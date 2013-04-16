@@ -20,7 +20,7 @@ describe("chorus.dialogs.RunAndDownload", function() {
             radioButtonAll = this.dialog.$("input[type=radio][id=all_rows]");
             submitButton = this.dialog.$("button.submit");
             rowsInput = this.dialog.$("input[name=rowLimit][type=text]");
-            spyOn(chorus.PageEvents, 'broadcast');
+            spyOn(chorus.PageEvents, 'trigger');
             spyOnEvent($(document), "close.facebox");
         });
 
@@ -43,8 +43,8 @@ describe("chorus.dialogs.RunAndDownload", function() {
                     submitButton.click();
                 });
 
-                it("broadcasts the file:runAndDownload event with the view options", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runAndDownload", this.dialog.options);
+                it("triggers the file:runAndDownload event with the view options", function() {
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("file:runAndDownload", this.dialog.options);
                 });
 
                 it("dismisses the dialog", function() {
@@ -63,8 +63,8 @@ describe("chorus.dialogs.RunAndDownload", function() {
                     submitButton.click();
                 });
 
-                it("broadcasts the file:runAndDownload event with limit and view options", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runAndDownload", _.extend({numOfRows: '867'}, this.dialog.options));
+                it("triggers the file:runAndDownload event with limit and view options", function() {
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("file:runAndDownload", _.extend({numOfRows: '867'}, this.dialog.options));
                 });
 
                 it("dismisses the dialog", function() {

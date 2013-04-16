@@ -1,6 +1,6 @@
 jasmine.sharedExamples.PageItemList = function() {
     beforeEach(function() {
-        this.eventSpy = spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+        this.eventSpy = spyOn(chorus.PageEvents, "trigger").andCallThrough();
         this.view.render();
         this.checkboxes = this.view.$("> li input[type=checkbox]");
     });
@@ -16,8 +16,8 @@ jasmine.sharedExamples.PageItemList = function() {
 
         it("selects the first item", function() {
             expect(this.view.$("> li").eq(0)).toHaveClass("selected");
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(0));
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selected", this.collection.at(0));
+            expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(0));
+            expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selected", this.collection.at(0));
         });
     });
 
@@ -41,8 +41,8 @@ jasmine.sharedExamples.PageItemList = function() {
     });
 
     function expectItemChecked(expectedModels) {
-        expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
-        var lastTwoCalls = chorus.PageEvents.broadcast.calls.slice(-2);
+        expect(chorus.PageEvents.trigger).toHaveBeenCalled();
+        var lastTwoCalls = chorus.PageEvents.trigger.calls.slice(-2);
         var eventName = lastTwoCalls[0].args[0];
 
         expect(eventName).toBe("checked");
@@ -86,7 +86,7 @@ jasmine.sharedExamples.PageItemList = function() {
             expect(this.view.$("li").eq(1)).toHaveClass('checked');
         });
 
-        it("broadcasts the '{{eventName}}:checked' event with the collection of currently-checked items", function() {
+        it("triggers the '{{eventName}}:checked' event with the collection of currently-checked items", function() {
             expectItemChecked.call(this, [ this.collection.at(1) ]);
             this.checkboxes.eq(0).click();
             expectItemChecked.call(this, [ this.collection.at(1), this.collection.at(0) ]);
@@ -119,7 +119,7 @@ jasmine.sharedExamples.PageItemList = function() {
             beforeEach(function() {
                 this.view.render();
                 this.view.$el.prepend("<li><input type='checkbox'></li>");
-                chorus.PageEvents.broadcast("selectAll");
+                chorus.PageEvents.trigger("selectAll");
             });
 
             it("checks all of the items", function() {
@@ -127,13 +127,13 @@ jasmine.sharedExamples.PageItemList = function() {
                 expect(this.view.$(".item_wrapper.checked").length).toBe(this.collection.length);
             });
 
-            it("broadcasts the '{{eventName}}:checked' page event with a collection of all models", function() {
+            it("triggers the '{{eventName}}:checked' page event with a collection of all models", function() {
                 expectItemChecked.call(this, this.collection.models);
             });
 
             context("when the selectNone page event is received", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("selectNone");
+                    chorus.PageEvents.trigger("selectNone");
                 });
 
                 it("un-checks all of the items", function() {
@@ -141,18 +141,18 @@ jasmine.sharedExamples.PageItemList = function() {
                     expect(this.view.$("li.checked").length).toBe(0);
                 });
 
-                it("broadcasts the '{{eventName}}:checked' page event with an empty collection", function() {
+                it("triggers the '{{eventName}}:checked' page event with an empty collection", function() {
                     expectItemChecked.call(this, []);
                 });
             });
         });
     });
 
-    describe("when another list view broadcasts that it has updated the set of checked items", function() {
+    describe("when another list view triggers that it has updated the set of checked items", function() {
         it("refreshes the view from the set of the checked items", function() {
             this.view.render();
             this.view.selectedModels.reset(this.collection.models.slice(1));
-            chorus.PageEvents.broadcast("checked", this.view.selectedModels);
+            chorus.PageEvents.trigger("checked", this.view.selectedModels);
             expect(this.view.$("input[type=checkbox]").eq(0)).not.toBeChecked();
             expect(this.view.$("input[type=checkbox]").eq(1)).toBeChecked();
         });
@@ -163,7 +163,7 @@ jasmine.sharedExamples.PageItemList = function() {
             decoyModel.set({entityType: "notReal"});
             this.view.selectedModels.reset(this.collection.models.slice(1));
             this.view.selectedModels.add([decoyModel]);
-            chorus.PageEvents.broadcast("checked", this.view.selectedModels);
+            chorus.PageEvents.trigger("checked", this.view.selectedModels);
             expect(this.view.$("input[type=checkbox]").eq(0)).not.toBeChecked();
             expect(this.view.$("input[type=checkbox]").eq(1)).toBeChecked();
         });
@@ -190,9 +190,9 @@ jasmine.sharedExamples.PageItemList = function() {
             expect(this.view.$("> li").eq(1)).toHaveClass("selected");
         });
 
-        it("should call itemSelected with the selected model and broadcast a general selected event", function() {
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(1));
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selected", this.collection.at(1));
+        it("should call itemSelected with the selected model and trigger a general selected event", function() {
+            expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(1));
+            expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selected", this.collection.at(1));
         });
 
         describe("rerendering", function() {
@@ -222,8 +222,8 @@ jasmine.sharedExamples.PageItemList = function() {
                 this.view.selectItem(this.view.$("li:not(:hidden)").eq(0));
             });
 
-            it("broadcasts an item deselected event", function() {
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith(this.view.options.entityType + ":deselected");
+            it("triggers an item deselected event", function() {
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(this.view.options.entityType + ":deselected");
             });
         });
 
@@ -234,7 +234,7 @@ jasmine.sharedExamples.PageItemList = function() {
                 this.view.render();
 
                 this.view.$("li").eq(0).removeClass("selected").addClass("hidden");
-                chorus.PageEvents.broadcast(this.view.options.entityType + ":search");
+                chorus.PageEvents.trigger(this.view.options.entityType + ":search");
             });
 
             it("selects the first visible item", function() {

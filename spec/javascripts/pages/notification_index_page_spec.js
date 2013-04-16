@@ -1,6 +1,6 @@
 describe("chorus.pages.NotificationIndexPage", function() {
     beforeEach(function() {
-        spyOn(chorus.PageEvents, "subscribe");
+        spyOn(chorus.pages.NotificationIndexPage.prototype, "refreshNotifications");
         this.page = new chorus.pages.NotificationIndexPage();
     });
 
@@ -19,10 +19,9 @@ describe("chorus.pages.NotificationIndexPage", function() {
             this.server.completeFetchFor(this.collection);
         });
 
-        it("subscribes to the notification:deleted event", function() {
-            expect(chorus.PageEvents.subscribe).toHaveBeenCalled();
-            expect(chorus.PageEvents.subscribe.callCount).toBeGreaterThan(1);
-            expect(chorus.PageEvents.subscribe.argsForCall[1][0]).toBe("notification:deleted");
+        it("refreshes notifications on the notification:deleted event", function() {
+            chorus.PageEvents.trigger("notification:deleted");
+            expect(this.page.refreshNotifications).toHaveBeenCalled();
         });
 
         it("should have the right breadcrumbs", function() {

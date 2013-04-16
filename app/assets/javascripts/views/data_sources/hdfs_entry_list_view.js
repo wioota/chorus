@@ -17,7 +17,7 @@ chorus.views.HdfsEntryList = chorus.views.PageItemList.extend({
         });
 
         this.selectedModels.reset(files);
-        chorus.PageEvents.broadcast("checked", this.selectedModels);
-        chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
+        chorus.PageEvents.trigger("checked", this.selectedModels);
+        chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
     }
 });

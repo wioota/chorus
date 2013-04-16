@@ -56,7 +56,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                         describe("when user cancel edit dataset and dataset:cancelEdit is triggered", function() {
                             beforeEach(function() {
                                 this.page.drawColumns.reset();
-                                chorus.PageEvents.broadcast("dataset:cancelEdit");
+                                chorus.PageEvents.trigger("dataset:cancelEdit");
                             });
 
                             it("re-draws the page", function() {
@@ -133,7 +133,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                         var otherColumn = rspecFixtures.databaseColumn();
                         otherColumn.dataset = this.page.model;
                         this.page.columnSet.add(otherColumn);
-                        chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');
+                        chorus.PageEvents.trigger('cancel:sidebar', 'chorus_view');
                     });
 
                     it("calls teardown on the old sidebar", function() {
@@ -171,7 +171,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                 describe("clicking select all", function() {
                     beforeEach(function() {
                         this.selectSpy = jasmine.createSpy("column selected spy");
-                        chorus.PageEvents.subscribe("column:selected", this.selectSpy);
+                        chorus.PageEvents.on("column:selected", this.selectSpy);
                         this.page.mainContent.contentDetails.$("a.select_all").click();
                     });
 
@@ -179,14 +179,14 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                         expect(this.page.mainContent.content.$("li.selected").length).toBe(this.page.mainContent.content.$("li").length);
                     });
 
-                    it("broadcasts the column:selected page event once for each li", function() {
+                    it("triggers the column:selected page event once for each li", function() {
                         expect(this.selectSpy.callCount).toBe(this.page.mainContent.content.$("li.selected").length);
                     });
 
                     describe("clicking select none", function() {
                         beforeEach(function() {
                             this.deselectSpy = jasmine.createSpy("column deselected spy");
-                            chorus.PageEvents.subscribe("column:deselected", this.deselectSpy);
+                            chorus.PageEvents.on("column:deselected", this.deselectSpy);
                             this.page.mainContent.contentDetails.$("a.select_none").click();
                         });
 
@@ -217,7 +217,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                     expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass("dataset_edit_chorus_view_sidebar");
                     this.resizedSpy.reset();
 
-                    chorus.PageEvents.broadcast('cancel:sidebar', 'edit_chorus_view');
+                    chorus.PageEvents.trigger('cancel:sidebar', 'edit_chorus_view');
                 });
 
                 it("triggers 'resized' on the page", function() {

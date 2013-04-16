@@ -26,7 +26,7 @@ chorus.models.SqlExecutionAndDownloadTask = chorus.models.WorkfileExecutionTask.
 
     cancel: function() {
         this._super("cancel");
-        chorus.PageEvents.broadcast("file:executionCancelled");
+        chorus.PageEvents.trigger("file:executionCancelled");
     },
 
     fileName: function() {

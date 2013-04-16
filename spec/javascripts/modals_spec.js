@@ -140,7 +140,7 @@ describe("chorus.Modal", function() {
             describe("when the facebox closes", function() {
                 beforeEach(function() {
                     this.modalClosedSpy = jasmine.createSpy("modal:closed");
-                    chorus.PageEvents.subscribe("modal:closed", this.modalClosedSpy);
+                    chorus.PageEvents.on("modal:closed", this.modalClosedSpy);
                     spyOn(this.modal, 'close');
                     $("#jasmine_content").append("<div id='facebox'/>");
                     $.facebox.settings.inited = true;

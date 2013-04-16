@@ -95,12 +95,12 @@ describe("chorus.views.ResultsConsoleView", function() {
                 this.view.render();
                 this.view.$(".controls").removeClass("hidden");
 
-                spyOn(chorus.PageEvents, "broadcast");
+                spyOn(chorus.PageEvents, "trigger");
                 this.view.$("a.close").click();
             });
 
-            it("broadcasts action:closePreview", function() {
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("action:closePreview");
+            it("triggers action:closePreview", function() {
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("action:closePreview");
             });
 
             it("hides the control section", function() {
@@ -204,7 +204,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("when another execution completed event occurs", function() {
                     beforeEach(function() {
-                        chorus.PageEvents.broadcast("file:executionSucceeded", rspecFixtures.workfileExecutionResults());
+                        chorus.PageEvents.trigger("file:executionSucceeded", rspecFixtures.workfileExecutionResults());
                     });
 
                     it("still renders only one data table", function() {
@@ -373,7 +373,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 spyOn(this.view, "closeError").andCallThrough();
 
                 this.task.save();
-                chorus.PageEvents.broadcast("file:executionStarted");
+                chorus.PageEvents.trigger("file:executionStarted");
             });
 
             it("sets the executing class", function() {
@@ -409,7 +409,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
                         this.view.$(".cancel").click();
-                        chorus.PageEvents.broadcast("file:executionFailed");
+                        chorus.PageEvents.trigger("file:executionFailed");
                     });
 
                     it("cancels the execution", function() {
@@ -424,7 +424,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     beforeEach(function() {
                         delete this.view.elapsedTimer;
                         this.view.$(".cancel").click();
-                        chorus.PageEvents.broadcast("file:executionFailed");
+                        chorus.PageEvents.trigger("file:executionFailed");
                     });
 
                     it("cancels the execution", function() {
@@ -440,7 +440,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("and there are results", function() {
                     beforeEach(function() {
                         this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
-                        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
+                        chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
                     it("has a link to display the execution message", function() {
@@ -460,7 +460,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                     describe("starting another execution", function() {
                         beforeEach(function() {
-                            chorus.PageEvents.broadcast("file:executionStarted", this.task);
+                            chorus.PageEvents.trigger("file:executionStarted", this.task);
                         });
 
                         it("hides the control section", function() {
@@ -472,7 +472,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("and the task does not have results", function() {
                     beforeEach(function() {
                         this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResultsEmpty());
-                        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
+                        chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
                     it("collapses the result table", function() {
@@ -491,7 +491,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
                         this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
-                        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
+                        chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
                     itRemovesExecutionUI(true);
@@ -502,7 +502,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     beforeEach(function() {
                         delete this.view.elapsedTimer;
                         this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
-                        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
+                        chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
                     itRemovesExecutionUI(false);
@@ -512,7 +512,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("and there was an execution error", function() {
                     beforeEach(function() {
                         this.server.lastCreateFor(this.task).failUnprocessableEntity(rspecFixtures.workfileExecutionErrorJson()['errors']);
-                        chorus.PageEvents.broadcast("file:executionFailed", this.task);
+                        chorus.PageEvents.trigger("file:executionFailed", this.task);
                     });
 
                     it("should show the error header", function() {
@@ -532,12 +532,12 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                     describe("clicking on the close button", function() {
                         beforeEach(function() {
-                            spyOn(chorus.PageEvents, "broadcast");
+                            spyOn(chorus.PageEvents, "trigger");
                             this.view.$(".close_errors").click();
                         });
 
-                        it("broadcasts action:closePreview", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("action:closePreview");
+                        it("triggers action:closePreview", function() {
+                            expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("action:closePreview");
                         });
 
                         it("hides the control section", function() {
@@ -552,7 +552,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     context("when the sql is executed again without errors", function() {
                         beforeEach(function() {
                             this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
-                            chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
+                            chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                         });
 
                         it("should show the data table", function() {
@@ -574,8 +574,8 @@ describe("chorus.views.ResultsConsoleView", function() {
                     beforeEach(function() {
                         this.task = new chorus.models.DataPreviewTask({});
                         this.view.execute(this.task);
-                        chorus.PageEvents.broadcast("file:executionSucceeded", this.task);
-                        chorus.PageEvents.broadcast("file:executionStarted");
+                        chorus.PageEvents.trigger("file:executionSucceeded", this.task);
+                        chorus.PageEvents.trigger("file:executionStarted");
                     });
 
                     it("hides the gutter", function() {
@@ -656,9 +656,9 @@ describe("chorus.views.ResultsConsoleView", function() {
             });
         });
 
-        context("when file:executionCancelled event is broadcast", function() {
+        context("when file:executionCancelled event is trigger", function() {
             beforeEach(function() {
-                chorus.PageEvents.broadcast('file:executionCancelled');
+                chorus.PageEvents.trigger('file:executionCancelled');
             });
 
             it("stops the spinner", function() {

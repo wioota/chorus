@@ -92,7 +92,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
             it("navigates to the right page when 'my workspaces' is selected from the 'search in' menu", function() {
                 spyOn(chorus.router, "navigate");
-                chorus.PageEvents.broadcast("choice:search_in", "my_workspaces");
+                chorus.PageEvents.trigger("choice:search_in", "my_workspaces");
                 expect(this.page.search.entityType()).toBe("all");
                 expect(this.page.search.searchIn()).toBe("my_workspaces");
                 expect(chorus.router.navigate).toHaveBeenCalledWith(this.page.search.showUrl());
@@ -442,7 +442,7 @@ describe("chorus.pages.SearchIndexPage", function() {
             beforeEach(function() {
                 this.workfile = rspecFixtures.workfile.sql();
                 this.selectedModels = new chorus.collections.Base([this.workfile]);
-                chorus.PageEvents.broadcast("checked", this.selectedModels);
+                chorus.PageEvents.trigger("checked", this.selectedModels);
             });
 
             it("displays the multiple selection section", function() {

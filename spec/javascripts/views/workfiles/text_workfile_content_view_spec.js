@@ -207,7 +207,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
     describe("the 'file:saveDraft' event", function() {
         beforeEach(function() {
             spyOn(this.view.model, "createDraft").andCallThrough();
-            chorus.PageEvents.broadcast("file:saveDraft");
+            chorus.PageEvents.trigger("file:saveDraft");
         });
 
         it("saves the draft", function() {
@@ -237,7 +237,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
             context("when there is no modal", function(){
                 beforeEach(function() {
                     chorus.modal = null;
-                    chorus.PageEvents.broadcast("file:replaceCurrentVersion");
+                    chorus.PageEvents.trigger("file:replaceCurrentVersion");
                     this.clock.tick(10000);
                 });
 
@@ -280,7 +280,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
             context("when a modal is open", function(){
                 beforeEach(function(){
-                    chorus.PageEvents.broadcast("file:replaceCurrentVersion");
+                    chorus.PageEvents.trigger("file:replaceCurrentVersion");
                 });
 
                 it('does not move focus from the modal to the text editor', function() {
@@ -291,7 +291,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
         describe("event file:createNewVersion", function() {
             beforeEach(function() {
-                chorus.PageEvents.broadcast("file:createNewVersion");
+                chorus.PageEvents.trigger("file:createNewVersion");
             });
 
             it("calls stops the auto save timer", function() {
@@ -316,7 +316,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
             describe("the 'file:replaceCurrentVersionWithSelection' event", function() {
                 beforeEach(function() {
                     chorus.modal = null;
-                    chorus.PageEvents.broadcast("file:replaceCurrentVersionWithSelection");
+                    chorus.PageEvents.trigger("file:replaceCurrentVersionWithSelection");
                     this.clock.tick(10000);
                 });
 
@@ -351,7 +351,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
             describe("event file:createNewVersionFromSelection", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("file:createNewVersionFromSelection");
+                    chorus.PageEvents.trigger("file:createNewVersionFromSelection");
                 });
 
                 it("calls stops the auto save timer", function() {
@@ -377,23 +377,23 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
             describe("event file:editorSelectionStatus", function() {
                 beforeEach(function() {
-                    spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                    spyOn(chorus.PageEvents, "trigger").andCallThrough();
                 });
 
                 it("calls file:selectionPresent when there is some text selected", function() {
                     this.view.editor.setSelection({line: 0, ch: 17}, {line: 0, ch: 20});
 
-                    chorus.PageEvents.broadcast("file:editorSelectionStatus");
+                    chorus.PageEvents.trigger("file:editorSelectionStatus");
 
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:selectionPresent");
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("file:selectionPresent");
                 });
 
                 it("calls file:selectionEmpty when there is No text selected", function() {
                     this.view.editor.setSelection({line: 0, ch: 17}, {line: 0, ch: 17});
 
-                    chorus.PageEvents.broadcast("file:editorSelectionStatus");
+                    chorus.PageEvents.trigger("file:editorSelectionStatus");
 
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:selectionEmpty");
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("file:selectionEmpty");
                 });
             });
         });
@@ -429,7 +429,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
     describe("when the user changes the selection", function() {
         beforeEach(function() {
-            spyOn(chorus.PageEvents, "broadcast");
+            spyOn(chorus.PageEvents, "trigger");
             this.view.render();
             this.view.editor.setValue("content\n\nmore content");
         });
@@ -437,14 +437,14 @@ describe("chorus.views.TextWorkfileContentView", function() {
         context("the selection range is empty", function() {
             it("fires the selection empty event", function() {
                 this.view.editor.setSelection({line: 1, ch: 0}, {line: 1, ch: 0});
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('file:selectionEmpty');
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith('file:selectionEmpty');
             });
         });
 
         context("the selection range is not empty", function() {
             it("fires the selection present event", function() {
                 this.view.editor.setSelection({line: 0, ch: 0}, {line: 2, ch: 0});
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('file:selectionPresent');
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith('file:selectionPresent');
             });
         });
     });

@@ -328,6 +328,16 @@
                     return _.all(args, function(val, key) {
                         return this.actual.attributes[key] === val;
                     }, this);
+                },
+
+                toHaveSubscription: function(eventName, callback) {
+                    this.message = function() {
+                        return [
+                            "Expected to have subscription to event " + eventName + " with callback " + callback,
+                            "Expected not to have subscription to event " + eventName + " with callback " + callback
+                        ];
+                    };
+                    return _.any(chorus.PageEvents._events[eventName], function(subscription) {return subscription.callback === callback;});
                 }
             });
 
@@ -354,7 +364,7 @@
             spyOn(window.history, "back");
             spyOn(chorus, 'isDevMode').andReturn(false);
 
-            chorus.PageEvents.reset();
+            chorus.PageEvents.off();
             chorus.session.sandboxPermissionsCreated = {};
             setLoggedInUser();
         });

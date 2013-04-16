@@ -105,7 +105,7 @@
                     return decodeURIComponent(arg);
                 });
                 var navFunction = function() {
-                    chorus.PageEvents.reset();
+                    chorus.PageEvents.off();
                     if (className === "Login" && self.app.session.loggedIn()) {
                         self.navigate("");
                     } else {

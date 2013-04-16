@@ -90,7 +90,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
     },
 
     saveSuccess: function () {
-        chorus.PageEvents.broadcast("data_source:added", this.model);
+        chorus.PageEvents.trigger("data_source:added", this.model);
         chorus.toast('instances.add.toast', {dataSourceName: this.model.name()});
         this.closeModal();
     },

@@ -31,7 +31,7 @@ describe("chorus.views.PageItemList", function() {
         describe("event names", function() {
             it("uses the entityType as the event name by default", function() {
                 var eventSpy = jasmine.createSpy("selectedSpy");
-                chorus.PageEvents.subscribe("user:selected", eventSpy);
+                chorus.PageEvents.on("user:selected", eventSpy);
                 this.view.render();
                 expect(this.view.$('li:eq(1)')).toExist();
                 this.view.$('li:eq(1)').click();
@@ -40,7 +40,7 @@ describe("chorus.views.PageItemList", function() {
 
             it("uses eventName if passed one", function() {
                 var eventSpy = jasmine.createSpy();
-                chorus.PageEvents.subscribe("alternate_event_name:selected", eventSpy);
+                chorus.PageEvents.on("alternate_event_name:selected", eventSpy);
                 this.view = new chorus.views.PageItemList({
                     eventName: 'alternate_event_name',
                     entityType: 'user',
@@ -62,7 +62,7 @@ describe("chorus.views.PageItemList", function() {
 
     describe("multiple selection", function() {
         beforeEach(function() {
-            chorus.PageEvents.subscribe("checked", function(collection) {
+            chorus.PageEvents.on("checked", function(collection) {
                 this.checkedModels = collection.models;
             }, this);
         });

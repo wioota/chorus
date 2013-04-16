@@ -199,7 +199,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
         var defaultSchemaId = 3;
 
         function changeWorkfileVersion(version, model, server) {
-            chorus.PageEvents.broadcast("workfileVersion:changed", version);
+            chorus.PageEvents.trigger("workfileVersion:changed", version);
             model.set({ versionInfo : { id: version, versionNum: version } });
             server.completeFetchFor(model);
         }

@@ -115,7 +115,7 @@ describe("chorus.views.Bare", function() {
             describe("when a subview triggers content:changed", function() {
                 beforeEach(function() {
                     this.view.recalculateScrolling.reset();
-                    chorus.PageEvents.broadcast("content:changed");
+                    chorus.PageEvents.trigger("content:changed");
                 });
 
                 it("recalculates scrolling", function() {
@@ -199,14 +199,12 @@ describe("chorus.views.Bare", function() {
         context("when called after teardown (due to the defer)", function() {
             beforeEach(function() {
                 this.view.teardown();
-                spyOn(chorus.PageEvents, "subscribe");
                 spyOn(this.view, "listenTo");
                 this.view.setupScrolling(".foo");
             });
 
             it("does not bind anything to the view", function() {
                 expect($.fn.bind).not.toHaveBeenCalled();
-                expect(chorus.PageEvents.subscribe).not.toHaveBeenCalled();
                 expect(this.view.listenTo).not.toHaveBeenCalled();
             });
         });
@@ -215,31 +213,12 @@ describe("chorus.views.Bare", function() {
     describe("#subscribePageEvent", function() {
         beforeEach(function() {
             this.view = new chorus.views.Bare();
+            this.fun = function() {};
         });
 
-        it("pushes a new subscription handle to the subscriptions array", function() {
-            expect(this.view.subscriptions.length).toBe(0);
-            this.view.subscribePageEvent("testevent", function() {}, this.view, "123");
-            expect(this.view.subscriptions.length).toBe(1);
-            var handle = this.view.subscriptions[0];
-            expect(chorus.PageEvents.subscriptionHandles[handle].eventName).toEqual("testevent");
-        });
-
-        it("pushes a new subscription handle to the subscriptions array with default context", function() {
-            expect(this.view.subscriptions.length).toBe(0);
-            this.view.subscribePageEvent("testevent", function() {});
-            expect(this.view.subscriptions.length).toBe(1);
-            var handle = this.view.subscriptions[0];
-            expect(chorus.PageEvents.subscriptionHandles[handle].binding.context).toBe(this.view);
-        });
-
-        it("pushes a new subscription handle to the subscriptions array with default context and specified id", function() {
-            expect(this.view.subscriptions.length).toBe(0);
-            this.view.subscribePageEvent("testevent", function() {}, "123");
-            expect(this.view.subscriptions.length).toBe(1);
-            var handle = this.view.subscriptions[0];
-            expect(chorus.PageEvents.subscriptionHandles[handle].binding.context).toBe(this.view);
-            expect(chorus.PageEvents.subscriptionHandles[handle].id).toBe("123");
+        it("listens to events from page events", function() {
+            this.view.subscribePageEvent("testevent", this.fun);
+            expect(this.view).toHaveSubscription("testevent", this.fun);
         });
     });
 
@@ -261,10 +240,7 @@ describe("chorus.views.Bare", function() {
             spyOn(this.view, "unbind");
             expect(this.view.requiredResources.models.length).toBe(1);
 
-            spyOn(chorus.PageEvents, "unsubscribe");
-            this.handle = chorus.PageEvents.subscribe("foo", this.view.render, this.view);
-            this.view.subscriptions.push(this.handle);
-
+            this.view.subscribePageEvent("foo", this.view.render);
             this.view.teardown();
         });
 
@@ -283,10 +259,6 @@ describe("chorus.views.Bare", function() {
 
         it("should tear down registered subviews", function() {
             expect(this.subViewObject.teardown).toHaveBeenCalled();
-        });
-
-        it("unsubscribe subscriptions", function(){
-            expect(chorus.PageEvents.unsubscribe).toHaveBeenCalledWith(this.handle);
         });
 
         describe("when the teardown function is told to preserve the container", function() {

@@ -36,8 +36,8 @@ chorus.views.PageItemList = chorus.views.Base.extend({
             delete this.previousIndex;
         }
 
-        chorus.PageEvents.broadcast("checked", this.selectedModels);
-        chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
+        chorus.PageEvents.trigger("checked", this.selectedModels);
+        chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
     },
 
     setup: function() {
@@ -66,9 +66,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
             });
         }
 
-        this.subscriptions.push(chorus.PageEvents.subscribe("selected",
-            this.updateSelection,
-            this));
+        this.subscribePageEvent("selected", this.updateSelection);
     },
 
     postRender: function() {
@@ -116,14 +114,14 @@ chorus.views.PageItemList = chorus.views.Base.extend({
 
     selectAll: function() {
         this.selectedModels.add(this.collection.models);
-        chorus.PageEvents.broadcast("checked", this.selectedModels);
-        chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
+        chorus.PageEvents.trigger("checked", this.selectedModels);
+        chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
     },
 
     selectNone: function() {
         this.selectedModels.reset();
-        chorus.PageEvents.broadcast("checked", this.selectedModels);
-        chorus.PageEvents.broadcast(this.eventName + ":checked", this.selectedModels);
+        chorus.PageEvents.trigger("checked", this.selectedModels);
+        chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
     },
 
     selectItem: function($target) {
@@ -148,14 +146,14 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         var eventName = this.eventName || model.eventType();
         if(eventName) {
             this.lastEventName = eventName;
-            chorus.PageEvents.broadcast(eventName + ":selected", model);
-            chorus.PageEvents.broadcast("selected", model);
+            chorus.PageEvents.trigger(eventName + ":selected", model);
+            chorus.PageEvents.trigger("selected", model);
         }
     },
 
     itemDeselected: function() {
         if(this.lastEventName) {
-            chorus.PageEvents.broadcast(this.lastEventName + ":deselected");
+            chorus.PageEvents.trigger(this.lastEventName + ":deselected");
         }
     },
 

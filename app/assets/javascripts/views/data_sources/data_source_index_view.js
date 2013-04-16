@@ -53,8 +53,8 @@ chorus.views.DataSourceIndex = chorus.views.Base.extend({
     selectModel: function() {
         if (this.dataSources.loaded && this.hdfsDataSources.loaded && this.gnipDataSources.loaded) {
             if (this.selectedModel) {
-                chorus.PageEvents.broadcast('selected', this.selectedModel);
-                chorus.PageEvents.broadcast('data_source:selected', this.selectedModel);
+                chorus.PageEvents.trigger('selected', this.selectedModel);
+                chorus.PageEvents.trigger('data_source:selected', this.selectedModel);
             } else {
                 this.$("li:first").click();
             }

@@ -75,7 +75,7 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
 
     modelSaved: function () {
         chorus.toast("import.schedule.toast");
-        chorus.PageEvents.broadcast('importSchedule:changed', this.model);
+        chorus.PageEvents.trigger('importSchedule:changed', this.model);
         this.dataset.trigger('change');
         this.closeModal();
     }

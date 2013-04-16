@@ -56,7 +56,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
         it("should re-render when csv_import:started is triggered", function() {
             this.server.reset();
-            chorus.PageEvents.broadcast("csv_import:started");
+            chorus.PageEvents.trigger("csv_import:started");
             expect(this.file.activities()).toHaveBeenFetched();
         });
 

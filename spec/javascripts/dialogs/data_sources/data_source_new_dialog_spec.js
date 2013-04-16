@@ -280,7 +280,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
                 context("when save completes", function() {
                     beforeEach(function() {
-                        spyOn(chorus.PageEvents, 'broadcast');
+                        spyOn(chorus.PageEvents, 'trigger');
                         spyOn(this.dialog, "closeModal");
 
                         this.dialog.model.set({id: "123"});
@@ -299,7 +299,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                     });
 
                     it("publishes the 'data_source:added' page event with the new instance's id", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:added", this.dialog.model);
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("data_source:added", this.dialog.model);
                     });
                 });
 

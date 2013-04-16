@@ -141,16 +141,16 @@ describe("chorus.views.WorkfileContentDetails", function() {
         });
 
         context("menus", function() {
-            it("when replacing the current version, it should broadcast the file:replaceCurrentVersion event", function() {
-                spyOn(chorus.PageEvents, "broadcast");
+            it("when replacing the current version, it should trigger the file:replaceCurrentVersion event", function() {
+                spyOn(chorus.PageEvents, "trigger");
                 this.view.replaceCurrentVersion();
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:replaceCurrentVersion");
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("file:replaceCurrentVersion");
             });
 
-            it("when creating a new version, it should broadcast the file:createNewVersion event", function() {
-                spyOn(chorus.PageEvents, "broadcast");
+            it("when creating a new version, it should trigger the file:createNewVersion event", function() {
+                spyOn(chorus.PageEvents, "trigger");
                 this.view.createNewVersion();
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:createNewVersion");
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("file:createNewVersion");
             });
         });
 
@@ -168,7 +168,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
         context("when user is editing the file", function() {
             context("and the autosave event is fired", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("file:autosaved");
+                    chorus.PageEvents.trigger("file:autosaved");
                 });
 
                 it("should display the autosave text", function() {

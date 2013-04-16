@@ -69,8 +69,8 @@ describe("chorus.views.DatasetContentDetails", function() {
             });
         });
 
-        it("subscribes to the action:closePreview broadcast", function() {
-            expect(chorus.PageEvents.hasSubscription("action:closePreview", this.view.closeDataPreview, this.view)).toBeTruthy();
+        it("subscribes to the action:closePreview trigger", function() {
+            expect(this.view).toHaveSubscription("action:closePreview", this.view.closeDataPreview);
         });
 
         describe("sql definition", function() {
@@ -267,7 +267,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             context("and the visualize button is clicked", function() {
                 beforeEach(function() {
                     spyOn(this.view, 'showVisualizationConfig');
-                    spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
+                    spyOn(chorus.PageEvents, 'trigger').andCallThrough();
                     this.view.filterWizardView.resetFilters.reset();
                     this.view.$("button.visualize").click();
                 });
@@ -303,8 +303,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                     expect(this.view.filterWizardView.resetFilters).toHaveBeenCalled();
                 });
 
-                it("broadcasts start:visualization", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("start:visualization");
+                it("triggers start:visualization", function() {
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("start:visualization");
                 });
 
                 context("and cancel is clicked", function() {
@@ -330,8 +330,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                         expect(this.view.$(".chart_config")).toHaveClass("hidden");
                     });
 
-                    it("broadcasts cancel:visualization", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("cancel:visualization");
+                    it("triggers cancel:visualization", function() {
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("cancel:visualization");
                     });
                 });
 
@@ -461,29 +461,29 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 describe("clicking 'Select All'", function() {
                     beforeEach(function() {
-                        spyOn(chorus.PageEvents, "broadcast");
+                        spyOn(chorus.PageEvents, "trigger");
                         this.view.$(".select_all").click();
                     });
 
-                    it("broadcasts the column:select_all page event", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:select_all");
+                    it("triggers the column:select_all page event", function() {
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("column:select_all");
                     });
                 });
 
                 describe("clicking 'Select None'", function() {
                     beforeEach(function() {
-                        spyOn(chorus.PageEvents, "broadcast");
+                        spyOn(chorus.PageEvents, "trigger");
                         this.view.$(".select_none").click();
                     });
 
-                    it("broadcasts the column:select_none page event", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:select_none");
+                    it("triggers the column:select_none page event", function() {
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("column:select_none");
                     });
                 });
 
                 describe("and the cancel link is clicked", function() {
                     beforeEach(function() {
-                        spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                        spyOn(chorus.PageEvents, "trigger").andCallThrough();
                         jasmine.JQuery.events.cleanUp();
                         spyOnEvent(".column_count input.search", "textchange");
                         spyOnEvent(".chorus_view_info input.search", "textchange");
@@ -492,8 +492,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                         this.view.$(".create_chorus_view .cancel").click();
                     });
 
-                    it("subscribes to the action:closePreview broadcast", function() {
-                        expect(chorus.PageEvents.hasSubscription("action:closePreview", this.view.closeDataPreview, this.view)).toBeTruthy();
+                    it("subscribes to the action:closePreview trigger", function() {
+                        expect(this.view).toHaveSubscription("action:closePreview", this.view.closeDataPreview);
                     });
 
                     it("swap the Create Bar to green definition bar", function() {
@@ -516,7 +516,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                     });
 
                     it("triggers 'cancel:sidebar'", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
                     });
 
                     context("and click on data preview close button when data preview was opened", function() {
@@ -678,7 +678,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                         context("and cancel is clicked", function() {
                             var cancelButton;
                             beforeEach(function() {
-                                spyOn(chorus.PageEvents, 'broadcast').andCallThrough();
+                                spyOn(chorus.PageEvents, 'trigger').andCallThrough();
                                 cancelButton = this.view.$('.edit_chorus_view .cancel');
                             });
                             it("shows the definition bar and hides the create_chart bar", function() {
@@ -693,17 +693,17 @@ describe("chorus.views.DatasetContentDetails", function() {
                             });
                             it("triggers 'cancel:sidebar'", function() {
                                 cancelButton.click();
-                                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
+                                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith('cancel:sidebar', 'chorus_view');
                             });
-                            it("broadcasts dataset:cancelEdit", function() {
+                            it("triggers dataset:cancelEdit", function() {
                                 cancelButton.click();
-                                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:cancelEdit");
+                                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("dataset:cancelEdit");
                             });
                             it("resets the query to the initial query before triggering events", function() {
-                                chorus.PageEvents.subscribe("dataset:cancelEdit", function() {
+                                chorus.PageEvents.on("dataset:cancelEdit", function() {
                                     expect(this.view.dataset.get("query")).toBe("select * from abc");
                                 }, this);
-                                chorus.PageEvents.subscribe("cancel:sidebar", function() {
+                                chorus.PageEvents.on("cancel:sidebar", function() {
                                     expect(this.view.dataset.get("query")).toBe("select * from abc");
                                 }, this);
                                 cancelButton.click();
@@ -711,11 +711,11 @@ describe("chorus.views.DatasetContentDetails", function() {
                         });
                         context("and 'Save and Return' is clicked", function() {
                             beforeEach(function() {
-                                spyOn(chorus.PageEvents, "broadcast");
+                                spyOn(chorus.PageEvents, "trigger");
                                 this.view.$(".save").click();
                             });
-                            it("broadcasts dataset:saveEdit", function() {
-                                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:saveEdit");
+                            it("triggers dataset:saveEdit", function() {
+                                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("dataset:saveEdit");
                             });
                         });
                     });

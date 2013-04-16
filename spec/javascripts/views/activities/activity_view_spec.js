@@ -457,7 +457,7 @@ describe("chorus.views.Activity", function() {
                     expect(this.view.$(".comments ul .morelinks a")).not.toExist();
                     expect(this.view.$(".comments li").length).toBe(2);
 
-                    chorus.PageEvents.broadcast("comment:added", this.newComment);
+                    chorus.PageEvents.trigger("comment:added", this.newComment);
                 });
 
                 it("updates the comment list", function() {
@@ -466,7 +466,7 @@ describe("chorus.views.Activity", function() {
                 });
 
                 it("won't try to add the same comment twice", function() {
-                    chorus.PageEvents.broadcast("comment:added", this.newComment);
+                    chorus.PageEvents.trigger("comment:added", this.newComment);
                     expect(this.view.model.comments().length).toBe(3);
                 });
             });
@@ -475,7 +475,7 @@ describe("chorus.views.Activity", function() {
                 beforeEach(function() {
                     this.deletedComment = this.model.comments().first();
                     expect(this.view.$(".comments li").length).toBe(2);
-                    chorus.PageEvents.broadcast("comment:deleted", this.deletedComment);
+                    chorus.PageEvents.trigger("comment:deleted", this.deletedComment);
                 });
 
                 it('updates the comment list', function() {

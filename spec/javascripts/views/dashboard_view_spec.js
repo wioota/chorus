@@ -17,13 +17,13 @@ describe("chorus.views.Dashboard", function(){
 
         it("doesnt re-fetch the activity list if a comment is added", function() {
             this.server.reset();
-            chorus.PageEvents.broadcast("comment:added");
+            chorus.PageEvents.trigger("comment:added");
             expect(this.activities).not.toHaveBeenFetched();
         });
 
         it("doesnt re-fetch the activity list if a comment is deleted", function() {
             this.server.reset();
-            chorus.PageEvents.broadcast("comment:deleted");
+            chorus.PageEvents.trigger("comment:deleted");
             expect(this.activities).not.toHaveBeenFetched();
         });
     });

@@ -9,12 +9,12 @@ chorus.dialogs.RunAndDownload = chorus.dialogs.DatasetDownload.extend({
     },
 
     downloadAll: function() {
-        chorus.PageEvents.broadcast("file:runAndDownload", this.options);
+        chorus.PageEvents.trigger("file:runAndDownload", this.options);
         this.closeModal();
     },
 
     downloadSome: function() {
-        chorus.PageEvents.broadcast("file:runAndDownload", _.extend({numOfRows: this.rowLimit()}, this.options));
+        chorus.PageEvents.trigger("file:runAndDownload", _.extend({numOfRows: this.rowLimit()}, this.options));
         this.closeModal();
     }
 });

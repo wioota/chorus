@@ -85,7 +85,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
             this.page.render();
-            chorus.PageEvents.broadcast("workfile:selected", this.model);
+            chorus.PageEvents.trigger("workfile:selected", this.model);
         });
 
         it("sets the model of the page", function() {
@@ -102,7 +102,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             beforeEach(function() {
                 this.oldSidebar = this.page.sidebar;
                 spyOn(this.page.sidebar, 'teardown');
-                chorus.PageEvents.broadcast("workfile:selected", this.model);
+                chorus.PageEvents.trigger("workfile:selected", this.model);
             });
 
             it("tears down the old sidebar", function() {
@@ -124,7 +124,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
             context("when a row has been checked", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("workfile:checked", this.page.collection.clone());
+                    chorus.PageEvents.trigger("workfile:checked", this.page.collection.clone());
                 });
 
                 it("displays the multiple selection section", function() {

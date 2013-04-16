@@ -357,7 +357,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                 context("when the save completes", function () {
                     beforeEach(function () {
                         spyOnEvent(this.dataset, 'change');
-                        spyOn(chorus.PageEvents, 'broadcast');
+                        spyOn(chorus.PageEvents, 'trigger');
                         spyOn(chorus, "toast");
                         spyOn(this.dialog, "closeModal");
                         this.dialog.model.trigger("saved");
@@ -368,7 +368,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
                     });
 
                     it("triggers a importSchedule:changed event", function () {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("importSchedule:changed", this.dialog.model);
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("importSchedule:changed", this.dialog.model);
                     });
 
                     it("triggers change on the dataset", function () {

@@ -8,13 +8,13 @@ describe("chorus.views.TagListSidebar", function() {
     });
 
     it("displays the tag name selected on the page", function() {
-        chorus.PageEvents.broadcast('tag:selected', this.selectedTag);
+        chorus.PageEvents.trigger('tag:selected', this.selectedTag);
         expect(this.view.$el).toContainText('Hello');
     });
 
     it("is empty if no tag is select", function() {
-        chorus.PageEvents.broadcast('tag:selected', this.selectedTag);
-        chorus.PageEvents.broadcast('tag:deselected');
+        chorus.PageEvents.trigger('tag:selected', this.selectedTag);
+        chorus.PageEvents.trigger('tag:deselected');
         expect(this.view.$el.html().trim()).toEqual('');
     });
 
@@ -22,7 +22,7 @@ describe("chorus.views.TagListSidebar", function() {
         context("user is admin", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: true}, chorus);
-                chorus.PageEvents.broadcast('tag:selected', this.selectedTag);
+                chorus.PageEvents.trigger('tag:selected', this.selectedTag);
                 this.deleteLink = this.view.$(".actions a.delete_tag_link");
             });
 
@@ -52,7 +52,7 @@ describe("chorus.views.TagListSidebar", function() {
         context("user is not admin", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: false}, chorus);
-                chorus.PageEvents.broadcast('tag:selected', this.selectedTag);
+                chorus.PageEvents.trigger('tag:selected', this.selectedTag);
                 this.deleteLink = this.view.$el.find(".actions a.delete_tag_link");
             });
 
@@ -65,7 +65,7 @@ describe("chorus.views.TagListSidebar", function() {
     describe("rename tag link", function() {
         beforeEach(function() {
             setLoggedInUser({admin: false}, chorus);
-            chorus.PageEvents.broadcast('tag:selected', this.selectedTag);
+            chorus.PageEvents.trigger('tag:selected', this.selectedTag);
             this.renameLink = this.view.$el.find(".actions a.rename_tag_link");
         });
 

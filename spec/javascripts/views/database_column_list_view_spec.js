@@ -50,22 +50,22 @@ describe("chorus.views.DatabaseColumnList", function() {
         });
 
         it("subscribes to column:select_all", function() {
-            expect(chorus.PageEvents.hasSubscription("column:select_all", this.view.selectAll, this.view)).toBeTruthy();
+            expect(this.view).toHaveSubscription("column:select_all", this.view.selectAll);
         });
 
         it("subscribes to column:select_none", function() {
-            expect(chorus.PageEvents.hasSubscription("column:select_none", this.view.selectNone, this.view)).toBeTruthy();
+            expect(this.view).toHaveSubscription("column:select_none", this.view.selectNone);
         });
 
         it("subscribes to column:removed", function() {
-            expect(chorus.PageEvents.hasSubscription("column:removed", this.view.deselectColumn, this.view)).toBeTruthy();
+            expect(this.view).toHaveSubscription("column:removed", this.view.deselectColumn);
         });
 
         describe("column:deselected", function() {
             beforeEach(function() {
                 this.view.selectMulti = true;
 
-                chorus.PageEvents.broadcast("column:deselected", this.collection.at(0));
+                chorus.PageEvents.trigger("column:deselected", this.collection.at(0));
             });
 
             it("deselects the column", function() {
@@ -75,7 +75,7 @@ describe("chorus.views.DatabaseColumnList", function() {
 
         describe("clicking on a list item", function() {
             beforeEach(function() {
-                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                spyOn(chorus.PageEvents, "trigger").andCallThrough();
             });
 
             context("with selectMulti false", function() {
@@ -93,12 +93,12 @@ describe("chorus.views.DatabaseColumnList", function() {
                         expect(this.view.$("li:eq(1)")).toHaveClass("selected");
                     });
 
-                    it("broadcasts the column:selected page event with the corresponding model as an argument", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:selected", this.collection.at(1));
+                    it("triggers the column:selected page event with the corresponding model as an argument", function() {
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("column:selected", this.collection.at(1));
                     });
 
-                    it("broadcasts the column:deselected page event with the corresponding model as an argument", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:deselected", this.collection.at(0));
+                    it("triggers the column:deselected page event with the corresponding model as an argument", function() {
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("column:deselected", this.collection.at(0));
                     });
 
                     describe("#selectNone", function() {
@@ -146,9 +146,9 @@ describe("chorus.views.DatabaseColumnList", function() {
                         expect(this.view.$("li:eq(1)")).toHaveClass("selected");
                     });
 
-                    it("broadcasts the column:selected page event with the corresponding model as an argument", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:selected", this.collection.at(0));
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:selected", this.collection.at(1));
+                    it("triggers the column:selected page event with the corresponding model as an argument", function() {
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("column:selected", this.collection.at(0));
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("column:selected", this.collection.at(1));
                     });
 
                     describe("deselecting", function() {
@@ -165,7 +165,7 @@ describe("chorus.views.DatabaseColumnList", function() {
                         });
 
                         it("triggers the column:deselected event with the corresponding model as an argument", function() {
-                            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:deselected", this.collection.at(1));
+                            expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("column:deselected", this.collection.at(1));
                         });
                     });
                 });

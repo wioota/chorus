@@ -54,17 +54,17 @@ chorus.views.DatabaseColumnList = chorus.views.Base.extend({
             var column = this.collection.get($selectedColumn.data('cid'));
             if (turnOn) {
                 $selectedColumn.addClass("selected");
-                chorus.PageEvents.broadcast("column:selected", column);
+                chorus.PageEvents.trigger("column:selected", column);
             } else {
-                chorus.PageEvents.broadcast("column:deselected", column);
+                chorus.PageEvents.trigger("column:deselected", column);
             }
         } else {
             var $deselected = this.$("li.selected");
             $deselected.removeClass("selected");
-            chorus.PageEvents.broadcast("column:deselected", this.collection.at(this.$("li").index($deselected)));
+            chorus.PageEvents.trigger("column:deselected", this.collection.at(this.$("li").index($deselected)));
 
             $selectedColumn.addClass("selected");
-            chorus.PageEvents.broadcast("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
+            chorus.PageEvents.trigger("column:selected", this.collection.at(this.$("li").index($selectedColumn)));
         }
     },
 

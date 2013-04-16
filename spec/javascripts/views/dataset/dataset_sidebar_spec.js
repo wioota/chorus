@@ -27,7 +27,7 @@ describe("chorus.views.DatasetSidebar", function() {
         beforeEach(function() {
             this.server.reset();
             this.dataset = rspecFixtures.workspaceDataset.sourceTable();
-            chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+            chorus.PageEvents.trigger("dataset:selected", this.dataset);
         });
 
         it("displays the selected dataset name", function() {
@@ -80,7 +80,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             it("does not display for a view", function() {
                 this.dataset = rspecFixtures.workspaceDataset.datasetView();
-                chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 expect(this.view.$(".actions a.analyze")).not.toExist();
             });
 
@@ -94,10 +94,10 @@ describe("chorus.views.DatasetSidebar", function() {
                 });
             });
 
-            context("when the analyze:running event is broadcast", function() {
+            context("when the analyze:running event is trigger", function() {
                 it("re-fetches the dataset statistics", function() {
                     this.server.reset();
-                    chorus.PageEvents.broadcast("analyze:running");
+                    chorus.PageEvents.trigger("analyze:running");
                     expect(this.server.lastFetchFor(this.view.resource.statistics())).toBeDefined();
                 });
             });
@@ -162,7 +162,7 @@ describe("chorus.views.DatasetSidebar", function() {
         context("when an oracle dataset is selected", function() {
             beforeEach(function() {
                 this.oracleDataset = rspecFixtures.oracleDataset({id: 12});
-                chorus.PageEvents.broadcast("dataset:selected", this.oracleDataset);
+                chorus.PageEvents.trigger("dataset:selected", this.oracleDataset);
             });
 
             it("displays an import dataset link", function() {
@@ -210,7 +210,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 this.view.render();
                 this.dataset = rspecFixtures.workspaceDataset.datasetTable();
                 this.dataset._workspace = this.view.resource._workspace;
-                chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 this.server.completeFetchFor(this.view.imports, []);
             });
 
@@ -288,7 +288,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("and no dataset is selected", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("dataset:selected");
+                    chorus.PageEvents.trigger("dataset:selected");
                 });
 
                 itShowsTheAppropriateDeleteLink(false);
@@ -303,7 +303,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 beforeEach(function() {
                     this.dataset = rspecFixtures.workspaceDataset.datasetTable();
                     this.view.resource._workspace = rspecFixtures.workspace({ id: 6007, permission: ["update"] });
-                    chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                    chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 });
 
                 itDoesNotShowTheDuplicateChorusViewLink();
@@ -425,7 +425,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 }
 
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                    chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 });
 
                 itShowsTheAppropriateDeleteLink(true, "table");
@@ -564,7 +564,7 @@ describe("chorus.views.DatasetSidebar", function() {
             context("when the dataset is a source view", function() {
                 beforeEach(function() {
                     this.dataset = rspecFixtures.workspaceDataset.sourceView();
-                    chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                    chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 });
 
                 itDoesNotShowTheDuplicateChorusViewLink();
@@ -575,7 +575,7 @@ describe("chorus.views.DatasetSidebar", function() {
             context("when the dataset is a chorus view", function() {
                 beforeEach(function() {
                     this.dataset = rspecFixtures.workspaceDataset.chorusView({ objectName: "annes_table", query: "select * from foos;" });
-                    chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                    chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 });
 
                 it("fetches the instance account", function() {
@@ -634,7 +634,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 _.each(["TABLE", "EXTERNAL_TABLE", "MASTER_TABLE", "HDFS_EXTERNAL_TABLE"], function(type) {
                     beforeEach(function() {
                         this.dataset = rspecFixtures.workspaceDataset.sourceTable({ objectType: type});
-                        chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                        chorus.PageEvents.trigger("dataset:selected", this.dataset);
                     });
 
                     itShowsTheAppropriateDeleteLink(true, type);
@@ -662,7 +662,7 @@ describe("chorus.views.DatasetSidebar", function() {
         context("when there is not a workspace", function() {
             beforeEach(function() {
                 this.dataset = rspecFixtures.dataset({id: "XYZ"});
-                chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                chorus.PageEvents.trigger("dataset:selected", this.dataset);
             });
 
             it("has the 'add a note' link with the correct data", function() {
@@ -691,7 +691,7 @@ describe("chorus.views.DatasetSidebar", function() {
             context('when the dataset is an oracle dataset', function(){
                 beforeEach(function(){
                     this.dataset = rspecFixtures.oracleDataset();
-                    chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                    chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 });
 
                 it('doesnt show the associate link', function(){
@@ -728,9 +728,9 @@ describe("chorus.views.DatasetSidebar", function() {
                 }
             }]).at(1);
 
-            chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+            chorus.PageEvents.trigger("dataset:selected", this.dataset);
             this.view.resource.statistics().set({lastAnalyzedTime: "2012-01-24T12:25:11Z"});
-            chorus.PageEvents.broadcast("column:selected", this.column);
+            chorus.PageEvents.trigger("column:selected", this.column);
             this.view.render();
         });
 
@@ -867,7 +867,7 @@ describe("chorus.views.DatasetSidebar", function() {
             this.view.resource = rspecFixtures.workspaceDataset.datasetTable();
             this.newImportSchedule = rspecFixtures.datasetImportScheduleSet().at(0);
             spyOn(this.view, 'render').andCallThrough();
-            chorus.PageEvents.broadcast("importSchedule:changed", this.newImportSchedule);
+            chorus.PageEvents.trigger("importSchedule:changed", this.newImportSchedule);
         });
 
         it("updates the importConfiguration and renders", function() {
@@ -880,7 +880,7 @@ describe("chorus.views.DatasetSidebar", function() {
         _.each(["CHORUS_VIEW", "VIEW", "TABLE", "TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type) {
             it("does not have any missing translations for" + type, function() {
                 this.dataset = rspecFixtures.workspaceDataset.datasetTable({objectType: type});
-                chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+                chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 expect(this.view.tabs.activity.options.type).not.toContain("missing");
             });
         }, this);
@@ -890,7 +890,7 @@ describe("chorus.views.DatasetSidebar", function() {
         describe("start:visualization", function() {
             beforeEach(function() {
                 expect($(this.view.el)).not.toHaveClass("visualizing");
-                chorus.PageEvents.broadcast("start:visualization");
+                chorus.PageEvents.trigger("start:visualization");
             });
 
             it("adds the 'visualizing' class to sidebar_content", function() {
@@ -899,9 +899,9 @@ describe("chorus.views.DatasetSidebar", function() {
         });
         describe("cancel:visualization", function() {
             beforeEach(function() {
-                chorus.PageEvents.broadcast("start:visualization");
+                chorus.PageEvents.trigger("start:visualization");
                 expect($(this.view.el)).toHaveClass("visualizing");
-                chorus.PageEvents.broadcast("cancel:visualization");
+                chorus.PageEvents.trigger("cancel:visualization");
             });
 
             it("removes the 'visualizing' class from sidebar_content", function() {

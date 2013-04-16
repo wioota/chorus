@@ -1,6 +1,6 @@
 describe("chorus.views.DataTab", function () {
     beforeEach(function () {
-        spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+        spyOn(chorus.PageEvents, "trigger").andCallThrough();
 
         chorus.page = { workspace:rspecFixtures.workspace({name:"new_workspace"}) };
         this.schema = chorus.page.workspace.sandbox().schema();
@@ -286,7 +286,7 @@ describe("chorus.views.DataTab", function () {
     describe("after workfile changed", function () {
         beforeEach(function () {
             this.executionSchema = rspecFixtures.workspace().sandbox().schema();
-            chorus.PageEvents.broadcast("workfile:changed", rspecFixtures.workfile.text({executionSchema: this.executionSchema.attributes}));
+            chorus.PageEvents.trigger("workfile:changed", rspecFixtures.workfile.text({executionSchema: this.executionSchema.attributes}));
         });
 
         it("updates focusSchema", function () {

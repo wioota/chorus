@@ -30,14 +30,14 @@ describe("chorus.views.ActivityListHeader", function() {
         describe('keeping the insight count updated', function() {
             it('updates when an insight is added', function() {
                 this.server.reset();
-                chorus.PageEvents.broadcast("insight:promoted");
+                chorus.PageEvents.trigger("insight:promoted");
                 expect(this.view.insightsCount).toHaveBeenFetched();
                 expect(new URI(this.server.lastFetchFor(this.view.insightsCount).url).query()).toMatch('per_page=0');
             });
 
             it("updates when a note is deleted", function() {
                 this.server.reset();
-                chorus.PageEvents.broadcast("note:deleted");
+                chorus.PageEvents.trigger("note:deleted");
                 expect(this.view.insightsCount).toHaveBeenFetched();
                 expect(new URI(this.server.lastFetchFor(this.view.insightsCount).url).query()).toMatch('per_page=0');
             });

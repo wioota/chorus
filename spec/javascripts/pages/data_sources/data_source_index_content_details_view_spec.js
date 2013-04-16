@@ -18,7 +18,7 @@ describe("chorus.views.DataSourceIndexContentDetails", function() {
             hdfsDataSources: hdfsDataSources,
             gnipDataSources: gnipDataSources
         });
-        spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+        spyOn(chorus.PageEvents, "trigger").andCallThrough();
     });
 
     describe('#render', function() {
@@ -57,16 +57,16 @@ describe("chorus.views.DataSourceIndexContentDetails", function() {
             });
 
             describe("when the 'select all' link is clicked", function() {
-                it("broadcasts the 'selectAll' page event", function() {
+                it("triggers the 'selectAll' page event", function() {
                     this.view.$(".multiselect a.select_all").click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectAll");
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectAll");
                 });
             });
 
             describe("when the 'select none' link is clicked", function() {
-                it("broadcasts the 'selectNone' page event", function() {
+                it("triggers the 'selectNone' page event", function() {
                     this.view.$(".multiselect a.select_none").click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectNone");
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectNone");
                 });
             });
         });

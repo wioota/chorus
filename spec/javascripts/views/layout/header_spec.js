@@ -437,7 +437,7 @@ describe("chorus.views.Header", function() {
                         this.server.reset();
                         this.view.unreadNotifications.loaded = true;
                         this.view.notifications.loaded = true;
-                        chorus.PageEvents.broadcast("notification:deleted");
+                        chorus.PageEvents.trigger("notification:deleted");
                     });
 
                     it("should re-fetch the notifications", function() {

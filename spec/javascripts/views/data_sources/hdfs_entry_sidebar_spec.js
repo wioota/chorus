@@ -23,9 +23,9 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                     expect(this.view.tabs.activity.collection).toHaveBeenFetched();
                 });
 
-                it("re-fetches when csv_import:started is broadcast", function() {
+                it("re-fetches when csv_import:started is trigger", function() {
                     this.server.reset();
-                    chorus.PageEvents.broadcast("csv_import:started");
+                    chorus.PageEvents.trigger("csv_import:started");
                     expect(this.view.tabs.activity.collection).toHaveBeenFetched();
                 });
             } else {
@@ -42,7 +42,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
         context("when the model is a directory", function() {
             beforeEach(function() {
                 this.hdfsEntry = rspecFixtures.hdfsDir();
-                chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
+                chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
             });
 
             itHasTheRightDefaultBehavior(false);
@@ -86,7 +86,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                     isBinary: false
                });
 
-                chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
+                chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
             });
 
             itHasTheRightDefaultBehavior(true);
@@ -121,7 +121,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                         isBinary: false
                     });
 
-                    chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
+                    chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
                 });
 
                 it("launches the dialog with right HdfsFile", function() {
@@ -154,7 +154,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                         name: 'my_file.sql',
                         isBinary: false
                     });
-                    chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
+                    chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
                 });
 
                 it("launches the dialog with right HdfsFile", function() {
@@ -186,7 +186,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                     isBinary: true
                 });
 
-                chorus.PageEvents.broadcast("hdfs_entry:selected", this.hdfsEntry);
+                chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
             });
 
             it("does not have a create external table link", function() {

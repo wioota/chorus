@@ -1,7 +1,7 @@
 jasmine.sharedExamples.aPageWithMultiSelect = function() {
     describe("multiple selection", function() {
         beforeEach(function() {
-            spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+            spyOn(chorus.PageEvents, "trigger").andCallThrough();
         });
 
         it("should have a 'select all' and 'deselect all'", function() {
@@ -11,16 +11,16 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
         });
 
         describe("when the 'select all' link is clicked", function() {
-            it("broadcasts the 'selectAll' page event", function() {
+            it("triggers the 'selectAll' page event", function() {
                 this.page.$(".multiselect a.select_all").click();
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectAll");
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectAll");
             });
         });
 
         describe("when the 'select none' link is clicked", function() {
-            it("broadcasts the 'selectNone' page event", function() {
+            it("triggers the 'selectNone' page event", function() {
                 this.page.$(".multiselect a.select_none").click();
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectNone");
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectNone");
             });
         });
 
@@ -30,7 +30,7 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
 
         context("when a row has been checked", function() {
             beforeEach(function() {
-                chorus.PageEvents.broadcast(this.page.mainContent.content.eventName + ":checked", this.page.collection.clone());
+                chorus.PageEvents.trigger(this.page.mainContent.content.eventName + ":checked", this.page.collection.clone());
             });
 
             it("displays the multiple selection section", function() {

@@ -83,7 +83,7 @@ describe("chorus global", function() {
             this.chorus.afterNavigate(this.spy1);
             this.chorus.afterNavigate(this.spy2);
 
-            spyOn(this.chorus.PageEvents, "reset");
+            spyOn(this.chorus.PageEvents, "off");
         });
 
         it("calls the supplied functions after the router triggers leaving", function() {
@@ -104,9 +104,9 @@ describe("chorus global", function() {
             expect(this.spy2).not.toHaveBeenCalled();
         });
 
-        it("calls chorus.PageEvents.reset after the router triggers leaving", function() {
+        it("resets chorus.PageEvents after the router triggers leaving", function() {
             this.chorus.router.trigger("leaving");
-            expect(this.chorus.PageEvents.reset).toHaveBeenCalled();
+            expect(this.chorus.PageEvents.off).toHaveBeenCalled();
         });
     });
 
@@ -453,13 +453,13 @@ describe("chorus global", function() {
 
         context("with the default onTextChange and a supplied eventName", function() {
             beforeEach(function() {
-                spyOn(chorus.PageEvents, "broadcast");
+                spyOn(chorus.PageEvents, "trigger");
                 chorus.search({ input: this.input1, list: this.list, eventName: "database:search"});
             });
 
-            it("should broadcast the event", function() {
+            it("should trigger the event", function() {
                 this.input1.val("otherText").trigger("keyup");
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("database:search");
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("database:search");
             });
         });
 

@@ -108,7 +108,7 @@ describe("chorus.views.DataSourceIndex", function() {
                 spyOn(this.view.dataSources, "fetchAll").andCallThrough();
                 spyOn(this.view.hdfsDataSources, "fetchAll").andCallThrough();
                 spyOn(this.view.gnipDataSources, "fetchAll").andCallThrough();
-                chorus.PageEvents.broadcast("data_source:added", this.newDataSource);
+                chorus.PageEvents.trigger("data_source:added", this.newDataSource);
             });
 
             it('re-fetches the data sources, hadoop and gnip data sources', function() {
@@ -120,7 +120,7 @@ describe("chorus.views.DataSourceIndex", function() {
             context("when the datasources have been re-fetched", function() {
                 beforeEach(function() {
                     this.selectedSpy = jasmine.createSpy("selected");
-                    chorus.PageEvents.subscribe("data_source:selected", this.selectedSpy);
+                    chorus.PageEvents.on("data_source:selected", this.selectedSpy);
                     this.server.completeFetchFor(this.dataSources, [
                         rspecFixtures.gpdbDataSource({name: "GP9", id: "1"}),
                         rspecFixtures.gpdbDataSource({name: "gP1", id: "2"}),
@@ -143,7 +143,7 @@ describe("chorus.views.DataSourceIndex", function() {
                     expect(this.view.$("li.selected .name")).toHaveText("new data source");
                 });
 
-                it("broadcasts a data_source:selected event to update the sidebar", function() {
+                it("triggers a data_source:selected event to update the sidebar", function() {
                     expect(this.selectedSpy).toHaveBeenCalled();
                     var selectedDataSource = _.last(this.selectedSpy.calls).args[0];
                     expect(selectedDataSource).toBe(this.newDataSource);
@@ -154,11 +154,11 @@ describe("chorus.views.DataSourceIndex", function() {
 
 
         describe("checking a data source checkbox", function() {
-            it("broadcasts the selected event with the right models", function() {
-                spyOn(chorus.PageEvents, 'broadcast');
+            it("triggers the selected event with the right models", function() {
+                spyOn(chorus.PageEvents, 'trigger');
                 this.view.$("li input:checkbox").eq(0).click().change();
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalled();
-                var lastTwoCalls = chorus.PageEvents.broadcast.calls.slice(-2);
+                expect(chorus.PageEvents.trigger).toHaveBeenCalled();
+                var lastTwoCalls = chorus.PageEvents.trigger.calls.slice(-2);
                 var eventName = lastTwoCalls[1].args[0];
                 expect(eventName).toEqual("data_source:checked");
                 var selectedModelsCollection = lastTwoCalls[0].args[1];
@@ -173,8 +173,8 @@ describe("chorus.views.DataSourceIndex", function() {
                     this.dataSources.at(0),
                     this.hdfsDataSources.at(0)
                 ]);
-                chorus.PageEvents.broadcast('checked', this.view.selectedModels);
-                chorus.PageEvents.broadcast('data_source:checked', this.view.selectedModels);
+                chorus.PageEvents.trigger('checked', this.view.selectedModels);
+                chorus.PageEvents.trigger('data_source:checked', this.view.selectedModels);
                 expect(this.view.$("input:checked").length).toBe(2);
 
                 var selectedDataSourceCheckbox = this.view.$("input[type=checkbox]").eq(0);

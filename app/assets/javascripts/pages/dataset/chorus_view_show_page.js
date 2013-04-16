@@ -12,7 +12,7 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
     },
 
     drawColumns: function() {
-        this.stopListening(this.mainContent.contentDetails);
+        this.mainContent.contentDetails && this.stopListening(this.mainContent.contentDetails, "dataset:edit");
         this._super('drawColumns');
         this.listenTo(this.mainContent.contentDetails, "dataset:edit", this.editChorusView);
     },

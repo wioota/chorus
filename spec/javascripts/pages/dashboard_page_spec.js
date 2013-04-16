@@ -160,7 +160,7 @@ describe("chorus.pages.DashboardPage", function() {
         describe('when a data source is added', function() {
             beforeEach(function() {
                 spyOn(this.page, "fetchDataSources");
-                chorus.PageEvents.broadcast("data_source:added");
+                chorus.PageEvents.trigger("data_source:added");
             });
 
             it('re-fetches all data sources', function() {

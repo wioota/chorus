@@ -105,7 +105,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         describe("column:selected event", function() {
             beforeEach(function(){
                 this.databaseColumn = this.dataset.columns().models[0];
-                chorus.PageEvents.broadcast("column:selected", this.databaseColumn);
+                chorus.PageEvents.trigger("column:selected", this.databaseColumn);
             });
 
             it("displays the name of that column", function() {
@@ -121,7 +121,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             describe("selecting another column", function() {
                 beforeEach(function(){
                     this.databaseColumn2 = this.dataset.columns().models[1];
-                    chorus.PageEvents.broadcast("column:selected", this.databaseColumn2);
+                    chorus.PageEvents.trigger("column:selected", this.databaseColumn2);
                 });
 
                 it("adds that column too", function() {
@@ -132,7 +132,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
                 describe("deselecting one column", function() {
                     beforeEach(function(){
-                        chorus.PageEvents.broadcast("column:deselected", this.databaseColumn);
+                        chorus.PageEvents.trigger("column:deselected", this.databaseColumn);
                     });
 
                     it("removes the name of that column", function() {
@@ -141,7 +141,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
                     describe("deselecting the other column", function() {
                         beforeEach(function(){
-                            chorus.PageEvents.broadcast("column:deselected", this.databaseColumn2);
+                            chorus.PageEvents.trigger("column:deselected", this.databaseColumn2);
                         });
 
                         it("removes the name of that column, and displays the no columns div", function() {
@@ -156,8 +156,8 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         describe("column:select all", function() {
             beforeEach(function() {
                 var column1 = this.dataset.columns().models[0];
-                chorus.PageEvents.broadcast("column:selected", column1);
-                chorus.PageEvents.broadcast("column:selected", column1);
+                chorus.PageEvents.trigger("column:selected", column1);
+                chorus.PageEvents.trigger("column:selected", column1);
             });
 
             it("should not show duplicate columns", function() {
@@ -167,7 +167,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         describe("clicking the 'Remove' link", function() {
             beforeEach(function() {
-                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                spyOn(chorus.PageEvents, "trigger").andCallThrough();
                 this.column1 = this.dataset.columns().models[0];
 
                 this.joinedDataset = rspecFixtures.workspaceDataset.datasetTable();
@@ -177,14 +177,14 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
                 this.chorusView.addJoin(this.column1, this.column2, 'inner');
 
-                chorus.PageEvents.broadcast("column:selected", this.column1);
-                chorus.PageEvents.broadcast("column:selected", this.column2);
+                chorus.PageEvents.trigger("column:selected", this.column1);
+                chorus.PageEvents.trigger("column:selected", this.column2);
                 this.view.render();
                 this.view.$("a.remove").eq(0).click();
             });
 
             it("should trigger the column:removed event", function() {
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("column:removed", this.column1);
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("column:removed", this.column1);
             });
 
             it("displays only the one remaining column", function() {
@@ -248,7 +248,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         describe("clicking 'Create Dataset'", function() {
             beforeEach(function() {
-                chorus.PageEvents.broadcast("column:selected", this.dataset.columns().models[0]);
+                chorus.PageEvents.trigger("column:selected", this.dataset.columns().models[0]);
                 spyOn(this.view, "sql").andReturn("SELECT * FROM FOO");
                 this.launchModalSpy = jasmine.createSpy("launchModal");
                 spyOn(chorus.dialogs, "VerifyChorusView").andCallFake(_.bind(function(options) {

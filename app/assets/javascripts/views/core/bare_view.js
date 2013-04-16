@@ -23,7 +23,6 @@ chorus.views.Bare = Backbone.View.include(
             this.preInitialize.apply(this, arguments);
             chorus.viewsToTearDown.push(this);
             this.subViewObjects = [];
-            this.subscriptions = [];
 
             this._initializeHeaderAndBreadcrumbs();
             this.setup.apply(this, arguments);
@@ -83,17 +82,10 @@ chorus.views.Bare = Backbone.View.include(
                 $(this.el).remove();
             }
 
-            this.scrollHandle && chorus.PageEvents.unsubscribe(this.scrollHandle);
-
             while(!_.isEmpty(this.subViewObjects)) {
                 var subViewObject = this.subViewObjects.pop();
                 subViewObject.teardown();
             }
-
-            _.each(this.subscriptions, function(handle) {
-                chorus.PageEvents.unsubscribe(handle);
-            });
-            this.subscriptions = [];
 
             if(this.parentView) {
                 var subViewObjects = this.parentView.subViewObjects;
@@ -107,7 +99,7 @@ chorus.views.Bare = Backbone.View.include(
             var keydownEventName = "keydown." + this.cid;
             _.each(this.hotkeys, _.bind(function(eventName, hotkey) {
                 $(document).bind(keydownEventName, chorus.hotKeyMeta + '+' + hotkey, function(event) {
-                    chorus.PageEvents.broadcast(eventName, event);
+                    chorus.PageEvents.trigger(eventName, event);
                 });
             }));
 
@@ -178,7 +170,7 @@ chorus.views.Bare = Backbone.View.include(
             this.renderSubviews();
             this.postRender($(this.el));
             this.renderHelps();
-            chorus.PageEvents.broadcast("content:changed");
+            chorus.PageEvents.trigger("content:changed");
             return this;
         },
 
@@ -264,14 +256,9 @@ chorus.views.Bare = Backbone.View.include(
             });
         },
 
-        subscribePageEvent: function(eventName, callback, context, id) {
-            context = context || this;
-            if(!id && _.isString(context)) {
-                id = context;
-                context = this;
-            }
-            var subscription = chorus.PageEvents.subscribe(eventName, callback, context, id);
-            this.subscriptions.push(subscription);
+        subscribePageEvent: function(eventName, callback)
+        {
+            this.listenTo(chorus.PageEvents, eventName, callback);
         },
 
         template: function template(context) {
@@ -309,13 +296,8 @@ chorus.views.Bare = Backbone.View.include(
                     // TODO #42333397: clean up this binding at teardown because it leaks memory
                     $el.bind("jsp-scroll-y", _.bind(function() { this.trigger("scroll"); }, this));
 
-                    if(this.scrollHandle) {
-                        chorus.PageEvents.unsubscribe(this.scrollHandle);
-                        var index = this.subscriptions.indexOf(this.scrollHandle);
-                        if(index > -1) this.subscriptions.splice(index, 1);
-                    }
-                    this.scrollHandle = this.subscribePageEvent("content:changed", function() { this.recalculateScrolling($el); });
-                    this.subscriptions.push(this.scrollHandle);
+                    this.stopListening(chorus.PageEvents, "content:changed");
+                    this.subscribePageEvent("content:changed", function() { this.recalculateScrolling($el); });
 
                     if (!alreadyInitialized) {
                         $el.addClass("custom_scroll");

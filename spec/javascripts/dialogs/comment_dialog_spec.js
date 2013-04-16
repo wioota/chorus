@@ -82,9 +82,9 @@ describe("chorus.dialogs.CommentDialog", function () {
             expect("invalidated").toHaveBeenTriggeredOn(this.dialog.pageModel);
         });
 
-        it("broadcasts comment:added", function () {
+        it("triggers comment:added", function () {
             var addedSpy = jasmine.createSpy("comment:added");
-            chorus.PageEvents.subscribe("comment:added", addedSpy);
+            chorus.PageEvents.on("comment:added", addedSpy);
             this.dialog.model.trigger("saved");
             expect(addedSpy).toHaveBeenCalled();
         });

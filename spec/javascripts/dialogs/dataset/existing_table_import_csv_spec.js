@@ -566,7 +566,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 beforeEach(function() {
                     spyOn(chorus, 'toast');
                     spyOn(chorus.router, "navigate");
-                    spyOn(chorus.PageEvents, 'broadcast');
+                    spyOn(chorus.PageEvents, 'trigger');
                     this.server.lastCreateFor(this.dialog.model).succeed();
                 });
 
@@ -576,7 +576,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 });
 
                 it("triggers csv_import:started", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("csv_import:started");
                 });
 
                 it("should navigate to the destination sandbox table", function() {

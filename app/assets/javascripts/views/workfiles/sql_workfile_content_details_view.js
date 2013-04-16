@@ -45,7 +45,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
 
         this.fileMenu.disableItem("newSelectionChorusView");
 
-        chorus.PageEvents.broadcast("file:editorSelectionStatus");
+        chorus.PageEvents.trigger("file:editorSelectionStatus");
     },
 
     fileMenuItems: function() {
@@ -96,20 +96,20 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
     },
 
     createChorusViewFromFile: function() {
-        chorus.PageEvents.broadcast("file:newChorusView");
+        chorus.PageEvents.trigger("file:newChorusView");
     },
 
     createChorusViewFromSelection: function() {
-        chorus.PageEvents.broadcast("file:newSelectionChorusView");
+        chorus.PageEvents.trigger("file:newSelectionChorusView");
     },
 
     runInExecutionSchema: function() {
-        chorus.PageEvents.broadcast("file:runCurrent");
+        chorus.PageEvents.trigger("file:runCurrent");
     },
 
     runSelectedInExecutionSchema: function() {
         if (this.enableRunSelection()) {
-            chorus.PageEvents.broadcast("file:runSelected");
+            chorus.PageEvents.trigger("file:runSelected");
         }
     },
 
@@ -127,7 +127,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
         e.preventDefault();
 
         if (this.model.workspace().isActive() && this.model.workspace().canUpdate()) {
-            chorus.PageEvents.broadcast("file:saveDraft");
+            chorus.PageEvents.trigger("file:saveDraft");
             this.dialog = new chorus.dialogs.ChangeWorkfileSchema({ model: this.model });
             this.dialog.launchModal();
         }

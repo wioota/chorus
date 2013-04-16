@@ -15,7 +15,7 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
         this.entityType = this.options.entityType;
         this.selectedModels = this.options.selectedModels;
         this.list = this.buildList();
-        this.subscribePageEvent("selected", this.saveSearchSelection, this);
+        this.subscribePageEvent("selected", this.saveSearchSelection);
     },
 
     saveSearchSelection: function(model) {

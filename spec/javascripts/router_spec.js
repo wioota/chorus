@@ -5,7 +5,7 @@ describe("chorus.router", function() {
             this.backboneSpy = spyOn(Backbone.history, "start");
             this.chorus.initialize();
             spyOn(this.chorus, "scrollToTop");
-            spyOn(chorus.PageEvents, "reset");
+            spyOn(chorus.PageEvents, "off");
 
         });
 
@@ -44,8 +44,8 @@ describe("chorus.router", function() {
                     expect(chorus.pages.UserNewPage.prototype.initialize).toHaveBeenCalled();
                 });
 
-                it("calls reset on the PageEvents object", function() {
-                    expect(chorus.PageEvents.reset).toHaveBeenCalled();
+                it("resets the PageEvents object", function() {
+                    expect(chorus.PageEvents.off).toHaveBeenCalled();
                 });
 
                 it("scrolls to the top of the page", function() {

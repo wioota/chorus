@@ -110,7 +110,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
                         beforeEach(function() {
                             this.executionSchema = rspecFixtures.schema({id: 101, name: 'other_schema', database: this.schema.get('database')});
                             this.workfile = new chorus.models.Workfile(rspecFixtures.workfile.sql({executionSchema: this.executionSchema.attributes}));
-                            chorus.PageEvents.broadcast("workfile:changed", this.workfile);
+                            chorus.PageEvents.trigger("workfile:changed", this.workfile);
                         });
 
                         it("does not fetch anything", function() {
@@ -123,7 +123,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
                         beforeEach(function() {
                             this.executionSchema = rspecFixtures.schema({id: 101, name: 'other_schema', database: {id: 102, name: 'other_database'}});
                             this.workfile = new chorus.models.Workfile(rspecFixtures.workfile.sql({executionSchema: this.executionSchema.attributes}));
-                            chorus.PageEvents.broadcast("workfile:changed", this.workfile);
+                            chorus.PageEvents.trigger("workfile:changed", this.workfile);
                         });
 
                         it("fetches the execution schema", function() {

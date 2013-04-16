@@ -145,7 +145,7 @@ describe("chorus.views.UserSidebar", function() {
 
             it("is called when user:selected is triggered", function() {
                 this.view.setUser.reset();
-                chorus.PageEvents.broadcast("user:selected", rspecFixtures.user());
+                chorus.PageEvents.trigger("user:selected", rspecFixtures.user());
                 expect(this.view.setUser).toHaveBeenCalled();
             });
         });

@@ -20,7 +20,7 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
 
     context("when a model is selected", function() {
         beforeEach(function() {
-            chorus.PageEvents.broadcast("model:selected", new chorus.collections.Base([
+            chorus.PageEvents.trigger("model:selected", new chorus.collections.Base([
                 {}
             ]));
             this.view.render();
@@ -55,12 +55,12 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
 
         describe("clicking deselect all link", function() {
             beforeEach(function() {
-                spyOn(chorus.PageEvents, "broadcast");
+                spyOn(chorus.PageEvents, "trigger");
                 this.view.$(".deselect_all").click();
             });
 
-            it("broadcasts a selectNone event", function() {
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("selectNone");
+            it("triggers a selectNone event", function() {
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectNone");
             });
         });
     });

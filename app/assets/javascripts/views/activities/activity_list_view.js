@@ -31,7 +31,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
     toggleCommentList:function (event) {
         event.preventDefault();
         $(event.target).closest(".comments").toggleClass("more");
-        chorus.PageEvents.broadcast("content:changed");
+        chorus.PageEvents.trigger("content:changed");
     },
 
     fetchMoreActivities:function (ev) {

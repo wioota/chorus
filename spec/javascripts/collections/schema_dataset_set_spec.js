@@ -42,7 +42,7 @@ describe("chorus.collections.SchemaDatasetSet", function() {
             );
         });
 
-        it("broadcasts 'searched' when API query returns", function() {
+        it("triggers 'searched' when API query returns", function() {
             var eventListener = jasmine.createSpy();
             this.collection.bind('searched', eventListener);
             this.collection.search("search term");

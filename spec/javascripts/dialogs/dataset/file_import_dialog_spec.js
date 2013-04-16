@@ -466,7 +466,7 @@ describe("chorus.dialogs.FileImport", function() {
                         it("closes itself when the 'import new table' dialog closes", function() {
                             var importCsvDialog = chorus.dialogs.NewTableImportCSV.prototype.setup.mostRecentCall.object;
                             importCsvDialog.closeModal();
-                            chorus.PageEvents.broadcast("csv_import:started");
+                            chorus.PageEvents.trigger("csv_import:started");
                             expect(this.dialog.modalClosed).toHaveBeenCalled();
                         });
 

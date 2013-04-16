@@ -166,11 +166,11 @@ describe("chorus.views.Base", function() {
             expect($._data(document, "events").keydown).toBeDefined();
         });
 
-        it("broadcasts events on hotkeys", function() {
-            spyOn(chorus.PageEvents, "broadcast");
+        it("triggers events on hotkeys", function() {
+            spyOn(chorus.PageEvents, "trigger");
             var ev = $.Event("keydown", { which: 82, ctrlKey: true });
             $(document).trigger(ev);
-            expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("my:event", ev);
+            expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("my:event", ev);
         });
 
         describe("navigating away", function() {
@@ -270,12 +270,12 @@ describe("chorus.views.Base", function() {
                         template: function() { return "<div class='foo'/>"; }
                     });
                     this.view = new SubClass();
-                    spyOn(chorus.PageEvents, "broadcast");
+                    spyOn(chorus.PageEvents, "trigger");
                     this.view.render();
                 });
 
                 it("triggers a 'content:changed' event on itself", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("content:changed");
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("content:changed");
                 });
 
                 it("adds the template name as a data-template", function() {

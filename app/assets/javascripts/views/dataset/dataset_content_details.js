@@ -29,8 +29,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.closePreviewHandle = this.subscribePageEvent("action:closePreview", this.closeDataPreview);
-        this.subscriptions.push(this.closePreviewHandle);
+        this.subscribePageEvent("action:closePreview", this.closeDataPreview);
         this.dataset = this.options.dataset;
         this.resultsConsole = new chorus.views.ResultsConsole({
             titleKey: "dataset.data_preview",
@@ -92,12 +91,12 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     triggerSelectAll: function(e) {
         e && e.preventDefault();
-        chorus.PageEvents.broadcast("column:select_all");
+        chorus.PageEvents.trigger("column:select_all");
     },
 
     triggerSelectNone: function(e) {
         e && e.preventDefault();
-        chorus.PageEvents.broadcast("column:select_none");
+        chorus.PageEvents.trigger("column:select_none");
     },
 
     startVisualizationWizard: function() {
@@ -109,7 +108,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".filters").removeClass("hidden");
         this.filterWizardView.options.showAliasedName = false;
         this.filterWizardView.resetFilters();
-        chorus.PageEvents.broadcast("start:visualization");
+        chorus.PageEvents.trigger("start:visualization");
     },
 
     selectVisualization: function(e) {
@@ -129,7 +128,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.column_count').removeClass("hidden");
         this.$('.info_bar').addClass('hidden');
         this.$(".chart_config").addClass('hidden');
-        chorus.PageEvents.broadcast('cancel:visualization');
+        chorus.PageEvents.trigger('cancel:visualization');
         if(this.chartConfig) {
             this.chartConfig.teardown(true);
             delete this.chartConfig;
@@ -155,7 +154,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     cancelCreateChorusView: function(e) {
         e.preventDefault();
-        chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');
+        chorus.PageEvents.trigger('cancel:sidebar', 'chorus_view');
         this.$('.definition').removeClass("hidden");
         this.$('.create_chorus_view').addClass("hidden");
         this.$(".filters").addClass("hidden");
@@ -163,7 +162,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$('.chorus_view_info').addClass('hidden');
 
         this.$(".column_count input.search").trigger("textchange");
-        this.closePreviewHandle = this.subscribePageEvent("action:closePreview", this.closeDataPreview);
+        this.subscribePageEvent("action:closePreview", this.closeDataPreview);
         this.inDeriveChorusView = false;
     },
 
@@ -190,12 +189,12 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         this.$(".column_count").removeClass("hidden");
         this.$(".definition").removeClass("hidden");
         this.dataset.set({query: this.dataset.initialQuery});
-        chorus.PageEvents.broadcast('cancel:sidebar', 'chorus_view');
-        chorus.PageEvents.broadcast('dataset:cancelEdit');
+        chorus.PageEvents.trigger('cancel:sidebar', 'chorus_view');
+        chorus.PageEvents.trigger('dataset:cancelEdit');
     },
 
     saveChorusView: function() {
-        chorus.PageEvents.broadcast("dataset:saveEdit");
+        chorus.PageEvents.trigger("dataset:saveEdit");
     },
 
     closeErrorWithDetailsLink: function(e) {

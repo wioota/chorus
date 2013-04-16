@@ -14,7 +14,7 @@ describe("chorus.views.WorkspaceListSidebar", function() {
         beforeEach(function() {
             this.workspace = rspecFixtures.workspace();
 
-            chorus.PageEvents.broadcast("workspace:selected", this.workspace);
+            chorus.PageEvents.trigger("workspace:selected", this.workspace);
         });
 
         it("displays the workspace name", function() {

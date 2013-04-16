@@ -75,7 +75,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                 this.entry = new chorus.models.HdfsEntry({});
 
                 expect(this.page.model).toEqual(this.page.collection.at(0));
-                chorus.PageEvents.broadcast("hdfs_entry:selected", this.entry);
+                chorus.PageEvents.trigger("hdfs_entry:selected", this.entry);
             });
             it("sets the entry as the model", function() {
                 expect(this.page.model).toEqual(this.entry);

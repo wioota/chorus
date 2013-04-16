@@ -23,8 +23,8 @@ chorus.dialogs.DatasetPreview = chorus.dialogs.Base.extend({
             enableExpander: true,
             verticalDialogPadding: this.verticalPadding
         });
-        this.closePreviewHandle = this.subscribePageEvent("action:closePreview", this.closeModal);
-        this.modalClosedHandle = this.subscribePageEvent("modal:closed", this.cancelTask);
+        this.subscribePageEvent("action:closePreview", this.closeModal);
+        this.subscribePageEvent("modal:closed", this.cancelTask);
     },
 
     footerSize: function() {
@@ -38,10 +38,5 @@ chorus.dialogs.DatasetPreview = chorus.dialogs.Base.extend({
 
     cancelTask: function(e) {
         this.task && this.task.cancel();
-        chorus.PageEvents.unsubscribe(this.modalClosedHandle);
-    },
-
-    close: function() {
-        chorus.PageEvents.unsubscribe(this.closePreviewHandle);
     }
 });

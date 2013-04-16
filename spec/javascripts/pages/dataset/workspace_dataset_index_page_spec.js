@@ -194,7 +194,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
             it("fetches the collection when csv_import:started is triggered", function() {
                 spyOn(this.page.collection, 'fetch').andCallThrough();
-                chorus.PageEvents.broadcast("csv_import:started");
+                chorus.PageEvents.trigger("csv_import:started");
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             });
 
@@ -205,7 +205,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
                 context("when a row has been checked", function() {
                     beforeEach(function() {
-                        chorus.PageEvents.broadcast("dataset:checked", this.page.collection.clone());
+                        chorus.PageEvents.trigger("dataset:checked", this.page.collection.clone());
                     });
 
                     it("displays the multiple selection section", function() {
@@ -446,7 +446,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             this.page.render();
 
             this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            chorus.PageEvents.broadcast("dataset:selected", this.dataset);
+            chorus.PageEvents.trigger("dataset:selected", this.dataset);
         });
 
         it("sets the selected dataset as its own model", function() {

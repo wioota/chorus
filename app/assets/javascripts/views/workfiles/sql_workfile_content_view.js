@@ -76,7 +76,7 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
         }, { silent: true });
 
         this.task.save({}, { method: "create" });
-        chorus.PageEvents.broadcast("file:executionStarted", this.task);
+        chorus.PageEvents.trigger("file:executionStarted", this.task);
     },
 
     createTask: function(taskClass) {
@@ -118,12 +118,12 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
 
     executionSucceeded: function(task) {
         this.executing = false;
-        chorus.PageEvents.broadcast("file:executionSucceeded", task);
-        chorus.PageEvents.broadcast("workfile:changed", this.model);
+        chorus.PageEvents.trigger("file:executionSucceeded", task);
+        chorus.PageEvents.trigger("workfile:changed", this.model);
     },
 
     executionFailed: function(task) {
         this.executing = false;
-        chorus.PageEvents.broadcast("file:executionFailed", task);
+        chorus.PageEvents.trigger("file:executionFailed", task);
     }
 });

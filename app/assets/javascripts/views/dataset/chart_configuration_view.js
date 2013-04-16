@@ -31,7 +31,7 @@
             this.numericalColumns = filterColumns(['WHOLE_NUMBER', 'REAL_NUMBER'], this.columns);
             this.datetimeColumns = filterColumns(['DATE', 'TIME', "DATETIME"], this.columns);
 
-            this.cancelVisualizationHandle = this.subscribePageEvent("cancel:visualization", this.cancelVisualization);
+            this.subscribePageEvent("cancel:visualization", this.cancelVisualization);
 
         },
 
@@ -76,7 +76,6 @@
 
         teardown: function() {
             this.clearSqlErrors();
-            chorus.PageEvents.unsubscribe(this.cancelVisualizationHandle);
             this._super("teardown", arguments);
         },
 

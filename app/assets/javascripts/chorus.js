@@ -23,7 +23,7 @@ window.Chorus = function chorus$Global() {
                 mode: "overlay"
             });
         }
-        self.PageEvents = new chorus.utilities.PageEvents();
+        self.PageEvents = _.extend({}, Backbone.Events);
         self.session = new chorus.models.Session();
         self.router = new chorus.Router(self);
         self.detectFeatures();
@@ -95,7 +95,7 @@ window.Chorus = function chorus$Global() {
     };
 
     self._navigated = function() {
-        self.PageEvents.reset();
+        self.PageEvents.off();
 
         while (!_.isEmpty(self.viewsToTearDown)) {
             var view = self.viewsToTearDown.pop();
@@ -274,7 +274,7 @@ window.Chorus = function chorus$Global() {
 
         if (afterFilter) afterFilter();
         if (eventName) {
-            chorus.PageEvents.broadcast(eventName);
+            chorus.PageEvents.trigger(eventName);
         }
     }
 

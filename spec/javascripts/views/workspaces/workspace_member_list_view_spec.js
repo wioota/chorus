@@ -53,14 +53,14 @@ describe("chorus.views.WorkspaceMemberList", function() {
                 expect(this.view.$(".members a.dialog[data-dialog=WorkspaceMembersMore]").length).toBe(0);
             });
 
-            describe("when a workspace:selected event is broadcast", function() {
+            describe("when a workspace:selected event is trigger", function() {
                 beforeEach(function() {
                     this.workspace = rspecFixtures.workspace({id: 456});
                 });
 
                 it("fetches and renders members from the new workspace", function() {
                     expect(this.view.$(".members li a").length).toEqual(2);
-                    chorus.PageEvents.broadcast("workspace:selected", this.workspace);
+                    chorus.PageEvents.trigger("workspace:selected", this.workspace);
                     this.server.completeFetchFor(this.workspace.members(),
                         [rspecFixtures.user({id: 123})],
                         {records:1}
@@ -93,7 +93,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
 
         it('setting the workspace a second time does not fetch the members', function(){
             this.server.reset();
-            chorus.PageEvents.broadcast("workspace:selected", this.workspace);
+            chorus.PageEvents.trigger("workspace:selected", this.workspace);
             expect(this.server.fetches().length).toEqual(0);
         });
 
@@ -104,7 +104,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
         });
     });
 
-    describe("when a workspace:selected event is broadcast", function() {
+    describe("when a workspace:selected event is trigger", function() {
         beforeEach(function() {
             this.view = new chorus.views.WorkspaceMemberList();
             this.workspace = rspecFixtures.workspace({id: 456});
@@ -113,7 +113,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
 
         it("renders members from the new workspace", function() {
             expect(this.view.$(".members li a").length).toEqual(0);
-            chorus.PageEvents.broadcast("workspace:selected", this.workspace);
+            chorus.PageEvents.trigger("workspace:selected", this.workspace);
             expect(this.view.$(".members li a").length).toEqual(1);
         });
     });

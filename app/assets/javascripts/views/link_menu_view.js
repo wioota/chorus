@@ -38,7 +38,7 @@ chorus.views.LinkMenu = chorus.views.Base.extend({
         var eventName = ul.data("event");
         var pickedChoiceData = $(e.target).closest('li').data("type");
         this.trigger("choice", eventName, pickedChoiceData);
-        chorus.PageEvents.broadcast("choice:" + eventName, pickedChoiceData, this);
+        chorus.PageEvents.trigger("choice:" + eventName, pickedChoiceData, this);
         this.render();
     }
 });

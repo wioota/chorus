@@ -108,7 +108,7 @@ describe("chorus.dialogs.EditNote", function() {
         describe("when the save completes successfully", function() {
             beforeEach(function() {
                 spyOn(this.dialog, "closeModal");
-                spyOn(chorus.PageEvents, "broadcast");
+                spyOn(chorus.PageEvents, "trigger");
                 this.server.lastUpdate().succeed();
             });
 
@@ -121,7 +121,7 @@ describe("chorus.dialogs.EditNote", function() {
             });
 
             it('triggers the note:saved event', function() {
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith('note:saved', this.dialog.model);
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith('note:saved', this.dialog.model);
             });
         });
 

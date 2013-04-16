@@ -272,7 +272,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
 
             spyOn(chorus.views.Base.prototype, "render").andCallThrough();
             this.view = new chorus.views.DataSourceListSidebar();
-            chorus.PageEvents.broadcast("data_source:selected", this.dataSource);
+            chorus.PageEvents.trigger("data_source:selected", this.dataSource);
             $('#jasmine_content').append(this.view.el);
         });
 
@@ -426,7 +426,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
 
             spyOn(chorus.views.Base.prototype, "render").andCallThrough();
             this.view = new chorus.views.DataSourceListSidebar();
-            chorus.PageEvents.broadcast("data_source:selected", this.dataSource);
+            chorus.PageEvents.trigger("data_source:selected", this.dataSource);
             $('#jasmine_content').append(this.view.el);
         });
 
@@ -514,7 +514,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
                 owner: {id: chorus.session.user().get('id')}
             });
             this.view = new chorus.views.DataSourceListSidebar();
-            chorus.PageEvents.broadcast("data_source:selected", this.dataSource);
+            chorus.PageEvents.trigger("data_source:selected", this.dataSource);
             this.server.completeFetchFor(this.dataSource.activities());
         });
 
@@ -538,7 +538,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
         beforeEach(function() {
             this.dataSource = rspecFixtures.gnipDataSource({name: "Harry's House of Glamour", username: "gnip" });
             this.view = new chorus.views.DataSourceListSidebar();
-            chorus.PageEvents.broadcast("data_source:selected", this.dataSource);
+            chorus.PageEvents.trigger("data_source:selected", this.dataSource);
             this.server.completeFetchFor(this.dataSource.activities());
         });
 

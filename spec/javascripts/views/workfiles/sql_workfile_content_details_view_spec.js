@@ -111,7 +111,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 this.contentView.getSelectedText = function() {
                     return "";
                 };
-                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                spyOn(chorus.PageEvents, "trigger").andCallThrough();
             });
 
             context("and opens the Run File menu", function() {
@@ -140,9 +140,9 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
         context("when the user has selected some text", function() {
             beforeEach(function() {
                 spyOn(this.contentView, "getSelectedText").andReturn("Chuck and Lenny");
-                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                spyOn(chorus.PageEvents, "trigger").andCallThrough();
 
-                chorus.PageEvents.broadcast("file:selectionPresent");
+                chorus.PageEvents.trigger("file:selectionPresent");
             });
 
             it("Changes the 'Run file' button text to 'Run Selected'", function() {
@@ -156,7 +156,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
             context("when the user de-selects text", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("file:selectionEmpty");
+                    chorus.PageEvents.trigger("file:selectionEmpty");
                 });
 
                 it("changes Run Selected button text back to Run File", function() {
@@ -182,7 +182,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
                     it("runs the selected sql when the user says to", function() {
                         this.qtipElement.find(".run_selection").click();
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runSelected");
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("file:runSelected");
                     });
 
                     context("clicking on 'Run selection and download'", function() {
@@ -214,9 +214,9 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     });
 
                     it("does nothing when the user clicks run selection", function() {
-                        chorus.PageEvents.broadcast.reset();
+                        chorus.PageEvents.trigger.reset();
                         this.qtipElement.find(".run_selection").click();
-                        expect(chorus.PageEvents.broadcast).not.toHaveBeenCalled();
+                        expect(chorus.PageEvents.trigger).not.toHaveBeenCalled();
                     });
                 });
             });
@@ -248,20 +248,20 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                 });
 
                 it("does nothing when the disabled span is clicked", function() {
-                    spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                    spyOn(chorus.PageEvents, "trigger").andCallThrough();
                     this.qtipElement.find(".run_default").click();
-                    expect(chorus.PageEvents.broadcast).not.toHaveBeenCalled();
+                    expect(chorus.PageEvents.trigger).not.toHaveBeenCalled();
                 });
             });
 
             context("clicking on 'Run file'", function() {
                 beforeEach(function() {
-                    spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                    spyOn(chorus.PageEvents, "trigger").andCallThrough();
                     this.qtipElement.find('.run_default').click();
                 });
 
-                it("broadcasts the 'file:runCurrent' event on the view", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:runCurrent");
+                it("triggers the 'file:runCurrent' event on the view", function() {
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("file:runCurrent");
                 });
             });
 
@@ -277,13 +277,13 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             context("it fires an event - editorSelectionStatus", function() {
                 beforeEach(function() {
                     spyOn(this.contentView, "getSelectedText").andReturn("Chuck and Lenny");
-                    spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                    spyOn(chorus.PageEvents, "trigger").andCallThrough();
                     this.qtipElement.find('.run_default').click();
                     this.view.render();
                 });
 
-                it("broadcast the event", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:editorSelectionStatus");
+                it("trigger the event", function() {
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("file:editorSelectionStatus");
                 });
             });
         });
@@ -293,12 +293,12 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
             beforeEach(function() {
                 modalSpy = stubModals();
                 this.saveDraftSpy = jasmine.createSpy("saveDraft");
-                chorus.PageEvents.subscribe('file:saveDraft', this.saveDraftSpy);
+                chorus.PageEvents.on('file:saveDraft', this.saveDraftSpy);
 
                 this.view.$(".change_workfile_schema").click();
             });
 
-            it("broadcasts a 'file:saveDraft' page event", function() {
+            it("triggers a 'file:saveDraft' page event", function() {
                 expect(this.saveDraftSpy).toHaveBeenCalled();
             });
 
@@ -327,19 +327,19 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
         beforeEach(function() {
             stubModals();
             this.view.model.workspace().set({active: true});
-            spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+            spyOn(chorus.PageEvents, "trigger").andCallThrough();
         });
 
         describe("from file", function() {
             beforeEach(function() {
                 this.view.render();
-                chorus.PageEvents.broadcast('file:selectionEmpty');
+                chorus.PageEvents.trigger('file:selectionEmpty');
             });
 
-            it("broadcasts file:newChorusView", function() {
+            it("triggers file:newChorusView", function() {
                 this.view.$('.save_as').click();
                 this.qtipElement.$('a[data-menu-name="newChorusView"]').click();
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:newChorusView");
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("file:newChorusView");
             });
         });
 
@@ -353,13 +353,13 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
         });
 
         context("with a selection", function() {
-            it("broadcasts file:newSelectionChorusView", function() {
+            it("triggers file:newSelectionChorusView", function() {
                 this.view.render();
-                chorus.PageEvents.broadcast('file:selectionPresent');
+                chorus.PageEvents.trigger('file:selectionPresent');
                 this.view.$('.save_as').click();
                 this.qtipElement.$('a[data-menu-name="newSelectionChorusView"]').click();
 
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("file:newSelectionChorusView");
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("file:newSelectionChorusView");
             });
 
             context("there is no sandbox nor executionSchema", function() {
@@ -368,7 +368,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
                     spyOn(this.view.model.workspace(), 'sandbox').andReturn(null);
 
                     this.view.render();
-                    chorus.PageEvents.broadcast('file:selectionPresent');
+                    chorus.PageEvents.trigger('file:selectionPresent');
 
                     this.view.$('.save_as').click();
                     expect(this.qtipElement.$('a[data-menu-name="newSelectionChorusView"]')).toHaveAttr('disabled');

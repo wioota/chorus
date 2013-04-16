@@ -157,7 +157,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                     beforeEach(function() {
                         spyOn(this.dialog, "closeModal");
                         spyOn(chorus, 'toast');
-                        spyOn(chorus.PageEvents, 'broadcast');
+                        spyOn(chorus.PageEvents, 'trigger');
                         this.server.lastCreate().succeed();
                     });
 
@@ -167,7 +167,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                     });
 
                     it("triggers csv_import:started", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("csv_import:started");
                     });
                 });
             });

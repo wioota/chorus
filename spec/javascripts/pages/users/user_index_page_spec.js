@@ -94,7 +94,7 @@ describe("chorus.pages.UserIndexPage", function() {
 
         it("sets the model to user on a user:selected event", function() {
             expect(this.page.model).toBeUndefined();
-            chorus.PageEvents.broadcast("user:selected", this.user);
+            chorus.PageEvents.trigger("user:selected", this.user);
             expect(this.page.model).toBe(this.user);
         });
     });

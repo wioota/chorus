@@ -129,7 +129,7 @@ describe("chorus.views.SearchResults", function() {
 
         describe("clicking an li", function() {
             beforeEach(function() {
-                this.eventSpy = spyOn(chorus.PageEvents, 'broadcast');
+                this.eventSpy = spyOn(chorus.PageEvents, 'trigger');
             });
 
             context("when the item was already selected", function() {
@@ -138,7 +138,7 @@ describe("chorus.views.SearchResults", function() {
                     this.view.$(".workfile_list li").eq(1).click();
                     this.eventSpy.reset();
                     this.view.$(".workfile_list li").eq(1).click();
-                    expect(chorus.PageEvents.broadcast).not.toHaveBeenCalledWith("workfile:selected", workfileToClick);
+                    expect(chorus.PageEvents.trigger).not.toHaveBeenCalledWith("workfile:selected", workfileToClick);
                 });
             });
 
@@ -157,7 +157,7 @@ describe("chorus.views.SearchResults", function() {
                     it("triggers the 'workfile:selected' event on itself, with the clicked model", function() {
                         var modelToClick = this.model.workspaceItems().find(function(item) {return item.get("entityType") === 'workfile';});
                         this.view.$(".this_workspace [data-template=search_workfile]").click();
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:selected", modelToClick);
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("workfile:selected", modelToClick);
                     });
                 });
 
@@ -165,7 +165,7 @@ describe("chorus.views.SearchResults", function() {
                     it("triggers the 'dataset:selected' event on itself, with the clicked model", function() {
                         var modelToClick = this.model.workspaceItems().find(function(item) {return item.get("entityType") === 'dataset';});
                         this.view.$(".this_workspace li[data-template=search_dataset]:first").click();
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:selected", modelToClick);
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("dataset:selected", modelToClick);
                     });
                 });
             });
@@ -174,7 +174,7 @@ describe("chorus.views.SearchResults", function() {
                 it("triggers the 'workfile:selected' event on itself, with the clicked workfile", function() {
                     var workfileToClick = this.model.workfiles().at(1);
                     this.view.$(".workfile_list li").eq(1).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workfile:selected", workfileToClick);
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("workfile:selected", workfileToClick);
                 });
             });
 
@@ -182,55 +182,55 @@ describe("chorus.views.SearchResults", function() {
                 it("triggers the 'attachment:selected' event on itself, with the clicked attachment", function() {
                     var attachmentToClick = this.model.attachments().at(1);
                     this.view.$(".attachment_list li").eq(1).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("attachment:selected", attachmentToClick);
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("attachment:selected", attachmentToClick);
                 });
             });
 
             context("when the li is for a workspace", function() {
-                it("broadcasts the 'workspace:selected' page event, with the clicked workspace", function() {
+                it("triggers the 'workspace:selected' page event, with the clicked workspace", function() {
                     var workspaceToClick = this.model.workspaces().at(1);
                     this.view.$(".workspace_list li").eq(1).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("workspace:selected", workspaceToClick);
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("workspace:selected", workspaceToClick);
                 });
             });
 
             context("when the li is for a tabular data", function() {
-                it("broadcasts the 'dataset:selected' page event, with the clicked tabular data", function() {
+                it("triggers the 'dataset:selected' page event, with the clicked tabular data", function() {
                     var modelToClick = this.model.datasets().at(0);
                     this.view.$(".dataset_list li").eq(0).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("dataset:selected", modelToClick);
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("dataset:selected", modelToClick);
                 });
             });
 
             context("when the li is for a hadoop file", function() {
-                it("broadcasts the 'hdfs_entry:selected' page event with the clicked hdfs file", function() {
+                it("triggers the 'hdfs_entry:selected' page event with the clicked hdfs file", function() {
                     var modelToClick = this.model.hdfs_entries().at(1);
                     this.view.$(".hdfs_list li").eq(1).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("hdfs_entry:selected", modelToClick);
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("hdfs_entry:selected", modelToClick);
                 });
             });
 
             context('when the li is for a data source', function() {
-                it("broadcasts the 'data_source:selected' page event with the clicked data source", function() {
+                it("triggers the 'data_source:selected' page event with the clicked data source", function() {
                     var modelToClick = this.model.dataSources().find(function (dataSource) { return dataSource.isGreenplum(); });
                     this.view.$(".data_source_list .gpdb_data_source").eq(0).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:selected", modelToClick);
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("data_source:selected", modelToClick);
                 });
             });
 
             context('when the li is for a hadoop data source', function() {
-                it("broadcasts the 'data_source:selected' page event with the clicked data source", function() {
+                it("triggers the 'data_source:selected' page event with the clicked data source", function() {
                     var modelToClick = this.model.dataSources().find(function (dataSource) { return dataSource.isHadoop(); });
                     this.view.$(".data_source_list .hdfs_data_source").eq(0).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:selected", modelToClick);
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("data_source:selected", modelToClick);
                 });
             });
 
             context('when the li is for a gnip data source', function() {
-                it("broadcasts the 'data_source:selected' page event with the clicked data source", function() {
+                it("triggers the 'data_source:selected' page event with the clicked data source", function() {
                     var modelToClick = this.model.dataSources().find(function (dataSource) { return dataSource.isGnip(); });
                     this.view.$(".data_source_list .gnip_data_source").eq(0).click();
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("data_source:selected", modelToClick);
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("data_source:selected", modelToClick);
                 });
             });
         });

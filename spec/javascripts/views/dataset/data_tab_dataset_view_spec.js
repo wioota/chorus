@@ -4,7 +4,7 @@ describe("chorus.views.DataTabDataset", function() {
         this.view = new chorus.views.DataTabDataset({model: this.dataset});
         this.qtip = stubQtip();
         this.view.render();
-        spyOn(chorus.PageEvents, "broadcast");
+        spyOn(chorus.PageEvents, "trigger");
     });
 
     it("adds the correct data attribute for fullname", function() {

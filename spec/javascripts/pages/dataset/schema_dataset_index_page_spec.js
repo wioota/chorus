@@ -203,7 +203,7 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
         describe("multiple selection", function() {
             context("when a row has been checked", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("dataset:checked", this.page.collection.clone());
+                    chorus.PageEvents.trigger("dataset:checked", this.page.collection.clone());
                 });
 
                 it("has an action to associate datasets with workspace", function() {

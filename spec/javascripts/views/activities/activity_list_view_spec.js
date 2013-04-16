@@ -17,13 +17,13 @@ describe("chorus.views.ActivityList", function() {
         });
 
         it("re-renders when 'note:deleted' is fired", function() {
-            chorus.PageEvents.broadcast('note:deleted', this.note);
+            chorus.PageEvents.trigger('note:deleted', this.note);
             expect(this.view.$("li[data-activity-id=" + this.note.id + "]")).not.toExist();
         });
 
         it('re-renders when note:saved is fired', function() {
             this.newNote = rspecFixtures.activity.noteOnGreenplumDataSource({id: this.note.id, body: 'A New Note'});
-            chorus.PageEvents.broadcast('note:saved', this.newNote);
+            chorus.PageEvents.trigger('note:saved', this.newNote);
             expect(this.view.$("li[data-activity-id=" + this.note.id + "]")).toContainText("A New Note");
         });
     });
@@ -112,7 +112,7 @@ describe("chorus.views.ActivityList", function() {
 
             describe("when the more link is clicked", function() {
                 beforeEach(function() {
-                    spyOn(chorus.PageEvents, "broadcast");
+                    spyOn(chorus.PageEvents, "trigger");
                     this.view.$("li[data-activity-id]:eq(0) .comments a.more").click();
                 });
 
@@ -121,7 +121,7 @@ describe("chorus.views.ActivityList", function() {
                 });
 
                 it("triggers a content:changed event", function() {
-                    expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("content:changed");
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("content:changed");
                 });
 
                 describe("when the less link is clicked", function() {
@@ -135,7 +135,7 @@ describe("chorus.views.ActivityList", function() {
                     });
 
                     it("triggers a content:changed event", function() {
-                        expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("content:changed");
+                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("content:changed");
                     });
                 });
             });

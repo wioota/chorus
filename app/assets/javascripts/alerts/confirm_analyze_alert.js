@@ -20,7 +20,7 @@ chorus.alerts.Analyze = chorus.alerts.Confirm.extend({
     },
 
     saved: function() {
-        chorus.PageEvents.broadcast("analyze:running");
+        chorus.PageEvents.trigger("analyze:running");
         chorus.toast("analyze.alert.toast", {name: this.model.name()});
         this.closeModal();
     }

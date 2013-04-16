@@ -23,7 +23,7 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
         });
 
         this.subscribePageEvent("action:closePreview", this.hidePreviewData);
-        this.modalClosedHandle = this.subscribePageEvent("modal:closed", this.cancelTask);
+        this.subscribePageEvent("modal:closed", this.cancelTask);
     },
 
     makeCodeMirrorOptions: function() {
@@ -67,6 +67,5 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
 
     cancelTask: function() {
         this.resultsConsole.cancelExecution();
-        chorus.PageEvents.unsubscribe(this.modalClosedHandle);
     }
 });

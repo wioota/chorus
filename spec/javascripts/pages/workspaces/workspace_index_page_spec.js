@@ -45,7 +45,7 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
 
             describe("when the workspace:selected event is triggered on the list view", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("workspace:selected", this.page.collection.at(3));
+                    chorus.PageEvents.trigger("workspace:selected", this.page.collection.at(3));
                 });
 
                 it("sets the model of the page", function() {

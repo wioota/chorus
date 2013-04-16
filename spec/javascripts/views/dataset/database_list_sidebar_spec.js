@@ -3,7 +3,7 @@ describe("chorus.views.DatabaseListSidebar", function() {
         this.view = new chorus.views.DatabaseListSidebar();
 
         this.database = rspecFixtures.database();
-        chorus.PageEvents.broadcast("database:selected", this.database);
+        chorus.PageEvents.trigger("database:selected", this.database);
     });
 
     it("should display the database name", function() {
@@ -12,7 +12,7 @@ describe("chorus.views.DatabaseListSidebar", function() {
 
     it("displays the new name when a new database is selected", function() {
         var db = rspecFixtures.database();
-        chorus.PageEvents.broadcast("database:selected", db);
+        chorus.PageEvents.trigger("database:selected", db);
         expect(this.view.$(".name")).toContainText(db.get("name"));
     });
 
@@ -21,7 +21,7 @@ describe("chorus.views.DatabaseListSidebar", function() {
     });
 
     it("displays nothing when a database is deselected", function() {
-        chorus.PageEvents.broadcast("database:deselected");
+        chorus.PageEvents.trigger("database:deselected");
         expect(this.view.$(".info")).not.toExist();
     });
 });

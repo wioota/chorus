@@ -73,11 +73,11 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
 
     replaceCurrentVersion: function() {
         this.updateAutosaveText("workfile.content_details.save");
-        chorus.PageEvents.broadcast("file:replaceCurrentVersion");
+        chorus.PageEvents.trigger("file:replaceCurrentVersion");
     },
 
     createNewVersion: function() {
-        chorus.PageEvents.broadcast("file:createNewVersion");
+        chorus.PageEvents.trigger("file:createNewVersion");
     },
 
 

@@ -432,7 +432,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             beforeEach(function() {
                 this.dialog.$("button.submit").click();
                 spyOn(chorus, 'toast');
-                spyOn(chorus.PageEvents, 'broadcast');
+                spyOn(chorus.PageEvents, 'trigger');
                 this.server.lastCreateFor(this.dialog.model).succeed();
             });
 
@@ -442,7 +442,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             });
 
             it("triggers csv_import:started", function() {
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("csv_import:started");
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("csv_import:started");
             });
         });
 

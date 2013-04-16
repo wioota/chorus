@@ -103,14 +103,14 @@ describe("chorus.views.LinkMenu", function() {
 
         describe("clicking on an option", function() {
             beforeEach(function() {
-                spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+                spyOn(chorus.PageEvents, "trigger").andCallThrough();
                 this.choiceSpy = jasmine.createSpy("choice");
                 this.view.bind("choice", this.choiceSpy);
                 this.view.$(".menu li[data-type=female] a").click();
             });
 
-            it("broadcasts the choice", function(){
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("choice:name", "female", this.view);
+            it("triggers the choice", function(){
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("choice:name", "female", this.view);
             });
 
             it("should trigger a choice event with the data", function() {

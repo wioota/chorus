@@ -67,10 +67,10 @@ describe("chorus.pages.DataSourceIndexPage", function() {
             expect(modal.lastModal()).toBeA(chorus.dialogs.DataSourcesNew);
         });
 
-        it("sets the page model when a 'data_source:selected' event is broadcast", function() {
+        it("sets the page model when a 'data_source:selected' event is trigger", function() {
             var dataSource = rspecFixtures.gpdbDataSource();
             expect(this.page.model).not.toBe(dataSource);
-            chorus.PageEvents.broadcast('data_source:selected', dataSource);
+            chorus.PageEvents.trigger('data_source:selected', dataSource);
             expect(this.page.model).toBe(dataSource);
         });
 
@@ -122,7 +122,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
             context("when a row has been checked", function() {
                 beforeEach(function() {
                     var dataSources = new chorus.collections.DataSourceSet([rspecFixtures.gpdbDataSource()]);
-                    chorus.PageEvents.broadcast("data_source:checked", dataSources);
+                    chorus.PageEvents.trigger("data_source:checked", dataSources);
                 });
 
                 it("displays the multiple selection section", function() {

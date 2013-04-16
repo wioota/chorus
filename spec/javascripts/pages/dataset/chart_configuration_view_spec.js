@@ -97,7 +97,7 @@ describe("chorus.views.ChartConfiguration", function() {
 
             describe("cancel:visualization", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast('cancel:visualization');
+                    chorus.PageEvents.trigger('cancel:visualization');
                 });
 
                 it("cancels the task", function() {
@@ -205,7 +205,7 @@ describe("chorus.views.ChartConfiguration", function() {
 
         context("not creating a visualization", function() {
             it("does not blow up when cancel:sidebar is triggered", function() {
-                chorus.PageEvents.broadcast('cancel:sidebar');
+                chorus.PageEvents.trigger('cancel:sidebar');
             });
         });
 

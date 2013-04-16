@@ -58,7 +58,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
 
             context("when a row has been checked", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.broadcast("kaggle_user:checked", this.kaggleUsers.clone());
+                    chorus.PageEvents.trigger("kaggle_user:checked", this.kaggleUsers.clone());
                 });
 
                 it("displays the multiple selection section", function() {
@@ -114,7 +114,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
             ]);
             spyOn(filterCollection.at(1), 'filterParams').andReturn(null);
             spyOn(filterCollection.at(0), 'filterParams').andReturn("someValue");
-            chorus.PageEvents.broadcast("filterKaggleUsers", filterCollection);
+            chorus.PageEvents.trigger("filterKaggleUsers", filterCollection);
         });
 
         it("sends a request for the filtered users", function() {

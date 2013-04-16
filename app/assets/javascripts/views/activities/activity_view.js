@@ -16,8 +16,8 @@ chorus.views.Activity = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.addCommentHandle = this.subscribePageEvent('comment:added', this.addComment);
-        this.deleteCommentHandle = this.subscribePageEvent('comment:deleted', this.deleteComment);
+        this.subscribePageEvent('comment:added', this.addComment);
+        this.subscribePageEvent('comment:deleted', this.deleteComment);
     },
 
     addComment: function(comment) {
@@ -60,7 +60,7 @@ chorus.views.Activity = chorus.views.Base.extend({
         e.preventDefault();
         this.model.promoteToInsight({
             success: _.bind(function() {
-                chorus.PageEvents.broadcast('insight:promoted', this.model);
+                chorus.PageEvents.trigger('insight:promoted', this.model);
             }, this)
         });
     },
@@ -87,11 +87,5 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     show: function() {
         this.htmlContent && this.htmlContent.show();
-    },
-
-    teardown: function() {
-        this._super('teardown');
-        chorus.PageEvents.unsubscribe(this.addCommentHandle);
-        chorus.PageEvents.unsubscribe(this.deleteCommentHandle);
     }
 });

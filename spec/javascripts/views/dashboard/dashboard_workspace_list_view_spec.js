@@ -170,7 +170,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
         describe("when an insight is promoted", function() {
             beforeEach(function() {
                 spyOn(this.view.collection, "fetchAll").andCallThrough();
-                chorus.PageEvents.broadcast("insight:promoted");
+                chorus.PageEvents.trigger("insight:promoted");
             });
 
             itRefreshesWorkspaces();
@@ -179,7 +179,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
         describe("when a comment is added", function() {
             beforeEach(function() {
                 spyOn(this.view.collection, "fetchAll").andCallThrough();
-                chorus.PageEvents.broadcast("comment:added");
+                chorus.PageEvents.trigger("comment:added");
             });
 
             itRefreshesWorkspaces();
@@ -188,7 +188,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
         describe("when a comment is deleted", function() {
             beforeEach(function() {
                 spyOn(this.view.collection, "fetchAll").andCallThrough();
-                chorus.PageEvents.broadcast("comment:deleted");
+                chorus.PageEvents.trigger("comment:deleted");
             });
 
             itRefreshesWorkspaces();
@@ -197,7 +197,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
         describe("when note is deleted", function() {
             beforeEach(function() {
                 spyOn(this.view.collection, "fetchAll").andCallThrough();
-                chorus.PageEvents.broadcast("note:deleted", rspecFixtures.activity.noteOnGreenplumDataSource());
+                chorus.PageEvents.trigger("note:deleted", rspecFixtures.activity.noteOnGreenplumDataSource());
             });
 
             itRefreshesWorkspaces();

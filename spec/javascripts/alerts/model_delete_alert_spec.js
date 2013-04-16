@@ -64,10 +64,10 @@ describe("chorus.alerts.ModelDelete", function() {
                 expect(chorus.toast).toHaveBeenCalledWith(this.alert.deleteMessage, this.deleteParams);
             });
 
-            it("broadcasts a pageevent <entityType>:deleted", function() {
-                spyOn(chorus.PageEvents, 'broadcast');
+            it("triggers a pageevent <entityType>:deleted", function() {
+                spyOn(chorus.PageEvents, 'trigger');
                 this.alert.model.trigger("destroy", this.alert.model);
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("user:deleted", this.alert.model);
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("user:deleted", this.alert.model);
             });
 
             context("when the alert does NOT have a redirect url", function() {

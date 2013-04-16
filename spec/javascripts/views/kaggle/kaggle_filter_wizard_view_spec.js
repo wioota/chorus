@@ -40,12 +40,12 @@ describe("chorus.views.KaggleFilterWizard", function() {
 
         describe("click the search kaggle users button", function() {
             beforeEach(function() {
-                spyOn(chorus.PageEvents, "broadcast");
+                spyOn(chorus.PageEvents, "trigger");
                 this.view.$("button.search_kaggle_user").click();
             });
 
-            it("broadcasts the filterKaggleUsers event with the filters", function() {
-                expect(chorus.PageEvents.broadcast).toHaveBeenCalledWith("filterKaggleUsers", this.view.collection);
+            it("triggers the filterKaggleUsers event with the filters", function() {
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("filterKaggleUsers", this.view.collection);
             });
         });
     });

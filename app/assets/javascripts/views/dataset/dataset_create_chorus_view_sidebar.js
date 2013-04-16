@@ -53,7 +53,7 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         var $li = $(e.target).closest("li");
         var column = this.chorusView.aggregateColumnSet.get($li.data('cid'));
         this.removeColumn(column);
-        chorus.PageEvents.broadcast("column:removed", column);
+        chorus.PageEvents.trigger("column:removed", column);
     },
 
     removeJoinClicked: function(e) {

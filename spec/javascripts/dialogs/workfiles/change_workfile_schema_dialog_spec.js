@@ -61,7 +61,7 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
             beforeEach(function() {
                 spyOn(chorus, "toast");
                 this.workfileChangedSpy = jasmine.createSpy();
-                chorus.PageEvents.subscribe("workfile:changed", this.workfileChangedSpy);
+                chorus.PageEvents.on("workfile:changed", this.workfileChangedSpy);
                 this.dialog.model.trigger("saved");
                 this.server.completeUpdateFor(this.model, _.extend(this.model.attributes, {executionSchema: this.executionSchema.attributes}));
             });
@@ -84,7 +84,7 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
                 expect(updatedExecutionSchemaId).toEqual("321");
             });
 
-            it("broadcasts workfile:changed", function() {
+            it("triggers workfile:changed", function() {
                 expect(this.workfileChangedSpy).toHaveBeenCalledWith(this.model);
             });
         });
@@ -123,7 +123,7 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
 
     context("when the schema picker is ready", function () {
         beforeEach(function () {
-            spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+            spyOn(chorus.PageEvents, "trigger").andCallThrough();
             spyOn(this.dialog.schemaPicker, "ready").andReturn(true);
             this.dialog.schemaPicker.trigger("change");
         });

@@ -210,7 +210,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         context("and there are still unhidden info boxes", function() {
             beforeEach(function() {
                 this.view.$(".info_box.edit_workspace_settings").addClass("hidden");
-                chorus.PageEvents.broadcast("modal:closed");
+                chorus.PageEvents.trigger("modal:closed");
             });
 
             it("does not navigate", function() {
@@ -221,7 +221,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
         context("and all info boxes are hidden", function() {
             beforeEach(function() {
                 this.view.$(".info_box").addClass("hidden");
-                chorus.PageEvents.broadcast("modal:closed");
+                chorus.PageEvents.trigger("modal:closed");
 
                 this.model.set({
                     hasAddedMember: true,

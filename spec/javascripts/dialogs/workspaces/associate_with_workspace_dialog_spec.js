@@ -95,7 +95,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
             describe("when the API is successful", function() {
                 beforeEach(function() {
-                    spyOn(chorus.PageEvents, "broadcast");
+                    spyOn(chorus.PageEvents, "trigger");
                     this.server.lastCreate().succeed();
                 });
 

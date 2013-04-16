@@ -28,9 +28,9 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
             },
             onCursorActivity: function(editor) {
                 if (editor.getSelection().length > 0) {
-                    chorus.PageEvents.broadcast("file:selectionPresent");
+                    chorus.PageEvents.trigger("file:selectionPresent");
                 } else {
-                    chorus.PageEvents.broadcast("file:selectionEmpty");
+                    chorus.PageEvents.trigger("file:selectionEmpty");
                 }
             }
         });
@@ -84,7 +84,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
 
     saveDraft: function() {
         this.stopTimer();
-        chorus.PageEvents.broadcast("file:autosaved");
+        chorus.PageEvents.trigger("file:autosaved");
         this.model.content(this.editor.getValue(), {silent: true});
         var overrides = {};
         if (this.model.get("hasDraft")) {
@@ -126,9 +126,9 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
 
     editorSelectionStatus: function() {
         if (this.editor.getSelection() && this.editor.getSelection().length > 0) {
-            chorus.PageEvents.broadcast("file:selectionPresent");
+            chorus.PageEvents.trigger("file:selectionPresent");
         } else {
-            chorus.PageEvents.broadcast("file:selectionEmpty");
+            chorus.PageEvents.trigger("file:selectionEmpty");
         }
     },
 

@@ -51,7 +51,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
 
     saved:function () {
         this.pageModel.trigger("invalidated");
-        chorus.PageEvents.broadcast("comment:added", this.model);
+        chorus.PageEvents.trigger("comment:added", this.model);
         this.closeModal();
     }
 });

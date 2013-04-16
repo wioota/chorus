@@ -79,7 +79,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
     saved: function() {
         this.closeModal();
         chorus.toast("hdfs.create_external.success", {tableName: this.model.get('tableName'), workspaceName: this.model.get("workspaceName")});
-        chorus.PageEvents.broadcast("csv_import:started");
+        chorus.PageEvents.trigger("csv_import:started");
     },
 
     saveFailed: function() {

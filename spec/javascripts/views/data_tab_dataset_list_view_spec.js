@@ -1,6 +1,6 @@
 describe("chorus.views.DataTabDatasetList", function() {
     beforeEach(function() {
-        spyOn(chorus.PageEvents, "broadcast").andCallThrough();
+        spyOn(chorus.PageEvents, "trigger").andCallThrough();
         this.collection = new chorus.collections.SchemaDatasetSet([
             rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "1234",  entitySubtype: "SANDBOX_TABLE", objectType: "TABLE" }),
             rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "Data1", entitySubtype: "SANDBOX_TABLE", objectType: "VIEW" }),

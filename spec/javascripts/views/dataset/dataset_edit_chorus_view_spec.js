@@ -75,7 +75,7 @@ describe("chorus.views.DatasetEditChorusView", function() {
             spyOn(chorus.router, "navigate");
             this.view.editor.setValue("select * from table_abc");
             spyOn(this.view.model, "save");
-            chorus.PageEvents.broadcast("dataset:saveEdit");
+            chorus.PageEvents.trigger("dataset:saveEdit");
             this.clock.tick(1000);
 
         });
@@ -111,7 +111,7 @@ describe("chorus.views.DatasetEditChorusView", function() {
     describe("cancel", function() {
         beforeEach(function() {
             this.view.model.serverErrors = {fields: {a: {BLANK: {}}}};
-            chorus.PageEvents.broadcast("dataset:cancelEdit");
+            chorus.PageEvents.trigger("dataset:cancelEdit");
         });
 
         it("clears the errors", function() {

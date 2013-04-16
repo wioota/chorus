@@ -33,7 +33,7 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.extend({
 
     deselectAll: function(e) {
         e.preventDefault();
-        chorus.PageEvents.broadcast("selectNone");
+        chorus.PageEvents.trigger("selectNone");
     },
 
     additionalContext: function() {

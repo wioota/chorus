@@ -20,12 +20,12 @@ chorus.views.DataSourceIndexContentDetails = chorus.views.Base.extend({
 
     selectAll: function(e) {
         e.preventDefault();
-        chorus.PageEvents.broadcast("selectAll");
+        chorus.PageEvents.trigger("selectAll");
     },
 
     selectNone: function(e) {
         e.preventDefault();
-        chorus.PageEvents.broadcast("selectNone");
+        chorus.PageEvents.trigger("selectNone");
     },
 
     additionalContext: function() {

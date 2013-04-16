@@ -95,7 +95,7 @@ describe("chorus.collections.FilteringCollection", function() {
             expect(this.collection.pluck('name')).toEqual(['bar']);
         });
 
-        it("broadcasts 'searched'", function() {
+        it("triggers 'searched'", function() {
             var searched = jasmine.createSpy('searched');
             this.collection.on('searched', searched);
             this.collection.search("search term");
