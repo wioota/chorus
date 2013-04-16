@@ -19,6 +19,20 @@
   INSERT INTO base_table1 VALUES ( 8,1,8, 'papaya' , '2012-04-09 00:00:02');
   ANALYZE base_table1;
 
+  CREATE TABLE table_with_nulls
+    (id integer PRIMARY KEY, all_nulls integer, some_nulls integer, category text, time_value timestamp )
+    DISTRIBUTED BY (id);
+  INSERT INTO table_with_nulls VALUES ( 0,NULL,5, 'apple', '2012-03-01 00:00:02' );
+  INSERT INTO table_with_nulls VALUES ( 1,NULL,NULL, 'apple', '2012-03-02 00:00:02' );
+  INSERT INTO table_with_nulls VALUES ( 2,NULL,7, 'orange' , '2012-04-01 00:00:02');
+  INSERT INTO table_with_nulls VALUES ( 3,NULL,1, 'orange' , '2012-04-01 00:00:02');
+  INSERT INTO table_with_nulls VALUES ( 4,NULL,2, 'orange' , '2012-04-01 00:00:02');
+  INSERT INTO table_with_nulls VALUES ( 5,NULL,7, 'apple' , '2012-04-01 00:00:02');
+  INSERT INTO table_with_nulls VALUES ( 6,NULL,NULL, 'orange' , '2012-04-01 00:00:02');
+  INSERT INTO table_with_nulls VALUES ( 7,NULL,3, 'orange' , '2012-04-01 00:00:02');
+  INSERT INTO table_with_nulls VALUES ( 8,NULL,14, 'apple', '2012-03-02 00:00:02' );
+  ANALYZE table_with_nulls;
+
   CREATE VIEW view1 AS
     SELECT * FROM base_table1;
   COMMENT ON VIEW view1 IS 'comment on view1';

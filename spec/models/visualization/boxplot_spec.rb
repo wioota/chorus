@@ -11,12 +11,15 @@ describe Visualization::Boxplot, :greenplum_integration do
 
   let(:visualization) do
     Visualization::Boxplot.new(dataset, {
-        :x_axis => "category",
-        :y_axis => "column2",
+        :x_axis => x_axis,
+        :y_axis => y_axis,
         :bins => 20,
         :filters => filters
     })
   end
+
+  let(:x_axis) { "category" }
+  let(:y_axis) { "column2" }
 
   describe "#fetch!" do
     let(:filters) { nil }
@@ -48,17 +51,33 @@ describe Visualization::Boxplot, :greenplum_integration do
       context "with allcaps column names" do
         let(:dataset) { database.find_dataset_in_schema('allcaps_candy', 'test_schema') }
         let(:filters) { nil }
-        let(:visualization) do
-          Visualization::Boxplot.new(dataset, {
-              :x_axis => "KITKAT",
-              :y_axis => "STUFF",
-              :bins => 20,
-              :filters => filters
-          })
-        end
+        let(:x_axis) { "KITKAT" }
+        let(:y_axis) { "STUFF" }
 
         it "fetches the rows correctly" do
           visualization.rows.should_not be_nil
+        end
+      end
+
+      context "with null values" do
+        let(:dataset) { database.find_dataset_in_schema('table_with_nulls', 'test_schema') }
+        let(:filters) { ["category != 'banana'"] }
+        let(:x_axis) { "category" }
+        let(:y_axis) { "some_nulls" }
+
+        it "does not count the nulls in the boxplot data" do
+          visualization.rows.should =~ [
+              {:bucket => "orange", :min => 1.0, :median => 2.5, :max => 7.0, :first_quartile => 1.5, :third_quartile => 5.0, :percentage => "57.14%", :count => 4},
+              {:bucket => "apple", :min =>5.0, :median => 7.0, :max => 14.0, :first_quartile => 6.0, :third_quartile => 10.5, :percentage => "42.86%", :count => 3}
+          ]
+        end
+
+        context "with all null values" do
+          let(:y_axis) { "all_nulls" }
+
+          it "returns an empty set of rows" do
+            visualization.rows.should =~ []
+          end
         end
       end
     end

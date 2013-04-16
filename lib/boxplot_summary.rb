@@ -6,32 +6,32 @@ class BoxplotSummary
   def self.summarize(i, bins)
     new_map = []
 
-    all_categories = i.map{|r| r[:bucket]}.uniq
+    all_buckets = i.map{|r| r[:bucket]}.uniq
     total = i.inject(0) { |sum, r| sum + r[:count] }
-    all_categories.each do |category|
-      subarray = i.select{ |r| r[:bucket] == category }
-      min = subarray.first[:min]
-      max = subarray.last[:max]
-      count = subarray.inject(0) { |sum, r| sum + r[:count] }
+    all_buckets.each do |bucket|
+      quartile_data = i.select{ |r| r[:bucket] == bucket }
+      min = quartile_data.first[:min]
+      max = quartile_data.last[:max]
+      count = quartile_data.inject(0) { |sum, r| sum + r[:count] }
       percentage = "%0.2f\%" % (count.to_f / total * 100)
 
-      if subarray.length == 1
-        median = first_quartile = third_quartile = subarray[0][:min]
-      elsif subarray.length == 2
-        median         = mean(subarray[0][:min], subarray[1][:min])
-        first_quartile = mean(subarray[0][:min], median)
-        third_quartile = mean(subarray[1][:min], median)
-      elsif subarray.length == 3
-        median = subarray[1][:min]
-        first_quartile = mean(subarray[0][:min], subarray[1][:min])
-        third_quartile = mean(subarray[1][:min], subarray[2][:min])
+      if quartile_data.length == 1
+        median = first_quartile = third_quartile = quartile_data[0][:min]
+      elsif quartile_data.length == 2
+        median         = mean(quartile_data[0][:max], quartile_data[1][:min])
+        first_quartile = mean(quartile_data[0][:max], median)
+        third_quartile = mean(quartile_data[1][:min], median)
+      elsif quartile_data.length == 3
+        median = quartile_data[1][:min]
+        first_quartile = mean(quartile_data[0][:max], quartile_data[1][:min])
+        third_quartile = mean(quartile_data[1][:max], quartile_data[2][:min])
       else
-        median = mean(subarray[1][:max], subarray[2][:min])
-        first_quartile = mean(subarray[0][:max], subarray[1][:min])
-        third_quartile = mean(subarray[2][:max], subarray[3][:min])
+        median = mean(quartile_data[1][:max], quartile_data[2][:min])
+        first_quartile = mean(quartile_data[0][:max], quartile_data[1][:min])
+        third_quartile = mean(quartile_data[2][:max], quartile_data[3][:min])
       end
 
-      new_map << {:bucket => category,
+      new_map << {:bucket => bucket,
                   :count => count,
                   :min => min,
                   :median => median,
