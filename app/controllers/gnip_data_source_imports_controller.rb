@@ -11,7 +11,7 @@ class GnipDataSourceImportsController < ApplicationController
                        :user => current_user,
                        :to_table => params[:import][:to_table])
 
-    render :json => [], :status => :ok
+    present [], :status => :ok
   end
 
   private

@@ -30,7 +30,7 @@ describe GnipDataSourceImportsController do
 
       it "presents an empty array" do
         mock_present { |model| model.should == [] }
-        post :create, params
+        post :create, gnip_data_source_import_params
       end
     end
   end
