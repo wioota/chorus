@@ -48,9 +48,10 @@ describe UsersController do
       end
 
       it "accepts a page parameter" do
-        get :index, :page => 2, :per_page => 2
+        get :index, :page => 2, :per_page => 2, :order => 'id'
         decoded_response.length.should == 2
-        decoded_response.first.username.should == User.order(:first_name)[2].username
+        decoded_response.map { |r| r["id"] }.should =~ (User.order(:id)[2..3].map(&:id))
+        decoded_response.map { |r| r["id"] }.should_not =~ (User.order(:id)[0..2].map(&:id))
       end
 
       it "defaults the per_page to fifty" do

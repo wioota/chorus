@@ -4,7 +4,7 @@ shared_examples_for :data_source_integration do
       data_source.valid_db_credentials?(account).should be_true
     end
 
-    it "returns true when the credentials are invalid" do
+    it "returns false when the credentials are invalid" do
       account.db_username = 'awesome_hat'
       data_source.valid_db_credentials?(account).should be_false
     end

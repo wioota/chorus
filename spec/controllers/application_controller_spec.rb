@@ -141,6 +141,16 @@ describe ApplicationController do
       decoded_errors.type.should == "GreenplumConnection::SqlPermissionDenied"
     end
 
+    it "returns error 403 when a DataSourceConnection::InvalidCredentials occurs" do
+      stub(controller).index { raise DataSourceConnection::InvalidCredentials.new("U R not authorized!") }
+
+      get :index
+
+      response.code.should == "403"
+      decoded_errors.message.should == "U R not authorized!"
+      decoded_errors.type.should == "DataSourceConnection::InvalidCredentials"
+    end
+
     describe "when an access denied error is raised" do
       let(:object_to_present) { data_sources(:default) }
       let(:exception) { Allowy::AccessDenied.new('', 'action', object_to_present) }

@@ -89,8 +89,7 @@ class DataSource < ActiveRecord::Base
   def valid_db_credentials?(account)
     success = true
     connection = connect_with(account).connect!
-  rescue DataSourceConnection::Error => e
-    raise unless e.error_type == :INVALID_PASSWORD
+  rescue DataSourceConnection::InvalidCredentials
     success = false
   ensure
     connection.try(:disconnect)
