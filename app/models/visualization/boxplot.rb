@@ -24,11 +24,11 @@ module Visualization
     private
 
     def build_row_sql
-      filters = @filters.present? ? "WHERE #{@filters.join(" AND ")}" : ""
+      filters = @filters.present? ? "#{@filters.join(" AND ")} AND" : ""
 
       innerQuery = <<-SQL
         select innerQuery."#{@category}", innerQuery.ntile, min(innerQuery."#{@values}"), max(innerQuery."#{@values}"), count(*) cnt from
-          (select "#{@category}", "#{@values}", ntile(4) OVER (t) AS ntile FROM #{@dataset.scoped_name} #{filters} WINDOW t AS (PARTITION BY "#{@category}" ORDER BY "#{@values}")) as innerQuery
+          (select "#{@category}", "#{@values}", ntile(4) OVER (t) AS ntile FROM #{@dataset.scoped_name} WHERE #{filters} "#{@category}" is not null and "#{@values}" is not null WINDOW t AS (PARTITION BY "#{@category}" ORDER BY "#{@values}")) as innerQuery
           GROUP BY innerQuery."#{@category}", innerQuery.ntile ORDER BY innerQuery."#{@category}", innerQuery.ntile
       SQL
 
