@@ -92,10 +92,10 @@ class Schema < ActiveRecord::Base
     self.active_tables_and_views_count = active_tables_and_views.count
     save!
 
-    Dataset.where(:id => found_datasets)
+    Dataset.where(:id => found_datasets).order("name ASC")
   rescue DataSourceConnection::Error
     touch(:refreshed_at)
-    Dataset.where(:id => found_datasets)
+    Dataset.where(:id => found_datasets).order("name ASC")
   end
 
   def dataset_count(account, options={})

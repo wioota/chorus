@@ -11,103 +11,76 @@ describe DatasetsController do
   end
 
   context "#index" do
-    context "with stubbed datasource" do
-      before do
-        stub(Schema).find(schema.id.to_s) { schema }
-        stub(schema).refresh_datasets(anything, options) do
-          fake_relation([dataset1, dataset2, dataset3])
-        end
-        stub(schema).dataset_count { 122 }
+    before do
+      stub(Schema).find(schema.id.to_s) { schema }
+      mock(schema).refresh_datasets(anything, options) do
+        fake_relation([dataset1, dataset2, dataset3])
       end
-      let(:options) { {:limit => per_page} }
-      let(:per_page) { 50 }
+      stub(schema).dataset_count { 122 }
+    end
+    let(:options) { {:limit => per_page} }
+    let(:per_page) { 50 }
 
-      shared_examples :works do
-        context "without any filter" do
-          it 'returns all the datasets in that schema' do
-            get :index, :schema_id => schema.to_param
-
-            response.code.should == "200"
-            decoded_response.length.should == 3
-            decoded_response.map(&:object_name).should match_array([dataset1.name, dataset2.name, dataset3.name])
-          end
-
-          context "pagination" do
-            let(:per_page) { 1 }
-
-            it "paginates results" do
-              get :index, :schema_id => schema.to_param, :per_page => per_page
-              decoded_response.length.should == 1
-            end
-          end
-
-          it "sorts the datasets by name" do
-            get :index, :schema_id => schema.to_param
-            # stub checks for valid SQL with sorting
-          end
-        end
-
-        context "with a name filter" do
-          let(:options) { {:name_filter => 'view', :limit => 50} }
-          it "filters datasets by name" do
-            get :index, :schema_id => schema.to_param, :filter => 'view'
-            # stub checks for valid SQL with sorting and filtering
-          end
-        end
-
-        context 'with a type filter' do
-          let(:options) { {:tables_only => true, :limit => 50 } }
-
-          it 'returns datasets of that type' do
-            get :index, :schema_id => schema.to_param, :tables_only => true
-          end
-        end
-      end
-
-      context "for an oracle schema" do
-        let(:dataset1) { datasets(:oracle_table) }
-        let(:dataset2) { datasets(:oracle_view) }
-        let(:dataset3) { datasets(:other_oracle_table) }
-        let(:schema) { schemas(:oracle) }
-
-        it_should_behave_like :works
-
-        it "saves a single dataset fixture until the show page works", :fixture do
+    shared_examples :works do
+      context "without any filter" do
+        it 'returns all the datasets in that schema' do
           get :index, :schema_id => schema.to_param
-          save_fixture "oracleDataset.json", { :response => response.decoded_body["response"].first }
+
+          response.code.should == "200"
+          decoded_response.length.should == 3
+          decoded_response.map(&:object_name).should match_array([dataset1.name, dataset2.name, dataset3.name])
+        end
+
+        context "pagination" do
+          let(:per_page) { 1 }
+
+          it "paginates results" do
+            get :index, :schema_id => schema.to_param, :per_page => per_page
+            decoded_response.length.should == per_page
+          end
         end
       end
 
-      context "for a greenplum schema" do
-        let(:dataset1) { datasets(:table) }
-        let(:dataset2) { datasets(:view) }
-        let(:dataset3) { datasets(:other_table) }
+      context "with a name filter" do
+        let(:options) { {:name_filter => 'view', :limit => 50} }
+        it "filters datasets by name" do
+          get :index, :schema_id => schema.to_param, :filter => 'view'
+          # stub checks for valid SQL with sorting and filtering
+        end
+      end
 
-        it_should_behave_like :works
+      context 'with a type filter' do
+        let(:options) { {:tables_only => true, :limit => 50 } }
 
-        generate_fixture "schemaDatasetSet.json" do
-          get :index, :schema_id => schema.to_param
+        it 'returns datasets of that type' do
+          get :index, :schema_id => schema.to_param, :tables_only => true
         end
       end
     end
 
-    context "with real greenplum", :greenplum_integration do
-      let(:user) { users(:admin) }
-      let(:schema) { GreenplumIntegration.real_database.schemas.find_by_name('test_schema') }
+    context "for an oracle schema" do
+      let(:dataset1) { datasets(:oracle_table) }
+      let(:dataset2) { datasets(:oracle_view) }
+      let(:dataset3) { datasets(:other_oracle_table) }
+      let(:schema) { schemas(:oracle) }
 
-      context "when searching" do
-        before do
-          get :index, :schema_id => schema.to_param, :filter => 'CANDY', :page => "1", :per_page => "5"
-        end
+      it_should_behave_like :works
 
-        it "presents the correct count / pagination information" do
-          decoded_pagination.records.should == 7
-          decoded_pagination.total.should == 2
-        end
+      it "saves a single dataset fixture until the show page works", :fixture do
+        get :index, :schema_id => schema.to_param
+        save_fixture "oracleDataset.json", { :response => response.decoded_body["response"].first }
+      end
+    end
 
-        it "returns sandbox datasets that aren't on the first page of unfiltered results" do
-          decoded_response.map(&:object_name).should include('candy_empty')
-        end
+    context "for a greenplum schema" do
+      let(:dataset1) { datasets(:table) }
+      let(:dataset2) { datasets(:view) }
+      let(:dataset3) { datasets(:other_table) }
+
+      it_should_behave_like :works
+
+      generate_fixture "schemaDatasetSet.json" do
+        get :index, :schema_id => schema.to_param
       end
     end
   end
