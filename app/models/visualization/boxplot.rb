@@ -39,14 +39,7 @@ module Visualization
         GROUP BY "#{@category}", ntile ORDER BY "#{@category}", ntile
       SQL
 
-      ntiles_for_each_bin_with_total = <<-SQL
-        SELECT "#{@category}", ntile, min, max, cnt, SUM(cnt) OVER(w) AS total
-        FROM (#{ntiles_for_each_bin}) AS ntilesForEachBin
-        WINDOW w AS (PARTITION BY "#{@category}")
-        ORDER BY total desc, "#{@category}", ntile LIMIT #{(@bins * 4).to_s}
-      SQL
-
-      return ntiles_for_each_bin_with_total
+      return ntiles_for_each_bin
     end
   end
 end
