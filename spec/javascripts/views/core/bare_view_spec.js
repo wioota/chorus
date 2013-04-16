@@ -220,6 +220,15 @@ describe("chorus.views.Bare", function() {
             this.view.subscribePageEvent("testevent", this.fun);
             expect(this.view).toHaveSubscription("testevent", this.fun);
         });
+
+        it("won't bind more than once", function() {
+            this.callbackSpy = jasmine.createSpy("callback");
+            this.view.subscribePageEvent("testevent", this.callbackSpy);
+            this.view.subscribePageEvent("testevent", this.callbackSpy);
+            this.view.subscribePageEvent("testevent", this.callbackSpy);
+            chorus.PageEvents.trigger("testevent");
+            expect(this.callbackSpy.callCount).toBe(1);
+        });
     });
 
     describe("#teardown", function() {

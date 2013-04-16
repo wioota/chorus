@@ -258,7 +258,14 @@ chorus.views.Bare = Backbone.View.include(
 
         subscribePageEvent: function(eventName, callback)
         {
-            this.listenTo(chorus.PageEvents, eventName, callback);
+            var events = chorus.PageEvents._events || {};
+            var self = this;
+            var alreadyBound = _.any(events[eventName], function(subscription) {
+                return (subscription.callback === callback) && (subscription.context === self);
+            });
+            if(!alreadyBound) {
+                this.listenTo(chorus.PageEvents, eventName, callback);
+            }
         },
 
         template: function template(context) {
