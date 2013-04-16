@@ -5,7 +5,7 @@ module Visualization
     def to_hash
       {
           :type => model.type,
-          :bins => model.bins,
+          :bins => model.buckets,
           :x_axis => model.category,
           :y_axis => model.values,
           :rows => model.rows,
