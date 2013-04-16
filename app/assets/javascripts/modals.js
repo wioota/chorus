@@ -62,7 +62,6 @@ chorus.Modal = chorus.views.Base.extend({
     },
 
     closeModal:function () {
-        this.teardown();
         $(document).trigger("close.facebox");
     },
 
@@ -92,6 +91,7 @@ chorus.Modal = chorus.views.Base.extend({
                 this.restoreScrollingBody();
             }
         }
+        this.teardown();
     },
 
     restore: function () {

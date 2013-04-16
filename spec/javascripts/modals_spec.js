@@ -142,6 +142,7 @@ describe("chorus.Modal", function() {
                     this.modalClosedSpy = jasmine.createSpy("modal:closed");
                     chorus.PageEvents.on("modal:closed", this.modalClosedSpy);
                     spyOn(this.modal, 'close');
+                    spyOn(this.modal, 'teardown');
                     $("#jasmine_content").append("<div id='facebox'/>");
                     $.facebox.settings.inited = true;
                     $(document).trigger("close.facebox");
@@ -169,6 +170,10 @@ describe("chorus.Modal", function() {
 
                 it("resets the body's ability to scroll'", function() {
                     expect(this.modal.restoreScrollingBody).toHaveBeenCalled();
+                });
+
+                it("tears down the modal", function() {
+                    expect(this.modal.teardown).toHaveBeenCalled();
                 });
             });
         });
