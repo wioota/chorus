@@ -59,6 +59,15 @@ FactoryGirl.define do
     sequence(:to_table) { |n| "factoried_import_table#{n}" }
     truncate false
     new_table true
-    sample_count 10
+  end
+
+  factory :gnip_import do
+    created_at Time.current
+    workspace
+    user
+    sequence(:to_table) { |n| "factoried_import_table#{n}" }
+    truncate false
+    new_table true
+    association :source, :factory => :gnip_data_source
   end
 end

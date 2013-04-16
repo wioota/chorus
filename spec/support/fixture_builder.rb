@@ -383,6 +383,9 @@ FixtureBuilder.configure do |fbuilder|
                                     :file_name => "import.csv")
     fbuilder.name :csv, csv_import
 
+    fbuilder.name :gnip, FactoryGirl.create(:gnip_import, :user => owner, :workspace => public_workspace, :to_table => "gnip_import_table",
+                                    :source => gnip_data_source)
+
     #CSV File
     csv_file = CsvFile.new({:user => the_collaborator, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :has_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
     csv_file.save!(:validate => false)

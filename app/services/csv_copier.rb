@@ -27,7 +27,7 @@ class CsvCopier < TableCopier
 
   def run
     destination_connection.copy_csv(
-        csv_file.contents.path,
+        java.io.FileReader.new(csv_file.contents.path),
         destination_table_name,
         csv_file.column_names,
         csv_file.delimiter,

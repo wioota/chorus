@@ -399,12 +399,12 @@ class GreenplumConnection < DataSourceConnection
       with_connection { |connection| connection.from(table_name).count }
     end
 
-    def copy_csv(file_path, table_name, column_names, delimiter, has_header)
+    def copy_csv(java_reader, table_name, column_names, delimiter, has_header)
       with_connection do |connection|
         connection.synchronize do |jdbc_conn|
           copy_manager = org.postgresql.copy.CopyManager.new(jdbc_conn)
           sql = "COPY \"#{table_name}\"(#{column_names.map{|c| "\"#{c}\""}.join(', ')}) FROM STDIN WITH DELIMITER '#{delimiter}' CSV #{has_header ? 'HEADER' : ''}"
-          copy_manager.copy_in(sql, java.io.FileReader.new(file_path.to_s))
+          copy_manager.copy_in(sql, java_reader)
         end
       end
     end

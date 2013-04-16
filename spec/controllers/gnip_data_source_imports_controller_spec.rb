@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe GnipDataSourceImportsController do
-
   let(:user) { users(:owner) }
-  let(:gnip_csv_result_mock) { GnipCsvResult.new("a,b,c\n1,2,3") }
   let(:gnip_data_source) { gnip_data_sources(:default) }
   let(:workspace) { workspaces(:public) }
 
@@ -20,44 +18,19 @@ describe GnipDataSourceImportsController do
       log_in user
     end
 
-    context "table name doesn't exist already" do
-      context "when success" do
-        before do
-          mock(QC.default_queue).enqueue_if_not_queued("GnipImporter.import_to_table", 'foobar',
-                                                       gnip_data_source.id, workspace.id, user.id, anything)
+    it "uses authentication" do
+      mock(subject).authorize! :can_edit_sub_objects, workspace
+      post :create, gnip_data_source_import_params
+    end
 
-          any_instance_of(GnipImporter) { |importer| stub(importer).valid? { true } }
-        end
-
-        it "uses authentication" do
-          mock(subject).authorize! :can_edit_sub_objects, workspace
-          post :create, gnip_data_source_import_params
-          response.code.should == '200'
-        end
-
-        it "leaves the job to handle the CSVFile" do
-          expect {
-            post :create, gnip_data_source_import_params
-          }.to change(CsvFile, :count).by(0)
-        end
-
-        it "creates an event before it is run" do
-          expect {
-            post :create, gnip_data_source_import_params
-          }.to change(Events::GnipStreamImportCreated, :count).by(1)
-
-          created_event = Events::GnipStreamImportCreated.last
-          created_event.destination_table.should == 'foobar'
-          created_event.dataset.should_not be_present
-        end
+    context "when the import is created successfully" do
+      before do
+        mock(GnipImport).create!.with_any_args { true }
       end
 
-      it "renders errors if the GnipImporter is not valid" do
-        any_instance_of(GnipImporter) { |importer| stub(importer).valid? { false } }
-        expect {
-          post :create, gnip_data_source_import_params
-        }.to_not change(Events::GnipStreamImportCreated, :count)
-        response.code.should == "422"
+      it "presents an empty array" do
+        mock_present { |model| model.should == [] }
+        post :create, params
       end
     end
   end

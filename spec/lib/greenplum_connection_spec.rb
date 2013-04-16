@@ -1317,12 +1317,12 @@ describe GreenplumConnection, :greenplum_integration do
     describe "copy_csv" do
       let(:number_of_lines) { 200 }
       let(:expected) { number_of_lines }
-      let(:path) { Rails.root.join('spec', 'fixtures', 'test.csv') }
+      let(:reader) { java.io.FileReader.new Rails.root.join('spec', 'fixtures', 'test.csv').to_s }
       let(:table_name) { 'csv_to_table' }
       let(:column_names) {['a', 'b', 'c']}
       let(:delimiter) { ',' }
       let(:has_header) { true }
-      let(:subject) { connection.copy_csv(path, table_name, column_names, delimiter, has_header) }
+      let(:subject) { connection.copy_csv(reader, table_name, column_names, delimiter, has_header) }
 
       before do
         connection.create_table(table_name, "a integer, b text, c text", "DISTRIBUTED RANDOMLY")

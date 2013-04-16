@@ -46,8 +46,12 @@ describe CsvCopier do
   end
 
   describe "run" do
+    before do
+      stub(java.io.FileReader).new(csv_file.contents.path) { 'I am a file reader!' }
+    end
+
     it "should have the connection copy the file in" do
-      mock(connection).copy_csv(csv_file.contents.path, destination_table_name, csv_file.column_names, csv_file.delimiter, csv_file.has_header)
+      mock(connection).copy_csv('I am a file reader!', destination_table_name, csv_file.column_names, csv_file.delimiter, csv_file.has_header)
       copier.run
     end
 
