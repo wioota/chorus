@@ -17,8 +17,8 @@ module Visualization
 
     def fetch!(account, check_id)
       result = CancelableQuery.new(@schema.connect_with(account), check_id, current_user).execute(row_sql)
-      row_data = result.rows.map { |row| {:bucket => row[0], :ntile => row[1].to_i, :min => row[2].to_f, :max => row[3].to_f, :count => row[4].to_i} }
-      @rows = BoxplotSummary.summarize(row_data, @bins)
+      ntiles_for_each_bin = result.rows.map { |row| {:bucket => row[0], :ntile => row[1].to_i, :min => row[2].to_f, :max => row[3].to_f, :count => row[4].to_i} }
+      @rows = BoxplotSummary.summarize(ntiles_for_each_bin, @bins)
     end
 
     private
