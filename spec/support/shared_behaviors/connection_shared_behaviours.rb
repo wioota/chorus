@@ -75,7 +75,9 @@ shared_examples "a data source connection" do
       end
 
       it "sets invalid_credentials on the account" do
-        expect { connection.connect! }.to raise_error(DataSourceConnection::InvalidCredentials)
+        expect { connection.connect! }.to raise_error(DataSourceConnection::InvalidCredentials) do |exception|
+          exception.subject.should == data_source
+        end
         account.invalid_credentials?.should be_true
       end
 
@@ -86,7 +88,9 @@ shared_examples "a data source connection" do
 
         it "does not attempt to connect, but still throws an INVALID_PASSWORD error" do
           dont_allow(Sequel).connect
-          expect { connection.connect! }.to raise_error(DataSourceConnection::InvalidCredentials)
+          expect { connection.connect! }.to raise_error(DataSourceConnection::InvalidCredentials) do |exception|
+            exception.subject.should == data_source
+          end
         end
       end
 

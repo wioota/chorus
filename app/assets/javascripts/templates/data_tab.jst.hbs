@@ -6,7 +6,7 @@
 {{#if schemaAssociated}}
     {{#if noCredentials}}
         <div class="notice no_credentials"><span class="bottom">{{noCredentialsWarning}}</span></div>
-    {{/if}}
+    {{else}}
     <input class="search" placeholder='{{t "schema.metadata.list.hint.datasets"}}'/>
     <div class="context">{{unsafeT "schema.functions.search_in" schemaLink=schemaLink}}</div>
     <div class="list_contents"></div>
@@ -29,6 +29,7 @@
             {{/each}}
         </ul>
     </div>
+    {{/if}}
 {{else}}
     <div class="empty_selection notice">
         <span class="top">{{t "database.sidebar.no_schema.title"}}</span>

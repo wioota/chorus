@@ -31,4 +31,12 @@ describe DataSourceConnection do
       exception.error_type.should == :I_AM_AN_ERROR_TYPE
     end
   end
+
+  describe "InvalidCredentials" do
+    it "can be initialized with a data source" do
+      data_source = data_sources(:default)
+      exception = DataSourceConnection::InvalidCredentials.new(data_source)
+      exception.subject.should == data_source
+    end
+  end
 end

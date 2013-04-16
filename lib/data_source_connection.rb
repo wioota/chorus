@@ -35,9 +35,14 @@ class DataSourceConnection
 
   class QueryError < StandardError; end
 
-  class InvalidCredentials < StandardError; end
+  class InvalidCredentials < StandardError
+    attr_accessor :subject
+    def initialize(data_source)
+      self.subject = data_source
+    end
+  end
 
-  class DriverNotConfigured < StandardError;
+  class DriverNotConfigured < StandardError
     attr_accessor :data_source
     def initialize(data_source)
       self.data_source = data_source
@@ -57,7 +62,7 @@ class DataSourceConnection
   def connect!
     verify_driver_configuration
     if @account.invalid_credentials?
-      raise InvalidCredentials #403
+      raise InvalidCredentials.new(@data_source)
     else
       @connection ||= Sequel.connect db_url, logger_options.merge({:test => true})
     end
@@ -66,9 +71,9 @@ class DataSourceConnection
 
     if exception.error_type == :INVALID_PASSWORD
       @account.invalid_credentials!
-      raise InvalidCredentials #403
+      raise InvalidCredentials.new(@data_source)
     else
-      raise exception #422
+      raise exception
     end
   end
 

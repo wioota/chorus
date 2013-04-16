@@ -142,13 +142,14 @@ describe ApplicationController do
     end
 
     it "returns error 403 when a DataSourceConnection::InvalidCredentials occurs" do
-      stub(controller).index { raise DataSourceConnection::InvalidCredentials.new("U R not authorized!") }
+      data_source = data_sources(:default)
+      stub(controller).index { raise DataSourceConnection::InvalidCredentials.new(data_source) }
 
       get :index
 
       response.code.should == "403"
-      decoded_errors.message.should == "U R not authorized!"
-      decoded_errors.type.should == "DataSourceConnection::InvalidCredentials"
+      decoded_errors.model_data["id"].should == data_source.id
+      decoded_errors.model_data["entity_type"].should == data_source.class.name.underscore
     end
 
     describe "when an access denied error is raised" do

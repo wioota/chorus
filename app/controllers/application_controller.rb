@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'SunspotError', :with => :render_unprocessable_entity
   rescue_from 'SearchExtensions::SolrUnreachable', :with => :render_solr_unreachable_error
   rescue_from 'ModelMap::UnknownEntityType', :with => :render_unprocessable_entity
-  rescue_from 'DataSourceConnection::InvalidCredentials', :with => :render_resource_forbidden
+  rescue_from 'DataSourceConnection::InvalidCredentials', :with => :render_forbidden
 
   helper_method :current_user
 
