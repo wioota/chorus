@@ -45,7 +45,7 @@ describe ImportSchedule, :greenplum_integration do
         import_schedule.new_table = false
         import_schedule.to_table = 'base_table1'
         any_instance_of(GpdbDataset) do |dataset|
-          stub(dataset).can_import_from(anything) { true }
+          stub(dataset).can_import_into(anything) { true }
         end
         import_schedule.should be_valid
         import_schedule.destination_dataset.name.should == 'base_table1'

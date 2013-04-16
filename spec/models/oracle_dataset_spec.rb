@@ -28,9 +28,47 @@ describe OracleDataset do
     end
   end
 
-  describe '#instance_account_ids' do
-    it 'returns instance account ids with access to the schema' do
+  describe "#instance_account_ids" do
+    it "returns instance account ids with access to the schema" do
       dataset.instance_account_ids.should == dataset.schema.instance_account_ids
+    end
+  end
+
+  describe "#can_import_into", :greenplum_integration, :oracle_integration do
+    let(:oracle_schema) { OracleIntegration.real_schema }
+    let(:gpdb_schema) { GpdbSchema.find_by_name('test_schema') }
+    let(:source) { oracle_schema.datasets.find_by_name('BASE_TABLE1') }
+
+    context "when tables have same column number, names and types" do
+      let(:destination) { gpdb_schema.datasets.find_by_name('base_table2') }
+
+      it "returns true" do
+        source.can_import_into(destination).should be_true
+      end
+    end
+
+    context "when tables have the same column number and types, but different names" do
+      let(:destination) { gpdb_schema.datasets.find_by_name('different_names_table2') }
+
+      it "returns false" do
+        source.can_import_into(destination).should be_false
+      end
+    end
+
+    context "when tables have same column number and names, but different types" do
+      let(:destination) { gpdb_schema.datasets.find_by_name('different_types_table') }
+
+      it "returns false" do
+        source.can_import_into(destination).should be_false
+      end
+    end
+
+    context "when tables have different number of columns" do
+      let(:destination) { gpdb_schema.datasets.find_by_name('master_table1') }
+
+      it "returns false" do
+        source.can_import_into(destination).should be_false
+      end
     end
   end
 end

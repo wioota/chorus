@@ -42,7 +42,7 @@ module OracleDataTypes
       'NUMBER' => 'numeric',
       'NVARCHAR2' => 'character varying',
       'ROWID' => 'text',
-      'TIMESTAMP' => 'timestamp',
+      'TIMESTAMP' => 'timestamp without time zone',
       'UROWID' => 'text',
       'VARCHAR' => 'character varying',
       'VARCHAR2' => 'character varying',

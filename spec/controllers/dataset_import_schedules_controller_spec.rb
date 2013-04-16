@@ -180,7 +180,7 @@ describe DatasetImportSchedulesController do
 
       it "should create a Import scheduled event with the correct destination dataset" do
         any_instance_of(GpdbDataset) do |d|
-          stub(d).can_import_from(anything) { true }
+          stub(d).can_import_into(anything) { true }
         end
 
         any_instance_of(ImportSchedule) do |import_schedule|

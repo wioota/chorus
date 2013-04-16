@@ -19,6 +19,10 @@
   INSERT INTO base_table1 VALUES ( 8,1,8, 'papaya' , '2012-04-09 00:00:02');
   ANALYZE base_table1;
 
+  CREATE TABLE base_table2
+    (id numeric PRIMARY KEY, column1 numeric, column2 numeric, category text, time_value timestamp )
+    DISTRIBUTED BY (id);
+
   CREATE TABLE table_with_nulls
     (id integer PRIMARY KEY, all_nulls integer, some_nulls integer, category text, time_value timestamp )
     DISTRIBUTED BY (id);
@@ -39,6 +43,9 @@
 
   CREATE TABLE different_names_table
     (id integer PRIMARY KEY, column3 integer, column2 integer, category text, time_value timestamp );
+
+  CREATE TABLE different_names_table2
+    (id numeric PRIMARY KEY, column3 numeric, column2 numeric, category text, time_value timestamp );
 
   CREATE TABLE different_types_table
     (id integer PRIMARY KEY, column1 text, column2 integer, category text, time_value timestamp );

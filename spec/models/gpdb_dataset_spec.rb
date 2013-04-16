@@ -33,39 +33,39 @@ describe GpdbDataset do
     end
   end
 
-  describe "#can_import_from", :greenplum_integration do
+  describe "#can_import_into", :greenplum_integration do
     let(:schema) { GpdbSchema.find_by_name('test_schema') }
-    let(:dataset) { schema.datasets.find_by_name('base_table1') }
+    let(:source) { schema.datasets.find_by_name('base_table1') }
 
     context "when tables have same column number, names and types" do
-      let(:source) { schema.datasets.find_by_name('view1') }
+      let(:destination) { schema.datasets.find_by_name('view1') }
 
       it "says tables are consistent" do
-        dataset.can_import_from(source).should be_true
+        source.can_import_into(destination).should be_true
       end
     end
 
-    context "when tables have same column number and types, but different names" do
-      let(:source) { schema.datasets.find_by_name('different_names_table') }
+    context "when tables have the same column number and types, but different names" do
+      let(:destination) { schema.datasets.find_by_name('different_names_table') }
 
       it "says tables are not consistent" do
-        dataset.can_import_from(source).should be_false
+        source.can_import_into(destination).should be_false
       end
     end
 
     context "when tables have same column number and names, but different types" do
-      let(:source) { schema.datasets.find_by_name('different_types_table') }
+      let(:destination) { schema.datasets.find_by_name('different_types_table') }
 
       it "says tables are not consistent" do
-        dataset.can_import_from(source).should be_false
+        source.can_import_into(destination).should be_false
       end
     end
 
     context "when tables have different number of columns" do
-      let(:source) { schema.datasets.find_by_name('master_table1') }
+      let(:destination) { schema.datasets.find_by_name('master_table1') }
 
       it "says tables are not consistent" do
-        dataset.can_import_from(source).should be_false
+        source.can_import_into(destination).should be_false
       end
     end
   end

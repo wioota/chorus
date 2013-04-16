@@ -31,7 +31,7 @@ module ImportMixins
   def tables_have_consistent_schema
     return unless to_table && table_exists?
     destination = schema.datasets.tables.find_by_name(to_table)
-    if destination && !destination.can_import_from(source_dataset)
+    if destination && !source_dataset.can_import_into(destination)
       errors.add(:base,
                  :table_not_consistent,
                  {:src_table_name => source_dataset.name,

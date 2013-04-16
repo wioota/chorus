@@ -79,7 +79,7 @@ describe OracleTableCopier do
                 %Q{"LONG_COL" text},
                 %Q{"NUMBER_COL" numeric},
                 %Q{"ROW_ID" text},
-                %Q{"TIMESTAMP_COL" timestamp},
+                %Q{"TIMESTAMP_COL" timestamp without time zone},
                 %Q{"UNICODE_CHAR" character},
                 %Q{"UNICODE_CLOB" text},
                 %Q{"UNICODE_VARCHAR" character varying},

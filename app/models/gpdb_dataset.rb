@@ -34,14 +34,14 @@ class GpdbDataset < Dataset
     %Q{"#{schema_name}"."#{name}"}
   end
 
-  def can_import_from(source)
-    source_columns = source.column_data
-    destination_columns = column_data
+  def can_import_into(destination)
+    destination_columns = destination.column_data
+    source_columns = column_data
 
-    consistent_size = destination_columns.size == source_columns.size
+    consistent_size = source_columns.size == destination_columns.size
 
-    consistent_size && destination_columns.all? do |destination_column|
-      source_columns.find { |source_column| destination_column.match?(source_column) }
+    consistent_size && source_columns.all? do |source_column|
+      destination_columns.find { |destination_column| source_column.match?(destination_column) }
     end
   end
 

@@ -32,6 +32,6 @@ class DatasetColumn
   end
 
   def match?(source_column)
-    name == source_column.name && gpdb_data_type == source_column.gpdb_data_type
+    name.downcase == source_column.name.downcase && gpdb_data_type == source_column.gpdb_data_type
   end
 end
