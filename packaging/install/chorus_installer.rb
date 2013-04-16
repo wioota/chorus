@@ -376,6 +376,7 @@ class ChorusInstaller
       link_shared_files
 
       secure_sensitive_files
+      secure_public_directory
     end
 
     log "Extracting postgres..." do
@@ -450,6 +451,10 @@ class ChorusInstaller
     files.each do |file|
       File.chmod(0600, file)
     end
+  end
+
+  def secure_public_directory
+      File.chmod(0555, "#{release_path}/public")
   end
 
   def configure_secret_key

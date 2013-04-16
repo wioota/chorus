@@ -601,10 +601,24 @@ describe ChorusInstaller do
       installer.secure_sensitive_files
     end
 
-    it "makes changes permissions to 600" do
+    it "changes permissions to 600" do
       files.each do |file|
         File.stat(file).mode.should == 0100600
       end
+    end
+  end
+
+  describe "#secure_public_directory" do
+    let(:public_directory) { "/usr/local/greenplum-chorus/releases/2.2.0.0/public" }
+    before do
+      stub(installer).version { "2.2.0.0" }
+      FileUtils.mkdir_p public_directory
+      installer.destination_path = "/usr/local/greenplum-chorus"
+      installer.secure_public_directory
+    end
+
+    it "changes permissions to 555" do
+        File.stat(public_directory).mode.should == 0100555
     end
   end
 
