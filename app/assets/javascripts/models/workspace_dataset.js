@@ -89,7 +89,7 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
                 datasetId: this.get("id"),
                 workspaceId: this.get("workspace").id
             });
-            this._datasetImportSchedules.on("remove", this.importScheduleRemoved, this);
+            this.listenTo(this._datasetImportSchedules, "remove", this.importScheduleRemoved);
         }
         return this._datasetImportSchedules;
     },

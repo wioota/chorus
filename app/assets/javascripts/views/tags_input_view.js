@@ -21,7 +21,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             return {name: tag.name(), model: tag};
         });
 
-        var textExtInput = this.$input.textext({
+        this.$input.textext({
             plugins: 'tags autocomplete ajax',
             tagsItems: tagsForTextext,
             itemManager: chorus.utilities.TagItemManager,
@@ -53,28 +53,28 @@ chorus.views.TagsInput = chorus.views.Base.extend({
             }
         });
 
-        this.setUpBindings(textExtInput);
+        this.textext = this.$input.textext()[0];
     },
 
-    setUpBindings: function(textextInput) {
-        // TODO #42333697: change these to use this.binding.add so they get cleaned up
-        this.textext = this.$input.textext()[0];
-        this.$input.on("setFormData", _.bind(this.updateTags, this));
-        this.$input.bind('isTagAllowed', _.bind(this.textExtValidate, this));
-        this.$input.bind('setInputData', _.bind(this.restoreInvalidTag, this));
+    events: {
+        'setFormData input.tag_editor': 'updateTags',
+        'isTagAllowed input.tag_editor': 'textExtValidate',
+        'setInputData input.tag_editor': 'restoreInvalidTag',
+        'focus input.tag_editor': 'resizeTextExt',
+        'tagClick input.tag_editor': 'triggerTagClick',
+        'commaKeyUp input.tag_editor': 'handleComma'
 
-        // this is so the dropdown always appears at the bottom of the text area
-        this.$input.bind('focus', _.bind(this.resizeTextExt, this));
+    },
 
-        textextInput.bind('tagClick', _.bind(function(e, tag, value, callback) {
-            this.trigger("tag:click", value.model);
-        }, this));
-        textextInput.bind('commaKeyUp', function(e, data) {
-            textextInput.trigger("enterKeyPress", e, data);
-            textextInput.trigger("setInputData", "");
-            // Trigger getSuggestions to fix a bug where a "," suggestion would show up for "Create new" option.
-            textextInput.trigger("getSuggestions");
-        });
+    triggerTagClick: function(e, tag, value, callback) {
+        this.trigger("tag:click", value.model);
+    },
+
+    handleComma: function(e, data) {
+        this.$input.trigger("enterKeyPress", e, data);
+        this.$input.trigger("setInputData", '');
+        // Trigger getSuggestions to fix a bug where a "," suggestion would show up for "Create new" option.
+        this.$input.trigger("getSuggestions");
     },
 
     resizeTextExt: function() {
@@ -116,7 +116,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     textExtValidate: function(e, data) {
         this.invalidTagName = "";
         data.tag.name = $.trim(data.tag.name);
-        data.tag.model = new chorus.models.Tag(data.tag);
+        data.tag.model = new chorus.models.Tag({name: data.tag.name});
         if(!this.validateTag(data.tag.model)) {
             data.result = false;
 

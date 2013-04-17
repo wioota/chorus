@@ -23,7 +23,7 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         this.insightsCount.attributes.entity = this.collection.attributes.entity;
         this.insightsCount.attributes.insights = true;
         this.insightsCount.fetchPage(1, {per_page: 0});
-        this.insightsCount.on("loaded", this.render, this);
+        this.listenTo(this.insightsCount, "loaded", this.render);
 
         this.requiredResources.add(this.insightsCount);
 

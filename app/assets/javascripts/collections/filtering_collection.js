@@ -9,9 +9,9 @@ chorus.collections.FilteringCollection = chorus.collections.Base.extend({
         if(args[0]) {
             throw "Must initialize FilteringCollection with null";
         }
-        this.attributes.collection.on('reset loaded', this.updateCollection, this);
-        this.attributes.collection.on('loaded', this.markLoaded, this);
-        this.attributes.collection.on('serverResponded', this.markResponded, this);
+        this.listenTo(this.attributes.collection, 'reset loaded', this.updateCollection);
+        this.listenTo(this.attributes.collection, 'loaded', this.markLoaded);
+        this.listenTo(this.attributes.collection, 'serverResponded', this.markResponded);
         this.updateCollection();
     },
 
