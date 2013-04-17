@@ -77,6 +77,7 @@ class Deployer
   def remove_previous_chorusrails_install
     if clean_install || legacy_path.present?
       ssh.chorus_control("stop")
+      ssh.run("chmod -R 755 #{install_path}/current/public")
       ssh.run("rm -fr #{install_path}")
     end
   end
@@ -125,7 +126,9 @@ class Deployer
   end
 
   def remove_old_builds(builds_to_keep=5)
-    ssh.run %Q{cd #{install_path}/releases && test `ls | wc -l` -gt #{builds_to_keep} && find . -maxdepth 1 -not -newer "`ls -t | head -#{builds_to_keep + 1} | tail -1`" -not -name "." -exec rm -rf {} \\;}, :quote => "'"
+    ssh.run "echo chmod -R 755 $1/public && rm -rf $1 > #{install_path}/releases/delete.sh"
+    ssh.run %Q{cd #{install_path}/releases && test `ls | wc -l` -gt #{builds_to_keep} && find . -maxdepth 1 -not -newer "`ls -t | head -#{builds_to_keep + 1} | tail -1`" -not -name "." -exec bash #{install_path}/releases/delete.sh {} \\;}, :quote => "'"
+    ssh.run "rm #{install_path}/releases/delete.sh"
   end
 
   class Ssh

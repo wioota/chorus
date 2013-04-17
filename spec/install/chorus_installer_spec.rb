@@ -612,13 +612,14 @@ describe ChorusInstaller do
     let(:public_directory) { "/usr/local/greenplum-chorus/releases/2.2.0.0/public" }
     before do
       stub(installer).version { "2.2.0.0" }
-      FileUtils.mkdir_p public_directory
+      FileUtils.mkdir_p "#{public_directory}/assets"
       installer.destination_path = "/usr/local/greenplum-chorus"
       installer.secure_public_directory
     end
 
     it "changes permissions to 555" do
-        File.stat(public_directory).mode.should == 0100555
+      File.stat(public_directory).mode.should == 0100555
+      File.stat("#{public_directory}/assets").mode.should == 0100555
     end
   end
 

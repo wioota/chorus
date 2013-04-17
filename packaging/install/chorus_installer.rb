@@ -454,7 +454,7 @@ class ChorusInstaller
   end
 
   def secure_public_directory
-      File.chmod(0555, "#{release_path}/public")
+    FileUtils.chmod_R(0555, "#{release_path}/public")
   end
 
   def configure_secret_key
