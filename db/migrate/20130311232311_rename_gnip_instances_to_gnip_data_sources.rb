@@ -1,7 +1,6 @@
 class RenameGnipInstancesToGnipDataSources < ActiveRecord::Migration
   def up
     rename_table :gnip_instances, :gnip_data_sources
-    execute "ALTER TABLE gnip_instances_id_seq RENAME TO gnip_data_sources_id_seq"
     execute 'ALTER INDEX gnip_instances_pkey RENAME to gnip_data_sources_pkey'
     rename_index :gnip_data_sources, 'index_gnip_instances_on_owner_id', 'index_gnip_data_sources_on_owner_id'
     execute "UPDATE events SET action='Events::NoteOnGnipDataSource' WHERE action='Events::NoteOnGnipInstance'"
@@ -17,7 +16,6 @@ class RenameGnipInstancesToGnipDataSources < ActiveRecord::Migration
     execute "UPDATE events SET action='Events::NoteOnGnipInstance' WHERE action='Events::NoteOnGnipDataSource'"
     rename_index :gnip_data_sources, 'index_gnip_data_sources_on_owner_id', 'index_gnip_instances_on_owner_id'
     execute 'ALTER INDEX gnip_data_sources_pkey RENAME to gnip_instances_pkey'
-    execute "ALTER TABLE gnip_data_sources_id_seq RENAME TO gnip_instances_id_seq"
     rename_table :gnip_data_sources, :gnip_instances
   end
 end

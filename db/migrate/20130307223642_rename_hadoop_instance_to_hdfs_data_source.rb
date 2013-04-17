@@ -2,7 +2,6 @@ class RenameHadoopInstanceToHdfsDataSource < ActiveRecord::Migration
   def up
     rename_table :hadoop_instances, :hdfs_data_sources
     rename_column :hdfs_entries, :hadoop_instance_id, :hdfs_data_source_id
-    execute "ALTER TABLE hadoop_instances_id_seq RENAME TO hdfs_data_sources_id_seq"
     execute "UPDATE events SET action='Events::NoteOnHdfsDataSource' WHERE action='Events::NoteOnHadoopInstance'"
     execute "UPDATE events SET target1_type='HdfsDataSource' WHERE target1_type='HadoopInstance'"
     execute "UPDATE events SET target2_type='HdfsDataSource' WHERE target2_type='HadoopInstance'"
@@ -15,7 +14,6 @@ class RenameHadoopInstanceToHdfsDataSource < ActiveRecord::Migration
   def down
     execute 'ALTER INDEX hdfs_data_sources_pkey RENAME to hadoop_instances_pkey'
     rename_index :hdfs_data_sources, 'index_hdfs_data_sources_on_owner_id', 'index_hadoop_instances_on_owner_id'
-    execute "ALTER TABLE hdfs_data_sources_id_seq RENAME TO hadoop_instances_id_seq"
     execute "UPDATE events SET action='Events::NoteOnHadoopInstance' WHERE action='Events::NoteOnHdfsDataSource'"
     execute "UPDATE events SET target1_type='HadoopInstance' WHERE target1_type='HdfsDataSource'"
     execute "UPDATE events SET target2_type='HadoopInstance' WHERE target2_type='HdfsDataSource'"

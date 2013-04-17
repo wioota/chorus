@@ -7,11 +7,9 @@ class RenameGpdbDatabaseInstanceAccountsToInstanceAccountPermissions < ActiveRec
     add_column :instance_account_permissions, :accessed_type, :string, null: false, default: 'GpdbDatabase'
     change_column_default :instance_account_permissions, :accessed_type, nil
     add_index :instance_account_permissions, [:accessed_id, :accessed_type], name: 'index_instance_account_permissions_on_accessed'
-    execute("alter sequence gpdb_databases_instance_accounts_id_seq rename to instance_account_permissions_id_seq;")
   end
 
   def down
-    execute("alter sequence instance_account_permissions_id_seq rename to gpdb_databases_instance_accounts_id_seq;")
     remove_index :instance_account_permissions, name: 'index_instance_account_permissions_on_accessed'
     remove_column :instance_account_permissions, :accessed_type
     rename_column :instance_account_permissions, :accessed_id, :gpdb_database_id
