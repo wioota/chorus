@@ -32,5 +32,10 @@ chorus.dialogs.Account = chorus.dialogs.Base.extend({
 
     saved:function () {
         this.closeModal();
+        if(this.options.shouldShowSavedToast) this.showSavedToast();
+    },
+
+    showSavedToast: function(){
+        chorus.toast("instances.account.updated.toast", {dataSourceName: this.options.instance.name()});
     }
 });

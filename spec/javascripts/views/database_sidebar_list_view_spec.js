@@ -165,6 +165,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
             var dialog = modalSpy.lastModal();
             expect(dialog.model.get("instanceId")).toBeDefined();
+            expect(dialog.options.shouldShowSavedToast).toBeTruthy();
         });
     });
 });

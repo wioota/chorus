@@ -108,4 +108,31 @@ describe("chorus.dialogs.InstanceAccount", function() {
             });
         });
     });
+
+    context("when options.shouldShowToast is true", function(){
+        beforeEach(function() {
+            this.dialog = new chorus.dialogs.InstanceAccount({
+                instance: this.instance,
+                title: t("instances.account.add.title"),
+                shouldShowSavedToast: true
+            });
+            this.dialog.launchModal();
+            this.dialog.render();
+            spyOn(this.dialog, 'showSavedToast');
+            this.account = this.dialog.model;
+            this.account.trigger("saved");
+        });
+
+        it("shows the toast", function() {
+            expect(this.dialog.showSavedToast).toHaveBeenCalled();
+        });
+    });
+
+    describe("#showSavedToast", function(){
+       it("broadcasts a toast with the right translation", function(){
+          spyOn(chorus, "toast");
+          this.dialog.showSavedToast();
+          expect(chorus.toast).toHaveBeenCalledWith("instances.account.updated.toast", {dataSourceName: this.instance.name()});
+       });
+    });
 });
