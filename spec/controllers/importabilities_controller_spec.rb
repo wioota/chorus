@@ -52,7 +52,7 @@ describe ImportabilitiesController do
 
       it 'lists the supported columns' do
         get :show, :dataset_id => dataset.to_param
-        decoded_response.supported_column_types.should == ["BINARY_DOUBLE", "BINARY_FLOAT", "CHAR", "CLOB", "DATE", "LONG", "DECIMAL", "INT", "NCHAR", "NCLOB", "NUMBER", "NVARCHAR2", "ROWID", "TIMESTAMP", "UROWID", "VARCHAR", "VARCHAR2", "TIMESTAMP WITH TIME ZONE", "TIMESTAMP WITHOUT TIME ZONE"]
+        decoded_response.supported_column_types.should == ["BINARY_DOUBLE", "BINARY_FLOAT", "CHAR", "CLOB", "DATE", "LONG", "DECIMAL", "INT", "NCHAR", "NCLOB", "NUMBER", "NVARCHAR2", "ROWID", "TIMESTAMP", "UROWID", "VARCHAR", "VARCHAR2", "TIMESTAMP WITH TIME ZONE", "TIMESTAMP WITH LOCAL TIME ZONE"]
       end
 
       generate_fixture "datasetImportabilityForUnimportableDataset.json" do
