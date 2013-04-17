@@ -36,7 +36,7 @@ describe DatasetImportability do
     end
 
     it 'lists the supported column types' do
-      importability.supported_column_types.should == ["BINARY_DOUBLE", "BINARY_FLOAT", "CHAR", "CLOB", "DATE", "LONG", "DECIMAL", "INT", "NCHAR", "NCLOB", "NUMBER", "NVARCHAR2", "ROWID", "TIMESTAMP", "UROWID", "VARCHAR", "VARCHAR2", "TIMESTAMP WITH TIME ZONE", "TIMESTAMP WITHOUT TIME ZONE"]
+      importability.supported_column_types.should == ["BINARY_DOUBLE", "BINARY_FLOAT", "CHAR", "CLOB", "DATE", "LONG", "DECIMAL", "INT", "NCHAR", "NCLOB", "NUMBER", "NVARCHAR2", "ROWID", "TIMESTAMP", "UROWID", "VARCHAR", "VARCHAR2", "TIMESTAMP WITH TIME ZONE", "TIMESTAMP WITH LOCAL TIME ZONE"]
     end
   end
 end

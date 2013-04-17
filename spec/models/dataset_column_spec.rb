@@ -50,7 +50,7 @@ describe DatasetColumn do
 
   describe '#match?' do
     let(:oracle_column) { OracleDatasetColumn.new(name: 'name', data_type: 'CHAR') }
-    let(:greenplum_column) { GpdbDatasetColumn.new(name: 'name', data_type: 'character') }
+    let(:greenplum_column) { GpdbDatasetColumn.new(name: 'name', data_type: 'character(1)') }
 
     context 'with an oracle and a greenplum' do
       it 'is true if their types are convertible' do

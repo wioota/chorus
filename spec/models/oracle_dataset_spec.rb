@@ -70,5 +70,13 @@ describe OracleDataset do
         source.can_import_into(destination).should be_false
       end
     end
+
+    context "when the source table has unsupported columns" do
+      let(:destination) { gpdb_schema.datasets.find_by_name('base_table2') }
+
+      it "should skip matching those columns" do
+        source.can_import_into(destination).should be_true
+      end
+    end
   end
 end

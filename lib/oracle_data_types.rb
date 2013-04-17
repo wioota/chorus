@@ -24,20 +24,19 @@ module OracleDataTypes
       'VARCHAR2' => 'STRING',
       'XMLTYPE' => 'OTHER',
       'TIMESTAMP WITH TIME ZONE' => 'DATETIME',
-      'TIMESTAMP WITHOUT TIME ZONE' => 'DATETIME',
-      'TIMESTAMP(6)' => 'DATETIME'
+      'TIMESTAMP WITH LOCAL TIME ZONE' => 'DATETIME',
   }
 
   ORACLE_TO_GPDB_TYPE_MAP = {
-      'BINARY_DOUBLE' => 'float8',
-      'BINARY_FLOAT' => 'float8',
-      'CHAR' => 'character',
+      'BINARY_DOUBLE' => 'double precision',
+      'BINARY_FLOAT' => 'double precision',
+      'CHAR' => 'character(1)',
       'CLOB' => 'text',
-      'DATE' => 'timestamp',
+      'DATE' => 'timestamp without time zone',
       'LONG' => 'text',
-      'DECIMAL' => 'float8',
+      'DECIMAL' => 'double precision',
       'INT' => 'numeric',
-      'NCHAR' => 'character',
+      'NCHAR' => 'character(1)',
       'NCLOB' => 'text',
       'NUMBER' => 'numeric',
       'NVARCHAR2' => 'character varying',
@@ -46,8 +45,8 @@ module OracleDataTypes
       'UROWID' => 'text',
       'VARCHAR' => 'character varying',
       'VARCHAR2' => 'character varying',
-      'TIMESTAMP WITH TIME ZONE' => 'TIMESTAMP with timezone',
-      'TIMESTAMP WITHOUT TIME ZONE' => 'TIMESTAMP without timezone'
+      'TIMESTAMP WITH TIME ZONE' => 'timestamp with time zone',
+      'TIMESTAMP WITH LOCAL TIME ZONE' => 'timestamp without time zone'
   }
 
   def self.greenplum_type_for(oracle_type)
