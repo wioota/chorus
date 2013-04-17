@@ -80,9 +80,11 @@ chorus.views.SqlWorkfileContent = chorus.views.Base.extend({
     },
 
     createTask: function(taskClass) {
+        if (this.task) {
+            this.stopListening(this.task, 'saved', this.executionSucceeded);
+            this.stopListening(this.task, 'saveFailed', this.executionFailed);
+        }
         this.task = new taskClass({ });
-        this.stopListening(undefined, 'saved', this.executionSucceeded);
-        this.stopListening(undefined, 'saveFailed', this.executionFailed);
         this.listenTo(this.task, 'saved', this.executionSucceeded);
         this.listenTo(this.task, 'saveFailed', this.executionFailed);
         this.resultsConsole.setModel(this.task);

@@ -269,17 +269,29 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                 });
             });
 
-            context("when an execution is already outstanding", function() {
-                beforeEach(function() {
-                    chorus.PageEvents.trigger("file:runCurrent");
-                    this.startedSpy = jasmine.createSpy();
-                    chorus.PageEvents.on("file:executionStarted", this.startedSpy);
-                    chorus.PageEvents.trigger("file:runCurrent");
-                });
+            it("can run twice", function() {
+                spyOn(this.view, 'run').andCallThrough();
+                chorus.PageEvents.trigger("file:runCurrent");
+                expect(this.view.run).toHaveBeenCalled();
 
-                it('does not start a new execution', function() {
-                    expect(this.startedSpy).not.toHaveBeenCalled();
-                });
+                this.view.run.reset();
+                expect(this.view.run).not.toHaveBeenCalled();
+                chorus.PageEvents.trigger("file:runCurrent");
+                expect(this.view.run).toHaveBeenCalled();
+            });
+
+        });
+
+        context("when an execution is already outstanding", function() {
+            beforeEach(function() {
+                chorus.PageEvents.trigger("file:runCurrent");
+                this.startedSpy = jasmine.createSpy();
+                chorus.PageEvents.on("file:executionStarted", this.startedSpy);
+                chorus.PageEvents.trigger("file:runCurrent");
+            });
+
+            it('does not start a new execution', function() {
+                expect(this.startedSpy).not.toHaveBeenCalled();
             });
         });
     });
