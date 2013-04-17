@@ -2899,7 +2899,6 @@
   homepage: http://github.com/ddollar/foreman
   children:
   - thor
-  - posix-spawn
   parents: []
 - name: jetpack
   source: bundle
@@ -2986,23 +2985,6 @@
   - rake
   parents:
   - vagrant
-- name: posix-spawn
-  source: bundle
-  version: 0.3.6
-  license: MIT
-  license_url: http://opensource.org/licenses/mit-license
-  approved: true
-  license_files:
-  - COPYING
-  - README.md
-  bundler_groups: []
-  summary: posix_spawnp(2) for ruby
-  description: posix-spawn uses posix_spawnp(2) for faster process spawning
-  homepage: http://github.com/rtomayko/posix-spawn
-  children:
-  - rake-compiler
-  parents:
-  - foreman
 - name: rails
   source: bundle
   version: 3.2.13
