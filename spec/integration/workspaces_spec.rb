@@ -35,10 +35,11 @@ describe "Workspaces" do
   describe "Delete a workspace" do
     it "deletes the workspace" do
       visit("#/workspaces/#{workspace.id}")
+      wait_for_page_load
       click_link "Delete this Workspace"
       click_button "Delete Workspace"
 
-      wait_for_page_load
+      page.should have_content("deleted workspace #{workspace.name}")
       visit('/#/workspaces')
 
       wait_for_page_load
