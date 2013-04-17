@@ -438,6 +438,7 @@ class ChorusInstaller
       @executor.stop_postgres
     end
     log "For Postgres errors check #{destination_path}/shared/db/server.log"
+    FileUtils.chmod_R(0755, "#{release_path}/public")
     FileUtils.rm_rf release_path
   end
 

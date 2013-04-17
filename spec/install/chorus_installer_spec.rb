@@ -1012,10 +1012,13 @@ describe ChorusInstaller do
   end
 
   describe "#remove_and_restart_previous!" do
+    let(:public_dir) { "/usr/local/greenplum-chorus/releases/2.2.0.0/public" }
     before do
       stub(installer).version { "2.2.0.0" }
       installer.destination_path = "/usr/local/greenplum-chorus"
-      FileUtils.mkdir_p "/usr/local/greenplum-chorus/releases/2.2.0.0"
+      FileUtils.mkdir_p public_dir
+      FileUtils.touch "#{public_dir}/foo"
+      installer.secure_public_directory
     end
 
     context "when upgrading an existing 2.2 installation" do
@@ -1029,6 +1032,7 @@ describe ChorusInstaller do
       end
 
       it "removes the release folder" do
+        mock(FileUtils).chmod_R(0755, public_dir)
         installer.remove_and_restart_previous!
         File.exists?("/usr/local/greenplum-chorus/releases/2.2.0.0").should == false
       end
