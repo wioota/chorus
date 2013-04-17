@@ -77,7 +77,7 @@ class Deployer
   def remove_previous_chorusrails_install
     if clean_install || legacy_path.present?
       ssh.chorus_control("stop")
-      ssh.run("chmod -R 755 #{install_path}/current/public")
+      ssh.run("chmod -R 755 #{install_path}/releases/*/public")
       ssh.run("rm -fr #{install_path}")
     end
   end
