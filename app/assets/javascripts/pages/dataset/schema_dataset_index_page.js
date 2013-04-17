@@ -11,18 +11,16 @@ chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
         this.handleFetchErrorsFor(this.collection);
         this.handleFetchErrorsFor(this.schema);
 
+        this.listenTo(this.schema, "loaded", this.schemaLoaded);
         this.schema.fetch();
         this.collection.sortAsc("objectName");
+        this.listenTo(this.collection, "loaded", this.collectionLoaded);
         this.collection.fetch();
 
         this.sidebar = new chorus.views.DatasetSidebar({listMode: true});
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "dataset:checked",
-            actions: [
-                '<a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a>',
-                '<a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a>'
-            ],
             actionEvents: {
                 'click .associate': _.bind(function(e) {
                     e.preventDefault();
@@ -51,7 +49,6 @@ chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
             this.mainContent.contentDetails.updatePagination();
         });
 
-        this.listenTo(this.schema, "loaded", this.schemaLoaded);
         this.breadcrumbs.requiredResources.add(this.schema);
     },
 
@@ -85,5 +82,14 @@ chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
             contentDetailsOptions: { multiSelect: true }
         });
         this.render();
+    },
+
+    collectionLoaded: function () {
+        var actions = [];
+        if (this.collection.first().isGreenplum()) {
+            actions.push('<a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a>');
+        }
+        actions.push('<a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a>');
+        this.multiSelectSidebarMenu.setActions(actions);
     }
 });

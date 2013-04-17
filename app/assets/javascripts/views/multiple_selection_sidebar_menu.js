@@ -7,7 +7,7 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.actions = this.options.actions;
+        this.actions = this.options.actions || [];
         this.selectEvent = this.options.selectEvent;
         this.selectedModels = new chorus.collections.Base();
         this.events = _.extend({}, this.events, this.options.actionEvents);
@@ -48,5 +48,9 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.extend({
     postRender: function() {
         this.showOrHideMultipleSelectionSection();
         this._super("postRender");
+    },
+
+    setActions: function(newActions){
+        this.actions = newActions;
     }
 });

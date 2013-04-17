@@ -27,7 +27,7 @@ Chorus::Application.configure do
   config.assets.compress = false
 
   # Expands the lines which load the assets
-  config.assets.debug = true
+  config.assets.debug = false
 
   # Give paperclip path to ImageMagick tools
   Paperclip.options[:command_path] = "/usr/local/bin/"

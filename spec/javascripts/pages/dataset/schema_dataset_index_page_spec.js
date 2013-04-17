@@ -225,4 +225,27 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
             });
         });
     });
+
+    context("when the collection loads", function(){
+        beforeEach(function () {
+            spyOn(this.page.multiSelectSidebarMenu, 'setActions');
+        });
+
+        it('resets the multi-selection sidebar actions', function(){
+            this.server.completeFetchFor(this.page.collection, rspecFixtures.schemaDatasetSet().models);
+            expect(this.page.multiSelectSidebarMenu.setActions).toHaveBeenCalledWith([
+                '<a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a>',
+                '<a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a>'
+            ]);
+        });
+
+        context("when the collection is oracle datasets", function () {
+            it("doesn't add the associate to workspace action", function () {
+                this.server.completeFetchFor(this.page.collection, [rspecFixtures.oracleDataset()]);
+                expect(this.page.multiSelectSidebarMenu.setActions).toHaveBeenCalledWith([
+                    '<a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a>'
+                ]);
+            });
+        });
+    });
 });

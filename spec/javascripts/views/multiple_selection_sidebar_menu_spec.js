@@ -38,6 +38,14 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
             expect(this.view.$("li")).toContainText('I am an action');
         });
 
+        it("allows actions to be updated", function () {
+            this.view.setActions(['<span class="action_two">fire the missiles!</span>']);
+            this.view.render();
+            expect(this.view.$("li")).not.toContainText('I am an action');
+            expect(this.view.$("li")).toContainText('fire the missiles!');
+        });
+
+
         it("binds custom events", function() {
             this.view.$(".action_one").click();
             expect(this.eventSpy).toHaveBeenCalled();
