@@ -18,7 +18,7 @@ describe GpdbDataset do
   describe "associations" do
     it { should have_many :associated_datasets }
     it { should have_many :bound_workspaces }
-
+    it { should be_associable }
   end
 
   context ".total_entries" do

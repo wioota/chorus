@@ -33,6 +33,14 @@ describe Dataset do
         dataset.reload.schema.should == schema
       end
     end
+
+    describe 'associable?' do
+      let(:dataset) { Dataset.new }
+
+      it 'raises NotImplemented' do
+        expect { dataset.associable? }.to raise_error(NotImplementedError)
+      end
+    end
   end
 
   describe "workspace association" do

@@ -38,4 +38,8 @@ class OracleDataset < Dataset
       destination_columns.find { |destination_column| source_column.match?(destination_column) }
     end
   end
+
+  def associable?
+    false
+  end
 end

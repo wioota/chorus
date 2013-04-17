@@ -6,7 +6,7 @@ class WorkspaceDatasetsController < ApplicationController
         :entity_subtype => params[:entity_subtype],
         :database_id => params[:database_id],
         :limit => params[:page].to_i * params[:per_page].to_i
-    }.reject { |k, v| v.nil? }
+    }.reject { |_, v| v.nil? }
 
     if params[:name_pattern]
       options.merge!(:name_filter => params[:name_pattern])
@@ -22,14 +22,9 @@ class WorkspaceDatasetsController < ApplicationController
     authorize! :can_edit_sub_objects, workspace
     datasets = Dataset.where(:id => params[:dataset_ids])
 
-    datasets.each do |dataset|
-      if !workspace.has_dataset?(dataset)
-        workspace.source_datasets << dataset
-        create_event_for_dataset(dataset, workspace)
-      end
-    end
+    status = associate_many_datasets(datasets) ? :created : :unprocessable_entity
 
-    render :json => {}, :status => :created
+    render :json => {}, :status => status
   end
 
   def show
@@ -70,6 +65,19 @@ class WorkspaceDatasetsController < ApplicationController
 
   def workspace
     @workspace ||= Workspace.workspaces_for(current_user).find(params[:workspace_id])
+  end
+
+  def associate_many_datasets(datasets)
+    Workspace.transaction do
+      datasets.each do |dataset|
+        raise ActiveRecord::Rollback unless dataset.associable?
+
+        unless workspace.has_dataset?(dataset)
+          workspace.source_datasets << dataset
+          create_event_for_dataset(dataset, workspace)
+        end
+      end
+    end
   end
 
   def create_event_for_dataset(dataset, workspace)

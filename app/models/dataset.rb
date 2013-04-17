@@ -174,4 +174,8 @@ class Dataset < ActiveRecord::Base
     cache_key = {:model_class => self.class.name, :model_id => id, :key => key}
     Rails.cache.fetch(cache_key, :expires_in => 1.minutes, &block)
   end
+
+  def associable?
+    raise NotImplementedError
+  end
 end
