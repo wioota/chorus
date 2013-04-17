@@ -3,6 +3,7 @@ whitelist:
 - MIT
 - Apache 1.1
 - Apache 2.0
+- Apache License 2.0
 - BSD
 - Public Domain
 - ruby

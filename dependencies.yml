@@ -131,6 +131,7 @@
   - minitest
   parents:
   - rack
+  - hike
   - sprockets
   - mime-types
   - treetop
@@ -143,6 +144,7 @@
   - cocaine
   - fssm
   - database_cleaner
+  - dotenv
   - execjs
   - fixture_builder
   - handlebars_assets
@@ -150,11 +152,11 @@
   - rspec-core
   - rspec-expectations
   - rspec-mocks
+  - railties
   - license_finder
   - log4r
   - paperclip
   - poltergeist
-  - railties
   - rsolr
   - rspec-rails
   - rspec_api_documentation
@@ -273,8 +275,8 @@
   - allowy
   - factory_girl
   - fixture_builder
-  - paperclip
   - railties
+  - paperclip
   - rails
   - rspec-rails
   - rspec_api_documentation
@@ -419,8 +421,8 @@
   - faye-websocket
   - jasmine
   - jasmine
-  - mizuno
   - rack-ssl
+  - mizuno
   - vcr
 - name: rack-cache
   source: bundle
@@ -469,7 +471,7 @@
   - rspec_api_documentation
 - name: hike
   source: bundle
-  version: 1.2.1
+  version: 1.2.2
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -480,7 +482,8 @@
   summary: Find files in a set of paths
   description: A Ruby library for finding files in a set of paths.
   homepage: http://github.com/sstephenson/hike
-  children: []
+  children:
+  - rake
   parents:
   - sprockets
 - name: tilt
@@ -737,13 +740,13 @@
   - rails
 - name: activerecord-jdbc-adapter
   source: bundle
-  version: 1.2.2.1
-  license: MIT
-  license_url: http://opensource.org/licenses/mit-license
+  version: 1.2.9
+  license: BSD
+  license_url: http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29
   approved: true
   license_files:
   - LICENSE.txt
-  - README.rdoc
+  - README.md
   bundler_groups: []
   summary: JDBC adapter for ActiveRecord, for use within JRuby on Rails.
   description: |-
@@ -756,7 +759,7 @@
   - activerecord-jdbcpostgresql-adapter
 - name: activerecord-jdbcpostgresql-adapter
   source: bundle
-  version: 1.2.2.1
+  version: 1.2.9
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -792,9 +795,8 @@
   - rails
 - name: addressable
   source: bundle
-  version: 2.3.2
-  license: Apache 2.0
-  license_url: http://www.apache.org/licenses/LICENSE-2.0.txt
+  version: 2.3.4
+  license: Apache License 2.0
   approved: true
   license_files:
   - LICENSE.txt
@@ -871,18 +873,17 @@
   - bullet
 - name: bullet
   source: bundle
-  version: 4.3.1
+  version: 4.6.0
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
   license_files:
   - MIT-LICENSE
-  - README.textile
-  - README_for_rails2.textile
+  - README.md
   bundler_groups:
   - :development
-  summary: A rails plugin to kill N+1 queries and unused eager loading.
-  description: A rails plugin to kill N+1 queries and unused eager loading.
+  summary: help to kill N+1 queries and unused eager loading.
+  description: help to kill N+1 queries and unused eager loading.
   homepage: http://github.com/flyerhzm/bullet
   children:
   - uniform_notifier
@@ -908,6 +909,7 @@
   parents:
   - multi_json
   - database_cleaner
+  - thor
   - jetpack
   - license_finder
   - log4r
@@ -920,7 +922,7 @@
   - vcr
 - name: nokogiri
   source: bundle
-  version: 1.5.6
+  version: 1.5.9
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -1014,13 +1016,13 @@
   - selenium-webdriver
 - name: selenium-webdriver
   source: bundle
-  version: 2.31.0
+  version: 2.32.1
   license: Apache 2.0
   license_url: http://www.apache.org/licenses/LICENSE-2.0.txt
   approved: true
   license_files:
   - COPYING
-  - README
+  - README.md
   bundler_groups: []
   summary: The next generation developer focused tool for automated testing of webapps
   description: WebDriver is a tool for writing automated tests of websites. It aims to mimic the behaviour of a real user, and as such interacts with the HTML of the application.
@@ -1059,7 +1061,7 @@
   - license_finder
 - name: capybara
   source: bundle
-  version: 2.0.2
+  version: 2.0.3
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -1094,7 +1096,7 @@
   - rspec_api_documentation
 - name: capybara-screenshot
   source: bundle
-  version: 0.3.1
+  version: 0.3.4
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -1129,7 +1131,7 @@
   - mizuno
 - name: chunky_png
   source: bundle
-  version: 1.2.6
+  version: 1.2.8
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -1205,7 +1207,7 @@
   - paperclip
 - name: fssm
   source: bundle
-  version: 0.2.9
+  version: 0.2.10
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -1508,7 +1510,7 @@
   - vcr
 - name: faye-websocket
   source: bundle
-  version: 0.4.6
+  version: 0.4.7
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -1519,6 +1521,7 @@
   homepage: http://github.com/faye/faye-websocket-ruby
   children:
   - eventmachine
+  - progressbar
   - rack
   - rake-compiler
   - rspec
@@ -1553,7 +1556,7 @@
   parents: []
 - name: thor
   source: bundle
-  version: 0.17.0
+  version: 0.18.1
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -1566,11 +1569,13 @@
   summary: A scripting framework that replaces rake, sake and rubigen
   description: A scripting framework that replaces rake, sake and rubigen
   homepage: http://whatisthor.com/
-  children: []
+  children:
+  - bundler
   parents:
   - foreman
   - jasmine-core
   - railties
+  - jquery-rails
 - name: forgery
   source: bundle
   version: 0.5.0
@@ -1615,13 +1620,13 @@
   parents: []
 - name: hashie
   source: bundle
-  version: 1.2.0
+  version: 2.0.3
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
   license_files:
   - LICENSE
-  - README.rdoc
+  - README.markdown
   bundler_groups:
   - :test
   - :integration
@@ -1636,6 +1641,7 @@
   - rspec
   - guard
   - guard-rspec
+  - growl
   parents: []
 - name: headless
   source: bundle
@@ -1657,8 +1663,8 @@
   parents: []
 - name: highline
   source: bundle
-  version: 1.6.15
-  license: ruby
+  version: 1.6.18
+  license: Ruby
   license_url: http://www.ruby-lang.org/en/LICENSE.txt
   approved: true
   license_files:
@@ -1863,6 +1869,7 @@
   - cocaine
   - fssm
   - diff-lcs
+  - dotenv
   - factory_girl
   - fakefs
   - faye-websocket
@@ -2336,6 +2343,7 @@
   - activesupport
   - actionpack
   parents:
+  - jquery-rails
   - rails
   - rspec-rails
   - sass-rails
@@ -2513,7 +2521,7 @@
   parents: []
 - name: sequel
   source: bundle
-  version: 3.45.0
+  version: 3.46.0
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -2828,7 +2836,7 @@
   - POpen4
 - name: allowy
   source: bundle
-  version: 0.2.6
+  version: 0.3.0
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -2849,7 +2857,7 @@
   parents: []
 - name: ci_reporter
   source: bundle
-  version: 1.8.3
+  version: 1.8.4
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -2881,7 +2889,7 @@
   - selenium-webdriver
 - name: foreman
   source: bundle
-  version: 0.46.0
+  version: 0.63.0
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -2899,6 +2907,7 @@
   homepage: http://github.com/ddollar/foreman
   children:
   - thor
+  - dotenv
   parents: []
 - name: jetpack
   source: bundle
@@ -2918,7 +2927,7 @@
   parents: []
 - name: bouncy-castle-java
   source: bundle
-  version: 1.5.0146.1
+  version: 1.5.0147
   license: MIT
   license_url: http://opensource.org/licenses/mit-license
   approved: true
@@ -2928,29 +2937,29 @@
   bundler_groups: []
   summary: Gem redistribution of Bouncy Castle jars
   description: Gem redistribution of "Legion of the Bouncy Castle Java cryptography APIs" jars at http://www.bouncycastle.org/java.html
-  homepage: http://github.com/nahi/bouncy-castle-java/
+  homepage: http://github.com/jruby/jruby/tree/master/gems/bouncy-castle-java/
   children: []
   parents:
   - jruby-openssl
 - name: jdbc-postgres
   source: bundle
-  version: 9.1.901
+  version: 9.2.1002.1
   license: BSD
   license_url: http://en.wikipedia.org/wiki/BSD_licenses#4-clause_license_.28original_.22BSD_License.22.29
   approved: true
   license_files:
   - LICENSE.txt
-  - README.txt
+  - README.md
   bundler_groups: []
-  summary: PostgreSQL JDBC driver for Java and PostgreSQL/ActiveRecord-JDBC.
-  description: Install this gem and require 'postgres' within JRuby to load the driver.
+  summary: PostgreSQL JDBC driver for JRuby and PostgreSQL/ActiveRecord-JDBC (activerecord-jdbcpostgresql-adapter).
+  description: Install this gem `require 'jdbc/postgres'` and invoke `Jdbc::Postgres.load_driver` within JRuby to load the driver.
   homepage: https://github.com/jruby/activerecord-jdbc-adapter
   children: []
   parents:
   - activerecord-jdbcpostgresql-adapter
 - name: jruby-openssl
   source: bundle
-  version: 0.7.7
+  version: 0.8.7
   license: LGPLv2.1
   approved: true
   license_files:
@@ -2960,10 +2969,9 @@
   - :default
   summary: OpenSSL add-on for JRuby
   description: JRuby-OpenSSL is an add-on gem for JRuby that emulates the Ruby OpenSSL native library.
-  homepage: https://github.com/jruby/jruby-ossl
+  homepage: https://github.com/jruby/jruby
   children:
   - bouncy-castle-java
-  - rdoc
   parents:
   - http_parser.rb
   - therubyrhino
@@ -3162,10 +3170,9 @@
   - arel
   - nokogiri
   - ci_reporter
-  - jruby-openssl
-  - net-ldap
   - rdoc
   - railties
+  - net-ldap
   - rsolr
   - webmock
   - uglifier
@@ -3224,7 +3231,7 @@
   - vcr
 - name: eventmachine
   source: bundle
-  version: 1.0.0
+  version: 1.0.3
   license: ruby
   license_url: http://www.ruby-lang.org/en/LICENSE.txt
   approved: true
@@ -3248,6 +3255,41 @@
   children:
   - rake-compiler
   - yard
-  - bluecloth
   parents:
   - faye-websocket
+- name: dotenv
+  source: bundle
+  version: 0.7.0
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  license_files:
+  - LICENSE
+  - README.md
+  bundler_groups: []
+  summary: Loads environment variables from `.env`.
+  description: Loads environment variables from `.env`.
+  homepage: https://github.com/bkeepers/dotenv
+  children:
+  - rake
+  - rspec
+  parents:
+  - foreman
+- name: jquery-rails
+  source: bundle
+  version: 2.1.4
+  license: MIT
+  license_url: http://opensource.org/licenses/mit-license
+  approved: true
+  license_files:
+  - LICENSE
+  - README.md
+  bundler_groups:
+  - :assets
+  summary: Use jQuery with Rails 3
+  description: This gem provides jQuery and the jQuery-ujs driver for your Rails 3 application.
+  homepage: http://rubygems.org/gems/jquery-rails
+  children:
+  - railties
+  - thor
+  parents: []
