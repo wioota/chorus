@@ -41,10 +41,8 @@ describe "Workspaces" do
       wait_for_page_load
       visit('/#/workspaces')
 
-      within ".list" do
-        page.should have_css("a[href='#/workspaces/#{Workspace.first.id}']")
-        page.should_not have_css("a[href='#/workspaces/#{workspace.id}']")
-      end
+      wait_for_page_load
+      Workspace.find_by_id(workspace.id).should be_nil
     end
   end
 end
