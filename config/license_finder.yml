@@ -1,5 +1,5 @@
---- 
-whitelist: 
+---
+whitelist:
 - MIT
 - Apache 1.1
 - Apache 2.0
@@ -10,3 +10,4 @@ whitelist:
 - Ruby
 - Tcl
 ignore_groups:
+dependencies_file_dir: "./doc/"
