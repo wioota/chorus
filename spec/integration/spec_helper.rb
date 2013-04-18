@@ -31,6 +31,7 @@ Dir[File.join(File.dirname(__FILE__), 'support', "**", "*")].each {|f| require f
 FACTORY_GIRL_SEQUENCE_OFFSET = 44444
 FactoryGirl.find_definitions
 require "#{Rails.root}/spec/support/fixture_builder.rb"
+require "#{Rails.root}/spec/support/queue_classic_helpers.rb"
 require Rails.root.join('spec/external_service_detector.rb').to_s
 
 RSpec.configure do |config|
