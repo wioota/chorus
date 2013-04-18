@@ -34,7 +34,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
         });
     });
 
-    describe("when the configuration is loaded", function() {
+    describe("once the configuration is loaded", function() {
         beforeEach(function() {
             this.server.completeFetchFor(chorus.models.Config.instance());
         });
@@ -116,7 +116,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
             });
         });
 
-        describe("selecting the 'register a hadoop file system' radio button", function() {
+        describe("selecting the 'HDFS cluster' option", function() {
             beforeEach(function() {
                 this.dialog.$("select.data_sources").val("register_existing_hdfs").change();
             });
@@ -141,6 +141,10 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                     form.find("input.group_list").val("hadoop");
 
                     form.find("input[name=name]").trigger("change");
+                });
+
+                it("labels 'host' correctly ", function() {
+                    expect(this.dialog.$(".register_existing_hdfs label[name=host]").text()).toMatchTranslation("instances.dialog.hadoop_host");
                 });
 
                 it("#fieldValues returns the values", function() {
