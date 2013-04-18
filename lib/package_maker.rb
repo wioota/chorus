@@ -5,7 +5,7 @@ module PackageMaker
     config/*
     db/
     doc/
-    lib/
+    lib/*
     packaging/
     public/
     script/rails
@@ -34,6 +34,7 @@ module PackageMaker
     config/jshint.yml
     config/jshint_specs.yml
     config/license_finder.yml
+    lib/libraries
   }
 
   extend self
@@ -60,7 +61,7 @@ module PackageMaker
     end
 
     PATHS_TO_EXCLUDE.each do |path|
-      FileUtils.rm(File.join(installation_path, path))
+      FileUtils.rm_rf(File.join(installation_path, path))
     end
 
     FileUtils.ln_s File.join(rails_root, 'packaging/install.rb'), install_root
