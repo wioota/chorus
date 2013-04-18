@@ -1,6 +1,6 @@
 if ChorusConfig.instance.oracle_configured?
   begin
-    require_relative 'libraries/ojdbc6.jar'
+    require_relative '../../lib/libraries/ojdbc6.jar'
   rescue LoadError
     Rails.logger.warn "Error loading Oracle driver"
   end

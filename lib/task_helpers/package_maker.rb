@@ -40,7 +40,7 @@ module PackageMaker
   extend self
 
   def make_installer
-    rails_root = File.expand_path(File.dirname(__FILE__) + '/../')
+    rails_root = File.expand_path(File.dirname(__FILE__) + '/../../')
     install_root = rails_root + '/tmp/installer/'
     installation_path = install_root + 'chorus_installation'
 
