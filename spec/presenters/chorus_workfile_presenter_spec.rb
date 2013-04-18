@@ -36,7 +36,7 @@ describe ChorusWorkfilePresenter, :type => :view do
     end
 
     context ":include_execution_schema is passed as an option" do
-      let(:presenter) { ChorusWorkfilePresenter.new(workfile, view, :include_execution_schema => true) }
+      let(:options) { {:include_execution_schema => true} }
 
       it "includes the execution_schema" do
         hash[:execution_schema].should == GpdbSchemaPresenter.new(workfile.execution_schema, view).presentation_hash
@@ -49,6 +49,22 @@ describe ChorusWorkfilePresenter, :type => :view do
       it "should not include owner or draft status" do
         hash[:owner].should be_nil
         hash[:has_draft].should be_nil
+      end
+    end
+
+    context "for list view" do
+      let(:options) { {:list_view => true} }
+
+      it "should not draft status" do
+        hash[:has_draft].should be_nil
+      end
+
+      context "when also presenting the execution schema" do
+        let(:options) { {:list_view => true, :include_execution_schema => true} }
+
+        it "should present the execution schema succinctly" do
+          hash[:execution_schema].should == GpdbSchemaPresenter.new(workfile.execution_schema, view, :succinct => true).presentation_hash
+        end
       end
     end
 

@@ -51,7 +51,7 @@ class EventPresenter < Presenter
   def as_comment
     {
         :body => model.respond_to?(:body) ? model.body : model.commit_message,
-        :author => present(model.actor),
+        :author => present(model.actor, :succinct => true),
         :timestamp => model.created_at
     }
   end

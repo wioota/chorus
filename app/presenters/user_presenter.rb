@@ -9,15 +9,15 @@ class UserPresenter < Presenter
         :image => present(model.image),
         :entity_type => model.entity_type_name
     }
-    unless rendering_activities?
-      results.merge!({
+    unless rendering_activities? || succinct?
+      results.merge!(
           :email => model.email,
           :title => model.title,
           :dept => model.dept,
           :notes => model.notes,
           :admin => model.admin?,
           :tags => present(model.tags)
-      })
+      )
     end
 
     if options[:include_api_key]

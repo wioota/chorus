@@ -30,8 +30,8 @@ describe WorkfilePresenter, :type => :view do
       hash[:workspace].to_hash.should == (WorkspacePresenter.new(workspace, view).presentation_hash)
     end
 
-    it "uses the user presenter to serialize the owner" do
-      hash[:owner].to_hash.should == (UserPresenter.new(user, view).presentation_hash)
+    it "uses the succinct user presenter to serialize the owner" do
+      hash[:owner].to_hash.should == (UserPresenter.new(user, view, :succinct => true).presentation_hash)
     end
 
     it "uses the workfile file name" do
@@ -41,6 +41,13 @@ describe WorkfilePresenter, :type => :view do
     it "includes entity_subtype" do
       stub(workfile).entity_subtype { 'something' }
       hash[:entity_subtype].should == 'something'
+    end
+
+    context "when presenting for a list" do
+      let(:options) { { :list_view => true }}
+      it "uses the succinct workspace presenter" do
+        hash[:workspace].to_hash.should == (WorkspacePresenter.new(workspace, view, :succinct => true).presentation_hash)
+      end
     end
 
     context "when the workfile has tags" do
@@ -69,7 +76,7 @@ describe WorkfilePresenter, :type => :view do
       end
 
       it "presents the notes as comments in reverse timestamp order" do
-        recent_comments[0][:author].to_hash.should == Presenter.present(user, view)
+        recent_comments[0][:author].to_hash.should == Presenter.present(user, view, :succinct => true)
         recent_comments[0][:body].should == "note for today"
         recent_comments[0][:timestamp].should == today
       end
@@ -94,7 +101,7 @@ describe WorkfilePresenter, :type => :view do
 
         context "when the comment is newer than the notes" do
           it "presents the comment before the notes" do
-            recent_comments[0][:author].to_hash.should == Presenter.present(user, view)
+            recent_comments[0][:author].to_hash.should == Presenter.present(user, view, :succinct => true)
             recent_comments[0][:body].should == "comment on yesterday's note"
             recent_comments[0][:timestamp].should == comment_timestamp
           end

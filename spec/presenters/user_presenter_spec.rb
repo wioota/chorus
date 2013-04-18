@@ -46,6 +46,20 @@ describe UserPresenter, :type => :view do
         hash[:api_key].should == user.api_key
       end
     end
+
+    context "rendering succinct json" do
+      let(:options) { {:succinct => true} }
+
+      it "should only render the id and name" do
+        hash[:id].should == user.id
+        hash[:username].should == user.username
+        hash[:first_name].should == user.first_name
+        hash[:last_name].should == user.last_name
+        hash[:entity_type].should == 'user'
+        hash[:image].to_hash.should == (ImagePresenter.new(user.image, view).presentation_hash)
+        hash.keys.size.should == 6
+      end
+    end
   end
 
   describe "complete_json?" do

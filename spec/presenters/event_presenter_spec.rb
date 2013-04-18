@@ -257,5 +257,17 @@ describe EventPresenter, :type => :view do
         end
       end
     end
+
+    context "presenting as a comment" do
+      let(:options) { {:as_comment => true} }
+      let(:hash) { subject.to_hash }
+
+      it "should present a restricted set" do
+        hash[:body].should == event.body
+        hash[:author].should == UserPresenter.new(event.actor, view, :succinct => true).presentation_hash
+        hash[:timestamp].should == model.created_at
+        hash.keys.size.should == 3
+      end
+    end
   end
 end

@@ -13,5 +13,9 @@ describe CommentPresenter, :type => :view do
       hash.should have_key(:body)
       hash.should have_key(:timestamp)
     end
+
+    it "presents a succinct author" do
+      hash[:author].to_hash.should == (UserPresenter.new(comment.author, view, :succinct => true).presentation_hash)
+    end
   end
 end

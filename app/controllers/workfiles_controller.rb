@@ -42,7 +42,9 @@ class WorkfilesController < ApplicationController
       workfiles = workfiles.with_file_type(params[:file_type])
     end
 
-    present paginate(workfiles), :presenter_options => {:workfile_as_latest_version => true}
+    workfiles = workfiles.includes(Workfile.eager_load_associations)
+
+    present paginate(workfiles), :presenter_options => {:workfile_as_latest_version => true, :list_view => true}
   end
 
 

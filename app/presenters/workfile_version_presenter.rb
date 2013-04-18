@@ -22,11 +22,11 @@ class WorkfileVersionPresenter < Presenter
   end
 
   def owner_hash
-    rendering_activities? ? { :id => model.owner_id } : present(model.owner)
+    rendering_activities? ? { :id => model.owner_id } : present(model.owner, options.merge(:succinct => true))
   end
 
   def modifier_hash
-    rendering_activities? ? { :id => model.modifier_id } : present(model.modifier)
+    rendering_activities? ? { :id => model.modifier_id } : present(model.modifier, options.merge(:succinct => true))
   end
 
   def icon_url

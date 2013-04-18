@@ -26,9 +26,9 @@ describe WorkfileVersionPresenter, :type => :view do
       workfile_hash.should have_key(:execution_schema)
     end
 
-    it "uses the user presenter to serialize the owner and modifier" do
-      hash[:owner].to_hash.should == UserPresenter.new(owner, view).presentation_hash
-      hash[:modifier].to_hash.should == UserPresenter.new(owner, view).presentation_hash
+    it "presents the owner and modifier succinctly" do
+      hash[:owner].to_hash.should == UserPresenter.new(owner, view, :succinct => true).presentation_hash
+      hash[:modifier].to_hash.should == UserPresenter.new(owner, view, :succinct => true).presentation_hash
     end
 
     context "when not on the workfile page" do

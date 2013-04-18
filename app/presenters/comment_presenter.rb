@@ -3,7 +3,7 @@ class CommentPresenter < Presenter
   def to_hash
     {
         :id => model.id,
-        :author => present(model.author),
+        :author => present(model.author, :succinct => true),
         :body => model.body,
         :action => 'SUB_COMMENT',
         :timestamp => model.created_at,

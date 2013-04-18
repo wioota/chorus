@@ -18,6 +18,7 @@ class Workfile < ActiveRecord::Base
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   has_many :comments, :through => :events
+  has_many :most_recent_comments, :through => :events, :source => :comments, :class_name => "Comment", :order => "id DESC", :limit => 1
   has_many :versions, :class_name => 'WorkfileVersion'
 
   belongs_to :latest_workfile_version, :class_name => 'WorkfileVersion'
@@ -43,6 +44,31 @@ class Workfile < ActiveRecord::Base
     integer :workspace_id, :multiple => true
     integer :member_ids, :multiple => true
     boolean :public
+  end
+
+  def self.eager_load_associations
+    [
+        {
+            :latest_workfile_version => [
+                {
+                    :workfile => [
+                        :workspace,
+                        :owner,
+                        :tags,
+                        {:most_recent_comments => :author},
+                        {:most_recent_notes => :actor},
+                        {
+                            :execution_schema => {
+                                :parent => :data_source
+                            }
+                        }
+                    ]
+                },
+                :owner,
+                :modifier
+            ]
+        }
+    ]
   end
 
   def self.build_for(params)
