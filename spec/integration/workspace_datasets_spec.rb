@@ -45,10 +45,6 @@ describe "Workspace datasets" do
     end
 
     it "does not show sandbox datasets" do
-      #page.should have_selector(".dataset_item")
-
-      #page.should #have two datasets
-      #page.should #have associated datasets
       workspace.sandbox.datasets[0..5].each do |dataset|
         page.should_not have_text(dataset.name)
       end
@@ -61,7 +57,7 @@ describe "Workspace datasets" do
     before { visit("#/workspaces/#{workspace.id}/datasets") }
 
     it "shows the associated datasets and shows the 'add credentials' link in the sidebar" do
-      page.should have_selector('.dataset_item .no_credentials')
+      page.should have_selector('.dataset_item.no_credentials')
       workspace.associated_datasets.each do |associated_dataset|
         dataset = associated_dataset.dataset
         page.find('span', :text => dataset.name).should_not be_nil
