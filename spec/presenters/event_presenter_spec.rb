@@ -262,11 +262,26 @@ describe EventPresenter, :type => :view do
       let(:options) { {:as_comment => true} }
       let(:hash) { subject.to_hash }
 
-      it "should present a restricted set" do
-        hash[:body].should == event.body
-        hash[:author].should == UserPresenter.new(event.actor, view, :succinct => true).presentation_hash
-        hash[:timestamp].should == model.created_at
-        hash.keys.size.should == 3
+      context "for a note" do
+        let(:event) { events(:note_on_greenplum) }
+
+        it "should present a restricted set" do
+          hash[:body].should == event.body
+          hash[:author].should == UserPresenter.new(event.actor, view, :succinct => true).presentation_hash
+          hash[:timestamp].should == event.created_at
+          hash.keys.size.should == 3
+        end
+      end
+
+      context "for a workfile version" do
+        let(:event) { Events::WorkfileUpgradedVersion.first }
+
+        it "should present a restricted set" do
+          hash[:body].should == event.commit_message
+          hash[:author].should == UserPresenter.new(event.actor, view, :succinct => true).presentation_hash
+          hash[:timestamp].should == event.created_at
+          hash.keys.size.should == 3
+        end
       end
     end
   end
