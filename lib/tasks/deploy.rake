@@ -1,4 +1,4 @@
-require_relative '../../lib/deployer'
+require_relative '../task_helpers/deployer'
 
 desc "Deploy an installer package file to a server"
 task :deploy, [:server, :package_file] do |t, args|

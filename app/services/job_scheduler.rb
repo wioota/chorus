@@ -1,6 +1,3 @@
-require 'clockwork'
-require 'queue_classic'
-
 class JobScheduler
   include Clockwork
 

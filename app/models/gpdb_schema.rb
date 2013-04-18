@@ -1,5 +1,3 @@
-require 'greenplum_connection'
-
 class GpdbSchema < Schema
   include Stale
 

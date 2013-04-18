@@ -1,5 +1,5 @@
 require_relative '../../version'
-require_relative '../../lib/package_maker'
+require_relative '../task_helpers/package_maker'
 
 namespace :package do
   task :check_clean_working_tree do

@@ -1,5 +1,4 @@
 require 'active_model'
-require_relative '../chorus_api_validation_format'
 
 class ExternalTable
   include ActiveModel::Validations

@@ -1,5 +1,3 @@
-require 'boxplot_summary'
-
 module Visualization
   class Boxplot < Base
     attr_accessor :rows, :buckets, :category, :values, :filters, :type

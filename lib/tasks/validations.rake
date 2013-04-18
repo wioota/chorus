@@ -1,4 +1,4 @@
-require 'existing_data_sources_validator'
+require_relative '../task_helpers/existing_data_sources_validator'
 
 namespace :validations do
   desc 'Check Data Sources'

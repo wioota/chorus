@@ -1,5 +1,5 @@
 require Rails.root + "app/models/chorus_config"
-require "backup_restore"
+require_relative "../task_helpers/backup_restore"
 
 namespace :backup do
 

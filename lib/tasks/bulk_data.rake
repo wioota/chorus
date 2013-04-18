@@ -1,4 +1,4 @@
-require 'bulk_data'
+require_relative '../task_helpers/bulk_data'
 
 namespace :bulk_data do
   desc "Bulk load user data into Chorus"

@@ -1,6 +1,3 @@
-require_relative 'data_source_connection'
-require_relative '../app/models/sql_result'
-
 class GreenplumConnection < DataSourceConnection
   class DatabaseError < Error
     def error_type

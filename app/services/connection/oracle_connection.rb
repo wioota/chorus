@@ -1,5 +1,3 @@
-require_relative 'data_source_connection'
-
 if ChorusConfig.instance.oracle_configured?
   begin
     require_relative 'libraries/ojdbc6.jar'

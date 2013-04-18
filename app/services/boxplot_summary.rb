@@ -1,8 +1,4 @@
 class BoxplotSummary
-  def self.mean(a,b)
-    (a + b) / 2.0
-  end
-
   def self.summarize(ntiles_for_each_bucket, number_of_buckets)
     boxplot_entries = []
 
@@ -26,6 +22,12 @@ class BoxplotSummary
     end
 
     return sort_entries(number_of_buckets, boxplot_entries)
+  end
+
+  private
+
+  def self.mean(a,b)
+    (a + b) / 2.0
   end
 
   def self.sort_entries(number_of_buckets, boxplot_entry)

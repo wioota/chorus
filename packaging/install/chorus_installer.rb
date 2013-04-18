@@ -6,7 +6,7 @@ require 'base64'
 require 'openssl'
 require 'pathname'
 require 'java'
-require_relative '../../lib/properties'
+require_relative '../../lib/shared/properties'
 
 java_import "java.lang.System"
 

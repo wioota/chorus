@@ -1,4 +1,4 @@
-require 'safe_mktmpdir'
+require_relative 'safe_mktmpdir'
 require 'pathname'
 require 'open3'
 require 'tempfile'

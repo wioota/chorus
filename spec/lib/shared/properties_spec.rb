@@ -79,7 +79,7 @@ describe Properties do
       'test1' => {'value1' => 10},
       'test2' => 20
     } }
-    let(:destination) { 'spec/lib/fixtures/converted.properties' }
+    let(:destination) { 'spec/lib/shared/converted.properties' }
 
     it 'writes to the properties file' do
       Properties.dump_file(hash, destination)

@@ -1,5 +1,4 @@
-require 'pathname'
-require_relative '../../lib/properties'
+require_relative '../../lib/shared/properties'
 
 class ChorusConfig
   attr_accessor :config

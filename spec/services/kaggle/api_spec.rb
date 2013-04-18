@@ -32,7 +32,7 @@ describe Kaggle::API, :kaggle_API => true do
 
         stub(Kaggle::API).enabled? { true }
         FakeWeb.register_uri(:get, kaggle_api_url,
-                             :body => File.read(Rails.root + "lib/kaggle/kaggleSearchResults.json"),
+                             :body => File.read(Rails.root + "spec/fixtures/kaggleSearchResults.json"),
                              :status => ["200", "Success"])
       end
 
@@ -62,7 +62,7 @@ describe Kaggle::API, :kaggle_API => true do
       include FakeFS::SpecHelpers
 
       before :all do
-        @kaggle_users = File.read(Rails.root + "lib/kaggle/kaggleSearchResults.json")
+        @kaggle_users = File.read(Rails.root + "spec/fixtures/kaggleSearchResults.json")
       end
 
       before do

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'boxplot_summary'
 
 describe BoxplotSummary do
   it "should handle a 1 row data set" do
