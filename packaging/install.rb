@@ -21,6 +21,7 @@ if __FILE__ == $0
 
     installer.install
     installer.startup
+    exec "stty echo"
 
     puts "Installation completed."
     unless installer.upgrade_existing?
