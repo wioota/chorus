@@ -2,10 +2,11 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "Workfiles" do
   let(:workspace) { workspaces(:public) }
+  let(:user) { users(:admin) }
 
   describe "add a workfile" do
     it "creates a simple workfile" do
-      login(users(:admin))
+      login(user)
       visit("#/workspaces/#{workspace.id}")
 
       click_link "Work Files"
@@ -20,7 +21,7 @@ describe "Workfiles" do
     end
 
     it "uploads a workfile from the local system" do
-      login(users(:admin))
+      login(user)
       visit("#/workspaces/#{workspace.id}")
 
       click_link "Work Files"
@@ -39,7 +40,7 @@ describe "Workfiles" do
     let(:workfile) { workfiles(:'sql.sql') }
 
     it "deletes an uploaded file from the show page" do
-      login(users(:admin))
+      login(user)
       visit("#/workspaces/#{workspace.id}")
 
       click_link "Work Files"
@@ -60,7 +61,7 @@ describe "Workfiles" do
 
     describe "Lists the work files" do
       before(:each) do
-        login(users(:admin))
+        login(user)
         visit("#/workspaces/#{workspace.id}/workfiles")
       end
 
@@ -108,6 +109,13 @@ describe "Workfiles" do
           click_button "Save Search Path"
         end
         get_workfile_contents.should == "fooey"
+      end
+    end
+
+    describe "if you don't have a valid instance account for the schema" do
+      let(:user) { users(:restricted_user) }
+      it "should display an 'add credentials' link in the sidebar" do
+        page.find('.data_tab').should have_text("add your credentials")
       end
     end
   end

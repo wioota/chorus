@@ -168,7 +168,23 @@ describe Workspace do
       end
 
       context "when the user has an instance account" do
-        let!(:account) { FactoryGirl.build(:instance_account, data_source: schema.database.data_source, owner: user).tap { |a| a.save(validate: false) } }
+        let!(:account) do
+          FactoryGirl.build(:instance_account, data_source: schema.database.data_source, owner: user).tap do |a|
+            a.save(validate: false)
+          end
+        end
+
+        context "when connecting fails due to invalid credentials" do
+          before do
+            mock(schema).dataset_count(anything, anything) { raise DataSourceConnection::InvalidCredentials.new(Object.new) }
+            mock(GpdbDataset).visible_to(anything, schema, anything) { raise DataSourceConnection::InvalidCredentials.new(Object.new)}
+          end
+
+          it "lets them see associated datasets and chorus views only" do
+            workspace.datasets(user).to_a.should =~ [source_table, chorus_view, chorus_view_from_source]
+            workspace.dataset_count(user).should == 3
+          end
+        end
 
         context "when the sandbox has tables" do
           before do

@@ -51,7 +51,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
         });
     });
 
-    context("it does not have a sandbox", function() {
+    context("when it does not have a sandbox", function() {
         function itHandlesTheWorkspaceResponse(helpText) {
             it("fetches the dataset collection", function() {
                 expect(this.workspace.sandbox()).toBeUndefined();
@@ -144,15 +144,18 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
     });
 
     context("after the workspace and collection have loaded", function() {
+        beforeEach(function() {
+            this.datasets = [
+                rspecFixtures.workspaceDataset.datasetTable(),
+                rspecFixtures.workspaceDataset.datasetTable()
+            ];
+            this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
+            this.account = this.workspace.sandbox().instance().accountForCurrentUser();
+        });
+
         context("and the user has update permission on the workspace", function() {
             beforeEach(function() {
-                this.datasets = [
-                    rspecFixtures.workspaceDataset.datasetTable(),
-                    rspecFixtures.workspaceDataset.datasetTable()
-                ];
                 this.server.completeFetchFor(this.workspace);
-                this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
-                this.account = this.workspace.sandbox().instance().accountForCurrentUser();
             });
 
             it("creates the sidebar", function() {
@@ -229,188 +232,194 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 });
             });
 
-            context("it has a sandbox", function() {
-                it("fetches the account for the current user", function() {
-                    expect(this.server.lastFetchFor(this.account)).not.toBeUndefined();
+
+        });
+
+        context("when it has a sandbox", function() {
+            beforeEach(function() {
+                this.server.completeFetchFor(this.workspace);
+            });
+
+            it("fetches the account for the current user", function() {
+                expect(this.server.lastFetchFor(this.account)).not.toBeUndefined();
+            });
+
+            describe("the 'import file' button", function() {
+                beforeEach(function() {
+                    this.page.render();
                 });
 
-                describe("the 'import file' button", function() {
-                    beforeEach(function() {
-                        this.page.render();
-                    });
-
-                    it("has the right text", function() {
-                        expect(this.page.$("button[data-dialog='FileImport']").text()).toMatchTranslation("dataset.import.title");
-                    });
-
-                    it("has the right data attributes", function() {
-                        expect(this.page.$("button[data-dialog='FileImport']").data("workspaceId").toString()).toBe(this.workspace.id.toString());
-                        expect(this.page.$("button[data-dialog='FileImport']").data("canonicalName")).toBe(this.workspace.sandbox().canonicalName());
-                    });
-
-                    describe("when the button is clicked", function() {
-                        beforeEach(function() {
-                            this.page.$("button[data-dialog='FileImport']").click();
-                        });
-
-                        it("launches an Import File dialog", function() {
-                            expect(this.modalSpy).toHaveModal(chorus.dialogs.FileImport);
-                        });
-                    });
-
-                    it("displays the sandbox location in the header", function () {
-                        expect(this.page.mainContent.contentHeader.$(".found_in a").eq(0).text()).toBe(this.workspace.sandbox().instance().name());
-                        expect(this.page.mainContent.contentHeader.$(".found_in a").eq(1).text()).toBe(this.workspace.sandbox().database().name());
-                        expect(this.page.mainContent.contentHeader.$(".found_in a").eq(2).text()).toBe(this.workspace.sandbox().schema().name());
-                    });
-
+                it("has the right text", function() {
+                    expect(this.page.$("button[data-dialog='FileImport']").text()).toMatchTranslation("dataset.import.title");
                 });
 
-                context("when the account loads and is empty and the instance account maps are individual", function() {
+                it("has the right data attributes", function() {
+                    expect(this.page.$("button[data-dialog='FileImport']").data("workspaceId").toString()).toBe(this.workspace.id.toString());
+                    expect(this.page.$("button[data-dialog='FileImport']").data("canonicalName")).toBe(this.workspace.sandbox().canonicalName());
+                });
 
+                describe("when the button is clicked", function() {
                     beforeEach(function() {
-                        spyOnEvent(this.page.collection, 'reset');
-                        this.server.completeFetchFor(this.account, rspecFixtures.instanceAccount({"id":null}));
-                        expect(this.page.instance.isShared()).toBeFalsy();
+                        this.page.$("button[data-dialog='FileImport']").click();
                     });
 
-                    it("pops up a WorkspaceInstanceAccount dialog", function() {
-
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
-                        expect(this.page.dialog.model).toBe(this.page.account);
-                        expect(this.page.dialog.pageModel).toBe(this.page.workspace);
-                    });
-
-                    context("after the account has been created", function() {
-                        beforeEach(function() {
-                            spyOn(this.page.collection, 'fetch').andCallThrough();
-                            this.page.account.trigger('saved');
-                        });
-
-                        it("fetches the datasets", function() {
-                            expect(this.page.collection.fetch).toHaveBeenCalled();
-                        });
-                    });
-
-                    context('navigating to the page a second time', function() {
-                        beforeEach(function() {
-                            this.modalSpy.reset();
-                            this.server.reset();
-                            this.page = new chorus.pages.WorkspaceDatasetIndexPage(this.workspace.get("id"));
-                            this.server.completeFetchFor(this.workspace);
-                            this.server.completeFetchFor(this.page.account, rspecFixtures.instanceAccount({"id":null}));
-                        });
-
-                        it("should not pop up the WorkspaceInstanceAccountDialog", function() {
-                            expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
-                        });
+                    it("launches an Import File dialog", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.FileImport);
                     });
                 });
 
-                context('when the account loads and is empty and the data source is shared', function() {
+                it("displays the sandbox location in the header", function () {
+                    expect(this.page.mainContent.contentHeader.$(".found_in a").eq(0).text()).toBe(this.workspace.sandbox().instance().name());
+                    expect(this.page.mainContent.contentHeader.$(".found_in a").eq(1).text()).toBe(this.workspace.sandbox().database().name());
+                    expect(this.page.mainContent.contentHeader.$(".found_in a").eq(2).text()).toBe(this.workspace.sandbox().schema().name());
+                });
+
+            });
+
+            context("when the account loads and is empty and the instance account maps are individual", function() {
+
+                beforeEach(function() {
+                    spyOnEvent(this.page.collection, 'reset');
+                    this.server.completeFetchFor(this.account, rspecFixtures.instanceAccount({"id":null}));
+                    expect(this.page.instance.isShared()).toBeFalsy();
+                });
+
+                it("pops up a WorkspaceInstanceAccount dialog", function() {
+
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
+                    expect(this.page.dialog.model).toBe(this.page.account);
+                    expect(this.page.dialog.pageModel).toBe(this.page.workspace);
+                });
+
+                context("after the account has been created", function() {
                     beforeEach(function() {
-                        spyOnEvent(this.page.collection, 'reset');
-                        this.page.instance.set({"shared": true});
-                        expect(this.page.instance.isShared()).toBeTruthy();
+                        spyOn(this.page.collection, 'fetch').andCallThrough();
+                        this.page.account.trigger('saved');
+                    });
+
+                    it("fetches the datasets", function() {
+                        expect(this.page.collection.fetch).toHaveBeenCalled();
+                    });
+                });
+
+                context('navigating to the page a second time', function() {
+                    beforeEach(function() {
+                        this.modalSpy.reset();
+                        this.server.reset();
+                        this.page = new chorus.pages.WorkspaceDatasetIndexPage(this.workspace.get("id"));
+                        this.server.completeFetchFor(this.workspace);
                         this.server.completeFetchFor(this.page.account, rspecFixtures.instanceAccount({"id":null}));
                     });
 
-                    it("does not pop up a WorkspaceInstanceAccount dialog", function() {
+                    it("should not pop up the WorkspaceInstanceAccountDialog", function() {
                         expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
                     });
                 });
+            });
 
-                context("when the account loads and is valid", function() {
+            context('when the account loads and is empty and the data source is shared', function() {
+                beforeEach(function() {
+                    spyOnEvent(this.page.collection, 'reset');
+                    this.page.instance.set({"shared": true});
+                    expect(this.page.instance.isShared()).toBeTruthy();
+                    this.server.completeFetchFor(this.page.account, rspecFixtures.instanceAccount({"id":null}));
+                });
+
+                it("does not pop up a WorkspaceInstanceAccount dialog", function() {
+                    expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
+                });
+            });
+
+            context("when the account loads and is valid", function() {
+                beforeEach(function() {
+                    this.server.completeFetchFor(this.account, rspecFixtures.instanceAccount());
+                });
+
+                it("does not pop up the WorkspaceInstanceAccountDialog", function() {
+                    expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
+                });
+
+                describe("filtering", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.account, rspecFixtures.instanceAccount());
+                        this.page.render();
+                        this.page.collection.type = undefined;
+                        spyOn(this.page.collection, 'fetch').andCallThrough();
                     });
 
-                    it("does not pop up the WorkspaceInstanceAccountDialog", function() {
-                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
+                    it("has options for filtering", function() {
+                        expect(this.page.$("ul[data-event=filter] li[data-type=]")).toExist();
+                        expect(this.page.$("ul[data-event=filter] li[data-type=SOURCE_TABLE]")).toExist();
+                        expect(this.page.$("ul[data-event=filter] li[data-type=CHORUS_VIEW]")).toExist();
+                        expect(this.page.$("ul[data-event=filter] li[data-type=SANDBOX_DATASET]")).toExist();
                     });
 
-                    describe("filtering", function() {
+                    it("can filter the list by 'all'", function() {
+                        this.page.$("li[data-type=] a").click();
+                        expect(this.page.collection.attributes.type).toBe("");
+                        expect(this.page.collection.fetch).toHaveBeenCalled();
+                    });
+
+                    it("has can filter the list by 'SOURCE_TABLE'", function() {
+                        this.page.$("li[data-type=SOURCE_TABLE] a").click();
+                        expect(this.page.collection.attributes.type).toBe("SOURCE_TABLE");
+                        expect(this.page.collection.fetch).toHaveBeenCalled();
+                        expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?entity_subtype=SOURCE_TABLE");
+                    });
+
+                    it("has can filter the list by 'SANBOX_TABLE'", function() {
+                        this.page.$("li[data-type=SANDBOX_DATASET] a").click();
+                        expect(this.page.collection.attributes.type).toBe("SANDBOX_DATASET");
+                        expect(this.page.collection.fetch).toHaveBeenCalled();
+                        expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?entity_subtype=SANDBOX_DATASET");
+                    });
+
+                    it("has can filter the list by 'CHORUS_VIEW'", function() {
+                        this.page.$("li[data-type=CHORUS_VIEW] a").click();
+                        expect(this.page.collection.attributes.type).toBe("CHORUS_VIEW");
+                        expect(this.page.collection.fetch).toHaveBeenCalled();
+                        expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?entity_subtype=CHORUS_VIEW");
+                    });
+                });
+
+                describe("search", function() {
+                    beforeEach(function() {
+                        this.page.$("input.search").val("foo").trigger("keyup");
+                    });
+
+                    it("shows the Loading text in the count span", function() {
+                        expect($(this.page.$(".count"))).toContainTranslation("loading");
+                    });
+
+                    it("throttles the number of search requests", function() {
+                        expect(_.debounce).toHaveBeenCalled();
+                    });
+
+                    it("re-fetches the collection with the search parameters", function() {
+                        expect(this.server.lastFetch().url).toContainQueryParams({namePattern: "foo"});
+                    });
+
+                    context("when the fetch completes", function() {
                         beforeEach(function() {
-                            this.page.render();
-                            this.page.collection.type = undefined;
-                            spyOn(this.page.collection, 'fetch').andCallThrough();
+                            spyOn(this.page.mainContent, "render").andCallThrough();
+                            spyOn(this.page.mainContent.content, "render").andCallThrough();
+                            spyOn(this.page.mainContent.contentFooter, "render").andCallThrough();
+                            spyOn(this.page.mainContent.contentDetails, "render").andCallThrough();
+                            spyOn(this.page.mainContent.contentDetails, "updatePagination").andCallThrough();
+                            this.server.completeFetchFor(this.page.collection);
                         });
 
-                        it("has options for filtering", function() {
-                            expect(this.page.$("ul[data-event=filter] li[data-type=]")).toExist();
-                            expect(this.page.$("ul[data-event=filter] li[data-type=SOURCE_TABLE]")).toExist();
-                            expect(this.page.$("ul[data-event=filter] li[data-type=CHORUS_VIEW]")).toExist();
-                            expect(this.page.$("ul[data-event=filter] li[data-type=SANDBOX_DATASET]")).toExist();
+                        it("updates the header, footer, and body", function() {
+                            expect(this.page.mainContent.content.render).toHaveBeenCalled();
+                            expect(this.page.mainContent.contentFooter.render).toHaveBeenCalled();
+                            expect(this.page.mainContent.contentDetails.updatePagination).toHaveBeenCalled();
                         });
 
-                        it("can filter the list by 'all'", function() {
-                            this.page.$("li[data-type=] a").click();
-                            expect(this.page.collection.attributes.type).toBe("");
-                            expect(this.page.collection.fetch).toHaveBeenCalled();
+                        it("does not re-render the page or body", function() {
+                            expect(this.page.mainContent.render).not.toHaveBeenCalled();
+                            expect(this.page.mainContent.contentDetails.render).not.toHaveBeenCalled();
                         });
-
-                        it("has can filter the list by 'SOURCE_TABLE'", function() {
-                            this.page.$("li[data-type=SOURCE_TABLE] a").click();
-                            expect(this.page.collection.attributes.type).toBe("SOURCE_TABLE");
-                            expect(this.page.collection.fetch).toHaveBeenCalled();
-                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?entity_subtype=SOURCE_TABLE");
-                        });
-
-                        it("has can filter the list by 'SANBOX_TABLE'", function() {
-                            this.page.$("li[data-type=SANDBOX_DATASET] a").click();
-                            expect(this.page.collection.attributes.type).toBe("SANDBOX_DATASET");
-                            expect(this.page.collection.fetch).toHaveBeenCalled();
-                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?entity_subtype=SANDBOX_DATASET");
-                        });
-
-                        it("has can filter the list by 'CHORUS_VIEW'", function() {
-                            this.page.$("li[data-type=CHORUS_VIEW] a").click();
-                            expect(this.page.collection.attributes.type).toBe("CHORUS_VIEW");
-                            expect(this.page.collection.fetch).toHaveBeenCalled();
-                            expect(this.server.lastFetch().url).toContain("/workspaces/" + this.workspace.get("id") + "/datasets?entity_subtype=CHORUS_VIEW");
-                        });
-                    });
-
-                    describe("search", function() {
-                        beforeEach(function() {
-                            this.page.$("input.search").val("foo").trigger("keyup");
-                        });
-
                         it("shows the Loading text in the count span", function() {
-                            expect($(this.page.$(".count"))).toContainTranslation("loading");
-                        });
-
-                        it("throttles the number of search requests", function() {
-                            expect(_.debounce).toHaveBeenCalled();
-                        });
-
-                        it("re-fetches the collection with the search parameters", function() {
-                            expect(this.server.lastFetch().url).toContainQueryParams({namePattern: "foo"});
-                        });
-
-                        context("when the fetch completes", function() {
-                            beforeEach(function() {
-                                spyOn(this.page.mainContent, "render").andCallThrough();
-                                spyOn(this.page.mainContent.content, "render").andCallThrough();
-                                spyOn(this.page.mainContent.contentFooter, "render").andCallThrough();
-                                spyOn(this.page.mainContent.contentDetails, "render").andCallThrough();
-                                spyOn(this.page.mainContent.contentDetails, "updatePagination").andCallThrough();
-                                this.server.completeFetchFor(this.page.collection);
-                            });
-
-                            it("updates the header, footer, and body", function() {
-                                expect(this.page.mainContent.content.render).toHaveBeenCalled();
-                                expect(this.page.mainContent.contentFooter.render).toHaveBeenCalled();
-                                expect(this.page.mainContent.contentDetails.updatePagination).toHaveBeenCalled();
-                            });
-
-                            it("does not re-render the page or body", function() {
-                                expect(this.page.mainContent.render).not.toHaveBeenCalled();
-                                expect(this.page.mainContent.contentDetails.render).not.toHaveBeenCalled();
-                            });
-                            it("shows the Loading text in the count span", function() {
-                                expect($(this.page.$(".count"))).not.toMatchTranslation("loading");
-                            });
+                            expect($(this.page.$(".count"))).not.toMatchTranslation("loading");
                         });
                     });
                 });
@@ -425,6 +434,10 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
             it("removes the import button", function() {
                 expect(this.page.mainContent.contentDetails.$("button")).not.toExist();
+            });
+
+            it("still fetches the account for the current user", function() {
+                expect(this.server.lastFetchFor(this.account)).not.toBeUndefined();
             });
         });
 

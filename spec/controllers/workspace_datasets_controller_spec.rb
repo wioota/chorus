@@ -32,7 +32,7 @@ describe WorkspaceDatasetsController do
       end
     end
 
-    describe "#index" do
+    describe "index" do
       it "uses authorization" do
         mock(subject).authorize! :show, workspace
         get :index, :workspace_id => workspace.to_param

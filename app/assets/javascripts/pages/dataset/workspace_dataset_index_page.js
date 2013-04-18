@@ -110,31 +110,30 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             this.mainContent.contentDetails.options.buttons = [];
         }
 
-        if (!this.workspace.canUpdate()) {
-            this.mainContent.contentDetails.options.buttons = [];
-            this.mainContent.contentDetails.render();
-        } else if (this.workspace.sandbox()) {
-            targetButton.dataAttributes.push({name: "canonical-name", value: this.workspace.sandbox().canonicalName()});
-            targetButton.disabled = false;
-            delete targetButton.helpText;
-            this.mainContent.contentDetails.render();
+        if(this.workspace.sandbox()) {
+            if(this.workspace.canUpdate()) {
+                targetButton.dataAttributes.push({name: "canonical-name", value: this.workspace.sandbox().canonicalName()});
+                targetButton.disabled = false;
+                delete targetButton.helpText;
+            } else {
+                this.mainContent.contentDetails.options.buttons = [];
+            }
+
             this.instance = this.workspace.sandbox().instance();
             this.account = this.workspace.sandbox().instance().accountForCurrentUser();
 
             this.listenTo(this.account, "loaded", this.checkAccount);
-            this.mainContent.contentDetails.render();
 
             this.account.fetchIfNotLoaded();
         } else {
             var loggedInUser = chorus.session.user();
 
-            if (loggedInUser.get("id") !== this.workspace.get("owner").id &&
-                !loggedInUser.get("admin"))
-            {
+            if(loggedInUser.get("id") !== this.workspace.get("owner").id && !loggedInUser.get("admin")) {
                 targetButton.helpText = t("dataset.import.need_sandbox_no_permissions");
-                this.mainContent.contentDetails.render();
             }
         }
+        this.mainContent.contentDetails.render();
+
     },
 
     checkAccount: function() {

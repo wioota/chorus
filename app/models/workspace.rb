@@ -143,6 +143,7 @@ class Workspace < ActiveRecord::Base
 
     account = sandbox && sandbox.database.account_for_user(current_user)
     skip_sandbox = !account ||
+        account.invalid_credentials? ||
         database_id && (database_id != sandbox.database_id) ||
         ["CHORUS_VIEW", "SOURCE_TABLE"].include?(entity_subtype)
 
@@ -155,14 +156,22 @@ class Workspace < ActiveRecord::Base
     unlimited_options.delete(:limit)
     with_filtered_datasets(current_user, unlimited_options) do |datasets, new_options, account, skip_sandbox|
       count = datasets.map(&:count).reduce(0, :+)
-      count += sandbox.dataset_count(account, new_options) unless skip_sandbox
+      begin
+        count += sandbox.dataset_count(account, new_options) unless skip_sandbox
+      rescue DataSourceConnection::InvalidCredentials
+        #do nothing
+      end
       count
     end
   end
 
   def datasets(current_user, options = {})
     with_filtered_datasets(current_user, options) do |datasets, new_options, account, skip_sandbox|
-      datasets << GpdbDataset.visible_to(account, sandbox, new_options) unless skip_sandbox
+      begin
+        datasets << GpdbDataset.visible_to(account, sandbox, new_options) unless skip_sandbox
+      rescue DataSourceConnection::InvalidCredentials
+        # This is in case a user has invalid credentials, but hasn't tried to use them since becoming invalid
+      end
       if datasets.count == 1 # return intact relations for optimization
         datasets.first
       else
