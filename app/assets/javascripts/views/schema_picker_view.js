@@ -37,7 +37,7 @@
                 this.selection = {
                     schema: this.options.defaultSchema,
                     database: this.options.defaultSchema.database(),
-                    instance: this.options.defaultSchema.database().instance()
+                    instance: this.options.defaultSchema.database().dataSource()
                 };
                 this.setState({ instance: LOADING, database: LOADING, schema: LOADING });
             } else {
@@ -263,7 +263,7 @@
             return this.instances && this.instances.get(this.$('.instance select option:selected').val());
         },
 
-        getSelectedDatabase : function() {
+        getSelectedDatabase: function() {
             return this.databases && this.databases.get(this.$('.database select option:selected').val());
         },
 

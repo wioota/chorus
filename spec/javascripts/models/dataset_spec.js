@@ -253,7 +253,7 @@ describe("chorus.models.Dataset", function() {
 
     describe("#instance", function() {
         beforeEach(function() {
-            this.dataSource = this.dataset.instance();
+            this.dataSource = this.dataset.dataSource();
         });
 
         it("returns a data source with the right id and name", function() {

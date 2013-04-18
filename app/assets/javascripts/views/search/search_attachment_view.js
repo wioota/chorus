@@ -7,7 +7,7 @@ chorus.views.SearchAttachment = chorus.views.SearchItemBase.extend({
         var datasetLink = this.model.dataset() && this.model.dataset().showLink();
         var workfileLink = this.model.workfile() && this.model.workfile().showLink();
         var hdfsFileLink = this.model.hdfsFile() && this.model.hdfsFile().showLink();
-        var instanceLink = this.model.instance() && this.model.instance().showLink();
+        var instanceLink = this.model.dataSource() && this.model.dataSource().showLink();
 
         var composedLinkString = "";
         if (workspaceLink && datasetLink) {

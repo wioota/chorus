@@ -35,11 +35,11 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     isOracle: function() {
-      return this.instance().isOracle();
+      return this.dataSource().isOracle();
     },
 
     isGreenplum: function() {
-      return this.instance().isGreenplum();
+      return this.dataSource().isGreenplum();
     },
 
     isExternal: function() {
@@ -61,8 +61,8 @@ chorus.models.Dataset = chorus.models.Base.include(
         return this._columns;
     },
 
-    instance: function() {
-        return this.schema().instance();
+    dataSource: function() {
+        return this.schema().dataSource();
     },
 
     database: function() {

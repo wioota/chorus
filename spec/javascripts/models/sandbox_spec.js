@@ -56,7 +56,7 @@ describe("chorus.models.Sandbox", function() {
 
     describe("#instance", function() {
         beforeEach(function() {
-            this.instance = this.model.instance();
+            this.instance = this.model.dataSource();
         });
 
         it('returns a data source with the right id and name', function() {
@@ -66,7 +66,7 @@ describe("chorus.models.Sandbox", function() {
         });
 
         it("memoizes", function() {
-            expect(this.instance).toBe(this.model.instance());
+            expect(this.instance).toBe(this.model.dataSource());
         });
     });
 

@@ -11,12 +11,12 @@ describe("chorus.models.Database", function() {
 
     describe("#instance", function() {
         it("returns a data source with the right id and name", function() {
-            expect(this.model.instance().id).toEqual('1');
-            expect(this.model.instance().name()).toEqual('insta_whip');
+            expect(this.model.dataSource().id).toEqual('1');
+            expect(this.model.dataSource().name()).toEqual('insta_whip');
         });
 
         it("memoizes", function() {
-            expect(this.model.instance()).toBe(this.model.instance());
+            expect(this.model.dataSource()).toBe(this.model.dataSource());
         });
     });
 

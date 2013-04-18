@@ -35,7 +35,7 @@ chorus.pages.GpdbSchemaIndexPage = chorus.pages.Base.include(
         return [
             { label: t("breadcrumbs.home"), url: "#/" },
             { label: t("breadcrumbs.instances"), url: "#/data_sources" },
-            { label: this.database.instance().name(), url: this.database.instance().showUrl() },
+            { label: this.database.dataSource().name(), url: this.database.dataSource().showUrl() },
             { label: this.database.name() }
         ];
     }

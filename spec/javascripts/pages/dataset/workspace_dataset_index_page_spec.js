@@ -150,7 +150,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 rspecFixtures.workspaceDataset.datasetTable()
             ];
             this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
-            this.account = this.workspace.sandbox().instance().accountForCurrentUser();
+            this.account = this.workspace.sandbox().dataSource().accountForCurrentUser();
         });
 
         context("and the user has update permission on the workspace", function() {
@@ -269,7 +269,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 });
 
                 it("displays the sandbox location in the header", function () {
-                    expect(this.page.mainContent.contentHeader.$(".found_in a").eq(0).text()).toBe(this.workspace.sandbox().instance().name());
+                    expect(this.page.mainContent.contentHeader.$(".found_in a").eq(0).text()).toBe(this.workspace.sandbox().dataSource().name());
                     expect(this.page.mainContent.contentHeader.$(".found_in a").eq(1).text()).toBe(this.workspace.sandbox().database().name());
                     expect(this.page.mainContent.contentHeader.$(".found_in a").eq(2).text()).toBe(this.workspace.sandbox().schema().name());
                 });

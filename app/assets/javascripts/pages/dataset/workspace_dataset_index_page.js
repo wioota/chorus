@@ -119,8 +119,8 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
                 this.mainContent.contentDetails.options.buttons = [];
             }
 
-            this.instance = this.workspace.sandbox().instance();
-            this.account = this.workspace.sandbox().instance().accountForCurrentUser();
+            this.instance = this.workspace.sandbox().dataSource();
+            this.account = this.workspace.sandbox().dataSource().accountForCurrentUser();
 
             this.listenTo(this.account, "loaded", this.checkAccount);
 

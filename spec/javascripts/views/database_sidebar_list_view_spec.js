@@ -154,7 +154,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
         it("should show the missing credentials error messages", function() {
             expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {
                 linkText: t("dataset.credentials.missing.linkText"),
-                dataSourceName: this.schema.database().instance().name()
+                dataSourceName: this.schema.database().dataSource().name()
             });
         });
 

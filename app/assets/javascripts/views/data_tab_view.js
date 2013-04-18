@@ -30,7 +30,7 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
             ctx.noCredentials = true;
             ctx.noCredentialsWarning = t('dataset.credentials.insufficient',
                 {
-                    dataSourceName: this.schema.database().instance().name(),
+                    dataSourceName: this.schema.database().dataSource().name(),
                     schemaName: this.schema.name()
                 });
         }

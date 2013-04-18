@@ -17,8 +17,8 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                 database: {
                     name: sandboxInfo.database().name(),
                     instance: {
-                        id: sandboxInfo.instance().id,
-                        name: sandboxInfo.instance().name()
+                        id: sandboxInfo.dataSource().id,
+                        name: sandboxInfo.dataSource().name()
                     }
                 }
             },
@@ -151,8 +151,8 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
         describe("#contentHeader", function() {
             describe("the links at the top", function() {
                 it('includes the link to the data source', function() {
-                    expect(this.page.$(".content_header a.instance")).toHaveHref(this.page.model.instance().showUrl());
-                    expect(this.page.$(".content_header a.instance")).toHaveText(this.page.model.instance().name());
+                    expect(this.page.$(".content_header a.instance")).toHaveHref(this.page.model.dataSource().showUrl());
+                    expect(this.page.$(".content_header a.instance")).toHaveText(this.page.model.dataSource().name());
                 });
 
                 it("includes the link to the database", function() {

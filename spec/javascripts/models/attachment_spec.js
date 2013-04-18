@@ -83,7 +83,7 @@ describe("chorus.models.Attachment", function() {
         it('shows the URL for a data source', function() {
             var search = rspecFixtures.searchResultWithAttachmentOnInstanceNote();
             var model = search.attachments().at(0);
-            var instance = model.instance();
+            var instance = model.dataSource();
             expect(instance.id).toBeDefined();
             expect(model.showUrl()).toBe(instance.showUrl());
         });
@@ -176,25 +176,25 @@ describe("chorus.models.Attachment", function() {
         });
 
         it("returns the data source", function() {
-            this.instance = this.model.instance();
+            this.instance = this.model.dataSource();
             expect(this.instance.get('name')).toBe(this.model.get('dataSource').name);
             expect(this.instance.get('id')).toBe(this.model.get('dataSource').id);
         });
 
         it("dynamically assigns the data source type", function() {
-            expect(this.model.instance()).toBeA(chorus.models.GpdbDataSource);
+            expect(this.model.dataSource()).toBeA(chorus.models.GpdbDataSource);
             var search = rspecFixtures.searchResultWithAttachmentOnHadoopNote();
             var model = search.attachments().at(0);
-            expect(model.instance()).toBeA(chorus.models.HdfsDataSource);
+            expect(model.dataSource()).toBeA(chorus.models.HdfsDataSource);
         });
 
         it("returns falsy when there is no data source", function() {
             this.model.unset('dataSource');
-            expect(this.model.instance()).toBeFalsy();
+            expect(this.model.dataSource()).toBeFalsy();
         });
 
         it("memoizes", function() {
-            expect(this.model.instance()).toBe(this.model.instance());
+            expect(this.model.dataSource()).toBe(this.model.dataSource());
         });
     });
 

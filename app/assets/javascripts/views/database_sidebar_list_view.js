@@ -29,7 +29,7 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
                 noCredentials: this.schemas.statusCode === 403,
                 noCredentialsWarning: Handlebars.helpers.unsafeT("dataset.credentials.missing.body", {
                     linkText: Handlebars.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'}),
-                    dataSourceName: this.schema.database() && this.schema.database().instance().name()
+                    dataSourceName: this.schema.database() && this.schema.database().dataSource().name()
                 })
             };
         }
@@ -120,6 +120,6 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
 
     launchAddCredentialsDialog: function(e) {
         e && e.preventDefault();
-        new chorus.dialogs.InstanceAccount({ instance: this.schema.instance(), title: t("instances.sidebar.add_credentials"), shouldShowSavedToast: true, reload: true }).launchModal();
+        new chorus.dialogs.InstanceAccount({ instance: this.schema.dataSource(), title: t("instances.sidebar.add_credentials"), shouldShowSavedToast: true, reload: true }).launchModal();
     }
 });

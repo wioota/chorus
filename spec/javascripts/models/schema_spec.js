@@ -92,7 +92,7 @@ describe("chorus.models.Schema", function() {
         it("returns a database with the right id and instanceId", function() {
             expect(this.database).toBeA(chorus.models.Database);
             expect(this.database.get("id")).toBe(this.model.database().id);
-            expect(this.database.instance().id).toBe(this.model.get("database").instance.id);
+            expect(this.database.dataSource().id).toBe(this.model.get("database").instance.id);
         });
 
         it("memoizes", function() {
@@ -118,12 +118,12 @@ describe("chorus.models.Schema", function() {
             });
 
             it('returns the data source directly', function() {
-                expect(this.model.instance().name()).toEqual('instance');
-                expect(this.model.instance().id).toEqual(45);
+                expect(this.model.dataSource().name()).toEqual('instance');
+                expect(this.model.dataSource().id).toEqual(45);
             });
 
             it("memoizes", function() {
-                expect(this.model.instance()).toBe(this.model.instance());
+                expect(this.model.dataSource()).toBe(this.model.dataSource());
             });
         });
 
@@ -134,12 +134,12 @@ describe("chorus.models.Schema", function() {
             });
 
             it('returns the data source directly', function() {
-                expect(this.model.instance().name()).toEqual('instance');
-                expect(this.model.instance().id).toEqual(42);
+                expect(this.model.dataSource().name()).toEqual('instance');
+                expect(this.model.dataSource().id).toEqual(42);
             });
 
             it("memoizes", function() {
-                expect(this.model.instance()).toBe(this.model.instance());
+                expect(this.model.dataSource()).toBe(this.model.dataSource());
             });
         });
     });

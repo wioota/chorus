@@ -12,7 +12,7 @@ chorus.dialogs.WorkspaceInstanceAccount = chorus.dialogs.Account.extend({
 
     additionalContext: function() {
         var results = this._super('additionalContext');
-        results.translationValues.dataSourceName = this.pageModel.sandbox().database().instance().get("name");
+        results.translationValues.dataSourceName = this.pageModel.sandbox().database().dataSource().get("name");
         return results;
     }
 

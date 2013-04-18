@@ -60,7 +60,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
             return _.compact([
                 {label: t("breadcrumbs.home"), url: "#/"},
                 {label: t("breadcrumbs.instances"), url: '#/data_sources'},
-                {label: this.dataset.instance().name(), url: this.dataset.instance().showUrl() },
+                {label: this.dataset.dataSource().name(), url: this.dataset.dataSource().showUrl() },
                 this.dataset.database() && {label: this.dataset.database().name(), url: this.dataset.database().showUrl() },
                 {label: this.dataset.schema().name(), url: this.dataset.schema().showUrl()},
                 {label: this.dataset.name()}

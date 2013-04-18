@@ -21,8 +21,8 @@ chorus.models.Sandbox = chorus.models.Base.extend({
         }
     },
 
-    instance: function() {
-        this._instance = this._instance || this.database().instance();
+    dataSource: function() {
+        this._instance = this._instance || this.database().dataSource();
         return this._instance;
     },
 

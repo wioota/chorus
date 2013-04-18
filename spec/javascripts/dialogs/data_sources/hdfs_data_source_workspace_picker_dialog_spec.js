@@ -57,7 +57,7 @@ describe("chorus.dialogs.HdfsDataSourceWorkspacePicker", function() {
                 context("when the sandbox version is less than 4.2", function() {
                     it("displays the errors message and does not proceed", function() {
                         spyOnEvent(this.dialog, "workspace:selected");
-                        this.dialog.selectedItem().sandbox().instance().set('version', '4.1');
+                        this.dialog.selectedItem().sandbox().dataSource().set('version', '4.1');
                         this.dialog.$("button.submit").click();
                         expect(this.dialog.$(".errors").text()).toContainTranslation("hdfs_data_source.gpdb_version.too_old_42");
                         expect("workspace:selected").not.toHaveBeenTriggeredOn(this.dialog, [this.dialog.selectedItem()]);

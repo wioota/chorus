@@ -115,7 +115,7 @@ describe("chorus.views.SearchAttachment", function() {
         });
 
         it("shows the file", function() {
-            var instance = this.result.instance();
+            var instance = this.result.dataSource();
             expect(
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.instance",

@@ -21,7 +21,7 @@ chorus.dialogs.HdfsDataSourceWorkspacePicker = chorus.dialogs.PickWorkspace.exte
     submit : function() {
         this.model.serverErrors = [];
 
-        if(this.selectedItem().sandbox().instance().version() < "4.2") {
+        if(this.selectedItem().sandbox().dataSource().version() < "4.2") {
             this.showDialogError(t("hdfs_data_source.gpdb_version.too_old_42"));
             return;
         }

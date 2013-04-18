@@ -7,7 +7,7 @@ chorus.models.Attachment = chorus.models.Base.extend({
         var datasetUrl = this.dataset() && this.dataset().showUrl();
         var workfileUrl = this.workfile() && this.workfile().showUrl();
         var hdfsFileUrl = this.hdfsFile() && this.hdfsFile().showUrl();
-        var instanceUrl = this.instance() && this.instance().showUrl();
+        var instanceUrl = this.dataSource() && this.dataSource().showUrl();
         var hdfsDataSourceUrl = this.hdfsDataSource() && this.hdfsDataSource().showUrl();
 
         return datasetUrl ||
@@ -62,7 +62,7 @@ chorus.models.Attachment = chorus.models.Base.extend({
         return this._hdfsFile;
     },
 
-    instance: function() {
+    dataSource: function() {
         if (!this._instance) {
             this._instance = this.get('dataSource') && new chorus.models.DynamicInstance(this.get('dataSource'));
         }

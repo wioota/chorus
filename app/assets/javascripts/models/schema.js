@@ -35,13 +35,13 @@ chorus.models.Schema = chorus.models.Base.include(
         return database;
     },
 
-    instance: function() {
+    dataSource: function() {
         var instance = this._instance;
         if(!this._instance) {
             if(this.has('instance')) {
                 instance = new chorus.models.DynamicInstance(this.get('instance'));
             } else {
-                instance = this.database().instance();
+                instance = this.database().dataSource();
             }
         }
         if(this.loaded) {
@@ -51,7 +51,7 @@ chorus.models.Schema = chorus.models.Base.include(
     },
 
     canonicalName: function() {
-        return _.compact([this.instance().name(), this.database() && this.database().name(), this.name()]).join(".");
+        return _.compact([this.dataSource().name(), this.database() && this.database().name(), this.name()]).join(".");
     },
 
     isEqualToSchema: function(other) {

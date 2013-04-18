@@ -90,7 +90,7 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
             expect(breadcrumbs.eq(1)).toContainTranslation("breadcrumbs.instances");
 
             expect(breadcrumbs.eq(2)).toContainText("AnInstance");
-            expect(breadcrumbs.eq(2)).toHaveHref(this.schema.database().instance().showUrl());
+            expect(breadcrumbs.eq(2)).toHaveHref(this.schema.database().dataSource().showUrl());
 
             expect(breadcrumbs.eq(3)).toContainText("Foo%");
             expect(breadcrumbs.eq(3)).toHaveHref(this.schema.database().showUrl());
@@ -116,7 +116,7 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
                 expect(breadcrumbs.eq(1)).toContainTranslation("breadcrumbs.instances");
 
                 expect(breadcrumbs.eq(2)).toContainText("A Data Source");
-                expect(breadcrumbs.eq(2)).toHaveHref(this.schema.instance().showUrl());
+                expect(breadcrumbs.eq(2)).toHaveHref(this.schema.dataSource().showUrl());
 
                 expect(this.page.$("#breadcrumbs .breadcrumb .slug").text()).toBe(this.page.schema.get("name"));
             });

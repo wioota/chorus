@@ -174,7 +174,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         }
 
         var addCredentialsLink = Handlebars.helpers.linkTo("#", t("dataset.credentials.missing.linkText"), {'class': 'add_credentials'});
-        var dataSourceName = this.resource.instance().name();
+        var dataSourceName = this.resource.dataSource().name();
         return Handlebars.helpers.unsafeT("dataset.credentials.missing.body", {linkText: addCredentialsLink, dataSourceName: dataSourceName });
     },
 
@@ -187,7 +187,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     hasInstanceAccount: function() {
-        return this.resource.instance().accountForCurrentUser().id;
+        return this.resource.dataSource().accountForCurrentUser().id;
     },
 
     displayEntityType: function() {

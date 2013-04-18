@@ -106,7 +106,7 @@ describe("chorus.views.DatasetSidebar", function() {
         context("when user does not have credentials", function() {
             beforeEach(function() {
                 this.dataset.set({hasCredentials: false});
-                delete this.dataset.instance()._accountForCurrentUser;
+                delete this.dataset.dataSource()._accountForCurrentUser;
                 this.view.render();
             });
 
@@ -130,7 +130,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 this.view.render();
                 expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {
                     linkText: t("dataset.credentials.missing.linkText"),
-                    dataSourceName: this.dataset.instance().name()
+                    dataSourceName: this.dataset.dataSource().name()
                 });
             });
 
@@ -579,7 +579,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 });
 
                 it("fetches the instance account", function() {
-                    expect(this.dataset.instance().accountForCurrentUser()).toHaveBeenFetched();
+                    expect(this.dataset.dataSource().accountForCurrentUser()).toHaveBeenFetched();
                 });
 
                 it("renders the loading section if the instance account is not loaded", function() {
@@ -588,7 +588,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("current user has an instance account", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.dataset.instance().accountForCurrentUser(), rspecFixtures.instanceAccount());
+                        this.server.completeFetchFor(this.dataset.dataSource().accountForCurrentUser(), rspecFixtures.instanceAccount());
                     });
 
                     it("shows the 'Create as a database view' link", function() {
@@ -623,7 +623,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("current user does not have an instance account", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.dataset.instance().accountForCurrentUser(), {});
+                        this.server.completeFetchFor(this.dataset.dataSource().accountForCurrentUser(), {});
                     });
 
                     itDoesNotHaveACreateDatabaseViewLink();

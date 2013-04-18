@@ -260,7 +260,7 @@ describe("chorus.views.DataTab", function () {
                 });
 
                 it("shows the insufficient credentials warning", function() {
-                   expect(this.view.$(".no_credentials")).toContainTranslation("dataset.credentials.insufficient", {dataSourceName: this.schema.database().instance().name(), schemaName: this.schema.name()});
+                   expect(this.view.$(".no_credentials")).toContainTranslation("dataset.credentials.insufficient", {dataSourceName: this.schema.database().dataSource().name(), schemaName: this.schema.name()});
                 });
             });
 

@@ -59,8 +59,8 @@ describe("chorus.pages.GpdbSchemaIndexPage", function() {
             expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
             expect(this.page.$(".breadcrumb:eq(1)")).toContainTranslation("breadcrumbs.instances");
 
-            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe(this.database.instance().showUrl());
-            expect(this.page.$(".breadcrumb:eq(2)")).toContainText(this.database.instance().name());
+            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe(this.database.dataSource().showUrl());
+            expect(this.page.$(".breadcrumb:eq(2)")).toContainText(this.database.dataSource().name());
 
             expect(this.page.$(".breadcrumb:eq(3)")).toContainText("Foo");
         });

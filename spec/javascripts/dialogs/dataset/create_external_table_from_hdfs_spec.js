@@ -110,7 +110,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
             context("with a workspace with a sandbox that is not GPDB 4.1+", function() {
                 beforeEach(function() {
-                    this.dialog.workspaces.get(this.dialog.$("select").val()).sandbox().instance().set('version', '4.0');
+                    this.dialog.workspaces.get(this.dialog.$("select").val()).sandbox().dataSource().set('version', '4.0');
                     this.dialog.$("button.submit").click();
                 });
 
@@ -121,7 +121,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
             context("with a workspace with a sandbox that is GPDB 4.1+", function() {
                 beforeEach(function() {
-                    this.dialog.workspaces.get(this.dialog.$("select").val()).sandbox().instance().set('version', '4.1');
+                    this.dialog.workspaces.get(this.dialog.$("select").val()).sandbox().dataSource().set('version', '4.1');
                     this.dialog.$("button.submit").click();
                 });
 

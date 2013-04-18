@@ -71,7 +71,7 @@ describe("ListHeaderView", function() {
             });
             it("shows the location of the sandbox", function() {
                 expect(this.view.$(".found_in").text()).not.toBeEmpty();
-                expect(this.view.$(".found_in a").eq(0).text()).toBe(this.workspace.sandbox().instance().name());
+                expect(this.view.$(".found_in a").eq(0).text()).toBe(this.workspace.sandbox().dataSource().name());
                 expect(this.view.$(".found_in a").eq(1).text()).toBe(this.workspace.sandbox().database().name());
                 expect(this.view.$(".found_in a").eq(2).text()).toBe(this.workspace.sandbox().schema().name());
             });
@@ -85,7 +85,7 @@ describe("ListHeaderView", function() {
             });
             it("shows the location of the sandbox", function() {
                 expect(this.view.$(".found_in").text()).not.toBeEmpty();
-                expect(this.view.$(".found_in a").eq(0).text()).toBe(this.workspace.sandbox().instance().name());
+                expect(this.view.$(".found_in a").eq(0).text()).toBe(this.workspace.sandbox().dataSource().name());
                 expect(this.view.$(".found_in a").eq(1).text()).toBe(this.workspace.sandbox().database().name());
                 expect(this.view.$(".found_in a").eq(2).text()).toBe(this.workspace.sandbox().schema().name());
             });

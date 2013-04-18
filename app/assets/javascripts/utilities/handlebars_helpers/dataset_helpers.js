@@ -28,7 +28,7 @@ chorus.handlebarsHelpers.dataset = {
     datasetLocation: function(databaseObject, label) {
         label = _.isString(label) ? label : "dataset.from";
         if (!databaseObject.schema()) return "";
-        var dataSource = databaseObject.instance();
+        var dataSource = databaseObject.dataSource();
         var schema = databaseObject.schema();
         var database = databaseObject.database();
 

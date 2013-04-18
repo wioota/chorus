@@ -51,7 +51,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         this.tabs.activity && this.tabs.activity.teardown();
         if (dataset) {
             if(dataset.isChorusView()) {
-                var accountForCurrentUser = dataset.instance().accountForCurrentUser();
+                var accountForCurrentUser = dataset.dataSource().accountForCurrentUser();
                 this.requiredResources.add(accountForCurrentUser);
                 accountForCurrentUser.fetchIfNotLoaded();
             }
@@ -111,7 +111,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
     launchAddCredentialsDialog: function(e) {
         e && e.preventDefault();
-        new chorus.dialogs.InstanceAccount({ instance: this.resource.instance(), title: t("instances.sidebar.add_credentials"), reload: true, goBack: false }).launchModal();
+        new chorus.dialogs.InstanceAccount({ instance: this.resource.dataSource(), title: t("instances.sidebar.add_credentials"), reload: true, goBack: false }).launchModal();
     },
 
     launchAssociateWithWorkspaceDialog: function(e) {
