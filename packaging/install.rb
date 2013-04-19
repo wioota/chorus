@@ -21,8 +21,9 @@ if __FILE__ == $0
 
     installer.install
     installer.startup
-    #exec "stty echo"
-
+    if STDIN.tty?
+      exec "stty echo"
+    end
     puts "Installation completed."
     unless installer.upgrade_existing?
       puts "To start Chorus, run the following commands:"
