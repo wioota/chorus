@@ -58,6 +58,14 @@ describe ChorusWorkfilePresenter, :type => :view do
       it "should not draft status" do
         hash[:has_draft].should be_nil
       end
+
+      context "when also presenting the execution schema" do
+        let(:options) { {:list_view => true, :include_execution_schema => true} }
+
+        it "should present the execution schema succinctly" do
+          hash[:execution_schema].should == GpdbSchemaPresenter.new(workfile.execution_schema, view, :succinct => true).presentation_hash
+        end
+      end
     end
 
     describe "when the 'workfile_as_latest_version' option is set" do

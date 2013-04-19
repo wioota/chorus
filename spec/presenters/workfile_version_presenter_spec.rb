@@ -107,13 +107,6 @@ describe WorkfileVersionPresenter, :type => :view do
       end
     end
 
-    context "when presenting for list view" do
-      let(:options) { {:list_view => true} }
-
-      it "should not have the workfile present execution schema" do
-        workfile_hash.should_not have_key(:execution_schema)
-      end
-    end
 
     context "when rendering the activity stream" do
       let(:options) { {:activity_stream => true} }
