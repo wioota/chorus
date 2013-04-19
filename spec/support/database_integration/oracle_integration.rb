@@ -53,11 +53,14 @@ module OracleIntegration
   end
 
   def self.setup_test_schemas
-    sql = ERB.new(File.read(Rails.root.join "spec/support/database_integration/setup_oracle_databases.sql.erb")).result(binding)
+    puts "Importing into #{schema_name}"
     begin
+      puts "Dropping schema"
       execute_sql %Q{DROP USER "#{schema_name}" CASCADE}
     rescue Exception
     end
+    sql = ERB.new(File.read(Rails.root.join "spec/support/database_integration/setup_oracle_databases.sql.erb")).result(binding)
+    puts "Executing setup_oracle_databases.sql"
     execute_sql(sql)
   end
 
