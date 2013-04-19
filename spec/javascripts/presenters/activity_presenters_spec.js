@@ -2,8 +2,8 @@ describe("chorus.presenters.Activity", function() {
     var model, actor, presenter, workfile, workspace, dataset, member,
         sourceDataset, gnipDataSource, datasetModel, schema, destination;
 
-    function linkTo(url, text) {
-        return Handlebars.helpers.linkTo(url, text);
+    function linkTo(url, text, attributes) {
+        return Handlebars.helpers.linkTo(url, text, attributes);
     }
 
     function itHasTheActorIcon() {
@@ -210,6 +210,40 @@ describe("chorus.presenters.Activity", function() {
             });
             it('when isReadOnly is true', function() {
                 expect(presenter.isReadOnly()).toEqual(true);
+            });
+        });
+
+        describe("#hasError", function() {
+            beforeEach(function() {
+                this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+            });
+
+            context("when the activity has errorObjects", function() {
+                it("is true", function() {
+                    this.model = rspecFixtures.activity.datasetImportFailedWithModelErrors();
+                    expect(this.model.get("errorObjects")).toBeTruthy();
+                    this.presenter = new chorus.presenters.Activity(this.model);
+                    expect(this.presenter.hasError()).toBeTruthy();
+                });
+            });
+
+            context("when the activity has errorMessage", function() {
+                it("is true", function() {
+                    this.model = rspecFixtures.activity.fileImportFailed();
+                    expect(this.model.get("errorMessage")).toBeTruthy();
+                    this.presenter = new chorus.presenters.Activity(this.model);
+                    expect(this.presenter.hasError()).toBeTruthy();
+                });
+            });
+
+            context("when the activity has neither", function() {
+                it("is false", function() {
+                    this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                    expect(this.model.get("errorObjects")).toBeFalsy();
+                    expect(this.model.get("errorMessage")).toBeFalsy();
+                    this.presenter = new chorus.presenters.Activity(this.model);
+                    expect(this.presenter.hasError()).toBeFalsy();
+                });
             });
         });
     });
@@ -1905,6 +1939,22 @@ describe("chorus.presenters.Activity", function() {
             );
         });
     });
+
+    context("credentials invalid", function() {
+        beforeEach(function() {
+            this.model = rspecFixtures.activity.credentialsInvalid();
+            this.presenter = new chorus.presenters.Activity(this.model, {isNotification: true});
+            this.actor = this.model.actor();
+            this.dataSource = this.model.dataSource();
+        });
+
+        it("has the right header html", function() {
+            expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.CredentialsInvalid.notification.default", {
+                    dataSourceLink: linkTo(this.dataSource.showUrl(), this.dataSource.name()),
+                    updateCredentialsLink: linkTo('#', t('dataset.credentials.missing.linkText'), {'class': 'update_credentials'})
+                }
+            );
+        });
+    });
 });
-
-

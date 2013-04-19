@@ -196,10 +196,11 @@ describe("chorus.views.Activity", function() {
             });
         });
 
-        context("when the activity is a failure", function () {
+        context("when the activity has errors", function () {
             beforeEach(function () {
                 this.model = rspecFixtures.activity.fileImportFailed();
                 this.view = new chorus.views.Activity({ model:this.model });
+                expect(this.view.context().hasError()).toBeTruthy();
                 this.view.render();
             });
 
@@ -320,11 +321,9 @@ describe("chorus.views.Activity", function() {
             });
         });
 
-        xcontext("isNotification", function () {
+        context("isNotification", function () {
             beforeEach(function () {
-                this.presenter = new chorus.presenters.Activity(this.view.model);
-                this.view.model = rspecFixtures.activity.noteOnWorkspaceCreated();
-                this.view.options.isNotification = true;
+                this.presenter.options.isNotification = true;
                 this.view.render();
             });
 
@@ -333,18 +332,18 @@ describe("chorus.views.Activity", function() {
             });
         });
 
-        xdescribe("attachment rendering", function () {
+        describe("attachment rendering", function () {
             it("displays info for each attached file", function () {
+                this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                this.presenter.model = this.model;
+                this.view.render();
                 var attachmentLis = this.view.$("ul.attachments li");
-                expect(attachmentLis.length).toBe(2);
+                expect(attachmentLis.length).toBe(3);
+                var attachment = this.model.attachments()[0];
 
-                expect(attachmentLis.eq(0).find('a')).toHaveAttr('href', '/file/10101');
-                expect(attachmentLis.eq(0).find('img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("SQL", "medium"));
-                expect(attachmentLis.eq(0).find('.name').text().trim()).toBe("something.sql");
-
-                expect(attachmentLis.eq(1).find('a')).toHaveAttr('href', '/file/10102');
-                expect(attachmentLis.eq(1).find('img')).toHaveAttr('src', chorus.urlHelpers.fileIconUrl("TXT", "medium"));
-                expect(attachmentLis.eq(1).find('.name').text().trim()).toBe("something.txt");
+                expect(attachmentLis.eq(0).find('a')).toHaveAttr('href', attachment.downloadUrl());
+                expect(attachmentLis.eq(0).find('img')).toHaveAttr('src', attachment.iconUrl({size: 'icon'}));
+                expect(attachmentLis.eq(0).find('.name').text().trim()).toBe(attachment.name());
             });
         });
 
@@ -490,12 +489,10 @@ describe("chorus.views.Activity", function() {
             expect(link.data("event-id").toString()).toEqual(this.model.id);
         });
 
-        xcontext("isReadOnly", function () {
+        context("isReadOnly", function () {
             beforeEach(function () {
                 setLoggedInUser({ id:this.view.model.author().id });
-                this.presenter = new chorus.presenters.Activity(this.view.model);
-                this.view.model = rspecFixtures.activity.noteOnWorkspaceCreated();
-                this.view.options.isReadOnly = true;
+                this.presenter.options.isReadOnly = true;
                 this.view.render();
             });
 
@@ -509,6 +506,17 @@ describe("chorus.views.Activity", function() {
 
             itDoesNotDisplayDeleteLink();
             itDoesNotDisplayEditLink();
+        });
+    });
+
+    context("when there is a update_credentials link", function() {
+        it("opens the dialog when clicked", function() {
+            this.modalSpy = stubModals();
+            var model = rspecFixtures.activity.credentialsInvalid();
+            this.view = new chorus.views.Activity({ model: model, isNotification: true });
+            this.view.render();
+            this.view.$('.update_credentials').click();
+            expect(this.modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
         });
     });
 });

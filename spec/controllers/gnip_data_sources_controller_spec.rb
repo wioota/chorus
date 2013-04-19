@@ -61,8 +61,8 @@ describe GnipDataSourcesController do
       get :index
       response.code.should == "200"
       decoded_response.length.should == 2
-      decoded_response[0].id.should == gnip_data_source.id
-      decoded_response[0].owner.id.should == gnip_data_source.owner_id
+      data_source = decoded_response.detect { |response| response.id == gnip_data_source.id }
+      data_source.owner.id.should == gnip_data_source.owner_id
     end
 
     it_behaves_like "a paginated list"
@@ -85,7 +85,7 @@ describe GnipDataSourcesController do
 
   describe '#update' do
     let(:gnip_data_source) { gnip_data_sources(:default) }
-    let(:params) { { :id => gnip_data_source.id } }
+    let(:params) { {:id => gnip_data_source.id} }
 
     describe "authorization" do
       context "when user is the data source owner" do

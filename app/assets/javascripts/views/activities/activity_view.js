@@ -6,7 +6,8 @@ chorus.views.Activity = chorus.views.Base.extend({
     events: {
         'click a.promote': 'promote',
         'click a.publish': 'publish',
-        'click a.unpublish': 'unpublish'
+        'click a.unpublish': 'unpublish',
+        'click a.update_credentials': 'launchUpdateCredentialsDialog'
     },
 
     subviews: {
@@ -75,6 +76,11 @@ chorus.views.Activity = chorus.views.Base.extend({
         e.preventDefault();
         var alert = new chorus.alerts.PublishInsight({model: this.model, publish: false});
         alert.launchModal();
+    },
+
+    launchUpdateCredentialsDialog: function(e) {
+        e.preventDefault();
+        new chorus.dialogs.InstanceAccount({ instance: this.model.dataSource(), title: t("instances.account.edit.title"), shouldShowSavedToast: true }).launchModal();
     },
 
     postRender: function() {

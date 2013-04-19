@@ -147,7 +147,7 @@ describe InstanceAccount do
     end
   end
 
-  describe "invalid!" do
+  describe "invalid_credentials!" do
     let(:account) { instance_accounts(:shared_instance_account) }
     it "flags the model as invalid and saves it" do
       account.invalid_credentials.should be_false
@@ -159,6 +159,17 @@ describe InstanceAccount do
     it "does not validate the credentials" do
       dont_allow(account).credentials_are_valid
       account.invalid_credentials!
+    end
+
+    it "creates a notification" do
+      expect {
+        account.invalid_credentials!
+      }.to change(account.owner.notifications, :count).by(1)
+      notification = account.owner.notifications.last
+      event = notification.event
+      event.should be_a Events::CredentialsInvalid
+      event.data_source.should == account.data_source
+      event.actor.should == account.owner
     end
   end
 end

@@ -230,6 +230,7 @@
 
         isFailure: function() {
             var failureActions = [
+                "CredentialsInvalid",
                 "GnipStreamImportFailed",
                 "FileImportFailed",
                 "WorkspaceImportFailed",

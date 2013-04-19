@@ -238,25 +238,6 @@ shared_examples_for :data_source_with_access_control do
     it "returns a connection built with build_connection_with" do
       data_source.connect_with(account).should == fake_connection
     end
-
-    it "doesn't call DataSourceStatusChecker.check by default" do
-      dont_allow(DataSourceStatusChecker).check
-      data_source.connect_with(account)
-    end
-
-    context "when the data source is offline" do
-      before { data_source.state = 'offline' }
-
-      it "calls DataSourceStatusChecker.check" do
-        mock(DataSourceStatusChecker).check(data_source)
-        data_source.connect_with(account)
-      end
-
-      it "doesn't call DataSourceStatusChecker.check if refresh_state option is false " do
-        dont_allow(DataSourceStatusChecker).check
-        data_source.connect_with(account, refresh_state: false)
-      end
-    end
   end
 end
 

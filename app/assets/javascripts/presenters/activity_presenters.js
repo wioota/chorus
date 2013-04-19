@@ -93,6 +93,10 @@
             return this.model.isFailure();
         },
 
+        hasError: function() {
+            return this.model.has('errorObjects') || this.model.has('errorMessage');
+        },
+
         id: function() {
             return this.model.id;
         },
@@ -130,6 +134,10 @@
 
     hidden = {
         headerParamOptions: {
+            CredentialsInvalid: {
+                links: [ "dataSource" ],
+                computed: [ "updateCredentialsLink" ]
+            },
             DataSourceChangedName: {
                 links: [ "actor", "dataSource" ],
                 attrs: [ "newName", "oldName" ]
@@ -483,6 +491,10 @@
         chorusViewSourceType: function(self) {
             var model = chorusViewSourceModel(self);
             return model.get("fileName") ? "workfile" : t("dataset.entitySubtypes." + chorusViewSourceModel(self).metaType());
+        },
+
+        updateCredentialsLink: function(self) {
+            return Handlebars.helpers.linkTo('#', t('dataset.credentials.missing.linkText'), {'class': 'update_credentials'});
         },
 
         versionLink: function(self) {

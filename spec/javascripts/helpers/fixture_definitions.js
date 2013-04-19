@@ -6,6 +6,7 @@ window.rspecFixtureDefinitions = {
             chorusViewChanged: {},
             chorusViewCreatedFromDataset: {},
             chorusViewCreatedFromWorkfile: {},
+            credentialsInvalid: {},
             datasetImportFailedWithModelErrors: {},
             dataSourceCreated: {},
             dataSourceChangedName: {},

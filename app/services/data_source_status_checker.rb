@@ -36,7 +36,7 @@ class DataSourceStatusChecker
     if @data_source.is_a?(HdfsDataSource)
       @data_source.version
     else
-      @data_source.connect_as_owner(refresh_state: false).version
+      @data_source.connect_as_owner.version
     end
   end
 end

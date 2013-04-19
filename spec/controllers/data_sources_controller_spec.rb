@@ -16,11 +16,11 @@ describe DataSourcesController do
     it_behaves_like "a paginated list"
     it_behaves_like :succinct_list
 
-    it "returns only online data sources that the user can access" do
+    it "returns data sources that the user can access" do
       get :index
       response.code.should == "200"
       decoded_response.map(&:id).should include(online_data_source.id)
-      decoded_response.map(&:id).should_not include(offline_data_source.id)
+      decoded_response.map(&:id).should include(offline_data_source.id)
       decoded_response.map(&:id).should include(permitted_data_source.id)
       decoded_response.map(&:id).should_not include(prohibited_data_source.id)
     end

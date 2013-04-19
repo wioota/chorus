@@ -10,9 +10,9 @@ describe DataSource do
 
       let(:user) { users(:owner) }
 
-      it "returns only online data sources that the user can access" do
+      it "returns data sources that the user can access" do
         DataSource.accessible_to(user).should include(online_data_source)
-        DataSource.accessible_to(user).should_not include(offline_data_source)
+        DataSource.accessible_to(user).should include(offline_data_source)
         DataSource.accessible_to(user).should include(permitted_data_source)
         DataSource.accessible_to(user).should_not include(prohibited_data_source)
       end

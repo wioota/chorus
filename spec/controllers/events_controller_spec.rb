@@ -310,6 +310,7 @@ describe EventsController do
         'schemaImportCreated' => Events::SchemaImportCreated,
         'schemaImportSuccess' => Events::SchemaImportSuccess,
         'schemaImportFailed' => Events::SchemaImportFailed,
+        'credentialsInvalid' => Events::CredentialsInvalid,
         'datasetImportFailedWithModelErrors' => :import_failed_with_model_errors
     }
 

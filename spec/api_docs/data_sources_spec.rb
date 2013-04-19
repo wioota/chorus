@@ -39,7 +39,7 @@ resource "Data sources" do
 
   get "/data_sources" do
     parameter :entity_type, "The specific type of data sources to return. Returns all types if blank"
-    parameter :accessible, "true to limit the list to data sources the current user can access, false for all data sources"
+    parameter :all, "true to return all data sources, rather than the default which only includes data sources the user has access to"
     pagination
 
     let(:entity_type) { "gpdb_data_source" }

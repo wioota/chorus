@@ -65,8 +65,7 @@ class DataSource < ActiveRecord::Base
   end
 
   def self.accessible_to(user)
-    where('data_sources.state = :state AND (data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership))',
-          state: "online",
+    where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
           owned: user.id,
           with_membership: user.instance_accounts.pluck(:data_source_id)
     )
@@ -97,13 +96,7 @@ class DataSource < ActiveRecord::Base
   end
 
   def connect_with(account, options = {})
-    build_options = options.dup
-    refresh_state = build_options.delete(:refresh_state).to_s != 'false'
-    if refresh_state && self.state == 'offline'
-      DataSourceStatusChecker.check(self)
-    end
-
-    connection = build_connection_with(account, build_options)
+    connection = build_connection_with(account, options)
 
     if block_given?
       connection.with_connection do

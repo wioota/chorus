@@ -27,6 +27,8 @@ class InstanceAccount < ActiveRecord::Base
     return if @currently_validating_creds
     self.invalid_credentials = true
     save(:validate => false)
+    event = Events::CredentialsInvalid.by(owner).add(:data_source => data_source)
+    Notification.create!(:event => event, :recipient => owner)
   end
 
   private

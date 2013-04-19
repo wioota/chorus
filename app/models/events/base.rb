@@ -101,7 +101,7 @@ module Events
     end
 
     def create_activities
-      self.class.entities_that_get_activities.each do |entity_name|
+      self.class.entities_that_get_activities.try(:each) do |entity_name|
         create_activity(entity_name)
       end
     end

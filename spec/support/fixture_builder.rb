@@ -482,6 +482,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::ChorusViewCreated.by(owner).add(:dataset => chorus_view, :workspace => public_workspace, :source_object => default_table)
     Events::ImportScheduleUpdated.by(owner).add(:workspace => public_workspace, :dataset => nil, :source_dataset => default_table, :destination_table => 'other_table')
     Events::ImportScheduleDeleted.by(owner).add(:workspace => public_workspace, :dataset => nil, :source_dataset => default_table, :destination_table => 'other_table_deleted')
+    Events::CredentialsInvalid.by(owner).add(:data_source => gpdb_data_source)
     Timecop.return
 
     #NotesAttachment

@@ -117,7 +117,6 @@ describe CommentsController do
     end
 
     generate_fixture "comment.json" do
-
       get :show, :id => comment.id
     end
   end
