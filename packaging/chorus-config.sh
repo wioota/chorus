@@ -126,7 +126,7 @@ function exit_control () {
 }
 
 function checkSensitiveFiles() {
-     $RUBY -e "require '$CHORUS_HOME/lib/sensitive_file_checker.rb'" -e "unless SensitiveFileChecker.check; puts(SensitiveFileChecker.errors); exit(1); end"
+     $RUBY -e "require '$CHORUS_HOME/app/services/sensitive_file_checker.rb'" -e "unless SensitiveFileChecker.check; puts(SensitiveFileChecker.errors); exit(1); end"
      SENSITIVE_FILE_EXIT_STATUS=$?
 
      if [ $SENSITIVE_FILE_EXIT_STATUS -eq 1 ]; then

@@ -1,7 +1,7 @@
 module SensitiveFileChecker
   def self.files
     %W{
-    #{path_prefix}/config/secret.token
+      #{path_prefix}/config/secret.token
       #{path_prefix}/config/secret.key
       #{path_prefix}/config/chorus.properties
     }
