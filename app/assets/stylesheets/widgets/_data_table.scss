@@ -3,6 +3,7 @@
     $line-height: 40px;
     $cell-width: 100px;
     $short-name-width: 90px;
+    $column-horizontal-padding: 10px;
     overflow: hidden;
 
     position: relative;
@@ -31,8 +32,13 @@
         line-height: normal;
     }
 
-    .column {
+    .th, .column {
+        border-right: 1px solid $subheader-border-color-dark;
         display: inline-block;
+    }
+
+    .column {
+        width: $cell-width + (2 * $column-horizontal-padding);
         overflow: hidden;
     }
 
@@ -42,18 +48,22 @@
     }
 
     .td, .th {
-        width: $cell-width;
         @include ellipsis;
-        border-right: 1px solid $subheader-border-color-dark;
+        padding: 0 $column-horizontal-padding;
+    }
+
+    .td {
+        line-height: $line-height;
+        border-bottom : $dotted-list-item-border;
+        @include font-normal-alpha;
     }
 
     .th {
+        width: $cell-width;
         position: relative;
         vertical-align: middle;
         line-height: $header-line-height;
         height: $header-line-height;
-        padding: 0 10px;
-        display: inline-block;
         border-bottom: 1px solid $subheader-border-color-dark;
         @include font-content-details;
 
@@ -63,7 +73,6 @@
             @include ellipsis;
         }
     }
-
 
     .th:hover:first-child .name {
         width: $cell-width;
@@ -100,11 +109,22 @@
         }
     }
 
-    .td {
-        line-height: $line-height;
-        padding: 0 10px;
-        border-bottom : $dotted-list-item-border;
-        @include font-normal-alpha;
-    }
+}
 
+.ui-resizable {
+    position: relative;
+}
+
+.ui-resizable-handle {
+    position: absolute;
+    font-size: 0.1px;
+    display: block;
+}
+
+.ui-resizable-e {
+    cursor: e-resize;
+    width: 40px;
+    right: -20px;
+    top: 0;
+    height: 100%;
 }

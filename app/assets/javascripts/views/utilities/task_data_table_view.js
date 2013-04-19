@@ -29,6 +29,15 @@ chorus.views.TaskDataTable = chorus.views.Base.extend({
         });
 
         this.setupScrolling(".tbody");
+        this.setupResizability();
+    },
+
+    setupResizability: function() {
+        this.$('.th:first').resizable({
+            autoHide: true,
+            handles: "e",
+            alsoResize: ".column:first"
+        });
     },
 
     additionalContext: function() {
