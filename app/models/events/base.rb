@@ -60,7 +60,10 @@ module Events
     end
 
     def self.add(params)
-      create!(params, :as => :create).tap { |event| event.create_activities }
+      event = new(params, :as => :create)
+      event.build_activities
+      event.save!
+      event
     end
 
     def self.presenter_class
@@ -100,9 +103,9 @@ module Events
       self.activity_query(user, workspace_activities).joins('LEFT OUTER JOIN "workspaces" ON "workspaces"."id" = "events"."workspace_id"')
     end
 
-    def create_activities
+    def build_activities
       self.class.entities_that_get_activities.try(:each) do |entity_name|
-        create_activity(entity_name)
+        build_activity(entity_name)
       end
     end
 
@@ -115,12 +118,12 @@ module Events
           AND (#{workspace_activities}))})
     end
 
-    def create_activity(entity_name)
+    def build_activity(entity_name)
       if entity_name == :global
-        Activity.global.create!(:event => self)
+        activities.build(:entity_type => Activity::GLOBAL)
       else
         entity = send(entity_name)
-        Activity.create!(:event => self, :entity => entity)
+        activities.build(:entity => entity)
       end
     end
 

@@ -22,7 +22,7 @@ module Events
     before_validation :set_promoted_info, :if => lambda { insight && insight_changed? }
     before_validation :set_actor_to_current_user, :if => lambda { current_user && !actor }
 
-    after_create :create_activities
+    before_create :build_activities
 
     alias_attribute :is_insight, :insight
 

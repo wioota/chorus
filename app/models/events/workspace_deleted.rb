@@ -5,14 +5,14 @@ module Events
     has_targets :workspace
     has_activities :actor, :global
 
-    def create_activity(entity_name)
+    def build_activity(entity_name)
       unless entity_name == :global
         super entity_name
         return
       end
 
       entity = send(:workspace)
-      Activity.global.create!(:event => self) if entity.public?
+      activities.build(:entity_type => Activity::GLOBAL) if entity.public?
     end
   end
 end
