@@ -54,7 +54,7 @@
                 });
             } else {
                 this.instances = new chorus.collections.GpdbDataSourceSet();
-                this.listenTo(this.instances, "loaded", this.dataSourcesLoaded);
+                this.onceLoaded(this.instances, this.dataSourcesLoaded);
                 this.instances.attributes.accessible = true;
                 this.listenTo(this.instances, "fetchFailed", this.instanceFetchFailed);
                 this.instances.fetchAll();
@@ -113,7 +113,7 @@
             this.databases = selectedInstance.databases();
             this.databases.fetchAllIfNotLoaded();
             this.listenTo(this.databases, "fetchFailed", this.databaseFetchFailed);
-            this.listenTo(this.databases, "loaded", this.databasesLoaded);
+            this.onceLoaded(this.databases, this.databasesLoaded);
         },
 
         databaseSelected: function () {
@@ -135,7 +135,7 @@
             this.schemas = selectedDatabase.schemas();
             this.schemas.fetchAllIfNotLoaded();
             this.listenTo(this.schemas, "fetchFailed", this.schemaFetchFailed);
-            this.listenTo(this.schemas, "loaded", this.schemasLoaded);
+            this.onceLoaded(this.schemas, this.schemasLoaded);
         },
 
         schemaSelected:function () {
