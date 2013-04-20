@@ -171,5 +171,20 @@ describe InstanceAccount do
       event.data_source.should == account.data_source
       event.actor.should == account.owner
     end
+
+    context "when the record has already been flagged as invalid" do
+      before do
+        account
+        already_locked_account = InstanceAccount.find(account.id)
+        already_locked_account.invalid_credentials!
+        account.invalid_credentials.should be_false
+      end
+
+      it "does not create a new notification" do
+        expect {
+          account.invalid_credentials!
+        }.to_not change(account.owner.notifications, :count)
+      end
+    end
   end
 end
