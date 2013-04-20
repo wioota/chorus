@@ -3,6 +3,10 @@ namespace :db do
     task :prepare => 'db:integration:load_structure'
   end
 
+  task :seed_development => :environment do
+    load 'db/development_seeds.rb'
+  end
+
   def create_database_tasks(database_name)
     namespace database_name.to_sym do
       desc "Recreate the #{database_name} from an existent structure.sql file"
