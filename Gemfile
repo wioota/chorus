@@ -75,7 +75,7 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy do
 end
 
 group :development do
-  gem 'license_finder'
+  gem 'license_finder', :require => false
   gem 'mizuno', :github => "GreenplumChorus/mizuno", :branch => '0.6.4_changes'
   gem 'bullet'
   gem 'vagrant'
