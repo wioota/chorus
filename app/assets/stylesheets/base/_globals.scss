@@ -14,9 +14,9 @@ a {
     cursor: pointer;
 }
 
-body {
+html, body {
     color: $color-text1;
-    background-color: $body-background-color;
+    background-color: $body-background-color !important;
     font-family: "Open Sans", Verdana;
 }
 
@@ -63,6 +63,10 @@ textarea {
 input[type=checkbox], input[type=radio] {
     display: inline;
     width: auto;
+}
+
+input[type=checkbox] {
+    margin: 5px 4px;
 }
 
 .required:after {

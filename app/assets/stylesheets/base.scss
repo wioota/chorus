@@ -4,7 +4,7 @@
 @import "compass/css3/border-radius";
 
 //these two are order dependent
-@import "compass/reset";
+@import "components/_normalize.scss";
 @import "base/_clearfix.scss";
 @import "base/_globals";
 
@@ -17,6 +17,7 @@
 @import "vendorish/_jquery.cleditor.scss";
 @import "vendorish/_jscrollpane.scss";
 @import "vendorish/_datepicker.scss";
+@import "vendorish/_prism.scss";
 @import "vendorish/_textext.scss";
 
 // vendorish/_facebox is loaded first in modals for clarity

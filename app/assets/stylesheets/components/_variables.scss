@@ -1,0 +1,20 @@
+/*
+ * @provides    variables
+ * @desc        component configuration file
+ *
+ */
+
+/* basic color rules - DO NOT use these in component files, they should only be used in config sections! */
+
+$gray: #464646;
+$light-gray: #7D7D7D;
+$light-green: #B3D988;
+$light-blue: #EAEFF6;
+
+
+/* Typography */
+
+$default-font-color: $gray;
+$default-font-size: 14px;
+$font-family: "Open Sans", Verdana;
+$low-light-type: $light-gray;

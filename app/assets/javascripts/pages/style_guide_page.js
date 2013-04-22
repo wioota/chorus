@@ -882,6 +882,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
         this.dialogs = this.buildDialogs();
         this.colorPalette = { "Color Palette": new chorus.views.ColorPaletteView() };
         this.fontStyles = { "Font Styles": new chorus.views.StyleGuideFonts() };
+        this.components = { "Components": new chorus.views.Components() };
     },
 
     renderViews: function(views, tabId, parentClass) {
@@ -902,6 +903,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
     postRender: function() {
 
+        this.renderViews(this.components, '#components');
         this.renderViews(this.fontStyles, "#fonts");
         this.renderViews(this.dialogs, '#dialogs');
         this.renderViews(this.contentDetails, "#content_details", "content_details");
