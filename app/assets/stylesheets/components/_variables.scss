@@ -10,6 +10,7 @@ $gray: #464646;
 $light-gray: #7D7D7D;
 $light-green: #B3D988;
 $light-blue: #EAEFF6;
+$blue: #2c95dd;
 
 
 /* Typography */
@@ -18,3 +19,8 @@ $default-font-color: $gray;
 $default-font-size: 14px;
 $font-family: "Open Sans", Verdana;
 $low-light-type: $light-gray;
+
+/* Link */
+
+$default-link-color: $blue;
+$low-light-link-color: $light-gray;
