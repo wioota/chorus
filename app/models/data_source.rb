@@ -90,7 +90,7 @@ class DataSource < ActiveRecord::Base
   end
 
   def connect_with(account, options = {})
-    connection = build_connection_with(account, options)
+    connection = connection_class.new(self, account, options.reverse_merge({:logger => Rails.logger}))
 
     if block_given?
       connection.with_connection do

@@ -51,10 +51,7 @@ class OracleDataSource < DataSource
     schema_permissions
   end
 
-  def build_connection_with(account, options = {})
-    options = {
-        :logger => Rails.logger
-    }.merge(options)
-    OracleConnection.new(self, account, options)
+  def connection_class
+    OracleConnection
   end
 end

@@ -13,7 +13,6 @@ module CommonDataSourceBehavior
     end
   end
 
-
   def check_status!
     update_state_and_version
 

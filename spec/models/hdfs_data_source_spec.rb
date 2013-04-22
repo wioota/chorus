@@ -38,12 +38,12 @@ describe HdfsDataSource do
   describe "#check_status!" do
     let(:data_source) { hdfs_data_sources(:hadoop) }
 
-
     context "when the data source is offline" do
 
       before do
         stub(Hdfs::QueryService).accessible? { false }
-        stub(Hdfs::QueryService).version_of.with_any_args { "xyz" }
+        stub(Hdfs::QueryService).version_of.with_any_args { raise ApiValidationError }
+        do_not_allow(Hdfs::QueryService).version_of.with_any_args { raise ApiValidationError }
       end
 
       it "sets the state to offline" do
@@ -95,7 +95,6 @@ describe HdfsDataSource do
       }.to change(data_source, :last_online_at)
     end
   end
-
 
   describe "#refresh" do
     let(:root_file) { HdfsEntry.new({:path => '/foo.txt'}, :without_protection => true) }

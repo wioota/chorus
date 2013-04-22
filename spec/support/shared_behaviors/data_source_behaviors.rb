@@ -229,14 +229,14 @@ shared_examples_for :data_source_with_access_control do
   describe "#connect_with" do
     let(:data_source) { FactoryGirl.build factory_name }
     let(:account) { Object.new }
-    let(:fake_connection) { Object.new }
+    let(:fake_connection_class) { Struct.new(:foo, :bar, :baz) }
 
     before do
-      mock(data_source).build_connection_with(account, {}) { fake_connection }
+      mock(data_source).connection_class { fake_connection_class }
     end
 
-    it "returns a connection built with build_connection_with" do
-      data_source.connect_with(account).should == fake_connection
+    it "returns an instance of the data source's connection_class" do
+      data_source.connect_with(account).should be_an_instance_of(fake_connection_class)
     end
   end
 end

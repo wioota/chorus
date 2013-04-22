@@ -96,8 +96,7 @@ class GpdbDataSource < DataSource
     ).to_sql
   end
 
-  def build_connection_with(account, options = {})
-    options = {:logger => Rails.logger}.merge(options)
-    GreenplumConnection.new(self, account, options)
+  def connection_class
+    GreenplumConnection
   end
 end
