@@ -21,9 +21,6 @@ if __FILE__ == $0
 
     installer.install
     installer.startup
-    if STDIN.tty?
-      exec "stty echo"
-    end
     puts "Installation completed."
     unless installer.upgrade_existing?
       puts "To start Chorus, run the following commands:"
@@ -39,5 +36,9 @@ if __FILE__ == $0
     File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
     puts "Failed to start chorus back up"
     exit 1
+  ensure
+    if STDIN.tty?
+      exec "stty echo"
+    end
   end
 end
