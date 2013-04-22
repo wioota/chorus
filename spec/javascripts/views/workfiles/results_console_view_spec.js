@@ -185,7 +185,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             function itShowsExecutionResults() {
 
                 it("renders a task data table with the given task", function() {
-                    expect(this.view.dataTable).toBeA(chorus.views.TaskDataTable);
+                    expect(this.view.dataTable).toBeA(chorus.views.DataTable);
                     expect(this.view.dataTable.model).toBe(this.task);
                     expect($(this.view.el)).toContain(this.view.dataTable.el);
                 });

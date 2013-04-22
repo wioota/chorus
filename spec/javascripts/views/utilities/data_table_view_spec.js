@@ -1,4 +1,4 @@
-describe("chorus.views.TaskDataTable", function() {
+describe("chorus.views.DataTable", function() {
     beforeEach(function() {
         this.task = rspecFixtures.dataPreviewTaskResults({
             columns: [
@@ -14,7 +14,7 @@ describe("chorus.views.TaskDataTable", function() {
             ]
         });
 
-        this.view = new chorus.views.TaskDataTable({ model: this.task });
+        this.view = new chorus.views.DataTable({ model: this.task });
     });
 
     describe("falsy data", function() {

@@ -556,7 +556,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 modelClass: "KaggleUser"
             }),
 
-            "Data Table": new chorus.views.TaskDataTable({
+            "Data Table": new chorus.views.DataTable({
                 model: new chorus.models.WorkfileExecutionTask({ result: {
                     columns: [
                         { name: "id" },

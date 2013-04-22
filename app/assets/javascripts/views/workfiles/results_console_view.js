@@ -99,7 +99,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     showResultTable: function(task) {
         this.dataTable && this.dataTable.teardown();
-        this.dataTable = new chorus.views.TaskDataTable({shuttle: this.options.shuttle, model: task});
+        this.dataTable = new chorus.views.DataTable({shuttle: this.options.shuttle, model: task});
         this.registerSubView(this.dataTable);
         this.dataTable.render();
         this.$(".result_table").removeClass("hidden").html(this.dataTable.el);
