@@ -2,6 +2,7 @@ class DataSource < ActiveRecord::Base
   include SoftDelete
   include TaggableBehavior
   include Notable
+  include CommonDataSourceBehavior
 
   attr_accessor :db_username, :db_password
   attr_accessible :name, :description, :host, :port, :db_name, :db_username, :db_password, :as => [:default, :create]
@@ -28,11 +29,7 @@ class DataSource < ActiveRecord::Base
   after_create :enqueue_refresh
   after_create :create_created_event, :if => :current_user
 
-  attr_accessor :highlighted_attributes, :search_result_notes
-  searchable_model do
-    text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
-    text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-  end
+
 
   def self.by_type(entity_type)
     if entity_type
@@ -50,9 +47,6 @@ class DataSource < ActiveRecord::Base
     end
   end
 
-  def self.type_name
-    'DataSource'
-  end
 
   def self.reindex_data_source(id)
     data_source = find(id)
@@ -153,6 +147,14 @@ class DataSource < ActiveRecord::Base
 
   def solr_reindex_later
     QC.enqueue_if_not_queued('DataSource.reindex_data_source', id)
+  end
+
+  def update_state_and_version
+    self.state = "online"
+    self.version = connect_as_owner(refresh_state: false).version
+  rescue => e
+    Chorus.log_debug "Could not connect while updating state: #{e}: #{e.message} on #{e.backtrace[0]}"
+    self.state = "offline"
   end
 
   private

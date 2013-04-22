@@ -1,6 +1,7 @@
 class HdfsDataSource < ActiveRecord::Base
   include TaggableBehavior
   include Notable
+  include CommonDataSourceBehavior
 
   attr_accessible :name, :host, :port, :description, :username, :group_list
   belongs_to :owner, :class_name => 'User'
@@ -14,18 +15,17 @@ class HdfsDataSource < ActiveRecord::Base
 
   after_create :create_root_entry
 
-  attr_accessor :highlighted_attributes, :search_result_notes
-  searchable_model do
-    text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
-    text :description, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-  end
-
   def url
     "gphdfs://#{host}:#{port}/"
   end
 
   def self.refresh(id)
     find(id).refresh
+  end
+
+  def update_state_and_version
+    self.state = Hdfs::QueryService.accessible?(self) ? "online" : "offline"
+    self.version = Hdfs::QueryService.version_of(self)
   end
 
   def refresh(path = "/")
@@ -40,14 +40,6 @@ class HdfsDataSource < ActiveRecord::Base
 
   def create_root_entry
     hdfs_entries.create({:hdfs_data_source => self, :path => "/", :is_directory => true}, { :without_protection => true })
-  end
-
-  def self.type_name
-    'DataSource'
-  end
-
-  def online?
-    state == "online"
   end
 
 end

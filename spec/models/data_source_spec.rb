@@ -22,10 +22,10 @@ describe DataSource do
   it_behaves_like "a notable model" do
     let!(:note) do
       Events::NoteOnDataSource.create!({
-          :actor => users(:owner),
-          :data_source => model,
-          :body => "This is the body"
-      }, :as => :create)
+                                           :actor => users(:owner),
+                                           :data_source => model,
+                                           :body => "This is the body"
+                                       }, :as => :create)
     end
 
     let!(:model) { FactoryGirl.create(:gpdb_data_source) }
@@ -185,6 +185,70 @@ describe DataSource do
     context 'missing account' do
       it 'returns nil' do
         data_source.account_for_user(users(:no_collaborators)).should be_nil
+      end
+    end
+  end
+
+  describe '#check_status!' do
+    let(:data_source) { data_sources(:owners) }
+
+    context "when the data source is offline" do
+      before do
+        stub(data_source).connect_as_owner {
+          raise "can't connect!"
+        }
+      end
+
+      it "sets the state to offline" do
+        data_source.state = "whatever"
+        data_source.check_status!
+        data_source.state.should == "offline"
+      end
+
+      it "updates last_checked_at" do
+        expect {
+          data_source.check_status!
+        }.to change(data_source, :last_checked_at)
+      end
+
+      it "does not update last_online_at" do
+        expect {
+          data_source.check_status!
+        }.not_to change(data_source, :last_online_at)
+      end
+    end
+
+    context "when the data source is online" do
+      before do
+        stub(data_source).connect_as_owner {
+          connection = Object.new
+          stub(connection).version { '1.2.3.4' }
+          connection
+        }
+      end
+
+      it "sets the state to online" do
+        data_source.state = "whatever"
+        data_source.check_status!
+        data_source.state.should == "online"
+      end
+
+      it "updates the version" do
+        data_source.version = "whatever"
+        data_source.check_status!
+        data_source.version.should == "1.2.3.4"
+      end
+
+      it "updates last_checked_at" do
+        expect {
+          data_source.check_status!
+        }.to change(data_source, :last_checked_at)
+      end
+
+      it "updates last_online_at" do
+        expect {
+          data_source.check_status!
+        }.to change(data_source, :last_online_at)
       end
     end
   end

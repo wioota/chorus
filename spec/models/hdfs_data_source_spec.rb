@@ -35,6 +35,68 @@ describe HdfsDataSource do
     end
   end
 
+  describe "#check_status!" do
+    let(:data_source) { hdfs_data_sources(:hadoop) }
+
+
+    context "when the data source is offline" do
+
+      before do
+        stub(Hdfs::QueryService).accessible? { false }
+        stub(Hdfs::QueryService).version_of.with_any_args { "xyz" }
+      end
+
+      it "sets the state to offline" do
+        data_source.state = "whatever"
+        data_source.check_status!
+        data_source.state.should == "offline"
+      end
+
+      it "updates last_checked_at" do
+        expect {
+          data_source.check_status!
+        }.to change(data_source, :last_checked_at)
+      end
+
+      it "does not update last_online_at" do
+        expect {
+          data_source.check_status!
+        }.not_to change(data_source, :last_online_at)
+      end
+    end
+
+    context "when the data source is online"
+    before do
+      stub(Hdfs::QueryService).accessible? { true }
+      stub(Hdfs::QueryService).version_of.with_any_args { "xyz" }
+    end
+
+    it "sets the state to online" do
+      data_source.state = "whatever"
+      data_source.check_status!
+      data_source.state.should == "online"
+    end
+
+    it "updates the version" do
+      data_source.version = "whatever"
+      data_source.check_status!
+      data_source.version == "xyz"
+    end
+
+    it "updates last_checked_at" do
+      expect {
+        data_source.check_status!
+      }.to change(data_source, :last_checked_at)
+    end
+
+    it "updates last_online_at" do
+      expect {
+        data_source.check_status!
+      }.to change(data_source, :last_online_at)
+    end
+  end
+
+
   describe "#refresh" do
     let(:root_file) { HdfsEntry.new({:path => '/foo.txt'}, :without_protection => true) }
     let(:root_dir) { HdfsEntry.new({:path => '/bar', :is_directory => true}, :without_protection => true) }
