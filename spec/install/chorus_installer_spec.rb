@@ -827,6 +827,7 @@ describe ChorusInstaller do
     context "when the data sources are invalid" do
       before do
         mock(executor).rake("validations:data_source") {false}
+        mock(executor).start_postgres
       end
 
       it "raises an installer error" do
@@ -837,6 +838,7 @@ describe ChorusInstaller do
     context "when the data sources are valid" do
       before do
         mock(executor).rake("validations:data_source") {true}
+        mock(executor).start_postgres
       end
 
       it "runs without incident" do
