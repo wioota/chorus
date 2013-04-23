@@ -2,6 +2,10 @@ class GnipImport < Import
   unscoped_belongs_to :workspace
   attr_accessible :workspace, :source
 
+  def self.presenter_class
+    ImportPresenter
+  end
+
   def schema
     workspace.sandbox
   end

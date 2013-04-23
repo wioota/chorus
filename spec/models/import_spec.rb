@@ -178,4 +178,12 @@ describe Import, :greenplum_integration do
       import.reload.workspace.should == workspace
     end
   end
+
+  describe "subclasses" do
+    it "responds to presenter_class" do
+      Import.subclasses.each do |subclass|
+        subclass.should respond_to(:presenter_class)
+      end
+    end
+  end
 end

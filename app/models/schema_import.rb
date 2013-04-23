@@ -3,6 +3,10 @@ class SchemaImport < Import
   validates :schema, :presence => true
   alias_attribute :source_dataset, :source
 
+  def self.presenter_class
+    ImportPresenter
+  end
+
   def create_import_event
     destination_table = schema.datasets.tables.find_by_name(to_table)
     created_event_class.by(user).add(
