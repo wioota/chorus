@@ -21,14 +21,14 @@ ul li {
 .list_horizontal_divided {
     >li {
         display: inline-block;
-        margin-right: 5px;
-        padding-right: 5px;
-        border-right: $list-horizontal-divider;
+        margin-left: 5px;
+        padding-left: 5px;
+        border-left: $list-horizontal-divider;
 
-        &:last-child {
-            margin-right: 0;
-            padding-right: 0;
-            border-right: none;
+        &:first-child {
+            margin-left: 0;
+            padding-left: 0;
+            border-left: none;
         }
     }
 }
@@ -79,6 +79,22 @@ ul li {
 
         &.selected {
             background-color: $list-selectable-selected-color;
+        }
+    }
+}
+
+.list_hover_reveal {
+    >li {
+        padding: 10px;
+        border-bottom: $list-vertical-divider;
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:not(:hover) {
+            .revealable {
+                display: none;
+            }
         }
     }
 }

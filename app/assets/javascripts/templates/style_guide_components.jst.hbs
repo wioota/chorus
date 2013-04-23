@@ -17,10 +17,45 @@ the lowlight link style.</p>
 
 <h1 class="docs_heading">Lists</h1>
 
-{{#each lists}}
-    <h2>{{title}}</h2>
-    {{{html}}}
-    <pre><code class="language-markup">{{ html }}</code></pre>
-{{/each}}
+<h2>Simple List</h2>
+<ul class="example"><li>First Item</li><li>Second Item</li><li>Third Item</li></ul>
 
+<h2>Horizontal List</h2>
+<ul class="example list_horizontal"><li>First Item</li><li>Second Item</li><li>Third Item</li></ul>
 
+<h2>Horizontal Divided List</h2>
+<ul class="example list_horizontal_divided"><li>First Item</li><li>Second Item</li><li>Third Item</li></ul>
+
+<h2>Breadcrumb List</h2>
+<ul class="example list_breadcrumb"><li>First Item</li><li>Second Item</li><li>Third Item</li></ul>
+
+<h2>Vertical Divided List</h2>
+<ul class="example list_vertical_divided"><li>First Item</li><li>Second Item</li><li>Third Item</li></ul>
+
+<h2>Selectable List</h2>
+<ul class="example list_selectable">
+    <li>First Item</li>
+    <li class="selected">Selected Item</li>
+    <li>Third Item</li>
+</ul>
+
+<h2>Hover Reveal List</h2>
+
+<ul class="list_hover_reveal example">
+    <li>
+        Random Text
+        <ul class="list_horizontal_divided">
+            <li>Always Visible</li>
+            <li class="revealable">Sometimes Visible</li>
+            <li class="revealable">Sometimes Visible</li>
+        </ul>
+    </li>
+    <li>
+        Random Text
+        <ul class="list_horizontal_divided">
+            <li>Always Visible</li>
+            <li class="revealable">Sometimes Visible</li>
+            <li class="revealable">Sometimes Visible</li>
+        </ul>
+    </li>
+</ul>
