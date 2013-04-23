@@ -88,10 +88,6 @@ describe("ImportGnipStream", function () {
                         it("stops the 'loading' submit button", function () {
                             expect(this.dialog.$(".submit").isLoading()).toBeFalsy();
                         });
-
-                        it("populates the dialog's errors div", function() {
-                            expect(this.dialog.$(".errors").text()).toContain("abc");
-                        });
                     });
 
                     context("when model is invalid", function() {
@@ -107,5 +103,4 @@ describe("ImportGnipStream", function () {
             });
         });
     });
-
 });

@@ -67,7 +67,6 @@ chorus.dialogs.ImportGnipStream = chorus.dialogs.Base.extend({
     },
 
     saveFailed: function() {
-        this.showErrors();
         this.$("button.submit").stopLoading("loading");
     }
 });

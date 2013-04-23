@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
   end
 
   def render_forbidden(e = nil)
-    present_forbidden(e.try(:subject))
+    present_forbidden(e.try(:subject), e.try(:error_type))
   end
 
   def logged_in?
@@ -162,13 +162,18 @@ class ApplicationController < ActionController::Base
     collection.paginate(params.slice(:page, :per_page, :total_entries))
   end
 
-  def present_forbidden(model)
+  def present_forbidden(model, error_type = nil)
     response_json = {}
 
     if model
       response_json[:errors] = {
           :model_data => {:id => model.id, :entity_type => model.class.name.underscore}
       }
+    end
+
+    if error_type
+      response_json[:errors] ||= {}
+      response_json[:errors][:record] = error_type
     end
 
     render :json => response_json, :status => :forbidden

@@ -40,6 +40,10 @@ class DataSourceConnection
     def initialize(data_source)
       self.subject = data_source
     end
+
+    def error_type
+      :INVALID_CREDENTIALS
+    end
   end
 
   class DriverNotConfigured < StandardError

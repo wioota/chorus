@@ -150,6 +150,7 @@ describe ApplicationController do
       response.code.should == "403"
       decoded_errors.model_data["id"].should == data_source.id
       decoded_errors.model_data["entity_type"].should == data_source.class.name.underscore
+      decoded_errors.record.should == "INVALID_CREDENTIALS"
     end
 
     describe "when an access denied error is raised" do
