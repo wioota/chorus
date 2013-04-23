@@ -98,7 +98,8 @@ class ApplicationController < ActionController::Base
   end
 
   def render_forbidden(e = nil)
-    present_forbidden(e.try(:subject), e.try(:error_type))
+    error_type = e.respond_to?(:error_type) && e.try(:error_type)
+    present_forbidden(e.try(:subject), error_type)
   end
 
   def logged_in?
