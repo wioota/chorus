@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import "_common.scss";
+@import "components/_variables.scss";
 @import "compass/css3/opacity";
 @import "compass/css3/border-radius";
 
@@ -19,6 +20,7 @@
 @import "vendorish/_datepicker.scss";
 @import "vendorish/_prism.scss";
 @import "vendorish/_textext.scss";
+@import "vendorish/_font_awesome.scss";
 
 // vendorish/_facebox is loaded first in modals for clarity
 

@@ -21,6 +21,22 @@ chorus.views.Components = chorus.views.Base.extend({
         "<a class='link_low_light' href='#'>lowlight link</a>"
     ],
 
+
+    baseListHtml: function() {
+        return $('<ul><li>First Item</li><li>Second Item</li><li>Third Item</li></ul>');
+    },
+
+    lists: function() {
+        return [
+            { title: "Simple List", html: this.baseListHtml().outerHtml() },
+            { title: "Horizontal List", html: this.baseListHtml().addClass("list_horizontal").outerHtml() },
+            { title: "Horizontal Divided List", html: this.baseListHtml().addClass("list_horizontal_divided").outerHtml() },
+            { title: "Breadcrumb List", html: this.baseListHtml().addClass("list_breadcrumb").outerHtml() },
+            { title: "Vertical Divided List", html: this.baseListHtml().addClass("list_vertical_divided").outerHtml() },
+            { title: "Selectable List", html: this.baseListHtml().addClass("list_selectable").find("li:eq(1)").text("Selected Item").addClass("selected").closest("ul").outerHtml() }
+        ];
+    },
+
     postRender: function() {
         Prism.highlightAll();
     },
@@ -28,7 +44,8 @@ chorus.views.Components = chorus.views.Base.extend({
     additionalContext: function() {
         return {
             typographies: this.typographies,
-            links: this.links
+            links: this.links,
+            lists: this.lists()
         };
     }
 });
