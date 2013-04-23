@@ -6,8 +6,9 @@
 
 /* basic color rules - DO NOT use these in component files, they should only be used in config sections! */
 
-$gray: #464646;
-$light-gray: #7D7D7D;
+$dark-gray: #464646;
+$gray: #7D7D7D;
+$light-gray: #D0D0D0;
 $light-green: #B3D988;
 $light-blue: #EAEFF6;
 $blue: #2c95dd;
@@ -15,21 +16,21 @@ $blue: #2c95dd;
 
 /* Typography */
 
-$default-font-color: $gray;
+$default-font-color: $dark-gray;
 $default-font-size: 14px;
 $font-family: "Open Sans", Verdana;
-$low-light-type: $light-gray;
+$low-light-type: $gray;
 
 /* Link */
 
 $default-link-color: $blue;
-$low-light-link-color: $light-gray;
+$low-light-link-color: $gray;
 
 /* Lists */
 
-$list-horizontal-divider: 1px solid #D0D0D0;
-$list-vertical-divider: 1px solid #D0D0D0;
-$list-selectable-hover-color: #e3e8ed;
+$list-horizontal-divider: 1px solid $light-gray;
+$list-vertical-divider: 1px solid $light-gray;
+$list-selectable-hover-color: rgba(0,0,0,0.1);
 $list-selectable-selected-color: white;
 $list-breadcrumb-divider: "\f0da";
 $list-breadcrumb-spacing: 5px;
