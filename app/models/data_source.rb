@@ -101,8 +101,8 @@ class DataSource < ActiveRecord::Base
     end
   end
 
-  def connect_as_owner(options = {})
-    connect_with(owner_account, options)
+  def connect_as_owner
+    connect_with(owner_account)
   end
 
   def connect_as(user)
@@ -151,7 +151,7 @@ class DataSource < ActiveRecord::Base
 
   def update_state_and_version
     self.state = "online"
-    self.version = connect_as_owner(refresh_state: false).version
+    self.version = connect_as_owner.version
   rescue => e
     Chorus.log_debug "Could not connect while updating state: #{e}: #{e.message} on #{e.backtrace[0]}"
     self.state = "offline"
