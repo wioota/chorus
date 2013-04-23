@@ -218,7 +218,7 @@ shared_examples_for :data_source_with_access_control do
     let(:data_source) { FactoryGirl.build factory_name }
 
     before do
-      mock(data_source).connect_with(data_source.owner_account, {})
+      mock(data_source).connect_with(data_source.owner_account)
     end
 
     it 'connects with the owners account' do

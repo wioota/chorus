@@ -6,7 +6,7 @@ class GnipCopier < TableCopier
   private
 
   def import_from_url(url)
-    reader = java.io.StringReader.new(stream.to_result_in_batches([url]))
+    reader = java.io.StringReader.new(stream.to_result_in_batches([url]).contents)
     destination_connection.copy_csv(reader, destination_table_name, column_names, ',', false)
   end
 

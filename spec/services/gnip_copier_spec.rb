@@ -38,20 +38,21 @@ describe GnipCopier do
   end
 
   describe 'run' do
+    let(:foo_csv) { 'hi,bye' }
+    let(:bar_csv) { 'yo,dawg' }
+
     before do
       stub(ChorusGnip).from_stream.with_any_args do
         stream = Object.new
         stub(stream).fetch { %w(foo bar) }
-        stub(stream).to_result_in_batches(%w(foo)) { foo_csv }
-        stub(stream).to_result_in_batches(%w(bar)) { bar_csv }
+        stub(stream).to_result_in_batches(%w(foo)) { GnipCsvResult.new foo_csv }
+        stub(stream).to_result_in_batches(%w(bar)) { GnipCsvResult.new bar_csv }
       end
     end
 
-    let(:foo_csv) { 'hi,bye' }
-    let(:bar_csv) { 'yo,dawg' }
-
     it 'copies the data into the destination table' do
       first_time = true
+
       mock(connection).copy_csv(is_a(java.io.StringReader), destination_table_name, ChorusGnip.column_names, ',', false).times(2) do |reader|
         buffer = java.io.BufferedReader.new(reader)
         if first_time
@@ -61,6 +62,7 @@ describe GnipCopier do
           buffer.read_line.should == bar_csv
         end
       end
+
       copier.run
     end
   end
