@@ -23,16 +23,16 @@ clock.write_file
 execute "unpack_greenplum" do
   dir =  '/home/vagrant'
   cwd dir
-  creates dir + '/greenplum-db-4.2.2.4'
+  creates dir + '/greenplum-db-4.2.5.0'
   user 'vagrant'
-  command "tar xzf /vagrant/greenplum-db-4.2.2.4.tar.gz"
+  command "tar xzf /vagrant/greenplum-db-4.2.5.0.tar.gz"
 end
 
 # This sets a symlink to the current version of greenplum.
 link "/home/vagrant/greenplum-db" do
   owner 'vagrant'
   group 'vagrant'
-  to "/home/vagrant/greenplum-db-4.2.2.4"
+  to "/home/vagrant/greenplum-db-4.2.5.0"
 end
 
 ['/gpmaster', '/gpdata1', '/gpdata2', '/home/vagrant/gpconfigs'].each do |dir|
