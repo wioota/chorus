@@ -14,7 +14,7 @@ echo "Setting maximum database connections to $MAX_CONNECTIONS"
 if [ -f $POSTGRES_PID_FILE ]; then
   if kill -0 `head -1 $POSTGRES_PID_FILE` > /dev/null 2>&1; then
     log "Postgres already running as process `head -1 $POSTGRES_PID_FILE`."
-    exit 1
+    exit 0
   fi
 fi
 

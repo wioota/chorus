@@ -14,7 +14,7 @@ depends_on postgres
 if [ -f $WORKER_PID_FILE ]; then
   if kill -0 `cat $WORKER_PID_FILE` > /dev/null 2>&1; then
     log "Worker already running as process `cat $WORKER_PID_FILE`."
-    exit 1
+    exit 0
   fi
 fi
 

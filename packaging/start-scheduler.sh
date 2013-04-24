@@ -14,7 +14,7 @@ depends_on postgres
 if [ -f $SCHEDULER_PID_FILE ]; then
   if kill -0 `cat $SCHEDULER_PID_FILE` > /dev/null 2>&1; then
     log "Scheduler already running as process `cat $SCHEDULER_PID_FILE`."
-    exit 1
+    exit 0
   fi
 fi
 
