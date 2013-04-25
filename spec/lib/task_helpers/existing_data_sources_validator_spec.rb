@@ -25,6 +25,12 @@ describe ExistingDataSourcesValidator do
     it_validates_duplicate(:hdfs_data_source, :gpdb_data_source)
     it_validates_duplicate(:gnip_data_source, :gnip_data_source)
 
+    it "returns true if there is a deleted_model with the same name" do
+      FactoryGirl.create(:gpdb_data_source, :name => 'duplicate_deleted_name').destroy
+      FactoryGirl.create(:gpdb_data_source, :name => 'duplicate_deleted_name')
+      ExistingDataSourcesValidator.run([DataSource]).should be_true
+    end
+
     it "doesn't validate tables that don't exist" do
       klass = Class.new(ActiveRecord::Base) do
         table_name = 'non_existent_records'

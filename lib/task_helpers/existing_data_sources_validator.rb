@@ -25,7 +25,7 @@ module ExistingDataSourcesValidator
   def self.find_invalid_data_sources(klasses)
     names = []
     klasses.each do |klass|
-      names += ActiveRecord::Base.connection.exec_query("select * from #{klass.table_name}").map {|record| record["name"] }
+      names += ActiveRecord::Base.connection.exec_query("select * from #{klass.table_name}").reject { |record| record["deleted_at"] }.map { |record| record["name"] }
     end
 
     names.reject { |name| names.count(name) == 1 }
