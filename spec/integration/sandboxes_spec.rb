@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe "Sandbox", :greenplum_integration do
 
   let(:workspace) { workspaces(:private_with_no_collaborators) }
-  let(:instance) { GreenplumIntegration.real_data_source }
+  let(:data_source) { GreenplumIntegration.real_data_source }
   let(:database) { GreenplumIntegration.real_database }
   let(:schema) { database.schemas.first }
 
@@ -16,10 +16,10 @@ describe "Sandbox", :greenplum_integration do
     click_link "Add a sandbox"
 
     within_modal do
-      #instance
-      page.find("div.instance span.ui-selectmenu-text").should have_content("Select one")
-      select_item("select[name=instance]", instance.id)
-      page.find("div.instance span.ui-selectmenu-text").should have_content(instance.name)
+      #data_source
+      page.find("div.data_source span.ui-selectmenu-text").should have_content("Select one")
+      select_item("select[name=data_source]", data_source.id)
+      page.find("div.data_source span.ui-selectmenu-text").should have_content(data_source.name)
 
       #database
       page.find("div.database span.ui-selectmenu-text").should have_content("Select one")

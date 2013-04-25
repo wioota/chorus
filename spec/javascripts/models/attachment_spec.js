@@ -81,11 +81,11 @@ describe("chorus.models.Attachment", function() {
         });
 
         it('shows the URL for a data source', function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnInstanceNote();
+            var search = rspecFixtures.searchResultWithAttachmentOnDataSourceNote();
             var model = search.attachments().at(0);
-            var instance = model.dataSource();
-            expect(instance.id).toBeDefined();
-            expect(model.showUrl()).toBe(instance.showUrl());
+            var dataSource = model.dataSource();
+            expect(dataSource.id).toBeDefined();
+            expect(model.showUrl()).toBe(dataSource.showUrl());
         });
 
         it("shows the URL for an hdfsFile", function() {
@@ -171,14 +171,14 @@ describe("chorus.models.Attachment", function() {
 
     describe('data source', function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnInstanceNote();
+            var search = rspecFixtures.searchResultWithAttachmentOnDataSourceNote();
             this.model = search.attachments().at(0);
         });
 
         it("returns the data source", function() {
-            this.instance = this.model.dataSource();
-            expect(this.instance.get('name')).toBe(this.model.get('dataSource').name);
-            expect(this.instance.get('id')).toBe(this.model.get('dataSource').id);
+            this.dataSource = this.model.dataSource();
+            expect(this.dataSource.get('name')).toBe(this.model.get('dataSource').name);
+            expect(this.dataSource.get('id')).toBe(this.model.get('dataSource').id);
         });
 
         it("dynamically assigns the data source type", function() {

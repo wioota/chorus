@@ -1,13 +1,13 @@
 module Gnip
   class DataSourceRegistrar
 
-    def self.create!(instance_attributes, owner)
-      chorus_gnip = ChorusGnip.new({:url => instance_attributes[:stream_url],
-                                    :username => instance_attributes[:username],
-                                    :password => instance_attributes[:password]
+    def self.create!(data_source_attributes, owner)
+      chorus_gnip = ChorusGnip.new({:url => data_source_attributes[:stream_url],
+                                    :username => data_source_attributes[:username],
+                                    :password => data_source_attributes[:password]
                                    })
       if chorus_gnip.auth
-        data_source = GnipDataSource.new(instance_attributes)
+        data_source = GnipDataSource.new(data_source_attributes)
         data_source.owner = owner
         data_source.save!
         Events::GnipDataSourceCreated.by(owner).add(:gnip_data_source => data_source)

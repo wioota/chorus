@@ -47,7 +47,7 @@ describe DataSourceNameValidator do
       record.save
       record.reload.valid?.should be_true
 
-      # don't leak modified instance class
+      # don't leak modified data source class
       Object.class_eval do
         const_set(:GpdbDataSource, OriginalGpdbDataSource)
         remove_const(:OriginalGpdbDataSource)

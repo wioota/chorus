@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Gnip::DataSourceRegistrar do
   let(:owner) { users(:owner) }
 
-  let(:instance_attributes) do
+  let(:data_source_attributes) do
     {
         :name => "new_gnip_data_source",
         :description => "some description",
@@ -23,24 +23,24 @@ describe Gnip::DataSourceRegistrar do
         end
       end
 
-      it "save the instance" do
-        instance = Gnip::DataSourceRegistrar.create!(instance_attributes, owner)
+      it "save the data source" do
+        data_source = Gnip::DataSourceRegistrar.create!(data_source_attributes, owner)
 
-        instance.should be_persisted
-        instance.name.should == "new_gnip_data_source"
-        instance.description.should == "some description"
-        instance.stream_url.should == "https://historical.gnip.com/fake"
-        instance.username.should == "gnip_username"
-        instance.password.should == "gnip_password"
-        instance.id.should_not be_nil
-        instance.should be_valid
+        data_source.should be_persisted
+        data_source.name.should == "new_gnip_data_source"
+        data_source.description.should == "some description"
+        data_source.stream_url.should == "https://historical.gnip.com/fake"
+        data_source.username.should == "gnip_username"
+        data_source.password.should == "gnip_password"
+        data_source.id.should_not be_nil
+        data_source.should be_valid
       end
 
       it "makes a GnipDataSourceCreated event" do
-        instance = Gnip::DataSourceRegistrar.create!(instance_attributes, owner)
+        data_source = Gnip::DataSourceRegistrar.create!(data_source_attributes, owner)
 
         event = Events::GnipDataSourceCreated.last
-        event.gnip_data_source.should == instance
+        event.gnip_data_source.should == data_source
         event.actor.should == owner
       end
     end
@@ -53,7 +53,7 @@ describe Gnip::DataSourceRegistrar do
       end
       it "raise an error" do
         expect {
-          Gnip::DataSourceRegistrar.create!(instance_attributes, owner)
+          Gnip::DataSourceRegistrar.create!(data_source_attributes, owner)
         }.to raise_error(ApiValidationError)
       end
     end
@@ -68,35 +68,35 @@ describe Gnip::DataSourceRegistrar do
       let(:new_owner) { users(:not_a_member) }
 
       before do
-        instance_attributes.merge!({:owner => JSON.parse(new_owner.to_json)})
+        data_source_attributes.merge!({:owner => JSON.parse(new_owner.to_json)})
         any_instance_of(ChorusGnip) do |c|
           mock(c).auth { true }
         end
       end
 
-      it "save the instance" do
-        instance = Gnip::DataSourceRegistrar.update!(gnip_data_source.id, instance_attributes)
+      it "save the data source" do
+        data_source = Gnip::DataSourceRegistrar.update!(gnip_data_source.id, data_source_attributes)
 
-        instance.should be_persisted
-        instance.name.should == "new_gnip_data_source"
-        instance.description.should == "some description"
-        instance.stream_url.should == "https://historical.gnip.com/fake"
-        instance.username.should == "gnip_username"
-        instance.password.should == "gnip_password"
-        instance.id.should_not be_nil
-        instance.should be_valid
+        data_source.should be_persisted
+        data_source.name.should == "new_gnip_data_source"
+        data_source.description.should == "some description"
+        data_source.stream_url.should == "https://historical.gnip.com/fake"
+        data_source.username.should == "gnip_username"
+        data_source.password.should == "gnip_password"
+        data_source.id.should_not be_nil
+        data_source.should be_valid
       end
 
       it "should ignore an empty password" do
-        instance_attributes[:password] = ""
-        instance = Gnip::DataSourceRegistrar.update!(gnip_data_source.id, instance_attributes)
-        instance.reload
-        instance.password.should_not be_blank
+        data_source_attributes[:password] = ""
+        data_source = Gnip::DataSourceRegistrar.update!(gnip_data_source.id, data_source_attributes)
+        data_source.reload
+        data_source.password.should_not be_blank
       end
 
       it "should strip out the owner" do
-        instance = Gnip::DataSourceRegistrar.update!(gnip_data_source.id, instance_attributes)
-        instance.owner.should_not == new_owner
+        data_source = Gnip::DataSourceRegistrar.update!(gnip_data_source.id, data_source_attributes)
+        data_source.owner.should_not == new_owner
       end
     end
 
@@ -109,7 +109,7 @@ describe Gnip::DataSourceRegistrar do
 
       it "raise an error" do
         expect {
-          Gnip::DataSourceRegistrar.update!(gnip_data_source.id, instance_attributes)
+          Gnip::DataSourceRegistrar.update!(gnip_data_source.id, data_source_attributes)
         }.to raise_error(ApiValidationError)
       end
     end

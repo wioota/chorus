@@ -40,8 +40,8 @@ class GpdbDataSource < DataSource
 
       database.update_attributes!({:stale_at => nil}, :without_protection => true)
       database_accounts = accounts.where(:db_username => db_usernames)
-      if database.instance_accounts.sort != database_accounts.sort
-        database.instance_accounts = database_accounts
+      if database.data_source_accounts.sort != database_accounts.sort
+        database.data_source_accounts = database_accounts
         QC.enqueue_if_not_queued("GpdbDatabase.reindex_datasets", database.id) if database.datasets.count > 0
       end
       found_databases << database
@@ -69,7 +69,7 @@ class GpdbDataSource < DataSource
     'gpdb_data_source'
   end
 
-  def instance_provider
+  def data_source_provider
     "Greenplum Database"
   end
 

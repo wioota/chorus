@@ -1,4 +1,4 @@
-class InstanceDatabasesController < DataSourcesController
+class DatabasesController < DataSourcesController
   def index
     gpdb_data_source = GpdbDataSource.find(params[:data_source_id])
     databases = GpdbDatabase.visible_to(authorized_account(gpdb_data_source))

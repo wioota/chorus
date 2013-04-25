@@ -212,7 +212,7 @@ describe WorkspaceDatasetsController do
       context 'when the dataset connection blew up' do
         before do
           error = GreenplumConnection::DatabaseError.new(nil)
-          mock(error).error_type { :INSTANCE_UNREACHABLE }
+          mock(error).error_type { :DATA_SOURCE_UNREACHABLE }
           any_instance_of(GpdbTable) do |table|
             stub(table).verify_in_source(anything) { raise error }
           end
@@ -231,7 +231,7 @@ describe WorkspaceDatasetsController do
         it 'renders the schema_not_found error' do
           get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
           response.decoded_body.should have_key :errors
-          response.decoded_body[:errors]['record'].should == 'INSTANCE_UNREACHABLE'
+          response.decoded_body[:errors]['record'].should == 'DATA_SOURCE_UNREACHABLE'
         end
       end
     end

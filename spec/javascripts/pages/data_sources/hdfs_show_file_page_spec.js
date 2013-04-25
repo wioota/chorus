@@ -1,11 +1,11 @@
 describe("chorus.pages.HdfsShowFilePage", function() {
     beforeEach(function() {
-        this.hdfsDataSource = rspecFixtures.hdfsDataSource({id: 1234, name: "MyInstance"});
+        this.hdfsDataSource = rspecFixtures.hdfsDataSource({id: 1234, name: "MyDataSource"});
         this.file = rspecFixtures.hdfsFile({
             id: 789,
             path: "/my/path/my file.txt",
             name: "my file.txt",
-            ancestors: [{id: 10, name: "path"}, {id: 11, name: "my"}, {id: 12, name: "MyInstance"}],
+            ancestors: [{id: 10, name: "path"}, {id: 11, name: "my"}, {id: 12, name: "MyDataSource"}],
             contents: ["first line", "second line"]
         });
         this.page = new chorus.pages.HdfsShowFilePage("1234", "789");
@@ -34,9 +34,9 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
 
             expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
-            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.instances");
+            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.data_sources");
 
-            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("MyInstance (2)");
+            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("MyDataSource (2)");
             expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/hdfs_data_sources/1234/browse");
 
             expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toBe("my file.txt");

@@ -352,7 +352,7 @@ describe("chorus.models.Workspace", function() {
                 this.model = rspecFixtures.workspace({
                     sandboxInfo: {
                         id: 6, name: "schema",
-                        database: { id: 4, name: "db", instance: { id: 5, name: "instance" } }
+                        database: { id: 4, name: "db", dataSource: { id: 5, name: "dataSource" } }
                     }
                 });
             });

@@ -49,10 +49,10 @@ describe EventsController do
         Activity.create!(:entity => object, :event => event)
       end
 
-      context "for a gpdb instance" do
+      context "for a gpdb data source" do
         let(:object) { data_sources(:default) }
 
-        it "presents the gpdb instance's activities" do
+        it "presents the gpdb data source's activities" do
           mock_present { |models| models.should include(event) }
           get :index, :entity_type => "gpdb_data_source", :entity_id => object.id
           response.code.should == "200"

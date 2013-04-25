@@ -11,14 +11,14 @@ describe DataSources::AccountController do
       log_in owner
     end
 
-    it "returns the current_user's InstanceAccount for the specified data source" do
+    it "returns the current_user's DataSourceAccount for the specified data source" do
       get :show, :data_source_id => data_source.to_param
       response.code.should == "200"
       decoded_response.id.should == account.id
       decoded_response.db_username.should == account.db_username
     end
 
-    generate_fixture "instanceAccount.json" do
+    generate_fixture "dataSourceAccount.json" do
       get :show, :data_source_id => data_source.to_param
     end
   end
@@ -39,7 +39,7 @@ describe DataSources::AccountController do
         decoded_response.db_username.should == "lenny"
         decoded_response.owner.id.should == user.id
 
-        rehydrated_account = InstanceAccount.find(decoded_response.id)
+        rehydrated_account = DataSourceAccount.find(decoded_response.id)
         rehydrated_account.db_password.should == "secret"
       end
     end
@@ -51,7 +51,7 @@ describe DataSources::AccountController do
       decoded_response.db_username.should == "lenny"
       decoded_response.owner.id.should == user.id
 
-      rehydrated_account = InstanceAccount.find(decoded_response.id)
+      rehydrated_account = DataSourceAccount.find(decoded_response.id)
       rehydrated_account.db_password.should == "secret"
     end
 
@@ -66,7 +66,7 @@ describe DataSources::AccountController do
       end
     end
 
-    context "for a shared accounts instance" do
+    context "for a shared accounts data source" do
       before do
         data_source.update_attribute :shared, true
       end
@@ -91,7 +91,7 @@ describe DataSources::AccountController do
       decoded_response.db_username.should == "changed"
       decoded_response.owner.id.should == user.id
 
-      rehydrated_account = InstanceAccount.find(decoded_response.id)
+      rehydrated_account = DataSourceAccount.find(decoded_response.id)
       rehydrated_account.db_password.should == "changed"
     end
 
@@ -128,9 +128,9 @@ describe DataSources::AccountController do
       end
 
       it "deletes the current users account for this data_source" do
-        InstanceAccount.find_by_data_source_id_and_owner_id(data_source.id, owner.id).should_not be_nil
+        DataSourceAccount.find_by_data_source_id_and_owner_id(data_source.id, owner.id).should_not be_nil
         delete :destroy, :data_source_id => data_source.id
-        InstanceAccount.find_by_data_source_id_and_owner_id(data_source.id, owner.id).should be_nil
+        DataSourceAccount.find_by_data_source_id_and_owner_id(data_source.id, owner.id).should be_nil
       end
     end
 
@@ -140,13 +140,13 @@ describe DataSources::AccountController do
 
       it "does not delete the owner's account" do
         log_in admin
-        lambda { delete :destroy, :data_source_id => data_source.id }.should_not change { InstanceAccount.count }
+        lambda { delete :destroy, :data_source_id => data_source.id }.should_not change { DataSourceAccount.count }
         response.code.should == "404"
       end
 
       it "does not delete the shared account" do
         log_in user
-        lambda { delete :destroy, :data_source_id => data_source.id }.should_not change { InstanceAccount.count }
+        lambda { delete :destroy, :data_source_id => data_source.id }.should_not change { DataSourceAccount.count }
         response.code.should == "404"
       end
     end

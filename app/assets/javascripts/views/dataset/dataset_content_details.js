@@ -238,8 +238,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         return {
             definition: this.dataset.isChorusView() ? this.dataset.get("query") : this.statistics.get("definition"),
             showEdit: this.dataset.isChorusView() && !workspaceArchived,
-            showDerive: !this.dataset.isChorusView() && !this.options.isInstanceBrowser && !workspaceArchived,
-            showPublish: chorus.models.Config.instance().get('tableauConfigured') && !this.options.isInstanceBrowser && !workspaceArchived && canUpdate,
+            showDerive: !this.dataset.isChorusView() && !this.options.isDataSourceBrowser && !workspaceArchived,
+            showPublish: chorus.models.Config.instance().get('tableauConfigured') && !this.options.isDataSourceBrowser && !workspaceArchived && canUpdate,
             showVisualize: this.dataset.schema() && !this.dataset.isOracle()
         };
     },

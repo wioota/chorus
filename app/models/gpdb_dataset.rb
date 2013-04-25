@@ -6,8 +6,8 @@ class GpdbDataset < Dataset
 
   unscoped_belongs_to :schema, :class_name => 'GpdbSchema'
 
-  def instance_account_ids
-    database.instance_account_ids
+  def data_source_account_ids
+    database.data_source_account_ids
   end
 
   def found_in_workspace_id

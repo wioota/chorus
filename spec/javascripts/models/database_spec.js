@@ -1,6 +1,6 @@
 describe("chorus.models.Database", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.database({ id: '2', name: "love_poems", instance: {id: '1', name: "insta_whip"} });
+        this.model = rspecFixtures.database({ id: '2', name: "love_poems", dataSource: {id: '1', name: "insta_whip"} });
     });
 
     describe("#urlTemplate", function() {
@@ -9,7 +9,7 @@ describe("chorus.models.Database", function() {
         });
     });
 
-    describe("#instance", function() {
+    describe("#dataSource", function() {
         it("returns a data source with the right id and name", function() {
             expect(this.model.dataSource().id).toEqual('1');
             expect(this.model.dataSource().name()).toEqual('insta_whip');

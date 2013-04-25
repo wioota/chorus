@@ -101,7 +101,7 @@ describe HdfsDataSource do
     let(:root_dir) { HdfsEntry.new({:path => '/bar', :is_directory => true}, :without_protection => true) }
     let(:deep_dir) { HdfsEntry.new({:path => '/bar/baz', :is_directory => true}, :without_protection => true) }
 
-    it "lists the root directory for the instance" do
+    it "lists the root directory for the data source" do
       mock(HdfsEntry).list('/', subject) { [root_file, root_dir] }
       mock(HdfsEntry).list(root_dir.path, subject) { [] }
       subject.refresh
@@ -115,7 +115,7 @@ describe HdfsDataSource do
     end
 
     context "when the server is not reachable" do
-      let(:instance) { hdfs_data_sources(:hadoop) }
+      let(:data_source) { hdfs_data_sources(:hadoop) }
       before do
         any_instance_of(Hdfs::QueryService) do |qs|
           stub(qs).list { raise Hdfs::DirectoryNotFoundError.new("ERROR!") }
@@ -123,16 +123,16 @@ describe HdfsDataSource do
       end
 
       it "marks all the hdfs entries as stale" do
-        instance.refresh
-        instance.hdfs_entries.size.should > 3
-        instance.hdfs_entries.each do |entry|
+        data_source.refresh
+        data_source.hdfs_entries.size.should > 3
+        data_source.hdfs_entries.each do |entry|
           entry.should be_stale
         end
       end
     end
 
     context "when a DirectoryNotFoundError happens on a subdirectory" do
-      let(:instance) { hdfs_data_sources(:hadoop) }
+      let(:data_source) { hdfs_data_sources(:hadoop) }
       before do
         any_instance_of(Hdfs::QueryService) do |qs|
           stub(qs).list { raise Hdfs::DirectoryNotFoundError.new("ERROR!") }
@@ -141,31 +141,31 @@ describe HdfsDataSource do
 
       it "does not mark any entries as stale" do
         expect {
-          instance.refresh("/foo")
-        }.to_not change { instance.hdfs_entries.not_stale.count }
+          data_source.refresh("/foo")
+        }.to_not change { data_source.hdfs_entries.not_stale.count }
       end
     end
   end
 
   describe "after being created" do
     before do
-      @new_instance = HdfsDataSource.create({:owner => User.first, :name => "Hadoop", :host => "localhost", :port => "8020"}, { :without_protection => true })
+      @new_data_source = HdfsDataSource.create({:owner => User.first, :name => "Hadoop", :host => "localhost", :port => "8020"}, { :without_protection => true })
     end
 
     it "creates an HDFS root entry" do
-      root_entry = @new_instance.hdfs_entries.find_by_path("/")
+      root_entry = @new_data_source.hdfs_entries.find_by_path("/")
       root_entry.should be_present
       root_entry.is_directory.should be_true
     end
   end
 
   describe "after being updated" do
-    let(:instance) { HdfsDataSource.first }
+    let(:data_source) { HdfsDataSource.first }
 
     it "it doesn't create any entries" do
       expect {
-        instance.name += "_updated"
-        instance.save!
+        data_source.name += "_updated"
+        data_source.save!
       }.not_to change(HdfsEntry, :count)
     end
   end

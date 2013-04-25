@@ -65,7 +65,7 @@ FactoryGirl.define do
     owner
   end
 
-  factory :instance_account do
+  factory :data_source_account do
     sequence(:db_username) { |n| "username#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     db_password "secret"
     owner

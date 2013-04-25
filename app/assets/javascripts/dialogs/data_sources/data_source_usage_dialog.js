@@ -2,12 +2,12 @@ chorus.dialogs.DataSourceUsage = chorus.dialogs.Base.extend({
     constructorName: "DataSourceUsage",
 
     templateName: "data_source_usage",
-    title: t("instances.usage.title"),
+    title: t("data_sources.usage.title"),
     useLoadingSection: true,
     additionalClass: 'with_sub_header',
 
     setup: function() {
-        this.usage = this.resource = this.options.instance.usage();
+        this.usage = this.resource = this.options.dataSource.usage();
         this.usage.fetchIfNotLoaded();
         this.requiredResources.push(this.usage);
     },
@@ -19,7 +19,7 @@ chorus.dialogs.DataSourceUsage = chorus.dialogs.Base.extend({
                 workspace.formattedSize = I18n.toHumanSize(workspace.sizeInBytes, {precision: 0, format: "%n %u"});
             } else {
                 workspace.percentageUsed = 0;
-                workspace.formattedSize = t('instances.usage.offline');
+                workspace.formattedSize = t('data_sources.usage.offline');
             }
         });
 
@@ -29,7 +29,7 @@ chorus.dialogs.DataSourceUsage = chorus.dialogs.Base.extend({
             };
         }
         else {
-            return {formattedSandboxesSize: t('instances.usage.offline')};
+            return {formattedSandboxesSize: t('data_sources.usage.offline')};
         }
     }
 });

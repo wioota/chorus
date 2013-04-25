@@ -1,12 +1,12 @@
 describe("chorus.alerts.RemoveIndividualAccount", function() {
     beforeEach(function() {
-        this.alert = new chorus.alerts.RemoveIndividualAccount({dataSourceName: "someInstance", name: "joey boy"});
+        this.alert = new chorus.alerts.RemoveIndividualAccount({dataSourceName: "someDataSource", name: "joey boy"});
         this.alert.render();
     });
 
     it("displays the confirmation message", function() {
-        expect(this.alert.$("h1").text().trim()).toMatchTranslation("instances.remove_individual_account.title", {dataSourceName: "someInstance", userName: "joey boy"});
-        expect(this.alert.$("button.submit").text().trim()).toMatchTranslation("instances.remove_individual_account.remove");
+        expect(this.alert.$("h1").text().trim()).toMatchTranslation("data_sources.remove_individual_account.title", {dataSourceName: "someDataSource", userName: "joey boy"});
+        expect(this.alert.$("button.submit").text().trim()).toMatchTranslation("data_sources.remove_individual_account.remove");
     });
 
     it("raises the 'removeIndividualAccount' event when the submit button is clicked", function() {

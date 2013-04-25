@@ -31,7 +31,7 @@ class Dataset < ActiveRecord::Base
   end
 
   has_shared_search_fields [
-                               {:type => :integer, :name => :instance_account_ids, :options => {:multiple => true}},
+                               {:type => :integer, :name => :data_source_account_ids, :options => {:multiple => true}},
                                {:type => :integer, :name => :found_in_workspace_id, :options => {:multiple => true}}
                            ]
   attr_accessor :highlighted_attributes, :search_result_notes, :skip_search_index
@@ -54,7 +54,7 @@ class Dataset < ActiveRecord::Base
       any_of do
         without :security_type_name, Dataset.security_type_name
         account_ids = current_user.accessible_account_ids
-        with :instance_account_ids, account_ids unless account_ids.blank?
+        with :data_source_account_ids, account_ids unless account_ids.blank?
       end
 
       any_of do

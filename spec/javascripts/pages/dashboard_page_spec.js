@@ -154,7 +154,7 @@ describe("chorus.pages.DashboardPage", function() {
             entireDataSourceSet.add(packedUpGnipSet);
             entireDataSourceSet.add(packedUpHadoopSet);
 
-            expect(entireDataSourceSet.length).toBe(this.page.mainContent.instanceList.collection.length);
+            expect(entireDataSourceSet.length).toBe(this.page.mainContent.dataSourceList.collection.length);
         });
 
         describe('when a data source is added', function() {

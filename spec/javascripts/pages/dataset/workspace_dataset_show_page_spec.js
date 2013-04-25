@@ -4,7 +4,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
             id: '100',
             "sandboxInfo": {
                 id: 6, name: "schema",
-                database: { id: 4, name: "db", instance: { id: 5, name: "instance" } }
+                database: { id: 4, name: "db", dataSource: { id: 5, name: "dataSource" } }
             }
         });
         chorus.page = {workspace: this.workspace};
@@ -16,7 +16,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                 name: sandboxInfo.get("name"),
                 database: {
                     name: sandboxInfo.database().name(),
-                    instance: {
+                    dataSource: {
                         id: sandboxInfo.dataSource().id,
                         name: sandboxInfo.dataSource().name()
                     }
@@ -151,8 +151,8 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
         describe("#contentHeader", function() {
             describe("the links at the top", function() {
                 it('includes the link to the data source', function() {
-                    expect(this.page.$(".content_header a.instance")).toHaveHref(this.page.model.dataSource().showUrl());
-                    expect(this.page.$(".content_header a.instance")).toHaveText(this.page.model.dataSource().name());
+                    expect(this.page.$(".content_header a.data_source")).toHaveHref(this.page.model.dataSource().showUrl());
+                    expect(this.page.$(".content_header a.data_source")).toHaveText(this.page.model.dataSource().name());
                 });
 
                 it("includes the link to the database", function() {

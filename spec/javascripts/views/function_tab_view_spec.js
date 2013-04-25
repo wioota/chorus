@@ -235,7 +235,7 @@ describe("chorus.views.FunctionTab", function () {
 
                     it("launches the correct dialog when the 'click here' credentials link is clicked", function () {
                         this.view.$('.no_credentials .add_credentials').click();
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.DataSourceAccount);
                     });
                 });
 
@@ -248,7 +248,7 @@ describe("chorus.views.FunctionTab", function () {
                         ]);
 
                         this.server.lastFetchFor(this.view.collection).failUnprocessableEntity(
-                            {message:"Instance is unavailable"}
+                            {message:"Data Source is unavailable"}
                         );
                     });
 
@@ -257,7 +257,7 @@ describe("chorus.views.FunctionTab", function () {
                     });
 
                     it("shows the error message", function () {
-                        expect(this.view.$(".notice")).toContainText("Instance is unavailable");
+                        expect(this.view.$(".notice")).toContainText("Data Source is unavailable");
                     });
                 });
 

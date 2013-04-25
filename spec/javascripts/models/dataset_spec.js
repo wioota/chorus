@@ -6,7 +6,7 @@ describe("chorus.models.Dataset", function() {
             database: {
                 name: "%foo%",
                 id: 2,
-                instance: {
+                dataSource: {
                     id: 1
                 }
             }
@@ -22,7 +22,7 @@ describe("chorus.models.Dataset", function() {
                 name: "ipa",
                 database: {
                     "name": "beers",
-                    instance: {
+                    dataSource: {
                         id: 12
                     }
                 }
@@ -117,7 +117,7 @@ describe("chorus.models.Dataset", function() {
             this.statistics = this.dataset.statistics();
         });
 
-        it("returns an instance of DatasetStatistics", function() {
+        it("returns a data source of DatasetStatistics", function() {
             expect(this.statistics).toBeA(chorus.models.DatasetStatistics);
         });
 
@@ -251,15 +251,15 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
-    describe("#instance", function() {
+    describe("#dataSource", function() {
         beforeEach(function() {
             this.dataSource = this.dataset.dataSource();
         });
 
         it("returns a data source with the right id and name", function() {
             expect(this.dataSource).toBeA(chorus.models.GpdbDataSource);
-            expect(this.dataSource.id).toBe(this.dataset.get("schema").database.instance.id);
-            expect(this.dataSource.name()).toBe(this.dataset.get("schema").database.instance.name);
+            expect(this.dataSource.id).toBe(this.dataset.get("schema").database.dataSource.id);
+            expect(this.dataSource.name()).toBe(this.dataset.get("schema").database.dataSource.name);
         });
     });
 

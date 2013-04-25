@@ -18,7 +18,7 @@ Chorus::Application.routes.draw do
   end
 
   resources :data_sources, :only => [:index, :show, :create, :update] do
-    resources :databases, :only => [:index], :controller => 'instance_databases'
+    resources :databases, :only => [:index], :controller => 'databases'
 
     scope :module => 'data_sources' do
       resource :owner, :only => [:update], :controller => 'owner'
@@ -34,7 +34,7 @@ Chorus::Application.routes.draw do
     resources :imports, :only => [:create], :controller => 'gnip_data_source_imports'
   end
 
-  resources :databases, :only => [:show], :controller => 'instance_databases' do
+  resources :databases, :only => [:show], :controller => 'databases' do
     resources :schemas, :only => [:index], :controller => 'database_schemas'
   end
 

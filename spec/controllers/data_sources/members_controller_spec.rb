@@ -4,14 +4,14 @@ describe DataSources::MembersController do
   let(:admin) { users(:admin) }
 
   shared_examples_for :a_data_source do
-    let(:instance_owner) { data_source.owner }
-    let(:shared_instance) { data_sources(:shared) }
-    let(:shared_owner) { shared_instance.owner }
+    let(:data_source_owner) { data_source.owner }
+    let(:shared_data_source) { data_sources(:shared) }
+    let(:shared_owner) { shared_data_source.owner }
     let(:other_user) { FactoryGirl.create :user }
 
     describe "#index" do
       before do
-        log_in instance_owner
+        log_in data_source_owner
       end
 
       it_behaves_like "an action that requires authentication", :get, :index, :data_source_id => '-1'
@@ -41,16 +41,16 @@ describe DataSources::MembersController do
           log_in admin
         end
 
-        it "fails for a shared account instance" do
-          post :create, :data_source_id => shared_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => shared_owner.id}
+        it "fails for a shared account data source" do
+          post :create, :data_source_id => shared_data_source.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => shared_owner.id}
           response.should be_not_found
         end
 
-        context "for an individual accounts instance" do
+        context "for an individual accounts data source" do
           it "get saved correctly" do
             post :create, :data_source_id => data_source.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => admin.id}
             response.code.should == "201"
-            rehydrated_account = InstanceAccount.find(decoded_response.id)
+            rehydrated_account = DataSourceAccount.find(decoded_response.id)
             rehydrated_account.should be_present
             rehydrated_account.db_username.should == "lenny"
             rehydrated_account.db_password.should == "secret"
@@ -60,25 +60,25 @@ describe DataSources::MembersController do
         end
       end
 
-      context "when instance owner" do
+      context "when data source owner" do
         before do
-          log_in instance_owner
+          log_in data_source_owner
         end
 
-        it "fails for a shared accounts instance" do
-          post :create, :data_source_id => shared_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => shared_owner.id}
+        it "fails for a shared accounts data source" do
+          post :create, :data_source_id => shared_data_source.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => shared_owner.id}
           response.should be_not_found
         end
 
-        context "for an individual accounts instance" do
+        context "for an individual accounts data source" do
           it "get saved correctly" do
-            post :create, :data_source_id => data_source.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => instance_owner.id}
+            post :create, :data_source_id => data_source.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => data_source_owner.id}
             response.code.should == "201"
-            rehydrated_account = InstanceAccount.find(decoded_response.id)
+            rehydrated_account = DataSourceAccount.find(decoded_response.id)
             rehydrated_account.should be_present
             rehydrated_account.db_username.should == "lenny"
             rehydrated_account.db_password.should == "secret"
-            rehydrated_account.owner.should == instance_owner
+            rehydrated_account.owner.should == data_source_owner
             rehydrated_account.data_source.should == data_source
           end
         end
@@ -89,29 +89,29 @@ describe DataSources::MembersController do
           log_in other_user
         end
 
-        it "fails for a shared accounts instance" do
-          post :create, :data_source_id => shared_instance.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => other_user.id}
+        it "fails for a shared accounts data source" do
+          post :create, :data_source_id => shared_data_source.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => other_user.id}
           response.should be_not_found
         end
 
-        it "fails for an individual accounts instance" do
+        it "fails for an individual accounts data source" do
           post :create, :data_source_id => data_source.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => other_user.id}
           response.should be_forbidden
         end
       end
 
       it "does not succeed when credentials are invalid" do
-        log_in instance_owner
+        log_in data_source_owner
         any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {
           false
         } }
-        post :create, :data_source_id => data_source.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => instance_owner.id}
+        post :create, :data_source_id => data_source.id, :account => {:db_username => "lenny", :db_password => "secret", :owner_id => data_source_owner.id}
         response.code.should == "422"
       end
     end
 
     describe "#update" do
-      let(:account) { data_source.account_for_user(instance_owner) }
+      let(:account) { data_source.account_for_user(data_source_owner) }
 
       before do
         any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
@@ -127,22 +127,22 @@ describe DataSources::MembersController do
           response.code.should == "200"
 
           decoded_response.db_username.should == "changed"
-          decoded_response.owner.id.should == instance_owner.id
+          decoded_response.owner.id.should == data_source_owner.id
 
-          rehydrated_account = InstanceAccount.find(decoded_response.id)
+          rehydrated_account = DataSourceAccount.find(decoded_response.id)
           rehydrated_account.db_password.should == "changed"
         end
 
-        it "succeeds, even if instance is shared" do
+        it "succeeds, even if data source is shared" do
           data_source.update_attribute :shared, true
           put :update, :data_source_id => data_source.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
           response.code.should == "200"
         end
       end
 
-      context "when instance owner" do
+      context "when data source owner" do
         before do
-          log_in instance_owner
+          log_in data_source_owner
         end
 
         it "succeeds for user's account" do
@@ -150,13 +150,13 @@ describe DataSources::MembersController do
           response.code.should == "200"
 
           decoded_response.db_username.should == "changed"
-          decoded_response.owner.id.should == instance_owner.id
+          decoded_response.owner.id.should == data_source_owner.id
 
-          rehydrated_account = InstanceAccount.find(decoded_response.id)
+          rehydrated_account = DataSourceAccount.find(decoded_response.id)
           rehydrated_account.db_password.should == "changed"
         end
 
-        it "succeeds for user's account, even if instance is shared" do
+        it "succeeds for user's account, even if data source is shared" do
           data_source.update_attribute :shared, true
           put :update, :data_source_id => data_source.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
           response.code.should == "200"
@@ -170,7 +170,7 @@ describe DataSources::MembersController do
           decoded_response.db_username.should == "changed"
           decoded_response.owner.id.should == other_user.id
 
-          rehydrated_account = InstanceAccount.find(decoded_response.id)
+          rehydrated_account = DataSourceAccount.find(decoded_response.id)
           rehydrated_account.db_password.should == "changed"
         end
       end
@@ -201,7 +201,7 @@ describe DataSources::MembersController do
       end
 
       it "does not succeed when credentials are invalid" do
-        log_in instance_owner
+        log_in data_source_owner
         any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { false } }
         put :update, :data_source_id => data_source.id, :id => account.id, :account => {:db_username => "changed", :db_password => "changed"}
         response.code.should == "422"
@@ -210,12 +210,12 @@ describe DataSources::MembersController do
 
     describe "#destroy" do
       before do
-        @other_user_account = FactoryGirl.build(:instance_account, :data_source => data_source, :owner => other_user).tap { |a| a.save(:validate => false) }
+        @other_user_account = FactoryGirl.build(:data_source_account, :data_source => data_source, :owner => other_user).tap { |a| a.save(:validate => false) }
       end
 
-      context "when the current user is the instance's owner" do
+      context "when the current user is the data source's owner" do
         before do
-          log_in instance_owner
+          log_in data_source_owner
         end
 
         it "removes the given account" do
@@ -229,7 +229,7 @@ describe DataSources::MembersController do
           response.should be_ok
         end
 
-        context "when there is no account for the given instance and user" do
+        context "when there is no account for the given data source and user" do
           it "responds with 'not found'" do
             delete :destroy, :data_source_id => data_source.id, :id => 'not_an_id'
             response.should be_not_found
@@ -237,7 +237,7 @@ describe DataSources::MembersController do
         end
       end
 
-      context "when the current user is not an admin nor the instance's owner" do
+      context "when the current user is not an admin nor the data source's owner" do
         before do
           log_in FactoryGirl.create(:user)
         end
@@ -265,13 +265,13 @@ describe DataSources::MembersController do
 
   describe "fixtures" do
     let(:data_source) { data_sources(:owners) }
-    let(:instance_owner) { data_source.owner }
+    let(:data_source_owner) { data_source.owner }
 
     before do
-      log_in instance_owner
+      log_in data_source_owner
     end
 
-    generate_fixture "instanceAccountSet.json" do
+    generate_fixture "dataSourceAccountSet.json" do
       get :index, :data_source_id => data_source.to_param
     end
   end

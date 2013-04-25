@@ -4,7 +4,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
         this.model.workspace().set({
             sandboxInfo: {
                 id: 4, name: "schema",
-                database: { id: 3, name: "db", instance: { id: 2, name: "instance" } }
+                database: { id: 3, name: "db", dataSource: { id: 2, name: "data source" } }
             }
         });
         this.contentView = new chorus.views.SqlWorkfileContent({ model: this.model });

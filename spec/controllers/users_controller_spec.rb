@@ -250,7 +250,7 @@ describe UsersController do
         log_in users(:admin)
       end
 
-      context "user with no instances or workspaces" do
+      context "user with no data sources or workspaces" do
         let(:user) { users(:the_collaborator) }
 
         before do
@@ -271,7 +271,7 @@ describe UsersController do
         end
       end
 
-      context "user owns an instance" do
+      context "user owns an data source" do
         let(:user) { users(:the_collaborator) }
 
         before do

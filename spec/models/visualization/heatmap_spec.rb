@@ -11,7 +11,7 @@ describe Visualization::Heatmap do
         :filters => filters
     })
   end
-  let(:instance_account) { GreenplumIntegration.real_account }
+  let(:data_source_account) { GreenplumIntegration.real_account }
 
   before do
     set_current_user users(:default)
@@ -20,7 +20,7 @@ describe Visualization::Heatmap do
   describe "#fetch!", :greenplum_integration do
 
     before do
-      visualization.fetch!(instance_account, 12345)
+      visualization.fetch!(data_source_account, 12345)
     end
 
     context 'dataset is a table' do

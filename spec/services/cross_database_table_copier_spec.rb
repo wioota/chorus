@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe CrossDatabaseTableCopier, :greenplum_integration do
-  let(:instance_account) { GreenplumIntegration.real_account }
-  let(:user) { instance_account.owner }
+  let(:data_source_account) { GreenplumIntegration.real_account }
+  let(:user) { data_source_account.owner }
   let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source) }
   let(:schema_name) { 'test_gpfdist_schema' }
   let(:schema) { database.schemas.find_by_name(schema_name) }
@@ -10,10 +10,10 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
 
   let(:log_options) { {:logger => Rails.logger } } # enable logging
 
-  let(:source_database_url) { database.connect_with(instance_account).db_url }
+  let(:source_database_url) { database.connect_with(data_source_account).db_url }
   let(:source_database) { Sequel.connect(source_database_url, log_options) }
 
-  let(:destination_database_url) { database.connect_with(instance_account).db_url }
+  let(:destination_database_url) { database.connect_with(data_source_account).db_url }
   let(:destination_database) { Sequel.connect(destination_database_url, log_options) }
 
   let(:source_table) { "candy" }

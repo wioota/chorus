@@ -14,7 +14,7 @@
         templateName:"schema_picker",
 
         events: {
-            "change .instance select": "instanceSelected",
+            "change .data_source select": "dataSourceSelected",
             "change .database select": "databaseSelected",
             "change .schema select": "schemaSelected",
             "click .database a.new": "createNewDatabase",
@@ -25,45 +25,45 @@
 
         setup: function () {
             //Prebind these so the BindingGroup detects duplicates each time and doesn't bind them multiple times.
-            this.instanceFetchFailed = _.bind(this.fetchFailed, this, null);
+            this.dataSourceFetchFailed = _.bind(this.fetchFailed, this, null);
             this.databaseFetchFailed = _.bind(this.fetchFailed, this, 'database');
             this.schemaFetchFailed = _.bind(this.fetchFailed, this, 'schema');
 
             this.sectionStates = {};
 
-            this.setState({ instance: HIDDEN, database: HIDDEN, schema: HIDDEN });
+            this.setState({ dataSource: HIDDEN, database: HIDDEN, schema: HIDDEN });
 
             if (this.options.defaultSchema) {
                 this.selection = {
                     schema: this.options.defaultSchema,
                     database: this.options.defaultSchema.database(),
-                    instance: this.options.defaultSchema.database().dataSource()
+                    dataSource: this.options.defaultSchema.database().dataSource()
                 };
-                this.setState({ instance: LOADING, database: LOADING, schema: LOADING });
+                this.setState({ dataSource: LOADING, database: LOADING, schema: LOADING });
             } else {
                 this.selection = {
-                    instance: this.options.instance,
+                    dataSource: this.options.dataSource,
                     database: this.options.database
                 };
             }
 
-            if (this.options.instance) {
+            if (this.options.dataSource) {
                 this.setState({
-                    instance: STATIC,
+                    dataSource: STATIC,
                     database: this.options.database ? STATIC : LOADING
                 });
             } else {
-                this.instances = new chorus.collections.GpdbDataSourceSet();
-                this.onceLoaded(this.instances, this.dataSourcesLoaded);
-                this.instances.attributes.accessible = true;
-                this.listenTo(this.instances, "fetchFailed", this.instanceFetchFailed);
-                this.instances.fetchAll();
+                this.dataSources = new chorus.collections.GpdbDataSourceSet();
+                this.onceLoaded(this.dataSources, this.dataSourcesLoaded);
+                this.dataSources.attributes.accessible = true;
+                this.listenTo(this.dataSources, "fetchFailed", this.dataSourceFetchFailed);
+                this.dataSources.fetchAll();
 
-                this.setState({ instance: LOADING });
+                this.setState({ dataSource: LOADING });
             }
 
-            if (this.selection.instance && !this.options.database) {
-                this.fetchDatabases(this.selection.instance);
+            if (this.selection.dataSource && !this.options.database) {
+                this.fetchDatabases(this.selection.dataSource);
             }
 
             if (this.selection.database) {
@@ -80,7 +80,7 @@
 
         dataSourcesLoaded: function () {
             var state = (this.gpdbDataSources().length === 0) ? UNAVAILABLE : SELECT;
-            this.setState({ instance: state });
+            this.setState({ dataSource: state });
         },
 
         databasesLoaded: function () {
@@ -93,24 +93,24 @@
             this.setState({ schema: state });
         },
 
-        instanceSelected:function () {
+        dataSourceSelected:function () {
             this.trigger("clearErrors");
             this.clearSelection('database');
             this.clearSelection('schema');
-            var selectedInstance = this.getSelectedInstance();
+            var selectedDataSource = this.getSelectedDataSource();
 
-            if (selectedInstance) {
-                this.setSelection("instance", selectedInstance);
+            if (selectedDataSource) {
+                this.setSelection("dataSource", selectedDataSource);
                 this.setState({ database: LOADING });
-                this.fetchDatabases(selectedInstance);
+                this.fetchDatabases(selectedDataSource);
             } else {
-                this.clearSelection('instance');
+                this.clearSelection('dataSource');
                 this.restyleAllSectionsToReflectStates();
             }
         },
 
-        fetchDatabases:function(selectedInstance) {
-            this.databases = selectedInstance.databases();
+        fetchDatabases:function(selectedDataSource) {
+            this.databases = selectedDataSource.databases();
             this.databases.fetchAllIfNotLoaded();
             this.listenTo(this.databases, "fetchFailed", this.databaseFetchFailed);
             this.onceLoaded(this.databases, this.databasesLoaded);
@@ -173,12 +173,12 @@
         },
 
         fieldValues: function () {
-            var selectedInstance = this.selection.instance;
+            var selectedDataSource = this.selection.dataSource;
             var selectedDatabase = this.selection.database;
             var selectedSchema   = this.selection.schema;
 
             var attrs = {
-                instance: selectedInstance && selectedInstance.get("id")
+                dataSource: selectedDataSource && selectedDataSource.get("id")
             };
 
             if (selectedDatabase && selectedDatabase.get('id')) {
@@ -206,7 +206,7 @@
             var states = _.clone(this.sectionStates);
 
             var hideTheRest = false;
-            _.each(["instance", "database", "schema"], function(sectionName) {
+            _.each(["dataSource", "database", "schema"], function(sectionName) {
                 var state = hideTheRest ? HIDDEN : states[sectionName];
                 this.restyleSection(sectionName, state);
 
@@ -216,7 +216,7 @@
         },
 
         restyleSection: function(type, state) {
-            var section = this.$("." + type);
+            var section = this.$("." + this.classNameForType(type));
             section.removeClass("hidden");
             section.find("a.new").removeClass("hidden");
             section.find(".loading_text, .select_container, .create_container, .unavailable").addClass("hidden");
@@ -259,8 +259,8 @@
             this.restyleAllSectionsToReflectStates();
         },
 
-        getSelectedInstance: function() {
-            return this.instances && this.instances.get(this.$('.instance select option:selected').val());
+        getSelectedDataSource: function() {
+            return this.dataSources && this.dataSources.get(this.$('.data_source select option:selected').val());
         },
 
         getSelectedDatabase: function() {
@@ -287,14 +287,14 @@
         },
 
         rebuildEmptySelect: function(type) {
-            var select = this.$("." + type).find("select");
+            var select = this.$("." + this.classNameForType(type)).find("select");
             select.html($("<option/>").prop('value', '').text(t("sandbox.select_one")));
             return select;
         },
 
         gpdbDataSources: function() {
-            return this.instances.filter(function(instance) {
-                return instance.get("instanceProvider") !== "Hadoop";
+            return this.dataSources.filter(function(dataSource) {
+                return dataSource.get("dataSourceProvider") !== "Hadoop";
             });
         },
 
@@ -304,11 +304,11 @@
 
         ready: function () {
             var attrs = this.fieldValues();
-            return !!(attrs.instance && (attrs.database || attrs.databaseName) && (attrs.schema || attrs.schemaName));
+            return !!(attrs.dataSource && (attrs.database || attrs.databaseName) && (attrs.schema || attrs.schemaName));
         },
 
        populateSelect: function(type, defaultValue) {
-            var models = (type === "instance") ? this.gpdbDataSources() : this[type + "s"].models;
+            var models = (type === "dataSource") ? this.gpdbDataSources() : this[type + "s"].models;
             var select = this.rebuildEmptySelect(type);
 
             _.each(this.sortModels(models), function(model) {
@@ -342,6 +342,10 @@
 
         additionalContext: function () {
             return { options: this.options };
+        },
+
+        classNameForType: function(type) {
+            return _.str.underscored(type);
         }
     });
 })();

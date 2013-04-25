@@ -4,7 +4,7 @@ describe GpdbViewPresenter, :type => :view do
   before(:each) do
     set_current_user(users(:admin))
 
-    gpdb_data_source = FactoryGirl.build(:gpdb_data_source, :id => 123, :name => "instance1")
+    gpdb_data_source = FactoryGirl.build(:gpdb_data_source, :id => 123, :name => "data_source1")
     database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :data_source => gpdb_data_source)
     schema = FactoryGirl.build(:gpdb_schema, :id => 456, :name => "abc", :database => database)
     db_view = FactoryGirl.build(:gpdb_view, :id => 321, :name => "view1", :schema => schema)

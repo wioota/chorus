@@ -1,9 +1,9 @@
-describe("chorus.dialogs.InstanceAccount", function() {
+describe("chorus.dialogs.DataSourceAccount", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.gpdbDataSource();
-        this.dialog = new chorus.dialogs.InstanceAccount({
-            instance: this.instance,
-            title: t("instances.account.add.title")
+        this.dataSource = rspecFixtures.gpdbDataSource();
+        this.dialog = new chorus.dialogs.DataSourceAccount({
+            dataSource: this.dataSource,
+            title: t("data_sources.account.add.title")
         });
         this.dialog.launchModal();
         this.dialog.render();
@@ -11,7 +11,7 @@ describe("chorus.dialogs.InstanceAccount", function() {
 
     describe("#render", function() {
         it("has the right title based on the launch element", function() {
-            expect(this.dialog.title).toMatchTranslation("instances.account.add.title");
+            expect(this.dialog.title).toMatchTranslation("data_sources.account.add.title");
         });
 
         it("does not autocomplete password inputs", function(){
@@ -22,7 +22,7 @@ describe("chorus.dialogs.InstanceAccount", function() {
 
     describe("#makeModel", function() {
         it("gets the current user's account on the data source that is the current page model", function() {
-            expect(this.dialog.model).toBe(this.instance.accountForCurrentUser());
+            expect(this.dialog.model).toBe(this.dataSource.accountForCurrentUser());
         });
     });
 
@@ -111,9 +111,9 @@ describe("chorus.dialogs.InstanceAccount", function() {
 
     context("when options.shouldShowToast is true", function(){
         beforeEach(function() {
-            this.dialog = new chorus.dialogs.InstanceAccount({
-                instance: this.instance,
-                title: t("instances.account.add.title"),
+            this.dialog = new chorus.dialogs.DataSourceAccount({
+                dataSource: this.dataSource,
+                title: t("data_sources.account.add.title"),
                 shouldShowSavedToast: true
             });
             this.dialog.launchModal();
@@ -132,7 +132,7 @@ describe("chorus.dialogs.InstanceAccount", function() {
        it("broadcasts a toast with the right translation", function(){
           spyOn(chorus, "toast");
           this.dialog.showSavedToast();
-          expect(chorus.toast).toHaveBeenCalledWith("instances.account.updated.toast", {dataSourceName: this.instance.name()});
+          expect(chorus.toast).toHaveBeenCalledWith("data_sources.account.updated.toast", {dataSourceName: this.dataSource.name()});
        });
     });
 });

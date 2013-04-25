@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 resource "Data sources" do
-  let(:owner) { owned_instance.owner }
-  let(:owned_instance) { data_sources(:shared)}
+  let(:owned_data_source) { data_sources(:shared)}
+  let(:owner) { owned_data_source.owner }
   let(:new_owner) { users(:no_collaborators) }
 
   before do
@@ -16,7 +16,7 @@ resource "Data sources" do
 
     required_parameters :data_source_id, :id
 
-    let(:data_source_id) { owned_instance.to_param }
+    let(:data_source_id) { owned_data_source.to_param }
     let(:id) { new_owner.to_param }
 
     example_request "Change the owner of a data source" do

@@ -19,7 +19,7 @@ describe("chorus.views.ChartConfiguration", function() {
     });
 
     describe("#buildForType(chartType)", function() {
-        it("returns an instance of the subclass for the given chart type", function() {
+        it("returns a data source of the subclass for the given chart type", function() {
             var options = {collection: rspecFixtures.databaseColumnSet()};
             var views = [
                 chorus.views.ChartConfiguration.buildForType("frequency", options),

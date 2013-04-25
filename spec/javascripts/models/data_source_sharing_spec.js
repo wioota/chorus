@@ -1,6 +1,6 @@
-describe("chorus.models.InstanceSharing", function() {
+describe("chorus.dialogs.DataSourceSharing", function() {
     beforeEach(function() {
-        this.sharing = new chorus.models.InstanceSharing({instanceId: 1});
+        this.sharing = new chorus.dialogs.DataSourceSharing({dataSourceId: 1});
     });
 
     it("posts to the correct endpoint", function() {

@@ -1,6 +1,6 @@
 describe("chorus.pages.GpdbSchemaIndexPage", function() {
     beforeEach(function() {
-        this.database = rspecFixtures.database({id: "5678", name: "Foo", instance: {id: "1234", name: "Foo"}});
+        this.database = rspecFixtures.database({id: "5678", name: "Foo", dataSource: {id: "1234", name: "Foo"}});
         this.page = new chorus.pages.GpdbSchemaIndexPage("5678");
         this.page.render();
     });
@@ -57,7 +57,7 @@ describe("chorus.pages.GpdbSchemaIndexPage", function() {
             expect(this.page.$(".breadcrumb:eq(0)")).toContainTranslation("breadcrumbs.home");
 
             expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
-            expect(this.page.$(".breadcrumb:eq(1)")).toContainTranslation("breadcrumbs.instances");
+            expect(this.page.$(".breadcrumb:eq(1)")).toContainTranslation("breadcrumbs.data_sources");
 
             expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe(this.database.dataSource().showUrl());
             expect(this.page.$(".breadcrumb:eq(2)")).toContainText(this.database.dataSource().name());

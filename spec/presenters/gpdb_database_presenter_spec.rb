@@ -14,7 +14,7 @@ describe GpdbDatabasePresenter, :type => :view do
     it "includes the fields" do
       @hash[:name].should == "abc"
       @hash[:id].should == 456
-      @hash[:instance][:id].should == 123
+      @hash[:data_source][:id].should == 123
     end
   end
 end

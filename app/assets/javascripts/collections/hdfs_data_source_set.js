@@ -3,8 +3,8 @@ chorus.collections.HdfsDataSourceSet = chorus.collections.Base.extend({
     model: chorus.models.HdfsDataSource,
     urlTemplate: "hdfs_data_sources",
 
-    comparator: function(instance) {
-        return instance.get("name").toLowerCase();
+    comparator: function(data_source) {
+        return data_source.get("name").toLowerCase();
     },
 
     urlParams: function () {

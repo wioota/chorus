@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28User+OR+GpdbDataSource+OR+HdfsDataSource+OR+GnipDataSource+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment+OR+OracleDataSource+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=tag_ids_im%3A1000000&fq=type_name_s%3A%28User+OR+DataSource+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000004+OR+1000005+OR+1000006+OR+1000016+OR+1000017%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000004+OR+1000005+OR+1000006+OR+1000016+OR+1000017%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&sort=sort_name_s+asc&start=0&rows=100&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s&q=%2A%3A%2A
+      string: fq=type%3A%28User+OR+GpdbDataSource+OR+HdfsDataSource+OR+GnipDataSource+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment+OR+OracleDataSource+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=tag_ids_im%3A1000000&fq=type_name_s%3A%28User+OR+DataSource+OR+Workspace+OR+Workfile+OR+Dataset+OR+HdfsEntry+OR+Attachment%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-data_source_account_ids_im%3A%281000001+OR+1000002+OR+1000004+OR+1000005+OR+1000006+OR+1000016+OR+1000017%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-data_source_account_ids_im%3A%281000001+OR+1000002+OR+1000004+OR+1000005+OR+1000006+OR+1000016+OR+1000017%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&sort=sort_name_s+asc&start=0&rows=100&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true&facet=true&f.type_name_s.facet.mincount=1&facet.field=type_name_s&q=%2A%3A%2A
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -22,29 +22,29 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>3,''params''=>{''facet''=>''true'',''group.ngroups''=>''true'',''sort''=>''sort_name_s
-        asc'',''group.limit''=>''3'',''wt''=>''ruby'',''rows''=>''100'',''start''=>''0'',''q''=>''*:*'',''group.truncate''=>''true'',''f.type_name_s.facet.mincount''=>''1'',''group.field''=>''grouping_id_s'',''facet.field''=>''type_name_s'',''group''=>''true'',''fq''=>[''type:(User
-        OR GpdbDataSource OR HdfsDataSource OR GnipDataSource OR Workspace OR Workfile
-        OR Dataset OR HdfsEntry OR Attachment OR OracleDataSource OR Events\\:\\:Note
-        OR Comment)'',''tag_ids_im:1000000'',''type_name_s:(User OR DataSource OR
-        Workspace OR Workfile OR Dataset OR HdfsEntry OR Attachment)'',''-(security_type_name_sm:(Workspace)
-        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
-        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Dataset)
-        AND -instance_account_ids_im:(1000001 OR 1000002 OR 1000004 OR 1000005 OR
-        1000006 OR 1000016 OR 1000017))'',''-(security_type_name_sm:ChorusView AND
-        -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Dataset)
-        AND -instance_account_ids_im:(1000001 OR 1000002 OR 1000004 OR 1000005 OR
-        1000006 OR 1000016 OR 1000017))'',''-(security_type_name_sm:ChorusView AND
-        -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workspace)
-        AND -member_ids_im:1000006 AND -public_b:true)'',''-(security_type_name_sm:(Workfile)
-        AND -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>3,''ngroups''=>3,''groups''=>[{''groupValue''=>''Workspace
-        1000014'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''Workspace
-        1000014'',''name_texts''=>[''tagged''],''tag_names_texts''=>[''alpha'',''beta'']}]}},{''groupValue''=>''GpdbTable
-        1000009'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''GpdbTable
-        1000009'',''name_texts''=>[''tagged''],''database_name_texts''=>[''default''],''table_description_texts''=>[''bogus''],''tag_names_texts''=>[''alpha''],''schema_name_texts''=>[''default''],''column_name_texts''=>[''bogus'',''bogus
-        2'']}]}},{''groupValue''=>''ChorusWorkfile 1000011'',''doclist''=>{''numFound''=>1,''start''=>0,''docs''=>[{''id''=>''ChorusWorkfile
-        1000011'',''tag_names_texts''=>[''alpha'',''beta''],''file_name_texts''=>[''tagged''],''description_texts''=>[''A
-        nice description''],''version_comments_texts''=>['''']}]}}]}},''facet_counts''=>{''facet_queries''=>{},''facet_fields''=>{''type_name_s''=>[''Dataset'',1,''Workfile'',1,''Workspace'',1]},''facet_dates''=>{},''facet_ranges''=>{}}}'
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2,'params'=>{'facet'=>'true','group.ngroups'=>'true','sort'=>'sort_name_s\
+        \ asc','group.limit'=>'3','wt'=>'ruby','rows'=>'100','start'=>'0','q'=>'*:*','group.truncate'=>'true','f.type_name_s.facet.mincount'=>'1','group.field'=>'grouping_id_s','facet.field'=>'type_name_s','group'=>'true','fq'=>['type:(User\
+        \ OR GpdbDataSource OR HdfsDataSource OR GnipDataSource OR Workspace OR Workfile\
+        \ OR Dataset OR HdfsEntry OR Attachment OR OracleDataSource OR Events\\\\\
+        :\\\\:Note OR Comment)','tag_ids_im:1000000','type_name_s:(User OR DataSource\
+        \ OR Workspace OR Workfile OR Dataset OR HdfsEntry OR Attachment)','-(security_type_name_sm:(Workspace)\
+        \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
+        \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Dataset)\
+        \ AND -data_source_account_ids_im:(1000001 OR 1000002 OR 1000004 OR 1000005\
+        \ OR 1000006 OR 1000016 OR 1000017))','-(security_type_name_sm:ChorusView\
+        \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Dataset)\
+        \ AND -data_source_account_ids_im:(1000001 OR 1000002 OR 1000004 OR 1000005\
+        \ OR 1000006 OR 1000016 OR 1000017))','-(security_type_name_sm:ChorusView\
+        \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workspace)\
+        \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
+        \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>3,'ngroups'=>3,'groups'=>[{'groupValue'=>'Workspace\
+        \ 1000014','doclist'=>{'numFound'=>1,'start'=>0,'docs'=>[{'id'=>'Workspace\
+        \ 1000014','name_texts'=>['tagged'],'tag_names_texts'=>['alpha','beta']}]}},{'groupValue'=>'GpdbTable\
+        \ 1000009','doclist'=>{'numFound'=>1,'start'=>0,'docs'=>[{'id'=>'GpdbTable\
+        \ 1000009','name_texts'=>['tagged'],'database_name_texts'=>['default'],'table_description_texts'=>['bogus'],'tag_names_texts'=>['alpha'],'schema_name_texts'=>['default'],'column_name_texts'=>['bogus','bogus\
+        \ 2']}]}},{'groupValue'=>'ChorusWorkfile 1000011','doclist'=>{'numFound'=>1,'start'=>0,'docs'=>[{'id'=>'ChorusWorkfile\
+        \ 1000011','tag_names_texts'=>['alpha','beta'],'file_name_texts'=>['tagged'],'description_texts'=>['A\
+        \ nice description'],'version_comments_texts'=>['']}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Dataset',1,'Workfile',1,'Workspace',1]},'facet_dates'=>{},'facet_ranges'=>{}}}"
     http_version: '1.1'
-  recorded_at: Fri, 22 Mar 2013 21:55:11 GMT
+  recorded_at: Thu, 25 Apr 2013 01:07:05 GMT
 recorded_with: VCR 2.3.0

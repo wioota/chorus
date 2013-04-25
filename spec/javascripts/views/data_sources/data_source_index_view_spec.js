@@ -18,9 +18,9 @@ describe("chorus.views.DataSourceIndex", function() {
     context('without data sources', function() {
         describe("#render", function() {
             it('renders empty text for each data source type', function() {
-                expect(this.view.$(".data_source .no_data_sources").text().trim()).toMatchTranslation("instances.none");
-                expect(this.view.$(".hdfs_data_source .no_data_sources").text().trim()).toMatchTranslation("instances.none");
-                expect(this.view.$(".gnip_data_source .no_data_sources").text().trim()).toMatchTranslation("instances.none");
+                expect(this.view.$(".data_source .no_data_sources").text().trim()).toMatchTranslation("data_sources.none");
+                expect(this.view.$(".hdfs_data_source .no_data_sources").text().trim()).toMatchTranslation("data_sources.none");
+                expect(this.view.$(".gnip_data_source .no_data_sources").text().trim()).toMatchTranslation("data_sources.none");
             });
         });
     });

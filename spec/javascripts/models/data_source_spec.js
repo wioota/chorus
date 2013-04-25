@@ -48,12 +48,12 @@ describe('chorus.models.DataSource', function() {
             this.account = this.model.accountForUser(this.user);
         });
 
-        it("returns an InstanceAccount", function() {
-            expect(this.account).toBeA(chorus.models.InstanceAccount);
+        it("returns an DataSourceAccount", function() {
+            expect(this.account).toBeA(chorus.models.DataSourceAccount);
         });
 
         it("sets the data source id", function() {
-            expect(this.account.get("instanceId")).toBe(this.model.get("id"));
+            expect(this.account.get("dataSourceId")).toBe(this.model.get("id"));
         });
 
         it("sets the user id based on the given user", function() {
@@ -96,7 +96,7 @@ describe('chorus.models.DataSource', function() {
             this.model.set(rspecFixtures.gpdbDataSource().attributes);
 
             var owner = this.owner = this.model.owner();
-            this.accounts = rspecFixtures.instanceAccountSet();
+            this.accounts = rspecFixtures.dataSourceAccountSet();
             this.accounts.each(function(account) {
                 account.set({
                     owner: {
@@ -110,7 +110,7 @@ describe('chorus.models.DataSource', function() {
         });
 
         it("returns the account for the owner", function() {
-            expect(this.model.accountForOwner()).toBeA(chorus.models.InstanceAccount);
+            expect(this.model.accountForOwner()).toBeA(chorus.models.DataSourceAccount);
             expect(this.model.accountForOwner()).toBe(this.accounts.models[1]);
         });
     });
@@ -119,19 +119,19 @@ describe('chorus.models.DataSource', function() {
         beforeEach(function() {
             this.model.set(rspecFixtures.gpdbDataSource().attributes);
 
-            this.instanceAccounts = this.model.accounts();
+            this.dataSourceAccounts = this.model.accounts();
         });
 
-        it("returns an InstanceAccountSet", function() {
-            expect(this.instanceAccounts).toBeA(chorus.collections.InstanceAccountSet);
+        it("returns an DataSourceAccountSet", function() {
+            expect(this.dataSourceAccounts).toBeA(chorus.collections.DataSourceAccountSet);
         });
 
         it("sets the data source id", function() {
-            expect(this.instanceAccounts.attributes.instanceId).toBe(this.model.get('id'));
+            expect(this.dataSourceAccounts.attributes.dataSourceId).toBe(this.model.get('id'));
         });
 
         it("memoizes", function() {
-            expect(this.instanceAccounts).toBe(this.model.accounts());
+            expect(this.dataSourceAccounts).toBe(this.model.accounts());
         });
     });
 
@@ -147,7 +147,7 @@ describe('chorus.models.DataSource', function() {
         });
 
         it("sets the data source id", function() {
-            expect(this.dataSourceUsage.attributes.instanceId).toBe(this.model.get('id'));
+            expect(this.dataSourceUsage.attributes.dataSourceId).toBe(this.model.get('id'));
         });
 
         it("memoizes", function() {
@@ -169,7 +169,7 @@ describe('chorus.models.DataSource', function() {
 
     describe("#sharing", function() {
         it("returns a data source sharing model", function() {
-            expect(this.model.sharing().get("instanceId")).toBe(this.model.get("id"));
+            expect(this.model.sharing().get("dataSourceId")).toBe(this.model.get("id"));
         });
 
         it("caches the sharing model", function() {
@@ -181,7 +181,7 @@ describe('chorus.models.DataSource', function() {
     describe("#sharedAccountDetails", function() {
         beforeEach(function() {
             this.owner = this.model.owner();
-            this.accounts = rspecFixtures.instanceAccountSet();
+            this.accounts = rspecFixtures.dataSourceAccountSet();
             this.accounts.models[1].set({owner: this.owner.attributes});
             spyOn(this.model, "accounts").andReturn(this.accounts);
         });

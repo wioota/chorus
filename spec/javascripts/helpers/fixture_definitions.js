@@ -31,7 +31,7 @@ window.rspecFixtureDefinitions = {
             noteOnGreenplumDataSource: {},
             noteOnOracleDataSource: {},
             noteOnGnipDataSourceCreated: {},
-            noteOnGreenplumInstanceCreated: {},
+            noteOnGreenplumDataSourceCreated: {},
             noteOnHdfsDataSourceCreated: {},
             noteOnHdfsFileCreated: {},
             noteOnWorkfileCreated: {},
@@ -105,7 +105,7 @@ window.rspecFixtureDefinitions = {
 
     draft: {},
 
-    forbiddenInstance: {},
+    forbiddenDataSource: {},
 
     frequencyTask: {},
 
@@ -133,15 +133,15 @@ window.rspecFixtureDefinitions = {
 
     image: {},
 
-    instanceAccount: { unique: ["id"] },
+    dataSourceAccount: { unique: ["id"] },
 
-    instanceAccountSet: {},
+    dataSourceAccountSet: {},
 
-    instanceDetails: {
+    dataSourceDetails: {
         model: 'DataSourceUsage'
     },
 
-    instanceDetailsWithoutPermission: {
+    dataSourceDetailsWithoutPermission: {
         model: 'DataSourceUsage'
     },
 
@@ -167,7 +167,7 @@ window.rspecFixtureDefinitions = {
         collection: "SchemaSet"
     },
 
-    schema: { unique: [ "id", "database.id", "database.instance.id" ] },
+    schema: { unique: [ "id", "database.id", "database.dataSource.id" ] },
 
     schemaDatasetSet: { unique: ["id"] },
 
@@ -198,7 +198,7 @@ window.rspecFixtureDefinitions = {
         model: "SearchResult"
     },
 
-    searchResultWithAttachmentOnInstanceNote: {
+    searchResultWithAttachmentOnDataSourceNote: {
         model: "SearchResult"
     },
 

@@ -1,5 +1,5 @@
-chorus.models.Instance = chorus.models.Base.extend({
-    constructorName: 'AbstractInstance',
+chorus.models.AbstractDataSource = chorus.models.Base.extend({
+    constructorName: 'AbstractDataSource',
     _imagePrefix: "/images/data_sources/",
 
     providerIconUrl: function() {
@@ -23,7 +23,7 @@ chorus.models.Instance = chorus.models.Base.extend({
     },
 
     stateText: function() {
-        return t("instances.state." + (this.isOnline() ? 'online' : 'offline'));
+        return t("data_sources.state." + (this.isOnline() ? 'online' : 'offline'));
     },
 
     version: function() {

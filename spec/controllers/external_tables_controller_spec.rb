@@ -4,7 +4,7 @@ describe ExternalTablesController do
   let(:user) { users(:the_collaborator) }
   let(:workspace) { workspaces(:public) }
 
-  let!(:instance_account) { sandbox.data_source.account_for_user!(user) }
+  let!(:data_source_account) { sandbox.data_source.account_for_user!(user) }
   let(:sandbox) { schemas(:default) }
 
   let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }

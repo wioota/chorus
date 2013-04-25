@@ -105,22 +105,22 @@ describe WorkspaceAccess do
       end
 
       context "with an updated sandbox" do
-        context "when user can show_contents? of the dataset instance" do
+        context "when user can show_contents? of the dataset data source" do
           it "allows update" do
             schema = schemas(:other_schema)
-            any_instance_of(GpdbDataSourceAccess) do |instance_access|
-              mock(instance_access).show_contents?(schema.data_source) { true }
+            any_instance_of(GpdbDataSourceAccess) do |data_source_access|
+              mock(data_source_access).show_contents?(schema.data_source) { true }
             end
             workspace.sandbox_id = schema.id
             workspace_access.can?(:update, workspace).should be_true
           end
         end
 
-        context "when user can not show_contents? of the dataset instance" do
+        context "when user can not show_contents? of the dataset data source" do
           it "does not allow update" do
             schema = schemas(:other_schema)
-            any_instance_of(GpdbDataSourceAccess) do |instance_access|
-              mock(instance_access).show_contents?(schema.data_source) { false }
+            any_instance_of(GpdbDataSourceAccess) do |data_source_access|
+              mock(data_source_access).show_contents?(schema.data_source) { false }
             end
             workspace.sandbox_id = schema.id
             workspace_access.can?(:update, workspace).should be_false

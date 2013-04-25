@@ -9,9 +9,9 @@ describe GpdbDataset do
   let(:source_table) { datasets(:source_table) }
   let(:dataset_view) { datasets(:view) }
 
-  describe "#instance_account_ids" do
-    it "returns instance account ids with access to the database" do
-      dataset.instance_account_ids.should == dataset.database.instance_account_ids
+  describe "#data_source_account_ids" do
+    it "returns data source account ids with access to the database" do
+      dataset.data_source_account_ids.should == dataset.database.data_source_account_ids
     end
   end
 

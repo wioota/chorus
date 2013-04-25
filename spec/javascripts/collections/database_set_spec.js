@@ -1,6 +1,6 @@
 describe("chorus.collections.DatabaseSet", function() {
     beforeEach(function() {
-        this.collection = new chorus.collections.DatabaseSet([], {instanceId: 86});
+        this.collection = new chorus.collections.DatabaseSet([], {dataSourceId: 86});
     });
 
     it("has the right show url", function() {

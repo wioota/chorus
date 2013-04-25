@@ -58,20 +58,20 @@ describe("chorus.views.TypeAheadSearch", function() {
         });
 
         it("should display the correct name and type for gpdb_data_source", function() {
-            var instance = resultForEntityType(this.results, 'gpdb_data_source');
-            var resultIndex = this.results.indexOf(instance);
+            var dataSource = resultForEntityType(this.results, 'gpdb_data_source');
+            var resultIndex = this.results.indexOf(dataSource);
             var result = this.view.$("li.result:eq("+ resultIndex +")");
-            expect(result.find(".name").html()).toBe(instance.get("highlightedAttributes").name[0]);
-            expect(result.find(".name").attr("href")).toBe(instance.showUrl());
+            expect(result.find(".name").html()).toBe(dataSource.get("highlightedAttributes").name[0]);
+            expect(result.find(".name").attr("href")).toBe(dataSource.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.gpdb_data_source");
         });
 
         it("should display the correct name and type for hdfs_data_source", function() {
-            var instance = resultForEntityType(this.results, 'hdfs_data_source');
-            var resultIndex = this.results.indexOf(instance);
+            var dataSource = resultForEntityType(this.results, 'hdfs_data_source');
+            var resultIndex = this.results.indexOf(dataSource);
             var result = this.view.$("li.result:eq("+ resultIndex +")");
-            expect(result.find(".name").html()).toBe(instance.get("highlightedAttributes").name[0]);
-            expect(result.find(".name").attr("href")).toBe(instance.showUrl());
+            expect(result.find(".name").html()).toBe(dataSource.get("highlightedAttributes").name[0]);
+            expect(result.find(".name").attr("href")).toBe(dataSource.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.hdfs_data_source");
         });
 

@@ -31,12 +31,12 @@ describe DatabaseSchemasController do
       decoded_response.should have(2).items
 
       decoded_response[0].name.should == schema1.name
-      decoded_response[0].database.instance.id.should == gpdb_data_source.id
+      decoded_response[0].database.data_source.id.should == gpdb_data_source.id
       decoded_response[0].database.name.should == schema1.database.name
       decoded_response[0].dataset_count.should == schema1.active_tables_and_views_count
 
       decoded_response[1].name.should == schema2.name
-      decoded_response[1].database.instance.id.should == gpdb_data_source.id
+      decoded_response[1].database.data_source.id.should == gpdb_data_source.id
       decoded_response[1].database.name.should == schema2.database.name
       decoded_response[1].dataset_count.should == schema2.active_tables_and_views_count
     end

@@ -1,7 +1,7 @@
-chorus.collections.InstanceAccountSet = chorus.collections.Base.extend({
-    constructorName: "InstanceAccountSet",
-    model: chorus.models.InstanceAccount,
-    urlTemplate: "data_sources/{{instanceId}}/members",
+chorus.collections.DataSourceAccountSet = chorus.collections.Base.extend({
+    constructorName: "DataSourceAccountSet",
+    model: chorus.models.DataSourceAccount,
+    urlTemplate: "data_sources/{{dataSourceId}}/members",
 
     users: function() {
         return this.map(function(model) {
@@ -11,7 +11,7 @@ chorus.collections.InstanceAccountSet = chorus.collections.Base.extend({
 
     urlParams: function() {
         return {
-            instanceId: this.attributes.instanceId
+            dataSourceId: this.attributes.dataSourceId
         };
     },
 

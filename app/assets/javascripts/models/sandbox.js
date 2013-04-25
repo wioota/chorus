@@ -1,9 +1,9 @@
 chorus.models.Sandbox = chorus.models.Base.extend({
     constructorName: "Sandbox",
     attrToLabel: {
-        "dataSourceName": "instances.dialog.instance_name",
-        "databaseName": "instances.dialog.database_name",
-        "schemaName": "instances.dialog.schema_name"
+        "dataSourceName": "data_sources.dialog.data_source_name",
+        "databaseName": "data_sources.dialog.database_name",
+        "schemaName": "data_sources.dialog.schema_name"
     },
 
     urlTemplate: "workspaces/{{workspaceId}}/sandbox",
@@ -22,8 +22,8 @@ chorus.models.Sandbox = chorus.models.Base.extend({
     },
 
     dataSource: function() {
-        this._instance = this._instance || this.database().dataSource();
-        return this._instance;
+        this._dataSource = this._dataSource || this.database().dataSource();
+        return this._dataSource;
     },
 
     database: function() {

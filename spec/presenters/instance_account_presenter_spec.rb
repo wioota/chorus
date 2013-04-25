@@ -1,17 +1,17 @@
 require 'spec_helper'
 
-describe InstanceAccountPresenter, :type => :view do
+describe DataSourceAccountPresenter, :type => :view do
   before do
     @user = FactoryGirl.create :user
 
     @gpdb_data_source = FactoryGirl.create :gpdb_data_source
     @gpdb_data_source.owner = @user
 
-    @account = FactoryGirl.build(:instance_account).tap { |a| a.save(:validate => false)}
+    @account = FactoryGirl.build(:data_source_account).tap { |a| a.save(:validate => false)}
     @account.owner = @user
     @account.data_source = @gpdb_data_source
 
-    @presenter = InstanceAccountPresenter.new(@account, view)
+    @presenter = DataSourceAccountPresenter.new(@account, view)
   end
 
   describe "#to_hash" do
@@ -22,7 +22,7 @@ describe InstanceAccountPresenter, :type => :view do
     it "includes the right keys and values" do
       @hash[:id].should == @account.id
       @hash[:owner_id].should == @user.id
-      @hash[:instance_id].should == @gpdb_data_source.id
+      @hash[:data_source_id].should == @gpdb_data_source.id
       @hash[:db_username].should == @account[:db_username]
     end
 

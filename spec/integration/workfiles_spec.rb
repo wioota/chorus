@@ -112,7 +112,7 @@ describe "Workfiles" do
       end
     end
 
-    describe "if you don't have a valid instance account for the schema" do
+    describe "if you don't have a valid data source account for the schema" do
       let(:user) { users(:restricted_user) }
       it "should display an 'add credentials' link in the sidebar" do
         page.find('.data_tab').should have_text("add your credentials")

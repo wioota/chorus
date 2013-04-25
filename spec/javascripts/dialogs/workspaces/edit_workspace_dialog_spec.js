@@ -13,7 +13,7 @@ describe("chorus.dialogs.EditWorkspace", function() {
             archiver: null,
             sandboxInfo: {
                 name: "analytics",
-                database: { name: "Analytics", instance: { name: "Gillette" } }
+                database: { name: "Analytics", dataSource: { name: "Gillette" } }
             }
         });
 

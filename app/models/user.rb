@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
 
   has_many :comments
 
-  has_many :instance_accounts, :foreign_key => :owner_id, :dependent => :destroy
+  has_many :data_source_accounts, :foreign_key => :owner_id, :dependent => :destroy
   has_many :hdfs_data_sources, :foreign_key => :owner_id
   has_many :gnip_data_sources, :foreign_key => :owner_id
 
@@ -98,7 +98,7 @@ class User < ActiveRecord::Base
 
   def destroy
     if gpdb_data_sources.count > 0
-      errors.add(:user, :nonempty_instance_list)
+      errors.add(:user, :nonempty_data_source_list)
       raise ActiveRecord::RecordInvalid.new(self)
     elsif owned_workspaces.count > 0
       errors.add(:workspace_count, :equal_to, {:count => 0})
@@ -108,8 +108,8 @@ class User < ActiveRecord::Base
   end
 
   def accessible_account_ids
-    shared_account_ids = InstanceAccount.joins(:data_source).where("data_sources.shared = true").collect(&:id)
-    (shared_account_ids + instance_account_ids).uniq
+    shared_account_ids = DataSourceAccount.joins(:data_source).where("data_sources.shared = true").collect(&:id)
+    (shared_account_ids + data_source_account_ids).uniq
   end
 
   def full_name

@@ -6,7 +6,7 @@ describe("chorus.collections.SchemaFunctionSet", function() {
 
     describe("#urlTemplate", function() {
         beforeEach(function() {
-            this.schema = rspecFixtures.schema({name: "b/a/r", database: {name: "%foo%", instance: {id: 10000} }});
+            this.schema = rspecFixtures.schema({name: "b/a/r", database: {name: "%foo%", dataSource: {id: 10000} }});
             this.functionSet = this.schema.functions();
         });
 

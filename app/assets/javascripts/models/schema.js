@@ -36,18 +36,18 @@ chorus.models.Schema = chorus.models.Base.include(
     },
 
     dataSource: function() {
-        var instance = this._instance;
-        if(!this._instance) {
-            if(this.has('instance')) {
-                instance = new chorus.models.DynamicInstance(this.get('instance'));
+        var dataSource = this._dataSource;
+        if(!this._dataSource) {
+            if(this.has('dataSource')) {
+                dataSource = new chorus.models.DynamicDataSource(this.get('dataSource'));
             } else {
-                instance = this.database().dataSource();
+                dataSource = this.database().dataSource();
             }
         }
         if(this.loaded) {
-            this._instance = instance;
+            this._dataSource = dataSource;
         }
-        return instance;
+        return dataSource;
     },
 
     canonicalName: function() {

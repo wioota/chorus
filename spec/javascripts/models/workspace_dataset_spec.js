@@ -7,7 +7,7 @@ describe("chorus.models.WorkspaceDataset", function() {
             },
             schema: {
                 database: {
-                    instance: {id: "45" }
+                    dataSource: {id: "45" }
                 }
             },
             objectType: "foo",

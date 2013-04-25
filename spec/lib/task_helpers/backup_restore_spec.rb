@@ -14,10 +14,10 @@ describe 'BackupRestore' do
         let(:stub_database_dump) { false }
 
         before do
-          any_instance_of(BackupRestore::Backup) do |instance|
-            stub(instance).log.with_any_args
+          any_instance_of(BackupRestore::Backup) do |data_source|
+            stub(data_source).log.with_any_args
             if stub_database_dump
-              stub(instance).dump_database  { # this is really slow so we stub it
+              stub(data_source).dump_database  { # this is really slow so we stub it
                 system "echo 'im a database' | gzip > database.gz"
               }
             end
@@ -86,8 +86,8 @@ describe 'BackupRestore' do
 
           context "when a system command fails" do
             it "cleans up all the files it created" do
-              any_instance_of(BackupRestore::Backup) do |instance|
-                stub(instance).capture_output.with_any_args { |cmd| raise "you can't do that!" if /tar/ =~ cmd }
+              any_instance_of(BackupRestore::Backup) do |data_source|
+                stub(data_source).capture_output.with_any_args { |cmd| raise "you can't do that!" if /tar/ =~ cmd }
               end
               new_files_created(@chorus_path) do
                 expect {
@@ -190,9 +190,9 @@ describe 'BackupRestore' do
     self.use_transactional_fixtures = false
 
     before do
-      any_instance_of(BackupRestore::Restore) do |instance|
-        stub(instance).log.with_any_args
-        stub(instance).restore_database
+      any_instance_of(BackupRestore::Restore) do |data_source|
+        stub(data_source).log.with_any_args
+        stub(data_source).restore_database
       end
     end
 
@@ -319,54 +319,6 @@ describe 'BackupRestore' do
         end
       end
     end
-  end
-end
-
-describe "Backup and Restore" do
-  include Deployment
-  self.use_transactional_fixtures = false
-
-  before do
-    any_instance_of(BackupRestore::Backup) do |backup|
-      stub(backup).log.with_any_args
-    end
-    any_instance_of(BackupRestore::Restore) do |restore|
-      stub(restore).log.with_any_args
-    end
-  end
-
-  around do |example|
-    # create fake original and restored install
-    make_tmp_path("rspec_backup_restore_original") do |original_path|
-      make_tmp_path("rspec_backup_restore_restored") do |restore_path|
-        @original_path = original_path
-        @restore_path = restore_path
-
-        # populate original directory from development tree
-        populate_fake_chorus_install @original_path, :assets => ["users/asset_file.icon"]
-
-        # populate restore target with just config directory minus chorus.properties
-        populate_fake_chorus_install @restore_path
-
-        # remove chorus.properties file from restore dir so we can replace it later
-        FileUtils.rm_f @restore_path.join "config/chorus.properties"
-
-        with_rails_root @original_path do
-          example.call
-        end
-      end
-    end
-  end
-
-  def all_models
-    ActiveRecord::Base.subclasses.map(&:unscoped).flatten.map(&:reload)
-  end
-
-  def get_filesystem_entries_at_path(path)
-    pathname = Pathname.new(path)
-    all_filesystem_entries(path).map do |entry|
-      Pathname.new(entry).relative_path_from(pathname).to_s
-    end.sort.uniq
   end
 end
 

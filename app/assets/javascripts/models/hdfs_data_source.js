@@ -1,4 +1,4 @@
-chorus.models.HdfsDataSource = chorus.models.Instance.extend({
+chorus.models.HdfsDataSource = chorus.models.AbstractDataSource.extend({
     constructorName: "HdfsDataSource",
     urlTemplate: "hdfs_data_sources/{{id}}",
     showUrlTemplate: "hdfs_data_sources/{{id}}/browse/",

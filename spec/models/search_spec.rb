@@ -128,8 +128,8 @@ describe Search do
       end
     end
 
-    context "when searching datasets with no instance accounts accessible to the user" do
-      it "does not include the condition for instance accounts" do
+    context "when searching datasets with no data source accounts accessible to the user" do
+      it "does not include the condition for data source accounts" do
         stub(user).accessible_account_ids { [] }
         Search.new(user, :query => 'whatever', :entity_type => :dataset).search
         Sunspot.session.should have_search_params(:with, Proc.new {
@@ -389,7 +389,7 @@ describe Search do
 
       it "excludes datasets you don't have permissions to" do
         user = users(:no_collaborators)
-        user.instance_accounts.joins(:instance_account_permissions).should be_empty
+        user.data_source_accounts.joins(:data_source_account_permissions).should be_empty
         create_and_record_search(user, :query => 'searchquery', :entity_type => :dataset) do |search|
           search.datasets.should == [shared_dataset]
         end
@@ -505,8 +505,8 @@ describe Search do
 
         it "is excluded from search results" do
           create_and_record_search(user, :query => 'searchquery', :entity_type => 'Dataset') do |search|
-            instance_account = FactoryGirl.build(:instance_account, :data_source => chorus_view.data_source, :owner => user).tap { |a| a.save(:validate => false)}
-            chorus_view.schema.database.instance_accounts << instance_account
+            data_source_account = FactoryGirl.build(:data_source_account, :data_source => chorus_view.data_source, :owner => user).tap { |a| a.save(:validate => false)}
+            chorus_view.schema.database.data_source_accounts << data_source_account
             chorus_view.solr_index!
             search.datasets.should_not include(chorus_view)
           end
@@ -514,8 +514,8 @@ describe Search do
 
         it "excludes results with matching notes on the chorus view" do
           create_and_record_search(user, :query => 'workspacedatasetnotesearch', :entity_type => 'Dataset') do |search|
-            instance_account = FactoryGirl.build(:instance_account, :data_source => chorus_view.data_source, :owner => user).tap { |a| a.save(:validate => false)}
-            chorus_view.schema.database.instance_accounts << instance_account
+            data_source_account = FactoryGirl.build(:data_source_account, :data_source => chorus_view.data_source, :owner => user).tap { |a| a.save(:validate => false)}
+            chorus_view.schema.database.data_source_accounts << data_source_account
             chorus_view.solr_index!
             search.datasets.should_not include(chorus_view)
           end
@@ -523,8 +523,8 @@ describe Search do
 
         it "excludes results with matching comments on the chorus view" do
           create_and_record_search(user, :query => 'commentsearch', :entity_type => 'Dataset') do |search|
-            instance_account = FactoryGirl.build(:instance_account, :data_source => chorus_view.data_source, :owner => user).tap { |a| a.save(:validate => false)}
-            chorus_view.schema.database.instance_accounts << instance_account
+            data_source_account = FactoryGirl.build(:data_source_account, :data_source => chorus_view.data_source, :owner => user).tap { |a| a.save(:validate => false)}
+            chorus_view.schema.database.data_source_accounts << data_source_account
             chorus_view.solr_index!
             search.datasets.should_not include(chorus_view)
           end
@@ -544,8 +544,8 @@ describe Search do
 
       it "returns the HdfsDataSource objects found" do
         create_and_record_search do |search|
-          search.hdfs_entries.length.should == 1
-          search.hdfs_entries.first.should == hdfs_entry
+          search.hdfs_entries.length.should == 2
+          search.hdfs_entries.should include(hdfs_entry)
         end
       end
     end
@@ -624,8 +624,8 @@ describe Search do
 
           it "excludes attachments when the chorus view is not accessible" do
             create_and_record_search(user, :query => 'attachmentsearch', :entity_type => 'Attachment') do |search|
-              instance_account = FactoryGirl.build(:instance_account, :data_source => chorus_view.data_source, :owner => user).tap { |a| a.save(:validate => false)}
-              chorus_view.schema.database.instance_accounts << instance_account
+              data_source_account = FactoryGirl.build(:data_source_account, :data_source => chorus_view.data_source, :owner => user).tap { |a| a.save(:validate => false)}
+              chorus_view.schema.database.data_source_accounts << data_source_account
               chorus_view.solr_index!
               search.attachments.should_not include(attachment)
             end

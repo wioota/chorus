@@ -111,7 +111,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
     launchAddCredentialsDialog: function(e) {
         e && e.preventDefault();
-        new chorus.dialogs.InstanceAccount({ instance: this.resource.dataSource(), title: t("instances.sidebar.add_credentials"), reload: true, goBack: false }).launchModal();
+        new chorus.dialogs.DataSourceAccount({ dataSource: this.resource.dataSource(), title: t("data_sources.sidebar.add_credentials"), reload: true, goBack: false }).launchModal();
     },
 
     launchAssociateWithWorkspaceDialog: function(e) {

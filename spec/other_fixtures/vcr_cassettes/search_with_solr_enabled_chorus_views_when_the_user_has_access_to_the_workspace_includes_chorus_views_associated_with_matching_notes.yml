@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28Dataset+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28Dataset%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-instance_account_ids_im%3A%281000001+OR+1000002+OR+1000004+OR+1000005+OR+1000006+OR+1000016+OR+1000017%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&q=commentsearch&fl=%2A+score&qf=name_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+tag_names_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
+      string: fq=type%3A%28Dataset+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28Dataset%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-data_source_account_ids_im%3A%281000001+OR+1000002+OR+1000004+OR+1000005+OR+1000006+OR+1000016+OR+1000017%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&q=commentsearch&fl=%2A+score&qf=name_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+tag_names_texts+body_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -22,17 +22,17 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>4,''params''=>{''group.ngroups''=>''true'',''group.limit''=>''3'',''qf''=>''name_texts
-        database_name_texts table_description_texts schema_name_texts column_name_texts
-        column_description_texts query_texts tag_names_texts body_texts'',''hl.simple.pre''=>''@@@hl@@@'',''wt''=>''ruby'',''hl''=>''on'',''rows''=>''50'',''defType''=>''edismax'',''fl''=>''*
-        score'',''hl.snippets''=>''100'',''start''=>''0'',''q''=>''commentsearch'',''group.truncate''=>''true'',''group.field''=>''grouping_id_s'',''hl.simple.post''=>''@@@endhl@@@'',''group''=>''true'',''fq''=>[''type:(Dataset
-        OR Events\\:\\:Note OR Comment)'',''type_name_s:(Dataset)'',''-(security_type_name_sm:(Dataset)
-        AND -instance_account_ids_im:(1000001 OR 1000002 OR 1000004 OR 1000005 OR
-        1000006 OR 1000016 OR 1000017))'',''-(security_type_name_sm:ChorusView AND
-        -member_ids_im:1000006 AND -public_b:true)'']}},''grouped''=>{''grouping_id_s''=>{''matches''=>1,''ngroups''=>1,''groups''=>[{''groupValue''=>''ChorusView
-        1000021'',''doclist''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.0995804,''docs''=>[{''id''=>''Comment
-        1000004'',''body_texts''=>[''commentsearch''],''score''=>1.0995804}]}}]}},''highlighting''=>{''Comment
-        1000004''=>{''body_texts''=>[''@@@hl@@@commentsearch@@@endhl@@@'']}}}'
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
+        \ database_name_texts table_description_texts schema_name_texts column_name_texts\
+        \ column_description_texts query_texts tag_names_texts body_texts','hl.simple.pre'=>'@@@hl@@@','wt'=>'ruby','hl'=>'on','rows'=>'50','defType'=>'edismax','fl'=>'*\
+        \ score','hl.snippets'=>'100','start'=>'0','q'=>'commentsearch','group.truncate'=>'true','group.field'=>'grouping_id_s','hl.simple.post'=>'@@@endhl@@@','group'=>'true','fq'=>['type:(Dataset\
+        \ OR Events\\\\:\\\\:Note OR Comment)','type_name_s:(Dataset)','-(security_type_name_sm:(Dataset)\
+        \ AND -data_source_account_ids_im:(1000001 OR 1000002 OR 1000004 OR 1000005\
+        \ OR 1000006 OR 1000016 OR 1000017))','-(security_type_name_sm:ChorusView\
+        \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>1,'ngroups'=>1,'groups'=>[{'groupValue'=>'ChorusView\
+        \ 1000021','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.1070813,'docs'=>[{'id'=>'Comment\
+        \ 1000004','body_texts'=>['commentsearch'],'score'=>1.1070813}]}}]}},'highlighting'=>{'Comment\
+        \ 1000004'=>{'body_texts'=>['@@@hl@@@commentsearch@@@endhl@@@']}}}"
     http_version: '1.1'
-  recorded_at: Fri, 22 Mar 2013 21:55:09 GMT
+  recorded_at: Thu, 25 Apr 2013 01:07:03 GMT
 recorded_with: VCR 2.3.0

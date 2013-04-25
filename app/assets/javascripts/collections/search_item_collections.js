@@ -51,7 +51,7 @@
         searchCollectionMixins, chorus.Mixins.MultiModelSet
     ).extend({
         searchKey: "dataSources",
-        model: chorus.models.DynamicInstance
+        model: chorus.models.DynamicDataSource
     });
 
     chorus.collections.Search.DatasetSet = chorus.collections.SchemaDatasetSet.include(

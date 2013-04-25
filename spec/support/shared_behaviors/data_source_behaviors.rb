@@ -30,24 +30,24 @@ shared_examples_for :data_source_with_access_control do
       @data_source_with_membership = FactoryGirl.create factory_name
       @data_source_forbidden = FactoryGirl.create factory_name
 
-      @membership_account = FactoryGirl.build :instance_account, :owner => user, :data_source => @data_source_with_membership
+      @membership_account = FactoryGirl.build :data_source_account, :owner => user, :data_source => @data_source_with_membership
       @membership_account.save(:validate => false)
     end
 
     describe '.accessible_to' do
-      it "returns owned instances" do
+      it "returns owned data sources" do
         described_class.accessible_to(user).should include @data_source_owned
       end
 
-      it "returns shared instances" do
+      it "returns shared data sources" do
         described_class.accessible_to(user).should include @data_source_shared
       end
 
-      it "returns data source instances to which user has membership" do
+      it "returns data source data sources to which user has membership" do
         described_class.accessible_to(user).should include @data_source_with_membership
       end
 
-      it "does not return instances the user has no access to" do
+      it "does not return data sources the user has no access to" do
         described_class.accessible_to(user).should_not include(@data_source_forbidden)
       end
     end
@@ -72,7 +72,7 @@ shared_examples_for :data_source_with_access_control do
   end
 
   describe ".unshared" do
-    it "returns unshared gpdb instances" do
+    it "returns unshared gpdb data sources" do
       unshared_data_sources = described_class.unshared
       unshared_data_sources.length.should > 0
       unshared_data_sources.each { |i| i.should_not be_shared }
@@ -90,13 +90,13 @@ shared_examples_for :data_source_with_access_control do
     it_should_behave_like 'a model with name validations'
 
     context "when host, port, or db_name change" do
-      let(:instance_account) { FactoryGirl.build :instance_account }
-      let(:data_source) { FactoryGirl.build factory_name, :owner_account => instance_account }
+      let(:data_source_account) { FactoryGirl.build :data_source_account }
+      let(:data_source) { FactoryGirl.build factory_name, :owner_account => data_source_account }
 
       before do
         data_source.save!(:validate => false)
-        stub(data_source).owner_account { instance_account }
-        mock(instance_account).valid? { true }
+        stub(data_source).owner_account { data_source_account }
+        mock(data_source_account).valid? { true }
       end
 
       it "validates the account when host changes" do
@@ -125,7 +125,7 @@ shared_examples_for :data_source_with_access_control do
     describe "when name changes" do
       let!(:data_source) { FactoryGirl.create factory_name }
       it "it does not validate the account" do
-        any_instance_of(InstanceAccount) do |account|
+        any_instance_of(DataSourceAccount) do |account|
           dont_allow(account).valid?
         end
         data_source.name = 'purple_bandana'
@@ -204,12 +204,12 @@ shared_examples_for :data_source_with_access_control do
     end
 
     it "destroys dependent data_source accounts" do
-      instance_accounts = data_source.accounts
-      instance_accounts.length.should > 0
+      data_source_accounts = data_source.accounts
+      data_source_accounts.length.should > 0
 
       data_source.destroy
-      instance_accounts.each do |account|
-        InstanceAccount.find_by_id(account.id).should be_nil
+      data_source_accounts.each do |account|
+        DataSourceAccount.find_by_id(account.id).should be_nil
       end
     end
   end
@@ -235,7 +235,7 @@ shared_examples_for :data_source_with_access_control do
       mock(data_source).connection_class { fake_connection_class }
     end
 
-    it "returns an instance of the data source's connection_class" do
+    it "returns an data source of the data source's connection_class" do
       data_source.connect_with(account).should be_an_instance_of(fake_connection_class)
     end
   end

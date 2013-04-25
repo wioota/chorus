@@ -7,25 +7,25 @@
 <div class="account_info">
     {{#if shared}}
         <img src="/images/data_sources/shared_icon.png"/>
-        {{t "instances.sidebar.is_shared_account"}}
+        {{t "data_sources.sidebar.is_shared_account"}}
         {{#if userCanEditPermissions}}
-            <a href="#" class="dialog" data-dialog="DataSourcePermissions">{{t "instances.sidebar.edit"}}</a>
+            <a href="#" class="dialog" data-dialog="DataSourcePermissions">{{t "data_sources.sidebar.edit"}}</a>
         {{/if}}
     {{else}}
         {{#if userCanEditPermissions}}
             <div class="edit_individual_accounts">
                 <img src="/images/data_sources/individual.png"/>
-                <span class="individual_accounts_count">{{t "instances.sidebar.there_are_x_individual_accounts" count=instanceAccountsCount}}</span>
-                 <a href="#" class="dialog" data-dialog="DataSourcePermissions">{{t "instances.sidebar.edit"}}</a>
+                <span class="individual_accounts_count">{{t "data_sources.sidebar.there_are_x_individual_accounts" count=dataSourceAccountsCount}}</span>
+                 <a href="#" class="dialog" data-dialog="DataSourcePermissions">{{t "data_sources.sidebar.edit"}}</a>
             </div>
         {{else}}
             <div class="individual_account">
                 {{#if userHasAccount}}
                     <img src="/images/data_sources/access.png"/>
-                    {{t "instances.sidebar.access"}}
+                    {{t "data_sources.sidebar.access"}}
                 {{else}}
                     <img src="/images/data_sources/no_access.png"/>
-                    {{t "instances.sidebar.no_access"}}
+                    {{t "data_sources.sidebar.no_access"}}
                 {{/if}}
             </div>
         {{/if}}
@@ -37,22 +37,22 @@
         {{#ifAny shared userCanEditDataSource }}
         {{else}}
             {{#if userHasAccount}}
-                <li><a class="dialog edit_credentials" href="#" data-dialog="InstanceAccount" data-title='{{t "instances.account.edit.title"}}'>{{t "instances.sidebar.edit_credentials"}}</a></li>
-                <li><a class="alert remove_credentials" href="#" data-alert="InstanceAccountDelete">{{t "instances.sidebar.remove_credentials"}}</a></li>
+                <li><a class="dialog edit_credentials" href="#" data-dialog="DataSourceAccount" data-title='{{t "data_sources.account.edit.title"}}'>{{t "data_sources.sidebar.edit_credentials"}}</a></li>
+                <li><a class="alert remove_credentials" href="#" data-alert="DataSourceAccountDelete">{{t "data_sources.sidebar.remove_credentials"}}</a></li>
             {{else}}
-                <li><a class="dialog add_credentials" href="#" data-dialog="InstanceAccount" data-title='{{t "instances.account.add.title"}}'>{{t "instances.sidebar.add_credentials"}}</a></li>
+                <li><a class="dialog add_credentials" href="#" data-dialog="DataSourceAccount" data-title='{{t "data_sources.account.add.title"}}'>{{t "data_sources.sidebar.add_credentials"}}</a></li>
             {{/if}}
         {{/ifAny}}
         {{#if userCanEditDataSource}}
             {{#if editable}}
-                <li><a class="dialog edit_data_source" href="#" data-dialog="DataSourceEdit">{{t "instances.sidebar.edit_instance"}}</a></li>
+                <li><a class="dialog edit_data_source" href="#" data-dialog="DataSourceEdit">{{t "data_sources.sidebar.edit_data_source"}}</a></li>
             {{/if}}
             {{#if deleteable}}
-                <li><a class="alert delete_data_source" href="#" data-alert="DataSourceDelete">{{t "instances.sidebar.delete_instance"}}</a></li>
+                <li><a class="alert delete_data_source" href="#" data-alert="DataSourceDelete">{{t "data_sources.sidebar.delete_data_source"}}</a></li>
             {{/if}}
         {{/if}}
         {{#if isGreenplum}}
-            <li class="workspace_usage_container"><span class="disabled workspace_usage">{{t "instances.sidebar.usage_loading"}}</span></li>
+            <li class="workspace_usage_container"><span class="disabled workspace_usage">{{t "data_sources.sidebar.usage_loading"}}</span></li>
         {{/if}}
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
         <li><a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a></li>

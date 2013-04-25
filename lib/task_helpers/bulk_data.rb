@@ -59,10 +59,10 @@ module BulkData
       end
     end
 
-    def create_gpdb_data_source(admin_user_name, instance_name)
+    def create_gpdb_data_source(admin_user_name, data_source_name)
       without_solr do
         current_user = User.find_by_username(admin_user_name)
-        params = {:name => instance_name, :host => 'chorus-gpdb42', :port => 5432, :db_username => 'gpadmin',
+        params = {:name => data_source_name, :host => 'chorus-gpdb42', :port => 5432, :db_username => 'gpadmin',
                   :db_password => 'secret', :db_name => 'postgres', :shared => true}
         gpdb_data_source = current_user.gpdb_data_sources.create!(params, :as => :create)
         gpdb_data_source.refresh

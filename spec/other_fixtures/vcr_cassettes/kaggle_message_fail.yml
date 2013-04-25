@@ -8,7 +8,7 @@ http_interactions:
       string: subject=some+subject&replyTo=test%40fun.com&htmlBody=message+body&userId=63766&userId=99999999
     headers:
       accept:
-      - ! '*/*'
+      - "*/*"
       user-agent:
       - Ruby
       content-type:
@@ -25,15 +25,15 @@ http_interactions:
       server:
       - Microsoft-IIS/8.0
       date:
-      - Fri, 22 Mar 2013 21:46:43 GMT
+      - Thu, 25 Apr 2013 01:09:07 GMT
       connection:
       - close
       content-length:
       - '86'
     body:
       encoding: US-ASCII
-      string: ! "{\r\n  \"status\": 200,\r\n  \"sent\": [\r\n    63766\r\n  ],\r\n\
-        \  \"failed\": [\r\n    99999999\r\n  ]\r\n}"
+      string: "{\r\n  \"status\": 200,\r\n  \"sent\": [\r\n    63766\r\n  ],\r\n \
+        \ \"failed\": [\r\n    99999999\r\n  ]\r\n}"
     http_version: '1.1'
-  recorded_at: Fri, 22 Mar 2013 21:46:42 GMT
+  recorded_at: Thu, 25 Apr 2013 01:09:07 GMT
 recorded_with: VCR 2.3.0

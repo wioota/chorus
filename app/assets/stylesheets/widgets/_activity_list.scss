@@ -301,7 +301,7 @@ li .activity_content,
 }
 
 #sidebar {
-    &.instance_list_sidebar, &.workfile_show_sidebar {
+    &.data_source_list_sidebar, &.workfile_show_sidebar {
         .activity_list .heading {
             display: none
         }

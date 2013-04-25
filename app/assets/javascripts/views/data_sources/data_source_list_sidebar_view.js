@@ -21,20 +21,20 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
             return {};
         }
 
-        var instanceAccounts = this.dataSource.accounts();
-        var instanceAccountsCount = instanceAccounts.persistedAccountCount ? instanceAccounts.persistedAccountCount() : instanceAccounts.length;
+        var dataSourceAccounts = this.dataSource.accounts();
+        var dataSourceAccountsCount = dataSourceAccounts.persistedAccountCount ? dataSourceAccounts.persistedAccountCount() : dataSourceAccounts.length;
 
         return {
             isGreenplum: this.model.isGreenplum(),
             userHasAccount: this.model.accountForCurrentUser() && this.model.accountForCurrentUser().has("id"),
             userCanEditPermissions: this.canEditPermissions(),
             userCanEditDataSource: this.canEditDataSource(),
-            instanceAccountsCount: instanceAccountsCount,
+            dataSourceAccountsCount: dataSourceAccountsCount,
             editable: true,
             deleteable: false,
             isOnlineOrOffline: this.dataSource.isOnline() || this.dataSource.isOffline(),
             entityType: this.model.entityType,
-            dataSourceProvider: t("instances.provider." + this.model.get('entityType')),
+            dataSourceProvider: t("data_sources.provider." + this.model.get('entityType')),
             shared: this.model.isShared && this.model.isShared(),
             isGnip: this.model.isGnip(),
             isOracle: this.model.isOracle()
@@ -92,7 +92,7 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
     postRender: function() {
         this._super("postRender");
         if (this.dataSource) {
-            this.$("a.dialog").data("instance", this.dataSource);
+            this.$("a.dialog").data("dataSource", this.dataSource);
             if(this.dataSource.usage()) {
                 this.updateWorkspaceUsage();
             }
@@ -115,11 +115,11 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
                 var count = this.dataSource.usage().workspaceCount();
                 if (count > 0) {
                     el = $("<a class='dialog workspace_usage' href='#' data-dialog='DataSourceUsage'></a>");
-                    el.data("instance", this.dataSource);
+                    el.data("data_source", this.dataSource);
                 } else {
                     el = $("<span class='disabled workspace_usage'></span>");
                 }
-                el.text(t("instances.sidebar.usage", {count: count}));
+                el.text(t("data_sources.sidebar.usage", {count: count}));
                 this.$(".workspace_usage_container").append(el);
             }
         }

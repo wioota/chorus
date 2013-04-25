@@ -1,6 +1,6 @@
 describe("chorus.pages.HdfsEntryIndexPage", function() {
     beforeEach(function() {
-        this.hdfsDataSource = rspecFixtures.hdfsDataSource({id: "1234", name: "instance Name"});
+        this.hdfsDataSource = rspecFixtures.hdfsDataSource({id: "1234", name: "Data Source Name"});
         this.hdfsEntry = rspecFixtures.hdfsDir({
             hdfsDataSource: this.hdfsDataSource.attributes,
             id: "4",
@@ -36,7 +36,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
 
             expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
-            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.instances");
+            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.data_sources");
         });
     });
 
@@ -58,7 +58,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
 
             expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
-            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.instances");
+            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.data_sources");
 
             expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe(this.hdfsDataSource.get("name") + " (2)");
 

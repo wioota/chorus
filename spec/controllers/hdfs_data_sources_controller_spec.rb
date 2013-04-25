@@ -16,17 +16,17 @@ describe HdfsDataSourcesController do
         stub(Hdfs::DataSourceRegistrar).create!( {}, @user) { hdfs_data_source }
       end
 
-      it "reports that the instance was created" do
+      it "reports that the data source was created" do
         post :create
         response.code.should == "201"
       end
 
-      it "renders the newly created instance" do
+      it "renders the newly created data source" do
         post :create
         decoded_response.name.should == hdfs_data_source.name
       end
 
-      it "schedules a job to refresh the instance" do
+      it "schedules a job to refresh the data source" do
         mock(QC.default_queue).enqueue_if_not_queued("HdfsDataSource.refresh", numeric)
         post :create
       end
@@ -36,12 +36,12 @@ describe HdfsDataSourcesController do
   describe "#update" do
     let(:attributes) { {'name' => 'some_random_value'} }
     let(:params) { attributes.merge :id => hdfs_data_source }
-    let(:fake_instance) { Object.new }
+    let(:fake_data_source) { Object.new }
 
     it "presents the updated hadoop data source" do
-      mock(Hdfs::DataSourceRegistrar).update!(hdfs_data_source.id, attributes, @user) { fake_instance }
+      mock(Hdfs::DataSourceRegistrar).update!(hdfs_data_source.id, attributes, @user) { fake_data_source }
       it_uses_authorization(:edit, hdfs_data_source)
-      mock_present { |instance| instance.should == fake_instance }
+      mock_present { |data_source| data_source.should == fake_data_source }
       put :update, params
     end
 

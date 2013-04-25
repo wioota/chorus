@@ -34,8 +34,8 @@ describe "Workspace datasets" do
     let(:user) { users(:the_collaborator) }
 
     before do
-      instance_account = workspace.sandbox.data_source.account_for_user(user)
-      instance_account.invalid_credentials!
+      data_source_account = workspace.sandbox.data_source.account_for_user(user)
+      data_source_account.invalid_credentials!
 
       visit("#/workspaces/#{workspace.id}/datasets")
     end

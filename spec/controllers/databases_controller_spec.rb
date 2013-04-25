@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe InstanceDatabasesController do
+describe DatabasesController do
   ignore_authorization!
 
   let(:user) { users(:owner) }
@@ -10,12 +10,12 @@ describe InstanceDatabasesController do
   end
 
   describe "#index" do
-    it "fails when no such gpdb instance" do
+    it "fails when no such gpdb data source" do
       get :index, :data_source_id => 12345
       response.code.should == "404"
     end
 
-    context "when the instance is accessible" do
+    context "when the data source is accessible" do
       let(:gpdb_data_source) { data_sources(:shared) }
       let(:database) { gpdb_databases(:shared_database) }
       let(:database2) { gpdb_databases(:shared_database) }
@@ -46,7 +46,7 @@ describe InstanceDatabasesController do
           get :index, :data_source_id => gpdb_data_source.id
           response.code.should == "200"
           decoded_response[0].id.should == database.id
-          decoded_response[0].instance.id.should == gpdb_data_source.id
+          decoded_response[0].data_source.id.should == gpdb_data_source.id
           decoded_response.size.should == 2
         end
 
@@ -68,8 +68,8 @@ describe InstanceDatabasesController do
     it "renders the database" do
       get :show, :id => database.to_param
       response.code.should == "200"
-      decoded_response.instance.id.should == database.data_source.id
-      decoded_response.instance.name.should == database.data_source.name
+      decoded_response.data_source.id.should == database.data_source.id
+      decoded_response.data_source.name.should == database.data_source.name
       decoded_response.id.should == database.id
       decoded_response.name.should == database.name
     end
@@ -85,11 +85,11 @@ describe InstanceDatabasesController do
       end
     end
 
-    context "when the current user does not have credentials for the instance" do
+    context "when the current user does not have credentials for the data source" do
       let(:user) { users(:default) }
       subject { described_class.new }
 
-      generate_fixture "forbiddenInstance.json" do
+      generate_fixture "forbiddenDataSource.json" do
         get :show, :id => database.to_param
         response.should be_forbidden
       end

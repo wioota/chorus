@@ -1,13 +1,13 @@
-describe("chorus.collections.InstanceAccountSet", function() {
+describe("chorus.collections.DataSourceAccountSet", function() {
     beforeEach(function() {
-        this.accountSet = new chorus.collections.InstanceAccountSet([], {instanceId: '1'});
+        this.accountSet = new chorus.collections.DataSourceAccountSet([], {dataSourceId: '1'});
     });
 
     describe("#users", function() {
         beforeEach(function() {
             this.accountSet.reset([
-                rspecFixtures.instanceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
-                rspecFixtures.instanceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } })
+                rspecFixtures.dataSourceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                rspecFixtures.dataSourceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } })
             ]);
             this.users = this.accountSet.users();
         });
@@ -49,9 +49,9 @@ describe("chorus.collections.InstanceAccountSet", function() {
     describe("sort", function() {
         beforeEach(function() {
             this.accountSet.reset([
-                rspecFixtures.instanceAccount({ owner: { firstName: 'fred', lastName: 'zzz' } }),
-                rspecFixtures.instanceAccount({ owner: { firstName: 'barnie', lastName: 'zzz' } }),
-                rspecFixtures.instanceAccount({ owner: { firstName: 'sammy', lastName: 'aaa' } })
+                rspecFixtures.dataSourceAccount({ owner: { firstName: 'fred', lastName: 'zzz' } }),
+                rspecFixtures.dataSourceAccount({ owner: { firstName: 'barnie', lastName: 'zzz' } }),
+                rspecFixtures.dataSourceAccount({ owner: { firstName: 'sammy', lastName: 'aaa' } })
             ]);
         });
         it("sorts by last name, and first name", function() {
@@ -66,8 +66,8 @@ describe("chorus.collections.InstanceAccountSet", function() {
         context("when all of the accounts are persisted", function() {
             beforeEach(function() {
                 this.accountSet.reset([
-                    rspecFixtures.instanceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
-                    rspecFixtures.instanceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } })
+                    rspecFixtures.dataSourceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                    rspecFixtures.dataSourceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } })
                 ]);
             });
 
@@ -79,9 +79,9 @@ describe("chorus.collections.InstanceAccountSet", function() {
         context("when some of the accounts are not persisted", function() {
             beforeEach(function() {
                 this.accountSet.reset([
-                    rspecFixtures.instanceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
-                    rspecFixtures.instanceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } }),
-                    rspecFixtures.instanceAccount({ id: null, owner: { id: '3', firstName: 'wilma', lastName: 'flinstone' } })
+                    rspecFixtures.dataSourceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                    rspecFixtures.dataSourceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } }),
+                    rspecFixtures.dataSourceAccount({ id: null, owner: { id: '3', firstName: 'wilma', lastName: 'flinstone' } })
                 ]);
             });
 
@@ -93,9 +93,9 @@ describe("chorus.collections.InstanceAccountSet", function() {
         context("when none of the accounts are persisted", function() {
             beforeEach(function() {
                 this.accountSet.reset([
-                    rspecFixtures.instanceAccount({ id: null, owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
-                    rspecFixtures.instanceAccount({ id: null, owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } }),
-                    rspecFixtures.instanceAccount({ id: null, owner: { id: '3', firstName: 'wilma', lastName: 'flinstone' } })
+                    rspecFixtures.dataSourceAccount({ id: null, owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                    rspecFixtures.dataSourceAccount({ id: null, owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } }),
+                    rspecFixtures.dataSourceAccount({ id: null, owner: { id: '3', firstName: 'wilma', lastName: 'flinstone' } })
                 ]);
             });
 

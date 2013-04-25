@@ -74,12 +74,12 @@ describe("chorus.views.SearchAttachment", function() {
 
         it("shows the file", function() {
             var hdfs = this.result.hdfsFile();
-            var hdfs_data_source = this.result.hdfsDataSource();
+            var hdfsDataSource = this.result.hdfsDataSource();
             expect(
                 this.view.$(".description .found_in").html()).toContainTranslation(
                 "attachment.found_in.file_in_hdfs",
                 {
-                    hdfsFileLink: '<a href="#/hdfs_data_sources/' + hdfs_data_source.id +  '/browseFile/' + hdfs.id  +'">'+hdfs.name()+'</a>'
+                    hdfsFileLink: '<a href="#/hdfs_data_sources/' + hdfsDataSource.id +  '/browseFile/' + hdfs.id  +'">'+hdfs.name()+'</a>'
                 }
             );
         });
@@ -108,19 +108,19 @@ describe("chorus.views.SearchAttachment", function() {
 
     context('with data source', function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnInstanceNote();
+            var search = rspecFixtures.searchResultWithAttachmentOnDataSourceNote();
             this.result = search.attachments().at(0);
             this.view = new chorus.views.SearchAttachment({model: this.result});
             this.view.render();
         });
 
         it("shows the file", function() {
-            var instance = this.result.dataSource();
+            var dataSource = this.result.dataSource();
             expect(
                 this.view.$(".description .found_in").html()).toContainTranslation(
-                "attachment.found_in.instance",
+                "attachment.found_in.data_source",
                 {
-                    instanceLink: '<a href="#/data_sources/'+instance.id+'/databases">'+instance.name()+'</a>'
+                    dataSourceLink: '<a href="#/data_sources/'+dataSource.id+'/databases">'+dataSource.name()+'</a>'
                 }
             );
         });

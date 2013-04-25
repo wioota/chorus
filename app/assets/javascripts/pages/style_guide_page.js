@@ -28,14 +28,14 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             completeJson: true,
             sandboxInfo: {
                 id: 1,
-                instance: {
+                data_source: {
                     id: 1,
                     name: 'Data Source',
                     entityType: 'gpdb_data_source'
                 }
             }
         });
-        this.models.workspace._sandbox = new chorus.models.Sandbox({database: {id: 1, instance: {id: 1, name: 'Data Source'}}});
+        this.models.workspace._sandbox = new chorus.models.Sandbox({database: {id: 1, dataSource: {id: 1, name: 'Data Source'}}});
 
         this.models.privateWorkspace = new chorus.models.Workspace({ name: "Private Workspace", summary: "Lots of secrets here", owner: {firstName: "Not", lastName: "You"}, "public": false, archivedAt: null});
         this.models.privateWorkspace.loaded = true;
@@ -49,7 +49,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             archivedAt: "1985-07-21T06:21:02Z"});
         this.models.archivedWorkspace.loaded = true;
 
-        this.models.instanceAccount = new chorus.models.InstanceAccount();
+        this.models.dataSourceAccount = new chorus.models.DataSourceAccount();
 
         this.models.tag = new chorus.models.Tag({
             name: "my first tag",
@@ -88,12 +88,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
         this.models.database = new chorus.models.Database({
             "name": "Some database",
-            "instance": this.models.gpdbDataSource
+            "datasource": this.models.gpdbDataSource
         });
 
         this.models.otherDatabase = new chorus.models.Database({
             "name": "Another database",
-            "instance": this.models.gpdbDataSource
+            "datasource": this.models.gpdbDataSource
         });
 
         this.models.schema = new chorus.models.Schema({
@@ -284,7 +284,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                         "name": "searchquery_hadoop",
                         "entityType": "attachment",
                         "type": "",
-                        "instance": {
+                        "datasource": {
                             "name": "searchquery_hadoop",
                             "host": "hadoop.example.com",
                             "port": 1111,
@@ -744,11 +744,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
     buildDialogs: function() {
         return {
-            "Workspace Instance Account": new chorus.dialogs.WorkspaceInstanceAccount({model: this.models.instanceAccount, pageModel: this.models.workspace}),
+            "Workspace Data source Account": new chorus.dialogs.WorkspaceDataSourceAccount({model: this.models.dataSourceAccount, pageModel: this.models.workspace}),
 
-            "Instance Account": new chorus.dialogs.InstanceAccount({
-                title: t("instances.account.add.title"),
-                instance: this.models.gpdbDataSource
+            "Data Source Account": new chorus.dialogs.DataSourceAccount({
+                title: t("data_sources.account.add.title"),
+                dataSource: this.models.gpdbDataSource
             }),
 
             "Change Password": new chorus.dialogs.ChangePassword(),
@@ -783,7 +783,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             "Create Database View": new chorus.dialogs.CreateDatabaseView({ pageModel: this.models.dataset }),
 
             "Edit Data Source": new chorus.dialogs.DataSourceEdit({
-                instance: this.models.gpdbDataSource
+                dataSource: this.models.gpdbDataSource
             }),
 
             "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
@@ -830,7 +830,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             "New Data Source": new chorus.dialogs.DataSourcesNew(),
 
             "Data Source Permissions": new chorus.dialogs.DataSourcePermissions({
-                instance: this.models.gpdbDataSource
+                dataSource: this.models.gpdbDataSource
             }),
 
             "Compose Kaggle Message": new chorus.dialogs.ComposeKaggleMessage({

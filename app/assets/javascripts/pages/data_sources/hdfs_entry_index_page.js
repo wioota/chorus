@@ -4,9 +4,9 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
     helpId: "instances",
 
     setup:function (hdfsDataSourceId, id) {
-        this.instance = new chorus.models.HdfsDataSource({ id: hdfsDataSourceId });
-        this.instance.fetch();
-        this.listenTo(this.instance, "loaded", this.instanceFetched);
+        this.dataSource = new chorus.models.HdfsDataSource({ id: hdfsDataSourceId });
+        this.dataSource.fetch();
+        this.listenTo(this.dataSource, "loaded", this.dataSourceFetched);
         this.hdfsDataSourceId = hdfsDataSourceId;
 
         this.hdfsEntry = new chorus.models.HdfsEntry({
@@ -26,7 +26,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
         });
 
         this.mainContent = new chorus.views.MainContentList({
-            contentHeader: new chorus.views.HdfsEntryHeader({dataSource: this.instance, hdfsEntry: this.hdfsEntry}),
+            contentHeader: new chorus.views.HdfsEntryHeader({dataSource: this.dataSource, hdfsEntry: this.hdfsEntry}),
             modelClass: "HdfsEntry",
             collection: this.collection,
             useCustomList: true,
@@ -57,15 +57,15 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
     crumbs: function() {
         var path = this.hdfsEntry.get("path") || "";
         var pathLength = _.compact(path.split("/")).length + 1;
-        var modelCrumb = this.instance.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "");
+        var modelCrumb = this.dataSource.get("name") + (pathLength > 0 ? " (" + pathLength + ")" : "");
         return [
             { label: t("breadcrumbs.home"), url: "#/" },
-            { label: t("breadcrumbs.instances"), url: "#/data_sources" },
-            { label: this.instance.loaded ? modelCrumb : "..." }
+            { label: t("breadcrumbs.data_sources"), url: "#/data_sources" },
+            { label: this.dataSource.loaded ? modelCrumb : "..." }
         ];
     },
 
-    instanceFetched: function() {
+    dataSourceFetched: function() {
         if(this.hdfsEntry.loaded) {
             this.render();
         }
@@ -78,7 +78,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
 
         this.collection.loaded = true;
 
-        if(this.instance.loaded) {
+        if(this.dataSource.loaded) {
             this.render();
         }
     },

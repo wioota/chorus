@@ -6,11 +6,11 @@ chorus.models.Database = chorus.models.Base.include(
     urlTemplate: "databases/{{id}}",
 
     dataSource: function() {
-        var instance = this._instance || new chorus.models.GpdbDataSource(this.get("instance"));
+        var dataSource = this._dataSource || new chorus.models.GpdbDataSource(this.get("dataSource"));
         if(this.loaded) {
-            this._instance = instance;
+            this._dataSource = dataSource;
         }
-        return instance;
+        return dataSource;
     },
 
     schemas: function() {

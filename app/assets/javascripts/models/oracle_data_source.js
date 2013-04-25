@@ -13,13 +13,13 @@ chorus.models.OracleDataSource = chorus.models.DataSource.extend({
     },
 
     attrToLabel: {
-        "dbUsername": "instances.dialog.database_account",
-        "dbPassword": "instances.dialog.database_password",
-        "name": "instances.dialog.instance_name",
-        "host": "instances.dialog.host",
-        "port": "instances.dialog.port",
-        "dbName": "instances.dialog.database_name",
-        "description": "instances.dialog.description"
+        "dbUsername": "data_sources.dialog.database_account",
+        "dbPassword": "data_sources.dialog.database_password",
+        "name": "data_sources.dialog.data_source_name",
+        "host": "data_sources.dialog.host",
+        "port": "data_sources.dialog.port",
+        "dbName": "data_sources.dialog.database_name",
+        "description": "data_sources.dialog.description"
     },
 
     schemas: function(){

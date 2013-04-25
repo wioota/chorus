@@ -1,5 +1,5 @@
-chorus.models.InstanceAccount = chorus.models.Base.extend({
-    constructorName: "InstanceAccount",
+chorus.models.DataSourceAccount = chorus.models.Base.extend({
+    constructorName: "DataSourceAccount",
     parameterWrapper: "account",
     paramsToIgnore: ['owner'],
 
@@ -8,14 +8,14 @@ chorus.models.InstanceAccount = chorus.models.Base.extend({
         var isEditingOwnAccount = this.get("userId") === chorus.session.user().id;
 
         if (isEditingOwnAccount) {
-            return "data_sources/{{instanceId}}/account";
+            return "data_sources/{{dataSourceId}}/account";
         }
 
         if (method === "update" || method === "delete") {
-            return "data_sources/{{instanceId}}/members/{{id}}";
+            return "data_sources/{{dataSourceId}}/members/{{id}}";
         }
 
-        return "data_sources/{{instanceId}}/members";
+        return "data_sources/{{dataSourceId}}/members";
     },
 
     user: function() {
@@ -31,12 +31,12 @@ chorus.models.InstanceAccount = chorus.models.Base.extend({
     },
 
     attrToLabel: {
-        "dbUsername": "instances.permissions.username",
-        "dbPassword": "instances.permissions.password"
+        "dbUsername": "data_sources.permissions.username",
+        "dbPassword": "data_sources.permissions.password"
     }
 }, {
-    findByInstanceId: function(instanceId) {
-        var account = new chorus.models.InstanceAccount({ instanceId: instanceId });
+    findBydataSourceId: function(dataSourceId) {
+        var account = new chorus.models.DataSourceAccount({ dataSourceId: dataSourceId });
         account.fetch();
         return account;
     }

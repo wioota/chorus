@@ -7,7 +7,7 @@ chorus.views.SearchAttachment = chorus.views.SearchItemBase.extend({
         var datasetLink = this.model.dataset() && this.model.dataset().showLink();
         var workfileLink = this.model.workfile() && this.model.workfile().showLink();
         var hdfsFileLink = this.model.hdfsFile() && this.model.hdfsFile().showLink();
-        var instanceLink = this.model.dataSource() && this.model.dataSource().showLink();
+        var dataSourceLink = this.model.dataSource() && this.model.dataSource().showLink();
 
         var composedLinkString = "";
         if (workspaceLink && datasetLink) {
@@ -25,9 +25,9 @@ chorus.views.SearchAttachment = chorus.views.SearchItemBase.extend({
         } else if (workspaceLink) {
             composedLinkString = t("attachment.found_in.workspace",
                 { workspaceLink: workspaceLink });
-        } else if (instanceLink) {
-            composedLinkString = t("attachment.found_in.instance",
-                { instanceLink: instanceLink });
+        } else if (dataSourceLink) {
+            composedLinkString = t("attachment.found_in.data_source",
+                { dataSourceLink: dataSourceLink });
         }
 
         return {

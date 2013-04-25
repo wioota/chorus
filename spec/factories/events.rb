@@ -8,7 +8,7 @@ FactoryGirl.define do
       association :data_source, :factory => :gpdb_data_source
     end
 
-    factory :hadoop_instance_created_event, :class => Events::HdfsDataSourceCreated do
+    factory :hadoop_data_source_created_event, :class => Events::HdfsDataSourceCreated do
       hdfs_data_source
     end
 
@@ -19,14 +19,14 @@ FactoryGirl.define do
 
     factory :data_source_changed_name_event, :class => Events::DataSourceChangedName do
       data_source { create :data_source }
-      new_name 'new_instance_name'
-      old_name 'old_instance_name'
+      new_name 'new_data_source_name'
+      old_name 'old_data_source_name'
     end
 
     factory :hdfs_data_source_changed_name_event, :class => Events::HdfsDataSourceChangedName do
       hdfs_data_source
-      new_name 'new_instance_name'
-      old_name 'old_instance_name'
+      new_name 'new_data_source_name'
+      old_name 'old_data_source_name'
     end
 
     factory :workfile_created_event, :class => Events::WorkfileCreated do

@@ -186,7 +186,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return this.resource ? this.resource.isChorusView() : "";
     },
 
-    hasInstanceAccount: function() {
+    hasDataSourceAccount: function() {
         return this.resource.dataSource().accountForCurrentUser().id;
     },
 

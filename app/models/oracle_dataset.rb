@@ -3,8 +3,8 @@ class OracleDataset < Dataset
    ''
   end
 
-  def instance_account_ids
-    schema.instance_account_ids
+  def data_source_account_ids
+    schema.data_source_account_ids
   end
 
   def found_in_workspace_id

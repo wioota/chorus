@@ -3,7 +3,7 @@ chorus.views.Dashboard = chorus.views.Base.extend({
     templateName:"dashboard/main",
     subviews: {
         '.dashboard_main': "dashboardMain",
-        '.instance_list': "instanceList",
+        '.data_source_list': "dataSourceList",
         '.workspace_list': "workspaceList"
     },
 
@@ -15,7 +15,7 @@ chorus.views.Dashboard = chorus.views.Base.extend({
             content:new chorus.views.DashboardWorkspaceList({ collection: this.collection })
         });
 
-        this.instanceList = new chorus.views.MainContentView({
+        this.dataSourceList = new chorus.views.MainContentView({
             collection: this.options.dataSourceSet,
             contentHeader: chorus.views.StaticTemplate("default_content_header", {title:t("header.browse_data")}),
             contentDetails: new chorus.views.StaticTemplate("dashboard/data_source_list_content_details"),

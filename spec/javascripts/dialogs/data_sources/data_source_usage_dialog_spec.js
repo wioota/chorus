@@ -6,7 +6,7 @@ describe("chorus.dialogs.DataSourceUsage", function() {
             port: "8555",
             description: "it is a food name"
         });
-        this.dialog = new chorus.dialogs.DataSourceUsage({ instance: this.dataSource, model: this.dataSource });
+        this.dialog = new chorus.dialogs.DataSourceUsage({ dataSource: this.dataSource, model: this.dataSource });
     });
 
     it("fetches the usage", function() {
@@ -20,17 +20,17 @@ describe("chorus.dialogs.DataSourceUsage", function() {
         });
 
         it("has the right title", function() {
-            expect(this.dialog.title).toMatchTranslation("instances.usage.title");
+            expect(this.dialog.title).toMatchTranslation("data_sources.usage.title");
         });
 
         context("when the usage and config have been fetched", function() {
             beforeEach(function(){
-                this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.instanceDetails());
+                this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.dataSourceDetails());
                 this.workspaces = this.dialog.usage.get("workspaces");
             });
 
             it("displays the estimated total usage", function() {
-                expect(this.dialog.$(".total_usage").text().trim()).toMatchTranslation("instances.usage.total", {size: '286 MB'});
+                expect(this.dialog.$(".total_usage").text().trim()).toMatchTranslation("data_sources.usage.total", {size: '286 MB'});
             });
 
             it("renders a li for each workspace", function() {
@@ -81,12 +81,12 @@ describe("chorus.dialogs.DataSourceUsage", function() {
                 });
 
                 it("displays the total usage as offline", function() {
-                    expect(this.dialog.$(".total_usage")).toContainTranslation("instances.usage.offline");
+                    expect(this.dialog.$(".total_usage")).toContainTranslation("data_sources.usage.offline");
                 });
 
                 it("sets the size text of the workspaces to be 'Offline'", function() {
                     this.dialog.$("li").each(function() {
-                        expect($(this).find(".size_text")).toContainTranslation('instances.usage.offline');
+                        expect($(this).find(".size_text")).toContainTranslation('data_sources.usage.offline');
                     });
                 });
 

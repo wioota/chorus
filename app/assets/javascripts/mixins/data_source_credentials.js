@@ -11,9 +11,9 @@ chorus.Mixins.DataSourceCredentials.page = {
         var dataSource = resource.dataSourceRequiringCredentials && resource.dataSourceRequiringCredentials();
 
         if (dataSource) {
-            var dialog = new chorus.dialogs.InstanceAccount({
-                title: t("instances.account.add.title"),
-                instance: dataSource,
+            var dialog = new chorus.dialogs.DataSourceAccount({
+                title: t("data_sources.account.add.title"),
+                dataSource: dataSource,
                 reload: true,
                 goBack: true
             });

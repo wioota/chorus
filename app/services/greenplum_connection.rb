@@ -7,7 +7,7 @@ class GreenplumConnection < DataSourceConnection
         when '3D000' then :DATABASE_MISSING
         when '53300' then :TOO_MANY_CONNECTIONS
         when /42.../ then :INVALID_STATEMENT
-        when /08.../ then :INSTANCE_UNREACHABLE
+        when /08.../ then :DATA_SOURCE_UNREACHABLE
         else :GENERIC
       end
     end

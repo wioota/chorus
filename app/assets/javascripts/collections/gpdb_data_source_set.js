@@ -10,7 +10,7 @@ chorus.collections.GpdbDataSourceSet = chorus.collections.Base.extend({
         });
     },
 
-    comparator: function(instance) {
-        return instance.get("name").toLowerCase();
+    comparator: function(dataSource) {
+        return dataSource.get("name").toLowerCase();
     }
 });

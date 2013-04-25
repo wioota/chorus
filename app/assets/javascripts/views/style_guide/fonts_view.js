@@ -45,7 +45,7 @@
         "16 normal text1":"default font, user show page",
         "16 normal text4":"disabled buttons",
 
-        "18 normal text2":"instance name in instance list",
+        "18 normal text2":"data source name in data source list",
         "18 normal link":"user and workfile names on list pages",
         "18 semibold link":"workspace names on dashboard workspace list",
 

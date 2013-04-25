@@ -28,9 +28,9 @@ describe OracleDataset do
     end
   end
 
-  describe "#instance_account_ids" do
-    it "returns instance account ids with access to the schema" do
-      dataset.instance_account_ids.should == dataset.schema.instance_account_ids
+  describe "#data_source_account_ids" do
+    it "returns data source account ids with access to the schema" do
+      dataset.data_source_account_ids.should == dataset.schema.data_source_account_ids
     end
   end
 

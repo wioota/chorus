@@ -84,14 +84,14 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     this.page = new chorus.pages.Bare();
                     chorus.pageOptions = {};
-                    this.model.serverErrors = { record: "INSTANCE_OVERLOADED" };
+                    this.model.serverErrors = { record: "DATA_SOURCE_OVERLOADED" };
                     this.page.handleFetchErrorsFor(this.model);
                 });
 
                 it("has the right translations", function() {
                     this.model.trigger("unprocessableEntity");
-                    expect(chorus.pageOptions.title).toMatchTranslation("record_error.INSTANCE_OVERLOADED_title");
-                    expect(chorus.pageOptions.text).toMatchTranslation("record_error.INSTANCE_OVERLOADED");
+                    expect(chorus.pageOptions.title).toMatchTranslation("record_error.DATA_SOURCE_OVERLOADED_title");
+                    expect(chorus.pageOptions.text).toMatchTranslation("record_error.DATA_SOURCE_OVERLOADED");
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith('/unprocessableEntity');
                 });
             });

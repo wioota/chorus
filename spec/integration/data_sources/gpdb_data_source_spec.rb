@@ -1,7 +1,7 @@
 require_relative '../spec_helper'
 
 describe "Data Sources", :greenplum_integration do
-  describe "adding a greenplum instance" do
+  describe "adding a greenplum data source" do
     include DataSourceHelpers
     
     before do
@@ -10,7 +10,7 @@ describe "Data Sources", :greenplum_integration do
       click_button "Add Data Source"
     end
 
-    it "creates a gpdb instance" do
+    it "creates a gpdb data source" do
       within_modal do
         select_and_do_within_data_source "register_existing_greenplum" do
           fill_in 'name', :with => "new_gpdb_data_source"

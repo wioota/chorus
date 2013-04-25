@@ -1,4 +1,4 @@
-chorus.models.GnipDataSource = chorus.models.Instance.extend({
+chorus.models.GnipDataSource = chorus.models.AbstractDataSource.extend({
     constructorName: "GnipDataSource",
     urlTemplate: "gnip_data_sources/{{id}}",
     showUrlTemplate: "gnip_data_sources/{{id}}",

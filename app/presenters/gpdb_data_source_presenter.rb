@@ -10,7 +10,7 @@ class GpdbDataSourcePresenter < DataSourcePresenter
     return {} if succinct?
     {
         :is_deleted => !model.deleted_at.nil?,
-        :instance_provider => model.instance_provider,
+        :data_source_provider => model.data_source_provider,
     }
   end
 end

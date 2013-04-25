@@ -39,7 +39,7 @@
                 {{#unless workspaceArchived}}
                     <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="dataset" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
                     {{#if isChorusView}}
-                        {{#if hasInstanceAccount}}
+                        {{#if hasDataSourceAccount}}
                             <li><a class="create_database_view dialog" href="#" data-dialog="CreateDatabaseView">{{t "actions.create_database_view"}}</a></li>
                         {{/if}}
                         <li><a class="duplicate" data-dialog="VerifyChorusView" href="#">{{t "dataset.chorusview.duplicate"}}</a></li>

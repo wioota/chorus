@@ -7,7 +7,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
             description: "it is a food name",
             dbName: "postgres"
         });
-        this.dialog = new chorus.dialogs.DataSourceEdit({ instance: this.dataSource });
+        this.dialog = new chorus.dialogs.DataSourceEdit({ dataSource: this.dataSource });
     });
 
     it("should make a copy of the source model", function() {
@@ -44,7 +44,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
 
             it("has a 'database' field that is pre-populated", function() {
                 expect(this.dialog.$("input[name='dbName']").val()).toBe("postgres");
-                expect(this.dialog.$("label[name='dbName']").text()).toMatchTranslation("instances.dialog.database_name");
+                expect(this.dialog.$("label[name='dbName']").text()).toMatchTranslation("data_sources.dialog.database_name");
                 expect(this.dialog.$("input[name='dbName']").prop("disabled")).toBeFalsy();
             });
         });
@@ -84,7 +84,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
 
             it("has a 'database' field that is pre-populated", function() {
                 expect(this.dialog.$("input[name='dbName']").val()).toBe("oracle-db121");
-                expect(this.dialog.$("label[name='dbName']").text()).toMatchTranslation("instances.dialog.database_name");
+                expect(this.dialog.$("label[name='dbName']").text()).toMatchTranslation("data_sources.dialog.database_name");
                 expect(this.dialog.$("input[name='dbName']").prop("disabled")).toBeFalsy();
             });
         });
@@ -92,7 +92,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
         describe('when editing a hdfs data source', function() {
             beforeEach(function() {
                 this.dataSource = rspecFixtures.hdfsDataSource({username: 'user', groupList: 'hadoop'});
-                this.dialog = new chorus.dialogs.DataSourceEdit({ instance: this.dataSource });
+                this.dialog = new chorus.dialogs.DataSourceEdit({ dataSource: this.dataSource });
                 this.dialog.render();
             });
 
@@ -133,9 +133,9 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                     name: "myGnip",
                     username: "me@fun.com",
                     streamUrl: "https://some.thing.com",
-                    description: "a gnip instance"
+                    description: "a gnip data source"
                 });
-                this.dialog = new chorus.dialogs.DataSourceEdit({ instance: this.dataSource });
+                this.dialog = new chorus.dialogs.DataSourceEdit({ dataSource: this.dataSource });
 
                 this.dialog.model = new chorus.models.GnipDataSource(this.dialog.model.attributes);
                 this.dialog.render();
@@ -147,7 +147,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
             });
 
             it("has a pre-populated and enabled 'description' field", function() {
-                expect(this.dialog.$("textarea[name=description]").val()).toBe("a gnip instance");
+                expect(this.dialog.$("textarea[name=description]").val()).toBe("a gnip data source");
                 expect(this.dialog.$("textarea[name=description]").prop("disabled")).toBeFalsy();
             });
 
@@ -184,7 +184,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
             this.dialog.$("input[name=port]").val("8555");
             this.dialog.$("input[name=host]").val(" testhost ");
             this.dialog.$("input[name=dbName]").val(" not_postgres ");
-            this.dialog.$("textarea[name=description]").val("  instance   ");
+            this.dialog.$("textarea[name=description]").val("  data source   ");
         });
 
         it("puts the button in 'loading' mode", function() {
@@ -206,14 +206,14 @@ describe("chorus.dialogs.DataSourceEdit", function() {
             expect(this.dialog.model.save.argsForCall[0][0].name).toBe("test1");
             expect(this.dialog.model.save.argsForCall[0][0].port).toBe("8555");
             expect(this.dialog.model.save.argsForCall[0][0].host).toBe("testhost");
-            expect(this.dialog.model.save.argsForCall[0][0].description).toBe("instance");
+            expect(this.dialog.model.save.argsForCall[0][0].description).toBe("data source");
             expect(this.dialog.model.save.argsForCall[0][0].dbName).toBe("not_postgres");
         });
 
         it("changes the text on the upload button to 'saving'", function() {
             spyOn(this.dialog.model, "save");
             this.dialog.$("button[type=submit]").submit();
-            expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.saving");
+            expect(this.dialog.$("button.submit").text()).toMatchTranslation("data_sources.new_dialog.saving");
         });
 
         it("disables the cancel button", function() {
@@ -291,7 +291,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
             });
 
             it("sets the button text back to 'Uploading'", function() {
-                expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.edit_dialog.save");
+                expect(this.dialog.$("button.submit").text()).toMatchTranslation("data_sources.edit_dialog.save");
             });
         }
 

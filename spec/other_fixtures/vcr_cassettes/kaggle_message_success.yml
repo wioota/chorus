@@ -5,10 +5,10 @@ http_interactions:
     uri: https://www.kaggle.com/connect/chorus-beta/message?apiKey=<SUPPRESSED_KAGGLE_API_KEY>
     body:
       encoding: US-ASCII
-      string: subject=some+subject&replyTo=test%40fun.com&htmlBody=message+body&userId=63766&userId=63767
+      string: apiKey=<SUPPRESSED_KAGGLE_API_KEY>&subject=Please+analyze+my+data&userId=63766&userId=63767&htmlBody=I+have+a+lot+of+data+that+needs+to+be+analyzed.&replyTo=user%40chorus.com
     headers:
       accept:
-      - ! '*/*'
+      - "*/*"
       user-agent:
       - Ruby
       content-type:
@@ -25,15 +25,15 @@ http_interactions:
       server:
       - Microsoft-IIS/8.0
       date:
-      - Fri, 22 Mar 2013 21:46:40 GMT
+      - Thu, 25 Apr 2013 01:10:19 GMT
       connection:
       - close
       content-length:
       - '80'
     body:
       encoding: US-ASCII
-      string: ! "{\r\n  \"status\": 200,\r\n  \"sent\": [\r\n    63766,\r\n    63767\r\
+      string: "{\r\n  \"status\": 200,\r\n  \"sent\": [\r\n    63766,\r\n    63767\r\
         \n  ],\r\n  \"failed\": []\r\n}"
     http_version: '1.1'
-  recorded_at: Fri, 22 Mar 2013 21:46:39 GMT
+  recorded_at: Thu, 25 Apr 2013 01:10:19 GMT
 recorded_with: VCR 2.3.0

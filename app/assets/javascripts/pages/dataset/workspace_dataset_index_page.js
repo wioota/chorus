@@ -119,7 +119,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
                 this.mainContent.contentDetails.options.buttons = [];
             }
 
-            this.instance = this.workspace.sandbox().dataSource();
+            this.dataSource = this.workspace.sandbox().dataSource();
             this.account = this.workspace.sandbox().dataSource().accountForCurrentUser();
 
             this.listenTo(this.account, "loaded", this.checkAccount);
@@ -137,9 +137,9 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
     },
 
     checkAccount: function() {
-        if (!this.instance.isShared() && !this.account.get('id')) {
+        if (!this.dataSource.isShared() && !this.account.get('id')) {
             if (!chorus.session.sandboxPermissionsCreated[this.workspace.get("id")]) {
-                this.dialog = new chorus.dialogs.WorkspaceInstanceAccount({model: this.account, pageModel: this.workspace});
+                this.dialog = new chorus.dialogs.WorkspaceDataSourceAccount({model: this.account, pageModel: this.workspace});
                 this.dialog.launchModal();
                 this.account.bind('saved', function() {
                     this.collection.fetch();

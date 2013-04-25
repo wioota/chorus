@@ -276,17 +276,17 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
             });
 
-            context("when the account loads and is empty and the instance account maps are individual", function() {
+            context("when the account loads and is empty and the data source account maps are individual", function() {
 
                 beforeEach(function() {
                     spyOnEvent(this.page.collection, 'reset');
-                    this.server.completeFetchFor(this.account, rspecFixtures.instanceAccount({"id":null}));
-                    expect(this.page.instance.isShared()).toBeFalsy();
+                    this.server.completeFetchFor(this.account, rspecFixtures.dataSourceAccount({"id":null}));
+                    expect(this.page.dataSource.isShared()).toBeFalsy();
                 });
 
-                it("pops up a WorkspaceInstanceAccount dialog", function() {
+                it("pops up a WorkspaceDataSourceAccount dialog", function() {
 
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkspaceDataSourceAccount);
                     expect(this.page.dialog.model).toBe(this.page.account);
                     expect(this.page.dialog.pageModel).toBe(this.page.workspace);
                 });
@@ -308,11 +308,11 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                         this.server.reset();
                         this.page = new chorus.pages.WorkspaceDatasetIndexPage(this.workspace.get("id"));
                         this.server.completeFetchFor(this.workspace);
-                        this.server.completeFetchFor(this.page.account, rspecFixtures.instanceAccount({"id":null}));
+                        this.server.completeFetchFor(this.page.account, rspecFixtures.dataSourceAccount({"id":null}));
                     });
 
-                    it("should not pop up the WorkspaceInstanceAccountDialog", function() {
-                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
+                    it("should not pop up the WorkspaceDataSourceAccountDialog", function() {
+                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceDataSourceAccount);
                     });
                 });
             });
@@ -320,23 +320,23 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             context('when the account loads and is empty and the data source is shared', function() {
                 beforeEach(function() {
                     spyOnEvent(this.page.collection, 'reset');
-                    this.page.instance.set({"shared": true});
-                    expect(this.page.instance.isShared()).toBeTruthy();
-                    this.server.completeFetchFor(this.page.account, rspecFixtures.instanceAccount({"id":null}));
+                    this.page.dataSource.set({"shared": true});
+                    expect(this.page.dataSource.isShared()).toBeTruthy();
+                    this.server.completeFetchFor(this.page.account, rspecFixtures.dataSourceAccount({"id":null}));
                 });
 
-                it("does not pop up a WorkspaceInstanceAccount dialog", function() {
-                    expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
+                it("does not pop up a WorkspaceDataSourceAccount dialog", function() {
+                    expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceDataSourceAccount);
                 });
             });
 
             context("when the account loads and is valid", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.account, rspecFixtures.instanceAccount());
+                    this.server.completeFetchFor(this.account, rspecFixtures.dataSourceAccount());
                 });
 
-                it("does not pop up the WorkspaceInstanceAccountDialog", function() {
-                    expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceInstanceAccount);
+                it("does not pop up the WorkspaceDataSourceAccountDialog", function() {
+                    expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceDataSourceAccount);
                 });
 
                 describe("filtering", function() {

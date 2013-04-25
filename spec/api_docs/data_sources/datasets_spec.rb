@@ -78,7 +78,7 @@ resource "Greenplum DB: datasets" do
     before do
       stub(DatasetStatistics).build_for(
           satisfy { |arg| arg.id == dataset.id && arg.class == GpdbTable },
-          satisfy { |arg| arg.id == owner_account.id && arg.class == InstanceAccount }
+          satisfy { |arg| arg.id == owner_account.id && arg.class == DataSourceAccount }
       ).returns(statistics)
     end
 

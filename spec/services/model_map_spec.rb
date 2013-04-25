@@ -18,12 +18,12 @@ describe ModelMap do
       ModelMap.model_from_params("workfile", model.id).should == model
     end
 
-    it "works for greenplum instances" do
+    it "works for greenplum data sources" do
       model = data_sources(:default)
       ModelMap.model_from_params("gpdb_data_source", model.id).should == model
     end
 
-    it "works for gnip instances" do
+    it "works for gnip data sources" do
       model = gnip_data_sources(:default)
       ModelMap.model_from_params("gnip_data_source", model.id).should == model
     end

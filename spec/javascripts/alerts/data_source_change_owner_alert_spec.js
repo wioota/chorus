@@ -7,9 +7,9 @@ describe("chorus.alerts.DataSourceChangedOwner", function() {
 
     it("displays the confirmation message", function() {
         var title = this.alert.$("h1").text().trim();
-        expect(title).toMatchTranslation("instances.confirm_change_owner.title", { displayName: "Boxiong Ding"});
-        expect(this.alert.$("p").text().trim()).toMatchTranslation("instances.confirm_change_owner.text");
-        expect(this.alert.$("button.submit").text().trim()).toMatchTranslation("instances.confirm_change_owner.change_owner");
+        expect(title).toMatchTranslation("data_sources.confirm_change_owner.title", { displayName: "Boxiong Ding"});
+        expect(this.alert.$("p").text().trim()).toMatchTranslation("data_sources.confirm_change_owner.text");
+        expect(this.alert.$("button.submit").text().trim()).toMatchTranslation("data_sources.confirm_change_owner.change_owner");
     });
 
     it("raises the 'confirmChangeOwner' event when the submit button is clicked, passing the user as a parameter", function() {

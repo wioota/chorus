@@ -524,7 +524,7 @@ describe("chorus.models.Activity", function() {
                 expect(this.model.author()).toBeA(chorus.models.User);
             });
 
-            it("returns the same instance when called multiple times", function() {
+            it("returns the same data source when called multiple times", function() {
                 expect(this.model.author()).toBe(this.model.author());
             });
         });
@@ -537,7 +537,7 @@ describe("chorus.models.Activity", function() {
                 expect(this.model.author()).toBeA(chorus.models.User);
             });
 
-            it("returns the same instance when called multiple times", function() {
+            it("returns the same data source when called multiple times", function() {
                 expect(this.model.author()).toBe(this.model.author());
             });
         });

@@ -20,14 +20,14 @@ describe("chorus.views.DatasetItem", function() {
     });
 
     it('renders breadcrumbs for the data source, database and schema', function() {
-        expect(this.view.$(".instance")).toContainText(this.dataset.dataSource().get("name"));
+        expect(this.view.$(".data_source")).toContainText(this.dataset.dataSource().get("name"));
         expect(this.view.$(".database")).toContainText(this.dataset.database().get("name"));
         expect(this.view.$(".schema")).toContainText(this.dataset.schema().get("name"));
     });
 
     it('attaches the data source model to the data source and database breadcrumbs', function() {
-        expect(this.view.$(".instance").data("instance")).toEqual(this.dataset.dataSource().attributes);
-        expect(this.view.$(".database").data("instance")).toEqual(this.dataset.dataSource().attributes);
+        expect(this.view.$(".data_source").data("data_source")).toEqual(this.dataset.dataSource().attributes);
+        expect(this.view.$(".database").data("data_source")).toEqual(this.dataset.dataSource().attributes);
     });
 
     xdescribe("found in workspaces tooltip (when rendered from the schema browse page)", function() {

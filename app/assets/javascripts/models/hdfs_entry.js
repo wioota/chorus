@@ -40,7 +40,7 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
     },
 
     getHdfsDataSource: function() {
-        return new chorus.models.HdfsDataSource(this.get('hdfsDataSource')).set({ instanceProvider: "Hadoop" });
+        return new chorus.models.HdfsDataSource(this.get('hdfsDataSource')).set({ dataSourceProvider: "Hadoop" });
     },
 
     iconUrl: function() {

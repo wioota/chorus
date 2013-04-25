@@ -41,7 +41,7 @@ describe("chorus.dialogs.SandboxNew", function() {
         context("without schema selected yet", function() {
             beforeEach(function() {
                 spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
-                    instance: "4",
+                    dataSource: "4",
                     database: "5",
                     schemaName: ""
                 });
@@ -58,7 +58,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                 spyOn(this.dialog, 'closeModal');
                 spyOn(this.dialog.schemaPicker, 'schemaId').andReturn("6");
                 spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
-                    instance: "4",
+                    dataSource: "4",
                     database: "5",
                     schema: "6"
                 });
@@ -137,7 +137,7 @@ describe("chorus.dialogs.SandboxNew", function() {
         context('with a data source id, database id, and schema name', function() {
             beforeEach(function() {
                 spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
-                    instance: "4",
+                    dataSource: "4",
                     database: "5",
                     schemaName: "new_schema"
                 });
@@ -162,7 +162,7 @@ describe("chorus.dialogs.SandboxNew", function() {
         context('with a data source id, database name and schema name', function() {
             beforeEach(function() {
                 spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
-                    instance: "4",
+                    dataSource: "4",
                     databaseName: "new_database",
                     schemaName: "new_schema"
                 });

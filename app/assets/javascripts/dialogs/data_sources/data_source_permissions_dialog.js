@@ -2,7 +2,7 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
     constructorName: "DataSourcePermissions",
 
     templateName: "data_source_permissions",
-    title: t("instances.permissions_dialog.title"),
+    title: t("data_sources.permissions_dialog.title"),
     additionalClass: 'with_sub_header',
     persistent: true,
 
@@ -22,9 +22,9 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
 
     makeModel: function() {
         this._super("makeModel", arguments);
-        this.model = this.dataSource = this.options.instance;
+        this.model = this.dataSource = this.options.dataSource;
 
-        this.ownership = new chorus.models.DataSourceOwnership({instanceId: this.dataSource.id});
+        this.ownership = new chorus.models.DataSourceOwnership({dataSourceId: this.dataSource.id});
         this.users = new chorus.collections.UserSet();
         this.listenTo(this.users, "reset", this.populateSelect);
         this.users.sortAsc("firstName");
@@ -132,7 +132,7 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         var newOwnerId = user.get("id");
         this.listenTo(this.ownership, "saveFailed", function() { this.showErrors(this.ownership); });
         this.listenTo(this.ownership, "saved", function() {
-            chorus.toast("instances.confirm_change_owner.toast");
+            chorus.toast("data_sources.confirm_change_owner.toast");
             this.closeModal();
             this.collection.fetch({
                 success: _.bind(function() {
@@ -148,7 +148,7 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
     newAccount: function(e) {
         var button = this.$("button.add_account");
         if (button.is(":disabled")) return;
-        this.account = new chorus.models.InstanceAccount({instanceId: this.dataSource.get("id")});
+        this.account = new chorus.models.DataSourceAccount({dataSourceId: this.dataSource.get("id")});
         this.collection.add(this.account);
         this.$("button.add_account").prop("disabled", true);
         var newLi = this.$("li[data-id=new]");
@@ -190,7 +190,7 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         });
 
         var select = this.$("li.new select.name");
-        select.attr('id', 'select_new_instance_account_owner'); // need handle for Selenium to interact with JQ Select
+        select.attr('id', 'select_new_data_source_account_owner'); // need handle for Selenium to interact with JQ Select
         select.empty();
         if (select) {
             select.append(_.map(otherUsers,
@@ -214,7 +214,7 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         event.stopPropagation();
         event.preventDefault();
         var li = $(event.target).closest("li");
-        li.find("a.save").startLoading("instances.permissions.saving");
+        li.find("a.save").startLoading("data_sources.permissions.saving");
 
         this.listenTo(this.account, "validationFailed", function() {
             this.showErrors(this.account);
@@ -268,13 +268,13 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         var localGroup = _.extend({}, Backbone.Events);
         function displaySuccessToast() {
             this.dataSource.set({shared: false});
-            chorus.toast("instances.shared_account_removed");
+            chorus.toast("data_sources.shared_account_removed");
             this.render();
             localGroup.stopListening();
         }
 
         function displayFailureToast() {
-            chorus.toast("instances.shared_account_remove_failed");
+            chorus.toast("data_sources.shared_account_remove_failed");
             localGroup.stopListening();
         }
 
@@ -296,7 +296,7 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         var localGroup = _.extend({}, Backbone.Events);
         function success() {
             this.dataSource.set({shared: true});
-            chorus.toast("instances.shared_account_added");
+            chorus.toast("data_sources.shared_account_added");
             this.render();
             localGroup.stopListening();
 
@@ -304,7 +304,7 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         }
 
         function displayFailureToast() {
-            chorus.toast("instances.shared_account_add_failed");
+            chorus.toast("data_sources.shared_account_add_failed");
             localGroup.stopListening();
         }
 
@@ -338,7 +338,7 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
             this.showErrors(account);
         }, this);
         this.listenTo(account, "destroy", function() {
-            chorus.toast("instances.remove_individual_account.toast", {
+            chorus.toast("data_sources.remove_individual_account.toast", {
                 dataSourceName: this.dataSource.get("name"),
                 userName: selectedUser.displayName()
             });

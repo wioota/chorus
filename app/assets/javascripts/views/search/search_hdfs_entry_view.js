@@ -22,7 +22,7 @@ chorus.views.SearchHdfsEntry = chorus.views.SearchItemBase.extend({
             showUrl: this.model.showUrl(),
             humanSize: I18n.toHumanSize(this.model.get("size")),
             iconUrl: chorus.urlHelpers.fileIconUrl(_.last(this.model.get("name").split("."))),
-            instanceLink: Handlebars.helpers.linkTo(hdfsDataSource.showUrl(), hdfsDataSource.get('name')),
+            dataSourceLink: Handlebars.helpers.linkTo(hdfsDataSource.showUrl(), hdfsDataSource.get('name')),
             completePath: new Handlebars.SafeString(pathLinks.join(" / ")),
             displayableFiletype: this.model.get('isBinary') === false
         });

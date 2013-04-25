@@ -5,7 +5,10 @@ http_interactions:
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><add><doc><field name="id">SearchableHtmlTestClass 1</field><field name="type">SearchableHtmlTestClass</field><field name="type">ActiveRecord::Base</field><field name="class_name">SearchableHtmlTestClass</field><field name="html_field_texts">hello twinkletwinklelittlestar</field></doc></add>
+      string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><add><doc><field name=\"\
+        id\">SearchableHtmlTestClass 1</field><field name=\"type\">SearchableHtmlTestClass</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">SearchableHtmlTestClass</field><field\
+        \ name=\"html_field_texts\">hello twinkletwinklelittlestar</field></doc></add>"
     headers:
       content-type:
       - text/xml
@@ -22,15 +25,15 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>92}}'
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>56}}"
     http_version: '1.1'
-  recorded_at: Fri, 22 Mar 2013 21:53:44 GMT
+  recorded_at: Thu, 25 Apr 2013 16:27:08 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
-      string: <?xml version="1.0" encoding="UTF-8"?><commit/>
+      string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><commit/>"
     headers:
       content-type:
       - text/xml
@@ -47,9 +50,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>6}}'
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>27}}"
     http_version: '1.1'
-  recorded_at: Fri, 22 Mar 2013 21:53:44 GMT
+  recorded_at: Thu, 25 Apr 2013 16:27:08 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -72,9 +75,8 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: ! '{''responseHeader''=>{''status''=>0,''QTime''=>1,''params''=>{''fl''=>''*
-        score'',''start''=>''0'',''q''=>''twinkletwinklelittlestar'',''qf''=>''html_field_texts'',''wt''=>''ruby'',''fq''=>''type:SearchableHtmlTestClass'',''defType''=>''edismax'',''rows''=>''30''}},''response''=>{''numFound''=>1,''start''=>0,''maxScore''=>1.0462223,''docs''=>[{''id''=>''SearchableHtmlTestClass
-        1'',''html_field_texts''=>[''hello twinkletwinklelittlestar''],''score''=>1.0462223}]}}'
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>1,'params'=>{'fl'=>'* score','start'=>'0','q'=>'twinkletwinklelittlestar','qf'=>'html_field_texts','wt'=>'ruby','fq'=>'type:SearchableHtmlTestClass','defType'=>'edismax','rows'=>'30'}},'response'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.053761,'docs'=>[{'id'=>'SearchableHtmlTestClass\
+        \ 1','html_field_texts'=>['hello twinkletwinklelittlestar'],'score'=>1.053761}]}}"
     http_version: '1.1'
-  recorded_at: Fri, 22 Mar 2013 21:53:44 GMT
+  recorded_at: Thu, 25 Apr 2013 16:27:08 GMT
 recorded_with: VCR 2.3.0

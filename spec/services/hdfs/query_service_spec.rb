@@ -2,37 +2,37 @@ require 'spec_helper'
 require 'java'
 
 describe Hdfs::QueryService, :hdfs_integration do
-  let(:hdfs_params) { HdfsIntegration.instance_config }
+  let(:hdfs_params) { HdfsIntegration.data_source_config }
   before do
     devnull = java.io.PrintStream.new(java.io.File.new("/dev/null"))
     com.emc.greenplum.hadoop.Hdfs.logger_stream = devnull
   end
 
-  describe ".instance_version" do
+  describe "data_source_version" do
     context "existing hadoop server" do
-      let(:instance) do
+      let(:data_source) do
         HdfsDataSource.new hdfs_params
       end
 
       it "returns the hadoop version" do
-        version = described_class.version_of(instance)
+        version = described_class.version_of(data_source)
         version.should == "0.20.1gp"
       end
     end
 
     context "nonexistent hadoop server" do
-      let(:instance) { "garbage" }
+      let(:data_source) { "garbage" }
       let(:port) { 8888 }
       let(:username) { "pivotal" }
-      let(:nonexistent_instance) do
-        HdfsDataSource.new :host => instance, :port => port, :username => username
+      let(:nonexistent_data_source) do
+        HdfsDataSource.new :host => data_source, :port => port, :username => username
       end
 
       it "raises ApiValidationError and prints to log file" do
         Timecop.freeze(Time.current)
-        mock(Rails.logger).error("#{Time.current.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Within JavaHdfs connection, failed to establish connection to #{instance}:#{port}")
-        expect { described_class.version_of(nonexistent_instance) }.to raise_error(ApiValidationError) { |error|
-          error.record.errors.get(:connection).should == [[:generic, { :message => "Unable to determine HDFS server version or unable to reach server at #{instance}:#{port}. Check connection parameters." }]]
+        mock(Rails.logger).error("#{Time.current.strftime("%Y-%m-%d %H:%M:%S")} ERROR: Within JavaHdfs connection, failed to establish connection to #{data_source}:#{port}")
+        expect { described_class.version_of(nonexistent_data_source) }.to raise_error(ApiValidationError) { |error|
+          error.record.errors.get(:connection).should == [[:generic, { :message => "Unable to determine HDFS server version or unable to reach server at #{data_source}:#{port}. Check connection parameters." }]]
         }
         Timecop.return
       end
@@ -41,25 +41,25 @@ describe Hdfs::QueryService, :hdfs_integration do
 
   describe "#accessible?" do
     context "when the hadoop server can be reached" do
-      let(:reachable_instance) do
+      let(:reachable_data_source) do
         HdfsDataSource.new hdfs_params
       end
 
       it "returns true" do
-        Hdfs::QueryService.accessible?(reachable_instance).should be_true
+        Hdfs::QueryService.accessible?(reachable_data_source).should be_true
       end
     end
 
     context "when the hadoop server cannot be reached" do
-      let(:instance) { "garbage" }
+      let(:data_source) { "garbage" }
       let(:port) { 8888 }
       let(:username) { "pivotal" }
-      let(:unreachable_instance) do
-        HdfsDataSource.new :host => instance, :port => port, :username => username
+      let(:unreachable_data_source) do
+        HdfsDataSource.new :host => data_source, :port => port, :username => username
       end
 
       it "returns false" do
-        Hdfs::QueryService.accessible?(unreachable_instance).should be_false
+        Hdfs::QueryService.accessible?(unreachable_data_source).should be_false
       end
     end
   end

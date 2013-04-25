@@ -18,7 +18,7 @@ class OracleConnection < DataSourceConnection
       errortype = case error_code
         when 1017 then :INVALID_PASSWORD
         when 12514 then :DATABASE_MISSING
-        when 17002 then :INSTANCE_UNREACHABLE
+        when 17002 then :DATA_SOURCE_UNREACHABLE
         else :GENERIC
       end
       Rails.logger.error "Oracle error code type = #{errortype}"

@@ -23,8 +23,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
     });
 
     it("shows data source description", function() {
-        expect(this.dialog.$(".register_existing_greenplum .description").text()).toMatchTranslation("instances.new_dialog.register_existing_greenplum_help_text");
-        expect(this.dialog.$(".register_existing_hdfs .description").text()).toMatchTranslation("instances.new_dialog.register_existing_hdfs_help_text");
+        expect(this.dialog.$(".register_existing_greenplum .description").text()).toMatchTranslation("data_sources.new_dialog.register_existing_greenplum_help_text");
+        expect(this.dialog.$(".register_existing_hdfs .description").text()).toMatchTranslation("data_sources.new_dialog.register_existing_hdfs_help_text");
     });
 
     it("does not autocomplete password inputs", function(){
@@ -77,8 +77,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
             describe("filling out the form", function() {
                 beforeEach(function() {
-                    this.dialog.$(".register_existing_greenplum input[name=name]").val("Instance_Name");
-                    this.dialog.$(".register_existing_greenplum textarea[name=description]").val("Instance Description");
+                    this.dialog.$(".register_existing_greenplum input[name=name]").val("DataSource_Name");
+                    this.dialog.$(".register_existing_greenplum textarea[name=description]").val("DataSource Description");
                     this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
                     this.dialog.$(".register_existing_greenplum input[name=port]").val("1234");
                     this.dialog.$(".register_existing_greenplum input[name=dbUsername]").val("user");
@@ -90,8 +90,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
                 it("gets the fieldValues", function() {
                     var values = this.dialog.fieldValues();
-                    expect(values.name).toBe("Instance_Name");
-                    expect(values.description).toBe("Instance Description");
+                    expect(values.name).toBe("DataSource_Name");
+                    expect(values.description).toBe("DataSource Description");
                     expect(values.host).toBe("foo.bar");
                     expect(values.port).toBe("1234");
                     expect(values.dbUsername).toBe("user");
@@ -133,8 +133,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
             describe("filling out the form", function() {
                 beforeEach(function() {
                     var form = this.dialog.$(".register_existing_hdfs");
-                    form.find("input[name=name]").val("Instance_Name");
-                    form.find("textarea[name=description]").val("Instance Description");
+                    form.find("input[name=name]").val("DataSource_Name");
+                    form.find("textarea[name=description]").val("DataSource Description");
                     form.find("input[name=host]").val("foo.bar");
                     form.find("input[name=port]").val("1234");
                     form.find("input.username").val("user");
@@ -144,13 +144,13 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                 });
 
                 it("labels 'host' correctly ", function() {
-                    expect(this.dialog.$(".register_existing_hdfs label[name=host]").text()).toMatchTranslation("instances.dialog.hadoop_host");
+                    expect(this.dialog.$(".register_existing_hdfs label[name=host]").text()).toMatchTranslation("data_sources.dialog.hadoop_host");
                 });
 
                 it("#fieldValues returns the values", function() {
                     var values = this.dialog.fieldValues();
-                    expect(values.name).toBe("Instance_Name");
-                    expect(values.description).toBe("Instance Description");
+                    expect(values.name).toBe("DataSource_Name");
+                    expect(values.description).toBe("DataSource Description");
                     expect(values.host).toBe("foo.bar");
                     expect(values.port).toBe("1234");
                     expect(values.username).toBe("user");
@@ -190,8 +190,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
             describe("filling out the form", function() {
                 beforeEach(function() {
-                    this.dialog.$(".register_existing_oracle input[name=name]").val("Instance_Name");
-                    this.dialog.$(".register_existing_oracle textarea[name=description]").val("Instance Description");
+                    this.dialog.$(".register_existing_oracle input[name=name]").val("DataSource_Name");
+                    this.dialog.$(".register_existing_oracle textarea[name=description]").val("DataSource Description");
                     this.dialog.$(".register_existing_oracle input[name=host]").val("foo.bar");
                     this.dialog.$(".register_existing_oracle input[name=port]").val("1234");
                     this.dialog.$(".register_existing_oracle input[name=dbUsername]").val("user");
@@ -203,8 +203,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
                 it("should return the values in fieldValues", function() {
                     var values = this.dialog.fieldValues();
-                    expect(values.name).toBe("Instance_Name");
-                    expect(values.description).toBe("Instance Description");
+                    expect(values.name).toBe("DataSource_Name");
+                    expect(values.description).toBe("DataSource Description");
                     expect(values.host).toBe("foo.bar");
                     expect(values.port).toBe("1234");
                     expect(values.dbUsername).toBe("user");
@@ -225,7 +225,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
         });
 
         it("shows gnip data source description", function() {
-            expect(this.dialog.$(".register_existing_gnip .description").text()).toMatchTranslation("instances.new_dialog.register_existing_gnip_help_text");
+            expect(this.dialog.$(".register_existing_gnip .description").text()).toMatchTranslation("data_sources.new_dialog.register_existing_gnip_help_text");
         });
 
         it("shows the icon", function() {
@@ -275,7 +275,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                 });
 
                 it("changes the text on the upload button to 'saving'", function() {
-                    expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.saving");
+                    expect(this.dialog.$("button.submit").text()).toMatchTranslation("data_sources.new_dialog.saving");
                 });
 
                 it("does not disable the cancel button", function() {
@@ -298,11 +298,11 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                     it('displays a toast message', function() {
                         spyOn(chorus, 'toast');
                         this.server.lastCreate().succeed();
-                        expect(chorus.toast).toHaveBeenCalledWith('instances.add.toast',
+                        expect(chorus.toast).toHaveBeenCalledWith('data_sources.add.toast',
                             {dataSourceName: this.dialog.model.name()});
                     });
 
-                    it("publishes the 'data_source:added' page event with the new instance's id", function() {
+                    it("publishes the 'data_source:added' page event with the new data_source's id", function() {
                         expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("data_source:added", this.dialog.model);
                     });
                 });
@@ -313,7 +313,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                     });
 
                     it("sets the button text back to 'Uploading'", function() {
-                        expect(this.dialog.$("button.submit").text()).toMatchTranslation("instances.new_dialog.save");
+                        expect(this.dialog.$("button.submit").text()).toMatchTranslation("data_sources.new_dialog.save");
                     });
                 }
 
@@ -345,8 +345,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                 this.dialog.$("select.data_sources").val("register_existing_hdfs").change();
 
                 var hadoopSection = this.dialog.$("div.register_existing_hdfs");
-                hadoopSection.find("input[name=name]").val(" Instance_Name ");
-                hadoopSection.find("textarea[name=description]").val(" Instance Description ");
+                hadoopSection.find("input[name=name]").val(" DataSource_Name ");
+                hadoopSection.find("textarea[name=description]").val(" DataSource Description ");
                 hadoopSection.find("input[name=host]").val(" foo.bar ");
                 hadoopSection.find("input[name=port]").val("1234");
                 hadoopSection.find("input[name=username]").val(" user ");
@@ -359,8 +359,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
             it("creates a hadoop data source model with the right data and saves it", function() {
                 var params = this.server.lastCreate().params();
 
-                expect(params['hdfs_data_source[name]']).toBe("Instance_Name");
-                expect(params['hdfs_data_source[description]']).toBe("Instance Description");
+                expect(params['hdfs_data_source[name]']).toBe("DataSource_Name");
+                expect(params['hdfs_data_source[description]']).toBe("DataSource Description");
                 expect(params['hdfs_data_source[host]']).toBe("foo.bar");
                 expect(params['hdfs_data_source[port]']).toBe("1234");
                 expect(params['hdfs_data_source[username]']).toBe("user");
@@ -373,8 +373,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                 this.dialog.$("select.data_sources").val("register_existing_greenplum").change();
 
                 var section = this.dialog.$(".register_existing_greenplum");
-                section.find("input[name=name]").val("Instance_Name");
-                section.find("textarea[name=description]").val("Instance Description");
+                section.find("input[name=name]").val("DataSource_Name");
+                section.find("textarea[name=description]").val("DataSource Description");
                 section.find("input[name=host]").val("foo.bar");
                 section.find("input[name=port]").val("1234");
                 section.find("input[name=dbUsername]").val("user");
@@ -388,8 +388,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                 var params = this.server.lastCreate().params();
 
                 expect(params['data_source[entity_type]']).toBe('gpdb_data_source');
-                expect(params["data_source[name]"]).toBe("Instance_Name");
-                expect(params["data_source[description]"]).toBe("Instance Description");
+                expect(params["data_source[name]"]).toBe("DataSource_Name");
+                expect(params["data_source[description]"]).toBe("DataSource Description");
                 expect(params["data_source[db_name]"]).toBe("foo");
             });
 
@@ -401,8 +401,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                 this.dialog.$("select.data_sources").val("register_existing_oracle").change();
 
                 var section = this.dialog.$(".register_existing_oracle");
-                section.find("input[name=name]").val("Instance_Name");
-                section.find("textarea[name=description]").val("Instance Description");
+                section.find("input[name=name]").val("DataSource_Name");
+                section.find("textarea[name=description]").val("DataSource Description");
                 section.find("input[name=host]").val("foo.bar");
                 section.find("input[name=port]").val("1234");
                 section.find("input[name=dbUsername]").val("user");
@@ -419,8 +419,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
                 expect(params['data_source[entity_type]']).toBe('oracle_data_source');
                 expect(params["data_source[db_password]"]).toBe("my_password");
-                expect(params["data_source[name]"]).toBe("Instance_Name");
-                expect(params["data_source[description]"]).toBe("Instance Description");
+                expect(params["data_source[name]"]).toBe("DataSource_Name");
+                expect(params["data_source[description]"]).toBe("DataSource Description");
                 expect(params["data_source[db_name]"]).toBe("foo");
             });
 

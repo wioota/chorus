@@ -70,10 +70,10 @@ class WorkspaceImport < Import
     read_pipe_searcher = "pipe%_#{handle}_r"
     read_connection = schema.connect_as(user)
     if read_connection.running? read_pipe_searcher
-      log "Found running reader on database #{schema.database.name} on instance #{schema.data_source.name}, killing it"
+      log "Found running reader on database #{schema.database.name} on data source #{schema.data_source.name}, killing it"
       read_connection.kill read_pipe_searcher
     else
-      log "Could not find running reader on database #{schema.database.name} on instance #{schema.data_source.name}"
+      log "Could not find running reader on database #{schema.database.name} on data source #{schema.data_source.name}"
     end
 
     write_pipe_searcher = "pipe%_#{handle}_w"

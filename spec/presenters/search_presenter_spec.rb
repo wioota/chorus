@@ -32,12 +32,12 @@ describe SearchPresenter, :type => :view do
 
       it 'includes matching data sources' do
         @hash.should have_key(:data_sources)
-        instance_hash = @hash[:data_sources]
-        instance_hash.should have_key(:numFound)
-        instance_hash.should have_key(:results)
-        instance_types = instance_hash[:results].map {|result| result[:entity_type]}.uniq
-        instance_types.should =~ ['gpdb_data_source', 'hdfs_data_source', 'gnip_data_source']
-        instance_hash[:results].each do |result|
+        data_source_hash = @hash[:data_sources]
+        data_source_hash.should have_key(:numFound)
+        data_source_hash.should have_key(:results)
+        data_source_types = data_source_hash[:results].map {|result| result[:entity_type]}.uniq
+        data_source_types.should =~ ['gpdb_data_source', 'hdfs_data_source', 'gnip_data_source']
+        data_source_hash[:results].each do |result|
           result.should have_key(:highlighted_attributes)
         end
       end

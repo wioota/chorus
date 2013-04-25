@@ -23,7 +23,7 @@ describe DataSources::SharingController do
         post :create, :data_source_id => data_source.to_param
 
         owner_account.reload.should be_present
-        InstanceAccount.where(:id => other_account.id).exists?.should be_false
+        DataSourceAccount.where(:id => other_account.id).exists?.should be_false
       end
 
       it "rejects non-owners" do

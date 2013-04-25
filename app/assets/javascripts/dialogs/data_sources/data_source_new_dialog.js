@@ -1,7 +1,7 @@
 chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
     constructorName: "DataSourcesNew",
     templateName: "data_source_new",
-    title: t("instances.new_dialog.title"),
+    title: t("data_sources.new_dialog.title"),
     persistent: true,
 
     events: {
@@ -53,7 +53,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         this.listenTo(this.model, "saveFailed", this.saveFailed);
         this.listenTo(this.model, "validationFailed", this.saveFailed);
 
-        this.$("button.submit").startLoading("instances.new_dialog.saving");
+        this.$("button.submit").startLoading("data_sources.new_dialog.saving");
         var values = this.fieldValues();
         this.model.set(values);
         this.model.save();
@@ -91,7 +91,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
 
     saveSuccess: function () {
         chorus.PageEvents.trigger("data_source:added", this.model);
-        chorus.toast('instances.add.toast', {dataSourceName: this.model.name()});
+        chorus.toast('data_sources.add.toast', {dataSourceName: this.model.name()});
         this.closeModal();
     },
 

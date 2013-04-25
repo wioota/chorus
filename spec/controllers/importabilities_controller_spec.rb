@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ImportabilitiesController do
   let(:user) { users(:default) }
-  let(:instance_account) { dataset.schema.data_source.owner_account }
+  let(:data_source_account) { dataset.schema.data_source.owner_account }
 
   let(:supported_column) { DatasetColumn.new(data_type: "BINARY_DOUBLE", name: "supported_col") }
   let(:unsupported_column) { DatasetColumn.new(data_type: "RAINBOWS", name: "unsupported_col") }
@@ -15,7 +15,7 @@ describe ImportabilitiesController do
 
   describe "#show" do
     before do
-      stub(DatasetColumn).columns_for(instance_account, dataset) { columns }
+      stub(DatasetColumn).columns_for(data_source_account, dataset) { columns }
     end
 
     context "when all of the dataset's columns are of a supported type" do

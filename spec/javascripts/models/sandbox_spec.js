@@ -43,7 +43,7 @@ describe("chorus.models.Sandbox", function() {
             this.database = this.model.database();
         });
 
-        it("returns a database with the right id and instanceId", function() {
+        it("returns a database with the right id and dataSourceId", function() {
             expect(this.database).toBeA(chorus.models.Database);
             expect(this.database.get("id")).toBe(this.model.get("database").id);
             expect(this.database.get("name")).toBe(this.model.get("database").name);
@@ -54,26 +54,26 @@ describe("chorus.models.Sandbox", function() {
         });
     });
 
-    describe("#instance", function() {
+    describe("#dataSource", function() {
         beforeEach(function() {
-            this.instance = this.model.dataSource();
+            this.dataSource = this.model.dataSource();
         });
 
         it('returns a data source with the right id and name', function() {
-            expect(this.instance).toBeA(chorus.models.GpdbDataSource);
-            expect(this.instance.get("id")).toBe(this.model.get("database").instance.id);
-            expect(this.instance.get("name")).toBe(this.model.get("database").instance.name);
+            expect(this.dataSource).toBeA(chorus.models.GpdbDataSource);
+            expect(this.dataSource.get("id")).toBe(this.model.get("database").dataSource.id);
+            expect(this.dataSource.get("name")).toBe(this.model.get("database").dataSource.name);
         });
 
         it("memoizes", function() {
-            expect(this.instance).toBe(this.model.dataSource());
+            expect(this.dataSource).toBe(this.model.dataSource());
         });
     });
 
     describe("validations", function() {
         beforeEach(function() {
             this.model.set({
-                instanceId: '1',
+                dataSourceId: '1',
                 databaseId: '2',
                 schemaId: '3'
             });

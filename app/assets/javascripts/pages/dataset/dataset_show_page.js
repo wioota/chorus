@@ -2,7 +2,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
     chorus.Mixins.DataSourceCredentials.page).extend({
         constructorName: "DatasetShowPage",
         helpId: "dataset",
-        isInstanceBrowser: true,
+        isDataSourceBrowser: true,
         additionalClass: 'dataset_show',
         sidebarOptions: {},
         contentDetailsOptions: {},
@@ -49,7 +49,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
                 persistent: true,
                 contentHeader: this.customHeaderView,
                 contentDetails: new chorus.views.DatasetContentDetails(_.extend(
-                    { dataset: this.dataset, collection: this.columnSet, isInstanceBrowser: this.isInstanceBrowser},
+                    { dataset: this.dataset, collection: this.columnSet, isDataSourceBrowser: this.isDataSourceBrowser},
                     this.contentDetailsOptions))
             });
             this.setupSidebar();
@@ -59,7 +59,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
             if (!this.dataset.schema()) return [];
             return _.compact([
                 {label: t("breadcrumbs.home"), url: "#/"},
-                {label: t("breadcrumbs.instances"), url: '#/data_sources'},
+                {label: t("breadcrumbs.data_sources"), url: '#/data_sources'},
                 {label: this.dataset.dataSource().name(), url: this.dataset.dataSource().showUrl() },
                 this.dataset.database() && {label: this.dataset.database().name(), url: this.dataset.database().showUrl() },
                 {label: this.dataset.schema().name(), url: this.dataset.schema().showUrl()},

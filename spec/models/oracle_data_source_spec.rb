@@ -8,7 +8,7 @@ describe OracleDataSource do
 
     context 'when creating' do
       it 'validates the owner account' do
-        mock(data_source).owner_account { mock(FactoryGirl.build(:instance_account)).valid? { true } }
+        mock(data_source).owner_account { mock(FactoryGirl.build(:data_source_account)).valid? { true } }
         data_source.valid?
       end
     end
@@ -84,16 +84,16 @@ describe OracleDataSource do
       end
 
       it 'calls Schema.refresh for each account' do
-        schema.instance_accounts = [account_with_access]
+        schema.data_source_accounts = [account_with_access]
         mock(Schema).refresh(account_with_access, data_source, {:refresh_all => true}) { [schema] }
         data_source.refresh_schemas
       end
 
-      it "adds new instance accounts to each Schema" do
-        schema.instance_accounts = []
-        schema.instance_accounts.find_by_id(account_with_access.id).should be_nil
+      it "adds new data source accounts to each Schema" do
+        schema.data_source_accounts = []
+        schema.data_source_accounts.find_by_id(account_with_access.id).should be_nil
         data_source.refresh_schemas
-        schema.instance_accounts.find_by_id(account_with_access.id).should == account_with_access
+        schema.data_source_accounts.find_by_id(account_with_access.id).should == account_with_access
       end
 
       it "continues to next account when unable to connect with an account" do
@@ -103,8 +103,8 @@ describe OracleDataSource do
       end
 
       it "enqueues a reindex_datasets worker for each schema if accounts were changed" do
-        schema.instance_accounts = []
-        schema.instance_accounts.find_by_id(account_with_access.id).should be_nil
+        schema.data_source_accounts = []
+        schema.data_source_accounts.find_by_id(account_with_access.id).should be_nil
         mock(QC.default_queue).enqueue_if_not_queued("OracleSchema.reindex_datasets", schema.id).once
         data_source.refresh_schemas
         data_source.refresh_schemas

@@ -65,11 +65,11 @@ describe Events::Note do
       }, :as => :create)
     end
 
-    it "sets the instance set correctly" do
+    it "sets the data source set correctly" do
       subject.hdfs_data_source.should == hdfs_data_source
     end
 
-    it "sets the instance as the target" do
+    it "sets the data source as the target" do
       subject.targets.should == {:hdfs_data_source => hdfs_data_source}
     end
 
@@ -311,7 +311,7 @@ describe Events::Note do
       end
     end
 
-    it "builds a note on a greenplum instance" do
+    it "builds a note on a greenplum data source" do
       gpdb_data_source = data_sources(:default)
       note = Events::Note.build_for(gpdb_data_source, {
           :body => "Some crazy content"
@@ -363,7 +363,7 @@ describe Events::Note do
       note.body.should == "Some crazy content"
     end
 
-    it "builds a note on a Gnip Instance" do
+    it "builds a note on a Gnip Data Source" do
       note = Events::Note.build_for(gnip_data_source, {
           :body => "Some crazy content"
       })

@@ -2,7 +2,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
     beforeEach(function() {
         stubDelay();
         this.dialog = new chorus.dialogs.NotesNew({
-            entityType: "instance",
+            entityType: "data_source",
             entityId: 1,
             pageModel: new chorus.models.GpdbDataSource()
         });
@@ -16,7 +16,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
         });
 
         it("sets the correct properties on the model", function() {
-            expect(this.dialog.model.get("entityType")).toBe("instance");
+            expect(this.dialog.model.get("entityType")).toBe("data_source");
             expect(this.dialog.model.get("entityId")).toBe(1);
         });
 
@@ -27,7 +27,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
         context("when a workspaceId option is passed", function() {
             it("sets that attribute on the note model", function() {
                 this.dialog = new chorus.dialogs.NotesNew({
-                    entityType: "instance",
+                    entityType: "data_source",
                     entityId: 1,
                     workspaceId: 45,
                     pageModel: new chorus.models.GpdbDataSource()
@@ -44,7 +44,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
         });
 
         it("has the right placeholder", function() {
-            expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("notes.placeholder", {noteSubject: "instance"}));
+            expect(this.dialog.$("textarea[name=body]").attr("placeholder")).toBe(t("notes.placeholder", {noteSubject: "data_source"}));
         });
 
         it("has the right button text", function() {
@@ -54,7 +54,7 @@ describe("chorus.dialogs.NotesNewDialog", function() {
         context("when a displayEntityType is available", function() {
             beforeEach(function() {
                 this.dialog = new chorus.dialogs.NotesNew({
-                    entityType: "instance",
+                    entityType: "data_source",
                     entityId: 1,
                     displayEntityType: 'foo',
                     pageModel: new chorus.models.GpdbDataSource()

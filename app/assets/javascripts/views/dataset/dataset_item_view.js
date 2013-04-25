@@ -21,7 +21,7 @@ chorus.views.DatasetItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).e
     },
 
     postRender: function() {
-        this.$("a.instance, a.database").data("instance", this.model.dataSource().attributes);
+        this.$("a.data_source, a.database").data("data_source", this.model.dataSource().attributes);
         var $menu = this.$('.found_in .open_other_menu');
         chorus.menu($menu, {
             content: $menu.parent().find('.other_menu'),

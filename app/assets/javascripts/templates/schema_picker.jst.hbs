@@ -1,22 +1,22 @@
-<div class="instance">
-    {{#if options.instance}}
+<div class="data_source">
+    {{#if options.dataSource}}
         <div class="header_container">
-            <label>{{t "sandbox.select.instance"}}</label>
+            <label>{{t "sandbox.select.data_source"}}</label>
         </div>
         <div class="title">
-            {{options.instance.attributes.name}}
+            {{options.dataSource.attributes.name}}
         </div>
     {{else}}
         <div class="header_container">
-            <label class="required">{{t "sandbox.select.instance"}}</label>
+            <label class="required">{{t "sandbox.select.data_source"}}</label>
         </div>
         <div class="loading_text">
             <span class="loading_spinner"></span>
         </div>
 
-        <div class="unavailable hidden">{{t "sandbox.unavailable.instance"}}</div>
+        <div class="unavailable hidden">{{t "sandbox.unavailable.data_source"}}</div>
         <div class="select_container hidden">
-            <select name="instance"></select>
+            <select name="data_source"></select>
         </div>
     {{/if}}
 </div>

@@ -20,8 +20,8 @@ describe OracleSchemaPresenter, :type => :view do
       hash[:refreshed_at].should == schema.refreshed_at
       hash[:refreshed_at].should_not be_nil
       hash[:entity_type].should == "oracle_schema"
-      hash[:instance][:id].should == schema.data_source.id
-      hash[:instance][:name].should == schema.data_source.name
+      hash[:data_source][:id].should == schema.data_source.id
+      hash[:data_source][:name].should == schema.data_source.name
     end
   end
 end

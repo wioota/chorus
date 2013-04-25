@@ -10,7 +10,7 @@ describe HdfsEntryAccess do
   end
 
   describe "#show?" do
-    context "if the user has access to the hdfs_entry's instance" do
+    context "if the user has access to the hdfs_entry's data source" do
       let(:user) { users(:the_collaborator) }
 
       it "allows access" do
@@ -18,7 +18,7 @@ describe HdfsEntryAccess do
       end
     end
 
-    context "if the user does not have access to the hdfs_entry's instance" do
+    context "if the user does not have access to the hdfs_entry's data source" do
       let(:user) { users(:the_collaborator) }
 
       before do

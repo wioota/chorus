@@ -8,13 +8,13 @@ module ImportConsole
       description << schema.name + "." + table_name
     end
 
-    def instance_description_for_schema(schema)
+    def data_source_description_for_schema(schema)
       if schema
-        instance = schema.data_source
-        if instance
-          instance.host + ":" + instance.port.to_s
+        data_source = schema.data_source
+        if data_source
+          data_source.host + ":" + data_source.port.to_s
         else
-          "#{schema.name} has no instance"
+          "#{schema.name} has no data source"
         end
       else
         "No schema found."

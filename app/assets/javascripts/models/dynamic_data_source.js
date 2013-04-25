@@ -1,6 +1,15 @@
-chorus.models.DynamicDataSource = function(attributes){
-    if(attributes.entityType === "oracle_data_source") {
-        return new chorus.models.OracleDataSource(attributes);
+chorus.models.DynamicDataSource = function(dataSourceJSON) {
+    var typeMap = {
+        data_source: 'GpdbDataSource',
+        gpdb_data_source: 'GpdbDataSource',
+        hdfs_data_source: 'HdfsDataSource',
+        gnip_data_source: 'GnipDataSource',
+        oracle_data_source: 'OracleDataSource'
+    };
+
+    if (!chorus.models[typeMap[dataSourceJSON.entityType]]) {
+        window.console.error("Unknown Data Source Type!", dataSourceJSON.entityType, dataSourceJSON);
     }
-    return new chorus.models.GpdbDataSource(attributes);
+
+    return new chorus.models[typeMap[dataSourceJSON.entityType]](dataSourceJSON);
 };

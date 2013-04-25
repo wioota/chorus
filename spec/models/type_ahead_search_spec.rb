@@ -51,7 +51,7 @@ describe TypeAheadSearch do
     def create_and_record_search(*args)
       if args.empty?
         tape_name = "type_ahead_search_spec"
-        args = [owner, {:query => 'typeahead', :per_page => 15}]
+        args = [owner, {:query => 'typeahead', :per_page => 20}]
       end
 
       record_with_vcr(tape_name) do

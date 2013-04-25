@@ -48,8 +48,8 @@ describe SearchController do
       get :show, :query => 'searchquery', :entity_type => 'user'
     end
 
-    generate_and_record_fixture "searchResultWithAttachmentOnInstanceNote.json" do
-      get :show, :query => 'searchquery_instance'
+    generate_and_record_fixture "searchResultWithAttachmentOnDataSourceNote.json" do
+      get :show, :query => 'searchquery_data_source'
     end
 
     generate_and_record_fixture "searchResultWithAttachmentOnWorkspaceNote.json" do

@@ -28,7 +28,7 @@ describe GpdbDataSourcePresenter, :type => :view do
       hash.should have_key(:online)
       hash.should have_key(:db_name)
       hash.should have_key(:description)
-      hash.should have_key(:instance_provider)
+      hash.should have_key(:data_source_provider)
       hash.should have_key(:version)
       hash.should have_key(:is_deleted)
       hash[:entity_type].should == "gpdb_data_source"

@@ -1,8 +1,8 @@
-describe("chorus.alerts.InstanceAccountDelete", function() {
+describe("chorus.alerts.DataSourceAccountDelete", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.gpdbDataSource({ id: '456' });
+        this.dataSource = rspecFixtures.gpdbDataSource({ id: '456' });
         setLoggedInUser({ id: "1011" });
-        this.alert = new chorus.alerts.InstanceAccountDelete({ pageModel: this.instance });
+        this.alert = new chorus.alerts.DataSourceAccountDelete({ pageModel: this.dataSource });
     });
 
     it("does not have a redirect url", function() {
@@ -12,7 +12,7 @@ describe("chorus.alerts.InstanceAccountDelete", function() {
     describe("#makeModel", function() {
         it("gets the user account for the data source that is the current page model", function(){
             expect(this.alert.model.get("userId")).toBe("1011");
-            expect(this.alert.model.get("instanceId")).toBe("456");
+            expect(this.alert.model.get("dataSourceId")).toBe("456");
         });
     });
 
@@ -23,7 +23,7 @@ describe("chorus.alerts.InstanceAccountDelete", function() {
         });
 
         it("displays a toast message", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("instances.account.delete.toast", undefined);
+            expect(chorus.toast).toHaveBeenCalledWith("data_sources.account.delete.toast", undefined);
             expect(chorus.toast.callCount).toBe(1);
         });
     });

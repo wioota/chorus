@@ -64,7 +64,7 @@ describe GpdbDataSourceWorkspaceDetailPresenter, :type => :view do
       end
     end
 
-    context "when the current_user doesn't have access to the instance" do
+    context "when the current_user doesn't have access to the data source" do
       let(:user) { users(:not_a_member) }
 
       it "should have nil for values" do
@@ -100,7 +100,7 @@ describe GpdbDataSourceWorkspaceDetailPresenter, :type => :view do
       hash[:sandboxes_size_in_bytes].should == 0
     end
 
-    it 'should not connect to the instance more than once' do
+    it 'should not connect to the data source more than once' do
       expect { hash }.to change { @schema_connections }.by(1)
     end
   end

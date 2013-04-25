@@ -1,6 +1,6 @@
-describe("chorus.models.InstanceAccount", function() {
+describe("chorus.models.DataSourceAccount", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.instanceAccount({ id: '72', instanceId: '1045' });
+        this.model = rspecFixtures.dataSourceAccount({ id: '72', dataSourceId: '1045' });
     });
 
     it("wraps parameters in 'account'", function() {
@@ -55,15 +55,15 @@ describe("chorus.models.InstanceAccount", function() {
         });
     });
 
-    describe("#fetchByInstanceId", function() {
+    describe("#fetchBydataSourceId", function() {
         it("hits the correct url", function() {
-            chorus.models.InstanceAccount.findByInstanceId("4");
+            chorus.models.DataSourceAccount.findBydataSourceId("4");
             expect(this.server.requests[0].url).toMatchUrl("/data_sources/4/members");
         });
 
-        it("returns an InstanceAccount", function() {
-            var model = chorus.models.InstanceAccount.findByInstanceId("4");
-            expect(model instanceof chorus.models.InstanceAccount).toBeTruthy();
+        it("returns an DataSourceAccount", function() {
+            var model = chorus.models.DataSourceAccount.findBydataSourceId("4");
+            expect(model instanceof chorus.models.DataSourceAccount).toBeTruthy();
         });
     });
 
@@ -88,7 +88,7 @@ describe("chorus.models.InstanceAccount", function() {
 
         context("when the account is being created", function() {
             it("requires a dbPassword", function() {
-                this.model = new chorus.models.InstanceAccount({ dbUsername: "ilikecoffee" });
+                this.model = new chorus.models.DataSourceAccount({ dbUsername: "ilikecoffee" });
                 this.model.performValidation();
                 expect(this.model.isValid()).toBeFalsy();
             });

@@ -6,7 +6,7 @@ describe DatasetDownloadsController do
   describe "#show" do
     let(:user) { users(:the_collaborator) }
     let(:table) { datasets(:table) }
-    let(:instance_account) { table.data_source.account_for_user!(user) }
+    let(:data_source_account) { table.data_source.account_for_user!(user) }
 
     let(:connection) {
       object = Object.new

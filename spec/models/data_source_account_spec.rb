@@ -1,19 +1,19 @@
 require 'spec_helper'
 
-describe InstanceAccount do
+describe DataSourceAccount do
   it "should allow mass-assignment of username and password" do
-    InstanceAccount.new(:db_username => 'aname').db_username.should == 'aname'
-    InstanceAccount.new(:db_password => 'apass').db_password.should == 'apass'
+    DataSourceAccount.new(:db_username => 'aname').db_username.should == 'aname'
+    DataSourceAccount.new(:db_password => 'apass').db_password.should == 'apass'
   end
 
   describe "validations" do
     let(:gpdb_data_source) { FactoryGirl.build(:gpdb_data_source) }
-    let(:account) { InstanceAccount.first }
+    let(:account) { DataSourceAccount.first }
 
     it { should validate_presence_of :db_username }
     it { should validate_presence_of :db_password }
 
-    it "validates the uniqueness of owner_id and instance_id" do
+    it "validates the uniqueness of owner_id and data_source_id" do
       data_source = account.data_source
       stub(data_source).valid_db_credentials?(anything) { true }
       new_account = data_source.accounts.build(:owner => account.owner)
@@ -95,7 +95,7 @@ describe InstanceAccount do
     let(:owner) { users(:admin) }
     let(:data_source) { data_sources(:default) }
     let(:password) { "apass" }
-    let(:instance_account) do
+    let(:data_source_account) do
       account = data_source.account_for_user(owner)
       stub(account.data_source).valid_db_credentials?(anything) { true }
       account.update_attributes!(:db_password => password, :db_username => 'aname')
@@ -104,7 +104,7 @@ describe InstanceAccount do
 
     it "stores db_password as encrypted_db_password using the attr_encrypted gem" do
       ActiveRecord::Base.connection.select_values("select encrypted_db_password
-                                                  from instance_accounts where id = #{instance_account.id}") do |db_password|
+                                                  from data_source_accounts where id = #{data_source_account.id}") do |db_password|
         db_password.should_not be_nil
         db_password.should_not == password
       end
@@ -123,7 +123,7 @@ describe InstanceAccount do
     context "creating a new account" do
       it "should reindex" do
         mock(data_source).refresh_databases_later
-        FactoryGirl.create(:instance_account, :owner => user, :data_source => data_source)
+        FactoryGirl.create(:data_source_account, :owner => user, :data_source => data_source)
       end
     end
 
@@ -148,7 +148,7 @@ describe InstanceAccount do
   end
 
   describe "invalid_credentials!" do
-    let(:account) { instance_accounts(:shared_instance_account) }
+    let(:account) { data_source_accounts(:shared_data_source_account) }
     it "flags the model as invalid and saves it" do
       account.invalid_credentials.should be_false
       account.invalid_credentials!
@@ -175,7 +175,7 @@ describe InstanceAccount do
     context "when the record has already been flagged as invalid" do
       before do
         account
-        already_locked_account = InstanceAccount.find(account.id)
+        already_locked_account = DataSourceAccount.find(account.id)
         already_locked_account.invalid_credentials!
         account.invalid_credentials.should be_false
       end

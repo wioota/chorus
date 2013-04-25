@@ -82,10 +82,10 @@ describe GpdbSchema do
     let(:account) { gpdb_data_source.owner_account }
     let(:schema) { schemas(:default) }
 
-    it 'returns true if the user can access the gpdb instance' do
+    it 'returns true if the user can access the gpdb data source' do
       owner = account.owner
-      any_instance_of(GpdbDataSource) do |instance|
-        mock(instance).accessible_to(owner) { true }
+      any_instance_of(GpdbDataSource) do |data_source|
+        mock(data_source).accessible_to(owner) { true }
       end
 
       schema.accessible_to(owner).should be_true
@@ -145,7 +145,7 @@ describe GpdbSchema do
 
   describe "#disk_space_used" do
     let(:schema) { schemas(:default) }
-    let(:account) { instance_accounts(:unauthorized) }
+    let(:account) { data_source_accounts(:unauthorized) }
     let(:connection) { Object.new }
     let(:disk_space_used) { 12345 }
 
@@ -194,7 +194,7 @@ describe GpdbSchema do
 
   describe "#connect_with" do
     let(:schema) { schemas(:public) }
-    let(:account) { instance_accounts(:unauthorized) }
+    let(:account) { data_source_accounts(:unauthorized) }
     let(:mockConnection) { {} }
 
     before do

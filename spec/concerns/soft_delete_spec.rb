@@ -11,14 +11,14 @@ describe SoftDelete do
     end
   end
 
-  let(:instance) do
+  let(:test_object) do
     @test_class.new.tap do |model|
       model.save!(:validate => false)
     end
   end
 
   it "does not validate on destroy" do
-    instance.destroy
-    @test_class.find_by_id(instance.id).should be_nil
+    test_object.destroy
+    @test_class.find_by_id(test_object.id).should be_nil
   end
 end

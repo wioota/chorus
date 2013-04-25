@@ -516,7 +516,7 @@ describe("chorus.views.Activity", function() {
             this.view = new chorus.views.Activity({ model: model, isNotification: true });
             this.view.render();
             this.view.$('.update_credentials').click();
-            expect(this.modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
+            expect(this.modalSpy).toHaveModal(chorus.dialogs.DataSourceAccount);
         });
     });
 });

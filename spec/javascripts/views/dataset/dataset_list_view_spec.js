@@ -4,7 +4,7 @@ describe("chorus.views.DatasetList", function() {
             rspecFixtures.workspaceDataset.chorusView({ hasCredentials: true, objectName: "foo" }),
             rspecFixtures.workspaceDataset.datasetTable({ hasCredentials: true, objectName: "bar" }),
             rspecFixtures.workspaceDataset.datasetTable({ objectName: "baz" })
-        ], { instanceId: "1", databaseName: "two", schemaName: "three" });
+        ], { dataSourceId: "1", databaseName: "two", schemaName: "three" });
         this.collection.loaded = true;
 
         this.view = new chorus.views.DatasetList({
@@ -18,7 +18,7 @@ describe("chorus.views.DatasetList", function() {
 
     describe("when there are no datasets", function() {
         beforeEach(function() {
-            this.view.collection = new chorus.collections.SchemaDatasetSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
+            this.view.collection = new chorus.collections.SchemaDatasetSet([], { dataSourceId: "1", databaseName: "two", schemaName: "three" });
             this.view.render();
         });
 
@@ -54,13 +54,13 @@ describe("chorus.views.DatasetList", function() {
 
         context("when there is no workspace", function() {
             beforeEach(function() {
-                this.view.collection = new chorus.collections.SchemaDatasetSet([], { instanceId: "1", databaseName: "two", schemaName: "three" });
+                this.view.collection = new chorus.collections.SchemaDatasetSet([], { dataSourceId: "1", databaseName: "two", schemaName: "three" });
                 this.view.collection.loaded = true;
                 this.view.render();
             });
 
             it('renders the no datasets in the this data source message', function() {
-                expect($(this.view.el)).toContainTranslation("dataset.browse_more_instance");
+                expect($(this.view.el)).toContainTranslation("dataset.browse_more_data_source");
             });
         });
     });

@@ -8,81 +8,81 @@
 </select>
 
 <div class="data_sources_form collapsed register_existing_greenplum">
-    <div class="description">{{t "instances.new_dialog.register_existing_greenplum_help_text"}}</div>
+    <div class="description">{{t "data_sources.new_dialog.register_existing_greenplum_help_text"}}</div>
     <form>
-        <label class="required">{{t "instances.dialog.instance_name"}}</label>
+        <label class="required">{{t "data_sources.dialog.data_source_name"}}</label>
         <input type="text" name="name" maxlength="64"/>
 
-        <label>{{t "instances.dialog.description"}}</label>
+        <label>{{t "data_sources.dialog.description"}}</label>
         <textarea rows="3" name="description"/>
 
-        <label class="required" name="host">{{t "instances.dialog.host"}}</label>
-        <label class="required" name="port">{{t "instances.dialog.port"}}</label>
+        <label class="required" name="host">{{t "data_sources.dialog.host"}}</label>
+        <label class="required" name="port">{{t "data_sources.dialog.port"}}</label>
         <input type="text" name="host"/>
         <input type="text" name="port"/>
 
-        <label class="required" name="dbName">{{t "instances.dialog.db_name"}}</label>
+        <label class="required" name="dbName">{{t "data_sources.dialog.db_name"}}</label>
         <input type="text" name="dbName" value="postgres"/>
 
-        <label class="required db_username" name="dbUsername">{{t "instances.dialog.database_account"}}</label>
-        <label class="required db_password" name="dbPassword">{{t "instances.dialog.database_password"}}</label>
+        <label class="required db_username" name="dbUsername">{{t "data_sources.dialog.database_account"}}</label>
+        <label class="required db_password" name="dbPassword">{{t "data_sources.dialog.database_password"}}</label>
         <input class="db_username" type="text" name="dbUsername" maxlength="256"/>
         <input class="db_password" type="password" name="dbPassword" maxlength="256" accept="" autocomplete="off"/>
 
         <input type="checkbox" name="shared" id="register_greenplum_shared"/>
-        <label for="register_greenplum_shared">{{t "instances.dialog.is_community_account"}}
-            <img class="help" src="/images/more-info.png" data-text='{{t "instances.new_dialog.is_community_account.help_text"}}'/>
+        <label for="register_greenplum_shared">{{t "data_sources.dialog.is_community_account"}}
+            <img class="help" src="/images/more-info.png" data-text='{{t "data_sources.new_dialog.is_community_account.help_text"}}'/>
         </label>
     </form>
 </div>
 
 <div class="data_sources_form collapsed register_existing_oracle">
-  <div class="description">{{t "instances.new_dialog.register_existing_oracle_help_text"}}</div>
+  <div class="description">{{t "data_sources.new_dialog.register_existing_oracle_help_text"}}</div>
   <form>
-    <label class="required">{{t "instances.dialog.instance_name"}}</label>
+    <label class="required">{{t "data_sources.dialog.data_source_name"}}</label>
     <input type="text" name="name" maxlength="64"/>
 
-    <label>{{t "instances.dialog.description"}}</label>
+    <label>{{t "data_sources.dialog.description"}}</label>
     <textarea rows="3" name="description"/>
 
-    <label class="required" name="host">{{t "instances.dialog.host"}}</label>
-    <label class="required" name="port">{{t "instances.dialog.port"}}</label>
+    <label class="required" name="host">{{t "data_sources.dialog.host"}}</label>
+    <label class="required" name="port">{{t "data_sources.dialog.port"}}</label>
     <input type="text" name="host"/>
     <input type="text" name="port"/>
 
-    <label class="required" name="dbName">{{t "instances.dialog.database_name"}}</label>
+    <label class="required" name="dbName">{{t "data_sources.dialog.database_name"}}</label>
     <input type="text" name="dbName" value=""/>
 
-    <label class="required db_username" name="dbUsername">{{t "instances.dialog.database_account"}}</label>
-    <label class="required db_password" name="dbPassword">{{t "instances.dialog.database_password"}}</label>
+    <label class="required db_username" name="dbUsername">{{t "data_sources.dialog.database_account"}}</label>
+    <label class="required db_password" name="dbPassword">{{t "data_sources.dialog.database_password"}}</label>
     <input class="db_username" type="text" name="dbUsername" maxlength="256"/>
     <input class="db_password" type="password" name="dbPassword" maxlength="256" autocomplete="off"/>
 
     <input type="checkbox" name="shared" id="register_oracle_shared"/>
-    <label for="register_oracle_shared">{{t "instances.dialog.is_community_account"}}
-      <img class="help" src="/images/more-info.png" data-text='{{t "instances.new_dialog.is_community_account.help_text"}}'/>
+    <label for="register_oracle_shared">{{t "data_sources.dialog.is_community_account"}}
+      <img class="help" src="/images/more-info.png" data-text='{{t "data_sources.new_dialog.is_community_account.help_text"}}'/>
     </label>
   </form>
 </div>
 
 <div class="data_sources_form collapsed register_existing_hdfs">
-    <div class="description">{{t "instances.new_dialog.register_existing_hdfs_help_text"}}</div>
+    <div class="description">{{t "data_sources.new_dialog.register_existing_hdfs_help_text"}}</div>
     <form>
         <input class="hidden" type="checkbox" name="shared" checked="checked"/>
 
-        <label class="required">{{t "instances.dialog.instance_name"}}</label>
+        <label class="required">{{t "data_sources.dialog.data_source_name"}}</label>
         <input type="text" name="name" maxlength="64"/>
 
-        <label>{{t "instances.dialog.description"}}</label>
+        <label>{{t "data_sources.dialog.description"}}</label>
         <textarea rows="3" name="description"/>
 
-        <label class="required" name="host">{{t "instances.dialog.hadoop_host"}}</label>
-        <label class="required" name="port">{{t "instances.dialog.port"}}</label>
+        <label class="required" name="host">{{t "data_sources.dialog.hadoop_host"}}</label>
+        <label class="required" name="port">{{t "data_sources.dialog.port"}}</label>
         <input type="text" name="host"/>
         <input type="text" name="port"/>
 
-        <label class="username required" name="username">{{t "instances.dialog.hadoop_account"}}</label>
-        <label class="group_list required" name="groupList">{{t "instances.dialog.hadoop_group_list"}}</label>
+        <label class="username required" name="username">{{t "data_sources.dialog.hadoop_account"}}</label>
+        <label class="group_list required" name="groupList">{{t "data_sources.dialog.hadoop_group_list"}}</label>
         <input class="username" type="text" name="username" maxlength="255"/>
         <input class="group_list" type="text" name="groupList" maxlength="255"/>
     </form>
@@ -90,22 +90,22 @@
 
 {{#if gnipConfigured}}
 <div class="data_sources_form collapsed register_existing_gnip">
-    <div class="description">{{t "instances.new_dialog.register_existing_gnip_help_text"}}</div>
+    <div class="description">{{t "data_sources.new_dialog.register_existing_gnip_help_text"}}</div>
     <form>
-        <label class="required">{{t "instances.dialog.gnip_data_source_name"}}</label>
+        <label class="required">{{t "data_sources.dialog.gnip_data_source_name"}}</label>
         <input type="text" name="name" maxlength="64"/>
 
-        <label>{{t "instances.dialog.description"}}</label>
+        <label>{{t "data_sources.dialog.description"}}</label>
         <textarea rows="3" name="description"/>
 
         <label class="required gnip_host" name="host">
-            {{t "instances.dialog.gnip_url"}}
-            <img src="/images/more-info.png" class="help" data-text='{{t "instances.dialog.gnip_help_text"}}'/>
+            {{t "data_sources.dialog.gnip_url"}}
+            <img src="/images/more-info.png" class="help" data-text='{{t "data_sources.dialog.gnip_help_text"}}'/>
         </label>
         <input class= "gnip_host" type="text" name="streamUrl" />
 
-        <label class="gnip_username required" name="username">{{t "instances.dialog.gnip_username"}}</label>
-        <label class="gnip_password required" name="password">{{t "instances.dialog.gnip_password"}}</label>
+        <label class="gnip_username required" name="username">{{t "data_sources.dialog.gnip_username"}}</label>
+        <label class="gnip_password required" name="password">{{t "data_sources.dialog.gnip_password"}}</label>
         <input class="gnip_username" type="text" name="username" maxlength="255"/>
         <input class="gnip_password" type="password" name="password" maxlength="255" autocomplete="off"/>
     </form>
@@ -115,5 +115,5 @@
 <div class="modal_controls">
     <label class="required"/><label>{{t "validation.required_field"}}</label>
     <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
-    <button type="submit" class="submit" tabindex="99" disabled="disabled">{{t "instances.new_dialog.save"}}</button>
+    <button type="submit" class="submit" tabindex="99" disabled="disabled">{{t "data_sources.new_dialog.save"}}</button>
 </div>

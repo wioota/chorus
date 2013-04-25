@@ -6,7 +6,7 @@ require 'socket'
 module HdfsIntegration
   HOST = ENV['HADOOP_HOST']
 
-  def self.instance_config(name = HOST)
+  def self.data_source_config(name = HOST)
     config['data_sources']['hadoop'].find { |hash| hash["host"] == name }
   end
 

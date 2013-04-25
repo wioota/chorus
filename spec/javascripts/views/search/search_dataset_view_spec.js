@@ -34,7 +34,7 @@ describe("chorus.views.SearchDataset", function() {
         });
 
         it('should attach a data source to the database and data source links', function() {
-            expect(this.view.$("a.instance, a.database").data("instance")).toBe(this.model.get("instance"));
+            expect(this.view.$("a.data_source, a.database").data("data_source")).toBe(this.model.get("dataSource"));
         });
     });
 

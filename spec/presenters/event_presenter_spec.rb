@@ -78,18 +78,18 @@ describe EventPresenter, :type => :view do
       end
 
       it "presents all of the event's 'targets', using the same names" do
-        special_instance = FactoryGirl.build(:gpdb_data_source)
+        special_data_source = FactoryGirl.build(:gpdb_data_source)
         special_user = FactoryGirl.build(:user)
 
         stub(event).targets do
           {
-              :special_instance => special_instance,
+              :special_data_source => special_data_source,
               :special_user => special_user
           }
         end
 
         hash = subject.to_hash
-        hash[:special_instance].should == Presenter.present(special_instance, view)
+        hash[:special_data_source].should == Presenter.present(special_data_source, view)
         hash[:special_user].should == Presenter.present(special_user, view)
       end
 

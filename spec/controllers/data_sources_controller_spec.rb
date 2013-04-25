@@ -53,7 +53,7 @@ describe DataSourcesController do
   describe "#show" do
     let(:data_source) { DataSource.first }
 
-    context "with a valid instance id" do
+    context "with a valid data source id" do
       it "does not require authorization" do
         dont_allow(subject).authorize!.with_any_args
         get :show, :id => data_source.to_param
@@ -64,7 +64,7 @@ describe DataSourcesController do
         response.should be_success
       end
 
-      it "presents the gpdb instance" do
+      it "presents the gpdb data source" do
         mock.proxy(controller).present(data_source)
         get :show, :id => data_source.to_param
       end
@@ -78,7 +78,7 @@ describe DataSourcesController do
       get :show, :id => data_sources(:oracle).to_param
     end
 
-    context "with an invalid gpdb instance id" do
+    context "with an invalid gpdb data source id" do
       it "returns not found" do
         get :show, :id => -1
         response.should be_not_found
@@ -105,7 +105,7 @@ describe DataSourcesController do
       put :update, params
     end
 
-    it "presents the gpdb instance" do
+    it "presents the gpdb data source" do
       mock.proxy(controller).present(gpdb_data_source)
       put :update, params
     end

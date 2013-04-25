@@ -1,5 +1,5 @@
-//= require ./instance
-chorus.models.DataSource = chorus.models.Instance.extend({
+//= require ./data_source
+chorus.models.DataSource = chorus.models.AbstractDataSource.extend({
     constructorName: 'DataSource',
 
     urlTemplate: 'data_sources/{{id}}',
@@ -22,12 +22,12 @@ chorus.models.DataSource = chorus.models.Instance.extend({
     },
 
     accounts: function() {
-        this._accounts || (this._accounts = new chorus.collections.InstanceAccountSet([], {instanceId: this.get("id")}));
+        this._accounts || (this._accounts = new chorus.collections.DataSourceAccountSet([], {dataSourceId: this.get("id")}));
         return this._accounts;
     },
 
     accountForUser: function(user) {
-        return new chorus.models.InstanceAccount({ instanceId: this.get("id"), userId: user.get("id") });
+        return new chorus.models.DataSourceAccount({ dataSourceId: this.get("id"), userId: user.get("id") });
     },
 
     accountForCurrentUser: function() {
@@ -50,7 +50,7 @@ chorus.models.DataSource = chorus.models.Instance.extend({
 
     usage: function() {
         if(!this.dataSourceUsage) {
-            this.dataSourceUsage = new chorus.models.DataSourceUsage({ instanceId: this.get('id')});
+            this.dataSourceUsage = new chorus.models.DataSourceUsage({ dataSourceId: this.get('id')});
         }
         return this.dataSourceUsage;
     },
@@ -61,7 +61,7 @@ chorus.models.DataSource = chorus.models.Instance.extend({
 
     sharing: function() {
         if(!this._sharing) {
-            this._sharing = new chorus.models.InstanceSharing({instanceId: this.get("id")});
+            this._sharing = new chorus.dialogs.DataSourceSharing({dataSourceId: this.get("id")});
         }
         return this._sharing;
     },

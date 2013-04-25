@@ -44,7 +44,7 @@ describe GpdbDatabase do
 
   describe '#refresh' do
     let(:gpdb_data_source) { FactoryGirl.build_stubbed(:gpdb_data_source) }
-    let(:account) { FactoryGirl.build_stubbed(:instance_account, :data_source => gpdb_data_source) }
+    let(:account) { FactoryGirl.build_stubbed(:data_source_account, :data_source => gpdb_data_source) }
     let(:db_names) { ["db_a", "db_B", "db_C", "db_d"] }
     let(:connection) { Object.new }
 
@@ -199,7 +199,7 @@ describe GpdbDatabase do
   describe "#connect_with" do
     let(:database) { gpdb_databases(:default) }
     let(:data_source) { database.data_source }
-    let(:account) { instance_accounts(:unauthorized) }
+    let(:account) { data_source_accounts(:unauthorized) }
 
     it "should return a GreenplumConnection" do
       mock(GreenplumConnection).new(data_source, account, {
@@ -235,15 +235,15 @@ describe GpdbDatabase do
       end
     end
 
-    it "does not destroy instance accounts (but secretly deletes the join model)" do
-      database.instance_accounts << database.data_source.accounts.first
-      instance_accounts = database.reload.instance_accounts
+    it "does not destroy data source accounts (but secretly deletes the join model)" do
+      database.data_source_accounts << database.data_source.accounts.first
+      data_source_accounts = database.reload.data_source_accounts
 
-      instance_accounts.length.should > 0
+      data_source_accounts.length.should > 0
 
       database.destroy
-      instance_accounts.each do |account|
-        InstanceAccount.find_by_id(account.id).should_not be_nil
+      data_source_accounts.each do |account|
+        DataSourceAccount.find_by_id(account.id).should_not be_nil
       end
     end
   end

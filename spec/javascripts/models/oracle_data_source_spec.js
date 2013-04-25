@@ -1,7 +1,7 @@
 describe("chorus.models.OracleDataSource", function() {
     beforeEach(function() {
-        this.instance = rspecFixtures.oracleDataSource({id: 1});
-        this.instance.set({
+        this.dataSource = rspecFixtures.oracleDataSource({id: 1});
+        this.dataSource.set({
             dbName: 'RockinDB',
             dbUsername: 'system',
             dbPassword: 'oracle'
@@ -9,27 +9,27 @@ describe("chorus.models.OracleDataSource", function() {
     });
 
     it("has the right entity type", function() {
-        expect(this.instance.entityType).toBe("oracle_data_source");
+        expect(this.dataSource.entityType).toBe("oracle_data_source");
     });
 
     it("has the right show url", function() {
-        expect(this.instance.showUrl()).toBe("#/data_sources/1/schemas");
+        expect(this.dataSource.showUrl()).toBe("#/data_sources/1/schemas");
     });
 
     it("has the right url", function() {
-        expect(this.instance.url()).toContain('/data_sources/1');
+        expect(this.dataSource.url()).toContain('/data_sources/1');
 
-        this.instance.unset("id", { silent: true });
-        expect(this.instance.url()).toBe('/data_sources/');
+        this.dataSource.unset("id", { silent: true });
+        expect(this.dataSource.url()).toBe('/data_sources/');
     });
 
     it('has the type', function() {
-        expect(this.instance.get('entityType')).toBe('oracle_data_source');
+        expect(this.dataSource.get('entityType')).toBe('oracle_data_source');
     });
 
     describe("#isGreenplum", function() {
         it('returns false for oracle data sources', function() {
-            expect(this.instance.isGreenplum()).toBeFalsy();
+            expect(this.dataSource.isGreenplum()).toBeFalsy();
         });
     });
 
@@ -47,36 +47,36 @@ describe("chorus.models.OracleDataSource", function() {
 
         context('when the data source is new', function() {
             beforeEach(function() {
-                this.instance.unset("id", { silent: true });
+                this.dataSource.unset("id", { silent: true });
             });
 
             it("returns true when the model is valid", function() {
-                expect(this.instance.performValidation(this.attrs)).toBeTruthy();
+                expect(this.dataSource.performValidation(this.attrs)).toBeTruthy();
             });
 
             _.each(["name", "host", "dbUsername", "dbPassword", "port", "dbName"], function(attr) {
                 it("requires " + attr, function() {
                     this.attrs[attr] = "";
-                    expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                    expect(this.instance.errors[attr]).toBeTruthy();
+                    expect(this.dataSource.performValidation(this.attrs)).toBeFalsy();
+                    expect(this.dataSource.errors[attr]).toBeTruthy();
                 });
             });
 
             it("allows name with spaces", function() {
                 this.attrs.name = "foo bar";
-                expect(this.instance.performValidation(this.attrs)).toBeTruthy();
+                expect(this.dataSource.performValidation(this.attrs)).toBeTruthy();
             });
 
             it("requires name with valid length", function() {
                 this.attrs.name = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest";
-                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                expect(this.instance.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: t('instances.dialog.instance_name')});
+                expect(this.dataSource.performValidation(this.attrs)).toBeFalsy();
+                expect(this.dataSource.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: t('data_sources.dialog.data_source_name')});
             });
 
             it("requires valid port", function() {
                 this.attrs.port = "z123";
-                expect(this.instance.performValidation(this.attrs)).toBeFalsy();
-                expect(this.instance.errors.port).toBeTruthy();
+                expect(this.dataSource.performValidation(this.attrs)).toBeFalsy();
+                expect(this.dataSource.errors.port).toBeTruthy();
             });
         });
 
@@ -84,14 +84,14 @@ describe("chorus.models.OracleDataSource", function() {
             it("does not require a dbUsername or dbPassword", function() {
                 delete this.attrs.dbPassword;
                 delete this.attrs.dbUsername;
-                expect(this.instance.performValidation(this.attrs)).toBeTruthy();
+                expect(this.dataSource.performValidation(this.attrs)).toBeTruthy();
             });
         });
     });
 
     describe('#schemas', function(){
         it('has the right url', function(){
-            expect(this.instance.schemas().url()).toHaveUrlPath('/data_sources/' + this.instance.id + '/schemas');
+            expect(this.dataSource.schemas().url()).toHaveUrlPath('/data_sources/' + this.dataSource.id + '/schemas');
         });
     });
 });

@@ -1403,8 +1403,8 @@ describe GreenplumConnection, :greenplum_integration do
         context "when the error code is 08NNN" do
           let(:error_code) { '08123' }
 
-          it "returns :INSTANCE_UNREACHABLE" do
-            error.error_type.should == :INSTANCE_UNREACHABLE
+          it "returns :DATA_SOURCE_UNREACHABLE" do
+            error.error_type.should == :DATA_SOURCE_UNREACHABLE
           end
         end
 

@@ -95,7 +95,7 @@ describe("chorus.pages.DatasetShowPage", function () {
                 expect(breadcrumbs.eq(0).text()).toBe(t("breadcrumbs.home"));
 
                 expect(breadcrumbs.eq(1).attr("href")).toBe("#/data_sources");
-                expect(breadcrumbs.eq(1).text()).toBe(t("breadcrumbs.instances"));
+                expect(breadcrumbs.eq(1).text()).toBe(t("breadcrumbs.data_sources"));
 
                 expect(breadcrumbs.eq(2)).toHaveHref(this.dataset.dataSource().databases().showUrl());
                 expect(breadcrumbs.eq(2)).toContainText(this.dataset.dataSource().name());
@@ -125,7 +125,7 @@ describe("chorus.pages.DatasetShowPage", function () {
                     expect(breadcrumbs.eq(0).text()).toBe(t("breadcrumbs.home"));
 
                     expect(breadcrumbs.eq(1).attr("href")).toBe("#/data_sources");
-                    expect(breadcrumbs.eq(1).text()).toBe(t("breadcrumbs.instances"));
+                    expect(breadcrumbs.eq(1).text()).toBe(t("breadcrumbs.data_sources"));
 
                     expect(breadcrumbs.eq(2)).toHaveHref(this.dataset.dataSource().showUrl());
                     expect(breadcrumbs.eq(2)).toContainText(this.dataset.dataSource().name());

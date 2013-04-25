@@ -1,6 +1,6 @@
 chorus.dialogs.Account = chorus.dialogs.Base.extend({
     constructorName: "AccountDialog",
-    templateName:"instance_account",
+    templateName:"data_source_account",
     translationKeys: {
         cancel: '',
         body: ''
@@ -36,6 +36,6 @@ chorus.dialogs.Account = chorus.dialogs.Base.extend({
     },
 
     showSavedToast: function(){
-        chorus.toast("instances.account.updated.toast", {dataSourceName: this.options.instance.name()});
+        chorus.toast("data_sources.account.updated.toast", {dataSourceName: this.options.dataSource.name()});
     }
 });

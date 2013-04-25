@@ -15,7 +15,7 @@ describe("chorus.pages.GnipDataSourceShowPage", function() {
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toBe(t("breadcrumbs.home"));
 
             expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
-            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toBe(t("breadcrumbs.instances"));
+            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toBe(t("breadcrumbs.data_sources"));
 
             expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("gnip");
         });

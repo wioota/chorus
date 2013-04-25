@@ -1,6 +1,6 @@
 shared_examples "dataset presenter" do |dataset_factory_name|
   before do
-    gpdb_data_source = FactoryGirl.build(:gpdb_data_source, :id => 123, :name => "instance1")
+    gpdb_data_source = FactoryGirl.build(:gpdb_data_source, :id => 123, :name => "data_source1")
     database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :data_source => gpdb_data_source)
     schema = FactoryGirl.build(:gpdb_schema, :id => 456, :name => "abc", :database => database)
     @dataset = FactoryGirl.build(dataset_factory_name,
@@ -13,7 +13,7 @@ shared_examples "dataset presenter" do |dataset_factory_name|
   let(:presenter) { described_class.new(@dataset, view) }
   let(:hash) { presenter.to_hash }
 
-  it "includes schema, database and instance object fields" do
+  it "includes schema, database and data source object fields" do
     hash[:id].should == 321
     hash[:object_name].should == "object1"
     hash[:entity_subtype].should == "SOURCE_TABLE"
@@ -27,9 +27,9 @@ shared_examples "dataset presenter" do |dataset_factory_name|
     database[:id].should == 789
     database[:name].should == "db1"
 
-    instance = database[:instance]
-    instance[:id].should == 123
-    instance[:name].should == "instance1"
+    data_source = database[:data_source]
+    data_source[:id].should == 123
+    data_source[:name].should == "data_source1"
   end
 
   it "checks if the user is allowed to access" do
@@ -45,7 +45,7 @@ end
 
 shared_examples "dataset presenter with workspace" do |dataset_factory_name|
   before do
-    gpdb_data_source = FactoryGirl.build(:gpdb_data_source, :id => 123, :name => "instance1")
+    gpdb_data_source = FactoryGirl.build(:gpdb_data_source, :id => 123, :name => "data_source1")
     database = FactoryGirl.build(:gpdb_database, :id => 789, :name => "db1", :data_source => gpdb_data_source)
     schema = FactoryGirl.build(:gpdb_schema, :id => 456, :name => "abc", :database => database)
     @dataset = FactoryGirl.build(dataset_factory_name,
@@ -112,7 +112,7 @@ end
 
 shared_examples "oracle dataset presenter" do |dataset_factory_name|
   before do
-    data_source = FactoryGirl.build(:oracle_data_source, :id => 123, :name => "instance1")
+    data_source = FactoryGirl.build(:oracle_data_source, :id => 123, :name => "data_source1")
     schema = FactoryGirl.build(:oracle_schema, :id => 456, :name => "abc", :data_source => data_source)
     @dataset = FactoryGirl.build(dataset_factory_name,
                                  :id => 321,
@@ -134,9 +134,9 @@ shared_examples "oracle dataset presenter" do |dataset_factory_name|
     schema[:id].should == 456
     schema[:name].should == "abc"
 
-    instance = schema[:instance]
-    instance[:id].should == 123
-    instance[:name].should == "instance1"
+    data_source = schema[:data_source]
+    data_source[:id].should == 123
+    data_source[:name].should == "data_source1"
   end
 
   it "checks if the user is allowed to access" do

@@ -31,7 +31,7 @@ describe("chorus.views.DataSourceIndexContentDetails", function() {
         });
     });
 
-    describe("when the instances are loaded", function() {
+    describe("when the data sources are loaded", function() {
         beforeEach(function() {
             this.view.dataSources.loaded = true;
             this.view.dataSources.trigger('loaded');

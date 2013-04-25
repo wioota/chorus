@@ -9,13 +9,13 @@ class DataSource < ActiveRecord::Base
   attr_accessible :shared, :as => :create
 
   belongs_to :owner, :class_name => 'User'
-  has_many :accounts, :class_name => 'InstanceAccount', :inverse_of => :data_source, :foreign_key => "data_source_id", :dependent => :destroy
-  has_one :owner_account, :class_name => 'InstanceAccount', :foreign_key => "data_source_id", :inverse_of => :data_source, :conditions => proc { {:owner_id => owner_id} }
+  has_many :accounts, :class_name => 'DataSourceAccount', :inverse_of => :data_source, :foreign_key => "data_source_id", :dependent => :destroy
+  has_one :owner_account, :class_name => 'DataSourceAccount', :foreign_key => "data_source_id", :inverse_of => :data_source, :conditions => proc { {:owner_id => owner_id} }
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
 
-  before_validation :build_instance_account_for_owner, :on => :create
+  before_validation :build_data_source_account_for_owner, :on => :create
 
   validates_associated :owner_account, :if => :validate_owner?
   validates_presence_of :name, :db_name, :host
@@ -61,7 +61,7 @@ class DataSource < ActiveRecord::Base
   def self.accessible_to(user)
     where('data_sources.shared OR data_sources.owner_id = :owned OR data_sources.id IN (:with_membership)',
           owned: user.id,
-          with_membership: user.instance_accounts.pluck(:data_source_id)
+          with_membership: user.data_source_accounts.pluck(:data_source_id)
     )
   end
 
@@ -158,7 +158,7 @@ class DataSource < ActiveRecord::Base
   end
 
   private
-  def build_instance_account_for_owner
+  def build_data_source_account_for_owner
     build_owner_account(:owner => owner, :db_username => db_username, :db_password => db_password)
   end
 

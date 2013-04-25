@@ -27,7 +27,7 @@ chorus.views.DatasetList = chorus.views.PageItemList.extend({
             } else if (this.collection.attributes.workspaceId) {
                 hintText = t("dataset.browse_more_workspace", {linkText: linkText});
             } else {
-                hintText = t("dataset.browse_more_instance", {linkText: linkText});
+                hintText = t("dataset.browse_more_data_source", {linkText: linkText});
             }
 
             noDatasetEl.append(hintText);

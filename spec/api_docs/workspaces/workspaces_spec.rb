@@ -167,8 +167,8 @@ resource "Workspaces" do
 
     before do
       workspace.update_attribute(:sandbox, sandbox)
-      any_instance_of(ExternalTable) do |instance|
-        stub(instance).save {
+      any_instance_of(ExternalTable) do |data_source|
+        stub(data_source).save {
           sandbox.datasets << FactoryGirl.create(:gpdb_table, :schema => sandbox, :name => table_name)
         }
       end

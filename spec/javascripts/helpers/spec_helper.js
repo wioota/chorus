@@ -440,8 +440,8 @@
         }
     };
 
-    window.setLoggedInUser = function(options, chorusInstance) {
-        var target = (chorusInstance || chorus);
+    window.setLoggedInUser = function(options, chorusObject) {
+        var target = (chorusObject || chorus);
         if(options instanceof chorus.models.User) {
             options = options.attributes;
         }

@@ -160,16 +160,16 @@ describe Workspace do
         workspace.source_datasets << source_table
       end
 
-      context "when the user does not have an instance account" do
+      context "when the user does not have a data source account" do
         it "lets them see associated datasets and chorus views only" do
           workspace.datasets(user).to_a.should =~ [source_table, chorus_view, chorus_view_from_source]
           workspace.dataset_count(user).should == 3
         end
       end
 
-      context "when the user has an instance account" do
+      context "when the user has a data source account" do
         let!(:account) do
-          FactoryGirl.build(:instance_account, data_source: schema.database.data_source, owner: user).tap do |a|
+          FactoryGirl.build(:data_source_account, data_source: schema.database.data_source, owner: user).tap do |a|
             a.save(validate: false)
           end
         end
@@ -376,7 +376,7 @@ describe Workspace do
     end
 
     it 'does not reindex the workspace' do
-      any_instance_of(Workspace) { |instance| dont_allow(instance).solr_reindex }
+      any_instance_of(Workspace) { |data_source| dont_allow(data_source).solr_reindex }
       workspace.destroy
     end
 

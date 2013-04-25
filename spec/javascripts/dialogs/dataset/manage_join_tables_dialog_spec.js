@@ -13,7 +13,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
             objectName:"original",
             schema:{
                 database:{
-                    instance:{
+                    dataSource:{
                         name:this.dataSourceName,
                         id:11
                     }

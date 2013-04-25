@@ -18,7 +18,7 @@ describe OracleViewAccess do
       end
     end
 
-    context "if the user has access to the view's instance" do
+    context "if the user has access to the view's data source" do
       let(:user) { users(:the_collaborator) }
 
       it "allows access" do
@@ -26,7 +26,7 @@ describe OracleViewAccess do
       end
     end
 
-    context "if the user does not have access to the view's instance" do
+    context "if the user does not have access to the view's data source" do
       let(:user) { users(:the_collaborator) }
 
       before do

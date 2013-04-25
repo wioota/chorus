@@ -4,7 +4,7 @@ jasmine.sharedExamples.aSidebar = function() {
     });
 
     it('displays data source type', function() {
-        expect(this.view.$(".data_source_type")).toContainText(t("instances.provider." + this.dataSource.get('entityType')));
+        expect(this.view.$(".data_source_type")).toContainText(t("data_sources.provider." + this.dataSource.get('entityType')));
     });
 
     it("has a 'add a note' link", function() {
@@ -34,7 +34,7 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
             this.dataSource.set({
                 shared: true
             });
-            this.dataSource._accountForCurrentUser = rspecFixtures.instanceAccount();
+            this.dataSource._accountForCurrentUser = rspecFixtures.dataSourceAccount();
             this.view.render();
         });
 
@@ -58,7 +58,7 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
 
         it('displays edit data source link when user is owner', function() {
             setLoggedInUser({ username: "benjamin", admin: false});
-            this.dataSource.accounts().reset([rspecFixtures.instanceAccount({owner: {id: chorus.session.user().get('id')}})]);
+            this.dataSource.accounts().reset([rspecFixtures.dataSourceAccount({owner: {id: chorus.session.user().get('id')}})]);
             this.dataSource.set({owner: {id: chorus.session.user().get('id')}});
             this.view.render();
             expect(this.view.$(".actions .edit_data_source")).toExist();
@@ -71,7 +71,7 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
         });
 
         it("shows shared account information", function() {
-            expect(this.view.$(".account_info")).toContainTranslation("instances.sidebar.is_shared_account");
+            expect(this.view.$(".account_info")).toContainTranslation("data_sources.sidebar.is_shared_account");
         });
     });
 
@@ -80,16 +80,16 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
             context('when the user does not have an account for the data source', function() {
                 it("shows the 'no access' text and image", function() {
                     expect(this.view.$(".account_info img").attr("src")).toBe("/images/data_sources/no_access.png");
-                    expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.no_access");
+                    expect(this.view.$(".account_info").text().trim()).toMatchTranslation("data_sources.sidebar.no_access");
                 });
 
                 it("shows the add credentials link", function() {
                     var addCredentialsLink = this.view.$(".actions a.add_credentials");
                     expect(addCredentialsLink).toExist();
-                    expect(addCredentialsLink.data("dialog")).toBe("InstanceAccount");
-                    expect(addCredentialsLink.data("title")).toMatchTranslation("instances.account.add.title");
-                    expect(addCredentialsLink.text()).toMatchTranslation("instances.sidebar.add_credentials");
-                    expect(addCredentialsLink.data("instance")).toBe(this.dataSource);
+                    expect(addCredentialsLink.data("dialog")).toBe("DataSourceAccount");
+                    expect(addCredentialsLink.data("title")).toMatchTranslation("data_sources.account.add.title");
+                    expect(addCredentialsLink.text()).toMatchTranslation("data_sources.sidebar.add_credentials");
+                    expect(addCredentialsLink.data("data_source")).toBe(this.dataSource);
                 });
 
                 it("does not show the 'edit credentials' link", function() {
@@ -103,28 +103,28 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
 
             context('when the user has set up an account for the data source', function() {
                 beforeEach(function() {
-                    var account = rspecFixtures.instanceAccount();
+                    var account = rspecFixtures.dataSourceAccount();
                     spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
                     this.view.render();
                 });
 
                 it("shows the 'access' text and image", function() {
                     expect(this.view.$(".account_info img").attr("src")).toBe("/images/data_sources/access.png");
-                    expect(this.view.$(".account_info").text().trim()).toMatchTranslation("instances.sidebar.access");
+                    expect(this.view.$(".account_info").text().trim()).toMatchTranslation("data_sources.sidebar.access");
                 });
 
                 it("shows the 'remove credentials' link", function() {
-                    expect(this.view.$(".actions .remove_credentials").text()).toMatchTranslation("instances.sidebar.remove_credentials");
-                    expect(this.view.$(".actions .remove_credentials").data("alert")).toBe("InstanceAccountDelete");
+                    expect(this.view.$(".actions .remove_credentials").text()).toMatchTranslation("data_sources.sidebar.remove_credentials");
+                    expect(this.view.$(".actions .remove_credentials").data("alert")).toBe("DataSourceAccountDelete");
                 });
 
                 it("shows the 'edit credentials' link", function() {
                     var editCredentialsLink = this.view.$(".actions .edit_credentials");
                     expect(editCredentialsLink).toExist();
-                    expect(editCredentialsLink.data("dialog")).toBe("InstanceAccount");
-                    expect(editCredentialsLink.data("title")).toMatchTranslation("instances.account.edit.title");
-                    expect(editCredentialsLink.text()).toMatchTranslation("instances.sidebar.edit_credentials");
-                    expect(editCredentialsLink.data("instance")).toBe(this.dataSource);
+                    expect(editCredentialsLink.data("dialog")).toBe("DataSourceAccount");
+                    expect(editCredentialsLink.data("title")).toMatchTranslation("data_sources.account.edit.title");
+                    expect(editCredentialsLink.text()).toMatchTranslation("data_sources.sidebar.edit_credentials");
+                    expect(editCredentialsLink.data("data_source")).toBe(this.dataSource);
                 });
 
                 it("does not show the 'add credentials' link", function() {
@@ -140,9 +140,9 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
 
                     it("shows the add credentials link", function() {
                         expect(this.view.$(".actions .add_credentials")).toExist();
-                        expect(this.view.$(".actions .add_credentials").data("dialog")).toBe("InstanceAccount");
-                        expect(this.view.$(".actions .add_credentials").data("title")).toMatchTranslation("instances.account.add.title");
-                        expect(this.view.$(".actions .add_credentials").text()).toMatchTranslation("instances.sidebar.add_credentials");
+                        expect(this.view.$(".actions .add_credentials").data("dialog")).toBe("DataSourceAccount");
+                        expect(this.view.$(".actions .add_credentials").data("title")).toMatchTranslation("data_sources.account.add.title");
+                        expect(this.view.$(".actions .add_credentials").text()).toMatchTranslation("data_sources.sidebar.add_credentials");
                     });
                 });
             });
@@ -150,9 +150,9 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
 
         context("when the current user is an admin", function() {
             beforeEach(function() {
-                var account = rspecFixtures.instanceAccount();
+                var account = rspecFixtures.dataSourceAccount();
                 spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
-                this.dataSource.accounts().add([rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount(), rspecFixtures.instanceAccount({id: null})]);
+                this.dataSource.accounts().add([rspecFixtures.dataSourceAccount(), rspecFixtures.dataSourceAccount(), rspecFixtures.dataSourceAccount({id: null})]);
                 setLoggedInUser({ username: "benjamin", admin: true});
                 this.view.render();
             });
@@ -173,8 +173,8 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
 
                 expect(editAccountsSection).toBeVisible();
                 expect(editAccountsLink).toBeVisible();
-                expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('instances.sidebar.there_are_x_individual_accounts', {count: 4});
-                expect(editAccountsLink.data("instance")).toBe(this.dataSource);
+                expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('data_sources.sidebar.there_are_x_individual_accounts', {count: 4});
+                expect(editAccountsLink.data("data_source")).toBe(this.dataSource);
                 expect(editAccountsLink.data("dialog")).toBe("DataSourcePermissions");
             });
         });
@@ -286,9 +286,9 @@ describe("chorus.views.DataSourceListSidebar", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.dataSource.activities());
-                var instanceAccountSet = rspecFixtures.instanceAccountSet();
-                instanceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
-                this.server.completeFetchAllFor(this.dataSource.accounts(), instanceAccountSet.models);
+                var dataSourceAccountSet = rspecFixtures.dataSourceAccountSet();
+                dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
+                this.server.completeFetchAllFor(this.dataSource.accounts(), dataSourceAccountSet.models);
                 this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
             });
 
@@ -307,12 +307,12 @@ describe("chorus.views.DataSourceListSidebar", function() {
                 });
 
                 it("shows the database version", function() {
-                    expect(this.view.$(".data_source_configuration_details")).toContainTranslation("instances.version");
+                    expect(this.view.$(".data_source_configuration_details")).toContainTranslation("data_sources.version");
                     expect(this.view.$(".data_source_configuration_details")).toContainText("99.999");
                 });
 
                 it("shows the owner", function() {
-                    expect(this.view.$(".data_source_configuration_details")).toContainTranslation("instances.permissions.owner");
+                    expect(this.view.$(".data_source_configuration_details")).toContainTranslation("data_sources.permissions.owner");
                     expect(this.view.$(".data_source_configuration_details")).toContainText(this.dataSource.owner().displayName());
                 });
 
@@ -323,21 +323,21 @@ describe("chorus.views.DataSourceListSidebar", function() {
                             dataSource.loaded = true;
                             this.view.setDataSource(dataSource);
                             this.server.completeFetchFor(dataSource.usage(), { workspaces: [] });
-                            var instanceAccountSet = rspecFixtures.instanceAccountSet();
-                            instanceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
-                            this.server.completeFetchFor(dataSource.accounts(), instanceAccountSet.models);
+                            var dataSourceAccountSet = rspecFixtures.dataSourceAccountSet();
+                            dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
+                            this.server.completeFetchFor(dataSource.accounts(), dataSourceAccountSet.models);
                             this.server.completeFetchFor(dataSource.accountForCurrentUser());
                         });
 
                         it("includes the shared account information", function() {
-                            expect(this.view.$(".data_source_configuration_details").text()).toContainTranslation("instances.shared_account");
+                            expect(this.view.$(".data_source_configuration_details").text()).toContainTranslation("data_sources.shared_account");
                         });
                     });
 
                     context('and the data source does not have a shared account', function() {
                         it("does not include the shared account information", function() {
                             this.view.render();
-                            expect(this.view.$(".data_source_configuration_details").text()).not.toContainTranslation("instances.shared_account");
+                            expect(this.view.$(".data_source_configuration_details").text()).not.toContainTranslation("data_sources.shared_account");
                         });
                     });
                 });
@@ -349,24 +349,24 @@ describe("chorus.views.DataSourceListSidebar", function() {
                     });
 
                     it("includes gpdb size information", function() {
-                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.size"))).not.toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.sidebar.size"))).not.toBe(-1);
                     });
 
                     it("does not include the port, host, or shared account information", function() {
-                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.host"))).toBe(-1);
-                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.port"))).toBe(-1);
-                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.sidebar.host"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.sidebar.port"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.shared_account"))).toBe(-1);
                     });
                 });
             });
 
             it("has the default loading text on the workspace usage link", function() {
-                expect(this.view.$(".actions .workspace_usage")).toContainTranslation("instances.sidebar.usage_loading");
+                expect(this.view.$(".actions .workspace_usage")).toContainTranslation("data_sources.sidebar.usage_loading");
             });
 
             context("when the workspace usage fetch completes", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.instanceDetails());
+                    this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.dataSourceDetails());
                 });
 
                 context("when there are no workspaces", function() {
@@ -381,7 +381,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
                     });
 
                     it("should show a count of zero", function() {
-                        expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: 0});
+                        expect(this.view.$('.actions .workspace_usage')).toContainTranslation('data_sources.sidebar.usage', {count: 0});
                     });
                 });
 
@@ -393,11 +393,11 @@ describe("chorus.views.DataSourceListSidebar", function() {
                     it("should be a dialog link", function() {
                         expect(this.view.$('.actions .workspace_usage')).not.toHaveClass("disabled");
                         expect(this.view.$('.actions .workspace_usage')).toHaveClass("dialog");
-                        expect(this.view.$(".actions .workspace_usage")).toHaveData("instance", this.dataSource);
+                        expect(this.view.$(".actions .workspace_usage")).toHaveData("data_source", this.dataSource);
                     });
 
                     it("should show the appropriate number of workspaces", function() {
-                        expect(this.view.$('.actions .workspace_usage')).toContainTranslation('instances.sidebar.usage', {count: this.dataSource.usage().get("workspaces").length});
+                        expect(this.view.$('.actions .workspace_usage')).toContainTranslation('data_sources.sidebar.usage', {count: this.dataSource.usage().get("workspaces").length});
                     });
                 });
             });
@@ -408,7 +408,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
                 this.server.completeFetchFor(this.dataSource.activities());
                 this.server.completeFetchAllFor(this.dataSource.accounts());
                 this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
-                this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.instanceDetailsWithoutPermission());
+                this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.dataSourceDetailsWithoutPermission());
             });
 
             it("renders without the workspace usage section", function() {
@@ -440,9 +440,9 @@ describe("chorus.views.DataSourceListSidebar", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.dataSource.activities());
-                var instanceAccountSet = rspecFixtures.instanceAccountSet();
-                instanceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
-                this.server.completeFetchAllFor(this.dataSource.accounts(), instanceAccountSet.models);
+                var dataSourceAccountSet = rspecFixtures.dataSourceAccountSet();
+                dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
+                this.server.completeFetchAllFor(this.dataSource.accounts(), dataSourceAccountSet.models);
                 this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
             });
 
@@ -466,21 +466,21 @@ describe("chorus.views.DataSourceListSidebar", function() {
                             var dataSource = rspecFixtures.oracleDataSource({shared: true});
                             dataSource.loaded = true;
                             this.view.setDataSource(dataSource);
-                            var instanceAccountSet = rspecFixtures.instanceAccountSet();
-                            instanceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
-                            this.server.completeFetchFor(dataSource.accounts(), instanceAccountSet.models);
+                            var dataSourceAccountSet = rspecFixtures.dataSourceAccountSet();
+                            dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
+                            this.server.completeFetchFor(dataSource.accounts(), dataSourceAccountSet.models);
                             this.server.completeFetchFor(dataSource.accountForCurrentUser());
                         });
 
                         it("includes the shared account information", function() {
-                            expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.shared_account"))).not.toBe(-1);
+                            expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.shared_account"))).not.toBe(-1);
                         });
                     });
 
                     context('and the data source does not have a shared account', function() {
                         it("does not include the shared account information", function() {
                             this.view.render();
-                            expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
+                            expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.shared_account"))).toBe(-1);
                         });
                     });
                 });
@@ -492,13 +492,13 @@ describe("chorus.views.DataSourceListSidebar", function() {
                     });
 
                     it("includes size information", function() {
-                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.size"))).not.toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.sidebar.size"))).not.toBe(-1);
                     });
 
                     it("does not include the port, host, or shared account information", function() {
-                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.host"))).toBe(-1);
-                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.sidebar.port"))).toBe(-1);
-                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("instances.shared_account"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.sidebar.host"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.sidebar.port"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.shared_account"))).toBe(-1);
                     });
                 });
             });

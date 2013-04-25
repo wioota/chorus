@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe DatasetsController do
   let(:user) { schema.data_source.owner }
-  let(:instance_account) { schema.data_source.account_for_user!(user) }
+  let(:data_source_account) { schema.data_source.account_for_user!(user) }
   let(:schema) { schemas(:default) }
   let(:table) { datasets(:table) }
 

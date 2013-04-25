@@ -25,7 +25,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
         });
     });
 
-    context("when the collection does not have path and instanceId set", function() {
+    context("when the collection does not have path and dataSourceId set", function() {
         beforeEach(function() {
             this.hdfsEntrySet = new chorus.collections.HdfsEntrySet([], {
                 path: null,

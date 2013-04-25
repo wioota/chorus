@@ -13,18 +13,18 @@ chorus.models.GpdbDataSource = chorus.models.DataSource.extend({
     },
 
     databases: function() {
-        this._databases || (this._databases = new chorus.collections.DatabaseSet([], {instanceId: this.get("id")}));
+        this._databases || (this._databases = new chorus.collections.DatabaseSet([], {dataSourceId: this.get("id")}));
         return this._databases;
     },
 
     attrToLabel: {
-        "dbUsername": "instances.dialog.database_account",
-        "dbPassword": "instances.dialog.database_password",
-        "name": "instances.dialog.instance_name",
-        "host": "instances.dialog.host",
-        "port": "instances.dialog.port",
-        "databaseName": "instances.dialog.database_name",
-        "dbName": "instances.dialog.db_name",
-        "description": "instances.dialog.description"
+        "dbUsername": "data_sources.dialog.database_account",
+        "dbPassword": "data_sources.dialog.database_password",
+        "name": "data_sources.dialog.data_source_name",
+        "host": "data_sources.dialog.host",
+        "port": "data_sources.dialog.port",
+        "databaseName": "data_sources.dialog.database_name",
+        "dbName": "data_sources.dialog.db_name",
+        "description": "data_sources.dialog.description"
     }
 });

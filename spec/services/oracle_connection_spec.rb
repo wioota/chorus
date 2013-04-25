@@ -468,8 +468,8 @@ describe OracleConnection, :oracle_integration do
         context "when the error code is 17002" do
           let(:error_code) { 17002 }
 
-          it "returns :INSTANCE_UNREACHABLE" do
-            error.error_type.should == :INSTANCE_UNREACHABLE
+          it "returns :DATA_SOURCE_UNREACHABLE" do
+            error.error_type.should == :DATA_SOURCE_UNREACHABLE
           end
         end
       end

@@ -13,12 +13,12 @@ module Hdfs
   JavaHdfs.timeout = 5
 
   class QueryService
-    def self.version_of(instance)
-      new(instance.host, instance.port, instance.username, instance.version).version
+    def self.version_of(data_source)
+      new(data_source.host, data_source.port, data_source.username, data_source.version).version
     end
 
-    def self.accessible?(instance)
-      hdfs = JavaHdfs.new(instance.host, instance.port.to_s, instance.username, instance.version)
+    def self.accessible?(data_source)
+      hdfs = JavaHdfs.new(data_source.host, data_source.port.to_s, data_source.username, data_source.version)
       hdfs.list("/").present?
     end
 

@@ -140,8 +140,8 @@ describe("chorus.views.DatasetSidebar", function() {
                     this.view.$('.no_credentials a.add_credentials').click();
                 });
 
-                it("launches the InstanceAccount dialog", function() {
-                    expect(chorus.modal).toBeA(chorus.dialogs.InstanceAccount);
+                it("launches the DataSourceAccount dialog", function() {
+                    expect(chorus.modal).toBeA(chorus.dialogs.DataSourceAccount);
                 });
 
                 context("saving the credentials", function() {
@@ -578,17 +578,17 @@ describe("chorus.views.DatasetSidebar", function() {
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 });
 
-                it("fetches the instance account", function() {
+                it("fetches the data source account", function() {
                     expect(this.dataset.dataSource().accountForCurrentUser()).toHaveBeenFetched();
                 });
 
-                it("renders the loading section if the instance account is not loaded", function() {
+                it("renders the loading section if the data source account is not loaded", function() {
                     expect(this.view.displayLoadingSection()).toBeTruthy();
                 });
 
-                context("current user has an instance account", function() {
+                context("current user has an data source account", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.dataset.dataSource().accountForCurrentUser(), rspecFixtures.instanceAccount());
+                        this.server.completeFetchFor(this.dataset.dataSource().accountForCurrentUser(), rspecFixtures.dataSourceAccount());
                     });
 
                     it("shows the 'Create as a database view' link", function() {
@@ -621,7 +621,7 @@ describe("chorus.views.DatasetSidebar", function() {
                     });
                 });
 
-                context("current user does not have an instance account", function() {
+                context("current user does not have an data source account", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.dataset.dataSource().accountForCurrentUser(), {});
                     });

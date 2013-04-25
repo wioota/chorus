@@ -7,9 +7,9 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             database: {
                 id: '3',
                 name: "db",
-                instance: {
+                dataSource: {
                     id: '2',
-                    name: "instance"
+                    name: "data source"
                 }
             }
         });
@@ -191,7 +191,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             describe("with selected text", function() {
                 context("when the workfile has an execution schema, and/or the workspace has a sandbox", function() {
                     beforeEach(function() {
-                        this.schema = rspecFixtures.schema({id: "77", database: {id: "88", instance: {id: "99"}}});
+                        this.schema = rspecFixtures.schema({id: "77", database: {id: "88", dataSource: {id: "99"}}});
                         spyOn(this.view.textContent.editor, "getSelection").andReturn("select 1 from table");
                     });
 
@@ -303,8 +303,8 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             this.view.textContent.editor.setValue("select * from table;");
 
             this.schema.set({
-                instanceId: '51',
-                dataSourceName: "bob_the_instance",
+                dataSourceId: '51',
+                dataSourceName: "bob_the_data_source",
                 databaseId: '52',
                 databaseName: "bar",
                 name: "wow"

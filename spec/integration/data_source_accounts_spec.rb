@@ -28,7 +28,7 @@ describe "Data Source Accounts" do
 
   it "Adds new data source account" do
     click_button "Add Account"
-    select_item('#select_new_instance_account_owner', no_access_user.id)
+    select_item('#select_new_data_source_account_owner', no_access_user.id)
     within "li.editing" do
       fill_in "dbUsername", :with => GreenplumIntegration.username
       fill_in "dbPassword", :with => GreenplumIntegration.password

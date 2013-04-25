@@ -101,7 +101,7 @@ describe NotesController do
     context "as the note owner" do
       let(:user) { note.actor }
 
-      it "update the note on a gpdb instance" do
+      it "update the note on a gpdb data source" do
         post :update, attributes
         response.code.should == "200"
 
@@ -119,7 +119,7 @@ describe NotesController do
     context "not as the note owner" do
       let(:user) { users(:the_collaborator) }
 
-      it "update the note on a gpdb instance" do
+      it "update the note on a gpdb data source" do
         post :update, attributes
         response.code.should == "403"
 

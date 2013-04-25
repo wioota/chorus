@@ -1,8 +1,8 @@
 describe("chorus.pages.SchemaDatasetIndexPage", function() {
     beforeEach(function() {
         spyOn(_, "debounce").andCallThrough();
-        this.schema = rspecFixtures.schema({id: "789", name: "Bar/", database: {id: "456", name: "Foo%", instance: {id: "123", name: "AnInstance"}} });
-        this.instance = rspecFixtures.gpdbDataSource({ id: "123" });
+        this.schema = rspecFixtures.schema({id: "789", name: "Bar/", database: {id: "456", name: "Foo%", dataSource: {id: "123", name: "ADataSource"}} });
+        this.dataSource = rspecFixtures.gpdbDataSource({ id: "123" });
         this.page = new chorus.pages.SchemaDatasetIndexPage("789");
     });
 
@@ -87,9 +87,9 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
             expect(breadcrumbs.eq(0)).toContainTranslation("breadcrumbs.home");
 
             expect(breadcrumbs.eq(1)).toHaveHref("#/data_sources");
-            expect(breadcrumbs.eq(1)).toContainTranslation("breadcrumbs.instances");
+            expect(breadcrumbs.eq(1)).toContainTranslation("breadcrumbs.data_sources");
 
-            expect(breadcrumbs.eq(2)).toContainText("AnInstance");
+            expect(breadcrumbs.eq(2)).toContainText("ADataSource");
             expect(breadcrumbs.eq(2)).toHaveHref(this.schema.database().dataSource().showUrl());
 
             expect(breadcrumbs.eq(3)).toContainText("Foo%");
@@ -100,7 +100,7 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
 
         context("when the schema has only an associated data source and not a database", function() {
             beforeEach(function() {
-                this.schema = rspecFixtures.oracleSchema({id: "789", name: "Bar/", instance: {id: "123", name: "A Data Source"}});
+                this.schema = rspecFixtures.oracleSchema({id: "789", name: "Bar/", dataSource: {id: "123", name: "A Data Source"}});
                 this.page = new chorus.pages.SchemaDatasetIndexPage("789");
                 this.server.completeFetchFor(this.schema);
             });
@@ -113,7 +113,7 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
                 expect(breadcrumbs.eq(0)).toContainTranslation("breadcrumbs.home");
 
                 expect(breadcrumbs.eq(1)).toHaveHref("#/data_sources");
-                expect(breadcrumbs.eq(1)).toContainTranslation("breadcrumbs.instances");
+                expect(breadcrumbs.eq(1)).toContainTranslation("breadcrumbs.data_sources");
 
                 expect(breadcrumbs.eq(2)).toContainText("A Data Source");
                 expect(breadcrumbs.eq(2)).toHaveHref(this.schema.dataSource().showUrl());

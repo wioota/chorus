@@ -1,6 +1,6 @@
 RSpec.configure do |config|
   unless ENV['GPDB_HOST']
-    warn "No Greenplum instance detected in environment variable 'GPDB_HOST'.  Skipping Greenplum integration tests.  See the project wiki for more information on running tests"
+    warn "No Greenplum data source detected in environment variable 'GPDB_HOST'.  Skipping Greenplum integration tests.  See the project wiki for more information on running tests"
     config.filter_run_excluding :greenplum_integration => true
   end
 
@@ -20,7 +20,7 @@ RSpec.configure do |config|
       config.filter_run_excluding :oracle_integration => true
     end
   else
-    warn "No Oracle instance detected in environment variable 'ORACLE_HOST'.  Skipping Oracle integration tests"
+    warn "No Oracle data source detected in environment variable 'ORACLE_HOST'.  Skipping Oracle integration tests"
     config.filter_run_excluding :oracle_integration => true
   end
 end

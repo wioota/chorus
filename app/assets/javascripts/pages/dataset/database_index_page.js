@@ -4,14 +4,14 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
     constructorName: "DatabaseIndexPage",
     helpId: "instances",
 
-    setup: function(instanceId) {
-        this.instance = new chorus.models.GpdbDataSource({id: instanceId});
-        this.collection = this.instance.databases();
+    setup: function(dataSourceId) {
+        this.dataSource = new chorus.models.GpdbDataSource({id: dataSourceId});
+        this.collection = this.dataSource.databases();
 
-        this.instance.fetch();
+        this.dataSource.fetch();
         this.collection.fetchAll();
 
-        this.handleFetchErrorsFor(this.instance);
+        this.handleFetchErrorsFor(this.dataSource);
 
         this.handleFetchErrorsFor(this.collection);
 
@@ -19,7 +19,7 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
             emptyTitleBeforeFetch: true,
             modelClass: "Database",
             collection: this.collection,
-            contentHeader: new chorus.views.TaggableHeader({model: this.instance}),
+            contentHeader: new chorus.views.TaggableHeader({model: this.dataSource}),
             search: {
                 eventName: "database:search",
                 placeholder: t("database.search_placeholder")
@@ -28,14 +28,14 @@ chorus.pages.DatabaseIndexPage = chorus.pages.Base.include(
 
         this.sidebar = new chorus.views.DatabaseListSidebar();
 
-        this.breadcrumbs.requiredResources.add(this.instance);
+        this.breadcrumbs.requiredResources.add(this.dataSource);
     },
 
     crumbs: function() {
         return [
             { label: t("breadcrumbs.home"), url: "#/" },
-            { label: t("breadcrumbs.instances"), url: "#/data_sources" },
-            { label: this.instance.get("name") }
+            { label: t("breadcrumbs.data_sources"), url: "#/data_sources" },
+            { label: this.dataSource.get("name") }
         ];
     }
 });

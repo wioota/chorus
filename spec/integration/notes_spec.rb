@@ -5,21 +5,21 @@ describe "Notes" do
     login(users(:admin))
   end
   
-  describe "creating a note on a GPDB instance" do
+  describe "creating a note on a GPDB data source" do
     it "contains the note" do
-      instance = data_sources(:default)
+      data_source = data_sources(:default)
       visit("#/data_sources")
       within ".data_source ul" do
-        find("li", :text => instance.name).click
+        find("li", :text => data_source.name).click
       end
       click_link "Add a note"
 
       within_modal do
-        set_cleditor_value("body", "Note on the instance")
+        set_cleditor_value("body", "Note on the data source")
         click_button "Add Note"
       end
 
-      instance.events.last.body.should == "Note on the instance"
+      data_source.events.last.body.should == "Note on the data source"
     end
   end
 

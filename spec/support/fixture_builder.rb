@@ -98,7 +98,7 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name(:oracle, oracle_schema)
     @note_on_oracle = FactoryGirl.create :note_on_data_source_event, :data_source => oracle_data_source, :body => 'note on oracle data source'
 
-    FactoryGirl.create(:instance_account, :owner => the_collaborator, :data_source => oracle_data_source)
+    FactoryGirl.create(:data_source_account, :owner => the_collaborator, :data_source => oracle_data_source)
 
     FactoryGirl.create(:oracle_schema, name: 'oracle_empty', data_source: oracle_data_source)
     oracle_table = FactoryGirl.create(:oracle_table, name: 'oracle_table', schema: oracle_schema)
@@ -116,10 +116,10 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:gnip_data_source, :owner => owner, :name => 'typeahead_gnip')
     Events::GnipDataSourceCreated.by(admin).add(:gnip_data_source => gnip_data_source)
 
-    # Instance Accounts
-    @shared_instance_account = shared_data_source.account_for_user(admin)
-    @unauthorized = FactoryGirl.create(:instance_account, :owner => the_collaborator, :data_source => owners_data_source)
-    owner_instance_account = owners_data_source.account_for_user(owner)
+    # Data Source Accounts
+    @shared_data_source_account = shared_data_source.account_for_user(admin)
+    @unauthorized = FactoryGirl.create(:data_source_account, :owner => the_collaborator, :data_source => owners_data_source)
+    owner_data_source_account = owners_data_source.account_for_user(owner)
 
 
     # Datasets
@@ -173,17 +173,17 @@ FixtureBuilder.configure do |fbuilder|
 
     with_current_user(owner) do
       note_on_greenplum_typeahead = Events::NoteOnDataSource.create!({:note_target => typeahead_data_source, :body => 'i exist only for my attachments'}, :as => :create)
-      note_on_greenplum_typeahead.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'typeahead_instance')))
+      note_on_greenplum_typeahead.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'typeahead_data_source')))
     end
 
     tagged_table = FactoryGirl.create(:gpdb_table, :name => "searchable_tag", :schema => searchquery_schema)
     tagged_table.tag_list = ["typeahead"]
     tagged_table.save!
 
-    # Search Database Instance Accounts For Solr Permissions
-    searchquery_database.instance_accounts << owner_instance_account
-    default_database.instance_accounts << owner_instance_account
-    shared_search_database.instance_accounts << @shared_instance_account
+    # Search Database Data Source Accounts For Solr Permissions
+    searchquery_database.data_source_accounts << owner_data_source_account
+    default_database.data_source_accounts << owner_data_source_account
+    shared_search_database.data_source_accounts << @shared_data_source_account
 
     #Workspaces
     workspaces = []
@@ -405,7 +405,7 @@ FixtureBuilder.configure do |fbuilder|
       @insight_on_greenplum = Events::NoteOnDataSource.create!({:note_target => gpdb_data_source, :body => 'i am an insight with greenpluminsight in me', :insight => true}, :as => :create)
 
       Events::NoteOnDataSource.create!({:note_target => gpdb_data_source, :body => 'i love searchquery'}, :as => :create)
-      Events::NoteOnDataSource.create!({:note_target => shared_data_source, :body => 'is this a greenplumsearch instance?'}, :as => :create)
+      Events::NoteOnDataSource.create!({:note_target => shared_data_source, :body => 'is this a greenplumsearch data source?'}, :as => :create)
       Events::NoteOnDataSource.create!({:note_target => shared_data_source, :body => 'no, not greenplumsearch'}, :as => :create)
       Events::NoteOnDataSource.create!({:note_target => shared_data_source, :body => 'really really?'}, :as => :create)
       @note_on_hdfs_data_source = Events::NoteOnHdfsDataSource.create!({:note_target => hdfs_data_source, :body => 'hadoop-idy-doop'}, :as => :create)
@@ -488,7 +488,7 @@ FixtureBuilder.configure do |fbuilder|
     #NotesAttachment
     @sql = @note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'workfile.sql')))
     @image = @note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'User.png')))
-    @attachment = @note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_instance')))
+    @attachment = @note_on_greenplum.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_data_source')))
     @attachment_workspace = @note_on_workspace.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace')))
     @attachment_private_workspace = @note_on_no_collaborators_private.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workspace')))
     @attachment_workfile = @note_on_workfile.attachments.create!(:contents => File.new(Rails.root.join('spec', 'fixtures', 'searchquery_workfile')))
@@ -502,14 +502,14 @@ FixtureBuilder.configure do |fbuilder|
     RR.reset
 
     if ENV['GPDB_HOST']
-      chorus_gpdb40 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.instance_config("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
-      chorus_gpdb41 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.instance_config("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
-      chorus_gpdb42 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.instance_config(GreenplumIntegration.hostname).merge(:name => GreenplumIntegration.hostname, :owner => admin))
+      chorus_gpdb40 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.data_source_config("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
+      chorus_gpdb41 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.data_source_config("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
+      chorus_gpdb42 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.data_source_config(GreenplumIntegration.hostname).merge(:name => GreenplumIntegration.hostname, :owner => admin))
 
       @chorus_gpdb42_test_superuser = chorus_gpdb42.account_for_user(admin)
 
-      FactoryGirl.create(:instance_account, GreenplumIntegration.account_config(GreenplumIntegration.hostname).merge(:owner => the_collaborator, :data_source => chorus_gpdb42))
-      FactoryGirl.create(:instance_account, GreenplumIntegration.account_config(GreenplumIntegration.hostname).merge(:owner => owner, :data_source => chorus_gpdb42))
+      FactoryGirl.create(:data_source_account, GreenplumIntegration.account_config(GreenplumIntegration.hostname).merge(:owner => the_collaborator, :data_source => chorus_gpdb42))
+      FactoryGirl.create(:data_source_account, GreenplumIntegration.account_config(GreenplumIntegration.hostname).merge(:owner => owner, :data_source => chorus_gpdb42))
 
       GreenplumIntegration.refresh_chorus
       chorus_gpdb42.refresh_databases(:skip_schema_refresh => true)
@@ -536,7 +536,7 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     if ENV['HADOOP_HOST']
-      @real = FactoryGirl.create(:hdfs_data_source, :owner => owner, :host => HdfsIntegration.instance_config['host'], :port => HdfsIntegration.instance_config['port'])
+      @real = FactoryGirl.create(:hdfs_data_source, :owner => owner, :host => HdfsIntegration.data_source_config['host'], :port => HdfsIntegration.data_source_config['port'])
     end
 
     if ENV['ORACLE_HOST'] && OracleIntegration.has_jar_file?

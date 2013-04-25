@@ -80,7 +80,7 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     launchUpdateCredentialsDialog: function(e) {
         e.preventDefault();
-        new chorus.dialogs.InstanceAccount({ instance: this.model.dataSource(), title: t("instances.account.edit.title"), shouldShowSavedToast: true }).launchModal();
+        new chorus.dialogs.DataSourceAccount({ dataSource: this.model.dataSource(), title: t("data_sources.account.edit.title"), shouldShowSavedToast: true }).launchModal();
     },
 
     postRender: function() {

@@ -1,7 +1,7 @@
 chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
     crumbs:[
         { label:t("breadcrumbs.home"), url:"#/" },
-        { label:t("breadcrumbs.instances") }
+        { label:t("breadcrumbs.data_sources") }
     ],
     helpId: "instances",
 
@@ -25,7 +25,7 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
         };
 
         this.mainContent = new chorus.views.MainContentView({
-            contentHeader: new chorus.views.StaticTemplate("default_content_header", {title:t("instances.title_plural")}),
+            contentHeader: new chorus.views.StaticTemplate("default_content_header", {title:t("data_sources.title_plural")}),
             contentDetails: new chorus.views.DataSourceIndexContentDetails(options),
             content: new chorus.views.DataSourceIndex(options)
         });

@@ -71,7 +71,7 @@ describe User do
 
   describe "#accessible_events" do
     let(:owner) { users(:owner) }
-    let(:instance_event) { events(:owner_creates_gpdb_data_source) }
+    let(:data_source_event) { events(:owner_creates_gpdb_data_source) }
     let(:public_workspace_event) { events(:owner_creates_public_workspace) }
     let(:private_workspace_event) { events(:owner_creates_private_workspace) }
     let(:user_added_event) { events(:admin_creates_owner) }
@@ -80,7 +80,7 @@ describe User do
       let(:current_user) { users(:the_collaborator) }
 
       it "returns all the events to a member of the private workspace" do
-        owner.accessible_events(current_user).should include(instance_event, public_workspace_event, private_workspace_event, user_added_event)
+        owner.accessible_events(current_user).should include(data_source_event, public_workspace_event, private_workspace_event, user_added_event)
       end
     end
 
@@ -88,7 +88,7 @@ describe User do
       let(:current_user) { users(:no_collaborators) }
 
       it "returns all the public events to a non-member of the private workspace" do
-        owner.accessible_events(current_user).should include(instance_event, public_workspace_event, user_added_event)
+        owner.accessible_events(current_user).should include(data_source_event, public_workspace_event, user_added_event)
         owner.accessible_events(current_user).should_not include(private_workspace_event)
       end
     end
@@ -240,7 +240,7 @@ describe User do
 
   describe "associations" do
     it { should have_many(:gpdb_data_sources) }
-    it { should have_many(:instance_accounts) }
+    it { should have_many(:data_source_accounts) }
     it { should have_many(:hdfs_data_sources) }
     it { should have_many(:workspaces) }
     it { should have_many(:owned_workspaces) }
@@ -301,7 +301,7 @@ describe User do
     it "fails for a user who owns a data source" do
       user.gpdb_data_sources << FactoryGirl.build(:gpdb_data_source, :owner => user)
       expect { user.destroy }.to raise_error(ActiveRecord::RecordInvalid)
-      user.should have_error_on(:user).with_message(:nonempty_instance_list)
+      user.should have_error_on(:user).with_message(:nonempty_data_source_list)
     end
 
     it "does not allow deleting a user who owns a workspace" do
@@ -332,12 +332,12 @@ describe User do
       }.to change(ImportSchedule, :count).by(-1)
     end
 
-    it "deletes associated instance accounts" do
+    it "deletes associated data source accounts" do
       user = users(:the_collaborator)
-      user.instance_accounts.count.should be > 0
+      user.data_source_accounts.count.should be > 0
       expect {
         user.destroy
-      }.to change { InstanceAccount.where(owner_id: user.id).count }.to(0)
+      }.to change { DataSourceAccount.where(owner_id: user.id).count }.to(0)
     end
 
     it "persists the database record" do
@@ -366,10 +366,10 @@ describe User do
   end
 
   describe "#accessible_account_ids" do
-    it "includes the users individual instance accounts plus all shared instance accounts" do
+    it "includes the users individual data source accounts plus all shared data source accounts" do
       user = users(:owner)
-      shared_ids = InstanceAccount.joins(:data_source).where('data_sources.shared = true').collect(&:id)
-      user_ids = user.instance_account_ids
+      shared_ids = DataSourceAccount.joins(:data_source).where('data_sources.shared = true').collect(&:id)
+      user_ids = user.data_source_account_ids
       user.accessible_account_ids.should =~ (shared_ids + user_ids).uniq
     end
   end

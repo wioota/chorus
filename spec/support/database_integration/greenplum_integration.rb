@@ -12,7 +12,7 @@ module GreenplumIntegration
     drop_and_create_gpdb_databases.sql
     drop_public_schema.sql
   }]
-  VERSIONS_FILE = (File.join(File.dirname(__FILE__), '../../..', 'tmp/instance_integration_file_versions')).to_s
+  VERSIONS_FILE = (File.join(File.dirname(__FILE__), '../../..', 'tmp/data_source_integration_file_versions')).to_s
 
   def self.execute_sql(sql_file, database = greenplum_config['db_name'])
     puts "Executing SQL file: #{sql_file} on host: #{hostname}"
@@ -103,14 +103,14 @@ module GreenplumIntegration
     "gpdb_#{Socket.gethostname.gsub('.', '_')}_#{ENV['RAILS_ENV']}".slice(0, 26) # needs to fit in 31 characters with _priv appended
   end
 
-  def self.instance_config(name)
-    config = find_greenplum_instance name
+  def self.data_source_config(name)
+    config = find_greenplum_data_source name
     account_config = config['account']
     config.reject { |k, v| k == "account" }.merge(account_config)
   end
 
   def self.account_config(name)
-    find_greenplum_instance(name)['account']
+    find_greenplum_data_source(name)['account']
   end
 
   def self.refresh_chorus
@@ -174,10 +174,10 @@ module GreenplumIntegration
   end
 
   def self.greenplum_config
-    @@gp_config ||= find_greenplum_instance hostname
+    @@gp_config ||= find_greenplum_data_source hostname
   end
 
-  def self.find_greenplum_instance(name)
+  def self.find_greenplum_data_source(name)
     config['data_sources']['gpdb'].find { |hash| hash["host"] == name }
   end
 

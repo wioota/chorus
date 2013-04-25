@@ -2,13 +2,13 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
     constructorName: "DataSourceEdit",
 
     templateName: "data_source_edit",
-    title: t("instances.edit_dialog.title"),
+    title: t("data_sources.edit_dialog.title"),
     events: {
         "submit form": "save"
     },
 
     makeModel: function() {
-        this.sourceModel = this.options.instance;
+        this.sourceModel = this.options.dataSource;
         this.model = new chorus.models[this.sourceModel.constructorName](this.sourceModel.attributes);
     },
 
@@ -39,14 +39,14 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
             }
         }, this);
 
-        this.$("button.submit").startLoading("instances.edit_dialog.saving");
+        this.$("button.submit").startLoading("data_sources.edit_dialog.saving");
         this.$("button.cancel").prop("disabled", true);
         this.model.save(attrs, {silent: true});
     },
 
     saveSuccess: function() {
         this.sourceModel.set(this.model.attributes);
-        chorus.toast("instances.edit_dialog.saved_message");
+        chorus.toast("data_sources.edit_dialog.saved_message");
         this.closeModal();
     },
 

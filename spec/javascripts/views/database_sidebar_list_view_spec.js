@@ -161,10 +161,10 @@ describe("chorus.views.DatabaseSidebarList", function() {
         it("should display the add credentials dialog when the add credential link is clicked", function() {
             var modalSpy = stubModals();
             this.view.$(".add_credentials").click();
-            expect(modalSpy).toHaveModal(chorus.dialogs.InstanceAccount);
+            expect(modalSpy).toHaveModal(chorus.dialogs.DataSourceAccount);
 
             var dialog = modalSpy.lastModal();
-            expect(dialog.model.get("instanceId")).toBeDefined();
+            expect(dialog.model.get("dataSourceId")).toBeDefined();
             expect(dialog.options.shouldShowSavedToast).toBeTruthy();
         });
     });

@@ -38,12 +38,12 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                 });
 
                 it("shows a toast message", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith("instances.confirm_change_owner.toast");
+                    expect(chorus.toast).toHaveBeenCalledWith("data_sources.confirm_change_owner.toast");
                 });
 
                 describe("after re-fetching the accounts", function() {
                     beforeEach(function() {
-                        this.dataSourceAccount = rspecFixtures.instanceAccount({owner: { id: this.newOwner.get("id")}});
+                        this.dataSourceAccount = rspecFixtures.dataSourceAccount({owner: { id: this.newOwner.get("id")}});
                         this.server.completeFetchFor(this.dialog.collection, [this.dataSourceAccount]);
                     });
 
@@ -87,7 +87,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll');
             this.dataSource = rspecFixtures.gpdbDataSource({shared: true, id: "5"});
-            this.dialog = new chorus.dialogs.DataSourcePermissions({ instance: this.dataSource });
+            this.dialog = new chorus.dialogs.DataSourcePermissions({ dataSource: this.dataSource });
         });
 
         it("does not re-render on model changes", function() {
@@ -103,14 +103,14 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
     context('when the data source is a shared account', function() {
         beforeEach(function() {
             this.dataSource = rspecFixtures.gpdbDataSource({"shared":true});
-            var account = rspecFixtures.instanceAccount({
+            var account = rspecFixtures.dataSourceAccount({
                 dbUsername: 'some_db_username',
-                instanceId: this.dataSource.id
+                dataSourceId: this.dataSource.id
             });
             this.dataSource.set({ owner: {id: account.user().get("id")} });
             this.dataSource.accounts().reset(account);
 
-            this.dialog = new chorus.dialogs.DataSourcePermissions({ instance: this.dataSource });
+            this.dialog = new chorus.dialogs.DataSourcePermissions({ dataSource: this.dataSource });
         });
 
         describe("#render", function() {
@@ -123,7 +123,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
             });
 
             it("displays the shared account subheader", function() {
-                expect(this.dialog.$(".sub_header .details_text").text()).toMatchTranslation("instances.shared_account");
+                expect(this.dialog.$(".sub_header .details_text").text()).toMatchTranslation("data_sources.shared_account");
             });
 
             it("displays the account owner information", function() {
@@ -228,7 +228,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
             });
 
             it("displays a 'switch to individual account' link", function() {
-                expect(this.dialog.$("a.remove_shared_account").text().trim()).toMatchTranslation("instances.permissions_dialog.switch_to_individual");
+                expect(this.dialog.$("a.remove_shared_account").text().trim()).toMatchTranslation("data_sources.permissions_dialog.switch_to_individual");
             });
 
             context("clicking the switch to individual account link", function() {
@@ -260,7 +260,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                         });
 
                         it("displays a toast message", function() {
-                            expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_removed");
+                            expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_removed");
                         });
 
                         it("clears shared account information from the data source model in the dialog", function() {
@@ -290,7 +290,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                         });
 
                         it("displays a save failed toast message", function() {
-                            expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_remove_failed");
+                            expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_remove_failed");
                         });
                     });
                 });
@@ -311,11 +311,11 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
             });
             this.accounts = this.dataSource.accounts();
             this.accounts.add([
-                rspecFixtures.instanceAccount({ id: '1', instanceId: this.dataSource.id, owner: { firstName: "bob", lastName: "zzap", id: '111' } }),
-                rspecFixtures.instanceAccount({ id: '2', instanceId: this.dataSource.id, owner: { firstName: "jim", lastName: "aardvark", id: '222' } }),
-                rspecFixtures.instanceAccount({ id: '3', instanceId: this.dataSource.id, owner: this.owner.attributes })
+                rspecFixtures.dataSourceAccount({ id: '1', dataSourceId: this.dataSource.id, owner: { firstName: "bob", lastName: "zzap", id: '111' } }),
+                rspecFixtures.dataSourceAccount({ id: '2', dataSourceId: this.dataSource.id, owner: { firstName: "jim", lastName: "aardvark", id: '222' } }),
+                rspecFixtures.dataSourceAccount({ id: '3', dataSourceId: this.dataSource.id, owner: this.owner.attributes })
             ]);
-            this.dialog = new chorus.dialogs.DataSourcePermissions({ instance: this.dataSource });
+            this.dialog = new chorus.dialogs.DataSourcePermissions({ dataSource: this.dataSource });
             this.dialog.launchModal();
 
             var ownerAccountId = this.dataSource.accountForOwner().get('id');
@@ -335,7 +335,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
         });
 
         it("does not have any 'change owner' links", function() {
-            expect(this.dialog.$("li")).not.toContainTranslation("instances.permissions.change_owner");
+            expect(this.dialog.$("li")).not.toContainTranslation("data_sources.permissions.change_owner");
         });
 
         it("only shows the 'make owner' links for users that aren't already the owner", function() {
@@ -353,11 +353,11 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
         });
 
         it("displays the 'switch to shared account' link", function() {
-            expect(this.dialog.$("a.add_shared_account").text()).toMatchTranslation("instances.permissions_dialog.switch_to_shared");
+            expect(this.dialog.$("a.add_shared_account").text()).toMatchTranslation("data_sources.permissions_dialog.switch_to_shared");
         });
 
         it("shows the number of individual accounts", function() {
-            expect(this.dialog.$(".sub_header .individual_accounts_count").text()).toMatchTranslation('instances.sidebar.x_individual_accounts', {count: 3});
+            expect(this.dialog.$(".sub_header .individual_accounts_count").text()).toMatchTranslation('data_sources.sidebar.x_individual_accounts', {count: 3});
         });
 
         it("shows the 'add an account' button", function() {
@@ -495,7 +495,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
 
         describe("removing a user's account credentials", function() {
             beforeEach(function() {
-                this.dataSource.set({"name": "myInstance"});
+                this.dataSource.set({"name": "myDataSource"});
                 this.accountBeingRemoved = this.accounts.get(2);
                 this.otherAccount = this.accounts.get(1);
                 this.liBeingRemoved = this.dialog.$("li[data-id=2]");
@@ -525,8 +525,8 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                     });
 
                     it("shows a toast message", function() {
-                        expect(chorus.toast).toHaveBeenCalledWith("instances.remove_individual_account.toast", {
-                            dataSourceName: "myInstance",
+                        expect(chorus.toast).toHaveBeenCalledWith("data_sources.remove_individual_account.toast", {
+                            dataSourceName: "myDataSource",
                             userName: "jim aardvark"
                         });
                     });
@@ -677,8 +677,8 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                                 });
                             });
 
-                            it("has the correct instanceId", function() {
-                                expect(this.dialog.account.get('instanceId')).toBe(this.dialog.dataSource.get('id'));
+                            it("has the correct dataSourceId", function() {
+                                expect(this.dialog.account.get('dataSourceId')).toBe(this.dialog.dataSource.get('id'));
                             });
 
                             it("has the selected ownerId", function() {
@@ -803,7 +803,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                     });
 
                     it("displays a toast message", function() {
-                        expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_added");
+                        expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_added");
                         expect(this.otherSavedSpy).toHaveBeenCalled();
                     });
 
@@ -819,7 +819,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                         expect(this.dialog.populateOwnerSelect).toHaveBeenCalled();
                     });
 
-                    it("should re-fetch the instance accounts", function() {
+                    it("should re-fetch the data source accounts", function() {
                         expect(this.dialog.collection.fetch).toHaveBeenCalled();
                     });
 
@@ -852,7 +852,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                     });
 
                     it("displays a save failed toast message", function() {
-                        expect(chorus.toast).toHaveBeenCalledWith("instances.shared_account_add_failed");
+                        expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_add_failed");
                     });
 
                     context("and then a save succeeds", function() {
@@ -862,7 +862,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                         });
 
                         it("doesn't display the saved toast message", function() {
-                            expect(chorus.toast).not.toHaveBeenCalledWith("instances.shared_account_added");
+                            expect(chorus.toast).not.toHaveBeenCalledWith("data_sources.shared_account_added");
                         });
                     });
                 });

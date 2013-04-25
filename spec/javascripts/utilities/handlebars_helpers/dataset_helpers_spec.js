@@ -75,9 +75,9 @@ describe('chorus.handlebarsHelpers.dataset', function() {
         });
 
         it('includes the data source name, database name, and schema name', function () {
-            var instance = this.model.dataSource();
-            expect($(this.result).find("a.instance")).toContainText(instance.name());
-            expect($(this.result).find("a.instance")).toHaveHref(instance.showUrl());
+            var dataSource = this.model.dataSource();
+            expect($(this.result).find("a.data_source")).toContainText(dataSource.name());
+            expect($(this.result).find("a.data_source")).toHaveHref(dataSource.showUrl());
 
             var database = this.model.database();
             expect($(this.result).find("a.database")).toContainText(database.name());
@@ -110,9 +110,9 @@ describe('chorus.handlebarsHelpers.dataset', function() {
             });
 
             it("doesn't include a database name", function() {
-                var instance = this.model.dataSource();
-                expect(this.result.find("a.instance")).toContainText(instance.name());
-                expect(this.result.find("a.instance")).toHaveHref(instance.showUrl());
+                var dataSource = this.model.dataSource();
+                expect(this.result.find("a.data_source")).toContainText(dataSource.name());
+                expect(this.result.find("a.data_source")).toHaveHref(dataSource.showUrl());
 
                 expect(this.result.find("a.database")).not.toExist();
 

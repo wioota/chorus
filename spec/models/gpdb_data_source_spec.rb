@@ -115,13 +115,13 @@ describe GpdbDataSource do
       let(:gpdb_data_source) { account_with_access.data_source }
       let(:database) { GreenplumIntegration.real_database }
 
-      it "adds new database_instance_accounts and enqueues a GpdbDatabase.reindex_datasets" do
+      it "adds new database_data_source_accounts and enqueues a GpdbDatabase.reindex_datasets" do
         mock(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_datasets", database.id)
         stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_datasets", anything)
-        database.instance_accounts = []
-        database.instance_accounts.find_by_id(account_with_access.id).should be_nil
+        database.data_source_accounts = []
+        database.data_source_accounts.find_by_id(account_with_access.id).should be_nil
         gpdb_data_source.refresh_databases
-        database.instance_accounts.find_by_id(account_with_access.id).should == account_with_access
+        database.data_source_accounts.find_by_id(account_with_access.id).should == account_with_access
       end
 
       it "does not enqueue GpdbDatabase.reindex_datasets if the data_source accounts for a database have not changed" do
@@ -136,7 +136,7 @@ describe GpdbDataSource do
       let(:database) { gpdb_databases(:default) }
       let(:missing_database) { gpdb_data_source.databases.where("id <> #{database.id}").first }
       let(:account_with_access) { gpdb_data_source.owner_account }
-      let(:account_without_access) { instance_accounts(:unauthorized) }
+      let(:account_without_access) { data_source_accounts(:unauthorized) }
 
       context "when database query is successful" do
         before do
@@ -159,10 +159,10 @@ describe GpdbDataSource do
           gpdb_data_source.refresh_databases
         end
 
-        it "removes database_instance_accounts if they no longer exist" do
-          database.instance_accounts << account_without_access
+        it "removes database_data_source_accounts if they no longer exist" do
+          database.data_source_accounts << account_without_access
           gpdb_data_source.refresh_databases
-          database.instance_accounts.find_by_id(account_without_access.id).should be_nil
+          database.data_source_accounts.find_by_id(account_without_access.id).should be_nil
         end
 
         it "marks databases as stale if they no longer exist" do
@@ -227,7 +227,7 @@ describe GpdbDataSource do
 
   describe "#connect_with" do
     let(:data_source) { data_sources(:default) }
-    let(:account) { instance_accounts(:unauthorized) }
+    let(:account) { data_source_accounts(:unauthorized) }
 
     it "should return a GreenplumConnection" do
       mock(GreenplumConnection).new(data_source, account, {

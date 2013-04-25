@@ -1,9 +1,9 @@
-chorus.dialogs.InstanceAccount = chorus.dialogs.Account.extend({
-    constructorName: "InstanceAccount",
+chorus.dialogs.DataSourceAccount = chorus.dialogs.Account.extend({
+    constructorName: "DataSourceAccount",
 
     translationKeys: {
         cancel: 'actions.cancel',
-        body: 'instances.account.enter_credentials'
+        body: 'data_sources.account.enter_credentials'
     },
 
     setup: function() {
@@ -11,7 +11,7 @@ chorus.dialogs.InstanceAccount = chorus.dialogs.Account.extend({
     },
 
     makeModel: function(options) {
-        var dataSource = this.options.instance;
+        var dataSource = this.options.dataSource;
         this.model = dataSource.accountForCurrentUser();
         this._super("makeModel", arguments);
     },

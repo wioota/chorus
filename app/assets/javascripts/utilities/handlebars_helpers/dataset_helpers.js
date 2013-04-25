@@ -44,7 +44,7 @@ chorus.handlebarsHelpers.dataset = {
             }
             schemaPieces.push(schemaName);
         } else {
-            schemaPieces.push(Handlebars.helpers.linkTo(dataSource.showUrl(), dataSourceName, {"class": "instance"}).toString());
+            schemaPieces.push(Handlebars.helpers.linkTo(dataSource.showUrl(), dataSourceName, {"class": "data_source"}).toString());
             if (databaseName.toString()) {
                 schemaPieces.push(Handlebars.helpers.linkTo(database.showUrl(), databaseName, {"class": "database"}).toString());
             }

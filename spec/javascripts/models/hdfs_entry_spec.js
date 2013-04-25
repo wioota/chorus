@@ -120,8 +120,8 @@ describe("chorus.models.HdfsEntry", function() {
             expect(this.hdfsDataSource.get('name')).toBe('obscene');
         });
 
-        it("should have an instanceProvider of Hadoop", function() {
-            expect(this.hdfsDataSource.get('instanceProvider')).toBe('Hadoop');
+        it("should have a dataSourceProvider of Hadoop", function() {
+            expect(this.hdfsDataSource.get('dataSourceProvider')).toBe('Hadoop');
         });
     });
 

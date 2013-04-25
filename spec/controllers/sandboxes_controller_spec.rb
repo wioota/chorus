@@ -74,8 +74,8 @@ describe SandboxesController do
       end
 
       it 'calls both create_database and create_schema' do
-        any_instance_of(GpdbDataSource) do |instance_double|
-          mock(instance_double).create_database("new_database", gpdb_data_source.owner) do |name|
+        any_instance_of(GpdbDataSource) do |data_source_double|
+          mock(data_source_double).create_database("new_database", gpdb_data_source.owner) do |name|
             gpdb_data_source.databases.create!({:name => name}, :without_protection => true)
           end
         end
@@ -95,8 +95,8 @@ describe SandboxesController do
       end
 
       it 'does not call create_schema if the schema is public' do
-        any_instance_of(GpdbDataSource) do |instance_double|
-          stub(instance_double).create_database('new_database', gpdb_data_source.owner) do |name|
+        any_instance_of(GpdbDataSource) do |data_source_double|
+          stub(data_source_double).create_database('new_database', gpdb_data_source.owner) do |name|
             database = FactoryGirl.create :gpdb_database, :name => name, :data_source => gpdb_data_source
             schema = FactoryGirl.create :gpdb_schema, :name => 'public', :database => database
             database

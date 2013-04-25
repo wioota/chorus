@@ -4,7 +4,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         chorus.page.workspace = rspecFixtures.workspace({
             sandboxInfo: {
                 name: "mySchema",
-                database: { name: "myDatabase", instance: { name: "myInstance" } }
+                database: { name: "myDatabase", dataSource: { name: "myDataSource" } }
             }
         });
         this.sandbox = chorus.page.workspace.sandbox();

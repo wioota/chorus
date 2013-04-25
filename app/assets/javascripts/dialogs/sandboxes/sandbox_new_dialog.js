@@ -11,7 +11,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     },
 
     subviews: {
-        "form > .instance_mode": "schemaPicker"
+        "form > .data_source_mode": "schemaPicker"
     },
 
     setup: function() {
@@ -47,7 +47,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         var schemaName = sandboxId ? undefined : this.schemaPicker.fieldValues().schemaName;
         var databaseId = this.schemaPicker.fieldValues().database;
         var databaseName = databaseId ? undefined : this.schemaPicker.fieldValues().databaseName;
-        var dataSourceId = this.schemaPicker.fieldValues().instance;
+        var dataSourceId = this.schemaPicker.fieldValues().dataSource;
 
         this.model.set({
             schemaId: sandboxId,

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe VisualizationsController do
   let(:user) { users(:owner) }
   let(:dataset) { datasets(:table) }
-  let(:instance_account) { dataset.schema.database.data_source.owner_account }
+  let(:data_source_account) { dataset.schema.database.data_source.owner_account }
 
   before do
     log_in user
@@ -14,7 +14,7 @@ describe VisualizationsController do
       it "returns json for visualization, in ascending order" do
         fake_visualization = Object.new
         mock(Visualization).build(dataset, {"type" => "frequency", "check_id" => "43"}) { fake_visualization }
-        mock(fake_visualization).fetch!(instance_account, "43")
+        mock(fake_visualization).fetch!(data_source_account, "43")
         mock_present { |model| model.should == fake_visualization }
 
         post :create, :type => "frequency", :check_id => "43", :dataset_id => dataset.id
@@ -98,7 +98,7 @@ describe VisualizationsController do
     context "when there is an error" do
       before do
         any_instance_of(Visualization::Histogram) do |visualization|
-          stub(visualization).fetch!(instance_account, "43") { raise GreenplumConnection::QueryError }
+          stub(visualization).fetch!(data_source_account, "43") { raise GreenplumConnection::QueryError }
         end
       end
 

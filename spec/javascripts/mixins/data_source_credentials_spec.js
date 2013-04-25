@@ -9,14 +9,14 @@ describe("chorus.Mixins.DataSourceCredentials", function() {
         describe("#dataSourceRequiringCredentials", function() {
             context('when a fetch failed because of missing data source credentials', function() {
                 it("returns a data source model with the right id", function() {
-                    var json = rspecFixtures.forbiddenInstanceJson({ errors: { model_data: { id: 101 } } });
+                    var json = rspecFixtures.forbiddenDataSourceJson({ errors: { model_data: { id: 101 } } });
 
                     this.collection.fetch();
                     this.server.lastFetchFor(this.collection).respondJson(403, json);
 
-                    var instance = this.collection.dataSourceRequiringCredentials();
-                    expect(instance).toBeA(chorus.models.DataSource);
-                    expect(instance.get("id")).toBe(101);
+                    var dataSource = this.collection.dataSourceRequiringCredentials();
+                    expect(dataSource).toBeA(chorus.models.DataSource);
+                    expect(dataSource.get("id")).toBe(101);
                 });
             });
         });
@@ -47,8 +47,8 @@ describe("chorus.Mixins.DataSourceCredentials", function() {
         describe("when a fetch fails for one of the page's required resources", function() {
             context("when credentials are missing", function() {
                 beforeEach(function() {
-                    this.instance = rspecFixtures.gpdbDataSource();
-                    spyOn(this.model, 'dataSourceRequiringCredentials').andReturn(this.instance);
+                    this.dataSource = rspecFixtures.gpdbDataSource();
+                    spyOn(this.model, 'dataSourceRequiringCredentials').andReturn(this.dataSource);
                     this.server.lastFetchFor(this.model).failForbidden();
                 });
 
@@ -58,9 +58,9 @@ describe("chorus.Mixins.DataSourceCredentials", function() {
 
                 it("launches the 'add credentials' dialog, and reloads after the credentials have been added", function() {
                     var dialog = this.modalSpy.lastModal();
-                    expect(dialog).toBeA(chorus.dialogs.InstanceAccount);
-                    expect(dialog.options.instance).toBe(this.instance);
-                    expect(dialog.options.title).toMatchTranslation("instances.account.add.title");
+                    expect(dialog).toBeA(chorus.dialogs.DataSourceAccount);
+                    expect(dialog.options.dataSource).toBe(this.dataSource);
+                    expect(dialog.options.title).toMatchTranslation("data_sources.account.add.title");
                 });
 
                 it("configure the dialog to reload after credentials are added and navigate back on dismissal", function() {

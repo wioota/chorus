@@ -161,8 +161,8 @@ describe DataSource do
 
     context 'individual data source' do
       let(:data_source) { data_sources(:owners) }
-      let!(:owner_account) { InstanceAccount.find_by_data_source_id_and_owner_id(data_source.id, data_source.owner.id) }
-      let!(:user_account) { InstanceAccount.find_by_data_source_id_and_owner_id(data_source.id, users(:the_collaborator).id) }
+      let!(:owner_account) { DataSourceAccount.find_by_data_source_id_and_owner_id(data_source.id, data_source.owner.id) }
+      let!(:user_account) { DataSourceAccount.find_by_data_source_id_and_owner_id(data_source.id, users(:the_collaborator).id) }
 
       it 'should return the account for the user' do
         data_source.account_for_user!(data_source.owner).should == owner_account

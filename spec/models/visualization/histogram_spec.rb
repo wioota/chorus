@@ -3,11 +3,11 @@ require 'spec_helper'
 describe Visualization::Histogram do
   let(:schema) { FactoryGirl.build_stubbed(:gpdb_schema, :name => 'analytics') }
   let(:dataset) { FactoryGirl.build_stubbed(:gpdb_table, :name => '2009_sfo_customer_survey', :schema => schema) }
-  let(:instance_account) { FactoryGirl.build_stubbed(:instance_account) }
-  let(:user) { instance_account.owner }
+  let(:data_source_account) { FactoryGirl.build_stubbed(:data_source_account) }
+  let(:user) { data_source_account.owner }
   let(:connection) {
     object = Object.new
-    stub(schema).connect_with(instance_account) { object }
+    stub(schema).connect_with(data_source_account) { object }
     object
   }
   before do
@@ -47,7 +47,7 @@ describe Visualization::Histogram do
         end
       end
 
-      visualization.fetch!(instance_account, 17)
+      visualization.fetch!(data_source_account, 17)
 
       visualization.rows.should include({:bin => [1.0, 3.7], :frequency => 2})
       visualization.rows.should include({:bin => [3.7, 6.3], :frequency => 0})

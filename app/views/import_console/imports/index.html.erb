@@ -23,10 +23,10 @@
       <th>Source DB Process Busy</th>
       <th>Destination DB Process Busy</th>
 
-      <th>Source Instance</th>
+      <th>Source Data Source</th>
       <th>Source Table Name</th>
 
-      <th>Destination Instance</th>
+      <th>Destination Data Source</th>
       <th>Destination Table Name</th>
     </tr>
   </thead>
@@ -42,10 +42,10 @@
       <td><%= show_process { import.busy?(:writer) } %></td>
       <td><%= show_process { import.busy?(:reader) } %></td>
 
-      <td><%= instance_description_for_schema(import.source_dataset.schema) %></td>
+      <td><%= data_source_description_for_schema(import.source_dataset.schema) %></td>
       <td><%= link_to_source(import)%></td>
 
-      <td><%= instance_description_for_schema(import.schema_or_sandbox) %></td>
+      <td><%= data_source_description_for_schema(import.schema_or_sandbox) %></td>
       <td><%= link_to_destination(import) %></td>
     </tr>
   <% end %>

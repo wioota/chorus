@@ -51,7 +51,7 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
             expect(this.page.$(".breadcrumb:eq(0)")).toContainTranslation("breadcrumbs.home");
 
             expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
-            expect(this.page.$(".breadcrumb:eq(1)")).toContainTranslation("breadcrumbs.instances");
+            expect(this.page.$(".breadcrumb:eq(1)")).toContainTranslation("breadcrumbs.data_sources");
 
             expect(this.page.$(".breadcrumb:eq(2)")).toContainText("Davis");
         });
@@ -75,12 +75,12 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
         var launchModalSpy;
 
         beforeEach(function() {
-            launchModalSpy = spyOn(chorus.dialogs.InstanceAccount.prototype, 'launchModal');
+            launchModalSpy = spyOn(chorus.dialogs.DataSourceAccount.prototype, 'launchModal');
             this.server.completeFetchFor(this.page.dataSource);
             this.server.lastFetchFor(this.page.collection).failForbidden({message: "Forbidden", model_data: {id: 'foo'}});
         });
 
-        it("launches the InstanceAccount dialog", function() {
+        it("launches the DataSourceAccount dialog", function() {
             expect(launchModalSpy).toHaveBeenCalled();
         });
     });
