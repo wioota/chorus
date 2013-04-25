@@ -89,7 +89,7 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
                     expect(addCredentialsLink.data("dialog")).toBe("DataSourceAccount");
                     expect(addCredentialsLink.data("title")).toMatchTranslation("data_sources.account.add.title");
                     expect(addCredentialsLink.text()).toMatchTranslation("data_sources.sidebar.add_credentials");
-                    expect(addCredentialsLink.data("data_source")).toBe(this.dataSource);
+                    expect(addCredentialsLink.data("dataSource")).toBe(this.dataSource);
                 });
 
                 it("does not show the 'edit credentials' link", function() {
@@ -124,7 +124,7 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
                     expect(editCredentialsLink.data("dialog")).toBe("DataSourceAccount");
                     expect(editCredentialsLink.data("title")).toMatchTranslation("data_sources.account.edit.title");
                     expect(editCredentialsLink.text()).toMatchTranslation("data_sources.sidebar.edit_credentials");
-                    expect(editCredentialsLink.data("data_source")).toBe(this.dataSource);
+                    expect(editCredentialsLink.data("dataSource")).toBe(this.dataSource);
                 });
 
                 it("does not show the 'add credentials' link", function() {
@@ -174,7 +174,7 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
                 expect(editAccountsSection).toBeVisible();
                 expect(editAccountsLink).toBeVisible();
                 expect(this.view.$(".individual_accounts_count").text()).toMatchTranslation('data_sources.sidebar.there_are_x_individual_accounts', {count: 4});
-                expect(editAccountsLink.data("data_source")).toBe(this.dataSource);
+                expect(editAccountsLink.data("dataSource")).toBe(this.dataSource);
                 expect(editAccountsLink.data("dialog")).toBe("DataSourcePermissions");
             });
         });

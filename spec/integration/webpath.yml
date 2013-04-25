@@ -1,17 +1,5 @@
 #Pivotal GPDB data sources
 gpdb_data_source_db:
-  gpdb_host: chorus-gpdb40.sf.pivotallabs.com
-  gpdb_port: 5432
-  gpdb_user: gpadmin
-  gpdb_pass: secret
-
-gpdb_data_source41_db:
-  gpdb_host: chorus-gpdb41.sf.pivotallabs.com
-  gpdb_port: 5432
-  gpdb_user: gpadmin
-  gpdb_pass: secret
-
-gpdb_data_source42_db:
   gpdb_host: chorus-gpdb42.sf.pivotallabs.com
   gpdb_port: 5432
   gpdb_user: gpadmin
