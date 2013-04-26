@@ -52,4 +52,63 @@ describe Workspaces::CsvImportsController do
       post :create, params
     end
   end
+
+  context "integration", :greenplum_integration do
+    let(:workspace) { workspaces(:real) }
+
+    let(:import) { CsvImport.last }
+
+    before do
+      expect {
+        post :create, params
+        response.code.should == "201"
+      }.to change(CsvImport, :count).by(1)
+    end
+
+    context "when importing into a new table" do
+      let(:import_params) do
+        {
+            to_table: to_table,
+            truncate: "false",
+            new_table: 'true'
+        }
+      end
+
+      it "creates a CsvImport with the expected values" do
+        import.workspace.should == workspace
+        import.to_table.should == to_table
+        import.csv_file.should == csv_file
+        import.truncate.should == false
+        import.user_id.should == user.id
+        import.new_table.should == true
+      end
+
+      it "should update the csv file" do
+        csv_file.reload.types.should == types
+        csv_file.column_names.should == column_names
+        csv_file.delimiter.should == delimiter
+        csv_file.has_header.should == has_header
+      end
+    end
+
+    context "when importing into an existing table" do
+      let(:to_table) { "base_table1" }
+      let(:import_params) do
+        {
+            to_table: to_table,
+            truncate: "true",
+            new_table: 'false'
+        }
+      end
+
+      it "creates a CsvImport with the expected values" do
+        import.workspace.should == workspace
+        import.to_table.should == to_table
+        import.csv_file.should == csv_file
+        import.truncate.should == true
+        import.user_id.should == user.id
+        import.new_table.should == false
+      end
+    end
+  end
 end
