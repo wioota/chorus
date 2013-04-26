@@ -9,7 +9,7 @@ describe PreviewsController do
   let(:account) { gpdb_data_source.account_for_user!(user) }
   let(:check_id) { 'id-for-cancelling-previews' }
   let(:connection) { Object.new }
-  let(:default_limit) { 1000 }
+  let(:row_limit) { 1000 }
 
   before do
     log_in user
@@ -24,13 +24,13 @@ describe PreviewsController do
 
     before do
       stub.proxy(ChorusConfig.instance).[](anything)
-      stub(ChorusConfig.instance).[]('default_preview_row_limit') { default_limit }
+      stub(ChorusConfig.instance).[]('default_preview_row_limit') { row_limit }
     end
 
     context "when create is successful" do
       before do
         mock(CancelableQuery).new(connection, check_id, user) do
-          mock(Object.new).execute(gpdb_table.preview_sql, { :limit => default_limit }) do
+          mock(Object.new).execute(gpdb_table.preview_sql, { :limit => row_limit }) do
             GreenplumSqlResult.new
           end
         end
@@ -61,7 +61,7 @@ describe PreviewsController do
     context "when there's an error'" do
       before do
         mock(CancelableQuery).new(connection, check_id, user) do
-          mock(Object.new).execute(gpdb_table.preview_sql, { :limit => default_limit }) do
+          mock(Object.new).execute(gpdb_table.preview_sql, { :limit => row_limit }) do
             raise GreenplumConnection::QueryError
           end
         end
@@ -104,7 +104,7 @@ describe PreviewsController do
 
     it "returns the results of the sql" do
       fake_query = Object.new
-      mock(fake_query).execute(expected_sql) { GreenplumSqlResult.new }
+      mock(fake_query).execute(expected_sql, {:limit => row_limit}) { GreenplumSqlResult.new }
       mock(CancelableQuery).new(connection, check_id, user) { fake_query }
 
       post :preview_sql, params

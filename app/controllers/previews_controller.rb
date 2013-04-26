@@ -29,7 +29,8 @@ class PreviewsController < ApplicationController
     sql_without_semicolon = task[:query].gsub(';', '')
     sql = "SELECT * FROM (#{sql_without_semicolon}) AS chorus_view;"
     connection = schema.connect_as(current_user)
-    result = CancelableQuery.new(connection, task[:check_id], current_user).execute(sql)
+    query = CancelableQuery.new(connection, task[:check_id], current_user)
+    result = query.execute(sql, :limit => ChorusConfig.instance['default_preview_row_limit'])
     present(result, :status => :ok)
   end
 end
