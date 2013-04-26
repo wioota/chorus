@@ -356,4 +356,25 @@ describe WorkspaceDatasetsController do
       end
     end
   end
+
+  context "integration", :greenplum_integration do
+    context "when the dataset is an Oracle table" do
+      let(:user) { users(:owner) }
+      let(:dataset) { datasets(:oracle_table) }
+      let(:workspace) { workspaces(:public) }
+      let(:params) do
+        {:dataset_ids => [dataset.to_param], :workspace_id => workspace.to_param}
+      end
+
+      before { log_in user }
+
+      it "does not process the entity" do
+        expect do
+          post :create, params
+        end.to_not change { workspace.source_datasets.count }
+
+        response.code.should == "422"
+      end
+    end
+  end
 end
