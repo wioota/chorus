@@ -8,8 +8,7 @@ gem 'paperclip', '3.0.4'
 gem 'queue_classic', :github => "GreenplumChorus/queue_classic"
 gem 'clockwork',     :require => false
 gem 'allowy'
-gem 'sunspot_rails', '2.0.0.pre.120720'
-gem 'sunspot_solr', :github => 'taktsoft/sunspot' # https://github.com/sunspot/sunspot/pull/267
+gem 'sunspot_rails'
 gem 'jetpack', :github => "GreenplumChorus/jetpack", :require => false
 gem 'nokogiri'
 gem 'postgresql_cursor', :github => "GreenplumChorus/postgresql_cursor"
@@ -66,12 +65,13 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy do
   gem 'jasmine', :github => 'pivotal/jasmine-gem'
   gem 'rspec_api_documentation', :github => "GreenplumChorus/rspec_api_documentation"
   gem 'forgery'
-  gem 'sunspot_matchers', :github => "pivotal/sunspot_matchers", :branch => "sunspot_2_pre"
+  gem 'sunspot_matchers'
   gem 'fixture_builder', :github => "rdy/fixture_builder"
   gem 'ci_reporter', '>= 1.8.2'
   gem 'faker'
   gem 'fakeweb'
   gem 'jshint_on_rails'
+  gem 'sunspot_solr', :github => 'taktsoft/sunspot' # https://github.com/sunspot/sunspot/pull/267
 end
 
 group :development do

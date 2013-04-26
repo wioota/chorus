@@ -45,12 +45,12 @@ describe Search do
       Sunspot.session.should be_a_search_for(Comment)
       Sunspot.session.should have_search_params(:fulltext, 'bob')
       Sunspot.session.should have_search_params(:facet, :type_name)
-      Sunspot.session.should have_search_params(:group, Proc.new {
+      Sunspot.session.should have_search_params(:group) {
         group :grouping_id do
           truncate
           limit 3
         end
-      })
+      }
     end
 
     it "supports pagination" do
@@ -132,11 +132,11 @@ describe Search do
       it "does not include the condition for data source accounts" do
         stub(user).accessible_account_ids { [] }
         Search.new(user, :query => 'whatever', :entity_type => :dataset).search
-        Sunspot.session.should have_search_params(:with, Proc.new {
+        Sunspot.session.should have_search_params(:with) {
           any_of do
             without :security_type_name, Dataset.security_type_name
           end
-        })
+        }
       end
     end
 
