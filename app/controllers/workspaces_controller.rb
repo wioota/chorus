@@ -33,12 +33,13 @@ class WorkspacesController < ApplicationController
 
   def update
     workspace = Workspace.find(params[:id])
-    authorize! :update, workspace
 
     original_archived = workspace.archived?.to_s
     attributes = params[:workspace]
     attributes[:archiver] = current_user if attributes[:archived] == 'true'
     workspace.attributes = attributes
+
+    authorize! :update, workspace
 
     create_workspace_events(workspace, original_archived)
     workspace.save!
