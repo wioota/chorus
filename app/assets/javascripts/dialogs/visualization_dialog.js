@@ -4,13 +4,13 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     additionalClass: "dialog_wide",
 
     subviews: {
-        ".tabledata": "tableData",
+        ".tabledata": "resultsConsole",
         ".filter_options": "filterWizard"
     },
 
     events: {
-        "click a.show": "showDataset",
-        "click a.hide": "hideDataset",
+        "click a.show": "showDataTable",
+        "click a.hide": "hideDataTable",
         "click a.show_options": "showFilterOptions",
         "click a.hide_options": "hideFilterOptions",
         "click button.close_dialog": "closeModal",
@@ -32,17 +32,13 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.filters = this.options.filters.clone();
         this.lastSavedFilters = this.options.filters.clone();
         this.filterWizard = new chorus.views.DatasetFilterWizard({collection: this.filters, columnSet: this.options.columnSet});
-        this.tableData = new chorus.views.ResultsConsole({shuttle: false, enableResize: true, enableExpander: false, model: this.task, footerSize: _.bind(this.footerSize, this)});
+        this.resultsConsole = new chorus.views.ResultsConsole({enableResize: true, enableExpander: false, model: this.task, footerSize: _.bind(this.footerSize, this)});
         this.listenTo(this.filters, "add remove change", this.filtersChanged);
     },
 
-    footerSize: function() {
-        return this.$('.modal_controls').outerHeight(true);
-    },
-
     postRender: function() {
-        this.tableData.showResultTable(this.task);
-        this.tableData.$('.expander_button').remove();
+        this.resultsConsole.initializeDataTable(this.task);
+        this.resultsConsole.$('.expander_button').remove();
         this.$('.chart_icon.' + this.type).addClass("selected");
 
         var menuItems = [
@@ -116,7 +112,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     chartRefreshed: function() {
         this.drawChart();
         this.chartUpToDate();
-        this.tableData.showResultTable(this.task);
+        this.resultsConsole.initializeDataTable(this.task);
     },
 
     chartUpToDate: function() {
@@ -229,15 +225,16 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.chartUpToDate();
     },
 
-    showDataset: function(e) {
+    showDataTable: function(e) {
         e && e.preventDefault();
         this.$('.results_console').removeClass("hidden");
         this.$(".modal_controls a.hide").removeClass("hidden");
         this.$(".modal_controls a.show").addClass("hidden");
+        this.resultsConsole.initializeDataTable(this.task);
         this.recalculateScrolling();
     },
 
-    hideDataset: function(e) {
+    hideDataTable: function(e) {
         e && e.preventDefault();
         this.$('.results_console').addClass("hidden");
         this.$(".modal_controls a.show").removeClass("hidden");
@@ -279,6 +276,10 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         } else {
             this.saveWorkfile();
         }
+    },
+
+    footerSize: function() {
+        return this.$('.modal_controls').outerHeight(true);
     },
 
     sanitizeFilename: function(fileName) {

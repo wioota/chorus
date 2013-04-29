@@ -89,7 +89,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     executionSucceeded: function(task) {
-        this.showResultTable(task);
+        this.initializeDataTable(task);
         this.hideSpinner();
 
         if (!task.hasResults()) {
@@ -97,7 +97,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         }
     },
 
-    showResultTable: function(task) {
+    initializeDataTable: function(task) {
         this.dataTable && this.dataTable.teardown();
         this.dataTable = new chorus.views.DataTable({model: task});
         this.registerSubView(this.dataTable);

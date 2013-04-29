@@ -78,42 +78,15 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.model.set({types: types}, {silent: true});
     },
 
-    initializeDataGrid: function (columns, rows) {
-
-
-        var gridCompatibleColumnCells = _.map(columns, function (column, index) {
-            return {name: index.toString(), field: index.toString(), id: index.toString() };
-        });
-        var gridCompatibleRows = _.map(rows, function (row) {
-            return _.reduce(row, function (memo, cell, index) {
-                memo[index.toString()] = cell;
-                return memo;
-            }, {});
-        });
-        var options = {
-            enableColumnReorder: false,
-            enableTextSelectionOnCells: true,
-            syncColumnCellResize: true,
-            showHeaderRow: true
-        };
-
-        this.grid = new Slick.Grid(this.$(".data_grid"), gridCompatibleRows, gridCompatibleColumnCells, options);
-
-        _.defer(_.bind(function () {
-            this.grid.resizeCanvas();
-            this.grid.invalidate();
-        }, this));
-    },
-
     postRender: function() {
-//        this.$(".tbody").unbind("scroll.follow_header");
-//        this.$(".tbody").bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
-//        this.setupScrolling(this.$(".tbody"));
+        this.$(".tbody").unbind("scroll.follow_header");
+        this.$(".tbody").bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
+        this.setupScrolling(this.$(".tbody"));
+
         var $dataTypes = this.$(".data_types");
 
         var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
         var columns = csvParser.getColumnOrientedData();
-        var rows = csvParser.rows;
         this.model.serverErrors = csvParser.serverErrors;
 
         this.model.set({
@@ -149,15 +122,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         } else {
             this.$("input#delimiter_other").prop("checked", true);
         }
-
-        this.initializeDataGrid(columns, rows);
-    },
-
-    revealed: function() {
-        var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
-        var columns = csvParser.getColumnOrientedData();
-        var rows = csvParser.rows;
-        this.initializeDataGrid(columns, rows);
     },
 
     getColumnNames: function() {
@@ -253,7 +217,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.updateModel();
 
         this.render();
-//        this.recalculateScrolling();
+        this.recalculateScrolling();
     },
 
     focusOtherInputField: function(e) {

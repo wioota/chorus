@@ -131,7 +131,7 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("re-draws the result console table", function() {
-                    expect(this.dialog.$(".data_table .td").length).not.toBe(0);
+                    expect(this.dialog.$(".slick-cell").length).not.toBe(0);
                 });
 
                 it("does not hide the filter options", function() {
@@ -650,7 +650,7 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("actually has columns", function() {
-                    expect(this.dialog.$(".data_table .column").length).toBeGreaterThan(1);
+                    expect(this.dialog.$(".data_table .slick-header-column").length).toBeGreaterThan(1);
                 });
             });
 
@@ -849,33 +849,38 @@ describe("chorus.dialogs.Visualization", function() {
         });
     });
 
-    describe("show and hide tabular data", function() {
+    describe("show and hide data table", function() {
         beforeEach(function() {
             this.dialog.render();
         });
 
         describe("clicking on the 'Show Data Table' link", function() {
             beforeEach(function() {
+                spyOn(this.dialog.resultsConsole, 'initializeDataTable');
                 this.dialog.$(".modal_controls a.show").click();
             });
 
             it("passes task into ResultsConsole", function() {
-                expect(this.dialog.tableData.model).toBe(this.dialog.task);
+                expect(this.dialog.resultsConsole.model).toBe(this.dialog.task);
             });
 
-            it("should enable the table resize area", function() {
-                expect(this.dialog.tableData.options.enableResize).toBeTruthy();
+            it("enables the table resize area", function() {
+                expect(this.dialog.resultsConsole.options.enableResize).toBe(true);
             });
 
-            it("should show the data table", function() {
+            it("initializes a data table", function () {
+                expect(this.dialog.resultsConsole.initializeDataTable).toHaveBeenCalled();
+            });
+
+            it("unhides the console", function() {
                 expect(this.dialog.$(".results_console")).not.toHaveClass("hidden");
             });
 
-            it("should hide the show table link", function() {
+            it("hides the show table link", function() {
                 expect(this.dialog.$(".modal_controls a.show")).toHaveClass("hidden");
             });
 
-            it("should show the hide table link", function() {
+            it("shows the hide table link", function() {
                 expect(this.dialog.$(".modal_controls a.hide")).not.toHaveClass("hidden");
             });
 
