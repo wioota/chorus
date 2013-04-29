@@ -234,6 +234,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 describe("clicking the maximize link", function() {
                     beforeEach(function() {
+                        spyOn(this.view.dataTable, 'resizeGridToResultsConsole');
                         spyOn(this.view, "getDesiredDataTableHeight").andReturn(777);
                         spyOn(this.view, "recalculateScrolling");
                         this.view.$("a.maximize").click();
@@ -254,7 +255,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(this.view.recalculateScrolling).toHaveBeenCalled();
                     });
 
-                    specify("the expander button arrow points up", function() {
+                    it("the expander button arrow points up", function() {
                         expect(this.view.$(".arrow")).toHaveClass("up");
                         expect(this.view.$(".arrow")).not.toHaveClass("down");
                     });
@@ -263,10 +264,15 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(this.view.$(".data_table").css("height")).toBe("777px");
                     });
 
+                    it("resizes the data grid", function() {
+                        expect(this.view.dataTable.resizeGridToResultsConsole).toHaveBeenCalled();
+                    });
+
                     itCanExpandAndCollapseTheResults("maximized", "minimized");
 
                     describe("clicking the minimize link", function() {
                         beforeEach(function() {
+                            this.view.dataTable.resizeGridToResultsConsole.reset();
                             this.view.recalculateScrolling.reset();
                             this.view.$("a.minimize").click();
                         });
@@ -286,8 +292,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                             expect(this.view.recalculateScrolling).toHaveBeenCalled();
                         });
 
-
-                        specify("the expander button arrow points up", function() {
+                        it("the expander button arrow points up", function() {
                             expect(this.view.$(".arrow")).toHaveClass("up");
                             expect(this.view.$(".arrow")).not.toHaveClass("down");
                         });
@@ -296,6 +301,9 @@ describe("chorus.views.ResultsConsoleView", function() {
                             expect(this.view.$(".data_table").css("height")).not.toBe("777px");
                         });
 
+                        it("resizes the data grid", function() {
+                            expect(this.view.dataTable.resizeGridToResultsConsole).toHaveBeenCalled();
+                        });
                     });
                 });
 

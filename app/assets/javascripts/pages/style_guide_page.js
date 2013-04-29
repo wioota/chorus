@@ -353,6 +353,25 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
         this.models.csvImport = new chorus.models.CSVImport({ workspaceId: '90210' });
 
+
+        var noColumns = 500;
+        var columns = [];
+        _(noColumns).times(function(i){
+            columns[i] = {name: 'header_' + String.fromCharCode(96 + (i%26))};
+        });
+
+        var rows = [];
+        _(500).times(function(i){
+            rows[i] = [];
+            _(noColumns).times(function(j) {
+                rows[i][j] = [ "Oakland" + i + "Eva" ];
+            });
+        });
+        this.models.workfileExecutionTask = new chorus.models.WorkfileExecutionTask({
+            columns: columns,
+            rows: rows
+        });
+
         chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
 
         return this.models;
@@ -441,6 +460,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
     buildViews: function() {
         return {
+            "Data Table": new chorus.views.DataTable({
+                model: this.models.workfileExecutionTask
+            }),
+
             "Breadcrumbs": new chorus.views.BreadcrumbsView({
                 breadcrumbs: [
                     { label: t("breadcrumbs.home"), url: "#/" },
@@ -554,42 +577,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             "Kaggle User List": new chorus.views.MainContentList({
                 collection: this.collections.kaggleUserSet,
                 modelClass: "KaggleUser"
-            }),
-
-            "Data Table": new chorus.views.DataTable({
-                model: new chorus.models.WorkfileExecutionTask({ result: {
-                    columns: [
-                        { name: "id" },
-                        { name: "city" },
-                        { name: "state" },
-                        { name: "zip" },
-                        { name: "other_state" },
-                        { name: "other_zip" }
-                    ],
-                    rows: [
-                        { id: 1, city: "Oakland", state: "CA", zip: "94612", other_state: "CA", other_zip: "94612" },
-                        { id: 2, city: "Arcata", state: "CA", zip: "95521", other_state: "CA", other_zip: "95521" },
-                        { id: 3, city: "Lafayette", state: "IN", zip: "47909", other_state: "IN", other_zip: "47909" },
-                        { id: 1, city: "Oakland", state: "CA", zip: "94612", other_state: "CA", other_zip: "94612" },
-                        { id: 2, city: "Arcata", state: "CA", zip: "95521", other_state: "CA", other_zip: "95521" },
-                        { id: 3, city: "Lafayette", state: "IN", zip: "47909", other_state: "IN", other_zip: "47909" },
-                        { id: 1, city: "Oakland", state: "CA", zip: "94612", other_state: "CA", other_zip: "94612" },
-                        { id: 2, city: "Arcata", state: "CA", zip: "95521", other_state: "CA", other_zip: "95521" },
-                        { id: 3, city: "Lafayette", state: "IN", zip: "47909", other_state: "IN", other_zip: "47909" },
-                        { id: 1, city: "Oakland", state: "CA", zip: "94612", other_state: "CA", other_zip: "94612" },
-                        { id: 2, city: "Arcata", state: "CA", zip: "95521", other_state: "CA", other_zip: "95521" },
-                        { id: 3, city: "Lafayette", state: "IN", zip: "47909", other_state: "IN", other_zip: "47909" },
-                        { id: 1, city: "Oakland", state: "CA", zip: "94612", other_state: "CA", other_zip: "94612" },
-                        { id: 2, city: "Arcata", state: "CA", zip: "95521", other_state: "CA", other_zip: "95521" },
-                        { id: 3, city: "Lafayette", state: "IN", zip: "47909", other_state: "IN", other_zip: "47909" },
-                        { id: 1, city: "Oakland", state: "CA", zip: "94612", other_state: "CA", other_zip: "94612" },
-                        { id: 2, city: "Arcata", state: "CA", zip: "95521", other_state: "CA", other_zip: "95521" },
-                        { id: 3, city: "Lafayette", state: "IN", zip: "47909", other_state: "IN", other_zip: "47909" },
-                        { id: 1, city: "Oakland", state: "CA", zip: "94612", other_state: "CA", other_zip: "94612" },
-                        { id: 2, city: "Arcata", state: "CA", zip: "95521", other_state: "CA", other_zip: "95521" },
-                        { id: 3, city: "Lafayette", state: "IN", zip: "47909", other_state: "IN", other_zip: "47909" }
-                    ]
-                }})
             }),
 
             "Visualization: BoxPlot": new chorus.views.visualizations.Boxplot({
@@ -798,13 +785,13 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 columnSet: this.models.dataset.columns()
             }),
 
-            "Create External Table From Hdfs": new chorus.dialogs.CreateExternalTableFromHdfs({
-                model: this.models.hdfsExternalTable,
-                csvOptions: {
-                    tableName: this.models.hdfsFile.name(),
-                    contents: this.models.hdfsFile.get('contents')
-                }
-            }),
+//            "Create External Table From Hdfs": new chorus.dialogs.CreateExternalTableFromHdfs({
+//                model: this.models.hdfsExternalTable,
+//                csvOptions: {
+//                    tableName: this.models.hdfsFile.name(),
+//                    contents: this.models.hdfsFile.get('contents')
+//                }
+//            }),
 
             "Import Now": new chorus.dialogs.ImportNow({
                 dataset: this.models.dataset
@@ -876,7 +863,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
         this.buildModels();
         this.buildCollections();
-
         this.views = this.buildViews();
         this.contentDetails = this.buildContentDetails();
         this.dialogs = this.buildDialogs();

@@ -2,35 +2,22 @@ chorus.views.DataTable = chorus.views.Base.extend({
     templateName: "data_table",
     constructorName: "DataTable",
 
-    // backbone events don't work for scroll?!
     postRender: function() {
-        this.$(".tbody").bind("scroll", _.bind(this.adjustHeaderPosition, this));
-
-        this.setupScrolling(".tbody");
-        this.setupResizability();
-    },
-
-    setupResizability: function() {
-        this.$('.th:first').resizable({
-            autoHide: true,
-            handles: "e",
-            alsoResize: ".column:first"
+        var columns = _.map(this.model.getColumns(), function(column) {
+            return {name: column.name, field: column.name, id: column.name };
         });
-    },
-
-    additionalContext: function() {
-        return {
-            shuttle: this.options.shuttle === undefined || this.options.shuttle,
-            columns: this.model.columnOrientedData()
+        var rows = this.model.getSortedRows(this.model.getRows());
+        var options = {
+            enableColumnReorder: false,
+            enableTextSelectionOnCells: true,
+            syncColumnCellResize: true
         };
+
+        this.grid = new Slick.Grid(this.$(".data_grid"), rows, columns, options);
     },
 
-    adjustHeaderPosition: function() {
-        this.$(".thead").css({ "left": -this.scrollLeft() });
-    },
-
-    scrollLeft: function() {
-        var api = this.$(".tbody").data("jsp");
-        return api && api.getContentPositionX();
+    resizeGridToResultsConsole: function() {
+        this.grid.resizeCanvas();
+        this.grid.invalidate();
     }
 });

@@ -1,5 +1,9 @@
 $cell-width: 150px;
 .table_import_csv.dialog {
+    .result_table {
+      height: 300px;
+    }
+
     .dialog_content {
         padding-left: 2px;
         padding-right: 2px;

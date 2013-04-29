@@ -99,11 +99,11 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     showResultTable: function(task) {
         this.dataTable && this.dataTable.teardown();
-        this.dataTable = new chorus.views.DataTable({shuttle: this.options.shuttle, model: task});
+        this.dataTable = new chorus.views.DataTable({model: task});
         this.registerSubView(this.dataTable);
-        this.dataTable.render();
         this.$(".result_table").removeClass("hidden").html(this.dataTable.el);
         this.$(".controls").removeClass("hidden");
+        this.dataTable.render();
         this.minimizeTable();
     },
 
@@ -148,6 +148,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".bottom_gutter").removeClass("hidden");
         this.$(".arrow").removeClass("down");
         this.$(".arrow").addClass("up");
+        this.dataTable.resizeGridToResultsConsole();
         this.recalculateScrolling();
     },
 
@@ -161,6 +162,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".result_table").removeClass("minimized");
         this.$(".result_table").addClass("maximized");
         this.$(".data_table").css("height", this.getDesiredDataTableHeight());
+        this.dataTable.resizeGridToResultsConsole();
         this.recalculateScrolling();
     },
 

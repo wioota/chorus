@@ -88,13 +88,6 @@
     background-color: $activity-stream-comment-background-color;
     }
 
-
-    .data_table {
-        border: 1px solid black;
-        width: 350px;
-        height: 300px;
-    }
-
     table {
         td, th, tr { @include debugging-mixin; }
         text-shadow: none !important;
@@ -178,5 +171,9 @@
         & > li {
           display: inline-block;
         }
+    }
+
+    .data_table {
+      height: 200px;
     }
 }

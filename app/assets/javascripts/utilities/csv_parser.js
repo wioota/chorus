@@ -36,10 +36,6 @@ chorus.utilities.CsvParser = function(contents, options) {
         return _.map(this.rows.shift(), chorus.utilities.CsvParser.normalizeColumnName);
     };
 
-    this.overrideColumnNames = function() {
-        return this.options.columnNameOverrides;
-    };
-
     this.getColumnOrientedData = function() {
         var columnNames;
         if(this.options.hasHeader) {
@@ -48,7 +44,7 @@ chorus.utilities.CsvParser = function(contents, options) {
             columnNames = this.generateColumnNames();
         }
         if (this.options.columnNameOverrides) {
-            columnNames = this.overrideColumnNames();
+            columnNames = this.options.columnNameOverrides;
         }
 
         var types = this.options.types;

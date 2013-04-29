@@ -266,6 +266,5 @@ chorus.dialogs.FileImport = chorus.dialogs.Base.extend({
             always: _.bind(this.uploadFinished, this),
             dataType: "json"
         });
-
     }
 });
