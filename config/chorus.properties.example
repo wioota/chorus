@@ -78,6 +78,14 @@ logging.loglevel = info
 
 logging.syslog.enabled = true
 
+# File Download Settings
+
+# This string is prefixed on all generated filenames. For instance, if a user
+# downloads a dataset, the name of the file downloaded will be the prefix
+# followed by the dataset name then the csv extension.
+# Only the first 20 characters of the prefix will be used.
+file_download.name_prefix =
+
 # Gpfdist Settings
 
 # To enable data movement between databases, gpfdist must be installed and

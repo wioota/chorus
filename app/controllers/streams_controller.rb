@@ -1,4 +1,6 @@
 class StreamsController < ApplicationController
+  include FileDownloadHelper
+
   private
 
   def stream(dataset, user, options = {})
@@ -9,7 +11,8 @@ class StreamsController < ApplicationController
         streamer_options
     )
 
-    response.headers["Content-Disposition"] = "attachment; filename=#{dataset.name}.csv"
+    filename = filename_for_download(dataset.name)
+    response.headers["Content-Disposition"] = "attachment; filename=\"#{filename}.csv\""
     response.headers["Cache-Control"] = 'no-cache'
     response.headers["Transfer-Encoding"] = 'chunked'
 

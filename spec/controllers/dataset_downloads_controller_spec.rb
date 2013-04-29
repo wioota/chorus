@@ -38,12 +38,16 @@ describe DatasetDownloadsController do
       log_in user
     end
 
+    it_behaves_like "prefixed file downloads" do
+      let(:do_request) { get :show, params }
+      let(:expected_filename) { "#{table.name}.csv" }
+    end
+
     context "with valid file content" do
       it "should response with success" do
         get :show, params
         response.code.should == "200"
       end
-
       it "streams the data into the template" do
         get :show, params
         response.body.should == 'i am the enum'

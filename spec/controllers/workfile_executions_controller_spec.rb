@@ -145,7 +145,7 @@ describe WorkfileExecutionsController do
       it "sets content disposition: attachment" do
         post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some"
         response.headers['Content-Disposition'].should include("attachment")
-        response.headers['Content-Disposition'].should include('filename=some.csv')
+        response.headers['Content-Disposition'].should include('filename="some.csv"')
         response.headers['Content-Type'].should == 'text/csv'
       end
 
@@ -164,6 +164,11 @@ describe WorkfileExecutionsController do
         it "limits the results when to num_of_rows" do
           post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some", :num_of_rows => limit
         end
+      end
+
+      it_behaves_like "prefixed file downloads" do
+        let(:do_request) { post :create, :workfile_id => workfile.id, :sql => sql, :check_id => check_id, :download => true, :file_name => "some" }
+        let(:expected_filename) { "some.csv" }
       end
     end
 

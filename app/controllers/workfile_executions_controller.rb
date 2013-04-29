@@ -1,4 +1,5 @@
 class WorkfileExecutionsController < ApplicationController
+  include FileDownloadHelper
   before_filter :find_workfile, :find_schema, :verify_workspace, :check_authorization
   require_params :check_id, :only => :create
   require_params :id, :only => :destroy, :field_name => :check_id
@@ -7,7 +8,8 @@ class WorkfileExecutionsController < ApplicationController
     query = CancelableQuery.new(@schema.connect_as(current_user), params[:check_id], current_user)
     if params[:download]
       cookies["fileDownload_#{params[:check_id]}".to_sym] = true
-      response.headers["Content-Disposition"] = "attachment; filename=#{params[:file_name]}.csv"
+      filename = filename_for_download("#{params[:file_name]}.csv")
+      response.headers["Content-Disposition"] = "attachment; filename=\"#{filename}\""
       response.headers["Cache-Control"] = 'no-cache'
       response.headers["Transfer-Encoding"] = 'chunked'
       response.headers['Content-Type'] = 'text/csv'
