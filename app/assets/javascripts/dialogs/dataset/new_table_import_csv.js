@@ -36,6 +36,72 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.listenTo(this.model, "validationFailed", this.saveFailed);
     },
 
+    postRender: function() {
+        var $dataTypes = this.$(".data_types");
+
+        var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
+        var columns = csvParser.getColumnOrientedData();
+        var rows = csvParser.rows;
+        this.model.serverErrors = csvParser.serverErrors;
+
+        this.model.set({
+            types: _.pluck(columns, "type")
+        }, {silent: true});
+
+        if (this.model.serverErrors) {
+            this.showErrors();
+        }
+
+        this.linkMenus = _.map(columns, function(item) {
+            return new chorus.views.LinkMenu({
+                options: [
+                    {data: "integer", text: "integer"},
+                    {data: "float", text: "float"},
+                    {data: "text", text: "text"},
+                    {data: "date", text: "date"},
+                    {data: "time", text: "time"},
+                    {data: "timestamp", text: "timestamp"}
+                ],
+                title: '',
+                event: "setType",
+                chosen: item.type
+            });
+        });
+        _.each(this.linkMenus, function(linkMenu, index) {
+            $dataTypes.find(".th").eq(index).find(".center").append(linkMenu.render().el);
+        });
+
+        this.$("input.delimiter").prop("checked", false);
+        if (_.contains([",", "\t", ";", " "], this.delimiter)) {
+            this.$("input.delimiter[value='" + this.delimiter + "']").prop("checked", true);
+        } else {
+            this.$("input#delimiter_other").prop("checked", true);
+        }
+
+        this.initializeDataGrid(columns, rows);
+    },
+
+    revealed: function() {
+        var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
+        var columns = csvParser.getColumnOrientedData();
+        var rows = csvParser.rows;
+        this.initializeDataGrid(columns, rows);
+    },
+
+    additionalContext: function() {
+        var options = _.clone(this.model.attributes);
+        options.columnNameOverrides = this.getColumnNames();
+        return {
+            includeHeader: this.includeHeader,
+            columns: new chorus.utilities.CsvParser(this.contents, options).getColumnOrientedData(),
+            delimiter: this.other_delimiter ? this.delimiter : '',
+            directions: Handlebars.helpers.unsafeT("dataset.import.table.new.directions", {
+                tablename_input_field: "<input type='text' name='tableName' value='" + this.model.get('tableName') + "'/>"
+            }),
+            ok: this.ok
+        };
+    },
+
     saved: function() {
         this.closeModal();
         chorus.toast("dataset.import.started");
@@ -78,68 +144,33 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.model.set({types: types}, {silent: true});
     },
 
-    postRender: function() {
-        this.$(".tbody").unbind("scroll.follow_header");
-        this.$(".tbody").bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
-        this.setupScrolling(this.$(".tbody"));
-
-        var $dataTypes = this.$(".data_types");
-
-        var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
-        var columns = csvParser.getColumnOrientedData();
-        this.model.serverErrors = csvParser.serverErrors;
-
-        this.model.set({
-            types: _.pluck(columns, "type")
-        }, {silent: true});
-
-        if (this.model.serverErrors) {
-            this.showErrors();
-        }
-
-        this.linkMenus = _.map(columns, function(item) {
-            return new chorus.views.LinkMenu({
-                options: [
-                    {data: "integer", text: "integer"},
-                    {data: "float", text: "float"},
-                    {data: "text", text: "text"},
-                    {data: "date", text: "date"},
-                    {data: "time", text: "time"},
-                    {data: "timestamp", text: "timestamp"}
-                ],
-                title: '',
-                event: "setType",
-                chosen: item.type
-            });
+    initializeDataGrid: function (columns, rows) {
+        var gridCompatibleColumnCells = _.map(columns, function (column, index) {
+            return {name: index.toString(), field: index.toString(), id: index.toString() };
         });
-        _.each(this.linkMenus, function(linkMenu, index) {
-            $dataTypes.find(".th").eq(index).find(".center").append(linkMenu.render().el);
+        var gridCompatibleRows = _.map(rows, function (row) {
+            return _.reduce(row, function (memo, cell, index) {
+                memo[index.toString()] = cell;
+                return memo;
+            }, {});
         });
+        var options = {
+            enableColumnReorder: false,
+            enableTextSelectionOnCells: true,
+            syncColumnCellResize: true,
+            showHeaderRow: true
+        };
 
-        this.$("input.delimiter").prop("checked", false);
-        if (_.contains([",", "\t", ";", " "], this.delimiter)) {
-            this.$("input.delimiter[value='" + this.delimiter + "']").prop("checked", true);
-        } else {
-            this.$("input#delimiter_other").prop("checked", true);
-        }
+        this.grid = new Slick.Grid(this.$(".data_grid"), gridCompatibleRows, gridCompatibleColumnCells, options);
+
+        _.defer(_.bind(function () {
+            this.grid.resizeCanvas();
+            this.grid.invalidate();
+        }, this));
     },
 
     getColumnNames: function() {
         return this.model.attributes.hasHeader ? this.headerColumnNames : this.generatedColumnNames;
-    },
-
-    additionalContext: function() {
-        var options = _.clone(this.model.attributes);
-        options.columnNameOverrides = this.getColumnNames();
-        return {
-            includeHeader: this.includeHeader,
-            columns: new chorus.utilities.CsvParser(this.contents, options).getColumnOrientedData(),
-            delimiter: this.other_delimiter ? this.delimiter : '',
-            directions: Handlebars.helpers.unsafeT("dataset.import.table.new.directions", {
-                tablename_input_field: "<input type='text' name='tableName' value='" + this.model.get('tableName') + "'/>"
-            }),
-            ok: this.ok
-        };
     },
 
     startImport: function() {
@@ -217,7 +248,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.updateModel();
 
         this.render();
-        this.recalculateScrolling();
+//        this.recalculateScrolling();
     },
 
     focusOtherInputField: function(e) {

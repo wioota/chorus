@@ -27,32 +27,5 @@
 </div>
 
 <div class="result_table">
-    <div class="data_table">
-        <div class="thead list">
-            <div class="column_names">
-                        {{#each columns}}<div class="th">
-                    <div class="field_name" title="{{name}}">
-                        <input type="text" value="{{name}}"/>
-                    </div>
-                    </div>{{/each}}
-            </div>
-            <div class="data_types">
-                        {{#each columns}}<div class="th">
-                    <div class="type {{type}}">
-                        <div class="left"/><div class="center type_name">
-                        <div class="arrow"/>
-                    </div><div class="right"/>
-                    </div>
-                    </div>{{/each}}
-            </div>
-        </div>
-
-        <div class="tbody">
-                    {{#each columns}}<div class="column">
-                {{#each values}}
-                <div class="td" title="{{this}}">{{renderTableData this}}</div>
-                {{/each}}
-                </div>{{/each}}
-        </div>
-    </div>
+    <div class="data_grid" style="width:969px; height:100%"></div>
 </div>
