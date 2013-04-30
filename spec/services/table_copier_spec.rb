@@ -163,7 +163,10 @@ describe TableCopier do
         conn.disconnect
       end
 
-      let(:conn) { Sequel.connect(destination_schema.connect_as(user).send(:db_url)) }
+      let(:conn) do
+        connection = destination_schema.connect_as(user)
+        Sequel.connect(connection.db_url, connection.db_options)
+      end
       let(:destination_table_name) { "temporary_for_copy" }
 
       context "when the source dataset is a chorus view" do

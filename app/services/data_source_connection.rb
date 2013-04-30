@@ -68,7 +68,7 @@ class DataSourceConnection
     if @account.invalid_credentials?
       raise InvalidCredentials.new(@data_source)
     else
-      @connection ||= Sequel.connect db_url, logger_options.merge({:test => true})
+      @connection ||= Sequel.connect db_url, db_options.merge({:test => true})
     end
   rescue Sequel::DatabaseError => e
     exception = error_class.new(e)
@@ -140,7 +140,7 @@ class DataSourceConnection
     DataSourceConnection::Error
   end
 
-  def logger_options
+  def db_options
     if @options[:logger]
       { :logger => @options[:logger], :sql_log_level => :debug }
     else

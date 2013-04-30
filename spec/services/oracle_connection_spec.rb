@@ -4,7 +4,6 @@ describe OracleConnection, :oracle_integration do
   let(:data_source) { OracleIntegration.real_data_source }
   let(:database_name) { data_source.db_name }
   let(:account) { OracleIntegration.real_account }
-  let(:db) { Sequel.connect(db_url) }
   let(:exception_class) { OracleConnection::DatabaseError }
 
   let(:options) {
@@ -14,6 +13,8 @@ describe OracleConnection, :oracle_integration do
   }
   let(:connection) { OracleConnection.new(data_source, account, options) }
   let(:db_url) { connection.db_url }
+  let(:db_options) { connection.db_options }
+  let(:db) { Sequel.connect(db_url, db_options) }
 
   before do
     stub.proxy(Sequel).connect.with_any_args
@@ -495,7 +496,7 @@ describe OracleConnection, :oracle_integration do
   end
 
   context "when the user doesn't have permission to access some object in the database" do
-    let(:db) { Sequel.connect(db_url) }
+    let(:db) { Sequel.connect(db_url, db_options) }
     let(:schema_name) { OracleIntegration.schema_name }
     let(:restricted_user) { "user_with_no_access" }
     let(:restricted_password) { "secret" }

@@ -4,6 +4,7 @@ describe GreenplumConnection, :greenplum_integration do
   let(:data_source) { GreenplumIntegration.real_data_source }
   let(:database_name) { GreenplumIntegration.database_name }
   let(:db_url) { connection.db_url }
+  let(:db_options) { connection.db_options }
   let(:account) { GreenplumIntegration.real_account }
   let(:exception_class) { GreenplumConnection::DatabaseError }
 
@@ -182,7 +183,7 @@ describe GreenplumConnection, :greenplum_integration do
         end
 
         it "should continue to use auto_commit" do
-          stub.proxy(Sequel).connect(db_url, :test => true) do |connection|
+          stub.proxy(Sequel).connect(db_url, db_options.merge(:test => true)) do |connection|
             connection.synchronize(:default) do |jdbc_conn|
               dont_allow(jdbc_conn).set_auto_commit(false)
               dont_allow(jdbc_conn).commit
@@ -277,9 +278,9 @@ describe GreenplumConnection, :greenplum_integration do
       let(:new_database_name) { "foobarbaz" }
       let(:subject) { connection.create_database("foobarbaz") }
       let(:expected) { true }
+      let!(:db) { Sequel.connect(db_url, db_options) }
 
       after do
-        db = Sequel.connect(db_url)
         db.execute("drop database if exists #{new_database_name}")
         db.disconnect
       end
@@ -334,9 +335,9 @@ describe GreenplumConnection, :greenplum_integration do
       let(:new_schema_name) { "foobarbaz" }
       let(:subject) { connection.create_schema("foobarbaz") }
       let(:expected) { true }
+      let!(:db) { Sequel.connect(db_url, db_options) }
 
       after do
-        db = Sequel.connect(db_url)
         db.drop_schema(new_schema_name, :if_exists => true)
         db.disconnect
       end
@@ -357,7 +358,7 @@ describe GreenplumConnection, :greenplum_integration do
         let(:expected) { true }
 
         around do |example|
-          db = Sequel.connect(db_url)
+          db = Sequel.connect(db_url, db_options)
           db.create_schema(schema_to_drop)
 
           example.run
@@ -434,8 +435,9 @@ describe GreenplumConnection, :greenplum_integration do
     end
 
     describe '#create_view' do
+      let!(:db) { Sequel.connect(db_url, db_options) }
+
       after do
-        db = Sequel.connect(db_url)
         db.default_schema = schema_name
         db.drop_view('a_new_db_view') if db.views.map(&:to_s).include? 'a_new_db_view'
         db.disconnect
@@ -449,7 +451,7 @@ describe GreenplumConnection, :greenplum_integration do
       it 'creates a view' do
         expect {
           connection.create_view('a_new_db_view', 'select 1;')
-        }.to change { Sequel.connect(db_url).views }
+        }.to change { Sequel.connect(db_url, db_options).views }
       end
 
       context 'when a view with that name already exists' do
@@ -462,9 +464,10 @@ describe GreenplumConnection, :greenplum_integration do
     end
 
     describe "create_external_table" do
+      let!(:db) { Sequel.connect(db_url, db_options) }
+
       after do
         if table_name == "a_new_external_table"
-          db = Sequel.connect(db_url)
           db.default_schema = schema_name
           db.execute("DROP EXTERNAL TABLE IF EXISTS \"#{schema_name}\".\"#{table_name}\"")
           db.disconnect
@@ -494,7 +497,7 @@ describe GreenplumConnection, :greenplum_integration do
       it 'creates an external table' do
         expect {
           subject
-        }.to change { Sequel.connect(db_url).tables }
+        }.to change { Sequel.connect(db_url, db_options).tables }
       end
 
       it 'sets the format to TEXT' do
@@ -613,7 +616,7 @@ describe GreenplumConnection, :greenplum_integration do
         let(:expected) { true }
 
         around do |example|
-          db = Sequel.connect(db_url)
+          db = Sequel.connect(db_url, db_options)
           db.default_schema = schema_name
           db.create_table(table_to_drop)
 
@@ -649,9 +652,10 @@ describe GreenplumConnection, :greenplum_integration do
 
       context "if the table exists" do
         let(:table_to_truncate) { "trunc_table" }
+        let!(:db) { Sequel.connect(db_url, db_options) }
 
         before do
-          db = Sequel.connect(db_url)
+          db = Sequel.connect(db_url, db_options)
           db.execute(<<-SQL)
             CREATE TABLE "test_schema"."trunc_table" (num integer);
             INSERT INTO "test_schema"."trunc_table" (num) VALUES (2)
@@ -660,7 +664,6 @@ describe GreenplumConnection, :greenplum_integration do
         end
 
         after do
-          db = Sequel.connect(db_url)
           db.execute(<<-SQL)
             DROP TABLE IF EXISTS "test_schema"."trunc_table"
           SQL
@@ -732,7 +735,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:subject) { connection.stream_sql(sql) { true } }
 
       before do
-        @db = Sequel.connect(db_url)
+        @db = Sequel.connect(db_url, db_options)
         @db.execute("SET search_path TO '#{schema_name}'")
         @db.execute("CREATE TABLE thing (one integer, two integer, three timestamp with time zone, fourth timestamp)")
         @db.execute("INSERT INTO thing VALUES (1, 2, '1999-01-08 04:05:06 -8:00', '1999-01-08 04:05:06')")
@@ -875,7 +878,7 @@ describe GreenplumConnection, :greenplum_integration do
 
       context "when the user doesn't have permission to the schema" do
         let(:subject) { connection.datasets }
-        let(:db) { Sequel.connect(db_url) }
+        let(:db) { Sequel.connect(db_url, db_options) }
         let(:restricted_user) { "user_with_no_access" }
         let(:restricted_password) { "secret" }
 
@@ -1015,7 +1018,7 @@ describe GreenplumConnection, :greenplum_integration do
 
       context "when the user doesn't have permission to the schema" do
         let(:subject) { connection.datasets_count }
-        let(:db) { Sequel.connect(db_url) }
+        let(:db) { Sequel.connect(db_url, db_options) }
         let(:restricted_user) { "user_with_no_access" }
         let(:restricted_password) { "secret" }
 
@@ -1215,9 +1218,9 @@ describe GreenplumConnection, :greenplum_integration do
 
     describe '#create_table' do
       let(:destination_table_name) { 'a_new_db_table' }
+      let!(:db) { Sequel.connect(db_url, db_options) }
 
       after do
-        db = Sequel.connect(db_url)
         db.default_schema = schema_name
         db.drop_table('a_new_db_table', :if_exists => true)
         db.disconnect
@@ -1233,7 +1236,7 @@ describe GreenplumConnection, :greenplum_integration do
       it 'creates a table' do
         expect {
           subject
-        }.to change { Sequel.connect(db_url).tables }
+        }.to change { Sequel.connect(db_url, db_options).tables }
       end
 
       context 'when a table with that name already exists' do
@@ -1251,7 +1254,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:source_table_name) { 'base_table1' }
       let(:limit) { nil }
       let(:check_id) { nil }
-      let(:conn) { Sequel.connect(db_url) }
+      let(:conn) { Sequel.connect(db_url, db_options) }
       let(:setup_sql) { '' }
 
       let(:expected) { true }
@@ -1316,13 +1319,13 @@ describe GreenplumConnection, :greenplum_integration do
       let(:delimiter) { ',' }
       let(:has_header) { true }
       let(:subject) { connection.copy_csv(reader, table_name, column_names, delimiter, has_header) }
+      let!(:db) { Sequel.connect(db_url, db_options) }
 
       before do
         connection.create_table(table_name, "a integer, b text, c text", "DISTRIBUTED RANDOMLY")
       end
 
       after do
-        db = Sequel.connect(db_url)
         db.default_schema = schema_name
         db.drop_table(table_name, :if_exists => true)
         db.disconnect
@@ -1470,7 +1473,7 @@ describe GreenplumConnection, :greenplum_integration do
   end
 
   context "when the user doesn't have permission to access the database" do
-    let(:db) { Sequel.connect(db_url) }
+    let(:db) { Sequel.connect(db_url, db_options) }
     let(:restricted_user) { "user_with_no_access" }
     let(:restricted_password) { "secret" }
 
