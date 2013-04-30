@@ -28,7 +28,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             completeJson: true,
             sandboxInfo: {
                 id: 1,
-                data_source: {
+                dataSource: {
                     id: 1,
                     name: 'Data Source',
                     entityType: 'gpdb_data_source'
@@ -88,12 +88,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
         this.models.database = new chorus.models.Database({
             "name": "Some database",
-            "datasource": this.models.gpdbDataSource
+            "dataSource": this.models.gpdbDataSource
         });
 
         this.models.otherDatabase = new chorus.models.Database({
             "name": "Another database",
-            "datasource": this.models.gpdbDataSource
+            "dataSource": this.models.gpdbDataSource
         });
 
         this.models.schema = new chorus.models.Schema({
@@ -284,7 +284,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                         "name": "searchquery_hadoop",
                         "entityType": "attachment",
                         "type": "",
-                        "datasource": {
+                        "dataSource": {
                             "name": "searchquery_hadoop",
                             "host": "hadoop.example.com",
                             "port": 1111,
@@ -351,19 +351,16 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             hdfs_entry_id: this.models.hdfsFile.get('id')
         });
 
-        this.models.csvImport = new chorus.models.CSVImport({ workspaceId: '90210' });
-
-
-        var noColumns = 500;
+        var numColumns = 500;
         var columns = [];
-        _(noColumns).times(function(i){
-            columns[i] = {name: 'header_' + String.fromCharCode(96 + (i%26))};
+        _(numColumns).times(function(i){
+            columns[i] = {name: 'header_' + String.fromCharCode(97 + (i%26))};
         });
 
         var rows = [];
         _(500).times(function(i){
             rows[i] = [];
-            _(noColumns).times(function(j) {
+            _(numColumns).times(function(j) {
                 rows[i][j] = [ "Oakland" + i + "Eva" ];
             });
         });
@@ -372,8 +369,24 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             rows: rows
         });
 
-        chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
 
+        var randCommaSeparatedLineOfLength = function(length){
+            var arr = [];
+            _(length).times(function(i){
+                arr.push(String.fromCharCode(97 + (i%26)));
+            });
+            return arr.join(",");
+        };
+        var csvLines = [];
+        _(50).times(function(){
+            csvLines.push(randCommaSeparatedLineOfLength(numColumns));
+        });
+        this.models.csvImport = new chorus.models.CSVImport({
+            workspaceId: '90210',
+            contents: csvLines
+        });
+
+        chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
         return this.models;
     },
 
@@ -731,6 +744,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
     buildDialogs: function() {
         return {
+            "New Table Import CSV": new chorus.dialogs.NewTableImportCSV({
+                model: this.models.csvImport, csvOptions: {tableName: 'foobar', contents: this.models.csvImport.get("contents")}
+            }),
+
             "Workspace Data source Account": new chorus.dialogs.WorkspaceDataSourceAccount({model: this.models.dataSourceAccount, pageModel: this.models.workspace}),
 
             "Data Source Account": new chorus.dialogs.DataSourceAccount({
@@ -799,10 +816,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Name Chorus View": new chorus.dialogs.NameChorusView({
                 model: this.models.chorusView
-            }),
-
-            "New Table Import CSV": new chorus.dialogs.NewTableImportCSV({
-                model: this.models.csvImport, csvOptions: {tableName: 'foobar'}
             }),
 
             "Publish To Tableau": new chorus.dialogs.PublishToTableau({
