@@ -7,7 +7,8 @@ describe OracleConnection, :oracle_integration do
   let(:host) { OracleIntegration.hostname }
   let(:port) { OracleIntegration.port }
   let(:db_url) { OracleIntegration.db_url }
-  let(:db) { Sequel.connect(db_url) }
+  let(:db_options) { OracleIntegration.db_options }
+  let(:db) { Sequel.connect(db_url, db_options) }
 
   let(:details) {
     {

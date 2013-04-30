@@ -37,17 +37,18 @@ class OracleConnection < DataSourceConnection
     @settings = details
   end
 
-  def logger_options
+  def db_options
+    options = {:user => @settings[:username], :password => @settings[:password]}
     if @settings[:logger]
-      { :logger => @settings[:logger], :sql_log_level => :debug }
+      options.merge({:logger => @settings[:logger], :sql_log_level => :debug})
     else
-      {}
+      options
     end
   end
 
   def connect!
     raise DriverNotConfigured.new('Oracle') unless ChorusConfig.instance.oracle_configured?
-    @connection ||= Sequel.connect(db_url, logger_options.merge({:test => true}))
+    @connection ||= Sequel.connect(db_url, db_options.merge({:test => true}))
   rescue Sequel::DatabaseError => e
     raise OracleConnection::DatabaseError.new(e)
   end
@@ -66,7 +67,7 @@ class OracleConnection < DataSourceConnection
   end
 
   def db_url
-    "jdbc:oracle:thin:#{@settings[:username]}/#{@settings[:password]}@//#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}"
+    "jdbc:oracle:thin:@//#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}"
   end
 
   def version

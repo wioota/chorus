@@ -49,7 +49,11 @@ module OracleIntegration
   end
 
   def self.db_url
-    "jdbc:oracle:thin:#{username}/#{password}@//#{hostname}:#{port}/#{db_name}"
+    "jdbc:oracle:thin:@//#{hostname}:#{port}/#{db_name}"
+  end
+
+  def self.db_options
+    {:user => username, :password => password}
   end
 
   def self.setup_test_schemas
@@ -62,7 +66,7 @@ module OracleIntegration
   end
 
   def self.execute_sql(sql)
-    Sequel.connect(db_url, :logger => Rails.logger) do |database_connection|
+    Sequel.connect(db_url, :user => username, :password => password, :logger => Rails.logger) do |database_connection|
       sql.split(";").each do |line|
        database_connection.run(line) unless line.blank?
       end

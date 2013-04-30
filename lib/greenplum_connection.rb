@@ -43,7 +43,7 @@ class GreenplumConnection < DataSourceConnection
   end
 
   def connect!
-    @connection ||= Sequel.connect db_url, logger_options.merge({:test => true})
+    @connection ||= Sequel.connect db_url, db_options.merge({:test => true})
   rescue Sequel::DatabaseError => e
     raise GreenplumConnection::DatabaseError.new(e)
   end
@@ -101,8 +101,7 @@ class GreenplumConnection < DataSourceConnection
   end
 
   def db_url
-    query_params = URI.encode_www_form(:user => @settings[:username], :password => @settings[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout)
-    "jdbc:postgresql://#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}?" << query_params
+    "jdbc:postgresql://#{@settings[:host]}:#{@settings[:port]}/#{@settings[:database]}"
   end
 
   def support_multiple_result_sets?
@@ -113,15 +112,16 @@ class GreenplumConnection < DataSourceConnection
     GreenplumSqlResult.new(:warnings => warnings, :result_set => result_set)
   end
 
-  private
-
-  def logger_options
+  def db_options
+    options = {:user => @settings[:username], :password => @settings[:password], :loginTimeout => GreenplumConnection.gpdb_login_timeout}
     if @settings[:logger]
-      { :logger => @settings[:logger], :sql_log_level => :debug }
+      options.merge({:logger => @settings[:logger], :sql_log_level => :debug})
     else
-      {}
+      options
     end
   end
+
+  private
 
   def quote_identifier(identifier)
     @connection.send(:quote_identifier, identifier)
