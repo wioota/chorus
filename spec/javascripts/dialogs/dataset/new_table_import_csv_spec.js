@@ -1,6 +1,6 @@
 describe("chorus.dialogs.NewTableImportCSV", function() {
     function submitChangedColumnName(dialog, newName) {
-        dialog.$(".field_name input").eq(0).val(newName).change();
+        dialog.$(".column_name input").eq(0).val(newName).change();
         dialog.$("button.submit").click();
     }
 
@@ -73,7 +73,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             });
 
             it("reparses the file with " + separator + " as the separator", function() {
-                expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
+                expect(this.dialog.$(".data_grid .column_name").length).toEqual(5);
             });
         };
     }
@@ -150,7 +150,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 });
 
                 it("reparses the file with z as the separator", function() {
-                    expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
+                    expect(this.dialog.$(".data_grid .column_name").length).toEqual(5);
                 });
             });
         });
@@ -184,11 +184,11 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
     describe("the data table", function() {
         it("has the right number of column names", function() {
-            expect(this.dialog.$(".data_table .thead .column_names .th input:text").length).toEqual(5);
+            expect(this.dialog.$(".data_grid .column_name").length).toEqual(5);
         });
 
         it("converts the column names into db friendly format", function() {
-            var $inputs = this.dialog.$(".data_table .thead .column_names .th input:text");
+            var $inputs = this.dialog.$(".data_grid .column_name input");
             expect($inputs.eq(0).val()).toBe("col1");
             expect($inputs.eq(1).val()).toBe("col2");
             expect($inputs.eq(2).val()).toBe("col3");
@@ -197,7 +197,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         });
 
         it("has the right number of column data types", function() {
-            expect(this.dialog.$(".data_table .thead .data_types .th").length).toEqual(5);
+            expect(this.dialog.$(".data_grid .data_type").length).toEqual(5);
         });
 
         it("does not memoize the data types", function() {
@@ -207,7 +207,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         });
 
         it("has the right number of data columns", function() {
-            expect(this.dialog.$(".data_table .tbody .column").length).toEqual(5);
+            expect(this.dialog.$(".data_grid  .column_name").length).toEqual(5);
         });
 
         it("displays the provided types", function() {
@@ -220,8 +220,13 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         });
 
         it("has the right data in each cell", function() {
-            _.each(this.dialog.$(".data_table .tbody .column"), function(column, i) {
-                var cells = $(column).find(".td");
+            this.dialog.setElement($("#jasmine_content"));
+            var grid = this.dialog.dataGrid;
+            _.each(this.dialog.$(".data_grid .column_name"), function(column, i) {
+                var cells = _.map([0,1,2], function(j){
+                    return grid.getCellNode(j, i);
+                });
+
                 expect(cells.length).toEqual(3);
                 _.each(cells, function(cell, j) {
                     expect($(cell)).toContainText("val" + (j + 1) + "." + (i + 1));
@@ -264,11 +269,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             expect(this.dialog.$("#hasHeader").prop("checked")).toBeFalsy();
         });
 
-        it("calls recalculate Scrolling", function() {
-            expect(this.dialog.recalculateScrolling).toHaveBeenCalled();
-        });
-
-        describe("rechecking the box", function() {
+        describe("and then rechecking the box", function() {
             beforeEach(function() {
                 this.dialog.postRender.reset();
                 this.dialog.$("#hasHeader").prop("checked", true).change();
@@ -286,51 +287,41 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 expect(this.dialog.$("#hasHeader").prop("checked")).toBeTruthy();
             });
 
-            it("retains column names header-generated-header", function() {
-                this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
+            it("retains user-defined column names in the header", function() {
+                this.dialog.$(".column_name input").eq(0).val("gobbledigook").change();
 
                 this.dialog.$("#hasHeader").prop("checked", false).change();
                 this.dialog.$("#hasHeader").prop("checked", true).change();
-                expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
+
+                expect(this.dialog.$(".column_name input").eq(0).val()).toBe("gobbledigook");
             });
 
-            it("retains column names header-generated-header", function() {
+            it("retains user-defined column names in the header", function() {
                 this.dialog.$("#hasHeader").prop("checked", false).change();
-                this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
+                this.dialog.$(".column_name input").eq(0).val("gobbledigook").change();
 
                 this.dialog.$("#hasHeader").prop("checked", true).change();
-                expect(this.dialog.$(".field_name input").eq(0).val()).toBe("col1");
+                expect(this.dialog.$(".column_name input").eq(0).val()).toBe("col1");
                 this.dialog.$("#hasHeader").prop("checked", false).change();
-                expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
+                expect(this.dialog.$(".column_name input").eq(0).val()).toBe("gobbledigook");
             });
 
             it("retains the table name", function() {
                 this.dialog.$("input[name=tableName]").val("testisgreat").change();
                 this.dialog.$("#hasHeader").prop("checked", false).change();
-                expect(this.dialog.$(".field_name input").eq(0).val()).toBe("column_1");
+                expect(this.dialog.$(".column_name input").eq(0).val()).toBe("column_1");
                 this.dialog.$("#hasHeader").prop("checked", true).change();
                 expect(this.dialog.$("input[name=tableName]").val()).toBe("testisgreat");
             });
         });
     });
 
-    describe("scrolling the data", function() {
-        beforeEach(function() {
-            spyOn(this.dialog, "adjustHeaderPosition").andCallThrough();
-            this.dialog.render();
-            this.dialog.$(".tbody").trigger("scroll");
-        });
-        it("sets the header position", function() {
-            expect(this.dialog.adjustHeaderPosition).toHaveBeenCalled();
-        });
-    });
-
     describe("with invalid column names", function() {
         beforeEach(function() {
-            this.$input = this.dialog.$(".column_names input:text").eq(0);
+            this.$input = this.dialog.$(".column_name input:text").eq(0);
             this.$input.val('');
 
-            this.$input2 = this.dialog.$(".column_names input:text").eq(1);
+            this.$input2 = this.dialog.$(".column_name input:text").eq(1);
             this.$input2.val('a ');
 
             this.dialog.$("button.submit").click();
@@ -459,10 +450,10 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
             });
             it("retains column names", function() {
-                this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
+                this.dialog.$(".column_name input").eq(0).val("gobbledigook").change();
                 this.dialog.$("button.submit").click();
                 this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
-                expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
+                expect(this.dialog.$(".column_name input").eq(0).val()).toBe("gobbledigook");
             });
             it("retains the table name", function() {
                 this.dialog.$("input[name=tableName]").val("testisgreat").change();

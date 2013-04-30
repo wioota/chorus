@@ -29,6 +29,11 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             tableName: chorus.utilities.CsvParser.normalizeForDatabase(this.csvOptions.tableName)
         });
 
+        var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
+        var columns = csvParser.getColumnOrientedData();
+        this.headerColumnNames = _.pluck(columns, "name");
+        this.generatedColumnNames = _.map(columns, function(column, i) { return "column_" + (i + 1); });
+
         this.subscribePageEvent("choice:setType", this.onSelectType);
 
         this.listenTo(this.model, "saved", this.saved);
@@ -102,6 +107,42 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         };
     },
 
+    convert2DArrayToArrayOfHashTables: function (rows) {
+        return _.map(rows, function (row) {
+            return _.reduce(row, function (memo, cell, index) {
+                memo[index.toString()] = cell;
+                return memo;
+            }, {});
+        });
+    },
+
+    initializeDataGrid: function (columns, rows) {
+        var gridCompatibleRows = this.convert2DArrayToArrayOfHashTables(rows);
+        var gridCompatibleColumnCells = _.map(columns, function (column, index) {
+            return {name: index.toString(), field: index.toString(), id: index.toString() };
+        });
+
+        var options = {
+            enableColumnReorder: false,
+            enableTextSelectionOnCells: true,
+            syncColumnCellResize: true,
+            showHeaderRow: true
+        };
+
+        this.dataGrid = new Slick.Grid(this.$(".data_grid"), gridCompatibleRows, gridCompatibleColumnCells, options);
+
+        _.each(this.$(".slick-header-column"), function(column, index) {
+          var $name = $(column).find(".slick-column-name");
+          $name.addClass("column_name");
+          $name.html("<input value='"+ this.getColumnNames()[index]+"'></input>");
+        }, this);
+
+        _.defer(_.bind(function () {
+            this.dataGrid.resizeCanvas();
+            this.dataGrid.invalidate();
+        }, this));
+    },
+
     saved: function() {
         this.closeModal();
         chorus.toast("dataset.import.started");
@@ -118,7 +159,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     storeColumnNames: function() {
-        var $names = this.$(".column_names input:text");
+        var $names = this.$(".column_name input:text");
 
         var columnNames;
         if ($names.length) {
@@ -144,31 +185,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.model.set({types: types}, {silent: true});
     },
 
-    initializeDataGrid: function (columns, rows) {
-        var gridCompatibleColumnCells = _.map(columns, function (column, index) {
-            return {name: index.toString(), field: index.toString(), id: index.toString() };
-        });
-        var gridCompatibleRows = _.map(rows, function (row) {
-            return _.reduce(row, function (memo, cell, index) {
-                memo[index.toString()] = cell;
-                return memo;
-            }, {});
-        });
-        var options = {
-            enableColumnReorder: false,
-            enableTextSelectionOnCells: true,
-            syncColumnCellResize: true,
-            showHeaderRow: true
-        };
-
-        this.grid = new Slick.Grid(this.$(".data_grid"), gridCompatibleRows, gridCompatibleColumnCells, options);
-
-        _.defer(_.bind(function () {
-            this.grid.resizeCanvas();
-            this.grid.invalidate();
-        }, this));
-    },
-
     getColumnNames: function() {
         return this.model.attributes.hasHeader ? this.headerColumnNames : this.generatedColumnNames;
     },
@@ -188,7 +204,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     performValidation: function() {
-        var $names = this.$(".column_names input:text");
+        var $names = this.$(".column_name input:text");
         var pattern = chorus.ValidationRegexes.ChorusIdentifier64();
         var allValid = true;
 
@@ -248,7 +264,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.updateModel();
 
         this.render();
-//        this.recalculateScrolling();
     },
 
     focusOtherInputField: function(e) {

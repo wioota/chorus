@@ -1568,7 +1568,6 @@ if (typeof Slick === "undefined") {
       numVisibleRows = Math.ceil(viewportH / options.rowHeight);
       viewportW = parseFloat($.css($container[0], "width", true));
       if (!options.autoHeight) {
-          console.error("=============>", viewportH);
           $viewport.height(viewportH);
       }
 
