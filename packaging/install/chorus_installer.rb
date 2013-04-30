@@ -2,6 +2,7 @@ require 'fileutils'
 require 'securerandom'
 require 'yaml'
 require_relative 'installer_errors'
+require_relative 'old_release_cleaner'
 require 'base64'
 require 'openssl'
 require 'pathname'
@@ -28,6 +29,7 @@ class ChorusInstaller
     @installer_home = options[:installer_home]
     @version_detector = options[:version_detector]
     @logger = options[:logger]
+    @old_release_cleaner = options[:old_release_cleaner]
     @io = options[:io]
     @log_stack = []
     @install_mode = :fresh
@@ -322,8 +324,12 @@ class ChorusInstaller
   end
 
   def link_current_to_release
-    File.delete("#{destination_path}/current") if File.exists?("#{destination_path}/current")
-    FileUtils.ln_sf("#{release_path}", "#{destination_path}/current")
+    if File.exists?("#{destination_path}/current")
+      previous_version = File.readlink("#{destination_path}/current")
+      @old_release_cleaner.remove_except(release_path, previous_version)
+      File.delete("#{destination_path}/current")
+    end
+    FileUtils.ln_sf(release_path, "#{destination_path}/current")
     FileUtils.ln_sf("#{release_path}/packaging/chorus_control.sh", "#{destination_path}/chorus_control.sh")
   end
 

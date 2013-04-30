@@ -15,6 +15,7 @@ if __FILE__ == $0
         installer_home: File.dirname(__FILE__),
         version_detector: VersionDetector.new,
         logger: logger,
+        old_release_cleaner: OldReleaseCleaner.new(logger),
         io: InstallerIO.new(silent),
         executor: ChorusExecutor.new({:logger => logger, :debug => true})
     })
