@@ -10,8 +10,8 @@ class ChorusExecutor
     raise InstallerErrors::InstallationFailed.new("Logger must be set") unless @logger
   end
 
-  def exec(command)
-    full_command = "PATH=#{release_path}/postgres/bin:$PATH && #{command}"
+  def exec(command, postgres_bin_path = release_path)
+    full_command = "PATH=#{postgres_bin_path}/postgres/bin:$PATH && #{command}"
     @logger.debug(full_command)
     @logger.capture_output(full_command) || raise(InstallerErrors::CommandFailed, command)
   end
@@ -63,7 +63,7 @@ class ChorusExecutor
   end
 
   def previous_chorus_control(command)
-    exec "CHORUS_HOME=#{@destination_path}/current #{@destination_path}/chorus_control.sh #{command}"
+    exec "CHORUS_HOME=#{@destination_path}/current #{@destination_path}/chorus_control.sh #{command}", "#{@destination_path}/current"
   end
 
   def if_debug(arg)

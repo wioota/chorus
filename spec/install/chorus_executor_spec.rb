@@ -19,7 +19,8 @@ describe ChorusExecutor do
     let(:destination_path) { "fooPath" }
     let(:version) { "extra_crispy" }
     let(:release_path) { "fooPath/releases/extra_crispy" }
-    let(:prefix) { "PATH=#{release_path}/postgres/bin:$PATH &&" }
+    let(:postgres_bin_path) { release_path }
+    let(:prefix) { "PATH=#{postgres_bin_path}/postgres/bin:$PATH &&" }
     let(:full_command) { "#{prefix} #{command}" }
     let(:command_success) { true }
     let(:command_times) { 1 }
@@ -47,6 +48,13 @@ describe ChorusExecutor do
           expect {
             executor.exec(command)
           }.to raise_error(InstallerErrors::CommandFailed)
+        end
+      end
+
+      describe "when given a postgres bin path" do
+        let(:postgres_bin_path) { "/somewhere/else" }
+        it "uses that as the postgres bin path" do
+          executor.exec(command, postgres_bin_path)
         end
       end
     end
@@ -140,6 +148,7 @@ describe ChorusExecutor do
     end
 
     describe "#start_previous_release" do
+      let(:postgres_bin_path) { "#{destination_path}/current" }
       let(:command) { "CHORUS_HOME=#{destination_path}/current #{destination_path}/chorus_control.sh start" }
 
       it "should work" do
@@ -148,6 +157,7 @@ describe ChorusExecutor do
     end
 
     describe "#stop_previous_release" do
+      let(:postgres_bin_path) { "#{destination_path}/current" }
       let(:command) { "CHORUS_HOME=#{destination_path}/current #{destination_path}/chorus_control.sh stop" }
 
       it "should work" do
