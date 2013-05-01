@@ -85,11 +85,6 @@ body .ui-draggable-dragging {
             margin-bottom: 10px;
         }
 
-        a, span, .disabled {
-            font-size: 12px;
-            font-weight: $semibold;
-        }
-
         .disabled {
             color: $color-text4;
         }
@@ -190,7 +185,6 @@ body .ui-draggable-dragging {
         margin-bottom: $guts-padding-bottom;
         .tabbed_area {
             .context {
-                @include font-content-details;
                 font-size: 14px;
 
                 span {

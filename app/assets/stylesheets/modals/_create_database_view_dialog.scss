@@ -1,7 +1,6 @@
 .create_database_view_dialog {
 
     .target_location {
-        @include font-normal-small;
         @include ellipsis;
         padding-bottom: 10px;
     }

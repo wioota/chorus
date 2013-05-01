@@ -15,13 +15,8 @@
         height: 10px;
     }
 
-    .filter_title {
-        @include secondary-text-small;
-    }
-
     .add_filter {
         float: right;
-        font-size: 12px;
     }
 
     .brackets {

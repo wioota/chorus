@@ -114,7 +114,6 @@ $cell-width: 150px;
 
         .column_mapping {
             .map {
-                @include font-content-details;
                 > span, a {
                     display: inline-block;
                     vertical-align: middle;

@@ -27,7 +27,7 @@ describe("chorus.views.KaggleFilterWizard", function() {
         });
 
         it("displays the filter title", function() {
-            expect(this.view.$("h1.filter_title").text()).toMatchTranslation("kaggle.filter.title");
+            expect(this.view.$(".filter_title").text()).toMatchTranslation("kaggle.filter.title");
         });
 
         it("displays one filter when rendered at first", function() {

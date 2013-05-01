@@ -25,7 +25,6 @@
         }
 
         .preview {
-            color: #314858;
             border: 1px solid #B2C7D6;
         }
     }
@@ -81,7 +80,6 @@
                 @include ellipsis;
                 display: inline-block;
                 font-weight: $semibold;
-                color: $color-text1;
                 vertical-align: middle;
                 width: 93%;
             }
@@ -188,8 +186,6 @@
         font-weight: normal;
 
         a.select_all, a.select_none {
-            @include font-content-details;
-
             margin-left: 10px;
         }
 

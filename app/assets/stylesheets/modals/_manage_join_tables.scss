@@ -127,7 +127,6 @@
             display: inline-block;
             max-width: 165px;
             @include ellipsis;
-            @include font-content-details;
         }
     }
 

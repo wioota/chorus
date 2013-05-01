@@ -171,20 +171,6 @@ $summary-line-height: 19px;
     color: black;
 }
 
-@mixin font-normal-small {
-    @include debugging-mixin;
-    font-size: 12px;
-    font-weight: normal;
-    color: $color-text2;
-}
-
-@mixin font-content-details {
-    @include debugging-mixin;
-    font-size: 12px;
-    font-weight: $semibold;
-    color: $color-text2;
-}
-
 @mixin font-menu {
     @include debugging-mixin;
     font-size: 14px;
@@ -259,11 +245,6 @@ $summary-line-height: 19px;
     font-size: 14px;
     font-weight: $semibold;
     color: white;
-}
-
-@mixin link-with-dotted-underline {
-    font-size: 12px;
-    font-weight: $semibold;
 }
 
 @mixin after-clearfix($which: both) {

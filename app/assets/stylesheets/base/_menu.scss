@@ -75,19 +75,8 @@
     z-index : $link-menu-z-index;
     display:inline-block;
     padding-left: 12px;
-    .title {
-        font-size: 12px;
-        font-weight: $semibold;
-        color: $color-text2;
-
-    }
 
     a {
-        font-size: 12px;
-        span {
-            color: $link-color;
-        }
-
         img {
            margin: 2px;
         }

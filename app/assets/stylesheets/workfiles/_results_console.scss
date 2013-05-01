@@ -38,16 +38,8 @@
         .right {
             float: right;
 
-            .message {
-                @include font-normal-small;
-            }
-
             .execution_info {
                 display: none;
-
-                .elapsed_time {
-                    @include font-normal-small;
-                }
 
                 .spinner {
                   display: inline-block;
@@ -60,7 +52,6 @@
                 }
 
                 .task_loading {
-                    @include font-normal-small;
                     display: inline-block;
                 }
 

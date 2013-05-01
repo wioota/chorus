@@ -12,7 +12,6 @@
     }
 
     .last_import, .next_import {
-        @include font-normal-small;
         line-height: 16px;
         margin-bottom: 10px;
         .icon {
@@ -21,10 +20,6 @@
             margin-right: 5px;
         }
         .right {
-            a {
-                font-size: 12px;
-                font-weight: $semibold;
-            }
             padding-left: 22px;
             &.last_import_text {
                 padding-top: 10px;

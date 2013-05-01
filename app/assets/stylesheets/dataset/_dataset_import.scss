@@ -60,7 +60,6 @@ $image-width: 35px;
                 }
 
                 .choose {
-                    @include font-content-details;
                     @include content-details-button($border-color);
                 }
             }

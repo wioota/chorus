@@ -65,7 +65,6 @@
         line-height: $header-line-height;
         height: $header-line-height;
         border-bottom: 1px solid $subheader-border-color-dark;
-        @include font-content-details;
 
         .name {
             display: inline-block;

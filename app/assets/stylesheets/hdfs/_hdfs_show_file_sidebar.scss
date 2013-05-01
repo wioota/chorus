@@ -6,9 +6,5 @@
             @include heading-sidebar;
             @include ellipsis;
         }
-
-        .last_updated {
-            @include font-normal-small;
-        }
     }
 }
