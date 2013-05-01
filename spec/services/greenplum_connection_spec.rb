@@ -1493,4 +1493,26 @@ describe GreenplumConnection, :greenplum_integration do
       account.invalid_credentials.should be_false
     end
   end
+
+  context "when the user has a crazy password" do
+    let(:db) { Sequel.connect(db_url, db_options) }
+    let(:user) { "user_with_crazy_password" }
+    let(:password) { '!@#$%^&*()' }
+
+    before do
+      db.execute("CREATE USER #{user} WITH PASSWORD '#{password}';") rescue nil
+      db.execute("GRANT CONNECT ON DATABASE \"#{database_name}\" TO #{user};")
+      account.db_username = user
+      account.db_password = password
+    end
+
+    after do
+      db.execute("DROP USER #{user};") rescue nil
+      db.disconnect
+    end
+
+    it "can connect successfully" do
+      expect { connection.connect! }.not_to raise_error
+    end
+  end
 end
