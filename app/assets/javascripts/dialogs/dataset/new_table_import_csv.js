@@ -42,8 +42,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     postRender: function() {
-        var $dataTypes = this.$(".data_types");
-
         var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
         var columns = csvParser.getColumnOrientedData();
         var rows = csvParser.rows;
@@ -57,6 +55,18 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.showErrors();
         }
 
+
+        this.$("input.delimiter").prop("checked", false);
+        if (_.contains([",", "\t", ";", " "], this.delimiter)) {
+            this.$("input.delimiter[value='" + this.delimiter + "']").prop("checked", true);
+        } else {
+            this.$("input#delimiter_other").prop("checked", true);
+        }
+
+        this.initializeDataGrid(columns, rows);
+    },
+
+    setupDataTypeMenus: function(columns) {
         this.linkMenus = _.map(columns, function(item) {
             return new chorus.views.LinkMenu({
                 options: [
@@ -72,18 +82,15 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
                 chosen: item.type
             });
         });
+
+        var $dataTypes = this.$(".slick-headerrow-columns");
         _.each(this.linkMenus, function(linkMenu, index) {
-            $dataTypes.find(".th").eq(index).find(".center").append(linkMenu.render().el);
+            var $column = $dataTypes.find(".slick-headerrow-column").eq(index);
+            $column.append('<div class="arrow"></div>');
+            $column.append(linkMenu.render().el);
+            $column.addClass("type")
+            $column.addClass(linkMenu.options.chosen);
         });
-
-        this.$("input.delimiter").prop("checked", false);
-        if (_.contains([",", "\t", ";", " "], this.delimiter)) {
-            this.$("input.delimiter[value='" + this.delimiter + "']").prop("checked", true);
-        } else {
-            this.$("input#delimiter_other").prop("checked", true);
-        }
-
-        this.initializeDataGrid(columns, rows);
     },
 
     revealed: function() {
@@ -126,21 +133,33 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,
             syncColumnCellResize: true,
-            showHeaderRow: true
+            showHeaderRow: true,
+            headerRowHeight: 16
         };
 
         this.dataGrid = new Slick.Grid(this.$(".data_grid"), gridCompatibleRows, gridCompatibleColumnCells, options);
-
-        _.each(this.$(".slick-header-column"), function(column, index) {
-          var $name = $(column).find(".slick-column-name");
-          $name.addClass("column_name");
-          $name.html("<input value='"+ this.getColumnNames()[index]+"'></input>");
-        }, this);
+        this.scrollHeaderRow();
+        this.addNameInputsToTopRow();
+        this.setupDataTypeMenus(columns);
 
         _.defer(_.bind(function () {
             this.dataGrid.resizeCanvas();
             this.dataGrid.invalidate();
         }, this));
+    },
+
+    scrollHeaderRow: function () {
+        this.dataGrid.onScroll.subscribe(_.bind(function (e, args) {
+            this.$('.slick-headerrow').css({left: -args.scrollLeft});
+        }, this));
+    },
+
+    addNameInputsToTopRow: function () {
+        _.each(this.$(".slick-header-column"), function (column, index) {
+            var $name = $(column).find(".slick-column-name");
+            $name.addClass("column_name");
+            $name.html("<input value='" + this.getColumnNames()[index] + "'></input>");
+        }, this);
     },
 
     saved: function() {
@@ -158,6 +177,16 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         $typeDiv.removeClass("integer float text date time timestamp").addClass(data);
     },
 
+    storeColumnInfo: function() {
+        this.storeColumnNames();
+
+        var $types = this.$(".slick-headerrow-columns .chosen");
+        var types = _.map($types, function($type, i) {
+            return $types.eq(i).text();
+        });
+        this.model.set({types: types}, {silent: true});
+    },
+
     storeColumnNames: function() {
         var $names = this.$(".column_name input:text");
 
@@ -173,16 +202,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
                 this.generatedColumnNames = columnNames;
             }
         }
-    },
-
-    storeColumnInfo: function() {
-        this.storeColumnNames();
-
-        var $types = this.$(".data_types .chosen");
-        var types = _.map($types, function($type, i) {
-            return $types.eq(i).text();
-        });
-        this.model.set({types: types}, {silent: true});
     },
 
     getColumnNames: function() {
@@ -239,13 +258,15 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         });
     },
 
-    adjustHeaderPosition: function() {
-        this.$(".thead").css({ "left": -this.scrollLeft() });
+    setHeader: function() {
+        this.storeColumnInfo();
+        this.updateModel();
+
+        this.render();
     },
 
-    scrollLeft: function() {
-        var api = this.$(".tbody").data("jsp");
-        return api && api.getContentPositionX();
+    focusOtherInputField: function(e) {
+        this.$("input[name=custom_delimiter]").focus();
     },
 
     setDelimiter: function(e) {
@@ -257,17 +278,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.other_delimiter = false;
         }
         this.updateModel();
-    },
-
-    setHeader: function() {
-        this.storeColumnInfo();
-        this.updateModel();
-
-        this.render();
-    },
-
-    focusOtherInputField: function(e) {
-        this.$("input[name=custom_delimiter]").focus();
     },
 
     setOtherDelimiter: function() {

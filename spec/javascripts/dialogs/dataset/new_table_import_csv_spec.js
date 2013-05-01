@@ -197,7 +197,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         });
 
         it("has the right number of column data types", function() {
-            expect(this.dialog.$(".data_grid .data_type").length).toEqual(5);
+            expect(this.dialog.$(".data_grid .type").length).toEqual(5);
         });
 
         it("does not memoize the data types", function() {
@@ -210,12 +210,13 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             expect(this.dialog.$(".data_grid  .column_name").length).toEqual(5);
         });
 
-        it("displays the provided types", function() {
+        it("displays the provided types with their associated classes", function() {
             var csvParser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.csvOptions);
             var columnData = csvParser.getColumnOrientedData();
 
-            _.each(this.dialog.$(".th .type"), function(th, index) {
-                expect($(th).find(".chosen").text().trim()).toBe(columnData[index].type);
+            _.each(this.dialog.$(".type"), function(type, index) {
+                expect($(type).find(".chosen").text().trim()).toBe(columnData[index].type);
+                expect($(type)).toHaveClass(columnData[index].type);
             }, this);
         });
 
@@ -236,7 +237,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
         describe("selecting a new data type", function() {
             beforeEach(function() {
-                this.$type = this.dialog.$(".th .type").eq(1);
+                this.$type = this.dialog.$(".type").eq(1);
                 this.$type.find(".chosen").click();
 
                 this.$type.find(".popup_filter li").eq(1).find("a").click();
