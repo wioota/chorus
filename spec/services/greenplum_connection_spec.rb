@@ -198,11 +198,21 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
 
-    context "when an error occurs" do
+    context "when a query error occurs" do
       let(:sql) { "select hi from non_existant_table_please" }
 
       it "should wrap it in a QueryError" do
         expect { subject }.to raise_error(GreenplumConnection::QueryError)
+      end
+    end
+
+    context "when a database error occurs" do
+      before do
+        account.invalid_credentials!
+      end
+
+      it "should leave the error alone" do
+        expect { subject }.to raise_error(DataSourceConnection::InvalidCredentials)
       end
     end
 

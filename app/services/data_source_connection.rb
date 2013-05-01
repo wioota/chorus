@@ -114,20 +114,23 @@ class DataSourceConnection
       statement = build_and_configure_statement(jdbc_conn, options, query)
       cancelable_query.store_statement(statement) if cancelable_query
 
-      set_timeout(options[:timeout], statement) if options[:timeout]
+      begin
+        set_timeout(options[:timeout], statement) if options[:timeout]
 
-      if options[:describe_only]
-        statement.execute_with_flags(org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY)
-      else
-        statement.execute
+        if options[:describe_only]
+          statement.execute_with_flags(org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY)
+        else
+          statement.execute
+        end
+
+        result = query_result(options, statement)
+        jdbc_conn.commit if options[:limit]
+        result
+      rescue Exception => e
+        raise QueryError, "The query could not be completed. Error: #{e.message}"
       end
 
-      result = query_result(options, statement)
-      jdbc_conn.commit if options[:limit]
-      result
     end
-  rescue Exception => e
-    raise QueryError, "The query could not be completed. Error: #{e.message}"
   end
 
   def verify_driver_configuration

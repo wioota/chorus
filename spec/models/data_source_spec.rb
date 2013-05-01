@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe DataSource do
   describe 'scopes' do
-    describe '#accessible_to' do
+    describe 'accessible_to' do
       let(:permitted_data_source) { data_sources(:owners) }
       let(:prohibited_data_source) { data_sources(:admins) }
       let(:online_data_source) { data_sources(:online) }

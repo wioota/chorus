@@ -3,11 +3,7 @@
         <div title="{{objectName}}" class="name">{{objectName}}</div>
         <div class="details">{{typeString}}</div>
     </div>
-
-    {{#if noCredentials}}
-        <div class="notice no_credentials"><span class="bottom">{{noCredentialsWarning}}</span></div>
-    {{/if}}
-
+    
     <div class="last_import low_light">
         {{#if importFailed}}
             <div class="icon">
@@ -28,6 +24,14 @@
         </div>
     </div>
 
+    {{#if noCredentials}}
+        <div class="notice no_credentials"><span class="bottom">{{noCredentialsWarning}}</span></div>
+    {{else}}
+        {{#if invalidCredentials}}
+            <div class="notice invalid_credentials"><span class="bottom">{{{invalidCredentialsMsg}}}</span></div>
+        {{/if}}
+    {{/if}}
+
     <div class="next_import low_light">
         {{nextImport}}
     </div>
@@ -39,10 +43,10 @@
                 {{#unless workspaceArchived}}
                     <li><a class="dialog" data-dialog="NotesNew" href="#" data-entity-id="{{id}}" data-entity-type="dataset" data-display-entity-type="{{displayEntityType}}" data-workspace-id="{{workspaceId}}" data-allow-workspace-attachments="true">{{t "actions.add_note"}}</a></li>
                     {{#if isChorusView}}
-                        {{#if hasDataSourceAccount}}
+                        {{#unless noValidCredentials}}
                             <li><a class="create_database_view dialog" href="#" data-dialog="CreateDatabaseView">{{t "actions.create_database_view"}}</a></li>
-                        {{/if}}
-                        <li><a class="duplicate" data-dialog="VerifyChorusView" href="#">{{t "dataset.chorusview.duplicate"}}</a></li>
+                            <li><a class="duplicate" data-dialog="VerifyChorusView" href="#">{{t "dataset.chorusview.duplicate"}}</a></li>
+                        {{/unless}}
                     {{else}}
                         <li><a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a></li>
                     {{/if}}
@@ -80,17 +84,17 @@
                 {{/if}}
             {{/unless}}
 
-            {{#unless noCredentials}}
+            {{#unless noValidCredentials}}
                 {{#if listMode}}
                     <li><a class="dataset_preview" href="#">{{t "actions.dataset_preview"}}</a></li>
                 {{/if}}
 
                 <li><a class="download dialog" data-dialog="DatasetDownload" href="#">{{t "actions.download"}}</a></li>
+                {{#if canAnalyze}}
+                   <li><a class="analyze" href="#">{{t "dataset.actions.analyze"}}</a></li>
+                {{/if}}
             {{/unless}}
 
-            {{#if canAnalyze}}
-               <li><a class="analyze" href="#">{{t "dataset.actions.analyze"}}</a></li>
-            {{/if}}
 
             {{#unless workspaceArchived}}
                 {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey functionCallContext=this}}</a></li>{{/if}}

@@ -182,6 +182,38 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return this.resource ? !this.resource.hasCredentials() : "";
     },
 
+    noValidCredentials: function() {
+        return this.noCredentials() || this.invalidCredentials();
+    },
+    invalidCredentials: function() {
+        return this.resource && this.resource.invalidCredentials;
+    },
+
+    invalidCredentialsMsg: function() {
+        var plainMsg = Handlebars.helpers.unsafeT("dataset.credentials.invalid.body", {
+            dataSourceName: this.resource.dataSource().name()
+        });
+        var linkMsg = plainMsg + " " + Handlebars.helpers.unsafeT("dataset.credentials.invalid.updateCredentials", {
+            linkText: Handlebars.helpers.linkTo("#", t("dataset.credentials.invalid.linkText"), {'class': 'update_credentials'})
+        });
+
+        if(this.canUpdateCredentials()) {
+            return linkMsg;
+        } else {
+            return plainMsg;
+        }
+    },
+
+    canUpdateCredentials: function() {
+        var user = chorus.session.user();
+
+        var userIsAdmin         = user.isAdmin();
+        var dataSourceIsShared  = this.resource.dataSource().get('shared');
+        var userIsOwner         = this.resource.dataSource().get('ownerId') === user.get('id');
+
+        return (userIsAdmin || userIsOwner || !dataSourceIsShared);
+    },
+
     isChorusView: function() {
         return this.resource ? this.resource.isChorusView() : "";
     },
@@ -215,7 +247,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     canExport: function() {
-        return !this.options.searchPage && this.resource && this.resource.canExport();
+        return !this.options.searchPage && this.resource && this.resource.canExport() && !this.noValidCredentials();
     },
 
     _linkToModel: function(model) {

@@ -133,6 +133,8 @@ window.rspecFixtureDefinitions = {
 
     image: {},
 
+    invalidCredentialsError: {},
+
     dataSourceAccount: { unique: ["id"] },
 
     dataSourceAccountSet: {},

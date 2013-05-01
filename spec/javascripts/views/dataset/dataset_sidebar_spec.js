@@ -5,14 +5,46 @@ describe("chorus.views.DatasetSidebar", function() {
         this.view.render();
     });
 
-    context("when it is disabled", function() {
+    function itDoesNotShowDatabaseDependentActions() {
+        describe("actions", function() {
+            it("does not show preview data even when on a list page", function() {
+                this.view.options.listMode = true;
+                this.view.render();
+                expect(this.view.$('.actions .dataset_preview')).not.toExist();
+            });
+
+            it("does not have 'Import Now' even if there's a workspace", function() {
+                this.view.resource._workspace = rspecFixtures.workspace();
+                this.view.render();
+                expect(this.view.$(".actions .import_now")).not.toExist();
+            });
+
+            it("does not show create import schedule actions", function() {
+                expect(this.view.$(".actions a.create_schedule")).not.toExist();
+            });
+
+            it("does not show analyze table", function() {
+                expect(this.view.$(".actions a.analyze")).not.toExist();
+            });
+
+            it("does not show create database view", function() {
+                expect(this.view.$(".actions a.create_database_view")).not.toExist();
+            });
+
+            it("does not show duplicate chorus view", function() {
+                expect(this.view.$(".actions a.duplicate")).not.toExist();
+            });
+        });
+    }
+
+    context("when disabled", function() {
         beforeEach(function() {
             this.view.disabled = true;
             spyOn(this.view, 'template');
             this.view.render();
         });
 
-        it("does not actually render", function() {
+        it("does not render", function() {
             expect(this.view.template).not.toHaveBeenCalled();
         });
     });
@@ -34,21 +66,39 @@ describe("chorus.views.DatasetSidebar", function() {
             expect(this.view.$(".name").text().trim()).toBe(this.dataset.get("objectName"));
         });
 
-        context("when the statistics has not yet loaded", function() {
-            it("displays the selected dataset type", function() {
-                expect(this.view.$(".details").text().trim()).toBe('Source Table');
-            });
-        });
-
-        context("when the statistics finish loading", function() {
-            beforeEach(function() {
-                spyOn(this.view, 'postRender');
-                this.dataset.statistics().fetch();
-                this.server.completeFetchFor(this.dataset.statistics());
+        describe("statistics", function() {
+            context("when the statistics have not yet loaded", function() {
+                it("displays the selected dataset type", function() {
+                    expect(this.view.$(".details").text().trim()).toBe('Source Table');
+                });
             });
 
-            it("should update the selected dataset type", function() {
-                expect(this.view.postRender).toHaveBeenCalled();
+            context("when the statistics finish loading", function() {
+                beforeEach(function() {
+                    spyOn(this.view, 'postRender');
+                    this.dataset.statistics().fetch();
+                    this.server.completeFetchFor(this.dataset.statistics());
+                });
+
+                it("rerenders the sidebar to show the statistics", function() {
+                    expect(this.view.postRender).toHaveBeenCalled();
+                });
+            });
+
+            context("when the statistics fail with invalid credentials", function() {
+                beforeEach(function() {
+                    spyOn(this.view, 'postRender');
+                    var errors = rspecFixtures.invalidCredentialsErrorJson();
+                    this.server.lastFetchFor(this.view.resource.statistics()).failForbidden(errors);
+                });
+
+                it("rerenders the sidebar and shows the error message", function() {
+                    expect(this.view.postRender).toHaveBeenCalled();
+
+                    expect(this.view.$('.invalid_credentials')).toContainTranslation("dataset.credentials.invalid.body", {
+                        dataSourceName: this.dataset.dataSource().name()
+                    });
+                });
             });
         });
 
@@ -103,57 +153,141 @@ describe("chorus.views.DatasetSidebar", function() {
             });
         });
 
-        context("when user does not have credentials", function() {
-            beforeEach(function() {
-                this.dataset.set({hasCredentials: false});
-                delete this.dataset.dataSource()._accountForCurrentUser;
-                this.view.render();
+        context("when the user has valid credentials", function() {
+            it("does not display the invalid credentials message", function() {
+                expect(this.view.$('.invalid_credentials')).not.toExist();
             });
+        });
 
-            it("does not show the preview data link even when on a list page", function() {
-                this.view.options.listMode = true;
-                this.view.render();
-                expect(this.view.$('.actions .dataset_preview')).not.toExist();
-            });
-
-            it("does not have the 'Import Now' action even if there's a workspace", function() {
-                this.view.resource._workspace = rspecFixtures.workspace();
-                this.view.render();
-                expect(this.view.$(".actions .import_now")).not.toExist();
-            });
-
-            it("does not show the analyze table action", function() {
-                expect(this.view.$(".actions a.analyze")).not.toExist();
-            });
-
-            it("shows a no-permissions message", function() {
-                this.view.render();
-                expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {
-                    linkText: t("dataset.credentials.missing.linkText"),
-                    dataSourceName: this.dataset.dataSource().name()
-                });
-            });
-
-            context("clicking on the link to add credentials", function() {
+        context("for a source dataset", function() {
+            context("when the user has invalid credentials", function() {
                 beforeEach(function() {
+                    this.user = chorus.session.user();
+                    var errors = rspecFixtures.invalidCredentialsErrorJson();
+                    this.server.lastFetchFor(this.view.resource.statistics()).failForbidden(errors);
+                });
+
+                it("displays a message explaining that the credentials are invalid", function() {
                     this.view.render();
-                    this.view.$('.no_credentials a.add_credentials').click();
+                    expect(this.view.$('.invalid_credentials')).toContainTranslation("dataset.credentials.invalid.body", {
+                        dataSourceName: this.dataset.dataSource().name()
+                    });
                 });
 
-                it("launches the DataSourceAccount dialog", function() {
-                    expect(chorus.modal).toBeA(chorus.dialogs.DataSourceAccount);
-                });
+                itDoesNotShowDatabaseDependentActions();
 
-                context("saving the credentials", function() {
-                    beforeEach(function() {
-                        spyOn(chorus.router, "reload");
-                        chorus.modal.$('input').val('stuff');
-                        chorus.modal.$('form').submit();
-                        this.server.completeSaveFor(chorus.modal.model);
+                function itDisplaysALinkToUpdateCredentials() {
+                    it("shows the link to update credentials", function() {
+                        this.view.render();
+
+                        expect(this.view.$('.invalid_credentials')).toContainTranslation("dataset.credentials.invalid.updateCredentials", {
+                            linkText: t("dataset.credentials.invalid.linkText")
+                        });
                     });
 
-                    it("reloads the current page", function() {
-                        expect(chorus.router.reload).toHaveBeenCalled();
+                    describe("clicking the link to update credentials", function() {
+                        beforeEach(function() {
+                            this.view.render();
+                            expect(this.view.$('.invalid_credentials a.update_credentials')).toExist();
+                            this.view.$('.invalid_credentials a.update_credentials').click();
+                        });
+
+                        it("launches the DataSourceAccount dialog", function() {
+                            expect(chorus.modal).toBeA(chorus.dialogs.DataSourceAccount);
+                        });
+
+                        describe("saving the credentials", function() {
+                            beforeEach(function() {
+                                spyOn(chorus.router, "reload");
+                                chorus.modal.$('input').val('stuff');
+                                chorus.modal.$('form').submit();
+                                this.server.completeSaveFor(chorus.modal.model);
+                            });
+
+                            it("reloads the current page", function() {
+                                expect(chorus.router.reload).toHaveBeenCalled();
+                            });
+                        });
+                    });
+                }
+
+                context("when the data source account is shared", function() {
+                    beforeEach(function() {
+                        this.dataset.dataSource().set('shared', true);
+                    });
+
+                    context("and the user is an admin", function() {
+                        beforeEach(function() {
+                            this.user.set('admin', true);
+                        });
+                        itDisplaysALinkToUpdateCredentials();
+                    });
+
+                    context("and the user is the owner of the data source", function() {
+                        beforeEach(function() {
+                            this.dataset.dataSource().set('ownerId', this.user.get('id'));
+                        });
+
+                        itDisplaysALinkToUpdateCredentials();
+                    });
+
+                    context("when the user is neither an admin nor the owner of the instance", function() {
+                        it("does not show the link to update credentials", function() {
+                            this.view.render();
+                            expect(this.view.$('.invalid_credentials')).not.toContainTranslation("dataset.credentials.invalid.updateCredentials", {
+                                linkText: t("dataset.credentials.invalid.linkText")
+                            });
+                        });
+                    });
+                });
+
+                context("when the data source account is not shared", function() {
+                    beforeEach(function() {
+                        spyOn(this.dataset.dataSource(), 'isShared').andReturn(false);
+                    });
+
+                    itDisplaysALinkToUpdateCredentials();
+                });
+            });
+
+            context("when user does not have credentials", function() {
+                beforeEach(function() {
+                    this.dataset.set({hasCredentials: false});
+                    delete this.dataset.dataSource()._accountForCurrentUser;
+                    this.view.render();
+                });
+
+                itDoesNotShowDatabaseDependentActions();
+
+                it("shows a no-permissions message", function() {
+                    this.view.render();
+                    expect(this.view.$('.no_credentials')).toContainTranslation("dataset.credentials.missing.body", {
+                        linkText: t("dataset.credentials.missing.linkText"),
+                        dataSourceName: this.dataset.dataSource().name()
+                    });
+                });
+
+                context("clicking the link to add credentials", function() {
+                    beforeEach(function() {
+                        this.view.render();
+                        this.view.$('.no_credentials a.add_credentials').click();
+                    });
+
+                    it("launches the DataSourceAccount dialog", function() {
+                        expect(chorus.modal).toBeA(chorus.dialogs.DataSourceAccount);
+                    });
+
+                    context("saving the credentials", function() {
+                        beforeEach(function() {
+                            spyOn(chorus.router, "reload");
+                            chorus.modal.$('input').val('stuff');
+                            chorus.modal.$('form').submit();
+                            this.server.completeSaveFor(chorus.modal.model);
+                        });
+
+                        it("reloads the current page", function() {
+                            expect(chorus.router.reload).toHaveBeenCalled();
+                        });
                     });
                 });
             });
@@ -222,7 +356,12 @@ describe("chorus.views.DatasetSidebar", function() {
             });
         });
 
-        context("when there is a workspace", function() {
+        context("by a workspace data tab", function() {
+            beforeEach(function() {
+                this.view.resource._workspace = rspecFixtures.workspace();
+                this.view.render();
+            });
+
             function itDoesNotHaveACreateDatabaseViewLink() {
                 it("does not have a create database view link", function() {
                     expect(this.view.$("a.create_database_view")).not.toExist();
@@ -281,11 +420,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 });
             }
 
-            beforeEach(function() {
-                this.view.resource._workspace = rspecFixtures.workspace();
-                this.view.render();
-            });
-
             context("and no dataset is selected", function() {
                 beforeEach(function() {
                     chorus.PageEvents.trigger("dataset:selected");
@@ -299,7 +433,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$("a.create_schedule, a.edit_schedule, a.import_now")).not.toExist();
             });
 
-            context("when the dataset is a sandbox table or view", function() {
+            context("and the selected dataset is a sandbox table or view", function() {
                 beforeEach(function() {
                     this.dataset = rspecFixtures.workspaceDataset.datasetTable();
                     this.view.resource._workspace = rspecFixtures.workspace({ id: 6007, permission: ["update"] });
@@ -380,7 +514,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 });
             });
 
-            context("when the dataset can be the source of an import", function() {
+            context("and the selected dataset can be the source of an import", function() {
                 function itHasActionLinks(linkClasses) {
                     var possibleLinkClasses = ["import_now", "edit_schedule", "create_schedule"];
 
@@ -576,19 +710,13 @@ describe("chorus.views.DatasetSidebar", function() {
                 beforeEach(function() {
                     this.dataset = rspecFixtures.workspaceDataset.chorusView({ objectName: "annes_table", query: "select * from foos;" });
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
+                    this.server.completeFetchFor(this.dataset.getImportSchedules(), []);
                 });
 
-                it("fetches the data source account", function() {
-                    expect(this.dataset.dataSource().accountForCurrentUser()).toHaveBeenFetched();
-                });
-
-                it("renders the loading section if the data source account is not loaded", function() {
-                    expect(this.view.displayLoadingSection()).toBeTruthy();
-                });
-
-                context("current user has an data source account", function() {
+                context("current user has credentials on the dataset", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.dataset.dataSource().accountForCurrentUser(), rspecFixtures.dataSourceAccount());
+                        this.dataset.set("hasCredentials", true);
+                        this.view.render();
                     });
 
                     it("shows the 'Create as a database view' link", function() {
@@ -621,12 +749,22 @@ describe("chorus.views.DatasetSidebar", function() {
                     });
                 });
 
-                context("current user does not have an data source account", function() {
+                context("current user does not have credentials on the dataset", function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.dataset.dataSource().accountForCurrentUser(), {});
+                        this.dataset.set("hasCredentials", false);
+                        this.view.render();
                     });
 
-                    itDoesNotHaveACreateDatabaseViewLink();
+                    itDoesNotShowDatabaseDependentActions();
+                });
+
+                context("when the user has invalid credentials", function() {
+                    beforeEach(function() {
+                        var errors = rspecFixtures.invalidCredentialsErrorJson();
+                        this.server.lastFetchFor(this.view.resource.statistics()).failForbidden(errors);
+                    });
+
+                    itDoesNotShowDatabaseDependentActions();
                 });
             });
 
@@ -688,24 +826,24 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_workspace');
             });
 
-            context('when the dataset is an oracle dataset', function(){
-                beforeEach(function(){
+            context('when the dataset is an oracle dataset', function() {
+                beforeEach(function() {
                     this.dataset = rspecFixtures.oracleDataset();
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 });
 
-                it('doesnt show the associate link', function(){
+                it('doesnt show the associate link', function() {
                     expect(this.view.$('.actions .associate')).not.toExist();
                 });
             });
         });
 
-        describe('clicking the edit tags link', function(){
-            beforeEach(function(){
+        describe('clicking the edit tags link', function() {
+            beforeEach(function() {
                 this.view.$('.edit_tags').click();
             });
 
-            it('opens the tag edit dialog', function(){
+            it('opens the tag edit dialog', function() {
                 expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
                 expect(this.modalSpy.lastModal().collection.length).toBe(1);
                 expect(this.modalSpy.lastModal().collection).toContain(this.dataset);
@@ -876,7 +1014,7 @@ describe("chorus.views.DatasetSidebar", function() {
         });
     });
 
-    describe("has all the translations for all objectTypes", function() {
+    describe("translations for all objectTypes", function() {
         _.each(["CHORUS_VIEW", "VIEW", "TABLE", "TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type) {
             it("does not have any missing translations for" + type, function() {
                 this.dataset = rspecFixtures.workspaceDataset.datasetTable({objectType: type});

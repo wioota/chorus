@@ -86,6 +86,7 @@
         handleRequestFailure: function(failureEvent, xhr, options) {
             var data = xhr.responseText && !!xhr.responseText.trim() && JSON.parse(xhr.responseText);
             this.parseErrors(data);
+            this.statusCode = parseInt(xhr.status, 10);
             this.trigger(failureEvent, this);
             this.respondToErrors(xhr.status, options);
         },
@@ -100,16 +101,15 @@
         respondToErrors: function(status, options) {
             options = options || {};
 
-            this.statusCode = parseInt(status, 10);
-            if (this.statusCode === 401) {
+            if (status === 401) {
                 chorus.session.trigger("needsLogin");
-            } else if (this.statusCode === 403) {
+            } else if (status === 403) {
                 this.trigger("resourceForbidden");
-            } else if (this.statusCode === 404) {
+            } else if (status === 404) {
                 options.notFound ? options.notFound() : this.trigger("resourceNotFound");
-            } else if (this.statusCode === 422) {
+            } else if (status === 422) {
                 options.unprocessableEntity ? options.unprocessableEntity() : this.trigger("unprocessableEntity");
-            } else if (this.statusCode === 500) {
+            } else if (status === 500) {
                 var toastOpts = {};
                 if(window.INTEGRATION_MODE) { toastOpts.sticky = true; }
                 chorus.toast("server_error", {toastOpts: toastOpts});

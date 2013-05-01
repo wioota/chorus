@@ -3,13 +3,14 @@ class DataSourcePresenter < Presenter
     hash = {
         :id => model.id,
         :name => model.name,
-        :entity_type => model.entity_type_name
+        :entity_type => model.entity_type_name,
+        :shared => model.shared,
+        :owner_id => model.owner_id
     }
     unless succinct?
       hash.merge!({
           :host => model.host,
           :port => model.port,
-          :shared => model.shared,
           :online => model.state == "online",
           :db_name => model.db_name,
           :description => model.description,
