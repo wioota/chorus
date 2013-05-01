@@ -101,7 +101,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
             });
 
             it("display spinner", function() {
-                expect(this.dialog.$(".data_table").isLoading()).toBeTruthy();
+                expect(this.dialog.$(".data_grid").isLoading()).toBeTruthy();
             });
 
             context("when the fetch completes", function() {
@@ -110,7 +110,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 });
 
                 it("stops the spinner", function() {
-                    expect(this.dialog.$(".data_table").isLoading()).toBeFalsy();
+                    expect(this.dialog.$(".data_grid").isLoading()).toBeFalsy();
                 });
                 it("display the correct tableName name", function() {
                     expect(this.dialog.$("input[name=tableName]").val()).toBe("new_test_name");
@@ -119,7 +119,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 it("display the correct elements", function() {
                     expect(this.dialog.$("input[name='pattern']").val()).toBe("*.csv");
                     expect(this.dialog.$("input#pattern:checked")).toBeTruthy();
-                    expect(this.dialog.$(".field_name input").eq(0).val()).toBe("column_1");
+                    expect(this.dialog.$(".column_name input").eq(0).val()).toBe("column_1");
                 });
 
                 it("uses the custom styleSelect", function() {
@@ -227,11 +227,11 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
             context("when the server responds with errors", function() {
                 beforeEach(function() {
-                    this.$type = this.dialog.$(".th .type").eq(1);
+                    this.$type = this.dialog.$(".type").eq(1);
                     this.$type.find(".chosen").click();
                     this.$type.find(".popup_filter li").eq(3).find("a").click();
                     this.dialog.$("input[name=tableName]").val("testisgreat").change();
-                    this.dialog.$(".field_name input").eq(0).val("gobbledigook").change();
+                    this.dialog.$(".column_name input").eq(0).val("gobbledigook").change();
                     this.dialog.$("button.submit").click();
 
                     this.server.lastCreate().fail();
@@ -243,7 +243,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 });
 
                 it("retains column names", function() {
-                    expect(this.dialog.$(".field_name input").eq(0).val()).toBe("gobbledigook");
+                    expect(this.dialog.$(".column_name input").eq(0).val()).toBe("gobbledigook");
                 });
 
                 it("retains the table name", function() {
@@ -251,7 +251,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 });
 
                 it("retains the data types", function() {
-                    this.$type = this.dialog.$(".th .type").eq(1);
+                    this.$type = this.dialog.$(".type").eq(1);
                     expect(this.$type.find(".chosen")).toHaveText("date");
                     expect(this.$type).toHaveClass("date");
                 });

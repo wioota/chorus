@@ -205,23 +205,6 @@ $cell-width: 150px;
             padding-left: 10px;
         }
     }
-
-    .data_table {
-        .column_names {
-            .th {
-                padding: 0 10px;
-                width:  $cell-width - 20px;
-            }
-
-            .field_name {
-                width: 95%;
-            }
-        }
-
-        .tbody {
-            top: 71px;
-        }
-    }
 }
 
 .table_import_csv.qtip {

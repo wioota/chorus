@@ -88,7 +88,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             var $column = $dataTypes.find(".slick-headerrow-column").eq(index);
             $column.append('<div class="arrow"></div>');
             $column.append(linkMenu.render().el);
-            $column.addClass("type")
+            $column.addClass("type");
             $column.addClass(linkMenu.options.chosen);
         });
     },
@@ -124,6 +124,8 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     initializeDataGrid: function (columns, rows) {
+        if (!this.$('.data_grid').length) { return; }
+
         var gridCompatibleRows = this.convert2DArrayToArrayOfHashTables(rows);
         var gridCompatibleColumnCells = _.map(columns, function (column, index) {
             return {name: index.toString(), field: index.toString(), id: index.toString() };

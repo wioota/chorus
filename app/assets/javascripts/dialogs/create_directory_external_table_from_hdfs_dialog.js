@@ -88,8 +88,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
     },
 
     updateModel: function() {
-        var $names = this.$(".column_names input:text");
-        var $types = this.$(".data_types .chosen");
+        var $names = this.$(".column_name input:text");
         var tableName = this.$(".directions input:text").val();
         var columns = _.map($names, function(name, i) {
             var $name = $names.eq(i);
@@ -132,11 +131,11 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         this.model.fetch();
         this.model.set({hasHeader: false}, {silent: true});
 
-        this.$(".data_table").startLoading();
+        this.$(".data_grid").startLoading();
 
         this.listenTo(this.model, "loaded", function() {
             this.contents = this.model.get('contents');
-            this.$(".data_table").stopLoading();
+            this.$(".data_grid").stopLoading();
             this.render();
             this.setupSelects();
         });

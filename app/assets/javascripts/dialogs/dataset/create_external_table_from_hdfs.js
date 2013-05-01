@@ -46,7 +46,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
     },
 
     updateModel: function() {
-        var $names = this.$(".column_names input:text");
+        var $names = this.$(".column_name input:text");
         var $types = this.$(".data_types .chosen");
         var tableName = this.$(".directions input:text").val();
         var columnNames = _.map($names, function(name, i) {
