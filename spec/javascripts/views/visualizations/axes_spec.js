@@ -828,5 +828,11 @@ describe("chorus.views.visualizations.Axes", function() {
            });
            expect(axis.labels().length).toBe(1);
         });
+
+        it("shows the visualization overlay string", function(){
+           chorus.models.Config.instance().set("visualizationOverlayString", "arbitrary text");
+           this.axes.render();
+           expect(this.$el.find(".visualization_overlay_string")).toContainText("arbitrary text");
+        });
     });
 });
