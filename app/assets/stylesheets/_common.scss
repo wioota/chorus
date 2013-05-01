@@ -264,7 +264,6 @@ $summary-line-height: 19px;
 @mixin link-with-dotted-underline {
     font-size: 12px;
     font-weight: $semibold;
-    border-bottom: 1px dotted $link-color;
 }
 
 @mixin after-clearfix($which: both) {

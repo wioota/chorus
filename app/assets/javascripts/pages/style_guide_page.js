@@ -28,7 +28,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             completeJson: true,
             sandboxInfo: {
                 id: 1,
-                data_source: {
+                dataSource: {
                     id: 1,
                     name: 'Data Source',
                     entityType: 'gpdb_data_source'
@@ -88,12 +88,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
         this.models.database = new chorus.models.Database({
             "name": "Some database",
-            "datasource": this.models.gpdbDataSource
+            "dataSource": this.models.gpdbDataSource
         });
 
         this.models.otherDatabase = new chorus.models.Database({
             "name": "Another database",
-            "datasource": this.models.gpdbDataSource
+            "dataSource": this.models.gpdbDataSource
         });
 
         this.models.schema = new chorus.models.Schema({
@@ -284,7 +284,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                         "name": "searchquery_hadoop",
                         "entityType": "attachment",
                         "type": "",
-                        "datasource": {
+                        "dataSource": {
                             "name": "searchquery_hadoop",
                             "host": "hadoop.example.com",
                             "port": 1111,
