@@ -14,6 +14,7 @@ class ConfigurationsController < ApplicationController
       :file_sizes_mb_user_icon => ChorusConfig.instance['file_sizes_mb.user_icon'],
       :file_sizes_mb_workspace_icon => ChorusConfig.instance['file_sizes_mb.workspace_icon'],
       :file_sizes_mb_attachment => ChorusConfig.instance['file_sizes_mb.attachment'],
+      :visualization_overlay_string => ChorusConfig.instance['visualization.overlay_string'].try(:[], 0...40),
       :kaggle_configured => ChorusConfig.instance.kaggle_configured?,
       :gnip_configured => ChorusConfig.instance.gnip_configured?,
       :execution_timeout_in_minutes => ChorusConfig.instance['execution_timeout_in_minutes'],
