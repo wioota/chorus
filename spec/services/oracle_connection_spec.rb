@@ -510,7 +510,8 @@ describe OracleConnection, :oracle_integration do
     end
 
     after do
-      db.execute("DROP USER #{restricted_user}") rescue nil
+      connection.disconnect
+      db.execute("DROP USER #{restricted_user}")
       db.disconnect
     end
 
@@ -535,7 +536,8 @@ describe OracleConnection, :oracle_integration do
     end
 
     after do
-      db.execute("DROP USER #{user}") rescue nil
+      connection.disconnect
+      db.execute("DROP USER #{user}")
       db.disconnect
     end
 
