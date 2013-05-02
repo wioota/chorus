@@ -8,13 +8,13 @@ describe DatasetPresenter, :type => :view do
   end
 
   before do
-    @user = FactoryGirl.create :user
-    set_current_user(@user)
+    set_current_user(user)
   end
 
   it_behaves_like 'dataset presenter', :gpdb_table
   it_behaves_like 'dataset presenter with workspace', :gpdb_table
 
+  let(:user) { users(:default) }
   let(:workspace) { FactoryGirl.create :workspace }
   let(:presenter) { WithTableauPresenter.new(dataset, view, {:workspace => workspace, :activity_stream => activity_stream}) }
   let(:activity_stream) { nil }
@@ -53,6 +53,37 @@ describe DatasetPresenter, :type => :view do
 
       it 'should not include the tableau workbooks key' do
         hash.should_not have_key(:tableau_workbooks)
+      end
+    end
+  end
+
+  describe 'credentials_hash' do
+    context 'for a chorus view' do
+      let(:dataset) { datasets(:chorus_view) }
+
+      it 'uses calculated accessible_to' do
+        mock(dataset).accessible_to(user) { 'something' }
+        hash[:has_credentials].should == 'something'
+      end
+    end
+
+    context 'for a source dataset' do
+      let(:dataset) { datasets(:table) }
+
+      it 'uses calculated accessible_to' do
+        stub(presenter).sandbox_table? { false }
+        mock(dataset).accessible_to(user) { 'something' }
+        hash[:has_credentials].should == 'something'
+      end
+    end
+
+    context 'for a sandbox dataset' do
+      let(:dataset) { datasets(:table) }
+
+      it 'always returns true' do
+        stub(presenter).sandbox_table? { true }
+        dont_allow(dataset).accessible_to
+        hash[:has_credentials].should == true
       end
     end
   end
