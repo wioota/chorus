@@ -303,4 +303,8 @@ describe Events::Base do
       end
     end
   end
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { events(:public_workfile_created) }
+  end
 end

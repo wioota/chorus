@@ -10,8 +10,8 @@ class Comment < ActiveRecord::Base
 
   validates_presence_of :author_id, :body, :event_id
 
-  searchable_html :body
   searchable_model
+  searchable_html :body
 
   delegate :grouping_id, :type_name, :to => :event
   delegate_search_permissions_for :workspace, :dataset, :to => :event

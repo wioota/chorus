@@ -155,4 +155,8 @@ describe Workfile do
   end
 
   it_should_behave_like "taggable models", [:workfiles, :public]
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { workfiles(:public) }
+  end
 end

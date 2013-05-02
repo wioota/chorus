@@ -324,4 +324,8 @@ describe DataSource do
   end
 
   it_should_behave_like "taggable models", [:data_sources, :default]
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { data_sources(:oracle) }
+  end
 end

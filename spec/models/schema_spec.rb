@@ -265,4 +265,8 @@ describe Schema do
       Schema.visible_to(account, parent).should == ["schema1", "schema2"]
     end
   end
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { schema }
+  end
 end

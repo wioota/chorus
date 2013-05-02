@@ -88,14 +88,6 @@ describe Dataset do
       duplicate_dataset.should have(:no).errors_on(:name)
     end
 
-    describe "default scope" do
-      it "does not contain deleted datasets" do
-        deleted_chorus_view = ChorusView.first
-        deleted_chorus_view.update_attribute :deleted_at, Time.current
-        Dataset.all.should_not include(deleted_chorus_view)
-      end
-    end
-
     it "validate uniqueness of name, scoped to deleted_at" do
       duplicate_dataset = GpdbTable.new
       duplicate_dataset.name = dataset.name
@@ -271,4 +263,9 @@ describe Dataset do
   end
 
   it_should_behave_like "taggable models", [:datasets, :table]
+
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { dataset }
+  end
 end
