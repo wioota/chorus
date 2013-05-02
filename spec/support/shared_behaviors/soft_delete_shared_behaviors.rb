@@ -20,7 +20,7 @@ shared_examples_for 'a soft deletable model' do
     end
   end
 
-  if subject.call.class.searchable?
+  if described_class.searchable?
     context 'when the model is searchable' do
       it 'does not index when deleted' do
         dont_allow(model).solr_index
