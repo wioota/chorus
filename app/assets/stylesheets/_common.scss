@@ -171,6 +171,13 @@ $summary-line-height: 19px;
     color: black;
 }
 
+@mixin font-content-details {
+    @include debugging-mixin;
+    font-size: 12px;
+    font-weight: $semibold;
+    color: $color-text2;
+}
+
 @mixin font-menu {
     @include debugging-mixin;
     font-size: 14px;

@@ -11,7 +11,7 @@ $link-padding: 6px;
 
     button.add_account {
         @include content-details-button($border-color);
-
+        @include font-content-details;
         margin-left: 10px;
     }
 
