@@ -47,7 +47,11 @@ class ApplicationController < ActionController::Base
       Thread.current[:user] = User.find_by_api_key(params[:api_key])
       @api_auth = true if Thread.current[:user].present?
     else
-      Thread.current[:user] = User.find_by_id(session[:user_id])
+      if session[:user_id]
+        Thread.current[:user] = User.find_by_id(session[:user_id])
+      else
+        Thread.current[:user] = nil
+      end
     end
     yield
     Thread.current[:user] = nil
