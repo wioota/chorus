@@ -182,6 +182,7 @@ class ChorusInstaller
     FileUtils.mkdir_p("#{destination_path}/shared/log")
     FileUtils.mkdir_p("#{destination_path}/shared/system")
     FileUtils.mkdir_p("#{destination_path}/shared/demo_data")
+    FileUtils.mkdir_p("#{destination_path}/shared/libraries")
   end
 
   def copy_config_files

@@ -378,6 +378,12 @@ describe ChorusInstaller do
       File.directory?('/usr/local/greenplum-chorus/shared/system').should be_true
     end
 
+    it "creates the libraries folder" do
+      installer.create_shared_structure
+
+      File.directory?('/usr/local/greenplum-chorus/shared/libraries').should be_true
+    end
+
     context "when shared directory is not empty" do
       before do
         FileUtils.mkdir_p("/usr/local/greenplum-chorus/shared/bad_folder")
