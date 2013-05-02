@@ -21,10 +21,13 @@ module DataSources
     private
 
     def updated_account
-      data_source = DataSource.unshared.find(params[:data_source_id])
+      data_source = DataSource.find(params[:data_source_id])
 
       account = data_source.accounts.find_or_initialize_by_owner_id(current_user.id)
       account.attributes = params[:account]
+
+      authorize! :update, account
+
       account.save!
       account
     end
