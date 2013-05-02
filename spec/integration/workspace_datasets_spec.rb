@@ -64,7 +64,6 @@ describe "Workspace datasets" do
 
     it "shows the 'add credentials' link in the sidebar" do
       page.find('.notice.no_credentials').should have_text("You do not have permission to access the data source #{workspace.associated_datasets.first.dataset.data_source.name}. Click here to add your credentials.")
-
     end
   end
 

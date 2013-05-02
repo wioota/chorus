@@ -59,7 +59,7 @@ describe DatasetPresenter, :type => :view do
 
   describe 'credentials_hash' do
     context 'for a chorus view' do
-      let(:dataset) { datasets(:chorus_view) }
+      let(:dataset) { workspace.chorus_views.build }
 
       it 'uses calculated accessible_to' do
         mock(dataset).accessible_to(user) { 'something' }
