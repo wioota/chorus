@@ -1192,6 +1192,21 @@ describe ChorusInstaller do
     end
   end
 
+  describe "#log_at_end" do
+    it "does not output immediately" do
+      dont_allow(installer).log
+      installer.log_at_end("HI!")
+    end
+
+    it "outputs when flush_logs is called" do
+      installer.log_at_end("HI!")
+      installer.log_at_end("BYE!")
+      mock(installer).log("HI!")
+      mock(installer).log("BYE!")
+      installer.flush_logs
+    end
+  end
+
   def stub_version
     FileUtils.mkdir_p('./chorus_installation')
     File.open('./chorus_installation/version_build', 'w') { |f| f.puts "2.2.0.0" }

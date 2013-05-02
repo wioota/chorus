@@ -32,6 +32,7 @@ class ChorusInstaller
     @old_release_cleaner = options[:old_release_cleaner]
     @io = options[:io]
     @log_stack = []
+    @log_buffer = []
     @install_mode = :fresh
     @executor = options[:executor]
   end
@@ -43,6 +44,16 @@ class ChorusInstaller
     if block_given?
       log_stack.push(nil).tap { yield block }.pop
       log "...done."
+    end
+  end
+
+  def log_at_end(message)
+    @log_buffer << message
+  end
+
+  def flush_logs
+    @log_buffer.each do |message|
+      log message
     end
   end
 
@@ -391,6 +402,10 @@ class ChorusInstaller
       extract_postgres
     end
 
+    if is_supported_mac?
+      warn_and_change_osx_properties
+    end
+
     if upgrade_existing?
       validate_data_sources
 
@@ -408,11 +423,9 @@ class ChorusInstaller
       end
     end
 
-    if is_supported_mac?
-      warn_and_change_osx_properties
-    end
-
     link_current_to_release
+
+    flush_logs
 
   rescue InstallerErrors::InstallAborted => e
     puts e.message
@@ -429,8 +442,8 @@ class ChorusInstaller
   end
 
   def warn_and_change_osx_properties
-    log "OS X Users:"
-    log "The properties file 'shared/chorus.properties' has had the number of worker_threads and webserver_threads reduced to 5 and the number of database_threads reduced to 15."
+    log_at_end "OS X Users:"
+    log_at_end "The properties file 'shared/chorus.properties' has had the number of worker_threads and webserver_threads reduced to 5 and the number of database_threads reduced to 15."
 
     properties_file = File.join(destination_path, "shared", "chorus.properties")
     properties = Properties.load_file(properties_file)
