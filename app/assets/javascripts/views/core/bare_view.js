@@ -308,10 +308,15 @@ chorus.views.Bare = Backbone.View.include(
 
                     if (!alreadyInitialized) {
                         $el.addClass("custom_scroll");
+                        var timeoutId;
                         $el.unbind('hover').hover(function() {
-                            $el.find('.jspVerticalBar, .jspHorizontalBar').fadeIn(150);
+                            clearTimeout(timeoutId);
+                            $el.find('.jspVerticalBar, .jspHorizontalBar').stop(true, true).fadeIn(150);
                         }, function() {
-                            $el.find('.jspVerticalBar, .jspHorizontalBar').fadeOut(150);
+                            clearTimeout(timeoutId);
+                            timeoutId = setTimeout(function() {
+                                $el.find('.jspVerticalBar, .jspHorizontalBar').stop(true, true).fadeOut(150);
+                            }, 2000);
                         });
 
                         $el.find('.jspContainer').unbind('mousewheel', this.onMouseWheel).bind('mousewheel', this.onMouseWheel);
