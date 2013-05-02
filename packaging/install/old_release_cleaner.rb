@@ -22,7 +22,7 @@ class OldReleaseCleaner
     return unless File.directory?(version)
 
     @logger.log "Removing outdated release: #{version}"
-    FileUtils.chmod_R(0777, version)
+    FileUtils.chmod_R(0777, version, :force => true)
     FileUtils.rm_rf(version)
   end
 end
