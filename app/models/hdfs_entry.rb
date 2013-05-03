@@ -96,12 +96,10 @@ class HdfsEntry < ActiveRecord::Base
   end
 
   def contents
-    begin
-      hdfs_query = Hdfs::QueryService.new(hdfs_data_source.host, hdfs_data_source.port, hdfs_data_source.username, hdfs_data_source.version)
-      hdfs_query.show(path)
-    rescue StandardError => e
-      raise HdfsContentsError.new(e)
-    end
+    hdfs_query = Hdfs::QueryService.new(hdfs_data_source.host, hdfs_data_source.port, hdfs_data_source.username, hdfs_data_source.version)
+    hdfs_query.show(path)
+  rescue StandardError => e
+    raise HdfsContentsError.new(e)
   end
 
   def file

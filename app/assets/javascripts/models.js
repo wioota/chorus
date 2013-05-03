@@ -70,10 +70,8 @@ chorus.models = {
             },
 
             afterParseErrors: function(data){
-                var response = data.response;
-                if(response) {
-                    var attributes = this.camelizeKeys(response);
-                    this.set(attributes);
+                if(data.response) {
+                    this.set(data.response);
                     this.loaded = true;
                 }
             },

@@ -172,7 +172,7 @@ class ApplicationController < ActionController::Base
 
     if model
       response_json[:errors] = {
-          :model_data => {:id => model.id, :entity_type => model.class.name.underscore}
+          :model_data => Presenter.present(model, :succinct => true)
       }
     end
 

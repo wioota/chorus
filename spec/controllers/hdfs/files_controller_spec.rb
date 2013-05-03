@@ -84,6 +84,10 @@ describe Hdfs::FilesController do
           decoded_errors[:record].should == "HDFS_CONTENTS_UNAVAILABLE"
           response.should have_presented entry
         end
+
+        generate_fixture "hdfsContentsError.json" do
+          get :show, :hdfs_data_source_id => hdfs_data_source.id, :id => entry.id
+        end
       end
     end
   end

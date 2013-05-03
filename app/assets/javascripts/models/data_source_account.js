@@ -39,5 +39,15 @@ chorus.models.DataSourceAccount = chorus.models.Base.extend({
         var account = new chorus.models.DataSourceAccount({ dataSourceId: dataSourceId });
         account.fetch();
         return account;
+    },
+
+    currentUserCanUpdateCredentialsFor: function(dataSource) {
+        var user = chorus.session.user();
+
+        var userIsAdmin         = user.isAdmin();
+        var dataSourceIsShared  = dataSource.get('shared');
+        var userIsOwner         = dataSource.get('ownerId') === user.get('id');
+
+        return (userIsAdmin || userIsOwner || !dataSourceIsShared);
     }
 });

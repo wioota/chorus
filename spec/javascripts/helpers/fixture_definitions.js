@@ -125,6 +125,8 @@ window.rspecFixtureDefinitions = {
 
     hdfsEntrySet: {},
 
+    hdfsContentsError: {},
+
     hdfsFile: {  unique: ["id"], model: "HdfsEntry" },
 
     hdfsDir: {  unique: ["id"], model: "HdfsEntry" },

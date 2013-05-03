@@ -34,6 +34,8 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     },
 
     setEntry: function(entry) {
+        this.resource && this.stopListening(this.resource, "unprocessableEntity");
+
         this.resource = entry;
         if (entry) {
             entry.entityId = this.resource.id;
@@ -59,6 +61,11 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
             delete this.tabs.activity;
         }
 
+        this.listenTo(this.resource, "unprocessableEntity", function() {
+            var record = this.resource.serverErrors.record;
+            chorus.toast("record_error." + record);
+        });
+
         this.render();
     },
 
@@ -73,37 +80,23 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         e && e.preventDefault();
         var hdfsDataSource = new chorus.models.HdfsDataSource({id: this.options.hdfsDataSourceId});
 
-        var hdfsFile = new chorus.models.HdfsEntry({
-            hdfsDataSource: hdfsDataSource,
-            id: this.resource.id
-        });
+        this.resource.fetch();
 
-        hdfsFile.fetch();
-
-        this.listenTo(hdfsFile, "loaded", function() {
+        this.listenTo(this.resource, "loaded", function() {
             var externalTable = new chorus.models.HdfsExternalTable({
-                path: hdfsFile.get('path'),
+                path: this.resource.get('path'),
                 hdfsDataSourceId: hdfsDataSource.get('id'),
-                hdfs_entry_id: hdfsFile.get('id')
+                hdfs_entry_id: this.resource.get('id')
             });
 
             var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({
                 model: externalTable,
                 csvOptions: {
-                    tableName: hdfsFile.name(),
-                    contents: hdfsFile.get('contents')
+                    tableName: this.resource.name(),
+                    contents: this.resource.get('contents')
                 }
             });
             dialog.launchModal();
-        });
-
-        this.listenTo(hdfsFile, "unprocessableEntity", function() {
-            var fields = hdfsFile.serverErrors.fields;
-            _.forEach(fields, function(field, fieldName) {
-                _.forEach(field, function(_, message) {
-                    chorus.toast("field_error.hdfs." + fieldName + "." + message);
-                });
-            });
         });
     },
 

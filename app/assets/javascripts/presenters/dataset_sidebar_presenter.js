@@ -197,21 +197,11 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
             linkText: Handlebars.helpers.linkTo("#", t("dataset.credentials.invalid.linkText"), {'class': 'update_credentials'})
         });
 
-        if(this.canUpdateCredentials()) {
+        if(chorus.models.DataSourceAccount.currentUserCanUpdateCredentialsFor(this.resource.dataSource())) {
             return linkMsg;
         } else {
             return plainMsg;
         }
-    },
-
-    canUpdateCredentials: function() {
-        var user = chorus.session.user();
-
-        var userIsAdmin         = user.isAdmin();
-        var dataSourceIsShared  = this.resource.dataSource().get('shared');
-        var userIsOwner         = this.resource.dataSource().get('ownerId') === user.get('id');
-
-        return (userIsAdmin || userIsOwner || !dataSourceIsShared);
     },
 
     isChorusView: function() {
@@ -219,7 +209,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     hasDataSourceAccount: function() {
-        return this.resource.dataSource().accountForCurrentUser().id;
+        return !!this.resource.dataSource().accountForCurrentUser().id;
     },
 
     displayEntityType: function() {
