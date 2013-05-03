@@ -136,9 +136,9 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                     it("show the user an error", function() {
                         spyOn(chorus, 'toast');
                         this.view.$('a.external_table').click();
-                        this.server.lastFetchFor(this.hdfsEntry).failUnprocessableEntity({"fields":{"contents":{"UNABLE_TO_READ":{}}}});
+                        this.server.lastFetchFor(this.hdfsEntry).failUnprocessableEntity(rspecFixtures.hdfsContentsErrorJson().errors);
 
-                        expect(chorus.toast).toHaveBeenCalledWith("field_error.hdfs.contents.UNABLE_TO_READ");
+                        expect(chorus.toast).toHaveBeenCalledWith("record_error.HDFS_CONTENTS_UNAVAILABLE");
                     });
                 });
             });

@@ -339,21 +339,6 @@ describe User do
         user.destroy
       }.to change { DataSourceAccount.where(owner_id: user.id).count }.to(0)
     end
-
-    it "persists the database record" do
-      user.destroy
-      User.find_with_destroyed(user.id).should_not be_nil
-    end
-
-    it "updates the deleted_at field" do
-      user.destroy
-      User.find_with_destroyed(user.id).deleted_at.should_not be_nil
-    end
-
-    it "doesnt appear in the default scope" do
-      user.destroy
-      User.find_by_id(user.id).should be_nil
-    end
   end
 
   describe "search fields" do
@@ -377,4 +362,8 @@ describe User do
   it { should have_attached_file(:image) }
 
   it_should_behave_like "taggable models", [:users, :default]
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { users(:default) }
+  end
 end

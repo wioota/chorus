@@ -113,7 +113,6 @@
 
         .show_options {
             font-weight: $semibold;
-            border-bottom: 1px dotted;
         }
     }
 
@@ -134,10 +133,6 @@
         margin-right: 8px;
         margin-top: 8px;
 
-        .title {
-            @include font-content-details;
-        }
-
         .add_user {
             font-size: 12px;
             font-weight: $semibold;
@@ -155,7 +150,6 @@
         .picked_users {
             .name {
                 @include ellipsis;
-                @include font-content-details;
                 max-width: 200px;
                 display: inline-block;
             }

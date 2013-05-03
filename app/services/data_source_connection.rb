@@ -68,7 +68,7 @@ class DataSourceConnection
     if @account.invalid_credentials?
       raise InvalidCredentials.new(@data_source)
     else
-      @connection ||= Sequel.connect db_url, logger_options.merge({:test => true})
+      @connection ||= Sequel.connect db_url, db_options.merge({:test => true})
     end
   rescue Sequel::DatabaseError => e
     exception = error_class.new(e)
@@ -114,20 +114,23 @@ class DataSourceConnection
       statement = build_and_configure_statement(jdbc_conn, options, query)
       cancelable_query.store_statement(statement) if cancelable_query
 
-      set_timeout(options[:timeout], statement) if options[:timeout]
+      begin
+        set_timeout(options[:timeout], statement) if options[:timeout]
 
-      if options[:describe_only]
-        statement.execute_with_flags(org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY)
-      else
-        statement.execute
+        if options[:describe_only]
+          statement.execute_with_flags(org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY)
+        else
+          statement.execute
+        end
+
+        result = query_result(options, statement)
+        jdbc_conn.commit if options[:limit]
+        result
+      rescue Exception => e
+        raise QueryError, "The query could not be completed. Error: #{e.message}"
       end
 
-      result = query_result(options, statement)
-      jdbc_conn.commit if options[:limit]
-      result
     end
-  rescue Exception => e
-    raise QueryError, "The query could not be completed. Error: #{e.message}"
   end
 
   def verify_driver_configuration
@@ -140,7 +143,7 @@ class DataSourceConnection
     DataSourceConnection::Error
   end
 
-  def logger_options
+  def db_options
     if @options[:logger]
       { :logger => @options[:logger], :sql_log_level => :debug }
     else

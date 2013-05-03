@@ -29,7 +29,8 @@ class OracleConnection < DataSourceConnection
 
     def sanitize_message(message)
       # jdbc:oracle:thin:username/password@//host:port/database
-      message.gsub /\:[^\:]+\/.+@\/\//, ':xxxx/xxxx@//'
+      message.gsub(/\:[^\:]+\/.+@\/\//, ':xxxx/xxxx@//')
+        .gsub('Java::JavaSql::', '')
     end
   end
 
@@ -51,7 +52,14 @@ class OracleConnection < DataSourceConnection
   end
 
   def db_url
-    "jdbc:oracle:thin:#{@account.db_username}/#{@account.db_password}@//#{@data_source.host}:#{@data_source.port}/#{@data_source.db_name}"
+    "jdbc:oracle:thin:@//#{@data_source.host}:#{@data_source.port}/#{@data_source.db_name}"
+  end
+
+  def db_options
+    super.merge({
+        :user => @account.db_username,
+        :password => @account.db_password
+    })
   end
 
   def version

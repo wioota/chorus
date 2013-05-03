@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe DataSource do
   describe 'scopes' do
-    describe '#accessible_to' do
+    describe 'accessible_to' do
       let(:permitted_data_source) { data_sources(:owners) }
       let(:prohibited_data_source) { data_sources(:admins) }
       let(:online_data_source) { data_sources(:online) }
@@ -324,4 +324,8 @@ describe DataSource do
   end
 
   it_should_behave_like "taggable models", [:data_sources, :default]
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { data_sources(:oracle) }
+  end
 end

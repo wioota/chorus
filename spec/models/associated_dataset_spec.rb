@@ -30,22 +30,7 @@ describe AssociatedDataset do
     end
   end
 
-  describe "#destroy" do
-    it "should not delete the database entry" do
-      associated_dataset.destroy
-      expect {
-        associated_dataset.reload
-      }.to_not raise_error(Exception)
-    end
-
-    it "should update the deleted_at field" do
-      associated_dataset.destroy
-      associated_dataset.reload.deleted_at.should_not be_nil
-    end
-
-    it "should be hidden from subsequent #find calls" do
-      associated_dataset.destroy
-      AssociatedDataset.find_by_id(associated_dataset.id).should be_nil
-    end
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { associated_dataset}
   end
 end

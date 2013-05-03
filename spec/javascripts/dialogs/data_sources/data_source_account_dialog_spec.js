@@ -47,12 +47,17 @@ describe("chorus.dialogs.DataSourceAccount", function() {
 
         describe("when the save completes", function() {
             beforeEach(function() {
+                spyOn(this.dialog, 'showSavedToast');
                 spyOn(this.dialog, 'closeModal').andCallThrough();
                 this.account.trigger("saved");
             });
 
             it("closes the dialog", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
+            });
+
+            it("shows the toast", function() {
+                expect(this.dialog.showSavedToast).toHaveBeenCalled();
             });
         });
     });
@@ -106,25 +111,6 @@ describe("chorus.dialogs.DataSourceAccount", function() {
                 this.dialog.$("button.cancel").click();
                 expect(window.history.back).not.toHaveBeenCalled();
             });
-        });
-    });
-
-    context("when options.shouldShowToast is true", function(){
-        beforeEach(function() {
-            this.dialog = new chorus.dialogs.DataSourceAccount({
-                dataSource: this.dataSource,
-                title: t("data_sources.account.add.title"),
-                shouldShowSavedToast: true
-            });
-            this.dialog.launchModal();
-            this.dialog.render();
-            spyOn(this.dialog, 'showSavedToast');
-            this.account = this.dialog.model;
-            this.account.trigger("saved");
-        });
-
-        it("shows the toast", function() {
-            expect(this.dialog.showSavedToast).toHaveBeenCalled();
         });
     });
 

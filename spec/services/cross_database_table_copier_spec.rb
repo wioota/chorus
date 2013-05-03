@@ -8,13 +8,13 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
   let(:schema) { database.schemas.find_by_name(schema_name) }
   let(:destination_table_fullname) { %Q{"#{sandbox.name}"."#{destination_table_name}"}}
 
-  let(:log_options) { {:logger => Rails.logger } } # enable logging
+  let(:db_options) { database.connect_with(data_source_account).db_options.merge({:logger => Rails.logger }) } # enable logging
 
   let(:source_database_url) { database.connect_with(data_source_account).db_url }
-  let(:source_database) { Sequel.connect(source_database_url, log_options) }
+  let(:source_database) { Sequel.connect(source_database_url, db_options) }
 
   let(:destination_database_url) { database.connect_with(data_source_account).db_url }
-  let(:destination_database) { Sequel.connect(destination_database_url, log_options) }
+  let(:destination_database) { Sequel.connect(destination_database_url, db_options) }
 
   let(:source_table) { "candy" }
   let(:source_table_fullname) { "\"#{schema_name}\".\"#{source_table}\"" }
@@ -298,7 +298,7 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
 
   def with_database_connection(database, &block)
     if database.is_a?(String)
-      Sequel.connect(database, log_options, &block)
+      Sequel.connect(database, db_options, &block)
     else
       block.call database
     end

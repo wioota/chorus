@@ -21,8 +21,6 @@
         background-color: $body-background-color;
         padding: 10px $dialog-padding;
 
-        @include font-normal-small;
-
         line-height: 16px;
 
         .menus {
@@ -66,7 +64,6 @@
         padding : 0;
         line-height: 34px;
         vertical-align: middle;
-        @include font-content-details;
 
         .sort_menu {
             float: right;

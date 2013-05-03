@@ -83,10 +83,6 @@
     .ui-tooltip-tip {
         visibility: hidden;
     }
-
-    a {
-        @include link-with-dotted-underline;
-    }
 }
 
 .tooltip-insert {

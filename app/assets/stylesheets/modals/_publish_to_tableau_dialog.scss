@@ -1,6 +1,5 @@
 .publish_to_tableau_dialog {
   .target_location {
-    @include font-normal-small;
     @include ellipsis;
     padding-bottom: 8px;
   }

@@ -358,23 +358,6 @@ describe Workspace do
     let(:workspace) { workspaces(:public) }
     let!(:workfile) { FactoryGirl.create(:workfile, workspace: workspace) }
 
-    it "should not delete the database entry" do
-      workspace.destroy
-      expect {
-        workspace.reload
-      }.to_not raise_error(Exception)
-    end
-
-    it "updates the deleted_at field" do
-      workspace.destroy
-      workspace.reload.deleted_at.should_not be_nil
-    end
-
-    it "is hidden from subsequent #find calls" do
-      workspace.destroy
-      Workspace.find_by_id(workspace.id).should be_nil
-    end
-
     it 'does not reindex the workspace' do
       any_instance_of(Workspace) { |data_source| dont_allow(data_source).solr_reindex }
       workspace.destroy
@@ -632,4 +615,8 @@ describe Workspace do
   end
 
   it_should_behave_like "taggable models", [:workspaces, :public]
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { workspaces(:public) }
+  end
 end

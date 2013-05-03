@@ -8,10 +8,6 @@
 }
 
 .workfile_content_details {
-    a {
-        @include font-content-details;
-    }
-
     .save {
         float: right;
 
@@ -54,10 +50,6 @@
         @include content-details-button(#AAA);
         color: $color-text2;
         float: right;
-    }
-
-    .not_previewable {
-        @include font-content-details;
     }
 }
 

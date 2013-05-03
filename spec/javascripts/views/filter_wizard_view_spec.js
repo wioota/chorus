@@ -11,7 +11,7 @@ describe("chorus.views.FilterWizard", function() {
         });
 
         it("displays the filter title", function() {
-            expect(this.view.$("h1.filter_title").text()).toMatchTranslation("dataset.filter.title");
+            expect(this.view.$(".filter_title").text()).toMatchTranslation("dataset.filter.title");
         });
 
         it("displays one filter when rendered at first", function() {

@@ -8,7 +8,6 @@
 
         .updated {
             color: $color-text4;
-            font-size: 12px;
             margin-top: 5px;
         }
     }
@@ -33,16 +32,11 @@
         margin: 5px 0 20px 0;
     }
 
-    .display_title {
-        @include font-content-details;
-    }
-
     .version_list {
         font-size: 12px;
         margin-left: 3px;
         span {
             color : $link-color;
-            border-bottom: 1px dotted $link-color;
             color: $link-color;
         }
 

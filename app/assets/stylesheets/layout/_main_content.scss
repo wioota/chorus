@@ -33,7 +33,6 @@
 }
 
 .content_details, .content_footer {
-    @include font-content-details;
     border-bottom: 1px solid $pagination-border-color;
     height: 32px;
     line-height: 32px;
@@ -44,7 +43,7 @@
     }
 
     button, .button {
-        @include font-content-details;
+        color: $color-text2;
         @include content-details-button($border-color);
         margin: 1px 5px 2px 5px;
     }
@@ -56,6 +55,7 @@
         line-height: 30px;
         vertical-align: middle;
 
+        a { color: $color-text2; }
         button, .button {
             color: $content-details-action-link-color;
             @include content-details-button($content-details-action-link-border-color);

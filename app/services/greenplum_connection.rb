@@ -15,7 +15,8 @@ class GreenplumConnection < DataSourceConnection
     private
 
     def sanitize_message(message)
-      message.gsub /(user|password)=\S*?(?=[&\s]|\Z)/, '\\1=xxxx'
+      message.gsub(/(user|password)=\S*?(?=[&\s]|\Z)/, '\\1=xxxx')
+        .gsub('Java::OrgPostgresqlUtil::', '')
     end
 
     def error_code
@@ -89,8 +90,15 @@ class GreenplumConnection < DataSourceConnection
   end
 
   def db_url
-    query_params = URI.encode_www_form(:user => @account.db_username, :password => @account.db_password, :loginTimeout => GreenplumConnection.gpdb_login_timeout)
-    "jdbc:postgresql://#{@data_source.host}:#{@data_source.port}/#{database_name}?" << query_params
+    "jdbc:postgresql://#{@data_source.host}:#{@data_source.port}/#{database_name}"
+  end
+
+  def db_options
+    super.merge({
+        :user => @account.db_username,
+        :password => @account.db_password,
+        :loginTimeout => GreenplumConnection.gpdb_login_timeout
+    })
   end
 
   def support_multiple_result_sets?
@@ -321,14 +329,14 @@ class GreenplumConnection < DataSourceConnection
         query = query.select_append { obj_description(relations__oid).as('description') }
 
         table_type = Sequel.case(
-              [
-                  [{:relations__relhassubclass => 't'}, 'MASTER_TABLE'],
-                  [{:relations__relkind => 'v'}, 'VIEW'],
-                  [{:pg_exttable__location => nil}, 'BASE_TABLE'],
-                  [Sequel.lit("position('gphdfs' in pg_exttable.location[1]) > 0"), 'HD_EXT_TABLE']
-              ],
-              'EXT_TABLE'
-          )
+            [
+                [{:relations__relhassubclass => 't'}, 'MASTER_TABLE'],
+                [{:relations__relkind => 'v'}, 'VIEW'],
+                [{:pg_exttable__location => nil}, 'BASE_TABLE'],
+                [Sequel.lit("position('gphdfs' in pg_exttable.location[1]) > 0"), 'HD_EXT_TABLE']
+            ],
+            'EXT_TABLE'
+        )
         query = query.select_append(table_type => :table_type)
 
         disk_size = Sequel.case(
@@ -400,7 +408,7 @@ class GreenplumConnection < DataSourceConnection
       with_connection do |connection|
         connection.synchronize do |jdbc_conn|
           copy_manager = org.postgresql.copy.CopyManager.new(jdbc_conn)
-          sql = "COPY \"#{table_name}\"(#{column_names.map{|c| "\"#{c}\""}.join(', ')}) FROM STDIN WITH DELIMITER '#{delimiter}' CSV #{has_header ? 'HEADER' : ''}"
+          sql = "COPY \"#{table_name}\"(#{column_names.map { |c| "\"#{c}\"" }.join(', ')}) FROM STDIN WITH DELIMITER '#{delimiter}' CSV #{has_header ? 'HEADER' : ''}"
           copy_manager.copy_in(sql, java_reader)
         end
       end

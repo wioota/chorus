@@ -5,6 +5,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
     events: {
         "click .no_credentials a.add_credentials": "launchAddCredentialsDialog",
+        "click .invalid_credentials a.update_credentials": "launchAddCredentialsDialog",
         "click .actions .associate": "launchAssociateWithWorkspaceDialog",
         "click .dataset_preview": "launchDatasetPreviewDialog",
         "click .actions a.analyze" : "launchAnalyzeAlert",
@@ -45,46 +46,56 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         this.render();
     },
 
+    createActivitiesTab: function(dataset) {
+        var activities = dataset.activities();
+        activities.fetch();
+
+        this.tabs.activity = new chorus.views.ActivityList({
+            collection: activities,
+            additionalClass: "sidebar",
+            displayStyle: ['without_workspace'],
+            type: t("database_object." + dataset.get('objectType'))
+        });
+        this.tabs.registerSubView(this.tabs.activity);
+    },
+
+    createStatisticsTab: function(dataset) {
+        this.tabs.statistics = new chorus.views.DatasetStatistics({
+            model: dataset,
+            column: this.selectedColumn
+        });
+        this.tabs.registerSubView(this.tabs.statistics);
+
+        var statistics = dataset.statistics();
+        statistics.fetchIfNotLoaded();
+        this.listenTo(statistics, "loaded", this.render);
+        this.listenTo(statistics, "fetchFailed", this.statisticsFetchFailed);
+    },
+
+    fetchImports: function(dataset) {
+        if(dataset.canBeImportSourceOrDestination()) {
+            this.imports = dataset.getImports();
+            this.importSchedules = dataset.getImportSchedules();
+            this.listenTo(this.imports, "loaded", this.render);
+            this.listenTo(this.importSchedules, "loaded", this.render);
+            this.imports.fetch();
+            this.importSchedules.fetch();
+        }
+    },
+
+    statisticsFetchFailed: function() {
+        if(this.resource.statistics().statusCode === 403) { this.resource.invalidCredentials = true; }
+        this.render();
+    },
+
     setDataset: function(dataset) {
         this.resource = dataset;
         this.tabs.statistics && this.tabs.statistics.teardown();
         this.tabs.activity && this.tabs.activity.teardown();
         if (dataset) {
-            if(dataset.isChorusView()) {
-                var accountForCurrentUser = dataset.dataSource().accountForCurrentUser();
-                this.requiredResources.add(accountForCurrentUser);
-                accountForCurrentUser.fetchIfNotLoaded();
-            }
-
-            var activities = dataset.activities();
-            activities.fetch();
-
-            this.tabs.activity = new chorus.views.ActivityList({
-                collection: activities,
-                additionalClass: "sidebar",
-                displayStyle: ['without_workspace'],
-                type: t("database_object." + dataset.get('objectType'))
-            });
-            this.tabs.registerSubView(this.tabs.activity);
-
-            this.tabs.statistics = new chorus.views.DatasetStatistics({
-                model: dataset,
-                column: this.selectedColumn
-            });
-            this.tabs.registerSubView(this.tabs.statistics);
-
-            var statistics = dataset.statistics();
-            statistics.fetchIfNotLoaded();
-            this.listenTo(statistics, "loaded", this.render);
-
-            if (dataset.canBeImportSourceOrDestination()) {
-                this.imports = dataset.getImports();
-                this.importSchedules = dataset.getImportSchedules();
-                this.listenTo(this.imports, "loaded", this.render);
-                this.listenTo(this.importSchedules, "loaded", this.render);
-                this.imports.fetch();
-                this.importSchedules.fetch();
-            }
+            this.createActivitiesTab(dataset);
+            this.createStatisticsTab(dataset);
+            this.fetchImports(dataset);
         } else {
             delete this.tabs.statistics;
             delete this.tabs.activity;

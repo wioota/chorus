@@ -213,18 +213,6 @@ describe GpdbDatabase do
   describe "#destroy" do
     let(:database) { gpdb_databases(:default) }
 
-    it "should not delete the database entry" do
-      database.destroy
-      expect {
-        database.reload
-      }.to_not raise_error(Exception)
-    end
-
-    it "should update the deleted_at field" do
-      database.destroy
-      database.reload.deleted_at.should_not be_nil
-    end
-
     it "destroys dependent schemas" do
       schemas = database.schemas
       schemas.length.should > 0
@@ -246,5 +234,9 @@ describe GpdbDatabase do
         DataSourceAccount.find_by_id(account.id).should_not be_nil
       end
     end
+  end
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { gpdb_databases(:default) }
   end
 end

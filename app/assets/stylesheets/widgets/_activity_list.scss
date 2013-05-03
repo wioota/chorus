@@ -26,13 +26,7 @@ $system-action-color: #7C7D7D;
         float: right;
         margin-right: 10px;
 
-        .title {
-            @include font-content-details;
-        }
-
         a {
-            @include link-with-dotted-underline;
-
             &.active {
                 color: black;
                 border-bottom: none;

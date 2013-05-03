@@ -19,7 +19,6 @@ $image-width: 35px;
             .file {
                 padding-left: $image-width + 4px;
                 .choose {
-                    @include font-content-details;
                     @include content-details-button($border-color);
                 }
             }

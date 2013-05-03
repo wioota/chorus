@@ -106,6 +106,14 @@ describe ConfigurationsController do
       decoded_response.file_sizes_mb_attachment.should == 10
     end
 
+    it "includes the visualization overlay string" do
+      stub(ChorusConfig.instance).[]('visualization.overlay_string') { 'FOR OFFICIAL USE ONLY'*50 }
+      get :show
+
+      response.code.should == "200"
+      decoded_response.visualization_overlay_string.should == ('FOR OFFICIAL USE ONLY'*50)[0...40]
+    end
+
     generate_fixture "config.json" do
       stub(ChorusConfig.instance).[]('file_sizes_mb.csv_imports') { 1 }
       stub(ChorusConfig.instance).[]('file_sizes_mb.workfiles') { 10 }

@@ -182,12 +182,34 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return this.resource ? !this.resource.hasCredentials() : "";
     },
 
+    noValidCredentials: function() {
+        return this.noCredentials() || this.invalidCredentials();
+    },
+    invalidCredentials: function() {
+        return this.resource && this.resource.invalidCredentials;
+    },
+
+    invalidCredentialsMsg: function() {
+        var plainMsg = Handlebars.helpers.unsafeT("dataset.credentials.invalid.body", {
+            dataSourceName: this.resource.dataSource().name()
+        });
+        var linkMsg = plainMsg + " " + Handlebars.helpers.unsafeT("dataset.credentials.invalid.updateCredentials", {
+            linkText: Handlebars.helpers.linkTo("#", t("dataset.credentials.invalid.linkText"), {'class': 'update_credentials'})
+        });
+
+        if(chorus.models.DataSourceAccount.currentUserCanUpdateCredentialsFor(this.resource.dataSource())) {
+            return linkMsg;
+        } else {
+            return plainMsg;
+        }
+    },
+
     isChorusView: function() {
         return this.resource ? this.resource.isChorusView() : "";
     },
 
     hasDataSourceAccount: function() {
-        return this.resource.dataSource().accountForCurrentUser().id;
+        return !!this.resource.dataSource().accountForCurrentUser().id;
     },
 
     displayEntityType: function() {
@@ -215,7 +237,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     canExport: function() {
-        return !this.options.searchPage && this.resource && this.resource.canExport();
+        return !this.options.searchPage && this.resource && this.resource.canExport() && !this.noValidCredentials();
     },
 
     _linkToModel: function(model) {

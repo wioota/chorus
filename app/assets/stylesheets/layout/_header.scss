@@ -99,7 +99,6 @@ $header-item-spacing: 2*$padding-x;
                 }
 
                 .type {
-                    @include font-normal-small;
                     position: absolute;
                     top: 9px;
                     right: 10px;

@@ -125,6 +125,8 @@ window.rspecFixtureDefinitions = {
 
     hdfsEntrySet: {},
 
+    hdfsContentsError: {},
+
     hdfsFile: {  unique: ["id"], model: "HdfsEntry" },
 
     hdfsDir: {  unique: ["id"], model: "HdfsEntry" },
@@ -132,6 +134,8 @@ window.rspecFixtureDefinitions = {
     histogramTask: {},
 
     image: {},
+
+    invalidCredentialsError: {},
 
     dataSourceAccount: { unique: ["id"] },
 

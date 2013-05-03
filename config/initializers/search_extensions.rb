@@ -26,8 +26,13 @@ module SearchExtensions
     def searchable_model options = {}, &block
       model_context = self
 
+      if include? SoftDelete
+        raise "THIS IS NOT YET HANDLED, but Sunspot does allow an array of unless options" if options[:unless]
+        options[:unless] = :deleted?
+      end
+
       searchable(options, &block) if block_given?
-      searchable do
+      searchable(options) do
         if model_context.taggable?
           integer(:tag_ids, :multiple => true)
           text :tag_names, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST do

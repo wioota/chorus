@@ -19,6 +19,7 @@ describe ChorusInstaller do
         installer_home: '.',
         version_detector: version_detector,
         logger: logger,
+        old_release_cleaner: old_release_cleaner,
         io: io,
         executor: executor
     }
@@ -26,6 +27,7 @@ describe ChorusInstaller do
 
   let(:version_detector) { Object.new }
   let(:logger) { Object.new }
+  let(:old_release_cleaner) { Object.new }
   let(:io) { Object.new }
   let(:executor) { StubExecutor.new }
 
@@ -374,6 +376,12 @@ describe ChorusInstaller do
       installer.create_shared_structure
 
       File.directory?('/usr/local/greenplum-chorus/shared/system').should be_true
+    end
+
+    it "creates the libraries folder" do
+      installer.create_shared_structure
+
+      File.directory?('/usr/local/greenplum-chorus/shared/libraries').should be_true
     end
 
     context "when shared directory is not empty" do
@@ -952,24 +960,39 @@ describe ChorusInstaller do
   end
 
   describe "#link_current_to_release" do
+    let(:previous_version) { '/usr/local/greenplum-chorus/releases/1.2.2.2' }
+    let(:new_version) { '/usr/local/greenplum-chorus/releases/2.2.0.0' }
     before do
       installer.destination_path = "/usr/local/greenplum-chorus"
       stub(installer).version { '2.2.0.0' }
-      FileUtils.mkdir_p '/usr/local/greenplum-chorus/releases/1.2.2.2'
+      FileUtils.mkdir_p previous_version
     end
 
     it "creates a symlink to the new release from current" do
       installer.link_current_to_release
 
-      File.readlink('/usr/local/greenplum-chorus/current').should == '/usr/local/greenplum-chorus/releases/2.2.0.0'
+      File.readlink('/usr/local/greenplum-chorus/current').should == new_version
     end
 
-    it "should overwrite an existing link to current" do
-      FileUtils.ln_s("/usr/local/greenplum-chorus/releases/1.2.2.2", "/usr/local/greenplum-chorus/current")
-      mock(File).delete("/usr/local/greenplum-chorus/current") # FakeFS workaround
-      installer.link_current_to_release
+    context "when there is an existing link to current" do
+      before do
+        mock(old_release_cleaner).remove_except(new_version, previous_version)
+      end
 
-      File.readlink('/usr/local/greenplum-chorus/current').should == '/usr/local/greenplum-chorus/releases/2.2.0.0'
+      it "should overwrite the existing link to current" do
+        FileUtils.ln_s(previous_version, "/usr/local/greenplum-chorus/current")
+        mock(File).delete("/usr/local/greenplum-chorus/current") # FakeFS workaround
+        installer.link_current_to_release
+
+        File.readlink('/usr/local/greenplum-chorus/current').should == '/usr/local/greenplum-chorus/releases/2.2.0.0'
+      end
+    end
+
+    context "when there is no existing link to current" do
+      it "should not try to remove directories, because this is probably a fresh install" do
+        do_not_allow(old_release_cleaner).remove_except
+        installer.link_current_to_release
+      end
     end
 
     it "should create a symlink for chorus_control" do
@@ -1166,6 +1189,21 @@ describe ChorusInstaller do
         end
         installer.dump_environment
       end
+    end
+  end
+
+  describe "#log_at_end" do
+    it "does not output immediately" do
+      dont_allow(installer).log
+      installer.log_at_end("HI!")
+    end
+
+    it "outputs when flush_logs is called" do
+      installer.log_at_end("HI!")
+      installer.log_at_end("BYE!")
+      mock(installer).log("HI!")
+      mock(installer).log("BYE!")
+      installer.flush_logs
     end
   end
 

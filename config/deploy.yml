@@ -19,6 +19,7 @@ fresh_install:
 load_test:
   <<: *stage
   host: chorus-load-test
+  install_path: ~/chorus
 
 vprevious:
   host: chorus-vprevious

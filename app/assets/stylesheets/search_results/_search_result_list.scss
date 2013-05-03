@@ -43,10 +43,6 @@
             font-weight: $semibold;
         }
 
-        .prefix {
-            @include font-content-details;
-        }
-
         .content {
             @include font-normal-alpha;
         }
@@ -59,7 +55,6 @@
         }
 
         .comments, .more_comments, .supporting_message, .more_supporting_message, .column_description, .table_description{
-            @include font-content-details;
             margin: 0;
 
             .comment {

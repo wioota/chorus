@@ -4,23 +4,12 @@
     }
 
     .account_info {
-        font-size: 12px;
-        font-weight: normal;
-        color: $color-text1;
-
         vertical-align: middle;
         margin-bottom: 10px;
 
         img {
             vertical-align: middle;
             padding-right: 4px;
-        }
-
-        a {
-            margin-left: 8px;
-            padding-left: 8px;
-            border-left: 1px solid $border-color;
-            border-color: $link-color;
         }
     }
 

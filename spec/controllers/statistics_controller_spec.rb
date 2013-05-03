@@ -77,9 +77,10 @@ describe StatisticsController do
     end
 
     context "with real gpdb connection", :greenplum_integration do
+      let(:workspace) { workspaces(:gpdb_workspace) }
+      let(:schema) { workspace.sandbox }
+
       context "when a chorus view uses a table that has been deleted" do
-        let(:workspace) { workspaces(:gpdb_workspace) }
-        let(:schema) { workspace.sandbox }
         let(:bad_chorus_view) do
           cv = FactoryGirl.build(:chorus_view, :name => "bad_chorus_view", :schema => schema, :query => "select * from bogus_table", :workspace => workspace)
           cv.save(:validate => false)
@@ -90,6 +91,17 @@ describe StatisticsController do
         it "returns a 422" do
           get :show, :dataset_id => bad_chorus_view.to_param
           response.code.should == "422"
+        end
+      end
+
+      context "when the user has invalid credentials" do
+        let(:dataset) { schema.datasets.first }
+        let(:account) { GreenplumIntegration.real_account }
+        let(:user) { account.owner }
+
+        generate_fixture "invalidCredentialsError.json" do
+          account.invalid_credentials!
+          get :show, :dataset_id => dataset.to_param
         end
       end
     end

@@ -1,5 +1,5 @@
 shared_examples "a well-behaved database query" do
-  let(:db) { Sequel.connect(db_url) }
+  let(:db) { Sequel.connect(db_url, db_options) }
 
   it "returns the expected result and manages its connection" do
     connection.should_not be_connected
@@ -23,8 +23,9 @@ shared_examples "a data source connection" do
   describe "connect!" do
     context "when a logger is not provided" do
       before do
-        mock.proxy(Sequel).connect(db_url, :test => true)
         options.delete :logger
+        db_options.delete :logger
+        mock.proxy(Sequel).connect(db_url, db_options.merge(:test => true))
       end
 
       context "with valid credentials" do

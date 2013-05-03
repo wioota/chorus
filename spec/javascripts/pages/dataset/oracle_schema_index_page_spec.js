@@ -77,7 +77,7 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
         beforeEach(function() {
             launchModalSpy = spyOn(chorus.dialogs.DataSourceAccount.prototype, 'launchModal');
             this.server.completeFetchFor(this.page.dataSource);
-            this.server.lastFetchFor(this.page.collection).failForbidden({message: "Forbidden", model_data: {id: 'foo'}});
+            this.server.lastFetchFor(this.page.collection).failForbidden(rspecFixtures.invalidCredentialsErrorJson().errors);
         });
 
         it("launches the DataSourceAccount dialog", function() {

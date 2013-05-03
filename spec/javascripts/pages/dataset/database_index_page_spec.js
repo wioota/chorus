@@ -82,7 +82,7 @@ describe("chorus.pages.DatabaseIndexPage", function() {
         beforeEach(function() {
             launchModalSpy = spyOn(chorus.dialogs.DataSourceAccount.prototype, 'launchModal');
             this.server.completeFetchFor(this.dataSource);
-            this.server.lastFetchAllFor(this.page.collection).failForbidden({message: "Forbidden", model_data: {id: 'foo'}});
+            this.server.lastFetchAllFor(this.page.collection).failForbidden(rspecFixtures.invalidCredentialsErrorJson().errors);
         });
 
         it("launches the DataSourceAccount dialog", function() {

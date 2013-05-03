@@ -25,4 +25,8 @@ describe Comment do
       end
     end
   end
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { comments(:comment_on_note_on_greenplum)}
+  end
 end

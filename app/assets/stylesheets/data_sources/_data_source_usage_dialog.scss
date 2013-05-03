@@ -1,9 +1,4 @@
 .data_source_usage {
-
-    .total_usage {
-        @include font-content-details;
-    }
-
     li {
         border-bottom: $dotted-list-item-border;
         margin-top: 8px;

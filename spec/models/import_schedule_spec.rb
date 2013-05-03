@@ -170,26 +170,6 @@ describe ImportSchedule, :greenplum_integration do
     it { should have_many :imports }
   end
 
-  describe "default scope" do
-    it "does not show deleted schedules" do
-      active_schedule = FactoryGirl.create(:import_schedule,
-                                           :workspace => workspace,
-                                           :user => user,
-                                           :start_datetime => Time.current,
-                                           :end_date => Time.current + 1.year,
-                                           :frequency => 'monthly')
-      deleted_schedule = FactoryGirl.create(:import_schedule,
-                                            :workspace => workspace,
-                                            :user => user,
-                                            :deleted_at => Time.current,
-                                            :start_datetime => Time.current,
-                                            :end_date => Time.current + 1.year,
-                                            :frequency => 'monthly')
-      ImportSchedule.all.should include(active_schedule)
-      ImportSchedule.all.should_not include(deleted_schedule)
-    end
-  end
-
   describe ".ready_to_run scope" do
     it "shows import schedules that should be run" do
       ready_schedule = FactoryGirl.create(:import_schedule, :workspace => workspace,
@@ -257,5 +237,9 @@ describe ImportSchedule, :greenplum_integration do
       workspace.destroy
       import_schedule.reload.workspace.should == workspace
     end
+  end
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { import_schedule }
   end
 end

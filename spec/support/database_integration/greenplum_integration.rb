@@ -6,11 +6,12 @@ require 'socket'
 module GreenplumIntegration
   FILES_TO_TRACK_CHANGES_OF = Dir[*%w{(
     greenplum_integration.rb
-    create_gpadmin.sql
-    create_private_test_schema.sql
-    create_test_schemas.sql
-    drop_and_create_gpdb_databases.sql
-    drop_public_schema.sql
+    create_users.sql.erb
+    drop_and_create_gpdb_databases.sql.erb
+    create_test_schemas.sql.erb
+    create_private_test_schema.sql.erb
+    create_test_schemas.sql.erb
+    drop_public_schema.sql.erb
   }]
   VERSIONS_FILE = (File.join(File.dirname(__FILE__), '../../..', 'tmp/data_source_integration_file_versions')).to_s
 
@@ -20,8 +21,8 @@ module GreenplumIntegration
 
     sql = sql_erb.result(binding)
 
-    database_string = "jdbc:postgresql://#{hostname}:#{port}/#{database}?user=#{username}&password=#{password}"
-    Sequel.connect(database_string) do |database_connection|
+    database_string = "jdbc:postgresql://#{hostname}:#{port}/#{database}"
+    Sequel.connect(database_string, :user => username, :password => password) do |database_connection|
       database_connection.run(sql)
     end
     return true

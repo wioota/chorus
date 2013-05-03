@@ -4,7 +4,6 @@ describe OracleConnection, :oracle_integration do
   let(:data_source) { OracleIntegration.real_data_source }
   let(:database_name) { data_source.db_name }
   let(:account) { OracleIntegration.real_account }
-  let(:db) { Sequel.connect(db_url) }
   let(:exception_class) { OracleConnection::DatabaseError }
 
   let(:options) {
@@ -14,6 +13,8 @@ describe OracleConnection, :oracle_integration do
   }
   let(:connection) { OracleConnection.new(data_source, account, options) }
   let(:db_url) { connection.db_url }
+  let(:db_options) { connection.db_options }
+  let(:db) { Sequel.connect(db_url, db_options) }
 
   before do
     stub.proxy(Sequel).connect.with_any_args
@@ -484,18 +485,28 @@ describe OracleConnection, :oracle_integration do
     describe "sanitizing exception messages" do
       let(:error) { OracleConnection::DatabaseError.new(StandardError.new(message)) }
 
-      let(:message) do
-        "foo jdbc:oracle:thin:system/oracle@//chorus-oracle:8888/orcl and stuff"
+      context "when the error as username and password" do
+        let(:message) do
+          "foo jdbc:oracle:thin:system/oracle@//chorus-oracle:8888/orcl and stuff"
+        end
+
+        it "replaces them with x'es" do
+          error.message.should == "foo jdbc:oracle:thin:xxxx/xxxx@//chorus-oracle:8888/orcl and stuff"
+        end
       end
 
-      it "should sanitize the connection string" do
-        error.message.should == "foo jdbc:oracle:thin:xxxx/xxxx@//chorus-oracle:8888/orcl and stuff"
+      context "when Java::JavaSql:: starts the message" do
+        let(:message) { "Java::JavaSql::SOMETHING TERRIBLE HAPPENED!" }
+
+        it "removes it from the message" do
+          error.message.should == "SOMETHING TERRIBLE HAPPENED!"
+        end
       end
     end
   end
 
   context "when the user doesn't have permission to access some object in the database" do
-    let(:db) { Sequel.connect(db_url) }
+    let(:db) { Sequel.connect(db_url, db_options) }
     let(:schema_name) { OracleIntegration.schema_name }
     let(:restricted_user) { "user_with_no_access" }
     let(:restricted_password) { "secret" }
@@ -509,7 +520,8 @@ describe OracleConnection, :oracle_integration do
     end
 
     after do
-      db.execute("DROP USER #{restricted_user}") rescue nil
+      connection.disconnect
+      db.execute("DROP USER #{restricted_user}")
       db.disconnect
     end
 
@@ -517,6 +529,30 @@ describe OracleConnection, :oracle_integration do
       connection.connect!
       expect { connection.execute("SELECT * FROM #{schema_name}.NEWTABLE") }.to raise_error
       account.invalid_credentials.should be_false
+    end
+  end
+  
+  context "when the user has a crazy password" do
+    let(:db) { Sequel.connect(db_url, db_options) }
+    let(:user) { "user_with_crazy_password" }
+    let(:password) { '!@#$%^&*()' }
+
+    before do
+      db.execute("CREATE USER #{user} IDENTIFIED BY \"#{password}\"")
+      db.execute("GRANT CREATE SESSION TO #{user}")
+
+      account.db_username = user
+      account.db_password = password
+    end
+
+    after do
+      connection.disconnect
+      db.execute("DROP USER #{user}")
+      db.disconnect
+    end
+
+    it "can connect successfully" do
+      expect { connection.connect! }.not_to raise_error
     end
   end
 end

@@ -29,21 +29,6 @@ describe DataSources::AccountController do
       log_in user
     end
 
-    context "with an oracle data source" do
-      let(:data_source) { data_sources(:oracle) }
-
-      it "succeeds" do
-        post :create, :data_source_id => data_source.id, :db_username => "lenny", :db_password => "secret"
-        response.code.should == "201"
-
-        decoded_response.db_username.should == "lenny"
-        decoded_response.owner.id.should == user.id
-
-        rehydrated_account = DataSourceAccount.find(decoded_response.id)
-        rehydrated_account.db_password.should == "secret"
-      end
-    end
-
     it "succeeds" do
       post :create, :data_source_id => data_source.id, :db_username => "lenny", :db_password => "secret"
       response.code.should == "201"
@@ -71,9 +56,20 @@ describe DataSources::AccountController do
         data_source.update_attribute :shared, true
       end
 
-      it "fails" do
-        post :create, :data_source_id => data_source.id, :db_username => "lenny", :db_password => "secret"
-        response.should be_not_found
+      context "when you are the owner" do
+        let(:user) { owner }
+
+        it "succeeds" do
+          post :create, :data_source_id => data_source.id, :db_username => "lenny", :db_password => "secret"
+          response.code.should == "201"
+        end
+      end
+
+      context "when you are not the owner" do
+        it "fails" do
+          post :create, :data_source_id => data_source.id, :db_username => "lenny", :db_password => "secret"
+          response.should be_forbidden
+        end
       end
     end
   end
@@ -100,9 +96,20 @@ describe DataSources::AccountController do
         data_source.update_attribute :shared, true
       end
 
-      it "fails" do
-        put :update, :data_source_id => data_source.id, :db_username => "changed", :db_password => "changed"
-        response.should be_not_found
+      context "when you are the owner" do
+        let(:user) { owner }
+
+        it "succeeds" do
+          put :update, :data_source_id => data_source.id, :db_username => "changed", :db_password => "changed"
+          response.code.should == "200"
+        end
+      end
+
+      context "when you are not the owner" do
+        it "fails" do
+          put :update, :data_source_id => data_source.id, :db_username => "changed", :db_password => "changed"
+          response.should be_forbidden
+        end
       end
     end
 

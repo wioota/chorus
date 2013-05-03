@@ -167,6 +167,11 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
             .attr("y", this.maxY())
             .attr("class", "axis_label");
 
+        this.el.append("svg:text")
+            .text(chorus.models.Config.instance().get("visualizationOverlayString"))
+            .attr("class", "visualization_overlay_string")
+            .attr("x", 10).attr("y", this.maxY());
+
         // reposition axis label now that we know its width
         var axisLabelWidth = axisLabel[0][0].getBBox().width;
         var centerX = (this.minX() + this.maxX()) / 2 - axisLabelWidth / 2;

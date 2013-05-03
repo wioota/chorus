@@ -86,6 +86,10 @@ logging.syslog.enabled = true
 # Only the first 20 characters of the prefix will be used.
 file_download.name_prefix =
 
+# This string is displayed on all visualizations. Both when displaying and when saving.
+# Only the first 40 characters of the prefix will be used.
+visualization.overlay_string =
+
 # Gpfdist Settings
 
 # To enable data movement between databases, gpfdist must be installed and
