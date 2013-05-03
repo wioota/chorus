@@ -4,7 +4,7 @@ module Visualization
     attr_writer :dataset, :schema
 
     def initialize(dataset=nil, attributes={})
-      @buckets = attributes[:buckets].to_i
+      @buckets = attributes[:bins].to_i
       @category = attributes[:x_axis]
       @values = attributes[:y_axis]
       @filters = attributes[:filters]

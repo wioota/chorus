@@ -32,7 +32,7 @@ class BoxplotSummary
 
   def self.sort_entries(number_of_buckets, boxplot_entry)
     boxplot_entry = boxplot_entry.sort { |a, b| b[:percentage] <=> a[:percentage] }
-    boxplot_entry = boxplot_entry[0..number_of_buckets-1] if number_of_buckets.present? && number_of_buckets > 0
+    boxplot_entry = boxplot_entry[0..number_of_buckets-1] if number_of_buckets.present?
     return boxplot_entry
   end
 

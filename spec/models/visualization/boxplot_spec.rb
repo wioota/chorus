@@ -8,12 +8,13 @@ describe Visualization::Boxplot, :greenplum_integration do
   let(:account) { GreenplumIntegration.real_account }
   let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source) }
   let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
+  let(:bucket_count) { 20 }
 
   let(:visualization) do
     Visualization::Boxplot.new(dataset, {
         :x_axis => x_axis,
         :y_axis => y_axis,
-        :buckets => 20,
+        :bins => bucket_count,
         :filters => filters
     })
   end
@@ -32,6 +33,11 @@ describe Visualization::Boxplot, :greenplum_integration do
             {:bucket => "orange", :min => 2.0, :median => 3.0, :max => 4.0, :first_quartile => 2.5, :third_quartile => 3.5, :percentage => "33.33%", :count => 3},
             {:bucket => "apple", :min => 0.0, :median => 0.5, :max => 1.0, :first_quartile => 0.25, :third_quartile => 0.75, :percentage => "22.22%", :count => 2}
         ]
+      end
+
+      it "limits the number of buckets in the boxplot summary" do
+        mock(BoxplotSummary).summarize(anything, bucket_count)
+        visualization.fetch!(account, 12345)
       end
 
       context "with filters" do
