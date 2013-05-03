@@ -3,10 +3,10 @@ chorus.views.DataTable = chorus.views.Base.extend({
     constructorName: "DataTable",
 
     postRender: function() {
-        var columns = _.map(this.model.getColumns(), function(column) {
-            return {name: column.name, field: column.name, id: column.name };
+        var columns = _.map(this.model.getColumns(), function(column, index) {
+            return {name: column.name, field: index };
         });
-        var rows = this.model.getSortedRows(this.model.getRows());
+        var rows = this.model.getRows();
         var options = {
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,

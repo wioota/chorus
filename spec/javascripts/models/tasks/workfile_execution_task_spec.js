@@ -45,10 +45,10 @@ describe("chorus.models.WorkfileExecutionTask", function() {
         });
 
         describe("#getRows", function(){
-            it("puts rows into the format columnOrientedData expects", function() {
+            it("puts rows into the format data tables expect", function() {
                 expect(this.model.getRows()).toEqual([
-                    {id: "1", title: "president"},
-                    {id: "2", title: "vice president"}
+                    {0: "1", 1: "president"},
+                    {0: "2", 1: "vice president"}
                 ]);
             });
         });

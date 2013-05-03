@@ -13,10 +13,10 @@ chorus.models.WorkfileExecutionTask = chorus.models.Task.extend({
             column,
             value;
         return _.map(rows, function(row) {
-            return _.inject(_.zip(columns, row), function(memo, columnValuePair) {
+            return _.inject(_.zip(columns, row), function(memo, columnValuePair, index) {
                 column = columnValuePair[0];
                 value = columnValuePair[1];
-                memo[column.name] = value;
+                memo[index] = value;
                 return memo;
             }, {});
         });
