@@ -26,8 +26,6 @@ chorus.views.Components = chorus.views.Base.extend({
             var markup = $(example).removeClass('example').outerHtml();
             $(example).append('<pre><code class="language-markup">' + Handlebars.Utils.escapeExpression(markup) + '</code></pre>');
         }, this));
-
-        Prism.highlightAll();
     },
 
     additionalContext: function() {
