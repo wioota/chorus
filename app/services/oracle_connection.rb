@@ -29,7 +29,8 @@ class OracleConnection < DataSourceConnection
 
     def sanitize_message(message)
       # jdbc:oracle:thin:username/password@//host:port/database
-      message.gsub /\:[^\:]+\/.+@\/\//, ':xxxx/xxxx@//'
+      message.gsub(/\:[^\:]+\/.+@\/\//, ':xxxx/xxxx@//')
+        .gsub('Java::JavaSql::', '')
     end
   end
 

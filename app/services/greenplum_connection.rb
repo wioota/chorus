@@ -15,7 +15,8 @@ class GreenplumConnection < DataSourceConnection
     private
 
     def sanitize_message(message)
-      message.gsub /(user|password)=\S*?(?=[&\s]|\Z)/, '\\1=xxxx'
+      message.gsub(/(user|password)=\S*?(?=[&\s]|\Z)/, '\\1=xxxx')
+        .gsub('Java::OrgPostgresqlUtil::', '')
     end
 
     def error_code

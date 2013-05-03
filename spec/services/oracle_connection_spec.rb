@@ -485,12 +485,22 @@ describe OracleConnection, :oracle_integration do
     describe "sanitizing exception messages" do
       let(:error) { OracleConnection::DatabaseError.new(StandardError.new(message)) }
 
-      let(:message) do
-        "foo jdbc:oracle:thin:system/oracle@//chorus-oracle:8888/orcl and stuff"
+      context "when the error as username and password" do
+        let(:message) do
+          "foo jdbc:oracle:thin:system/oracle@//chorus-oracle:8888/orcl and stuff"
+        end
+
+        it "replaces them with x'es" do
+          error.message.should == "foo jdbc:oracle:thin:xxxx/xxxx@//chorus-oracle:8888/orcl and stuff"
+        end
       end
 
-      it "should sanitize the connection string" do
-        error.message.should == "foo jdbc:oracle:thin:xxxx/xxxx@//chorus-oracle:8888/orcl and stuff"
+      context "when Java::JavaSql:: starts the message" do
+        let(:message) { "Java::JavaSql::SOMETHING TERRIBLE HAPPENED!" }
+
+        it "removes it from the message" do
+          error.message.should == "SOMETHING TERRIBLE HAPPENED!"
+        end
       end
     end
   end

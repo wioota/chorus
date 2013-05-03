@@ -1479,6 +1479,14 @@ describe GreenplumConnection, :greenplum_integration do
           error.message.should == "foo jdbc:postgresql://somehost:5432/db_name?password=xxxx&user=xxxx blah"
         end
       end
+
+      context "when Java::OrgPostgresqlUtil:: starts the message" do
+        let(:message) { "Java::OrgPostgresqlUtil::SOMETHING TERRIBLE HAPPENED!" }
+
+        it "removes it from the message" do
+          error.message.should == "SOMETHING TERRIBLE HAPPENED!"
+        end
+      end
     end
   end
 
