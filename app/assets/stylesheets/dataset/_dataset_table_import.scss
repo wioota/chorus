@@ -85,13 +85,14 @@ $cell-width: 150px;
 
     .slick-headerrow-columns {
       overflow: visible;
+      height: 20px;
     }
 
     .slick-headerrow {
       overflow: visible !important;
     }
 
-    .data_grid {
+    .import_data_grid {
       .type {
         line-height: 16px;
         font-size: 12px;
@@ -167,6 +168,37 @@ $cell-width: 150px;
 
         .popup_filter {
           z-index: 9999999;
+        }
+      }
+
+      .column_mapping {
+        > span, a {
+          display: inline-block;
+          padding-top: 4px;
+        }
+
+        a {
+          @include ellipsis;
+          font-size: 12px;
+          font-weight: $semibold;
+          max-width: $cell-width - 68px;
+          margin-left: 3px;
+          &.selection_conflict {
+            color: #cc0000;
+
+            .arrow {
+              @include triangle(down, #cc0000, 6px, 6px);
+            }
+          }
+
+          .destination_column_name {
+            margin-right: 5px;
+          }
+
+          .arrow {
+            display: inline-block;
+            @include triangle(down, $link-color, 6px, 6px);
+          }
         }
       }
     }
@@ -256,4 +288,20 @@ $cell-width: 150px;
             float: right;
         }
     }
+}
+
+.existing_table_import_csv {
+  .import_data_grid {
+    .slick-headerrow-columns {
+      height: 32px;
+      .slick-headerrow-column {
+        height: auto;
+      }
+    }
+  }
+  .column_name {
+    display: block;
+    padding: 10px;
+    font-size: $default-font-size;
+  }
 }

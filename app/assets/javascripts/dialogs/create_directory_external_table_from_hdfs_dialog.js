@@ -131,11 +131,11 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         this.model.fetch();
         this.model.set({hasHeader: false}, {silent: true});
 
-        this.$(".data_grid").startLoading();
+        this.$(".import_data_grid").startLoading();
 
         this.listenTo(this.model, "loaded", function() {
             this.contents = this.model.get('contents');
-            this.$(".data_grid").stopLoading();
+            this.$(".import_data_grid").stopLoading();
             this.render();
             this.setupSelects();
         });

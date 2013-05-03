@@ -55,6 +55,7 @@
 //= require views/filter_wizard_view
 //= require views/filter_view
 //= require views/tag_box_view
+//= require views/import_data_grid_view
 //= require_tree ./views
 //= require dialogs/pick_items_dialog
 //= require dialogs/workspaces/pick_workspace_dialog

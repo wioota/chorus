@@ -10,6 +10,10 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     delimiter: ',',
 
+    subviews: {
+        ".result_table": "importDataGrid"
+    },
+
     events: {
         "click button.submit": "startImport",
         "change #hasHeader": "setHeader",
@@ -35,6 +39,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.generatedColumnNames = _.map(columns, function(column, i) { return "column_" + (i + 1); });
 
         this.subscribePageEvent("choice:setType", this.onSelectType);
+        this.importDataGrid = new chorus.views.NewTableImportDataGrid();
 
         this.listenTo(this.model, "saved", this.saved);
         this.listenTo(this.model, "saveFailed", this.saveFailed);
@@ -55,7 +60,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.showErrors();
         }
 
-
         this.$("input.delimiter").prop("checked", false);
         if (_.contains([",", "\t", ";", " "], this.delimiter)) {
             this.$("input.delimiter[value='" + this.delimiter + "']").prop("checked", true);
@@ -63,41 +67,14 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.$("input#delimiter_other").prop("checked", true);
         }
 
-        this.initializeDataGrid(columns, rows);
-    },
-
-    setupDataTypeMenus: function(columns) {
-        this.linkMenus = _.map(columns, function(item) {
-            return new chorus.views.LinkMenu({
-                options: [
-                    {data: "integer", text: "integer"},
-                    {data: "float", text: "float"},
-                    {data: "text", text: "text"},
-                    {data: "date", text: "date"},
-                    {data: "time", text: "time"},
-                    {data: "timestamp", text: "timestamp"}
-                ],
-                title: '',
-                event: "setType",
-                chosen: item.type
-            });
-        });
-
-        var $dataTypes = this.$(".slick-headerrow-columns");
-        _.each(this.linkMenus, function(linkMenu, index) {
-            var $column = $dataTypes.find(".slick-headerrow-column").eq(index);
-            $column.append('<div class="arrow"></div>');
-            $column.append(linkMenu.render().el);
-            $column.addClass("type");
-            $column.addClass(linkMenu.options.chosen);
-        });
+        this.importDataGrid.initializeDataGrid(columns, rows, this.getColumnNames());
     },
 
     revealed: function() {
         var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
         var columns = csvParser.getColumnOrientedData();
         var rows = csvParser.rows;
-        this.initializeDataGrid(columns, rows);
+        this.importDataGrid.initializeDataGrid(columns, rows, this.getColumnNames());
     },
 
     additionalContext: function() {
@@ -112,56 +89,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             }),
             ok: this.ok
         };
-    },
-
-    convert2DArrayToArrayOfHashTables: function (rows) {
-        return _.map(rows, function (row) {
-            return _.reduce(row, function (memo, cell, index) {
-                memo[index.toString()] = cell;
-                return memo;
-            }, {});
-        });
-    },
-
-    initializeDataGrid: function (columns, rows) {
-        if (!this.$('.data_grid').length) { return; }
-
-        var gridCompatibleRows = this.convert2DArrayToArrayOfHashTables(rows);
-        var gridCompatibleColumnCells = _.map(columns, function (column, index) {
-            return {name: index.toString(), field: index.toString(), id: index.toString() };
-        });
-
-        var options = {
-            enableColumnReorder: false,
-            enableTextSelectionOnCells: true,
-            syncColumnCellResize: true,
-            showHeaderRow: true,
-            headerRowHeight: 16
-        };
-
-        this.dataGrid = new Slick.Grid(this.$(".data_grid"), gridCompatibleRows, gridCompatibleColumnCells, options);
-        this.scrollHeaderRow();
-        this.addNameInputsToTopRow();
-        this.setupDataTypeMenus(columns);
-
-        _.defer(_.bind(function () {
-            this.dataGrid.resizeCanvas();
-            this.dataGrid.invalidate();
-        }, this));
-    },
-
-    scrollHeaderRow: function () {
-        this.dataGrid.onScroll.subscribe(_.bind(function (e, args) {
-            this.$('.slick-headerrow').css({left: -args.scrollLeft});
-        }, this));
-    },
-
-    addNameInputsToTopRow: function () {
-        _.each(this.$(".slick-header-column"), function (column, index) {
-            var $name = $(column).find(".slick-column-name");
-            $name.addClass("column_name");
-            $name.html("<input value='" + this.getColumnNames()[index] + "'></input>");
-        }, this);
     },
 
     saved: function() {

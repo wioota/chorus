@@ -101,7 +101,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
             });
 
             it("display spinner", function() {
-                expect(this.dialog.$(".data_grid").isLoading()).toBeTruthy();
+                expect(this.dialog.$(".import_data_grid").isLoading()).toBeTruthy();
             });
 
             context("when the fetch completes", function() {
@@ -110,7 +110,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 });
 
                 it("stops the spinner", function() {
-                    expect(this.dialog.$(".data_grid").isLoading()).toBeFalsy();
+                    expect(this.dialog.$(".import_data_grid").isLoading()).toBeFalsy();
                 });
                 it("display the correct tableName name", function() {
                     expect(this.dialog.$("input[name=tableName]").val()).toBe("new_test_name");

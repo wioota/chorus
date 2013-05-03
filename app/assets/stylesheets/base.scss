@@ -21,9 +21,10 @@
 @import "vendorish/_prism.scss";
 @import "vendorish/_textext.scss";
 @import "vendorish/_font_awesome.scss";
+@import "vendorish/_slick.grid.scss";
+@import "vendorish/_slick-default-theme.scss";
 
 // vendorish/_facebox is loaded first in modals for clarity
-
 
 @import "base/_dev.scss";
 @import "base/_controls.scss";

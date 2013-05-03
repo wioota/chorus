@@ -6,6 +6,10 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     title: t("dataset.import.table.title"),
     delimiter: ',',
 
+    subviews: {
+        ".result_table": "importDataGrid"
+    },
+
     events: {
         "click button.submit": "startImport",
         "change #hasHeader": "refreshCSV",
@@ -27,6 +31,8 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.columnSet = this.dataset.columns();
         this.requiredResources.add(this.columnSet);
         this.columnSet.fetchAll();
+
+        this.importDataGrid = new chorus.views.ExistingTableImportDataGrid();
 
         var parser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.csvOptions);
         var columns = parser.getColumnOrientedData();
@@ -65,15 +71,10 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             return { name: column.name(), type: chorus.models.DatabaseColumn.humanTypeMap[column.get("typeCategory")] };
         });
 
-        var api = this.$(".tbody").data("jsp");
-        this.scrollPosX = api ? api.getContentPositionX() : 0;
-        this.scrollPosY = api ? api.getContentPositionY() : 0;
-
         this._super("render", arguments);
     },
 
     postRender: function() {
-        this.handleScrolling();
         this.cleanUpQtip();
 
         if (this.dataset.loaded) {
@@ -84,7 +85,13 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             this.showErrors();
         }
 
-        _.each(this.$(".column_mapping .map a"), function(map, i) {
+        var csvParser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.model.attributes);
+        var columns = csvParser.getColumnOrientedData();
+        var rows = csvParser.rows;
+        var columnNames = _.pluck(columns, "name");
+        this.importDataGrid.initializeDataGrid(columns, rows, columnNames);
+
+        _.each(this.$(".column_mapping a"), function(map, i) {
             var menuContent = this.$(".menu_content ul").clone();
             this.destinationMenus[i] = menuContent;
             chorus.menu($(map), {
@@ -108,12 +115,11 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         } else {
             this.$("input#delimiter_other").prop("checked", true);
         }
-
     },
 
     destinationColumnSelected: function(e, api) {
         e.preventDefault();
-        var destinationColumnLinks = this.$(".column_mapping .map a");
+        var destinationColumnLinks = this.$(".column_mapping a");
         var qtipLaunchLink = api.elements.target;
         var selectedColumnName = $(e.target).attr("title");
         var selectedColumnIndex = destinationColumnLinks.index(qtipLaunchLink);
@@ -143,13 +149,13 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     updateDestinationLinks: function(frequencies) {
-        var launchLinks = this.$(".column_mapping .map a");
+        var launchLinks = this.$(".column_mapping a");
         _.each(launchLinks, function(launchLink, i) {
             launchLink = $(launchLink);
             var columnName = this.columnMapping[i];
             var frequency = frequencies[columnName];
 
-            launchLink.find(".column_name").text(columnName || t("dataset.import.table.existing.select_one"));
+            launchLink.find(".destination_column_name").text(columnName || t("dataset.import.table.existing.select_one"));
             launchLink.toggleClass("selected", (frequency === 1));
             launchLink.toggleClass("selection_conflict", (frequency !== 1));
         }, this);
@@ -186,9 +192,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     additionalContext: function() {
-        var parser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.model.attributes);
         return {
-            columns : parser.getColumnOrientedData(),
             destinationColumns: this.destinationColumns,
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: t("dataset.import.table.existing.directions", {
@@ -225,16 +229,6 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         this.model.set({types: _.pluck(columnData, 'type')});
 
         this.render();
-        this.recalculateScrolling();
-    },
-
-    adjustHeaderPosition: function() {
-        this.$(".thead").css({ "left": -this.scrollLeft() });
-    },
-
-    scrollLeft: function() {
-        var api = this.$(".tbody").data("jsp");
-        return api && api.getContentPositionX();
     },
 
     setDelimiter: function(e) {
@@ -264,19 +258,8 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     cleanUpQtip: function() {
-        this.$(".column_mapping .map").qtip("destroy");
-        this.$(".column_mapping .map").removeData("qtip");
-    },
-
-    handleScrolling: function() {
-        var $tbody = this.$(".tbody");
-        $tbody.unbind("scroll.follow_header");
-        $tbody.bind("scroll.follow_header", _.bind(this.adjustHeaderPosition, this));
-        $tbody.scrollTop(this.scrollPosY);
-        $tbody.scrollLeft(this.scrollPosX);
-        this.$(".thead").css({ "left": -this.scrollPosX });
-
-        this.setupScrolling(this.$(".tbody"));
+        this.$(".column_mapping").qtip("destroy");
+        this.$(".column_mapping").removeData("qtip");
     },
 
     validateColumns: function() {

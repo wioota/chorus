@@ -73,7 +73,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             });
 
             it("reparses the file with " + separator + " as the separator", function() {
-                expect(this.dialog.$(".data_grid .column_name").length).toEqual(5);
+                expect(this.dialog.$(".import_data_grid .column_name").length).toEqual(5);
             });
         };
     }
@@ -150,7 +150,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 });
 
                 it("reparses the file with z as the separator", function() {
-                    expect(this.dialog.$(".data_grid .column_name").length).toEqual(5);
+                    expect(this.dialog.$(".import_data_grid .column_name").length).toEqual(5);
                 });
             });
         });
@@ -184,11 +184,11 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
     describe("the data table", function() {
         it("has the right number of column names", function() {
-            expect(this.dialog.$(".data_grid .column_name").length).toEqual(5);
+            expect(this.dialog.$(".import_data_grid .column_name").length).toEqual(5);
         });
 
         it("converts the column names into db friendly format", function() {
-            var $inputs = this.dialog.$(".data_grid .column_name input");
+            var $inputs = this.dialog.$(".import_data_grid .column_name input");
             expect($inputs.eq(0).val()).toBe("col1");
             expect($inputs.eq(1).val()).toBe("col2");
             expect($inputs.eq(2).val()).toBe("col3");
@@ -197,17 +197,11 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         });
 
         it("has the right number of column data types", function() {
-            expect(this.dialog.$(".data_grid .type").length).toEqual(5);
-        });
-
-        it("does not memoize the data types", function() {
-            this.oldLinkMenus = this.dialog.linkMenus;
-            this.dialog.render();
-            expect(this.oldLinkMenus === this.dialog.linkMenus).toBeFalsy();
+            expect(this.dialog.$(".import_data_grid .type").length).toEqual(5);
         });
 
         it("has the right number of data columns", function() {
-            expect(this.dialog.$(".data_grid  .column_name").length).toEqual(5);
+            expect(this.dialog.$(".import_data_grid  .column_name").length).toEqual(5);
         });
 
         it("displays the provided types with their associated classes", function() {
@@ -221,9 +215,11 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         });
 
         it("has the right data in each cell", function() {
-            this.dialog.setElement($("#jasmine_content"));
-            var grid = this.dialog.dataGrid;
-            _.each(this.dialog.$(".data_grid .column_name"), function(column, i) {
+            $("#jasmine_content").append("<div class='foo'></div>");
+            //If you assign the dialog element directly to #jasmine_content, the later teardown will destroy jasmine content
+            this.dialog.setElement($("#jasmine_content .foo"));
+            var grid = this.dialog.importDataGrid;
+            _.each(this.dialog.$(".import_data_grid .column_name"), function(column, i) {
                 var cells = _.map([0,1,2], function(j){
                     return grid.getCellNode(j, i);
                 });

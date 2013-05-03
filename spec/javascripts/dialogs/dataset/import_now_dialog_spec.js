@@ -452,7 +452,6 @@ describe("chorus.dialogs.ImportNow", function() {
                     });
                 });
 
-
                 it("enables the import target options", function() {
                     expect(this.dialog.$("input")).toBeVisible();
                 });
