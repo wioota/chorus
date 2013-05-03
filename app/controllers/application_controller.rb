@@ -172,7 +172,7 @@ class ApplicationController < ActionController::Base
 
     if model
       response_json[:errors] = {
-          :model_data => Presenter.present(model, :succinct => true)
+          :model_data => Presenter.present(model, view_context, :succinct => true)
       }
     end
 
