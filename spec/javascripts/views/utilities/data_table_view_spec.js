@@ -43,7 +43,6 @@ describe("chorus.views.DataTable", function() {
     describe("#render", function() {
         beforeEach(function() {
             stubDefer();
-            spyOn($.fn, "jScrollPane").andCallThrough();
             this.view.render();
         });
 
@@ -73,6 +72,19 @@ describe("chorus.views.DataTable", function() {
             _(columNames).each(_.bind(function(columName, i){
                 expect(this.view.$(".slick-header-column:eq("+i+")").text()).toBe(columName);
             }, this));
+        });
+
+        describe("clicking on a cell", function () {
+            beforeEach(function () {
+                $("#jasmine_content").append(this.view.$el);
+                this.cell = this.view.$(".slick-row:eq(0) .slick-cell:eq(0)");
+                this.cell.trigger('click');
+            });
+
+            it("selects the cell's value", function () {
+                var selection = window.getSelection();
+                expect(selection.focusNode.textContent).toBe(this.cell.text());
+            });
         });
     });
 });

@@ -4,6 +4,7 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
     additionalClass: "import_data_grid",
     headerRowHeight: 0,
     customizeHeaderRows: $.noop,
+    events: { "click .slick-cell": "selectCell" },
 
     initializeDataGrid: function(columns, rows, columnNames) {
         var gridCompatibleRows = this.convert2DArrayToArrayOfHashTables(rows);
@@ -56,5 +57,19 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
         if (!value) { return value; }
 
         return "<span title='"+value+"'>"+value+"</span>";
+    },
+
+    selectCell: function(e) {
+        if (window.getSelection && document.createRange) {
+            var sel = window.getSelection();
+            var range = document.createRange();
+            range.selectNodeContents(e.currentTarget);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        } else if (document.selection && document.body.createTextRange) {
+            var textRange = document.body.createTextRange();
+            textRange.moveToElementText(e.currentTarget);
+            textRange.select();
+        }
     }
 });
