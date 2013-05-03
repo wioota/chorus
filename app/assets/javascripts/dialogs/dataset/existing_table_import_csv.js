@@ -85,13 +85,23 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
             this.showErrors();
         }
 
+        this.initializeDataPreview();
+        this.updateDestinations();
+        this.selectStartingDelimiter();
+    },
+
+    initializeDataPreview: function () {
         var csvParser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.model.attributes);
         var columns = csvParser.getColumnOrientedData();
         var rows = csvParser.rows;
         var columnNames = _.pluck(columns, "name");
         this.importDataGrid.initializeDataGrid(columns, rows, columnNames);
 
-        _.each(this.$(".column_mapping a"), function(map, i) {
+        this.setupColumnMapping();
+    },
+
+    setupColumnMapping: function () {
+        _.each(this.$(".column_mapping a"), function (map, i) {
             var menuContent = this.$(".menu_content ul").clone();
             this.destinationMenus[i] = menuContent;
             chorus.menu($(map), {
@@ -107,8 +117,9 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
                 mimic: "left center"
             });
         }, this);
-        this.updateDestinations();
+    },
 
+    selectStartingDelimiter: function () {
         this.$("input.delimiter").prop("checked", false);
         if (_.contains([",", "\t", ";", " "], this.delimiter)) {
             this.$("input.delimiter[value='" + this.delimiter + "']").prop("checked", true);
