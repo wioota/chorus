@@ -16,6 +16,7 @@ $image-width: 35px;
         .file_details {
             line-height: $image-height;
             vertical-align: middle;
+            margin-top: 10px;
 
             span, label, input[type=file] {
                 display: inline-block;

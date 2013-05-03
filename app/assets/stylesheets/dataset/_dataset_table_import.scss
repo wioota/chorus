@@ -90,6 +90,7 @@ $cell-width: 150px;
 
     .slick-headerrow {
       overflow: visible !important;
+      background: none;
     }
 
     .import_data_grid {
@@ -172,6 +173,7 @@ $cell-width: 150px;
       }
 
       .column_mapping {
+        font-size: 12px;
         > span, a {
           display: inline-block;
           padding-top: 4px;
