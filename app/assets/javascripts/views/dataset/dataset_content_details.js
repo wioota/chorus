@@ -100,6 +100,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     startVisualizationWizard: function() {
+        this.resultsConsole.clickClose();
         this.$('.chart_icon:eq(0)').click();
         this.$('.column_count').addClass('hidden');
         this.$('.info_bar').removeClass('hidden');

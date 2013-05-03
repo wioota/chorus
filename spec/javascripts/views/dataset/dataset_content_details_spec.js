@@ -267,6 +267,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             context("and the visualize button is clicked", function() {
                 beforeEach(function() {
                     spyOn(this.view, 'showVisualizationConfig');
+                    spyOn(this.view.resultsConsole, 'clickClose');
                     spyOn(chorus.PageEvents, 'trigger').andCallThrough();
                     this.view.filterWizardView.resetFilters.reset();
                     this.view.$("button.visualize").click();
@@ -305,6 +306,10 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 it("triggers start:visualization", function() {
                     expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("start:visualization");
+                });
+
+                it("closes the results console", function() {
+                    expect(this.view.resultsConsole.clickClose).toHaveBeenCalled();
                 });
 
                 context("and cancel is clicked", function() {
