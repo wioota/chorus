@@ -38,8 +38,8 @@ describe("chorus.models.DataPreviewTask", function() {
 
     it("puts rows into the format columnOrientedData expects", function() {
         expect(this.model.getRows()).toEqual([
-            {first_column: "1", second_column: "2"},
-            {first_column: "3", second_column: "4"}
+            {0: "1", 1: "2"},
+            {0: "3", 1: "4"}
         ]);
     });
 
