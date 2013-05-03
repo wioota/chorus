@@ -213,4 +213,23 @@ describe("chorus.pages.DatasetShowPage", function () {
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
         });
     });
+
+    context("when the dataset fetch 403s", function () {
+        beforeEach(function () {
+            this.errorJson = rspecFixtures.invalidCredentialsErrorJson(
+                {errors: { model_data: {owner_id: 'some_nonsense', shared: true } } }
+            );
+            spyOn(Backbone.history, "loadUrl");
+            this.server.lastFetchFor(this.dataset).failForbidden(this.errorJson.errors);
+        });
+
+        it("navigates to the 403 page", function () {
+            expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/forbidden");
+        });
+
+        it("displays an appropriate explanation", function() {
+            expect(chorus.pageOptions.title).toMatchTranslation("data_sources.shared_account_invalid.title");
+            expect(chorus.pageOptions.text).toMatchTranslation("data_sources.shared_account_invalid.text");
+        });
+    });
 });

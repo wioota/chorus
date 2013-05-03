@@ -8,25 +8,25 @@ chorus.Mixins.DataSourceCredentials.model = {
 };
 
 chorus.Mixins.DataSourceCredentials.page = {
+    unauthorizedErrorPageOptions: function() {
+        return {
+            title: t("data_sources.shared_account_invalid.title"),
+            text: t("data_sources.shared_account_invalid.text")
+        };
+    },
+
     dependentResourceForbidden: function(resource) {
         var dataSource = resource.dataSourceRequiringCredentials && resource.dataSourceRequiringCredentials();
-        if (dataSource) {
-            if (chorus.models.DataSourceAccount.currentUserCanUpdateCredentialsFor(dataSource)) {
+        if(dataSource) {
+            if(chorus.models.DataSourceAccount.currentUserCanUpdateCredentialsFor(dataSource)) {
                 this.launchDataSourceAccountDialog(dataSource, resource);
             } else {
-                chorus.pageOptions = this.failurePageOptions();
+                chorus.pageOptions = this.unauthorizedErrorPageOptions();
                 Backbone.history.loadUrl("/forbidden");
             }
         } else {
             this._super("dependentResourceForbidden", arguments);
         }
-    },
-
-    failurePageOptions: function() {
-        return {
-            title: t("data_sources.shared_account_invalid.title"),
-            text: t("data_sources.shared_account_invalid.text")
-        };
     },
 
     launchDataSourceAccountDialog: function(dataSource, resource) {
