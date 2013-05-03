@@ -17,6 +17,7 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
         });
 
         var options = {
+            defaultFormatter: this.cellFormatter,
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,
             syncColumnCellResize: true,
@@ -49,5 +50,11 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
                 return memo;
             }, {});
         });
+    },
+
+    cellFormatter: function(row, cell, value, columnDef, dataContext){
+        if (!value) { return value; }
+
+        return "<span title='"+value+"'>"+value+"</span>";
     }
 });

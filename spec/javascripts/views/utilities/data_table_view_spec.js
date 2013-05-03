@@ -58,6 +58,11 @@ describe("chorus.views.DataTable", function() {
             });
         });
 
+        it("sets the cell's value as a title tag on each cell", function () {
+            var $originCell = this.view.$(".slick-row:eq(0) .slick-cell:eq(0) span");
+            expect($originCell.attr('title')).toBe($originCell.text());
+        });
+
         it("renders a column for every column of the result", function() {
             expect(this.view.$(".slick-header-column").length).toBe(4);
         });
@@ -68,15 +73,6 @@ describe("chorus.views.DataTable", function() {
             _(columNames).each(_.bind(function(columName, i){
                 expect(this.view.$(".slick-header-column:eq("+i+")").text()).toBe(columName);
             }, this));
-        });
-
-        xit("adds a data attribute to each column, specifying its type", function() {
-            expect(this.view.$(".slick-header-column:eq(0)").attr("data-type")).toBe("WHOLE_NUMBER");
-            expect(this.view.$(".slick-header-column:eq(1)").attr("data-type")).toBe("OTHER");
-        });
-
-        xit("sets up custom scrolling", function() {
-            expect($.fn.jScrollPane).toHaveBeenCalled();
         });
     });
 });

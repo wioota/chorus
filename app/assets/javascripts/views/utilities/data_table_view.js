@@ -8,6 +8,7 @@ chorus.views.DataTable = chorus.views.Base.extend({
         });
         var rows = this.model.getRows();
         var options = {
+            defaultFormatter: this.cellFormatter,
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,
             syncColumnCellResize: true
@@ -19,5 +20,11 @@ chorus.views.DataTable = chorus.views.Base.extend({
     resizeGridToResultsConsole: function() {
         this.grid.resizeCanvas();
         this.grid.invalidate();
+    },
+
+    cellFormatter: function(row, cell, value, columnDef, dataContext){
+        if (!value) { return value; }
+
+        return "<span title='"+value+"'>"+value+"</span>";
     }
 });
