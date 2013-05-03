@@ -5,10 +5,14 @@
 }
 
 legend.subtitle {
-    padding: 10px 10px 10px 30px;
-    margin-left: -30px;
-    margin-bottom: -16px;
+    padding: 10px 10px 10px 0px;
+    width: 100%;
     @include font-normal-alpha;
+
+    .text {
+        float: left;
+        padding-right: 10px;
+    }
 }
 
 .titled-input-group {
@@ -19,8 +23,7 @@ legend.subtitle {
 
 .import_scheduler {
     hr {
-        width:  90%;
-        margin-left: 15%;
+        margin-top: 1em;
         height:  1px;
         background-color: $border-color;
         border:  none;
