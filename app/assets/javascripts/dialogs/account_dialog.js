@@ -32,7 +32,7 @@ chorus.dialogs.Account = chorus.dialogs.Base.extend({
 
     saved: function() {
         this.closeModal();
-        this.showSavedToast();
+        if(this.options.dataSource) { this.showSavedToast(); }
     },
 
     showSavedToast: function() {

@@ -277,7 +277,6 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             });
 
             context("when the account loads and is empty and the data source account maps are individual", function() {
-
                 beforeEach(function() {
                     spyOnEvent(this.page.collection, 'reset');
                     this.server.completeFetchFor(this.account, rspecFixtures.dataSourceAccount({"id":null}));
@@ -285,7 +284,6 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 });
 
                 it("pops up a WorkspaceDataSourceAccount dialog", function() {
-
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkspaceDataSourceAccount);
                     expect(this.page.dialog.model).toBe(this.page.account);
                     expect(this.page.dialog.pageModel).toBe(this.page.workspace);
