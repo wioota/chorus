@@ -24,7 +24,7 @@ describe WorkspaceDatasetsController do
       stub(workspace).dataset_count { 42 }
       any_instance_of(GpdbTable) do |table|
         stub(table).accessible_to(user) { true }
-        stub(table).verify_in_source
+        stub(table).verify_in_source { true }
       end
       any_instance_of(GpdbView) do |view|
         stub(view).accessible_to(user) { true }
@@ -88,7 +88,7 @@ describe WorkspaceDatasetsController do
       end
     end
 
-    describe "#create" do
+    describe "create" do
       let(:other_view) { datasets(:other_view) }
 
       it "uses authorization" do
@@ -126,7 +126,7 @@ describe WorkspaceDatasetsController do
       end
     end
 
-    describe "#show" do
+    describe "show" do
       before do
         any_instance_of(GpdbSchema) do |schema|
           stub(schema).verify_in_source(anything) { true }
@@ -138,8 +138,13 @@ describe WorkspaceDatasetsController do
         response.should be_not_found
       end
 
-      it "uses authorization" do
+      it "should return forbidden when the user is not allowed to see the workspace contents" do
         mock(subject).authorize! :show, workspace
+        get :show, :id => gpdb_table.to_param, :workspace_id => workspace.to_param
+      end
+
+      it "should return forbidden when the user does not have an account for the data source" do
+        mock(subject).authorize_data_source_access(gpdb_table)
         get :show, :id => gpdb_table.to_param, :workspace_id => workspace.to_param
       end
 
@@ -236,7 +241,7 @@ describe WorkspaceDatasetsController do
       end
     end
 
-    describe "#destroy" do
+    describe "destroy" do
       it "deletes the association" do
         delete :destroy, :id => source_table.to_param, :workspace_id => workspace.to_param
 

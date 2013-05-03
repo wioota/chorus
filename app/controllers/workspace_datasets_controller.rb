@@ -1,4 +1,5 @@
 class WorkspaceDatasetsController < ApplicationController
+  include DataSourceAuth
 
   def index
     authorize! :show, workspace
@@ -36,6 +37,8 @@ class WorkspaceDatasetsController < ApplicationController
     else
       dataset = datasets.find(params[:id])
     end
+
+    authorize_data_source_access(dataset)
 
     if dataset.schema.verify_in_source(current_user) && dataset.verify_in_source(current_user)
       present dataset, {:presenter_options => {:workspace => workspace}}

@@ -108,7 +108,17 @@ describe DatasetsController do
 
         it "should return forbidden" do
           get :show, :id => table.to_param
+          response.code.should == "403"
+        end
+      end
 
+      context "when the user does not have an account for the data source" do
+        before do
+          table.data_source.account_for_user(user).destroy
+        end
+
+        it "should return forbidden" do
+          get :show, :id => table.to_param
           response.code.should == "403"
         end
       end
