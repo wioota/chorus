@@ -14,13 +14,13 @@ jasmine.sharedExamples.aSidebar = function() {
         expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe(this.dataSource.entityType);
     });
 
-    describe('clicking the edit tags link', function(){
-        beforeEach(function(){
+    describe('clicking the edit tags link', function() {
+        beforeEach(function() {
             this.modalSpy = stubModals();
             this.view.$('.edit_tags').click();
         });
 
-        it('opens the tag edit dialog', function(){
+        it('opens the tag edit dialog', function() {
             expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
             expect(this.modalSpy.lastModal().collection.length).toBe(1);
             expect(this.modalSpy.lastModal().collection).toContain(this.dataSource);
@@ -46,7 +46,7 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
             expect(this.view.$(".actions .add_credentials")).not.toExist();
         });
 
-        it('displays the data source shared account info', function () {
+        it('displays the data source shared account info', function() {
             expect(this.view.$(".data_source_configuration_details .shared_account_info")).toContainText(this.dataSource.accountForOwner().get("dbUsername"));
         });
 
@@ -115,7 +115,6 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
 
                 it("shows the 'remove credentials' link", function() {
                     expect(this.view.$(".actions .remove_credentials").text()).toMatchTranslation("data_sources.sidebar.remove_credentials");
-                    expect(this.view.$(".actions .remove_credentials").data("alert")).toBe("DataSourceAccountDelete");
                 });
 
                 it("shows the 'edit credentials' link", function() {
@@ -319,7 +318,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
                 describe('for existing greenplum data source', function() {
                     context('and the data source has a shared account', function() {
                         beforeEach(function() {
-                            var dataSource = rspecFixtures.gpdbDataSource({"shared":true});
+                            var dataSource = rspecFixtures.gpdbDataSource({"shared": true});
                             dataSource.loaded = true;
                             this.view.setDataSource(dataSource);
                             this.server.completeFetchFor(dataSource.usage(), { workspaces: [] });
@@ -419,7 +418,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
     });
 
     context('when a oracle data source is selected', function() {
-        beforeEach(function(){
+        beforeEach(function() {
             this.dataSource = rspecFixtures.oracleDataSource({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub);
@@ -557,6 +556,22 @@ describe("chorus.views.DataSourceListSidebar", function() {
         it("shows the stream url", function() {
             var shared_account_info = this.dataSource.get("streamUrl");
             expect(this.view.$(".data_source_configuration_details .streamUrl")).toContainText(shared_account_info);
+        });
+    });
+
+    describe("#launchRemoveCredentialsAlert", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.DataSourceListSidebar();
+            this.view.render();
+            this.dataSource = rspecFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
+            this.view.setDataSource(this.dataSource);
+            this.modalSpy = stubModals();
+        });
+
+        it("launches the remove credentials modal", function(){
+            this.view.launchRemoveCredentialsAlert();
+            expect(this.modalSpy).toHaveModal(chorus.alerts.DataSourceAccountDelete);
+            expect(this.modalSpy.lastModal().pageModel).toBe(this.dataSource);
         });
     });
 });

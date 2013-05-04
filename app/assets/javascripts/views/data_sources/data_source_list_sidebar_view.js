@@ -8,7 +8,8 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
     },
 
     events: {
-        "click .edit_tags": 'startEditingTags'
+        "click .edit_tags": 'startEditingTags',
+        "click .remove_credentials": 'launchRemoveCredentialsAlert'
     },
 
     setup: function() {
@@ -128,5 +129,10 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
     startEditingTags: function(e) {
         e.preventDefault();
         new chorus.dialogs.EditTags({collection: new chorus.collections.Base([this.model])}).launchModal();
+    },
+
+    launchRemoveCredentialsAlert: function(e){
+        e && e.preventDefault();
+        new chorus.alerts.DataSourceAccountDelete({pageModel: this.model}).launchModal();
     }
 });
