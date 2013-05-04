@@ -27,19 +27,20 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
             defaultColumnWidth: 130
         };
 
-        this.slickGrid = new Slick.Grid(this.$el, gridCompatibleRows, gridCompatibleColumnCells, options);
+        this.grid && this.grid.destroy();
+        this.grid = new Slick.Grid(this.$el, gridCompatibleRows, gridCompatibleColumnCells, options);
         this.scrollHeaderRow();
         this.customizeHeaderRows(columns, columnNames);
         this.$(".slick-column-name").addClass("column_name");
 
         _.defer(_.bind(function () {
-            this.slickGrid.resizeCanvas();
-            this.slickGrid.invalidate();
+            this.grid.resizeCanvas();
+            this.grid.invalidate();
         }, this));
     },
 
     scrollHeaderRow: function() {
-        this.slickGrid.onScroll.subscribe(_.bind(function (e, args) {
+        this.grid.onScroll.subscribe(_.bind(function (e, args) {
             this.$('.slick-headerrow-columns').css({left: -args.scrollLeft});
         }, this));
     },
@@ -71,5 +72,10 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
             textRange.moveToElementText(e.currentTarget);
             textRange.select();
         }
-    }
+   },
+
+   teardown: function() {
+       this.grid && this.grid.destroy();
+       this._super("teardown");
+   }
 });
