@@ -23,8 +23,8 @@ resource "Hdfs" do
   post "/hdfs_data_sources" do
     parameter :name, "Name to show Chorus users for data source"
     parameter :description, "Description of data source"
-    parameter :host, "Host IP or address of Hadoop data source"
-    parameter :port, "Port of Hadoop data source"
+    parameter :host, "Host IP or address of HDFS data source"
+    parameter :port, "Port of HDFS data source"
     parameter :username, "Username for connection to data source"
     parameter :group_list, "Group list for connection"
 
@@ -37,17 +37,17 @@ resource "Hdfs" do
 
     required_parameters :name, :host, :port, :username, :group_list
 
-    example_request "Register a Hadoop data source" do
+    example_request "Register a HDFS data source" do
       status.should == 201
     end
   end
 
   put "/hdfs_data_sources/:id" do
-    parameter :id, "Hadoop data source id"
+    parameter :id, "HDFS data source id"
     parameter :name, "Name to show Chorus users for data source"
     parameter :description, "Description of data source"
-    parameter :host, "Host IP or address of Hadoop data source"
-    parameter :port, "Port of Hadoop data source"
+    parameter :host, "Host IP or address of HDFS data source"
+    parameter :port, "Port of HDFS data source"
     parameter :username, "Username for connection to data source"
     parameter :group_list, "Group list for connection"
 
@@ -61,7 +61,7 @@ resource "Hdfs" do
 
     required_parameters :name, :host, :port, :username, :group_list
 
-    example_request "Update the details on a hadoop data source" do
+    example_request "Update the details on a HDFS data source" do
       status.should == 200
     end
   end
@@ -69,13 +69,13 @@ resource "Hdfs" do
   get "/hdfs_data_sources" do
     pagination
 
-    example_request "Get a list of registered Hadoop data sources" do
+    example_request "Get a list of registered HDFS data sources" do
       status.should == 200
     end
   end
 
   get "/hdfs_data_sources/:id" do
-    parameter :id, "Hadoop data source id"
+    parameter :id, "HDFS data source id"
 
     let(:id) { data_source.to_param }
 
@@ -85,20 +85,28 @@ resource "Hdfs" do
   end
 
   get "/hdfs_data_sources/:hdfs_data_source_id/files" do
-    parameter :hdfs_data_source_id, "Hadoop data source id"
+    parameter :hdfs_data_source_id, "HDFS data source id"
 
-    example_request "Get a list of files for a specific hadoop data source's root directory"  do
+    example_request "Get a list of files for a specific HDFS data source's root directory"  do
       status.should == 200
     end
   end
 
   get "/hdfs_data_sources/:hdfs_data_source_id/files/:id" do
-    parameter :hdfs_data_source_id, "Hadoop data source id"
+    parameter :hdfs_data_source_id, "HDFS data source id"
     parameter :id, "HDFS file id"
 
     let(:id) { dir_entry.id }
 
-    example_request "Get a list of files for a subdirectory of a specific hadoop data source"  do
+    example_request "Get a list of files for a subdirectory of a specific HDFS data source"  do
+      status.should == 200
+    end
+  end
+
+  delete "/hdfs_data_sources/:hdfs_data_source_id" do
+    parameter :hdfs_data_source_id, "HDFS data source id"
+
+    example_request "Delete a HDFS data source" do
       status.should == 200
     end
   end
