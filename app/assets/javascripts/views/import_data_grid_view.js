@@ -3,6 +3,7 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
     constructorName: "ImportDataGrid",
     additionalClass: "import_data_grid",
     headerRowHeight: 0,
+    columnMinWidth: 100,
     customizeHeaderRows: $.noop,
     events: { "click .slick-cell": "selectCell" },
 
@@ -13,9 +14,9 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
                 name: column.name,
                 field: index.toString(),
                 id: index.toString(),
-                minWidth: 100
+                minWidth: this.columnMinWidth
             };
-        });
+        }, this);
 
         var options = {
             defaultFormatter: this.cellFormatter,
@@ -24,7 +25,8 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
             syncColumnCellResize: true,
             showHeaderRow: true,
             headerRowHeight: this.headerRowHeight,
-            defaultColumnWidth: 130
+            defaultColumnWidth: 130,
+            forceFitColumns: this.forceFitColumns(columns)
         };
 
         this.grid && this.grid.destroy();
@@ -58,6 +60,10 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
         if (!value) { return value; }
 
         return "<span title='"+value+"'>"+value+"</span>";
+    },
+
+    forceFitColumns: function (columns) {
+        return (columns.length * this.columnMinWidth) <= this.$el.width();
     },
 
     selectCell: function(e) {
