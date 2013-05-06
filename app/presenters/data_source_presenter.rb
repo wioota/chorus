@@ -4,6 +4,7 @@ class DataSourcePresenter < Presenter
         :id => model.id,
         :name => model.name,
         :entity_type => model.entity_type_name,
+        :is_deleted => model.deleted?,
         :shared => model.shared,
         :owner_id => model.owner_id
     }

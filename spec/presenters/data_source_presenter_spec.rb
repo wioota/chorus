@@ -16,6 +16,7 @@ describe DataSourcePresenter, :type => :view do
       hash.should have_key(:port)
       hash.should have_key(:host)
       hash.should have_key(:description)
+      hash.should have_key(:is_deleted)
       hash.should have_key(:db_name)
       hash.should have_key(:version)
       hash.should have_key(:online)

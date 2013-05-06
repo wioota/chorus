@@ -3,6 +3,8 @@ class DataSourcesController < ApplicationController
 
   wrap_parameters :data_source, :exclude => []
 
+  before_filter :find_data_source, :only => [:show, :update, :destroy]
+
   def index
     succinct = params[:succinct] == 'true'
     includes = succinct ? [] : [{:owner => :tags}, :tags]
@@ -13,8 +15,7 @@ class DataSourcesController < ApplicationController
   end
 
   def show
-    data_source = DataSource.find(params[:id])
-    present data_source
+    present @data_source
   end
 
   def create
@@ -24,9 +25,20 @@ class DataSourcesController < ApplicationController
   end
 
   def update
-    data_source = DataSource.find(params[:id])
-    authorize! :edit, data_source
-    data_source.update_attributes!(params[:data_source])
-    present data_source
+    authorize! :edit, @data_source
+    @data_source.update_attributes!(params[:data_source])
+    present @data_source
+  end
+
+  def destroy
+    authorize! :edit, @data_source
+    @data_source.destroy
+    head :ok
+  end
+
+  private
+
+  def find_data_source
+    @data_source = DataSource.find(params[:id])
   end
 end

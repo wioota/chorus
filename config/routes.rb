@@ -17,7 +17,7 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :data_sources, :only => [:index, :show, :create, :update] do
+  resources :data_sources, :only => [:index, :show, :create, :update, :destroy] do
     resources :databases, :only => [:index], :controller => 'databases'
 
     scope :module => 'data_sources' do

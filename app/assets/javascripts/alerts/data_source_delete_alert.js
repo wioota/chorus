@@ -12,6 +12,6 @@ chorus.alerts.DataSourceDelete = chorus.alerts.ModelDelete.extend({
     },
 
     text: function() {
-        return t("data_sources.delete.text.hdfs_data_source");
+        return t("data_sources.delete.text." + this.model.get("entityType"));
     }
 });

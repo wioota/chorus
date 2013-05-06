@@ -24,4 +24,14 @@ describe("chorus.alerts.DataSourceDelete", function() {
             expect(this.alert.additionalContext().text).toMatchTranslation('data_sources.delete.text.hdfs_data_source');
         });
     });
+
+    describe("for a greenplum data source", function() {
+        beforeEach(function() {
+            this.alert.model = rspecFixtures.gpdbDataSource();
+        });
+
+        it("has the correct text", function() {
+            expect(this.alert.additionalContext().text).toMatchTranslation('data_sources.delete.text.gpdb_data_source');
+        });
+    });
 });

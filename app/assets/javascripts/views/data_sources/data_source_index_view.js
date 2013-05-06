@@ -28,6 +28,7 @@ chorus.views.DataSourceIndex = chorus.views.Base.extend({
         this.registerSubView(this.gnipDataSourceList);
 
         this.listenTo(this.dataSources, 'loaded', this.selectModel);
+        this.listenTo(this.dataSources, 'destroy', this.clearSelection);
         this.listenTo(this.hdfsDataSources, 'loaded', this.selectModel);
         this.listenTo(this.hdfsDataSources, 'destroy', this.clearSelection);
         this.listenTo(this.gnipDataSources, 'loaded', this.selectModel);

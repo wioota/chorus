@@ -7,7 +7,7 @@ describe DataSourcesController do
 
   before { log_in user }
 
-  describe "#index" do
+  describe "index" do
     let(:permitted_data_source) { data_sources(:owners) }
     let(:prohibited_data_source) { data_sources(:admins) }
     let(:online_data_source) { data_sources(:online) }
@@ -50,7 +50,7 @@ describe DataSourcesController do
     end
   end
 
-  describe "#show" do
+  describe "show" do
     let(:data_source) { DataSource.first }
 
     context "with a valid data source id" do
@@ -86,7 +86,7 @@ describe DataSourcesController do
     end
   end
 
-  describe "#update" do
+  describe "update" do
     let(:changed_attributes) { {} }
     let(:gpdb_data_source) { data_sources(:shared) }
     let(:params) do
@@ -122,7 +122,7 @@ describe DataSourcesController do
     end
   end
 
-  describe "#create" do
+  describe "create" do
     it_behaves_like "an action that requires authentication", :put, :update, :id => '-1'
 
     let(:valid_attributes) do
@@ -236,6 +236,20 @@ describe DataSourcesController do
         response.code.should == "422"
         decoded_errors.fields.entity_type.should have_key :INVALID
       end
+    end
+  end
+
+  describe "destroy" do
+    let(:data_source) { data_sources(:shared) }
+    it "destroys the model" do
+      delete :destroy, :id => data_source.id
+      response.should be_success
+      DataSource.find_by_id(data_source.id).should be_nil
+    end
+
+    it "uses authentication" do
+      mock(subject).authorize! :edit, data_source
+      delete :destroy, :id => data_source.id
     end
   end
 end

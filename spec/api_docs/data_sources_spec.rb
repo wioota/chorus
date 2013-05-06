@@ -79,6 +79,14 @@ resource "Data sources" do
     end
   end
 
+  delete "/data_sources/:id" do
+    parameter :id, "Data source id"
+
+    example_request "Delete a data source" do
+      status.should == 200
+    end
+  end
+
   get "/data_sources/:data_source_id/workspace_detail" do
     parameter :data_source_id, "Data source id"
 
