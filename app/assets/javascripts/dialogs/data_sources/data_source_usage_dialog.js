@@ -7,13 +7,14 @@ chorus.dialogs.DataSourceUsage = chorus.dialogs.Base.extend({
     additionalClass: 'with_sub_header',
 
     setup: function() {
-        this.usage = this.resource = this.options.dataSource.usage();
+        this.dataSource = this.options.dataSource;
+        this.usage = this.resource = this.dataSource.usage();
         this.usage.fetchIfNotLoaded();
         this.requiredResources.push(this.usage);
     },
 
     additionalContext: function(context) {
-        var online = this.model.get("state") !== 'offline';
+        var online = this.dataSource.get("state") !== 'offline';
         _.each(context.workspaces, function(workspace) {
             if(online) {
                 workspace.formattedSize = I18n.toHumanSize(workspace.sizeInBytes, {precision: 0, format: "%n %u"});

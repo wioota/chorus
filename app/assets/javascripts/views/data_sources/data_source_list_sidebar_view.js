@@ -4,7 +4,8 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
     useLoadingSection: true,
 
     subviews: {
-        '.tab_control': 'tabs'
+        '.tab_control': 'tabs',
+        '.workspace_usage_container': 'workspaceUsagesWidget'
     },
 
     events: {
@@ -42,10 +43,14 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
         };
     },
 
+    setUpWorkspaceUsagesWidget: function() {
+        this.workspaceUsagesWidget = new chorus.views.DataSourceWorkspaceUsagesWidget();
+    },
+
     setupSubviews: function() {
         this.tabs.activity && this.tabs.activity.teardown();
         this.tabs.configuration && this.tabs.configuration.teardown();
-
+        this.setUpWorkspaceUsagesWidget();
         if (this.dataSource) {
             this.tabs.activity = new chorus.views.ActivityList({
                 collection: this.dataSource.activities(),
@@ -56,6 +61,9 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
 
             this.registerSubView(this.tabs.activity);
             this.registerSubView(this.tabs.configuration);
+
+            this.registerSubView(this.workspaceUsagesWidget);
+            this.workspaceUsagesWidget.setDataSource(this.dataSource);
         }
     },
 
@@ -81,12 +89,8 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
             this.listenTo(account, "fetchFailed", this.render);
         }
 
-        var dataSourceUsage = this.dataSource.usage();
-        if(dataSourceUsage) {
-            this.listenTo(dataSourceUsage, "loaded", this.updateWorkspaceUsage);
-            this.listenTo(dataSourceUsage, "fetchFailed", this.updateWorkspaceUsage);
-            dataSourceUsage.fetchIfNotLoaded();
-        }
+        this.workspaceUsagesWidget || this.setUpWorkspaceUsagesWidget();
+        this.workspaceUsagesWidget.setDataSource(this.dataSource);
         this.render();
     },
 
@@ -94,9 +98,6 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
         this._super("postRender");
         if (this.dataSource) {
             this.$("a.dialog").data("dataSource", this.dataSource);
-            if(this.dataSource.usage()) {
-                this.updateWorkspaceUsage();
-            }
         }
     },
 
@@ -106,24 +107,6 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
 
     canEditDataSource: function() {
         return (this.resource.owner().get("id") === chorus.session.user().get("id") ) || chorus.session.user().get("admin");
-    },
-
-    updateWorkspaceUsage: function() {
-        if (this.dataSource.usage().loaded) {
-            this.$(".workspace_usage_container").empty();
-            if(this.model.hasWorkspaceUsageInfo()) {
-                var el;
-                var count = this.dataSource.usage().workspaceCount();
-                if (count > 0) {
-                    el = $("<a class='dialog workspace_usage' href='#' data-dialog='DataSourceUsage'></a>");
-                    el.data("data_source", this.dataSource);
-                } else {
-                    el = $("<span class='disabled workspace_usage'></span>");
-                }
-                el.text(t("data_sources.sidebar.usage", {count: count}));
-                this.$(".workspace_usage_container").append(el);
-            }
-        }
     },
 
     startEditingTags: function(e) {

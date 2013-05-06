@@ -6,7 +6,7 @@ describe("chorus.dialogs.DataSourceUsage", function() {
             port: "8555",
             description: "it is a food name"
         });
-        this.dialog = new chorus.dialogs.DataSourceUsage({ dataSource: this.dataSource, model: this.dataSource });
+        this.dialog = new chorus.dialogs.DataSourceUsage({ dataSource: this.dataSource });
     });
 
     it("fetches the usage", function() {
@@ -16,7 +16,6 @@ describe("chorus.dialogs.DataSourceUsage", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.dialog.render();
-            $('#jasmine_content').append(this.dialog.el);
         });
 
         it("has the right title", function() {
@@ -46,6 +45,7 @@ describe("chorus.dialogs.DataSourceUsage", function() {
             });
 
             it("sets the width of the 'used' bar to be the percentage of the workspace size vs the recommended size", function() {
+                $('#jasmine_content').append(this.dialog.el);
                 var zipped = _.zip(this.dialog.$("li"), this.workspaces);
                 _.each(zipped, function(z) {
                     var el = $(z[0]);

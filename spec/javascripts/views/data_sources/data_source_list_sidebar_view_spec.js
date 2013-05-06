@@ -277,7 +277,6 @@ describe("chorus.views.DataSourceListSidebar", function() {
 
         it('fetches the activities, data source usage and accounts', function() {
             expect(this.dataSource.activities()).toHaveBeenFetched();
-            expect(this.dataSource.usage()).toHaveBeenFetched();
             expect(this.dataSource.accounts()).toHaveAllBeenFetched();
         });
 
@@ -321,7 +320,6 @@ describe("chorus.views.DataSourceListSidebar", function() {
                             var dataSource = rspecFixtures.gpdbDataSource({"shared": true});
                             dataSource.loaded = true;
                             this.view.setDataSource(dataSource);
-                            this.server.completeFetchFor(dataSource.usage(), { workspaces: [] });
                             var dataSourceAccountSet = rspecFixtures.dataSourceAccountSet();
                             dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
                             this.server.completeFetchFor(dataSource.accounts(), dataSourceAccountSet.models);
@@ -358,62 +356,6 @@ describe("chorus.views.DataSourceListSidebar", function() {
                     });
                 });
             });
-
-            it("has the default loading text on the workspace usage link", function() {
-                expect(this.view.$(".actions .workspace_usage")).toContainTranslation("data_sources.sidebar.usage_loading");
-            });
-
-            context("when the workspace usage fetch completes", function() {
-                beforeEach(function() {
-                    this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.dataSourceDetails());
-                });
-
-                context("when there are no workspaces", function() {
-                    beforeEach(function() {
-                        this.dataSource.usage().set({workspaces: []});
-                        this.dataSource.usage().trigger("loaded");
-                    });
-
-                    it("should disable the link", function() {
-                        expect(this.view.$('.actions .workspace_usage')).toHaveClass('disabled');
-                        expect(this.view.$('.actions .workspace_usage').data('dialog')).toBeUndefined();
-                    });
-
-                    it("should show a count of zero", function() {
-                        expect(this.view.$('.actions .workspace_usage')).toContainTranslation('data_sources.sidebar.usage', {count: 0});
-                    });
-                });
-
-                context("when there are workspaces", function() {
-                    beforeEach(function() {
-                        expect(this.dataSource.usage().get("workspaces").length).toBeGreaterThan(0);
-                    });
-
-                    it("should be a dialog link", function() {
-                        expect(this.view.$('.actions .workspace_usage')).not.toHaveClass("disabled");
-                        expect(this.view.$('.actions .workspace_usage')).toHaveClass("dialog");
-                        expect(this.view.$(".actions .workspace_usage")).toHaveData("data_source", this.dataSource);
-                    });
-
-                    it("should show the appropriate number of workspaces", function() {
-                        expect(this.view.$('.actions .workspace_usage')).toContainTranslation('data_sources.sidebar.usage', {count: this.dataSource.usage().get("workspaces").length});
-                    });
-                });
-            });
-        });
-
-        context("when the user doesn't have permission to fetch the data source workspace usage", function() {
-            beforeEach(function() {
-                this.server.completeFetchFor(this.dataSource.activities());
-                this.server.completeFetchAllFor(this.dataSource.accounts());
-                this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
-                this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.dataSourceDetailsWithoutPermission());
-            });
-
-            it("renders without the workspace usage section", function() {
-                expect(this.view.$(".data_source_name").text()).toBe("Harry's House of Glamour");
-                expect(this.view.$('.actions .workspace_usage')).not.toExist();
-            });
         });
     });
 
@@ -431,7 +373,6 @@ describe("chorus.views.DataSourceListSidebar", function() {
 
         it('fetches the activities, data source usage and accounts', function() {
             expect(this.dataSource.activities()).toHaveBeenFetched();
-            expect(this.dataSource.usage()).toHaveBeenFetched();
             expect(this.dataSource.accounts()).toHaveAllBeenFetched();
         });
 
@@ -568,10 +509,23 @@ describe("chorus.views.DataSourceListSidebar", function() {
             this.modalSpy = stubModals();
         });
 
-        it("launches the remove credentials modal", function(){
+        it("launches the remove credentials modal", function() {
             this.view.launchRemoveCredentialsAlert();
             expect(this.modalSpy).toHaveModal(chorus.alerts.DataSourceAccountDelete);
             expect(this.modalSpy.lastModal().pageModel).toBe(this.dataSource);
+        });
+    });
+
+    describe("#setDataSource", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.DataSourceListSidebar();
+            this.view.render();
+            this.dataSource = rspecFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
+            this.view.setDataSource(this.dataSource);
+        });
+
+        it("sets the dataSource on the workspaceUsagesWidget", function(){
+            expect(this.view.workspaceUsagesWidget.dataSource).toBe(this.dataSource);
         });
     });
 });
