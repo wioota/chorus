@@ -5,7 +5,7 @@ chorus.views.DataTable = chorus.views.Base.extend({
 
     postRender: function() {
         var columns = _.map(this.model.getColumns(), function(column, index) {
-            return {name: column.name, field: index, sortable: true};
+            return {name: column.name, field: index, id: column.name + index, sortable: true};
         });
         this.rows = this.model.getRows();
         var options = {

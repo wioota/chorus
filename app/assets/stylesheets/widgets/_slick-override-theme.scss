@@ -1,3 +1,5 @@
+@import "components/_variables.scss";
+
 .slick-header-columns {
   background: none;
 }
@@ -16,4 +18,28 @@
 
 .slick-group-toggle.collapsed {
   background: none;
+}
+
+.slick-sort-indicator-desc {
+  @include triangle(down, $dark-gray, 10px, 5px);
+  margin-top: 4px;
+}
+
+.slick-sort-indicator-asc {
+  @include triangle(up, $dark-gray, 10px, 5px);
+}
+
+
+.slick-header-column-sorted {
+  font-style: italic;
+}
+
+.slick-sort-indicator {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  margin-left: auto;
+  right: 5px;
+  top: 8px;
+  position: absolute;
 }
