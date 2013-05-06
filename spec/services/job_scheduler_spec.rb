@@ -25,6 +25,17 @@ describe JobScheduler do
     end
   end
 
+  describe "OrphanCleaner.clean" do
+    it "runs every 24 hours" do
+      job_scheduler.job_named('OrphanCleaner.clean').period.should == 24.hours
+    end
+
+    it "enqueues the 'OrphanCleaner.clean' job in QC" do
+      mock(QC.default_queue).enqueue_if_not_queued("OrphanCleaner.clean")
+      job_scheduler.job_named('OrphanCleaner.clean').run(Time.current)
+    end
+  end
+
   describe "SolrIndexer.refresh_external_data" do
     it "runs every ChorusConfig.instance['reindex_search_data_interval_hours'] hours" do
       job_scheduler.job_named('SolrIndexer.refresh_external_data').period.should == ChorusConfig.instance['reindex_search_data_interval_hours'].hours

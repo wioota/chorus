@@ -1,6 +1,7 @@
 class HdfsDataSource < ActiveRecord::Base
   include TaggableBehavior
   include Notable
+  include SoftDelete
   include CommonDataSourceBehavior
 
   attr_accessible :name, :host, :port, :description, :username, :group_list
@@ -14,6 +15,14 @@ class HdfsDataSource < ActiveRecord::Base
   validates_with DataSourceNameValidator
 
   after_create :create_root_entry
+  after_destroy :enqueue_destroy_entries
+
+  def self.destroy_entries(data_source_id)
+    # Don't use dependent => destroy because it pulls them all into memory
+    HdfsEntry.where(:hdfs_data_source_id => data_source_id).find_each do |entry|
+      entry.destroy
+    end
+  end
 
   def url
     "gphdfs://#{host}:#{port}/"
@@ -40,6 +49,12 @@ class HdfsDataSource < ActiveRecord::Base
 
   def create_root_entry
     hdfs_entries.create({:hdfs_data_source => self, :path => "/", :is_directory => true}, { :without_protection => true })
+  end
+
+  private
+
+  def enqueue_destroy_entries
+    QC.enqueue_if_not_queued("HdfsDataSource.destroy_entries", id)
   end
 
 end

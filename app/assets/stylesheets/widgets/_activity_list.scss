@@ -91,6 +91,7 @@ $system-action-color: #7C7D7D;
         a[href=''], a:not([href]) {
             color: $color-text3;
             cursor: auto;
+            text-decoration: none;
         }
 
         .insight_ribbon {

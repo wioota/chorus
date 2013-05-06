@@ -1,12 +1,17 @@
 chorus.alerts.DataSourceDelete = chorus.alerts.ModelDelete.extend({
     constructorName: "DataSourceDelete",
 
-    text:t("data_sources.delete.text"),
-    title:t("data_sources.delete.title"),
-    ok:t("actions.delete"),
-    deleteMessage:"data_sources.delete.toast",
+    title: t("data_sources.delete.title"),
+    ok: t("actions.delete_data_source"),
+    deleteMessage: "data_sources.delete.toast",
 
-    makeModel:function () {
-        this.model = this.options.pageModel;
+    deleteMessageParams: function() {
+        return {
+            dataSourceName: this.model.name()
+        };
+    },
+
+    text: function() {
+        return t("data_sources.delete.text.hdfs_data_source");
     }
 });

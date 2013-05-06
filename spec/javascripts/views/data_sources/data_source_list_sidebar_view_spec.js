@@ -26,6 +26,76 @@ jasmine.sharedExamples.aSidebar = function() {
             expect(this.modalSpy.lastModal().collection).toContain(this.dataSource);
         });
     });
+
+    describe("clear", function() {
+        beforeEach(function() {
+            this.view.render();
+            this.view.clear();
+        });
+
+        it('should not display anything', function() {
+            expect(this.view.$("*")).not.toExist();
+        });
+    });
+
+    context('when user is not an admin or owner of the data source', function() {
+        beforeEach(function() {
+            setLoggedInUser({ username: "benjamin", admin: false});
+            this.dataSource.set({owner: {id: "harry"}});
+            this.view.render();
+        });
+
+        it('does not display edit data source link when user is neither admin nor owner', function() {
+            expect(this.view.$(".actions .edit_data_source")).not.toExist();
+        });
+
+        it('does not display the delete data source link', function() {
+            expect(this.view.$(".actions .delete_data_source")).not.toExist();
+        });
+    });
+
+    context('when user is an owner of the data source', function() {
+        beforeEach(function() {
+            setLoggedInUser({ username: "benjamin", admin: false});
+            this.dataSource.set({owner: {id: chorus.session.user().get('id')} });
+            this.view.render();
+        });
+
+        it('displays edit data source link', function() {
+            expect(this.view.$(".actions .edit_data_source")).toExist();
+        });
+
+        it('displays delete data source link', function() {
+            expect(this.view.$(".actions .delete_data_source")).toExist();
+        });
+
+        context('click on delete data source', function() {
+            beforeEach(function() {
+                this.modalSpy = stubModals();
+                this.view.$('.delete_data_source').click();
+            });
+
+            it('opens the delete data source alert', function(){
+                expect(this.modalSpy).toHaveModal(chorus.alerts.DataSourceDelete);
+                expect(this.modalSpy.lastModal().model).toBe(this.dataSource);
+            });
+        });
+    });
+
+    context('when user is an admin', function() {
+        beforeEach(function() {
+            setLoggedInUser({ username: "benjamin", admin: true});
+            this.view.render();
+        });
+
+        it('displays edit data source link', function() {
+            expect(this.view.$(".actions .edit_data_source")).toExist();
+        });
+
+        it('displays delete data source link', function() {
+            expect(this.view.$(".actions .delete_data_source")).toExist();
+        });
+    });
 };
 
 jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = function() {
@@ -195,28 +265,12 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
         expect(chorus.views.ActivityList.mostRecentCall.args[0].displayStyle).toBe('without_object');
     });
 
-    context('when user is an admin or owner of the data source', function() {
-        it('displays edit data source link when user is admin', function() {
-            setLoggedInUser({ username: "benjamin", admin: true});
-            this.view.render();
-            expect(this.view.$(".actions .edit_data_source")).toExist();
-        });
-
-        it('displays edit data source link when user is owner', function() {
-            setLoggedInUser({ username: "benjamin", admin: false});
-            this.dataSource.set({owner: {id: chorus.session.user().get('id')} });
-            this.view.render();
-            expect(this.view.$(".actions .edit_data_source")).toExist();
-        });
-
-        it('does not display the delete data source link', function() {
-            expect(this.view.$(".actions .delete_data_source")).not.toExist();
-        });
-
+    context('when user is an owner of the data source', function() {
         context('when the data source is offline', function() {
             beforeEach(function() {
-                setLoggedInUser({ username: "benjamin", admin: true});
+                setLoggedInUser({ username: "benjamin", admin: false});
                 this.dataSource.set({
+                    owner: {id: chorus.session.user().get('id')},
                     online: false
                 });
                 this.view.render();
@@ -229,22 +283,6 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
             it("does display the edit accounts link", function() {
                 expect(this.view.$("a[data-dialog=DataSourcePermissions]")).toExist();
             });
-        });
-    });
-
-    context('when user is not an admin or owner of the data source', function() {
-        beforeEach(function() {
-            setLoggedInUser({ username: "benjamin", admin: false});
-            this.dataSource.set({owner: {id: "harry"}});
-            this.view.render();
-        });
-
-        it('does not display edit data source link when user is neither admin nor owner', function() {
-            expect(this.view.$(".actions .edit_data_source")).not.toExist();
-        });
-
-        it('does not display the delete data source link', function() {
-            expect(this.view.$(".actions .delete_data_source")).not.toExist();
         });
     });
 };

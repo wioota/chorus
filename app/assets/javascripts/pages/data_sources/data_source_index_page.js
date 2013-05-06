@@ -45,9 +45,15 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
         });
 
         this.subscribePageEvent("data_source:selected", this.setModel);
+        this.subscribePageEvent("clear_selection", this.clearModel);
     },
 
     setModel:function (dataSource) {
         this.model = dataSource;
+    },
+
+    clearModel:function (dataSource) {
+        delete this.model;
+        this.sidebar.clear();
     }
 });

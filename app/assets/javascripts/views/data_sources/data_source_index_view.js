@@ -29,6 +29,7 @@ chorus.views.DataSourceIndex = chorus.views.Base.extend({
 
         this.listenTo(this.dataSources, 'loaded', this.selectModel);
         this.listenTo(this.hdfsDataSources, 'loaded', this.selectModel);
+        this.listenTo(this.hdfsDataSources, 'destroy', this.clearSelection);
         this.listenTo(this.gnipDataSources, 'loaded', this.selectModel);
 
         this.subscribePageEvent("data_source:added", function(dataSource) {
@@ -59,5 +60,11 @@ chorus.views.DataSourceIndex = chorus.views.Base.extend({
                 this.$("li:first").click();
             }
         }
+    },
+
+    clearSelection: function(model) {
+        this.selectedModel = undefined;
+        chorus.PageEvents.trigger('clear_selection', model);
+        this.render();
     }
 });

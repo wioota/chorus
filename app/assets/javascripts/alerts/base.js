@@ -18,7 +18,7 @@ chorus.alerts.Base = chorus.Modal.extend({
     additionalContext: function(ctx) {
         return {
             title: this.title,
-            text: this.text,
+            text: _.result(this, 'text'),
             body: this.body,
             ok: this.ok,
             cancel: this.cancel || t("actions.cancel")

@@ -59,7 +59,7 @@ describe HdfsEntry do
                  "modified_at" => "2010-10-20 22:00:00",
                  'content_count' => 0
              }]
-        HdfsEntry.destroy_all # remove fixtures
+        HdfsEntry.delete_all # remove fixtures
         any_instance_of(Hdfs::QueryService) do |h|
           stub(h).list('/') { @hdfs_results }
         end
@@ -442,5 +442,9 @@ describe HdfsEntry do
       hdfs_entry.hdfs_data_source_id.should == entry.hdfs_data_source.id
       hdfs_entry.path.should == entry.path
     end
+  end
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { hdfs_entries(:hdfs_file) }
   end
 end

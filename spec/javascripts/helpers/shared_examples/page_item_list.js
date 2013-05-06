@@ -112,6 +112,17 @@ jasmine.sharedExamples.PageItemList = function() {
             expect(this.view.$("input[type=checkbox]").eq(1)).toBeChecked();
             expect(this.view.$("li").eq(1)).toHaveClass('checked');
         });
+
+        describe("when clear_selection is triggered for that item", function() {
+            beforeEach(function() {
+                this.selectedModel = this.view.selectedModels.at(0);
+                chorus.PageEvents.trigger("clear_selection", this.selectedModel);
+            });
+
+            it("un-checks the entry", function() {
+                expect(this.view.$("li input[type=checkbox]").eq(1)).not.toBeChecked();
+            });
+        });
     });
 
     describe("select all and select none", function() {
@@ -193,6 +204,16 @@ jasmine.sharedExamples.PageItemList = function() {
         it("should call itemSelected with the selected model and trigger a general selected event", function() {
             expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(1));
             expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selected", this.collection.at(1));
+        });
+
+        describe("when clear_selection is triggered", function() {
+            beforeEach(function() {
+                chorus.PageEvents.trigger("clear_selection");
+            });
+
+            it("un-selects the entry", function() {
+                expect(this.view.$("li.selected")).not.toExist();
+            });
         });
 
         describe("rerendering", function() {

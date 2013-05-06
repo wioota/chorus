@@ -7,11 +7,17 @@ class HdfsEntryPresenter < Presenter
         :is_dir => model.is_directory,
         :is_binary => false,
         :last_updated_stamp => model.modified_at.nil? ? "" : model.modified_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        :entity_type => model.entity_type_name,
+        :hdfs_data_source => present(model.hdfs_data_source, options),
+        :is_deleted => model.deleted?
+    }
+
+    unless succinct?
+      hash.merge!({
         :ancestors => model.ancestors,
         :path => model.parent_path,
-        :entity_type => model.entity_type_name,
-        :hdfs_data_source => present(model.hdfs_data_source, options)
-    }.merge(tags_hash)
+      }.merge(tags_hash))
+    end
 
     if model.is_directory
       hash[:entries] = present model.entries if options[:deep]

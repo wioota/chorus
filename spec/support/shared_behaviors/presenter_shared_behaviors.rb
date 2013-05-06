@@ -102,7 +102,7 @@ shared_examples :succinct_data_source_presenter do
   let(:options) { {:succinct => true} }
 
   it "should only present a subset" do
-    extra_keys = presenter.presentation_hash.keys - [:id, :name, :entity_type, :owner_id, :shared]
+    extra_keys = presenter.presentation_hash.keys - [:id, :name, :entity_type, :is_deleted, :owner_id, :shared]
     extra_keys.should be_empty
   end
 

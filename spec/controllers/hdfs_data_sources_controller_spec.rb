@@ -45,6 +45,11 @@ describe HdfsDataSourcesController do
       put :update, params
     end
 
+    it "uses authentication" do
+      mock(subject).authorize! :edit, hdfs_data_source
+      put :update, params
+    end
+
     context "when it fails due to validation" do
       let(:attributes) { {'name' => 'some_wrong_value'} }
 
@@ -79,6 +84,19 @@ describe HdfsDataSourcesController do
 
     generate_fixture "hdfsDataSource.json" do
       get :show, :id => hdfs_data_source.id
+    end
+  end
+
+  describe "#destroy" do
+    it "destroys the model" do
+      delete :destroy, :id => hdfs_data_source.id
+      response.should be_success
+      HdfsDataSource.find_by_id(hdfs_data_source.id).should be_nil
+    end
+
+    it "uses authentication" do
+      mock(subject).authorize! :edit, hdfs_data_source
+      delete :destroy, :id => hdfs_data_source.id
     end
   end
 end

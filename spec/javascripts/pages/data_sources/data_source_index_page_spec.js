@@ -67,11 +67,24 @@ describe("chorus.pages.DataSourceIndexPage", function() {
             expect(modal.lastModal()).toBeA(chorus.dialogs.DataSourcesNew);
         });
 
-        it("sets the page model when a 'data_source:selected' event is trigger", function() {
+        it("sets the page model when a 'data_source:selected' event is triggered", function() {
             var dataSource = rspecFixtures.gpdbDataSource();
             expect(this.page.model).not.toBe(dataSource);
             chorus.PageEvents.trigger('data_source:selected', dataSource);
             expect(this.page.model).toBe(dataSource);
+        });
+
+        it("clears the page model when a 'clear_selection' event is triggered", function() {
+            var dataSource = rspecFixtures.gpdbDataSource();
+            chorus.PageEvents.trigger('data_source:selected', dataSource);
+            chorus.PageEvents.trigger('clear_selection');
+            expect(this.page.model).toBeUndefined();
+        });
+
+        it("clears the sidebar when a 'clear_selection' event is triggered", function() {
+            spyOn(this.page.sidebar, 'clear');
+            chorus.PageEvents.trigger('clear_selection');
+            expect(this.page.sidebar.clear).toHaveBeenCalled();
         });
 
         it("displays the loading text", function() {

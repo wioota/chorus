@@ -31,13 +31,10 @@ chorus.views.PageItemList = chorus.views.Base.extend({
             this.addModelsToSelection(modelsToAdd);
             this.previousIndex = index;
         } else {
-            var match = this.findSelectedModel(model);
-            this.selectedModels.remove(match);
-            delete this.previousIndex;
+            this.unselectItem(model);
         }
 
-        chorus.PageEvents.trigger("checked", this.selectedModels);
-        chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
+        this.sendCheckedEvents();
     },
 
     setup: function() {
@@ -53,6 +50,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
 
         this.subscribePageEvent("selectAll", this.selectAll);
         this.subscribePageEvent("selectNone", this.selectNone);
+        this.subscribePageEvent("clear_selection", this.clearSelection);
         this.subscribePageEvent("checked", this.checkSelectedModels);
 
         this.selectedIndex = 0;
@@ -124,6 +122,12 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
     },
 
+    clearSelection: function(model) {
+        this.unselectItem(model);
+        delete this.selectedIndex;
+        this.$(">li").removeClass("selected");
+    },
+
     selectItem: function($target) {
         var $lis = this.$(">li");
         var preSelected = $target.hasClass("selected");
@@ -140,6 +144,15 @@ chorus.views.PageItemList = chorus.views.Base.extend({
             this.selectedIndex = 0;
             this.itemDeselected();
         }
+    },
+
+    unselectItem: function(model) {
+        if(model) {
+            var match = this.findSelectedModel(model);
+            this.selectedModels.remove(match);
+        }
+        delete this.previousIndex;
+        this.sendCheckedEvents();
     },
 
     itemSelected: function(model) {
@@ -168,6 +181,11 @@ chorus.views.PageItemList = chorus.views.Base.extend({
                 this.selectedIndex = index;
             }
         }, this);
+    },
+
+    sendCheckedEvents: function() {
+        chorus.PageEvents.trigger("checked", this.selectedModels);
+        chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
     },
 
     makeListItemView: function(model) {

@@ -27,8 +27,7 @@ module SearchExtensions
       model_context = self
 
       if include? SoftDelete
-        raise "THIS IS NOT YET HANDLED, but Sunspot does allow an array of unless options" if options[:unless]
-        options[:unless] = :deleted?
+        options[:if] = Array.wrap(options[:if]) << lambda { |model| !model.deleted? }
       end
 
       searchable(options, &block) if block_given?

@@ -7,7 +7,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
             description: "it is a food name",
             dbName: "postgres"
         });
-        this.dialog = new chorus.dialogs.DataSourceEdit({ dataSource: this.dataSource });
+        this.dialog = new chorus.dialogs.DataSourceEdit({ model: this.dataSource });
     });
 
     it("should make a copy of the source model", function() {
@@ -92,7 +92,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
         describe('when editing a hdfs data source', function() {
             beforeEach(function() {
                 this.dataSource = rspecFixtures.hdfsDataSource({username: 'user', groupList: 'hadoop'});
-                this.dialog = new chorus.dialogs.DataSourceEdit({ dataSource: this.dataSource });
+                this.dialog = new chorus.dialogs.DataSourceEdit({ model: this.dataSource });
                 this.dialog.render();
             });
 
@@ -135,7 +135,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                     streamUrl: "https://some.thing.com",
                     description: "a gnip data source"
                 });
-                this.dialog = new chorus.dialogs.DataSourceEdit({ dataSource: this.dataSource });
+                this.dialog = new chorus.dialogs.DataSourceEdit({ model: this.dataSource });
 
                 this.dialog.model = new chorus.models.GnipDataSource(this.dialog.model.attributes);
                 this.dialog.render();

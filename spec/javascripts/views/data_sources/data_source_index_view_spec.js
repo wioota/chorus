@@ -195,5 +195,23 @@ describe("chorus.views.DataSourceIndex", function() {
                 expect(this.view.selectedModels.length).toBe(2);
             });
         });
+
+        context("when a hdfsDataSource is deleted", function() {
+            beforeEach(function() {
+                spyOn(this.view, 'postRender');
+                this.dataSource = this.hdfsDataSources.at(0);
+                this.dataSource.destroy();
+                this.server.completeDestroyFor(this.dataSource);
+            });
+
+            it("removes the data source from the collection", function() {
+                expect(this.hdfsDataSources.get(this.dataSource.id)).toBeFalsy();
+                expect(this.view.postRender).toHaveBeenCalled();
+            });
+
+            it("it un-selects the item", function() {
+                expect(this.view.$("li.selected")).not.toExist();
+            });
+        });
     });
 });

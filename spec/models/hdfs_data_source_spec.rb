@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe HdfsDataSource do
-  subject { FactoryGirl.build :hdfs_data_source }
+  subject { hdfs_data_sources(:hadoop) }
 
   it_behaves_like "a notable model" do
     let!(:note) do
@@ -32,6 +32,33 @@ describe HdfsDataSource do
 
     it_should_behave_like 'a model with name validations' do
       let(:factory_name) { :hdfs_data_source }
+    end
+  end
+
+  describe "destroy" do
+    it "enqueues a destroy_entries job" do
+      mock(QC.default_queue).enqueue_if_not_queued("HdfsDataSource.destroy_entries", subject.id)
+      subject.destroy
+    end
+  end
+
+  describe "destroy_entries" do
+    it "destroys hdfs_entries" do
+      subject.destroy
+      entries = subject.hdfs_entries
+      entry_count = entries.count
+      call_count = 0
+      any_instance_of(HdfsEntry) do |entry|
+        stub.proxy(entry).destroy do |result|
+          call_count += 1
+        end
+      end
+      entries.should_not be_empty
+      HdfsDataSource.destroy_entries(subject.id)
+      entries.reload.should be_empty
+
+      #Ensure that we don't delete children multiple times due to a dependent destroy
+      call_count.should == entry_count
     end
   end
 
@@ -171,5 +198,9 @@ describe HdfsDataSource do
   end
 
   it_should_behave_like "taggable models", [:hdfs_data_sources, :hadoop]
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { subject }
+  end
 
 end

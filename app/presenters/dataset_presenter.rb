@@ -10,7 +10,7 @@ class DatasetPresenter < Presenter
         :schema => schema_hash,
         :recent_comments => present(recent_comments, :as_comment => true),
         :comment_count => recent_comments.empty? ? 0 : model.comments.count + model.notes.count,
-        :is_deleted => !model.deleted_at.nil?
+        :is_deleted => model.deleted?
     }.merge(workspace_hash).
         merge(credentials_hash).
         merge(associated_workspaces_hash).

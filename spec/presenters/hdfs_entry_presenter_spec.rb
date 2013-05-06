@@ -39,6 +39,7 @@ describe HdfsEntryPresenter, :type => :view do
         hash[:path].should == "/"
         hash[:last_updated_stamp].should == "2010-10-20T10:11:12Z"
         hash[:size].should == 10
+        hash[:is_deleted].should be_false
         hash[:is_dir].should be_true
         hash[:count].should be(1)
         hash[:tags].should be_an Array
@@ -84,6 +85,7 @@ describe HdfsEntryPresenter, :type => :view do
         hash[:path].should == "/"
         hash[:last_updated_stamp].should == "2010-10-20T10:11:12Z"
         hash[:size].should == 10
+        hash[:is_deleted].should be_false
         hash[:is_dir].should be_false
         hash[:hdfs_data_source][:id].should == hdfs_data_source.id
         hash[:hdfs_data_source][:name].should == hdfs_data_source.name

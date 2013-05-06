@@ -2,6 +2,7 @@ class HdfsEntry < ActiveRecord::Base
   include Stale
   include Notable
   include TaggableBehavior
+  include SoftDelete
 
   attr_accessible :path
 
@@ -10,7 +11,7 @@ class HdfsEntry < ActiveRecord::Base
 
   belongs_to :hdfs_data_source
   belongs_to :parent, :class_name => HdfsEntry, :foreign_key => 'parent_id'
-  has_many :children, :class_name => HdfsEntry, :foreign_key => 'parent_id', :dependent => :destroy
+  has_many :children, :class_name => HdfsEntry, :foreign_key => 'parent_id'
 
   validates_uniqueness_of :path, :scope => :hdfs_data_source_id
   validates_presence_of :hdfs_data_source
@@ -24,7 +25,7 @@ class HdfsEntry < ActiveRecord::Base
     text :parent_name, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
   end
 
-  before_save :build_full_path, :on_create => true
+  before_create :build_full_path
 
   HdfsContentsError = Class.new(StandardError)
 

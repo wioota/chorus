@@ -4,7 +4,8 @@ class HdfsDataSourcePresenter < Presenter
     hash = {
         :id => model.id,
         :name => model.name,
-        :entity_type => model.entity_type_name
+        :entity_type => model.entity_type_name,
+        :is_deleted => model.deleted?
     }
     unless succinct?
       hash.merge!({
@@ -14,7 +15,7 @@ class HdfsDataSourcePresenter < Presenter
           :description => model.description,
           :version => model.version,
           :username => model.username,
-          :group_list => model.group_list,
+          :group_list => model.group_list
       }.merge(owner_hash).
       merge(tags_hash))
     end

@@ -25,4 +25,11 @@ class HdfsDataSourcesController < ApplicationController
     hdfs_data_source = Hdfs::DataSourceRegistrar.update!(hdfs_data_source.id, params[:hdfs_data_source], current_user)
     present hdfs_data_source
   end
+
+  def destroy
+    hdfs_data_source = HdfsDataSource.find(params[:id])
+    authorize! :edit, hdfs_data_source
+    hdfs_data_source.destroy
+    head :ok
+  end
 end

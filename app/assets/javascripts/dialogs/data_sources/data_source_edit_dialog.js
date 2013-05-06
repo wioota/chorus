@@ -8,8 +8,8 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
     },
 
     makeModel: function() {
-        this.sourceModel = this.options.dataSource;
-        this.model = new chorus.models[this.sourceModel.constructorName](this.sourceModel.attributes);
+        this.sourceModel = this.model;
+        this.model = this.model.clone();
     },
 
     setup: function() {

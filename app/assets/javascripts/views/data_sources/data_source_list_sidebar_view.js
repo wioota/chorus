@@ -10,7 +10,9 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
 
     events: {
         "click .edit_tags": 'startEditingTags',
-        "click .remove_credentials": 'launchRemoveCredentialsAlert'
+        "click .remove_credentials": 'launchRemoveCredentialsAlert',
+        "click .edit_data_source": 'editDataSource',
+        "click .delete_data_source": 'deleteDataSource'
     },
 
     setup: function() {
@@ -32,8 +34,6 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
             userCanEditPermissions: this.canEditPermissions(),
             userCanEditDataSource: this.canEditDataSource(),
             dataSourceAccountsCount: dataSourceAccountsCount,
-            editable: true,
-            deleteable: false,
             isOnlineOrOffline: this.dataSource.isOnline() || this.dataSource.isOffline(),
             entityType: this.model.entityType,
             dataSourceProvider: t("data_sources.provider." + this.model.get('entityType')),
@@ -65,6 +65,11 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
             this.registerSubView(this.workspaceUsagesWidget);
             this.workspaceUsagesWidget.setDataSource(this.dataSource);
         }
+    },
+
+    clear: function() {
+        this.resource = this.dataSource = this.model = undefined;
+        this.render();
     },
 
     setDataSource: function(dataSource) {
@@ -117,5 +122,15 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
     launchRemoveCredentialsAlert: function(e){
         e && e.preventDefault();
         new chorus.alerts.DataSourceAccountDelete({dataSource: this.model}).launchModal();
+    },
+
+    editDataSource: function(e) {
+        e.preventDefault();
+        new chorus.dialogs.DataSourceEdit({model: this.model}).launchModal();
+    },
+
+    deleteDataSource: function(e) {
+        e.preventDefault();
+        new chorus.alerts.DataSourceDelete({model: this.model}).launchModal();
     }
 });

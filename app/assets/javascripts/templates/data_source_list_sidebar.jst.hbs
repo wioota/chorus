@@ -44,12 +44,8 @@
             {{/if}}
         {{/ifAny}}
         {{#if userCanEditDataSource}}
-            {{#if editable}}
-                <li><a class="dialog edit_data_source" href="#" data-dialog="DataSourceEdit">{{t "data_sources.sidebar.edit_data_source"}}</a></li>
-            {{/if}}
-            {{#if deleteable}}
-                <li><a class="alert delete_data_source" href="#" data-alert="DataSourceDelete">{{t "data_sources.sidebar.delete_data_source"}}</a></li>
-            {{/if}}
+            <li><a class="dialog edit_data_source" href="#">{{t "data_sources.sidebar.edit_data_source"}}</a></li>
+            <li><a class="alert delete_data_source" href="#">{{t "data_sources.sidebar.delete_data_source"}}</a></li>
         {{/if}}
         {{#if isGreenplum}}
             <li class="workspace_usage_container"></li>

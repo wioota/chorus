@@ -280,14 +280,12 @@ describe("chorus.models.Activity", function() {
                     hdfsEntry: {
                         id: 1234,
                         hdfsDataSource: {id: 1},
-                        path: "/data/test",
                         name: "file.csv"
                     }
                 });
 
                 var hdfsEntry = activity.hdfsEntry();
                 expect(hdfsEntry).toBeA(chorus.models.HdfsEntry);
-                expect(hdfsEntry.getPath()).toBe("/data/test");
                 expect(hdfsEntry.name()).toBe("file.csv");
                 expect(hdfsEntry.get("hdfsDataSource").id).toBe(1);
                 expect(hdfsEntry.get("id")).toBe(1234);

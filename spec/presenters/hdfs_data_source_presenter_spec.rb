@@ -18,6 +18,7 @@ describe HdfsDataSourcePresenter, :type => :view do
       hash.should have_key(:host)
       hash.should have_key(:port)
       hash.should have_key(:id)
+      hash.should have_key(:is_deleted)
       hash.should have_key(:owner)
       hash.should have_key(:description)
       hash.should have_key(:version)

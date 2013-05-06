@@ -10,6 +10,10 @@ class JobScheduler
       QC.enqueue_if_not_queued("CsvFile.delete_old_files!")
     end
 
+    every(24.hours, 'OrphanCleaner.clean') do
+      QC.enqueue_if_not_queued("OrphanCleaner.clean")
+    end
+
     every(ChorusConfig.instance['reindex_search_data_interval_hours'].hours, 'SolrIndexer.refresh_external_data') do
       QC.enqueue_if_not_queued("SolrIndexer.refresh_external_data")
     end
