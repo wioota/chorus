@@ -5,13 +5,9 @@ describe("sinon extensions", function() {
         });
     }
 
-    function itIncludesErrorAndResponse() {
+    function itIncludesError() {
         it("returns an error message in the 'message' field", function() {
             expect(JSON.parse(this.fakeRequest.responseText).errors).toEqual(this.errors);
-        });
-
-        it("includes the response if one is given", function() {
-            expect(JSON.parse(this.fakeRequest.responseText).response).toEqual(this.response);
         });
     }
 
@@ -232,7 +228,7 @@ describe("sinon extensions", function() {
         });
 
         itReturnsStatus(403);
-        itIncludesErrorAndResponse();
+        itIncludesError();
     });
 
     describe("#failUnauthorized", function() {
@@ -241,7 +237,7 @@ describe("sinon extensions", function() {
         });
 
         itReturnsStatus(401);
-        itIncludesErrorAndResponse();
+        itIncludesError();
     });
 
     describe("#failNotFound", function() {
@@ -251,7 +247,7 @@ describe("sinon extensions", function() {
         });
 
         itReturnsStatus(404);
-        itIncludesErrorAndResponse();
+        itIncludesError();
     });
 
     describe("#failUnprocessableEntity", function() {
@@ -260,6 +256,6 @@ describe("sinon extensions", function() {
         });
 
         itReturnsStatus(422);
-        itIncludesErrorAndResponse();
+        itIncludesError();
     });
 });
