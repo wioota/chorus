@@ -787,7 +787,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             "Create Database View": new chorus.dialogs.CreateDatabaseView({ pageModel: this.models.dataset }),
 
             "Edit Data Source": new chorus.dialogs.DataSourceEdit({
-                dataSource: this.models.gpdbDataSource
+                model: this.models.gpdbDataSource
             }),
 
             "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
