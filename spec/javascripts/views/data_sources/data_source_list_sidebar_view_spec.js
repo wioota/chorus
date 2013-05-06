@@ -512,7 +512,6 @@ describe("chorus.views.DataSourceListSidebar", function() {
         it("launches the remove credentials modal", function() {
             this.view.launchRemoveCredentialsAlert();
             expect(this.modalSpy).toHaveModal(chorus.alerts.DataSourceAccountDelete);
-            expect(this.modalSpy.lastModal().pageModel).toBe(this.dataSource);
         });
     });
 

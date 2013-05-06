@@ -8,6 +8,6 @@ chorus.alerts.DataSourceAccountDelete = chorus.alerts.ModelDelete.extend({
 
     makeModel:function () {
         this._super("makeModel", arguments);
-        this.model = this.pageModel.accountForCurrentUser();
+        this.model = this.options.dataSource.accountForCurrentUser();
     }
 });

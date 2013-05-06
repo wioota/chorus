@@ -116,6 +116,6 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
 
     launchRemoveCredentialsAlert: function(e){
         e && e.preventDefault();
-        new chorus.alerts.DataSourceAccountDelete({pageModel: this.model}).launchModal();
+        new chorus.alerts.DataSourceAccountDelete({dataSource: this.model}).launchModal();
     }
 });
