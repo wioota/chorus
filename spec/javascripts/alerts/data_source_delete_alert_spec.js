@@ -34,4 +34,14 @@ describe("chorus.alerts.DataSourceDelete", function() {
             expect(this.alert.additionalContext().text).toMatchTranslation('data_sources.delete.text.gpdb_data_source');
         });
     });
+
+    describe("for an oracle data source", function() {
+        beforeEach(function() {
+            this.alert.model = rspecFixtures.oracleDataSource();
+        });
+
+        it("has the correct text", function() {
+            expect(this.alert.additionalContext().text).toMatchTranslation('data_sources.delete.text.oracle_data_source');
+        });
+    });
 });

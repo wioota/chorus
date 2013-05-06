@@ -82,6 +82,8 @@ resource "Data sources" do
   delete "/data_sources/:id" do
     parameter :id, "Data source id"
 
+    let(:id) { owned_data_source.to_param }
+
     example_request "Delete a data source" do
       status.should == 200
     end

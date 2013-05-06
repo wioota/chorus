@@ -106,6 +106,8 @@ resource "Hdfs" do
   delete "/hdfs_data_sources/:id" do
     parameter :id, "HDFS data source id"
 
+    let(:id) { data_source.to_param }
+
     example_request "Delete a HDFS data source" do
       status.should == 200
     end
