@@ -228,7 +228,7 @@ describe("sinon extensions", function() {
 
     describe("#failForbidden", function() {
         beforeEach(function() {
-            this.fakeRequest.failForbidden(this.errors, this.response);
+            this.fakeRequest.failForbidden(this.errors);
         });
 
         itReturnsStatus(403);
@@ -237,7 +237,7 @@ describe("sinon extensions", function() {
 
     describe("#failUnauthorized", function() {
         beforeEach(function() {
-            this.fakeRequest.failUnauthorized(this.errors, this.response);
+            this.fakeRequest.failUnauthorized(this.errors);
         });
 
         itReturnsStatus(401);
@@ -247,7 +247,7 @@ describe("sinon extensions", function() {
     describe("#failNotFound", function() {
         beforeEach(function() {
             this.fakeRequest = new sinon.FakeXMLHttpRequest();
-            this.fakeRequest.failNotFound(this.errors, this.response);
+            this.fakeRequest.failNotFound(this.errors);
         });
 
         itReturnsStatus(404);
@@ -256,7 +256,7 @@ describe("sinon extensions", function() {
 
     describe("#failUnprocessableEntity", function() {
         beforeEach(function() {
-            this.fakeRequest.failUnprocessableEntity(this.errors, this.response);
+            this.fakeRequest.failUnprocessableEntity(this.errors);
         });
 
         itReturnsStatus(422);

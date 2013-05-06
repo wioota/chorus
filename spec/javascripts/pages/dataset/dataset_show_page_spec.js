@@ -183,7 +183,7 @@ describe("chorus.pages.DatasetShowPage", function () {
             spyOn(Backbone.history, "loadUrl");
 
             this.server.lastFetchFor(this.dataset).failUnprocessableEntity(
-                { record: 'MISSING_DB_OBJECT' }, rspecFixtures.dataset().toJSON());
+                { record: 'MISSING_DB_OBJECT' });
         });
 
         it('stays on the page', function () {

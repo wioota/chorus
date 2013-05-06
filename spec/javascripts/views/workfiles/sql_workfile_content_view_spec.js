@@ -144,8 +144,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         beforeEach(function() {
                             this.spy = jasmine.createSpy();
                             chorus.PageEvents.on("workfile:changed", this.spy);
-                            this.server.lastCreate().failUnprocessableEntity({ record: "it broke" }, {
-                            });
+                            this.server.lastCreate().failUnprocessableEntity({ record: "it broke" });
                         });
 
                         it("triggers file:executionFailed", function() {
@@ -162,7 +161,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                             this.spy = jasmine.createSpy();
                             chorus.PageEvents.on("workfile:changed", this.spy);
                             chorus.PageEvents.trigger.reset();
-                            this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } }, {});
+                            this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                         });
 
                         it("triggers file:executionFailed", function() {

@@ -92,7 +92,9 @@
         },
 
         parseErrors: function(data) {
-            data = this.camelizeKeys(data);
+            if(data && data.errors && data.errors.model_data) {
+                data.errors.modelData = this.camelizeKeys(data.errors.model_data);
+            }
             this.serverErrors = data.errors;
             this.afterParseErrors(data);
         },

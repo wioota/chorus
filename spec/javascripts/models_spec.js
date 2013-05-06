@@ -145,9 +145,7 @@ describe("chorus.models.Base", function() {
                 beforeEach(function() {
                     this.errors = { fields: { a: { BLANK: {} } } };
 
-                    this.server.lastUpdate().failUnprocessableEntity(this.errors, {
-                        foo: "bar"
-                    });
+                    this.server.lastUpdate().failUnprocessableEntity(this.errors);
                 });
 
                 it("returns the error information", function() {
@@ -163,7 +161,7 @@ describe("chorus.models.Base", function() {
                 describe("and then another request succeeds", function() {
                     beforeEach(function() {
                         this.model.save();
-                        this.server.lastUpdate().succeed({foo: "hi"});
+                        this.server.lastUpdate().succeed();
                     });
 
                     it("should trigger the saved event", function() {

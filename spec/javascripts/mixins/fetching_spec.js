@@ -437,9 +437,9 @@ describe("chorus.Mixins.Fetching", function() {
 
             });
 
-            context('when the xhr includes errors and real data', function() {
+            context('when the xhr includes errors with model data', function() {
                 beforeEach(function() {
-                    this.server.lastFetch().failUnprocessableEntity({ record: 'MISSING_DB_OBJECT' }, { attribute_name: 'value' });
+                    this.server.lastFetch().failUnprocessableEntity({ record: 'MISSING_DB_OBJECT', model_data: {attribute_name: 'value' }});
                 });
 
                 it('populates the server errors', function() {
@@ -447,11 +447,7 @@ describe("chorus.Mixins.Fetching", function() {
                 });
 
                 it("includes object data", function() {
-                    expect(this.resource.get('attributeName')).toEqual('value');
-                });
-
-                it('sets loaded on the model', function() {
-                    expect(this.resource.loaded).toBeTruthy();
+                    expect(this.resource.serverErrors.modelData.attributeName).toEqual('value');
                 });
             });
 

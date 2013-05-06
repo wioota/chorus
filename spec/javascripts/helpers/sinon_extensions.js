@@ -199,37 +199,32 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         });
     },
 
-    failNotFound: function(errors, response) {
+    failNotFound: function(errors) {
         return this.respondJson(404, {
-            response: response,
             errors: errors || {}
         });
     },
 
-    failForbidden: function(errors, response) {
+    failForbidden: function(errors) {
         return this.respondJson(403, {
-            response: response,
             errors: errors || {}
         });
     },
 
-    failUnprocessableEntity: function(errors, response) {
+    failUnprocessableEntity: function(errors) {
         return this.respondJson(422, {
-            response: response,
             errors: errors || {}
         });
     },
 
-    failUnauthorized: function(errors, response) {
+    failUnauthorized: function(errors) {
         return this.respondJson(401, {
-            response: response || [],
             errors: errors || {}
         });
     },
 
-    failServerError: function(errors, response) {
+    failServerError: function(errors) {
         return this.respondJson(500, {
-            response: response || [],
             errors: errors || {}
         });
     },

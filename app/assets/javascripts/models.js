@@ -69,13 +69,6 @@ chorus.models = {
                 return attrs;
             },
 
-            afterParseErrors: function(data){
-                if(data.response) {
-                    this.set(data.response);
-                    this.loaded = true;
-                }
-            },
-
             destroy: function(options) {
                 options || (options = {});
                 options.wait = true;
