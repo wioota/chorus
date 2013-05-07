@@ -1,6 +1,5 @@
 class DataSourceAccountAccess < DefaultAccess
   def update?(account)
-    data_source = account.data_source
-    current_user.admin? || !data_source.shared? || data_source.owner_id == account.owner_id
+    current_user.admin? || account.owner == current_user
   end
 end

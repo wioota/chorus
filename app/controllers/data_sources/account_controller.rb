@@ -23,7 +23,8 @@ module DataSources
     def updated_account
       data_source = DataSource.find(params[:data_source_id])
 
-      account = data_source.accounts.find_or_initialize_by_owner_id(current_user.id)
+      account = data_source.account_for_user(current_user) || data_source.accounts.build(:owner => current_user)
+      authorize! :update, account
       account.attributes = params[:account]
 
       authorize! :update, account

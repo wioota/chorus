@@ -3,12 +3,12 @@ require 'spec_helper'
 describe DataSources::AccountController do
   let(:data_source) { data_sources(:owners) }
   let(:user) { users(:default) }
-  let(:owner) { users(:owner) }
-  let(:account) { data_source.account_for_user(owner) }
+  let(:account) { data_source.account_for_user(user) }
 
   describe "#show" do
+    let(:user) { users(:owner) }
     before do
-      log_in owner
+      log_in user
     end
 
     it "returns the current_user's DataSourceAccount for the specified data source" do
@@ -25,7 +25,7 @@ describe DataSources::AccountController do
 
   describe "#create" do
     before do
-      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
       log_in user
     end
 
@@ -42,7 +42,7 @@ describe DataSources::AccountController do
 
     context "when the credentials are invalid" do
       before do
-        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {false} }
+        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { false } }
       end
 
       it "fails" do
@@ -51,13 +51,11 @@ describe DataSources::AccountController do
       end
     end
 
-    context "for a shared accounts data source" do
-      before do
-        data_source.update_attribute :shared, true
-      end
+    context "for a shared data source account" do
+      let(:data_source) { FactoryGirl.create(:gpdb_data_source, {:shared => true, :owner => users(:default)}) }
 
       context "when you are the owner" do
-        let(:user) { owner }
+        let(:user) { data_source.owner }
 
         it "succeeds" do
           post :create, :data_source_id => data_source.id, :db_username => "lenny", :db_password => "secret"
@@ -65,7 +63,23 @@ describe DataSources::AccountController do
         end
       end
 
-      context "when you are not the owner" do
+      context "when you are an admin, but you are not the owner" do
+        let(:user) { users(:admin) }
+
+        it "succeeds" do
+          account.db_username.should_not == "lenny"
+
+          expect do
+            post :create, :data_source_id => data_source.id, :db_username => "lenny", :db_password => "secret"
+          end.not_to change(DataSourceAccount, :count)
+
+          account.reload.db_username.should == "lenny"
+        end
+      end
+
+      context "when you are not the owner, and not an admin" do
+        let(:user) { users(:no_collaborators) }
+
         it "fails" do
           post :create, :data_source_id => data_source.id, :db_username => "lenny", :db_password => "secret"
           response.should be_forbidden
@@ -76,7 +90,7 @@ describe DataSources::AccountController do
 
   describe "#update" do
     before do
-      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
+      any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
       log_in user
     end
 
@@ -92,12 +106,13 @@ describe DataSources::AccountController do
     end
 
     context "for a shared data_source" do
+      let(:data_source) { data_sources(:shared) }
       before do
         data_source.update_attribute :shared, true
       end
 
       context "when you are the owner" do
-        let(:user) { owner }
+        let(:user) { data_source.owner }
 
         it "succeeds" do
           put :update, :data_source_id => data_source.id, :db_username => "changed", :db_password => "changed"
@@ -115,7 +130,7 @@ describe DataSources::AccountController do
 
     context "when credentials are invalid " do
       before do
-        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {false} }
+        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { false } }
       end
 
       it "fails" do
@@ -126,8 +141,10 @@ describe DataSources::AccountController do
   end
 
   describe "#destroy" do
+    before { log_in user }
+
     context "of an unshared account" do
-      before { log_in owner }
+      let(:user) { users(:owner) }
 
       it "succeeds" do
         delete :destroy, :data_source_id => data_source.id
@@ -135,26 +152,28 @@ describe DataSources::AccountController do
       end
 
       it "deletes the current users account for this data_source" do
-        DataSourceAccount.find_by_data_source_id_and_owner_id(data_source.id, owner.id).should_not be_nil
+        DataSourceAccount.find_by_data_source_id_and_owner_id(data_source.id, user.id).should_not be_nil
         delete :destroy, :data_source_id => data_source.id
-        DataSourceAccount.find_by_data_source_id_and_owner_id(data_source.id, owner.id).should be_nil
+        DataSourceAccount.find_by_data_source_id_and_owner_id(data_source.id, user.id).should be_nil
       end
     end
 
     context "of a shared account" do
       let(:data_source) { data_sources(:shared) }
-      let(:admin) { users(:admin) }
 
-      it "does not delete the owner's account" do
-        log_in admin
-        lambda { delete :destroy, :data_source_id => data_source.id }.should_not change { DataSourceAccount.count }
-        response.code.should == "404"
+      context "when the current user is an admin" do
+        let(:user) { users(:admin) }
+        it "does not delete the owner's account" do
+          lambda { delete :destroy, :data_source_id => data_source.id }.should_not change { DataSourceAccount.count }
+          response.code.should == "404"
+        end
       end
 
-      it "does not delete the shared account" do
-        log_in user
-        lambda { delete :destroy, :data_source_id => data_source.id }.should_not change { DataSourceAccount.count }
-        response.code.should == "404"
+      context "when the current user is not the owner and not an admin" do
+        it "does not delete the shared account" do
+          lambda { delete :destroy, :data_source_id => data_source.id }.should_not change { DataSourceAccount.count }
+          response.code.should == "404"
+        end
       end
     end
   end
