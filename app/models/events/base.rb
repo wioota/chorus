@@ -24,7 +24,7 @@ module Events
     serialize :additional_data, JsonHashSerializer
 
     class_attribute :entities_that_get_activities, :target_names, :object_translations
-    attr_accessible :actor, :action, :target1, :target2, :workspace, :additional_data, :as => :create
+    attr_accessible :actor, :action, :target1, :target2, :target3, :workspace, :additional_data, :as => :create
 
     has_many :activities, :foreign_key => :event_id, :dependent => :destroy
     has_many :notifications, :foreign_key => :event_id, :dependent => :destroy
@@ -45,9 +45,10 @@ module Events
     belongs_to :actor, :class_name => 'User'
     belongs_to :target1, :polymorphic => true
     belongs_to :target2, :polymorphic => true
+    belongs_to :target3, :polymorphic => true
     belongs_to :workspace
 
-    [:actor, :workspace, :target1, :target2].each do |method|
+    [:actor, :workspace, :target1, :target2, :target3].each do |method|
       define_method("#{method}_with_deleted") do
         original_method = :"#{method}_without_deleted"
         send(original_method) || try_unscoped(method) { send(original_method, true) }

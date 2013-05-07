@@ -5,7 +5,7 @@ class WorkfilePresenter < Presenter
 
     workfile = {
       :id => model.id,
-      :workspace => present(model.workspace, options.merge(:succinct => options[:list_view])),
+      :workspace => present(model.workspace, options.merge(:succinct => options[:succinct] || options[:list_view])),
       :file_name => model.file_name,
       :file_type => model.content_type,
       :latest_version_id => model.latest_workfile_version_id,

@@ -12,7 +12,7 @@ class SchemaImport < Import
     created_event_class.by(user).add(
       {
         :source_dataset => source,
-        :schema_id => schema.id,
+        :schema => schema,
         :destination_table => to_table,
         :dataset => destination_table,
         :reference_id => id,
@@ -51,7 +51,7 @@ class SchemaImport < Import
       :error_message => error_message,
       :source_dataset => source,
       :dataset => schema.datasets.find_by_name(to_table),
-      :schema_id => schema.id
+      :schema => schema
     )
     Notification.create!(:recipient_id => user.id, :event_id => event.id)
   end

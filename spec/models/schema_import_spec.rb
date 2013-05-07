@@ -100,7 +100,7 @@ describe SchemaImport do
 
     let!(:import_created_event) do
       Events::SchemaImportCreated.by(user).add(
-        :schema_id => sandbox.id,
+        :schema => sandbox,
         :dataset => nil,
         :destination_table => destination_table_name,
         :reference_id => import.id,

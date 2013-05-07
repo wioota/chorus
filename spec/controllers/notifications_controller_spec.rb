@@ -34,6 +34,14 @@ describe NotificationsController do
       decoded_response.length.should == 1
     end
 
+    it "passes the succinct option to the Presenter" do
+      mock_present do |models, view, options|
+        options[:succinct].should be_true
+        options[:activity_stream].should be_true
+      end
+      get :index
+    end
+
     context "when the unread parameter is passed" do
       it "only returns unread notifications" do
         put :read, :notification_ids => [notification1.id]

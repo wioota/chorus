@@ -4,7 +4,7 @@ class NotificationsController < ApplicationController
       includes(:event => Events::Base.activity_stream_eager_load_associations).
       includes(:recipient, :comment)
     notifications = notifications.unread if params['type'] == 'unread'
-    present paginate(notifications)
+    present paginate(notifications), :presenter_options => {:activity_stream => true, :succinct => true}
   end
 
   def read

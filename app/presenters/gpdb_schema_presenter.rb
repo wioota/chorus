@@ -3,14 +3,19 @@ class GpdbSchemaPresenter < Presenter
     hash = {
         :id => model.id,
         :name => model.name,
-        :database => present(model.database, options),
         :dataset_count => model.active_tables_and_views_count,
         :refreshed_at => model.refreshed_at,
-        :entity_type => model.entity_type_name
+        :entity_type => model.entity_type_name,
+        :is_deleted => model.deleted?
     }
     unless succinct?
       hash.merge!({
         :has_credentials => model.accessible_to(current_user)
+      })
+    end
+    unless rendering_activities?
+      hash.merge!({
+          :database => present(model.database, options),
       })
     end
     hash

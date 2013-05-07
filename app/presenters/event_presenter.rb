@@ -9,8 +9,7 @@ class EventPresenter < Presenter
       merge(attachment_hash).
       merge(notification_hash).
       merge(comments_hash).
-      merge(insight_hash).
-      merge(schema_hash)
+      merge(insight_hash)
   end
 
   def simple_hash
@@ -25,22 +24,6 @@ class EventPresenter < Presenter
   end
 
   private
-
-  def schema_hash
-    additional_data = model.additional_data
-
-    if additional_data.include? 'schema_id'
-      schema = Schema.find additional_data['schema_id']
-      return {
-        :schema => {
-          :id => schema.id,
-          :name => schema.name
-        }
-      }
-    end
-
-    {}
-  end
 
   def comments_hash
     {

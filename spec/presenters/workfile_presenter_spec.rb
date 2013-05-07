@@ -30,6 +30,11 @@ describe WorkfilePresenter, :type => :view do
       hash[:workspace].to_hash.should == (WorkspacePresenter.new(workspace, view).presentation_hash)
     end
 
+    it "the workspace presenter does not lose the succinct option" do
+      options[:succinct] = true
+      hash[:workspace].to_hash.should == (WorkspacePresenter.new(workspace, view, :succinct => true).presentation_hash)
+    end
+
     it "uses the succinct user presenter to serialize the owner" do
       hash[:owner].to_hash.should == (UserPresenter.new(user, view, :succinct => true).presentation_hash)
     end

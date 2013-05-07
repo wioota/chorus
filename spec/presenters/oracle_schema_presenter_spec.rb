@@ -17,6 +17,7 @@ describe OracleSchemaPresenter, :type => :view do
       hash[:id].should == schema.id
       hash[:name].should == schema.name
       hash[:dataset_count].should == 2
+      hash[:is_deleted].should == schema.deleted?
       hash[:refreshed_at].should == schema.refreshed_at
       hash[:refreshed_at].should_not be_nil
       hash[:entity_type].should == "oracle_schema"

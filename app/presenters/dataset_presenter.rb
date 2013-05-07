@@ -34,7 +34,7 @@ class DatasetPresenter < Presenter
   end
 
   def schema_hash
-    rendering_activities? ? {:id => model.schema_id, :name => model.schema.name} : present(model.schema, options.merge(:succinct => true))
+    present(model.schema, options)
   end
 
   def thetype
