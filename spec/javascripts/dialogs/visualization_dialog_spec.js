@@ -123,6 +123,8 @@ describe("chorus.dialogs.Visualization", function() {
 
             context("and the task save completes", function() {
                 beforeEach(function() {
+                    chorus.views.ResultsConsole.prototype.initializeDataTable.reset();
+
                     this.server.completeSaveFor(this.dialog.task);
                 });
 
@@ -131,7 +133,7 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("re-draws the result console table", function() {
-                    expect(this.dialog.$(".slick-cell").length).not.toBe(0);
+                    expect(chorus.views.ResultsConsole.prototype.initializeDataTable).toHaveBeenCalled();
                 });
 
                 it("does not hide the filter options", function() {
@@ -169,6 +171,8 @@ describe("chorus.dialogs.Visualization", function() {
         this.modalSpy = stubModals();
         stubDefer();
         stubClEditor();
+
+        spyOn(chorus.views.ResultsConsole.prototype, "initializeDataTable");
         spyOn(chorus.Modal.prototype, "closeModal");
 
         this.dataset = rspecFixtures.workspaceDataset.datasetTable();
@@ -573,6 +577,7 @@ describe("chorus.dialogs.Visualization", function() {
 
         context("when the rows are valid", function() {
             beforeEach(function() {
+                chorus.views.ResultsConsole.prototype.initializeDataTable.reset();
                 this.dialog.launchModal();
                 this.dialog.drawChart();
             });
@@ -649,8 +654,8 @@ describe("chorus.dialogs.Visualization", function() {
                     expect(this.dialog.$(".modal_controls a.hide")).toHaveClass("hidden");
                 });
 
-                it("actually has columns", function() {
-                    expect(this.dialog.$(".data_table .slick-header-column").length).toBeGreaterThan(1);
+                it("renders the data table", function() {
+                    expect(chorus.views.ResultsConsole.prototype.initializeDataTable).toHaveBeenCalled();
                 });
             });
 
@@ -856,7 +861,6 @@ describe("chorus.dialogs.Visualization", function() {
 
         describe("clicking on the 'Show Data Table' link", function() {
             beforeEach(function() {
-                spyOn(this.dialog.resultsConsole, 'initializeDataTable');
                 this.dialog.$(".modal_controls a.show").click();
             });
 
