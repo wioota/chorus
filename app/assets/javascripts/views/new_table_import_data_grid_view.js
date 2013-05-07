@@ -2,6 +2,10 @@ chorus.views.NewTableImportDataGrid = chorus.views.ImportDataGrid.extend({
     constructorName: "NewTableImportDataGrid",
     headerRowHeight: 16,
 
+    setup: function() {
+        this.subscribePageEvent("choice:setType", this.onSelectType);
+    },
+
     customizeHeaderRows: function(columns, columnNames) {
         this.addNameInputsToTopRow(columnNames);
         this.setupDataTypeMenus(columns);
@@ -39,5 +43,30 @@ chorus.views.NewTableImportDataGrid = chorus.views.ImportDataGrid.extend({
             $column.addClass("type");
             $column.addClass(linkMenu.options.chosen);
         });
+    },
+
+    onSelectType: function(data, linkMenu) {
+        var $typeDiv = $(linkMenu.el).closest("div.type");
+        $typeDiv.removeClass("integer float text date time timestamp").addClass(data);
+    },
+
+    getColumnNames: function() {
+        var $names =  this.$(".column_name input:text");
+        var columnNames = _.map($names, function(name, i) {
+            return $names.eq(i).val();
+        });
+        return columnNames;
+    },
+
+    getColumnTypes: function() {
+        var $types = this.$(".slick-headerrow-columns .chosen");
+        var types = _.map($types, function($type, i) {
+            return $types.eq(i).text();
+        });
+        return types;
+    },
+
+    markColumnNameInputAsInvalid: function(index) {
+        this.markInputAsInvalid(this.$(".column_name input").eq(index), t("import.validation.column_name"), true);
     }
 });

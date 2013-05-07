@@ -44,33 +44,55 @@ describe("chorus.views.NewTableImportDataGrid", function() {
             expect($(type)).toHaveClass(this.columns[index].type);
         }, this);
     });
-//
-//    it("has the right data in each cell", function() {
-//        this.dialog.setElement($("#jasmine_content"));
-//        var grid = this.dialog.importDataGrid;
-//        _.each(this.dialog.$(".import_data_grid .column_name"), function(column, i) {
-//            var cells = _.map([0,1,2], function(j){
-//                return grid.getCellNode(j, i);
-//            });
-//
-//            expect(cells.length).toEqual(3);
-//            _.each(cells, function(cell, j) {
-//                expect($(cell)).toContainText("val" + (j + 1) + "." + (i + 1));
-//            });
-//        });
-//    });
-//
-//    describe("selecting a new data type", function() {
-//        beforeEach(function() {
-//            this.$type = this.dialog.$(".type").eq(1);
-//            this.$type.find(".chosen").click();
-//
-//            this.$type.find(".popup_filter li").eq(1).find("a").click();
-//        });
-//
-//        it("changes the type of the column", function() {
-//            expect(this.$type.find(".chosen")).toHaveText("float");
-//            expect(this.$type).toHaveClass("float");
-//        });
-//    });
+
+    it("has the right data in each cell", function() {
+        $("#jasmine_content").append("<div class='foo'></div>");
+        //If you assign the dialog element directly to #jasmine_content, the later teardown will destroy jasmine content
+        this.view.setElement($("#jasmine_content .foo"));
+        var grid = this.view.grid;
+        _.each(this.view.$(".import_data_grid .column_name"), function(column, i) {
+            var cells = _.map([0,1,2], function(j){
+                return grid.getCellNode(j, i);
+            });
+
+            expect(cells.length).toEqual(3);
+            _.each(cells, function(cell, j) {
+                expect($(cell)).toContainText("val" + (j + 1) + "." + (i + 1));
+            });
+        });
+    });
+
+    describe("selecting a new data type", function() {
+        beforeEach(function() {
+            this.$type = this.view.$(".type").eq(1);
+            this.$type.find(".chosen").click();
+
+            this.$type.find(".popup_filter li").eq(1).find("a").click();
+        });
+
+        it("changes the type of the column", function() {
+            expect(this.$type.find(".chosen")).toHaveText("float");
+            expect(this.$type).toHaveClass("float");
+        });
+    });
+
+    describe("#getColumnNames", function() {
+        it("returns an array of the column names extracted from the DOM", function() {
+            expect(this.view.getColumnNames()).toEqual(["col1", "col2", "col3", "col_4", "col_5"]);
+        });
+    });
+
+
+    describe("#getColumnTypes", function(){
+       it("returns an array of the column types extracted from the DOM", function(){
+           expect(this.view.getColumnTypes()).toEqual(["text","text","text","text","text"]);
+       });
+    });
+
+    describe("#markColumnNameInputAsInvalid", function() {
+        it("marks the column name input with the given index as invalid", function() {
+            this.view.markColumnNameInputAsInvalid(2);
+            expect(this.view.$(".column_name input").eq(2)).toHaveClass("has_error");
+        });
+    });
 });

@@ -36,9 +36,10 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
         var columns = csvParser.getColumnOrientedData();
         this.headerColumnNames = _.pluck(columns, "name");
-        this.generatedColumnNames = _.map(columns, function(column, i) { return "column_" + (i + 1); });
+        this.generatedColumnNames = _.map(columns, function(column, i) {
+            return "column_" + (i + 1);
+        });
 
-        this.subscribePageEvent("choice:setType", this.onSelectType);
         this.importDataGrid = new chorus.views.NewTableImportDataGrid();
 
         this.listenTo(this.model, "saved", this.saved);
@@ -56,12 +57,12 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             types: _.pluck(columns, "type")
         }, {silent: true});
 
-        if (this.model.serverErrors) {
+        if(this.model.serverErrors) {
             this.showErrors();
         }
 
         this.$("input.delimiter").prop("checked", false);
-        if (_.contains([",", "\t", ";", " "], this.delimiter)) {
+        if(_.contains([",", "\t", ";", " "], this.delimiter)) {
             this.$("input.delimiter[value='" + this.delimiter + "']").prop("checked", true);
         } else {
             this.$("input#delimiter_other").prop("checked", true);
@@ -101,36 +102,24 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.$("button.submit").stopLoading();
     },
 
-    onSelectType: function(data, linkMenu) {
-        var $typeDiv = $(linkMenu.el).closest("div.type");
-        $typeDiv.removeClass("integer float text date time timestamp").addClass(data);
-    },
-
     storeColumnInfo: function() {
         this.storeColumnNames();
-
-        var $types = this.$(".slick-headerrow-columns .chosen");
-        var types = _.map($types, function($type, i) {
-            return $types.eq(i).text();
-        });
-        this.model.set({types: types}, {silent: true});
+        this.storeColumnTypes();
     },
 
     storeColumnNames: function() {
-        var $names = this.$(".column_name input:text");
-
-        var columnNames;
-        if ($names.length) {
-            columnNames = _.map($names, function(name, i) {
-                return $names.eq(i).val();
-            });
-
-            if (this.model.get("hasHeader")) {
-                this.headerColumnNames = columnNames;
+        var names = this.importDataGrid.getColumnNames();
+        if(names.length) {
+            if(this.model.get("hasHeader")) {
+                this.headerColumnNames = names;
             } else {
-                this.generatedColumnNames = columnNames;
+                this.generatedColumnNames = names;
             }
         }
+    },
+
+    storeColumnTypes: function() {
+        this.model.set({types: this.importDataGrid.getColumnTypes()}, {silent: true});
     },
 
     getColumnNames: function() {
@@ -138,7 +127,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     startImport: function() {
-        if (this.performValidation()) {
+        if(this.performValidation()) {
             this.storeColumnInfo();
             this.updateModel();
 
@@ -146,13 +135,12 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.model.save();
         }
 
-        if (this.model.serverErrors) {
+        if(this.model.serverErrors) {
             this.showErrors();
         }
     },
 
     performValidation: function() {
-        var $names = this.$(".column_name input:text");
         var pattern = chorus.ValidationRegexes.ChorusIdentifier64();
         var allValid = true;
 
@@ -165,11 +153,11 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.markInputAsInvalid($tableName, t("import.validation.toTable.required"), true);
         }
 
-        _.each($names, function(name, i) {
-            var $name = $names.eq(i);
-            if (!$name.val().match(pattern)) {
+        var names = this.importDataGrid.getColumnNames();
+        _.each(names, function(name, i) {
+            if(!name.match(pattern)) {
                 allValid = false;
-                this.markInputAsInvalid($name, t("import.validation.column_name"), true);
+                this.importDataGrid.markColumnNameInputAsInvalid(i);
             }
         }, this);
 
@@ -190,8 +178,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     setHeader: function() {
         this.storeColumnInfo();
         this.updateModel();
-
-        this.render();
     },
 
     focusOtherInputField: function(e) {
@@ -199,7 +185,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     setDelimiter: function(e) {
-        if (e.target.value === "other") {
+        if(e.target.value === "other") {
             this.delimiter = this.$("input[name=custom_delimiter]").val();
             this.other_delimiter = true;
         } else {
