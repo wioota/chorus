@@ -1,6 +1,8 @@
 describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
     beforeEach(function() {
         setLoggedInUser({id: '54321'});
+        spyOn(chorus.views.NewTableImportDataGrid.prototype, "initializeDataGrid");
+
         chorus.page = {};
         chorus.page.workspace = rspecFixtures.workspace({
             sandboxInfo: {
@@ -147,10 +149,8 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
                     expect(request.url).toMatchUrl("/workspaces/" + workspaceId + "/external_tables");
                     expect(request.params()["fake_model[table_name]"]).toBe("hi");
-                    expect(request.params()["fake_model[types][]"]).toEqual(['text','text','text','text','text']);
                     expect(request.params()["fake_model[delimiter]"]).toBe(",");
                     expect(request.params()["fake_model[hdfs_entry_id]"]).toBe("234");
-                    expect(request.params()["fake_model[column_names][]"]).toEqual(['column_1', 'column_2', 'column_3', 'column_4', 'column_5']);
                 });
 
                 context("when the post to import responds with success", function() {
@@ -169,37 +169,6 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                     it("triggers csv_import:started", function() {
                         expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("csv_import:started");
                     });
-                });
-            });
-
-            context("when the server responds with errors", function() {
-                beforeEach(function() {
-                    this.$type = this.dialog.$(".type").eq(1);
-                    this.$type.find(".chosen").click();
-                    this.$type.find(".popup_filter li").eq(3).find("a").click();
-                    this.dialog.$("input[name=tableName]").val("testisgreat").change();
-                    this.dialog.$(".column_name input").eq(0).val("gobbledigook").change();
-
-                    this.dialog.$("button.submit").click();
-                    this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
-                });
-
-                it("has no validation errors", function() {
-                    expect(this.dialog.$(".has_error").length).toBe(0);
-                });
-
-                it("retains column names", function() {
-                    expect(this.dialog.$(".column_name input").eq(0).val()).toBe("gobbledigook");
-                });
-
-                it("retains the table name", function() {
-                    expect(this.dialog.$("input[name=tableName]").val()).toBe("testisgreat");
-                });
-
-                it("retains the data types", function() {
-                    this.$type = this.dialog.$(".type").eq(1);
-                    expect(this.$type.find(".chosen")).toHaveText("date");
-                    expect(this.$type).toHaveClass("date");
                 });
             });
         });

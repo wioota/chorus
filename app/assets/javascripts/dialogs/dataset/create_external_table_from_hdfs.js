@@ -46,12 +46,10 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
     },
 
     updateModel: function() {
-        var $names = this.$(".column_name input:text");
-        var $types = this.$(".data_types .chosen");
-        var tableName = this.$(".directions input:text").val();
-        var columnNames = _.map($names, function(name, i) {
-            var $name = $names.eq(i);
-            return chorus.Mixins.dbHelpers.safePGName($name.val());
+        var names = this.importDataGrid.getColumnNames();
+
+        var columnNames = _.map(names, function(name) {
+            return chorus.Mixins.dbHelpers.safePGName(name);
         });
 
         this.workspaceName = this.$("option:selected").text();
