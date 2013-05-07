@@ -1,4 +1,4 @@
-describe("chorus.views.DataTable", function() {
+describe("chorus.views.DataGrid", function() {
     beforeEach(function() {
         this.task = rspecFixtures.dataPreviewTaskResults({
             columns: [
@@ -14,7 +14,7 @@ describe("chorus.views.DataTable", function() {
             ]
         });
 
-        this.view = new chorus.views.DataTable({ model: this.task });
+        this.view = new chorus.views.DataGrid({ model: this.task });
     });
 
     describe("falsy data", function() {

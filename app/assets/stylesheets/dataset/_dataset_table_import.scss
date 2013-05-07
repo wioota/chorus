@@ -99,7 +99,7 @@ $cell-width: 150px;
         font-size: 12px;
         padding: 0px;
         overflow: visible;
-        z-index: $data-table-column-header-z-index;
+        z-index: $data-grid-column-header-z-index;
 
         .link_menu {
           position: absolute;

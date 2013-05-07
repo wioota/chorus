@@ -141,7 +141,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(this.view.$('.result_table')).toHaveClass("collapsed");
                         expect(this.view.$('.result_table')).not.toHaveClass("minimized");
                         expect(this.view.$('.result_table')).not.toHaveClass("maximized");
-                        expect(this.view.$('.data_table').css("height")).toBe("0px");
+                        expect(this.view.$('.data_grid').css("height")).toBe("0px");
                     });
 
                     it("makes the arrow point down", function() {
@@ -184,10 +184,10 @@ describe("chorus.views.ResultsConsoleView", function() {
 
             function itShowsExecutionResults() {
 
-                it("renders a task data table with the given task", function() {
-                    expect(this.view.dataTable).toBeA(chorus.views.DataTable);
-                    expect(this.view.dataTable.model).toBe(this.task);
-                    expect($(this.view.el)).toContain(this.view.dataTable.el);
+                it("renders a data grid with the given task", function() {
+                    expect(this.view.dataGrid).toBeA(chorus.views.DataGrid);
+                    expect(this.view.dataGrid.model).toBe(this.task);
+                    expect($(this.view.el)).toContain(this.view.dataGrid.el);
                 });
 
                 it("displays the result table", function() {
@@ -195,7 +195,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 });
 
                 it("renders only one data table", function() {
-                    expect(this.view.$(".result_table .data_table").length).toBe(1);
+                    expect(this.view.$(".result_table .data_grid").length).toBe(1);
                 });
 
                 it("shows the control section", function() {
@@ -208,7 +208,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                     });
 
                     it("still renders only one data table", function() {
-                        expect(this.view.$(".result_table .data_table").length).toBe(1);
+                        expect(this.view.$(".result_table .data_grid").length).toBe(1);
                     });
                 });
 
@@ -234,8 +234,8 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 describe("clicking the maximize link", function() {
                     beforeEach(function() {
-                        spyOn(this.view.dataTable, 'resizeGridToResultsConsole');
-                        spyOn(this.view, "getDesiredDataTableHeight").andReturn(777);
+                        spyOn(this.view.dataGrid, 'resizeGridToResultsConsole');
+                        spyOn(this.view, "getDesiredDataGridHeight").andReturn(777);
                         spyOn(this.view, "recalculateScrolling");
                         this.view.$("a.maximize").click();
                     });
@@ -260,19 +260,19 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(this.view.$(".arrow")).not.toHaveClass("down");
                     });
 
-                    it("sets .data_table height to use the full viewport", function() {
-                        expect(this.view.$(".data_table").css("height")).toBe("777px");
+                    it("sets .data_grid height to use the full viewport", function() {
+                        expect(this.view.$(".data_grid").css("height")).toBe("777px");
                     });
 
                     it("resizes the data grid", function() {
-                        expect(this.view.dataTable.resizeGridToResultsConsole).toHaveBeenCalled();
+                        expect(this.view.dataGrid.resizeGridToResultsConsole).toHaveBeenCalled();
                     });
 
                     itCanExpandAndCollapseTheResults("maximized", "minimized");
 
                     describe("clicking the minimize link", function() {
                         beforeEach(function() {
-                            this.view.dataTable.resizeGridToResultsConsole.reset();
+                            this.view.dataGrid.resizeGridToResultsConsole.reset();
                             this.view.recalculateScrolling.reset();
                             this.view.$("a.minimize").click();
                         });
@@ -298,33 +298,33 @@ describe("chorus.views.ResultsConsoleView", function() {
                         });
 
                         it("does not keep the maxmized height", function() {
-                            expect(this.view.$(".data_table").css("height")).not.toBe("777px");
+                            expect(this.view.$(".data_grid").css("height")).not.toBe("777px");
                         });
 
                         it("resizes the data grid", function() {
-                            expect(this.view.dataTable.resizeGridToResultsConsole).toHaveBeenCalled();
+                            expect(this.view.dataGrid.resizeGridToResultsConsole).toHaveBeenCalled();
                         });
                     });
                 });
 
-                describe("getDesiredDataTableHeight", function() {
+                describe("getDesiredDataGridHeight", function() {
                     beforeEach(function() {
-                        this.originalSize = this.view.getDesiredDataTableHeight();
+                        this.originalSize = this.view.getDesiredDataGridHeight();
                     });
 
                     it("incorporates the footerSize passed to the view as a function", function() {
                         spyOn(this.view, "footerSize").andReturn(10);
-                        expect(this.view.getDesiredDataTableHeight()).toBe(this.originalSize - 10);
+                        expect(this.view.getDesiredDataGridHeight()).toBe(this.originalSize - 10);
                     });
 
                     it("takes into account the vertical padding passed into the view", function() {
                         this.view.options.verticalDialogPadding = 20;
-                        expect(this.view.getDesiredDataTableHeight()).toBe(this.originalSize - 20);
+                        expect(this.view.getDesiredDataGridHeight()).toBe(this.originalSize - 20);
                     });
 
                     it("takes into account the bottom gutter", function() {
                         spyOn(this.view, "bottomGutterHeight").andReturn(35);
-                        expect(this.view.getDesiredDataTableHeight()).toBe(this.originalSize - 35);
+                        expect(this.view.getDesiredDataGridHeight()).toBe(this.originalSize - 35);
                     });
                 });
 
@@ -488,7 +488,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                         expect(this.view.$('.result_table')).toHaveClass("collapsed");
                         expect(this.view.$('.result_table')).not.toHaveClass("minimized");
                         expect(this.view.$('.result_table')).not.toHaveClass("maximized");
-                        expect(this.view.$('.data_table').css("height")).toBe("0px");
+                        expect(this.view.$('.data_grid').css("height")).toBe("0px");
                     });
 
                     it("does not have a download link", function() {

@@ -188,7 +188,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         });
     });
 
-    describe("the data table", function() {
+    describe("the data grid", function() {
         it("converts the column names into db friendly format", function() {
             var call = _.last(this.dialog.importDataGrid.initializeDataGrid.calls);
             expect(_.pluck(call.args[0], "name")).toEqual([

@@ -1,6 +1,6 @@
-chorus.views.DataTable = chorus.views.Base.extend({
-    templateName: "data_table",
-    constructorName: "DataTable",
+chorus.views.DataGrid = chorus.views.Base.extend({
+    templateName: "data_grid",
+    constructorName: "DataGrid",
     events: { "click .slick-cell": "selectCell" },
 
     postRender: function() {
@@ -17,7 +17,7 @@ chorus.views.DataTable = chorus.views.Base.extend({
         };
 
         this.grid && this.grid.destroy();
-        this.grid = new Slick.Grid(this.$(".data_grid"), this.rows, columns, options);
+        this.grid = new Slick.Grid(this.$(".grid"), this.rows, columns, options);
         this.grid.onSort.subscribe(_.bind(this.sortFunction, this));
     },
 

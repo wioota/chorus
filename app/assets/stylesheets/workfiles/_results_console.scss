@@ -103,7 +103,7 @@
 
     .expander_button {
         cursor: pointer;
-        background: $data-table-background-color;
+        background: $data-grid-background-color;
         width: 30px;
         height: 15px;
 
@@ -142,16 +142,16 @@
         }
     }
 
-    .minimized .data_table {
+    .minimized .data_grid {
         height: 200px;
         width: 100%;
     }
 
-    .collapsed .data_table {
+    .collapsed .data_grid {
         display: none;
     }
 
-    .maximized .data_table {
+    .maximized .data_grid {
         height: 500px;
         width: 100%;
     }

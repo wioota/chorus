@@ -7,7 +7,7 @@
         "$body-background-color": "#EAEFF6",
         "$body-glow-color ": "#C8DCED",
         "$shaded-background-color": "#E1E5E9",
-        "$data-table-background-color": "#EAEEF2",
+        "$data-grid-background-color": "#EAEEF2",
         "$dialog-background-color": "white",
         "$element-background": "white",
         "$button-background-color ": "white",

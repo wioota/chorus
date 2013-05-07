@@ -45,7 +45,7 @@ describe("chorus.models.WorkfileExecutionTask", function() {
         });
 
         describe("#getRows", function(){
-            it("puts rows into the format data tables expect", function() {
+            it("puts rows into the format data grids expect", function() {
                 expect(this.model.getRows()).toEqual([
                     {0: "1", 1: "president"},
                     {0: "2", 1: "vice president"}

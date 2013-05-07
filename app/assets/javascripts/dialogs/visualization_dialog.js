@@ -9,8 +9,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     events: {
-        "click a.show": "showDataTable",
-        "click a.hide": "hideDataTable",
+        "click a.show": "showDataGrid",
+        "click a.hide": "hideDataGrid",
         "click a.show_options": "showFilterOptions",
         "click a.hide_options": "hideFilterOptions",
         "click button.close_dialog": "closeModal",
@@ -37,7 +37,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     postRender: function() {
-        this.resultsConsole.initializeDataTable(this.task);
+        this.resultsConsole.initializeDataGrid(this.task);
         this.resultsConsole.$('.expander_button').remove();
         this.$('.chart_icon.' + this.type).addClass("selected");
 
@@ -112,7 +112,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     chartRefreshed: function() {
         this.drawChart();
         this.chartUpToDate();
-        this.resultsConsole.initializeDataTable(this.task);
+        this.resultsConsole.initializeDataGrid(this.task);
     },
 
     chartUpToDate: function() {
@@ -225,16 +225,16 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.chartUpToDate();
     },
 
-    showDataTable: function(e) {
+    showDataGrid: function(e) {
         e && e.preventDefault();
         this.$('.results_console').removeClass("hidden");
         this.$(".modal_controls a.hide").removeClass("hidden");
         this.$(".modal_controls a.show").addClass("hidden");
-        this.resultsConsole.initializeDataTable(this.task);
+        this.resultsConsole.initializeDataGrid(this.task);
         this.recalculateScrolling();
     },
 
-    hideDataTable: function(e) {
+    hideDataGrid: function(e) {
         e && e.preventDefault();
         this.$('.results_console').addClass("hidden");
         this.$(".modal_controls a.show").removeClass("hidden");

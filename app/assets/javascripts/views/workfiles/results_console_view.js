@@ -89,7 +89,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     executionSucceeded: function(task) {
-        this.initializeDataTable(task);
+        this.initializeDataGrid(task);
         this.hideSpinner();
 
         if (!task.hasResults()) {
@@ -97,13 +97,13 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         }
     },
 
-    initializeDataTable: function(task) {
-        this.dataTable && this.dataTable.teardown();
-        this.dataTable = new chorus.views.DataTable({model: task});
-        this.registerSubView(this.dataTable);
-        this.$(".result_table").removeClass("hidden").html(this.dataTable.el);
+    initializeDataGrid: function(task) {
+        this.dataGrid && this.dataGrid.teardown();
+        this.dataGrid = new chorus.views.DataGrid({model: task});
+        this.registerSubView(this.dataGrid);
+        this.$(".result_table").removeClass("hidden").html(this.dataGrid.el);
         this.$(".controls").removeClass("hidden");
-        this.dataTable.render();
+        this.dataGrid.render();
         this.minimizeTable();
     },
 
@@ -136,7 +136,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     minimizeTable: function(e) {
         e && e.preventDefault();
-        this.$('.data_table').css("height", "");
+        this.$('.data_grid').css("height", "");
         this.$("a.minimize").addClass("hidden");
         this.$("a.maximize").removeClass("hidden");
         this.$(".controls").removeClass("collapsed");
@@ -148,7 +148,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".bottom_gutter").removeClass("hidden");
         this.$(".arrow").removeClass("down");
         this.$(".arrow").addClass("up");
-        this.dataTable.resizeGridToResultsConsole();
+        this.dataGrid.resizeGridToResultsConsole();
         this.recalculateScrolling();
     },
 
@@ -161,12 +161,12 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".result_table").removeClass("collapsed");
         this.$(".result_table").removeClass("minimized");
         this.$(".result_table").addClass("maximized");
-        this.$(".data_table").css("height", this.getDesiredDataTableHeight());
-        this.dataTable.resizeGridToResultsConsole();
+        this.$(".data_grid").css("height", this.getDesiredDataGridHeight());
+        this.dataGrid.resizeGridToResultsConsole();
         this.recalculateScrolling();
     },
 
-    getDesiredDataTableHeight: function() {
+    getDesiredDataGridHeight: function() {
         var arbitrarySpacing = 2; // to eliminate spurious y-scrollbar
         return $(window).height() - this.distanceFromTopOfWindow() - this.distanceFromBottomOfWindow() - arbitrarySpacing;
     },
@@ -188,7 +188,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     distanceFromTopOfWindow: function() {
-        var distanceFromTopOfDocument = this.$(".data_table").offset().top;
+        var distanceFromTopOfDocument = this.$(".data_grid").offset().top;
         return distanceFromTopOfDocument - $(window).scrollTop();
     },
 
@@ -209,7 +209,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$(".result_table").addClass("collapsed");
         this.$(".result_table").removeClass("minimized");
         this.$(".result_table").removeClass("maximized");
-        this.$(".data_table").css("height", "");
+        this.$(".data_grid").css("height", "");
     },
 
     closeError: function(e) {

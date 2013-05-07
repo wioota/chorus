@@ -123,7 +123,7 @@ describe("chorus.dialogs.Visualization", function() {
 
             context("and the task save completes", function() {
                 beforeEach(function() {
-                    chorus.views.ResultsConsole.prototype.initializeDataTable.reset();
+                    chorus.views.ResultsConsole.prototype.initializeDataGrid.reset();
 
                     this.server.completeSaveFor(this.dialog.task);
                 });
@@ -133,7 +133,7 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("re-draws the result console table", function() {
-                    expect(chorus.views.ResultsConsole.prototype.initializeDataTable).toHaveBeenCalled();
+                    expect(chorus.views.ResultsConsole.prototype.initializeDataGrid).toHaveBeenCalled();
                 });
 
                 it("does not hide the filter options", function() {
@@ -172,7 +172,7 @@ describe("chorus.dialogs.Visualization", function() {
         stubDefer();
         stubClEditor();
 
-        spyOn(chorus.views.ResultsConsole.prototype, "initializeDataTable");
+        spyOn(chorus.views.ResultsConsole.prototype, "initializeDataGrid");
         spyOn(chorus.Modal.prototype, "closeModal");
 
         this.dataset = rspecFixtures.workspaceDataset.datasetTable();
@@ -577,7 +577,7 @@ describe("chorus.dialogs.Visualization", function() {
 
         context("when the rows are valid", function() {
             beforeEach(function() {
-                chorus.views.ResultsConsole.prototype.initializeDataTable.reset();
+                chorus.views.ResultsConsole.prototype.initializeDataGrid.reset();
                 this.dialog.launchModal();
                 this.dialog.drawChart();
             });
@@ -654,8 +654,8 @@ describe("chorus.dialogs.Visualization", function() {
                     expect(this.dialog.$(".modal_controls a.hide")).toHaveClass("hidden");
                 });
 
-                it("renders the data table", function() {
-                    expect(chorus.views.ResultsConsole.prototype.initializeDataTable).toHaveBeenCalled();
+                it("renders the data grid", function() {
+                    expect(chorus.views.ResultsConsole.prototype.initializeDataGrid).toHaveBeenCalled();
                 });
             });
 
@@ -872,8 +872,8 @@ describe("chorus.dialogs.Visualization", function() {
                 expect(this.dialog.resultsConsole.options.enableResize).toBe(true);
             });
 
-            it("initializes a data table", function () {
-                expect(this.dialog.resultsConsole.initializeDataTable).toHaveBeenCalled();
+            it("initializes a data grid", function () {
+                expect(this.dialog.resultsConsole.initializeDataGrid).toHaveBeenCalled();
             });
 
             it("unhides the console", function() {
@@ -893,7 +893,7 @@ describe("chorus.dialogs.Visualization", function() {
                     this.dialog.$(".modal_controls a.hide").click();
                 });
 
-                it("should hide the data table", function() {
+                it("hides the results console", function() {
                     expect(this.dialog.$(".results_console")).toHaveClass("hidden");
                 });
 

@@ -473,7 +473,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
     buildViews: function() {
         return {
-            "Data Table": new chorus.views.DataTable({
+            "Data Grid": new chorus.views.DataGrid({
                 model: this.models.workfileExecutionTask
             }),
 
