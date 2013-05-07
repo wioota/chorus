@@ -8,6 +8,8 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
     events: { "click .slick-cell": "selectCell" },
 
     initializeDataGrid: function(columns, rows, columnNames) {
+        if(this.$(".grid").length < 1) { return; }
+
         var gridCompatibleRows = this.convert2DArrayToArrayOfHashTables(rows);
         var gridCompatibleColumnCells = _.map(columns, function (column, index) {
             return {
@@ -18,19 +20,8 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
             };
         }, this);
 
-        var options = {
-            defaultFormatter: this.cellFormatter,
-            enableColumnReorder: false,
-            enableTextSelectionOnCells: true,
-            syncColumnCellResize: true,
-            showHeaderRow: true,
-            headerRowHeight: this.headerRowHeight,
-            defaultColumnWidth: 130,
-            forceFitColumns: this.forceFitColumns(columns)
-        };
-
         this.grid && this.grid.destroy();
-        this.grid = new Slick.Grid(this.$(".grid"), gridCompatibleRows, gridCompatibleColumnCells, options);
+        this.grid = new Slick.Grid(this.$(".grid"), gridCompatibleRows, gridCompatibleColumnCells, this._slickGridOptions(columns));
         this.scrollHeaderRow();
         this.customizeHeaderRows(columns, columnNames);
         this.$(".slick-column-name").addClass("column_name");
@@ -83,5 +74,18 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
    teardown: function() {
        this.grid && this.grid.destroy();
        this._super("teardown");
-   }
+   },
+
+    _slickGridOptions: function(columns) {
+        return {
+            defaultFormatter: this.cellFormatter,
+            enableColumnReorder: false,
+            enableTextSelectionOnCells: true,
+            syncColumnCellResize: true,
+            showHeaderRow: true,
+            headerRowHeight: this.headerRowHeight,
+            defaultColumnWidth: 130,
+            forceFitColumns: this.forceFitColumns(columns)
+        };
+    }
 });

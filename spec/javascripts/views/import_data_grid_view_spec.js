@@ -18,8 +18,24 @@ describe("chorus.views.ImportDataGrid", function () {
 
         this.view = new chorus.views.ImportDataGrid(this.$element);
         spyOn(this.view, 'forceFitColumns').andCallThrough();
+        spyOn(Slick, "Grid").andCallThrough();
         this.view.render();
         this.view.initializeDataGrid(this.columns, this.rows, this.columnNames);
+    });
+
+    it("initializes SlickGrid", function() {
+       expect(Slick.Grid).toHaveBeenCalled();
+    });
+
+    context("before the parent has rendered", function() {
+        beforeEach(function() {
+           Slick.Grid.reset();
+           this.view.$el.empty();
+            this.view.initializeDataGrid(this.columns, this.rows, this.columnNames);
+        });
+        it("does not initializes SlickGrid", function() {
+            expect(Slick.Grid).not.toHaveBeenCalled();
+        });
     });
 
     describe("force-fitting columns", function () {

@@ -105,6 +105,7 @@ predef:             # Names of predefined global variables - comma-separated str
   - setLoggedInUser
   - unsetLoggedInUser
   - resetBackboneEventSpies
+  - Slick
   - stubView
   - stubDelay
   - stubSetTimeout
