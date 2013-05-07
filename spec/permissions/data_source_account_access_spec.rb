@@ -20,6 +20,15 @@ describe DataSourceAccountAccess do
         end
       end
 
+      context "for the admin" do
+        let(:data_source) { FactoryGirl.create(:gpdb_data_source, :shared => true, :owner => users(:default)) }
+        let(:current_user) { users(:admin) }
+
+        it "is allowed" do
+          data_source_account_access.can?(:update, data_source_account).should be_true
+        end
+      end
+
       context "for others" do
         let(:current_user) { users(:no_collaborators) }
 
