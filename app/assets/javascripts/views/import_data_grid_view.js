@@ -1,5 +1,5 @@
 chorus.views.ImportDataGrid = chorus.views.Base.extend({
-    templateName: "no_template",
+    templateName: "import_data_grid",
     constructorName: "ImportDataGrid",
     additionalClass: "import_data_grid",
     headerRowHeight: 0,
@@ -30,7 +30,7 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
         };
 
         this.grid && this.grid.destroy();
-        this.grid = new Slick.Grid(this.$el, gridCompatibleRows, gridCompatibleColumnCells, options);
+        this.grid = new Slick.Grid(this.$(".grid"), gridCompatibleRows, gridCompatibleColumnCells, options);
         this.scrollHeaderRow();
         this.customizeHeaderRows(columns, columnNames);
         this.$(".slick-column-name").addClass("column_name");

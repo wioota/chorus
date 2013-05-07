@@ -16,7 +16,7 @@ describe("chorus.views.NewTableImportDataGrid", function() {
 
         this.columnNames = ["col1", "col2", "col3", "col_4", "col_5"];
 
-        this.view = new chorus.views.NewTableImportDataGrid(this.$element);
+        this.view = new chorus.views.NewTableImportDataGrid();
         this.view.render();
         this.view.initializeDataGrid(this.columns, this.rows, this.columnNames);
     });
@@ -81,7 +81,6 @@ describe("chorus.views.NewTableImportDataGrid", function() {
             expect(this.view.getColumnNames()).toEqual(["col1", "col2", "col3", "col_4", "col_5"]);
         });
     });
-
 
     describe("#getColumnTypes", function(){
        it("returns an array of the column types extracted from the DOM", function(){

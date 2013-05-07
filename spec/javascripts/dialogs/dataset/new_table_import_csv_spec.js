@@ -154,7 +154,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                     expect(this.dialog.$('input.delimiter:checked').val()).toBe('other');
                 });
 
-                it("reparses the file with z as the separator", function() {
+                it("creates a grid with the right number of z-delimited columns", function() {
                     var call = _.last(this.dialog.importDataGrid.initializeDataGrid.calls);
                     expect(call.args[0].length).toEqual(5);
                 });

@@ -33,18 +33,6 @@
 
 <div class="result_table"></div>
 
-<div class="menu_content hidden">
-    <ul>
-        {{#each destinationColumns}}
-            <li name={{name}}>
-                <div class="check_wrapper"><span class="check hidden"></span></div>
-                <a class="name" href="#" title="{{name}}">{{name}}</a><span class="count"/>
-                <span class="type">{{type}}</span>
-            </li>
-        {{/each}}
-    </ul>
-</div>
-
 <div class="modal_controls">
     <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
     <button type="submit" class="submit" tabindex="99">{{t "dataset.import.table.submit"}}</button>

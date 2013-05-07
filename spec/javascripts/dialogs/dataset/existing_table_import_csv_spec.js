@@ -1,5 +1,8 @@
 describe("chorus.dialogs.ExistingTableImportCSV", function() {
     beforeEach(function() {
+        spyOn(chorus.views.ExistingTableImportDataGrid.prototype, 'initializeDataGrid');
+        spyOn(chorus.views.ExistingTableImportDataGrid.prototype, 'automap');
+
         chorus.page = {};
         chorus.page.workspace = rspecFixtures.workspace({
             sandboxInfo: {
@@ -58,6 +61,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     });
 
     it("has the import button disabled by default", function() {
+        this.dialog.dataGrid.trigger("updatedDestinationCount", {count: 0, total: 5, frequencies: [0,0,0,0,0]});
         expect(this.dialog.$('button.submit')).toBeDisabled();
     });
 
@@ -86,44 +90,49 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         });
     });
 
-    function hasRightSeparator(separator) {
-        return function() {
-            beforeEach(function() {
-                this.csvOptions = {
-                    contents: [
-                        "COL1" + separator + "col2" + separator + "col3" + separator + "col_4" + separator + "Col_5",
-                        "val1.1" + separator + "val1.2" + separator + "val1.3" + separator + "val1.4" + separator + "val1.5",
-                        "val2.1" + separator + "val2.2" + separator + "val2.3" + separator + "val2.4" + separator + "val2.5",
-                        "val3.1" + separator + "val3.2" + separator + "val3.3" + separator + "val3.4" + separator + "val3.5"
-                    ],
-                    tableName: 'existing_table'
-                };
 
-                this.dialog = new chorus.dialogs.ExistingTableImportCSV({model: this.model, csvOptions: this.csvOptions, datasetId: "dat-id"});
-                this.server.completeFetchFor(this.dataset);
-                this.dialog.render();
+    describe("separators", function() {
+        function hasRightSeparator(separator) {
+            return function() {
+                beforeEach(function() {
+                    this.csvOptions = {
+                        contents: [
+                            "COL1" + separator + "col2" + separator + "col3" + separator + "col_4" + separator + "Col_5",
+                            "val1.1" + separator + "val1.2" + separator + "val1.3" + separator + "val1.4" + separator + "val1.5",
+                            "val2.1" + separator + "val2.2" + separator + "val2.3" + separator + "val2.4" + separator + "val2.5",
+                            "val3.1" + separator + "val3.2" + separator + "val3.3" + separator + "val3.4" + separator + "val3.5"
+                        ],
+                        tableName: 'existing_table'
+                    };
 
-                this.dialog.$("input.delimiter[value='" + separator + "']").click();
-            });
+                    this.dialog.teardown();
+                    //If you don't tear down the old dialog, spying on function calls becomes tricky later
+                    this.dialog = new chorus.dialogs.ExistingTableImportCSV({model: this.model, csvOptions: this.csvOptions, datasetId: "dat-id"});
+                    this.server.completeFetchFor(this.dataset);
+                    this.dialog.render();
 
-            it("has " + separator + " as separator", function() {
-                expect(this.dialog.$('input.delimiter:checked').val()).toBe(separator);
-            });
+                    this.dialog.$("input.delimiter[value='" + separator + "']").click();
 
-            it("reparses the file with " + separator + " as the separator", function() {
-                expect(this.dialog.$(".import_data_grid .column_name").length).toEqual(5);
-            });
+                });
 
-            it("updates the total columns in the progress section", function() {
-                expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", { count: 0, total: 5 });
-            });
-        };
-    }
+                it("has " + separator + " as separator", function() {
+                    expect(this.dialog.$('input.delimiter:checked').val()).toBe(separator);
+                });
 
-    describe("selecting the 'tab' separator", hasRightSeparator('\t'));
-    describe("selecting the 'comma' separator", hasRightSeparator(','));
-    describe("selecting the 'semicolon' separator", hasRightSeparator(';'));
-    describe("selecting the 'space' separator", hasRightSeparator(' '));
+                it("reparses the file with " + separator + " as the separator", function() {
+                    this.dialog.render();
+                    this.dialog.dataGrid.initializeDataGrid.reset();
+                    this.dialog.$("input.delimiter[value='" + separator + "']").click();
+                    var call = _.last(this.dialog.dataGrid.initializeDataGrid.calls);
+                    expect(call.args[0].length).toEqual(5);
+                });
+            };
+        }
+        describe("selecting the 'tab' separator", hasRightSeparator('\t'));
+        describe("selecting the 'comma' separator", hasRightSeparator(','));
+        describe("selecting the 'semicolon' separator", hasRightSeparator(';'));
+        describe("selecting the 'space' separator", hasRightSeparator(' '));
+    });
 
     describe("changing the separator", function() {
         beforeEach(function() {
@@ -195,7 +204,8 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
                 });
 
                 it("reparses the file with z as the separator", function() {
-                    expect(this.dialog.$(".import_data_grid .column_name").length).toEqual(5);
+                    var call = _.last(this.dialog.dataGrid.initializeDataGrid.calls);
+                    expect(call.args[0].length).toEqual(5);
                 });
             });
         });
@@ -209,6 +219,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     });
 
     it("has a progress tracker", function() {
+        this.dialog.dataGrid.trigger("updatedDestinationCount", {count: 0, total: 5, frequencies: [0,0,0,0,0]});
         expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 0, total: 5});
     });
 
@@ -221,19 +232,8 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             this.dialog.$("a.automap").click();
         });
 
-        it("selects destination columns in the dataset's DDL order", function() {
-            var columnNameLinks = this.dialog.$(".column_mapping a");
-            expect(columnNameLinks.eq(0)).toHaveText("col1");
-            expect(columnNameLinks.eq(1)).toHaveText("col2");
-            expect(columnNameLinks.eq(2)).toHaveText("col3");
-            expect(columnNameLinks.eq(3)).toHaveText("col4");
-            expect(columnNameLinks.eq(4)).toHaveText("col5");
-
-            expect(columnNameLinks).not.toHaveClass("selection_conflict");
-        });
-
         it("displays the correct progress text", function() {
-            expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 5, total: 5});
+            expect(this.dialog.dataGrid.automap).toHaveBeenCalled();
         });
     });
 
@@ -241,178 +241,14 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         expect(this.dialog.$("#hasHeader")).toBeChecked();
     });
 
-    describe("the data table", function() {
-        it('shows a mapping selector for each of the columns in the csv', function(){
-            var $columnMaps = this.dialog.$(".import_data_grid .column_mapping");
-            expect($columnMaps.length).toEqual(5);
+    describe("the data grid subview", function() {
+        it("is initialized with destination columns");
 
-            _.each($columnMaps, function(el) {
-                expect($(el).text()).toContainTranslation("dataset.import.table.existing.map_to");
-                expect($(el).find("a").text()).toContainTranslation("dataset.import.table.existing.select_one");
-                expect($(el).find("a")).toHaveClass("selection_conflict");
-            });
-        });
+        it("is initialized with source columns and rows");
 
-        it("converts the column names into db friendly format", function() {
-            var $columnNames = this.dialog.$(".import_data_grid .column_name");
-            expect($columnNames.eq(0).text()).toBe("col1");
-            expect($columnNames.eq(1).text()).toBe("col2");
-            expect($columnNames.eq(2).text()).toBe("col3");
-            expect($columnNames.eq(3).text()).toBe("col_4");
-            expect($columnNames.eq(4).text()).toBe("col_5");
-        });
-
-        it("has the right data in each cell", function() {
-            $("#jasmine_content").append("<div class='foo'></div>");
-            //If you assign the dialog element directly to #jasmine_content, the later teardown will destroy jasmine content
-            this.dialog.setElement($("#jasmine_content .foo"));
-            var grid = this.dialog.dataGrid;
-            _.each(this.dialog.$(" .import_data_grid .column_name"), function(column, i) {
-                var cells = _.map([0,1,2,4], function(j){
-                    return grid.getCellNode(j, i);
-                });
-
-                expect(cells.length).toEqual(3);
-                _.each(cells, function(cell, j) {
-                    expect($(cell)).toContainText("val" + (j + 1) + "." + (i + 1));
-                });
-            });
-        });
-
-        describe("choosing the mapping for a column in the csv", function() {
-            var menuLinks, menus;
-
-            beforeEach(function() {
-                menuLinks = this.dialog.$(".column_mapping a");
-                menuLinks.click(); // just to initialize all qtips
-                menus = this.qtip.find("ul");
-            });
-
-            it("shows the destination columns and their types", function() {
-                expect(menus.eq(0).find("li").length).toBe(6);
-                _.each(menus.eq(0).find("li"), function(li, i) {
-                    var $li = $(li);
-                    var type = chorus.models.DatabaseColumn.humanTypeMap[this.columns[i].typeCategory];
-                    expect($li.find("a")).toContainText("col" + (i + 1));
-                    expect($li.find(".type")).toContainText(type);
-                }, this);
-            });
-
-            context("selecting a destination column", function() {
-                beforeEach(function() {
-                    menus.eq(0).find("li:eq(1) a").click();
-                });
-
-                function itSelectsDestinationColumn(sourceIndex, destinationIndex, destinationName, options) {
-                    it("shows the right destination column as selected", function() {
-                        expect(menuLinks.eq(sourceIndex)).toHaveText(destinationName);
-
-                        var menu = menus.eq(sourceIndex);
-                        expect(menu.find(".check").not(".hidden").length).toBe(1);
-                        expect(menu.find(".name.selected").length).toBe(1);
-                        var selectedLi = menu.find("li[name=" + destinationName + "]");
-                        expect(selectedLi.find(".check")).not.toHaveClass("hidden");
-                        expect(selectedLi.find(".name")).toHaveClass("selected");
-                    });
-
-                    if (options && options.conflict) {
-                        it("marks that source column as having a selection conflict", function() {
-                            expect(menuLinks.eq(sourceIndex)).not.toHaveClass("selected");
-                            expect(menuLinks.eq(sourceIndex)).toHaveClass("selection_conflict");
-                        });
-                    } else {
-                        it("marks that source column as having been mapped", function() {
-                            expect(menuLinks.eq(sourceIndex)).toHaveClass("selected");
-                            expect(menuLinks.eq(sourceIndex)).not.toHaveClass("selection_conflict");
-                        });
-                    }
-                }
-
-                function itHasSelectedCounts(counts) {
-                    it("updates the counts in all of the menus", function() {
-                        _.each(menus, function(menu) {
-                            _.each($(menu).find(".count"), function(el, index) {
-                                var count = counts[index];
-                                if (count > 0) {
-                                    expect($(el).text()).toContainText("(" + count + ")");
-                                }
-                            });
-                        });
-                    });
-                }
-
-                itSelectsDestinationColumn(0, 1, "col2");
-                itHasSelectedCounts([0, 1, 0, 0, 0]);
-
-                it("does not update the text of a different destination column link", function() {
-                    expect(menuLinks.eq(1)).toContainTranslation("dataset.import.table.existing.select_one");
-                    expect(menuLinks.eq(1)).not.toHaveClass("selected");
-                    expect(menuLinks.eq(1)).toHaveClass("selection_conflict");
-                });
-
-                it("updates the progress tracker", function() {
-                    expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 1, total: 5});
-                });
-
-                it("keeps the import button disabled", function() {
-                    expect(this.dialog.$('button.submit')).toBeDisabled();
-                });
-
-                context("choosing the same destination column again", function() {
-                    beforeEach(function() {
-                        menus.eq(0).find("li:eq(1) a").click();
-                    });
-
-                    itSelectsDestinationColumn(0, 1, "col2");
-                    itHasSelectedCounts([0, 1, 0, 0, 0]);
-
-                    it("does not double-count the column", function() {
-                        expect(menus.eq(0).find("li:eq(1) .count")).toContainText("(1)");
-                        expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 1, total: 5});
-                    });
-                });
-
-                context("when choosing a different destination column for the same source column", function() {
-                    beforeEach(function() {
-                        menus.eq(0).find("li:eq(2) a").click();
-                    });
-
-                    itSelectsDestinationColumn(0, 2, "col3");
-                    itHasSelectedCounts([0, 0, 1, 0, 0]);
-                });
-
-                context("when mapping another source column to the same destination column", function() {
-                    beforeEach(function() {
-                        menus.eq(1).find("li:eq(1) a").click();
-                    });
-
-                    itSelectsDestinationColumn(0, 1, "col2", { conflict: true });
-                    itSelectsDestinationColumn(1, 1, "col2", { conflict: true });
-                    itHasSelectedCounts([0, 2, 0, 0, 0]);
-
-                    it("updates the progress tracker", function() {
-                        expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 2, total: 5});
-                    });
-                });
-
-                context("when all source columns but one are mapped", function() {
-                    beforeEach(function() {
-                        for (var i = 0; i < 4; i++) {
-                            menus.eq(i).find("li a").eq(i).click();
-                        }
-                    });
-
-                    itHasSelectedCounts([1, 1, 1, 1, 0]);
-
-                    it("the last unselected column map is still displayed with red", function() {
-                        expect(menuLinks.eq(0)).toHaveClass("selected");
-                        expect(menuLinks.eq(1)).toHaveClass("selected");
-                        expect(menuLinks.eq(2)).toHaveClass("selected");
-                        expect(menuLinks.eq(3)).toHaveClass("selected");
-                        expect(menuLinks.eq(4)).toHaveClass("selection_conflict");
-                    });
-                });
-            });
+        it("updates the column count when destination count changes", function() {
+            this.dialog.dataGrid.trigger("updatedDestinationCount", {count: 23, total: 81});
+            expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", { count: 23, total: 81 });
         });
     });
 
@@ -453,7 +289,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         });
     });
 
-    describe("when all columns have been mapped", function() {
+    context("when all columns have been mapped", function() {
         beforeEach(function() {
             spyOn(this.dialog, "closeModal");
             this.expectedColumnNames = [];
@@ -482,6 +318,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
         describe("clicking the import button", function() {
             beforeEach(function() {
+                this.dialog.dataGrid.columnMapping = this.expectedColumnNames;
                 this.dialog.$("button.submit").click();
             });
 
@@ -541,8 +378,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
         describe("and then double mapping a destination column", function() {
             beforeEach(function() {
-                this.dialog.$(".column_mapping:eq(0)").click();
-                this.qtip.find(".qtip:last .ui-tooltip-content li:eq(1) a").click();
+                this.dialog.dataGrid.trigger("updatedDestinationCount", {count: 5, total: 5, frequencies: [1,2,0,1,1]});
             });
             it("disables the import button", function() {
                 expect(this.dialog.$('button.submit')).toBeDisabled();
