@@ -1,6 +1,6 @@
 class RenameOnlineToState < ActiveRecord::Migration
   class MigrationInstance < ActiveRecord::Base
-    set_table_name :gpdb_instances
+    self.table_name = :gpdb_instances
   end
 
   def up

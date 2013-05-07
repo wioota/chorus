@@ -1,6 +1,6 @@
 class AddApiKeys < ActiveRecord::Migration
   class MigrationUser < ActiveRecord::Base
-    set_table_name :users
+    self.table_name = :users
   end
 
   def up
