@@ -9,6 +9,10 @@ class OracleSchema < Schema
 
   validates :data_source, :presence => true
 
+  def self.destroy_schemas(data_source_id)
+    OracleSchema.where(:parent_id => data_source_id).destroy_all
+  end
+
   def class_for_type(type)
     type == 't' ? OracleTable : OracleView
   end

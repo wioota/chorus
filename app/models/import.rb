@@ -31,6 +31,10 @@ class Import < ActiveRecord::Base
     nil
   end
 
+  def self.unfinished
+    where(:finished_at => nil)
+  end
+
   def create_import_event
     raise "implement me!"
   end

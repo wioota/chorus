@@ -444,6 +444,27 @@ describe HdfsEntry do
     end
   end
 
+  describe "destroy_entries" do
+    it "destroys entries for given data source id" do
+      data_source = hdfs_data_sources(:hadoop)
+      data_source.destroy
+      entries = data_source.hdfs_entries
+      entry_count = entries.count
+      call_count = 0
+      any_instance_of(HdfsEntry) do |entry|
+        stub.proxy(entry).destroy do |result|
+          call_count += 1
+        end
+      end
+      entries.should_not be_empty
+      HdfsEntry.destroy_entries(data_source.id)
+      entries.reload.should be_empty
+
+      #Ensure that we don't delete children multiple times due to a dependent destroy
+      call_count.should == entry_count
+    end
+  end
+
   it_behaves_like 'a soft deletable model' do
     let(:model) { hdfs_entries(:hdfs_file) }
   end

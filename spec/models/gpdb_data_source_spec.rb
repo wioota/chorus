@@ -246,16 +246,11 @@ describe GpdbDataSource do
   end
 
   describe "#destroy" do
-    let(:data_source) { data_sources(:owners) }
+    let(:data_source) { data_sources(:default) }
 
-    it "destroys dependent databases" do
-      databases = data_source.databases
-      databases.length.should > 0
-
+    it "enqueues a destroy_databases job" do
+      mock(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.destroy_databases", data_source.id)
       data_source.destroy
-      databases.each do |database|
-        GpdbDatabase.find_by_id(database.id).should be_nil
-      end
     end
   end
 

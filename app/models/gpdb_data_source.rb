@@ -1,8 +1,10 @@
 class GpdbDataSource < DataSource
-  has_many :databases, :class_name => 'GpdbDatabase', :dependent => :destroy, :foreign_key => "data_source_id"
+  has_many :databases, :class_name => 'GpdbDatabase', :foreign_key => "data_source_id"
   has_many :datasets, :through => :schemas
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
+
+  after_destroy :enqueue_destroy_databases
 
   def self.create_for_user(user, data_source_hash)
     user.gpdb_data_sources.create!(data_source_hash, :as => :create)
@@ -98,5 +100,9 @@ class GpdbDataSource < DataSource
 
   def connection_class
     GreenplumConnection
+  end
+
+  def enqueue_destroy_databases
+    QC.enqueue_if_not_queued("GpdbDatabase.destroy_databases", id)
   end
 end

@@ -8,7 +8,11 @@ class GpdbSchema < Schema
     super.where("type != 'ChorusView'")
   end
 
+  #this must happen before we nullify the sandbox_id on workspaces
+  before_destroy :destroy_import_schedules
+
   has_many :workspaces, :foreign_key => :sandbox_id, :dependent => :nullify
+  has_many :import_schedules, :through => :workspaces
   has_many :imports, class_name: 'SchemaImport', foreign_key: 'schema_id'
 
   has_many :workfiles_as_execution_schema, :class_name => 'Workfile', :foreign_key => :execution_schema_id, :dependent => :nullify
@@ -20,6 +24,7 @@ class GpdbSchema < Schema
   delegate :data_source, :account_for_user!, :to => :database
 
   before_save :mark_schemas_as_stale
+  before_destroy :cancel_imports
 
   def stored_functions(account)
     results = connect_with(account).functions
@@ -70,6 +75,18 @@ class GpdbSchema < Schema
       datasets.each do |dataset|
         dataset.mark_stale! unless dataset.type == "ChorusView"
       end
+    end
+  end
+
+  def cancel_imports
+    imports.unfinished.each do |import|
+      import.cancel(false, "Source/Destination of this import was deleted")
+    end
+  end
+
+  def destroy_import_schedules
+    import_schedules.each do |schedule|
+      schedule.destroy
     end
   end
 end

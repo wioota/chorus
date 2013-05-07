@@ -34,6 +34,9 @@ class Dataset < ActiveRecord::Base
                                {:type => :integer, :name => :data_source_account_ids, :options => {:multiple => true}},
                                {:type => :integer, :name => :found_in_workspace_id, :options => {:multiple => true}}
                            ]
+
+  after_destroy :cancel_imports
+
   attr_accessor :highlighted_attributes, :search_result_notes, :skip_search_index
   attr_accessible :name
 
@@ -177,5 +180,13 @@ class Dataset < ActiveRecord::Base
 
   def associable?
     raise NotImplementedError
+  end
+
+  private
+
+  def cancel_imports
+    imports.unfinished.each do |import|
+      import.cancel(false, "Source/Destination of this import was deleted")
+    end
   end
 end

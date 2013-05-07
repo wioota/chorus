@@ -7,7 +7,7 @@ class DataSourceAccount < ActiveRecord::Base
 
   attr_encrypted :db_password, :encryptor => ChorusEncryptor, :encrypt_method => :encrypt_password, :decrypt_method => :decrypt_password, :encode => false
 
-  has_many :data_source_account_permissions, dependent: :destroy
+  has_many :data_source_account_permissions, :dependent => :destroy
   has_many :accesseds, :through => :data_source_account_permissions
   has_many :gpdb_databases, :through => :data_source_account_permissions, :source => :accessed,
            :conditions => "data_source_account_permissions.accessed_type = 'GpdbDatabase'"

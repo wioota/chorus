@@ -14,6 +14,14 @@ describe OracleDataSource do
     end
   end
 
+  describe "destroy" do
+    it "enqueues a destroy_schemas job" do
+      data_source = data_sources(:oracle)
+      mock(QC.default_queue).enqueue_if_not_queued("OracleSchema.destroy_schemas", data_source.id)
+      data_source.destroy
+    end
+  end
+
   describe "owner_account" do
     it "is created automatically" do
       data_source = FactoryGirl.build(:oracle_data_source, :owner_account => nil)

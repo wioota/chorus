@@ -29,6 +29,13 @@ class HdfsEntry < ActiveRecord::Base
 
   HdfsContentsError = Class.new(StandardError)
 
+  def self.destroy_entries(data_source_id)
+    # Don't use dependent => destroy because it pulls them all into memory
+    HdfsEntry.where(:hdfs_data_source_id => data_source_id).find_each do |entry|
+      entry.destroy
+    end
+  end
+
   def name
     File.basename(path)
   end

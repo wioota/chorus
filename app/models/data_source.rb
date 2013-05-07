@@ -142,7 +142,7 @@ class DataSource < ActiveRecord::Base
   end
 
   def refresh_databases_later
-    QC.enqueue_if_not_queued('DataSource.refresh_databases', id)
+    QC.enqueue_if_not_queued('DataSource.refresh_databases', id) unless being_destroyed?
   end
 
   def solr_reindex_later

@@ -111,6 +111,9 @@ describe ImportExecutor do
 
     context "where the import source dataset has been deleted" do
       before do
+        any_instance_of(GreenplumConnection) do |data_source|
+          stub(data_source).running? { false }
+        end
         source_dataset.destroy
         import.reload # reload the deleted source dataset
       end
@@ -128,13 +131,8 @@ describe ImportExecutor do
 
       it "creates a WorkspaceImportFailed" do
         expect {
-          expect {
-            copier_start
-          }.to raise_error error_message
-        }.to change(Events::WorkspaceImportFailed, :count).by(1)
-
-        event = Events::WorkspaceImportFailed.last
-        event.error_message.should == error_message
+          copier_start
+        }.to raise_error error_message
       end
     end
 

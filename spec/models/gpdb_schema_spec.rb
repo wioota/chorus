@@ -56,6 +56,12 @@ describe GpdbSchema do
     end
 
     describe "cascading deletes" do
+      before do
+        any_instance_of(GreenplumConnection) do |data_source|
+          stub(data_source).running? { false }
+        end
+      end
+
       it "deletes its datasets when it is destroyed" do
         schema = schemas(:default)
 
@@ -264,16 +270,10 @@ describe GpdbSchema do
   describe "#destroy" do
     let(:schema) { schemas(:default) }
 
-    it "should not delete the schema entry" do
-      schema.destroy
-      expect {
-        schema.reload
-      }.to_not raise_error(Exception)
-    end
-
-    it "should update the deleted_at field" do
-      schema.destroy
-      schema.reload.deleted_at.should_not be_nil
+    before do
+      any_instance_of(GreenplumConnection) do |connection|
+        stub(connection).running? { false }
+      end
     end
 
     it "destroys dependent datasets" do
@@ -304,6 +304,27 @@ describe GpdbSchema do
       workfiles.each do |workfile|
         workfile.reload.execution_schema_id.should be_nil
       end
+    end
+
+    it "cancels any running imports" do
+      unfinished_imports = schema.imports.unfinished
+      stub(schema.imports).unfinished { unfinished_imports }
+      unfinished_imports.should_not be_empty
+      unfinished_imports.each do |import|
+        mock(import).cancel(false, "Source/Destination of this import was deleted")
+      end
+      schema.destroy
+    end
+
+    it "destroys import schedules from associated workspaces" do
+      schedule = import_schedules(:default)
+      schedule.source_dataset = datasets(:other_table)
+      schedule.save(:validate => false)
+      schema = schedule.workspace.sandbox
+      schedule.source_dataset.schema.should_not == schema
+
+      schema.destroy
+      ImportSchedule.find_by_id(schedule.id).should be_nil
     end
   end
 

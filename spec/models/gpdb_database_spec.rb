@@ -213,6 +213,12 @@ describe GpdbDatabase do
   describe "#destroy" do
     let(:database) { gpdb_databases(:default) }
 
+    before do
+      any_instance_of(GreenplumConnection) do |data_source|
+        stub(data_source).running? { false }
+      end
+    end
+
     it "destroys dependent schemas" do
       schemas = database.schemas
       schemas.length.should > 0
@@ -233,6 +239,17 @@ describe GpdbDatabase do
       data_source_accounts.each do |account|
         DataSourceAccount.find_by_id(account.id).should_not be_nil
       end
+    end
+  end
+
+  describe "destroy_databases" do
+    it "destroys databases for given data source id" do
+      data_source = data_sources(:shared)
+      data_source.destroy
+      databases = data_source.databases
+      databases.should_not be_empty
+      GpdbDatabase.destroy_databases(data_source.id)
+      databases.reload.should be_empty
     end
   end
 

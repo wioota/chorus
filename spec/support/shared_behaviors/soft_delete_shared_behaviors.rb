@@ -1,4 +1,9 @@
 shared_examples_for 'a soft deletable model' do
+  before do
+    any_instance_of(GreenplumConnection) do |data_source|
+      stub(data_source).running? { false }
+    end
+  end
 
   context 'before deletion' do
     it 'has a nil deleted_at' do

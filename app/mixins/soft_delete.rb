@@ -7,6 +7,7 @@ module SoftDelete
   end
 
   def destroy
+    @being_destroyed = true
     run_callbacks(:destroy) do
       self.deleted_at = Time.current.utc
       save(:validate => false)
@@ -16,6 +17,10 @@ module SoftDelete
 
   def deleted?
     deleted_at.present?
+  end
+
+  def being_destroyed?
+    @being_destroyed
   end
 
   module ClassMethods

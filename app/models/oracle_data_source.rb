@@ -1,5 +1,7 @@
 class OracleDataSource < DataSource
-  has_many :schemas, :as => :parent, :class_name => 'OracleSchema', :dependent => :destroy
+  has_many :schemas, :as => :parent, :class_name => 'OracleSchema'
+
+  after_destroy :enqueue_destroy_schemas
 
   def self.create_for_user(user, params)
     user.oracle_data_sources.create!(params) do |data_source|
@@ -49,6 +51,10 @@ class OracleDataSource < DataSource
       Chorus.log_error "Error refreshing Oracle Schema #{e.message}"
     end
     schema_permissions
+  end
+
+  def enqueue_destroy_schemas
+    QC.enqueue_if_not_queued("OracleSchema.destroy_schemas", id)
   end
 
   def connection_class

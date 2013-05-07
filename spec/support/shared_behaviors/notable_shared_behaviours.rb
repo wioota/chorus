@@ -6,6 +6,12 @@ shared_examples_for "a notable model" do
   end
 
   context "when it is destroyed" do
+    before do
+      any_instance_of(GreenplumConnection) do |data_source|
+        stub(data_source).running? { false }
+      end
+    end
+
     it "removes the associated notes from the Solr index" do
       stub(Sunspot).remove
       mock(Sunspot).remove(satisfy {|arg|

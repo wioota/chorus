@@ -59,6 +59,12 @@ class GpdbDatabase < ActiveRecord::Base
     refresh(*args)
   end
 
+  def self.destroy_databases(data_source_id)
+    GpdbDatabase.where(:data_source_id => data_source_id).find_each do |entry|
+      entry.destroy
+    end
+  end
+
   def create_schema(name, current_user)
     new_schema = GpdbSchema.new(:name => name, :database => self)
     raise ActiveRecord::RecordInvalid.new(new_schema) if new_schema.invalid?

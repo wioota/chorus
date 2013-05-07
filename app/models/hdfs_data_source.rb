@@ -17,13 +17,6 @@ class HdfsDataSource < ActiveRecord::Base
   after_create :create_root_entry
   after_destroy :enqueue_destroy_entries
 
-  def self.destroy_entries(data_source_id)
-    # Don't use dependent => destroy because it pulls them all into memory
-    HdfsEntry.where(:hdfs_data_source_id => data_source_id).find_each do |entry|
-      entry.destroy
-    end
-  end
-
   def url
     "gphdfs://#{host}:#{port}/"
   end
@@ -54,7 +47,7 @@ class HdfsDataSource < ActiveRecord::Base
   private
 
   def enqueue_destroy_entries
-    QC.enqueue_if_not_queued("HdfsDataSource.destroy_entries", id)
+    QC.enqueue_if_not_queued("HdfsEntry.destroy_entries", id)
   end
 
 end

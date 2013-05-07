@@ -73,6 +73,12 @@ describe GpdbDataset do
   describe "#destroy" do
     let(:dataset) { datasets(:table) }
 
+    before do
+      any_instance_of(GreenplumConnection) do |data_source|
+        stub(data_source).running? { false }
+      end
+    end
+
     it "should not delete the dataset entry" do
       dataset.destroy
       expect {

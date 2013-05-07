@@ -3,8 +3,10 @@ class Schema < ActiveRecord::Base
 
   attr_accessible :name, :type
   belongs_to :parent, :polymorphic => true
-  has_many :datasets, :foreign_key => :schema_id, :dependent => :destroy
+  has_many :datasets, :foreign_key => :schema_id
   delegate :accessible_to, :to => :parent
+
+  before_destroy :destroy_datasets
 
   def active_tables_and_views
     datasets.where(:stale_at => nil)
@@ -104,5 +106,13 @@ class Schema < ActiveRecord::Base
 
   def dataset_count(account, options={})
     connect_with(account).datasets_count options
+  end
+
+  private
+
+  def destroy_datasets
+    datasets.find_each do |dataset|
+      dataset.destroy
+    end
   end
 end

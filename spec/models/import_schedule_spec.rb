@@ -10,6 +10,10 @@ describe ImportSchedule, :greenplum_integration do
   let(:workspace) { workspaces(:public) }
 
   before do
+    any_instance_of(GreenplumConnection) do |data_source|
+      stub(data_source).running? { false }
+    end
+
     workspace.update_attribute :sandbox_id, schema.id
     import_schedule.user = user
     import_schedule.workspace = workspace

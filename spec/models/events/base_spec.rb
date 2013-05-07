@@ -191,6 +191,11 @@ describe Events::Base do
   end
 
   describe "with deleted" do
+    before do
+      any_instance_of(GreenplumConnection) do |data_source|
+        stub(data_source).running? { false }
+      end
+    end
     describe "workspace" do
       it "still has access to the workspace" do
         workspace = Workspace.last

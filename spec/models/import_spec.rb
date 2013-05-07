@@ -186,4 +186,23 @@ describe Import, :greenplum_integration do
       end
     end
   end
+
+  describe "unfinished" do
+    let(:import) { imports(:one) }
+    it "includes not yet started imports" do
+      import.started_at.should be_blank
+      Import.unfinished.should include(import)
+    end
+
+    it "includes started, but not yet complete imports" do
+      import.touch(:started_at)
+      Import.unfinished.should include(import)
+    end
+
+    it "does not include finished imports" do
+      stub(import.import_schedule).table_exists?
+      import.update_status :passed
+      Import.unfinished.should_not include(import)
+    end
+  end
 end

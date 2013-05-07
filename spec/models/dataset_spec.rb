@@ -28,6 +28,9 @@ describe Dataset do
 
     describe "#schema" do
       it "returns the schema even if it is deleted" do
+        any_instance_of(GreenplumConnection) do |data_source|
+          stub(data_source).running? { false }
+        end
         dataset.schema.should == schema
         schema.destroy
         dataset.reload.schema.should == schema
@@ -258,6 +261,22 @@ describe Dataset do
 
       it "uses caching" do
         dataset.table_description
+      end
+    end
+  end
+
+  describe "destroy" do
+    context "with imports" do
+      let(:dataset) { datasets(:table) }
+
+      it "cancels the import" do
+        unfinished_imports = dataset.imports.unfinished
+        stub(dataset.imports).unfinished { unfinished_imports }
+        unfinished_imports.should_not be_empty
+        unfinished_imports.each do |import|
+          mock(import).cancel(false, "Source/Destination of this import was deleted")
+        end
+        dataset.destroy
       end
     end
   end
