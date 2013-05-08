@@ -24,7 +24,7 @@ describe("chorus.models.ChartTask", function() {
     });
 
     it("mixes in SQLResults", function() {
-        expect(this.model.columnOrientedData).toBeDefined();
+        expect(this.model.hasResults).toBeDefined();
     });
 
     describe("getRows", function() {

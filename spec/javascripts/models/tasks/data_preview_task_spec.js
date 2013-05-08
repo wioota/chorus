@@ -36,7 +36,7 @@ describe("chorus.models.DataPreviewTask", function() {
         expect(this.model.name()).toBe("mike_the_table");
     });
 
-    it("puts rows into the format columnOrientedData expects", function() {
+    it("puts rows into the format data grids expect", function() {
         expect(this.model.getRows()).toEqual([
             {first_column_0: "1", second_column_1: "2"},
             {first_column_0: "3", second_column_1: "4"}

@@ -24,7 +24,7 @@ describe("chorus.models.WorkfileExecutionTask", function() {
     });
 
     it("mixes in SQLResults", function() {
-        expect(this.model.columnOrientedData).toBeDefined();
+        expect(this.model.hasResults).toBeDefined();
     });
 
     it("sends the correct parameters on destroy", function() {
