@@ -47,15 +47,9 @@ describe("chorus.models.WorkfileExecutionTask", function() {
         describe("#getRows", function(){
             it("puts rows into the format data grids expect", function() {
                 expect(this.model.getRows()).toEqual([
-                    {0: "1", 1: "president"},
-                    {0: "2", 1: "vice president"}
+                    {id_0: "1", title_1: "president"},
+                    {id_0: "2", title_1: "vice president"}
                 ]);
-            });
-        });
-
-        describe("#getColumns", function(){
-            it("returns the columns", function() {
-                expect(this.model.getColumns()).toEqual(this.columns);
             });
         });
     });

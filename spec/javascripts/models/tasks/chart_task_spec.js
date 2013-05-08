@@ -26,4 +26,21 @@ describe("chorus.models.ChartTask", function() {
     it("mixes in SQLResults", function() {
         expect(this.model.columnOrientedData).toBeDefined();
     });
+
+    describe("getRows", function() {
+        beforeEach(function() {
+            this.model = rspecFixtures.boxplotTask();
+        });
+
+        it("includes unique and original names", function() {
+            var rows = this.model.getRows();
+            var columns = this.model.getColumns();
+            expect(columns.length).toBeGreaterThan(0);
+
+            var originalColumnNames = _.pluck(columns, "name");
+            var uniqueColumnNames = _.pluck(columns, "uniqueName");
+            expect(_.intersection(_.keys(rows[0]), originalColumnNames).sort()).toEqual(originalColumnNames.sort());
+            expect(_.intersection(_.keys(rows[0]), uniqueColumnNames).sort()).toEqual(uniqueColumnNames.sort());
+        });
+    });
 });

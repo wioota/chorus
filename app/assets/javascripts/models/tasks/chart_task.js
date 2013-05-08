@@ -19,5 +19,17 @@ chorus.models.ChartTask = chorus.models.Task.extend({
 
     getColumnLabel: function(columnName) {
         return this.columnLabels[columnName] ? t(this.columnLabels[columnName]) : columnName;
+    },
+
+    getRows: function() {
+        var rows = this.get("rows"),
+            columns = this.getColumns();
+
+        return _.map(rows, function(row) {
+            _.each(columns, function(column) {
+                row[column.uniqueName] = row[column.name];
+            });
+            return row;
+        });
     }
 });

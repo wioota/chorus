@@ -5,16 +5,20 @@ chorus.views.DataGrid = chorus.views.Base.extend({
 
     columnMinWidth: 5,
 
-    postRender: function() {
-        var columns = _.map(this.model.getColumns(), function(column, index) {
+    slickStyleColumns: function() {
+        return _.map(this.model.getColumns(), function(column) {
             return {
-                name: column.name,
-                field: index,
-                id: column.name + index,
+                name: column.name, 
+                field: column.uniqueName, 
+                id: column.uniqueName, 
                 sortable: true,
                 minWidth: this.columnMinWidth
             };
         });
+    },
+            
+    postRender: function() {
+        var columns = this.slickStyleColumns();
         this.rows = this.model.getRows();
 
         this.grid && this.grid.destroy();

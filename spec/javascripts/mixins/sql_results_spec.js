@@ -25,6 +25,27 @@ describe("chorus.Mixins.SQLResults", function() {
         });
     });
 
+    describe("#getColumns", function() {
+        beforeEach(function() {
+            this.host = new HostModel();
+            this.host.set("columns", [{name: "dog"}, {name: "cat"}, {name: "dog"}, {name: "dog_0"}]);
+        });
+
+        it("creates unique names for the columns", function() {
+            expect(_.pluck(this.host.getColumns(), "name")).toEqual(["dog", "cat", "dog", "dog_0"]);
+            var uniqueNames = _.pluck(this.host.getColumns(), "uniqueName");
+            expect(_.uniq(uniqueNames)).toEqual(uniqueNames);
+        });
+
+        it("returns predictable unique names", function() {
+            var firstSet = _.map(this.host.getColumns(), function(column) {
+                return _.clone(column);
+            });
+           var secondSet = this.host.getColumns();
+           expect(firstSet).toEqual(secondSet);
+        });
+    });
+
     describe("#hasResults", function() {
         beforeEach(function() {
             this.host = new HostModel();

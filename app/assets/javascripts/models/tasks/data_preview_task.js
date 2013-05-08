@@ -5,14 +5,14 @@ chorus.models.DataPreviewTask = chorus.models.Task.extend({
 
     getRows: function() {
         var rows = this.get("rows"),
-            columns = this.get("columns"),
+            columns = this.getColumns(),
             column,
             value;
         return _.map(rows, function(row) {
-            return _.inject(_.zip(columns, row), function(memo, columnValuePair, index) {
+            return _.inject(_.zip(columns, row), function(memo, columnValuePair) {
                 column = columnValuePair[0];
                 value = columnValuePair[1];
-                memo[index] = value;
+                memo[column.uniqueName] = value;
                 return memo;
             }, {});
         });
