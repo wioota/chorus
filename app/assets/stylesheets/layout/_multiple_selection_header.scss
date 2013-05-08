@@ -1,10 +1,14 @@
-.multiselect {
-    .select {
-        padding-right: 3px;
-    }
+@import "../components/_variables.scss";
 
-    .separator {
-        padding: 0 3px;
-        color: $link-color;
-    }
+.multiselect {
+  .select {
+    padding-right: 3px;
+  }
+
+  .separator {
+    padding: 0 3px;
+    color: $light-gray;
+  }
+
+  margin: 0px 5px;
 }

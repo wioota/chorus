@@ -1,7 +1,6 @@
 $link-padding: 15px;
 
 .list_content_details {
-    padding: 0 $padding-x;
     overflow: hidden;
 
     div {
@@ -32,19 +31,6 @@ $link-padding: 15px;
                 }
             }
         }
-    }
-
-    .multiselect {
-        .select {
-            padding-right: 3px;
-        }
-
-        .separator {
-            padding: 0 3px;
-            color: $link-color;
-        }
-
-        margin: 0px 5px;
     }
 
     button, .button {

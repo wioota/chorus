@@ -36,6 +36,7 @@
     border-bottom: 1px solid $pagination-border-color;
     height: 32px;
     line-height: 32px;
+    padding: 0 $padding-x;
     &.hidden {
         padding: 0;
         height: 0;

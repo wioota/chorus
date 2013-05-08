@@ -1,3 +1,7 @@
+{{#if multiSelect}}
+    {{> multipleSelectionHeader}}
+{{/if}}
+
 {{#each buttons}}
     {{#if view}}
         <button type="button" class="dialog" data-dialog="{{view}}"
@@ -34,10 +38,6 @@
             <span class="next">{{t "pagination.next"}}</span>
         </div>
     </div>
-{{/if}}
-
-{{#if multiSelect}}
-    {{> multipleSelectionHeader}}
 {{/if}}
 
 {{#if search}}
