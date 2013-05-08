@@ -8,9 +8,9 @@ chorus.views.DataGrid = chorus.views.Base.extend({
     slickStyleColumns: function() {
         return _.map(this.model.getColumns(), function(column) {
             return {
-                name: column.name, 
-                field: column.uniqueName, 
-                id: column.uniqueName, 
+                name: column.name,
+                field: column.uniqueName,
+                id: column.uniqueName,
                 sortable: true,
                 minWidth: this.columnMinWidth
             };
