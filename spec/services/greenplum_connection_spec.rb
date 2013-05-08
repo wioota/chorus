@@ -164,7 +164,7 @@ describe GreenplumConnection, :greenplum_integration do
             connection.synchronize do |jdbc_conn|
               mock.proxy(jdbc_conn).set_auto_commit(false)
               stub.proxy(jdbc_conn).prepare_statement do |statement|
-                mock.proxy(statement).set_fetch_size(1)
+                mock.proxy(statement).set_max_rows(1)
               end
               mock.proxy(jdbc_conn).commit
 
@@ -182,12 +182,10 @@ describe GreenplumConnection, :greenplum_integration do
           subject.rows.length.should > 1
         end
 
-        it "should continue to use auto_commit" do
+        it "should not use auto_commit" do
           stub.proxy(Sequel).connect(db_url, db_options.merge(:test => true)) do |connection|
             connection.synchronize(:default) do |jdbc_conn|
-              dont_allow(jdbc_conn).set_auto_commit(false)
-              dont_allow(jdbc_conn).commit
-
+              mock(jdbc_conn).set_auto_commit(false)
               stub(connection).synchronize.with_no_args.yields(jdbc_conn)
             end
             connection
