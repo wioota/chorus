@@ -205,6 +205,45 @@ describe("chorus.utilities.CsvParser", function() {
 
             itParsesCorrectly();
         });
+
+        context("when types are specified", function() {
+            beforeEach(function() {
+                this.options.types = ['integer', 'text', 'float'];
+                this.contents = [
+                    "col1,col2,col3",
+                    "row1val1,row1val2,row1val3",
+                    "row2val1,row2val2,row2val3"
+                ];
+
+                this.expectedColumns = [
+                    {name: 'col1', values: ['row1val1', 'row2val1'], type: 'integer'},
+                    {name: 'col2', values: ['row1val2', 'row2val2'], type: 'text'},
+                    {name: 'col3', values: ['row1val3', 'row2val3'], type: 'float'}
+                ];
+            });
+
+            itParsesCorrectly();
+        });
+
+        context("when some types are specified", function() {
+            beforeEach(function() {
+                this.options.types = ['integer'];
+                this.contents = [
+                    "col1,col2,col3",
+                    "row1val1,row1val2,row1val3",
+                    "row2val1,row2val2,row2val3"
+                ];
+
+                this.expectedColumns = [
+                    {name: 'col1', values: ['row1val1', 'row2val1'], type: 'text'},
+                    {name: 'col2', values: ['row1val2', 'row2val2'], type: 'text'},
+                    {name: 'col3', values: ['row1val3', 'row2val3'], type: 'text'}
+                ];
+            });
+
+            itParsesCorrectly();
+        });
+
         context("no header row", function() {
             beforeEach(function() {
                 this.contents = [

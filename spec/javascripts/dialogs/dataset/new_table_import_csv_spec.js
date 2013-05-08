@@ -94,6 +94,11 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         it("recalculates the column types", function() {
             expect(this.dialog.model.get("types").length).toBe(1);
         });
+
+        it("recalculates the column names", function() {
+            var expectedName = chorus.utilities.CsvParser.normalizeColumnName(this.csvOptions.contents[0]);
+            expect(this.dialog.getColumnNames()).toEqual([expectedName]);
+        });
     });
 
     describe("other delimiter input field", function() {
@@ -254,12 +259,15 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 expect(call.args[2]).toEqual(columnNames);
             });
 
-            it("retains user-defined column names in the header", function() {
+            it("retains generated column names in the header", function() {
                 this.dialog.$("#hasHeader").prop("checked", false).change();
+
                 var columnNames = ["one", "two", "gobbledigook", "four", "five"];
                 spyOn(this.dialog.importDataGrid, "getColumnNames").andReturn(columnNames);
+
                 this.dialog.$("#hasHeader").prop("checked", true).change();
                 this.dialog.$("#hasHeader").prop("checked", false).change();
+
                 var call = _.last(this.dialog.importDataGrid.initializeDataGrid.calls);
                 expect(call.args[2]).toEqual(columnNames);
             });
@@ -269,6 +277,25 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 this.dialog.$("#hasHeader").prop("checked", false).change();
                 this.dialog.$("#hasHeader").prop("checked", true).change();
                 expect(this.dialog.$("input[name=tableName]").val()).toBe("testisgreat");
+            });
+        });
+
+        describe("after switching delimiter", function() {
+            beforeEach(function() {
+                this.dialog.$("input.delimiter[value=';']").click();
+            });
+
+            describe("and then rechecking the box", function() {
+                beforeEach(function() {
+                    this.dialog.postRender.reset();
+                    this.dialog.$("#hasHeader").prop("checked", true).change();
+                });
+
+                it("has the correct header row", function() {
+                    var columnNames = chorus.utilities.CsvParser.normalizeColumnName(this.csvOptions.contents[0]);
+                    var call = _.last(this.dialog.importDataGrid.initializeDataGrid.calls);
+                    expect(call.args[2]).toEqual([columnNames]);
+                });
             });
         });
     });

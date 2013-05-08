@@ -31,7 +31,7 @@ class ExternalTablesController < ApplicationController
       :delimiter => table_params[:delimiter],
       :file_pattern => file_pattern,
       :location_url => hdfs_entry.url,
-      :name => table_params[:table_name],
+      :name => table_params[:table_name]
     )
     if e.save
       workspace.sandbox.refresh_datasets(account)

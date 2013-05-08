@@ -33,12 +33,8 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             tableName: chorus.utilities.CsvParser.normalizeForDatabase(this.csvOptions.tableName)
         });
 
-        var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
-        var columns = csvParser.getColumnOrientedData();
-        this.headerColumnNames = _.pluck(columns, "name");
-        this.generatedColumnNames = _.map(columns, function(column, i) {
-            return "column_" + (i + 1);
-        });
+        this.csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
+        this.generateColumnNames();
 
         this.importDataGrid = new chorus.views.NewTableImportDataGrid();
 
@@ -47,12 +43,18 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.listenTo(this.model, "validationFailed", this.saveFailed);
     },
 
-    postRender: function() {
-        var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
-        var columns = csvParser.getColumnOrientedData();
-        var rows = csvParser.rows;
-        this.model.serverErrors = csvParser.serverErrors;
+    generateColumnNames: function() {
+        var headerRow = this.csvParser.parseColumnNames();
+        this.headerColumnNames = headerRow;
+        this.generatedColumnNames = _.map(headerRow, function(column, i) {
+            return "column_" + (i + 1);
+        });
+    },
 
+    postRender: function() {
+        var columns = this.csvParser.getColumnOrientedData();
+        var rows = this.csvParser.rows();
+        this.model.serverErrors = this.csvParser.serverErrors;
         this.model.set({
             types: _.pluck(columns, "type")
         }, {silent: true});
@@ -72,18 +74,15 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     revealed: function() {
-        var csvParser = new chorus.utilities.CsvParser(this.contents, this.model.attributes);
-        var columns = csvParser.getColumnOrientedData();
-        var rows = csvParser.rows;
+        var columns = this.csvParser.getColumnOrientedData();
+        var rows = this.csvParser.rows();
         this.importDataGrid.initializeDataGrid(columns, rows, this.getColumnNames());
     },
 
     additionalContext: function() {
-        var options = _.clone(this.model.attributes);
-        options.columnNameOverrides = this.getColumnNames();
         return {
             includeHeader: this.includeHeader,
-            columns: new chorus.utilities.CsvParser(this.contents, options).getColumnOrientedData(),
+            columns: this.csvParser.getColumnOrientedData(),
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: Handlebars.helpers.unsafeT("dataset.import.table.new.directions", {
                 tablename_input_field: "<input type='text' name='tableName' value='" + this.model.get('tableName') + "'/>"
@@ -175,8 +174,17 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         });
     },
 
+    parseCsv: function() {
+        this.csvParser.setOptions({
+            hasHeader: !!(this.$("#hasHeader").prop("checked")),
+            delimiter: this.delimiter
+        });
+        this.csvParser.parse();
+    },
+
     setHeader: function() {
         this.storeColumnInfo();
+        this.parseCsv();
         this.updateModel();
     },
 
@@ -192,6 +200,8 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.delimiter = e.target.value;
             this.other_delimiter = false;
         }
+        this.parseCsv();
+        this.generateColumnNames();
         this.updateModel();
     },
 

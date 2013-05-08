@@ -4,7 +4,11 @@ chorus.utilities.CsvParser = function(contents, options) {
         hasHeader: true,
         delimiter: ","
     }, options);
-    this.rows = [];
+    var rows = [];
+
+    this.setOptions = function(options) {
+        _.extend(this.options, options);
+    };
 
     this.parse = function() {
         var parser = new CSV();
@@ -21,19 +25,23 @@ chorus.utilities.CsvParser = function(contents, options) {
             }
         }
 
-        this.rows = parser.lines;
+        rows = parser.lines;
     };
 
     this.parse();
 
     this.generateColumnNames = function() {
-        return _.map(this.rows[0], function(column, i) {
+        return _.map(rows[0], function(column, i) {
             return "column_" + (i + 1);
         });
     };
 
     this.parseColumnNames = function() {
-        return _.map(this.rows.shift(), chorus.utilities.CsvParser.normalizeColumnName);
+        return _.map(rows[0], chorus.utilities.CsvParser.normalizeColumnName);
+    };
+
+    this.rows = function() {
+        return this.options.hasHeader ? rows.slice(1) : rows;
     };
 
     this.getColumnOrientedData = function() {
@@ -47,12 +55,14 @@ chorus.utilities.CsvParser = function(contents, options) {
             columnNames = this.options.columnNameOverrides;
         }
 
+        var rows = this.rows();
+        var columnCount = rows[0] ? rows[0].length : 0;
         var types = this.options.types;
-        if (!types) {
+        if (!types || types.length !== columnCount) {
             types = _.map(columnNames, function(columnName, i) {
                 var containsSomeText = false;
                 var allEmpty = true;
-                _.each(this.rows, function(row) {
+                _.each(rows, function(row) {
                     var contents = row[i];
                     var isText = contents && isNaN(+contents);
                     var isEmpty = !contents || contents.trim() === '';
@@ -65,7 +75,7 @@ chorus.utilities.CsvParser = function(contents, options) {
 
         return _.map(columnNames, function(columnName, i) {
             var columnValues = [];
-            _.each(this.rows, function(row) {
+            _.each(rows, function(row) {
                 columnValues.push(row[i] || "");
             });
             return {values: columnValues, name: columnName, type: types[i]};
