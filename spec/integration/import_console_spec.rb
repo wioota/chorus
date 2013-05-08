@@ -20,6 +20,7 @@ describe "Import Console" do
     FactoryGirl.create :import, :source_dataset => dataset, :workspace => workspace, :to_table => "forever_table", :user => user
     FactoryGirl.create :import, :source_dataset => deleted_table, :workspace => workspace, :to_table => "import_of_deleted_table", :user => user
     FactoryGirl.create :import, :source_dataset => other_table, :workspace => deleted_workspace, :to_table => "import_to_deleted_workspace", :user => user
+    stub(deleted_table).cancel_imports
     deleted_table.destroy
     deleted_workspace.destroy
   end
