@@ -13,19 +13,15 @@ describe Events::SchemaImportCreated do
       :actor => actor,
       :dataset => destination_dataset,
       :source_dataset => source_dataset,
-      :schema_id => schema.id,
+      :schema => schema,
       :destination_table => 'non_existent_table'
     )
   end
 
   its(:dataset) { should == destination_dataset }
+  its(:targets) { should == {:source_dataset => source_dataset, :dataset => destination_dataset, :schema => schema } }
   its(:source_dataset) { should == source_dataset }
-  its(:additional_data) { should == {'schema_id' => schema.id,
-                                     'destination_table' => 'non_existent_table'}
-  }
-
-  its(:schema) { should == schema }
-
+  its(:additional_data) { should == {'destination_table' => 'non_existent_table'} }
   it_creates_activities_for { [actor, destination_dataset, source_dataset] }
   it_does_not_create_a_global_activity
 

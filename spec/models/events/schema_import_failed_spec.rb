@@ -17,16 +17,14 @@ describe Events::SchemaImportFailed do
       :error_message => 'Flying Monkey Attack again',
       :destination_table => 'non_existent_table',
       :dataset => destination_dataset,
-      :schema_id => schema.id
+      :schema => schema
     )
   end
 
   its(:dataset) { should == destination_dataset }
-  its(:targets) { should == {:source_dataset => source_dataset, :dataset => destination_dataset } }
-  its(:additional_data) { should == {'schema_id' => schema.id,
-                                     'destination_table' => 'non_existent_table',
+  its(:targets) { should == {:source_dataset => source_dataset, :dataset => destination_dataset, :schema => schema } }
+  its(:additional_data) { should == {'destination_table' => 'non_existent_table',
                                      'error_message' => 'Flying Monkey Attack again'} }
-  its(:schema) { should == schema }
 
   it_creates_activities_for { [actor, destination_dataset, source_dataset] }
   it_does_not_create_a_global_activity
