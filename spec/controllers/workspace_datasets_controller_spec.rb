@@ -20,8 +20,6 @@ describe WorkspaceDatasetsController do
           workspaces_for(user).mock!.
           find(workspace.to_param) { workspace }
 
-      stub(workspace).datasets { the_datasets }
-      stub(workspace).dataset_count { 42 }
       any_instance_of(GpdbTable) do |table|
         stub(table).accessible_to(user) { true }
         stub(table).verify_in_source { true }
@@ -33,6 +31,10 @@ describe WorkspaceDatasetsController do
     end
 
     describe "index" do
+      before do
+        stub(workspace).datasets { the_datasets }
+        stub(workspace).dataset_count { 42 }
+      end
       it "uses authorization" do
         mock(subject).authorize! :show, workspace
         get :index, :workspace_id => workspace.to_param
@@ -133,22 +135,41 @@ describe WorkspaceDatasetsController do
         end
       end
 
-      it "does not present datasets not associated with the workspace" do
-        get :show, :id => other_table.to_param, :workspace_id => workspace.to_param
-        response.should be_not_found
-      end
+      context "when the dataset is not associated with the workspace" do
+        let(:dataset) { other_table }
 
-      it "should return forbidden when the user is not allowed to see the workspace contents" do
-        mock(subject).authorize! :show, workspace
-        get :show, :id => gpdb_table.to_param, :workspace_id => workspace.to_param
-      end
-
-      it "should return forbidden when the user does not have an account for the data source" do
-        mock(subject).authorize_data_source_access(gpdb_table)
-        get :show, :id => gpdb_table.to_param, :workspace_id => workspace.to_param
+        it "does not present the dataset" do
+          get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+          response.should be_not_found
+        end
       end
 
       context "when the specified dataset is associated with the workspace" do
+        before do
+          any_instance_of(dataset.class) do |dataset|
+            stub(dataset).in_workspace?.with_any_args { true }
+          end
+        end
+
+        context "when the user is not allowed to see the workspace contents" do
+          let(:dataset) { gpdb_table }
+          before { mock(subject).authorize! :show, workspace }
+
+          it "should return forbidden" do
+            get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+          end
+        end
+
+        context "when the user does not have an account for the data source" do
+          let(:dataset) { gpdb_table }
+          before { mock(subject).authorize_data_source_access(dataset) }
+
+          it "should return forbidden" do
+            get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+          end
+        end
+
+
         context "when the dataset is a table" do
           let(:dataset) { gpdb_table }
 
@@ -175,68 +196,74 @@ describe WorkspaceDatasetsController do
         end
 
         context "when the dataset is a source table" do
-          let(:the_datasets) { fake_relation [source_table] }
+          let(:dataset) { source_table }
 
           generate_fixture "workspaceDataset/sourceTable.json" do
-            get :show, :id => source_table.to_param, :workspace_id => workspace.to_param
+            get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
           end
         end
 
         context "when the dataset is a source view" do
-          let(:the_datasets) { fake_relation [source_view] }
+          let(:dataset) { source_view }
 
           generate_fixture "workspaceDataset/sourceView.json" do
-            get :show, :id => source_view.to_param, :workspace_id => workspace.to_param
-          end
-        end
-      end
-
-      context 'when the dataset does not exist in greenplum' do
-        before do
-          any_instance_of(GpdbTable) do |table|
-            stub(table).verify_in_source(anything) { false }
+            get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
           end
         end
 
-        it 'responds an error http code' do
-          get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
-          response.code.should == '422'
-        end
+        context 'when the dataset connection blows up' do
+          let(:dataset) {gpdb_table }
 
-        it 'renders the table' do
-          get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
-          response.decoded_body.should have_key :response
-        end
+          before do
+            any_instance_of(WorkspaceDatasetsController) do |controller|
+              stub(controller).authorize_data_source_access
+            end
+            error = GreenplumConnection::DatabaseError.new(nil)
+            mock(error).error_type { :DATA_SOURCE_UNREACHABLE }
+            any_instance_of(GpdbTable) do |table|
+              stub(table).verify_in_source(anything) { raise error }
+            end
+          end
 
-        it 'renders the database_not_found error' do
-          get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
-          response.decoded_body.should have_key :errors
-        end
-      end
+          it 'responds an error http code' do
+            get :show, id: dataset.to_param, workspace_id: workspace.to_param
+            response.code.should == '422'
+          end
 
-      context 'when the dataset connection blew up' do
-        before do
-          error = GreenplumConnection::DatabaseError.new(nil)
-          mock(error).error_type { :DATA_SOURCE_UNREACHABLE }
-          any_instance_of(GpdbTable) do |table|
-            stub(table).verify_in_source(anything) { raise error }
+          it 'renders the table' do
+            get :show, id: dataset.to_param, workspace_id: workspace.to_param
+            response.decoded_body.should have_key :response
+          end
+
+          it 'renders the schema_not_found error' do
+            get :show, id: dataset.to_param, workspace_id: workspace.to_param
+            response.decoded_body.should have_key :errors
+            response.decoded_body[:errors]['record'].should == 'DATA_SOURCE_UNREACHABLE'
           end
         end
 
-        it 'responds an error http code' do
-          get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
-          response.code.should == '422'
-        end
+        context 'when the dataset does not exist in greenplum' do
+          let(:dataset) { gpdb_table }
+          before do
+            any_instance_of(GpdbTable) do |table|
+              stub(table).verify_in_source(anything) { false }
+            end
+          end
 
-        it 'renders the table' do
-          get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
-          response.decoded_body.should have_key :response
-        end
+          it 'responds an error http code' do
+            get :show, id: dataset.to_param, workspace_id: workspace.to_param
+            response.code.should == '422'
+          end
 
-        it 'renders the schema_not_found error' do
-          get :show, id: gpdb_table.to_param, workspace_id: workspace.to_param
-          response.decoded_body.should have_key :errors
-          response.decoded_body[:errors]['record'].should == 'DATA_SOURCE_UNREACHABLE'
+          it 'renders the table' do
+            get :show, id: dataset.to_param, workspace_id: workspace.to_param
+            response.decoded_body.should have_key :response
+          end
+
+          it 'renders the database_not_found error' do
+            get :show, id: dataset.to_param, workspace_id: workspace.to_param
+            response.decoded_body.should have_key :errors
+          end
         end
       end
     end

@@ -134,14 +134,14 @@ class Workspace < ActiveRecord::Base
     end
   end
 
-  def with_filtered_datasets(current_user, options = {})
+  def with_filtered_datasets(user, options = {})
     entity_subtype = options[:entity_subtype]
     database_id = options[:id]
 
     extra_options = {}
     extra_options.merge! :tables_only => true if entity_subtype == "SANDBOX_TABLE"
 
-    account = sandbox && sandbox.database.account_for_user(current_user)
+    account = sandbox && sandbox.database.account_for_user(user)
     skip_sandbox = !account ||
         account.invalid_credentials? ||
         database_id && (database_id != sandbox.database_id) ||
@@ -151,10 +151,10 @@ class Workspace < ActiveRecord::Base
     yield datasets, options.merge(extra_options), account, skip_sandbox
   end
 
-  def dataset_count(current_user, options = {})
+  def dataset_count(user, options = {})
     unlimited_options = options.dup
     unlimited_options.delete(:limit)
-    with_filtered_datasets(current_user, unlimited_options) do |datasets, new_options, account, skip_sandbox|
+    with_filtered_datasets(user, unlimited_options) do |datasets, new_options, account, skip_sandbox|
       count = datasets.map(&:count).reduce(0, :+)
       begin
         count += sandbox.dataset_count(account, new_options) unless skip_sandbox
@@ -166,7 +166,7 @@ class Workspace < ActiveRecord::Base
   end
 
   def datasets(current_user, options = {})
-    with_filtered_datasets(current_user, options) do |datasets, new_options, account, skip_sandbox|
+      with_filtered_datasets(current_user, options) do |datasets, new_options, account, skip_sandbox|
       begin
         datasets << GpdbDataset.visible_to(account, sandbox, new_options) unless skip_sandbox
       rescue DataSourceConnection::InvalidCredentials

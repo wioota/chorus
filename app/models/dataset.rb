@@ -182,6 +182,10 @@ class Dataset < ActiveRecord::Base
     raise NotImplementedError
   end
 
+  def in_workspace?(workspace)
+    raise NotImplementedError
+  end
+
   private
 
   def cancel_imports

@@ -42,4 +42,8 @@ class OracleDataset < Dataset
   def associable?
     false
   end
+
+  def in_workspace?(workspace)
+    false
+  end
 end

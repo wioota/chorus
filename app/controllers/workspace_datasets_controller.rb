@@ -30,13 +30,9 @@ class WorkspaceDatasetsController < ApplicationController
 
   def show
     authorize! :show, workspace
-    datasets = workspace.datasets(current_user)
 
-    if params[:name]
-      dataset = datasets.find_by_name(params[:name])
-    else
-      dataset = datasets.find(params[:id])
-    end
+    dataset = params[:name] ? Dataset.find_by_name(params[:name]) : Dataset.find(params[:id])
+    dataset.in_workspace?(workspace) or raise ActiveRecord::RecordNotFound
 
     authorize_data_source_access(dataset)
 
@@ -45,6 +41,7 @@ class WorkspaceDatasetsController < ApplicationController
     else
       render_dataset_with_error(dataset)
     end
+
   rescue GreenplumConnection::DatabaseError => e
     render_dataset_with_error(dataset, e.error_type)
   end
@@ -90,3 +87,4 @@ class WorkspaceDatasetsController < ApplicationController
     )
   end
 end
+

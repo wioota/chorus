@@ -53,6 +53,10 @@ class GpdbDataset < Dataset
     true
   end
 
+  def in_workspace?(workspace)
+    self.bound_workspaces.include?(workspace)
+  end
+
   private
 
   def create_import_event(params, user)

@@ -4,7 +4,6 @@ describe Dataset do
   let(:schema) { schemas(:default) }
   let(:other_schema) { schemas(:other_schema) }
   let(:dataset) { datasets(:table) }
-  let(:source_table) { datasets(:source_table) }
 
   it_behaves_like "a notable model" do
     let!(:note) do
@@ -48,9 +47,29 @@ describe Dataset do
 
   describe "workspace association" do
     let(:workspace) { workspaces(:public) }
+    let(:dataset) { datasets(:source_table) }
+    before {
+      dataset.bound_workspaces = []
+      dataset.bound_workspaces << workspace }
 
     it "can be bound to workspaces" do
-      source_table.bound_workspaces.should include workspace
+      dataset.bound_workspaces.should include workspace
+    end
+
+    describe 'in_workspace?' do
+      it "reflects reality" do
+        dataset.in_workspace?(workspace).should be_true
+      end
+    end
+
+    context "when the dataset is not in the workspace" do
+      before do
+        dataset.bound_workspaces = []
+      end
+
+      it "is false" do
+        dataset.in_workspace?(workspace).should be_false
+      end
     end
   end
 
@@ -282,7 +301,6 @@ describe Dataset do
   end
 
   it_should_behave_like "taggable models", [:datasets, :table]
-
 
   it_behaves_like 'a soft deletable model' do
     let(:model) { dataset }
