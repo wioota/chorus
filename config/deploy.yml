@@ -25,3 +25,8 @@ vprevious:
   host: chorus-vprevious
   install_path: ~/chorus
   postgres_build: 2
+
+vnext:
+  host: chorus-vnext
+  install_path: ~/chorus
+  postgres_build: 2
