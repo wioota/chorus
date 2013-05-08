@@ -8,10 +8,10 @@ describe Dataset do
   it_behaves_like "a notable model" do
     let!(:note) do
       Events::NoteOnDataset.create!({
-          :actor => users(:owner),
-          :dataset => model,
-          :body => "This is the body"
-      }, :as => :create)
+                                        :actor => users(:owner),
+                                        :dataset => model,
+                                        :body => "This is the body"
+                                    }, :as => :create)
     end
 
     let!(:model) { dataset }
@@ -48,28 +48,13 @@ describe Dataset do
   describe "workspace association" do
     let(:workspace) { workspaces(:public) }
     let(:dataset) { datasets(:source_table) }
-    before {
+    before do
       dataset.bound_workspaces = []
-      dataset.bound_workspaces << workspace }
+      dataset.bound_workspaces << workspace
+    end
 
     it "can be bound to workspaces" do
       dataset.bound_workspaces.should include workspace
-    end
-
-    describe 'in_workspace?' do
-      it "reflects reality" do
-        dataset.in_workspace?(workspace).should be_true
-      end
-    end
-
-    context "when the dataset is not in the workspace" do
-      before do
-        dataset.bound_workspaces = []
-      end
-
-      it "is false" do
-        dataset.in_workspace?(workspace).should be_false
-      end
     end
   end
 
@@ -268,7 +253,7 @@ describe Dataset do
     end
 
     describe "#column_data" do
-      let(:cache_key) {:column_data}
+      let(:cache_key) { :column_data }
 
       it "uses caching" do
         dataset.column_data
@@ -276,7 +261,7 @@ describe Dataset do
     end
 
     describe "#table_description" do
-      let(:cache_key) {:table_description}
+      let(:cache_key) { :table_description }
 
       it "uses caching" do
         dataset.table_description

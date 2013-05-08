@@ -117,4 +117,42 @@ describe GpdbDataset do
       AssociatedDataset.find_by_id(associated_dataset.id).should be_nil
     end
   end
+
+  describe "in_workspace?" do
+    let(:workspace) { workspaces(:public) }
+    let(:dataset) { datasets(:source_table) }
+
+    context "when the datset is in the workspace" do
+      before do
+        dataset.bound_workspaces = []
+        dataset.bound_workspaces << workspace
+      end
+      it "is true" do
+        dataset.in_workspace?(workspace).should be_true
+      end
+    end
+
+    context "when the dataset is not in the workspace" do
+      before do
+        dataset.bound_workspaces = []
+      end
+
+      context "but the dataset is in the sandbox" do
+        before do
+          workspace.sandbox = dataset.schema
+          workspace.save!
+        end
+
+        it "is true" do
+          dataset.in_workspace?(workspace).should be_true
+        end
+      end
+
+      context "when the dataset is not in the sandbox" do
+        it "is false" do
+          dataset.in_workspace?(workspace).should be_false
+        end
+      end
+    end
+  end
 end
