@@ -145,5 +145,5 @@ alpine.api_key =
 oracle.enabled = true
 
 #Data Science Studio
-data_science_studio.enabled = true
-data_science_studio.url = localhost
+workflow.enabled = true
+workflow.url = localhost

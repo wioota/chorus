@@ -42,8 +42,8 @@ class ChorusConfig
     !!(self['alpine.url'].present? && self['alpine.api_key'].present?)
   end
 
-  def data_science_studio_configured?
-    !!(self['data_science_studio.url'].present? && self['data_science_studio.enabled'].present?)
+  def workflow_configured?
+    !!(self['workflow.url'].present? && self['workflow.enabled'].present?)
   end
 
   def syslog_configured?
