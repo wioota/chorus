@@ -351,40 +351,49 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             hdfs_entry_id: this.models.hdfsFile.get('id')
         });
 
-        var numColumns = 500;
-        var columns = [];
-        _(numColumns).times(function(i){
-            columns[i] = {name: 'header_' + String.fromCharCode(97 + (i%26))};
-        });
-
-        var rows = [];
-        _(500).times(function(i){
-            rows[i] = [];
-            _(numColumns).times(function(j) {
-                rows[i][j] = [ "Oakland" + i + "Eva" ];
+        this.models.workfileExecutionTask = (function () {
+            var numColumns = 10;
+            var columns = [];
+            _(numColumns).times(function (i) {
+                columns[i] = {name: 'header_' + String.fromCharCode(97 + (i % 26))};
             });
-        });
-        this.models.workfileExecutionTask = new chorus.models.WorkfileExecutionTask({
-            columns: columns,
-            rows: rows
-        });
 
-
-        var randCommaSeparatedLineOfLength = function(length){
-            var arr = [];
-            _(length).times(function(i){
-                arr.push(String.fromCharCode(97 + (i%26)));
+            var rows = [];
+            _(50).times(function (i) {
+                rows[i] = [];
+                _(numColumns).times(function (j) {
+                    rows[i][j] = [ "Oakland" + i + "Eva" ];
+                });
             });
-            return arr.join(",");
-        };
-        var csvLines = [];
-        _(50).times(function(){
-            csvLines.push(randCommaSeparatedLineOfLength(numColumns));
-        });
-        this.models.csvImport = new chorus.models.CSVImport({
-            workspaceId: '90210',
-            contents: csvLines
-        });
+
+            return new chorus.models.WorkfileExecutionTask({
+                columns: columns,
+                rows: rows
+            });
+        })();
+
+
+
+        this.models.csvImport = (function() {
+            var numColumns = 12;
+            var randCommaSeparatedLineOfLength = function(length){
+                var arr = [];
+                _(length).times(function(i){
+                    arr.push(String.fromCharCode(97 + (i%26)));
+                });
+                return arr.join(",");
+            };
+            var csvLines = [];
+            _(9).times(function(){
+                csvLines.push(randCommaSeparatedLineOfLength(numColumns));
+            });
+
+           return new chorus.models.CSVImport({
+                workspaceId: '90210',
+                contents: csvLines
+            });
+        })();
+
 
         chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
         return this.models;
@@ -744,7 +753,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
     buildDialogs: function() {
         return {
-            "New Table Import CSV": new chorus.dialogs.NewTableImportCSV({
+
+            "Data Grid": new chorus.views.DataGrid({
+                model: this.models.workfileExecutionTask
+            }),
+
+            "New Table Import from CSV ": new chorus.dialogs.NewTableImportCSV({
                 model: this.models.csvImport, csvOptions: {tableName: 'foobar', contents: this.models.csvImport.get("contents")}
             }),
 
