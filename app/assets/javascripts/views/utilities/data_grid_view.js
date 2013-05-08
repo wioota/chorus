@@ -3,21 +3,22 @@ chorus.views.DataGrid = chorus.views.Base.extend({
     constructorName: "DataGrid",
     events: { "click .slick-cell": "selectCell" },
 
+    columnMinWidth: 5,
+
     postRender: function() {
         var columns = _.map(this.model.getColumns(), function(column, index) {
-            return {name: column.name, field: index, id: column.name + index, sortable: true};
+            return {
+                name: column.name,
+                field: index,
+                id: column.name + index,
+                sortable: true,
+                minWidth: this.columnMinWidth
+            };
         });
         this.rows = this.model.getRows();
-        var options = {
-            defaultFormatter: this.cellFormatter,
-            enableColumnReorder: false,
-            enableTextSelectionOnCells: true,
-            syncColumnCellResize: true,
-            enableCellNavigation: true
-        };
 
         this.grid && this.grid.destroy();
-        this.grid = new Slick.Grid(this.$(".grid"), this.rows, columns, options);
+        this.grid = new Slick.Grid(this.$(".grid"), this.rows, columns, this._slickGridOptions(columns));
         this.grid.onSort.subscribe(_.bind(this.sortFunction, this));
     },
 
@@ -65,5 +66,21 @@ chorus.views.DataGrid = chorus.views.Base.extend({
     teardown: function() {
         this.grid && this.grid.destroy();
         this._super("teardown");
+    },
+
+    forceFitColumns: function (columns) {
+        return (columns.length * this.columnMinWidth) <= this.$el.width();
+    },
+
+    _slickGridOptions: function(columns) {
+        return {
+            defaultFormatter: this.cellFormatter,
+            enableColumnReorder: false,
+            enableTextSelectionOnCells: true,
+            syncColumnCellResize: true,
+            enableCellNavigation: true,
+            defaultColumnWidth: 130,
+            forceFitColumns: this.forceFitColumns(columns)
+        };
     }
 });

@@ -375,7 +375,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
 
         this.models.csvImport = (function() {
-            var numColumns = 12;
+            var numColumns = 2;
             var randCommaSeparatedLineOfLength = function(length){
                 var arr = [];
                 _(length).times(function(i){
@@ -753,7 +753,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
     buildDialogs: function() {
         return {
-
             "Data Grid": new chorus.views.DataGrid({
                 model: this.models.workfileExecutionTask
             }),

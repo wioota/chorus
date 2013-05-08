@@ -15,6 +15,8 @@ describe("chorus.views.DataGrid", function() {
         });
 
         this.view = new chorus.views.DataGrid({ model: this.task });
+
+        spyOn(this.view, 'forceFitColumns').andCallThrough();
     });
 
     describe("falsy data", function() {
@@ -84,6 +86,35 @@ describe("chorus.views.DataGrid", function() {
             it("selects the cell's value", function () {
                 var selection = window.getSelection();
                 expect(selection.focusNode.textContent).toBe(this.cell.text());
+            });
+        });
+
+        describe("force-fitting columns", function () {
+            beforeEach(function () {
+                this.columns = this.task.get("columns");
+            });
+
+            it("determined when initializing the data grid", function () {
+                expect(this.view.forceFitColumns).toHaveBeenCalled();
+            });
+
+            context("when columns do not fill the viewport", function () {
+                beforeEach(function () {
+                    this.view.$el.width(25);
+                });
+                it("is true", function () {
+                    expect(this.view.forceFitColumns(this.columns)).toBe(true);
+                });
+            });
+
+            context("when columns fill the viewport", function () {
+                beforeEach(function () {
+                    this.view.$el.width(15);
+                });
+
+                it("is false", function () {
+                    expect(this.view.forceFitColumns(this.columns)).toBe(false);
+                });
             });
         });
     });

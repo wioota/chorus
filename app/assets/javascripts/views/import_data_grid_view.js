@@ -53,10 +53,6 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
         return "<span title='"+value+"'>"+value+"</span>";
     },
 
-    forceFitColumns: function (columns) {
-        return (columns.length * this.columnMinWidth) <= this.$el.width();
-    },
-
     selectCell: function(e) {
         if (window.getSelection && document.createRange) {
             var sel = window.getSelection();
@@ -69,12 +65,16 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
             textRange.moveToElementText(e.currentTarget);
             textRange.select();
         }
-   },
+    },
 
-   teardown: function() {
-       this.grid && this.grid.destroy();
-       this._super("teardown");
-   },
+    teardown: function() {
+        this.grid && this.grid.destroy();
+        this._super("teardown");
+    },
+
+    forceFitColumns: function (columns) {
+        return (columns.length * this.columnMinWidth) <= this.$el.width();
+    },
 
     _slickGridOptions: function(columns) {
         return {
