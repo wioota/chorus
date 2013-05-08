@@ -86,11 +86,7 @@
                     break;
                 case "NoteOnHdfsFile":
                     model = new chorus.models.HdfsEntry();
-                    model.set({
-                        hdfsDataSource: new chorus.models.HdfsDataSource(this.get("hdfsFile").hdfsDataSource),
-                        id: this.get("hdfsFile").id,
-                        name: this.get("hdfsFile").name
-                    });
+                    model.set(this.get("hdfsFile"));
                     break;
                 case "NoteOnWorkspace":
                     model = new chorus.models.Workspace();
