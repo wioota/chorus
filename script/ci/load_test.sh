@@ -10,5 +10,5 @@ do
     break
 done
 
-rake bulk_data:generate_fake_users["load-test-users.csv",200]
-rake setup_load_test["load_test","load-test-users.csv"]
+#rake bulk_data:generate_fake_users["load-test-users.csv",200]
+#rake setup_load_test["load_test","load-test-users.csv"]
