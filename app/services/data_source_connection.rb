@@ -97,6 +97,7 @@ class DataSourceConnection
 
   def stream_sql(query, options={}, cancelable_query = nil, &record_handler)
     with_jdbc_connection(options) do |jdbc_conn|
+      jdbc_conn.set_auto_commit(false)
       statement = build_and_configure_statement(jdbc_conn, options, query)
 
       cancelable_query.store_statement(statement) if cancelable_query
@@ -116,6 +117,7 @@ class DataSourceConnection
 
       begin
         set_timeout(options[:timeout], statement) if options[:timeout]
+        jdbc_conn.set_auto_commit(false) if options[:limit]
 
         if options[:describe_only]
           statement.execute_with_flags(org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY)
@@ -171,7 +173,6 @@ class DataSourceConnection
 
   def build_and_configure_statement(jdbc_conn, options, query)
     statement = jdbc_conn.prepare_statement(query)
-    jdbc_conn.set_auto_commit(false)
     statement.set_fetch_size(1000)
     statement.set_max_rows(options[:limit]) if options[:limit]
     statement
