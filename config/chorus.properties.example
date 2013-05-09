@@ -144,6 +144,6 @@ alpine.api_key =
 #ORACLE
 oracle.enabled = true
 
-#Data Science Studio
+#Workflow
 workflow.enabled = true
 workflow.url = localhost
