@@ -60,13 +60,16 @@ class Schema < ActiveRecord::Base
   end
 
   def refresh_datasets(account, options = {})
+    ##Please do not instantiate all datasets in your schema: you will run out of memory
+    ##This means no datasets.detect, datasets.select, datasets.reject, ...
+
     found_datasets = []
     mark_stale = options.delete(:mark_stale)
     force_index = options.delete(:force_index)
     datasets_in_data_source = connect_with(account).datasets(options)
 
     datasets_in_data_source.each do |attrs|
-      dataset = datasets.detect { |set| set.name == attrs[:name] }
+      dataset = datasets.find_by_name(attrs[:name])
       klass = class_for_type attrs.delete(:type)
       unless dataset
         dataset = klass.new(:name => attrs[:name])
@@ -90,8 +93,12 @@ class Schema < ActiveRecord::Base
 
     if mark_stale
       raise "You should not use mark_stale and limit at the same time" if options[:limit]
-      (datasets.not_stale.reject { |dataset| found_datasets.include?(dataset.id) }).each do |dataset|
-        dataset.mark_stale! unless dataset.is_a? ChorusView
+      #You might want to use a datasets.reject here.  Don't.
+      #This will instantiate all the datasets at once and may use more memory than your JVM has available
+      datasets.not_stale.find_each do |dataset|
+        unless dataset.is_a? ChorusView || found_datasets.include?(dataset.id)
+          dataset.mark_stale!
+        end
       end
     end
 
