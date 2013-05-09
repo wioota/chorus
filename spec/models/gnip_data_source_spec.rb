@@ -35,4 +35,7 @@ describe GnipDataSource do
 
   it_should_behave_like "taggable models", [:gnip_data_sources, :default]
 
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { gnip_data_sources(:default) }
+  end
 end

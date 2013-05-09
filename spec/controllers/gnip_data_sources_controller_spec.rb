@@ -150,4 +150,19 @@ describe GnipDataSourcesController do
     end
 
   end
+
+  describe 'destroy' do
+    let(:data_source) { gnip_data_sources(:default) }
+
+    it "destroys the model" do
+      delete :destroy, :id => data_source.id
+      response.should be_success
+      GnipDataSource.find_by_id(data_source.id).should be_nil
+    end
+
+    it "uses authorization" do
+      mock(subject).authorize! :owner, data_source
+      delete :destroy, :id => data_source.id
+    end
+  end
 end

@@ -2,7 +2,9 @@ chorus.pages.GnipDataSourceShowPage = chorus.pages.Base.extend({
     setup: function(id) {
         this.model = new chorus.models.GnipDataSource({id: id});
         this.model.fetch();
-
+        this.listenTo(this.model, 'destroy', function(){
+            chorus.router.navigate('#/data_sources');
+        });
         this.handleFetchErrorsFor(this.model);
 
         this.mainContent = new chorus.views.MainContentView({

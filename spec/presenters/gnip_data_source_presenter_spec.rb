@@ -13,6 +13,7 @@ describe GnipDataSourcePresenter, :type => :view do
       hash.should have_key(:name)
       hash.should have_key(:stream_url)
       hash.should have_key(:id)
+      hash.should have_key(:is_deleted)
       hash.should have_key(:owner)
       hash.should have_key(:description)
       hash.should have_key(:username)

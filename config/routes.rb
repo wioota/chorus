@@ -30,7 +30,7 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :gnip_data_sources, :only => [:index, :show, :create, :update] do
+  resources :gnip_data_sources, :except => [:new, :edit] do
     resources :imports, :only => [:create], :controller => 'gnip_data_source_imports'
   end
 

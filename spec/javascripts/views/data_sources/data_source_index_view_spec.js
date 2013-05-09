@@ -231,5 +231,23 @@ describe("chorus.views.DataSourceIndex", function() {
                 expect(this.view.$("li.selected")).not.toExist();
             });
         });
+
+        context("when a gnipDataSource is deleted", function() {
+            beforeEach(function() {
+                spyOn(this.view, 'postRender');
+                this.dataSource = this.gnipDataSources.at(0);
+                this.dataSource.destroy();
+                this.server.completeDestroyFor(this.dataSource);
+            });
+
+            it("removes the data source from the collection", function() {
+                expect(this.gnipDataSources.get(this.dataSource.id)).toBeFalsy();
+                expect(this.view.postRender).toHaveBeenCalled();
+            });
+
+            it("it un-selects the item", function() {
+                expect(this.view.$("li.selected")).not.toExist();
+            });
+        });
     });
 });

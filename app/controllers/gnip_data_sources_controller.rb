@@ -22,4 +22,12 @@ class GnipDataSourcesController < ApplicationController
 
     present data_source
   end
+
+  def destroy
+    data_source = GnipDataSource.find(params[:id])
+    authorize! :owner, data_source
+    data_source.destroy
+
+    head :ok
+  end
 end

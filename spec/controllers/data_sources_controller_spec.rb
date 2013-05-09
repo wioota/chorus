@@ -247,7 +247,7 @@ describe DataSourcesController do
       DataSource.find_by_id(data_source.id).should be_nil
     end
 
-    it "uses authentication" do
+    it "uses authorization" do
       mock(subject).authorize! :edit, data_source
       delete :destroy, :id => data_source.id
     end

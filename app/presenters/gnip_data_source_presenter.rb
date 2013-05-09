@@ -3,7 +3,8 @@ class GnipDataSourcePresenter < Presenter
     hash = {
         :id => model.id,
         :name => model.name,
-        :entity_type => model.entity_type_name
+        :entity_type => model.entity_type_name,
+        :is_deleted => model.deleted?
     }
     unless succinct?
       hash.merge!({

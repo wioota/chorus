@@ -32,6 +32,7 @@ chorus.views.DataSourceIndex = chorus.views.Base.extend({
         this.listenTo(this.hdfsDataSources, 'loaded', this.selectModel);
         this.listenTo(this.hdfsDataSources, 'destroy', this.clearSelection);
         this.listenTo(this.gnipDataSources, 'loaded', this.selectModel);
+        this.listenTo(this.gnipDataSources, 'destroy', this.clearSelection);
 
         this.subscribePageEvent("data_source:added", function(dataSource) {
             this.dataSources.loaded = false;

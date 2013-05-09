@@ -37,5 +37,10 @@ describe("chorus.pages.GnipDataSourceShowPage", function() {
             expect(this.page.$('.sidebar_content')).toContainText('Import Stream');
         });
 
+        it("navigates to the data sources index page when the model is destroyed", function() {
+            spyOn(chorus.router, "navigate");
+            this.page.model.trigger('destroy');
+            expect(chorus.router.navigate).toHaveBeenCalledWith("#/data_sources");
+        });
     });
 });
