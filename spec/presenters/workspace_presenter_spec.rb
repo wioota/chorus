@@ -9,6 +9,7 @@ describe WorkspacePresenter, :type => :view do
 
   before(:each) do
     set_current_user(user)
+
   end
 
   let(:options) { {} }
@@ -57,7 +58,7 @@ describe WorkspacePresenter, :type => :view do
 
     it "should use gpdbSchemaPresenter Hash method for sandbox_info" do
       new_sandbox = hash[:sandbox_info]
-      new_sandbox.to_hash.should == (GpdbSchemaPresenter.new(schema, view).presentation_hash)
+      new_sandbox.to_hash.should == (GpdbSchemaPresenter.new(schema, view, {:succinct => true}).presentation_hash)
     end
 
     it "sanitizes summary" do

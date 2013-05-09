@@ -34,7 +34,7 @@ class DatasetPresenter < Presenter
   end
 
   def schema_hash
-    present(model.schema, options)
+    present(model.schema, options.merge({:succinct => true}))
   end
 
   def thetype

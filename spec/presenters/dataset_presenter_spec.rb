@@ -105,6 +105,10 @@ describe DatasetPresenter, :type => :view do
         hash[:associated_workspaces].should == []
         hash[:has_credentials].should == true
       end
+
+      it 'renders schemas succinctly' do
+        hash[:schema].should_not have_key(:has_credentials)
+      end
     end
 
     context 'for a sandbox table' do
