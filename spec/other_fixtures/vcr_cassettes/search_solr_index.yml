@@ -22,9 +22,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>18}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:46 GMT
+  recorded_at: Thu, 09 May 2013 00:44:55 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -142,9 +142,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>17}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:46 GMT
+  recorded_at: Thu, 09 May 2013 00:44:55 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -167,9 +167,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>11}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>18}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:46 GMT
+  recorded_at: Thu, 09 May 2013 00:44:55 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -358,9 +358,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>9}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>21}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:47 GMT
+  recorded_at: Thu, 09 May 2013 00:44:55 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -383,9 +383,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>24}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:47 GMT
+  recorded_at: Thu, 09 May 2013 00:44:55 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -530,6 +530,18 @@ http_interactions:
         \ 1000010</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
+        \ name=\"sort_name_s\">alternate</field><field boost=\"1000000\" name=\"name_texts\"\
+        >alternate</field><field boost=\"1000\" name=\"database_name_texts\">alternate</field><field\
+        \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
+        1000\" name=\"schema_name_texts\">alternate</field><field boost=\"1000\" name=\"\
+        column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000011</field><field\
+        \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
+        \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
+        \ name=\"class_name\">GpdbTable</field><field name=\"grouping_id_s\">GpdbTable\
+        \ 1000011</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
+        >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">searchquery_table</field><field name=\"data_source_account_ids_im\"\
         >1000002</field><field name=\"found_in_workspace_id_im\">1000001</field><field\
         \ name=\"found_in_workspace_id_im\">1000011</field><field name=\"found_in_workspace_id_im\"\
@@ -541,10 +553,10 @@ http_interactions:
         \ name=\"column_name_texts\">searchquery 2</field><field boost=\"1000\" name=\"\
         column_description_texts\">searchquery column description</field><field boost=\"\
         1000\" name=\"column_description_texts\">searchquery column description 2</field></doc><doc><field\
-        \ name=\"id\">GpdbTable 1000011</field><field name=\"type\">GpdbTable</field><field\
+        \ name=\"id\">GpdbTable 1000012</field><field name=\"type\">GpdbTable</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000011</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000012</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">searchquery_shared_table</field><field\
@@ -554,10 +566,10 @@ http_interactions:
         \ name=\"table_description_texts\">bogus</field><field boost=\"1000\" name=\"\
         schema_name_texts\">shared_schema</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">GpdbTable 1000012</field><field name=\"type\">GpdbTable</field><field\
+        \ name=\"id\">GpdbTable 1000013</field><field name=\"type\">GpdbTable</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000012</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000013</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">typeahead-with-dash</field><field\
@@ -567,10 +579,10 @@ http_interactions:
         table_description_texts\">bogus</field><field boost=\"1000\" name=\"schema_name_texts\"\
         >shared_schema</field><field boost=\"1000\" name=\"column_name_texts\">bogus</field><field\
         \ boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">GpdbTable 1000013</field><field name=\"type\">GpdbTable</field><field\
+        \ name=\"id\">GpdbTable 1000014</field><field name=\"type\">GpdbTable</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000013</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000014</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">typeahead_with_underscore</field><field\
@@ -580,10 +592,10 @@ http_interactions:
         \ name=\"table_description_texts\">bogus</field><field boost=\"1000\" name=\"\
         schema_name_texts\">shared_schema</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">GpdbTable 1000014</field><field name=\"type\">GpdbTable</field><field\
+        \ name=\"id\">GpdbTable 1000015</field><field name=\"type\">GpdbTable</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000014</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000015</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">plurals</field><field name=\"\
@@ -593,10 +605,10 @@ http_interactions:
         >bogus</field><field boost=\"1000\" name=\"schema_name_texts\">shared_schema</field><field\
         \ boost=\"1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"column_name_texts\">bogus 2</field></doc><doc><field name=\"id\"\
-        >GpdbTable 1000015</field><field name=\"type\">GpdbTable</field><field name=\"\
+        >GpdbTable 1000016</field><field name=\"type\">GpdbTable</field><field name=\"\
         type\">GpdbDataset</field><field name=\"type\">Dataset</field><field name=\"\
         type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000015</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000016</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">typeahead_gpdb_table</field><field\
@@ -608,12 +620,12 @@ http_interactions:
         table_description_texts\">bogus</field><field boost=\"1000\" name=\"schema_name_texts\"\
         >searchquery_schema</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">ChorusView 1000016</field><field name=\"type\">ChorusView</field><field\
+        \ name=\"id\">ChorusView 1000017</field><field name=\"type\">ChorusView</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000006</field><field\
         \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000001</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000016</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusView 1000017</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">typeahead_chorus_view</field><field\
@@ -624,11 +636,11 @@ http_interactions:
         database_name_texts\">searchquery_database</field><field boost=\"1000\" name=\"\
         table_description_texts\">bogus</field><field boost=\"1000\" name=\"schema_name_texts\"\
         >searchquery_schema</field><field boost=\"1000\" name=\"query_texts\">select\
-        \ 1</field></doc><doc><field name=\"id\">GpdbTable 1000017</field><field name=\"\
+        \ 1</field></doc><doc><field name=\"id\">GpdbTable 1000018</field><field name=\"\
         type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field name=\"\
         type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">GpdbTable</field><field name=\"tag_ids_im\">1000001</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000017</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000018</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">searchable_tag</field><field name=\"\
@@ -641,12 +653,12 @@ http_interactions:
         >searchquery_schema</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field><field\
         \ boost=\"1000\" name=\"tag_names_texts\">typeahead</field></doc><doc><field\
-        \ name=\"id\">ChorusView 1000018</field><field name=\"type\">ChorusView</field><field\
+        \ name=\"id\">ChorusView 1000019</field><field name=\"type\">ChorusView</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000007</field><field\
         \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000008</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000018</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusView 1000019</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">chorus_view</field><field name=\"\
@@ -656,12 +668,12 @@ http_interactions:
         1000\" name=\"database_name_texts\">default</field><field boost=\"1000\" name=\"\
         table_description_texts\">bogus</field><field boost=\"1000\" name=\"schema_name_texts\"\
         >default</field><field boost=\"1000\" name=\"query_texts\">select * from a_table</field></doc><doc><field\
-        \ name=\"id\">ChorusView 1000019</field><field name=\"type\">ChorusView</field><field\
+        \ name=\"id\">ChorusView 1000020</field><field name=\"type\">ChorusView</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000007</field><field\
         \ name=\"public_b\">false</field><field name=\"workspace_id_im\">1000009</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000019</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusView 1000020</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">private_chorus_view</field><field\
@@ -672,12 +684,12 @@ http_interactions:
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">default</field><field boost=\"1000\" name=\"\
         query_texts\">select * from a_table</field></doc><doc><field name=\"id\">ChorusView\
-        \ 1000020</field><field name=\"type\">ChorusView</field><field name=\"type\"\
+        \ 1000021</field><field name=\"type\">ChorusView</field><field name=\"type\"\
         >GpdbDataset</field><field name=\"type\">Dataset</field><field name=\"type\"\
         >ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000007</field><field\
         \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000010</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000020</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusView 1000021</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">searchquery_chorus_view</field><field\
@@ -689,12 +701,12 @@ http_interactions:
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">searchquery_schema</field><field boost=\"1000\"\
         \ name=\"query_texts\">select searchquery from a_table</field></doc><doc><field\
-        \ name=\"id\">ChorusView 1000021</field><field name=\"type\">ChorusView</field><field\
+        \ name=\"id\">ChorusView 1000022</field><field name=\"type\">ChorusView</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000007</field><field\
         \ name=\"public_b\">false</field><field name=\"workspace_id_im\">1000011</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000021</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusView 1000022</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">searchquery_chorus_view_private</field><field\
@@ -706,10 +718,10 @@ http_interactions:
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">searchquery_schema</field><field boost=\"1000\"\
         \ name=\"query_texts\">select searchquery from a_table</field></doc><doc><field\
-        \ name=\"id\">GpdbTable 1000022</field><field name=\"type\">GpdbTable</field><field\
+        \ name=\"id\">GpdbTable 1000023</field><field name=\"type\">GpdbTable</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000022</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000023</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">csv_import_table</field><field\
@@ -719,68 +731,52 @@ http_interactions:
         >bogus</field><field boost=\"1000\" name=\"schema_name_texts\">schema44445</field><field\
         \ boost=\"1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"column_name_texts\">bogus 2</field></doc><doc><field name=\"id\"\
-        >GpdbTable 1000023</field><field name=\"type\">GpdbTable</field><field name=\"\
+        >GpdbTable 1000024</field><field name=\"type\">GpdbTable</field><field name=\"\
         type\">GpdbDataset</field><field name=\"type\">Dataset</field><field name=\"\
         type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000023</field><field name=\"type_name_s\"\
-        >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
-        \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">2candy</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
-        >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">2candy</field><field boost=\"1000\"\
-        \ name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"1000\"\
-        \ name=\"table_description_texts\">bogus</field><field boost=\"1000\" name=\"\
-        schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">GpdbTable 1000024</field><field name=\"type\">GpdbTable</field><field\
-        \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
         \ name=\"grouping_id_s\">GpdbTable 1000024</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">7_`~!@#$%^&amp;*()+=[]{}|\\;:',&lt;.&gt;/?</field><field\
-        \ name=\"data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
+        >Dataset</field><field name=\"sort_name_s\">2candy</field><field name=\"data_source_account_ids_im\"\
         >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
-        \ name=\"found_in_workspace_id_im\">1000018</field><field name=\"found_in_workspace_id_im\"\
-        >1000019</field><field boost=\"1000000\" name=\"name_texts\">7_`~!@#$%^&amp;*()+=[]{}|\\\
-        ;:',&lt;.&gt;/?</field><field boost=\"1000\" name=\"database_name_texts\"\
-        >gpdb_granada_test</field><field boost=\"1000\" name=\"table_description_texts\"\
-        >bogus</field><field boost=\"1000\" name=\"schema_name_texts\">test_schema</field><field\
-        \ boost=\"1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\"\
-        \ name=\"column_name_texts\">bogus 2</field></doc><doc><field name=\"id\"\
-        >GpdbTable 1000025</field><field name=\"type\">GpdbTable</field><field name=\"\
-        type\">GpdbDataset</field><field name=\"type\">Dataset</field><field name=\"\
-        type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
+        >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">2candy</field><field boost=\"1000\"\
+        \ name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"1000\"\
+        \ name=\"table_description_texts\">bogus</field><field boost=\"1000\" name=\"\
+        schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
+        \ name=\"id\">GpdbTable 1000025</field><field name=\"type\">GpdbTable</field><field\
+        \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
         \ name=\"grouping_id_s\">GpdbTable 1000025</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
+        >Dataset</field><field name=\"sort_name_s\">7_`~!@#$%^&amp;*()+=[]{}|\\;:',&lt;.&gt;/?</field><field\
+        \ name=\"data_source_account_ids_im\">1000015</field><field name=\"data_source_account_ids_im\"\
+        >1000016</field><field name=\"data_source_account_ids_im\">1000017</field><field\
+        \ name=\"found_in_workspace_id_im\">1000018</field><field name=\"found_in_workspace_id_im\"\
+        >1000019</field><field boost=\"1000000\" name=\"name_texts\">7_`~!@#$%^&amp;*()+=[]{}|\\\
+        ;:',&lt;.&gt;/?</field><field boost=\"1000\" name=\"database_name_texts\"\
+        >gpdb_lapulapu_test</field><field boost=\"1000\" name=\"table_description_texts\"\
+        >bogus</field><field boost=\"1000\" name=\"schema_name_texts\">test_schema</field><field\
+        \ boost=\"1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\"\
+        \ name=\"column_name_texts\">bogus 2</field></doc><doc><field name=\"id\"\
+        >GpdbTable 1000026</field><field name=\"type\">GpdbTable</field><field name=\"\
+        type\">GpdbDataset</field><field name=\"type\">Dataset</field><field name=\"\
+        type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
+        \ name=\"grouping_id_s\">GpdbTable 1000026</field><field name=\"type_name_s\"\
+        >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
+        \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">allcaps_candy</field><field name=\"\
-        data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
-        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        data_source_account_ids_im\">1000015</field><field name=\"data_source_account_ids_im\"\
+        >1000016</field><field name=\"data_source_account_ids_im\">1000017</field><field\
         \ name=\"found_in_workspace_id_im\">1000018</field><field name=\"found_in_workspace_id_im\"\
         >1000019</field><field boost=\"1000000\" name=\"name_texts\">allcaps_candy</field><field\
-        \ boost=\"1000\" name=\"database_name_texts\">gpdb_granada_test</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
         \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000026</field><field\
-        \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
-        \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
-        \ name=\"class_name\">GpdbTable</field><field name=\"grouping_id_s\">GpdbTable\
-        \ 1000026</field><field name=\"type_name_s\">Dataset</field><field name=\"\
-        security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
-        >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">base_table1</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
-        >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">base_table1</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
-        1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
-        \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
-        column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000027</field><field\
         \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
@@ -788,12 +784,12 @@ http_interactions:
         \ 1000027</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">base_table2</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        \ name=\"sort_name_s\">base_table1</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">base_table2</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
+        \ boost=\"1000000\" name=\"name_texts\">base_table1</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
         column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
@@ -804,46 +800,46 @@ http_interactions:
         \ 1000028</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">candy</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
-        >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">candy</field><field boost=\"1000\"\
-        \ name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"1000\"\
-        \ name=\"table_description_texts\">bogus</field><field boost=\"1000\" name=\"\
-        schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">GpdbTable 1000029</field><field name=\"type\">GpdbTable</field><field\
-        \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000029</field><field name=\"type_name_s\"\
-        >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
-        \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">candy_composite</field><field\
-        \ name=\"data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
+        \ name=\"sort_name_s\">base_table2</field><field name=\"data_source_account_ids_im\"\
         >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
-        \ name=\"found_in_workspace_id_im\">1000018</field><field name=\"found_in_workspace_id_im\"\
-        >1000019</field><field boost=\"1000000\" name=\"name_texts\">candy_composite</field><field\
-        \ boost=\"1000\" name=\"database_name_texts\">gpdb_granada_test</field><field\
-        \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
-        1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
-        \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000030</field><field\
-        \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
-        \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
-        \ name=\"class_name\">GpdbTable</field><field name=\"grouping_id_s\">GpdbTable\
-        \ 1000030</field><field name=\"type_name_s\">Dataset</field><field name=\"\
-        security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
-        >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">candy_empty</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">candy_empty</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
+        \ boost=\"1000000\" name=\"name_texts\">base_table2</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
         column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000029</field><field\
+        \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
+        \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
+        \ name=\"class_name\">GpdbTable</field><field name=\"grouping_id_s\">GpdbTable\
+        \ 1000029</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
+        >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
+        \ name=\"sort_name_s\">candy</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
+        >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">candy</field><field boost=\"1000\"\
+        \ name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"1000\"\
+        \ name=\"table_description_texts\">bogus</field><field boost=\"1000\" name=\"\
+        schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
+        \ name=\"id\">GpdbTable 1000030</field><field name=\"type\">GpdbTable</field><field\
+        \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
+        \ name=\"grouping_id_s\">GpdbTable 1000030</field><field name=\"type_name_s\"\
+        >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
+        \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
+        >Dataset</field><field name=\"sort_name_s\">candy_composite</field><field\
+        \ name=\"data_source_account_ids_im\">1000015</field><field name=\"data_source_account_ids_im\"\
+        >1000016</field><field name=\"data_source_account_ids_im\">1000017</field><field\
+        \ name=\"found_in_workspace_id_im\">1000018</field><field name=\"found_in_workspace_id_im\"\
+        >1000019</field><field boost=\"1000000\" name=\"name_texts\">candy_composite</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field\
+        \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
+        1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
+        \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000031</field><field\
         \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
@@ -851,12 +847,12 @@ http_interactions:
         \ 1000031</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">candy_one_column</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        \ name=\"sort_name_s\">candy_empty</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">candy_one_column</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
+        \ boost=\"1000000\" name=\"name_texts\">candy_empty</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
         column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
@@ -867,15 +863,15 @@ http_interactions:
         \ 1000032</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">different_names_table</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        \ name=\"sort_name_s\">candy_one_column</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">different_names_table</field><field\
-        \ boost=\"1000\" name=\"database_name_texts\">gpdb_granada_test</field><field\
-        \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
-        1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
-        \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
+        \ boost=\"1000000\" name=\"name_texts\">candy_one_column</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
+        1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
+        \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
+        column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000033</field><field\
         \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
@@ -883,12 +879,12 @@ http_interactions:
         \ 1000033</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">different_names_table2</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        \ name=\"sort_name_s\">different_names_table</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">different_names_table2</field><field\
-        \ boost=\"1000\" name=\"database_name_texts\">gpdb_granada_test</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">different_names_table</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
         \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
@@ -899,12 +895,12 @@ http_interactions:
         \ 1000034</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">different_types_table</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        \ name=\"sort_name_s\">different_names_table2</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">different_types_table</field><field\
-        \ boost=\"1000\" name=\"database_name_texts\">gpdb_granada_test</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">different_names_table2</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
         \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
@@ -915,12 +911,12 @@ http_interactions:
         \ 1000035</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">external_web_table1</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        \ name=\"sort_name_s\">different_types_table</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">external_web_table1</field><field\
-        \ boost=\"1000\" name=\"database_name_texts\">gpdb_granada_test</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">different_types_table</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
         \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
@@ -931,15 +927,15 @@ http_interactions:
         \ 1000036</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">master_table1</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        \ name=\"sort_name_s\">external_web_table1</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">master_table1</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
-        1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
-        \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
-        column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
+        \ boost=\"1000000\" name=\"name_texts\">external_web_table1</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field\
+        \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
+        1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
+        \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000037</field><field\
         \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
@@ -947,12 +943,12 @@ http_interactions:
         \ 1000037</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">parition_sales</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        \ name=\"sort_name_s\">master_table1</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">parition_sales</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
+        \ boost=\"1000000\" name=\"name_texts\">master_table1</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
         column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
@@ -963,12 +959,12 @@ http_interactions:
         \ 1000038</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">pg_all_types</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        \ name=\"sort_name_s\">parition_sales</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">pg_all_types</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
+        \ boost=\"1000000\" name=\"name_texts\">parition_sales</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
         column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
@@ -979,15 +975,15 @@ http_interactions:
         \ 1000039</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">second_candy_one_column</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        \ name=\"sort_name_s\">pg_all_types</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">second_candy_one_column</field><field\
-        \ boost=\"1000\" name=\"database_name_texts\">gpdb_granada_test</field><field\
-        \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
-        1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
-        \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
+        \ boost=\"1000000\" name=\"name_texts\">pg_all_types</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
+        1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
+        \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
+        column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000040</field><field\
         \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
@@ -995,147 +991,148 @@ http_interactions:
         \ 1000040</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
+        \ name=\"sort_name_s\">second_candy_one_column</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
+        >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">second_candy_one_column</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field\
+        \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
+        1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
+        \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000041</field><field\
+        \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
+        \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
+        \ name=\"class_name\">GpdbTable</field><field name=\"grouping_id_s\">GpdbTable\
+        \ 1000041</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
+        >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">table_with_nulls</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
         \ boost=\"1000000\" name=\"name_texts\">table_with_nulls</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
         column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus 2</field></doc><doc><field name=\"id\">GpdbView 1000041</field><field\
+        >bogus 2</field></doc><doc><field name=\"id\">GpdbView 1000042</field><field\
         \ name=\"type\">GpdbView</field><field name=\"type\">GpdbDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">GpdbView</field><field name=\"grouping_id_s\">GpdbView\
-        \ 1000041</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        \ 1000042</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbView</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">view1</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
         \ boost=\"1000000\" name=\"name_texts\">view1</field><field boost=\"1000\"\
-        \ name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"1000\"\
+        \ name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"1000\"\
         \ name=\"table_description_texts\">bogus</field><field boost=\"1000\" name=\"\
         schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">GpdbTable 1000042</field><field name=\"type\">GpdbTable</field><field\
+        \ name=\"id\">GpdbTable 1000043</field><field name=\"type\">GpdbTable</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000042</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000043</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">non_public_base_table1</field><field\
-        \ name=\"data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
-        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000015</field><field name=\"data_source_account_ids_im\"\
+        >1000016</field><field name=\"data_source_account_ids_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">non_public_base_table1</field><field\
-        \ boost=\"1000\" name=\"database_name_texts\">gpdb_granada_test_priv</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test_priv</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">non_public_schema</field><field boost=\"\
         1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"\
         column_name_texts\">bogus 2</field></doc><doc><field name=\"id\">GpdbTable\
-        \ 1000043</field><field name=\"type\">GpdbTable</field><field name=\"type\"\
+        \ 1000044</field><field name=\"type\">GpdbTable</field><field name=\"type\"\
         >GpdbDataset</field><field name=\"type\">Dataset</field><field name=\"type\"\
         >ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000043</field><field name=\"type_name_s\"\
-        >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
-        \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">table_in_public</field><field\
-        \ name=\"data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
-        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">table_in_public</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
-        1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
-        \ name=\"schema_name_texts\">public</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">GpdbTable 1000044</field><field name=\"type\">GpdbTable</field><field\
-        \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
         \ name=\"grouping_id_s\">GpdbTable 1000044</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">2candy</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field boost=\"1000000\"\
-        \ name=\"name_texts\">2candy</field><field boost=\"1000\" name=\"database_name_texts\"\
-        >gpdb_granada_test</field><field boost=\"1000\" name=\"table_description_texts\"\
-        >bogus</field><field boost=\"1000\" name=\"schema_name_texts\">test_gpfdist_schema</field><field\
-        \ boost=\"1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\"\
-        \ name=\"column_name_texts\">bogus 2</field></doc><doc><field name=\"id\"\
-        >GpdbTable 1000045</field><field name=\"type\">GpdbTable</field><field name=\"\
-        type\">GpdbDataset</field><field name=\"type\">Dataset</field><field name=\"\
-        type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
+        >Dataset</field><field name=\"sort_name_s\">table_in_public</field><field\
+        \ name=\"data_source_account_ids_im\">1000015</field><field name=\"data_source_account_ids_im\"\
+        >1000016</field><field name=\"data_source_account_ids_im\">1000017</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">table_in_public</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
+        1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
+        \ name=\"schema_name_texts\">public</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
+        \ name=\"id\">GpdbTable 1000045</field><field name=\"type\">GpdbTable</field><field\
+        \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
         \ name=\"grouping_id_s\">GpdbTable 1000045</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">allcaps_candy</field><field name=\"\
-        data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
+        >Dataset</field><field name=\"sort_name_s\">2candy</field><field name=\"data_source_account_ids_im\"\
         >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field boost=\"1000000\"\
+        \ name=\"name_texts\">2candy</field><field boost=\"1000\" name=\"database_name_texts\"\
+        >gpdb_lapulapu_test</field><field boost=\"1000\" name=\"table_description_texts\"\
+        >bogus</field><field boost=\"1000\" name=\"schema_name_texts\">test_gpfdist_schema</field><field\
+        \ boost=\"1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\"\
+        \ name=\"column_name_texts\">bogus 2</field></doc><doc><field name=\"id\"\
+        >GpdbTable 1000046</field><field name=\"type\">GpdbTable</field><field name=\"\
+        type\">GpdbDataset</field><field name=\"type\">Dataset</field><field name=\"\
+        type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
+        \ name=\"grouping_id_s\">GpdbTable 1000046</field><field name=\"type_name_s\"\
+        >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
+        \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
+        >Dataset</field><field name=\"sort_name_s\">allcaps_candy</field><field name=\"\
+        data_source_account_ids_im\">1000015</field><field name=\"data_source_account_ids_im\"\
+        >1000016</field><field name=\"data_source_account_ids_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">allcaps_candy</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">test_gpfdist_schema</field><field boost=\"1000\"\
         \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000046</field><field\
+        >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000047</field><field\
         \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">GpdbTable</field><field name=\"grouping_id_s\">GpdbTable\
-        \ 1000046</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        \ 1000047</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">candy</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field boost=\"1000000\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field boost=\"1000000\"\
         \ name=\"name_texts\">candy</field><field boost=\"1000\" name=\"database_name_texts\"\
-        >gpdb_granada_test</field><field boost=\"1000\" name=\"table_description_texts\"\
+        >gpdb_lapulapu_test</field><field boost=\"1000\" name=\"table_description_texts\"\
         >bogus</field><field boost=\"1000\" name=\"schema_name_texts\">test_gpfdist_schema</field><field\
         \ boost=\"1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"column_name_texts\">bogus 2</field></doc><doc><field name=\"id\"\
-        >GpdbTable 1000047</field><field name=\"type\">GpdbTable</field><field name=\"\
+        >GpdbTable 1000048</field><field name=\"type\">GpdbTable</field><field name=\"\
         type\">GpdbDataset</field><field name=\"type\">Dataset</field><field name=\"\
         type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000047</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000048</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">candy_composite</field><field\
-        \ name=\"data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
-        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000015</field><field name=\"data_source_account_ids_im\"\
+        >1000016</field><field name=\"data_source_account_ids_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">candy_composite</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">test_gpfdist_schema</field><field boost=\"1000\"\
         \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000048</field><field\
+        >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000049</field><field\
         \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">GpdbTable</field><field name=\"grouping_id_s\">GpdbTable\
-        \ 1000048</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        \ 1000049</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">candy_empty</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field boost=\"1000000\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field boost=\"1000000\"\
         \ name=\"name_texts\">candy_empty</field><field boost=\"1000\" name=\"database_name_texts\"\
-        >gpdb_granada_test</field><field boost=\"1000\" name=\"table_description_texts\"\
+        >gpdb_lapulapu_test</field><field boost=\"1000\" name=\"table_description_texts\"\
         >bogus</field><field boost=\"1000\" name=\"schema_name_texts\">test_gpfdist_schema</field><field\
         \ boost=\"1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\"\
-        \ name=\"column_name_texts\">bogus 2</field></doc><doc><field name=\"id\"\
-        >GpdbTable 1000049</field><field name=\"type\">GpdbTable</field><field name=\"\
-        type\">GpdbDataset</field><field name=\"type\">Dataset</field><field name=\"\
-        type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000049</field><field name=\"type_name_s\"\
-        >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
-        \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">candy_one_column</field><field\
-        \ name=\"data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
-        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">candy_one_column</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
-        1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
-        \ name=\"schema_name_texts\">test_gpfdist_schema</field><field boost=\"1000\"\
-        \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus 2</field></doc></add>"
+        \ name=\"column_name_texts\">bogus 2</field></doc></add>"
     headers:
       content-type:
       - text/xml
@@ -1152,9 +1149,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>10}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>73}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:48 GMT
+  recorded_at: Thu, 09 May 2013 00:44:56 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1167,204 +1164,218 @@ http_interactions:
         \ name=\"grouping_id_s\">GpdbTable 1000050</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">other_base_table</field><field\
-        \ name=\"data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
-        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
-        \ name=\"found_in_workspace_id_im\">1000019</field><field boost=\"1000000\"\
-        \ name=\"name_texts\">other_base_table</field><field boost=\"1000\" name=\"\
-        database_name_texts\">gpdb_granada_test</field><field boost=\"1000\" name=\"\
-        table_description_texts\">bogus</field><field boost=\"1000\" name=\"schema_name_texts\"\
-        >test_schema2</field><field boost=\"1000\" name=\"column_name_texts\">bogus</field><field\
-        \ boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">GpdbTable 1000051</field><field name=\"type\">GpdbTable</field><field\
-        \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000051</field><field name=\"type_name_s\"\
-        >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
-        \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">heatmap_table</field><field name=\"\
-        data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
-        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">heatmap_table</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
+        >Dataset</field><field name=\"sort_name_s\">candy_one_column</field><field\
+        \ name=\"data_source_account_ids_im\">1000015</field><field name=\"data_source_account_ids_im\"\
+        >1000016</field><field name=\"data_source_account_ids_im\">1000017</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">candy_one_column</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
-        \ name=\"schema_name_texts\">test_schema3</field><field boost=\"1000\" name=\"\
-        column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus 2</field></doc><doc><field name=\"id\">ChorusView 1000052</field><field\
-        \ name=\"type\">ChorusView</field><field name=\"type\">GpdbDataset</field><field\
+        \ name=\"schema_name_texts\">test_gpfdist_schema</field><field boost=\"1000\"\
+        \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000051</field><field\
+        \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
-        \ name=\"class_name\">ChorusView</field><field name=\"member_ids_im\">1000006</field><field\
-        \ name=\"member_ids_im\">1000007</field><field name=\"public_b\">true</field><field\
-        \ name=\"workspace_id_im\">1000008</field><field name=\"grouping_id_s\">ChorusView\
-        \ 1000052</field><field name=\"type_name_s\">Dataset</field><field name=\"\
-        security_type_name_sm\">ChorusView</field><field name=\"security_type_name_sm\"\
+        \ name=\"class_name\">GpdbTable</field><field name=\"grouping_id_s\">GpdbTable\
+        \ 1000051</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
-        \ name=\"sort_name_s\">chorus_view</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
-        >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">CHORUS_VIEW</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
-        1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
-        \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
-        query_texts\">select * from test_schema.base_table1;</field></doc><doc><field\
-        \ name=\"id\">ChorusView 1000053</field><field name=\"type\">ChorusView</field><field\
-        \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
-        \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000006</field><field\
-        \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000019</field><field\
+        \ name=\"sort_name_s\">other_base_table</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
+        >1000019</field><field boost=\"1000000\" name=\"name_texts\">other_base_table</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field\
+        \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
+        1000\" name=\"schema_name_texts\">test_schema2</field><field boost=\"1000\"\
+        \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >bogus 2</field></doc><doc><field name=\"id\">GpdbTable 1000052</field><field\
+        \ name=\"type\">GpdbTable</field><field name=\"type\">GpdbDataset</field><field\
+        \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
+        \ name=\"class_name\">GpdbTable</field><field name=\"grouping_id_s\">GpdbTable\
+        \ 1000052</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
+        >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
+        \ name=\"sort_name_s\">heatmap_table</field><field name=\"data_source_account_ids_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field boost=\"1000000\"\
+        \ name=\"name_texts\">heatmap_table</field><field boost=\"1000\" name=\"database_name_texts\"\
+        >gpdb_lapulapu_test</field><field boost=\"1000\" name=\"table_description_texts\"\
+        >bogus</field><field boost=\"1000\" name=\"schema_name_texts\">test_schema3</field><field\
+        \ boost=\"1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\"\
+        \ name=\"column_name_texts\">bogus 2</field></doc><doc><field name=\"id\"\
+        >ChorusView 1000053</field><field name=\"type\">ChorusView</field><field name=\"\
+        type\">GpdbDataset</field><field name=\"type\">Dataset</field><field name=\"\
+        type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
+        \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000007</field><field\
+        \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000008</field><field\
         \ name=\"grouping_id_s\">ChorusView 1000053</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">convert_to_database</field><field\
-        \ name=\"data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
-        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        >Dataset</field><field name=\"sort_name_s\">chorus_view</field><field name=\"\
+        data_source_account_ids_im\">1000015</field><field name=\"data_source_account_ids_im\"\
+        >1000016</field><field name=\"data_source_account_ids_im\">1000017</field><field\
         \ name=\"found_in_workspace_id_im\">1000018</field><field name=\"found_in_workspace_id_im\"\
-        >1000019</field><field boost=\"1000000\" name=\"name_texts\">convert_to_database</field><field\
-        \ boost=\"1000\" name=\"database_name_texts\">gpdb_granada_test</field><field\
+        >1000019</field><field boost=\"1000000\" name=\"name_texts\">CHORUS_VIEW</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
         \ name=\"query_texts\">select * from test_schema.base_table1;</field></doc><doc><field\
         \ name=\"id\">ChorusView 1000054</field><field name=\"type\">ChorusView</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
+        \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000006</field><field\
+        \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000019</field><field\
+        \ name=\"grouping_id_s\">ChorusView 1000054</field><field name=\"type_name_s\"\
+        >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
+        \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
+        >Dataset</field><field name=\"sort_name_s\">convert_to_database</field><field\
+        \ name=\"data_source_account_ids_im\">1000015</field><field name=\"data_source_account_ids_im\"\
+        >1000016</field><field name=\"data_source_account_ids_im\">1000017</field><field\
+        \ name=\"found_in_workspace_id_im\">1000018</field><field name=\"found_in_workspace_id_im\"\
+        >1000019</field><field boost=\"1000000\" name=\"name_texts\">convert_to_database</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field\
+        \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
+        1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
+        \ name=\"query_texts\">select * from test_schema.base_table1;</field></doc><doc><field\
+        \ name=\"id\">ChorusView 1000055</field><field name=\"type\">ChorusView</field><field\
+        \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"public_b\">true</field><field\
         \ name=\"workspace_id_im\">1000018</field><field name=\"grouping_id_s\">ChorusView\
-        \ 1000054</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        \ 1000055</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">ChorusView</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">real_chorus_view</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
         \ boost=\"1000000\" name=\"name_texts\">real_chorus_view</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
-        query_texts\">select 1</field></doc><doc><field name=\"id\">OracleTable 1000055</field><field\
+        query_texts\">select 1</field></doc><doc><field name=\"id\">OracleTable 1000056</field><field\
         \ name=\"type\">OracleTable</field><field name=\"type\">OracleDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">OracleTable</field><field name=\"grouping_id_s\">OracleTable\
-        \ 1000055</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        \ 1000056</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">OracleTable</field><field name=\"security_type_name_sm\"\
         >OracleDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">all_column_table</field><field boost=\"1000000\" name=\"\
         name_texts\">ALL_COLUMN_TABLE</field><field boost=\"1000\" name=\"database_name_texts\"\
-        ></field><field boost=\"1000\" name=\"schema_name_texts\">TEST_GRANADA_TEST</field><field\
+        ></field><field boost=\"1000\" name=\"schema_name_texts\">TEST_LAPULAPU_TEST</field><field\
         \ boost=\"1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"column_name_texts\">bogus 2</field></doc><doc><field name=\"id\"\
-        >OracleView 1000056</field><field name=\"type\">OracleView</field><field name=\"\
+        >OracleView 1000057</field><field name=\"type\">OracleView</field><field name=\"\
         type\">OracleDataset</field><field name=\"type\">Dataset</field><field name=\"\
         type\">ActiveRecord::Base</field><field name=\"class_name\">OracleView</field><field\
-        \ name=\"grouping_id_s\">OracleView 1000056</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">OracleView 1000057</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">OracleView</field><field\
         \ name=\"security_type_name_sm\">OracleDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">all_column_view</field><field\
         \ boost=\"1000000\" name=\"name_texts\">ALL_COLUMN_VIEW</field><field boost=\"\
         1000\" name=\"database_name_texts\"></field><field boost=\"1000\" name=\"\
-        schema_name_texts\">TEST_GRANADA_TEST</field><field boost=\"1000\" name=\"\
+        schema_name_texts\">TEST_LAPULAPU_TEST</field><field boost=\"1000\" name=\"\
         column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus 2</field></doc><doc><field name=\"id\">OracleTable 1000057</field><field\
+        >bogus 2</field></doc><doc><field name=\"id\">OracleTable 1000058</field><field\
         \ name=\"type\">OracleTable</field><field name=\"type\">OracleDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">OracleTable</field><field name=\"grouping_id_s\">OracleTable\
-        \ 1000057</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        \ 1000058</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">OracleTable</field><field name=\"security_type_name_sm\"\
         >OracleDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">base_table1</field><field boost=\"1000000\" name=\"\
         name_texts\">BASE_TABLE1</field><field boost=\"1000\" name=\"database_name_texts\"\
-        ></field><field boost=\"1000\" name=\"schema_name_texts\">TEST_GRANADA_TEST</field><field\
+        ></field><field boost=\"1000\" name=\"schema_name_texts\">TEST_LAPULAPU_TEST</field><field\
         \ boost=\"1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"column_name_texts\">bogus 2</field></doc><doc><field name=\"id\"\
-        >OracleTable 1000058</field><field name=\"type\">OracleTable</field><field\
-        \ name=\"type\">OracleDataset</field><field name=\"type\">Dataset</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">OracleTable</field><field\
-        \ name=\"grouping_id_s\">OracleTable 1000058</field><field name=\"type_name_s\"\
-        >Dataset</field><field name=\"security_type_name_sm\">OracleTable</field><field\
-        \ name=\"security_type_name_sm\">OracleDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">newertable</field><field boost=\"\
-        1000000\" name=\"name_texts\">NEWERTABLE</field><field boost=\"1000\" name=\"\
-        database_name_texts\"></field><field boost=\"1000\" name=\"schema_name_texts\"\
-        >TEST_GRANADA_TEST</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">OracleTable 1000059</field><field name=\"type\">OracleTable</field><field\
+        >OracleTable 1000059</field><field name=\"type\">OracleTable</field><field\
         \ name=\"type\">OracleDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">OracleTable</field><field\
         \ name=\"grouping_id_s\">OracleTable 1000059</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">OracleTable</field><field\
         \ name=\"security_type_name_sm\">OracleDataset</field><field name=\"security_type_name_sm\"\
+        >Dataset</field><field name=\"sort_name_s\">newertable</field><field boost=\"\
+        1000000\" name=\"name_texts\">NEWERTABLE</field><field boost=\"1000\" name=\"\
+        database_name_texts\"></field><field boost=\"1000\" name=\"schema_name_texts\"\
+        >TEST_LAPULAPU_TEST</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
+        \ name=\"id\">OracleTable 1000060</field><field name=\"type\">OracleTable</field><field\
+        \ name=\"type\">OracleDataset</field><field name=\"type\">Dataset</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">OracleTable</field><field\
+        \ name=\"grouping_id_s\">OracleTable 1000060</field><field name=\"type_name_s\"\
+        >Dataset</field><field name=\"security_type_name_sm\">OracleTable</field><field\
+        \ name=\"security_type_name_sm\">OracleDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">newtable</field><field boost=\"\
         1000000\" name=\"name_texts\">NEWTABLE</field><field boost=\"1000\" name=\"\
         database_name_texts\"></field><field boost=\"1000\" name=\"schema_name_texts\"\
-        >TEST_GRANADA_TEST</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >TEST_LAPULAPU_TEST</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">OracleView 1000060</field><field name=\"type\">OracleView</field><field\
+        \ name=\"id\">OracleView 1000061</field><field name=\"type\">OracleView</field><field\
         \ name=\"type\">OracleDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">OracleView</field><field\
-        \ name=\"grouping_id_s\">OracleView 1000060</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">OracleView 1000061</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">OracleView</field><field\
         \ name=\"security_type_name_sm\">OracleDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">newview</field><field boost=\"\
         1000000\" name=\"name_texts\">NEWVIEW</field><field boost=\"1000\" name=\"\
         database_name_texts\"></field><field boost=\"1000\" name=\"schema_name_texts\"\
-        >TEST_GRANADA_TEST</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >TEST_LAPULAPU_TEST</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">OracleTable 1000061</field><field name=\"type\">OracleTable</field><field\
+        \ name=\"id\">OracleTable 1000062</field><field name=\"type\">OracleTable</field><field\
         \ name=\"type\">OracleDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">OracleTable</field><field\
-        \ name=\"grouping_id_s\">OracleTable 1000061</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">OracleTable 1000062</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">OracleTable</field><field\
         \ name=\"security_type_name_sm\">OracleDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">partitioned_integers</field><field\
         \ boost=\"1000000\" name=\"name_texts\">PARTITIONED_INTEGERS</field><field\
         \ boost=\"1000\" name=\"database_name_texts\"></field><field boost=\"1000\"\
-        \ name=\"schema_name_texts\">TEST_GRANADA_TEST</field><field boost=\"1000\"\
+        \ name=\"schema_name_texts\">TEST_LAPULAPU_TEST</field><field boost=\"1000\"\
         \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus 2</field></doc><doc><field name=\"id\">OracleTable 1000062</field><field\
+        >bogus 2</field></doc><doc><field name=\"id\">OracleTable 1000063</field><field\
         \ name=\"type\">OracleTable</field><field name=\"type\">OracleDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">OracleTable</field><field name=\"grouping_id_s\">OracleTable\
-        \ 1000062</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        \ 1000063</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">OracleTable</field><field name=\"security_type_name_sm\"\
         >OracleDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">special_characters</field><field boost=\"1000000\"\
         \ name=\"name_texts\">SPECIAL_CHARACTERS</field><field boost=\"1000\" name=\"\
         database_name_texts\"></field><field boost=\"1000\" name=\"schema_name_texts\"\
-        >TEST_GRANADA_TEST</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >TEST_LAPULAPU_TEST</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">OracleTable 1000063</field><field name=\"type\">OracleTable</field><field\
+        \ name=\"id\">OracleTable 1000064</field><field name=\"type\">OracleTable</field><field\
         \ name=\"type\">OracleDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">OracleTable</field><field\
-        \ name=\"grouping_id_s\">OracleTable 1000063</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">OracleTable 1000064</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">OracleTable</field><field\
         \ name=\"security_type_name_sm\">OracleDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">two_column_table</field><field\
         \ boost=\"1000000\" name=\"name_texts\">TWO_COLUMN_TABLE</field><field boost=\"\
         1000\" name=\"database_name_texts\"></field><field boost=\"1000\" name=\"\
-        schema_name_texts\">TEST_GRANADA_TEST</field><field boost=\"1000\" name=\"\
+        schema_name_texts\">TEST_LAPULAPU_TEST</field><field boost=\"1000\" name=\"\
         column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus 2</field></doc><doc><field name=\"id\">OracleTable 1000064</field><field\
+        >bogus 2</field></doc><doc><field name=\"id\">OracleTable 1000065</field><field\
         \ name=\"type\">OracleTable</field><field name=\"type\">OracleDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">OracleTable</field><field name=\"grouping_id_s\">OracleTable\
-        \ 1000064</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        \ 1000065</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">OracleTable</field><field name=\"security_type_name_sm\"\
         >OracleDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">unsupported_columns</field><field boost=\"1000000\"\
         \ name=\"name_texts\">UNSUPPORTED_COLUMNS</field><field boost=\"1000\" name=\"\
         database_name_texts\"></field><field boost=\"1000\" name=\"schema_name_texts\"\
-        >TEST_GRANADA_TEST</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >TEST_LAPULAPU_TEST</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
-        \ name=\"id\">OracleTable 1000065</field><field name=\"type\">OracleTable</field><field\
+        \ name=\"id\">OracleTable 1000066</field><field name=\"type\">OracleTable</field><field\
         \ name=\"type\">OracleDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">OracleTable</field><field\
-        \ name=\"grouping_id_s\">OracleTable 1000065</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">OracleTable 1000066</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">OracleTable</field><field\
         \ name=\"security_type_name_sm\">OracleDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">with_composite_key</field><field\
         \ boost=\"1000000\" name=\"name_texts\">WITH_COMPOSITE_KEY</field><field boost=\"\
         1000\" name=\"database_name_texts\"></field><field boost=\"1000\" name=\"\
-        schema_name_texts\">TEST_GRANADA_TEST</field><field boost=\"1000\" name=\"\
+        schema_name_texts\">TEST_LAPULAPU_TEST</field><field boost=\"1000\" name=\"\
         column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
         >bogus 2</field></doc></add>"
     headers:
@@ -1383,9 +1394,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>25}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:48 GMT
+  recorded_at: Thu, 09 May 2013 00:44:57 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1408,21 +1419,21 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>31}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:48 GMT
+  recorded_at: Thu, 09 May 2013 00:44:57 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
       string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><add><doc><field name=\"\
-        id\">ChorusView 1000016</field><field name=\"type\">ChorusView</field><field\
+        id\">ChorusView 1000017</field><field name=\"type\">ChorusView</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000006</field><field\
         \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000001</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000016</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusView 1000017</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">typeahead_chorus_view</field><field\
@@ -1433,13 +1444,13 @@ http_interactions:
         database_name_texts\">searchquery_database</field><field boost=\"1000\" name=\"\
         table_description_texts\">bogus</field><field boost=\"1000\" name=\"schema_name_texts\"\
         >searchquery_schema</field><field boost=\"1000\" name=\"query_texts\">select\
-        \ 1</field></doc><doc><field name=\"id\">ChorusView 1000018</field><field\
+        \ 1</field></doc><doc><field name=\"id\">ChorusView 1000019</field><field\
         \ name=\"type\">ChorusView</field><field name=\"type\">GpdbDataset</field><field\
         \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">ChorusView</field><field name=\"member_ids_im\">1000006</field><field\
         \ name=\"member_ids_im\">1000007</field><field name=\"public_b\">true</field><field\
         \ name=\"workspace_id_im\">1000008</field><field name=\"grouping_id_s\">ChorusView\
-        \ 1000018</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        \ 1000019</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">ChorusView</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">chorus_view</field><field name=\"data_source_account_ids_im\"\
@@ -1449,12 +1460,12 @@ http_interactions:
         >default</field><field boost=\"1000\" name=\"table_description_texts\">bogus</field><field\
         \ boost=\"1000\" name=\"schema_name_texts\">default</field><field boost=\"\
         1000\" name=\"query_texts\">select * from a_table</field></doc><doc><field\
-        \ name=\"id\">ChorusView 1000019</field><field name=\"type\">ChorusView</field><field\
+        \ name=\"id\">ChorusView 1000020</field><field name=\"type\">ChorusView</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000007</field><field\
         \ name=\"public_b\">false</field><field name=\"workspace_id_im\">1000009</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000019</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusView 1000020</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">private_chorus_view</field><field\
@@ -1465,12 +1476,12 @@ http_interactions:
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">default</field><field boost=\"1000\" name=\"\
         query_texts\">select * from a_table</field></doc><doc><field name=\"id\">ChorusView\
-        \ 1000020</field><field name=\"type\">ChorusView</field><field name=\"type\"\
+        \ 1000021</field><field name=\"type\">ChorusView</field><field name=\"type\"\
         >GpdbDataset</field><field name=\"type\">Dataset</field><field name=\"type\"\
         >ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000007</field><field\
         \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000010</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000020</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusView 1000021</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">searchquery_chorus_view</field><field\
@@ -1482,12 +1493,12 @@ http_interactions:
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">searchquery_schema</field><field boost=\"1000\"\
         \ name=\"query_texts\">select searchquery from a_table</field></doc><doc><field\
-        \ name=\"id\">ChorusView 1000021</field><field name=\"type\">ChorusView</field><field\
+        \ name=\"id\">ChorusView 1000022</field><field name=\"type\">ChorusView</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000007</field><field\
         \ name=\"public_b\">false</field><field name=\"workspace_id_im\">1000011</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000021</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusView 1000022</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">searchquery_chorus_view_private</field><field\
@@ -1499,54 +1510,54 @@ http_interactions:
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">searchquery_schema</field><field boost=\"1000\"\
         \ name=\"query_texts\">select searchquery from a_table</field></doc><doc><field\
-        \ name=\"id\">ChorusView 1000052</field><field name=\"type\">ChorusView</field><field\
+        \ name=\"id\">ChorusView 1000053</field><field name=\"type\">ChorusView</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000007</field><field\
         \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000008</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000052</field><field name=\"type_name_s\"\
-        >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
-        \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">chorus_view</field><field name=\"\
-        data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
-        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
-        \ name=\"found_in_workspace_id_im\">1000018</field><field name=\"found_in_workspace_id_im\"\
-        >1000019</field><field boost=\"1000000\" name=\"name_texts\">CHORUS_VIEW</field><field\
-        \ boost=\"1000\" name=\"database_name_texts\">gpdb_granada_test</field><field\
-        \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
-        1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
-        \ name=\"query_texts\">select * from test_schema.base_table1;</field></doc><doc><field\
-        \ name=\"id\">ChorusView 1000053</field><field name=\"type\">ChorusView</field><field\
-        \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
-        \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000006</field><field\
-        \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000019</field><field\
         \ name=\"grouping_id_s\">ChorusView 1000053</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
-        >Dataset</field><field name=\"sort_name_s\">convert_to_database</field><field\
-        \ name=\"data_source_account_ids_im\">1000014</field><field name=\"data_source_account_ids_im\"\
-        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        >Dataset</field><field name=\"sort_name_s\">chorus_view</field><field name=\"\
+        data_source_account_ids_im\">1000015</field><field name=\"data_source_account_ids_im\"\
+        >1000016</field><field name=\"data_source_account_ids_im\">1000017</field><field\
         \ name=\"found_in_workspace_id_im\">1000018</field><field name=\"found_in_workspace_id_im\"\
-        >1000019</field><field boost=\"1000000\" name=\"name_texts\">convert_to_database</field><field\
-        \ boost=\"1000\" name=\"database_name_texts\">gpdb_granada_test</field><field\
+        >1000019</field><field boost=\"1000000\" name=\"name_texts\">CHORUS_VIEW</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
         \ name=\"query_texts\">select * from test_schema.base_table1;</field></doc><doc><field\
         \ name=\"id\">ChorusView 1000054</field><field name=\"type\">ChorusView</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
+        \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000006</field><field\
+        \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000019</field><field\
+        \ name=\"grouping_id_s\">ChorusView 1000054</field><field name=\"type_name_s\"\
+        >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
+        \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
+        >Dataset</field><field name=\"sort_name_s\">convert_to_database</field><field\
+        \ name=\"data_source_account_ids_im\">1000015</field><field name=\"data_source_account_ids_im\"\
+        >1000016</field><field name=\"data_source_account_ids_im\">1000017</field><field\
+        \ name=\"found_in_workspace_id_im\">1000018</field><field name=\"found_in_workspace_id_im\"\
+        >1000019</field><field boost=\"1000000\" name=\"name_texts\">convert_to_database</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field\
+        \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
+        1000\" name=\"schema_name_texts\">test_schema</field><field boost=\"1000\"\
+        \ name=\"query_texts\">select * from test_schema.base_table1;</field></doc><doc><field\
+        \ name=\"id\">ChorusView 1000055</field><field name=\"type\">ChorusView</field><field\
+        \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">ChorusView</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"public_b\">true</field><field\
         \ name=\"workspace_id_im\">1000018</field><field name=\"grouping_id_s\">ChorusView\
-        \ 1000054</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        \ 1000055</field><field name=\"type_name_s\">Dataset</field><field name=\"\
         security_type_name_sm\">ChorusView</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">real_chorus_view</field><field name=\"data_source_account_ids_im\"\
-        >1000014</field><field name=\"data_source_account_ids_im\">1000015</field><field\
-        \ name=\"data_source_account_ids_im\">1000016</field><field name=\"found_in_workspace_id_im\"\
+        >1000015</field><field name=\"data_source_account_ids_im\">1000016</field><field\
+        \ name=\"data_source_account_ids_im\">1000017</field><field name=\"found_in_workspace_id_im\"\
         >1000018</field><field name=\"found_in_workspace_id_im\">1000019</field><field\
         \ boost=\"1000000\" name=\"name_texts\">real_chorus_view</field><field boost=\"\
-        1000\" name=\"database_name_texts\">gpdb_granada_test</field><field boost=\"\
+        1000\" name=\"database_name_texts\">gpdb_lapulapu_test</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
         \ name=\"schema_name_texts\">test_schema</field><field boost=\"1000\" name=\"\
         query_texts\">select 1</field></doc></add>"
@@ -1566,9 +1577,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>19}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:48 GMT
+  recorded_at: Thu, 09 May 2013 00:44:57 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1591,9 +1602,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>21}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:57 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1621,7 +1632,7 @@ http_interactions:
         \ name=\"body_texts\">Comment on no collaborators private</field></doc><doc><field\
         \ name=\"id\">Comment 1000003</field><field name=\"type\">Comment</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">Comment</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000010</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000011</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"data_source_account_ids_im\">1000002</field><field\
@@ -1630,7 +1641,7 @@ http_interactions:
         \ name=\"body_texts\">commentsearch ftw</field></doc><doc><field name=\"id\"\
         >Comment 1000004</field><field name=\"type\">Comment</field><field name=\"\
         type\">ActiveRecord::Base</field><field name=\"class_name\">Comment</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000021</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusView 1000022</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"member_ids_im\">1000006</field><field name=\"\
@@ -1655,9 +1666,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:57 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1680,9 +1691,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>16}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:57 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1723,68 +1734,75 @@ http_interactions:
         \ name=\"class_name\">GpdbDataSource</field><field name=\"grouping_id_s\"\
         >GpdbDataSource 1000004</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
-        >DataSource</field><field name=\"sort_name_s\">offline</field><field boost=\"\
-        1000000\" name=\"name_texts\">Offline</field></doc><doc><field name=\"id\"\
+        >DataSource</field><field name=\"sort_name_s\">alternate</field><field boost=\"\
+        1000000\" name=\"name_texts\">Alternate</field></doc><doc><field name=\"id\"\
         >GpdbDataSource 1000005</field><field name=\"type\">GpdbDataSource</field><field\
         \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">GpdbDataSource</field><field name=\"grouping_id_s\"\
         >GpdbDataSource 1000005</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
+        >DataSource</field><field name=\"sort_name_s\">offline</field><field boost=\"\
+        1000000\" name=\"name_texts\">Offline</field></doc><doc><field name=\"id\"\
+        >GpdbDataSource 1000006</field><field name=\"type\">GpdbDataSource</field><field\
+        \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
+        \ name=\"class_name\">GpdbDataSource</field><field name=\"grouping_id_s\"\
+        >GpdbDataSource 1000006</field><field name=\"type_name_s\">DataSource</field><field\
+        \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
         >DataSource</field><field name=\"sort_name_s\">online</field><field boost=\"\
         1000000\" name=\"name_texts\">Online</field></doc><doc><field name=\"id\"\
-        >OracleDataSource 1000006</field><field name=\"type\">OracleDataSource</field><field\
+        >OracleDataSource 1000007</field><field name=\"type\">OracleDataSource</field><field\
         \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">OracleDataSource</field><field name=\"grouping_id_s\"\
-        >OracleDataSource 1000006</field><field name=\"type_name_s\">DataSource</field><field\
+        >OracleDataSource 1000007</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
         >DataSource</field><field name=\"sort_name_s\">oracle</field><field boost=\"\
         1000000\" name=\"name_texts\">oracle</field></doc><doc><field name=\"id\"\
-        >GpdbDataSource 1000007</field><field name=\"type\">GpdbDataSource</field><field\
+        >GpdbDataSource 1000008</field><field name=\"type\">GpdbDataSource</field><field\
         \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">GpdbDataSource</field><field name=\"grouping_id_s\"\
-        >GpdbDataSource 1000007</field><field name=\"type_name_s\">DataSource</field><field\
+        >GpdbDataSource 1000008</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
         >DataSource</field><field name=\"sort_name_s\">typeahead_gpdb_data_source</field><field\
         \ boost=\"1000000\" name=\"name_texts\">typeahead_gpdb_data_source</field></doc><doc><field\
-        \ name=\"id\">OracleDataSource 1000008</field><field name=\"type\">OracleDataSource</field><field\
+        \ name=\"id\">OracleDataSource 1000009</field><field name=\"type\">OracleDataSource</field><field\
         \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">OracleDataSource</field><field name=\"grouping_id_s\"\
-        >OracleDataSource 1000008</field><field name=\"type_name_s\">DataSource</field><field\
+        >OracleDataSource 1000009</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
         >DataSource</field><field name=\"sort_name_s\">typeahead_oracle_data_source</field><field\
         \ boost=\"1000000\" name=\"name_texts\">typeahead_oracle_data_source</field></doc><doc><field\
-        \ name=\"id\">GpdbDataSource 1000009</field><field name=\"type\">GpdbDataSource</field><field\
-        \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
-        \ name=\"class_name\">GpdbDataSource</field><field name=\"grouping_id_s\"\
-        >GpdbDataSource 1000009</field><field name=\"type_name_s\">DataSource</field><field\
-        \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
-        >DataSource</field><field name=\"sort_name_s\">gpdb_data_source44445</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">gpdb_data_source44445</field></doc><doc><field\
         \ name=\"id\">GpdbDataSource 1000010</field><field name=\"type\">GpdbDataSource</field><field\
         \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">GpdbDataSource</field><field name=\"grouping_id_s\"\
         >GpdbDataSource 1000010</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
-        >DataSource</field><field name=\"sort_name_s\">chorus_gpdb40</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">chorus_gpdb40</field></doc><doc><field\
+        >DataSource</field><field name=\"sort_name_s\">gpdb_data_source44445</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">gpdb_data_source44445</field></doc><doc><field\
         \ name=\"id\">GpdbDataSource 1000011</field><field name=\"type\">GpdbDataSource</field><field\
         \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">GpdbDataSource</field><field name=\"grouping_id_s\"\
         >GpdbDataSource 1000011</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
-        >DataSource</field><field name=\"sort_name_s\">chorus_gpdb41</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">chorus_gpdb41</field></doc><doc><field\
+        >DataSource</field><field name=\"sort_name_s\">chorus_gpdb40</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">chorus_gpdb40</field></doc><doc><field\
         \ name=\"id\">GpdbDataSource 1000012</field><field name=\"type\">GpdbDataSource</field><field\
         \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">GpdbDataSource</field><field name=\"grouping_id_s\"\
         >GpdbDataSource 1000012</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
+        >DataSource</field><field name=\"sort_name_s\">chorus_gpdb41</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">chorus_gpdb41</field></doc><doc><field\
+        \ name=\"id\">GpdbDataSource 1000013</field><field name=\"type\">GpdbDataSource</field><field\
+        \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
+        \ name=\"class_name\">GpdbDataSource</field><field name=\"grouping_id_s\"\
+        >GpdbDataSource 1000013</field><field name=\"type_name_s\">DataSource</field><field\
+        \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
         >DataSource</field><field name=\"sort_name_s\">local-greenplum</field><field\
         \ boost=\"1000000\" name=\"name_texts\">local-greenplum</field></doc><doc><field\
-        \ name=\"id\">OracleDataSource 1000013</field><field name=\"type\">OracleDataSource</field><field\
+        \ name=\"id\">OracleDataSource 1000014</field><field name=\"type\">OracleDataSource</field><field\
         \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">OracleDataSource</field><field name=\"grouping_id_s\"\
-        >OracleDataSource 1000013</field><field name=\"type_name_s\">DataSource</field><field\
+        >OracleDataSource 1000014</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
         >DataSource</field><field name=\"sort_name_s\">oracle_data_source44445</field><field\
         \ boost=\"1000000\" name=\"name_texts\">oracle_data_source44445</field></doc></add>"
@@ -1804,9 +1822,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>35}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:57 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1829,9 +1847,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>6}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>18}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:57 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1879,9 +1897,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:57 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1904,9 +1922,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>34}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1942,9 +1960,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1967,9 +1985,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>19}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2002,15 +2020,215 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
       string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><commit/>"
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>89}}"
+    http_version: '1.1'
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><add><doc><field name=\"\
+        id\">User 1000000</field><field name=\"type\">User</field><field name=\"type\"\
+        >ActiveRecord::Base</field><field name=\"class_name\">User</field><field name=\"\
+        grouping_id_s\">User 1000000</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Admin_44445</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >AlphaSearch</field><field boost=\"1000\" name=\"username_texts\">admin</field><field\
+        \ boost=\"1000\" name=\"email_texts\">admin_44445@huelsgreen.net</field></doc><doc><field\
+        \ name=\"id\">User 1000001</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000001</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Admin_44446</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >AlphaSearch</field><field boost=\"1000\" name=\"username_texts\">evil_admin</field><field\
+        \ boost=\"1000\" name=\"email_texts\">admin_44446@brakus.com</field></doc><doc><field\
+        \ name=\"id\">User 1000002</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000002</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Judson</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Williamson</field><field boost=\"1000\" name=\"username_texts\">default</field><field\
+        \ boost=\"1000\" name=\"email_texts\">judson@mann.org</field></doc><doc><field\
+        \ name=\"id\">User 1000003</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000003</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Dean</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Price</field><field boost=\"1000\" name=\"username_texts\">no_collaborators</field><field\
+        \ boost=\"1000\" name=\"email_texts\">dean@west.biz</field></doc><doc><field\
+        \ name=\"id\">User 1000004</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000004</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">no_picture</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Fritsch</field><field boost=\"1000\" name=\"username_texts\">no_picture</field><field\
+        \ boost=\"1000\" name=\"email_texts\">no_picture@renner.com</field></doc><doc><field\
+        \ name=\"id\">User 1000005</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000005</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">with_picture</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Satterfield</field><field boost=\"1000\" name=\"username_texts\">with_picture</field><field\
+        \ boost=\"1000\" name=\"email_texts\">with_picture@veumprosacco.net</field></doc><doc><field\
+        \ name=\"id\">User 1000006</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000006</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">searchquery</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Torp</field><field boost=\"1000\" name=\"username_texts\">owner</field><field\
+        \ boost=\"1000\" name=\"email_texts\">searchquery@trantow.org</field></doc><doc><field\
+        \ name=\"id\">User 1000007</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000007</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Trudie</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Lehner</field><field boost=\"1000\" name=\"username_texts\">the_collaborator</field><field\
+        \ boost=\"1000\" name=\"email_texts\">trudie@abbott.org</field></doc><doc><field\
+        \ name=\"id\">User 1000008</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000008</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Sid</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Mayer</field><field boost=\"1000\" name=\"username_texts\">not_a_member</field><field\
+        \ boost=\"1000\" name=\"email_texts\">sid@wiza.net</field></doc><doc><field\
+        \ name=\"id\">User 1000009</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000009</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Kayley</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Deckow</field><field boost=\"1000\" name=\"username_texts\">restricted_user</field><field\
+        \ boost=\"1000\" name=\"email_texts\">kayley@schmidt.info</field></doc><doc><field\
+        \ name=\"id\">User 1000010</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000010</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Hilbert</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Hegmann</field><field boost=\"1000\" name=\"username_texts\">user44445</field><field\
+        \ boost=\"1000\" name=\"email_texts\">hilbert@sawayn.name</field></doc><doc><field\
+        \ name=\"id\">User 1000011</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000011</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">typeahead</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Collins</field><field boost=\"1000\" name=\"username_texts\">typeahead</field><field\
+        \ boost=\"1000\" name=\"email_texts\">typeahead@hermiston.com</field></doc><doc><field\
+        \ name=\"id\">User 1000012</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000012</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Shane</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Dietrich</field><field boost=\"1000\" name=\"username_texts\">user44446</field><field\
+        \ boost=\"1000\" name=\"email_texts\">shane@krislangworth.biz</field></doc><doc><field\
+        \ name=\"id\">User 1000013</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000013</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Kenny</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Gibson</field><field boost=\"1000\" name=\"username_texts\">user44447</field><field\
+        \ boost=\"1000\" name=\"email_texts\">kenny@friesensporer.com</field></doc><doc><field\
+        \ name=\"id\">User 1000014</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000014</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Shaniya</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Pfeffer</field><field boost=\"1000\" name=\"username_texts\">user44448</field><field\
+        \ boost=\"1000\" name=\"email_texts\">shaniya@purdy.info</field></doc><doc><field\
+        \ name=\"id\">User 1000015</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000015</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Carolina</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Schroeder</field><field boost=\"1000\" name=\"username_texts\">user44449</field><field\
+        \ boost=\"1000\" name=\"email_texts\">carolina@lakin.name</field></doc><doc><field\
+        \ name=\"id\">User 1000016</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000016</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Mark</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Bogisich</field><field boost=\"1000\" name=\"username_texts\">user44450</field><field\
+        \ boost=\"1000\" name=\"email_texts\">mark@christiansenweber.biz</field></doc><doc><field\
+        \ name=\"id\">User 1000017</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000017</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Lupe</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Harris</field><field boost=\"1000\" name=\"username_texts\">user44451</field><field\
+        \ boost=\"1000\" name=\"email_texts\">lupe@heidenreichkutch.net</field></doc><doc><field\
+        \ name=\"id\">User 1000018</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000018</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Allison</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Bergstrom</field><field boost=\"1000\" name=\"username_texts\">user44452</field><field\
+        \ boost=\"1000\" name=\"email_texts\">allison@doyle.name</field></doc><doc><field\
+        \ name=\"id\">User 1000019</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000019</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Angelo</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Dach</field><field boost=\"1000\" name=\"username_texts\">user44453</field><field\
+        \ boost=\"1000\" name=\"email_texts\">angelo@runtestiedemann.com</field></doc><doc><field\
+        \ name=\"id\">User 1000020</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000020</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Ken</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Konopelski</field><field boost=\"1000\" name=\"username_texts\">user44454</field><field\
+        \ boost=\"1000\" name=\"email_texts\">ken@bayer.com</field></doc><doc><field\
+        \ name=\"id\">User 1000021</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000021</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Vito</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Jaskolski</field><field boost=\"1000\" name=\"username_texts\">user44455</field><field\
+        \ boost=\"1000\" name=\"email_texts\">vito@ernser.com</field></doc><doc><field\
+        \ name=\"id\">User 1000022</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000022</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Jacky</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Macejkovic</field><field boost=\"1000\" name=\"username_texts\">user44456</field><field\
+        \ boost=\"1000\" name=\"email_texts\">jacky@howerath.biz</field></doc><doc><field\
+        \ name=\"id\">User 1000023</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000023</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Tess</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Aufderhar</field><field boost=\"1000\" name=\"username_texts\">user44457</field><field\
+        \ boost=\"1000\" name=\"email_texts\">tess@swiftkunde.info</field></doc><doc><field\
+        \ name=\"id\">User 1000024</field><field name=\"type\">User</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
+        \ name=\"grouping_id_s\">User 1000024</field><field name=\"type_name_s\">User</field><field\
+        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
+        first_name_texts\">Gwen</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Hegmann</field><field boost=\"1000\" name=\"username_texts\">user44458</field><field\
+        \ boost=\"1000\" name=\"email_texts\">gwen@carroll.net</field></doc></add>"
     headers:
       content-type:
       - text/xml
@@ -2029,207 +2247,7 @@ http_interactions:
       encoding: US-ASCII
       string: "{'responseHeader'=>{'status'=>0,'QTime'=>16}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><add><doc><field name=\"\
-        id\">User 1000000</field><field name=\"type\">User</field><field name=\"type\"\
-        >ActiveRecord::Base</field><field name=\"class_name\">User</field><field name=\"\
-        grouping_id_s\">User 1000000</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Admin_44445</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >AlphaSearch</field><field boost=\"1000\" name=\"username_texts\">admin</field><field\
-        \ boost=\"1000\" name=\"email_texts\">admin_44445@veum.name</field></doc><doc><field\
-        \ name=\"id\">User 1000001</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000001</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Admin_44446</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >AlphaSearch</field><field boost=\"1000\" name=\"username_texts\">evil_admin</field><field\
-        \ boost=\"1000\" name=\"email_texts\">admin_44446@blandadouglas.com</field></doc><doc><field\
-        \ name=\"id\">User 1000002</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000002</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Lucienne</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Donnelly</field><field boost=\"1000\" name=\"username_texts\">default</field><field\
-        \ boost=\"1000\" name=\"email_texts\">lucienne@wiegandwatsica.org</field></doc><doc><field\
-        \ name=\"id\">User 1000003</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000003</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Laverne</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Kshlerin</field><field boost=\"1000\" name=\"username_texts\">no_collaborators</field><field\
-        \ boost=\"1000\" name=\"email_texts\">laverne@koepp.com</field></doc><doc><field\
-        \ name=\"id\">User 1000004</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000004</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">no_picture</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Graham</field><field boost=\"1000\" name=\"username_texts\">no_picture</field><field\
-        \ boost=\"1000\" name=\"email_texts\">no_picture@harber.com</field></doc><doc><field\
-        \ name=\"id\">User 1000005</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000005</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">with_picture</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Douglas</field><field boost=\"1000\" name=\"username_texts\">with_picture</field><field\
-        \ boost=\"1000\" name=\"email_texts\">with_picture@hyatt.net</field></doc><doc><field\
-        \ name=\"id\">User 1000006</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000006</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">searchquery</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Rau</field><field boost=\"1000\" name=\"username_texts\">owner</field><field\
-        \ boost=\"1000\" name=\"email_texts\">searchquery@hegmann.org</field></doc><doc><field\
-        \ name=\"id\">User 1000007</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000007</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Dimitri</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Homenick</field><field boost=\"1000\" name=\"username_texts\">the_collaborator</field><field\
-        \ boost=\"1000\" name=\"email_texts\">dimitri@larkin.org</field></doc><doc><field\
-        \ name=\"id\">User 1000008</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000008</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Eliane</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Nicolas</field><field boost=\"1000\" name=\"username_texts\">not_a_member</field><field\
-        \ boost=\"1000\" name=\"email_texts\">eliane@hackett.net</field></doc><doc><field\
-        \ name=\"id\">User 1000009</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000009</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Rocio</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Murazik</field><field boost=\"1000\" name=\"username_texts\">restricted_user</field><field\
-        \ boost=\"1000\" name=\"email_texts\">rocio@murphy.name</field></doc><doc><field\
-        \ name=\"id\">User 1000010</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000010</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Roberta</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Kreiger</field><field boost=\"1000\" name=\"username_texts\">user44445</field><field\
-        \ boost=\"1000\" name=\"email_texts\">roberta@heller.name</field></doc><doc><field\
-        \ name=\"id\">User 1000011</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000011</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">typeahead</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Kohler</field><field boost=\"1000\" name=\"username_texts\">typeahead</field><field\
-        \ boost=\"1000\" name=\"email_texts\">typeahead@schinner.com</field></doc><doc><field\
-        \ name=\"id\">User 1000012</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000012</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Ramona</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Crona</field><field boost=\"1000\" name=\"username_texts\">user44446</field><field\
-        \ boost=\"1000\" name=\"email_texts\">ramona@zboncak.name</field></doc><doc><field\
-        \ name=\"id\">User 1000013</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000013</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Liza</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Daugherty</field><field boost=\"1000\" name=\"username_texts\">user44447</field><field\
-        \ boost=\"1000\" name=\"email_texts\">liza@dubuque.name</field></doc><doc><field\
-        \ name=\"id\">User 1000014</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000014</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Adelle</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Weber</field><field boost=\"1000\" name=\"username_texts\">user44448</field><field\
-        \ boost=\"1000\" name=\"email_texts\">adelle@mraz.net</field></doc><doc><field\
-        \ name=\"id\">User 1000015</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000015</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Jamarcus</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Emard</field><field boost=\"1000\" name=\"username_texts\">user44449</field><field\
-        \ boost=\"1000\" name=\"email_texts\">jamarcus@brakus.net</field></doc><doc><field\
-        \ name=\"id\">User 1000016</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000016</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Dedric</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Wintheiser</field><field boost=\"1000\" name=\"username_texts\">user44450</field><field\
-        \ boost=\"1000\" name=\"email_texts\">dedric@bahringeryost.info</field></doc><doc><field\
-        \ name=\"id\">User 1000017</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000017</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Kaitlin</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Donnelly</field><field boost=\"1000\" name=\"username_texts\">user44451</field><field\
-        \ boost=\"1000\" name=\"email_texts\">kaitlin@yost.biz</field></doc><doc><field\
-        \ name=\"id\">User 1000018</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000018</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Bobby</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Mraz</field><field boost=\"1000\" name=\"username_texts\">user44452</field><field\
-        \ boost=\"1000\" name=\"email_texts\">bobby@pouros.info</field></doc><doc><field\
-        \ name=\"id\">User 1000019</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000019</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Kendrick</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Osinski</field><field boost=\"1000\" name=\"username_texts\">user44453</field><field\
-        \ boost=\"1000\" name=\"email_texts\">kendrick@upton.biz</field></doc><doc><field\
-        \ name=\"id\">User 1000020</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000020</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Conor</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Jakubowski</field><field boost=\"1000\" name=\"username_texts\">user44454</field><field\
-        \ boost=\"1000\" name=\"email_texts\">conor@schulistheathcote.org</field></doc><doc><field\
-        \ name=\"id\">User 1000021</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000021</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">David</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Pacocha</field><field boost=\"1000\" name=\"username_texts\">user44455</field><field\
-        \ boost=\"1000\" name=\"email_texts\">david@kling.name</field></doc><doc><field\
-        \ name=\"id\">User 1000022</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000022</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Sherman</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Klein</field><field boost=\"1000\" name=\"username_texts\">user44456</field><field\
-        \ boost=\"1000\" name=\"email_texts\">sherman@langoshreichel.com</field></doc><doc><field\
-        \ name=\"id\">User 1000023</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000023</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Delta</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Littel</field><field boost=\"1000\" name=\"username_texts\">user44457</field><field\
-        \ boost=\"1000\" name=\"email_texts\">delta@bernhardhowe.biz</field></doc><doc><field\
-        \ name=\"id\">User 1000024</field><field name=\"type\">User</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
-        \ name=\"grouping_id_s\">User 1000024</field><field name=\"type_name_s\">User</field><field\
-        \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Colby</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Donnelly</field><field boost=\"1000\" name=\"username_texts\">user44458</field><field\
-        \ boost=\"1000\" name=\"email_texts\">colby@beer.com</field></doc></add>"
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>6}}"
-    http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2252,9 +2270,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>26}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>17}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2483,9 +2501,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>13}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2508,9 +2526,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>6}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>10}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2520,14 +2538,14 @@ http_interactions:
         id\">Events::NoteOnDataSource 1000008</field><field name=\"type\">Events::NoteOnDataSource</field><field\
         \ name=\"type\">Events::Note</field><field name=\"type\">Events::Base</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">Events::NoteOnDataSource</field><field\
-        \ name=\"grouping_id_s\">OracleDataSource 1000006</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">OracleDataSource 1000007</field><field name=\"type_name_s\"\
         >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"body_texts\"\
         >note on oracle data source</field></doc><doc><field name=\"id\">Events::NoteOnDataSource\
         \ 1000011</field><field name=\"type\">Events::NoteOnDataSource</field><field\
         \ name=\"type\">Events::Note</field><field name=\"type\">Events::Base</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">Events::NoteOnDataSource</field><field\
-        \ name=\"grouping_id_s\">GpdbDataSource 1000007</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbDataSource 1000008</field><field name=\"type_name_s\"\
         >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"body_texts\"\
         >i exist only for my attachments</field></doc><doc><field name=\"id\">Events::NoteOnWorkfile\
@@ -2669,7 +2687,7 @@ http_interactions:
         \ name=\"data_source_account_ids_im\">1000002</field><field name=\"found_in_workspace_id_im\"\
         >1000001</field><field name=\"found_in_workspace_id_im\">1000011</field><field\
         \ name=\"found_in_workspace_id_im\">1000010</field><field name=\"grouping_id_s\"\
-        >GpdbTable 1000010</field><field name=\"type_name_s\">Dataset</field><field\
+        >GpdbTable 1000011</field><field name=\"type_name_s\">Dataset</field><field\
         \ name=\"security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"body_texts\">notesearch ftw</field></doc><doc><field name=\"id\"\
@@ -2679,7 +2697,7 @@ http_interactions:
         \ name=\"data_source_account_ids_im\">1000002</field><field name=\"found_in_workspace_id_im\"\
         >1000001</field><field name=\"found_in_workspace_id_im\">1000011</field><field\
         \ name=\"found_in_workspace_id_im\">1000010</field><field name=\"grouping_id_s\"\
-        >GpdbTable 1000010</field><field name=\"type_name_s\">Dataset</field><field\
+        >GpdbTable 1000011</field><field name=\"type_name_s\">Dataset</field><field\
         \ name=\"security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"body_texts\">insightsearch ftw</field></doc><doc><field name=\"id\"\
@@ -2691,7 +2709,7 @@ http_interactions:
         \ name=\"found_in_workspace_id_im\">1000010</field><field name=\"member_ids_im\"\
         >1000006</field><field name=\"member_ids_im\">1000007</field><field name=\"\
         public_b\">false</field><field name=\"workspace_id_im\">1000011</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000021</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusView 1000022</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"body_texts\">workspacedatasetnotesearch</field></doc><doc><field\
@@ -2704,7 +2722,7 @@ http_interactions:
         \ name=\"found_in_workspace_id_im\">1000010</field><field name=\"member_ids_im\"\
         >1000006</field><field name=\"member_ids_im\">1000007</field><field name=\"\
         public_b\">true</field><field name=\"workspace_id_im\">1000008</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000010</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000011</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"body_texts\">workspacedatasetnotesearch</field></doc><doc><field\
@@ -2761,9 +2779,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>15}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2786,9 +2804,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>11}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2810,7 +2828,7 @@ http_interactions:
         \ name=\"data_source_account_ids_im\">1000002</field><field name=\"found_in_workspace_id_im\"\
         >1000001</field><field name=\"found_in_workspace_id_im\">1000011</field><field\
         \ name=\"found_in_workspace_id_im\">1000010</field><field name=\"grouping_id_s\"\
-        >GpdbTable 1000010</field><field name=\"type_name_s\">Dataset</field><field\
+        >GpdbTable 1000011</field><field name=\"type_name_s\">Dataset</field><field\
         \ name=\"security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"body_texts\">notesearch ftw</field></doc><doc><field name=\"id\"\
@@ -2820,7 +2838,7 @@ http_interactions:
         \ name=\"data_source_account_ids_im\">1000002</field><field name=\"found_in_workspace_id_im\"\
         >1000001</field><field name=\"found_in_workspace_id_im\">1000011</field><field\
         \ name=\"found_in_workspace_id_im\">1000010</field><field name=\"grouping_id_s\"\
-        >GpdbTable 1000010</field><field name=\"type_name_s\">Dataset</field><field\
+        >GpdbTable 1000011</field><field name=\"type_name_s\">Dataset</field><field\
         \ name=\"security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"body_texts\">insightsearch ftw</field></doc></add>"
@@ -2840,9 +2858,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2865,9 +2883,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>12}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2926,9 +2944,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:58 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2951,9 +2969,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>15}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:49 GMT
+  recorded_at: Thu, 09 May 2013 00:44:59 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3009,9 +3027,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:50 GMT
+  recorded_at: Thu, 09 May 2013 00:44:59 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3034,9 +3052,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>9}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>15}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:50 GMT
+  recorded_at: Thu, 09 May 2013 00:44:59 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3063,7 +3081,7 @@ http_interactions:
         \ name=\"found_in_workspace_id_im\">1000010</field><field name=\"member_ids_im\"\
         >1000006</field><field name=\"member_ids_im\">1000007</field><field name=\"\
         public_b\">false</field><field name=\"workspace_id_im\">1000011</field><field\
-        \ name=\"grouping_id_s\">ChorusView 1000021</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusView 1000022</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">ChorusView</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"body_texts\">workspacedatasetnotesearch</field></doc><doc><field\
@@ -3076,7 +3094,7 @@ http_interactions:
         \ name=\"found_in_workspace_id_im\">1000010</field><field name=\"member_ids_im\"\
         >1000006</field><field name=\"member_ids_im\">1000007</field><field name=\"\
         public_b\">true</field><field name=\"workspace_id_im\">1000008</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000010</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000011</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"body_texts\">workspacedatasetnotesearch</field></doc><doc><field\
@@ -3108,9 +3126,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>6}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:50 GMT
+  recorded_at: Thu, 09 May 2013 00:44:59 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3133,9 +3151,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>10}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>15}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:50 GMT
+  recorded_at: Thu, 09 May 2013 00:44:59 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3183,9 +3201,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>9}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:50 GMT
+  recorded_at: Thu, 09 May 2013 00:44:59 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3208,9 +3226,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>14}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:50 GMT
+  recorded_at: Thu, 09 May 2013 00:44:59 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3233,19 +3251,19 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>1}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:50 GMT
+  recorded_at: Thu, 09 May 2013 00:44:59 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
     body:
       encoding: US-ASCII
       string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><add><doc><field name=\"\
-        id\">GpdbTable 1000010</field><field name=\"type\">GpdbTable</field><field\
+        id\">GpdbTable 1000011</field><field name=\"type\">GpdbTable</field><field\
         \ name=\"type\">GpdbDataset</field><field name=\"type\">Dataset</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbTable</field><field\
-        \ name=\"grouping_id_s\">GpdbTable 1000010</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">GpdbTable 1000011</field><field name=\"type_name_s\"\
         >Dataset</field><field name=\"security_type_name_sm\">GpdbTable</field><field\
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >Dataset</field><field name=\"sort_name_s\">searchquery_table</field><field\
@@ -3276,9 +3294,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:50 GMT
+  recorded_at: Thu, 09 May 2013 00:44:59 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3301,7 +3319,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>9}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>98}}"
     http_version: '1.1'
-  recorded_at: Thu, 25 Apr 2013 01:10:50 GMT
+  recorded_at: Thu, 09 May 2013 00:44:59 GMT
 recorded_with: VCR 2.3.0

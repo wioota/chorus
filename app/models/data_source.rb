@@ -8,6 +8,8 @@ class DataSource < ActiveRecord::Base
   attr_accessible :name, :description, :host, :port, :db_name, :db_username, :db_password, :as => [:default, :create]
   attr_accessible :shared, :as => :create
 
+  before_destroy :cancel_imports
+
   belongs_to :owner, :class_name => 'User'
   has_many :accounts, :class_name => 'DataSourceAccount', :inverse_of => :data_source, :foreign_key => "data_source_id", :dependent => :destroy
   has_one :owner_account, :class_name => 'DataSourceAccount', :foreign_key => "data_source_id", :inverse_of => :data_source, :conditions => proc { {:owner_id => owner_id} }

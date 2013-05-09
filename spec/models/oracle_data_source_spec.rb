@@ -1,12 +1,13 @@
 require 'spec_helper'
 
 describe OracleDataSource do
-  let(:data_source) { FactoryGirl.build(:oracle_data_source) }
+  let(:data_source) { data_sources(:oracle) }
 
   describe "validations" do
     it { should validate_presence_of(:host) }
 
     context 'when creating' do
+      let(:data_source) { FactoryGirl.build(:oracle_data_source) }
       it 'validates the owner account' do
         mock(data_source).owner_account { mock(FactoryGirl.build(:data_source_account)).valid? { true } }
         data_source.valid?
@@ -19,6 +20,13 @@ describe OracleDataSource do
       data_source = data_sources(:oracle)
       mock(QC.default_queue).enqueue_if_not_queued("OracleSchema.destroy_schemas", data_source.id)
       data_source.destroy
+    end
+
+    it "cancels any imports" do
+      import = imports(:oracle)
+      import.success.should be_nil
+      data_source.destroy
+      import.reload.success.should == false
     end
   end
 

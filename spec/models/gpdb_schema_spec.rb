@@ -306,7 +306,7 @@ describe GpdbSchema do
       end
     end
 
-    it "cancels any running imports" do
+    it "cancels any running schema imports" do
       unfinished_imports = schema.imports.unfinished
       stub(schema.imports).unfinished { unfinished_imports }
       unfinished_imports.should_not be_empty
@@ -314,6 +314,15 @@ describe GpdbSchema do
         mock(import).cancel(false, "Source/Destination of this import was deleted")
       end
       schema.destroy
+    end
+
+    it "cancels any running workspace imports" do
+      import = imports(:csv)
+      schema = import.workspace.sandbox
+
+      import.success.should be_nil
+      schema.destroy
+      import.reload.success.should == false
     end
 
     it "destroys import schedules from associated workspaces" do

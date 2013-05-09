@@ -87,6 +87,7 @@ FixtureBuilder.configure do |fbuilder|
     shared_data_source = FactoryGirl.create(:gpdb_data_source, :name => "Shared", :owner => admin, :shared => true)
     owners_data_source = FactoryGirl.create(:gpdb_data_source, :name => "Owners", :owner => owner, :shared => false)
     admin_only_data_source = FactoryGirl.create(:gpdb_data_source, :name => "Admins", :owner => admin, :shared => false)
+    alternate_data_source = FactoryGirl.create(:gpdb_data_source, :name => "Alternate", :owner => admin, :shared => true)
 
     FactoryGirl.create(:gpdb_data_source, :name => "Offline", :owner => owner, :state => "offline")
     FactoryGirl.create(:gpdb_data_source, :name => "Online", :owner => owner, :state => "online")
@@ -139,6 +140,10 @@ FixtureBuilder.configure do |fbuilder|
     tagged = FactoryGirl.create(:gpdb_table, :name => 'tagged', :schema => default_schema)
     tagged.tag_list = ['alpha']
     tagged.save!
+
+    alternate_database = FactoryGirl.create(:gpdb_database, :data_source => alternate_data_source, :name => 'alternate')
+    alternate_schema = FactoryGirl.create(:gpdb_schema, :name => 'alternate', :database => alternate_database)
+    FactoryGirl.create(:gpdb_table, :name => "alternate", :schema => alternate_schema)
 
     # Search setup
     searchquery_database = FactoryGirl.create(:gpdb_database, :data_source => owners_data_source, :name => 'searchquery_database')

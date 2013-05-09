@@ -247,10 +247,44 @@ describe GpdbDataSource do
 
   describe "#destroy" do
     let(:data_source) { data_sources(:default) }
+    before do
+      any_instance_of(GreenplumConnection) do |connection|
+        stub(connection).running?
+      end
+    end
 
     it "enqueues a destroy_databases job" do
       mock(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.destroy_databases", data_source.id)
       data_source.destroy
+    end
+
+    it "cancels any source imports" do
+      import = imports(:one)
+      data_source = import.source.data_source
+
+      import.success.should be_nil
+      data_source.destroy
+      import.reload.success.should == false
+    end
+
+    it "cancels any destination workspace imports" do
+      import = imports(:one)
+      source_dataset = datasets(:alternate)
+      import.source = source_dataset
+      import.save(:validate => false)
+      data_source = import.workspace.sandbox.data_source
+
+      import.success.should be_nil
+      data_source.destroy
+      import.reload.success.should == false
+    end
+
+    it "cancels any destination schema imports" do
+      import = imports(:oracle)
+      data_source = import.schema.data_source
+      import.success.should be_nil
+      data_source.destroy
+      import.reload.success.should == false
     end
   end
 

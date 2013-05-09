@@ -1,7 +1,10 @@
 class GpdbDataSource < DataSource
   has_many :databases, :class_name => 'GpdbDatabase', :foreign_key => "data_source_id"
-  has_many :datasets, :through => :schemas
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
+  has_many :datasets, :through => :schemas
+  has_many :imports_as_source, :through => :datasets, :source => :imports
+  has_many :imports_as_destination_via_schema, :through => :schemas, :source => :imports
+  has_many :imports_as_destination_via_workspace, :through => :schemas, :source => :imports_via_workspaces
   has_many :workspaces, :through => :schemas, :foreign_key => 'sandbox_id'
 
   after_destroy :enqueue_destroy_databases
@@ -100,6 +103,18 @@ class GpdbDataSource < DataSource
 
   def connection_class
     GreenplumConnection
+  end
+
+  def cancel_imports
+    imports_as_source.unfinished.each do |import|
+      import.cancel(false, "Source/Destination of this import was deleted")
+    end
+    imports_as_destination_via_schema.unfinished.each do |import|
+      import.cancel(false, "Source/Destination of this import was deleted")
+    end
+    imports_as_destination_via_workspace.unfinished.each do |import|
+      import.cancel(false, "Source/Destination of this import was deleted")
+    end
   end
 
   def enqueue_destroy_databases

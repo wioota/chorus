@@ -28,6 +28,7 @@ class Workspace < ActiveRecord::Base
 
   has_many :associated_datasets, :dependent => :destroy
   has_many :source_datasets, :through => :associated_datasets, :source => :dataset
+  has_many :all_imports, :class_name => 'Import'
   has_many :imports, :class_name => 'WorkspaceImport'
 
   validates_presence_of :name

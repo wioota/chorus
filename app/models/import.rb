@@ -15,7 +15,7 @@ class Import < ActiveRecord::Base
   validate :table_does_not_exist, :if => :new_table, :on => :create
   validates :scoped_source, :presence => true, :unless => :file_name
   validates :file_name, :presence => true, :unless => :scoped_source
-  validate :tables_have_consistent_schema, :unless => :new_table, :unless => :file_name, :on => :create
+  validate :tables_have_consistent_schema, :unless => :file_name, :on => :create
 
   after_create :create_import_event
   after_create :enqueue_import, :unless => :file_name

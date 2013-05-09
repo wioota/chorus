@@ -1,5 +1,7 @@
 class OracleDataSource < DataSource
   has_many :schemas, :as => :parent, :class_name => 'OracleSchema'
+  has_many :datasets, :through => :schemas
+  has_many :imports_as_source, :through => :datasets, :source => :imports
 
   after_destroy :enqueue_destroy_schemas
 
@@ -51,6 +53,12 @@ class OracleDataSource < DataSource
       Chorus.log_error "Error refreshing Oracle Schema #{e.message}"
     end
     schema_permissions
+  end
+
+  def cancel_imports
+    imports_as_source.unfinished.each do |import|
+      import.cancel(false, "Source/Destination of this import was deleted")
+    end
   end
 
   def enqueue_destroy_schemas
