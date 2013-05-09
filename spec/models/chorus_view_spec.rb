@@ -235,4 +235,25 @@ describe ChorusView do
       }.not_to change(schema, :active_tables_and_views_count)
     end
   end
+
+  describe "in_workspace?" do
+    let(:chorus_view) { datasets(:chorus_view) }
+
+    context "when the chorus view is not in the workspace" do
+      let(:workspace) { workspaces(:empty_workspace) }
+
+      it "returns false" do
+          chorus_view.in_workspace?(workspace).should be_false
+      end
+    end
+
+    context "when the chorus view is in the workspace" do
+      let(:workspace) { chorus_view.workspace }
+
+      it "returns false" do
+        chorus_view.in_workspace?(workspace).should be_true
+      end
+    end
+
+  end
 end

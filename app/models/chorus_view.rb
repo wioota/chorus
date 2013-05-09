@@ -78,6 +78,10 @@ class ChorusView < GpdbDataset
     sql
   end
 
+  def in_workspace?(workspace)
+    self.workspace == workspace
+  end
+
   def convert_to_database_view(name, user)
     view = schema.views.build(:name => name)
     view.query = query

@@ -154,5 +154,13 @@ describe GpdbDataset do
         end
       end
     end
+
+    context "when the workspace does not have a sandbox" do
+      let(:workspace) { workspaces(:no_sandbox) }
+
+      it "returns false" do
+        dataset.in_workspace?(workspace).should be_false
+      end
+    end
   end
 end

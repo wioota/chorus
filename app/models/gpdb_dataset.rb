@@ -55,6 +55,8 @@ class GpdbDataset < Dataset
 
   def in_workspace?(workspace)
     self.bound_workspaces.include?(workspace) || workspace.sandbox.datasets.include?(self)
+  rescue NoMethodError
+    false
   end
 
   private
