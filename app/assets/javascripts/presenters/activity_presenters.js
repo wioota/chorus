@@ -494,6 +494,9 @@
         },
 
         updateCredentialsLink: function(self) {
+            if(self.model.get("dataSource").isDeleted) {
+                return t('dataset.credentials.missing.linkText');
+            }
             return Handlebars.helpers.linkTo('#', t('dataset.credentials.missing.linkText'), {'class': 'update_credentials'});
         },
 

@@ -56,6 +56,12 @@ $system-action-color: #7C7D7D;
 }
 
 .notification_list, .activity_list {
+    a[href=''], a:not([href]) {
+        color: $color-text3;
+        cursor: auto;
+        text-decoration: none;
+    }
+
     .more_items {
         font-size: 12px;
         padding: $activity-gutter $big-gutter;
@@ -86,12 +92,6 @@ $system-action-color: #7C7D7D;
                 max-width: $icon-image-width;
                 max-height: $icon-image-height;
             }
-        }
-
-        a[href=''], a:not([href]) {
-            color: $color-text3;
-            cursor: auto;
-            text-decoration: none;
         }
 
         .insight_ribbon {
