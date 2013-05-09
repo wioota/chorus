@@ -19,8 +19,10 @@ class ConfigurationsController < ApplicationController
       :gnip_configured => ChorusConfig.instance.gnip_configured?,
       :execution_timeout_in_minutes => ChorusConfig.instance['execution_timeout_in_minutes'],
       :default_preview_row_limit => ChorusConfig.instance['default_preview_row_limit'] || 100,
-      :oracle_configured => ChorusConfig.instance.oracle_configured?
-    }.merge!(alpine_config) }
+      :oracle_configured => ChorusConfig.instance.oracle_configured?,
+      :workflow_configured => ChorusConfig.instance.workflow_configured?,
+      :workflow_url => ChorusConfig.instance['workflow.url']
+    }.merge(alpine_config) }
   end
 
   def version
