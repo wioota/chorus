@@ -83,6 +83,11 @@ resource "Data sources" do
     parameter :id, "Data source id"
 
     let(:id) { owned_data_source.to_param }
+    before do
+      any_instance_of(GreenplumConnection) do |connection|
+        stub(connection).running?
+      end
+    end
 
     example_request "Delete a data source" do
       status.should == 200
