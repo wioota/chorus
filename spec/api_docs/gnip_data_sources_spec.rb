@@ -89,4 +89,14 @@ resource "Gnip data sources" do
       status.should == 200
     end
   end
+
+  delete "/gnip_data_sources/:id" do
+    parameter :id, "gnip data source id"
+
+    let(:id) { gnip_data_source.to_param }
+
+    example_request "Delete a Gnip data source" do
+      status.should == 200
+    end
+  end
 end
