@@ -152,6 +152,10 @@
                 links: [ "actor", "dataSource" ]
             },
 
+            DataSourceDeleted: {
+                links: [ "actor", "dataSource" ]
+            },
+
             GnipDataSourceCreated: {
                 links: [ "actor", "gnipDataSource" ]
             },

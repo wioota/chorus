@@ -38,4 +38,11 @@ describe GnipDataSource do
   it_behaves_like 'a soft deletable model' do
     let(:model) { gnip_data_sources(:default) }
   end
+
+  it "destroying it creates an event" do
+    subject = gnip_data_sources(:default)
+    set_current_user(users(:admin))
+    expect { subject.destroy }.to change { Events::DataSourceDeleted.count }.by(1)
+    Events::DataSourceDeleted.last.data_source.should == subject
+  end
 end

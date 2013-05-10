@@ -11,6 +11,7 @@ window.rspecFixtureDefinitions = {
             dataSourceCreated: {},
             dataSourceChangedName: {},
             dataSourceChangedOwner: {},
+            dataSourceDeleted: {},
             fileImportCreated: {},
             fileImportFailed: {},
             fileImportSuccess: {},

@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28Attachment+OR+User+OR+GpdbDataSource+OR+OracleDataSource+OR+HdfsDataSource+OR+GnipDataSource+OR+Workspace+OR+Workfile+OR+Tag+OR+Dataset+OR+HdfsEntry%29&fq=type_name_s%3A%28Attachment+OR+User+OR+DataSource+OR+Workspace+OR+Workfile+OR+Tag+OR+Dataset+OR+HdfsEntry%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-data_source_account_ids_im%3A%281000001+OR+1000004+OR+1000002+OR+1000005+OR+1000006+OR+1000007+OR+1000017+OR+1000018%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-data_source_account_ids_im%3A%281000001+OR+1000004+OR+1000002+OR+1000005+OR+1000006+OR+1000007+OR+1000017+OR+1000018%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&q=typeahead&fl=%2A+score&qf=name_texts+first_name_texts+last_name_texts+file_name_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=20
+      string: fq=type%3A%28Attachment+OR+User+OR+GpdbDataSource+OR+OracleDataSource+OR+HdfsDataSource+OR+GnipDataSource+OR+Workspace+OR+Workfile+OR+Tag+OR+Dataset+OR+HdfsEntry%29&fq=type_name_s%3A%28Attachment+OR+User+OR+DataSource+OR+Workspace+OR+Workfile+OR+Tag+OR+Dataset+OR+HdfsEntry%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-data_source_account_ids_im%3A%281000001+OR+1000004+OR+1000002+OR+1000006+OR+1000007+OR+1000008+OR+1000018+OR+1000019%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workspace%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Workfile%29+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3A%28Dataset%29+AND+-data_source_account_ids_im%3A%281000001+OR+1000004+OR+1000002+OR+1000006+OR+1000007+OR+1000008+OR+1000018+OR+1000019%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&q=typeahead&fl=%2A+score&qf=name_texts+first_name_texts+last_name_texts+file_name_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&start=0&rows=20
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -27,33 +27,33 @@ http_interactions:
         \ OR User OR GpdbDataSource OR OracleDataSource OR HdfsDataSource OR GnipDataSource\
         \ OR Workspace OR Workfile OR Tag OR Dataset OR HdfsEntry)','type_name_s:(Attachment\
         \ OR User OR DataSource OR Workspace OR Workfile OR Tag OR Dataset OR HdfsEntry)','-(security_type_name_sm:(Dataset)\
-        \ AND -data_source_account_ids_im:(1000001 OR 1000004 OR 1000002 OR 1000005\
-        \ OR 1000006 OR 1000007 OR 1000017 OR 1000018))','-(security_type_name_sm:ChorusView\
+        \ AND -data_source_account_ids_im:(1000001 OR 1000004 OR 1000002 OR 1000006\
+        \ OR 1000007 OR 1000008 OR 1000018 OR 1000019))','-(security_type_name_sm:ChorusView\
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workspace)\
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workspace)\
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Dataset)\
-        \ AND -data_source_account_ids_im:(1000001 OR 1000004 OR 1000002 OR 1000005\
-        \ OR 1000006 OR 1000007 OR 1000017 OR 1000018))','-(security_type_name_sm:ChorusView\
-        \ AND -member_ids_im:1000006 AND -public_b:true)'],'hl'=>'on','defType'=>'edismax','rows'=>'20'}},'response'=>{'numFound'=>16,'start'=>0,'maxScore'=>1715779.8,'docs'=>[{'id'=>'User\
-        \ 1000011','first_name_texts'=>['typeahead'],'username_texts'=>['typeahead'],'email_texts'=>['typeahead@hermiston.com'],'last_name_texts'=>['Collins'],'score'=>1715779.8},{'id'=>'ChorusWorkfile\
+        \ AND -data_source_account_ids_im:(1000001 OR 1000004 OR 1000002 OR 1000006\
+        \ OR 1000007 OR 1000008 OR 1000018 OR 1000019))','-(security_type_name_sm:ChorusView\
+        \ AND -member_ids_im:1000006 AND -public_b:true)'],'hl'=>'on','defType'=>'edismax','rows'=>'20'}},'response'=>{'numFound'=>16,'start'=>0,'maxScore'=>1717037.8,'docs'=>[{'id'=>'User\
+        \ 1000011','first_name_texts'=>['typeahead'],'username_texts'=>['typeahead'],'email_texts'=>['typeahead@bauchfisher.org'],'last_name_texts'=>['Casper'],'score'=>1717037.8},{'id'=>'ChorusWorkfile\
         \ 1000000','file_name_texts'=>['typeahead'],'description_texts'=>['A nice\
-        \ description'],'version_comments_texts'=>['','Factory commit message'],'score'=>1486403.9},{'id'=>'HdfsEntry\
-        \ 1000006','name_texts'=>['typeahead'],'parent_name_texts'=>['testdir'],'score'=>690858.75},{'id'=>'Tag\
-        \ 1000001','name_texts'=>['typeahead'],'score'=>690858.75},{'id'=>'GnipDataSource\
-        \ 1000001','name_texts'=>['typeahead_gnip'],'score'=>598301.2},{'id'=>'Attachment\
-        \ 1000000','name_texts'=>['typeahead_data_source'],'score'=>478640.97},{'id'=>'Workspace\
-        \ 1000000','name_texts'=>['typeahead_private'],'score'=>478640.97},{'id'=>'Workspace\
-        \ 1000001','name_texts'=>['typeahead_public'],'score'=>478640.97},{'id'=>'Workspace\
-        \ 1000004','name_texts'=>['typeahead_workspace'],'score'=>478640.97},{'id'=>'GpdbTable\
+        \ description'],'version_comments_texts'=>['','Factory commit message'],'score'=>1487640.6},{'id'=>'HdfsEntry\
+        \ 1000006','name_texts'=>['typeahead'],'parent_name_texts'=>['testdir'],'score'=>691893.25},{'id'=>'Tag\
+        \ 1000001','name_texts'=>['typeahead'],'score'=>691893.25},{'id'=>'GnipDataSource\
+        \ 1000001','name_texts'=>['typeahead_gnip'],'score'=>599197.1},{'id'=>'Attachment\
+        \ 1000000','name_texts'=>['typeahead_data_source'],'score'=>479357.72},{'id'=>'Workspace\
+        \ 1000000','name_texts'=>['typeahead_private'],'score'=>479357.72},{'id'=>'Workspace\
+        \ 1000001','name_texts'=>['typeahead_public'],'score'=>479357.72},{'id'=>'Workspace\
+        \ 1000004','name_texts'=>['typeahead_workspace'],'score'=>479357.72},{'id'=>'GpdbTable\
         \ 1000013','name_texts'=>['typeahead-with-dash'],'database_name_texts'=>['shared_database'],'table_description_texts'=>['bogus'],'schema_name_texts'=>['shared_schema'],'column_name_texts'=>['bogus','bogus\
-        \ 2'],'score'=>478640.97},{'id'=>'GpdbTable 1000016','name_texts'=>['typeahead_gpdb_table'],'database_name_texts'=>['searchquery_database'],'table_description_texts'=>['bogus'],'schema_name_texts'=>['searchquery_schema'],'column_name_texts'=>['bogus','bogus\
-        \ 2'],'score'=>478640.97},{'id'=>'ChorusView 1000017','name_texts'=>['typeahead_chorus_view'],'database_name_texts'=>['searchquery_database'],'table_description_texts'=>['bogus'],'schema_name_texts'=>['searchquery_schema'],'query_texts'=>['select\
-        \ 1'],'score'=>478640.97},{'id'=>'GpdbTable 1000014','name_texts'=>['typeahead_with_underscore'],'database_name_texts'=>['shared_database'],'table_description_texts'=>['bogus'],'schema_name_texts'=>['shared_schema'],'column_name_texts'=>['bogus','bogus\
-        \ 2'],'score'=>418810.84},{'id'=>'GpdbDataSource 1000008','name_texts'=>['typeahead_gpdb_data_source'],'score'=>418810.84},{'id'=>'OracleDataSource\
-        \ 1000009','name_texts'=>['typeahead_oracle_data_source'],'score'=>418810.84},{'id'=>'HdfsDataSource\
-        \ 1000002','name_texts'=>['typeahead_hdfs_data_source'],'score'=>418810.84}]},'highlighting'=>{'User\
+        \ 2'],'score'=>479357.72},{'id'=>'GpdbTable 1000016','name_texts'=>['typeahead_gpdb_table'],'database_name_texts'=>['searchquery_database'],'table_description_texts'=>['bogus'],'schema_name_texts'=>['searchquery_schema'],'column_name_texts'=>['bogus','bogus\
+        \ 2'],'score'=>479357.72},{'id'=>'ChorusView 1000017','name_texts'=>['typeahead_chorus_view'],'database_name_texts'=>['searchquery_database'],'table_description_texts'=>['bogus'],'schema_name_texts'=>['searchquery_schema'],'query_texts'=>['select\
+        \ 1'],'score'=>479357.72},{'id'=>'GpdbTable 1000014','name_texts'=>['typeahead_with_underscore'],'database_name_texts'=>['shared_database'],'table_description_texts'=>['bogus'],'schema_name_texts'=>['shared_schema'],'column_name_texts'=>['bogus','bogus\
+        \ 2'],'score'=>419438.0},{'id'=>'GpdbDataSource 1000009','name_texts'=>['typeahead_gpdb_data_source'],'score'=>419438.0},{'id'=>'OracleDataSource\
+        \ 1000010','name_texts'=>['typeahead_oracle_data_source'],'score'=>419438.0},{'id'=>'HdfsDataSource\
+        \ 1000002','name_texts'=>['typeahead_hdfs_data_source'],'score'=>419438.0}]},'highlighting'=>{'User\
         \ 1000011'=>{'first_name_texts'=>['@@@hl@@@typeahead@@@endhl@@@']},'ChorusWorkfile\
         \ 1000000'=>{'file_name_texts'=>['@@@hl@@@typeahead@@@endhl@@@']},'HdfsEntry\
         \ 1000006'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@']},'Tag 1000001'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@']},'GnipDataSource\
@@ -66,9 +66,9 @@ http_interactions:
         \ 1000016'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@_gpdb_table']},'ChorusView\
         \ 1000017'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@_chorus_view']},'GpdbTable\
         \ 1000014'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@_with_underscore']},'GpdbDataSource\
-        \ 1000008'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@_gpdb_data_source']},'OracleDataSource\
-        \ 1000009'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@_oracle_data_source']},'HdfsDataSource\
+        \ 1000009'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@_gpdb_data_source']},'OracleDataSource\
+        \ 1000010'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@_oracle_data_source']},'HdfsDataSource\
         \ 1000002'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@_hdfs_data_source']}}}"
     http_version: '1.1'
-  recorded_at: Thu, 09 May 2013 00:47:41 GMT
+  recorded_at: Fri, 10 May 2013 00:43:04 GMT
 recorded_with: VCR 2.3.0

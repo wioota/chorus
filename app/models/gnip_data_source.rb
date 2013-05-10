@@ -6,6 +6,8 @@ class GnipDataSource < ActiveRecord::Base
   attr_accessible :name, :stream_url, :description, :username, :password, :owner
   attr_accessor :highlighted_attributes, :search_result_notes
 
+  after_destroy :create_deleted_event, :if => :current_user
+
   validates_presence_of :name, :stream_url, :username, :password, :owner
   validates_length_of :name, :maximum => 64
 
@@ -22,5 +24,11 @@ class GnipDataSource < ActiveRecord::Base
 
   def self.type_name
     'DataSource'
+  end
+
+  private
+
+  def create_deleted_event
+    Events::DataSourceDeleted.by(current_user).add(:data_source => self)
   end
 end

@@ -16,6 +16,7 @@ class HdfsDataSource < ActiveRecord::Base
 
   after_create :create_root_entry
   after_destroy :enqueue_destroy_entries
+  after_destroy :create_deleted_event, :if => :current_user
 
   def url
     "gphdfs://#{host}:#{port}/"
@@ -50,4 +51,7 @@ class HdfsDataSource < ActiveRecord::Base
     QC.enqueue_if_not_queued("HdfsEntry.destroy_entries", id)
   end
 
+  def create_deleted_event
+    Events::DataSourceDeleted.by(current_user).add(:data_source => self)
+  end
 end

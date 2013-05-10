@@ -40,6 +40,12 @@ describe HdfsDataSource do
       mock(QC.default_queue).enqueue_if_not_queued("HdfsEntry.destroy_entries", subject.id)
       subject.destroy
     end
+
+    it "creates an event" do
+      set_current_user(users(:admin))
+      expect { subject.destroy }.to change { Events::DataSourceDeleted.count }.by(1)
+      Events::DataSourceDeleted.last.data_source.should == subject
+    end
   end
 
   describe "#check_status!" do

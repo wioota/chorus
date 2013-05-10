@@ -323,6 +323,13 @@ describe DataSource do
     end
   end
 
+  it "creates an event if the data source is destroyed" do
+    set_current_user(users(:admin))
+    data_source = data_sources(:default)
+    expect { data_source.destroy }.to change { Events::DataSourceDeleted.count }.by(1)
+    Events::DataSourceDeleted.last.data_source.should == data_source
+  end
+
   it_should_behave_like "taggable models", [:data_sources, :default]
 
   it_behaves_like 'a soft deletable model' do

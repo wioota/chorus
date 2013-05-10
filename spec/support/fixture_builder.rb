@@ -88,6 +88,10 @@ FixtureBuilder.configure do |fbuilder|
     owners_data_source = FactoryGirl.create(:gpdb_data_source, :name => "Owners", :owner => owner, :shared => false)
     admin_only_data_source = FactoryGirl.create(:gpdb_data_source, :name => "Admins", :owner => admin, :shared => false)
     alternate_data_source = FactoryGirl.create(:gpdb_data_source, :name => "Alternate", :owner => admin, :shared => true)
+    deleted_data_source = FactoryGirl.create(:gpdb_data_source, :name => "deleted", :owner => admin, :shared => true)
+    with_current_user(owner) do
+      deleted_data_source.destroy
+    end
 
     FactoryGirl.create(:gpdb_data_source, :name => "Offline", :owner => owner, :state => "offline")
     FactoryGirl.create(:gpdb_data_source, :name => "Online", :owner => owner, :state => "online")

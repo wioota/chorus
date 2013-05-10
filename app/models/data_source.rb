@@ -8,6 +8,7 @@ class DataSource < ActiveRecord::Base
   attr_accessible :name, :description, :host, :port, :db_name, :db_username, :db_password, :as => [:default, :create]
   attr_accessible :shared, :as => :create
 
+  # Must happen before accounts are destroyed
   before_destroy :cancel_imports
 
   belongs_to :owner, :class_name => 'User'
@@ -31,7 +32,7 @@ class DataSource < ActiveRecord::Base
   after_create :enqueue_refresh
   after_create :create_created_event, :if => :current_user
 
-
+  after_destroy :create_deleted_event, :if => :current_user
 
   def self.by_type(entity_type)
     if entity_type
@@ -188,5 +189,9 @@ class DataSource < ActiveRecord::Base
           :new_name => name
       )
     end
+  end
+
+  def create_deleted_event
+    Events::DataSourceDeleted.by(current_user).add(:data_source => self)
   end
 end

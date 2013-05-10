@@ -256,6 +256,7 @@ describe EventsController do
 
     FIXTURE_FILES = {
         'dataSourceCreated' => Events::DataSourceCreated,
+        'dataSourceDeleted' => Events::DataSourceDeleted,
         'gnipDataSourceCreated' => Events::GnipDataSourceCreated,
         'hdfsDataSourceCreated' => Events::HdfsDataSourceCreated,
         'dataSourceChangedOwner' => Events::DataSourceChangedOwner,

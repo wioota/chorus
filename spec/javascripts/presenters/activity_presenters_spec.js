@@ -316,6 +316,26 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("data source deleted", function() {
+        beforeEach(function() {
+            this.model = rspecFixtures.activity.dataSourceDeleted();
+            this.presenter = new chorus.presenters.Activity(this.model);
+            this.dataSource = this.model.dataSource();
+            this.actor = this.model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(this.presenter.headerHtml().toString()).toContainTranslation(
+                "activity.header.DataSourceDeleted.default", {
+                    actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
+                    dataSourceLink: linkTo(null, this.dataSource.name())
+                }
+            );
+        });
+    });
+
     context('hadoop data source created', function() {
         beforeEach(function() {
             this.model = rspecFixtures.activity.hdfsDataSourceCreated();
