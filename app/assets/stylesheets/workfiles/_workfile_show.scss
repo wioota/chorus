@@ -8,7 +8,11 @@
 }
 
 .workfile_content_details {
-    .save {
+  //take this negative margin out in 2.5
+  margin-left: -10px;
+  margin-right: -10px;
+
+  .save {
         float: right;
 
         span.view {
