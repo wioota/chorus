@@ -49,6 +49,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         this.server.completeFetchFor(this.dataset);
         this.qtip = stubQtip();
         stubDefer();
+        spyOn(this.dialog.dataGrid, "setDestinationColumns");
         this.server.completeFetchFor(this.dialog.columnSet, this.columns);
     });
 
@@ -242,9 +243,17 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     });
 
     describe("the data grid subview", function() {
-        it("is initialized with destination columns");
+        it("is initialized with destination columns", function(){
+            expect(this.dialog.dataGrid.setDestinationColumns).toHaveBeenCalledWith(this.dialog.columnSet.models);
+        });
 
-        it("is initialized with source columns and rows");
+        it("is initialized with source columns and rows", function(){
+            var call = _.last(this.dialog.dataGrid.initializeDataGrid.calls);
+            var expectedColumnNames = ['col1', 'col2', 'col3', 'col_4', 'col_5'];
+            var expectedRows = ['val1.1', 'val1.2', 'val1.3', 'val1.4', 'val1.5'];
+            expect(_.pluck(call.args[0], "name")).toEqual(expectedColumnNames);
+            expect(call.args[1][0]).toEqual(expectedRows);
+        });
 
         it("updates the column count when destination count changes", function() {
             this.dialog.dataGrid.trigger("updatedDestinationCount", {count: 23, total: 81});

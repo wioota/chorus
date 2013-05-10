@@ -85,7 +85,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
     initializeDataPreview: function () {
         var csvParser = new chorus.utilities.CsvParser(this.csvOptions.contents, this.model.attributes);
         var sourceColumns = csvParser.getColumnOrientedData();
-        var rows = csvParser.rows;
+        var rows = csvParser.rows();
         var sourceColumnNames = _.pluck(sourceColumns, "name");
         this.dataGrid.initializeDataGrid(sourceColumns, rows, sourceColumnNames);
     },

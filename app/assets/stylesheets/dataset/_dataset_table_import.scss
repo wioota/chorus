@@ -85,7 +85,6 @@ $cell-width: 150px;
 
     .slick-headerrow-columns {
       overflow: visible;
-      height: 20px;
     }
 
     .slick-headerrow {
@@ -292,14 +291,27 @@ $cell-width: 150px;
     }
 }
 
-.existing_table_import_csv {
-  .import_data_grid {
-    .slick-headerrow-columns {
-      height: 32px;
-      .slick-headerrow-column {
-        height: auto;
-      }
+.new_table_import_csv {
+    .column_name {
+      padding: 0;
     }
+
+    .slick-headerrow-columns {
+      height: 18px;
+    }
+}
+
+.existing_table_import_csv {
+  .slick-headerrow-columns {
+    height: 32px;
+  }
+
+  .slick-headerrow-column {
+    height: auto;
+  }
+
+  .slick-header-column:hover {
+    background: none;
   }
   .column_name {
     display: block;
