@@ -11,22 +11,22 @@ class TableauPublisher
                                    params[:tableau_workbook][:tableau_username],
                                    params[:tableau_workbook][:tableau_password])
 
-    workfile = create_workfile(params, workspace)
+    workfile = build_workfile(params, workspace)
+    handle_errors(workbook, workfile) unless workfile_unique?(workfile) && workbook.save
 
-    if (!workfile || workfile.validate_name_uniqueness) && workbook.save
-      publication = create_publication(dataset, params)
-      if workfile
-        workfile.tableau_workbook_publication = publication
-        workfile.save!
-      end
-      publication
-    else
-      handle_errors(workbook, workfile)
+    publication = create_publication(dataset, params)
+    if workfile
+      workfile.tableau_workbook_publication = publication
+      workfile.save!
     end
+    publication
   end
 
   private
 
+  def workfile_unique?(workfile)
+    (!workfile || workfile.validate_name_uniqueness)
+  end
 
   def handle_errors(workbook, workfile)
     messages = workbook.errors.full_messages
@@ -43,7 +43,7 @@ class TableauPublisher
     )
   end
 
-  def create_workfile(params, workspace)
+  def build_workfile(params, workspace)
     if params[:tableau_workbook][:create_work_file] == "true"
       workfile = LinkedTableauWorkfile.new(file_name: "#{params[:tableau_workbook][:name]}.twb")
       workfile.owner = current_user
