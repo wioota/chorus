@@ -46,6 +46,8 @@ class SqlStreamer
       rescue Exception => e
         y << e.message
       end
+      #Ruby enumerators leak active record connections due to details of Fibers in jRuby (at least ~1.7.0)
+      #If you take out this line, you may run out of active record connections if you stream too much.
       ActiveRecord::Base.connection.close
     end
   end
