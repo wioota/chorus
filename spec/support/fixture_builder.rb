@@ -239,16 +239,10 @@ FixtureBuilder.configure do |fbuilder|
     searchquery_chorus_view_private = FactoryGirl.create(:chorus_view, :name => "searchquery_chorus_view_private", :schema => searchquery_schema, :query => "select searchquery from a_table", :workspace => search_private_workspace)
 
     # Tableau publications
-    publication = FactoryGirl.create :tableau_workbook_publication, :name => "default",
-                                     :workspace => public_workspace, :dataset => chorus_view, :project_name => "Default"
-    @owner_publishes_to_tableau = Events::TableauWorkbookPublished.by(owner).add(
-        :workbook_name => publication.name,
-        :dataset => publication.dataset,
-        :workspace => publication.workspace,
-        :project_name => "Default",
-        :workbook_url => publication.workbook_url,
-        :project_url => publication.project_url
-    )
+    publication = with_current_user(owner) do
+      FactoryGirl.create :tableau_workbook_publication, :name => "default",
+                                       :workspace => public_workspace, :dataset => chorus_view, :project_name => "Default"
+    end
 
     tableau_workfile = LinkedTableauWorkfile.create({:file_name => 'tableau',
                                   :workspace => public_workspace,
