@@ -81,7 +81,7 @@ describe WorkfilePresenter, :type => :view do
       end
 
       it "presents the notes as comments in reverse timestamp order" do
-        recent_comments[0][:author].to_hash.should == Presenter.present(user, view, :succinct => true)
+        recent_comments[0][:author].to_hash.should == Presenter.present(user, view, {:succinct => true, :activity_stream => true})
         recent_comments[0][:body].should == "note for today"
         recent_comments[0][:timestamp].should == today
       end

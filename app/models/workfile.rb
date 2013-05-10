@@ -59,7 +59,7 @@ class Workfile < ActiveRecord::Base
                         {:most_recent_notes => :actor},
                         {
                             :execution_schema => {
-                                :parent => :data_source
+                                :scoped_parent => :data_source
                             }
                         }
                     ]

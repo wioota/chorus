@@ -64,7 +64,7 @@ class Workspace < ActiveRecord::Base
     [{:owner => :tags},
      :archiver,
      :tags,
-     {:sandbox => {:parent => {:data_source => [:tags, {:owner => :tags}]}}}
+     {:sandbox => {:scoped_parent => {:data_source => [:tags, {:owner => :tags}]}}}
     ]
   end
 

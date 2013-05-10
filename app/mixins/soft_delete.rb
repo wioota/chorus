@@ -1,6 +1,5 @@
 module SoftDelete
   extend ActiveSupport::Concern
-  include UnscopedBelongsTo
 
   included do
     default_scope :conditions => {:deleted_at => nil}
@@ -26,14 +25,6 @@ module SoftDelete
   module ClassMethods
     def find_with_destroyed *args
       self.with_exclusive_scope { find(*args) }
-    end
-  end
-
-  def unscoped_getter(scoped_name, foreign_key, klass)
-    if deleted?
-      super
-    else
-      send scoped_name
     end
   end
 end

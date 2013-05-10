@@ -266,6 +266,20 @@ describe Schema do
     end
   end
 
+  describe "unscoped parent" do
+    before do
+      any_instance_of(GreenplumConnection) do |data_source|
+        stub(data_source).running? { false }
+      end
+    end
+
+    it "returns the parent even if it has been destroyed" do
+      schema.parent.destroy
+      schema.reload
+      schema.parent.should_not be_nil
+    end
+  end
+
   it_behaves_like 'a soft deletable model' do
     let(:model) { schema }
   end

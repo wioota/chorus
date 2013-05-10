@@ -2,7 +2,7 @@ class Schema < ActiveRecord::Base
   include SoftDelete
 
   attr_accessible :name, :type
-  belongs_to :parent, :polymorphic => true
+  unscoped_belongs_to :parent, :polymorphic => true
   has_many :datasets, :foreign_key => :schema_id
   delegate :accessible_to, :to => :parent
 

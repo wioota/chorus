@@ -3,6 +3,7 @@ require "spec_helper"
 describe EventPresenter, :type => :view do
   let(:gpdb_data_source) { FactoryGirl.create(:gpdb_data_source) }
   let(:current_user) { users(:owner) }
+  let(:sub_presenter_options) { {:succinct => true, :activity_stream => true} }
 
   before do
     set_current_user(current_user)
@@ -32,7 +33,7 @@ describe EventPresenter, :type => :view do
 
         it "does not render datasets with their schemas or associated workspaces" do
           hash = subject.to_hash
-          hash[:dataset].should == DatasetPresenter.present(dataset, view, {:activity_stream => true, :succinct => true})
+          hash[:dataset].should == DatasetPresenter.present(dataset, view, sub_presenter_options)
           hash[:dataset][:associated_workspaces].should be_empty
         end
       end
@@ -74,7 +75,7 @@ describe EventPresenter, :type => :view do
         hash[:id].should == event.id
         hash[:timestamp].should == event.created_at
         hash[:action].should == "DataSourceCreated"
-        hash[:actor].should == Presenter.present(event.actor, view)
+        hash[:actor].should == Presenter.present(event.actor, view, sub_presenter_options)
       end
 
       it "presents all of the event's 'targets', using the same names" do
@@ -89,8 +90,8 @@ describe EventPresenter, :type => :view do
         end
 
         hash = subject.to_hash
-        hash[:special_data_source].should == Presenter.present(special_data_source, view)
-        hash[:special_user].should == Presenter.present(special_user, view)
+        hash[:special_data_source].should == Presenter.present(special_data_source, view, sub_presenter_options)
+        hash[:special_user].should == Presenter.present(special_user, view, sub_presenter_options)
       end
 
       it "includes all of the event's 'additional data'" do
@@ -208,7 +209,7 @@ describe EventPresenter, :type => :view do
       it "has hash for insights" do
         hash = subject.to_hash
         hash[:is_insight].should be_true
-        hash[:promoted_by].should == Presenter.present(user, view)
+        hash[:promoted_by].should == Presenter.present(user, view, sub_presenter_options)
         hash[:promotion_time].should == event.promotion_time
         hash[:is_published].should == false
       end
@@ -244,7 +245,7 @@ describe EventPresenter, :type => :view do
 
         it "should present a restricted set" do
           hash[:body].should == event.body
-          hash[:author].should == UserPresenter.new(event.actor, view, :succinct => true).presentation_hash
+          hash[:author].should == UserPresenter.new(event.actor, view, sub_presenter_options).presentation_hash
           hash[:timestamp].should == event.created_at
           hash.keys.size.should == 3
         end
@@ -255,7 +256,7 @@ describe EventPresenter, :type => :view do
 
         it "should present a restricted set" do
           hash[:body].should == event.commit_message
-          hash[:author].should == UserPresenter.new(event.actor, view, :succinct => true).presentation_hash
+          hash[:author].should == UserPresenter.new(event.actor, view, sub_presenter_options).presentation_hash
           hash[:timestamp].should == event.created_at
           hash.keys.size.should == 3
         end

@@ -54,7 +54,7 @@ class DatasetPresenter < Presenter
   end
 
   def credentials_hash
-    if rendering_activities? || (sandbox_table? && !model.is_a?(ChorusView))
+    if rendering_activities? || succinct? || (sandbox_table? && !model.is_a?(ChorusView))
       {:has_credentials => true}
     else
       {:has_credentials => model.accessible_to(current_user)}

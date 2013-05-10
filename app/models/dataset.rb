@@ -44,7 +44,7 @@ class Dataset < ActiveRecord::Base
 
   def self.eager_load_associations
     [:tags,
-     {:scoped_schema => :parent},
+     {:scoped_schema => :scoped_parent},
      {:bound_workspaces => :tags},
      :tableau_workbook_publications,
      :most_recent_notes,

@@ -27,14 +27,14 @@ class EventPresenter < Presenter
 
   def comments_hash
     {
-      :comments => present(model.comments)
+      :comments => present(model.comments, extended_options)
     }
   end
 
   def as_comment
     {
         :body => model.respond_to?(:body) ? model.body : model.commit_message,
-        :author => present(model.actor, :succinct => true),
+        :author => present(model.actor, extended_options),
         :timestamp => model.created_at
     }
   end
@@ -42,7 +42,7 @@ class EventPresenter < Presenter
   def insight_hash
     {
         :is_insight =>  model.insight?,
-        :promoted_by => model.insight? ? present(model.promoted_by) : nil,
+        :promoted_by => model.insight? ? present(model.promoted_by, extended_options) : nil,
         :promotion_time => model.insight? ? model.promotion_time : nil,
         :is_published => model.published?
     }
@@ -56,7 +56,7 @@ class EventPresenter < Presenter
   def basic_hash
     {
       :id => model.id,
-      :actor => present(model.actor, @options),
+      :actor => present(model.actor, extended_options),
       :action => action,
       :timestamp => model.created_at
     }
@@ -88,7 +88,7 @@ class EventPresenter < Presenter
   def targets_hash
     model.targets.reduce({}) do |hash, entry|
       name, model = entry
-      hash[name] = present(model, @options)
+      hash[name] = present(model, extended_options)
       hash
     end
   end
@@ -98,22 +98,26 @@ class EventPresenter < Presenter
     if model.is_a?(Events::Note)
       attachments = model.attachments
       attachments.each_with_index do |model, index|
-        hash[index] = present(model, @options)
+        hash[index] = present(model, extended_options)
       end
       datasets = model.datasets
       datasets.each do |dataset|
-        model_hash = present(dataset, {:workspace => model.workspace}.merge(@options))
+        model_hash = present(dataset, {:workspace => model.workspace}.merge(extended_options))
         model_hash.merge!({:workspace => model.workspace}) if model.workspace
         model_hash.merge!({:entity_type => 'dataset'} )
         hash << model_hash
         end
       workfiles = model.workfiles
       workfiles.each do |workfile|
-        model_hash = present(workfile, @options.merge(:workfile_as_latest_version => true))
+        model_hash = present(workfile, extended_options.merge(:workfile_as_latest_version => true))
         model_hash.merge!({:entity_type => 'workfile'} )
         hash << model_hash
       end
     end
     return {:attachments => hash}
+  end
+
+  def extended_options
+    @options.merge(:succinct => true, :activity_stream => true)
   end
 end
