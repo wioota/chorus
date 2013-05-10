@@ -9,7 +9,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         var attrs = {
             query: (searchParams[2] || searchParams[0])
         };
-        if (searchParams.length === 3) {
+        if(searchParams.length === 3) {
             attrs.searchIn = searchParams[0];
             attrs.entityType = searchParams[1];
         }
@@ -24,7 +24,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         this.model.fetch();
     },
 
-    unprocessableEntity: function (search) {
+    unprocessableEntity: function(search) {
         chorus.pageOptions = {
             title: t("search.bad_entity_type.title"),
             text: t("search.bad_entity_type.text")
@@ -80,9 +80,9 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
             content: new chorus.views.SearchResults({ model: this.model })
         });
-        if (this.search.isPaginated() && !this.search.workspace()) {
+        if(this.search.isPaginated() && !this.search.workspace()) {
             this.mainContent.contentDetails = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult", multiSelect: true});
-            this.mainContent.contentFooter  = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult", hideCounts: true, hideIfNoPagination: true });
+            this.mainContent.contentFooter = new chorus.views.ListContentDetails({ collection: this.search.getResults(), modelClass: "SearchResult", hideCounts: true, hideIfNoPagination: true });
         }
 
         this.sidebars = {
@@ -90,7 +90,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
             user: new chorus.views.UserSidebar({listMode: true}),
             workspace: new chorus.views.WorkspaceListSidebar(),
             dataset: new chorus.views.DatasetSidebar({listMode: true, searchPage: true}),
-            dataSource: new chorus.views.DataSourceListSidebar(),
+            dataSource: new chorus.views.DataSourceListSidebar({searchPage: true}),
             attachment: new chorus.views.ArtifactListSidebar()
         };
 

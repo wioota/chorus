@@ -107,11 +107,15 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
     },
 
     canEditPermissions: function() {
-        return this.resource.canHaveIndividualAccounts() && this.canEditDataSource();
+        return this.resource.canHaveIndividualAccounts() && this.adminOrOwner();
     },
 
     canEditDataSource: function() {
-        return (this.resource.owner().get("id") === chorus.session.user().get("id") ) || chorus.session.user().get("admin");
+        return !this.options.searchPage && this.adminOrOwner();
+    },
+
+    adminOrOwner: function() {
+        return this.resource.owner().get("id") === chorus.session.user().get("id") || chorus.session.user().get("admin");
     },
 
     startEditingTags: function(e) {

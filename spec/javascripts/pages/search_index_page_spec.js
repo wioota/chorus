@@ -476,5 +476,9 @@ describe("chorus.pages.SearchIndexPage", function() {
         it("sets the searchPage option for DatasetSidebar to true", function() {
             expect(this.page.sidebars.dataset.options.searchPage).toEqual(true);
         });
+
+        it("sets the searchPage option for DataSourceSidebar to true", function() {
+            expect(this.page.sidebars.dataSource.options.searchPage).toEqual(true);
+        });
     });
 });

@@ -96,6 +96,22 @@ jasmine.sharedExamples.aSidebar = function() {
             expect(this.view.$(".actions .delete_data_source")).toExist();
         });
     });
+
+    context('when searchPage is true', function() {
+        beforeEach(function() {
+            setLoggedInUser({ username: "benjamin", admin: true});
+            this.view.options.searchPage = true;
+            this.view.render();
+        });
+
+        it('does not display edit data source link', function() {
+            expect(this.view.$(".actions .edit_data_source")).not.toExist();
+        });
+
+        it('does not display delete data source link', function() {
+            expect(this.view.$(".actions .delete_data_source")).not.toExist();
+        });
+    });
 };
 
 jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = function() {
