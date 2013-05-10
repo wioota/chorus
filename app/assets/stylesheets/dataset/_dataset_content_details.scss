@@ -61,6 +61,7 @@
     }
 
     .definition {
+        padding: 0 $padding-x;
 
         .sql {
             @include font-normal-alpha;
