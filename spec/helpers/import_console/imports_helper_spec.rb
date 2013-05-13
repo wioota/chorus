@@ -105,5 +105,11 @@ describe ImportConsole::ImportsHelper do
         table_description(schemas(:oracle), "oracle_table").should == "oracle.oracle_table"
       end
     end
+
+    context "when the schema is nil" do
+      it "returns the empty string" do
+        table_description(nil, "anything").should == ""
+      end
+    end
   end
 end

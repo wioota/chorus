@@ -20,6 +20,7 @@ class Import < ActiveRecord::Base
   after_create :enqueue_import, :unless => :file_name
 
   alias_method :scoped_source, :source
+
   def source
     value = scoped_source
     unless value

@@ -106,6 +106,11 @@ shared_examples "a data source connection" do
         end
       end
     end
+
+    it "has a default login timeout of 10 seconds" do
+      mock(Sequel).connect(db_url, hash_including(:login_timeout => 10))
+      connection.connect!
+    end
   end
 
   describe "disconnect" do

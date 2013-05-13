@@ -27,6 +27,5 @@ chorus.alerts.Base = chorus.Modal.extend({
 
     revealed: function() {
         $("#facebox").removeClass().addClass("alert_facebox");
-        this.$(this.focusSelector).focus();
     }
 });

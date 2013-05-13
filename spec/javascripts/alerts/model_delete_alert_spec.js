@@ -1,7 +1,7 @@
 describe("chorus.alerts.ModelDelete", function() {
     beforeEach(function() {
         this.model = new chorus.models.User();
-        this.alert = new chorus.alerts.ModelDelete({  model: this.model });
+        this.dialog = this.alert = new chorus.alerts.ModelDelete({  model: this.model });
         stubModals();
         this.alert.launchModal();
         this.alert.redirectUrl = "/partyTime";
@@ -11,18 +11,7 @@ describe("chorus.alerts.ModelDelete", function() {
         this.alert.deleteMessage = "It has been deleted";
     });
 
-    describe("#revealed", function() {
-        beforeEach(function() {
-            spyOn($.fn, 'focus');
-            this.alert.render();
-        });
-
-        it("focuses on the cancel button", function() {
-            this.alert.revealed();
-            expect($.fn.focus).toHaveBeenCalled();
-            expect($.fn.focus.mostRecentCall.object).toBe("button.cancel");
-        });
-    });
+    itBehavesLike.aDialogWithSomethingToFocusOn();
 
     describe("clicking delete", function() {
         beforeEach(function() {

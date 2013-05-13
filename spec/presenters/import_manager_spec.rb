@@ -8,7 +8,7 @@ describe ImportManager do
       let(:import) { imports(:one) }
 
       it "returns the workspace sandbox" do
-        import_manager.schema_or_sandbox.should == import.workspace.sandbox
+        import_manager.schema.should == import.workspace.sandbox
       end
     end
 
@@ -16,7 +16,7 @@ describe ImportManager do
       let(:import) { imports(:oracle) }
 
       it "returns the schema" do
-        import_manager.schema_or_sandbox.should == import.schema
+        import_manager.schema.should == import.schema
       end
     end
   end
