@@ -1,6 +1,7 @@
 chorus.Modal = chorus.views.Base.extend({
     constructorName: "Modal",
     verticalPadding: 30,
+    focusSelector: '.popup input:eq(0)',
 
     launchModal: function() {
         if (chorus.modal && this !== chorus.modal) {
@@ -12,9 +13,8 @@ chorus.Modal = chorus.views.Base.extend({
 
     launchNewModal:function () {
         this.render();
-        $(document).one('reveal.facebox', _.bind(this.revealed, this));
+        $(document).one('reveal.facebox', _.bind(this.beginReveal, this));
         $.facebox(this.el);
-
         this.previousModal = chorus.modal;
         this.restore();
     },
@@ -137,7 +137,12 @@ chorus.Modal = chorus.views.Base.extend({
     },
 
     close:$.noop,
-    revealed:$.noop
+    revealed: $.noop,
+
+    beginReveal: function() {
+        this.revealed();
+        this.$(this.focusSelector).focus();
+    }
 });
 
 if (window.jasmine) {

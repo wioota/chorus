@@ -100,11 +100,11 @@ describe("chorus.alerts.Base", function() {
         });
     });
 
-    describe("#revealed", function() {
+    describe("on reveal", function() {
         it("focuses on the cancel button", function() {
             spyOn($.fn, 'focus');
             this.alert.render();
-            this.alert.revealed();
+            $(document).trigger('reveal.facebox');
             expect($.fn.focus).toHaveBeenCalled();
             expect($.fn.focus.mostRecentCall.object).toBe("button.cancel");
         });
