@@ -146,11 +146,9 @@ class DataSourceConnection
   end
 
   def db_options
-    if @options[:logger]
-      { :logger => @options[:logger], :sql_log_level => :debug }
-    else
-      {}
-    end
+    options = {:login_timeout => 10}
+    options.merge!({ :logger => @options[:logger], :sql_log_level => :debug }) if @options[:logger]
+    options
   end
 
   def stream_through_block(options, record_handler, statement)
