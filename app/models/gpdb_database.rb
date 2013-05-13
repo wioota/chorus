@@ -60,8 +60,8 @@ class GpdbDatabase < ActiveRecord::Base
   end
 
   def self.destroy_databases(data_source_id)
-    GpdbDatabase.where(:data_source_id => data_source_id).find_each do |entry|
-      entry.destroy
+    GpdbDatabase.where(:data_source_id => data_source_id).find_each do |database|
+      database.destroy
     end
   end
 
@@ -90,9 +90,7 @@ class GpdbDatabase < ActiveRecord::Base
 
   def mark_schemas_as_stale
     if stale? && stale_at_changed?
-      schemas.each do |schema|
-        schema.mark_stale!
-      end
+      schemas.find_each(&:mark_stale!)
     end
   end
 end

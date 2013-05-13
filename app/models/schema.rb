@@ -118,8 +118,6 @@ class Schema < ActiveRecord::Base
   private
 
   def destroy_datasets
-    datasets.find_each do |dataset|
-      dataset.destroy
-    end
+    datasets.find_each(&:destroy)
   end
 end

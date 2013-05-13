@@ -15,7 +15,7 @@ class ImportManager < DelegateClass(Import)
   end
 
   def connection(type)
-    schema = (type == :reader ? schema_or_sandbox : source_dataset.schema)
+    schema = (type == :reader ? schema : source_dataset.schema)
     schema.connect_as(user)
   end
 
@@ -31,16 +31,12 @@ class ImportManager < DelegateClass(Import)
     __getobj__.is_a? WorkspaceImport
   end
 
-  def schema_import?
-    __getobj__.is_a? SchemaImport
-  end
-
   def using_pipe?
     source_dataset.is_a? GpdbDataset
   end
 
   def destination_dataset
-    schema_or_sandbox.datasets.find_by_name(to_table)
+    schema.datasets.find_by_name(to_table)
   end
 
   def named_pipe
@@ -48,13 +44,5 @@ class ImportManager < DelegateClass(Import)
     return unless ChorusConfig.instance.gpfdist_configured?
     dir = Pathname.new ChorusConfig.instance['gpfdist.data_dir']
     Dir.glob(dir.join "pipe*_#{created_at.to_i}_#{id}").first
-  end
-
-  def schema_or_sandbox
-    if schema_import?
-      schema
-    else
-      workspace.sandbox
-    end
   end
 end
