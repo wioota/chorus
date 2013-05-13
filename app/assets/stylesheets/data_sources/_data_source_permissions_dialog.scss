@@ -9,12 +9,6 @@ $link-padding: 6px;
         visibility: hidden;
     }
 
-    button.add_account {
-        @include content-details-button($border-color);
-        @include font-content-details;
-        margin-left: 10px;
-    }
-
     .sub_header {
         .individual_accounts_count {
             background : url("/images/data_sources/individual.png") no-repeat left 8px;

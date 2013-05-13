@@ -17,7 +17,6 @@ $icon-image-width : 32px;
 $icon-image-height : 32px;
 $activity-gutter: 8px;
 $dialog-padding : 15px;
-$button-height : 26px;
 $breadcrumbs-height: 32px;
 $help-pill-width: 34px;
 $texteditor-min-height: 300px;
@@ -33,7 +32,6 @@ $shaded-background-color: #E1E5E9;
 $data-grid-background-color: #EAEEF2;
 $dialog-background-color: white;
 $element-background: white;
-$button-background-color : white;
 $list-hover-color: #e3e8ed;
 $list-checked-color: #dde3e9;
 $progress-bar-background-color : #D8DEE6;
@@ -249,12 +247,6 @@ $summary-line-height: 19px;
     line-height: $summary-line-height;
 }
 
-@mixin create-bar-text {
-    font-size: 14px;
-    font-weight: $semibold;
-    color: white;
-}
-
 @mixin after-clearfix($which: both) {
     &:after {
             content: ".";
@@ -282,18 +274,6 @@ $summary-line-height: 19px;
     white-space: inherit;
     overflow: inherit;
     text-overflow: inherit;
-}
-
-@mixin content-details-button($border-color) {
-    border: 1px solid $border-color;
-    @include border-radius(30px);
-    background: none;
-    margin-bottom: 2px;
-
-    &[disabled=disabled] {
-        @include opacity(0.5);
-    }
-    @include debugging-mixin;
 }
 
 @mixin tab-gradient {

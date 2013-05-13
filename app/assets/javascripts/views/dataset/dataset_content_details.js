@@ -114,8 +114,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     selectVisualization: function(e) {
         var type = $(e.target).data('chart_type');
-        $(e.target).siblings(".cancel").data("type", type);
-        $(e.target).siblings('.chart_icon').removeClass('selected');
+        this.$(".create_chart .cancel").data("type", type);
+        this.$('.chart_icon').removeClass('selected');
         $(e.target).addClass('selected');
         this.showTitle(e);
         this.showVisualizationConfig(type);
@@ -212,8 +212,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     showTitle: function(e) {
-        $(e.target).siblings('.title').addClass('hidden');
-        $(e.target).siblings('.title.' + $(e.target).data('chart_type')).removeClass('hidden');
+        this.$(".chart_type_title").addClass('hidden');
+        this.$('.chart_type_title.' + $(e.target).data('chart_type')).removeClass('hidden');
     },
 
     showVisualizationConfig: function(chartType) {
@@ -228,9 +228,9 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     showSelectedTitle: function(e) {
-        $(e.target).siblings('.title').addClass('hidden');
+        this.$('.chart_type_title').addClass('hidden');
         var type = this.$('.selected').data('chart_type');
-        $(e.target).siblings('.title.' + type).removeClass('hidden');
+        this.$('.chart_type_title.' + type).removeClass('hidden');
     },
 
     additionalContext: function() {

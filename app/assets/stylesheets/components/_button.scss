@@ -1,0 +1,50 @@
+@mixin content-details-button($border-color) {
+  border: 1px solid $border-color;
+  @include border-radius(30px);
+  background: none;
+  font-size: inherit;
+
+  &[disabled=disabled] {
+    @include opacity(0.5);
+  }
+}
+
+a.button, button, input[type=submit] {
+  -webkit-appearance : initial;
+  display: inline-block;
+  color: $default-font-color;
+  border: 1px solid $button-border-color;
+  background : $button-background-color;
+  font-size : 16px;
+  line-height: $button-height;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0 14px;
+  vertical-align: middle;
+  cursor : pointer;
+  outline-color: $button-border-color;
+  font-family: "Open Sans", Verdana;
+  &:disabled {
+    color : $low-light-type;
+    cursor : initial;
+  }
+}
+
+.button_action_primary {
+  @include content-details-button($button-border-color);
+}
+
+.button_action_limited {
+  @include content-details-button($button-border-color-limited);
+}
+
+.button_action_highlighted, a.button_action_highlighted {
+  color: $button-text-color-highlighted;
+  @include content-details-button($button-border-color-highlighted);
+}
+
+.button_action_secondary {
+  color: $button-text-color-secondary;
+  @include content-details-button($button-border-color-secondary);
+}
+

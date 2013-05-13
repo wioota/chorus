@@ -8,10 +8,6 @@
 }
 
 .workfile_content_details {
-  //take this negative margin out in 2.5
-  margin-left: -10px;
-  margin-right: -10px;
-
   .save {
         float: right;
 
@@ -49,12 +45,6 @@
 
 .read_only_workfile_content_details {
     background-image: url("/images/binary_workfile_action_bar_tile.png");
-
-    button {
-        @include content-details-button(#AAA);
-        color: $color-text2;
-        float: right;
-    }
 }
 
 .content {

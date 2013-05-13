@@ -1,9 +1,17 @@
-{{> multipleSelectionHeader}}
-<button class="add_data_source">{{t "data_sources.add.title"}}</button>
-{{#if loaded}}
-    <div class="count">
-        <span class="number">{{count}}</span> {{pluralize count "data_sources.title"}}
-    </div>
-{{else}}
-    <div class="loading_section">{{t "loading"}}</div>
-{{/if}}
+<ul class="list_horizontal">
+    <li>
+        {{> multipleSelectionHeader}}
+    </li>
+    <li>
+        <button class="add_data_source button_action_primary">{{t "data_sources.add.title"}}</button>
+    </li>
+    <li>
+        {{#if loaded}}
+            <div class="count">
+                <span class="number">{{count}}</span> {{pluralize count "data_sources.title"}}
+            </div>
+        {{else}}
+            <div class="loading_section">{{t "loading"}}</div>
+        {{/if}}
+    </li>
+</ul>
