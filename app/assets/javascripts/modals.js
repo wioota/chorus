@@ -1,7 +1,7 @@
 chorus.Modal = chorus.views.Base.extend({
     constructorName: "Modal",
     verticalPadding: 30,
-    focusSelector: '.popup input:eq(0)',
+    focusSelector: 'input:eq(0)',
 
     launchModal: function() {
         if (chorus.modal && this !== chorus.modal) {
