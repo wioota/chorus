@@ -4,9 +4,7 @@ describe DatasetImportSchedulesController do
   let(:user) { users(:owner) }
   let(:import_schedule) { import_schedules(:default) }
 
-  before do
-    log_in user
-  end
+  before { log_in user }
 
   describe "#index" do
     let(:dataset) { import_schedule.source_dataset }
