@@ -46,11 +46,18 @@
         </div>
     </div>
 </div>
-<div class="create_chorus_view hidden">
-     <a href="#" class="cancel">{{t "actions.cancel"}}</a>
-      <span class="create">{{t "dataset.content_details.create"}}</span><span class="triangle_right"></span>
-     <span class="chorusview"><span class="triangle"></span></span>
-     <span class="title">{{t "dataset.chorusview.title"}}</span>
+<div class="create_chorus_view action_bar_highlighted hidden">
+    <div class="line">
+        <div class="col col-ext">
+            <a href="#" class="cancel">{{t "actions.cancel"}}</a>
+        </div>
+
+        <div class="col cols-16">
+            <span class="create">{{t "dataset.content_details.create"}}</span><span class="triangle_right"></span>
+            <span class="chorusview"><span class="triangle"></span></span>
+            <span class="title mlm">{{t "dataset.chorusview.title"}}</span>
+        </div>
+    </div>
 </div>
 <div class="edit_chorus_view hidden">
      <a href="#" class="cancel">{{t "actions.cancel"}}</a>
@@ -75,11 +82,14 @@
     </div>
 </div>
 
-<div class="chorus_view_info hidden">
-    <span class="select">{{t "actions.select"}}</span>
-    <a href="#" class="select_all">{{t "actions.select_all"}}</a>
-    |
-    <a href="#" class="select_none">{{t "actions.select_none"}}</a>
+<div class="chorus_view_info action_bar_secondary hidden">
+    <ul class="list_horizontal select_all_or_none mrm">
+        <li><span class="select">{{t "actions.select"}}</span></li>
+        <li><a href="#" class="select_all">{{t "actions.select_all"}}</a></li>
+        <li>|</li>
+        <li><a href="#" class="select_none">{{t "actions.select_none"}}</a></li>
+    </ul>
+
     <input class="search" placeholder="{{t "dataset.search"}}"/>
     <span class="count">{{t "dataset.column_count" count=models.length}}</span>
 </div>

@@ -7,7 +7,7 @@
     }
 }
 
-.chart_icon {
+.chart_icon, .chorusview {
   width: 50px;
   height: 26px;
   display: inline-block;
@@ -72,7 +72,7 @@
 //
     .chorus_search_container {
         display: inline-block;
-        width: 70%;
+        width: 50%;
         margin-top: 3px;
     }
     .chorus_search {
@@ -230,4 +230,8 @@
             padding-left: (6 * $padding-x);
         }
     }
+}
+
+.select_all_or_none {
+  display: inline-block;
 }

@@ -45,7 +45,9 @@
   background-color: $content-details-action-background-color;
   padding: 3px 10px;
 
-  a { color: $color-text2; }
+  color: $action-bar-highlighted-font-color;
+
+  a { color: $action-bar-highlighted-font-color; }
 }
 
 .action_bar_secondary {
