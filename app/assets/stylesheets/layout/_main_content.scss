@@ -45,6 +45,14 @@
   a { color: $action-bar-highlighted-font-color; }
 }
 
+.action_bar_hoverable_item {
+  cursor: pointer;
+
+  &:hover {
+    background-color: $content-details-chart-icon-hover-background-color;
+  }
+}
+
 .action_bar_secondary {
   padding: 3px 10px;
   border-top: 1px solid #B2C7D6;

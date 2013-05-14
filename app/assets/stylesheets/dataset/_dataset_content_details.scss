@@ -9,6 +9,8 @@
 
 $action-bar-height: 32px;
 
+
+
 .chart_icon, .chorusview {
   width: 50px;
   height: $action-bar-height;
@@ -17,11 +19,6 @@ $action-bar-height: 32px;
 
   background-position: center;
   background-repeat: no-repeat;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $content-details-chart-icon-hover-background-color;
-  }
 
   &.selected {
     background-color: $content-details-chart-icon-selected-background-color;
