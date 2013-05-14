@@ -8,12 +8,16 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         this.collection.fetchAll();
 
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
+        this.buttonView = new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Workfile",
             collection: this.collection,
             model: this.workspace,
             title: t("workfiles.title"),
-            contentDetailsOptions: { multiSelect: true },
+            contentDetailsOptions: {
+                multiSelect: true,
+                buttonView: this.buttonView
+            },
             contentOptions: {listItemOptions: {workspaceIdForTagLink: this.workspace.id} },
             linkMenus: {
                 type: {
@@ -67,7 +71,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
             this.collection.fetchAll();
         }, this);
 
-        this.listenTo(this.workspace, "change", this.updateButtons);
+        this.requiredResources.add(this.workspace);
         this.breadcrumbs.requiredResources.add(this.workspace);
     },
 
@@ -91,34 +95,5 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         }
         this.sidebar = chorus.views.WorkfileSidebar.buildFor({model: this.model});
         this.renderSubview('sidebar');
-    },
-
-    updateButtons: function() {
-        if (this.mainContent.model.canUpdate() && this.mainContent.model.isActive()) {
-            this.mainContent.contentDetails.options.buttons = [
-                {
-                    view: "WorkfilesImport",
-                    text: t("actions.import_workfile"),
-                    dataAttributes: [
-                        {
-                            name: "workspace-id",
-                            value: this.mainContent.model.get("id")
-                        }
-                    ]
-                },
-                {
-                    view: "WorkfilesSqlNew",
-                    text: t("actions.create_sql_workfile"),
-                    dataAttributes: [
-                        {
-                            name: "workspace-id",
-                            value: this.mainContent.model.get("id")
-                        }
-                    ]
-                }
-            ];
-        }
-
-        this.render();
     }
 });
