@@ -134,6 +134,15 @@ describe Schema do
         end
       end
 
+      context "when a chorus view has the same name as a dataset" do
+        let!(:chorus_view) { ChorusView.new({:name => 'new_table', :schema => schema, :workspace => workspaces(:public), :query => '', :master_table => true}, :without_protection => true).tap {|cv| cv.save(:validate => false)} }
+
+        it "does not return the chorus view" do
+          datasets = schema.refresh_datasets(account)
+          datasets.should_not include(chorus_view)
+        end
+      end
+
       it "does not re-create datasets that already exist in our database" do
         expect do
           schema.refresh_datasets(account)

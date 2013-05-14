@@ -28,7 +28,7 @@ chorus.dialogs.DatasetPreview = chorus.dialogs.Base.extend({
     },
 
     footerSize: function() {
-        return this.$('.modal_controls').outerHeight(true);
+        return this.$('.form_controls').outerHeight(true);
     },
 
     postRender: function() {

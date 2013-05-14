@@ -105,8 +105,8 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         }
 
         this.$(".workfile .upload_finished").removeClass("hidden");
-        this.$(".modal_controls .cancel_upload").removeClass("hidden");
-        this.$(".modal_controls .cancel").addClass("hidden");
+        this.$(".form_controls .cancel_upload").removeClass("hidden");
+        this.$(".form_controls .cancel").addClass("hidden");
         this.uploadingFiles = true;
     },
 
@@ -152,8 +152,8 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.$(".progress_bar").addClass("hidden");
         this.$(".progress_text").addClass("hidden");
         this.$(".upload_finished").addClass("hidden");
-        this.$(".modal_controls .cancel_upload").addClass("hidden");
-        this.$(".modal_controls .cancel").removeClass("hidden");
+        this.$(".form_controls .cancel_upload").addClass("hidden");
+        this.$(".form_controls .cancel").removeClass("hidden");
         this.$(".attachment_links").removeClass("disabled");
         this.saving = false;
     },

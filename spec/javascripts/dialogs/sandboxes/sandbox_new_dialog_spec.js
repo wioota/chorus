@@ -49,7 +49,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
 
             it("disables the submit button", function() {
-                expect(this.dialog.$(".modal_controls button.submit")).toBeDisabled();
+                expect(this.dialog.$(".form_controls button.submit")).toBeDisabled();
             });
         });
 
@@ -79,11 +79,11 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
 
             it("changes the button text to 'Adding...'", function() {
-                expect(this.dialog.$(".modal_controls button.submit").text()).toMatchTranslation("sandbox.adding_sandbox");
+                expect(this.dialog.$(".form_controls button.submit").text()).toMatchTranslation("sandbox.adding_sandbox");
             });
 
             it("sets the button to a loading state", function() {
-                expect(this.dialog.$(".modal_controls button.submit").isLoading()).toBeTruthy();
+                expect(this.dialog.$(".form_controls button.submit").isLoading()).toBeTruthy();
             });
 
             it("saves the workspace with the new sandbox id", function() {
@@ -97,7 +97,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                 });
 
                 it("takes the button out of the loading state", function() {
-                    expect(this.dialog.$(".modal_controls button.submit").isLoading()).toBeFalsy();
+                    expect(this.dialog.$(".form_controls button.submit").isLoading()).toBeFalsy();
                 });
 
                 it("displays the error message", function() {

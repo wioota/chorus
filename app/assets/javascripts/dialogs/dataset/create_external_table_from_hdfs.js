@@ -77,7 +77,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
     },
 
     selectWorkspace: function() {
-        this.model.set({workspaceId: this.$("option:selected").val()});
+        this.model.set({workspaceId: this.$("option:selected").val()}, {silent: true});
     },
 
     resourcesLoaded: function() {

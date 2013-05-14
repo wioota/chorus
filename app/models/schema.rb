@@ -69,7 +69,7 @@ class Schema < ActiveRecord::Base
     datasets_in_data_source = connect_with(account).datasets(options)
 
     datasets_in_data_source.each do |attrs|
-      dataset = datasets.find_by_name(attrs[:name])
+      dataset = datasets.views_tables.find_by_name(attrs[:name])
       klass = class_for_type attrs.delete(:type)
       unless dataset
         dataset = klass.new(:name => attrs[:name])

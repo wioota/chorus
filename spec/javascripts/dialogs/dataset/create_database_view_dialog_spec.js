@@ -13,7 +13,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
     });
 
     it('should have a close link', function() {
-        var $cancelButton = this.view.$('.modal_controls .cancel');
+        var $cancelButton = this.view.$('.form_controls .cancel');
         expect($cancelButton).toContainTranslation("actions.cancel");
     });
 

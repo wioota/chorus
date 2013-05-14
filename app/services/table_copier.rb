@@ -109,7 +109,7 @@ class TableCopier
     @table_created
   end
 
-  def  chorus_view?
+  def chorus_view?
     source_dataset.is_a?(ChorusView)
   end
 

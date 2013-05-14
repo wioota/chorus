@@ -21,6 +21,9 @@ chorus.Mixins.StickyHeader = {
     makeSpacerForElement: function (elem, index) {
         var spacerClass = "scroll_spacer";
         var spacerClassToAvoidSpacerDups = spacerClass + index;
+
+        elem = this.extractElementFromSelectionArrays(elem, spacerClass);
+
         if(this.contentDetailsAtTop) {
             if ($("."+spacerClassToAvoidSpacerDups).length === 0) {
 
@@ -40,6 +43,14 @@ chorus.Mixins.StickyHeader = {
     teardownStickyHeaders: function() {
         $(window).unbind('scroll', this.boundScrollHandler);
         delete this.boundScrollHandler;
-    }
+    },
 
+    extractElementFromSelectionArrays: function (elem, spacerClass) {
+        if (elem.length > 1) {
+            elem = $(_.detect(elem, function (el) {
+                return !($(el).hasClass(spacerClass));
+            }));
+        }
+        return elem;
+    }
 };
