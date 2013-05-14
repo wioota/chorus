@@ -1,20 +1,35 @@
-<button class="run_file button_action_highlighted"><span class="run_description">{{t "workfile.content_details.run_file"}}</span><span class="down_arrow"></span></button>
-<div class="execution_schema">
-{{t "workfile.content_details.execution_schema"}}:
-{{#if schemaName}}
-    {{schemaName}}
-{{else}}
-    {{t "workfile.content_details.no_schema"}}
-{{/if}}
+<div class="line">
+    <div class="col">
+        <button class="run_file button_action_highlighted">
+            <span class="run_description">{{t "workfile.content_details.run_file"}}</span>
+            <span class="down_arrow"></span>
+        </button>
+
+        <div class="execution_schema">
+            {{t "workfile.content_details.execution_schema"}}:
+            {{#if schemaName}}
+                {{schemaName}}
+            {{else}}
+                {{t "workfile.content_details.no_schema"}}
+            {{/if}}
+        </div>
+
+        <a class="change_workfile_schema" href="#">Change</a>
+    </div>
+
+    <div class="col col-ext">
+        <div class="save">
+            <span class="auto_save hidden"></span>
+            <span class="view">
+                <button class="save_as button_action_highlighted">{{t "workfile.content_details.save_as"}}<span class="down_arrow"/></button>
+            </span>
+        </div>
+    </div>
 </div>
 
-<a class="change_workfile_schema" href="#">Change</a>
-
-{{renderTemplate "workfile_content_details" .}}
-
 <div class="hidden">
-<div class="run_workfile">
-    <ul class="run_menu">
+    <div class="run_workfile">
+        <ul class="run_menu">
         <li>
             {{#if schemaName}}
                 <span class="menu_shortcut">{{hotKeyName "r"}}</span>
@@ -26,11 +41,11 @@
             {{/if}}
         </li>
         <li>
-        {{#if schemaName}}
-            <a href="#" class="run_and_download">{{t "workfile.content_details.run_and_download"}}</a>
-        {{else}}
-            <span class="run_and_download">{{t "workfile.content_details.run_and_download"}}</span>
-        {{/if}}
+            {{#if schemaName}}
+                <a href="#" class="run_and_download">{{t "workfile.content_details.run_and_download"}}</a>
+            {{else}}
+                <span class="run_and_download">{{t "workfile.content_details.run_and_download"}}</span>
+            {{/if}}
         </li>
 
         <li>
@@ -42,5 +57,5 @@
             <a href="#" class="run_selection_and_download">{{t "workfile.content_details.run_selection_and_download"}}</a>
         </li>
     </ul>
-</div>
+    </div>
 </div>

@@ -65,6 +65,10 @@ input[type=checkbox] {
     display: none !important;
 }
 
+.invisible {
+    visibility: hidden !important;
+}
+
 .no_cursor {
     cursor: none;
 }

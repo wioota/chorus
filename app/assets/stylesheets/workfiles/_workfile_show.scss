@@ -9,18 +9,13 @@
 
 .workfile_content_details {
   .save {
-        float: right;
-
         span.view {
             margin-right: 0;
-            font-size: 11px
         }
 
         span.auto_save {
             margin-right: 10px;
-            font-size: 12px;
             color: $color-text4;
-            font-weight: normal;
         }
     }
 
