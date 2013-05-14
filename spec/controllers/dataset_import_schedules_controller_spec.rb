@@ -247,7 +247,7 @@ describe DatasetImportSchedulesController do
         response.should be_success
         decoded_response.to_table.should == import_schedule.to_table
         decoded_response.frequency.should == import_schedule.frequency
-        decoded_response.dataset_id.should == to_table.id
+        decoded_response.dataset_id.should == source_table.id
       end
 
       it "returns an error when importing into a new table but name already exists" do
