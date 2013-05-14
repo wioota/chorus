@@ -6,7 +6,7 @@ describe ImportSchedulePresenter, :type => :view do
       stub(d).table_exists? { false }
     end
 
-    @presenter = ImportSchedulePresenter.new(import_schedule, view, {:dataset_id => dataset_id})
+    @presenter = ImportSchedulePresenter.new(import_schedule, view)
 
     any_instance_of(GpdbDataset) do |d|
       stub(d).can_import_into(anything) { true }
@@ -23,7 +23,6 @@ describe ImportSchedulePresenter, :type => :view do
 
   describe "#to_hash" do
     let(:hash) { @presenter.to_hash }
-    let(:dataset_id) { 111 }
     let(:import) { nil }
 
     it "includes the right keys" do
@@ -36,7 +35,7 @@ describe ImportSchedulePresenter, :type => :view do
       hash[:next_import_at].should == import_schedule.next_import_at
       hash[:new_table].should == import_schedule.new_table
       hash[:destination_dataset_id].should == import_schedule.destination_dataset_id
-      hash[:dataset_id].should == dataset_id
+      hash[:dataset_id].should == import_schedule.source_dataset_id
       hash[:source_id].should == import_schedule.source_dataset_id
     end
   end

@@ -4,7 +4,7 @@ class ImportSchedulePresenter < Presenter
     {
         :id => model.id,
         :source_id => model.source_dataset_id,
-        :dataset_id => @options[:dataset_id],
+        :dataset_id => model.source_dataset_id,
         :workspace_id => model.workspace_id,
         :start_datetime => model.start_datetime,
         :end_date => model.end_date,
