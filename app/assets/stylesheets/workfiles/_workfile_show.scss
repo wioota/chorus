@@ -1,41 +1,13 @@
-.fixed {
-    position: fixed;
-    left: $guts-padding;
-    margin-right: $sidebar-width + $sidebar-padding-x + 1;
-    right: 0px;
-    top: $header-height + 1;
-    z-index: $header-z-index - 1;
-}
-
 .workfile_content_details {
-  .save {
-        span.view {
-            margin-right: 0;
-        }
+  .auto_save {
+      color: $color-text4;
+  }
 
-        span.auto_save {
-            margin-right: 10px;
-            color: $color-text4;
-        }
-    }
-
-    .down_arrow {
-        width: 0;
-        height: 0;
-        border-left: 4px solid transparent;
-        border-right: 4px solid transparent;
-        border-top: 4px solid #aaa;
-        margin: 0 0 2px 8px;
-        display: inline-block;
-    }
-
-    .execution_schema {
-        color: $content-details-action-link-color;
-        display: inline;
-        padding-left: $padding-x;
-        padding-right: $padding-x;
-        font-weight: normal;
-    }
+  .down_arrow {
+      @include triangle(down, #aaa, 8px, 4px);
+      margin: 0 0 2px 8px;
+      display: inline-block;
+  }
 }
 
 .read_only_workfile_content_details {
