@@ -34,11 +34,6 @@
 
 .content_details, .content_footer {
     border-bottom: 1px solid $pagination-border-color;
-    &.hidden {
-        padding: 0;
-        height: 0;
-        border: none;
-    }
 }
 
 .action_bar_highlighted {
