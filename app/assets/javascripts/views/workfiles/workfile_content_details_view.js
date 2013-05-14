@@ -1,4 +1,7 @@
-chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
+chorus.views.WorkfileContentDetails = chorus.views.Base.include(
+        chorus.Mixins.StickyHeader
+    ).extend({
+
     templateName:"workfile_content_details",
     additionalClass: "workfile_content_details action_bar",
 
@@ -6,19 +9,9 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
         this.subscribePageEvent("file:autosaved", this.updateAutosaveText);
     },
 
-    scrollHandler: function() {
-        if (!this.$el) return;
-        this.topPosition = this.topPosition || this.$el.parent().offset().top;
-        var contentDetailsTop = this.topPosition  - $(window).scrollTop();
-        var distanceToHeader = contentDetailsTop - $(".header").outerHeight();
-        this.$el.parent().toggleClass('fixed', distanceToHeader <= 0);
-        this.$el.closest('.main_content').find('.results_console').toggleClass('fixed', distanceToHeader <= 0);
-    },
-
     teardown: function() {
         this._super("teardown", arguments);
-        $(window).unbind('scroll', this.boundScrollHandler);
-        delete this.boundScrollHandler;
+        this.teardownStickyHeaders();
     },
 
     updateAutosaveText: function(args) {
@@ -65,10 +58,12 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.extend({
             this.$(".save_as").attr("disabled", true);
         }
 
-        if(!this.boundScrollHandler) {
-            this.boundScrollHandler = _.bind(this.scrollHandler, this);
-            $(window).scroll(this.boundScrollHandler);
-        }
+        this.bindStickyHeader();
+    },
+
+    stickyHeaderElements: function() {
+        var $resultsConsole = this.$el.closest('.main_content').find(".results_console");
+        return [this.$el.parent(), $resultsConsole];
     },
 
     replaceCurrentVersion: function() {

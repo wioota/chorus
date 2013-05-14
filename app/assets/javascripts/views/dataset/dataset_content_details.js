@@ -1,4 +1,6 @@
-chorus.views.DatasetContentDetails = chorus.views.Base.extend({
+chorus.views.DatasetContentDetails = chorus.views.Base.include(
+        chorus.Mixins.StickyHeader
+    ).extend({
     templateName: "dataset_content_details",
     constructorName: 'DatasetContentDetails',
     persistent: true,
@@ -83,10 +85,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         }
         this.showErrors(this.dataset);
 
-        if(!this.boundScrollHandler) {
-            this.boundScrollHandler = _.bind(this.scrollHandler, this);
-            $(window).scroll(this.boundScrollHandler);
-        }
+        this.bindStickyHeader();
     },
 
     triggerSelectAll: function(e) {
@@ -264,33 +263,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
       this.dialog.launchModal();
     },
 
-    scrollHandler: function() {
-        if (!this.$el) return;
-        this.topPosition = this.topPosition || this.$el.parent().offset().top;
-        var contentDetailsTop = this.topPosition  - $(window).scrollTop();
-        var distanceToHeader = contentDetailsTop - $(".header").outerHeight();
-        var contentDetailsAtTop = distanceToHeader <= 0;
-        var $parent = this.$el.parent();
-
-        if(contentDetailsAtTop) {
-            if($(".scrollSpacer").length === 0) {
-                var $spacer = $parent.clone();
-                $spacer.addClass("scrollSpacer");
-                $spacer.css("visibility", "hidden");
-                $parent.before($spacer);
-            }
-        } else {
-            $(".scrollSpacer").remove();
-        }
-
-        $parent.toggleClass('fixed', contentDetailsAtTop);
-        var $results_console = this.$el.closest('.main_content').find('.results_console');
-        $results_console.toggleClass('fixed', contentDetailsAtTop);
-    },
-
     teardown: function() {
         this._super("teardown", arguments);
-        $(window).unbind('scroll', this.boundScrollHandler);
-        delete this.boundScrollHandler;
+        this.teardownStickyHeaders();
     }
 });
