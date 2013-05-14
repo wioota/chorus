@@ -59,11 +59,22 @@
         </div>
     </div>
 </div>
-<div class="edit_chorus_view hidden">
-     <a href="#" class="cancel">{{t "actions.cancel"}}</a>
-      <span class="create">{{t "dataset.content_details.edit_as_workfile"}}</span><span class="triangle_right"></span>
-     <button class="preview">{{t "dataset.run_sql"}}</button>
-     <button class="save">{{t "dataset.content_details.edit_chorus_view.save"}}</button>
+<div class="edit_chorus_view action_bar_highlighted hidden">
+    <div class="line">
+        <div class="col col-ext">
+            <ul class="list_horizontal">
+            <li><button class="save button_action_highlighted">{{t "dataset.content_details.edit_chorus_view.save"}}</button></li>
+            <li><a href="#" class="cancel">{{t "actions.cancel"}}</a></li>
+            </ul>
+        </div>
+        <div class="col cols-4">
+            <span class="create">{{t "dataset.content_details.edit_as_workfile"}}</span><span
+                class="triangle_right"></span>
+        </div>
+        <div class="col cols-13">
+            <button class="preview button_action_highlighted">{{t "dataset.run_sql"}}</button>
+        </div>
+    </div>
 </div>
 <div class="info_bar hidden action_bar_secondary">
 {{t "dataset.visualization.info_bar"}}
