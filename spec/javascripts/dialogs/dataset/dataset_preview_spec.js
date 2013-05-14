@@ -11,7 +11,7 @@ describe("chorus.dialogs.DatasetPreview", function() {
     });
 
     it('should have a close link', function() {
-        expect(this.view.$('.modal_controls .cancel')).toContainTranslation("actions.close_window");
+        expect(this.view.$('.form_controls .cancel')).toContainTranslation("actions.close_window");
     });
 
     it("should pass the dataset to execute on the results console", function() {

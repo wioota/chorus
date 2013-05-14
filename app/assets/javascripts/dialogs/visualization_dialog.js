@@ -79,8 +79,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
                 this.subviews[".chart_area"] = "emptyDataWarning";
                 this.renderSubview("emptyDataWarning");
             } else {
-                this.$(".modal_controls a.hide").addClass("hidden");
-                this.$(".modal_controls a.show").removeClass("hidden");
+                this.$(".form_controls a.hide").addClass("hidden");
+                this.$(".form_controls a.show").removeClass("hidden");
                 this.$("button.save").prop("disabled", false);
                 this.chart = new chorus.views.visualizations[_.capitalize(this.type)]({model:this.task});
                 this.subviews[".chart_area"] = "chart";
@@ -228,8 +228,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     showDataGrid: function(e) {
         e && e.preventDefault();
         this.$('.results_console').removeClass("hidden");
-        this.$(".modal_controls a.hide").removeClass("hidden");
-        this.$(".modal_controls a.show").addClass("hidden");
+        this.$(".form_controls a.hide").removeClass("hidden");
+        this.$(".form_controls a.show").addClass("hidden");
         this.resultsConsole.initializeDataGrid(this.task);
         this.recalculateScrolling();
     },
@@ -237,8 +237,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     hideDataGrid: function(e) {
         e && e.preventDefault();
         this.$('.results_console').addClass("hidden");
-        this.$(".modal_controls a.show").removeClass("hidden");
-        this.$(".modal_controls a.hide").addClass("hidden");
+        this.$(".form_controls a.show").removeClass("hidden");
+        this.$(".form_controls a.hide").addClass("hidden");
     },
 
     saveToDesktop: function() {
@@ -279,7 +279,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     footerSize: function() {
-        return this.$('.modal_controls').outerHeight(true);
+        return this.$('.form_controls').outerHeight(true);
     },
 
     sanitizeFilename: function(fileName) {

@@ -795,8 +795,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             });
 
             it("cancel should be replaced by cancel upload button", function() {
-                expect(this.dialog.$('.modal_controls .cancel')).not.toBeVisible();
-                expect(this.dialog.$('.modal_controls .cancel_upload')).toBeVisible();
+                expect(this.dialog.$('.form_controls .cancel')).not.toBeVisible();
+                expect(this.dialog.$('.form_controls .cancel_upload')).toBeVisible();
             });
 
             context("when the upload has failed", function() {
@@ -805,8 +805,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 });
 
                 it("should hide the cancel upload button again", function() {
-                    expect(this.dialog.$('.modal_controls .cancel')).toBeVisible();
-                    expect(this.dialog.$('.modal_controls .cancel_upload')).not.toBeVisible();
+                    expect(this.dialog.$('.form_controls .cancel')).toBeVisible();
+                    expect(this.dialog.$('.form_controls .cancel_upload')).not.toBeVisible();
                 });
 
             });
