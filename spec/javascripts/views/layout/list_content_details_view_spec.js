@@ -12,36 +12,17 @@ describe("chorus.views.ListContentDetails", function() {
 
     describe("#render", function() {
         describe("buttons", function() {
-            context("with a view", function() {
-                beforeEach(function() {
-                    this.view.options.buttons = [
-                        {
-                            view: "WorkspacesNew",
-                            text: "Create a Workspace",
-                            dataAttributes: [
-                                {
-                                    name: "foo",
-                                    value: "bar"
-                                }
-                            ]
-                        },
-                        {
-                            url: "#/foo",
-                            text: "Create a Foo"
-                        }
-                    ];
+            beforeEach(function() {
+                this.view.render();
+            });
 
-                    this.view.render();
-                });
+            it("creates a buttons subview", function(){
+                expect(this.view.buttonView).toBeA(chorus.views.ListContentDetailsButtonView);
+                expect(this.view.buttonView.options).toBe(this.view.options);
+            });
 
-                it("shows the buttons", function() {
-                    expect(this.view.$('button[data-dialog="WorkspacesNew"]')).toExist();
-                    expect(this.view.$('button[data-dialog="WorkspacesNew"]').text()).toBe("Create a Workspace");
-                    expect(this.view.$('button[data-dialog="WorkspacesNew"]')).toHaveData("foo", "bar");
-
-                    expect(this.view.$("a.button[href='#/foo']")).toExist();
-                    expect(this.view.$("a.button[href='#/foo']")).toContainText("Create a Foo");
-                });
+            it("contains a div to hold the buttons", function(){
+               expect(this.view.$("div.button_holder")).toExist();
             });
         });
 
@@ -377,6 +358,20 @@ describe("chorus.views.ListContentDetails", function() {
             this.collection.loaded = true;
             this.view = new chorus.views.ListContentDetails({ collection: this.collection, modelClass: "WorkspaceDataset" });
             $("#jasmine_content").append(this.view.el);
+        });
+    });
+
+    context("when initialized with a buttons subview", function(){
+        beforeEach(function() {
+            this.buttonView = new chorus.views.Base();
+            this.view = new chorus.views.ListContentDetails({
+                collection: this.collection,
+                modelClass: "User",
+                buttonView: this.buttonView
+            });
+        });
+        it("has a buttons subview", function(){
+            expect(this.view.buttonView).toBe(this.buttonView);
         });
     });
 });
