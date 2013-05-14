@@ -86,6 +86,17 @@ describe Workfile do
         workfile.notes.should == [note]
       end
     end
+
+    it "destroys dependent versions" do
+      workfile = workfiles(:public)
+      versions = workfile.versions
+      versions.length.should > 0
+
+      workfile.destroy
+      versions.each do |version|
+        WorkfileVersion.find_by_id(version.id).should be_nil
+      end
+    end
   end
 
   describe "search fields" do
