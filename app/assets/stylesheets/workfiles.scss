@@ -16,3 +16,9 @@
         max-width: 100%;
     }
 }
+
+button .down_arrow {
+    @include triangle(down, #aaa, 8px, 4px);
+    margin: 0 0 2px 8px;
+    display: inline-block;
+}

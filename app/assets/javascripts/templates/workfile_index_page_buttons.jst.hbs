@@ -1,4 +1,14 @@
 {{#if canUpdate}}
 <button class="import_workfile button_action_primary">{{t "actions.import_workfile"}}</button>
-<button class="new_workfile button_action_primary">{{t "actions.create_sql_workfile"}}</button>
+<button class="new_workfile button_action_primary">{{t "actions.create_workfile"}}<span class="down_arrow"></span></button>
 {{/if}}
+
+<div class="hidden">
+    <div class="create_workfile_menu">
+        <ul class="run_menu">
+            <li>
+                <a href="#" class="create_sql_workfile">{{t "actions.create_sql_workfile"}}</a>
+            </li>
+        </ul>
+    </div>
+</div>

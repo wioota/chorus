@@ -3,6 +3,7 @@ describe("chorus.views.WorkfileIndexPageButtons", function() {
         this.workspace = rspecFixtures.workspace();
         this.workspace.loaded = false;
         this.view = new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
+        this.qtipElement = stubQtip();
     });
 
     context("before the workspace is fetched", function() {
@@ -25,7 +26,9 @@ describe("chorus.views.WorkfileIndexPageButtons", function() {
 
             it("renders buttons", function() {
                 expect(this.view.$("button.import_workfile")).toExist();
+                expect(this.view.$("button.import_workfile")).toContainTranslation("actions.import_workfile");
                 expect(this.view.$("button.new_workfile")).toExist();
+                expect(this.view.$("button.new_workfile")).toContainTranslation("actions.create_workfile");
             });
 
             context("clicking the import workfile button", function() {
@@ -39,14 +42,23 @@ describe("chorus.views.WorkfileIndexPageButtons", function() {
                 });
             });
 
-            context("clicking the create sql workfile button", function() {
+            context("clicking the create workfile button", function() {
                 beforeEach(function() {
                     this.view.$("button.new_workfile").click();
                 });
 
-                it("launches the WorkfilesSqlNew dialog", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkfilesSqlNew);
-                    expect(this.modalSpy.lastModal().options.workspaceId).toBe(this.workspace.id);
+                it("enables the 'SQL' button", function() {
+                    expect(this.qtipElement.find(".create_sql_workfile")).not.toHaveClass("disabled");
+                });
+
+                context("clicking on 'SQL'", function() {
+                    it("launches the WorkfilesSqlNew dialog", function() {
+                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkfilesSqlNew);
+                        expect(this.qtipElement.find('.create_sql_workfile')).toContainTranslation('actions.create_sql_workfile');
+                        this.qtipElement.find('.create_sql_workfile').click();
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkfilesSqlNew);
+                        expect(this.modalSpy.lastModal().options.workspaceId).toBe(this.workspace.id);
+                    });
                 });
             });
         });

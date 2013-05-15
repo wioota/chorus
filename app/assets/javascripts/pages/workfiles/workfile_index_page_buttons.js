@@ -2,17 +2,30 @@ chorus.views.WorkfileIndexPageButtons = chorus.views.Base.extend({
     templateName: "workfile_index_page_buttons",
 
     events: {
-        "click button.import_workfile": "launchWorkfileImportsDialog",
-        "click button.new_workfile": "launchWorkfileSqlNewDialog"
+        "click button.import_workfile": "launchWorkfileImportsDialog"
     },
 
     setup: function() {
         this.model.fetchIfNotLoaded();
     },
 
+    postRender: function() {
+        chorus.menu(this.$('.new_workfile'), {
+            content: this.$(".create_workfile_menu"),
+            orientation: "right",
+            contentEvents: {
+                "a.create_sql_workfile": _.bind(this.launchWorkfileSqlNewDialog, this)
+            }
+        });
+    },
+
+    canUpdate: function() {
+        return this.model.loaded && this.model.canUpdate() && this.model.isActive();
+    },
+
     additionalContext: function() {
         return {
-            canUpdate: this.model.loaded && this.model.canUpdate() && this.model.isActive()
+            canUpdate: this.canUpdate()
         };
     },
 

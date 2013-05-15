@@ -11,12 +11,6 @@
   .auto_save {
       color: $color-text4;
   }
-
-  .down_arrow {
-      @include triangle(down, #aaa, 8px, 4px);
-      margin: 0 0 2px 8px;
-      display: inline-block;
-  }
 }
 
 .read_only_workfile_content_details {
