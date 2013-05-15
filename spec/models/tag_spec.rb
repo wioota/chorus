@@ -125,7 +125,7 @@ describe Tag do
 
       tag.reload.update_attribute(:taggings_count, 0)
 
-      expect { Tag.reset_counters }.to change { tag.reload.taggings_count }.to(2)
+      expect { Tag.reset_all_counters }.to change { tag.reload.taggings_count }.to(2)
     end
   end
 

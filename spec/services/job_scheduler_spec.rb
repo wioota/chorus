@@ -47,14 +47,14 @@ describe JobScheduler do
     end
   end
 
-  describe "Tag.reset_counters" do
+  describe "Tag.reset_all_counters" do
     it "runs every ChorusConfig.instance['reset_counter_cache_interval_hours'] hours" do
-      job_scheduler.job_named('Tag.reset_counters').period.should == ChorusConfig.instance['reset_counter_cache_interval_hours'].hours
+      job_scheduler.job_named('Tag.reset_all_counters').period.should == ChorusConfig.instance['reset_counter_cache_interval_hours'].hours
     end
 
-    it "enqueues the 'Tag.reset_counters' job in QC" do
-      mock(QC.default_queue).enqueue_if_not_queued("Tag.reset_counters")
-      job_scheduler.job_named('Tag.reset_counters').run(Time.current)
+    it "enqueues the 'Tag.reset_all_counters' job in QC" do
+      mock(QC.default_queue).enqueue_if_not_queued("Tag.reset_all_counters")
+      job_scheduler.job_named('Tag.reset_all_counters').run(Time.current)
     end
   end
 
