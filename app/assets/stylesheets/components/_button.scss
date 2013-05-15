@@ -44,12 +44,10 @@ button.modalish, .button_modalish {
 }
 
 .button_action_highlighted {
-  color: $button-text-color-highlighted;
   @include content-details-button($button-border-color-highlighted);
 }
 
 .button_action_secondary {
-  color: $button-text-color-secondary;
   @include content-details-button($button-border-color-secondary);
 }
 
