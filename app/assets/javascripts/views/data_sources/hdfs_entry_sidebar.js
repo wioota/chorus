@@ -78,26 +78,29 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
     createExternalTable: function(e) {
         e && e.preventDefault();
-        var hdfsDataSource = new chorus.models.HdfsDataSource({id: this.options.hdfsDataSourceId});
 
         this.resource.fetch();
 
-        this.listenTo(this.resource, "loaded", function() {
-            var externalTable = new chorus.models.HdfsExternalTable({
-                path: this.resource.get('path'),
-                hdfsDataSourceId: hdfsDataSource.get('id'),
-                hdfs_entry_id: this.resource.get('id')
-            });
+        this.listenTo(this.resource, "loaded", this.launchCreateExternTableDialog);
+    },
 
-            var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({
-                model: externalTable,
-                csvOptions: {
-                    tableName: this.resource.name(),
-                    contents: this.resource.get('contents')
-                }
-            });
-            dialog.launchModal();
+    launchCreateExternTableDialog: function() {
+        this.stopListening(this.resource, 'loaded', this.launchCreateExternTableDialog);
+        var hdfsDataSource = new chorus.models.HdfsDataSource({id: this.options.hdfsDataSourceId});
+        var externalTable = new chorus.models.HdfsExternalTable({
+            path: this.resource.get('path'),
+            hdfsDataSourceId: hdfsDataSource.get('id'),
+            hdfs_entry_id: this.resource.get('id')
         });
+
+        var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({
+            model: externalTable,
+            csvOptions: {
+                tableName: this.resource.name(),
+                contents: this.resource.get('contents')
+            }
+        });
+        dialog.launchModal();
     },
 
     openDirectoryExternalTable: function(e) {
