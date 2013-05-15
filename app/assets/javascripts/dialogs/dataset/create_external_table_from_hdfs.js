@@ -1,7 +1,7 @@
 chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.extend({
     constructorName: "CreateExternalTableFromHdfs",
+    templateName: "create_external_table_from_hdfs",
     title: t("hdfs.create_external.title"),
-    ok: t("hdfs.create_external.ok"),
     useLoadingSection: true,
     loadingKey: "hdfs.create_external.creating",
     includeHeader: false,

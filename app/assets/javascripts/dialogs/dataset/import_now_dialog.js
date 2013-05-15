@@ -81,7 +81,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     customSetup: function() {
         this.title = t("import.title");
-        this.submitText = t("import.begin");
+        this.submitKey = "import.begin";
     },
 
     saveModel: function() {
@@ -213,7 +213,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
             allowSchemaSelection: !this.workspace,
             canonicalName: this.schema && this.schema.canonicalName(),
             showSchedule: this.showSchedule,
-            submitText: this.submitText
+            submitKey: this.submitKey
         };
     },
 

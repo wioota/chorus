@@ -3,6 +3,20 @@ chorus.handlebarsHelpers.template = {
         return new Handlebars.SafeString(window.JST["templates/" + templateName](context));
     },
 
+    formControls:function(submitText, cancelText) {
+        if(cancelText && cancelText.hash) {
+            cancelText = "actions.cancel";
+        }
+        return Handlebars.helpers.renderTemplate("components/form_controls", { submitText: submitText, cancelText: cancelText});
+    },
+
+    formControlsWithDisabledSubmit: function(submitText, cancelText) {
+        if(cancelText && cancelText.hash) {
+            cancelText = "actions.cancel";
+        }
+        return Handlebars.helpers.renderTemplate("components/form_controls", { submitText: submitText, cancelText: cancelText, disabled: true});
+    },
+
     renderTemplateIf: function(conditional, templateName, context) {
         if (conditional) {
             return Handlebars.helpers.renderTemplate(templateName, context);

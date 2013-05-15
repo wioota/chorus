@@ -4,3 +4,6 @@ Handlebars.registerPartial("workspaceItemDetails", window.JST["templates/workspa
 Handlebars.registerPartial("itemLastComment", window.JST["templates/item_last_comment"]);
 Handlebars.registerPartial("multipleSelectionHeader", window.JST["templates/multiple_selection_header"]);
 Handlebars.registerPartial("listItemText", window.JST["templates/list_item_text"]);
+Handlebars.registerPartial("formControls", window.JST["templates/components/form_controls"]);
+Handlebars.registerPartial("csvImportConsole", window.JST["templates/csv_import_console"]);
+Handlebars.registerPartial("closeWindowFormControls", window.JST["templates/components/close_window_form_controls"]);

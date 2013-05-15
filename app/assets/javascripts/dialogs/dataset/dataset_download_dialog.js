@@ -1,7 +1,7 @@
 chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
     constructorName: "DatasetDownload",
     templateName: "dataset_download",
-    submitText: t("actions.download"),
+    submitKey: "actions.download",
 
     events: {
         "click button.submit": "submitDownload"
@@ -20,7 +20,7 @@ chorus.dialogs.DatasetDownload = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            submitText: this.submitText
+            submitKey: this.submitKey
         };
     },
 

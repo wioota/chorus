@@ -2,8 +2,5 @@
     <div class="toolbar"></div>
     <textarea class="required" name="body" placeholder="{{placeholder}}" tabindex="1">{{body}}</textarea>
 
-    <div class="form_controls">
-        <button type="button" class="cancel" tabindex=3>{{t "actions.cancel"}}</button>
-        <button type="submit" class="submit" tabindex=2>{{t "actions.save_changes"}}</button>
-    </div>
+    {{formControls "actions.save_changes"}}
 </form>

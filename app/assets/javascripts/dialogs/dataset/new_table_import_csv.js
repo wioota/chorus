@@ -4,7 +4,6 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     templateName: "new_table_import_csv",
     additionalClass: "table_import_csv dialog_wide",
     title: t("dataset.import.table.title"),
-    ok: t("dataset.import.table.submit"),
     loadingKey: "dataset.import.importing",
     includeHeader: true,
 
@@ -86,8 +85,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: Handlebars.helpers.unsafeT("dataset.import.table.new.directions", {
                 tablename_input_field: "<input type='text' name='tableName' value='" + this.model.get('tableName') + "'/>"
-            }),
-            ok: this.ok
+            })
         };
     },
 
