@@ -1,5 +1,5 @@
-@mixin chart_icon($name) {
-    .#{$name}.chart_icon, .chorusview {
+@mixin action_bar_icon($name) {
+    .#{$name}.action_bar_icon {
         background-image: url("/images/visualizations/create_icons/#{$name}_off.png");
         &.selected {
             background-image: url("/images/visualizations/create_icons/#{$name}_on.png");
@@ -9,9 +9,7 @@
 
 $action-bar-height: 32px;
 
-
-
-.chart_icon, .chorusview {
+.action_bar_icon {
   width: 50px;
   height: $action-bar-height;
   display: inline-block;
@@ -57,13 +55,14 @@ $action-bar-height: 32px;
       display: block;
     }
 
-  .create_chart, .create_chorus_view, .edit_chorus_view {
+  .pennant_bar {
     padding-top: 0;
     padding-bottom: 0;
     padding-left: 0;
     position: relative;
     line-height: $action-bar-height - 2px;
   }
+
   .action_bar_pennant {
     color: white;
     background-color: $content-details-create-background-color;
@@ -84,32 +83,12 @@ $action-bar-height: 32px;
     padding: 7px 10px;
   }
 
-  @include chart_icon(frequency);
-  @include chart_icon(histogram);
-  @include chart_icon(heatmap);
-  @include chart_icon(timeseries);
-  @include chart_icon(boxplot);
-  @include chart_icon(chorusview);
-}
-
-.transform_menu {
-    li {
-        padding: 5px;
-
-        a {
-            @include font-menu;
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-
-        .menu_shortcut {
-            @include font-menu;
-            color: $color-text4;
-            float: right;
-            padding-left: (6 * $padding-x);
-        }
-    }
+  @include action_bar_icon(frequency);
+  @include action_bar_icon(histogram);
+  @include action_bar_icon(heatmap);
+  @include action_bar_icon(timeseries);
+  @include action_bar_icon(boxplot);
+  @include action_bar_icon(chorusview);
 }
 
 .select_all_or_none {
