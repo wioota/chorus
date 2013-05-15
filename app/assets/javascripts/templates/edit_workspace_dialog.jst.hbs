@@ -1,5 +1,6 @@
 <form>
-    <label class="required">{{t "workspace.settings.name"}}</label>
+    <div class="pbs pts"><label class="required">{{t "workspace.settings.name"}}</label></div>
+
     <input type="text" name="name" maxlength="256" value="{{name}}" tabindex="1"/>
     <input type="checkbox" id="public_checkbox" name="public"
         {{#if public}}
@@ -8,63 +9,78 @@
     />
     <label for="public_checkbox">{{t "workspace.settings.publicly_available"}}</label>
 
-    <div>
+    <div class="pbs pts">
         <div class="toolbar"></div>
         <label>{{t "workspace.settings.summary"}}</label>
     </div>
+
     <textarea name="summary" rows="2" tabindex="2">{{summary}}</textarea>
 
-    <label>Workspace Image</label>
+    <div class="pbs pts"><label>Workspace Image</label></div>
 
     <div class="image_container">
-        <div class='edit_photo'><div class="image_upload"/></div>
-        <div class="instructions">
-            {{t "workspace.settings.image.instructions"}}
+        <div class="line">
+            <div class="col cols-11">
+                <div class='edit_photo'>
+                    <div class="image_upload"/>
+                </div>
+            </div>
+            <div class="col col-last">
+                <div class="instructions">
+                    {{t "workspace.settings.image.instructions"}}
+                </div>
+            </div>
         </div>
     </div>
 
-    <label>{{t "workspace.settings.sandbox.location"}}</label>
+    <div class="pbs pts"><label>{{t "workspace.settings.sandbox.location"}}</label></div>
 
-    <div class="sandboxLocation">{{sandboxLocation}}</div>
+    <div class="sandboxLocation plm pbs pts">{{sandboxLocation}}</div>
     {{#if canChangeOwner}}
-        <label>{{ t "workspace.settings.change_owner"}}</label>
+        <div class="pbs pts"><label>{{ t "workspace.settings.change_owner"}}</label></div>
         <select name="owner" id="selectowner" class="owner">
             {{#each members}}
                 <option value={{id}}>{{displayNameFromPerson attributes}}</option>
             {{/each}}
         </select>
     {{else}}
-        <label>{{ t "workspace.settings.workspace_owner"}}</label>
+        <div class="pbs pts"><label>{{ t "workspace.settings.workspace_owner"}}</label></div>
         <div class="owner"><a href="{{ownerUrl}}">{{ownerName}}</a></div>
     {{/if}}
+    <div class="ptm pbm"><label>{{t "workspace.settings.status"}}</label></div>
 
-    <div class="workspace_status">
-        <label>{{t "workspace.settings.status"}}</label>
-        <div class="radio">
-            <input type="radio" id="workspace_active" name="status"
-                {{#if active}}
-                    checked="checked"
-                {{/if}}
-            />
-            <label for="workspace_active"><span>{{t "workspace.settings.active"}}</span></label>
+    <div class="line">
+        <div class="col cols-6">
+            <div class="workspace_status plm">
+                <div class="radio pbs">
+                    <input type="radio" id="workspace_active" name="status"
+                        {{#if active}}
+                            checked="checked"
+                        {{/if}}
+                    />
+                    <label for="workspace_active"><span>{{t "workspace.settings.active"}}</span></label>
+                </div>
+                <div class="radio">
+                    <input type="radio" id="workspace_archived" name="status"
+                        {{#unless active}}
+                            checked="checked"
+                        {{/unless}}
+                    />
+                    <label for="workspace_archived"><span>{{t "workspace.settings.archived"}}</span></label>
+                </div>
+            </div>
         </div>
-        <div class="radio">
-            <input type="radio" id="workspace_archived" name="status"
-                {{#unless active}}
-                    checked="checked"
-                {{/unless}}
-            />
-            <label for="workspace_archived"><span>{{t "workspace.settings.archived"}}</span></label>
+        <div class="col col-last">
+            <div class="archived_text">
+                {{t "workspace.settings.archived_description"}}
+            </div>
         </div>
-    </div>
-    <div class="archived_text">
-        {{t "workspace.settings.archived_description"}}
     </div>
 
     <div class="form_controls">
-        <button type="button" class="cancel" tabindex="100">{{#if canSave}}{{t "actions.cancel"}}{{else}}{{t "actions.close_window"}}{{/if}}</button>
+        <button type="button" class="cancel modalish" tabindex="100">{{#if canSave}}{{t "actions.cancel"}}{{else}}{{t "actions.close_window"}}{{/if}}</button>
         {{#if canSave}}
-        <button type="submit" class="submit" tabindex="99">{{t "actions.save_changes"}}</button>
+        <button type="submit" class="submit modalish" tabindex="99">{{t "actions.save_changes"}}</button>
         {{/if}}
     </div>
 </form>

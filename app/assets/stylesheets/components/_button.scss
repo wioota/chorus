@@ -13,9 +13,6 @@ a.button, button, input[type=submit] {
   -webkit-appearance : initial;
   display: inline-block;
   color: $default-font-color;
-  border: 1px solid $button-border-color;
-  background : $button-background-color;
-  font-size : 16px;
   line-height: $button-height;
   vertical-align: middle;
   margin: 0;
@@ -30,6 +27,14 @@ a.button, button, input[type=submit] {
   }
 }
 
+
+button.modalish, .button_modalish {
+  color: $default-link-color;
+  border: 1px solid $button-border-color;
+  background: $button-background-color;
+  font-size: 16px;
+}
+
 .button_action_primary {
   @include content-details-button($button-border-color);
 }
@@ -38,7 +43,7 @@ a.button, button, input[type=submit] {
   @include content-details-button($button-border-color-limited);
 }
 
-.button_action_highlighted, a.button_action_highlighted {
+.button_action_highlighted {
   color: $button-text-color-highlighted;
   @include content-details-button($button-border-color-highlighted);
 }

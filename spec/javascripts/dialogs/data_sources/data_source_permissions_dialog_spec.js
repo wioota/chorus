@@ -320,7 +320,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
 
             var ownerAccountId = this.dataSource.accountForOwner().get('id');
             this.ownerLi = this.dialog.$("li[data-id=" + ownerAccountId + "]");
-            this.otherLis = this.dialog.$("li[data-id!=" + ownerAccountId + "]");
+            this.otherLis = this.dialog.$(".collection_list li[data-id!=" + ownerAccountId + "]");
 
             $('#jasmine_content').append(this.dialog.el);
         });
@@ -586,7 +586,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                 });
 
                 it("adds a new item to the accounts list", function() {
-                    expect(this.dialog.$("li").length).toBe(4);
+                    expect(this.dialog.$(".collection_list li").length).toBe(4);
                 });
 
                 it("puts the new item into edit mode", function() {
@@ -604,7 +604,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                 it("disables the 'add account' button", function() {
                     expect(this.dialog.$("button.add_account")).toBeDisabled();
                     this.dialog.$("button.add_account").click();
-                    expect(this.dialog.$("li").length).toBe(4);
+                    expect(this.dialog.$(".collection_list li").length).toBe(4);
                 });
 
                 it("displays the image for the selected user", function() {
@@ -634,7 +634,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                     });
 
                     it("removes the new row", function() {
-                        expect(this.dialog.$('li').length).toBe(3);
+                        expect(this.dialog.$('.collection_list li').length).toBe(3);
                     });
 
                     it("removes the model from the collection", function() {
@@ -729,7 +729,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                     });
 
                     it("removes the new row", function() {
-                        expect(this.dialog.$('li').length).toBe(3);
+                        expect(this.dialog.$('.collection_list li').length).toBe(3);
                     });
 
                     it("removes the model from the collection", function() {
@@ -751,7 +751,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
 
         describe("when the 'add account' button is clicked (before the users are fetched)", function() {
             beforeEach(function() {
-                expect(this.dialog.$("li").length).toBe(3);
+                expect(this.dialog.$(".collection_list li").length).toBe(3);
                 this.dialog.$("button.add_account").click();
             });
 
