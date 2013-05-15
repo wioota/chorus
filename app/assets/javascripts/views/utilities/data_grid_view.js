@@ -78,13 +78,13 @@ chorus.views.DataGrid = chorus.views.Base.extend({
 
     _slickGridOptions: function(columns) {
         return {
+            defaultColumnWidth: 130,
             defaultFormatter: this.cellFormatter,
+            enableCellNavigation: false,
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,
-            syncColumnCellResize: true,
-            enableCellNavigation: true,
-            defaultColumnWidth: 130,
-            forceFitColumns: this.forceFitColumns(columns)
+            forceFitColumns: this.forceFitColumns(columns),
+            syncColumnCellResize: true
         };
     }
 });

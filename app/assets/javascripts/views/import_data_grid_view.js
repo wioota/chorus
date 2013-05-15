@@ -78,14 +78,15 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
 
     _slickGridOptions: function(columns) {
         return {
+            defaultColumnWidth: 130,
             defaultFormatter: this.cellFormatter,
+            enableCellNavigation: false,
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,
-            syncColumnCellResize: true,
-            showHeaderRow: true,
+            forceFitColumns: this.forceFitColumns(columns),
             headerRowHeight: this.headerRowHeight,
-            defaultColumnWidth: 130,
-            forceFitColumns: this.forceFitColumns(columns)
+            showHeaderRow: true,
+            syncColumnCellResize: true
         };
     }
 });
