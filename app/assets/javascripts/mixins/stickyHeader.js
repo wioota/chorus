@@ -1,4 +1,12 @@
 chorus.Mixins.StickyHeader = {
+    //This is largely untestable. Delete at your own risk.
+    //Most of the pain is from making the header sticky if the page content requires scrolling, but
+    //does not require scrolling when the header is position: fixed.
+
+    //Fun Edge cases to consider:
+        // - The page content requires scrolling with the results console, but not without it
+        // - The page content requires scrolling if the codeMirror content has many lines.  Then you scroll down and then delete those lines
+
     bindStickyHeader: function() {
         if(!this.boundScrollHandler) {
             this.boundScrollHandler = _.bind(this.scrollHandler, this);
@@ -25,8 +33,9 @@ chorus.Mixins.StickyHeader = {
         elem = this.extractElementFromSelectionArrays(elem, spacerClass);
 
         if(this.contentDetailsAtTop) {
+            //Before making the headers' positions fixed,
+            //Make clones of the headers to prevent the DOM from collapsing
             if ($("."+spacerClassToAvoidSpacerDups).length === 0) {
-
                 var $spacer = elem.clone();
                 $spacer.addClass(spacerClass);
                 $spacer.addClass(spacerClassToAvoidSpacerDups);
@@ -37,7 +46,7 @@ chorus.Mixins.StickyHeader = {
             $("."+spacerClass).remove();
         }
 
-        if(!elem.hasClass(spacerClass)) { elem.toggleClass('fixed_header', this.contentDetailsAtTop); }
+        elem.toggleClass('fixed_header', this.contentDetailsAtTop);
     },
 
     teardownStickyHeaders: function() {
@@ -46,6 +55,8 @@ chorus.Mixins.StickyHeader = {
     },
 
     extractElementFromSelectionArrays: function (elem, spacerClass) {
+        // Sometimes receives both the sticky element and its spacer clone.
+        // Throw away the spacer clone.
         if (elem.length > 1) {
             elem = $(_.detect(elem, function (el) {
                 return !($(el).hasClass(spacerClass));
