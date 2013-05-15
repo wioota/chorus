@@ -10,7 +10,7 @@ chorus_config = ChorusConfig.new(chorus_home)
 database_yml = File.join(chorus_home, 'config', 'database.yml')
 db_config = YAML.load_file database_yml
 
-pool_size = [chorus_config['webserver_threads'].to_i, chorus_config['worker_threads'].to_i].max
+pool_size = [chorus_config['webserver_threads'].to_i, (chorus_config['worker_threads'].to_i + 1)].max
 postgres_port = chorus_config['postgres_port']
 
 if db_config[environment] && (db_config[environment]['pool'] != pool_size || db_config[environment]['port'] != postgres_port)
