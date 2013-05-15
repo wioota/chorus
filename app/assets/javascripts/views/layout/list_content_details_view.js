@@ -1,6 +1,7 @@
 chorus.views.ListContentDetails = chorus.views.Base.extend({
     constructorName: "ListContentDetailsView",
     templateName: "list_content_details",
+    additionalClass: "action_bar_primary",
 
     events: {
         "click a.next": "fetchNextPage",

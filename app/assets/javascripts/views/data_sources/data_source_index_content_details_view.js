@@ -1,6 +1,7 @@
 chorus.views.DataSourceIndexContentDetails = chorus.views.Base.extend({
     constructorName: "DataSourceIndexContentDetailsView",
     templateName:"data_source_index_content_details",
+    additionalClass: "action_bar_primary",
 
     events: {
         "click a.select_all": "selectAll",
