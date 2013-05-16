@@ -1,6 +1,6 @@
 describe("chorus.pages.DashboardPage", function() {
     beforeEach(function() {
-        chorus.session = new chorus.models.Session({ id: "foo" });
+        chorus.session = rspecFixtures.session();
         this.page = new chorus.pages.DashboardPage();
     });
 
@@ -118,7 +118,7 @@ describe("chorus.pages.DashboardPage", function() {
         });
 
         it("passes the userId to workspaceSet", function() {
-            expect(this.page.workspaceSet.attributes.userId).toBe("foo");
+            expect(this.page.workspaceSet.attributes.userId).toBe(chorus.session.user().id);
         });
 
         it("fetches only the data sources where the user has permissions succinctly", function() {

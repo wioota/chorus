@@ -8,8 +8,8 @@ chorus.models.Session = chorus.models.Base.extend({
     },
 
     user: function() {
-        if (!this._user && this.get("id")) {
-            this._user = new chorus.models.User(this.attributes);
+        if (!this._user && this.get("user")) {
+            this._user = new chorus.models.User(this.get('user'));
         }
 
         return this._user;

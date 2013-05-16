@@ -445,7 +445,7 @@
         if(options instanceof chorus.models.User) {
             options = options.attributes;
         }
-        target.session = rspecFixtures.session(options);
+        target.session = rspecFixtures.session({user: options});
     };
 
     window.stubView = function(html, options) {

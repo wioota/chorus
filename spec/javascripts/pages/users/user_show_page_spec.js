@@ -74,10 +74,6 @@ describe("chorus.pages.UserShow", function() {
                 this.page = new chorus.pages.UserShowPage(chorus.session.user().id.toString());
                 this.server.completeFetchFor(this.page.model);
             });
-
-            it("sets showApiKey to true", function() {
-                expect(this.page.sidebar.options.showApiKey).toBeTruthy();
-            });
         });
 
         context("not on your own page", function() {
@@ -93,10 +89,6 @@ describe("chorus.pages.UserShow", function() {
 
             it("sets the sidebar's model to the user", function() {
                 expect(this.page.sidebar.model).toBe(this.page.model);
-            });
-
-            it("does not set showApiKey to true", function() {
-                expect(this.page.sidebar.options.showApiKey).toBeFalsy();
             });
         });
     });

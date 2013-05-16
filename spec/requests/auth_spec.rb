@@ -1,16 +1,17 @@
 require 'spec_helper'
 
 describe "resources which require authentication" do
-  let!(:user) { FactoryGirl.create :user, :username => 'some_user', :password => 'secret' }
+  let!(:user) { users(:default) }
 
   context "after the user has logged in" do
     before do
-      post "/sessions", :session => { :username => "some_user", :password => "secret" }
+      post "/sessions", :session => { :username => user.username, :password => FixtureBuilder.password }
+      response.should be_success
     end
 
     it "shows the resource" do
       get "/users"
-      response.code.should == "200"
+      response.should be_success
     end
 
     context "then logged out" do

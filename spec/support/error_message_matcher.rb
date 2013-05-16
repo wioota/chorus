@@ -8,6 +8,7 @@ RSpec::Matchers.define :have_error_on do |attribute|
   end
 
   match do |model|
+    model.valid? if model.errors.empty?
     @errors_on_attribute = model.errors[attribute]
     @errors_on_attribute.should_not be_nil
 
