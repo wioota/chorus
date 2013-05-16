@@ -4,30 +4,37 @@ require 'timecop'
 describe SessionsController do
   describe "#create" do
     let(:user) { users(:admin) }
-    let(:params) { {:username => user.username, :password => FixtureBuilder.password} }
+    let(:params) { {:username => user.username, :password => 'secret'} }
 
     describe "with the correct credentials" do
+      before do
+        stub(CredentialsValidator).user('admin', 'secret') { user }
+      end
+
       it "succeeds" do
         post :create, params
         response.code.should == "201"
       end
 
-      it "creates a new session" do
-        expect { post :create, params }.to change(Session, :count).by(1)
-        Session.last.user.should == user
-      end
-
-      it "adds the session_id to the session" do
-        expect { post :create, params }.to change(Session, :count).by(1)
-        session[:chorus_session_id].should == Session.last.session_id
-      end
-
-      it "should present the session" do
+      it "should present the user" do
         mock_present do |model|
-          model.should be_a Session
-          model.user.should == user
+          model.should == user
         end
         post :create, params
+      end
+
+      it "includes_api_key when presenting the user" do
+        mock_present do |user, view, options|
+          options[:include_api_key].should == true
+        end
+        post :create, params
+      end
+
+      it "sets session expiration" do
+        stub(ChorusConfig.instance).[]('session_timeout_minutes') { 123 }
+        post :create, params
+        response.should be_success
+        session[:expires_at].should be_within(1.minute).of(123.minutes.from_now)
       end
     end
 
@@ -44,8 +51,11 @@ describe SessionsController do
     end
 
     describe "with incorrect credentials" do
-      let(:params) { {:username => user.username, :password => 'badpassword'} }
       before do
+        thing = Object.new
+        stub(thing).errors.stub!.messages { {:field => [["error", {}]]} }
+        invalid_exception = CredentialsValidator::Invalid.new(thing)
+        stub(CredentialsValidator).user(user.username, 'secret') { raise(invalid_exception) }
         post :create, params
       end
 
@@ -54,7 +64,7 @@ describe SessionsController do
       end
 
       it "includes details of invalid credentials" do
-        decoded_errors.fields.username_or_password.INVALID.should == {}
+        decoded_errors.fields.field.ERROR.should == {}
       end
     end
   end
@@ -68,13 +78,19 @@ describe SessionsController do
         get :show
       end
 
-      it "should present the session" do
+      it "should present the user" do
         mock_present do |model|
-          model.should be_a Session
-          model.user.should == user
+          model.should == user
         end
         get :show
         response.code.should == "200"
+      end
+
+      it "includes_api_key when presenting the user" do
+        mock_present do |user, view, options|
+          options[:include_api_key].should == true
+        end
+        get :show
       end
 
       generate_fixture "session.json" do

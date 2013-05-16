@@ -7,8 +7,6 @@ class SunspotError < StandardError
 end
 
 class ApplicationController < ActionController::Base
-  attr_accessor :current_session
-
   around_filter :set_current_user
   before_filter :require_login
   before_filter :set_collection_defaults, :only => :index
@@ -45,12 +43,15 @@ class ApplicationController < ActionController::Base
   private
 
   def set_current_user
-    session_id = params[:session_id] || session[:chorus_session_id]
-    if session_id
-      self.current_session = Session.find_by_session_id(session_id.to_s)
-      Thread.current[:user] = current_session.try(:user)
+    if params[:api_key].present?
+      Thread.current[:user] = User.find_by_api_key(params[:api_key])
+      @api_auth = true if Thread.current[:user].present?
     else
-      Thread.current[:user] = nil
+      if session[:user_id]
+        Thread.current[:user] = User.find_by_id(session[:user_id])
+      else
+        Thread.current[:user] = nil
+      end
     end
     yield
     Thread.current[:user] = nil
@@ -113,12 +114,25 @@ class ApplicationController < ActionController::Base
     Thread.current[:user]
   end
 
+  def check_expiration
+    head(:unauthorized) if !@api_auth && expired?
+  end
+
+  def expired?
+    !session[:expires_at] || session[:expires_at] < Time.current
+  end
+
   def extend_expiration
-    current_session && current_session.update_expiration!
+    force_extend_expiration unless expired?
+  end
+
+  def force_extend_expiration
+    session[:expires_at] = ChorusConfig.instance['session_timeout_minutes'].minutes.from_now
   end
 
   def require_login
-    head :unauthorized if !logged_in? || current_session.expired?
+    head :unauthorized unless logged_in?
+    check_expiration
   end
 
   def require_admin

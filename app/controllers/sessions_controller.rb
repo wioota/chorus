@@ -3,10 +3,11 @@ class SessionsController < ApplicationController
   skip_before_filter :extend_expiration
 
   def create
-    session_object = Session.create!(params[:session])
-    session[:chorus_session_id] = session_object.session_id
-    present session_object, :status => :created
-  rescue ActiveRecord::RecordInvalid => e
+    user = CredentialsValidator.user(params[:session][:username], params[:session][:password])
+    session[:user_id] = user.id
+    force_extend_expiration
+    present user, :status => :created, :presenter_options => {:include_api_key => true}
+  rescue CredentialsValidator::Invalid => e
     present_validation_errors e.record.errors, :status => :unauthorized
   end
 
@@ -16,6 +17,6 @@ class SessionsController < ApplicationController
   end
 
   def show
-    present current_session
+    present current_user, :presenter_options => {:include_api_key => true}
   end
 end
