@@ -36,7 +36,6 @@ describe ChorusView do
             let(:query) {  "select 1; -- a comment with semicolon ; in it\n select 2;" }
 
             it 'is invalid' do
-              chorus_view.should_not be_valid
               chorus_view.should have_error_on(:query).with_message(:multiple_result_sets)
             end
           end
@@ -53,7 +52,6 @@ describe ChorusView do
             let(:query) {  "select 1; /* a comment with semicolon ; in\n it */ select 2;" }
 
             it 'is invalid' do
-              chorus_view.should_not be_valid
               chorus_view.should have_error_on(:query).with_message(:multiple_result_sets)
             end
           end
@@ -64,7 +62,6 @@ describe ChorusView do
         let(:query) {  "select 1; create table a_new_table()" }
 
         it 'is invalid' do
-          chorus_view.should_not be_valid
           chorus_view.should have_error_on(:query).with_message(:multiple_result_sets)
         end
 
@@ -78,7 +75,6 @@ describe ChorusView do
         let(:query) { "select * from a_non_existent_table_aaa;" }
 
         it 'is invalid' do
-          chorus_view.should_not be_valid
           chorus_view.should have_error_on(:query).with_message(:generic)
         end
       end
@@ -86,7 +82,6 @@ describe ChorusView do
       describe 'when it starts with not select or with' do
         let(:query) { "create table query_not_starting_with_keyword_table();" }
         it 'is invalid' do
-          chorus_view.should_not be_valid
           chorus_view.should have_error_on(:query).with_message(:start_with_keywords)
         end
       end

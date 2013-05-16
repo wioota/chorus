@@ -26,7 +26,6 @@ describe CsvImport do
         let(:table_exists) { true }
 
         it "is invalid" do
-          import.should_not be_valid
           import.should have_error_on(:to_table)
         end
       end
@@ -35,7 +34,6 @@ describe CsvImport do
         let(:options) { { :csv_file => FactoryGirl.create(:csv_file, :column_names => %w(tacos chips tacos burritos chips))} }
 
         it "is invalid" do
-          import.should_not be_valid
           import.should have_error_on(:column_names).with_message(:duplicates).with_options(:dupes => "tacos, chips")
         end
       end
