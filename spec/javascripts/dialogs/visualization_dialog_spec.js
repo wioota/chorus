@@ -916,4 +916,15 @@ describe("chorus.dialogs.Visualization", function() {
             expect(this.dialog.task.get('filters').length).toBe(2);
         });
     });
+
+    describe("#getAvailableHeight", function () {
+        beforeEach(function () {
+            this.maxHeight = 30;
+            spyOn($.fn, 'css').andReturn(this.maxHeight+"px");
+        });
+
+        it("turns blue", function () {
+            expect(this.dialog.getAvailableHeight()).toBe(this.maxHeight - this.dialog.$el.height());
+        });
+    });
 });

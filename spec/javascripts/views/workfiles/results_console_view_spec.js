@@ -309,22 +309,28 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 describe("getDesiredDataGridHeight", function() {
                     beforeEach(function() {
-                        this.originalSize = this.view.getDesiredDataGridHeight();
+                        this.arbitrarySpacing = 2; // to eliminate alleged spurious y-scrollbar
+                        this.availableHeight = 300 - this.arbitrarySpacing;
+                        spyOn(this.view.boundingContainer, 'getAvailableHeight').andReturn(this.availableHeight + this.arbitrarySpacing);
+                    });
+
+                    it("doesn't expand past the available height of its bounding container", function () {
+                        expect(this.view.getDesiredDataGridHeight()).toBe(this.availableHeight);
                     });
 
                     it("incorporates the footerSize passed to the view as a function", function() {
                         spyOn(this.view, "footerSize").andReturn(10);
-                        expect(this.view.getDesiredDataGridHeight()).toBe(this.originalSize - 10);
+                        expect(this.view.getDesiredDataGridHeight()).toBe(this.availableHeight - 10);
                     });
 
                     it("takes into account the vertical padding passed into the view", function() {
                         this.view.options.verticalDialogPadding = 20;
-                        expect(this.view.getDesiredDataGridHeight()).toBe(this.originalSize - 20);
+                        expect(this.view.getDesiredDataGridHeight()).toBe(this.availableHeight - 20);
                     });
 
                     it("takes into account the bottom gutter", function() {
                         spyOn(this.view, "bottomGutterHeight").andReturn(35);
-                        expect(this.view.getDesiredDataGridHeight()).toBe(this.originalSize - 35);
+                        expect(this.view.getDesiredDataGridHeight()).toBe(this.availableHeight - 35);
                     });
                 });
 

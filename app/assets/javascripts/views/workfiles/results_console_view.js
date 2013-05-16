@@ -14,7 +14,47 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         "click a.download_csv": "saveToDesktop"
     },
 
+    defaultBoundingContainer: function (view) {
+        return {
+            getAvailableHeight: function () {
+                return $(window).height() - this.distanceFromTopOfWindow() - this.distanceFromBottomOfWindow();
+            },
+
+            distanceFromTopOfWindow: function() {
+                var distanceFromTopOfDocument = view.$(".data_grid").offset().top;
+                return distanceFromTopOfDocument - $(window).scrollTop();
+            },
+
+            distanceFromBottomOfWindow: function() {
+                var verticalDialogPadding = 0;
+                if (view.options.verticalDialogPadding) {
+                    verticalDialogPadding = view.options.verticalDialogPadding;
+                }
+
+                return verticalDialogPadding + this.bottomGutterHeight() + this.footerSize();
+            },
+
+            bottomGutterHeight: function() {
+                var bottomGutter = view.$(".bottom_gutter");
+                if( bottomGutter.is(":visible") ){
+                    return bottomGutter.height();
+                } else {
+                    return 0;
+                }
+            },
+
+            footerSize: function() {
+                if (view.options.footerSize) {
+                    return view.options.footerSize();
+                } else {
+                    return 0;
+                }
+            }
+        };
+    },
+
     setup: function() {
+        this.boundingContainer = this.options.boundingContainer || this.defaultBoundingContainer(this);
         this.showDownloadDialog = this.options.showDownloadDialog;
         this.dataset = this.options.dataset;
         this.subscribePageEvent("file:executionStarted", this.executionStarted);
@@ -167,38 +207,9 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     },
 
     getDesiredDataGridHeight: function() {
+        var baseHeight = this.boundingContainer.getAvailableHeight();
         var arbitrarySpacing = 2; // to eliminate spurious y-scrollbar
-        return $(window).height() - this.distanceFromTopOfWindow() - this.distanceFromBottomOfWindow() - arbitrarySpacing;
-    },
-
-    bottomGutterHeight: function() {
-        if( this.$(".bottom_gutter").is(":visible") ){
-            return this.$(".bottom_gutter").height();
-        } else {
-            return 0;
-        }
-    },
-
-    footerSize: function() {
-        if (this.options.footerSize) {
-            return this.options.footerSize();
-        } else {
-            return 0;
-        }
-    },
-
-    distanceFromTopOfWindow: function() {
-        var distanceFromTopOfDocument = this.$(".data_grid").offset().top;
-        return distanceFromTopOfDocument - $(window).scrollTop();
-    },
-
-    distanceFromBottomOfWindow: function() {
-        var verticalDialogPadding = 0;
-        if (this.options.verticalDialogPadding) {
-            verticalDialogPadding = this.options.verticalDialogPadding;
-        }
-
-        return verticalDialogPadding + this.bottomGutterHeight() + this.footerSize();
+        return baseHeight - arbitrarySpacing;
     },
 
     collapseTable: function() {
