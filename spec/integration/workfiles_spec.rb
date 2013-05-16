@@ -11,7 +11,11 @@ describe "Workfiles" do
 
       click_link "Work Files"
       click_button "Create"
-      click_link "SQL File"
+      page.assert_selector('.create_workfile_menu', :visible => true)
+      within '.create_workfile_menu' do
+        find("a", :text => "SQL File", :visible => true).click
+      end
+
       wf_name = "sql_wf_new"
       within_modal do
         fill_in 'fileName', :with => wf_name
