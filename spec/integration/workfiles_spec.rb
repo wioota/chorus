@@ -10,7 +10,8 @@ describe "Workfiles" do
       visit("#/workspaces/#{workspace.id}")
 
       click_link "Work Files"
-      click_button "Create SQL File"
+      click_button "Create"
+      click_link "SQL File"
       wf_name = "sql_wf_new"
       within_modal do
         fill_in 'fileName', :with => wf_name
