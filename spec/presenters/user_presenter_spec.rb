@@ -14,7 +14,6 @@ describe UserPresenter, :type => :view do
       hash.should have_key(:first_name)
       hash.should have_key(:last_name)
       hash.should have_key(:tags)
-      hash.should_not have_key(:api_key)
     end
 
     it "uses the image presenter to serialize the image urls" do
@@ -36,14 +35,6 @@ describe UserPresenter, :type => :view do
         hash[:entity_type].should == 'user'
         hash[:image].to_hash.should == (ImagePresenter.new(user.image, view).presentation_hash)
         hash.keys.size.should == 6
-      end
-    end
-
-    context "When include_api_key is true" do
-      let(:options) { {:include_api_key => true} }
-
-      it "only renders the id, first/last name, username, and image" do
-        hash[:api_key].should == user.api_key
       end
     end
 

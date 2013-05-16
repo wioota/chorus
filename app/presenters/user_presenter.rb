@@ -19,14 +19,10 @@ class UserPresenter < Presenter
           :tags => present(model.tags)
       )
     end
-
-    if options[:include_api_key]
-      results[:api_key] = model.api_key
-    end
     results
   end
 
   def complete_json?
-    !rendering_activities?
+    !rendering_activities? && !succinct?
   end
 end

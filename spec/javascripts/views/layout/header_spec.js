@@ -1,12 +1,6 @@
 describe("chorus.views.Header", function() {
     beforeEach(function() {
-        chorus.session = new chorus.models.Session({
-            "firstName": "Daniel",
-            "lastName": "Burke",
-            username: "dburke",
-            id: "55"
-        });
-        chorus.user = chorus.session;
+        chorus.session = rspecFixtures.session({user: {id: 55}});
         chorus._navigated();
         this.view = new chorus.views.Header();
         spyOn(this.view, "render").andCallThrough();
@@ -536,7 +530,7 @@ describe("chorus.views.Header", function() {
 
                     context("when the login finish successfully", function() {
                         beforeEach(function() {
-                            this.server.completeSaveFor(chorus.session, this.users.at(0));
+                            this.server.completeSaveFor(chorus.session, rspecFixtures.session({user: this.users.at(0).attributes}));
                         });
 
                         it("updates the chorus.session.user model", function() {
