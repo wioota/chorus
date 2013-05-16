@@ -13,13 +13,11 @@ describe AssociatedDataset do
 
     it 'doesnt allow associating a chorus view to a workspace' do
       association = FactoryGirl.build(:associated_dataset, :dataset => datasets(:chorus_view))
-      association.should_not be_valid
       association.should have_error_on(:dataset).with_message(:invalid_type)
     end
 
     it "doesnt have duplicate workspace_id + dataset_id" do
       association = FactoryGirl.build(:associated_dataset, :workspace => workspace, :dataset => gpdb_table)
-      association.should_not be_valid
       association.should have_error_on(:dataset_id).with_message(:taken).with_options(:value => gpdb_table.id)
     end
 

@@ -3,7 +3,6 @@ require 'spec_helper'
 def it_validates_against(model_type)
   it "fails if a #{model_type} has the same name as the record" do
     FactoryGirl.create(model_type.to_s.underscore.to_sym, :name => name)
-    record.valid?.should == false
     record.should have_error_on(:name).with_message(:taken)
   end
 end
@@ -61,7 +60,6 @@ describe DataSourceNameValidator do
 
     it "it matches data source names regardless of case" do
       FactoryGirl.create(:gnip_data_source, :name => name.capitalize)
-      record.valid?.should == false
       record.should have_error_on(:name).with_message(:taken)
     end
   end

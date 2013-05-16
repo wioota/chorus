@@ -14,7 +14,6 @@ describe ChorusWorkfile do
       it 'is not valid' do
         workfile = FactoryGirl.build(:chorus_workfile, :file_name => 'workfile?.sql')
 
-        workfile.should_not be_valid
         workfile.should have_error_on(:file_name)
       end
     end
@@ -23,7 +22,6 @@ describe ChorusWorkfile do
       it 'is not valid' do
         workfile = FactoryGirl.build(:chorus_workfile, :file_name => 'a/file.sql')
 
-        workfile.should_not be_valid
         workfile.should have_error_on(:file_name)
       end
     end

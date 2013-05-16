@@ -69,7 +69,6 @@ describe WorkfileVersion do
                                                    :modifier => user
                                                })
 
-        workfile_version.should_not be_valid
         workfile_version.should have_error_on(:contents).with_message(:invalid)
 
         workfile_version.errors[:contents].flatten.join.should_not match(/not recognized by the 'identify' command/)
