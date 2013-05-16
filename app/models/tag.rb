@@ -23,8 +23,8 @@ class Tag < ActiveRecord::Base
     where(["name ILIKE ?", "%#{name}%"])
   end
 
-  def self.reset_counters
-    find_each { |tag| tag.update_attribute(:taggings_count, tag.taggings.count) }
+  def self.reset_all_counters
+    find_each { |tag| Tag.reset_counters(tag.id, :taggings) }
   end
 
   def self.find_or_create_by_tag_name(name)
