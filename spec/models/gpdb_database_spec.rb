@@ -15,6 +15,7 @@ describe GpdbDatabase do
     it 'does not allow strange characters in the name' do
       ['/', '&', '?'].each do |char|
         new_database = FactoryGirl.build(:gpdb_database, :name =>"schema#{char}name")
+        new_database.should_not be_valid
         new_database.should have_error_on(:name)
       end
     end
@@ -27,6 +28,7 @@ describe GpdbDatabase do
           new_database = FactoryGirl.build(:gpdb_database,
                                            :name => existing.name,
                                            :data_source => existing.data_source)
+          new_database.should_not be_valid
           new_database.should have_error_on(:name).with_message(:taken)
         end
       end

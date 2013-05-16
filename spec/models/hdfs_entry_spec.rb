@@ -27,6 +27,7 @@ describe HdfsEntry do
       duplicate_entry = HdfsEntry.new
       duplicate_entry.hdfs_data_source = existing_entry.hdfs_data_source
       duplicate_entry.path = existing_entry.path
+      duplicate_entry.should_not be_valid
       duplicate_entry.should have_error_on(:path)
     end
 

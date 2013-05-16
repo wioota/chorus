@@ -14,6 +14,7 @@ describe Search do
   describe "#valid" do
     it "is not valid without a valid entity_type" do
       search = Search.new(user, :query => 'fries', :entity_type => 'potato')
+      search.should_not be_valid
       search.should have_error_on(:entity_type).with_message(:invalid_entity_type)
     end
 

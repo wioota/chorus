@@ -24,6 +24,7 @@ describe Events::Note do
 
   it "requires an actor" do
     note = Events::Note.new
+    note.should_not be_valid
     note.should have_error_on(:actor_id)
   end
 
@@ -116,6 +117,7 @@ describe Events::Note do
 
     it "can not be created on an archived workspace" do
       note = Events::NoteOnWorkspace.new(:workspace => workspaces(:archived), :actor => actor, :body => 'WOO!')
+      note.should_not be_valid
       note.should have_error_on(:workspace)
     end
 
@@ -203,6 +205,7 @@ describe Events::Note do
       let(:workspace) { workspaces(:private_with_no_collaborators) }
 
       it "is not valid if the actor is not a member of a private workspace" do
+        subject.should_not be_valid
         subject.should have_error_on(:workspace).with_message(:not_a_member)
       end
     end
@@ -303,6 +306,7 @@ describe Events::Note do
             :body => "More crazy content",
             :workspace_id => workspace.id
         })
+        note.should_not be_valid
         note.should have_error_on(:workspace).with_message(:archived)
       end
     end

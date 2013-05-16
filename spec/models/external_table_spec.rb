@@ -17,6 +17,7 @@ describe ExternalTable do
   it "should validate the presence of attributes" do
     [:column_names, :column_types, :name, :location_url].each do |a|
       e = ExternalTable.new(params.merge(a => nil))
+      e.should_not be_valid
       e.should have_error_on(a)
     end
   end
