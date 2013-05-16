@@ -9,6 +9,10 @@ class Session < ActiveRecord::Base
 
   before_create :generate_session_id
 
+  def self.remove_expired_sessions
+    where("updated_at < ?", ChorusConfig.instance['session_timeout_minutes'].minutes.ago).destroy_all
+  end
+
   def expired?
     updated_at < ChorusConfig.instance['session_timeout_minutes'].minutes.ago
   end

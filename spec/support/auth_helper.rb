@@ -4,6 +4,7 @@ module AuthHelper
     session_object.user = user
     session_object.save(:validate => false)
     session[:chorus_session_id] = session_object.session_id
+    session_object
   end
 
   def log_out

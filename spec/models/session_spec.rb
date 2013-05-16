@@ -126,4 +126,21 @@ describe Session do
       end
     end
   end
+
+  describe "remove_expired_sessions" do
+    it "only removes sessions older than the session timeout" do
+      stub(ChorusConfig.instance).[]('session_timeout_minutes') { 20 }
+      Timecop.freeze(Time.now) do
+        expired_session = Session.new
+        expired_session.save(:validate => false)
+        Timecop.travel(2.minutes)
+        current_session = Session.new
+        current_session.save(:validate => false)
+        Timecop.travel(19.minutes)
+        Session.remove_expired_sessions
+        Session.find_by_id(expired_session.id).should be_nil
+        Session.find_by_id(current_session.id).should_not be_nil
+      end
+    end
+  end
 end

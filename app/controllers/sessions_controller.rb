@@ -11,6 +11,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    current_session.try(:destroy)
     session.clear
     head :no_content
   end

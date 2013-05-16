@@ -58,6 +58,17 @@ describe JobScheduler do
     end
   end
 
+  describe "Session.remove_expired_sessions" do
+    it "runs every ChorusConfig.instance['clean_expired_sessions_interval_hours'] minutes" do
+      job_scheduler.job_named('Session.remove_expired_sessions').period.should == ChorusConfig.instance['clean_expired_sessions_interval_hours'].hours
+    end
+
+    it "enqueues the 'Session.remove_expired_sessions' job in QC" do
+      mock(QC.default_queue).enqueue_if_not_queued("Session.remove_expired_sessions")
+      job_scheduler.job_named('Session.remove_expired_sessions').run(Time.current)
+    end
+  end
+
   describe "ImportScheduler" do
     it "runs every minute" do
       job_scheduler.job_named('ImportScheduler.run').period.should == 1.minute

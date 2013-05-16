@@ -100,11 +100,12 @@ describe SessionsController do
     end
 
     it "clears the session" do
-      log_in users(:owner)
+      session_object = log_in users(:owner)
       delete :destroy
       response.code.should == "204"
       session[:user_id].should_not be_present
       session[:expires_at].should_not be_present
+      Session.find_by_id(session_object.id).should be_nil
     end
   end
 end
