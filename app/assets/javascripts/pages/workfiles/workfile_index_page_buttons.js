@@ -1,8 +1,18 @@
 chorus.views.WorkfileIndexPageButtons = chorus.views.Base.extend({
     templateName: "workfile_index_page_buttons",
+    createActions: [
+        {className: 'create_sql_workfile', text: t("actions.create_sql_workfile")}
+    ],
 
     events: {
         "click button.import_workfile": "launchWorkfileImportsDialog"
+    },
+
+    menuEvents: {
+        "a.create_sql_workfile": function(e) {
+            e && e.preventDefault();
+            new chorus.dialogs.WorkfilesSqlNew({workspaceId: this.model.get('id')}).launchModal();
+        }
     },
 
     setup: function() {
@@ -13,9 +23,7 @@ chorus.views.WorkfileIndexPageButtons = chorus.views.Base.extend({
         this.menu(this.$('.new_workfile'), {
             content: this.$(".create_workfile_menu"),
             orientation: "right",
-            contentEvents: {
-                "a.create_sql_workfile": this.launchWorkfileSqlNewDialog
-            }
+            contentEvents: this.menuEvents
         });
     },
 
@@ -25,17 +33,13 @@ chorus.views.WorkfileIndexPageButtons = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            canUpdate: this.canUpdate()
+            canUpdate: this.canUpdate(),
+            createActions: this.createActions
         };
     },
 
     launchWorkfileImportsDialog: function(e) {
         e && e.preventDefault();
         new chorus.dialogs.WorkfilesImport({workspaceId: this.model.get('id')}).launchModal();
-    },
-
-    launchWorkfileSqlNewDialog: function(e) {
-        e && e.preventDefault();
-        new chorus.dialogs.WorkfilesSqlNew({workspaceId: this.model.get('id')}).launchModal();
     }
 });

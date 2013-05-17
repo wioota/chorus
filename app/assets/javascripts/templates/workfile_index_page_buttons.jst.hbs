@@ -6,9 +6,11 @@
 <div class="hidden">
     <div class="create_workfile_menu">
         <ul class="run_menu">
-            <li>
-                <a href="#" class="create_sql_workfile">{{t "actions.create_sql_workfile"}}</a>
-            </li>
+            {{#each createActions}}
+                <li>
+                    <a href="#" class="{{className}}">{{text}}</a>
+                </li>
+            {{/each}}
         </ul>
     </div>
 </div>
