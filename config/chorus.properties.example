@@ -145,6 +145,6 @@ alpine.api_key =
 #ORACLE
 oracle.enabled = true
 
-#Workflow
-workflow.enabled = true
-workflow.url = localhost
+#Work Flow
+work_flow.enabled = true
+work_flow.url = localhost

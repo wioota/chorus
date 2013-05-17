@@ -20,8 +20,8 @@ class ConfigurationsController < ApplicationController
       :execution_timeout_in_minutes => ChorusConfig.instance['execution_timeout_in_minutes'],
       :default_preview_row_limit => ChorusConfig.instance['default_preview_row_limit'] || 100,
       :oracle_configured => ChorusConfig.instance.oracle_configured?,
-      :workflow_configured => ChorusConfig.instance.workflow_configured?,
-      :workflow_url => ChorusConfig.instance['workflow.url']
+      :work_flow_configured => ChorusConfig.instance.work_flow_configured?,
+      :work_flow_url => ChorusConfig.instance['work_flow.url']
     }.merge(alpine_config) }
   end
 

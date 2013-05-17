@@ -48,13 +48,19 @@ unless Rails.env.production?
   end
 
   def find_missing_docs
+    routes_to_ignore = [
+        'data_sources/credentials#show'
+    ]
+
     Rails.application.reload_routes!
     all_routes = Rails.application.routes.routes
 
     require 'rails/application/route_inspector'
     inspector = Rails::Application::RouteInspector.new
     routes = inspector.collect_routes(all_routes)
-    routes.reject! { |r| r[:verb].blank? }
+    routes.reject! do |r|
+      r[:verb].blank? || routes_to_ignore.include?(r[:reqs])
+    end
 
     existing_routes = routes.collect do |r|
       ::Route.new(r[:verb].downcase, r[:path][/\/[^( ]+/])
