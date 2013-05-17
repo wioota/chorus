@@ -1,5 +1,5 @@
 module DataSources
-  class AccountController < ApplicationController
+  class AccountsController < ApplicationController
     def show
       present DataSource.find(params[:data_source_id]).account_for_user(current_user)
     end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DataSources::AccountController do
+describe DataSources::AccountsController do
   let(:data_source) { data_sources(:owners) }
   let(:user) { users(:default) }
   let(:account) { data_source.account_for_user(user) }
