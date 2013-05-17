@@ -23,7 +23,7 @@ Chorus::Application.routes.draw do
     scope :module => 'data_sources' do
       resource :accounts, :only => [:show, :create, :update, :destroy]
       resource :credentials, :only => [:show]
-      resource :owner, :only => [:update], :controller => 'owner'
+      resource :owner, :only => [:update]
       resource :sharing, :only => [:create, :destroy], :controller => 'sharing'
       resource :workspace_detail, :only => [:show]
       resources :members, :only => [:index, :create, :update, :destroy]
@@ -35,7 +35,7 @@ Chorus::Application.routes.draw do
     resources :imports, :only => [:create], :controller => 'gnip_data_source_imports'
   end
 
-  resources :databases, :only => [:show], :controller => 'databases' do
+  resources :databases, :only => [:show] do
     resources :schemas, :only => [:index], :controller => 'database_schemas'
   end
 

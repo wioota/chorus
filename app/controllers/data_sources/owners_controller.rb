@@ -1,5 +1,5 @@
 module DataSources
-  class OwnerController < ApplicationController
+  class OwnersController < ApplicationController
     def update
       authorize! :edit, data_source
       DataSourceOwnership.change(current_user, data_source, new_owner)

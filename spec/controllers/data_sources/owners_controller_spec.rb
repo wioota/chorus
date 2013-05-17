@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DataSources::OwnerController do
+describe DataSources::OwnersController do
   let(:data_source) { data_sources(:shared) }
   let(:user) { data_source.owner }
   let(:new_owner) { users(:no_collaborators) }
