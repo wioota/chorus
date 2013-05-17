@@ -6,13 +6,16 @@ chorus.Mixins.DialogFormHelpers = {
             checkFn = options.checkInput;
         } else {
             checkFn = _.bind(function() {
-                var hasText = this.$(options.inputSelector).val().trim().length > 0;
-                this.$("button.submit").prop("disabled", hasText ? false : "disabled");
+                return this.$(options.inputSelector).val().trim().length > 0;
             }, this);
         }
 
-        events["keyup " + options.inputSelector] = checkFn;
-        events["paste " + options.inputSelector] = checkFn;
+        this.toggleSubmitDisabled = _.bind(function() {
+            this.$("button.submit").prop("disabled", checkFn() ? false : "disabled");
+        }, this);
+
+        events["keyup " + options.inputSelector] = this.toggleSubmitDisabled;
+        events["paste " + options.inputSelector] = this.toggleSubmitDisabled;
         events["submit " + options.formSelector] = "create";
         this.events = _.extend(this.events || {}, events);
     }

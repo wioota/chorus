@@ -13,18 +13,39 @@ describe("chorus.dialogs.WorkFlowNew", function() {
         expect(this.dialog.$("button.submit")).toContainTranslation("work_flows.new_dialog.add_work_flow");
     });
 
+    it("creates a schema picker with the schema section hidden", function(){
+       expect(this.dialog.schemaPicker.options.showSchemaSection).toBeFalsy();
+    });
+
     describe("submitting", function() {
-        describe("with an invalid work flow name", function() {
-            it("does not allow submitting", function() {
-                this.dialog.$("input[name='fileName']").val("     ").keyup();
-                expect(this.dialog.$("form button.submit")).toBeDisabled();
-            });
+        beforeEach(function() {
+            // start with a valid form submission
+            this.dialog.$("input[name='fileName']").val("stuff").keyup();
+
+            var fakeDatabase = rspecFixtures.database();
+            spyOn(this.dialog.schemaPicker, "getSelectedDatabase").andReturn(fakeDatabase);
+            this.dialog.schemaPicker.trigger('change');
         });
 
         describe("with valid form values", function() {
             it("submits the form", function() {
-                this.dialog.$("input[name='fileName']").val("stuff").keyup();
                 expect(this.dialog.$("form button.submit")).not.toBeDisabled();
+            });
+        });
+
+        describe("when no database is selected", function() {
+            it("disables the form", function() {
+                this.dialog.schemaPicker.getSelectedDatabase.andReturn(null);
+                this.dialog.schemaPicker.trigger('change');
+
+                expect(this.dialog.$("form button.submit")).toBeDisabled();
+            });
+        });
+
+        describe("with an invalid work flow name", function() {
+            it("does not allow submitting", function() {
+                this.dialog.$("input[name='fileName']").val("     ").keyup();
+                expect(this.dialog.$("form button.submit")).toBeDisabled();
             });
         });
     });

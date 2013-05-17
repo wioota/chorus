@@ -11,7 +11,7 @@
 
     chorus.views.SchemaPicker = chorus.views.Base.extend({
         constructorName: "SchemaPickerView",
-        templateName:"schema_picker",
+        templateName: "schema_picker",
 
         events: {
             "change .data_source select": "dataSourceSelected",
@@ -23,17 +23,20 @@
             "click .schema .cancel": "cancelNewSchema"
         },
 
-        setup: function () {
+        setup: function() {
             //Prebind these so the BindingGroup detects duplicates each time and doesn't bind them multiple times.
             this.dataSourceFetchFailed = _.bind(this.fetchFailed, this, null);
             this.databaseFetchFailed = _.bind(this.fetchFailed, this, 'database');
             this.schemaFetchFailed = _.bind(this.fetchFailed, this, 'schema');
 
             this.sectionStates = {};
+            if(_.isUndefined(this.options.showSchemaSection)) {
+                this.options.showSchemaSection = true;
+            }
 
             this.setState({ dataSource: HIDDEN, database: HIDDEN, schema: HIDDEN });
 
-            if (this.options.defaultSchema) {
+            if(this.options.defaultSchema) {
                 this.selection = {
                     schema: this.options.defaultSchema,
                     database: this.options.defaultSchema.database(),
@@ -47,7 +50,7 @@
                 };
             }
 
-            if (this.options.dataSource) {
+            if(this.options.dataSource) {
                 this.setState({
                     dataSource: STATIC,
                     database: this.options.database ? STATIC : LOADING
@@ -202,11 +205,15 @@
             return selectedSchema && selectedSchema.id;
         },
 
+        getSectionsToRestyle: function() {
+            return this.options.showSchemaSection ? ["dataSource", "database", "schema"] : ["dataSource", "database"];
+        },
+
         restyleAllSectionsToReflectStates: function() {
             var states = _.clone(this.sectionStates);
 
             var hideTheRest = false;
-            _.each(["dataSource", "database", "schema"], function(sectionName) {
+            _.each(this.getSectionsToRestyle(), function(sectionName) {
                 var state = hideTheRest ? HIDDEN : states[sectionName];
                 this.restyleSection(sectionName, state);
 

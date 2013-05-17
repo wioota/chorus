@@ -974,5 +974,26 @@ describe("chorus.views.SchemaPicker", function() {
                 });
             });
         });
+
+    });
+
+    describe("#getSectionsToRestyle", function(){
+        it("includes schema when options.showSchemaSection is truthy", function(){
+            this.dataSource = rspecFixtures.gpdbDataSource();
+            this.view = new chorus.views.SchemaPicker({ dataSource: this.dataSource, showSchemaSection: true });
+            expect(this.view.getSectionsToRestyle()).toEqual(["dataSource", "database", "schema"]);
+        });
+
+        it("includes schema by default", function(){
+            this.dataSource = rspecFixtures.gpdbDataSource();
+            this.view = new chorus.views.SchemaPicker({ dataSource: this.dataSource});
+            expect(this.view.getSectionsToRestyle()).toEqual(["dataSource", "database", "schema"]);
+        });
+
+        it("does not include schema when options.showSchemaSection is falsy", function(){
+            this.dataSource = rspecFixtures.gpdbDataSource();
+            this.view = new chorus.views.SchemaPicker({ dataSource: this.dataSource, showSchemaSection: false });
+            expect(this.view.getSectionsToRestyle()).toEqual(["dataSource", "database"]);
+        });
     });
 });
