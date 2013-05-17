@@ -12,4 +12,20 @@ describe("chorus.dialogs.WorkFlowNew", function() {
     it("has an Add Work Flow button", function() {
         expect(this.dialog.$("button.submit")).toContainTranslation("work_flows.new_dialog.add_work_flow");
     });
+
+    describe("submitting", function() {
+        describe("with an invalid work flow name", function() {
+            it("does not allow submitting", function() {
+                this.dialog.$("input[name='fileName']").val("     ").keyup();
+                expect(this.dialog.$("form button.submit")).toBeDisabled();
+            });
+        });
+
+        describe("with valid form values", function() {
+            it("submits the form", function() {
+                this.dialog.$("input[name='fileName']").val("stuff").keyup();
+                expect(this.dialog.$("form button.submit")).not.toBeDisabled();
+            });
+        });
+    });
 });

@@ -1,1 +1,4 @@
-<button class="submit">{{t "work_flows.new_dialog.add_work_flow"}}</button>
+<form>
+    <input type="text" name="fileName" placeholder="Name" tabindex="1" maxlength="60"></input>
+    {{formControlsWithDisabledSubmit "work_flows.new_dialog.add_work_flow"}}
+</form>

@@ -45,8 +45,12 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
         this.$("button.submit").stopLoading();
     },
 
+    fileNameIsValid: function() {
+        return this.$("input[name=fileName]").val().trim().length > 0;
+    },
+
     checkInput: function() {
-        var hasText = this.$("input[name=fileName]").val().trim().length > 0;
+        var hasText = this.fileNameIsValid();
         this.$("button.submit").prop("disabled", hasText ? false : "disabled");
     }
 });
