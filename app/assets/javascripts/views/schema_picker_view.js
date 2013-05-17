@@ -65,44 +65,44 @@
                 this.setState({ dataSource: LOADING });
             }
 
-            if (this.selection.dataSource && !this.options.database) {
+            if(this.selection.dataSource && !this.options.database) {
                 this.fetchDatabases(this.selection.dataSource);
             }
 
-            if (this.selection.database) {
+            if(this.selection.database) {
                 this.fetchSchemas(this.selection.database);
             }
         },
 
-        postRender:function () {
+        postRender: function() {
             this.restyleAllSectionsToReflectStates();
 
             this.$('.loading_spinner').startLoading();
             this.$("input.name").bind("textchange", _.bind(this.triggerSchemaSelected, this));
         },
 
-        dataSourcesLoaded: function () {
+        dataSourcesLoaded: function() {
             var state = (this.gpdbDataSources().length === 0) ? UNAVAILABLE : SELECT;
             this.setState({ dataSource: state });
         },
 
-        databasesLoaded: function () {
+        databasesLoaded: function() {
             var state = (this.databases.length === 0) ? UNAVAILABLE : SELECT;
             this.setState({ database: state });
         },
 
-        schemasLoaded: function () {
+        schemasLoaded: function() {
             var state = (this.schemas.length === 0) ? UNAVAILABLE : SELECT;
             this.setState({ schema: state });
         },
 
-        dataSourceSelected:function () {
+        dataSourceSelected: function() {
             this.trigger("clearErrors");
             this.clearSelection('database');
             this.clearSelection('schema');
             var selectedDataSource = this.getSelectedDataSource();
 
-            if (selectedDataSource) {
+            if(selectedDataSource) {
                 this.setSelection("dataSource", selectedDataSource);
                 this.setState({ database: LOADING });
                 this.fetchDatabases(selectedDataSource);
@@ -112,19 +112,19 @@
             }
         },
 
-        fetchDatabases:function(selectedDataSource) {
+        fetchDatabases: function(selectedDataSource) {
             this.databases = selectedDataSource.databases();
             this.databases.fetchAllIfNotLoaded();
             this.listenTo(this.databases, "fetchFailed", this.databaseFetchFailed);
             this.onceLoaded(this.databases, this.databasesLoaded);
         },
 
-        databaseSelected: function () {
+        databaseSelected: function() {
             this.trigger("clearErrors");
             this.clearSelection('schema');
             var selectedDatabase = this.getSelectedDatabase();
 
-            if (selectedDatabase) {
+            if(selectedDatabase) {
                 this.setSelection("database", selectedDatabase);
                 this.setState({ schema: LOADING });
                 this.fetchSchemas(selectedDatabase);
@@ -141,12 +141,12 @@
             this.onceLoaded(this.schemas, this.schemasLoaded);
         },
 
-        schemaSelected:function () {
+        schemaSelected: function() {
             this.trigger("clearErrors");
             this.setSelection("schema", this.getSelectedSchema());
         },
 
-        createNewDatabase:function (e) {
+        createNewDatabase: function(e) {
             e.preventDefault();
             this.trigger("clearErrors");
             this.clearSelection('database');
@@ -155,7 +155,7 @@
             this.$(".schema input.name").val(chorus.models.Schema.DEFAULT_NAME);
         },
 
-        createNewSchema:function (e) {
+        createNewSchema: function(e) {
             e.preventDefault();
             this.trigger("clearErrors");
             this.clearSelection("schema");
@@ -163,36 +163,36 @@
             this.$(".schema input.name").val("");
         },
 
-        cancelNewDatabase: function (e) {
+        cancelNewDatabase: function(e) {
             e.preventDefault();
             this.databasesLoaded();
             this.triggerSchemaSelected();
         },
 
-        cancelNewSchema:function (e) {
+        cancelNewSchema: function(e) {
             e.preventDefault();
             this.schemasLoaded();
             this.triggerSchemaSelected();
         },
 
-        fieldValues: function () {
+        fieldValues: function() {
             var selectedDataSource = this.selection.dataSource;
             var selectedDatabase = this.selection.database;
-            var selectedSchema   = this.selection.schema;
+            var selectedSchema = this.selection.schema;
 
             var attrs = {
                 dataSource: selectedDataSource && selectedDataSource.get("id")
             };
 
-            if (selectedDatabase && selectedDatabase.get('id')) {
+            if(selectedDatabase && selectedDatabase.get('id')) {
                 attrs.database = selectedDatabase.get("id");
-            } else if (selectedDatabase && selectedDatabase.get("name")) {
+            } else if(selectedDatabase && selectedDatabase.get("name")) {
                 attrs.databaseName = selectedDatabase.get('name');
             } else {
                 attrs.databaseName = this.$(".database input.name:visible").val();
             }
 
-            if (selectedSchema) {
+            if(selectedSchema) {
                 attrs.schema = selectedSchema.get("id");
             } else {
                 attrs.schemaName = this.$(".schema input.name:visible").val();
@@ -218,7 +218,7 @@
                 this.restyleSection(sectionName, state);
 
                 var waitingForSelect = (state === SELECT && !this.selection[sectionName]);
-                if (_.contains([UNAVAILABLE, LOADING, HIDDEN], state) || waitingForSelect) hideTheRest = true;
+                if(_.contains([UNAVAILABLE, LOADING, HIDDEN], state) || waitingForSelect) hideTheRest = true;
             }, this);
         },
 
@@ -231,7 +231,7 @@
 
             this.rebuildEmptySelect(type);
 
-            switch (state) {
+            switch(state) {
                 case LOADING:
                     section.find(".loading_text").removeClass("hidden");
                     break;
@@ -279,7 +279,9 @@
         },
 
         fetchFailed: function(type, collection) {
-            if (type) { this.clearSelection(type); }
+            if(type) {
+                this.clearSelection(type);
+            }
             this.trigger("error", collection);
         },
 
@@ -287,7 +289,7 @@
             this.selection[type] = value;
             this.triggerSchemaSelected();
         },
-        
+
         clearSelection: function(type) {
             delete this.selection[type];
             this.triggerSchemaSelected();
@@ -309,12 +311,12 @@
             this.trigger("change", this.ready());
         },
 
-        ready: function () {
+        ready: function() {
             var attrs = this.fieldValues();
             return !!(attrs.dataSource && (attrs.database || attrs.databaseName) && (attrs.schema || attrs.schemaName));
         },
 
-       populateSelect: function(type, defaultValue) {
+        populateSelect: function(type, defaultValue) {
             var models = (type === "dataSource") ? this.gpdbDataSources() : this[type + "s"].models;
             var select = this.rebuildEmptySelect(type);
 
@@ -328,8 +330,8 @@
                 select.append(option);
             });
 
-            if (defaultValue !== undefined && !_.contains(_.pluck(models, "id"), defaultValue)) {
-                if (type === "schema") this.showErrorForMissingSchema();
+            if(defaultValue !== undefined && !_.contains(_.pluck(models, "id"), defaultValue)) {
+                if(type === "schema") this.showErrorForMissingSchema();
                 this.clearSelection(type);
             }
 
@@ -347,7 +349,7 @@
             });
         },
 
-        additionalContext: function () {
+        additionalContext: function() {
             return { options: this.options };
         },
 
