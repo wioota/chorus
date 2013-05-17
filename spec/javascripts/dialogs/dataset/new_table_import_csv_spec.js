@@ -26,6 +26,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
         }))();
 
         this.dialog = new chorus.dialogs.NewTableImportCSV({ model: this.model, csvOptions: this.csvOptions });
+        spyOn(this.dialog, 'inDocument').andReturn(true);
         this.dialog.render();
     });
 
@@ -61,7 +62,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 this.dialog.teardown();
                 //If you don't tear down the old dialog, spying on function calls becomes tricky later
                 this.dialog = new chorus.dialogs.NewTableImportCSV({ model: this.model, csvOptions: this.csvOptions });
-
+                spyOn(this.dialog, 'inDocument').andReturn(true);
             });
 
             it("has " + separator + " as separator", function() {
@@ -146,6 +147,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
                     this.dialog.teardown();
                     this.dialog = new chorus.dialogs.NewTableImportCSV({ model: this.model, csvOptions: this.csvOptions });
+                    spyOn(this.dialog, 'inDocument').andReturn(true);
                     this.dialog.render();
 
                     this.dialog.importDataGrid.initializeDataGrid.reset();
@@ -194,6 +196,17 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
     });
 
     describe("the data grid", function() {
+        context("when the view is not in the DOM", function () {
+            beforeEach(function () {
+                this.dialog.importDataGrid.initializeDataGrid.reset();
+                this.dialog.inDocument.andReturn(false);
+            });
+            it("does not initialize", function () {
+                this.dialog.render();
+                expect(this.dialog.importDataGrid.initializeDataGrid).not.toHaveBeenCalled();
+            });
+        });
+
         it("converts the column names into db friendly format", function() {
             var call = _.last(this.dialog.importDataGrid.initializeDataGrid.calls);
             expect(_.pluck(call.args[0], "name")).toEqual([

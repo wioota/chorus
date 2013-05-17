@@ -27,17 +27,6 @@ describe("chorus.views.ImportDataGrid", function () {
        expect(Slick.Grid).toHaveBeenCalled();
     });
 
-    context("before the parent has rendered", function() {
-        beforeEach(function() {
-           Slick.Grid.reset();
-           this.view.$el.empty();
-            this.view.initializeDataGrid(this.columns, this.rows, this.columnNames);
-        });
-        it("does not initializes SlickGrid", function() {
-            expect(Slick.Grid).not.toHaveBeenCalled();
-        });
-    });
-
     describe("force-fitting columns", function () {
         it("determined when initializing the data grid", function () {
             expect(this.view.forceFitColumns).toHaveBeenCalled();
