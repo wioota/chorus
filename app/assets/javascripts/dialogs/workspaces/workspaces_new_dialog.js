@@ -34,7 +34,7 @@ chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.extend({
     },
 
     workspaceSaved:function () {
-        $(document).trigger("close.facebox");
+        this.closeModal();
         chorus.router.navigate("/workspaces/" + this.model.get("id") + "/quickstart");
     },
 

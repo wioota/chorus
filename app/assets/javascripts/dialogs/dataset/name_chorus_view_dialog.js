@@ -24,7 +24,7 @@ chorus.dialogs.NameChorusView = chorus.dialogs.Base.extend({
     },
 
     chorusViewCreated: function() {
-        $(document).trigger("close.facebox");
+        this.closeModal();
         chorus.router.navigate(this.model.showUrl());
     },
 

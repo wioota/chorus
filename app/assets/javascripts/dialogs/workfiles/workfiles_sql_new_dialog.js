@@ -37,7 +37,7 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
     },
 
     saved:function () {
-        $(document).trigger("close.facebox");
+        this.closeModal();
         chorus.router.navigate(this.model.showUrl());
     },
 
