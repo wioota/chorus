@@ -338,4 +338,85 @@ describe("chorus.views.Bare", function() {
             });
         });
     });
+
+    describe("#menu", function() {
+        beforeEach(function() {
+            chorus._navigated();
+            this.view = new chorus.views.Bare();
+            var viewElement = $('<div><div class="menu_goes_here"></div></div>');
+            this.element = viewElement.find(".menu_goes_here");
+            this.view.setElement(viewElement);
+            this.qtipElement = stubQtip();
+            this.eventSpy = jasmine.createSpy();
+
+            this.view.menu('.menu_goes_here', {
+                content: "menu content<a class='test_link'></a>",
+                classes: "myClass",
+                style: {foo: 'bar'},
+                mimic: "left center",
+                position: {
+                    my: "left center",
+                    at: "right center"
+                },
+                contentEvents: {
+                    '.test_link': this.eventSpy
+                }
+            });
+            this.qtipArgs = $.fn.qtip.mostRecentCall.args[0];
+        });
+
+        it("calls qtip on the given element", function() {
+            expect($.fn.qtip.mostRecentCall.object.get(0)).toEqual(this.element.get(0));
+        });
+
+        it("passes down the given content", function() {
+            expect(this.qtipArgs.content).toEqual("menu content<a class='test_link'></a>");
+        });
+
+        it("sets up the events on the contents", function() {
+            this.element.click();
+            this.qtipElement.find('.test_link').click();
+            expect(this.eventSpy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), this.element.data('qtip'));
+        });
+
+        context("event handling", function() {
+            beforeEach(function() {
+                this.element.click();
+            });
+
+            it("closes the qtip", function() {
+                expect(this.qtipElement).toHaveVisibleQtip();
+                this.qtipElement.find('.test_link').click();
+                expect(this.qtipElement).not.toHaveVisibleQtip();
+            });
+        });
+
+        it("sets up our menu styling", function() {
+            expect(this.qtipArgs.show.event).toEqual('click');
+            expect(this.qtipArgs.hide).toEqual('unfocus');
+            expect(this.qtipArgs.position.my).toEqual("left center");
+            expect(this.qtipArgs.position.at).toEqual("right center");
+            expect(this.qtipArgs.style).toEqual({
+                classes: "myClass tooltip-white",
+                foo: "bar",
+                tip: {
+                    mimic: "left center",
+                    width: 20,
+                    height: 15
+                }
+            });
+        });
+
+        context("after navigating away", function() {
+            beforeEach(function() {
+                spyOn($.fn, 'remove');
+                chorus._navigated();
+            });
+
+            it("calls $.fn.remove on the menu element", function() {
+                expect($.fn.remove.mostRecentCall.object.get(0)).toEqual(this.element.get(0));
+            });
+        });
+    });
+
 });

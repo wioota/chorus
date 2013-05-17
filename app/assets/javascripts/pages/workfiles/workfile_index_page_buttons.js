@@ -10,11 +10,11 @@ chorus.views.WorkfileIndexPageButtons = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        chorus.menu(this.$('.new_workfile'), {
+        this.menu(this.$('.new_workfile'), {
             content: this.$(".create_workfile_menu"),
             orientation: "right",
             contentEvents: {
-                "a.create_sql_workfile": _.bind(this.launchWorkfileSqlNewDialog, this)
+                "a.create_sql_workfile": this.launchWorkfileSqlNewDialog
             }
         });
     },

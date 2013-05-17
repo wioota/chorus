@@ -26,14 +26,14 @@
     /*z-index: $body-tooltip-z-index !important;*/
 }
 
-.tooltip-modal {
+.ui-tooltip {
     // qTip's author explicitly recommends !important for overriding z-index
     // https://github.com/Craga89/qTip2/issues/274
-    z-index: $modal-tooltip-z-index !important;
+    z-index: $tooltip-z-index !important;
 }
 
 .tooltip-white {
-    @include tooltip($color-text1, #FFFFFF, #CCC)
+    @include tooltip($color-text1, #FFFFFF, #CCC);
 }
 
 .tooltip-error {

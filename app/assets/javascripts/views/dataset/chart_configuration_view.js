@@ -84,17 +84,16 @@
 
             var $a = this.$(".limiter a");
             var $el = $(this.el);
-            var limiterSelected = _.bind(this.limiterSelected, this);
-            $.each($a, function(index, link) {
+            $.each($a, _.bind(function(index, link) {
                 var $link = $(link);
-                chorus.menu($link, {
+                this.menu($link, {
                     content: $link.parent().find(".limiter_menu_container").html(),
                     container: $el,
                     contentEvents: {
-                        'li': limiterSelected
+                        'li': this.limiterSelected
                     }
                 });
-            });
+            }, this));
 
             this._super("postRender");
         },

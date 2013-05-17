@@ -23,7 +23,7 @@ chorus.views.SearchDataset = chorus.views.SearchItemBase.extend({
         this._super("postRender");
 
         this.$("a.data_source, a.database").data("data_source", this.model.get("data_source"));
-        chorus.menu(this.$(".location .found_in a.open_other_menu"), {
+        this.menu(this.$(".location .found_in a.open_other_menu"), {
             content: this.$(".other_menu"),
             classes: "found_in_other_workspaces_menu"
         });

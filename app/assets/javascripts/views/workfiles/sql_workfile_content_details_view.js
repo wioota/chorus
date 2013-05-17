@@ -14,7 +14,7 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
 
     postRender: function() {
         this._super("postRender");
-        chorus.menu(this.$('.run_file'), {
+        this.menu(this.$('.run_file'), {
             content: this.$(".run_workfile"),
             orientation: "right",
             qtipArgs: {
@@ -25,10 +25,10 @@ chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.ext
                 }
             },
             contentEvents: {
-                "a.run_default": _.bind(this.runInExecutionSchema, this),
-                "a.run_selection": _.bind(this.runSelectedInExecutionSchema, this),
-                "a.run_and_download": _.bind(this.runAndDownloadInExecutionSchema, this),
-                "a.run_selection_and_download": _.bind(this.runSelectionAndDownloadInExecutionSchema, this)
+                "a.run_default": this.runInExecutionSchema,
+                "a.run_selection": this.runSelectedInExecutionSchema,
+                "a.run_and_download": this.runAndDownloadInExecutionSchema,
+                "a.run_selection_and_download": this.runSelectionAndDownloadInExecutionSchema
             }
         });
 

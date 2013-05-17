@@ -74,16 +74,16 @@ chorus.dialogs.ManageJoinTables = chorus.dialogs.Base.extend({
             onSelect: _.bind(this.joinableDatasetsSelected, this)
         });
 
-        this.menu && this.menu.teardown();
-        this.menu = new chorus.views.Menu({
+        this.menuView && this.menuView.teardown();
+        this.menuView = new chorus.views.Menu({
             launchElement: this.$("a.schema_qtip"),
             items: menuItems,
             checkable: true,
             additionalClass: "join_schemas"
         });
-        this.registerSubView(this.menu);
+        this.registerSubView(this.menuView);
 
-        this.menu.selectItem(this.pageModel.schema().get("name"));
+        this.menuView.selectItem(this.pageModel.schema().get("name"));
 
         chorus.search({
             input: this.$(".search input:text"),

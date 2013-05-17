@@ -87,7 +87,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
 
     describe("when the path is long", function () {
         beforeEach(function () {
-            spyOn(chorus, "menu");
+            spyOn(this.page, "menu");
             this.server.completeFetchFor(this.hdfsDataSource);
             this.server.completeFetchFor(this.hdfsEntry,
                 {
@@ -105,7 +105,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         });
 
         it("constructs the breadcrumb links correctly", function () {
-            var options = chorus.menu.mostRecentCall.args[1];
+            var options = this.page.menu.mostRecentCall.args[1];
 
             var $content = $(options.content);
 
