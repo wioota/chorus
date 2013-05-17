@@ -21,8 +21,8 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
             },
 
             distanceFromTopOfWindow: function() {
-                var distanceFromTopOfDocument = view.$(".data_grid").offset().top;
-                return distanceFromTopOfDocument - $(window).scrollTop();
+                var distance = view.$(".data_grid").offset().top;
+                return distance - $(window).scrollTop();
             },
 
             distanceFromBottomOfWindow: function() {

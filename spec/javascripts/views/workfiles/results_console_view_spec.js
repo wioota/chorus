@@ -80,6 +80,49 @@ describe("chorus.views.ResultsConsoleView", function() {
                 expect(this.view.$(".expander_button")).not.toExist();
             });
         });
+
+        describe("the default bounding container", function(){
+            beforeEach(function () {
+                this.windowHeight = 455;
+                spyOn($.fn, 'height').andReturn(this.windowHeight);
+                spyOn($.fn, 'offset').andReturn({top: 0});
+            });
+
+            it("incorporates the footerSize passed to the view as a function", function() {
+                spyOn(this.view.boundingContainer, "footerSize").andReturn(5);
+
+                var availableHeight = this.view.boundingContainer.getAvailableHeight();
+                expect(availableHeight).toBe(this.windowHeight - 5);
+            });
+
+            it("incorporates the top offset", function() {
+                $.fn.offset.andReturn({top: 7});
+
+                var availableHeight = this.view.boundingContainer.getAvailableHeight();
+                expect(availableHeight).toBe(this.windowHeight - 7);
+            });
+
+            it("incorporates the window.scrollTop", function() {
+                spyOn($.fn, 'scrollTop').andReturn(11);
+
+                var availableHeight = this.view.boundingContainer.getAvailableHeight();
+                expect(availableHeight).toBe(this.windowHeight + 11);
+            });
+
+            it("takes into account the vertical padding passed into the view", function() {
+                this.view.options.verticalDialogPadding = 2;
+
+                var availableHeight = this.view.boundingContainer.getAvailableHeight();
+                expect(availableHeight).toBe(this.windowHeight - 2);
+            });
+
+            it("takes into account the bottom gutter", function() {
+                spyOn(this.view.boundingContainer, "bottomGutterHeight").andReturn(3);
+
+                var availableHeight = this.view.boundingContainer.getAvailableHeight();
+                expect(availableHeight).toBe(this.windowHeight - 3);
+            });
+        });
     });
 
     describe("event handling", function() {
@@ -316,21 +359,6 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                     it("doesn't expand past the available height of its bounding container", function () {
                         expect(this.view.getDesiredDataGridHeight()).toBe(this.availableHeight);
-                    });
-
-                    it("incorporates the footerSize passed to the view as a function", function() {
-                        spyOn(this.view, "footerSize").andReturn(10);
-                        expect(this.view.getDesiredDataGridHeight()).toBe(this.availableHeight - 10);
-                    });
-
-                    it("takes into account the vertical padding passed into the view", function() {
-                        this.view.options.verticalDialogPadding = 20;
-                        expect(this.view.getDesiredDataGridHeight()).toBe(this.availableHeight - 20);
-                    });
-
-                    it("takes into account the bottom gutter", function() {
-                        spyOn(this.view, "bottomGutterHeight").andReturn(35);
-                        expect(this.view.getDesiredDataGridHeight()).toBe(this.availableHeight - 35);
                     });
                 });
 
