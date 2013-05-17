@@ -653,6 +653,23 @@ describe("chorus.presenters.Activity", function() {
                 }
             );
         });
+
+        context("after deletion", function () {
+            it("has the right header html", function() {
+                this.model.attributes.workfile.isDeleted = true;
+                this.workfile = this.model.workfile();
+                this.workspace = this.workfile.workspace();
+
+                expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.WorkfileUpgradedVersion.default", {
+                        actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
+                        workfileLink: linkTo(this.workfile.showUrl(), this.workfile.name()),
+                        workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name()),
+                        versionLink: linkTo(null, t("workfile.version_title", { versionNum: this.model.get("versionNum") }))
+                    }
+                );
+            });
+        });
     });
 
     context("workfile version deleted", function() {

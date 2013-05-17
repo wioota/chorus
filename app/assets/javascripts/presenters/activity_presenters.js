@@ -507,12 +507,15 @@
         versionLink: function(self) {
             var version_num = self.model.get("versionNum");
             var version_id = self.model.get("versionId");
+
             var workfile = self.model.get("workfile");
             var workfile_version = new chorus.models.Workfile({
                 versionInfo: { id : version_id },
                 id : workfile.id,
-                workspace: workfile.workspace
+                workspace: workfile.workspace,
+                isDeleted: workfile.isDeleted
             });
+
             return workfile_version.showLink(t("workfile.version_title", { versionNum: version_num }));
         },
 
