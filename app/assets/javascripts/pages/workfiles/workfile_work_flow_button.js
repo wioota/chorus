@@ -5,5 +5,5 @@ chorus.views.WorkfileIndexPageButtons.prototype.createActions.push(
 );
 
 chorus.views.WorkfileIndexPageButtons.prototype.menuEvents["a.create_work_flow"] = function() {
-    new chorus.dialogs.WorkFlowNew().launchModal();
+    new chorus.dialogs.WorkFlowNew({workspace: this.model}).launchModal();
 };

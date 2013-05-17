@@ -1,7 +1,7 @@
 describe("chorus.dialogs.WorkFlowNew", function() {
     beforeEach(function() {
         this.workspace = rspecFixtures.workspace();
-        this.dialog = new chorus.dialogs.WorkFlowNew();
+        this.dialog = new chorus.dialogs.WorkFlowNew({workspace: this.workspace});
         this.dialog.render();
     });
 
@@ -15,6 +15,14 @@ describe("chorus.dialogs.WorkFlowNew", function() {
 
     it("creates a schema picker with the schema section hidden", function(){
        expect(this.dialog.schemaPicker.options.showSchemaSection).toBeFalsy();
+    });
+
+    context("when the workspace has a sandbox", function() {
+        it("sets the default data source and database", function() {
+            var database = this.dialog.model.sandbox().database();
+            expect(database).toBeTruthy();
+            expect(this.dialog.schemaPicker.selection.database).toEqual(database);
+        });
     });
 
     describe("submitting", function() {
