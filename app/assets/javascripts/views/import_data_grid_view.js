@@ -8,7 +8,7 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
     events: { "click .slick-cell": "selectCell" },
 
     initializeDataGrid: function(columns, rows, columnNames) {
-        if(this.$(".grid").length < 1) { return; }
+        if($(".grid").length < 1) { return; }
 
         var gridCompatibleRows = this.convert2DArrayToArrayOfHashTables(rows);
         var gridCompatibleColumnCells = _.map(columns, function (column, index) {
@@ -27,6 +27,7 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
         this.$(".slick-column-name").addClass("column_name");
 
         _.defer(_.bind(function () {
+            if($(".grid").length < 1) { return; }
             this.grid.resizeCanvas();
             this.grid.invalidate();
         }, this));
