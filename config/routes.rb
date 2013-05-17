@@ -21,7 +21,7 @@ Chorus::Application.routes.draw do
     resources :databases, :only => [:index], :controller => 'databases'
 
     scope :module => 'data_sources' do
-      resource :accounts, :only => [:show, :create, :update, :destroy]
+      resource :account, :only => [:show, :create, :update, :destroy]
       resource :credentials, :only => [:show]
       resource :owner, :only => [:update]
       resource :sharing, :only => [:create, :destroy], :controller => 'sharing'
