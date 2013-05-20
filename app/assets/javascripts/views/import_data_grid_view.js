@@ -8,6 +8,7 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
     events: { "click .slick-cell": "selectCell" },
 
     initializeDataGrid: function(columns, rows, columnNames) {
+        if(!this.inDocument()) { return; }
         var gridCompatibleRows = this.convert2DArrayToArrayOfHashTables(rows);
         var gridCompatibleColumnCells = _.map(columns, function (column, index) {
             return {
@@ -24,12 +25,18 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
         this.customizeHeaderRows(columns, columnNames);
         this.$(".slick-column-name").addClass("column_name");
 
-        _.defer(_.bind(function () {
-            this.grid.resizeCanvas();
-            this.grid.invalidate();
-        }, this));
+        _.defer(_.bind(this.resizeGridToResultsConsole, this));
     },
 
+    inDocument: function () {
+        return (this.$el.closest('body').length > 0);
+    },
+
+    resizeGridToResultsConsole: function() {
+        if(!this.inDocument()) { return; }
+        this.grid.resizeCanvas();
+        this.grid.invalidate();
+    },
     scrollHeaderRow: function() {
         this.grid.onScroll.subscribe(_.bind(function (e, args) {
             this.$('.slick-headerrow-columns').css({left: -args.scrollLeft});

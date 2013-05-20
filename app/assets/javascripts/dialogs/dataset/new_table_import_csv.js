@@ -68,13 +68,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         } else {
             this.$("input#delimiter_other").prop("checked", true);
         }
-        if(this.inDocument()) {
-            this.importDataGrid.initializeDataGrid(columns, rows, this.getColumnNames());
-        }
-    },
-
-    inDocument: function () {
-        return (this.$el.closest('body').length > 0);
+        this.importDataGrid.initializeDataGrid(columns, rows, this.getColumnNames());
     },
 
     revealed: function() {
