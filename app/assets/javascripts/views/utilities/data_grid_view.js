@@ -3,7 +3,7 @@ chorus.views.DataGrid = chorus.views.Base.extend({
     constructorName: "DataGrid",
     events: { "click .slick-cell": "selectCell" },
 
-    columnMinWidth: 5,
+    columnStartingWidth: 100,
 
     slickStyleColumns: function() {
         return _.map(this.model.getColumns(), function(column) {
@@ -12,7 +12,7 @@ chorus.views.DataGrid = chorus.views.Base.extend({
                 field: column.uniqueName,
                 id: column.uniqueName,
                 sortable: true,
-                minWidth: this.columnMinWidth
+                minWidth: this.columnStartingWidth
             };
         });
     },
@@ -73,7 +73,7 @@ chorus.views.DataGrid = chorus.views.Base.extend({
     },
 
     forceFitColumns: function (columns) {
-        return (columns.length * this.columnMinWidth) <= this.$el.width();
+        return (columns.length * this.columnStartingWidth) <= this.$el.width();
     },
 
     _slickGridOptions: function(columns) {

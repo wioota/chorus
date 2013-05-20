@@ -3,7 +3,7 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
     constructorName: "ImportDataGrid",
     additionalClass: "import_data_grid",
     headerRowHeight: 0,
-    columnMinWidth: 100,
+    columnStartingWidth: 100,
     customizeHeaderRows: $.noop,
     events: { "click .slick-cell": "selectCell" },
 
@@ -15,7 +15,7 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
                 name: column.name,
                 field: index.toString(),
                 id: index.toString(),
-                minWidth: this.columnMinWidth
+                minWidth: this.columnStartingWidth
             };
         }, this);
 
@@ -78,7 +78,7 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
     },
 
     forceFitColumns: function (columns) {
-        return (columns.length * this.columnMinWidth) <= this.$el.width();
+        return (columns.length * this.columnStartingWidth) <= this.$el.width();
     },
 
     _slickGridOptions: function(columns) {
