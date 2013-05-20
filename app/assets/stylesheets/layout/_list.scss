@@ -34,14 +34,23 @@
         .image {
             display: block;
             float: left;
-            width: $icon-image-width + 18px;
-            height: $icon-image-height + 13px;
+            width: $large-image-width + 5px;
+            height: $large-image-height;
 
             img {
                 height: auto;
                 width:  auto;
-                max-width: $icon-image-width + 18px;
-                max-height: $icon-image-height + 13px;
+                max-width: $large-image-width + 5px;
+                max-height: $large-image-height;
+            }
+            &.icon {
+                width: $icon-image-width;
+                height: $icon-image-height;
+
+                img {
+                    max-width: $icon-image-width;
+                    max-height: $icon-image-height;
+                }
             }
         }
 

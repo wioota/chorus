@@ -15,7 +15,7 @@ describe("chorus.views.WorkfileItem", function() {
     });
 
     it("includes the correct workfile icon (non-image)", function() {
-        expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/icon/sql.png");
+        expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/large/sql.png");
     });
 
     context("when the workfile is a linked tableau workbook", function () {

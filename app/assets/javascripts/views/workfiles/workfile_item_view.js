@@ -27,7 +27,7 @@ chorus.views.WorkfileItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).
     additionalContext: function() {
 
         var ctx = {
-            iconUrl:  this.model.iconUrl({size: 'icon'}),
+            iconUrl:  this.model.iconUrl({size: 'large'}),
             name:  this.model.name(),
             tableauWorkbook: this.model.get('fileType') === 'tableau_workbook',
             tableauIcon: Handlebars.helpers.tableauIcon(),
