@@ -1,4 +1,5 @@
 chorus.views.WorkfileIndexPageButtons = chorus.views.Base.extend({
+    constructorName: "WorkfileIndexPageButtons",
     templateName: "workfile_index_page_buttons",
     createActions: [
         {className: 'create_sql_workfile', text: t("actions.create_sql_workfile")}
@@ -16,6 +17,7 @@ chorus.views.WorkfileIndexPageButtons = chorus.views.Base.extend({
     },
 
     setup: function() {
+        chorus.applyPlugins(this);
         this.model.fetchIfNotLoaded();
     },
 

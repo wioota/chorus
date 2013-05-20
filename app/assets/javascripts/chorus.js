@@ -15,6 +15,7 @@ window.Chorus = function chorus$Global() {
     self.locale = 'en';
     self.cleanupFunctions = [];
     self.viewsToTearDown = [];
+    self.plugins = [];
 
     self.initialize = function() {
         // Check and prompt for Chrome Frame install if applicable
@@ -39,6 +40,15 @@ window.Chorus = function chorus$Global() {
 
         //set qtip to appear above dialogs
         $.fn.qtip.zindex = 17000;
+    };
+
+    self.applyPlugins = function(instance) {
+        if(!instance.constructorName) {
+            self.log("trying to load a plugin on an object that can't handle it");
+        }
+        _.each(self.plugins, function(plugin) {
+            plugin[instance.constructorName] && plugin[instance.constructorName].init(instance);
+        });
     };
 
     // to enable development mode, run `rake enable_dev_mode`
