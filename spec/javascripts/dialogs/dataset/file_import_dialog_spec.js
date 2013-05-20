@@ -1,5 +1,6 @@
 describe("chorus.dialogs.FileImport", function() {
     beforeEach(function() {
+        chorus.models.Config.instance().set({fileSizesMbCsvImports: 1 });
         chorus.page = {};
         chorus.page.workspace = rspecFixtures.workspace({id: 242});
         this.modalSpy = stubModals();
@@ -70,7 +71,6 @@ describe("chorus.dialogs.FileImport", function() {
     context("when a file is chosen", function() {
         beforeEach(function() {
             this.fileList = [{ name: 'foo Bar Baz.csv' }];
-            this.request = jasmine.createSpyObj('request', ['abort']);
             this.fakeFileUpload.add(this.fileList);
         });
 
@@ -98,10 +98,6 @@ describe("chorus.dialogs.FileImport", function() {
         });
 
         describe("file size validation", function() {
-            beforeEach(function() {
-                this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
-                this.request = jasmine.createSpyObj('request', ['abort']);
-            });
             describe("when the file size is within limits", function() {
                 beforeEach(function() {
                     this.fileList = [{ name: 'foo Bar Baz.csv', size: 1 * 1024 * 1024 - 1 }];

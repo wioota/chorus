@@ -24,7 +24,6 @@ chorus.models.Session = chorus.models.Base.extend({
         var success = options.success, error = options.error;
 
         options.success = function(model, data, xhr) {
-            chorus.models.Config.instance();
             if (success) success(model, data);
         };
 

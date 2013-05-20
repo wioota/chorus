@@ -468,10 +468,8 @@ describe("chorus.models.Workspace", function() {
 
     describe("#maxImageSize",function() {
         it("returns the max file size for workspace icons from the config", function() {
-            this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
-            var maxImgSize = chorus.models.Config.instance().get("fileSizesMbWorkspaceIcon");
-            expect(maxImgSize).toBeDefined();
-            expect(this.model.maxImageSize()).toBe(maxImgSize);
+            chorus.models.Config.instance().set({fileSizesMbWorkspaceIcon: 3});
+            expect(this.model.maxImageSize()).toBe(3);
         });
     });
 });

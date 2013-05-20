@@ -1,6 +1,7 @@
 describe("chorus.models.AlpineWorkfile", function () {
     var workfile;
     beforeEach(function() {
+        loadConfig();
         workfile = rspecFixtures.workfile.alpine();
     });
 
@@ -15,11 +16,6 @@ describe("chorus.models.AlpineWorkfile", function () {
     });
 
     describe("imageUrl", function() {
-        beforeEach(function() {
-            chorus.models.Config.instance();
-            this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
-        });
-
         it("matches the expected url", function() {
             expect(chorus.models.Config.instance().get('alpineUrl')).toBeDefined();
             expect(chorus.models.Config.instance().get('alpineApiKey')).toBeDefined();
@@ -33,11 +29,6 @@ describe("chorus.models.AlpineWorkfile", function () {
     });
 
     describe("runUrl", function() {
-        beforeEach(function() {
-            chorus.models.Config.instance();
-            this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
-        });
-
         it("matches the expected url", function() {
             expect(chorus.models.Config.instance().get('alpineUrl')).toBeDefined();
             expect(chorus.models.Config.instance().get('alpineApiKey')).toBeDefined();

@@ -1,5 +1,6 @@
 describe("chorus.dialogs.MemoNewDialog", function() {
     beforeEach(function() {
+        loadConfig();
         this.model = new chorus.models.Note({
             entityType: 'workfile',
             entityId: 1,
@@ -598,7 +599,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                     context("when the file size exceeds the maximum allowed size", function() {
                         beforeEach(function() {
-                            this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
+                            expect(chorus.models.Config.instance().get("fileSizesMbAttachment")*1024*1024).toBeLessThan(999999999999999999);
                             this.numFilesStart = this.dialog.model.files.length;
                             this.fileList = [
                                 { name: 'foo Bar Baz.csv', size: 1 },

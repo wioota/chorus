@@ -21,6 +21,14 @@
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
+  <script>
+
+//          var _instance = new chorus.models.Config(<%= Presenter.present(ChorusConfig.instance, self).to_json.html_safe %>, {parse: true});
+          var instance = chorus.models.Config.instance()
+            instance.set(instance.parse(<%= Presenter.present(ChorusConfig.instance, self).to_json.html_safe %>));
+//          chorus.models.Config.instance().set(chorus.mixins.Fetching.camelizeKeys(<%= Presenter.present(ChorusConfig.instance, self).to_json.html_safe %>));
+  </script>
+
   <script type="text/javascript">
       $(chorus.initialize);
   </script>

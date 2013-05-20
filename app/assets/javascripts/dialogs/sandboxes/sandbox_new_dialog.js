@@ -23,7 +23,6 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.workspace.fetch();
 
         this.requiredResources.add(this.workspace);
-        this.requiredResources.add(chorus.models.Config.instance());
 
         this.listenTo(this.model, "saved", this.saved);
         this.listenTo(this.model, "saveFailed", this.saveFailed);

@@ -93,6 +93,7 @@
             this.server = sinon.fakeServer.create();
             chorus.router.unbind();
             delete chorus.page;
+            chorus.models.Config.instance().clear();
             window.qtipElements = {};
 
             this.renderDOM = function(content) {
@@ -409,6 +410,10 @@
 
     window.xitBehavesLike = {};
     _.each(window.itBehavesLike, function(value, key) { window.xitBehavesLike[key] = $.noop; });
+
+    window.loadConfig = function() {
+        chorus.models.Config.instance().set(rspecFixtures.config().attributes);
+    };
 
     window.unsetLoggedInUser = function() {
         chorus.session.unset("id");

@@ -2,7 +2,6 @@ describe("chorus.views.AlpineWorkfileContent", function() {
     beforeEach(function() {
         this.model = rspecFixtures.workfile.alpine();
         this.view = new chorus.views.AlpineWorkfileContent({ model: this.model });
-        this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
         this.view.render();
     });
 

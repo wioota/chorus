@@ -96,16 +96,6 @@ describe("chorus.models.Session", function() {
             expect(this.server.lastFetch().url).toBe("/sessions");
         });
 
-        context("when the session is valid", function() {
-            beforeEach(function() {
-                this.server.lastFetch().succeed();
-            });
-
-            it("fetches the chorus configuration", function() {
-                expect(new chorus.models.Config()).toHaveBeenFetched();
-            });
-        });
-
         context("when the session is not valid", function() {
             beforeEach(function() {
                 expect(this.model.user()).toBeTruthy();
