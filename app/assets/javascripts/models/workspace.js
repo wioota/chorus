@@ -69,20 +69,22 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     sandboxTables: function() {
-        return new chorus.collections.WorkspaceDatasetSet([], {
+        this._sandboxTables = this._sandboxTables || new chorus.collections.WorkspaceDatasetSet([], {
             workspaceId: this.id,
             type: "SANDBOX_TABLE",
             objectType: "TABLE"
         });
+
+        return this._sandboxTables;
     },
 
     datasets: function() {
-        this._datasets || (this._datasets = new chorus.collections.WorkspaceDatasetSet([], { workspaceId: this.id }));
+        this._datasets = this._datasets || new chorus.collections.WorkspaceDatasetSet([], { workspaceId: this.id });
         return this._datasets;
     },
 
     comments:function () {
-        this._comments || (this._comments = new chorus.collections.CommentSet(this.get("latestCommentList")));
+        this._comments = this._comments || new chorus.collections.CommentSet(this.get("latestCommentList"));
         return this._comments;
     },
 

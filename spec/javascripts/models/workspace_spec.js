@@ -63,6 +63,10 @@ describe("chorus.models.Workspace", function() {
             expect(collection.attributes.type).toEqual("SANDBOX_TABLE");
             expect(collection.attributes.objectType).toEqual("TABLE");
         });
+
+        it("memoizes", function() {
+            expect(this.model.sandboxTables()).toBe(this.model.sandboxTables());
+        });
     });
 
     describe("#isPublic", function() {

@@ -111,7 +111,8 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         e.preventDefault();
         if(!this.saving) {
             var destination = this.schedule && this.schedule.destination();
-            var tables = this.schema.tables();
+            var tables = this.workspace ? this.workspace.sandboxTables() : this.schema.tables();
+
             var pickerOptions = {
                 defaultSelection: destination && destination.id && destination,
                 collection: tables

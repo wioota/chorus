@@ -12,7 +12,6 @@ jasmine.sharedExamples.importIntoNewTableIsSelected = function() {
 describe("chorus.dialogs.ImportNow", function() {
     context('importing into a workspace', function() {
         beforeEach(function() {
-            this.workspace = rspecFixtures.workspace({id: 123});
             this.dataset = rspecFixtures.workspaceDataset.datasetTable({workspace: {id: 123}});
             this.importSchedules = rspecFixtures.datasetImportScheduleSet();
             _.extend(this.importSchedules.attributes, {
@@ -28,8 +27,7 @@ describe("chorus.dialogs.ImportNow", function() {
             this.importSchedule.unset('sampleCount');
 
             this.dialog = new chorus.dialogs.ImportNow({
-                dataset: this.dataset,
-                workspace: this.workspace
+                dataset: this.dataset
             });
         });
 
@@ -65,18 +63,18 @@ describe("chorus.dialogs.ImportNow", function() {
                     expect(this.dialog.$(".existing_table span.dataset_picked")).toHaveClass("hidden");
                 });
 
+                it("should have a link to the dataset picker dialog", function() {
+                    expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_dataset");
+                });
+
                 context("when clicking the dataset picker link", function() {
                     beforeEach(function() {
-                        stubModals();
+                        this.modalStub = stubModals();
                         this.dialog.$(".existing_table a.dataset_picked").click();
                     });
 
-                    it("should have a link to the dataset picker dialog", function() {
-                        expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_dataset");
-                    });
-
                     it("should set the pre-selected dataset if there is one", function() {
-                        expect(chorus.modal.options.defaultSelection.attributes).toEqual(this.importSchedule.destination().attributes);
+                        expect(this.modalStub.lastModal().options.defaultSelection.attributes).toEqual(this.importSchedule.destination().attributes);
                     });
                 });
             });
@@ -108,7 +106,7 @@ describe("chorus.dialogs.ImportNow", function() {
                 });
 
                 it("should display the import destination", function() {
-                    expect(this.dialog.$(".destination")).toContainTranslation("import.destination", {canonicalName: this.workspace.sandbox().schema().canonicalName()});
+                    expect(this.dialog.$(".destination")).toContainTranslation("import.destination", {canonicalName: this.dataset.workspace().sandbox().schema().canonicalName()});
                 });
 
                 describe("the new table section", function() {
@@ -177,7 +175,7 @@ describe("chorus.dialogs.ImportNow", function() {
 
                 context("after clicking the dataset picker link", function() {
                     beforeEach(function() {
-                        stubModals();
+                        this.modalStub = stubModals();
                         spyOn(chorus.Modal.prototype, 'launchSubModal').andCallThrough();
                         spyOn(this.dialog, "datasetsChosen").andCallThrough();
                         this.dialog.$(".existing_table a.dataset_picked").click();
@@ -187,11 +185,8 @@ describe("chorus.dialogs.ImportNow", function() {
                         expect(chorus.Modal.prototype.launchSubModal).toHaveBeenCalled();
                     });
 
-                    it("uses the tables in the workspace sandbox", function() {
-                        var collection = chorus.modal.options.collection;
-                        expect(collection).toBeA(chorus.collections.SchemaDatasetSet);
-                        expect(collection.attributes.schemaId).toEqual(this.workspace.sandbox().schema().id);
-                        expect(collection.attributes.tablesOnly).toEqual('true');
+                    it("uses the workspace sandbox tables", function() {
+                        expect(this.modalStub.lastModal().collection).toEqual(this.dataset.workspace().sandboxTables());
                     });
 
                     context("after selecting a dataset", function() {
