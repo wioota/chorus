@@ -45,7 +45,7 @@ class GpdbDatabase < ActiveRecord::Base
   end
 
   def self.reindex_datasets(database_id)
-    GpdbDatabase.find(database_id).datasets.not_stale.each do |dataset|
+    GpdbDatabase.find(database_id).datasets.not_stale.find_each do |dataset|
       begin
         dataset.solr_index
       rescue => e
