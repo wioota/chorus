@@ -92,6 +92,8 @@ module Chorus
     config.middleware.insert_before(Rails::Rack::Logger, ActionDispatch::Session::CookieStore)
     config.middleware.insert_before(ActionDispatch::Session::CookieStore, ActionDispatch::Cookies)
 
+    config.cache_store = :memory_store
+
     config.log_tags += [
       proc do |req|
         if req.session[:user_id].nil?
