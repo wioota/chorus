@@ -100,9 +100,10 @@ resource "Workfiles" do
 
   post "/workspaces/:workspace_id/workfiles" do
     let(:workspace_id) { workspace.to_param }
+    let(:database_id) { 1 }
 
     parameter :entity_subtype, ""
-    parameter :alpine_id, "1"
+    parameter :database_id, "Database Id"
     parameter :workspace_id, "Workspace Id"
     parameter :description, "Workfile description"
     parameter :file_name, "Filename"

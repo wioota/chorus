@@ -188,7 +188,7 @@ describe WorkfilesController do
             :entity_subtype => 'alpine',
             :workspace_id => workspace.to_param,
             :file_name => 'something',
-            :alpine_id => '42'
+            :database_id => '42'
         }
       end
 
@@ -196,7 +196,7 @@ describe WorkfilesController do
         mock_present do |model|
           model.should be_a AlpineWorkfile
           model.file_name.should == 'something'
-          model.additional_data['alpine_id'].should == '42'
+          model.additional_data['database_id'].should == '42'
           model.workspace.should == workspace
         end
         post :create, params
