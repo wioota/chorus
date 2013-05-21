@@ -47,6 +47,23 @@ describe("chorus.dialogs.WorkFlowNew", function() {
             });
         });
 
+        describe("when the workfile creation succeeds", function() {
+            beforeEach(function() {
+                spyOn(this.dialog, "closeModal");
+                spyOn(chorus.router, "navigate");
+                this.dialog.$("form").submit();
+                this.server.completeSaveFor(this.dialog.resource, {id: 42});
+            });
+
+            it("closes the dialog", function() {
+               expect(this.dialog.closeModal).toHaveBeenCalled();
+            });
+
+            it("navigates to the workflow page", function() {
+               expect(chorus.router.navigate).toHaveBeenCalledWith("#/workFlows/42");
+            });
+        });
+
         describe("when no database is selected", function() {
             it("disables the form", function() {
                 this.dialog.schemaPicker.getSelectedDatabase.andReturn(null);

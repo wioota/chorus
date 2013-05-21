@@ -21,7 +21,7 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.Base.include(chorus.Mixins.DialogFor
             defaultSchema: this.options.workspace.sandbox()
         });
         this.listenTo(this.schemaPicker, "change", this.toggleSubmitDisabled);
-
+        this.listenTo(this.resource, "saved", this.workfileSaved);
     },
 
     getFileName: function() {
@@ -41,6 +41,11 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.Base.include(chorus.Mixins.DialogFor
         });
 
         this.$("button.submit").startLoading("actions.adding");
-        this.resource.save({source: "empty"});
+        this.resource.save();
+    },
+
+    workfileSaved: function() {
+        this.closeModal();
+        chorus.router.navigate(this.resource.showUrl({workFlow: true}));
     }
 });

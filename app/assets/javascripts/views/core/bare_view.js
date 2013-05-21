@@ -256,8 +256,7 @@ chorus.views.Bare = Backbone.View.include(
             });
         },
 
-        subscribePageEvent: function(eventName, callback)
-        {
+        subscribePageEvent: function(eventName, callback) {
             var events = chorus.PageEvents._events || {};
             var self = this;
             var alreadyBound = _.any(events[eventName], function(subscription) {
