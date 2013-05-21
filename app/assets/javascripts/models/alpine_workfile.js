@@ -1,6 +1,11 @@
 //= require ./workfile
 chorus.models.AlpineWorkfile = chorus.models.Workfile.extend({
     constructorName: "AlpineWorkfile",
+    parameterWrapper: "workfile",
+
+    defaults: {
+        entitySubtype: "alpine"
+    },
 
     iconUrl: function(options) {
         return chorus.urlHelpers.fileIconUrl('afm', options && options.size);

@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe AlpineWorkfile do
   describe "validations" do
-    it { should validate_presence_of :alpine_id }
+    it { should validate_presence_of :database_id }
   end
 
   describe "entity_subtype" do

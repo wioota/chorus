@@ -7,8 +7,8 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.Base.include(chorus.Mixins.DialogFor
     },
 
     setup: function() {
-        this.model = this.resource = new chorus.models.Workfile({
-            workspace: this.options.workspace
+        this.model = this.resource = new chorus.models.AlpineWorkfile({
+            workspace: {id: this.options.workspace.id }
         });
         this.disableFormUnlessValid({
             formSelector: "form",
@@ -18,7 +18,7 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.Base.include(chorus.Mixins.DialogFor
 
         this.schemaPicker = new chorus.views.SchemaPicker({
             showSchemaSection: false,
-            defaultSchema: this.model.sandbox()
+            defaultSchema: this.options.workspace.sandbox()
         });
         this.listenTo(this.schemaPicker, "change", this.toggleSubmitDisabled);
 
@@ -32,13 +32,12 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.Base.include(chorus.Mixins.DialogFor
         return this.getFileName().trim().length > 0 && !!this.schemaPicker.getSelectedDatabase();
     },
 
-    create: function create(e) {
-        e.preventDefault();
-
+    create: function(e) {
         var fileName = this.getFileName();
 
         this.resource.set({
-            fileName: fileName
+            fileName: fileName,
+            databaseId: this.schemaPicker.getSelectedDatabase().id
         });
 
         this.$("button.submit").startLoading("actions.adding");

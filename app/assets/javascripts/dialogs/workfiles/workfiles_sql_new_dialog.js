@@ -21,9 +21,7 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.include(chorus.Mixins.Dialo
         });
     },
 
-    create:function create(e) {
-        e.preventDefault();
-
+    create: function() {
         var fileName = this.$("input[name=fileName]").val().trim();
 
         this.resource.set({

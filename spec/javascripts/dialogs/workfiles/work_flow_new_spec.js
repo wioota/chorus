@@ -19,7 +19,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
 
     context("when the workspace has a sandbox", function() {
         it("sets the default data source and database", function() {
-            var database = this.dialog.model.sandbox().database();
+            var database = this.dialog.options.workspace.sandbox().database();
             expect(database).toBeTruthy();
             expect(this.dialog.schemaPicker.selection.database).toEqual(database);
         });
@@ -30,14 +30,20 @@ describe("chorus.dialogs.WorkFlowNew", function() {
             // start with a valid form submission
             this.dialog.$("input[name='fileName']").val("stuff").keyup();
 
-            var fakeDatabase = rspecFixtures.database();
-            spyOn(this.dialog.schemaPicker, "getSelectedDatabase").andReturn(fakeDatabase);
+            this.fakeDatabase = rspecFixtures.database();
+            spyOn(this.dialog.schemaPicker, "getSelectedDatabase").andReturn(this.fakeDatabase);
             this.dialog.schemaPicker.trigger('change');
         });
 
         describe("with valid form values", function() {
-            it("submits the form", function() {
+            it("enables the submit button", function() {
                 expect(this.dialog.$("form button.submit")).not.toBeDisabled();
+            });
+
+            it("submits the form", function() {
+                this.dialog.$("form").submit();
+                expect(this.server.lastCreate().params()["workfile[entity_subtype]"]).toEqual('alpine');
+                expect(this.server.lastCreate().params()["workfile[database_id]"]).toEqual(this.fakeDatabase.id);
             });
         });
 

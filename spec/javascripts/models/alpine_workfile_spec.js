@@ -5,6 +5,11 @@ describe("chorus.models.AlpineWorkfile", function () {
         workfile = rspecFixtures.workfile.alpine();
     });
 
+    it("has an 'alpine' as its entity subtype", function() {
+        var workfile = new chorus.models.AlpineWorkfile();
+        expect(workfile.get("entitySubtype")).toBe("alpine");
+    });
+
     describe("iconUrl", function () {
         it("returns the afm icon", function () {
             expect(workfile.iconUrl()).toMatch(/afm\.png/);
