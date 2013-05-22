@@ -56,6 +56,12 @@ describe User do
       User.order(nil).to_a.should == User.all(:order => "LOWER(first_name)").to_a
     end
 
+    it "sorts by id as a secondary sort" do
+      User.update_all(:first_name => 'billy')
+      ids = User.order(nil).collect(&:id)
+      ids.should == ids.sort
+    end
+
     context "with a recognized sort order" do
       it "respects the sort order" do
         User.order("last_name").to_a.should == User.all(:order => "LOWER(last_name)").to_a

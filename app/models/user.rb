@@ -69,7 +69,7 @@ class User < ActiveRecord::Base
 
   def self.order(field)
     sort_by = VALID_SORT_ORDERS[field] || DEFAULT_SORT_ORDER
-    super(sort_by)
+    super(sort_by, :id)
   end
 
   def self.authenticate(username, password)
