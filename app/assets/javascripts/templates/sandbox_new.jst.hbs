@@ -6,6 +6,5 @@
 </fieldset>
 <div class="form_controls">
     <label class="required"/><label>{{t "validation.required_field"}}</label>
-    <button type="button" class="cancel modalish" tabindex=2>{{t "actions.cancel"}}</button>
-    <button type="submit" class="submit modalish" tabindex=1>{{t "sandbox.create_sandbox"}}</button>
+    {{formControlsWithDisabledSubmit "sandbox.create_sandbox"}}
 </div>
