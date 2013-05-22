@@ -9,7 +9,7 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.extend({
 
     showUrlTemplate: function(options) {
         if (options && options.workFlow) {
-            return "workFlows/{{id}}";
+            return "work_flows/{{id}}";
         }
 
         return this._super("showUrlTemplate", arguments);
@@ -25,10 +25,11 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.extend({
             database_id: this.get("databaseId"),
             file_name: this.get("fileName"),
             workfile_id: this.id,
-            session_id: chorus.session.get("sessionId")
+            session_id: chorus.session.get("sessionId"),
+            method: "chorusEntry"
         });
 
-        return uri;
+        return uri.toString();
     },
 
     imageUrl: function() {

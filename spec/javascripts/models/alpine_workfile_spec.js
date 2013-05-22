@@ -15,7 +15,7 @@ describe("chorus.models.AlpineWorkfile", function() {
         });
 
         it("has a workflow showUrl", function() {
-            expect(this.model.showUrl({workFlow: true})).toBe("#/workFlows/23");
+            expect(this.model.showUrl({workFlow: true})).toBe("#/work_flows/23");
         });
     });
 
@@ -46,13 +46,13 @@ describe("chorus.models.AlpineWorkfile", function() {
         it("has the right url", function() {
             var url = this.model.iframeUrl();
 
-            expect(url.hostname()).toEqual("test.com");
-            expect(url).toHaveUrlPath("/alpinedatalabs/main/chorus.do");
+            expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
             expect(url).toContainQueryParams({
                 database_id: "3",
                 file_name: "hello.afm",
                 workfile_id: "23",
-                session_id: "hex"
+                session_id: "hex",
+                method: "chorusEntry"
             });
         });
     });

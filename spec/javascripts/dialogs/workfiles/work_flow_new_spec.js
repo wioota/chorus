@@ -60,7 +60,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
             });
 
             it("navigates to the workflow page", function() {
-               expect(chorus.router.navigate).toHaveBeenCalledWith("#/workFlows/42");
+               expect(chorus.router.navigate).toHaveBeenCalledWith("#/work_flows/42");
             });
         });
 
