@@ -7,6 +7,11 @@ describe("chorus.models.AlpineWorkfile", function() {
             id: "23",
             workspace: {id: "32"}
         });
+        chorus.models.Config.instance().set({
+            workFlowConfigured: true,
+            workFlowUrl: "test.com"
+        });
+        chorus.session.set("sessionId", "hex");
     });
 
     describe("showUrl", function() {
@@ -34,52 +39,27 @@ describe("chorus.models.AlpineWorkfile", function() {
         });
     });
 
-    describe("iframeUrl", function() {
-        beforeEach(function() {
-            chorus.models.Config.instance().set({
-                workFlowConfigured: true,
-                workFlowUrl: "test.com"
-            });
-            chorus.session.set("sessionId", "hex");
-        });
+    it("has the right iframeUrl", function() {
+        var url = this.model.iframeUrl();
 
-        it("has the right url", function() {
-            var url = this.model.iframeUrl();
-
-            expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
-            expect(url).toContainQueryParams({
-                database_id: "3",
-                file_name: "hello.afm",
-                workfile_id: "23",
-                session_id: "hex",
-                method: "chorusEntry"
-            });
+        expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
+        expect(url).toContainQueryParams({
+            database_id: "3",
+            file_name: "hello.afm",
+            workfile_id: "23",
+            session_id: "hex",
+            method: "chorusEntry"
         });
     });
 
-    xdescribe("imageUrl", function() {
-        it("matches the expected url", function() {
-            expect(chorus.models.Config.instance().get('alpineUrl')).toBeDefined();
-            expect(chorus.models.Config.instance().get('alpineApiKey')).toBeDefined();
-            var uri = new URI({
-                hostname: chorus.models.Config.instance().get('alpineUrl'),
-                path: "/alpinedatalabs/main/chorus.do",
-                query: "method=getWorkFlowImage&api_key=" + chorus.models.Config.instance().get('alpineApiKey') + "&id=" + this.model.get("alpineId")
-            });
-            expect(new URI(this.model.imageUrl()).equals(uri)).toBeTruthy();
-        });
-    });
+    it("has the right imageUrl", function() {
+        var url = this.model.imageUrl();
 
-    xdescribe("runUrl", function() {
-        it("matches the expected url", function() {
-            expect(chorus.models.Config.instance().get('alpineUrl')).toBeDefined();
-            expect(chorus.models.Config.instance().get('alpineApiKey')).toBeDefined();
-            var uri = new URI({
-                hostname: chorus.models.Config.instance().get('alpineUrl'),
-                path: "/alpinedatalabs/main/chorus.do",
-                query: "method=runWorkFlow&api_key=" + chorus.models.Config.instance().get('alpineApiKey') + "&id=" + this.model.get("alpineId") + "&chorus_workfile_type=Workfile&chorus_workfile_id=" + this.model.get('id') + "&chorus_workfile_name=" + this.model.get('fileName')
-            });
-            expect(new URI(this.model.runUrl()).equals(uri)).toBeTruthy();
+        expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
+        expect(url).toContainQueryParams({
+            workfile_id: "23",
+            session_id: "hex",
+            method: "chorusImage"
         });
     });
 });

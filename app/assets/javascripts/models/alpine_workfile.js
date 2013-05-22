@@ -35,7 +35,9 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.extend({
     imageUrl: function() {
         var uri = this.alpineUrlBase();
         uri.addQuery({
-            method: "getWorkFlowImage"
+            method: "chorusImage",
+            workfile_id: this.id,
+            session_id: chorus.session.get('sessionId')
         });
         return uri.toString();
     },
