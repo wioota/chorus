@@ -9,6 +9,7 @@ class Workfile < ActiveRecord::Base
 
   attr_accessible :description, :file_name, :as => [:default, :create]
   attr_accessible :owner, :workspace, :as => :create
+  attr_accessor :resolve_name_conflicts
 
   serialize :additional_data, JsonHashSerializer
 
@@ -26,6 +27,7 @@ class Workfile < ActiveRecord::Base
   validates :workspace, presence: true
   validates :owner, presence: true
   validates_presence_of :file_name
+  validate :validate_name_uniqueness, :on => :create
 
   before_validation :init_file_name, :on => :create
 
@@ -106,6 +108,7 @@ class Workfile < ActiveRecord::Base
   end
 
   def validate_name_uniqueness
+    return false if !workspace
     exists = Workfile.exists?(:file_name => file_name, :workspace_id => workspace.id)
     if exists
       errors.add(:file_name, "is not unique.")
@@ -133,7 +136,7 @@ class Workfile < ActiveRecord::Base
   private
 
   def init_file_name
-    WorkfileName.resolve_name_for!(self)
+    WorkfileName.resolve_name_for!(self) if resolve_name_conflicts
     true
   end
 

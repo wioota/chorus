@@ -20,29 +20,37 @@ describe Workfile do
 
     context "normalize the file name" do
       let!(:another_workfile) { FactoryGirl.create(:workfile, :file_name => 'workfile.sql') }
+      let(:workfile) { Workfile.new(:file_name => "workfile.sql") }
+      let(:workspace) { another_workfile.workspace }
+      let(:resolve_name_conflicts) { false }
+
+      before do
+        workfile.resolve_name_conflicts = resolve_name_conflicts
+        workfile.workspace = another_workfile.workspace
+        workfile.owner = another_workfile.owner
+      end
+
+      context "when not resolving name conflicts" do
+        it "is not valid" do
+          workfile.should_not be_valid
+          workfile.file_name.should == "workfile.sql"
+        end
+      end
 
       context "first conflict" do
+        let(:resolve_name_conflicts) { true }
         it "renames and turns the workfile valid" do
-          workfile = Workfile.new(:file_name => "workfile.sql")
-          workfile.workspace = another_workfile.workspace
-          workfile.owner = another_workfile.owner
-
           workfile.should be_valid
           workfile.file_name.should == 'workfile_1.sql'
         end
       end
 
       context "multiple conflicts" do
-        let(:workspace) { FactoryGirl.create(:workspace) }
-        let!(:another_workfile_1) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
-        let!(:another_workfile_2) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql') }
+        let(:resolve_name_conflicts) { true }
+        let!(:another_workfile_2) { FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'workfile.sql', :resolve_name_conflicts => true) }
 
         it "increases the name suffix number" do
-          workfile = Workfile.new :file_name => 'workfile.sql'
-          workfile.workspace = workspace
-          workfile.owner = another_workfile_1.owner
-
-          workfile.save
+          workfile.resolve_name_conflicts = true
           workfile.should be_valid
           workfile.file_name.should == 'workfile_2.sql'
         end

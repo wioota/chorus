@@ -14,6 +14,9 @@ class WorkfilesController < ApplicationController
     authorize! :can_edit_sub_objects, workspace
 
     workfile = Workfile.build_for(params[:workfile].merge(:workspace => workspace, :owner => current_user))
+    is_upload = !params[:workfile][:file_name]
+    is_svg = params[:workfile][:svg_data]
+    workfile.resolve_name_conflicts = (is_svg || is_upload)
     workfile.save!
 
     present workfile, presenter_options: {:workfile_as_latest_version => true}, status: :created

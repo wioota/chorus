@@ -53,5 +53,13 @@ describe WorkfileCopyController do
       post :create, :workfile_id => workfile.id, :workspace_id => target_workspace.id
       response.status.should == 403
     end
+
+    it "should resolve workfile name conflicts" do
+      FactoryGirl.create(:workfile, :file_name => workfile.file_name, :workspace => target_workspace)
+      post :create, :workfile_id => workfile.id, :workspace_id => target_workspace.id
+      response.status.should == 201
+      copied_workfile = Workfile.last
+      copied_workfile.file_name.should == workfile.file_name + "_1"
+    end
   end
 end
