@@ -505,18 +505,20 @@
         },
 
         versionLink: function(self) {
-            var version_num = self.model.get("versionNum");
-            var version_id = self.model.get("versionId");
+            var versionNum          = self.model.get("versionNum");
+            var versionId           = self.model.get("versionId");
+            var versionIsDeleted    = self.model.get("versionIsDeleted");
+            var workfile            = self.model.get("workfile");
+            var isDeleted           = workfile.isDeleted || versionIsDeleted;
 
-            var workfile = self.model.get("workfile");
             var workfile_version = new chorus.models.Workfile({
-                versionInfo: { id : version_id },
+                versionInfo: { id : versionId },
                 id : workfile.id,
                 workspace: workfile.workspace,
-                isDeleted: workfile.isDeleted
+                isDeleted: isDeleted
             });
 
-            return workfile_version.showLink(t("workfile.version_title", { versionNum: version_num }));
+            return workfile_version.showLink(t("workfile.version_title", { versionNum: versionNum }));
         },
 
         destinationSchemaLink: function(self) {

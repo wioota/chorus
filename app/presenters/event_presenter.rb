@@ -9,7 +9,8 @@ class EventPresenter < Presenter
       merge(attachment_hash).
       merge(notification_hash).
       merge(comments_hash).
-      merge(insight_hash)
+      merge(insight_hash).
+      symbolize_keys
   end
 
   def simple_hash
@@ -24,6 +25,10 @@ class EventPresenter < Presenter
   end
 
   private
+
+  def child_presenter_hash
+    {}
+  end
 
   def comments_hash
     {
@@ -59,7 +64,7 @@ class EventPresenter < Presenter
       :actor => present(model.actor, extended_options),
       :action => action,
       :timestamp => model.created_at
-    }
+    }.merge(child_presenter_hash)
   end
 
   def action

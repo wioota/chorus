@@ -232,7 +232,7 @@ describe EventPresenter, :type => :view do
 
       it "presents the errors" do
         hash = subject.to_hash
-        hash['error_objects'].should == ErrorPresenter.new(event.error_objects).as_json
+        hash[:error_objects].should == ErrorPresenter.new(event.error_objects).as_json
       end
     end
 
