@@ -10,7 +10,7 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
 
     additionalContext: function () {
         return  {
-            alpineUrl: this.model.runUrl(),
+            workFlowShowUrl: this.model.workFlowShowUrl(),
             canOpen: this.model.canOpen()
         };
     }

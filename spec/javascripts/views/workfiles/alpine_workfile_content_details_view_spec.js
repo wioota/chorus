@@ -24,12 +24,7 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
         });
 
         it("links the 'Open File' button to the Alpine page", function() {
-            var url = URI('/AlpineIlluminator/alpine/result/runflow.jsp?')
-                  .addQuery("flowFilePath", "/tmp/run_file_test.afm");
-            url.addQuery('actions[create_workfile_insight]',
-                          'http://' + window.location.host + '/notes/');
-            expect(this.view.$('a.open_file')).toHaveHref(this.model.runUrl());
-            expect(this.view.$('a.open_file')).toHaveAttr('target', 'alpine');
+            expect(this.view.$('a.open_file')).toHaveHref(this.model.workFlowShowUrl());
         });
 
         context("when the current user cannot open the workfile", function(){

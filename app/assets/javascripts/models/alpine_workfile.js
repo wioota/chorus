@@ -42,17 +42,6 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.extend({
         return uri.toString();
     },
 
-    runUrl: function() {
-        var uri = this.alpineUrlBase();
-        uri.addQuery({
-            method: "runWorkFlow",
-            chorus_workfile_type: "Workfile",
-            chorus_workfile_id: this.id,
-            chorus_workfile_name: this.get("fileName")
-        });
-        return uri.toString();
-    },
-
     alpineUrlBase: function() {
         var uri = URI({
             hostname: chorus.models.Config.instance().get('workFlowUrl'),
@@ -68,5 +57,9 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.extend({
     canOpen: function canOpen() {
         return _(this.workspace().members().pluck('id')).include(chorus.session.user().id) &&
             this.workspace().isActive();
+    },
+
+    workFlowShowUrl: function() {
+        return "#/work_flows/" + this.id;
     }
 });

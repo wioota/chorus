@@ -86,4 +86,10 @@ describe("chorus.models.AlpineWorkfile", function() {
             });
         });
     });
+
+    describe("workFlowShowUrl", function(){
+       it("corresponds to the workflow show page's url", function(){
+          expect(this.model.workFlowShowUrl()).toBe("#/work_flows/"+this.model.id);
+       });
+    });
 });
