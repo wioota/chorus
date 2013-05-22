@@ -117,7 +117,7 @@ describe TableauWorkbooksController do
           response.code.should == '201'
           post :create, params
           response.code.should == '422'
-          response.body.should include "File name is not unique"
+          decoded_errors.fields.file_name.should have_key("TAKEN")
         end
       end
 

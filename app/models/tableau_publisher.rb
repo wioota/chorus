@@ -7,31 +7,30 @@ class TableauPublisher
   end
 
   def publish_workbook(dataset, workspace, params)
-    workbook = build_workbook(dataset, params[:tableau_workbook][:name],
-                                   params[:tableau_workbook][:tableau_username],
-                                   params[:tableau_workbook][:tableau_password])
+    Workfile.transaction do
+      workbook = build_workbook(dataset, params[:tableau_workbook][:name],
+                                params[:tableau_workbook][:tableau_username],
+                                params[:tableau_workbook][:tableau_password])
 
-    workfile = build_workfile(params, workspace)
-    handle_errors(workbook, workfile) unless workfile_unique?(workfile) && workbook.save
+      workfile = build_workfile(params, workspace)
 
-    publication = create_publication(dataset, params)
-    if workfile
-      workfile.tableau_workbook_publication = publication
-      workfile.save!
+      workbook.save if !workfile || workfile.valid?
+
+      handle_errors(workbook) if workbook.errors.any?
+
+      publication = create_publication(dataset, params)
+      if workfile
+        workfile.tableau_workbook_publication = publication
+        workfile.save!
+      end
+      publication
     end
-    publication
   end
 
   private
 
-  def workfile_unique?(workfile)
-    (!workfile || workfile.validate_name_uniqueness)
-  end
-
-  def handle_errors(workbook, workfile)
-    messages = workbook.errors.full_messages
-    messages = messages + workfile.errors.full_messages if workfile
-    raise ModelNotCreated.new(messages.join(". "))
+  def handle_errors(workbook)
+    raise ModelNotCreated.new(workbook.errors.full_messages.join(''))
   end
 
   def create_publication(dataset, params)

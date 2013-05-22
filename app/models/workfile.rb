@@ -111,7 +111,7 @@ class Workfile < ActiveRecord::Base
     return false if !workspace
     exists = Workfile.exists?(:file_name => file_name, :workspace_id => workspace.id)
     if exists
-      errors.add(:file_name, "is not unique.")
+      errors.add(:file_name, :taken)
       false
     else
       true
