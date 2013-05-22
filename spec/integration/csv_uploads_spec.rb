@@ -25,7 +25,7 @@ describe "CSV Uploads", :greenplum_integration do
       page.should have_no_text("loading...")
       first("li", :text => "Information").click()
       csv_length = File.read(csv_file).split("\n").length - 1
-      page.should have_content("Rows #{csv_length}")
+      page.should have_content("Rows (est) #{csv_length}")
     end
     current_route.should =~ /datasets\/(\d)+/
   end
