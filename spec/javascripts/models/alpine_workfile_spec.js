@@ -62,4 +62,28 @@ describe("chorus.models.AlpineWorkfile", function() {
             method: "chorusImage"
         });
     });
+
+    describe("canOpen", function () {
+        context("when the workspace is active and the current user is a member", function () {
+            it("returns true", function(){
+               this.model.workspace().members().add(new chorus.models.User(chorus.session.user().attributes));
+               expect(this.model.canOpen()).toBeTruthy();
+            });
+        });
+
+        context("when the workspace is archived", function () {
+            it("returns false", function () {
+                this.model.workspace().set("archivedAt", true);
+                expect(this.model.canOpen()).toBeFalsy();
+            });
+        });
+
+        context("when the current user is not a member", function () {
+
+            it("returns false", function () {
+                this.model.workspace().members().reset();
+                expect(this.model.canOpen()).toBeFalsy();
+            });
+        });
+    });
 });

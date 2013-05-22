@@ -63,5 +63,10 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.extend({
 
     isAlpine: function() {
         return true;
+    },
+
+    canOpen: function canOpen() {
+        return _(this.workspace().members().pluck('id')).include(chorus.session.user().id) &&
+            this.workspace().isActive();
     }
 });
