@@ -95,12 +95,15 @@ module Chorus
     config.cache_store = :memory_store
 
     config.log_tags += [
-      proc do |req|
-        if req.session[:user_id].nil?
-          "not_logged_in"
-        else
-          "user_id:#{req.session[:user_id]}"
+      lambda do |req|
+        session_id = req.session[:chorus_session_id]
+
+        if session_id
+          session = Session.find_by_session_id(session_id)
+          return "user_id:#{session.user_id}" if session
         end
+
+        "not_logged_in"
       end
     ]
   end
