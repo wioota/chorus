@@ -28,7 +28,6 @@ class HdfsDataSource < ActiveRecord::Base
 
   def update_state_and_version
     self.state = Hdfs::QueryService.accessible?(self) ? "online" : "offline"
-    self.version = Hdfs::QueryService.version_of(self) if online?
   end
 
   def refresh(path = "/")
