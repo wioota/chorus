@@ -14,7 +14,7 @@ chorus.pages.WorkFlowShowPage = chorus.pages.Base.extend({
 
     context: function() {
         return {
-            alpineUrl: this.model.iframeUrl()
+            alpineUrl: this.model.loaded ? this.model.iframeUrl() : ""
         };
     }
 });
