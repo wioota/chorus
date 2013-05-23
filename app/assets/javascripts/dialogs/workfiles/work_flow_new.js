@@ -22,6 +22,7 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.Base.include(chorus.Mixins.DialogFor
         });
         this.listenTo(this.schemaPicker, "change", this.toggleSubmitDisabled);
         this.listenTo(this.resource, "saved", this.workfileSaved);
+        this.listenTo(this.resource, "saveFailed", this.saveFailed);
     },
 
     getFileName: function() {
@@ -42,6 +43,10 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.Base.include(chorus.Mixins.DialogFor
 
         this.$("button.submit").startLoading("actions.adding");
         this.resource.save();
+    },
+
+    saveFailed: function() {
+        this.$("button.submit").stopLoading();
     },
 
     workfileSaved: function() {

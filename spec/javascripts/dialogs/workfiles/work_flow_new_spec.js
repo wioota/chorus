@@ -64,6 +64,17 @@ describe("chorus.dialogs.WorkFlowNew", function() {
             });
         });
 
+        describe("when the save fails", function() {
+            beforeEach(function() {
+                spyOn($.fn, 'stopLoading');
+                this.dialog.model.trigger("saveFailed");
+            });
+
+            it("removes the spinner from the button", function() {
+                expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
+            });
+        });
+
         describe("when no database is selected", function() {
             it("disables the form", function() {
                 this.dialog.schemaPicker.getSelectedDatabase.andReturn(null);
