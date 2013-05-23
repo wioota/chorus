@@ -111,7 +111,7 @@ resource "Workfiles" do
     required_parameters :file_name, :workspace_id
 
     let(:description) { "Get off my lawn, you darn kids!" }
-    let(:file_name) { workfile.file_name }
+    let(:file_name) { "new_file.sql" }
 
     example_request "Create a new workfile in a workspace" do
       status.should == 201
