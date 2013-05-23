@@ -1,63 +1,29 @@
-chorus.dialogs.WorkFlowNew = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
-    templateName: "work_flow_new",
-    title: t("work_flows.new_dialog.title"),
-    persistent: true,
+//= require ./work_flow_new_base_dialog
 
+chorus.dialogs.WorkFlowNew = chorus.dialogs.WorkFlowNewBase.extend({
     subviews: {
         ".database_picker": "schemaPicker"
     },
 
-    additionalContext: function () {
-        return {
-            userWillPickSchema: true
-        };
-    },
+    userWillPickSchema: true,
 
-    setup: function() {
-        this.model = this.resource = new chorus.models.AlpineWorkfile({
-            workspace: {id: this.options.workspace.id }
-        });
-        this.disableFormUnlessValid({
-            formSelector: "form",
-            inputSelector: "input[name=fileName]",
-            checkInput: _.bind(this.checkInput, this)
-        });
-
+    setupSubviews: function(){
         this.schemaPicker = new chorus.views.SchemaPicker({
             showSchemaSection: false,
             defaultSchema: this.options.workspace.sandbox()
         });
         this.listenTo(this.schemaPicker, "change", this.toggleSubmitDisabled);
-        this.listenTo(this.resource, "saved", this.workfileSaved);
-        this.listenTo(this.resource, "saveFailed", this.saveFailed);
-    },
-
-    getFileName: function() {
-        return this.$("input[name=fileName]").val().trim();
     },
 
     checkInput: function() {
         return this.getFileName().trim().length > 0 && !!this.schemaPicker.ready();
     },
 
-    create: function(e) {
-        var fileName = this.getFileName();
-
-        this.resource.set({
-            fileName: fileName,
+    resourceAttributes: function () {
+        return {
+            fileName: this.getFileName(),
             databaseId: this.schemaPicker.getSelectedDatabase().id
-        });
-
-        this.$("button.submit").startLoading("actions.adding");
-        this.resource.save();
-    },
-
-    saveFailed: function() {
-        this.$("button.submit").stopLoading();
-    },
-
-    workfileSaved: function() {
-        this.closeModal();
-        chorus.router.navigate(this.resource.showUrl({workFlow: true}));
+        };
     }
+
 });
