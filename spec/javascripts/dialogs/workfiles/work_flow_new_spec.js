@@ -67,11 +67,16 @@ describe("chorus.dialogs.WorkFlowNew", function() {
         describe("when the save fails", function() {
             beforeEach(function() {
                 spyOn($.fn, 'stopLoading');
-                this.dialog.model.trigger("saveFailed");
+                this.dialog.$("form").submit();
+                this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity();
             });
 
             it("removes the spinner from the button", function() {
                 expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
+            });
+
+            it("does not erase the fileName input", function() {
+                expect(this.dialog.$("input[name='fileName']").val()).toBe("stuff");
             });
         });
 

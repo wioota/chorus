@@ -1,6 +1,7 @@
 chorus.dialogs.WorkFlowNew = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
     templateName: "work_flow_new",
     title: t("work_flows.new_dialog.title"),
+    persistent: true,
 
     subviews: {
         ".database_picker": "schemaPicker"
