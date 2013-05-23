@@ -30,7 +30,7 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.Base.include(chorus.Mixins.DialogFor
     },
 
     checkInput: function() {
-        return this.getFileName().trim().length > 0 && !!this.schemaPicker.getSelectedDatabase();
+        return this.getFileName().trim().length > 0 && !!this.schemaPicker.ready();
     },
 
     create: function(e) {

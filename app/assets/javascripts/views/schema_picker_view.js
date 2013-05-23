@@ -313,7 +313,7 @@
 
         ready: function() {
             var attrs = this.fieldValues();
-            return !!(attrs.dataSource && (attrs.database || attrs.databaseName) && (attrs.schema || attrs.schemaName));
+            return !!(attrs.dataSource && (attrs.database || attrs.databaseName) && (attrs.schema || attrs.schemaName || !this.options.showSchemaSection));
         },
 
         populateSelect: function(type, defaultValue) {

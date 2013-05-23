@@ -77,7 +77,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
 
         describe("when no database is selected", function() {
             it("disables the form", function() {
-                this.dialog.schemaPicker.getSelectedDatabase.andReturn(null);
+                spyOn(this.dialog.schemaPicker, "ready").andReturn(false);
                 this.dialog.schemaPicker.trigger('change');
 
                 expect(this.dialog.$("form button.submit")).toBeDisabled();

@@ -973,6 +973,51 @@ describe("chorus.views.SchemaPicker", function() {
                     });
                 });
             });
+
+            context("with showSchemaSection false", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.SchemaPicker({ allowCreate: true, showSchemaSection: false });
+                });
+
+                context('with only a data source', function() {
+                    beforeEach(function() {
+                        spyOn(this.view, "fieldValues").andReturn({
+                            dataSource: 5
+                        });
+                    });
+
+                    it("return false", function() {
+                        expect(this.view.ready()).toBeFalsy();
+                    });
+                });
+
+                context('with a data source and a blank databaseName', function() {
+                    beforeEach(function() {
+                        spyOn(this.view, "fieldValues").andReturn({
+                            dataSource: 5,
+                            databaseName: ""
+                        });
+                    });
+
+                    it("return false", function() {
+                        expect(this.view.ready()).toBeFalsy();
+                    });
+                });
+
+                context('with a data source, a database, and a blank schemaName', function() {
+                    beforeEach(function() {
+                        spyOn(this.view, "fieldValues").andReturn({
+                            dataSource: 5,
+                            database: 6,
+                            schemaName: ""
+                        });
+                    });
+
+                    it("return false", function() {
+                        expect(this.view.ready()).toBeTruthy();
+                    });
+                });
+            });
         });
 
     });
