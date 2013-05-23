@@ -31,4 +31,15 @@ describe("chorus.pages.WorkFlowShowPage", function() {
             expect(this.page.$("iframe").attr("src")).toBe("");
         });
     });
+
+    it("routes to the login page when recieving an 'unauthorized' message", function() {
+        runs(function(){
+            spyOn(chorus, 'requireLogin');
+            expect(chorus.requireLogin).not.toHaveBeenCalled();
+            window.postMessage('unauthorized', '*');
+        });
+        waitsFor(function() {
+            return chorus.requireLogin.callCount > 0; // times out if requireLogin never called
+        });
+    });
 });

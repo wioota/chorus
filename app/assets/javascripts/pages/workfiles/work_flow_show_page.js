@@ -10,11 +10,18 @@ chorus.pages.WorkFlowShowPage = chorus.pages.Base.extend({
 
     setup: function() {
         this.listenTo(this.model, "loaded", this.render);
+        window.addEventListener('message', _.bind(this.respondToIframe, this));
     },
 
     context: function() {
         return {
             alpineUrl: this.model.loaded ? this.model.iframeUrl() : ""
         };
+    },
+
+    respondToIframe: function(event) {
+        if(event.data === 'unauthorized') {
+            chorus.requireLogin();
+        }
     }
 });
