@@ -24,6 +24,23 @@ describe("chorus.pages.WorkFlowShowPage", function() {
         it("has an iframe to alpine", function() {
             expect(this.page.$("iframe").attr("src")).toBe(this.workfile.iframeUrl());
         });
+
+        context("when receiving a 'go_to_workfile' message", function() {
+            it("routes to the workflow show page", function() {
+                var routerSpy;
+                runs(function(){
+                    routerSpy = spyOn(chorus.router, 'navigate');
+                    expect(routerSpy).not.toHaveBeenCalled();
+                    window.postMessage({action: 'go_to_workfile'}, '*');
+                });
+                waitsFor(function() {
+                    return routerSpy.callCount > 0;
+                });
+                runs(function() {
+                    expect(routerSpy).toHaveBeenCalledWith(this.workfile.showUrl());
+                });
+            });
+        });
     });
 
     context("when the workfile is not loaded", function() {
@@ -32,11 +49,11 @@ describe("chorus.pages.WorkFlowShowPage", function() {
         });
     });
 
-    it("routes to the login page when recieving an 'unauthorized' message", function() {
+    it("routes to the login page when receiving an 'unauthorized' message", function() {
         runs(function(){
             spyOn(chorus, 'requireLogin');
             expect(chorus.requireLogin).not.toHaveBeenCalled();
-            window.postMessage('unauthorized', '*');
+            window.postMessage({action: 'unauthorized'}, '*');
         });
         waitsFor(function() {
             return chorus.requireLogin.callCount > 0; // times out if requireLogin never called
