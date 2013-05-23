@@ -166,8 +166,9 @@ chorus.models.Workspace = chorus.models.Base.extend({
     },
 
     currentUserCanCreateWorkFlows:function(){
-        return _(this.members().pluck('id')).include(chorus.session.user().id) &&
-            this.isActive();
+        var memberIds = this.members().pluck('id');
+        var currentUserId = chorus.session.user().id;
+        return _(memberIds).include(currentUserId) && this.isActive();
     },
 
     workspaceAdmin:function () {

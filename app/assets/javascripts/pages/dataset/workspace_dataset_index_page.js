@@ -73,7 +73,6 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.sidebar = new chorus.views.DatasetSidebar({ workspace: this.workspace, listMode: true });
 
         this.onceLoaded(this.workspace, this.workspaceLoaded);
-        this.onceLoaded(this.workspace.members(), this.setSidebarActions);
         this.breadcrumbs.requiredResources.add(this.workspace);
     },
 
@@ -125,7 +124,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             }
         }
         this.mainContent.contentDetails.render();
-
+        this.onceLoaded(this.workspace.members(), this.setSidebarActions);
     },
 
     checkAccount: function() {

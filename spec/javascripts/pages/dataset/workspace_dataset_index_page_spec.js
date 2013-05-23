@@ -486,6 +486,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
         context("after the workspace members have loaded", function () {
             beforeEach(function () {
                 spyOn(this.page.multiSelectSidebarMenu, 'setActions');
+                this.server.completeFetchFor(this.workspace);
             });
             it('resets the multi-selection sidebar actions', function(){
                 var members = this.page.workspace.members();
