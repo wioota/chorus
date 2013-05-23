@@ -1,7 +1,12 @@
-describe("chorus.dialogs.WorkFlowNew", function() {
+describe("chorus.dialogs.WorkFlowNewForDatasetList", function() {
     beforeEach(function() {
+        var dataset1 = rspecFixtures.dataset({id: 1});
+        var dataset2 = rspecFixtures.dataset({id: 2});
         this.workspace = rspecFixtures.workspace();
-        this.dialog = new chorus.dialogs.WorkFlowNew({workspace: this.workspace});
+        this.dialog = new chorus.dialogs.WorkFlowNewForDatasetList({
+            workspace: this.workspace,
+            collection: new chorus.collections.Base([dataset1, dataset2])
+        });
         this.dialog.render();
     });
 
@@ -13,30 +18,10 @@ describe("chorus.dialogs.WorkFlowNew", function() {
         expect(this.dialog.$("button.submit")).toContainTranslation("work_flows.new_dialog.add_work_flow");
     });
 
-    it("shows some instructional text", function () {
-       expect(this.dialog.$el).toContainTranslation("work_flows.new_dialog.info");
-    });
-
-    it("creates a schema picker with the schema section hidden", function(){
-       expect(this.dialog.schemaPicker.options.showSchemaSection).toBeFalsy();
-    });
-
-    context("when the workspace has a sandbox", function() {
-        it("sets the default data source and database", function() {
-            var database = this.dialog.options.workspace.sandbox().database();
-            expect(database).toBeTruthy();
-            expect(this.dialog.schemaPicker.selection.database).toEqual(database);
-        });
-    });
-
     describe("submitting", function() {
         beforeEach(function() {
             // start with a valid form submission
             this.dialog.$("input[name='fileName']").val("stuff").keyup();
-
-            this.fakeDatabase = rspecFixtures.database();
-            spyOn(this.dialog.schemaPicker, "getSelectedDatabase").andReturn(this.fakeDatabase);
-            this.dialog.schemaPicker.trigger('change');
         });
 
         describe("with valid form values", function() {
@@ -47,7 +32,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
             it("submits the form", function() {
                 this.dialog.$("form").submit();
                 expect(this.server.lastCreate().params()["workfile[entity_subtype]"]).toEqual('alpine');
-                expect(this.server.lastCreate().params()["workfile[database_id]"]).toEqual(this.fakeDatabase.id);
+                expect(this.server.lastCreate().params()["workfile[dataset_ids][]"]).toEqual(['1', '2']);
             });
         });
 
@@ -60,36 +45,22 @@ describe("chorus.dialogs.WorkFlowNew", function() {
             });
 
             it("closes the dialog", function() {
-               expect(this.dialog.closeModal).toHaveBeenCalled();
+                expect(this.dialog.closeModal).toHaveBeenCalled();
             });
 
             it("navigates to the workflow page", function() {
-               expect(chorus.router.navigate).toHaveBeenCalledWith("#/work_flows/42");
+                expect(chorus.router.navigate).toHaveBeenCalledWith("#/work_flows/42");
             });
         });
 
         describe("when the save fails", function() {
             beforeEach(function() {
                 spyOn($.fn, 'stopLoading');
-                this.dialog.$("form").submit();
-                this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity();
+                this.dialog.model.trigger("saveFailed");
             });
 
             it("removes the spinner from the button", function() {
                 expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
-            });
-
-            it("does not erase the fileName input", function() {
-                expect(this.dialog.$("input[name='fileName']").val()).toBe("stuff");
-            });
-        });
-
-        describe("when no database is selected", function() {
-            it("disables the form", function() {
-                spyOn(this.dialog.schemaPicker, "ready").andReturn(false);
-                this.dialog.schemaPicker.trigger('change');
-
-                expect(this.dialog.$("form button.submit")).toBeDisabled();
             });
         });
 

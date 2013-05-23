@@ -235,6 +235,17 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                             expect(this.page.$(".multiple_selection a.new_work_flow")).toContainTranslation("sidebar.new_work_flow");
                         });
 
+                        describe("clicking the 'new work flow' action", function() {
+                            beforeEach(function() {
+                                this.page.$(".multiple_selection a.new_work_flow").click();
+                            });
+
+                            it("launches the dialog for creating a new work flow", function() {
+                                expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkFlowNewForDatasetList);
+                                expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
+                            });
+                        });
+
                         context("when the current user can not create work flows", function () {
                             beforeEach(function () {
                                 chorus.models.Workspace.prototype.currentUserCanCreateWorkFlows.andReturn(false);

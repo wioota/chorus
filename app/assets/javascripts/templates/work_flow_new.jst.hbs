@@ -1,15 +1,17 @@
 <form>
     <input type="text" name="fileName" placeholder="Name" tabindex="1" maxlength="60"></input>
 
-    <div class="ptm line">
-        <div class="col cols-3">
-            <img class="info" src="/images/icon_info_mediumgrey.png"/>
+    {{#if userWillPickSchema}}
+        <div class="ptm line info_block">
+            <div class="col cols-3">
+                <img src="/images/icon_info_mediumgrey.png"/>
+            </div>
+            <div class="col col-last">
+                <span>{{t "work_flows.new_dialog.info"}}</span>
+            </div>
         </div>
-        <div class="col col-last">
-            <span>{{t "work_flows.new_dialog.info"}}</span>
-        </div>
-    </div>
-    <hr />
-    <div class="database_picker"></div>
+        <hr />
+        <div class="database_picker"></div>
+    {{/if}}
     {{formControlsWithDisabledSubmit "work_flows.new_dialog.add_work_flow"}}
 </form>

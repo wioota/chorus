@@ -151,15 +151,22 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         return actions;
     },
 
+    sidebarMultiselectActionEvents: function () {
+        return {
+            'click .edit_tags': _.bind(function () {
+                new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+            }, this),
+            'click .new_work_flow': _.bind(function () {
+                new chorus.dialogs.WorkFlowNewForDatasetList({workspace: this.workspace, collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+            }, this)
+        };
+    },
+
     buildSidebar: function () {
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "dataset:checked",
             actions: this.sidebarMultiselectActions(),
-            actionEvents: {
-                'click .edit_tags': _.bind(function () {
-                    new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
-                }, this)
-            }
+            actionEvents: this.sidebarMultiselectActionEvents()
         });
     },
 
