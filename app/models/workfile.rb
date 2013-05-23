@@ -84,7 +84,7 @@ class Workfile < ActiveRecord::Base
 
   def self.order_by(column_name)
     if column_name.blank? || column_name == "file_name"
-      order("lower(file_name)")
+      order("lower(file_name), id")
     else
       order("updated_at")
     end

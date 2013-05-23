@@ -78,7 +78,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def self.list_order
-    order("lower(replace(datasets.name,'_',''))")
+    order("lower(replace(datasets.name,'_','')), id")
   end
 
   def self.tables
