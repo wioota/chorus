@@ -165,6 +165,11 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return this._hasPermission(['admin', 'update']);
     },
 
+    currentUserCanCreateWorkFlows:function(){
+        return _(this.members().pluck('id')).include(chorus.session.user().id) &&
+            this.isActive();
+    },
+
     workspaceAdmin:function () {
         return this._hasPermission(['admin']);
     },

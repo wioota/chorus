@@ -472,4 +472,28 @@ describe("chorus.models.Workspace", function() {
             expect(this.model.maxImageSize()).toBe(3);
         });
     });
+
+    describe("#currentUserCanCreateWorkFlows", function () {
+        context("when the workspace is active and the current user is a member", function () {
+            it("returns true", function(){
+                this.model.members().add(new chorus.models.User(chorus.session.user().attributes));
+                expect(this.model.currentUserCanCreateWorkFlows()).toBeTruthy();
+            });
+        });
+
+        context("when the workspace is archived", function () {
+            it("returns false", function () {
+                this.model.set("archivedAt", true);
+                expect(this.model.currentUserCanCreateWorkFlows()).toBeFalsy();
+            });
+        });
+
+        context("when the current user is not a member", function () {
+
+            it("returns false", function () {
+                this.model.members().reset();
+                expect(this.model.currentUserCanCreateWorkFlows()).toBeFalsy();
+            });
+        });
+    });
 });

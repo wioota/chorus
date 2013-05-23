@@ -21,6 +21,10 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             expect(this.workspace).toHaveBeenFetched();
         });
 
+        it("fetches the workspace members", function () {
+           expect(this.workspace.members()).toHaveBeenFetched();
+        });
+
         it("sets the workspace id, for prioritizing search", function() {
             expect(this.page.header.workspaceId).toBe(9999);
         });
@@ -216,7 +220,36 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                     });
 
                     it("has an action to edit tags", function() {
-                        expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
+                        expect(this.page.$(".multiple_selection a.edit_tags")).toContainTranslation("sidebar.edit_tags");
+                    });
+
+                    context("when work flow is configured", function () {
+                        beforeEach(function () {
+                            chorus.models.Config.instance().set("workFlowConfigured", true);
+                            spyOn(chorus.models.Workspace.prototype, 'currentUserCanCreateWorkFlows').andReturn(true);
+                            this.page = new chorus.pages.WorkspaceDatasetIndexPage(this.workspace.get("id"));
+                            this.page.render();
+                        });
+
+                        it("has an action to create a new workFlow", function () {
+                            expect(this.page.$(".multiple_selection a.new_work_flow")).toContainTranslation("sidebar.new_work_flow");
+                        });
+
+                        context("when the current user can not create work flows", function () {
+                            beforeEach(function () {
+                                chorus.models.Workspace.prototype.currentUserCanCreateWorkFlows.andReturn(false);
+                                this.page = new chorus.pages.WorkspaceDatasetIndexPage(this.workspace.get("id"));
+                                this.page.render();
+                            });
+
+                            it("does not have an action to create a new workFlow", function () {
+                                expect(this.page.$(".multiple_selection a.new_work_flow")).not.toExist();
+                            });
+                        });
+                    });
+
+                    it("does not have an action to create a new workFlow", function () {
+                        expect(this.page.$(".multiple_selection a.new_work_flow")).not.toExist();
                     });
 
                     describe("clicking the 'edit_tags' link", function() {
@@ -447,6 +480,19 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
             it("has no buttons", function() {
                 expect(this.page.$("button")).not.toExist();
+            });
+        });
+
+        context("after the workspace members have loaded", function () {
+            beforeEach(function () {
+                spyOn(this.page.multiSelectSidebarMenu, 'setActions');
+            });
+            it('resets the multi-selection sidebar actions', function(){
+                var members = this.page.workspace.members();
+                this.server.completeFetchFor(members, {});
+                expect(this.page.multiSelectSidebarMenu.setActions).toHaveBeenCalledWith([
+                    '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
+                ]);
             });
         });
     });
