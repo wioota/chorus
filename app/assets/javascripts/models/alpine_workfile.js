@@ -26,7 +26,8 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.extend({
             file_name: this.get("fileName"),
             workfile_id: this.id,
             session_id: chorus.session.get("sessionId"),
-            method: "chorusEntry"
+            method: "chorusEntry",
+            "dataset_id[]": this.get("datasetIds")
         });
 
         return uri.toString();

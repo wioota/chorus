@@ -5,8 +5,10 @@ describe("chorus.models.AlpineWorkfile", function() {
             databaseId: "3",
             fileName: "hello.afm",
             id: "23",
-            workspace: {id: "32"}
+            workspace: {id: "32"},
+            datasetIds: ["3", "4", "5"]
         });
+
         chorus.models.Config.instance().set({
             workFlowConfigured: true,
             workFlowUrl: "test.com"
@@ -48,7 +50,8 @@ describe("chorus.models.AlpineWorkfile", function() {
             file_name: "hello.afm",
             workfile_id: "23",
             session_id: "hex",
-            method: "chorusEntry"
+            method: "chorusEntry",
+            "dataset_id[]": ["3", "4", "5" ]
         });
     });
 
