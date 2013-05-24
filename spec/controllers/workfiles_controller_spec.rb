@@ -222,23 +222,48 @@ describe WorkfilesController do
     end
 
     context 'when entity_subtype is alpine' do
-      let(:params) do
-        {
-            :entity_subtype => 'alpine',
-            :workspace_id => workspace.to_param,
-            :file_name => 'something',
-            :database_id => '42'
-        }
+      context "and a database has been chosen" do
+        let(:params) do
+          {
+              :entity_subtype => 'alpine',
+              :workspace_id => workspace.to_param,
+              :file_name => 'something',
+              :database_id => '42'
+          }
+        end
+
+        it 'creates an AlpineWorkfile' do
+          mock_present do |model|
+            model.should be_a AlpineWorkfile
+            model.file_name.should == 'something'
+            model.additional_data['database_id'].should == '42'
+            model.workspace.should == workspace
+          end
+          post :create, params
+        end
       end
 
-      it 'creates an AlpineWorkfile' do
-        mock_present do |model|
-          model.should be_a AlpineWorkfile
-          model.file_name.should == 'something'
-          model.additional_data['database_id'].should == '42'
-          model.workspace.should == workspace
+      context "and a list of datasets have been chosen" do
+        let(:dataset_ids) { [datasets(:table).id, datasets(:other_table).id].map(&:to_s) }
+        let(:params) do
+          {
+              :entity_subtype => 'alpine',
+              :workspace_id => workspace.to_param,
+              :file_name => 'something',
+              :dataset_ids => dataset_ids
+          }
         end
-        post :create, params
+
+        it 'creates an AlpineWorkfile' do
+          mock_present do |model|
+            model.should be_a AlpineWorkfile
+            model.file_name.should == 'something'
+            model.additional_data['database_id'].should == datasets(:table).database.id
+            model.additional_data['dataset_ids'].should =~ dataset_ids
+            model.workspace.should == workspace
+          end
+          post :create, params
+        end
       end
     end
   end
