@@ -474,10 +474,25 @@ describe("chorus.models.Workspace", function() {
     });
 
     describe("#currentUserCanCreateWorkFlows", function () {
-        context("when the workspace is active and the current user is a member", function () {
-            it("returns true", function(){
-                this.model.members().add(new chorus.models.User(chorus.session.user().attributes));
-                expect(this.model.currentUserCanCreateWorkFlows()).toBeTruthy();
+        context("when the workspace is active", function () {
+            context("the current user is a member", function () {
+                beforeEach(function () {
+                    this.model.members().add(new chorus.models.User(chorus.session.user().attributes));
+                });
+
+                it("returns true", function(){
+                    expect(this.model.currentUserCanCreateWorkFlows()).toBeTruthy();
+                });
+            });
+
+            context("the workspace is public", function () {
+                beforeEach(function () {
+                    spyOn(this.model, "isPublic").andReturn(true);
+                });
+
+                it("returns true", function () {
+                    expect(this.model.currentUserCanCreateWorkFlows()).toBeTruthy();
+                });
             });
         });
 
@@ -489,9 +504,9 @@ describe("chorus.models.Workspace", function() {
         });
 
         context("when the current user is not a member", function () {
-
             it("returns false", function () {
                 this.model.members().reset();
+                spyOn(this.model, "isPublic").andReturn(false);
                 expect(this.model.currentUserCanCreateWorkFlows()).toBeFalsy();
             });
         });
