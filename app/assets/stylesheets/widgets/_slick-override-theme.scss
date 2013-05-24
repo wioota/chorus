@@ -29,7 +29,6 @@
   @include triangle(up, $dark-gray, 10px, 5px);
 }
 
-
 .slick-header-column-sorted {
   font-style: italic;
 }
@@ -43,7 +42,8 @@
   top: 6px;
   position: absolute;
 }
-
-.slick-column-name {
-  padding-right: 11px;
+.slick-header-sortable {
+  .slick-column-name {
+    padding-right: 15px;
+  }
 }
