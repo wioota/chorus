@@ -29,8 +29,17 @@ describe AlpineWorkfile do
         before { stub(ActiveModel::Validations::HelperMethods).validates_presence_of }
         let(:datasetB) { FactoryGirl.create(:gpdb_table) }
 
-        it "raises TooManyDataBases error" do
+        it "assigns too_many_databases error" do
           AlpineWorkfile.create(params).errors_on(:datasets).should include(:too_many_databases)
+        end
+      end
+
+      context "and at least one of the datasets is a chorus view" do
+        before { stub(ActiveModel::Validations::HelperMethods).validates_presence_of }
+        let(:datasetB) { datasets(:chorus_view) }
+
+        it "assigns too_many_databases error" do
+          AlpineWorkfile.create(params).errors_on(:datasets).should include(:chorus_view_selected)
         end
       end
     end
