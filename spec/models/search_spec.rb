@@ -2,6 +2,14 @@ require "spec_helper"
 
 describe Search do
   let(:user) { users(:owner) }
+  let(:add_stemmed_fields) do
+    lambda do |params|
+      return unless params[:qf]
+      fields = params[:qf].split
+      new_fields = fields.map {|field| field.sub /_texts$/, "_stemmed_texts" }
+      params[:qf] = (fields + new_fields).join(" ")
+    end
+  end
 
   describe ".new" do
     it "takes current user and search params" do
@@ -42,7 +50,10 @@ describe Search do
       Sunspot.session.should be_a_search_for(Attachment)
       Sunspot.session.should be_a_search_for(Events::Note)
       Sunspot.session.should be_a_search_for(Comment)
-      Sunspot.session.should have_search_params(:fulltext, 'bob')
+      Sunspot.session.should have_search_params(:fulltext) {
+        fulltext "bob"
+        adjust_solr_params &add_stemmed_fields
+      }
       Sunspot.session.should have_search_params(:facet, :type_name)
       Sunspot.session.should have_search_params(:group) {
         group :grouping_id do
@@ -85,7 +96,10 @@ describe Search do
           (search.models_to_search - models).each do |other_model|
             sunspot_search.should_not be_a_search_for(other_model)
           end
-          sunspot_search.should have_search_params(:fulltext, 'bob')
+          sunspot_search.should have_search_params(:fulltext) {
+            fulltext "bob"
+            adjust_solr_params &add_stemmed_fields
+          }
           sunspot_search.should have_search_params(:paginate, :page => 1, :per_page => 3)
           sunspot_search.should_not have_search_params(:facet, :type_name)
         end
@@ -122,7 +136,10 @@ describe Search do
         search.search
         Sunspot.session.should be_a_search_for(User)
         Sunspot.session.should_not be_a_search_for(GpdbDataSource)
-        Sunspot.session.should have_search_params(:fulltext, 'bob')
+        Sunspot.session.should have_search_params(:fulltext) {
+          fulltext "bob"
+          adjust_solr_params &add_stemmed_fields
+        }
         Sunspot.session.should_not have_search_params(:facet, :type_name)
       end
     end
@@ -146,7 +163,10 @@ describe Search do
         session = Sunspot.session
         session.should be_a_search_for(User)
         session.should_not be_a_search_for(GpdbDataSource)
-        session.should have_search_params(:fulltext, 'bob')
+        session.should have_search_params(:fulltext) {
+          fulltext "bob"
+          adjust_solr_params &add_stemmed_fields
+        }
         session.should_not have_search_params(:facet, :type_name)
       end
     end
@@ -176,7 +196,10 @@ describe Search do
       end
 
       it "searches for the same query" do
-        Sunspot.session.searches.last.should have_search_params(:fulltext, 'bob')
+        Sunspot.session.searches.last.should have_search_params(:fulltext) {
+          fulltext "bob"
+          adjust_solr_params &add_stemmed_fields
+        }
       end
 
       it "does not perform the workspace search more than once" do
@@ -209,7 +232,10 @@ describe Search do
       it "filters by tag_id" do
         search.models
         Sunspot.session.should have_search_params(:with, :tag_ids, tag.id)
-        Sunspot.session.should_not have_search_params(:fulltext, tag.name)
+        Sunspot.session.should_not have_search_params(:fulltext) {
+          fulltext tag.name
+          adjust_solr_params &add_stemmed_fields
+        }
       end
 
       it "orders by sort_name" do
@@ -226,7 +252,10 @@ describe Search do
           last_search = Sunspot.session.searches.last
           last_search.should have_search_params(:with, :workspace_id, 7)
           last_search.should have_search_params(:with, :tag_ids, tag.id)
-          last_search.should_not have_search_params(:fulltext, tag.name)
+          last_search.should_not have_search_params(:fulltext) {
+            fulltext tag.name
+            adjust_solr_params &add_stemmed_fields
+          }
         end
       end
 
