@@ -1,5 +1,13 @@
 chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
     helpId: "workfiles",
+    linkMenuOptions: [
+        {data: "", text: t("workfiles.header.menu.filter.all")},
+        {data: "SQL", text: t("workfiles.header.menu.filter.sql")},
+        {data: "CODE", text: t("workfiles.header.menu.filter.code")},
+        {data: "TEXT", text: t("workfiles.header.menu.filter.text")},
+        {data: "IMAGE", text: t("workfiles.header.menu.filter.image")},
+        {data: "OTHER", text: t("workfiles.header.menu.filter.other")}
+    ],
 
     setup: function(workspaceId) {
         this.collection = new chorus.collections.WorkfileSet([], {workspaceId: workspaceId});
@@ -22,14 +30,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
             linkMenus: {
                 type: {
                     title: t("header.menu.filter.title"),
-                    options: [
-                        {data: "", text: t("workfiles.header.menu.filter.all")},
-                        {data: "SQL", text: t("workfiles.header.menu.filter.sql")},
-                        {data: "CODE", text: t("workfiles.header.menu.filter.code")},
-                        {data: "TEXT", text: t("workfiles.header.menu.filter.text")},
-                        {data: "IMAGE", text: t("workfiles.header.menu.filter.image")},
-                        {data: "OTHER", text: t("workfiles.header.menu.filter.other")}
-                    ],
+                    options: this.linkMenuOptions,
                     event: "filter"
                 },
                 sort: {
