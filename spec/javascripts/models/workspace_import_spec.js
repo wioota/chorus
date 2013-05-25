@@ -117,9 +117,18 @@ describe("chorus.models.WorkspaceImport", function() {
 
     describe("#source", function() {
         it("sets the model correctly", function() {
-            this.model.set({workspaceId: 123, sourceDatasetId: 567, sourceDatasetName: 'source'});
+            this.model.set({workspaceId: 123, sourceDataset: {id: 567, objectName: 'source'}});
             expect(this.model.source().url()).toContain("/workspaces/123/datasets/567");
             expect(this.model.source().name()).toBe('source');
+        });
+    });
+    
+    describe("#destination", function() {
+        it("returns the workspace dataset", function() {
+            expect(this.model.destination()).toBeA(chorus.models.WorkspaceDataset);
+            expect(this.model.destination().get('id')).toEqual(this.model.get('destinationDataset').id);
+            expect(this.model.destination().get('objectName')).toEqual(this.model.get('destinationDataset').objectName);
+            expect(this.model.destination().get('workspace').id).toEqual(this.model.get('workspaceId'));
         });
     });
 });

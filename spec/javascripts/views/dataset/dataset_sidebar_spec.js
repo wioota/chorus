@@ -463,10 +463,8 @@ describe("chorus.views.DatasetSidebar", function() {
                             completedStamp: "2012-02-29T14:23:59Z",
                             success: true,
                             toTable: this.dataset.name(),
-                            destinationDatasetId: this.dataset.id,
-                            sourceDatasetName: "sourcey",
-                            sourceDatasetId: this.dataset.id + 1
-
+                            destinationDataset: {id: this.dataset.id},
+                            sourceDataset: { id: this.dataset.id + 1, objectName: "sourcey"}
                         });
                         this.server.completeFetchFor(this.view.imports, [this.lastImport]);
                     });
@@ -676,8 +674,8 @@ describe("chorus.views.DatasetSidebar", function() {
                             completedStamp: "2012-02-29T14:23:59Z",
                             success: true,
                             toTable: 'our_destination',
-                            destinationDatasetId: 12345,
-                            sourceDatasetId: this.dataset.id
+                            destinationDataset: {id: 12345, objectName: 'our_destination'},
+                            sourceDataset: {id: this.dataset.id}
                         });
                         this.server.completeFetchFor(this.view.imports, [this.lastImport]);
                         this.server.completeFetchFor(this.view.importSchedules, []);
