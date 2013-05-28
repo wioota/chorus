@@ -34,7 +34,7 @@ describe AlpineWorkfile do
     context "when passed datasets" do
       let(:datasetA) { datasets(:table) }
       let(:datasetB) { datasets(:other_table) }
-      let(:params) { {dataset_ids: [datasetA.id, datasetB.id]} }
+      let(:params) { {dataset_ids: [datasetA.id, datasetB.id], workspace: workspace} }
 
       it 'assigns the database ID' do
         AlpineWorkfile.create(params).database_id.should == datasetA.database.id

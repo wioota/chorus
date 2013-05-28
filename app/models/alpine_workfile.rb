@@ -17,7 +17,7 @@ class AlpineWorkfile < Workfile
     end
 
     def ensure_active_workspace(record)
-      record.errors[:workspace] << :ARCHIVED if record.workspace.archived?
+      record.errors[:workspace] << :ARCHIVED if record.workspace && record.workspace.archived?
     end
   end
 
