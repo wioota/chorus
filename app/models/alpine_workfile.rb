@@ -4,6 +4,7 @@ class AlpineWorkfile < Workfile
     def validate(record)
       ensure_single_database(record)
       ensure_no_chorus_views(record)
+      ensure_active_workspace(record)
     end
 
     def ensure_single_database(record)
@@ -13,6 +14,10 @@ class AlpineWorkfile < Workfile
 
     def ensure_no_chorus_views(record)
       record.errors[:datasets] << :chorus_view_selected if record.datasets.map(&:type).include?("ChorusView")
+    end
+
+    def ensure_active_workspace(record)
+      record.errors[:workspace] << :ARCHIVED if record.workspace.archived?
     end
   end
 

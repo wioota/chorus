@@ -1,9 +1,6 @@
 require "spec_helper"
 
 describe AlpineWorkfile do
-  describe "validations" do
-    it { should validate_presence_of :database_id }
-  end
   let(:workspace) { workspaces(:public) }
   let(:user) { workspace.owner }
   let(:params) do
@@ -12,13 +9,26 @@ describe AlpineWorkfile do
   end
   let(:model) { Workfile.build_for(params).tap { |file| file.save } }
 
-  it "should have a content_type of work_flow" do
+  describe "validations" do
+    it { should validate_presence_of :database_id }
+
+    context "with an archived workspace" do
+      let(:workspace) { workspaces(:archived) }
+
+      it "is invalid" do
+        model.errors_on(:workspace).should include(:ARCHIVED)
+      end
+    end
+  end
+
+  it "has a content_type of work_flow" do
     model.content_type.should == 'work_flow'
   end
 
-  it "should have an entity_subtype of 'alpine'" do
+  it "has an entity_subtype of 'alpine'" do
     model.entity_subtype.should == 'alpine'
   end
+
 
   describe "new" do
     context "when passed datasets" do
