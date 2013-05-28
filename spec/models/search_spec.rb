@@ -675,7 +675,7 @@ describe Search do
 
     describe "per_type=" do
       it "limits the search to not return more than some number of models" do
-        create_and_record_search(owner, :query => 'alphasearch', :per_type => 1) do |search|
+        create_and_record_search(owner, :query => 'alpha search', :per_type => 1) do |search|
           search.users.length.should == 1
           search.num_found[:users].should > 1
         end

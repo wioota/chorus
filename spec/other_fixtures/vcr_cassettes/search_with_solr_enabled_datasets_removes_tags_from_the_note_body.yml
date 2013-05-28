@@ -32,9 +32,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
     http_version: '1.1'
-  recorded_at: Fri, 24 May 2013 21:55:01 GMT
+  recorded_at: Tue, 28 May 2013 17:10:00 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -57,9 +57,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>70}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>15}}"
     http_version: '1.1'
-  recorded_at: Fri, 24 May 2013 21:55:01 GMT
+  recorded_at: Tue, 28 May 2013 17:10:00 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -82,7 +82,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>21,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>30,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
         \ last_name_texts username_texts email_texts tag_names_texts name_texts description_texts\
         \ summary_texts file_name_texts version_comments_texts database_name_texts\
         \ table_description_texts schema_name_texts column_name_texts column_description_texts\
@@ -107,13 +107,13 @@ http_interactions:
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workspace)\
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
         \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>1,'ngroups'=>1,'groups'=>[{'groupValue'=>'GpdbTable\
-        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>11.79913,'docs'=>[{'id'=>'Events::NoteOnDataset\
+        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>11.812593,'docs'=>[{'id'=>'Events::NoteOnDataset\
         \ 1000053','body_stemmed_texts'=>['sometext searchwithhtml ftw'],'body_texts'=>['sometext\
-        \ searchwithhtml ftw'],'score'=>11.79913}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Dataset',1]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'Events::NoteOnDataset\
+        \ searchwithhtml ftw'],'score'=>11.812593}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Dataset',1]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'Events::NoteOnDataset\
         \ 1000053'=>{'body_stemmed_texts'=>['sometext @@@hl@@@searchwithhtml@@@endhl@@@\
         \ ftw'],'body_texts'=>['sometext @@@hl@@@searchwithhtml@@@endhl@@@ ftw']}}}"
     http_version: '1.1'
-  recorded_at: Fri, 24 May 2013 21:55:01 GMT
+  recorded_at: Tue, 28 May 2013 17:10:00 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -364,9 +364,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>17}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>18}}"
     http_version: '1.1'
-  recorded_at: Fri, 24 May 2013 21:55:01 GMT
+  recorded_at: Tue, 28 May 2013 17:10:00 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -389,9 +389,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>9}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>19}}"
     http_version: '1.1'
-  recorded_at: Fri, 24 May 2013 21:55:01 GMT
+  recorded_at: Tue, 28 May 2013 17:10:00 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -414,7 +414,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>1}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
     http_version: '1.1'
-  recorded_at: Fri, 24 May 2013 21:55:01 GMT
+  recorded_at: Tue, 28 May 2013 17:10:00 GMT
 recorded_with: VCR 2.3.0
