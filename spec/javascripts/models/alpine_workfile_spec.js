@@ -68,11 +68,12 @@ describe("chorus.models.AlpineWorkfile", function() {
 
     describe("canOpen", function () {
         beforeEach(function () {
-            spyOn(this.model.workspace(), 'currentUserCanCreateWorkFlows');
+            spyOn(this.model.workspace(), 'currentUserCanOpenWorkFlows');
         });
+
         it("delegates access conditions to the workspace", function () {
             this.model.canOpen();
-            expect(this.model.workspace().currentUserCanCreateWorkFlows).toHaveBeenCalled();
+            expect(this.model.workspace().currentUserCanOpenWorkFlows).toHaveBeenCalled();
         });
     });
 

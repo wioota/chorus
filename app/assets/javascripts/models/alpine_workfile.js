@@ -56,7 +56,7 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.extend({
     },
 
     canOpen: function canOpen() {
-        return this.workspace().currentUserCanCreateWorkFlows();
+        return this.workspace().currentUserCanOpenWorkFlows();
     },
 
     workFlowShowUrl: function() {
