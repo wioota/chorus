@@ -4,11 +4,20 @@ describe AlpineWorkfile do
   describe "validations" do
     it { should validate_presence_of :database_id }
   end
+  let(:workspace) { workspaces(:public) }
+  let(:user) { workspace.owner }
+  let(:params) do
+    {:workspace => workspace, :entity_subtype => "alpine",
+     :file_name => "sfgj", :dataset_ids => [datasets(:table).id], :owner => user}
+  end
+  let(:model) { Workfile.build_for(params).tap { |file| file.save } }
 
-  describe "entity_subtype" do
-    it "should return 'alpine'" do
-      AlpineWorkfile.new.entity_subtype.should == 'alpine'
-    end
+  it "should have a content_type of work_flow" do
+    model.content_type.should == 'work_flow'
+  end
+
+  it "should have an entity_subtype of 'alpine'" do
+    model.entity_subtype.should == 'alpine'
   end
 
   describe "new" do

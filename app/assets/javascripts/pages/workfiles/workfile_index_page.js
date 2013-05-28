@@ -1,13 +1,6 @@
 chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
+    constructorName: 'WorkfileIndexPage',
     helpId: "workfiles",
-    linkMenuOptions: [
-        {data: "", text: t("workfiles.header.menu.filter.all")},
-        {data: "SQL", text: t("workfiles.header.menu.filter.sql")},
-        {data: "CODE", text: t("workfiles.header.menu.filter.code")},
-        {data: "TEXT", text: t("workfiles.header.menu.filter.text")},
-        {data: "IMAGE", text: t("workfiles.header.menu.filter.image")},
-        {data: "OTHER", text: t("workfiles.header.menu.filter.other")}
-    ],
 
     setup: function(workspaceId) {
         this.collection = new chorus.collections.WorkfileSet([], {workspaceId: workspaceId});
@@ -30,7 +23,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
             linkMenus: {
                 type: {
                     title: t("header.menu.filter.title"),
-                    options: this.linkMenuOptions,
+                    options: this.linkMenuOptions(),
                     event: "filter"
                 },
                 sort: {
@@ -80,6 +73,15 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         this.loadWorkspace(workspaceId);
     },
 
+    setModel: function(workfile) {
+        this.model = workfile;
+        if(this.sidebar) {
+            this.sidebar.teardown(true);
+        }
+        this.sidebar = chorus.views.WorkfileSidebar.buildFor({model: this.model});
+        this.renderSubview('sidebar');
+    },
+
     crumbs: function() {
         return [
             {label: t("breadcrumbs.home"), url: "#/"},
@@ -89,12 +91,21 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         ];
     },
 
-    setModel: function(workfile) {
-        this.model = workfile;
-        if(this.sidebar) {
-            this.sidebar.teardown(true);
+    linkMenuOptions: function () {
+        var items = [
+            {data: "", text: t("workfiles.header.menu.filter.all")},
+            {data: "SQL", text: t("workfiles.header.menu.filter.sql")},
+            {data: "CODE", text: t("workfiles.header.menu.filter.code")},
+            {data: "TEXT", text: t("workfiles.header.menu.filter.text")},
+            {data: "IMAGE", text: t("workfiles.header.menu.filter.image")},
+            {data: "OTHER", text: t("workfiles.header.menu.filter.other")}
+        ];
+
+        if (chorus.models.Config.instance().get("workFlowConfigured")) {
+            var workFlowsOption = {data: "WORK_FLOW", text: t("workfiles.header.menu.filter.work_flow")};
+            items.splice(2, 0, workFlowsOption);
         }
-        this.sidebar = chorus.views.WorkfileSidebar.buildFor({model: this.model});
-        this.renderSubview('sidebar');
+
+        return items;
     }
 });

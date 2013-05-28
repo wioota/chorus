@@ -17,6 +17,8 @@ class AlpineWorkfile < Workfile
   end
 
   has_additional_data :database_id, :dataset_ids
+
+  before_validation { self.content_type ='work_flow' }
   before_validation { self.database_id = datasets.first.database.id unless datasets.empty? }
   validates_presence_of :database_id
   validates_with AlpineWorkfileValidator

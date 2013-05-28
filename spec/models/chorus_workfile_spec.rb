@@ -97,6 +97,7 @@ describe ChorusWorkfile do
 
       it 'sets the content of the workfile' do
         workfile.versions.first.contents.size.should > 0
+        workfile.content_type.should == 'sql'
       end
 
       it 'sets the right description on the workfile' do
@@ -161,6 +162,7 @@ describe ChorusWorkfile do
     it 'creates a workfile in the database' do
       workfile.should be_valid
       workfile.should be_persisted
+      workfile.content_type.should == 'image'
     end
 
     it 'creates a workfile version in the database' do

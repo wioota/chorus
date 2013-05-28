@@ -215,6 +215,22 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
             });
 
+            context("when workflows are enabled", function () {
+                beforeEach(function () {
+                    chorus.models.Config.instance().set("workFlowConfigured", true);
+                    this.page = new chorus.pages.WorkfileIndexPage(this.workspace.id);
+                    this.server.completeFetchFor(this.workspace);
+                    this.server.completeFetchFor(this.page.collection);
+                    spyOn(this.page.collection, "fetchAll");
+                });
+
+                it("can filter the list by 'WORK_FLOW'", function() {
+                    this.page.$("li[data-type=WORK_FLOW] a").click();
+                    expect(this.page.collection.attributes.fileType).toBe("WORK_FLOW");
+                    expect(this.page.collection.fetchAll).toHaveBeenCalled();
+                });
+            });
+
             it("can filter the list by 'CODE'", function() {
                 this.page.$("li[data-type=CODE] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("CODE");

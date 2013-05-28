@@ -75,7 +75,7 @@ class Workfile < ActiveRecord::Base
 
   def self.build_for(params)
     klass = @@entity_subtypes[params[:entity_subtype]].constantize
-    workfile = klass.new(params, :as => :create)
+    klass.new(params, :as => :create)
   end
 
   def self.with_file_type(file_type)
@@ -89,7 +89,6 @@ class Workfile < ActiveRecord::Base
       order("updated_at")
     end
   end
-
 
   def self.type_name
     'Workfile'
