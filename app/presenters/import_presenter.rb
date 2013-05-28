@@ -1,7 +1,6 @@
 class ImportPresenter < Presenter
 
   def to_hash
-    pa model.source.inspect
     {
         :id => model.id,
         :to_table => model.to_table,
