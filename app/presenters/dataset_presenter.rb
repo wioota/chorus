@@ -8,22 +8,21 @@ class DatasetPresenter < Presenter
     {
         :id => model.id,
         :object_name => model.name,
-        :schema => schema_hash
-    }
+        :schema => schema_hash,
+        :entity_type => model.entity_type_name,
+        :entity_subtype => thetype
+    }.merge(associated_workspaces_hash)
   end
 
   def complete_hash
     recent_comments = Array.wrap(recent_comment)
     {
-        :entity_type => model.entity_type_name,
-        :entity_subtype => thetype,
         :recent_comments => present(recent_comments, :as_comment => true),
         :comment_count => recent_comments.empty? ? 0 : model.comments.count + model.notes.count,
         :is_deleted => model.deleted?
     }.merge(succinct_hash).
         merge(workspace_hash).
         merge(credentials_hash).
-        merge(associated_workspaces_hash).
         merge(frequency).
         merge(tableau_workbooks_hash).
         merge(tags_hash)
