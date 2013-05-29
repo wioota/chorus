@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Alpine::WorkspaceDatasetsController do
+describe Alpine::DatasetsController do
   let(:user) { users(:the_collaborator) }
 
   before do
@@ -8,13 +8,11 @@ describe Alpine::WorkspaceDatasetsController do
   end
 
   describe '#index' do
-    let(:workspace) { workspaces(:public) }
     let(:gpdb_view) { datasets(:view) }
     let(:gpdb_table) { datasets(:table) }
     let(:the_datasets) { fake_relation [gpdb_table, gpdb_view] }
 
     before do
-      stub(workspace).datasets { the_datasets }
       stub(request).remote_ip { '127.0.0.1' }
       stub(request).remote_addr { '::1' }
     end
@@ -25,12 +23,6 @@ describe Alpine::WorkspaceDatasetsController do
       end
 
       context 'for local requests' do
-        before do
-          mock(Workspace).
-              workspaces_for(user).mock!.
-              find(workspace.to_param) { workspace }
-        end
-
         [
             '127.0.0.1',
             '::1',
@@ -42,10 +34,10 @@ describe Alpine::WorkspaceDatasetsController do
             stub(request).remote_addr { ip }
             mock_present do |collection, _, options|
               collection.to_a.to_a.should =~ the_datasets.to_a
-              options.should == {:workspace => workspace, :succinct => true}
+              options.should == {:succinct => true}
             end
 
-            get :index, :workspace_id => workspace.to_param
+            get :index, :dataset_ids => [gpdb_table.to_param, gpdb_view.to_param]
             response.should be_success
           end
         end
@@ -57,7 +49,7 @@ describe Alpine::WorkspaceDatasetsController do
         it 'returns not found' do
           stub(request).remote_ip { ip }
           stub(request).remote_addr { ip }
-          get :index, :workspace_id => workspace.to_param
+          get :index, :dataset_ids => [gpdb_table.to_param, gpdb_view.to_param]
           response.should be_not_found
         end
       end
@@ -69,7 +61,7 @@ describe Alpine::WorkspaceDatasetsController do
       end
 
       it 'returns not found' do
-        get :index, :workspace_id => workspace.to_param
+        get :index, :dataset_ids => [gpdb_table.to_param, gpdb_view.to_param]
         response.should be_not_found
       end
     end

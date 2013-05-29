@@ -146,9 +146,7 @@ Chorus::Application.routes.draw do
       resource :credentials, :only => [:show]
     end
 
-    resources :workspaces, only: [] do
-      resources :datasets, :only => [:index], :controller => 'workspace_datasets'
-    end
+    resources :datasets, :only => [:index]
   end
 
   resource :status, :only => [:show], :controller => 'status'
