@@ -27,6 +27,7 @@ class SandboxesController < ApplicationController
           end
         end
 
+        workspace.show_sandbox_datasets = attributes[:show_sandbox_datasets] if attributes.has_key?(:show_sandbox_datasets)
         if workspace.sandbox_id_changed? && workspace.sandbox
           Events::WorkspaceAddSandbox.by(current_user).add(
               :sandbox_schema => workspace.sandbox,
