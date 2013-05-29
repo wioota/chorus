@@ -127,11 +127,9 @@ class Workspace < ActiveRecord::Base
     end
 
     datasets.map do |relation|
-      if options[:name_filter]
-        relation.with_name_like options[:name_filter]
-      else
-        relation
-      end
+      relation = relation.with_name_like options[:name_filter] if options[:name_filter]
+      relation = relation.where(:id => options[:dataset_ids]) if options[:dataset_ids]
+      relation
     end
   end
 

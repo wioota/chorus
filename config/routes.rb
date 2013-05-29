@@ -68,17 +68,17 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resource :imports, :only => :update, :controller => "dataset_imports"
+  resource :imports, :only => :update, :controller => 'dataset_imports'
 
   resources :workspaces, :only => [:index, :create, :show, :update, :destroy] do
     resources :members, :only => [:index, :create]
     resource :image, :only => [:create, :show], :controller => :workspace_images
     resource :sandbox, :only => [:create]
     resources :workfiles, :only => [:create, :index]
-    resource :quickstart, :only => [:destroy], :controller => "workspace_quickstart"
+    resource :quickstart, :only => [:destroy], :controller => 'workspace_quickstart'
     resources :imports, :only => [:create], :controller => 'workspaces/imports'
 
-    resources :datasets, :only => [:index, :create, :show, :destroy], :controller => "workspace_datasets" do
+    resources :datasets, :only => [:index, :create, :show, :destroy], :controller => 'workspace_datasets' do
       resources :import_schedules, :only => [:index, :create, :update, :destroy], :controller => 'dataset_import_schedules'
       resources :imports, :only => [:index], :controller => 'dataset_imports'
       resources :tableau_workbooks, :only => :create
@@ -116,7 +116,7 @@ Chorus::Application.routes.draw do
   end
 
   resources :attachments, :only => [] do
-    resource :download, :only => [:show] , :controller => 'attachment_downloads'
+    resource :download, :only => [:show], :controller => 'attachment_downloads'
   end
 
   resources :insights, :only => [:index, :create] do
@@ -139,10 +139,16 @@ Chorus::Application.routes.draw do
     resources :messages, :only => [:create]
   end
 
+  namespace :alpine do
+    resources :workspace, only: [] do
+      resources :datasets, :only => [:index], :controller => 'workspace_datasets'
+    end
+  end
+
   resource :status, :only => [:show], :controller => 'status'
 
   namespace :import_console do
-    match '/' =>  'imports#index'
+    match '/' => 'imports#index'
     resources :imports, :only => :index
   end
 
@@ -150,7 +156,7 @@ Chorus::Application.routes.draw do
 
   post 'download_data', :controller => 'data_downloads'
 
-  match "/" => "root#index"
-  match "VERSION" => "configurations#version"
+  match '/' => 'root#index'
+  match 'VERSION' => 'configurations#version'
 
 end
