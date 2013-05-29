@@ -140,7 +140,7 @@ Chorus::Application.routes.draw do
   end
 
   namespace :alpine do
-    resources :workspace, only: [] do
+    resources :workspaces, only: [] do
       resources :datasets, :only => [:index], :controller => 'workspace_datasets'
     end
   end
