@@ -275,8 +275,6 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                     });
                 });
             });
-
-
         });
 
         context("when it has a sandbox", function() {

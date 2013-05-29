@@ -509,6 +509,14 @@ describe("chorus.models.Workspace", function() {
                 expect(this.model.currentUserCanCreateWorkFlows()).toBeFalsy();
             });
         });
+
+        context("when the current user is the owner", function() {
+            it("returns true", function () {
+                this.model.members().reset();
+                this.model.set('owner', chorus.session.user().attributes);
+                expect(this.model.currentUserCanCreateWorkFlows()).toBeTruthy();
+            });
+        });
     });
 
     describe("#currentUserCanOpenWorkFlows", function () {

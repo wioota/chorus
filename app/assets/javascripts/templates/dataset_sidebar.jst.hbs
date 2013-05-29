@@ -84,6 +84,10 @@
                 {{/if}}
             {{/unless}}
 
+            {{#if currentUserCanCreateWorkFlow}}
+                <li><a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a></li>
+            {{/if}}
+
             {{#unless noValidCredentials}}
                 {{#if listMode}}
                     <li><a class="dataset_preview" href="#">{{t "actions.dataset_preview"}}</a></li>
@@ -94,7 +98,6 @@
                    <li><a class="analyze" href="#">{{t "dataset.actions.analyze"}}</a></li>
                 {{/if}}
             {{/unless}}
-
 
             {{#unless workspaceArchived}}
                 {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey functionCallContext=this}}</a></li>{{/if}}

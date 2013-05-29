@@ -10,7 +10,8 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         "click .dataset_preview": "launchDatasetPreviewDialog",
         "click .actions a.analyze" : "launchAnalyzeAlert",
         "click a.duplicate": "launchDuplicateChorusView",
-        "click .edit_tags": "startEditingTags"
+        "click .edit_tags": "startEditingTags",
+        "click .new_work_flow": "launchWorkFlowDialog"
     },
 
     subviews: {
@@ -145,6 +146,12 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     launchDuplicateChorusView: function(e) {
         e.preventDefault();
         var dialog = new chorus.dialogs.VerifyChorusView({ model : this.resource.createDuplicateChorusView() });
+        dialog.launchModal();
+    },
+
+    launchWorkFlowDialog: function (e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.WorkFlowNewForDatasetList({workspace: this.resource.workspace(), collection: new chorus.collections.Base([this.resource])});
         dialog.launchModal();
     },
 
