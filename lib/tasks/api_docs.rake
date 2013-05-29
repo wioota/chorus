@@ -50,7 +50,7 @@ unless Rails.env.production?
   def find_missing_docs
     routes_to_ignore = [
         'alpine/credentials#show',
-        'alpine/workspace_datasets#index'
+        'alpine/datasets#index'
     ]
 
     Rails.application.reload_routes!
