@@ -10,7 +10,7 @@ class DatasetPresenter < Presenter
         :object_name => model.name,
         :schema => schema_hash,
         :entity_type => model.entity_type_name,
-        :entity_subtype => thetype
+        :entity_subtype => subtype
     }.merge(associated_workspaces_hash)
   end
 
@@ -46,7 +46,7 @@ class DatasetPresenter < Presenter
     present(model.schema, options.merge({:succinct => true}))
   end
 
-  def thetype
+  def subtype
     if sandbox_table?
       "SANDBOX_TABLE"
     else
