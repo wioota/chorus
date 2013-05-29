@@ -22,13 +22,15 @@ Chorus::Application.routes.draw do
 
     scope :module => 'data_sources' do
       resource :account, :only => [:show, :create, :update, :destroy]
-      resource :credentials, :only => [:show]
       resource :owner, :only => [:update]
       resource :sharing, :only => [:create, :destroy], :controller => 'sharing'
       resource :workspace_detail, :only => [:show]
       resources :members, :only => [:index, :create, :update, :destroy]
       resources :schemas, :only => [:index]
     end
+
+    # Remove this once Alpine uses alpine/credentials directly
+    get 'credentials' => 'alpine/credentials#show'
   end
 
   resources :gnip_data_sources, :except => [:new, :edit] do
@@ -140,6 +142,10 @@ Chorus::Application.routes.draw do
   end
 
   namespace :alpine do
+    resources :data_sources, :only => [] do
+      resource :credentials, :only => [:show]
+    end
+
     resources :workspaces, only: [] do
       resources :datasets, :only => [:index], :controller => 'workspace_datasets'
     end

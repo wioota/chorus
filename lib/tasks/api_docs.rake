@@ -49,7 +49,7 @@ unless Rails.env.production?
 
   def find_missing_docs
     routes_to_ignore = [
-        'data_sources/credentials#show',
+        'alpine/credentials#show',
         'alpine/workspace_datasets#index'
     ]
 

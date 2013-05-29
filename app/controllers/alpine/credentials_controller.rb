@@ -1,5 +1,5 @@
-module DataSources
-  class CredentialsController < Alpine::AlpineController
+module Alpine
+  class CredentialsController < AlpineController
     def show
       data_source = DataSource.find(params[:data_source_id])
       account = data_source.account_for_user!(current_user)
