@@ -58,8 +58,8 @@ module ImportConsole
 
     def show_process
       yield || "Not found"
-    rescue Exception => e
-      "#{e}: #{e.message} - #{e.backtrace}"
+    rescue Exception
+      "unknown"
     end
   end
 end
