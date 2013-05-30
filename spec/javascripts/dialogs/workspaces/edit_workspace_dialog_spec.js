@@ -468,6 +468,7 @@ describe("chorus.dialogs.EditWorkspace", function() {
                         this.dialog.$("input[name=name]").val("my modified name");
                         this.dialog.$("textarea[name=summary]").val("my modified summary");
                         this.dialog.$("select.owner").val('13');
+                        this.dialog.$(".show_sandbox_datasets").prop('checked', false);
                         this.dialog.$('form').submit();
                     });
 
@@ -485,6 +486,10 @@ describe("chorus.dialogs.EditWorkspace", function() {
 
                     it("sets the owner id on the workspace", function() {
                         expect(this.dialog.pageModel.get("ownerId")).toBe("13");
+                    });
+
+                    it("sets the showSandboxDatasets flag on the workspace", function() {
+                        expect(this.dialog.pageModel.get("showSandboxDatasets")).toBe(false);
                     });
 
                     it("does not close the dialog before the server responds", function() {
