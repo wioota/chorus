@@ -59,7 +59,7 @@ chorus.handlebarsHelpers.dataset = {
         if (statistics instanceof chorus.models.DatasetStatistics && statistics.get("objectType")) {
             keys.push(statistics.get("objectType"));
         }
-        else if (dataset.entitySubtype === "CHORUS_VIEW" || dataset.entitySubtype === "SOURCE_TABLE")
+        else if (dataset.entitySubtype === "CHORUS_VIEW" || dataset.entitySubtype === "SOURCE_TABLE" || dataset.entitySubtype === "SANDBOX_TABLE")
         {
             keys.push(dataset.objectType);
         }

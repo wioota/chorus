@@ -185,6 +185,18 @@ describe('chorus.handlebarsHelpers.dataset', function() {
                 Handlebars.helpers.humanizedDatasetType(this.sourceView.attributes);
                 expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.SOURCE_TABLE.VIEW');
             });
+
+            it("returns Sandbox Table", function() {
+                this.sandBoxTable = rspecFixtures.workspaceDataset.datasetTable();
+                Handlebars.helpers.humanizedDatasetType(this.sandBoxTable.attributes);
+                expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.SANDBOX_TABLE.TABLE');
+            });
+
+            it("returns Sandbox View", function() {
+                this.sandBoxView = rspecFixtures.workspaceDataset.datasetView();
+                Handlebars.helpers.humanizedDatasetType(this.sandBoxView.attributes);
+                expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.SANDBOX_TABLE.VIEW');
+            });
         });
 
         context("when the statistics object is present", function() {
