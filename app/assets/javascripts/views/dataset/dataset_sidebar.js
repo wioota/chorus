@@ -84,6 +84,15 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         }
     },
 
+    fetchMembers: function (dataset) {
+        var workspace = dataset.workspace();
+        if (workspace) {
+            var members = workspace.members();
+            this.listenTo(members, "loaded", this.render);
+            members.fetchIfNotLoaded();
+        }
+    },
+
     statisticsFetchFailed: function() {
         if(this.resource.statistics().statusCode === 403) { this.resource.invalidCredentials = true; }
         this.render();
@@ -97,6 +106,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
             this.createActivitiesTab(dataset);
             this.createStatisticsTab(dataset);
             this.fetchImports(dataset);
+            this.fetchMembers(dataset);
         } else {
             delete this.tabs.statistics;
             delete this.tabs.activity;
