@@ -90,6 +90,11 @@ describe WorkspaceAccess do
         workspace.attributes = {:public => false}
         workspace_access.can?(:update, workspace).should be_false
       end
+
+      it "does not allow edit of show_sandbox_datasets" do
+        workspace.attributes = {:show_sandbox_datasets => false}
+        workspace_access.can?(:update, workspace).should be_false
+      end
     end
 
     context "for owners" do
