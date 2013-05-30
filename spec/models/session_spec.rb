@@ -5,7 +5,7 @@ describe Session do
     it "sets session_id" do
       user = users(:default)
       session = Session.create!(:username => user.username, :password => FixtureBuilder.password)
-      session.session_id.should match /\S[20]/
+      session.session_id.should match /\S{20}/
     end
   end
 
