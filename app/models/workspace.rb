@@ -135,19 +135,15 @@ class Workspace < ActiveRecord::Base
 
   def with_filtered_datasets(user, options = {})
     entity_subtype = options[:entity_subtype]
-    database_id = options[:id]
 
     extra_options = {}
     extra_options.merge! :tables_only => true if entity_subtype == "SANDBOX_TABLE"
 
     account = sandbox && sandbox.database.account_for_user(user)
-    skip_sandbox = !account ||
-        account.invalid_credentials? ||
-        database_id && (database_id != sandbox.database_id) ||
-        ["CHORUS_VIEW", "SOURCE_TABLE"].include?(entity_subtype)
 
     datasets = filtered_datasets(options)
-    yield datasets, options.merge(extra_options), account, skip_sandbox
+    database_id = options[:id]
+    yield datasets, options.merge(extra_options), account, skip_sandbox?(database_id, account, entity_subtype)
   end
 
   def dataset_count(user, options = {})
@@ -165,7 +161,7 @@ class Workspace < ActiveRecord::Base
   end
 
   def datasets(current_user, options = {})
-      with_filtered_datasets(current_user, options) do |datasets, new_options, account, skip_sandbox|
+    with_filtered_datasets(current_user, options) do |datasets, new_options, account, skip_sandbox|
       begin
         datasets << GpdbDataset.visible_to(account, sandbox, new_options) unless skip_sandbox
       rescue DataSourceConnection::InvalidCredentials
@@ -249,6 +245,13 @@ class Workspace < ActiveRecord::Base
   end
 
   private
+
+  def skip_sandbox?(database_id, account, entity_subtype)
+    !account || account.invalid_credentials? ||
+        (database_id && (database_id != sandbox.database_id)) ||
+        ["CHORUS_VIEW", "SOURCE_TABLE"].include?(entity_subtype) ||
+        !show_sandbox_datasets
+  end
 
   def unschedule_imports
     import_schedules.destroy_all if archived?

@@ -179,10 +179,25 @@ describe Workspace do
           end
         end
 
+        context "and show_sandbox_datasets is false" do
+          before do
+            workspace.show_sandbox_datasets = false
+            workspace.save
+            stub(GpdbDataset).visible_to(account, schema, anything) {
+              [sandbox_table, source_table, chorus_view, sandbox_view, chorus_view_from_source]
+            }
+          end
+
+          it "shows associated datasets and chorus views only" do
+            workspace.datasets(user).to_a.should =~ [source_table, chorus_view, chorus_view_from_source]
+            workspace.dataset_count(user).should == 3
+          end
+        end
+
         context "when connecting fails due to invalid credentials" do
           before do
             mock(schema).dataset_count(anything, anything) { raise DataSourceConnection::InvalidCredentials.new(Object.new) }
-            mock(GpdbDataset).visible_to(anything, schema, anything) { raise DataSourceConnection::InvalidCredentials.new(Object.new)}
+            mock(GpdbDataset).visible_to(anything, schema, anything) { raise DataSourceConnection::InvalidCredentials.new(Object.new) }
           end
 
           it "lets them see associated datasets and chorus views only" do
@@ -192,19 +207,20 @@ describe Workspace do
         end
 
         context "when the sandbox has tables" do
+          let(:magic_number) { 142 }
           before do
             stub(GpdbDataset).visible_to(account, schema, anything) { [sandbox_table, sandbox_view] }
-            stub(schema).dataset_count(account, anything) { 142 }
+            stub(schema).dataset_count(account, anything) { magic_number }
           end
 
           it "includes datasets in the workspace's sandbox and all of its source datasets" do
             workspace.datasets(user).to_a.should =~ [sandbox_table, source_table, chorus_view, sandbox_view, chorus_view_from_source]
-            workspace.dataset_count(user).should == 1 + 2 + 142
+            workspace.dataset_count(user).should == 1 + 2 + magic_number
           end
 
           it "filters by entity_subtype" do
             workspace.datasets(user, {:entity_subtype => "SANDBOX_DATASET"}).to_a.should =~ [sandbox_table, sandbox_view]
-            workspace.dataset_count(user, {:entity_subtype => "SANDBOX_DATASET"}).should == 142
+            workspace.dataset_count(user, {:entity_subtype => "SANDBOX_DATASET"}).should == magic_number
             workspace.datasets(user, {:entity_subtype => "CHORUS_VIEW"}).to_a.should =~ [chorus_view, chorus_view_from_source]
             workspace.dataset_count(user, {:entity_subtype => "CHORUS_VIEW"}).should == 2
             workspace.datasets(user, {:entity_subtype => "SOURCE_TABLE"}).to_a.should =~ [source_table]
