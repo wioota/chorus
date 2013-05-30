@@ -14,7 +14,7 @@ chorus.dialogs.EditWorkspace = chorus.dialogs.Base.include(
 
         additionalContext: function() {
             var sandbox = this.pageModel.sandbox();
-            var sandboxLocation = sandbox ? sandbox.canonicalName() : t("workspace.settings.sandbox.none");
+            var sandboxLocation = sandbox ? sandbox.canonicalName() : null;
             var owner = this.pageModel.owner();
 
             return {
@@ -23,6 +23,7 @@ chorus.dialogs.EditWorkspace = chorus.dialogs.Base.include(
                 members: this.pageModel.members().models,
                 canSave: this.pageModel.canUpdate(),
                 canChangeOwner: this.pageModel.workspaceAdmin(),
+                canChangeShowSandboxDatasets : this.pageModel.workspaceAdmin(),
                 ownerName: owner.displayName(),
                 ownerUrl: owner.showUrl(),
                 sandboxLocation: sandboxLocation,

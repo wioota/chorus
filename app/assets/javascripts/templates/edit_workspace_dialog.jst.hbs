@@ -35,7 +35,18 @@
 
     <div class="pbs pts"><label>{{t "workspace.settings.sandbox.location"}}</label></div>
 
-    <div class="sandboxLocation plm pbs pts">{{sandboxLocation}}</div>
+    {{#if sandboxLocation }}
+        <div class="sandboxLocation plm pbs pts">{{sandboxLocation}}</div>
+        <div class="plm">
+            <input class="show_sandbox_datasets" type="checkbox"
+                   {{#if showSandboxDatasets}}checked="checked"{{/if}}
+                   {{#unless canChangeShowSandboxDatasets}}disabled="disabled"{{/unless}}>
+            <label>{{t "actions.sandbox.show_sandbox_datasets_by_default"}}</label>
+        </div>
+    {{else}}
+        <div class="sandboxLocation plm pbs pts">{{t "workspace.settings.sandbox.none" }}</div>
+    {{/if}}
+
     {{#if canChangeOwner}}
         <div class="pbs pts"><label>{{ t "workspace.settings.change_owner"}}</label></div>
         <select name="owner" id="selectowner" class="owner">
