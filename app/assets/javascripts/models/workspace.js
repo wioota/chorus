@@ -165,18 +165,8 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return this._hasPermission(['admin', 'update']);
     },
 
-    currentUserIsMember: function() {
-        var memberIds = this.members().pluck('id');
-        var currentUserId = chorus.session.user().id;
-        return _(memberIds).include(currentUserId);
-    },
-
     currentUserCanCreateWorkFlows: function(){
         return this.isActive() && this._hasPermission(['admin', 'create_work_flow']);
-    },
-
-    currentUserCanOpenWorkFlows: function() {
-        return this.isActive() && ( this.currentUserIsMember() || this.isPublic() );
     },
 
     workspaceAdmin:function () {

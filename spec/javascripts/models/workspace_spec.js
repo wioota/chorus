@@ -514,43 +514,4 @@ describe("chorus.models.Workspace", function() {
             });
         });
     });
-
-    describe("#currentUserCanOpenWorkFlows", function () {
-        context("when the workspace is active", function () {
-            context("the current user is a member", function () {
-                beforeEach(function () {
-                    this.model.members().add(new chorus.models.User(chorus.session.user().attributes));
-                });
-
-                it("returns true", function(){
-                    expect(this.model.currentUserCanOpenWorkFlows()).toBeTruthy();
-                });
-            });
-
-            context("the workspace is public", function () {
-                beforeEach(function () {
-                    spyOn(this.model, "isPublic").andReturn(true);
-                });
-
-                it("returns false", function () {
-                    expect(this.model.currentUserCanOpenWorkFlows()).toBeTruthy();
-                });
-            });
-        });
-
-        context("when the workspace is archived", function () {
-            it("returns false", function () {
-                this.model.set("archivedAt", true);
-                expect(this.model.currentUserCanOpenWorkFlows()).toBeFalsy();
-            });
-        });
-
-        context("when the current user is not a member and the workspace is not public", function () {
-            it("returns false", function () {
-                this.model.members().reset();
-                spyOn(this.model, "isPublic").andReturn(false);
-                expect(this.model.currentUserCanOpenWorkFlows()).toBeFalsy();
-            });
-        });
-    });
 });
