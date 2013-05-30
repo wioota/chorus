@@ -30,6 +30,27 @@ describe "Workspaces" do
       page.should have_selector(".breadcrumb:contains('#{workspace.name}')")
       workspace.reload.image.original_filename.should == 'User.png'
     end
+
+    context "with more than 24 members" do
+      before do
+        members = 25.times.map { FactoryGirl.create(:user, username: "uSeR#{rand(99999)}") }
+        workspace.members << members
+        workspace.save
+      end
+
+      describe "the 'change owner' drop-down menu" do
+        before do
+          visit("#/workspaces/#{workspace.id}")
+          click_link "Edit Workspace"
+        end
+
+        it "displays all members" do
+          within('#selectowner') do
+            page.should have_css('option', count: workspace.members.count)
+          end
+        end
+      end
+    end
   end
 
   describe "Delete a workspace" do

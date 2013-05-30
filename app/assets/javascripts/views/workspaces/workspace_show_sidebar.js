@@ -1,7 +1,9 @@
 chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
     constructorName: "WorkspaceShowSidebarView",
     templateName:"workspace_show_sidebar",
-
+    events: {
+        "click .edit_workspace": 'launchEditWorkspaceDialog'
+    },
     subviews: {
         ".workspace_member_list": "workspaceMemberList"
     },
@@ -31,5 +33,14 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
         });
         this.$('.workspace_image').load(_.bind(this.recalculateScrolling, this));
         this._super('postRender');
+    },
+
+    launchEditWorkspaceDialog: function (e) {
+        e && e.preventDefault();
+
+        this.editWorkspaceDialog = new chorus.dialogs.EditWorkspace({model: this.model});
+        this.onceLoaded(this.model.members(), function () {
+            this.editWorkspaceDialog.launchModal();
+        });
     }
 });

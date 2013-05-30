@@ -91,7 +91,18 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             });
 
             it("has a link to edit workspace settings", function() {
-                expect(this.view.$("a.dialog[data-dialog=EditWorkspace]").text().trim()).toMatchTranslation("actions.edit_workspace");
+                var linkText = this.view.$("a.edit_workspace").text().trim();
+                expect(linkText).toMatchTranslation("actions.edit_workspace");
+            });
+
+            it("the link to Edit Workspace opens a Dialog", function () {
+                var members = this.view.model.members();
+
+                var launchModalSpy = spyOn(chorus.dialogs.EditWorkspace.prototype, 'launchModal');
+                this.view.$('.edit_workspace').click();
+                expect(launchModalSpy).not.toHaveBeenCalled();
+                this.server.completeFetchFor(members);
+                expect(launchModalSpy).toHaveBeenCalled();
             });
 
             it("has a link to delete the workspace", function() {
@@ -134,7 +145,8 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             });
 
             it("has a link to edit the workspace's settings", function() {
-                expect(this.view.$("a.dialog[data-dialog=EditWorkspace]").text().trim()).toMatchTranslation("actions.edit_workspace");
+                var linkText = this.view.$("a.edit_workspace").text().trim();
+                expect(linkText).toMatchTranslation("actions.edit_workspace");
             });
         });
 
@@ -146,7 +158,8 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             });
 
             it("has a link to view the workspace's settings", function() {
-                expect(this.view.$("a[data-dialog=EditWorkspace]").text().trim()).toMatchTranslation("actions.view_workspace_settings");
+                var linkText = this.view.$("a.edit_workspace").text().trim();
+                expect(linkText).toMatchTranslation("actions.view_workspace_settings");
             });
 
             it("does not have a link to delete the workspace", function() {
