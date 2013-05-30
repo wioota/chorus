@@ -49,6 +49,12 @@ describe("chorus.pages.WorkFlowShowPage", function() {
         });
     });
 
+    it("handles the workfile errors", function () {
+        spyOn(Backbone.history, "loadUrl");
+        this.page.model.trigger("resourceForbidden");
+        expect(Backbone.history.loadUrl).toHaveBeenCalled();
+    });
+
     it("routes to the login page when receiving an 'unauthorized' message", function() {
         runs(function(){
             spyOn(chorus, 'requireLogin');

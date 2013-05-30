@@ -5,6 +5,7 @@ chorus.pages.WorkFlowShowPage = chorus.pages.Base.extend({
 
     makeModel: function(workfileId) {
         this.model = new chorus.models.AlpineWorkfile({id: workfileId});
+        this.handleFetchErrorsFor(this.model);
         this.model.fetch();
     },
 
