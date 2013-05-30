@@ -5,21 +5,6 @@ describe "Workfiles" do
   let(:user) { users(:admin) }
 
   describe "add a workfile" do
-    it "creates a simple workfile" do
-      login(user)
-      visit("#/workspaces/#{workspace.id}")
-
-      click_link "Work Files"
-      click_button "Create SQL File"
-      wf_name = "sql_wf_new"
-      within_modal do
-        fill_in 'fileName', :with => wf_name
-        click_button "Add SQL File"
-      end
-      page.should have_content (wf_name)
-      workspace.workfiles.find_by_file_name("#{wf_name}.sql").should_not be_nil
-    end
-
     it "uploads a workfile from the local system" do
       login(user)
       visit("#/workspaces/#{workspace.id}")

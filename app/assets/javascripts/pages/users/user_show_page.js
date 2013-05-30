@@ -25,14 +25,13 @@ chorus.pages.UserShowPage = chorus.pages.Base.extend({
             model: this.model,
             content: new chorus.views.UserShow({model: this.model}),
             contentHeader: new chorus.views.DisplayNameHeader({ model: this.model, showTagBox: true }),
-            contentDetails: new chorus.views.StaticTemplate("plain_text", {text: t("users.details")})
+            contentDetails: new chorus.views.StaticTemplate("plain_action_bar", {text: t("users.details")})
         });
         this.setupSidebar();
         this.render();
     },
 
     setupSidebar: function() {
-        var showApiKey = parseInt(this.model.id, 10) === parseInt(chorus.session.user().id, 10);
-        this.sidebar = new chorus.views.UserSidebar({model: this.model, showApiKey: showApiKey});
+        this.sidebar = new chorus.views.UserSidebar({model: this.model});
     }
 });

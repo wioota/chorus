@@ -9,7 +9,8 @@ describe WorkfilesController do
   let(:private_workspace) { workspaces(:private) }
   let(:private_workfile) { workfiles(:private) }
   let(:public_workfile) { workfiles(:public) }
-  let(:file) { test_file("workfile.sql", "text/sql") }
+  let(:file) { test_file(file_name, "text/sql") }
+  let(:file_name) { "workfile.sql"}
 
   before do
     log_in user
@@ -160,46 +161,109 @@ describe WorkfilesController do
 
     it_behaves_like "an action that requires authentication", :post, :create, :workspace_id => '-1'
 
-    it 'creates a workfile from upload' do
-      post :create, params
-      response.code.should == "201"
-      Workfile.last.file_name.should == 'workfile.sql'
-    end
+    context "creating a new sql file" do
+      let(:params) do
+        {
+          :workspace_id => workspace.to_param,
+          :file_name => "new_file.sql"
+        }
+      end
 
-    it 'creates a workfile from an svg document' do
-      expect {
-        post :create, :workspace_id => workspace.to_param, :file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'
-      }.to change(Workfile, :count).by(1)
-      Workfile.last.file_name.should == 'some_vis.png'
-    end
+      it 'works' do
+        post :create, params
+        response.code.should == '201'
+      end
 
-    context 'when uploading a workfile with an invalid name' do
-      let(:file) { test_file '@invalid' }
-
-      it 'returns 422' do
+      it 'throws errors on name conflicts' do
+        FactoryGirl.create(:workfile, :workspace => workspace, :file_name => "new_file.sql")
         post :create, params
         response.code.should == '422'
       end
     end
 
-    context 'when entity_subtype is alpine' do
-      let(:params) do
-        {
-            :entity_subtype => 'alpine',
-            :workspace_id => workspace.to_param,
-            :file_name => 'something',
-            :alpine_id => '42'
-        }
+    context "uploading a file" do
+      it 'creates a workfile' do
+        post :create, params
+        response.code.should == "201"
+        Workfile.last.file_name.should == 'workfile.sql'
       end
 
-      it 'creates an AlpineWorkfile' do
-        mock_present do |model|
-          model.should be_a AlpineWorkfile
-          model.file_name.should == 'something'
-          model.additional_data['alpine_id'].should == '42'
-          model.workspace.should == workspace
-        end
+      it 'resolves name conflicts' do
+        FactoryGirl.create(:workfile, :workspace => workspace, :file_name => file_name)
         post :create, params
+        response.code.should == "201"
+        Workfile.last.file_name.should == 'workfile_1.sql'
+      end
+
+      context 'when uploading a workfile with an invalid name' do
+        let(:file) { test_file '@invalid' }
+
+        it 'returns 422' do
+          post :create, params
+          response.code.should == '422'
+        end
+      end
+    end
+
+    context 'creating a workfile from an svg document' do
+      it 'works' do
+        expect {
+          post :create, :workspace_id => workspace.to_param, :file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'
+        }.to change(Workfile, :count).by(1)
+        Workfile.last.file_name.should == 'some_vis.png'
+      end
+
+      it 'resolves name conflicts' do
+        FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'some_vis.png')
+        post :create, :workspace_id => workspace.to_param, :file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'
+        response.code.should == '201'
+        Workfile.last.file_name.should == 'some_vis_1.png'
+      end
+    end
+
+    context 'when entity_subtype is alpine' do
+      context "and a database has been chosen" do
+        let(:params) do
+          {
+              :entity_subtype => 'alpine',
+              :workspace_id => workspace.to_param,
+              :file_name => 'something',
+              :database_id => '42'
+          }
+        end
+
+        it 'creates an AlpineWorkfile' do
+          mock_present do |model|
+            model.should be_a AlpineWorkfile
+            model.file_name.should == 'something'
+            model.additional_data['database_id'].should == '42'
+            model.workspace.should == workspace
+          end
+          post :create, params
+        end
+      end
+
+      context "and a list of datasets have been chosen" do
+        let(:dataset_ids) { [datasets(:table).id, datasets(:other_table).id].map(&:to_s) }
+        let(:params) do
+          {
+              :entity_subtype => 'alpine',
+              :workspace_id => workspace.to_param,
+              :file_name => 'something',
+              :dataset_ids => dataset_ids
+          }
+        end
+
+        it 'creates an AlpineWorkfile' do
+          mock_present do |model|
+            model.should be_a AlpineWorkfile
+            model.file_name.should == 'something'
+            model.additional_data['database_id'].should == datasets(:table).database.id
+            model.additional_data['dataset_ids'].should =~ dataset_ids
+            model.workspace.should == workspace
+          end
+          post :create, params
+        end
       end
     end
   end

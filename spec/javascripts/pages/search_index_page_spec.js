@@ -257,7 +257,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     describe("when all of the sidebar's fetches complete", function() {
                         beforeEach(function() {
                             this.server.completeFetchFor(this.clickedUser.activities(), []);
-                            this.server.completeFetchFor(chorus.models.Config.instance());
+                            loadConfig();
                         });
 
                         it("shows that user in the sidebar", function() {

@@ -102,44 +102,17 @@ body .ui-draggable-dragging {
             display: block;
             border-bottom: $dotted-list-item-border;
             margin-right: 10px;
+            margin-bottom: 5px;
         }
 
         .key {
-            display: inline-block;
-            color: $color-text2;
-            width: 49%;
+            color: $color-text1;
+            font-weight: $semibold;
         }
 
         .value {
-            width: 47%;
-            color: black;
-            max-width: 120px;
-            text-align: right;
-            vertical-align: top;
-            display: inline-block;
-            @include ellipsis;
-        }
-
-        .multiline {
-            margin-right: 10px;
-
-            .key {
-                border-bottom: $dotted-list-item-border;
-            }
-
-            .value {
-                width: auto;
-                max-width: 100%;
-                padding-left: 0;
-                display: block;
-                border-bottom: $dotted-list-item-border;
-
-                &:nth-child(2) {
-                    width: 47%;
-                    max-width: 120px;
-                    display: inline-block;
-                }
-            }
+            color: $color-text1;
+            word-wrap: break-word;
         }
     }
 
@@ -148,14 +121,9 @@ body .ui-draggable-dragging {
         li {
             display: inline-block;
             vertical-align: middle;
-            height: $icon-image-height + 6px;
-            width: $icon-image-width + 6px;
+            height: $icon-image-height + 3px;
+            width: $icon-image-width + 3px;
             padding-bottom: 3px;
-        }
-
-        img {
-            max-width: $icon-image-width;
-            max-height: $icon-image-height;
         }
 
         .dialog {

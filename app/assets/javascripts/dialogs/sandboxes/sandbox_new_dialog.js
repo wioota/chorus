@@ -23,7 +23,6 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.workspace.fetch();
 
         this.requiredResources.add(this.workspace);
-        this.requiredResources.add(chorus.models.Config.instance());
 
         this.listenTo(this.model, "saved", this.saved);
         this.listenTo(this.model, "saveFailed", this.saveFailed);
@@ -48,13 +47,15 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         var databaseId = this.schemaPicker.fieldValues().database;
         var databaseName = databaseId ? undefined : this.schemaPicker.fieldValues().databaseName;
         var dataSourceId = this.schemaPicker.fieldValues().dataSource;
+        var showSandboxDatasets = this.$(".show_sandbox_datasets").prop("checked");
 
         this.model.set({
             schemaId: sandboxId,
             schemaName: schemaName,
             databaseId: databaseId,
             databaseName: databaseName,
-            dataSourceId: dataSourceId
+            dataSourceId: dataSourceId,
+            showSandboxDatasets: showSandboxDatasets
         });
 
         this.model.save();

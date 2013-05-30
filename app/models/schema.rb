@@ -69,7 +69,7 @@ class Schema < ActiveRecord::Base
     datasets_in_data_source = connect_with(account).datasets(options)
 
     datasets_in_data_source.each do |attrs|
-      dataset = datasets.find_by_name(attrs[:name])
+      dataset = datasets.views_tables.find_by_name(attrs[:name])
       klass = class_for_type attrs.delete(:type)
       unless dataset
         dataset = klass.new(:name => attrs[:name])
@@ -105,10 +105,10 @@ class Schema < ActiveRecord::Base
     self.active_tables_and_views_count = active_tables_and_views.count
     save!
 
-    Dataset.where(:id => found_datasets).order("name ASC")
+    Dataset.where(:id => found_datasets).order("name ASC, id")
   rescue DataSourceConnection::Error
     touch(:refreshed_at)
-    Dataset.where(:id => found_datasets).order("name ASC")
+    Dataset.where(:id => found_datasets).order("name ASC, id")
   end
 
   def dataset_count(account, options={})
@@ -118,8 +118,6 @@ class Schema < ActiveRecord::Base
   private
 
   def destroy_datasets
-    datasets.find_each do |dataset|
-      dataset.destroy
-    end
+    datasets.find_each(&:destroy)
   end
 end

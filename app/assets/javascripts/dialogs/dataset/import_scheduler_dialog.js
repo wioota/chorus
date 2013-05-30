@@ -31,10 +31,10 @@ chorus.dialogs.ImportScheduler = chorus.dialogs.ImportNow.extend({
 
         if(action === "create_schedule") {
             this.title = t("import.title_schedule");
-            this.submitText = t("import.begin_schedule");
+            this.submitKey = "import.begin_schedule";
         } else {
             this.title = t("import.title_edit_schedule");
-            this.submitText = t("actions.save_changes");
+            this.submitKey = "actions.save_changes";
         }
     },
 

@@ -355,8 +355,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                     });
 
                     it("shows the title for that chart type", function() {
-                        var chartType =
-                            expect(this.view.$('.title.' + this.firstChartType)).not.toHaveClass('hidden');
+                        expect(this.view.$('.chart_type_title.' + this.firstChartType)).not.toHaveClass('hidden');
                     });
 
                     context("and a different chart type is hovered over", function() {
@@ -367,8 +366,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                         });
 
                         it("shows the title for the hovered icon and hides the selected title", function() {
-                            expect(this.view.$('.title.' + this.hoverChartType)).not.toHaveClass('hidden');
-                            expect(this.view.$('.title.' + this.firstChartType)).toHaveClass('hidden');
+                            expect(this.view.$('.chart_type_title.' + this.hoverChartType)).not.toHaveClass('hidden');
+                            expect(this.view.$('.chart_type_title.' + this.firstChartType)).toHaveClass('hidden');
                         });
 
                         context("and we stop hovering", function() {
@@ -378,8 +377,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                             });
 
                             it("shows the selected title for the hovered icon and hides the hovered title", function() {
-                                expect(this.view.$('.title.' + this.hoverChartType)).toHaveClass('hidden');
-                                expect(this.view.$('.title.' + this.firstChartType)).not.toHaveClass('hidden');
+                                expect(this.view.$('.chart_type_title.' + this.hoverChartType)).toHaveClass('hidden');
+                                expect(this.view.$('.chart_type_title.' + this.firstChartType)).not.toHaveClass('hidden');
                             });
                         });
                     });
@@ -396,8 +395,8 @@ describe("chorus.views.DatasetContentDetails", function() {
                         });
 
                         it("shows that title and hides the other visible ones", function() {
-                            expect(this.view.$('.title.' + this.secondChartType)).not.toHaveClass('hidden');
-                            expect(this.view.$('.title.' + this.firstChartType)).toHaveClass('hidden');
+                            expect(this.view.$('.chart_type_title.' + this.secondChartType)).not.toHaveClass('hidden');
+                            expect(this.view.$('.chart_type_title.' + this.firstChartType)).toHaveClass('hidden');
                         });
                     });
                 });

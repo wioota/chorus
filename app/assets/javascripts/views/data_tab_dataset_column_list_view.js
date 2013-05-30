@@ -35,7 +35,7 @@ chorus.views.DataTabDatasetColumnList = chorus.views.Base.extend({
         return {
             cid: column.cid,
             fullName: column.toText(),
-            type: column.get("typeClass")
+            type: column.get("dataType")
         };
     }
 });

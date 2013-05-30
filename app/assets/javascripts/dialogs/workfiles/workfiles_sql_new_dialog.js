@@ -1,16 +1,10 @@
-chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
+chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
     constructorName: "WorkfilesSqlNew",
 
     templateName:"workfiles_sql_new",
     title:t("workfiles.sql_dialog.title"),
 
     persistent:true,
-
-    events:{
-        "keyup input[name=fileName]": "checkInput",
-        "paste input[name=fileName]": "checkInput",
-        "submit form":"create"
-    },
 
     makeModel:function () {
         this.model = this.model || new chorus.models.Workfile({
@@ -21,11 +15,13 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
     setup:function () {
         this.listenTo(this.resource, "saved", this.saved);
         this.listenTo(this.resource, "saveFailed", this.saveFailed);
+        this.disableFormUnlessValid({
+            formSelector: "form",
+            inputSelector: "input[name=fileName]"
+        });
     },
 
-    create:function create(e) {
-        e.preventDefault();
-
+    create: function() {
         var fileName = this.$("input[name=fileName]").val().trim();
 
         this.resource.set({
@@ -37,16 +33,11 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.extend({
     },
 
     saved:function () {
-        $(document).trigger("close.facebox");
+        this.closeModal();
         chorus.router.navigate(this.model.showUrl());
     },
 
     saveFailed: function() {
         this.$("button.submit").stopLoading();
-    },
-
-    checkInput: function() {
-        var hasText = this.$("input[name=fileName]").val().trim().length > 0;
-        this.$("button.submit").prop("disabled", hasText ? false : "disabled");
     }
 });

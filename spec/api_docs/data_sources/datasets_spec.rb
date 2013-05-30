@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB: datasets" do
+resource "Datasets" do
   let(:dataset) { datasets(:table) }
   let(:owner) { users(:owner) }
 

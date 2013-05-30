@@ -120,15 +120,40 @@ describe("chorus.dialogs.EditWorkspace", function() {
                 it("shows sandbox info", function() {
                     expect(this.dialog.$(".sandboxLocation").text()).toBe("Gillette.Analytics.analytics");
                 });
+
+                it("shows the checkbox and label for showing sandbox datasets", function() {
+                    expect(this.dialog.$(".show_sandbox_datasets")).toBeChecked();
+                    expect(this.dialog.$el).toContainTranslation("actions.sandbox.show_sandbox_datasets_by_default");
+
+                });
+
+                context("when show_sandbox_datasets is set to false", function() {
+                    beforeEach(function() {
+                        var workspace = rspecFixtures.workspace({showSandboxDatasets: false});
+                        this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: workspace });
+                        this.dialog.render();
+                    });
+
+                    it("shows an unchecked checkbox", function() {
+                        expect(this.dialog.$(".show_sandbox_datasets")).not.toBeChecked();
+                    });
+                });
             });
 
             context("without a sandbox", function() {
-                it("shows sandbox info", function() {
+                beforeEach(function() {
                     var workspace = rspecFixtures.workspace();
                     workspace.unset("sandboxInfo");
                     this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: workspace });
                     this.dialog.render();
+                });
+
+                it("shows sandbox info", function() {
                     expect(this.dialog.$(".sandboxLocation").text()).toMatchTranslation("workspace.settings.sandbox.none");
+                });
+
+                it("does not show the checkbox and label for showing sandbox datasets", function() {
+                    expect(this.dialog.$(".show_sandbox_datasets")).not.toExist();
                 });
             });
         });
@@ -233,6 +258,10 @@ describe("chorus.dialogs.EditWorkspace", function() {
                     expect(archivedRadio).toBeChecked();
                 });
             });
+
+            it("does allow the user to change the setting for showing sandbox datasets", function() {
+                expect(this.dialog.$(".show_sandbox_datasets")).toBeEnabled();
+            });
         });
 
         context("when the user is not the owner, but is a member of the workspace", function() {
@@ -248,6 +277,10 @@ describe("chorus.dialogs.EditWorkspace", function() {
             itDoesNotAllowEditingMembers();
             itHasEditableNameAndSummmary();
             itDisablesArchivingAndUnarchiving();
+
+            it("does not allow the user to change the setting for showing sandbox datasets", function() {
+                  expect(this.dialog.$(".show_sandbox_datasets")).toBeDisabled();
+            });
         });
 
         context("when the user is not a member of the workspace", function() {
@@ -435,6 +468,7 @@ describe("chorus.dialogs.EditWorkspace", function() {
                         this.dialog.$("input[name=name]").val("my modified name");
                         this.dialog.$("textarea[name=summary]").val("my modified summary");
                         this.dialog.$("select.owner").val('13');
+                        this.dialog.$(".show_sandbox_datasets").prop('checked', false);
                         this.dialog.$('form').submit();
                     });
 
@@ -452,6 +486,10 @@ describe("chorus.dialogs.EditWorkspace", function() {
 
                     it("sets the owner id on the workspace", function() {
                         expect(this.dialog.pageModel.get("ownerId")).toBe("13");
+                    });
+
+                    it("sets the showSandboxDatasets flag on the workspace", function() {
+                        expect(this.dialog.pageModel.get("showSandboxDatasets")).toBe(false);
                     });
 
                     it("does not close the dialog before the server responds", function() {
@@ -603,6 +641,10 @@ describe("chorus.dialogs.EditWorkspace", function() {
                     it("does not set the name on the workspace", function() {
                         expect(this.dialog.pageModel.get("summary")).toBe("my summary");
                     });
+                });
+
+                it("does allow the user to change the setting for showing sandbox datasets", function() {
+                    expect(this.dialog.$(".show_sandbox_datasets")).toBeEnabled();
                 });
             });
         });

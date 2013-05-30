@@ -10,10 +10,6 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         "click a.close_errors": "clearServerErrors"
     },
 
-    setup: function () {
-        this.requiredResources.add(chorus.models.Config.instance());
-    },
-
     postRender: function() {
         _.defer(_.bind(function() {
             chorus.styleSelect(this.$("select.data_sources"), { format: function(text, option) {

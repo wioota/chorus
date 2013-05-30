@@ -1,0 +1,39 @@
+a.button, button, input[type=submit] {
+    -webkit-appearance: initial;
+    display: inline-block;
+    color: $default-font-color;
+    line-height: $button-height;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0 14px;
+    vertical-align: middle;
+    cursor: pointer;
+    outline-color: $button-border-color;
+    font-family: "Open Sans", Verdana;
+
+    &:disabled {
+        cursor: initial;
+    }
+}
+
+button.modalish, .button_modalish {
+    color: $default-link-color;
+    border: 1px solid $button-border-color;
+    background: $button-background-color;
+    font-size: 16px;
+
+    &:disabled {
+        color: $low-light-type;
+    }
+}
+
+.button_action {
+    border: 1px solid $button-border-color;
+    @include border-radius(30px);
+    background: none;
+    font-size: inherit;
+
+    &:disabled {
+        @include opacity(0.5);
+    }
+}

@@ -51,6 +51,10 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return !this.options.searchPage && this.hasWorkspace() && this.resource.isDeleteable() && this.resource.workspace().canUpdate();
     },
 
+    workFlowsEnabled: function () {
+        return chorus.models.Config.instance().get("workFlowConfigured");
+    },
+
     realWorkspace: function() {
         // this.workspace gets overriden by options hash passed by pages.
         return this.options.searchPage ? null : this.resource.workspace();
@@ -58,6 +62,13 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
     workspaceId: function() {
         return this.hasWorkspace() && this.resource.workspace().id;
+    },
+
+    currentUserCanCreateWorkFlow: function () {
+      return this.workFlowsEnabled() &&
+          !this.isChorusView() &&
+          this.hasWorkspace() &&
+          this.resource.workspace().currentUserCanCreateWorkFlows();
     },
 
     importsEnabled: function() {
@@ -108,7 +119,8 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         var tableLink = this._linkToModel(source);
         var lastImport = this.resource.lastImport();
 
-        if(lastImport.get('sourceDatasetId') === this.resource.get('id')) {
+        var sourceDataset = lastImport.get('sourceDataset');
+        if(sourceDataset && sourceDataset.id === this.resource.get('id')) {
             importStringKey = "import.in_progress";
             tableLink = destination.id ? this._linkToModel(destination) : destination.name();
         } else {
@@ -143,7 +155,8 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
             return Handlebars.helpers.unsafeT("import.began", { timeAgo: startedAt });
         }
 
-        if(lastImport.get("sourceDatasetId") === this.resource.get("id")) {
+        var sourceDataset = lastImport.get("sourceDataset");
+        if(sourceDataset && sourceDataset.id === this.resource.get("id")) {
             var destination = lastImport.destination();
             tableLink = destination.id ? this._linkToModel(destination) : this.ellipsize(destination.name());
 
@@ -156,7 +169,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
             var source = lastImport.source();
             tableLink = (lastImport.get("fileName")) ?
                 Handlebars.helpers.spanFor(this.ellipsize(lastImport.get("fileName")), { 'class': "source_file", title: lastImport.get("fileName") }) :
-                this._linkToModel(source);
+                source.get("id") ? this._linkToModel(source) : source.get("objectName");
             if(lastImport.get('success')) {
                 importStatusKey = "import.last_imported_into";
             } else {

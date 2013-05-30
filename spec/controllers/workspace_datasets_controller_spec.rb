@@ -50,7 +50,7 @@ describe WorkspaceDatasetsController do
       end
 
       it "orders and paginates the datasets" do
-        mock(the_datasets).order("lower(replace(datasets.name,'_',''))") { the_datasets }
+        mock(the_datasets).order("lower(replace(datasets.name,'_','')), id") { the_datasets }
         mock(the_datasets).paginate("page" => "2", "per_page" => "25", "total_entries" => 42) { the_datasets }
         get :index, :workspace_id => workspace.to_param, :page => "2", :per_page => "25"
       end

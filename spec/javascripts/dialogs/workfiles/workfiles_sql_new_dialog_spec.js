@@ -42,8 +42,9 @@ describe("chorus.dialogs.WorkfilesSqlNew", function() {
                 this.dialog.$("form").submit();
             });
 
-            it("doesn't freak out", function() {
+            it("does not let you submit the form", function() {
                 expect(this.dialog.model.get("fileName")).toBe("");
+                expect(this.dialog.$("form button.submit")).toBeDisabled();
             });
         });
 

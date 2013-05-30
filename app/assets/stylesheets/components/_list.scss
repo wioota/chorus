@@ -98,3 +98,9 @@ ul li {
         }
     }
 }
+
+.list_action_highlighted {
+  > li {
+    border-color: $list-border-color-highlighted;
+  }
+}

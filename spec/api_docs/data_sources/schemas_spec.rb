@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB: schemas" do
+resource "Schemas" do
   let!(:owned_data_source) { data_sources(:owners) }
   let(:owner) { owned_data_source.owner }
   let!(:database) { gpdb_databases(:default) }
@@ -48,7 +48,7 @@ resource "Greenplum DB: schemas" do
     parameter :schema_id, "Greenplum schema id"
     pagination
 
-    example_request "Get the list of database objects for a specific schema" do
+    example_request "Get the list of datasets for a specific schema" do
       status.should == 200
     end
   end

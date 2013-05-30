@@ -4,7 +4,7 @@ class ChorusWorkfile < Workfile
 
   belongs_to :execution_schema, :class_name => 'GpdbSchema'
 
-  has_many :versions, :foreign_key => :workfile_id, :class_name => 'WorkfileVersion', :order => 'version_num DESC', :inverse_of => :workfile
+  has_many :versions, :foreign_key => :workfile_id, :class_name => 'WorkfileVersion', :order => 'version_num DESC', :inverse_of => :workfile, :dependent => :destroy
   has_many :drafts, :class_name => 'WorkfileDraft', :foreign_key => :workfile_id
 
   validates_format_of :file_name, :with => /^[a-zA-Z0-9_ \.\(\)\-]+$/

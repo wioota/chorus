@@ -81,7 +81,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
     describe("when the path is long", function() {
         beforeEach(function() {
-            spyOn(chorus, "menu");
+            spyOn(this.page, "menu");
 
             this.server.completeFetchFor(this.page.model,
                 {
@@ -101,7 +101,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         });
 
         it("constructs the breadcrumb links correctly", function () {
-            var options = chorus.menu.mostRecentCall.args[1];
+            var options = this.page.menu.mostRecentCall.args[1];
 
             var $content = $(options.content);
 

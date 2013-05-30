@@ -13,11 +13,12 @@ $guts-padding: 7px;
 $guts-padding-bottom: 15px;
 $user-detail-image-width: 150px;
 $header-height : 49px;
-$icon-image-width : 32px;
-$icon-image-height : 32px;
+$icon-image-width : 35px;
+$icon-image-height : 35px;
+$large-image-width : 45px;
+$large-image-height : 45px;
 $activity-gutter: 8px;
 $dialog-padding : 15px;
-$button-height : 26px;
 $breadcrumbs-height: 32px;
 $help-pill-width: 34px;
 $texteditor-min-height: 300px;
@@ -33,7 +34,6 @@ $shaded-background-color: #E1E5E9;
 $data-grid-background-color: #EAEEF2;
 $dialog-background-color: white;
 $element-background: white;
-$button-background-color : white;
 $list-hover-color: #e3e8ed;
 $list-checked-color: #dde3e9;
 $progress-bar-background-color : #D8DEE6;
@@ -103,9 +103,9 @@ $menu-z-index: $header-z-index + 1;
 $dialog-overlay-z-index: $menu-z-index + 1;
 $dialog-z-index: $dialog-overlay-z-index + 1;
 
-$modal-tooltip-z-index: $dialog-z-index + 1;
+$tooltip-z-index: $dialog-z-index + 1;
 
-$toast-closing-z-index: $modal-tooltip-z-index + 1;
+$toast-closing-z-index: $tooltip-z-index + 1;
 $toast-z-index: $toast-closing-z-index + 1;
 $hidden-z-index: -100;
 $select-menu-z-index: 1000000;
@@ -249,12 +249,6 @@ $summary-line-height: 19px;
     line-height: $summary-line-height;
 }
 
-@mixin create-bar-text {
-    font-size: 14px;
-    font-weight: $semibold;
-    color: white;
-}
-
 @mixin after-clearfix($which: both) {
     &:after {
             content: ".";
@@ -282,18 +276,6 @@ $summary-line-height: 19px;
     white-space: inherit;
     overflow: inherit;
     text-overflow: inherit;
-}
-
-@mixin content-details-button($border-color) {
-    border: 1px solid $border-color;
-    @include border-radius(30px);
-    background: none;
-    margin-bottom: 2px;
-
-    &[disabled=disabled] {
-        @include opacity(0.5);
-    }
-    @include debugging-mixin;
 }
 
 @mixin tab-gradient {

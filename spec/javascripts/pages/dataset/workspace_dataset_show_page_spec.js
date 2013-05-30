@@ -99,6 +99,13 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                 });
             });
         });
+
+        it("navigates to the chorus view show page if the dataset turns out to be a chorus view", function() {
+            spyOn(chorus.router, "navigate");
+            var chorusView = rspecFixtures.workspaceDataset.chorusView({workspace: { id: this.workspace.get("id") }});
+            this.server.completeFetchFor(this.dataset, chorusView.attributes);
+            expect(chorus.router.navigate).toHaveBeenCalledWith(chorusView.showUrl());
+        });
     });
 
     describe("#render", function() {

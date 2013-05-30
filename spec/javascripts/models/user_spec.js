@@ -1,5 +1,6 @@
 describe("chorus.models.User", function() {
     beforeEach(function() {
+        chorus.models.Config.instance().set({fileSizesMbUserIcon: 3});
         this.model = new chorus.models.User();
     });
 
@@ -336,7 +337,6 @@ describe("chorus.models.User", function() {
 
     describe("#maxImageSize", function() {
         it("returns the max file size for user icons from the config", function() {
-            this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
             var maxImgSize = chorus.models.Config.instance().get("fileSizesMbUserIcon");
             expect(maxImgSize).toBeDefined();
             expect(this.model.maxImageSize()).toBe(maxImgSize);

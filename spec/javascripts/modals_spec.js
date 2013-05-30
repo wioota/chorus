@@ -1,6 +1,6 @@
 describe("chorus.Modal", function() {
     beforeEach(function() {
-        this.modal = new chorus.Modal();
+        this.dialog = this.modal = new chorus.Modal();
         spyOn(chorus.Modal.prototype, "resize").andCallThrough();
         spyOn(chorus.Modal.prototype, "recalculateScrolling").andCallThrough();
         stubModals();
@@ -61,13 +61,14 @@ describe("chorus.Modal", function() {
         describe("when there is no existing chorus.modal", function() {
             beforeEach(function() {
                 delete chorus.modal;
-
                 //Modal is abstract, so we need to give it a template to render
                 //this is the responsibility of subclasses
                 this.modal.templateName = "plain_text";
 
                 this.modal.launchModal();
             });
+
+            itBehavesLike.aDialogWithSomethingToFocusOn();
 
             it("sets chorus.modal", function() {
                 expect(chorus.modal).toBe(this.modal);

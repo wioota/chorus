@@ -100,9 +100,10 @@ resource "Workfiles" do
 
   post "/workspaces/:workspace_id/workfiles" do
     let(:workspace_id) { workspace.to_param }
+    let(:database_id) { 1 }
 
     parameter :entity_subtype, ""
-    parameter :alpine_id, "1"
+    parameter :database_id, "Database Id"
     parameter :workspace_id, "Workspace Id"
     parameter :description, "Workfile description"
     parameter :file_name, "Filename"
@@ -110,7 +111,7 @@ resource "Workfiles" do
     required_parameters :file_name, :workspace_id
 
     let(:description) { "Get off my lawn, you darn kids!" }
-    let(:file_name) { workfile.file_name }
+    let(:file_name) { "new_file.sql" }
 
     example_request "Create a new workfile in a workspace" do
       status.should == 201

@@ -9,6 +9,7 @@ class Workfile < ActiveRecord::Base
 
   attr_accessible :description, :file_name, :as => [:default, :create]
   attr_accessible :owner, :workspace, :as => :create
+  attr_accessor :resolve_name_conflicts
 
   serialize :additional_data, JsonHashSerializer
 
@@ -19,13 +20,14 @@ class Workfile < ActiveRecord::Base
   has_many :events, :through => :activities
   has_many :comments, :through => :events
   has_many :most_recent_comments, :through => :events, :source => :comments, :class_name => "Comment", :order => "id DESC", :limit => 1
-  has_many :versions, :class_name => 'WorkfileVersion'
+  has_many :versions, :class_name => 'WorkfileVersion', :dependent => :destroy
 
   belongs_to :latest_workfile_version, :class_name => 'WorkfileVersion'
 
   validates :workspace, presence: true
   validates :owner, presence: true
   validates_presence_of :file_name
+  validate :validate_name_uniqueness, :on => :create
 
   before_validation :init_file_name, :on => :create
 
@@ -73,7 +75,7 @@ class Workfile < ActiveRecord::Base
 
   def self.build_for(params)
     klass = @@entity_subtypes[params[:entity_subtype]].constantize
-    workfile = klass.new(params, :as => :create)
+    klass.new(params, :as => :create)
   end
 
   def self.with_file_type(file_type)
@@ -82,12 +84,11 @@ class Workfile < ActiveRecord::Base
 
   def self.order_by(column_name)
     if column_name.blank? || column_name == "file_name"
-      order("lower(file_name)")
+      order("lower(file_name), id")
     else
       order("updated_at")
     end
   end
-
 
   def self.type_name
     'Workfile'
@@ -106,9 +107,10 @@ class Workfile < ActiveRecord::Base
   end
 
   def validate_name_uniqueness
+    return false if !workspace
     exists = Workfile.exists?(:file_name => file_name, :workspace_id => workspace.id)
     if exists
-      errors.add(:file_name, "is not unique.")
+      errors.add(:file_name, :taken)
       false
     else
       true
@@ -133,7 +135,7 @@ class Workfile < ActiveRecord::Base
   private
 
   def init_file_name
-    WorkfileName.resolve_name_for!(self)
+    WorkfileName.resolve_name_for!(self) if resolve_name_conflicts
     true
   end
 

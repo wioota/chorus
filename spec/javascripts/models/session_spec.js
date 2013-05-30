@@ -66,24 +66,25 @@ describe("chorus.models.Session", function() {
 
     describe("loggedIn", function() {
         beforeEach(function() {
-            this.model = new models.Session();
+            this.model = rspecFixtures.session();
         });
 
         it("returns true when there's a user", function () {
-            this.model._user = rspecFixtures.user();
-            expect(this.model._user.get('id')).toBeTruthy();
+            expect(this.model.user().get('id')).toBeTruthy();
             expect(this.model.loggedIn()).toBeTruthy();
 
         });
 
         it("returns false when there is no _user", function () {
+            delete this.model.attributes.user;
+            expect(this.model.user()).toBeFalsy();
             expect(this.model.loggedIn()).toBeFalsy();
         });
     });
 
     describe("#fetch", function() {
         beforeEach(function() {
-            this.model = new models.Session({ id: "1234", foo: "bar" });
+            this.model = rspecFixtures.session();
 
             this.errorSpy = jasmine.createSpy("error");
             this.model.fetch({
@@ -93,16 +94,6 @@ describe("chorus.models.Session", function() {
 
         it("has the correct url", function() {
             expect(this.server.lastFetch().url).toBe("/sessions");
-        });
-
-        context("when the session is valid", function() {
-            beforeEach(function() {
-                this.server.lastFetch().succeed();
-            });
-
-            it("fetches the chorus configuration", function() {
-                expect(new chorus.models.Config()).toHaveBeenFetched();
-            });
         });
 
         context("when the session is not valid", function() {
@@ -158,7 +149,7 @@ describe("chorus.models.Session", function() {
 
         context("when a user has been fetched", function() {
             beforeEach(function() {
-                this.session._user = rspecFixtures.user();
+                this.session = rspecFixtures.session();
             });
 
             it("returns a User", function() {
@@ -178,15 +169,10 @@ describe("chorus.models.Session", function() {
 
     describe("resuming", function() {
         beforeEach(function() {
-            this.session = new models.Session();
-            this.session._user = rspecFixtures.user();
+            this.session = rspecFixtures.session();
         });
 
         describe("#rememberPathBeforeLoggedOut", function() {
-            beforeEach(function() {
-                this.session.user().id = 2;
-            });
-
             context("when navigating to logout", function() {
                 beforeEach(function() {
                     Backbone.history.fragment = "logout";

@@ -41,11 +41,11 @@ chorus.views.ExistingTableImportDataGrid = chorus.views.ImportDataGrid.extend({
         _.each(this.$(".column_mapping a"), function (map, i) {
             var menuContent = this.$(".menu_content ul").clone();
             this.destinationMenus[i] = menuContent;
-            chorus.menu($(map), {
+            this.menu($(map), {
                 content: menuContent,
                 classes: "table_import_csv",
                 contentEvents: {
-                    'a.name': _.bind(this.destinationColumnSelected, this)
+                    'a.name': this.destinationColumnSelected
                 },
                 position: {
                     my: "left center",

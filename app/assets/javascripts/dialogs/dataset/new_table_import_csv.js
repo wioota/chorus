@@ -1,10 +1,9 @@
 chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     constructorName: "NewTableImportCSV",
-
+    suppressRenderOnChange: true,
     templateName: "new_table_import_csv",
     additionalClass: "table_import_csv dialog_wide",
     title: t("dataset.import.table.title"),
-    ok: t("dataset.import.table.submit"),
     loadingKey: "dataset.import.importing",
     includeHeader: true,
 
@@ -69,11 +68,11 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         } else {
             this.$("input#delimiter_other").prop("checked", true);
         }
-
         this.importDataGrid.initializeDataGrid(columns, rows, this.getColumnNames());
     },
 
     revealed: function() {
+        this._super("revealed", arguments);
         var columns = this.csvParser.getColumnOrientedData();
         var rows = this.csvParser.rows();
         this.importDataGrid.initializeDataGrid(columns, rows, this.getColumnNames());
@@ -86,8 +85,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             delimiter: this.other_delimiter ? this.delimiter : '',
             directions: Handlebars.helpers.unsafeT("dataset.import.table.new.directions", {
                 tablename_input_field: "<input type='text' name='tableName' value='" + this.model.get('tableName') + "'/>"
-            }),
-            ok: this.ok
+            })
         };
     },
 
@@ -186,6 +184,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.storeColumnInfo();
         this.parseCsv();
         this.updateModel();
+        this.render();
     },
 
     focusOtherInputField: function(e) {
@@ -203,6 +202,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         this.parseCsv();
         this.generateColumnNames();
         this.updateModel();
+        this.render();
     },
 
     setOtherDelimiter: function() {

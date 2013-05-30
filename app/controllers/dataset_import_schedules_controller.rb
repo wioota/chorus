@@ -7,7 +7,7 @@ class DatasetImportSchedulesController < ApplicationController
         :source_dataset_id => params[:dataset_id]
     )
     authorize! :show, Workspace.find(params[:workspace_id])
-    present import_schedules, :presenter_options => {:dataset_id => params[:dataset_id]}
+    present import_schedules
   end
 
   def create
@@ -15,37 +15,25 @@ class DatasetImportSchedulesController < ApplicationController
     workspace = Workspace.find(params[:workspace_id])
     authorize! :can_edit_sub_objects, workspace
     src_table = Dataset.find(params[:dataset_id])
+
     import_schedule = src_table.import_schedules.new(import_params)
     import_schedule.workspace    = workspace
     import_schedule.user         = current_user
-    if import_schedule.save
-      import_schedule.create_import_event
-      present import_schedule, :status => :created
-    else
-      raise ApiValidationError.new(import_schedule.errors)
-    end
+    import_schedule.save!
+    import_schedule.create_import_event
+    present import_schedule, :status => :created
   end
 
   def update
     unnormalize_params = params[:dataset_import_schedule]
-    import_schedule = ImportSchedule.find(params[:id])
-    import_params = normalize_attributes(unnormalize_params)
+    import_schedule    = ImportSchedule.find(params[:id])
+    import_params      = normalize_attributes(unnormalize_params)
     authorize! :can_edit_sub_objects, import_schedule.workspace
 
-    if import_schedule.update_attributes(import_params)
-      dst_table = import_schedule.workspace.sandbox.datasets.find_by_name(import_schedule[:to_table])
+    import_schedule.update_attributes!(import_params)
+    create_import_updated_event(import_schedule)
 
-      Events::ImportScheduleUpdated.by(current_user).add(
-          :workspace => import_schedule.workspace,
-          :source_dataset => import_schedule.source_dataset,
-          :dataset => dst_table,
-          :destination_table => import_schedule.to_table
-      )
-
-      present import_schedule
-    else
-      raise ApiValidationError.new(import_schedule.errors)
-    end
+    present import_schedule
   end
 
   def destroy
@@ -72,5 +60,18 @@ class DatasetImportSchedulesController < ApplicationController
     normalized_params[:frequency] = unnormalized_params[:frequency].downcase if unnormalized_params[:frequency]
     normalized_params[:start_datetime] = DateTime.parse(unnormalized_params[:start_datetime]) if unnormalized_params[:start_datetime]
     normalized_params
+  end
+
+private
+
+  def create_import_updated_event(import_schedule)
+    dst_table = import_schedule.workspace.sandbox.datasets.find_by_name(import_schedule[:to_table])
+
+    Events::ImportScheduleUpdated.by(current_user).add(
+        :workspace => import_schedule.workspace,
+        :source_dataset => import_schedule.source_dataset,
+        :dataset => dst_table,
+        :destination_table => import_schedule.to_table
+    )
   end
 end

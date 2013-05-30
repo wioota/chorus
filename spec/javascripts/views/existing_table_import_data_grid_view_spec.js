@@ -27,6 +27,7 @@ describe("chorus.views.ExistingTableImportDataGrid", function() {
         ];
 
         this.view = new chorus.views.ExistingTableImportDataGrid();
+        $('#jasmine_content').append(this.view.el);
         this.view.setDestinationColumns(this.columnSet.models);
         this.view.render();
         this.view.initializeDataGrid(this.sourceColumns, this.rows);

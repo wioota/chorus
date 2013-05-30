@@ -1,4 +1,5 @@
 chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
+    constructorName: 'WorkfileIndexPage',
     helpId: "workfiles",
 
     setup: function(workspaceId) {
@@ -8,24 +9,21 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         this.collection.fetchAll();
 
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
+        this.buttonView = new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Workfile",
             collection: this.collection,
             model: this.workspace,
             title: t("workfiles.title"),
-            contentDetailsOptions: { multiSelect: true },
+            contentDetailsOptions: {
+                multiSelect: true,
+                buttonView: this.buttonView
+            },
             contentOptions: {listItemOptions: {workspaceIdForTagLink: this.workspace.id} },
             linkMenus: {
                 type: {
                     title: t("header.menu.filter.title"),
-                    options: [
-                        {data: "", text: t("workfiles.header.menu.filter.all")},
-                        {data: "SQL", text: t("workfiles.header.menu.filter.sql")},
-                        {data: "CODE", text: t("workfiles.header.menu.filter.code")},
-                        {data: "TEXT", text: t("workfiles.header.menu.filter.text")},
-                        {data: "IMAGE", text: t("workfiles.header.menu.filter.image")},
-                        {data: "OTHER", text: t("workfiles.header.menu.filter.other")}
-                    ],
+                    options: this.linkMenuOptions(),
                     event: "filter"
                 },
                 sort: {
@@ -67,21 +65,12 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
             this.collection.fetchAll();
         }, this);
 
-        this.listenTo(this.workspace, "change", this.updateButtons);
+        this.requiredResources.add(this.workspace);
         this.breadcrumbs.requiredResources.add(this.workspace);
     },
 
     makeModel: function(workspaceId) {
         this.loadWorkspace(workspaceId);
-    },
-
-    crumbs: function() {
-        return [
-            {label: t("breadcrumbs.home"), url: "#/"},
-            {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
-            {label: this.workspace.loaded ? this.workspace.displayShortName() : "...", url: this.workspace.showUrl()},
-            {label: t("breadcrumbs.workfiles.all")}
-        ];
     },
 
     setModel: function(workfile) {
@@ -93,32 +82,30 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         this.renderSubview('sidebar');
     },
 
-    updateButtons: function() {
-        if (this.mainContent.model.canUpdate() && this.mainContent.model.isActive()) {
-            this.mainContent.contentDetails.options.buttons = [
-                {
-                    view: "WorkfilesImport",
-                    text: t("actions.import_workfile"),
-                    dataAttributes: [
-                        {
-                            name: "workspace-id",
-                            value: this.mainContent.model.get("id")
-                        }
-                    ]
-                },
-                {
-                    view: "WorkfilesSqlNew",
-                    text: t("actions.create_sql_workfile"),
-                    dataAttributes: [
-                        {
-                            name: "workspace-id",
-                            value: this.mainContent.model.get("id")
-                        }
-                    ]
-                }
-            ];
+    crumbs: function() {
+        return [
+            {label: t("breadcrumbs.home"), url: "#/"},
+            {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
+            {label: this.workspace.loaded ? this.workspace.displayShortName() : "...", url: this.workspace.showUrl()},
+            {label: t("breadcrumbs.workfiles.all")}
+        ];
+    },
+
+    linkMenuOptions: function () {
+        var items = [
+            {data: "", text: t("workfiles.header.menu.filter.all")},
+            {data: "SQL", text: t("workfiles.header.menu.filter.sql")},
+            {data: "CODE", text: t("workfiles.header.menu.filter.code")},
+            {data: "TEXT", text: t("workfiles.header.menu.filter.text")},
+            {data: "IMAGE", text: t("workfiles.header.menu.filter.image")},
+            {data: "OTHER", text: t("workfiles.header.menu.filter.other")}
+        ];
+
+        if (chorus.models.Config.instance().get("workFlowConfigured")) {
+            var workFlowsOption = {data: "WORK_FLOW", text: t("workfiles.header.menu.filter.work_flow")};
+            items.splice(2, 0, workFlowsOption);
         }
 
-        this.render();
+        return items;
     }
 });

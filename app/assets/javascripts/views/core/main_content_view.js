@@ -12,7 +12,7 @@ chorus.views.MainContentView = chorus.views.Base.extend({
 
     subviews: {
         ".content_header > div": "contentHeader",
-        ".content_details > div": "contentDetails",
+        ".content_details": "contentDetails",
         ".content > div": "content",
         ".content_footer > div": "contentFooter"
     },

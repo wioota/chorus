@@ -24,7 +24,6 @@ describe("chorus.pages.UserEditPage", function() {
 
             this.server.completeFetchFor(this.user);
             this.server.completeFetchFor(this.user.activities());
-            this.server.completeFetchFor(chorus.models.Config.instance());
             this.view.render();
         });
 

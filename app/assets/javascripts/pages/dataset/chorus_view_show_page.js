@@ -39,5 +39,7 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
         } else {
             this._super('constructSidebarForType', arguments);
         }
-    }
+    },
+
+    checkEntityType: $.noop
 });

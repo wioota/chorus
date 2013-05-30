@@ -1,6 +1,6 @@
 chorus.dialogs.RunAndDownload = chorus.dialogs.DatasetDownload.extend({
     constructorName: "RunAndDownload",
-    submitText: t("workfile.run_and_download_dialog.run"),
+    submitKey: "workfile.run_and_download_dialog.run",
 
     persistent:true,
 

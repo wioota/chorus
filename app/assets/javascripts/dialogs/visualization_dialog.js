@@ -32,7 +32,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.filters = this.options.filters.clone();
         this.lastSavedFilters = this.options.filters.clone();
         this.filterWizard = new chorus.views.DatasetFilterWizard({collection: this.filters, columnSet: this.options.columnSet});
-        this.resultsConsole = new chorus.views.ResultsConsole({enableResize: true, enableExpander: false, model: this.task, footerSize: _.bind(this.footerSize, this)});
+        this.configureResultsConsole();
         this.listenTo(this.filters, "add remove change", this.filtersChanged);
     },
 
@@ -72,6 +72,22 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
         this.drawChart();
     },
 
+    getAvailableHeight: function(){
+        var maxPopupHeight = $('#facebox').find('.popup').css("max-height").replace("px", "");
+        return maxPopupHeight - (this.$el.height() - this.resultsConsole.$('.result_table').height());
+    },
+
+    configureResultsConsole: function () {
+        var resultsConsoleOptions = {
+            enableResize: true,
+            enableExpander: false,
+            model: this.task,
+            footerSize: _.bind(this.footerSize, this),
+            boundingContainer: this
+        };
+        this.resultsConsole = new chorus.views.ResultsConsole(resultsConsoleOptions);
+    },
+
     drawChart: function() {
         if (this.isValidData()) {
             if ((this.type === "timeseries") && !this.isSufficientDataForTimeseries()) {
@@ -79,8 +95,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
                 this.subviews[".chart_area"] = "emptyDataWarning";
                 this.renderSubview("emptyDataWarning");
             } else {
-                this.$(".modal_controls a.hide").addClass("hidden");
-                this.$(".modal_controls a.show").removeClass("hidden");
+                this.$(".form_controls a.hide").addClass("hidden");
+                this.$(".form_controls a.show").removeClass("hidden");
                 this.$("button.save").prop("disabled", false);
                 this.chart = new chorus.views.visualizations[_.capitalize(this.type)]({model:this.task});
                 this.subviews[".chart_area"] = "chart";
@@ -228,8 +244,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     showDataGrid: function(e) {
         e && e.preventDefault();
         this.$('.results_console').removeClass("hidden");
-        this.$(".modal_controls a.hide").removeClass("hidden");
-        this.$(".modal_controls a.show").addClass("hidden");
+        this.$(".form_controls a.hide").removeClass("hidden");
+        this.$(".form_controls a.show").addClass("hidden");
         this.resultsConsole.initializeDataGrid(this.task);
         this.recalculateScrolling();
     },
@@ -237,8 +253,8 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     hideDataGrid: function(e) {
         e && e.preventDefault();
         this.$('.results_console').addClass("hidden");
-        this.$(".modal_controls a.show").removeClass("hidden");
-        this.$(".modal_controls a.hide").addClass("hidden");
+        this.$(".form_controls a.show").removeClass("hidden");
+        this.$(".form_controls a.hide").addClass("hidden");
     },
 
     saveToDesktop: function() {
@@ -279,7 +295,7 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
     },
 
     footerSize: function() {
-        return this.$('.modal_controls').outerHeight(true);
+        return this.$('.form_controls').outerHeight(true);
     },
 
     sanitizeFilename: function(fileName) {

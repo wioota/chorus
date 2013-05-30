@@ -40,6 +40,15 @@ describe ConfigurationsController do
       decoded_response.alpine_api_key.should == 'abcdefg'
     end
 
+    it "includes the work flow configuration" do
+      stub(ChorusConfig.instance).[]('work_flow.url') { 'http://test.example.com:8080' }
+      stub(ChorusConfig.instance).[]('work_flow.enabled') { true }
+      get :show
+      response.code.should == "200"
+      decoded_response.work_flow_configured.should be_true
+      decoded_response.work_flow_url.should == 'http://test.example.com:8080'
+    end
+
     it "does not include the alpine configuration when it is not fully configured" do
       stub(ChorusConfig.instance).[]('alpine.url') { '' }
       stub(ChorusConfig.instance).[]('alpine.api_key') { 'abcdefg' }

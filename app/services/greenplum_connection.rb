@@ -31,12 +31,6 @@ class GreenplumConnection < DataSourceConnection
   class ObjectNotFound < StandardError; end
   class SqlPermissionDenied < StandardError; end
 
-  @@gpdb_login_timeout = 10
-
-  def self.gpdb_login_timeout
-    @@gpdb_login_timeout
-  end
-
   def disconnect
     @connection.disconnect if @connection
     @connection = nil
@@ -96,8 +90,7 @@ class GreenplumConnection < DataSourceConnection
   def db_options
     super.merge({
         :user => @account.db_username,
-        :password => @account.db_password,
-        :loginTimeout => GreenplumConnection.gpdb_login_timeout
+        :password => @account.db_password
     })
   end
 

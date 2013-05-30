@@ -1,16 +1,12 @@
-chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.extend({
+chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.include(
+        chorus.Mixins.DialogFormHelpers
+    ).extend({
     constructorName: "WorkspacesNew",
 
     templateName:"workspaces_new",
     title:"Create a New Workspace",
 
     persistent:true,
-
-    events:{
-        "keyup input[name=name]": "checkInput",
-        "paste input[name=name]": "checkInput",
-        "submit form.new_workspace":"createWorkspace"
-    },
 
     makeModel:function () {
         this.model = this.model || new chorus.models.Workspace();
@@ -19,9 +15,10 @@ chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.extend({
     setup:function () {
         this.listenTo(this.resource, "saved", this.workspaceSaved);
         this.listenTo(this.resource, "saveFailed", function() { this.$("button.submit").stopLoading(); });
+        this.disableFormUnlessValid({formSelector: "form.new_workspace", inputSelector: "input[name='name']"});
     },
 
-    createWorkspace:function createWorkspace(e) {
+    create:function create(e) {
         e.preventDefault();
 
         this.resource.set({
@@ -34,12 +31,7 @@ chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.extend({
     },
 
     workspaceSaved:function () {
-        $(document).trigger("close.facebox");
+        this.closeModal();
         chorus.router.navigate("/workspaces/" + this.model.get("id") + "/quickstart");
-    },
-
-    checkInput : function() {
-        var hasText = this.$("input[name=name]").val().trim().length > 0;
-        this.$("button.submit").prop("disabled", hasText ? false : "disabled");
     }
 });

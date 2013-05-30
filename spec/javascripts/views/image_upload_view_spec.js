@@ -1,5 +1,6 @@
 describe("chorus.views.ImageUpload", function() {
     beforeEach(function() {
+        loadConfig();
         this.user = rspecFixtures.user({
             username: "franklin",
             id : 13,
@@ -8,7 +9,6 @@ describe("chorus.views.ImageUpload", function() {
         this.view = new chorus.views.ImageUpload({model : this.user});
         this.view.model.loaded = true;
         this.imageJson = rspecFixtures.imageJson();
-        this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
     });
 
     describe("#render", function() {

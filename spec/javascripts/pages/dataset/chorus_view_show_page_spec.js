@@ -26,7 +26,12 @@ describe("chorus.pages.ChorusViewShowPage", function() {
 
             context("when the Chorus View fetch completes", function() {
                 beforeEach(function() {
+                    spyOn(chorus.router, "navigate");
                     this.server.completeFetchFor(this.chorusView);
+                });
+
+                it("does not navigate again", function() {
+                   expect(chorus.router.navigate).not.toHaveBeenCalled();
                 });
 
                 describe("when the columnSet fetch completes", function() {

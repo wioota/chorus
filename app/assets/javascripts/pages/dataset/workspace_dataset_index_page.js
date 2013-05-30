@@ -7,6 +7,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.collection.sortAsc("objectName");
         this.collection.fetch();
         this.handleFetchErrorsFor(this.collection);
+        this.workspace.members().fetchIfNotLoaded();
 
         this.subscribePageEvent("dataset:selected", function(dataset) {
             this.model = dataset;
@@ -27,17 +28,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             this.collection.search($(e.target).val());
         }, this), 300);
 
-        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
-            selectEvent: "dataset:checked",
-            actions: [
-                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
-            ],
-            actionEvents: {
-                'click .edit_tags': _.bind(function() {
-                    new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
-                }, this)
-            }
-        });
+        this.buildSidebar();
 
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
         this.mainContent = new chorus.views.MainContentList({
@@ -81,7 +72,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.DatasetSidebar({ workspace: this.workspace, listMode: true });
 
-        this.listenTo(this.workspace, "loaded", this.workspaceLoaded);
+        this.onceLoaded(this.workspace, this.workspaceLoaded);
         this.breadcrumbs.requiredResources.add(this.workspace);
     },
 
@@ -133,7 +124,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             }
         }
         this.mainContent.contentDetails.render();
-
+        this.onceLoaded(this.workspace.members(), this.setSidebarActions);
     },
 
     checkAccount: function() {
@@ -147,5 +138,39 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
                 chorus.session.sandboxPermissionsCreated[this.workspace.get("id")] = true;
             }
         }
+    },
+
+    sidebarMultiselectActions: function () {
+        var actions = [
+            '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
+        ];
+
+        if (chorus.models.Config.instance().get("workFlowConfigured") && this.workspace.currentUserCanCreateWorkFlows()) {
+            actions.push('<a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a>');
+        }
+        return actions;
+    },
+
+    sidebarMultiselectActionEvents: function () {
+        return {
+            'click .edit_tags': _.bind(function () {
+                new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+            }, this),
+            'click .new_work_flow': _.bind(function () {
+                new chorus.dialogs.WorkFlowNewForDatasetList({workspace: this.workspace, collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+            }, this)
+        };
+    },
+
+    buildSidebar: function () {
+        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
+            selectEvent: "dataset:checked",
+            actions: this.sidebarMultiselectActions(),
+            actionEvents: this.sidebarMultiselectActionEvents()
+        });
+    },
+
+    setSidebarActions: function () {
+        this.multiSelectSidebarMenu.setActions(this.sidebarMultiselectActions());
     }
 });

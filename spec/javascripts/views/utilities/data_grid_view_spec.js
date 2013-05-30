@@ -101,6 +101,7 @@ describe("chorus.views.DataGrid", function() {
             context("when columns do not fill the viewport", function () {
                 beforeEach(function () {
                     this.view.$el.width(25);
+                    this.view.columnStartingWidth = 5;
                 });
                 it("is true", function () {
                     expect(this.view.forceFitColumns(this.columns)).toBe(true);
@@ -110,6 +111,7 @@ describe("chorus.views.DataGrid", function() {
             context("when columns fill the viewport", function () {
                 beforeEach(function () {
                     this.view.$el.width(15);
+                    this.view.columnStartingWidth = 5;
                 });
 
                 it("is false", function () {

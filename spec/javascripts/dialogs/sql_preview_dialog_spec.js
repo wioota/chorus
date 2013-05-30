@@ -11,8 +11,8 @@ describe("chorus.dialogs.SqlPreview", function () {
         });
 
         it("has a close window button", function () {
-            expect(this.dialog.$('.modal_controls button.cancel')).toExist();
-            expect(this.dialog.$('.modal_controls button.cancel').text().trim()).toMatchTranslation("actions.close_window");
+            expect(this.dialog.$('.form_controls button.cancel')).toExist();
+            expect(this.dialog.$('.form_controls button.cancel').text().trim()).toMatchTranslation("actions.close_window");
         });
 
         it("hides the sql text area until the codemirror editor is ready", function () {
@@ -52,7 +52,7 @@ describe("chorus.dialogs.SqlPreview", function () {
                     });
 
                     it("hides the preview button", function () {
-                        expect(this.dialog.$("button.preview")).toHaveClass("hidden");
+                        expect(this.dialog.$("button.preview")).toHaveClass("invisible");
                     });
 
                     it("shows the expander", function () {
@@ -69,7 +69,7 @@ describe("chorus.dialogs.SqlPreview", function () {
                         });
 
                         it("shows the preview button", function () {
-                            expect(this.dialog.$("button.preview")).not.toHaveClass("hidden");
+                            expect(this.dialog.$("button.preview")).not.toHaveClass("invisible");
                         });
 
                         describe("clicking on the data preview again", function () {

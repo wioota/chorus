@@ -63,6 +63,10 @@ describe("chorus.models.Workspace", function() {
             expect(collection.attributes.type).toEqual("SANDBOX_TABLE");
             expect(collection.attributes.objectType).toEqual("TABLE");
         });
+
+        it("memoizes", function() {
+            expect(this.model.sandboxTables()).toBe(this.model.sandboxTables());
+        });
     });
 
     describe("#isPublic", function() {
@@ -464,10 +468,93 @@ describe("chorus.models.Workspace", function() {
 
     describe("#maxImageSize",function() {
         it("returns the max file size for workspace icons from the config", function() {
-            this.server.completeFetchFor(chorus.models.Config.instance(), rspecFixtures.config());
-            var maxImgSize = chorus.models.Config.instance().get("fileSizesMbWorkspaceIcon");
-            expect(maxImgSize).toBeDefined();
-            expect(this.model.maxImageSize()).toBe(maxImgSize);
+            chorus.models.Config.instance().set({fileSizesMbWorkspaceIcon: 3});
+            expect(this.model.maxImageSize()).toBe(3);
+        });
+    });
+
+    describe("#currentUserCanCreateWorkFlows", function () {
+        context("when the workspace is active", function () {
+            context("the current user is a member", function () {
+                beforeEach(function () {
+                    this.model.members().add(new chorus.models.User(chorus.session.user().attributes));
+                });
+
+                it("returns true", function(){
+                    expect(this.model.currentUserCanCreateWorkFlows()).toBeTruthy();
+                });
+            });
+
+            context("the workspace is public", function () {
+                beforeEach(function () {
+                    spyOn(this.model, "isPublic").andReturn(true);
+                });
+
+                it("returns false", function () {
+                    expect(this.model.currentUserCanCreateWorkFlows()).toBeFalsy();
+                });
+            });
+        });
+
+        context("when the workspace is archived", function () {
+            it("returns false", function () {
+                this.model.set("archivedAt", true);
+                expect(this.model.currentUserCanCreateWorkFlows()).toBeFalsy();
+            });
+        });
+
+        context("when the current user is not a member", function () {
+            it("returns false", function () {
+                this.model.members().reset();
+                expect(this.model.currentUserCanCreateWorkFlows()).toBeFalsy();
+            });
+        });
+
+        context("when the current user is the owner", function() {
+            it("returns true", function () {
+                this.model.members().reset();
+                this.model.set('owner', chorus.session.user().attributes);
+                expect(this.model.currentUserCanCreateWorkFlows()).toBeTruthy();
+            });
+        });
+    });
+
+    describe("#currentUserCanOpenWorkFlows", function () {
+        context("when the workspace is active", function () {
+            context("the current user is a member", function () {
+                beforeEach(function () {
+                    this.model.members().add(new chorus.models.User(chorus.session.user().attributes));
+                });
+
+                it("returns true", function(){
+                    expect(this.model.currentUserCanOpenWorkFlows()).toBeTruthy();
+                });
+            });
+
+            context("the workspace is public", function () {
+                beforeEach(function () {
+                    spyOn(this.model, "isPublic").andReturn(true);
+                });
+
+                it("returns false", function () {
+                    expect(this.model.currentUserCanOpenWorkFlows()).toBeTruthy();
+                });
+            });
+        });
+
+        context("when the workspace is archived", function () {
+            it("returns false", function () {
+                this.model.set("archivedAt", true);
+                expect(this.model.currentUserCanOpenWorkFlows()).toBeFalsy();
+            });
+        });
+
+        context("when the current user is not a member and the workspace is not public", function () {
+            it("returns false", function () {
+                this.model.members().reset();
+                spyOn(this.model, "isPublic").andReturn(false);
+                expect(this.model.currentUserCanOpenWorkFlows()).toBeFalsy();
+            });
         });
     });
 });

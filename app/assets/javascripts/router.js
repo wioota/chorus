@@ -61,7 +61,8 @@
             ["tags", "TagIndex"],
             ["tags/:name", "TagShow"],
             ["tags/:scope/:entityType/:name", "TagShow"],
-            ["data_sources/:id/schemas", "OracleSchemaIndex"]
+            ["data_sources/:id/schemas", "OracleSchemaIndex"],
+            ["work_flows/:id", "WorkFlowShow"]
         ],
 
         initialize:function (app) {
@@ -117,7 +118,7 @@
                         self.app.page = page;
                         self.app.updateCachebuster();
 
-                        $("#page").html(page.render().el).attr("data-page", className);
+                        $("#page").html(page.render().el).attr("data-page", className).addClass(page.pageClass);
 
                         if (self.app.modal) self.app.modal.closeModal();
                     }

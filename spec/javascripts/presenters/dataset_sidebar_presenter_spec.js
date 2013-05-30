@@ -131,7 +131,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                 beforeEach(function() {
                     this.datasetImport = rspecFixtures.workspaceImportSet().last();
                     this.datasetImport.set({
-                        sourceDatasetId: resource.get('id'),
+                        sourceDataset: { id: resource.get('id') },
                         completedStamp: Date.parse("Today - 33 days").toJSONString(),
                         success: true
                     });
@@ -158,7 +158,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                     context("when importing to an existing table", function() {
                         beforeEach(function() {
                             delete this.datasetImport.attributes.completedStamp;
-                            this.datasetImport.set({destinationDatasetId: 2});
+                            this.datasetImport.set({destinationDataset:{id: 2}});
                             this.spy.andReturn(
                                 this.datasetImport
                             );
@@ -182,6 +182,28 @@ describe("chorus.presenters.DatasetSidebar", function() {
                         expect(presenter.importFailed()).toBeFalsy();
                         expect(presenter.lastImport()).toMatch("Imported 1 month ago into");
                     });
+
+                    context("for an existing table", function() {
+                        beforeEach(function() {
+                            this.datasetImport.set({destinationDataset: {id: 12345}}, {silent: true});
+                        });
+
+                        it("should have a link to the destination table", function() {
+                            expect(presenter.lastImport()).toMatch("into <a ");
+                            expect(presenter.lastImport()).toMatch(this.datasetImport.name());
+                        });
+                    });
+
+                    context("for a deleted table", function() {
+                        beforeEach(function() {
+                            this.datasetImport.set({destinationDataset: { id: null}}, {silent: true});
+                        });
+
+                        it("should not have a link to the destination table", function() {
+                            expect(presenter.lastImport()).not.toMatch("into <a ");
+                            expect(presenter.lastImport()).toMatch(this.datasetImport.name());
+                        });
+                    });
                 });
 
                 describe("failed import", function() {
@@ -200,7 +222,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     context("for an existing table", function() {
                         beforeEach(function() {
-                            this.datasetImport.set({destinationDatasetId: 12345}, {silent: true});
+                            this.datasetImport.set({destinationDataset: {id: 12345}}, {silent: true});
                         });
 
                         it("should have a link to the destination table", function() {
@@ -211,7 +233,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
                     context("for a new table", function() {
                         beforeEach(function() {
-                            this.datasetImport.set({destinationDatasetId: null}, {silent: true});
+                            this.datasetImport.set({destinationDataset: { id: null}}, {silent: true});
                         });
 
                         it("should not have a link to the destination table", function() {
@@ -226,7 +248,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                 beforeEach(function() {
                     this.datasetImport = rspecFixtures.workspaceImportSet().first();
                     this.datasetImport.set({
-                        sourceDatasetId: resource.get('id') + 1,
+                        sourceDataset: { id: resource.get('id') + 1, objectName: "the_juice"},
                         completedStamp: Date.parse("Today - 33 days").toJSONString(),
                         success: true
                     });
@@ -257,14 +279,33 @@ describe("chorus.presenters.DatasetSidebar", function() {
                     it("has normal lastImport text", function() {
                         expect(presenter.importInProgress()).toBeFalsy();
                         expect(presenter.importFailed()).toBeFalsy();
+                        expect(presenter.lastImport()).toMatch("Imported 1 month ago from <a");
+                    });
+                });
+
+                describe("successfully finished import", function() {
+                    beforeEach(function() {
+                        this.datasetImport.set({
+                            sourceDataset: { objectName: "the_juice" },
+                            completedStamp: Date.parse("Today - 33 days").toJSONString(),
+                            success: true
+                        });
+                        spyOn(resource, 'lastImport').andReturn(
+                            this.datasetImport
+                        );
+                    });
+
+                    it("has normal lastImport text", function() {
+                        expect(presenter.importInProgress()).toBeFalsy();
+                        expect(presenter.importFailed()).toBeFalsy();
                         expect(presenter.lastImport()).toMatch("Imported 1 month ago from");
+                        expect(presenter.lastImport()).not.toMatch("from <a");
                     });
                 });
 
                 describe("import from a file", function() {
                     beforeEach(function() {
-                        this.datasetImport.unset("sourceDatasetId");
-                        this.datasetImport.unset("sourceDatasetName");
+                        this.datasetImport.set("sourceDataset", null);
                         this.datasetImport.set("fileName", "foo.csv");
                         spyOn(resource, 'lastImport').andReturn(
                             this.datasetImport

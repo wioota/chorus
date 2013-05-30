@@ -67,6 +67,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
     describe("#render", function () {
         beforeEach(function() {
+            $('#jasmine_content').append(this.dialog.el);
             this.dialog.render();
         });
 

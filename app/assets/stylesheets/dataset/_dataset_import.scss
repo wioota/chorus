@@ -59,10 +59,6 @@ $image-width: 35px;
                         cursor : pointer;
                     }
                 }
-
-                .choose {
-                    @include content-details-button($border-color);
-                }
             }
         }
 

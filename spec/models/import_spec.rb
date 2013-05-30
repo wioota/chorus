@@ -40,13 +40,11 @@ describe Import, :greenplum_integration do
 
     it "validates the presence of to_table" do
       import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :to_table => nil)
-      import.should_not be_valid
       import.should have_error_on(:to_table)
     end
 
     it "validates the presence of source_dataset if no file_name present" do
       import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :source => nil, :file_name => nil)
-      import.should_not be_valid
       import.should have_error_on(:scoped_source_dataset)
       import.should have_error_on(:file_name)
     end
@@ -58,13 +56,11 @@ describe Import, :greenplum_integration do
 
     it "validates the presence of user" do
       import = FactoryGirl.build(:import, :workspace => workspace, :user => nil)
-      import.should_not be_valid
       import.should have_error_on(:user)
     end
 
     it "validates that the to_table does not exist already if it is a new table" do
       import.to_table = "master_table1"
-      import.should_not be_valid
       import.should have_error_on(:base).with_message(:table_exists)
     end
 
@@ -81,7 +77,6 @@ describe Import, :greenplum_integration do
       end
       import.to_table = 'pg_all_types'
       import.new_table = false
-      import.should_not be_valid
 
       import.should have_error_on(:base, :table_not_consistent)
     end

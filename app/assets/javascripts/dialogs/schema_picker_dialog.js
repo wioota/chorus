@@ -10,12 +10,12 @@ chorus.dialogs.SchemaPicker = chorus.dialogs.Base.extend({
         ".schema_picker":"schemaPicker"
     },
 
-    schemaPickerTranslation: function(key) {
-        return t(["schema_picker", this.options.action, key].join("."));
+    schemaPickerTranslationKey: function(key) {
+        return ["schema_picker", this.options.action, key].join(".");
     },
 
     setup: function() {
-        this.title = this.schemaPickerTranslation("title");
+        this.title = t(this.schemaPickerTranslationKey("title"));
 
         this.schemaPicker = new chorus.views.SchemaPicker({ defaultSchema: this.options.schema });
         this.listenTo(this.schemaPicker, "change", this.enableOrDisableSubmitButton);
@@ -25,7 +25,7 @@ chorus.dialogs.SchemaPicker = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            save: this.schemaPickerTranslation("save")
+            saveKey: this.schemaPickerTranslationKey("save")
         };
     },
 

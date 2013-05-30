@@ -34,10 +34,15 @@ describe Workspace do
   end
 
   describe "create" do
+    let(:owner) { users(:no_collaborators) }
+    let(:workspace) { owner.owned_workspaces.create!(name: 'new workspace!') }
+
     it "creates a membership for the owner" do
-      owner = users(:no_collaborators)
-      workspace = owner.owned_workspaces.create!(name: 'new workspace!')
       workspace.members.should include(owner)
+    end
+
+    it "shows sandbox datasets by default" do
+      workspace.show_sandbox_datasets.should be_true
     end
   end
 

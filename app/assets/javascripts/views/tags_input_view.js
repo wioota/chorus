@@ -13,7 +13,6 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     postRender: function() {
         this.$input = this.$('input');
         this.buildTextExt();
-        this.focusInput();
     },
 
     buildTextExt: function() {
@@ -78,7 +77,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
     },
 
     resizeTextExt: function() {
-        this.textext.trigger('postInvalidate');
+        this.textext && this.textext.trigger('postInvalidate');
     },
 
     updateTags: function(e, tags) {
@@ -89,6 +88,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         } else if(tags.length < this.tags.length) {
             this.removeMissingTag(tags);
         }
+        this.focusInput();
     },
 
     addTag: function(newTag) {

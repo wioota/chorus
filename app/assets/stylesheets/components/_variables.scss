@@ -12,6 +12,9 @@ $light-gray: #D0D0D0;
 $light-green: #B3D988;
 $light-blue: #EAEFF6;
 $blue: #2c95dd;
+$green: #98B675;
+$dark-green: #4E7225;
+$gray-blue: #B2C7D6;
 
 
 /* Typography */
@@ -20,6 +23,9 @@ $default-font-color: $dark-gray;
 $default-font-size: 14px;
 $font-family: "Open Sans", Verdana;
 $low-light-type: $gray;
+$mid-light-type: #5f5f5f;
+
+$action-bar-highlighted-font-color: $dark-green;
 
 /* Link */
 
@@ -35,3 +41,38 @@ $list-selectable-selected-color: white;
 $list-breadcrumb-divider: "\f0da";
 $list-breadcrumb-spacing: 5px;
 $list-breadcrumb-size: 12px;
+$list-border-color-highlighted: $green;
+
+
+/* whitespace */
+
+$baseLineHeight: 1.5em !default; //must be in em
+$baseFontSize: 15px !default; // must be px
+
+/*
+ * em-ratio	converts between em and px
+ * to em 	divide by this ratio
+ * to px 	mulitply by this ratio
+ */
+$emRatio: $baseFontSize/$baseLineHeight;
+
+
+$guttersH: 15px;
+$guttersV: $baseLineHeight/2em*1rem; // set top and bottom margins to half the base line height so that the total takes up one row of vertical rhythm.
+$spacingHelpers: ($emRatio*$baseLineHeight/3, $emRatio*$baseLineHeight/2, $emRatio*$baseLineHeight); //TODO: convert to px;
+
+/* buttons */
+$button-height : 26px;
+$button-border-color: $light-gray;
+$button-background-color : white;
+
+$button-border-color-highlighted: $green;
+
+$button-border-color-secondary: $gray-blue;
+
+$button-border-color-limited: #A0A0A0;
+
+/* action bars */
+$action-bar-highlighted-background-color: $light-green;
+$action-bar-hovered-item-background-color: #C3ECA0;
+$action-bar-secondary-background-color: #C4DCEB;

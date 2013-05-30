@@ -27,7 +27,6 @@ describe GpdbSchema do
       it 'does not allow slashes, ampersands and question marks' do
         ['/', '&', '?'].each do |char|
           new_schema = FactoryGirl.build(:gpdb_schema, :name => "schema#{char}name")
-          new_schema.should_not be_valid
           new_schema.should have_error_on(:name)
         end
       end
@@ -40,7 +39,6 @@ describe GpdbSchema do
             new_schema = FactoryGirl.build(:gpdb_schema,
                                            :name => existing.name,
                                            :database => existing.database)
-            new_schema.should_not be_valid
             new_schema.should have_error_on(:name).with_message(:taken)
           end
         end

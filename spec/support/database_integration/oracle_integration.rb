@@ -53,15 +53,17 @@ module OracleIntegration
   end
 
   def self.setup_test_schemas
+    return if schema_exists?
     puts "Importing into #{schema_name}"
-    begin
-      puts "Dropping schema"
-      execute_sql %Q{DROP USER "#{schema_name}" CASCADE}
-    rescue Exception
-    end
     sql = ERB.new(File.read(Rails.root.join "spec/support/database_integration/setup_oracle_databases.sql.erb")).result(binding)
     puts "Executing setup_oracle_databases.sql"
     execute_sql(sql)
+  end
+
+  def self.schema_exists?
+    Sequel.connect(db_url) do |connection|
+      connection.fetch(OracleConnection::SCHEMAS_SQL).any? {|row| row[:name] == schema_name }
+    end
   end
 
   def self.execute_sql(sql)

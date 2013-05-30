@@ -92,7 +92,7 @@
             padding: 20px;
         }
 
-        .modal_controls {
+        .form_controls {
             padding: $dialog-padding;
             border-top: 1px solid $menu-border-color;
             margin: 0;
@@ -123,4 +123,14 @@ div.dialog {
     &.dialog_wide {
       width:940px;
     }
+}
+
+/*Custom Dialogs*/
+
+.dialog.data_source_permissions {
+  width: 570px;
+}
+
+.dialog.edit_workspace_dialog {
+  width: 580px;
 }

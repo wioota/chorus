@@ -50,11 +50,11 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     },
 
     setupSchemaMenu: function() {
-        chorus.menu(this.$(".context a"), {
+        this.menu(this.$(".context a"), {
             content: this.$(".schema_menu_container").html(),
             container: $('#sidebar_wrapper'),
             contentEvents: {
-                'a.schema': _.bind(this.schemaSelected, this)
+                'a.schema': this.schemaSelected
             },
 
             classes: "sidebar_schema_picker",

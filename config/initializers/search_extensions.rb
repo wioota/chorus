@@ -162,11 +162,16 @@ module Sunspot
       end
 
       def highlights_hash
-        highlights.inject({}) do |hsh, highlight|
-          hsh[highlight.field_name] ||= []
-          hsh[highlight.field_name] << highlight.format
+        hash = highlights.inject({}) do |hsh, highlight|
+          field_name = highlight.field_name.to_s.sub(/_stemmed$/, '').to_sym
+          hsh[field_name] ||= []
+          hsh[field_name] << highlight.format
           hsh
         end
+        hash.each do |key, highlights|
+          highlights.uniq!
+        end
+        hash
       end
 
       # intercept the result load in sunspot and attach search result notes
@@ -198,5 +203,22 @@ module Sunspot
     end
 
     alias_method_chain :prepare, :rescue
+  end
+
+  module Rails
+    module Searchable
+      module ClassMethods
+
+        protected
+        
+        def solr_benchmark(batch_size, counter,  &block)
+          start = Time.now
+          logger.info("[#{Time.current}] Start Indexing")
+          yield
+          elapsed = Time.now-start
+          logger.info("[#{Time.current}] Completed Indexing. Rows indexed #{counter * batch_size}. Rows/sec: #{batch_size/elapsed.to_f} (Elapsed: #{elapsed} sec.)")
+        end
+      end
+    end
   end
 end

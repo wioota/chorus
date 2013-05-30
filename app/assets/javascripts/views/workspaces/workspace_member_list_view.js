@@ -13,14 +13,7 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
     additionalContext: function() {
         if (this.collection) {
             return {
-                members: this.collection.chain().first(this.numberOfMembersToShow).map(
-                    function(member) {
-                        return {
-                            imageUrl: member.fetchImageUrl({ size: 'icon' }),
-                            showUrl: member.showUrl(),
-                            displayName: member.displayName()
-                        };
-                    }).value(),
+                members: this.members(),
                 extra_members: Math.max(this.collection.totalRecordCount() - this.numberOfMembersToShow, 0)
             };
         } else {
@@ -39,5 +32,19 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
             this.setCollection(workspace.members());
         }
         this.render();
+    },
+
+    members: function () {
+        function detailsForMember(member) {
+            return {
+                imageUrl: member.fetchImageUrl({ size: 'icon' }),
+                showUrl: member.showUrl(),
+                displayName: member.displayName()
+            };
+        }
+
+        var collection = this.collection.chain().first(this.numberOfMembersToShow).map(detailsForMember);
+
+        return collection.value();
     }
 });

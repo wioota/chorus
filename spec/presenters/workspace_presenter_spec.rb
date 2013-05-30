@@ -33,6 +33,7 @@ describe WorkspacePresenter, :type => :view do
       hash.should have_key(:has_changed_settings)
       hash.should have_key(:sandbox_info)
       hash.should have_key(:tags)
+      hash.should have_key(:show_sandbox_datasets)
       hash.should_not have_key(:number_of_insights)
       hash.should_not have_key(:number_of_comments)
       hash.should_not have_key(:latest_comment_list)

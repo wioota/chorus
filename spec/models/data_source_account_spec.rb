@@ -17,14 +17,12 @@ describe DataSourceAccount do
       data_source = account.data_source
       stub(data_source).valid_db_credentials?(anything) { true }
       new_account = data_source.accounts.build(:owner => account.owner)
-      new_account.should_not be_valid
       new_account.should have_error_on(:owner_id).with_message(:taken)
     end
 
     describe "credentials_are_valid" do
       it "validates the credentials are valid" do
         stub(account.data_source).valid_db_credentials?(account) { false }
-        account.should_not be_valid
         account.should have_error_on(:base).with_message(:INVALID_PASSWORD)
       end
 

@@ -22,7 +22,7 @@ describe("chorus.presenters.Activity", function() {
     function itHasTheErrorIcon() {
         describe("the icon", function() {
             it("shows the error icon", function() {
-                expect(this.presenter.iconSrc()).toBe("/images/message_error.png");
+                expect(this.presenter.iconSrc()).toBe("/images/message_error_med.png");
             });
 
             it("links to the user's profile", function() {
@@ -638,8 +638,10 @@ describe("chorus.presenters.Activity", function() {
         it("has the right header html", function() {
             this.workfile = this.model.workfile();
             this.workspace = this.workfile.workspace();
-            var workfile_version = new chorus.models.Workfile({
-                versionInfo: { id : this.model.get("versionId") },
+            var versionId = this.model.get('versionId');
+
+            var versionedWorkfile = new chorus.models.Workfile({
+                versionInfo: {id: versionId},
                 id : this.workfile.id,
                 workspace: this.workspace
             });
@@ -649,9 +651,44 @@ describe("chorus.presenters.Activity", function() {
                     actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
                     workfileLink: linkTo(this.workfile.showUrl(), this.workfile.name()),
                     workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name()),
-                    versionLink: linkTo(workfile_version.showUrl(), t("workfile.version_title", { versionNum: this.model.get("versionNum") }))
+                    versionLink: linkTo(versionedWorkfile.showUrl(), t("workfile.version_title", { versionNum: this.model.get('versionNum') }))
                 }
             );
+        });
+
+        context("after the workfile has been deleted", function () {
+            it("has the right header html", function() {
+                this.model.attributes.workfile.isDeleted = true;
+                this.workfile = this.model.workfile();
+                this.workspace = this.workfile.workspace();
+
+                expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.WorkfileUpgradedVersion.default", {
+                        actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
+                        workfileLink: linkTo(this.workfile.showUrl(), this.workfile.name()),
+                        workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name()),
+                        versionLink: linkTo(null, t("workfile.version_title", { versionNum: this.model.get('versionNum') }))
+                    }
+                );
+            });
+        });
+
+        context("after only the version has been deleted", function () {
+            it("has the right header html", function() {
+                this.model.attributes.workfile.isDeleted = false;
+                this.model.attributes.versionIsDeleted = true;
+                this.workfile = this.model.workfile();
+                this.workspace = this.workfile.workspace();
+
+                expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.WorkfileUpgradedVersion.default", {
+                        actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
+                        workfileLink: linkTo(this.workfile.showUrl(), this.workfile.name()),
+                        workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name()),
+                        versionLink: linkTo(null, t("workfile.version_title", { versionNum: this.model.get('versionNum') }))
+                    }
+                );
+            });
         });
     });
 

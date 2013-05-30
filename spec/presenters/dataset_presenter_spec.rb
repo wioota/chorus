@@ -16,7 +16,8 @@ describe DatasetPresenter, :type => :view do
 
   let(:user) { users(:default) }
   let(:workspace) { FactoryGirl.create :workspace }
-  let(:presenter) { WithTableauPresenter.new(dataset, view, {:workspace => workspace, :activity_stream => activity_stream}) }
+  let(:succinct) { false }
+  let(:presenter) { WithTableauPresenter.new(dataset, view, {:workspace => workspace, :activity_stream => activity_stream, :succinct => succinct}) }
   let(:activity_stream) { nil }
   let(:hash) { presenter.to_hash }
 
@@ -196,14 +197,31 @@ describe DatasetPresenter, :type => :view do
         hash[:schema][:name].should == schema.name
       end
     end
+
+    context 'when succinct is true' do
+      let(:schema) { FactoryGirl.create :gpdb_schema }
+      let(:dataset) { FactoryGirl.create :gpdb_table, :schema => schema }
+      let(:succinct) { true }
+
+      it 'has the correct keys' do
+        hash.keys.should =~ [:id, :object_name, :schema, :associated_workspaces, :entity_subtype, :entity_type]
+      end
+
+      it 'presents the schema' do
+        hash[:schema][:name].should == schema.name
+        hash[:schema][:id].should == schema.id
+      end
+    end
   end
 
   describe 'complete_json?' do
     let(:dataset) { datasets(:table) }
+
     context 'when rendering activities' do
       let(:activity_stream) { true }
-      it 'is not true' do
-        presenter.complete_json?.should_not be_true
+
+      it 'is false' do
+        presenter.complete_json?.should be_false
       end
     end
 
@@ -211,6 +229,14 @@ describe DatasetPresenter, :type => :view do
       let(:activity_stream) { nil }
       it 'is true' do
         presenter.complete_json?.should be_true
+      end
+    end
+
+    context 'when succinct is true' do
+      let(:succinct) { true }
+
+      it 'is false' do
+        presenter.complete_json?.should be_false
       end
     end
   end

@@ -98,5 +98,16 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
             showLocation: true,
             workspaceId: this.workspace.id
         }, options));
+    },
+
+    datasetLoaded: function() {
+        this._super("datasetLoaded");
+        this.checkEntityType();
+    },
+
+    checkEntityType: function() {
+        if(this.dataset.isChorusView()) {
+            chorus.router.navigate(this.dataset.showUrl());
+        }
     }
 });

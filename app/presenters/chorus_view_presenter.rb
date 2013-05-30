@@ -3,7 +3,7 @@ class ChorusViewPresenter < DatasetPresenter
   def to_hash
     options[:workspace] = model.workspace
     super.merge({
-        :object_type => "CHORUS_VIEW",
+        :object_type => subtype,
         :query => model.query,
         :is_deleted => !model.deleted_at.nil?
     })
@@ -13,7 +13,7 @@ class ChorusViewPresenter < DatasetPresenter
     true
   end
 
-  def thetype
+  def subtype
     "CHORUS_VIEW"
   end
 end

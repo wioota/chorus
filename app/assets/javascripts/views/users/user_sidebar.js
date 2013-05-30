@@ -12,7 +12,6 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
 
     setup: function() {
         this.config = chorus.models.Config.instance();
-        this.requiredResources.push(this.config);
 
         this.tabs = new chorus.views.TabControl(["activity"]);
         if (this.model) this.setUser(this.model);
@@ -31,8 +30,7 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
                 listMode: this.options.listMode,
                 changePasswordAvailable: currentUserCanEdit && !this.config.isExternalAuth(),
                 isInEditMode: this.options.editMode,
-                deleteAvailable : this.model.currentUserCanDelete(),
-                showApiKey: this.options.showApiKey
+                deleteAvailable : this.model.currentUserCanDelete()
             });
         }
 

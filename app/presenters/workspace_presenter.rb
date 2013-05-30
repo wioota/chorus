@@ -22,7 +22,8 @@ class WorkspacePresenter < Presenter
         :has_added_sandbox => model.has_added_sandbox,
         :has_changed_settings => model.has_changed_settings,
         :tags => present(model.tags, @options),
-        :sandbox_info => present(model.sandbox, options.merge(:succinct => true))
+        :sandbox_info => present(model.sandbox, options.merge(:succinct => true)),
+        :show_sandbox_datasets => model.show_sandbox_datasets
       )
     end
 

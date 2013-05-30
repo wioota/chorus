@@ -47,7 +47,9 @@ describe("chorus.pages.WorkfileIndexPage", function() {
     describe("#setup", function() {
         it("fetches the model", function() {
             var theUrl = "/workspaces/" + this.model.workspace().id;
-            expect(_.any(this.server.requests, function(req) { return req.url.trim() === theUrl; })).toBeTruthy();
+            expect(_.any(this.server.requests, function(req) {
+                return req.url.trim() === theUrl;
+            })).toBeTruthy();
         });
 
         it("sets the workspace id, for prioritizing search", function() {
@@ -78,6 +80,11 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
         it("passes the workspaceIdForTagLink option as listItemOptions to the main content options", function() {
             expect(this.page.mainContent.content.options.listItemOptions.workspaceIdForTagLink).toBe(this.workspace.id);
+        });
+
+        it("creates the correct buttons", function() {
+            expect(this.page.buttonView).toBeA(chorus.views.WorkfileIndexPageButtons);
+            expect(this.page.buttonView.model.get("id")).toBe(this.workspace.get("id"));
         });
     });
 
@@ -117,6 +124,9 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             this.server.completeFetchFor(this.page.collection, rspecFixtures.workfileSet());
         });
 
+        it("shows the page title", function() {
+            expect(this.page.$('.content_header h1').text().trim()).toEqual(t("workfiles.title"));
+        });
         describe("multiple selection", function() {
             it("does not display the multiple selection section", function() {
                 expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
@@ -205,6 +215,22 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
             });
 
+            context("when workflows are enabled", function () {
+                beforeEach(function () {
+                    chorus.models.Config.instance().set("workFlowConfigured", true);
+                    this.page = new chorus.pages.WorkfileIndexPage(this.workspace.id);
+                    this.server.completeFetchFor(this.workspace);
+                    this.server.completeFetchFor(this.page.collection);
+                    spyOn(this.page.collection, "fetchAll");
+                });
+
+                it("can filter the list by 'WORK_FLOW'", function() {
+                    this.page.$("li[data-type=WORK_FLOW] a").click();
+                    expect(this.page.collection.attributes.fileType).toBe("WORK_FLOW");
+                    expect(this.page.collection.fetchAll).toHaveBeenCalled();
+                });
+            });
+
             it("can filter the list by 'CODE'", function() {
                 this.page.$("li[data-type=CODE] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("CODE");
@@ -255,58 +281,4 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         });
     });
 
-    describe("buttons", function() {
-        context("before the workspace is fetched", function() {
-            beforeEach(function() {
-                this.page.render();
-            });
-
-            it("does not render any buttons", function() {
-                expect(this.page.mainContent.contentDetails.$("button").length).toBe(0);
-            });
-        });
-
-        context("after the workspace is fetched", function() {
-            context("and the user can update the workspace", function() {
-                beforeEach(function() {
-                    spyOn(this.page.mainContent.model, 'canUpdate').andReturn(true);
-                    this.server.completeFetchFor(this.workspace);
-                    this.server.completeFetchFor(this.page.collection);
-                });
-
-                it("renders buttons", function() {
-                    expect(this.page.mainContent.contentDetails.$("button[data-dialog=WorkfilesImport]")).toExist();
-                    expect(this.page.mainContent.contentDetails.$("button[data-dialog=WorkfilesSqlNew]")).toExist();
-                });
-
-                it("shows the page title", function() {
-                    expect(this.page.$('.content_header h1').text().trim()).toEqual(t("workfiles.title"));
-                });
-            });
-
-            context("and the user cannot update the workspace", function() {
-                beforeEach(function() {
-                    spyOn(this.page.mainContent.model, 'canUpdate').andReturn(false);
-                    this.server.completeFetchFor(this.workspace);
-                    this.server.completeFetchFor(this.page.collection);
-                });
-
-                it("does not render buttons", function() {
-                    expect(this.page.mainContent.contentDetails.$("button").length).toBe(0);
-                });
-            });
-
-            context("and the workspace is archived", function() {
-                beforeEach(function() {
-                    this.workspace.set({archivedAt: "2012-05-08 21:40:14"});
-                    this.server.completeFetchFor(this.workspace);
-                    this.server.completeFetchFor(this.page.collection);
-                });
-
-                it("does not render buttons", function() {
-                    expect(this.page.mainContent.contentDetails.$("button").length).toBe(0);
-                });
-            });
-        });
-    });
 });

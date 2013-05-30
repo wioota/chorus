@@ -10,7 +10,7 @@ class WorkspacesController < ApplicationController
 
     workspaces = workspaces.active if params[:active]
     succinct = params[:succinct] == 'true'
-    present paginate(workspaces.includes(succinct ? [] : Workspace.eager_load_associations).order("lower(name) ASC")),
+    present paginate(workspaces.includes(succinct ? [] : Workspace.eager_load_associations).order("lower(name) ASC, id")),
             :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true', :succinct => succinct}
   end
 

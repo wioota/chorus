@@ -1,15 +1,12 @@
 describe("chorus.dialogs.DataSourcesNew", function() {
     beforeEach(function() {
+        loadConfig();
         stubDefer();
         this.selectMenuStub = stubSelectMenu();
         spyOn(chorus, 'styleSelect').andCallThrough();
         this.dialog = new chorus.dialogs.DataSourcesNew();
         $('#jasmine_content').append(this.dialog.el);
         this.dialog.render();
-    });
-
-    it("calls Config.instance to pre-fetch the config data", function() {
-        expect(this.dialog.requiredResources.models).toContain(chorus.models.Config.instance());
     });
 
     it("styles the select", function() {
@@ -34,11 +31,11 @@ describe("chorus.dialogs.DataSourcesNew", function() {
         });
     });
 
-    describe("once the configuration is loaded", function() {
+    describe("immediately", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(chorus.models.Config.instance());
+            chorus.models.Config.instance().set({oracleConfigured: false, gnipConfigured: false});
+            this.dialog.render();
         });
-
         it("shows the label", function() {
             expect(this.dialog.$("label[for=data_sources]").text()).toMatchTranslation("datasource.type");
         });
@@ -167,7 +164,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
     context("when oracle is configured", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(chorus.models.Config.instance().set({oracleConfigured: true}));
+            chorus.models.Config.instance().set({oracleConfigured: true});
         });
 
         describe("selecting the 'Oracle Database' option", function() {
@@ -217,7 +214,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
     context("when gnip is configured", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(chorus.models.Config.instance().set({ gnipConfigured: true }));
+            chorus.models.Config.instance().set({ gnipConfigured: true });
         });
 
         it("shows the 'Register an existing GNIP data source' option", function() {
@@ -251,7 +248,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
     context("when gnip is not configured", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(chorus.models.Config.instance().set({ gnipConfigured: false }));
+            chorus.models.Config.instance().set({ gnipConfigured: false });
+            this.dialog.render();
         });
 
         it("does not show the 'Register an existing GNIP data source' option", function() {
@@ -261,7 +259,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
     describe("submitting the form", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(chorus.models.Config.instance().set({ gnipConfigured: true, gnipUrl: "www.example.com", gnipPort: 433, oracleConfigured:true }));
+            chorus.models.Config.instance().set({ gnipConfigured: true, gnipUrl: "www.example.com", gnipPort: 433, oracleConfigured:true });
         });
 
         function testUpload() {

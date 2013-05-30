@@ -545,7 +545,7 @@ describe("chorus.dialogs.Visualization", function() {
             });
 
             it("should not show the 'Show Data Table' link (until the chart is loaded)", function() {
-                expect(this.dialog.$(".modal_controls a.show")).toHaveClass("hidden");
+                expect(this.dialog.$(".form_controls a.show")).toHaveClass("hidden");
             });
 
             it("displays the correct message", function () {
@@ -567,7 +567,7 @@ describe("chorus.dialogs.Visualization", function() {
             });
 
             it("should not show the 'Show Data Table' link (until the chart is loaded)", function() {
-                expect(this.dialog.$(".modal_controls a.show")).toHaveClass("hidden");
+                expect(this.dialog.$(".form_controls a.show")).toHaveClass("hidden");
             });
 
             it("displays the correct message", function () {
@@ -612,11 +612,11 @@ describe("chorus.dialogs.Visualization", function() {
             });
 
             it("should have a 'Show Data Table' link", function() {
-                expect(this.dialog.$(".modal_controls a.show")).toContainTranslation("visualization.show_table");
+                expect(this.dialog.$(".form_controls a.show")).toContainTranslation("visualization.show_table");
             });
 
             it("should have a 'Hide Data Table' link", function() {
-                expect(this.dialog.$(".modal_controls a.hide")).toContainTranslation("visualization.hide_table");
+                expect(this.dialog.$(".form_controls a.hide")).toContainTranslation("visualization.hide_table");
             });
 
             it("should have a 'Close' button", function() {
@@ -651,7 +651,7 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("should hide the 'Hide Data Table' link", function() {
-                    expect(this.dialog.$(".modal_controls a.hide")).toHaveClass("hidden");
+                    expect(this.dialog.$(".form_controls a.hide")).toHaveClass("hidden");
                 });
 
                 it("renders the data grid", function() {
@@ -861,7 +861,7 @@ describe("chorus.dialogs.Visualization", function() {
 
         describe("clicking on the 'Show Data Table' link", function() {
             beforeEach(function() {
-                this.dialog.$(".modal_controls a.show").click();
+                this.dialog.$(".form_controls a.show").click();
             });
 
             it("passes task into ResultsConsole", function() {
@@ -881,16 +881,16 @@ describe("chorus.dialogs.Visualization", function() {
             });
 
             it("hides the show table link", function() {
-                expect(this.dialog.$(".modal_controls a.show")).toHaveClass("hidden");
+                expect(this.dialog.$(".form_controls a.show")).toHaveClass("hidden");
             });
 
             it("shows the hide table link", function() {
-                expect(this.dialog.$(".modal_controls a.hide")).not.toHaveClass("hidden");
+                expect(this.dialog.$(".form_controls a.hide")).not.toHaveClass("hidden");
             });
 
             describe("clicking on the 'Hide Chart Data' link", function() {
                 beforeEach(function() {
-                    this.dialog.$(".modal_controls a.hide").click();
+                    this.dialog.$(".form_controls a.hide").click();
                 });
 
                 it("hides the results console", function() {
@@ -898,11 +898,11 @@ describe("chorus.dialogs.Visualization", function() {
                 });
 
                 it("should show the 'Show Data Table' link", function() {
-                    expect(this.dialog.$(".modal_controls a.show")).not.toHaveClass("hidden");
+                    expect(this.dialog.$(".form_controls a.show")).not.toHaveClass("hidden");
                 });
 
                 it("should hide the 'Hide Data Table' link", function() {
-                    expect(this.dialog.$(".modal_controls a.hide")).toHaveClass("hidden");
+                    expect(this.dialog.$(".form_controls a.hide")).toHaveClass("hidden");
                 });
             });
         });
@@ -914,6 +914,17 @@ describe("chorus.dialogs.Visualization", function() {
             this.dialog.refreshChart();
 
             expect(this.dialog.task.get('filters').length).toBe(2);
+        });
+    });
+
+    describe("#getAvailableHeight", function () {
+        beforeEach(function () {
+            this.maxHeight = 30;
+            spyOn($.fn, 'css').andReturn(this.maxHeight+"px");
+        });
+
+        it("turns blue", function () {
+            expect(this.dialog.getAvailableHeight()).toBe(this.maxHeight - this.dialog.$el.height());
         });
     });
 });

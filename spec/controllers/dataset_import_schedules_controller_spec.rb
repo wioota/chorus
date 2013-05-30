@@ -4,9 +4,7 @@ describe DatasetImportSchedulesController do
   let(:user) { users(:owner) }
   let(:import_schedule) { import_schedules(:default) }
 
-  before do
-    log_in user
-  end
+  before { log_in user }
 
   describe "#index" do
     let(:dataset) { import_schedule.source_dataset }
@@ -15,17 +13,17 @@ describe DatasetImportSchedulesController do
       get :index, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
     end
 
-    shared_examples_for "import data" do
+    describe "import data" do
       context "with an import schedule" do
         it 'returns the import schedule' do
           get :index, :workspace_id => import_schedule.workspace_id, :dataset_id => dataset.id
 
           response.should be_success
           decoded_response.length.should == 1
-          import_schedule = decoded_response.first
-          import_schedule.to_table.should == import_schedule.to_table
-          import_schedule.frequency.should == import_schedule.frequency
-          import_schedule.dataset_id.should == dataset.id.to_s
+          decoded_import_schedule = decoded_response.first
+          decoded_import_schedule.to_table.should == import_schedule.to_table
+          decoded_import_schedule.frequency.should == import_schedule.frequency
+          decoded_import_schedule.dataset_id.should == dataset.id
         end
       end
 
@@ -37,11 +35,6 @@ describe DatasetImportSchedulesController do
           decoded_response.length.should == 0
         end
       end
-    end
-
-    context 'for a source dataset' do
-      let!(:dataset) { import_schedule.source_dataset }
-      it_should_behave_like 'import data'
     end
 
     context 'when requesting for the destination dataset' do
@@ -206,7 +199,7 @@ describe DatasetImportSchedulesController do
   describe "#update" do
     let(:source_table) { import_schedule.source_dataset }
 
-    let(:attributes) {
+    let(:params) {
       {
           :id => import_schedule.id,
           :dataset_id => source_table.id,
@@ -216,7 +209,7 @@ describe DatasetImportSchedulesController do
 
     describe "updating an import schedule that not exists" do
       it "should return an error" do
-        put :update, attributes.merge(:id => 8614698)
+        put :update, params.merge(:id => 8614698)
         response.should_not be_success
         response.code.should == "404"
       end
@@ -231,7 +224,7 @@ describe DatasetImportSchedulesController do
           stub(import_schedule).valid? { true }
         end
 
-        put :update, attributes.merge(:start_datetime => '2012-01-01T0:00:00')
+        put :update, params.merge(:start_datetime => '2012-01-01T0:00:00')
         import_schedule.reload.start_datetime.should == DateTime.parse('2012-01-01T0:00:00')
       end
 
@@ -240,13 +233,21 @@ describe DatasetImportSchedulesController do
           stub(import_schedule).table_exists? { false }
         end
 
-        put :update, attributes.merge(:frequency => frequency)
+        zend_date = import_schedule.end_date
+        zstart_datetime = import_schedule.start_datetime
+
+        put :update, params.merge(:frequency => frequency)
         response.code.should == "200"
         import_schedule.reload
 
         import_schedule.frequency.should == frequency
-        import_schedule.end_date.should == import_schedule.end_date
-        import_schedule.start_datetime.should == import_schedule.start_datetime
+        import_schedule.end_date.should == zend_date
+        import_schedule.start_datetime.should == zstart_datetime
+
+        response.should be_success
+        decoded_response.to_table.should == import_schedule.to_table
+        decoded_response.frequency.should == import_schedule.frequency
+        decoded_response.dataset_id.should == source_table.id
       end
 
       it "returns an error when importing into a new table but name already exists" do
@@ -254,7 +255,7 @@ describe DatasetImportSchedulesController do
           stub(import_schedule).table_exists? { true }
         end
 
-        put :update, attributes.merge(:new_table => 'true', :to_table => to_table.name)
+        put :update, params.merge(:new_table => 'true', :to_table => to_table.name)
         response.code.should == '422'
         decoded_errors.fields.base.TABLE_EXISTS.table_name == to_table.name
       end
@@ -264,7 +265,7 @@ describe DatasetImportSchedulesController do
           stub(import_schedule).table_exists? { false }
         end
 
-        put :update, attributes.merge(:new_table => 'false', :to_table => "non_existent")
+        put :update, params.merge(:new_table => 'false', :to_table => "non_existent")
         response.code.should == '422'
         decoded_errors.fields.base.TABLE_NOT_EXISTS.table_name == "non_existent"
       end
@@ -282,7 +283,7 @@ describe DatasetImportSchedulesController do
       end
 
       expect {
-        put :update, attributes.merge(:new_table => 'true', :to_table => "new_table_non_existent")
+        put :update, params.merge(:new_table => 'true', :to_table => "new_table_non_existent")
       }.to change(Events::ImportScheduleUpdated, :count).by(1)
 
       event = Events::ImportScheduleUpdated.last

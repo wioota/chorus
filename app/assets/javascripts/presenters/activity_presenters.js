@@ -13,7 +13,7 @@
 
         iconSrc: function() {
             if (this.isFailure()) {
-                return "/images/message_error.png";
+                return "/images/message_error_med.png";
             } else if (this.model.isSuccessfulImport()) {
                 return "/images/import_icon.png";
             } else {
@@ -505,15 +505,20 @@
         },
 
         versionLink: function(self) {
-            var version_num = self.model.get("versionNum");
-            var version_id = self.model.get("versionId");
-            var workfile = self.model.get("workfile");
+            var versionNum          = self.model.get("versionNum");
+            var versionId           = self.model.get("versionId");
+            var versionIsDeleted    = self.model.get("versionIsDeleted");
+            var workfile            = self.model.get("workfile");
+            var isDeleted           = workfile.isDeleted || versionIsDeleted;
+
             var workfile_version = new chorus.models.Workfile({
-                versionInfo: { id : version_id },
+                versionInfo: { id : versionId },
                 id : workfile.id,
-                workspace: workfile.workspace
+                workspace: workfile.workspace,
+                isDeleted: isDeleted
             });
-            return workfile_version.showLink(t("workfile.version_title", { versionNum: version_num }));
+
+            return workfile_version.showLink(t("workfile.version_title", { versionNum: versionNum }));
         },
 
         destinationSchemaLink: function(self) {

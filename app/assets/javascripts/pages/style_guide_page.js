@@ -770,8 +770,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Change Password": new chorus.dialogs.ChangePassword(),
 
-            "Show API Key": new chorus.dialogs.ShowApiKey(),
-
             "New Note": new chorus.dialogs.NotesNew(),
 
             "Comment": new chorus.dialogs.Comment(),

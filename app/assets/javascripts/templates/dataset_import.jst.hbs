@@ -6,7 +6,7 @@
         <div class="file">
             <span class="file_name"/>
             <span class="file-wrapper">
-                <button class="choose">{{t "dataset.import.select_file"}}</button>
+                <button class="choose button_action">{{t "dataset.import.select_file"}}</button>
                 <input class="file-input" type="file" name="csv[contents]"/>
                 <a href="#" class='hidden'>{{t "actions.change"}}</a>
             </span>
@@ -39,8 +39,5 @@
         </div>
     </div>
 
-    <div class="modal_controls">
-        <button type="button" class="cancel" tabindex="100">{{t "actions.cancel"}}</button>
-        <button type="submit" class="submit" tabindex="99" disabled="disabled">{{t "dataset.import.upload_file"}}</button>
-    </div>
+    {{formControlsWithDisabledSubmit "dataset.import.upload_file"}}
 </form>

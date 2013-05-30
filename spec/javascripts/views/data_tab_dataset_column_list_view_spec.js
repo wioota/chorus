@@ -33,16 +33,19 @@ describe("chorus.views.DataTabDatasetColumnList", function() {
 
         context("when there are columns", function() {
             beforeEach(function() {
+                this.columnA = rspecFixtures.databaseColumn({name: "column_1", dataType: "text" });
+                this.columnB = rspecFixtures.databaseColumn({name: "column_2", dataType: "timestamp with time zone"});
+
                 this.server.completeFetchAllFor(this.dataset.columns(), [
-                    rspecFixtures.databaseColumn({name: "column_1", typeCategory: "STRING" }),
-                    rspecFixtures.databaseColumn({name: "column_2", typeCategory: "DATETIME"})
+                    this.columnA,
+                    this.columnB
                 ]);
             });
 
             it("should show an 'li' for each column", function() {
                 expect(this.view.$("li").length).toBe(2);
-                expect(this.view.$("li").eq(0)).toContainText("[string] column_1");
-                expect(this.view.$("li").eq(1)).toContainText("[date_time] column_2");
+                expect(this.view.$("li").eq(0)).toContainText("[" + this.columnA.get('dataType') + "] " + this.columnA.get('name'));
+                expect(this.view.$("li").eq(1)).toContainText("[" + this.columnB.get('dataType') + "] " + this.columnB.get('name'));
             });
 
             describe("draggable setup", function() {

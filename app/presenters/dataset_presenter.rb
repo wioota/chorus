@@ -1,26 +1,35 @@
 class DatasetPresenter < Presenter
 
   def to_hash
-    recent_comments = Array.wrap(recent_comment)
+    succinct? ? succinct_hash : complete_hash
+  end
+
+  def succinct_hash
     {
         :id => model.id,
-        :entity_type => model.entity_type_name,
-        :entity_subtype => thetype,
         :object_name => model.name,
         :schema => schema_hash,
+        :entity_type => model.entity_type_name,
+        :entity_subtype => subtype
+    }.merge(associated_workspaces_hash)
+  end
+
+  def complete_hash
+    recent_comments = Array.wrap(recent_comment)
+    {
         :recent_comments => present(recent_comments, :as_comment => true),
         :comment_count => recent_comments.empty? ? 0 : model.comments.count + model.notes.count,
         :is_deleted => model.deleted?
-    }.merge(workspace_hash).
+    }.merge(succinct_hash).
+        merge(workspace_hash).
         merge(credentials_hash).
-        merge(associated_workspaces_hash).
         merge(frequency).
         merge(tableau_workbooks_hash).
         merge(tags_hash)
   end
 
   def complete_json?
-    !rendering_activities?
+    !rendering_activities? && !succinct?
   end
 
   private
@@ -37,7 +46,7 @@ class DatasetPresenter < Presenter
     present(model.schema, options.merge({:succinct => true}))
   end
 
-  def thetype
+  def subtype
     if sandbox_table?
       "SANDBOX_TABLE"
     else

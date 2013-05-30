@@ -55,8 +55,6 @@ describe HdfsDataSource do
 
       before do
         stub(Hdfs::QueryService).accessible? { false }
-        stub(Hdfs::QueryService).version_of.with_any_args { raise ApiValidationError }
-        do_not_allow(Hdfs::QueryService).version_of.with_any_args { raise ApiValidationError }
       end
 
       it "sets the state to offline" do
@@ -81,7 +79,6 @@ describe HdfsDataSource do
     context "when the data source is online"
     before do
       stub(Hdfs::QueryService).accessible? { true }
-      stub(Hdfs::QueryService).version_of.with_any_args { "xyz" }
     end
 
     it "sets the state to online" do
@@ -93,7 +90,6 @@ describe HdfsDataSource do
     it "updates the version" do
       data_source.version = "whatever"
       data_source.check_status!
-      data_source.version == "xyz"
     end
 
     it "updates last_checked_at" do

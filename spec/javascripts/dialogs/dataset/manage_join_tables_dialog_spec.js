@@ -146,10 +146,10 @@ describe("chorus.dialogs.ManageJoinTables", function () {
                 });
 
                 it("cleans up after itself", function () {
-                    this.teardownSpy = spyOn(this.dialog.menu, "teardown");
+                    this.teardownSpy = spyOn(this.dialog.menuView, "teardown");
                     this.dialog.render();
                     expect(this.teardownSpy).toHaveBeenCalled();
-                    expect(_.indexOf(this.dialog.getSubViews(), this.dialog.menu)).toBeGreaterThan(-1);
+                    expect(_.indexOf(this.dialog.getSubViews(), this.dialog.menuView)).toBeGreaterThan(-1);
                 });
 
                 describe("the schema-picker", function () {

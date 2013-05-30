@@ -52,6 +52,12 @@ class Dataset < ActiveRecord::Base
      :import_schedules]
   end
 
+  def self.eager_load_succinct_associations
+    [
+        {:scoped_schema => :scoped_parent}
+    ]
+  end
+
   def self.add_search_permissions(current_user, search)
     search.build do
       any_of do
@@ -78,7 +84,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def self.list_order
-    order("lower(replace(datasets.name,'_',''))")
+    order("lower(replace(datasets.name,'_','')), id")
   end
 
   def self.tables

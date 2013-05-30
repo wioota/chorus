@@ -2,9 +2,8 @@ module ImportConsole
   module ImportsHelper
     def table_description(schema, table_name)
       description = ''
-      if schema.respond_to?(:database) && !schema.database.nil?
-        description << schema.database.name + "."
-      end
+      return description unless schema
+      description << schema.database.name + "." if schema.respond_to?(:database) && !schema.database.nil?
       description << schema.name + "." + table_name
     end
 
@@ -43,7 +42,7 @@ module ImportConsole
 
     def link_to_destination(import_manager)
       to_table = import_manager.to_table
-      schema_or_sandbox = import_manager.schema_or_sandbox
+      schema_or_sandbox = import_manager.schema
       description = table_description(schema_or_sandbox, to_table)
       dest_table = schema_or_sandbox.datasets.find_by_name(to_table)
       if dest_table

@@ -55,7 +55,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
             var link = $("<a></a>").attr('href', hdfsEntry.showUrl()).text(_.truncate(hdfsEntry.get('name'), maxLength));
             $content.append($("<li></li>").append(link));
         });
-        chorus.menu(this.$(".breadcrumb").eq(2), {
+        this.menu(this.$(".breadcrumb").eq(2), {
             content: $content,
 
             qtipArgs: {

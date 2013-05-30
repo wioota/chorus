@@ -46,7 +46,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
         });
 
         it("should have the right submit button text", function() {
-            expect(this.dialog.submitText).toMatchTranslation("import.begin_schedule");
+            expect(this.dialog.$("button.submit").text()).toMatchTranslation("import.begin_schedule");
         });
 
         it("should show the schedule controls", function() {

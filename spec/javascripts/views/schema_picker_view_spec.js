@@ -973,6 +973,72 @@ describe("chorus.views.SchemaPicker", function() {
                     });
                 });
             });
+
+            context("with showSchemaSection false", function() {
+                beforeEach(function() {
+                    this.view = new chorus.views.SchemaPicker({ allowCreate: true, showSchemaSection: false });
+                });
+
+                context('with only a data source', function() {
+                    beforeEach(function() {
+                        spyOn(this.view, "fieldValues").andReturn({
+                            dataSource: 5
+                        });
+                    });
+
+                    it("return false", function() {
+                        expect(this.view.ready()).toBeFalsy();
+                    });
+                });
+
+                context('with a data source and a blank databaseName', function() {
+                    beforeEach(function() {
+                        spyOn(this.view, "fieldValues").andReturn({
+                            dataSource: 5,
+                            databaseName: ""
+                        });
+                    });
+
+                    it("return false", function() {
+                        expect(this.view.ready()).toBeFalsy();
+                    });
+                });
+
+                context('with a data source, a database, and a blank schemaName', function() {
+                    beforeEach(function() {
+                        spyOn(this.view, "fieldValues").andReturn({
+                            dataSource: 5,
+                            database: 6,
+                            schemaName: ""
+                        });
+                    });
+
+                    it("return false", function() {
+                        expect(this.view.ready()).toBeTruthy();
+                    });
+                });
+            });
+        });
+
+    });
+
+    describe("#getSectionsToRestyle", function(){
+        it("includes schema when options.showSchemaSection is truthy", function(){
+            this.dataSource = rspecFixtures.gpdbDataSource();
+            this.view = new chorus.views.SchemaPicker({ dataSource: this.dataSource, showSchemaSection: true });
+            expect(this.view.getSectionsToRestyle()).toEqual(["dataSource", "database", "schema"]);
+        });
+
+        it("includes schema by default", function(){
+            this.dataSource = rspecFixtures.gpdbDataSource();
+            this.view = new chorus.views.SchemaPicker({ dataSource: this.dataSource});
+            expect(this.view.getSectionsToRestyle()).toEqual(["dataSource", "database", "schema"]);
+        });
+
+        it("does not include schema when options.showSchemaSection is falsy", function(){
+            this.dataSource = rspecFixtures.gpdbDataSource();
+            this.view = new chorus.views.SchemaPicker({ dataSource: this.dataSource, showSchemaSection: false });
+            expect(this.view.getSectionsToRestyle()).toEqual(["dataSource", "database"]);
         });
     });
 });

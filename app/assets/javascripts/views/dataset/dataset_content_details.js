@@ -1,4 +1,6 @@
-chorus.views.DatasetContentDetails = chorus.views.Base.extend({
+chorus.views.DatasetContentDetails = chorus.views.Base.include(
+        chorus.Mixins.StickyHeader
+    ).extend({
     templateName: "dataset_content_details",
     constructorName: 'DatasetContentDetails',
     persistent: true,
@@ -83,10 +85,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
         }
         this.showErrors(this.dataset);
 
-        if(!this.boundScrollHandler) {
-            this.boundScrollHandler = _.bind(this.scrollHandler, this);
-            $(window).scroll(this.boundScrollHandler);
-        }
+        this.bindStickyHeader();
     },
 
     triggerSelectAll: function(e) {
@@ -114,8 +113,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
 
     selectVisualization: function(e) {
         var type = $(e.target).data('chart_type');
-        $(e.target).siblings(".cancel").data("type", type);
-        $(e.target).siblings('.chart_icon').removeClass('selected');
+        this.$(".create_chart .cancel").data("type", type);
+        this.$('.chart_icon').removeClass('selected');
         $(e.target).addClass('selected');
         this.showTitle(e);
         this.showVisualizationConfig(type);
@@ -212,8 +211,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     showTitle: function(e) {
-        $(e.target).siblings('.title').addClass('hidden');
-        $(e.target).siblings('.title.' + $(e.target).data('chart_type')).removeClass('hidden');
+        this.$(".chart_type_title").addClass('hidden');
+        this.$('.chart_type_title.' + $(e.target).data('chart_type')).removeClass('hidden');
     },
 
     showVisualizationConfig: function(chartType) {
@@ -228,9 +227,9 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
     },
 
     showSelectedTitle: function(e) {
-        $(e.target).siblings('.title').addClass('hidden');
+        this.$('.chart_type_title').addClass('hidden');
         var type = this.$('.selected').data('chart_type');
-        $(e.target).siblings('.title.' + type).removeClass('hidden');
+        this.$('.chart_type_title.' + type).removeClass('hidden');
     },
 
     additionalContext: function() {
@@ -264,33 +263,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.extend({
       this.dialog.launchModal();
     },
 
-    scrollHandler: function() {
-        if (!this.$el) return;
-        this.topPosition = this.topPosition || this.$el.parent().offset().top;
-        var contentDetailsTop = this.topPosition  - $(window).scrollTop();
-        var distanceToHeader = contentDetailsTop - $(".header").outerHeight();
-        var contentDetailsAtTop = distanceToHeader <= 0;
-        var $parent = this.$el.parent();
-
-        if(contentDetailsAtTop) {
-            if($(".scrollSpacer").length === 0) {
-                var $spacer = $parent.clone();
-                $spacer.addClass("scrollSpacer");
-                $spacer.css("visibility", "hidden");
-                $parent.before($spacer);
-            }
-        } else {
-            $(".scrollSpacer").remove();
-        }
-
-        $parent.toggleClass('fixed', contentDetailsAtTop);
-        var $results_console = this.$el.closest('.main_content').find('.results_console');
-        $results_console.toggleClass('fixed', contentDetailsAtTop);
-    },
-
     teardown: function() {
         this._super("teardown", arguments);
-        $(window).unbind('scroll', this.boundScrollHandler);
-        delete this.boundScrollHandler;
+        this.teardownStickyHeaders();
     }
 });

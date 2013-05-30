@@ -53,18 +53,24 @@ describe User do
 
   describe ".order" do
     it "sorts by first name, by default" do
-      User.order(nil).to_a.should == User.all(:order => "LOWER(first_name)").to_a
+      User.order(nil).to_a.should == User.all(:order => "LOWER(first_name), id").to_a
+    end
+
+    it "sorts by id as a secondary sort" do
+      User.update_all(:first_name => 'billy')
+      ids = User.order(nil).collect(&:id)
+      ids.should == ids.sort
     end
 
     context "with a recognized sort order" do
       it "respects the sort order" do
-        User.order("last_name").to_a.should == User.all(:order => "LOWER(last_name)").to_a
+        User.order("last_name").to_a.should == User.all(:order => "LOWER(last_name), id").to_a
       end
     end
 
     context "with an unrecognized sort order" do
       it "sorts by first name" do
-        User.order("last_name; DROP TABLE users;").to_a.should == User.order("LOWER(first_name)").to_a
+        User.order("last_name; DROP TABLE users;").to_a.should == User.order("LOWER(first_name), id").to_a
       end
     end
   end
@@ -279,11 +285,6 @@ describe User do
     it "should create a random password salt" do
       user = User.create :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
       user.password_salt.should_not be_blank
-    end
-
-    it "should create a random api key" do
-      user = User.create :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
-      user.api_key.length.should == 40
     end
 
     describe "when creating a second user with the same password" do

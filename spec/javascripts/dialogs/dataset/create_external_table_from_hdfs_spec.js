@@ -89,12 +89,17 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
 
         context("changing the workspace", function() {
             beforeEach(function() {
+                spyOn(this.dialog, 'postRender').andCallThrough();
                 this.dialog.$("select").val(this.workspace3.id).change();
             });
 
             it("populates the select when refresh happens", function() {
                 this.dialog.render();
                 expect(this.dialog.$("select")).toHaveValue(this.workspace3.id);
+            });
+
+            it("does not re-render the dialog", function() {
+                expect(this.dialog.postRender).not.toHaveBeenCalled();
             });
         });
 

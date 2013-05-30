@@ -21,10 +21,6 @@ div[data-page="Dashboard"] {
       right: $help-pill-width + (2 * $guts-padding);
     }
 
-    .content {
-        padding-right: 15px;
-    }
-
     .main_activity_list .heading {
         display: none;
     }
@@ -90,20 +86,6 @@ div[data-page="Dashboard"] {
             > li:last-child {
                 border-bottom:  $dotted-list-item-border;
             }
-        }
-    }
-
-    .content_details {
-        line-height : 27px;
-        color: $link-color;
-        border-top : none;
-        border-bottom-style: dotted;
-        padding-top: 4px;
-
-        a {
-            padding: 0 10px;
-            font-size: 12px;
-            font-weight: $semibold;
         }
     }
 

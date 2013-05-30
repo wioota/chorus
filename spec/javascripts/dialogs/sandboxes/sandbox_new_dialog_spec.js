@@ -13,6 +13,11 @@ describe("chorus.dialogs.SandboxNew", function() {
         expect(this.dialog.workspace).toHaveBeenFetched();
     });
 
+    it("shows the checkbox for displaying sandbox datasets by default", function(){
+       expect(this.dialog.$el).toContainTranslation("actions.sandbox.show_sandbox_datasets_by_default");
+       expect(this.dialog.$("input[type='checkbox']")).toBeChecked();
+    });
+
     context("when the SchemaPicker triggers an error", function() {
         beforeEach(function() {
             var modelWithError = rspecFixtures.schemaSet();
@@ -49,7 +54,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
 
             it("disables the submit button", function() {
-                expect(this.dialog.$(".modal_controls button.submit")).toBeDisabled();
+                expect(this.dialog.$(".form_controls button.submit")).toBeDisabled();
             });
         });
 
@@ -79,11 +84,11 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
 
             it("changes the button text to 'Adding...'", function() {
-                expect(this.dialog.$(".modal_controls button.submit").text()).toMatchTranslation("sandbox.adding_sandbox");
+                expect(this.dialog.$(".form_controls button.submit").text()).toMatchTranslation("sandbox.adding_sandbox");
             });
 
             it("sets the button to a loading state", function() {
-                expect(this.dialog.$(".modal_controls button.submit").isLoading()).toBeTruthy();
+                expect(this.dialog.$(".form_controls button.submit").isLoading()).toBeTruthy();
             });
 
             it("saves the workspace with the new sandbox id", function() {
@@ -97,7 +102,7 @@ describe("chorus.dialogs.SandboxNew", function() {
                 });
 
                 it("takes the button out of the loading state", function() {
-                    expect(this.dialog.$(".modal_controls button.submit").isLoading()).toBeFalsy();
+                    expect(this.dialog.$(".form_controls button.submit").isLoading()).toBeFalsy();
                 });
 
                 it("displays the error message", function() {
@@ -159,7 +164,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
         });
 
-        context('with a data source id, database name and schema name', function() {
+        context('with a data source id, database name and schema name, with sandbox datasets shown ', function() {
             beforeEach(function() {
                 spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
                     dataSource: "4",
@@ -183,6 +188,36 @@ describe("chorus.dialogs.SandboxNew", function() {
                 expect(this.server.lastCreate().params()['sandbox[schema_id]']).toBeUndefined();
                 expect(this.server.lastCreate().params()['sandbox[database_name]']).toBe('new_database');
                 expect(this.server.lastCreate().params()['sandbox[data_source_id]']).toBe('4');
+                expect(this.server.lastCreate().params()['sandbox[show_sandbox_datasets]']).toBe('true');
+            });
+        });
+
+        context('with a data source id, database name and schema name, with sandbox datasets not shown', function() {
+            beforeEach(function() {
+                spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
+                    dataSource: "4",
+                    databaseName: "new_database",
+                    schemaName: "new_schema"
+                });
+
+                this.dialog.schemaPicker.trigger("change", "new_schema");
+                this.dialog.$(".show_sandbox_datasets").prop("checked", false);
+                this.dialog.$("button.submit").click();
+            });
+
+            it("sets the database name and schema name on the schema", function() {
+                expect(this.dialog.model.get("databaseName")).toBe("new_database");
+                expect(this.dialog.model.get("schemaName")).toBe("new_schema");
+                expect(this.dialog.model.get("dataSourceId")).toBe("4");
+            });
+
+            it("saves the workspace with the new database and sandbox names", function() {
+                expect(this.server.lastCreate().url).toBe('/workspaces/45/sandbox');
+                expect(this.server.lastCreate().params()['sandbox[schema_name]']).toBe('new_schema');
+                expect(this.server.lastCreate().params()['sandbox[schema_id]']).toBeUndefined();
+                expect(this.server.lastCreate().params()['sandbox[database_name]']).toBe('new_database');
+                expect(this.server.lastCreate().params()['sandbox[data_source_id]']).toBe('4');
+                expect(this.server.lastCreate().params()['sandbox[show_sandbox_datasets]']).toBe('false');
             });
         });
     });

@@ -30,6 +30,26 @@ describe SandboxesController do
       end
     end
 
+    context 'when the client does not pass a value for show_sandbox_datasets' do
+      it 'does not change the value of show_sandbox_datasets' do
+        workspace.update_attributes(:show_sandbox_datasets => true)
+        post :create, :workspace_id => workspace.id, :schema_id => sandbox.id
+        response.code.should == '201'
+
+        workspace.reload.show_sandbox_datasets.should be_true
+      end
+    end
+
+    context 'when the user chooses not to show sandbox schemas' do
+
+      it 'updates the show_sandbox_datasets attribute on the workspace' do
+        post :create, :workspace_id => workspace.id, :schema_id => sandbox.id, :show_sandbox_datasets => false
+        response.code.should == '201'
+
+        workspace.reload.show_sandbox_datasets.should be_false
+      end
+    end
+
     context 'with a schema that does not exist' do
       it 'returns an error' do
         post :create, :workspace_id => workspace.id, :schema_id => -1

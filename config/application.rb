@@ -9,7 +9,7 @@ require "sprockets/railtie"
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(:assets => %w(development test integration ci_jasmine ci_legacy)))
+  Bundler.require(*Rails.groups(:assets => %w|development test integration ci_jasmine ci_legacy ci_next|))
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
 end
@@ -92,13 +92,18 @@ module Chorus
     config.middleware.insert_before(Rails::Rack::Logger, ActionDispatch::Session::CookieStore)
     config.middleware.insert_before(ActionDispatch::Session::CookieStore, ActionDispatch::Cookies)
 
+    config.cache_store = :memory_store
+
     config.log_tags += [
-      proc do |req|
-        if req.session[:user_id].nil?
-          "not_logged_in"
-        else
-          "user_id:#{req.session[:user_id]}"
+      lambda do |req|
+        session_id = req.session[:chorus_session_id]
+
+        if session_id
+          session = Session.find_by_session_id(session_id)
+          return "user_id:#{session.user_id}" if session
         end
+
+        "not_logged_in"
       end
     ]
   end

@@ -33,10 +33,6 @@ $link-padding: 15px;
         }
     }
 
-    button, .button {
-        @include content-details-button($border-color);
-    }
-
     img.help {
         vertical-align: middle;
         margin-left: 4px;

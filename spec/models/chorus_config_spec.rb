@@ -202,6 +202,52 @@ describe ChorusConfig do
     end
   end
 
+  describe "Work flow integration" do
+    let(:work_flow_config) do
+      {
+        'enabled' => true,
+        'url' => 'localhost'
+      }
+    end
+
+    describe "work_flow_configured?" do
+      before do
+        config.config = {'work_flow' => work_flow_config}
+      end
+
+      context "when enabled is true and url is provided" do
+        it "is true" do
+          config.work_flow_configured?.should be_true
+        end
+      end
+
+      context "when url is provided and enabled is false" do
+        let(:work_flow_config) do
+          {
+              'url' => 'localhost',
+              'enabled' => false
+          }
+        end
+
+        it "is false" do
+          config.work_flow_configured?.should be_false
+        end
+      end
+
+      context "when enabled is true but url is not provided" do
+        let(:work_flow_config) do
+          {
+              'enabled' => true
+          }
+        end
+
+        it "is false" do
+          config.work_flow_configured?.should be_false
+        end
+      end
+    end
+  end
+
   describe "oracle configuration" do
     let(:enabled) {false}
     before do

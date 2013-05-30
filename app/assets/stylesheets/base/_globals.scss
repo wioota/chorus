@@ -6,11 +6,10 @@ a:focus {
     outline: none;
 }
 
-
 a {
     color: $link-color;
     font-size: 14px;
-    text-decoration : none;
+    text-decoration: none;
     cursor: pointer;
 }
 
@@ -18,33 +17,7 @@ html, body {
     color: $color-text1;
     background-color: $body-background-color !important;
     font-family: "Open Sans", Verdana;
-}
-
-.modal_controls {
-  a.button, button, input[type=submit] {
-    color: $link-color;
-  }
-}
-
-a.button, button, input[type=submit] {
-    -webkit-appearance : initial;
-    display: inline-block;
-    color: $default-font-color;
-    border: 1px solid $border-color;
-    background : $button-background-color;
-    font-size : 16px;
-    line-height: $button-height;
-    vertical-align: middle;
-    margin: 0;
-    padding: 0 14px;
-    vertical-align: middle;
-    cursor : pointer;
-    outline-color: $border-color;
-    font-family: "Open Sans", Verdana;
-    &:disabled {
-        color : $color-text4;
-        cursor : initial;
-    }
+    height: 100%;
 }
 
 label {
@@ -84,6 +57,10 @@ input[type=checkbox] {
 
 .hidden {
     display: none !important;
+}
+
+.invisible {
+    visibility: hidden !important;
 }
 
 .no_cursor {

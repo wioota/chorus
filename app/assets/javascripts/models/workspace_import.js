@@ -17,19 +17,11 @@ chorus.models.WorkspaceImport = chorus.models.Base.extend({
     },
 
     destination: function() {
-        return new chorus.models.WorkspaceDataset({
-            id: this.get("destinationDatasetId"),
-            objectName: this.get("toTable"),
-            workspace: {id: this.get("workspaceId")}
-        });
+        return new chorus.models.WorkspaceDataset(_.extend(this.get('destinationDataset'), {workspace: {id: this.get('workspaceId')}}));
     },
 
     source: function() {
-        return new chorus.models.WorkspaceDataset({
-            id: this.get('sourceDatasetId'),
-            objectName: this.get('sourceDatasetName'),
-            workspace: { id: this.get("workspaceId") }
-        });
+        return new chorus.models.WorkspaceDataset(_.extend(this.get('sourceDataset') || {}, {workspace: {id: this.get('workspaceId')}}));
     },
 
     isInProgress: function() {

@@ -7,15 +7,6 @@ describe ApplicationController do
     Chorus::Application.config.log_tags.first.should == :uuid
   end
 
-  it "should include user id in logs for every web request" do
-    user_id_proc = Chorus::Application.config.log_tags[1]
-    request = Object.new
-    stub(request).session { {:user_id => nil} }
-    user_id_proc.call(request).should == 'not_logged_in'
-    stub(request).session { {:user_id => 123} }
-    user_id_proc.call(request).should == 'user_id:123'
-  end
-
   describe "rescuing from errors" do
     controller do
       def index
@@ -31,7 +22,7 @@ describe ApplicationController do
       stub(controller).index { raise ActiveRecord::RecordNotFound }
       get :index
 
-      response.code.should == "404"
+      response.should be_not_found
       decoded_errors.record.should == "NOT_FOUND"
     end
 
@@ -39,7 +30,7 @@ describe ApplicationController do
       stub(controller).index { raise Hdfs::DirectoryNotFoundError }
       get :index
 
-      response.code.should == "404"
+      response.should be_not_found
       decoded_errors.record.should == "NOT_FOUND"
     end
 
@@ -49,7 +40,7 @@ describe ApplicationController do
       invalid_record.valid?
       stub(controller).index { raise ActiveRecord::RecordInvalid.new(invalid_record) }
       get :index
-      response.code.should == "422"
+      response.should be_unprocessable
       decoded_errors.fields.username.BLANK.should == {}
     end
 
@@ -59,7 +50,7 @@ describe ApplicationController do
       stub(controller).index { raise ActiveRecord::RecordInvalid.new(invalid_record) }
       get :index
 
-      response.code.should == "422"
+      response.should be_unprocessable
       decoded_errors.fields.username.GENERIC.message.should == "some error"
     end
 
@@ -70,7 +61,7 @@ describe ApplicationController do
 
       get :index
 
-      response.code.should == '422'
+      response.should be_unprocessable
       decoded_errors.record.should == "SOME_ERROR_TYPE"
       decoded_errors.message.should == 'oops'
     end
@@ -81,7 +72,7 @@ describe ApplicationController do
 
       get :index
 
-      response.code.should == '422'
+      response.should be_unprocessable
       decoded_errors.record.should == "DATA_SOURCE_DRIVER_NOT_CONFIGURED"
       decoded_errors.data_source.should == 'Oracle'
     end
@@ -91,7 +82,7 @@ describe ApplicationController do
 
       get :index
 
-      response.code.should == "422"
+      response.should be_unprocessable
       decoded_errors.fields.general.GENERIC.message.should == 'oops'
     end
 
@@ -100,7 +91,7 @@ describe ApplicationController do
 
       get :index
 
-      response.code.should == "422"
+      response.should be_unprocessable
       decoded_errors.fields.query.INVALID.message.should == "broken!"
     end
 
@@ -118,7 +109,7 @@ describe ApplicationController do
 
       get :index
 
-      response.code.should == "422"
+      response.should be_unprocessable
       decoded_errors.fields.general.GENERIC.message.should == "sunspot error"
     end
 
@@ -127,7 +118,7 @@ describe ApplicationController do
 
       get :index
 
-      response.code.should == "422"
+      response.should be_unprocessable
       decoded_errors.fields.general.GENERIC.message.should == "Invalid entity type"
     end
 
@@ -136,7 +127,7 @@ describe ApplicationController do
 
       get :index
 
-      response.code.should == "403"
+      response.should be_forbidden
       decoded_errors.message.should == "SqlPermissionDenied error"
       decoded_errors.type.should == "GreenplumConnection::SqlPermissionDenied"
     end
@@ -222,31 +213,28 @@ describe ApplicationController do
       response.body.should == user.id.to_s
     end
 
-    it "returns nil when there is no user_id stored in the session" do
-      session[:user_id] = nil
+    it "returns nil when there is no session_id stored in the session" do
+      session[:chorus_session_id] = nil
       get :index
       response.body.should == ' '
     end
 
-    it "returns nil when there is no user with the id stored in the session" do
-      session[:user_id] = -1
+    it "returns nil when there is no session with the session_id" do
+      session[:chorus_session_id] = -1
       get :index
       response.body.should == ' '
     end
 
-    it "sets the user when api_key is sent" do
-      get :index, :api_key => user.api_key
+    it "sets the user when session_id is sent" do
+      session_object = Session.new
+      session_object.user = user
+      session_object.save(:validate => false)
+      get :index, :session_id => session_object.session_id
       response.body.should == user.id.to_s
     end
 
-    it "does not set the user when api_key is invalid" do
-      get :index, :api_key => '8675309'
-      response.body.should == ' '
-    end
-
-    it "does not set the user when api_key is blank" do
-      user.update_attribute :api_key, ''
-      get :index, :api_key => user.api_key
+    it "does not set the user when session_id is blank" do
+      get :index, :session_id => ''
       response.body.should == ' '
     end
   end
@@ -316,44 +304,27 @@ describe ApplicationController do
     end
 
     before do
-      log_in users(:no_collaborators)
-      session[:expires_at] = 1.hour.from_now
+      log_in users(:default)
     end
 
-    context "with and unexpired session" do
-      it "allows API requests" do
+    context "with a fresh session" do
+      it "tells the session to update its expiration" do
+        any_instance_of(Session) do |s|
+          mock(s).update_expiration!
+        end
         get :index
         response.should be_success
-      end
-
-      it "resets the expires_at" do
-        get :index
-        session[:expires_at].should > 1.hour.from_now
-      end
-
-      it "uses the configured session timeout" do
-        stub(ChorusConfig.instance).[]('session_timeout_minutes') { 60 * 4 }
-        Timecop.freeze(2012, 4, 17, 10, 30) do
-          get :index
-          session[:expires_at].should == 4.hours.from_now
-        end
       end
     end
 
     context "with an expired session" do
       before do
-        session[:expires_at] = 2.hours.ago
+        any_instance_of(Session) do |s|
+          stub(s).expired? { true }
+        end
       end
 
       it "returns 'unauthorized'" do
-        get :index
-        response.code.should == "401"
-      end
-    end
-
-    context "without session expiration" do
-      it "returns 'unauthorized'" do
-        session.delete(:expires_at)
         get :index
         response.code.should == "401"
       end

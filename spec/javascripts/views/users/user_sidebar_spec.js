@@ -1,7 +1,7 @@
 describe("chorus.views.UserSidebar", function() {
     beforeEach(function() {
+        chorus.models.Config.instance().set({externalAuthEnabled: false});
         this.user = new chorus.models.User({username: "bill", id: "42"});
-        this.config = new chorus.models.Config({ externalAuthEnabled: false });
 
         spyOn(chorus.views.UserSidebar.prototype, "setUser").andCallThrough();
         this.view = new chorus.views.UserSidebar({model: this.user, listMode: false});
@@ -14,7 +14,6 @@ describe("chorus.views.UserSidebar", function() {
 
     context("when the fetch completes", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(chorus.models.Config.instance());
             this.server.completeFetchFor(this.view.collection, [ rspecFixtures.activity.dataSourceCreated() ]);
         });
 
@@ -87,30 +86,6 @@ describe("chorus.views.UserSidebar", function() {
             });
         });
 
-        context("when showApiKey is true", function() {
-            beforeEach(function() {
-                setLoggedInUser({ username: 'bill', id : "42" });
-                this.view.options.showApiKey = true;
-                this.view.render();
-            });
-
-            it("should have a 'show api key' action", function() {
-                expect(this.view.$("a.show_api_key")).toContainTranslation('actions.show_api_key');
-            });
-        });
-
-        context("when showApiKey is false", function() {
-            beforeEach(function() {
-                setLoggedInUser({ username: 'bill', id : "42" });
-                this.view.options.showApiKey = false;
-                this.view.render();
-            });
-
-            it("should have a 'show api key' action", function() {
-                expect(this.view.$("a.show_api_key")).not.toExist();
-            });
-        });
-
         describe("when viewing in list mode", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: true});
@@ -154,7 +129,6 @@ describe("chorus.views.UserSidebar", function() {
     context("without a user", function() {
         beforeEach(function() {
             this.view = new chorus.views.UserSidebar({listMode: false});
-            this.server.completeFetchFor(chorus.models.Config.instance());
             this.view.render();
         });
 

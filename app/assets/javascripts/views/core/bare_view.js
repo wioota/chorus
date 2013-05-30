@@ -256,8 +256,7 @@ chorus.views.Bare = Backbone.View.include(
             });
         },
 
-        subscribePageEvent: function(eventName, callback)
-        {
+        subscribePageEvent: function(eventName, callback) {
             var events = chorus.PageEvents._events || {};
             var self = this;
             var alreadyBound = _.any(events[eventName], function(subscription) {
@@ -364,6 +363,80 @@ chorus.views.Bare = Backbone.View.include(
             } else {
                 subject.once('loaded', _.bind(callback, this));
             }
+        },
+
+        _wrapRemove: function(element) {
+            return function () {
+                $(element).remove();
+            };
+        },
+
+        menuClass: '',
+
+        menu: function(selector, options) {
+            var menuElement = this.$(selector);
+            chorus.afterNavigate(this._wrapRemove(menuElement));
+
+            options = options || {};
+            var classes = ((options.classes || "") + " tooltip-white").trim();
+
+            var qtipArgs = {
+                content: options.content,
+                show: {
+                    event: 'click',
+                    delay: 0
+                },
+                hide: 'unfocus',
+                position: {
+                    container: options.container,
+                    my: "top center",
+                    at: "bottom center"
+                },
+                style: _.extend({
+                    classes: classes,
+                    tip: {
+                        mimic: options.mimic || "top center",
+                        width: 20,
+                        height: 15
+                    }
+                }, options.style)
+            };
+
+            _.extend(qtipArgs, options.qtipArgs);
+
+            if(options.position) {
+                _.extend(qtipArgs.position, options.position);
+            }
+
+            if (options.orientation === "right") {
+                qtipArgs.position.my = "top left";
+                qtipArgs.style.tip.offset = 40;
+            } else if (options.orientation === "left") {
+                qtipArgs.position.my = "top right";
+                qtipArgs.style.tip.offset = 40;
+            }
+
+            if (options.contentEvents) {
+                var self = this;
+                qtipArgs.events || (qtipArgs.events = {});
+                qtipArgs.events.render = function(event, api) {
+                    _.each(options.contentEvents, function(callback, selector) {
+                        var wrappedCallback = function(event) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            callback.call(self, event, api);
+                            api.hide();
+                        };
+                        $(api.elements.content).find(selector).click(wrappedCallback);
+                    });
+                };
+            }
+
+            menuElement.click(function(e) {
+                e.preventDefault();
+            });
+
+            menuElement.qtip(qtipArgs);
         }
     }, {
         extended: function(subclass) {

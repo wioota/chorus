@@ -115,7 +115,7 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
     postRender:function () {
         if(this.options.showVersions) {
             var versionList = this.versionList.render();
-            chorus.menu(this.$('a.version_list'), {
+            this.menu(this.$('a.version_list'), {
                 content:$(versionList.el)
             });
             this.versionList.delegateEvents(this.versionList.events);

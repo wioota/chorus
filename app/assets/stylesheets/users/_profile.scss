@@ -7,3 +7,9 @@
 img.profile {
     @include profile_image;
 }
+
+.icon img.profile,
+img.profile.icon {
+    max-width: $icon-image-width - 3;
+    max-height: $icon-image-height - 3;
+}

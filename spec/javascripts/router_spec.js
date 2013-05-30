@@ -19,9 +19,15 @@ describe("chorus.router", function() {
             beforeEach(function() {
                 spyOn(this.chorus.router, "navigate").andCallThrough();
                 spyOn(chorus.pages.UserNewPage.prototype, "initialize").andCallThrough();
+                this.originalPageClass = chorus.pages.UserNewPage.prototype.pageClass;
+                chorus.pages.UserNewPage.prototype.pageClass = "classyPage";
                 spyOnEvent(this.chorus.router, "leaving");
-
+                $("#jasmine_content").append("<div id='page'></div>");
                 this.chorus.router.navigate("/users/new", { foo: "bar" });
+            });
+
+            afterEach(function() {
+                chorus.pages.UserNewPage.prototype.pageClass = this.originalPageClass;
             });
 
             it("fetches the session", function() {
@@ -60,6 +66,10 @@ describe("chorus.router", function() {
                 it("sets chorus.page.pageOptions to chorus.pageOptions", function() {
                     expect(this.chorus.page.pageOptions).toEqual({ foo: "bar" });
                     expect(this.chorus.pageOptions).toBeUndefined();
+                });
+
+                it("adds the page class to the #page", function() {
+                    expect($("#page")).toHaveClass("classyPage");
                 });
             });
 

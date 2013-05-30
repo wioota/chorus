@@ -225,6 +225,14 @@ describe WorkspacesController do
         end
       end
 
+      it "can change the show_sandbox_datasets attribute" do
+        workspace.show_sandbox_datasets.should be_true
+        put :update, params.merge(:show_sandbox_datasets => false)
+
+        response.should be_success
+        workspace.reload.show_sandbox_datasets.should be_false
+      end
+
       describe "unarchiving workspace" do
         let(:workspace) {workspaces(:archived)}
 

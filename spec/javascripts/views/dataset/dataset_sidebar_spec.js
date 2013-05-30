@@ -433,6 +433,10 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$("a.create_schedule, a.edit_schedule, a.import_now")).not.toExist();
             });
 
+            it("does not display a new workflow link by default", function () {
+                expect(this.view.$("a.new_work_flow")).not.toExist();
+            });
+
             context("and the selected dataset is a sandbox table or view", function() {
                 beforeEach(function() {
                     this.dataset = rspecFixtures.workspaceDataset.datasetTable();
@@ -463,10 +467,8 @@ describe("chorus.views.DatasetSidebar", function() {
                             completedStamp: "2012-02-29T14:23:59Z",
                             success: true,
                             toTable: this.dataset.name(),
-                            destinationDatasetId: this.dataset.id,
-                            sourceDatasetName: "sourcey",
-                            sourceDatasetId: this.dataset.id + 1
-
+                            destinationDataset: {id: this.dataset.id},
+                            sourceDataset: { id: this.dataset.id + 1, objectName: "sourcey"}
                         });
                         this.server.completeFetchFor(this.view.imports, [this.lastImport]);
                     });
@@ -676,8 +678,8 @@ describe("chorus.views.DatasetSidebar", function() {
                             completedStamp: "2012-02-29T14:23:59Z",
                             success: true,
                             toTable: 'our_destination',
-                            destinationDatasetId: 12345,
-                            sourceDatasetId: this.dataset.id
+                            destinationDataset: {id: 12345, objectName: 'our_destination'},
+                            sourceDataset: {id: this.dataset.id}
                         });
                         this.server.completeFetchFor(this.view.imports, [this.lastImport]);
                         this.server.completeFetchFor(this.view.importSchedules, []);
@@ -766,6 +768,10 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     itDoesNotShowDatabaseDependentActions();
                 });
+
+                it("does not have a new workflow link", function () {
+                    expect(this.view.$("a.new_work_flow")).not.toExist();
+                });
             });
 
             context("when the dataset is a source table", function() {
@@ -781,7 +787,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 });
             });
 
-            it("has an associate with another workspace link", function() {
+            it("has an 'associate with another workspace' link", function() {
                 expect(this.view.$('.actions .associate')).toContainTranslation("actions.associate_with_another_workspace");
                 this.view.$('.actions .associate').click();
                 expect(this.modalSpy).toHaveModal(chorus.dialogs.AssociateWithWorkspace);
@@ -794,6 +800,51 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(notesNew).toHaveData("entityType", "dataset");
                 expect(notesNew).toHaveData("displayEntityType", this.dataset.metaType());
                 expect(notesNew).toHaveData("allowWorkspaceAttachments", true);
+            });
+
+            context("when work_flows are enabled", function () {
+                beforeEach(function () {
+                    chorus.models.Config.instance().set("workFlowConfigured", true);
+                    this.view = new chorus.views.DatasetSidebar();
+                    this.dataset = rspecFixtures.workspaceDataset.sourceTable();
+                    chorus.PageEvents.trigger("dataset:selected", this.dataset);
+                    this.workspace = this.view.resource.workspace();
+                    spyOn(this.workspace, 'currentUserIsMember');
+                });
+
+                context("when the current user is a member of the workspace", function () {
+                    beforeEach(function () {
+                        this.workspace.currentUserIsMember.andReturn(true);
+                        this.view.render();
+                    });
+
+                    it("displays a new workflow link", function () {
+                        expect(this.view.$("a.new_work_flow")).toExist();
+                    });
+
+                    describe("clicking the 'new work flow' link", function() {
+                        beforeEach(function() {
+                            this.view.$("a.new_work_flow").click();
+                        });
+
+                        it("launches the dialog for creating a new work flow", function() {
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkFlowNewForDatasetList);
+                            expect(this.modalSpy.lastModal().collection.length).toBe(1);
+                            expect(this.modalSpy.lastModal().collection).toContain(this.dataset);
+                        });
+                    });
+                });
+
+                context("when the current user is not a member of the workspace", function () {
+                    beforeEach(function () {
+                        this.workspace.currentUserIsMember.andReturn(false);
+                        this.view.render();
+                    });
+
+                    it("does not display a new workflow link", function () {
+                        expect(this.view.$("a.new_work_flow")).not.toExist();
+                    });
+                });
             });
         });
 
@@ -814,6 +865,20 @@ describe("chorus.views.DatasetSidebar", function() {
 
             it("does not have the 'Import Now' action", function() {
                 expect(this.view.$(".actions .import_now")).not.toExist();
+            });
+
+            context("when workflows are enabled", function () {
+                beforeEach(function () {
+                    chorus.models.Config.instance().set("workFlowConfigured", true);
+                    this.view = new chorus.views.DatasetSidebar();
+                    this.view.render();
+                    this.dataset = rspecFixtures.dataset({id: "XYZ"});
+                    chorus.PageEvents.trigger("dataset:selected", this.dataset);
+                });
+
+                it("does not have a new workflow link", function () {
+                    expect(this.view.$("a.new_work_flow")).not.toExist();
+                });
             });
 
             it("does not display a delete link", function() {
@@ -884,10 +949,10 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$(".column_statistics .pair").eq(2).find(".key")).toContainTranslation("dataset.column_statistics.min");
                 expect(this.view.$(".column_statistics .pair").eq(3).find(".key")).toContainTranslation("dataset.column_statistics.max");
                 expect(this.view.$(".column_statistics .pair").eq(4).find(".key")).toContainTranslation("dataset.column_statistics.distinct");
-                expect(this.view.$(".column_statistics .pair").eq(5).find(".key")).toContainTranslation("dataset.column_statistics.pctnull");
+                expect(this.view.$(".column_statistics .pair").eq(5).find(".key")).toContainTranslation("dataset.column_statistics.common");
+                expect(this.view.$(".column_statistics .pair").eq(6).find(".key")).toContainTranslation("dataset.column_statistics.pctnull");
                 expect(this.view.$(".column.description").find("h4")).toContainTranslation("dataset.column_statistics.description");
 
-                expect(this.view.$(".column_statistics .multiline").eq(0).find(".key")).toContainTranslation("dataset.column_statistics.common");
             });
 
             it("should display a comment for the column", function() {

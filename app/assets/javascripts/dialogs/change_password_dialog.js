@@ -17,6 +17,6 @@ chorus.dialogs.ChangePassword = chorus.dialogs.Base.extend({
     },
 
     saved:function () {
-        $(document).trigger("close.facebox");
+        this.closeModal();
     }
 });

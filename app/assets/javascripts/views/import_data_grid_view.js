@@ -3,20 +3,19 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
     constructorName: "ImportDataGrid",
     additionalClass: "import_data_grid",
     headerRowHeight: 0,
-    columnMinWidth: 100,
+    columnStartingWidth: 100,
     customizeHeaderRows: $.noop,
     events: { "click .slick-cell": "selectCell" },
 
     initializeDataGrid: function(columns, rows, columnNames) {
-        if(this.$(".grid").length < 1) { return; }
-
+        if(!this.inDocument()) { return; }
         var gridCompatibleRows = this.convert2DArrayToArrayOfHashTables(rows);
         var gridCompatibleColumnCells = _.map(columns, function (column, index) {
             return {
                 name: column.name,
                 field: index.toString(),
                 id: index.toString(),
-                minWidth: this.columnMinWidth
+                minWidth: this.columnStartingWidth
             };
         }, this);
 
@@ -26,12 +25,18 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
         this.customizeHeaderRows(columns, columnNames);
         this.$(".slick-column-name").addClass("column_name");
 
-        _.defer(_.bind(function () {
-            this.grid.resizeCanvas();
-            this.grid.invalidate();
-        }, this));
+        _.defer(_.bind(this.resizeGridToResultsConsole, this));
     },
 
+    inDocument: function () {
+        return (this.$el.closest('body').length > 0);
+    },
+
+    resizeGridToResultsConsole: function() {
+        if(!this.inDocument()) { return; }
+        this.grid.resizeCanvas();
+        this.grid.invalidate();
+    },
     scrollHeaderRow: function() {
         this.grid.onScroll.subscribe(_.bind(function (e, args) {
             this.$('.slick-headerrow-columns').css({left: -args.scrollLeft});
@@ -73,19 +78,20 @@ chorus.views.ImportDataGrid = chorus.views.Base.extend({
     },
 
     forceFitColumns: function (columns) {
-        return (columns.length * this.columnMinWidth) <= this.$el.width();
+        return (columns.length * this.columnStartingWidth) <= this.$el.width();
     },
 
     _slickGridOptions: function(columns) {
         return {
+            defaultColumnWidth: 130,
             defaultFormatter: this.cellFormatter,
+            enableCellNavigation: false,
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,
-            syncColumnCellResize: true,
-            showHeaderRow: true,
+            forceFitColumns: this.forceFitColumns(columns),
             headerRowHeight: this.headerRowHeight,
-            defaultColumnWidth: 130,
-            forceFitColumns: this.forceFitColumns(columns)
+            showHeaderRow: true,
+            syncColumnCellResize: true
         };
     }
 });

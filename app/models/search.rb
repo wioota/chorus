@@ -204,7 +204,16 @@ class Search
       end
 
       with :type_name, type_names_to_search
+
+      adjust_solr_params do |params|
+        if params[:qf]
+          fields = params[:qf].split
+          new_fields = fields.map {|field| field.sub /_texts$/, "_stemmed_texts" }
+          params[:qf] = (fields + new_fields).join(" ")
+        end
+      end
     end
+
     models_to_search.each do |model_to_search|
       model_to_search.add_search_permissions(current_user, search) if model_to_search.respond_to? :add_search_permissions
     end

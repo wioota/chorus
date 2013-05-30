@@ -1,6 +1,7 @@
 chorus.views.ListContentDetails = chorus.views.Base.extend({
     constructorName: "ListContentDetailsView",
     templateName: "list_content_details",
+    additionalClass: "action_bar_primary",
 
     events: {
         "click a.next": "fetchNextPage",
@@ -9,7 +10,12 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
         "click a.select_none": "selectNone"
     },
 
+    subviews: {
+      "div.button_holder" : "buttonView"
+    },
+
     setup: function(){
+        this.buttonView = this.options.buttonView || new chorus.views.ListContentDetailsButtonView(this.options);
         this.listenTo(this.collection, "remove", this.render);
     },
 

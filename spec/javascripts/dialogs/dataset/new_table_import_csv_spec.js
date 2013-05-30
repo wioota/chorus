@@ -61,7 +61,6 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 this.dialog.teardown();
                 //If you don't tear down the old dialog, spying on function calls becomes tricky later
                 this.dialog = new chorus.dialogs.NewTableImportCSV({ model: this.model, csvOptions: this.csvOptions });
-
             });
 
             it("has " + separator + " as separator", function() {

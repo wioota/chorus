@@ -37,7 +37,17 @@ module Visualization
         GROUP BY "#{@category}", ntile ORDER BY "#{@category}", ntile
       SQL
 
-      return ntiles_for_each_bucket
+      # this was removed previously, but is a key performance optimization and must remain in place.
+      # The query needs to limit the number of buckets, there could be a large number of rows
+      # the 'limit' clause is the important part, not the 'total' field
+      ntiles_for_each_bin_with_total = <<-SQL
+        SELECT "#{@category}", ntile, min, max, cnt, SUM(cnt) OVER(w) AS total
+        FROM (#{ntiles_for_each_bucket}) AS ntilesForEachBin
+        WINDOW w AS (PARTITION BY "#{@category}")
+        ORDER BY total desc, "#{@category}", ntile LIMIT #{(@buckets * 4).to_s}
+      SQL
+
+      return ntiles_for_each_bin_with_total
     end
   end
 end

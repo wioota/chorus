@@ -285,6 +285,18 @@ describe Dataset do
     end
   end
 
+  describe "list_order" do
+    # postgres loves to order by update order, it's like that
+    it "sorts by id as a secondary sort, and not by update order" do
+      Dataset.order("id desc").all.each_with_index do |dataset, i|
+        Dataset.where(:id => dataset.id).update_all(:name => 'billy', :schema_id => i)
+      end
+      ids = Dataset.list_order.collect &:id
+      ids.should == ids.sort
+      User.create
+    end
+  end
+
   it_should_behave_like "taggable models", [:datasets, :table]
 
   it_behaves_like 'a soft deletable model' do

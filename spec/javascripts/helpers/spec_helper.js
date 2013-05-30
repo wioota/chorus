@@ -93,6 +93,7 @@
             this.server = sinon.fakeServer.create();
             chorus.router.unbind();
             delete chorus.page;
+            chorus.models.Config.instance().clear();
             window.qtipElements = {};
 
             this.renderDOM = function(content) {
@@ -277,10 +278,14 @@
 
                 toContainQueryParams: function(queryParams) {
                     var actualQueryParams = new URI(this.actual).query(true);
-                    var targetQueryParams = new URI("").addSearch(chorus.Mixins.Fetching.underscoreKeys(queryParams)).query(true);
+                    var targetQueryParams = new URI("").addQuery(chorus.Mixins.Fetching.underscoreKeys(queryParams)).query(true);
 
                     return _.all(targetQueryParams, function(targetValue, targetKey) {
-                        return actualQueryParams[targetKey] === targetValue;
+                        if (targetValue instanceof Array) {
+                            return _.difference(targetValue, actualQueryParams[targetKey]).length === 0;
+                        } else {
+                            return actualQueryParams[targetKey] === targetValue;
+                        }
                     });
                 },
 
@@ -410,6 +415,10 @@
     window.xitBehavesLike = {};
     _.each(window.itBehavesLike, function(value, key) { window.xitBehavesLike[key] = $.noop; });
 
+    window.loadConfig = function() {
+        chorus.models.Config.instance().set(rspecFixtures.config().attributes);
+    };
+
     window.unsetLoggedInUser = function() {
         chorus.session.unset("id");
         delete chorus.session._user;
@@ -445,7 +454,7 @@
         if(options instanceof chorus.models.User) {
             options = options.attributes;
         }
-        target.session = rspecFixtures.session(options);
+        target.session = rspecFixtures.session({user: options});
     };
 
     window.stubView = function(html, options) {
