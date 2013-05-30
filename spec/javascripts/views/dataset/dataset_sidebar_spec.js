@@ -809,12 +809,11 @@ describe("chorus.views.DatasetSidebar", function() {
                     this.dataset = rspecFixtures.workspaceDataset.sourceTable();
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
                     this.workspace = this.view.resource.workspace();
-                    spyOn(this.workspace, 'currentUserIsMember');
                 });
 
                 context("when the current user is a member of the workspace", function () {
                     beforeEach(function () {
-                        this.workspace.currentUserIsMember.andReturn(true);
+                        this.workspace.set({permission: ["create_work_flow"]});
                         this.view.render();
                     });
 
@@ -822,12 +821,12 @@ describe("chorus.views.DatasetSidebar", function() {
                         expect(this.view.$("a.new_work_flow")).toExist();
                     });
 
-                    describe("clicking the 'new work flow' link", function() {
-                        beforeEach(function() {
+                    describe("clicking the 'new work flow' link", function () {
+                        beforeEach(function () {
                             this.view.$("a.new_work_flow").click();
                         });
 
-                        it("launches the dialog for creating a new work flow", function() {
+                        it("launches the dialog for creating a new work flow", function () {
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkFlowNewForDatasetList);
                             expect(this.modalSpy.lastModal().collection.length).toBe(1);
                             expect(this.modalSpy.lastModal().collection).toContain(this.dataset);
@@ -837,7 +836,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("when the current user is not a member of the workspace", function () {
                     beforeEach(function () {
-                        this.workspace.currentUserIsMember.andReturn(false);
+                        this.workspace.set({permission: []});
                         this.view.render();
                     });
 

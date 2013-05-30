@@ -475,9 +475,13 @@ describe("chorus.models.Workspace", function() {
 
     describe("#currentUserCanCreateWorkFlows", function () {
         context("when the workspace is active", function () {
+            beforeEach(function () {
+                spyOn(this.model, "isActive").andReturn(true);
+            });
+
             context("the current user is a member", function () {
                 beforeEach(function () {
-                    this.model.members().add(new chorus.models.User(chorus.session.user().attributes));
+                    this.model.set({permission: ["create_work_flow"]});
                 });
 
                 it("returns true", function(){
@@ -485,13 +489,13 @@ describe("chorus.models.Workspace", function() {
                 });
             });
 
-            context("the workspace is public", function () {
+            context("the current user is an owner", function () {
                 beforeEach(function () {
-                    spyOn(this.model, "isPublic").andReturn(true);
+                    this.model.set({permission: ["admin"]});
                 });
 
-                it("returns false", function () {
-                    expect(this.model.currentUserCanCreateWorkFlows()).toBeFalsy();
+                it("returns true", function(){
+                    expect(this.model.currentUserCanCreateWorkFlows()).toBeTruthy();
                 });
             });
         });
@@ -505,55 +509,8 @@ describe("chorus.models.Workspace", function() {
 
         context("when the current user is not a member", function () {
             it("returns false", function () {
-                this.model.members().reset();
+                this.model.set({permission: []});
                 expect(this.model.currentUserCanCreateWorkFlows()).toBeFalsy();
-            });
-        });
-
-        context("when the current user is the owner", function() {
-            it("returns true", function () {
-                this.model.members().reset();
-                this.model.set('owner', chorus.session.user().attributes);
-                expect(this.model.currentUserCanCreateWorkFlows()).toBeTruthy();
-            });
-        });
-    });
-
-    describe("#currentUserCanOpenWorkFlows", function () {
-        context("when the workspace is active", function () {
-            context("the current user is a member", function () {
-                beforeEach(function () {
-                    this.model.members().add(new chorus.models.User(chorus.session.user().attributes));
-                });
-
-                it("returns true", function(){
-                    expect(this.model.currentUserCanOpenWorkFlows()).toBeTruthy();
-                });
-            });
-
-            context("the workspace is public", function () {
-                beforeEach(function () {
-                    spyOn(this.model, "isPublic").andReturn(true);
-                });
-
-                it("returns false", function () {
-                    expect(this.model.currentUserCanOpenWorkFlows()).toBeTruthy();
-                });
-            });
-        });
-
-        context("when the workspace is archived", function () {
-            it("returns false", function () {
-                this.model.set("archivedAt", true);
-                expect(this.model.currentUserCanOpenWorkFlows()).toBeFalsy();
-            });
-        });
-
-        context("when the current user is not a member and the workspace is not public", function () {
-            it("returns false", function () {
-                this.model.members().reset();
-                spyOn(this.model, "isPublic").andReturn(false);
-                expect(this.model.currentUserCanOpenWorkFlows()).toBeFalsy();
             });
         });
     });

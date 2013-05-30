@@ -89,7 +89,7 @@ chorus.dialogs.EditWorkspace = chorus.dialogs.Base.include(
                 "public": !!this.$("input[name=public]").is(":checked"),
                 active: active,
                 hasChangedSettings: true,
-                showSandboxDatasets: !!this.$("show_sandbox_datasets").prop("checked"),
+                showSandboxDatasets: !!this.$(".show_sandbox_datasets").prop("checked"),
                 archived: !active
             };
 
