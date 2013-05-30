@@ -337,6 +337,22 @@ describe WorkfilesController do
       public_workfile.reload.execution_schema.should == schema
     end
 
+    context "updating file names" do
+      let(:new_name) { "new_name.sql" }
+      let(:options) do
+        {
+            :id => public_workfile.to_param,
+            :file_name => new_name
+        }
+      end
+
+      it "updates the file name" do
+        put :update, options
+        response.should be_success
+        public_workfile.reload.file_name.should == new_name
+      end
+    end
+
     context "when no execution schema has been set" do
       let(:options) do
         {
