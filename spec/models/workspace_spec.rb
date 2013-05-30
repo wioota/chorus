@@ -352,7 +352,7 @@ describe Workspace do
 
       [
           [private_workspace, owner, [:admin]],
-          [private_workspace, member, [:read, :commenting, :update]],
+          [private_workspace, member, [:read, :commenting, :update, :create_work_flow]],
           [private_workspace, admin, [:admin]],
           [private_workspace, anon, []],
           [public_workspace, anon, [:read, :commenting]]

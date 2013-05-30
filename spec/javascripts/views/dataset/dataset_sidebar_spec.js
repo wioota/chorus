@@ -811,50 +811,39 @@ describe("chorus.views.DatasetSidebar", function() {
                     this.workspace = this.view.resource.workspace();
                 });
 
-                it("fetches the workspace members", function () {
-                    expect(this.server.lastFetchFor(this.workspace.members())).toBeDefined();
+                context("when the current user is a member of the workspace", function () {
+                    beforeEach(function () {
+                        this.workspace.set({permission: ["create_work_flow"]});
+                        this.view.render();
+                    });
+
+                    it("displays a new workflow link", function () {
+                        expect(this.view.$("a.new_work_flow")).toExist();
+                    });
+
+                    describe("clicking the 'new work flow' link", function () {
+                        beforeEach(function () {
+                            this.view.$("a.new_work_flow").click();
+                        });
+
+                        it("launches the dialog for creating a new work flow", function () {
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkFlowNewForDatasetList);
+                            expect(this.modalSpy.lastModal().collection.length).toBe(1);
+                            expect(this.modalSpy.lastModal().collection).toContain(this.dataset);
+                        });
+                    });
                 });
 
-                context("when the members have not been fetched from the server", function() {
-                    it("does not show a new work flow link", function () {
+                context("when the current user is not a member of the workspace", function () {
+                    beforeEach(function () {
+                        this.workspace.set({permission: []});
+                        this.view.render();
+                    });
+
+                    it("does not display a new workflow link", function () {
                         expect(this.view.$("a.new_work_flow")).not.toExist();
                     });
                 });
-
-                context("when the members have been fetched", function () {
-                    context("when the current user is a member of the workspace", function () {
-                        beforeEach(function () {
-                            this.server.completeFetchFor(this.workspace.members(), [chorus.session.user().attributes]);
-                        });
-
-                        it("displays a new workflow link", function () {
-                            expect(this.view.$("a.new_work_flow")).toExist();
-                        });
-
-                        describe("clicking the 'new work flow' link", function () {
-                            beforeEach(function () {
-                                this.view.$("a.new_work_flow").click();
-                            });
-
-                            it("launches the dialog for creating a new work flow", function () {
-                                expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkFlowNewForDatasetList);
-                                expect(this.modalSpy.lastModal().collection.length).toBe(1);
-                                expect(this.modalSpy.lastModal().collection).toContain(this.dataset);
-                            });
-                        });
-                    });
-
-                    context("when the current user is not a member of the workspace", function () {
-                        beforeEach(function () {
-                            this.server.completeFetchFor(this.workspace.members(), []);
-                        });
-
-                        it("does not display a new workflow link", function () {
-                            expect(this.view.$("a.new_work_flow")).not.toExist();
-                        });
-                    });
-                });
-
             });
         });
 

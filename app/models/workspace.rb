@@ -205,7 +205,7 @@ class Workspace < ActiveRecord::Base
     if user.admin? || (owner.id == user.id)
       [:admin]
     elsif user.memberships.find_by_workspace_id(id)
-      [:read, :commenting, :update]
+      [:read, :commenting, :update, :create_work_flow]
     elsif public?
       [:read, :commenting]
     else
