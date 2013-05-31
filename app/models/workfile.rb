@@ -122,6 +122,9 @@ class Workfile < ActiveRecord::Base
     'workfile'
   end
 
+  def attempt_data_source_connection
+  end
+
   def copy(user, workspace)
     workfile = self.class.new
     workfile.file_name = file_name

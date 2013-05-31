@@ -10,7 +10,7 @@ describe WorkfilesController do
   let(:private_workfile) { workfiles(:private) }
   let(:public_workfile) { workfiles(:public) }
   let(:file) { test_file(file_name, "text/sql") }
-  let(:file_name) { "workfile.sql"}
+  let(:file_name) { "workfile.sql" }
 
   before do
     log_in user
@@ -128,6 +128,54 @@ describe WorkfilesController do
       it "responds with a success" do
         get :show, {:id => public_workfile}
         response.should be_success
+      end
+
+      context "for an alpine workfile" do
+        let(:alpine_workfile) { workfiles("alpine.afm") }
+
+        before do
+          alpine_workfile.database_id = gpdb_databases(:default).id
+          alpine_workfile.save
+        end
+
+        describe "connecting to the data source" do
+          let(:connection) { Object.new }
+          let(:database) { Object.new }
+
+          it "validates the database credentials" do
+            any_instance_of(AlpineWorkfile) do |workfile|
+              mock(workfile).attempt_data_source_connection
+            end
+
+            get :show, {:id => alpine_workfile, :connect => true}
+            response.should be_success
+          end
+
+          context "when the user does not have a credential mapping" do
+            before do
+              user.data_source_accounts.destroy_all
+            end
+
+            it "responds with 403, missing credentials" do
+              get :show, {:id => alpine_workfile, :connect => true}
+              response.should_not be_not_found
+              response.should be_forbidden
+            end
+          end
+
+          context "when the user has wrong credentials" do
+            before do
+              alpine_workfile.data_source.accounts.create(:owner => user).invalid_credentials!
+            end
+
+            it "responds with 403, missing credentials" do
+              get :show, {:id => alpine_workfile, :connect => true}
+              response.should_not be_not_found
+              response.should be_forbidden
+            end
+          end
+        end
+
       end
     end
 

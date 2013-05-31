@@ -82,4 +82,20 @@ describe("chorus.models.AlpineWorkfile", function() {
           expect(this.model.workFlowShowUrl()).toBe("#/work_flows/"+this.model.id);
        });
     });
+
+    describe("dataSourceRequireingCredentials", function () {
+        describe("when the error entity type is workspace", function () {
+            it("is undefined", function () {
+                this.model.serverErrors = {modelData: {entityType: 'workspace'}};
+                expect(this.model.dataSourceRequiringCredentials()).toBeFalsy();
+            });
+        });
+
+        describe("when the error entity type is not workspace", function () {
+            it("delegates to the data source credentials mixin", function () {
+                this.model.serverErrors = {modelData: {entityType: 'data_source'}};
+                expect(this.model.dataSourceRequiringCredentials()).toBeA(chorus.models.GpdbDataSource);
+            });
+        });
+    });
 });

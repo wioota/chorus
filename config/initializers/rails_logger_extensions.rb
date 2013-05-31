@@ -21,5 +21,6 @@ end
 module Kernel
   def pa(args)
     Rails.logger.debug(args)
+    args
   end
 end

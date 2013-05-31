@@ -8,6 +8,7 @@ describe("chorus.pages.WorkFlowShowPage", function() {
     context("when the workfile is loaded", function() {
         beforeEach(function() {
             this.workfile = rspecFixtures.workfile.alpine({id: 4});
+            this.workfile.urlParams = {connect: true};
             this.server.completeFetchFor(this.workfile);
         });
 
@@ -49,20 +50,44 @@ describe("chorus.pages.WorkFlowShowPage", function() {
         });
     });
 
-    it("handles the workfile errors", function () {
-        spyOn(Backbone.history, "loadUrl");
-        this.page.model.trigger("resourceForbidden");
-        expect(Backbone.history.loadUrl).toHaveBeenCalled();
-    });
-
-    it("routes to the login page when receiving an 'unauthorized' message", function() {
-        runs(function(){
-            spyOn(chorus, 'requireLogin');
-            expect(chorus.requireLogin).not.toHaveBeenCalled();
-            window.postMessage({action: 'unauthorized'}, '*');
+    context("when the workfile has errors", function () {
+        context("when the errors come from the workspace", function () {
+            it("does the normal thing", function () {
+                spyOn(Backbone.history, "loadUrl");
+                this.page.model.serverErrors = {
+                    record: 'CHEESE',
+                    modelData: {
+                        entityType: 'workspace'
+                    }
+                };
+                this.page.model.trigger("resourceForbidden");
+                expect(Backbone.history.loadUrl).toHaveBeenCalled();
+            });
         });
-        waitsFor(function() {
-            return chorus.requireLogin.callCount > 0; // times out if requireLogin never called
+
+        context("when the errors come from the data source", function () {
+            it("handles the workfile errors", function () {
+                spyOn(this.page, "launchDataSourceAccountDialog");
+                this.page.model.serverErrors = {
+                    record: 'CHEESE',
+                    modelData: {
+                        entityType: 'data_source'
+                    }
+                };
+                this.page.model.trigger("resourceForbidden");
+                expect(this.page.launchDataSourceAccountDialog).toHaveBeenCalled();
+            });
+
+            it("routes to the login page when receiving an 'unauthorized' message", function() {
+                runs(function(){
+                    spyOn(chorus, 'requireLogin');
+                    expect(chorus.requireLogin).not.toHaveBeenCalled();
+                    window.postMessage({action: 'unauthorized'}, '*');
+                });
+                waitsFor(function() {
+                    return chorus.requireLogin.callCount > 0; // times out if requireLogin never called
+                });
+            });
         });
     });
 });

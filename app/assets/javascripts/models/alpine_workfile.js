@@ -1,10 +1,18 @@
 //= require ./workfile
-chorus.models.AlpineWorkfile = chorus.models.Workfile.extend({
+chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
+    chorus.Mixins.DataSourceCredentials.model
+).extend({
     constructorName: "AlpineWorkfile",
     parameterWrapper: "workfile",
 
     defaults: {
         entitySubtype: "alpine"
+    },
+
+    dataSourceRequiringCredentials: function() {
+        if (this.serverErrors.modelData.entityType !== "workspace") {
+            return this._super('dataSourceRequiringCredentials');
+        }
     },
 
     showUrlTemplate: function(options) {

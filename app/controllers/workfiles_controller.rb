@@ -1,11 +1,18 @@
 require 'will_paginate/array'
 
 class WorkfilesController < ApplicationController
+  include DataSourceAuth
   wrap_parameters :workfile, :exclude => []
 
   def show
     workfile = Workfile.find(params[:id])
     authorize! :show, workfile.workspace
+
+    if params[:connect].present?
+      authorize_data_source_access workfile
+      workfile.attempt_data_source_connection
+    end
+
     present workfile, :presenter_options => {:contents => true, :workfile_as_latest_version => true}
   end
 

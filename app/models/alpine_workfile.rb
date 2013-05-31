@@ -32,6 +32,14 @@ class AlpineWorkfile < Workfile
     'alpine'
   end
 
+  def attempt_data_source_connection
+    data_source.connect_as(current_user).connect!
+  end
+
+  def data_source
+    GpdbDatabase.find(database_id).data_source
+  end
+
   def datasets
     @datasets ||= Dataset.where(:id => dataset_ids)
   end

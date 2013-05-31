@@ -1,4 +1,6 @@
-chorus.pages.WorkFlowShowPage = chorus.pages.Base.extend({
+chorus.pages.WorkFlowShowPage = chorus.pages.Base.include(
+    chorus.Mixins.DataSourceCredentials.page
+).extend({
     templateName: "header_iframe_layout",
     additionalClass: "logged_in_layout",
     pageClass: "full_height",
@@ -6,6 +8,7 @@ chorus.pages.WorkFlowShowPage = chorus.pages.Base.extend({
     makeModel: function(workfileId) {
         this.model = new chorus.models.AlpineWorkfile({id: workfileId});
         this.handleFetchErrorsFor(this.model);
+        this.model.urlParams = {connect: true};
         this.model.fetch();
     },
 
