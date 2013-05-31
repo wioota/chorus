@@ -189,7 +189,7 @@ describe('chorus.handlebarsHelpers.dataset', function() {
             it("returns Sandbox Table", function() {
                 this.sandBoxTable = rspecFixtures.workspaceDataset.datasetTable();
                 Handlebars.helpers.humanizedDatasetType(this.sandBoxTable.attributes);
-                expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.SANDBOX_TABLE.TABLE');
+                expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.SANDBOX_TABLE.BASE_TABLE');
             });
 
             it("returns Sandbox View", function() {
