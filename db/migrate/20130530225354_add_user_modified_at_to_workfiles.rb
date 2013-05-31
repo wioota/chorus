@@ -5,11 +5,7 @@ class AddUserModifiedAtToWorkfiles < ActiveRecord::Migration
 
   def up
     add_column :workfiles, :user_modified_at, :datetime
-
-    MigrationWorkfile.all.each do |workfile|
-      workfile.user_modified_at = workfile.updated_at
-      workfile.save
-    end
+    execute "update workfiles set user_modified_at = updated_at"
   end
 
   def down
