@@ -41,8 +41,8 @@ describe "Workfiles" do
   end
 
   describe "workfiles list page" do
-    let(:workfile_first_by_date) { workspace.workfiles.order(:updated_at).first }
-    let(:workfile_last_by_date) { workspace.workfiles.order(:updated_at).last }
+    let(:workfile_first_by_date) { workspace.workfiles.order(:user_modified_at).last }
+    let(:workfile_last_by_date) { workspace.workfiles.order(:user_modified_at).first }
 
     describe "Lists the work files" do
       before(:each) do
