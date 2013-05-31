@@ -59,7 +59,7 @@ describe("chorus.views.WorkfileSidebar", function() {
 
         context("with a non-sql workfile", function() {
             beforeEach(function() {
-                this.workfile = rspecFixtures.workfile.text({ versionInfo: { updatedAt: "2011-11-22T10:46:03Z" }});
+                this.workfile = rspecFixtures.workfile.text({ userModifiedAt: "2011-11-22T10:46:03Z" });
                 expect(this.workfile.isText()).toBeTruthy();
 
                 this.view = new chorus.views.WorkfileSidebar({ model : this.workfile });
@@ -194,7 +194,7 @@ describe("chorus.views.WorkfileSidebar", function() {
 
         describe("when the user is not a workspace member", function() {
             beforeEach(function() {
-                this.workfile = rspecFixtures.workfile.text({ versionInfo: { updatedAt: "2011-11-22T10:46:03Z" }});
+                this.workfile = rspecFixtures.workfile.text();
                 this.view = new chorus.views.WorkfileSidebar({ model : this.workfile });
 
                 this.view.model.fetch();

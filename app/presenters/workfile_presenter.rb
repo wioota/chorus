@@ -14,7 +14,8 @@ class WorkfilePresenter < Presenter
       :comment_count => recent_comments.empty? ? 0 : model.comments.count + model.notes.count,
       :tags => present(model.tags, options),
       :entity_type => model.entity_type_name,
-      :entity_subtype => model.entity_subtype
+      :entity_subtype => model.entity_subtype,
+      :user_modified_at => model.user_modified_at
     }
 
     unless rendering_activities?
