@@ -180,6 +180,14 @@
                 links: [ "actor", "workspace" ]
             },
 
+            WorkspaceToShowSandboxDatasets: {
+                links: [ "actor", "workspace" ]
+            },
+
+            WorkspaceToNoLongerShowSandboxDatasets: {
+                links: [ "actor", "workspace" ]
+            },
+
             WorkspaceMakePrivate: {
                 links: [ "actor", "workspace" ]
             },

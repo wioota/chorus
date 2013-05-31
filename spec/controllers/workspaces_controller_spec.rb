@@ -163,12 +163,15 @@ describe WorkspacesController do
     let(:public_workspace) { workspaces(:public_with_no_collaborators) }
     let(:private_workspace) { workspaces(:private_with_no_collaborators) }
     let(:workspace) {private_workspace}
-
-    let(:params) { {
-        :id => workspace.id,
+    let(:workspace_params) { {
         :owner => {id: "3"},
         :public => workspace.public?.to_s,
         :archived => workspace.archived?.to_s
+    } }
+
+    let(:params) { {
+        :id => workspace.id,
+        :workspace => workspace_params
     } }
 
     before do
@@ -183,7 +186,8 @@ describe WorkspacesController do
 
       it "can change the owner" do
         member = users(:the_collaborator)
-        put :update, params.merge(:owner_id => member.id.to_s)
+
+        put :update, params.merge(:workspace => workspace_params.merge(:owner_id => member.id.to_s))
 
         workspace.reload
         workspace.owner.should == member
@@ -194,7 +198,7 @@ describe WorkspacesController do
         let(:workspace) {public_workspace}
 
         it "allows updating the workspace's privacy" do
-          put :update, params.merge(:public => false)
+          put :update, params.merge(:workspace => workspace_params.merge(:public => "false"))
           workspace.reload
           workspace.should_not be_public
           response.should be_success
@@ -202,7 +206,7 @@ describe WorkspacesController do
 
         it "generates an event" do
           expect_to_add_event(Events::WorkspaceMakePrivate, owner) do
-            put :update, params.merge(:public => false)
+            put :update, params.merge(:workspace => workspace_params.merge(:public => "false"))
           end
         end
       end
@@ -211,7 +215,7 @@ describe WorkspacesController do
         let(:workspace) {private_workspace}
 
         it "allows updating the workspace's privacy" do
-          put :update, params.merge(:public => "true")
+          put :update, params.merge(:workspace => workspace_params.merge(:public => "true"))
 
           workspace.reload
           workspace.should be_public
@@ -220,24 +224,58 @@ describe WorkspacesController do
 
         it "generates an event" do
           expect_to_add_event(Events::WorkspaceMakePublic, owner) do
-            put :update, params.merge(:public => "true")
+            put :update, params.merge(:workspace => workspace_params.merge(:public => "true"))
           end
         end
       end
 
-      it "can change the show_sandbox_datasets attribute" do
-        workspace.show_sandbox_datasets.should be_true
-        put :update, params.merge(:show_sandbox_datasets => false)
+      describe "changing the show_sandbox_datasets attribute" do
+        context "from true to false" do
+          before do
+            workspace.show_sandbox_datasets = true
+            workspace.save
+          end
 
-        response.should be_success
-        workspace.reload.show_sandbox_datasets.should be_false
+          it "can change the show_sandbox_datasets attribute" do
+            put :update, params.merge(:workspace => workspace_params.merge(:show_sandbox_datasets => "false"))
+
+            response.should be_success
+            workspace.reload.show_sandbox_datasets.should be_false
+          end
+
+          it 'generates an WorkspaceToNoLongerShowSandboxDatasets event' do
+            expect_to_add_event(Events::WorkspaceToNoLongerShowSandboxDatasets, owner) do
+              put :update, params.merge(:workspace => workspace_params.merge(:show_sandbox_datasets => "false"))
+            end
+          end
+        end
+
+        context "from false to true" do
+          before do
+            workspace.show_sandbox_datasets = false
+            workspace.save
+          end
+
+          it "can change the show_sandbox_datasets attribute" do
+            put :update, params.merge(:workspace => workspace_params.merge(:show_sandbox_datasets => "true"))
+
+            response.should be_success
+            workspace.reload.show_sandbox_datasets.should be_true
+          end
+
+          it 'generates an WorkspaceToShowSandboxDatasets event' do
+            expect_to_add_event(Events::WorkspaceToShowSandboxDatasets, owner) do
+              put :update, params.merge(:workspace => workspace_params.merge(:show_sandbox_datasets => "true"))
+            end
+          end
+        end
       end
 
       describe "unarchiving workspace" do
         let(:workspace) {workspaces(:archived)}
 
         it "unarchives the workspace" do
-          put :update, params.merge(:archived => "false")
+          put :update, params.merge(:workspace => workspace_params.merge(:archived => "false"))
           workspace.reload
           workspace.archived_at.should be_nil
           workspace.archiver.should be_nil
@@ -246,7 +284,7 @@ describe WorkspacesController do
 
         it "generates an event" do
           expect_to_add_event(Events::WorkspaceUnarchived, owner) do
-            put :update, params.merge(:archived => "false")
+            put :update, params.merge(:workspace => workspace_params.merge(:archived => "false"))
           end
         end
       end
@@ -264,7 +302,7 @@ describe WorkspacesController do
         end
 
         it "archives the workspace" do
-          put :update, params.merge(:archived => "true")
+          put :update, params.merge(:workspace => workspace_params.merge(:archived => "true"))
           workspace.reload
 
           workspace.archived_at.should be_within(1.minute).of(Time.current)
@@ -273,7 +311,7 @@ describe WorkspacesController do
 
         it "generates an event" do
           expect_to_add_event(Events::WorkspaceArchived, owner) do
-            put :update, params.merge(:archived => "true")
+            put :update, params.merge(:workspace => workspace_params.merge(:archived => "true"))
           end
         end
       end

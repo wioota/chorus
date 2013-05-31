@@ -34,14 +34,14 @@ class WorkspacesController < ApplicationController
   def update
     workspace = Workspace.find(params[:id])
 
-    original_archived = workspace.archived?.to_s
     attributes = params[:workspace]
     attributes[:archiver] = current_user if attributes[:archived] == 'true'
     workspace.attributes = attributes
 
     authorize! :update, workspace
 
-    create_workspace_events(workspace, original_archived)
+    create_workspace_events(workspace) if workspace.valid?
+
     workspace.save!
     present workspace
   end
@@ -57,16 +57,23 @@ class WorkspacesController < ApplicationController
 
   private
 
-  def create_workspace_events(workspace, original_archived)
+  def create_workspace_events(workspace)
     if workspace.public_changed?
-      workspace.public ?
+      workspace.public? ?
           Events::WorkspaceMakePublic.by(current_user).add(:workspace => workspace) :
           Events::WorkspaceMakePrivate.by(current_user).add(:workspace => workspace)
     end
-    if params[:workspace][:archived].present? && params[:workspace][:archived] != original_archived
+
+    if workspace.archived_at_changed?
       workspace.archived? ?
           Events::WorkspaceArchived.by(current_user).add(:workspace => workspace) :
           Events::WorkspaceUnarchived.by(current_user).add(:workspace => workspace)
+    end
+
+    if workspace.show_sandbox_datasets_changed?
+      workspace.show_sandbox_datasets? ?
+          Events::WorkspaceToShowSandboxDatasets.by(current_user).add(:workspace => workspace) :
+          Events::WorkspaceToNoLongerShowSandboxDatasets.by(current_user).add(:workspace => workspace)
     end
   end
 end
