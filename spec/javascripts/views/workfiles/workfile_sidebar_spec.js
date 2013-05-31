@@ -227,6 +227,17 @@ describe("chorus.views.WorkfileSidebar", function() {
                 expect(this.modalSpy.lastModal().collection).toContain(this.workfile);
             });
         });
+
+        describe('clicking the rename link', function() {
+           beforeEach(function() {
+               this.modalSpy = stubModals();
+               this.view.$('.rename').click();
+           });
+
+           it('opens the rename workfile dialog', function() {
+               expect(this.modalSpy).toHaveModal(chorus.dialogs.RenameWorkfile);
+           });
+        });
     });
 
     context("when showVersions is true", function() {

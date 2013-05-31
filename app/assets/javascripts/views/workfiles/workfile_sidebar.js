@@ -14,7 +14,8 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
 
     events: {
         "click a.version_list": 'displayVersionList',
-        "click .edit_tags": 'startEditingTags'
+        "click .edit_tags": 'startEditingTags',
+        "click .rename": 'launchRenameDialog'
     },
 
     setup:function () {
@@ -138,6 +139,11 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
     startEditingTags: function(e) {
         e.preventDefault();
         new chorus.dialogs.EditTags({collection: new chorus.collections.Base([this.model])}).launchModal();
+    },
+
+    launchRenameDialog: function(e) {
+        e && e.preventDefault();
+        new chorus.dialogs.RenameWorkfile({model: this.model}).launchModal();
     }
 
 },
