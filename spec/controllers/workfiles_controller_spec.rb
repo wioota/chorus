@@ -139,10 +139,13 @@ describe WorkfilesController do
         end
 
         describe "connecting to the data source" do
-          let(:connection) { Object.new }
-          let(:database) { Object.new }
+          before do
+            alpine_workfile.data_source.accounts.create(:owner => user)
+          end
 
           it "validates the database credentials" do
+            mock(controller).authorize!(:show, alpine_workfile.workspace)
+            mock(controller).authorize!(:show_contents, alpine_workfile.data_source)
             any_instance_of(AlpineWorkfile) do |workfile|
               mock(workfile).attempt_data_source_connection
             end
