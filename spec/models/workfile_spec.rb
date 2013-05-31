@@ -173,6 +173,29 @@ describe Workfile do
 
   end
 
+  describe 'user_modified_at' do
+    let(:workfile) { workfiles(:public) }
+
+    it 'does not update when adding tags' do
+      expect do
+        workfile.tag_list=(['garden', 'gnomes'])
+      end.not_to change { workfile.user_modified_at }
+    end
+
+    it 'does not update when changing execution schema' do
+      schema = schemas(:default)
+      expect do
+        workfile.execution_schema = schema
+        workfile.save
+      end.not_to change { workfile.user_modified_at }
+    end
+
+    it "updates on create" do
+      workfile = FactoryGirl.create(:workfile)
+      workfile.user_modified_at.should_not be_nil
+    end
+  end
+
   it_should_behave_like "taggable models", [:workfiles, :public]
 
   it_behaves_like 'a soft deletable model' do

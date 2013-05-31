@@ -60,7 +60,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         }, this);
 
         this.mainContent.contentHeader.bind("choice:sort", function(choice) {
-            var field = choice === "alpha" ? "fileName" : "lastUpdatedStamp";
+            var field = choice === "alpha" ? "fileName" : "userModifiedAt";
             this.collection.sortAsc(field);
             this.collection.fetchAll();
         }, this);

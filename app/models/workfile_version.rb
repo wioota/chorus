@@ -16,6 +16,7 @@ class WorkfileVersion < ActiveRecord::Base
 
   after_save do
     workfile.solr_index
+    workfile.touch(:user_modified_at)
   end
 
   after_validation :clean_content_errors
@@ -84,6 +85,7 @@ class WorkfileVersion < ActiveRecord::Base
       File.open(contents.path, "w") do |file|
         file.write new_content
       end
+      workfile.touch(:user_modified_at)
     else
       errors.add(:version, :invalid)
       raise ActiveRecord::RecordInvalid.new(self)

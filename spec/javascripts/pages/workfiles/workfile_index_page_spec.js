@@ -273,9 +273,9 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
             });
 
-            it("can sort the list bu date ascending", function() {
+            it("can sort the list by date (hopefully descending)", function() {
                 this.page.$("li[data-type=date] a").click();
-                expect(this.page.collection.order).toBe("lastUpdatedStamp");
+                expect(this.page.collection.order).toBe("userModifiedAt");
                 expect(this.page.collection.fetchAll).toHaveBeenCalled();
             });
         });

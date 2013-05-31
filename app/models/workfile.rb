@@ -33,6 +33,7 @@ class Workfile < ActiveRecord::Base
 
   after_create :create_workfile_created_event, :if => :current_user
   after_create :update_has_added_workfile_on_workspace
+  after_create { touch(:user_modified_at) }
 
   delegate :member_ids, :public, :to => :workspace
 
@@ -86,7 +87,7 @@ class Workfile < ActiveRecord::Base
     if column_name.blank? || column_name == "file_name"
       order("lower(file_name), id")
     else
-      order("updated_at")
+      order("user_modified_at desc")
     end
   end
 
@@ -151,5 +152,4 @@ class Workfile < ActiveRecord::Base
     workspace.has_added_workfile = true
     workspace.save!
   end
-
 end

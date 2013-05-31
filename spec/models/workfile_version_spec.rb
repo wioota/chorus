@@ -115,6 +115,12 @@ describe WorkfileVersion do
           version2.update_content("this is new content")
           File.read(version2.contents.path).should == "this is new content"
         end
+
+        it "updates the user_modified_at" do
+          expect do
+            version2.update_content("this is new content")
+          end.to change { workfile.user_modified_at }
+        end
       end
     end
 
@@ -149,5 +155,12 @@ describe WorkfileVersion do
         workfile_version.get_content.should be_nil
       end
     end
+  end
+
+  it "should update the user_modified_at after save" do
+    expect do
+      version2.contents = test_file("workfile.sql")
+      version2.save
+    end.to change { workfile.user_modified_at }
   end
 end
