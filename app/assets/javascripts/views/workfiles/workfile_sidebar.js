@@ -86,7 +86,7 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
             showAddNoteLink: workspaceActive && this.options.showEditingLinks,
             showCopyLink: true,
             showDownloadLink: this.options.showDownloadLink,
-            showDeleteLink: workspaceActive && this.options.showEditingLinks && this.model.workspace().canUpdate(),
+            showEditLinks: workspaceActive && this.options.showEditingLinks && this.model.workspace().canUpdate(),
             showUpdatedTime: this.options.showUpdatedTime,
             showVersions: this.options.showVersions
         };

@@ -8,6 +8,7 @@ class WorkspacePresenter < Presenter
       :entity_type => model.entity_type_name,
       :summary => sanitize(model.summary),
       :archived_at => model.archived_at,
+      :permission => model.permissions_for(current_user),
       :public => model.public
     }
 
@@ -16,7 +17,6 @@ class WorkspacePresenter < Presenter
         :owner => present(model.owner),
         :archiver => present(model.archiver),
         :image => present(model.image),
-        :permission => model.permissions_for(current_user),
         :has_added_member => model.has_added_member,
         :has_added_workfile => model.has_added_workfile,
         :has_added_sandbox => model.has_added_sandbox,

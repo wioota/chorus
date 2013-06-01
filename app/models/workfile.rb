@@ -27,7 +27,7 @@ class Workfile < ActiveRecord::Base
   validates :workspace, presence: true
   validates :owner, presence: true
   validates_presence_of :file_name
-  validate :validate_name_uniqueness, :on => :create
+  validates_uniqueness_of :file_name, :scope => :workspace_id
 
   before_validation :init_file_name, :on => :create
 
@@ -104,17 +104,6 @@ class Workfile < ActiveRecord::Base
           with :public, true
         end
       end
-    end
-  end
-
-  def validate_name_uniqueness
-    return false if !workspace
-    exists = Workfile.exists?(:file_name => file_name, :workspace_id => workspace.id)
-    if exists
-      errors.add(:file_name, :taken)
-      false
-    else
-      true
     end
   end
 

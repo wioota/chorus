@@ -14,7 +14,9 @@
     </div>
     <div class="actions">
         <ul>
-            <li><a class="rename" href="#">Rename</a></li>
+            {{#if showEditLinks}}
+                <li><a class="rename" href="#">Rename</a></li>
+            {{/if}}
             {{#if showAddNoteLink}}
                 <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workfile" data-workspace-id={{workspace.id}} data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
             {{/if}}
@@ -25,7 +27,7 @@
             {{#if showDownloadLink}}
                 <li><a href="{{downloadUrl}}" class="download">{{t "actions.download"}}</a></li>
             {{/if}}
-            {{#if showDeleteLink}}
+            {{#if showEditLinks}}
                 <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{id}}" data-workspace-id="{{workspace.id}}" data-workfile-name="{{fileName}}">{{t "workfile.delete.button"}}</a></li>
             {{/if}}
         </ul>

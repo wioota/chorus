@@ -213,6 +213,10 @@ describe("chorus.views.WorkfileSidebar", function() {
                 var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
                 expect(deleteLink).not.toExist();
             });
+
+            it("hides the rename workfile link", function() {
+               expect(this.view.$(".actions .rename")).not.toExist();
+            });
         });
 
         describe('clicking the edit tags link', function(){

@@ -58,20 +58,27 @@ describe Workfile do
     end
   end
 
-  describe ".validate_name_uniqueness" do
+  describe "name uniqueness validation" do
     let(:workspace) { workspaces(:public) }
     let(:other_workspace) { workspaces(:private) }
     let(:existing_workfile) { workspace.workfiles.first! }
 
     it "is invalid if a workfile in the workspace has the same name" do
       new_workfile = FactoryGirl.build(:workfile, :file_name => existing_workfile.file_name, :workspace => workspace)
-      new_workfile.validate_name_uniqueness.should be_false
+      new_workfile.should_not be_valid
       new_workfile.should have_error_on(:file_name)
     end
 
     it "is valid if a workfile in another workspace has the same name" do
       new_workfile = FactoryGirl.build(:workfile, :file_name => existing_workfile.file_name, :workspace => other_workspace)
-      new_workfile.validate_name_uniqueness.should be_true
+      new_workfile.should be_valid
+    end
+
+    it "is invalid if you change a name to an existing name" do
+      new_workfile = FactoryGirl.build(:workfile, :file_name => 'totally_unique', :workspace => workspace)
+      new_workfile.should be_valid
+      new_workfile.file_name = existing_workfile.file_name
+      new_workfile.should_not be_valid
     end
   end
 
