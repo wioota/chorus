@@ -94,7 +94,7 @@ describe 'add a tag' do
         find('a', :text => workfile.file_name)
       end
       within ".multiselect" do
-        click_link "All"
+        first('.select_all').click
       end
 
       within ".multiselect_actions" do

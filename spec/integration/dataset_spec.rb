@@ -15,7 +15,7 @@ describe "Dataset", :database_integration do
 
     wait_for_page_load
 
-    click_link 'All'
+    first('.select_all').click
     click_link 'Associate with a workspace'
 
     within_modal do
