@@ -186,6 +186,9 @@ chorus.views.PageItemList = chorus.views.Base.extend({
     sendCheckedEvents: function() {
         chorus.PageEvents.trigger("checked", this.selectedModels);
         chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
+
+        var event = this.$("input[type=checkbox]:not(:checked)").length === 0 ? "selectAll" : "unselectAny";
+        chorus.PageEvents.trigger(event);
     },
 
     makeListItemView: function(model) {

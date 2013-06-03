@@ -26,12 +26,24 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
             });
         });
 
-        it("subscribes to the 'selectNone'", function () {
+        it("subscribes to 'selectNone'", function () {
             var checkbox = this.page.$(".multiselect .select_all");
             checkbox.prop("checked", true);
-
             chorus.PageEvents.trigger("selectNone");
+            expect(checkbox.prop("checked")).toBeFalsy();
+        });
 
+        it("subscribes to 'selectAll'", function () {
+            var checkbox = this.page.$(".multiselect .select_all");
+            checkbox.prop("checked", false);
+            chorus.PageEvents.trigger("selectAll");
+            expect(checkbox.prop("checked")).toBeTruthy();
+        });
+
+        it("subscribes to 'unselectAny'", function () {
+            var checkbox = this.page.$(".multiselect .select_all");
+            checkbox.prop("checked", true);
+            chorus.PageEvents.trigger("unselectAny");
             expect(checkbox.prop("checked")).toBeFalsy();
         });
 

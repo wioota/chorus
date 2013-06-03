@@ -41,20 +41,14 @@ jasmine.sharedExamples.PageItemList = function() {
     });
 
     function expectItemChecked(expectedModels) {
-        expect(chorus.PageEvents.trigger).toHaveBeenCalled();
-        var lastTwoCalls = chorus.PageEvents.trigger.calls.slice(-2);
-        var eventName = lastTwoCalls[0].args[0];
+        var entityChecked = this.view.options.entityType + ":checked";
+        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("checked", jasmine.any(chorus.collections[this.collection.constructorName]));
+        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(entityChecked, jasmine.any(chorus.collections[this.collection.constructorName]));
 
-        expect(eventName).toBe("checked");
-        var collection = lastTwoCalls[0].args[1];
-        expect(collection).toBeA(chorus.collections[this.collection.constructorName]);
-
-        eventName = lastTwoCalls[1].args[0];
-        expect(eventName).toBe(this.view.options.entityType + ":checked");
-
-        collection = lastTwoCalls[1].args[1];
-        expect(collection).toBeA(chorus.collections[this.collection.constructorName]);
-        expect(collection.pluck("id")).toEqual(_.pluck(expectedModels, "id"));
+        var lastCall = _(chorus.PageEvents.trigger.calls).chain().filter(function (call) {
+            return call.args[0] === "checked" || call.args[0] === entityChecked;
+        }).last().value();
+        expect(lastCall.args[1].pluck("id")).toEqual(_.pluck(expectedModels, "id"));
     }
 
     describe("checking an item", function() {

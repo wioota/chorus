@@ -73,6 +73,32 @@ describe("chorus.views.PageItemList", function() {
             expect(this.checkedModels).toEqual([modelToClick]);
         });
 
+        describe("when selecting all checkboxes", function () {
+            beforeEach(function () {
+                this.selectAllSpy = jasmine.createSpy("select all");
+                chorus.PageEvents.on("selectAll", this.selectAllSpy);
+                _(this.view.$("input[type=checkbox]")).each(function (element) {
+                    $(element).click();
+                });
+            });
+
+            it("triggers 'selectAll'", function () {
+                expect(this.selectAllSpy).toHaveBeenCalled();
+            });
+
+            describe("and deselecting any checkbox", function () {
+                beforeEach(function () {
+                    this.unselectAnySpy = jasmine.createSpy("unselect any");
+                    chorus.PageEvents.on("unselectAny", this.unselectAnySpy);
+                    this.view.$("input[type=checkbox]:first").click();
+                });
+
+                it("triggers 'unselectAny'", function () {
+                    expect(this.unselectAnySpy).toHaveBeenCalled();
+                });
+            });
+        });
+
         describe('shift+click', function() {
             beforeEach(function() {
                 expect(this.view.$("input[type=checkbox]:checked").length).toBe(0);

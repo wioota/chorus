@@ -152,17 +152,16 @@ describe("chorus.views.DataSourceIndex", function() {
             });
         });
 
-
         describe("checking a data source checkbox", function() {
             it("triggers the selected event with the right models", function() {
                 spyOn(chorus.PageEvents, 'trigger');
                 this.view.$("li input:checkbox").eq(0).click().change();
-                expect(chorus.PageEvents.trigger).toHaveBeenCalled();
-                var lastTwoCalls = chorus.PageEvents.trigger.calls.slice(-2);
-                var eventName = lastTwoCalls[1].args[0];
-                expect(eventName).toEqual("data_source:checked");
-                var selectedModelsCollection = lastTwoCalls[0].args[1];
-                expect(selectedModelsCollection.length).toEqual(1);
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("data_source:checked", jasmine.any(Object));
+
+                var lastCall = _(chorus.PageEvents.trigger.calls).chain().filter(function (call) {
+                    return call.args[0] === "data_source:checked";
+                }).last().value();
+                expect(lastCall.args[1].length).toBe(1);
             });
         });
 
