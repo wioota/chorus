@@ -1,13 +1,13 @@
-chorus.views.ListContentDetails = chorus.views.Base.extend({
+chorus.views.ListContentDetails = chorus.views.Base.include(
+        chorus.Mixins.BoundForMultiSelect
+    ).extend({
     constructorName: "ListContentDetailsView",
     templateName: "list_content_details",
     additionalClass: "action_bar_primary",
 
     events: {
         "click a.next": "fetchNextPage",
-        "click a.previous": "fetchPreviousPage",
-        "click a.select_all": "selectAll",
-        "click a.select_none": "selectNone"
+        "click a.previous": "fetchPreviousPage"
     },
 
     subviews: {
@@ -33,16 +33,6 @@ chorus.views.ListContentDetails = chorus.views.Base.extend({
 
     scrollToTopOfPage: function() {
         window.scroll(0, 0);
-    },
-
-    selectAll: function(e) {
-        e.preventDefault();
-        chorus.PageEvents.trigger("selectAll");
-    },
-
-    selectNone: function(e) {
-        e.preventDefault();
-        chorus.PageEvents.trigger("selectNone");
     },
 
     postRender: function(el) {

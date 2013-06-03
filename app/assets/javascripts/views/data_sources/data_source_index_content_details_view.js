@@ -1,11 +1,11 @@
-chorus.views.DataSourceIndexContentDetails = chorus.views.Base.extend({
+chorus.views.DataSourceIndexContentDetails = chorus.views.Base.include(
+        chorus.Mixins.BoundForMultiSelect
+    ).extend({
     constructorName: "DataSourceIndexContentDetailsView",
     templateName:"data_source_index_content_details",
     additionalClass: "action_bar_primary",
 
     events: {
-        "click a.select_all": "selectAll",
-        "click a.select_none": "selectNone",
         "click button.add_data_source": "launchAddDataSourceDialog"
     },
 
@@ -17,16 +17,6 @@ chorus.views.DataSourceIndexContentDetails = chorus.views.Base.extend({
         this.listenTo(this.dataSources, 'loaded', this.render);
         this.listenTo(this.hdfsDataSources, 'loaded', this.render);
         this.listenTo(this.gnipDataSources, 'loaded', this.render);
-    },
-
-    selectAll: function(e) {
-        e.preventDefault();
-        chorus.PageEvents.trigger("selectAll");
-    },
-
-    selectNone: function(e) {
-        e.preventDefault();
-        chorus.PageEvents.trigger("selectNone");
     },
 
     additionalContext: function() {

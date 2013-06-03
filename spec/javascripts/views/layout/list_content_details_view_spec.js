@@ -49,22 +49,18 @@ describe("chorus.views.ListContentDetails", function() {
                 expect(this.view.$("span.explore")).not.toExist();
             });
 
-            it("should have a 'select all' and 'deselect all'", function() {
-                expect(this.view.$(".multiselect span")).toContainTranslation("actions.select");
-                expect(this.view.$(".multiselect a.select_all")).toContainTranslation("actions.select_all");
-                expect(this.view.$(".multiselect a.select_none")).toContainTranslation("actions.select_none");
-            });
-
             describe("when the 'select all' link is clicked", function() {
                 it("triggers the 'selectAll' page event", function() {
-                    this.view.$(".multiselect a.select_all").click();
+                    this.view.$(".multiselect .select_all").prop("checked", true);
+                    this.view.$(".multiselect .select_all").change();
                     expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectAll");
                 });
             });
 
             describe("when the 'select none' link is clicked", function() {
                 it("triggers the 'selectNone' page event", function() {
-                    this.view.$(".multiselect a.select_none").click();
+                    this.view.$(".multiselect .select_all").prop("checked", false);
+                    this.view.$(".multiselect .select_all").change();
                     expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectNone");
                 });
             });

@@ -4,22 +4,24 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
             spyOn(chorus.PageEvents, "trigger").andCallThrough();
         });
 
-        it("should have a 'select all' and 'deselect all'", function() {
-            expect(this.page.$(".multiselect span")).toContainTranslation("actions.select");
-            expect(this.page.$(".multiselect a.select_all")).toContainTranslation("actions.select_all");
-            expect(this.page.$(".multiselect a.select_none")).toContainTranslation("actions.select_none");
+        it("should have a checkbox", function() {
+            expect(this.page.$(".multiselect input[type=checkbox].select_all")).toExist();
         });
 
-        describe("when the 'select all' link is clicked", function() {
+        describe("when the 'select all' checkbox is checked", function() {
             it("triggers the 'selectAll' page event", function() {
-                this.page.$(".multiselect a.select_all").click();
+                var checkbox = this.page.$(".multiselect .select_all");
+                checkbox.prop("checked", true);
+                checkbox.change();
                 expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectAll");
             });
         });
 
-        describe("when the 'select none' link is clicked", function() {
+        describe("when the 'select all' checkbox is unchecked", function() {
             it("triggers the 'selectNone' page event", function() {
-                this.page.$(".multiselect a.select_none").click();
+                var checkbox = this.page.$(".multiselect .select_all");
+                checkbox.prop("checked", false);
+                checkbox.change();
                 expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectNone");
             });
         });
