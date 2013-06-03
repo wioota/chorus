@@ -211,7 +211,7 @@ describe("sinon extensions", function() {
             this.fakeRequest.fail();
         });
 
-        itReturnsStatus(200);
+        itReturnsStatus(400);
 
         it("returns an error message in the 'message' field", function() {
             expect(this.fakeRequest.responseText).toContain("something went wrong!");
