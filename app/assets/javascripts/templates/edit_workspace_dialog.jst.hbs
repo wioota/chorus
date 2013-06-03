@@ -38,10 +38,10 @@
     {{#if sandboxLocation }}
         <div class="sandboxLocation plm pbs pts">{{sandboxLocation}}</div>
         <div class="plm">
-            <input class="show_sandbox_datasets" type="checkbox"
+            <input id="workspace_show_sandbox_datasets" class="show_sandbox_datasets" type="checkbox"
                    {{#if showSandboxDatasets}}checked="checked"{{/if}}
                    {{#unless canChangeShowSandboxDatasets}}disabled="disabled"{{/unless}}>
-            <label>{{t "actions.sandbox.show_sandbox_datasets_by_default"}}</label>
+            <label for="workspace_show_sandbox_datasets">{{t "actions.sandbox.show_sandbox_datasets_by_default"}}</label>
         </div>
     {{else}}
         <div class="sandboxLocation plm pbs pts">{{t "workspace.settings.sandbox.none" }}</div>
