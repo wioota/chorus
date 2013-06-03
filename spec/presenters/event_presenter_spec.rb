@@ -42,13 +42,9 @@ describe EventPresenter, :type => :view do
         let(:workspace_with_sandbox) { workspaces(:public) }
         let(:event) { FactoryGirl.create(:note_on_workspace_event, :workspace => workspace_with_sandbox) }
 
-        it "only renders the sandbox id of a workspace" do
+        it "presents the succinct hash of the workspace" do
           hash = subject.to_hash
-          hash[:workspace].should have_key(:id)
-          hash[:workspace].should have_key(:name)
-          hash[:workspace].should have_key(:is_deleted)
-          hash[:workspace].should have_key(:entity_type)
-          hash[:workspace].keys.size.should == 7
+          hash[:workspace].should == WorkspacePresenter.new(workspace_with_sandbox, view, sub_presenter_options).to_hash
         end
       end
     end

@@ -139,6 +139,7 @@ describe WorkspacePresenter, :type => :view do
           :is_deleted,
           :summary,
           :archived_at,
+          :permission,
           :public
         ]
       end
