@@ -68,7 +68,11 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
     },
 
     setSchemaToCurrentWorkspace: function() {
-        this.schema = new chorus.models.Schema({id: "workspaceSchema", name: t("database.sidebar.this_workspace")});
+        this.schema = new chorus.models.Schema({
+            id: "workspaceSchema",
+            name: t("database.sidebar.this_workspace"),
+            database: this.schema.get('database')
+        });
     },
 
     fetchMoreDatasets: function(e) {

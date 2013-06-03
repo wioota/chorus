@@ -286,11 +286,30 @@ describe("chorus.views.DataTab", function () {
     describe("after workfile changed", function () {
         beforeEach(function () {
             this.executionSchema = rspecFixtures.workspace().sandbox().schema();
-            chorus.PageEvents.trigger("workfile:changed", rspecFixtures.workfile.text({executionSchema: this.executionSchema.attributes}));
         });
 
-        it("updates focusSchema", function () {
-            expect(this.view.focusSchema.canonicalName()).toBe(this.executionSchema.canonicalName());
+        context("when the workfile execution schema is this workspace", function() {
+            beforeEach(function() {
+                this.view.setSchemaToCurrentWorkspace();
+                chorus.PageEvents.trigger("workfile:changed", rspecFixtures.workfile.text({executionSchema: this.executionSchema.attributes}));
+            });
+
+            it("updates focusSchema", function () {
+                expect(this.view.focusSchema.canonicalName()).toBe(this.executionSchema.canonicalName());
+            });
         });
+
+        context("when the workfile execution schema is anything else", function() {
+            beforeEach(function() {
+                chorus.PageEvents.trigger("workfile:changed", rspecFixtures.workfile.text({executionSchema: this.executionSchema.attributes}));
+            });
+
+            it("updates focusSchema", function () {
+                expect(this.view.focusSchema.canonicalName()).toBe(this.executionSchema.canonicalName());
+            });
+        });
+
     });
+
+
 });
