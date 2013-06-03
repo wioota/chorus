@@ -26,6 +26,15 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
             });
         });
 
+        it("subscribes to the 'selectNone'", function () {
+            var checkbox = this.page.$(".multiselect .select_all");
+            checkbox.prop("checked", true);
+
+            chorus.PageEvents.trigger("selectNone");
+
+            expect(checkbox.prop("checked")).toBeFalsy();
+        });
+
         it("does not display the multiple selection section", function() {
             expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
         });
