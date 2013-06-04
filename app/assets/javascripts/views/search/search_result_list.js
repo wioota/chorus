@@ -29,7 +29,8 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
             listItemOptions: {
                 workspaceIdForTagLink: this.options.search.get('workspaceId')
             },
-            selectedModels: this.selectedModels
+            selectedModels: this.selectedModels,
+            multiListMode: true
         });
     },
 
