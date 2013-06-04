@@ -33,10 +33,10 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
             expect(checkbox.prop("checked")).toBeFalsy();
         });
 
-        it("subscribes to 'selectAll'", function () {
+        it("subscribes to 'allSelected'", function () {
             var checkbox = this.page.$(".multiselect .select_all");
             checkbox.prop("checked", false);
-            chorus.PageEvents.trigger("selectAll");
+            chorus.PageEvents.trigger("allSelected");
             expect(checkbox.prop("checked")).toBeTruthy();
         });
 

@@ -243,8 +243,8 @@ describe("chorus.views.SearchResults", function() {
             it("clicking a checkbox adds the model to the selectedModels", function() {
                 $('#jasmine_content').append(this.view.$el);
                 var workfileToClick = this.model.workfiles().at(1);
-                this.view.$(".workfile_list li input[type=checkbox]").eq(1).click();
-                expect(this.view.selectedModels.models).toEqual([workfileToClick]);
+                this.view.$(".workfile_list li input[type=checkbox]").eq(1).prop("checked", true).click();
+                expect(_(this.view.selectedModels.models).pluck('id')).toEqual([workfileToClick.id]);
             });
 
             describe("when workspace specific items are found", function() {

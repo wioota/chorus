@@ -75,15 +75,15 @@ describe("chorus.views.PageItemList", function() {
 
         describe("when selecting all checkboxes", function () {
             beforeEach(function () {
-                this.selectAllSpy = jasmine.createSpy("select all");
-                chorus.PageEvents.on("selectAll", this.selectAllSpy);
+                this.allSelectedSpy = jasmine.createSpy("select all");
+                chorus.PageEvents.on("allSelected", this.allSelectedSpy);
                 _(this.view.$("input[type=checkbox]")).each(function (element) {
                     $(element).click();
                 });
             });
 
-            it("triggers 'selectAll'", function () {
-                expect(this.selectAllSpy).toHaveBeenCalled();
+            it("triggers 'allSelected'", function () {
+                expect(this.allSelectedSpy).toHaveBeenCalled();
             });
 
             describe("and deselecting any checkbox", function () {
