@@ -457,14 +457,34 @@ describe Workspace do
     let(:workspace) { workspaces(:public_with_no_collaborators) }
     let(:dataset) { FactoryGirl.create(:gpdb_table) }
 
-    it "returns true if the dataset is in the workspace's sandbox" do
-      workspace.sandbox = dataset.schema
-      workspace.has_dataset?(dataset).should be_true
+    context "when the workspace automatically adds sandbox tables" do
+      before do
+        workspace.show_sandbox_datasets = true
+      end
+      it "returns true if the dataset is in the workspace's sandbox" do
+        workspace.sandbox = dataset.schema
+        workspace.has_dataset?(dataset).should be_true
+      end
+
+      it "returns true if the dataset has already been associated with the workspace" do
+        workspace.source_datasets << dataset
+        workspace.has_dataset?(dataset).should be_true
+      end
     end
 
-    it "returns true if the dataset has already been associated with the workspace" do
-      workspace.source_datasets << dataset
-      workspace.has_dataset?(dataset).should be_true
+    context "when the workspace does not automatically add sandbox tables" do
+      before do
+        workspace.show_sandbox_datasets = false
+      end
+      it "returns true if the dataset is in the workspace's sandbox" do
+        workspace.sandbox = dataset.schema
+        workspace.has_dataset?(dataset).should be_false
+      end
+
+      it "returns true if the dataset has already been associated with the workspace" do
+        workspace.source_datasets << dataset
+        workspace.has_dataset?(dataset).should be_true
+      end
     end
 
     it "returns false otherwise" do

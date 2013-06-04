@@ -218,7 +218,7 @@ class Workspace < ActiveRecord::Base
   end
 
   def has_dataset?(dataset)
-    dataset.schema == sandbox || source_datasets.include?(dataset)
+    (dataset.schema == sandbox && show_sandbox_datasets) || source_datasets.include?(dataset)
   end
 
   def member?(user)
