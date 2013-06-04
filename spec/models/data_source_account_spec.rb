@@ -8,7 +8,7 @@ describe DataSourceAccount do
 
   describe "validations" do
     let(:gpdb_data_source) { FactoryGirl.build(:gpdb_data_source) }
-    let(:account) { DataSourceAccount.first }
+    let(:account) { data_sources(:default).accounts.first }
 
     it { should validate_presence_of :db_username }
     it { should validate_presence_of :db_password }
