@@ -34,6 +34,10 @@ describe("chorus.dialogs.WorkspacesNew", function() {
                 expect(this.dialog.$("button.submit")).toBeDisabled();
             });
         });
+
+        it("is not public by default", function() {
+           expect(this.dialog.$('#public')).not.toBeChecked();
+        });
     });
 
     describe("submitting the form", function() {
