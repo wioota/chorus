@@ -43,7 +43,7 @@
 
     #sidebar_wrapper {
         z-index: 10;
-        position: fixed;
+        position: absolute;
         right: 0;
         top: $header-height;
         bottom: 0;
