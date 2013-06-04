@@ -1,6 +1,34 @@
 describe("chorus.dialogs.RenameWorkfile", function() {
+    context("when the workfile is sql", function() {
+        beforeEach(function(){
+            this.workfile = rspecFixtures.workfile.sql({fileName: "originalName.sql"});
+            this.dialog = new chorus.dialogs.RenameWorkfile({model: this.workfile});
+            this.dialog.render();
+        });
+
+        it("should have an input field containing the current file name", function(){
+            expect(this.dialog.$('input').val()).toBe("originalName");
+        });
+
+        it("should display a different version of the dialog", function() {
+            expect(this.dialog.additionalContext().isSql).toBeTruthy();
+        });
+
+        context("submitting the form", function() {
+            beforeEach(function(){
+                this.dialog.$('input').val("newName").change();
+                this.dialog.$("form").submit();
+            });
+
+            it ("should append .sql to the fileName", function() {
+                expect(this.workfile.get("fileName")).toBe("newName.sql");
+                expect(this.workfile).toHaveBeenUpdated();
+            });
+        });
+    });
+
     beforeEach(function() {
-        this.workfile = rspecFixtures.workfile.sql({fileName: "originalName.sql"});
+        this.workfile = rspecFixtures.workfile.image({fileName: "originalName"});
         this.dialog = new chorus.dialogs.RenameWorkfile({model: this.workfile});
         this.dialog.render();
     });
@@ -10,7 +38,7 @@ describe("chorus.dialogs.RenameWorkfile", function() {
     });
 
     it("should have an input field containing the current file name", function(){
-       expect(this.dialog.$('input').val()).toBe("originalName.sql");
+       expect(this.dialog.$('input').val()).toBe("originalName");
     });
 
     context("with invalid form values", function() {
