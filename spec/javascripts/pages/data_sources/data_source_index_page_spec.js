@@ -158,6 +158,30 @@ describe("chorus.pages.DataSourceIndexPage", function() {
                     });
                 });
             });
+
+            context("when all data sources for a single type are selected", function () {
+                beforeEach(function () {
+                    _.each(this.page.$(".data_source input[type=checkbox]"), function (element) {
+                        $(element).prop("checked", true).click();
+                    });
+                });
+
+                it("does not check the 'select_all' checkbox", function () {
+                    expect(this.page.$(".select_all").prop("checked")).toBeFalsy();
+                });
+            });
+
+            context("when all data sources are selected", function () {
+                beforeEach(function () {
+                    _.each(this.page.$(".data_source_list input[type=checkbox]"), function (element) {
+                        $(element).prop("checked", true).click();
+                    });
+                });
+
+                it("checks the 'select_all' checkbox", function () {
+                    expect(this.page.$(".select_all").prop("checked")).toBeTruthy();
+                });
+            });
         });
     });
 });

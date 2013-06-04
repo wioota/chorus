@@ -41,6 +41,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         this.eventName = this.options.eventName || this.options.entityType;
         this.entityViewType = this.options.entityViewType;
         this.listItemOptions = this.options.listItemOptions || {};
+        this.multiListMode = this.options.multiListMode;
 
         if(this.options.entityType) {
             this.selectedModels = this.options.selectedModels || this.collection.clone().reset();
@@ -187,8 +188,13 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         chorus.PageEvents.trigger("checked", this.selectedModels);
         chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
 
-        var event = this.$("input[type=checkbox]:not(:checked)").length === 0 ? "selectAll" : "unselectAny";
-        chorus.PageEvents.trigger(event);
+        var event = this.getSelectionEvent();
+        event && chorus.PageEvents.trigger(event);
+    },
+
+    getSelectionEvent: function () {
+        var element = this.multiListMode ? this.$el.closest(".content") : this.$el;
+        return element.find("input[type=checkbox]:not(:checked)").length === 0 ? "selectAll" : "unselectAny";
     },
 
     makeListItemView: function(model) {

@@ -18,7 +18,8 @@ chorus.views.DataSourceList = chorus.views.Base.extend({
             eventName: "data_source",
             collection: this.collection,
             entityViewType: chorus.views.DataSourceItem,
-            selectedModels: this.selectedModels
+            selectedModels: this.selectedModels,
+            multiListMode: true
         });
     },
 
