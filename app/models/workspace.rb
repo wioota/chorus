@@ -202,7 +202,7 @@ class Workspace < ActiveRecord::Base
   end
 
   def permissions_for(user)
-    if user.admin? || (owner.id == user.id)
+    if user.admin? || (owner_id == user.id)
       [:admin]
     elsif user.memberships.find_by_workspace_id(id)
       [:read, :commenting, :update, :create_work_flow]
