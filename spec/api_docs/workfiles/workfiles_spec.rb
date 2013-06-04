@@ -31,11 +31,13 @@ resource "Workfiles" do
   put "/workfiles/:id" do
     parameter :id, "Id of a workfile"
     parameter :"execution_schema[id]", "Id of the execution schema"
+    parameter :file_name, "Filename"
 
     required_parameters :id
 
     let(:id) { workfile.to_param }
     let(:"execution_schema[id]") { schemas(:default).to_param }
+    let(:file_name) { "newname.sql" }
 
     example_request "Update a workfile" do
       status.should == 200
