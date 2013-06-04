@@ -122,6 +122,11 @@ describe WorkspacesController do
         post :create, params
         Workspace.last.owner.should == owner
       end
+
+      it "creates a private workspace by default" do
+        post :create, params
+        Workspace.last.public.should be_false
+      end
     end
   end
 

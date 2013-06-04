@@ -150,6 +150,8 @@ FactoryGirl.define do
   factory :workspace do
     sequence(:name) { |n| "workspace#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     owner
+    public true
+
     after(:create) do |workspace|
       FactoryGirl.create(:membership, :workspace => workspace, :user => workspace.owner)
     end

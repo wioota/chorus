@@ -8,6 +8,7 @@ describe GpdbDataSourceWorkspaceDetailPresenter, :type => :view do
 
   before do
     stub(ChorusConfig.instance).[]('sandbox_recommended_size_in_gb') { 1 }
+    stub(ChorusConfig.instance).[]('ldap') { false }
     set_current_user(user)
   end
 
@@ -27,8 +28,8 @@ describe GpdbDataSourceWorkspaceDetailPresenter, :type => :view do
 
     context "with several workspaces using the same sandbox" do
       let(:sandbox) { schemas(:default) }
-      let(:duplicate_sandbox_workspace1) { FactoryGirl.create(:workspace, :sandbox => sandbox) }
-      let(:duplicate_sandbox_workspace2) { FactoryGirl.create(:workspace, :sandbox => sandbox) }
+      let!(:duplicate_sandbox_workspace1) { FactoryGirl.create(:workspace, :sandbox => sandbox) }
+      let!(:duplicate_sandbox_workspace2) { FactoryGirl.create(:workspace, :sandbox => sandbox) }
 
       it "doesn't add up the sandbox size of the duplicate sandboxes" do
         sandbox_ids = Workspace.where(:sandbox_id => gpdb_data_source.schema_ids).collect(&:sandbox_id).uniq
