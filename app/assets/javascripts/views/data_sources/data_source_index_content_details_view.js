@@ -19,6 +19,10 @@ chorus.views.DataSourceIndexContentDetails = chorus.views.Base.include(
         this.listenTo(this.gnipDataSources, 'loaded', this.render);
     },
 
+    postRender: function () {
+        this.renderCheckedState();
+    },
+
     additionalContext: function() {
         return {
             loaded: this.dataSources.loaded && this.gnipDataSources.loaded && this.hdfsDataSources.loaded,

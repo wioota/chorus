@@ -46,6 +46,8 @@ chorus.views.ListContentDetails = chorus.views.Base.include(
         if (this.options.search) {
             this.setupSearch();
         }
+
+        this.renderCheckedState();
     },
 
     setupSearch: function() {

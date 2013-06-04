@@ -65,6 +65,12 @@ describe("chorus.views.DataSourceIndexContentDetails", function() {
                     expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectNone");
                 });
             });
+
+            it("renders the checked state", function () {
+                this.view.$(".select_all").prop("checked", true).change();
+                this.view.render();
+                expect(this.view.$(".select_all").prop("checked")).toBeTruthy();
+            });
         });
     });
 });
