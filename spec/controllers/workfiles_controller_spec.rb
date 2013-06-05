@@ -320,7 +320,7 @@ describe WorkfilesController do
   end
 
   describe "#update" do
-    let(:schema) { schemas(:default) }
+    let(:schema) { schemas(:public) }
     let(:options) do
       {
           :id => public_workfile.to_param,
@@ -354,6 +354,17 @@ describe WorkfilesController do
         response.should be_success
         public_workfile.reload.file_name.should == new_name
       end
+
+      context "when the filename is not provided" do
+        let(:new_name) { nil }
+
+        it "leaves the filename alone" do
+          old_filename = public_workfile.file_name
+          put :update, options
+          response.should be_success
+          public_workfile.reload.file_name.should == old_filename
+        end
+      end
     end
 
     context "when no execution schema has been set" do
@@ -383,6 +394,26 @@ describe WorkfilesController do
         put :update, options
         response.should be_forbidden
         private_workfile.reload.execution_schema.should_not == schema
+      end
+    end
+
+    context "for alpine workfiles" do
+      let(:workfile) { workfiles(:'alpine.afm') }
+      let(:params) do
+        {
+            :entity_subtype => 'alpine',
+            :workspace_id => workspace.to_param,
+            :file_name => 'something',
+            :database_id => '42',
+            :id => workfile.to_param,
+            :execution_schema => { :id => schema.to_param }
+        }
+      end
+
+      it "updates the model successfully" do
+        put :update, params
+        response.should be_success
+        workfile.reload.file_name.should == 'something'
       end
     end
   end

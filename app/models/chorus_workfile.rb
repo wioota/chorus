@@ -1,6 +1,7 @@
 class ChorusWorkfile < Workfile
   attr_accessible :versions_attributes, :as => [:default, :create]
-  attr_accessible :svg_data, :execution_schema, :as => [:create]
+  attr_accessible :svg_data, :as => [:create]
+  attr_accessible :execution_schema
 
   belongs_to :execution_schema, :class_name => 'GpdbSchema'
 

@@ -35,13 +35,10 @@ class WorkfilesController < ApplicationController
     execution_schema = params[:workfile][:execution_schema]
     if execution_schema && execution_schema[:id]
       schema = GpdbSchema.find(execution_schema[:id])
-      workfile.execution_schema = schema
+      params[:workfile][:execution_schema] = schema
     end
 
-    new_file_name = params[:workfile][:file_name]
-    workfile.file_name = new_file_name if !new_file_name.nil?
-    workfile.save!
-
+    workfile.update_attributes(params[:workfile])
     present workfile, :presenter_options => {:include_execution_schema => true}
   end
 
