@@ -153,6 +153,13 @@ describe('chorus.models.DataSource', function() {
         it("memoizes", function() {
             expect(this.dataSourceUsage).toBe(this.model.usage());
         });
+
+        context("when the data source is Oracle", function() {
+           it('returns null', function() {
+              this.model = rspecFixtures.oracleDataSource();
+              expect(this.model.usage()).toBeNull();
+           });
+        });
     });
 
     describe("#hasWorkspaceUsageInfo", function() {

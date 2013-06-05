@@ -49,6 +49,9 @@ chorus.models.DataSource = chorus.models.AbstractDataSource.extend({
     },
 
     usage: function() {
+        if(this.isOracle()) {
+            return null;
+        }
         if(!this.dataSourceUsage) {
             this.dataSourceUsage = new chorus.models.DataSourceUsage({ dataSourceId: this.get('id')});
         }
