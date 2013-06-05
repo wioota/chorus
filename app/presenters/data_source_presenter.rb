@@ -6,7 +6,9 @@ class DataSourcePresenter < Presenter
         :entity_type => model.entity_type_name,
         :is_deleted => model.deleted?,
         :shared => model.shared,
-        :owner_id => model.owner_id
+        :owner_id => model.owner_id,
+        :version => model.version
+
     }
     unless succinct?
       hash.merge!({
@@ -15,7 +17,6 @@ class DataSourcePresenter < Presenter
           :online => model.state == "online",
           :db_name => model.db_name,
           :description => model.description,
-          :version => model.version
       }.merge(owner_hash).
       merge(tags_hash))
     end
