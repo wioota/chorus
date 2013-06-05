@@ -7,14 +7,6 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
     selectedEvent: 'files:selected',
     modelClass: "Workspace",
 
-    additionalContext: function() {
-        var ctx = this._super("additionalContext", arguments);
-
-        return _.extend(ctx, {
-            serverErrors: this.serverErrors
-        });
-    },
-
     makeModel: function() {
         this.pageModel = this.options.pageModel;
         this.collection = this.collection || this.defaultWorkspaces();
