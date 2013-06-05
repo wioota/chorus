@@ -1,5 +1,6 @@
 .fixed_header {
   position: fixed;
+  min-width: $page-min-width - $sidebar-width - $sidebar-padding-x - 8;
   left: $guts-padding;
   margin-right: $sidebar-width + $sidebar-padding-x + 1;
   right: 0px;
