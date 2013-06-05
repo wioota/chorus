@@ -25,7 +25,7 @@ class DatasetImportsController < ApplicationController
 
       unless import.finished_at
         dataset_import_params = params[:dataset_import]
-        ImportExecutor.cancel(import, dataset_import_params[:success].to_s == "true", dataset_import_params[:message])
+        import.mark_as_canceled!(dataset_import_params[:message])
       end
     end
 

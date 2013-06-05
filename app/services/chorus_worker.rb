@@ -1,6 +1,11 @@
 class ChorusWorker < QC::Worker
   SLEEP_INCREMENT = 2
 
+  def start
+    Thread.new { ImportCanceler.run }
+    super
+  end
+
   def thread_pool_size
     ChorusConfig.instance['worker_threads'].to_i
   end

@@ -3,7 +3,7 @@ class ImportExecutor
 
   def self.run(import_id)
     import = Import.find(import_id)
-    ImportExecutor.new(import).run if import.success.nil?
+    ImportExecutor.new(import).run if import.runnable?
   end
 
   def self.cancel(import, success, message = nil)
@@ -16,7 +16,6 @@ class ImportExecutor
 
   def run
     import.touch(:started_at)
-    # raises go into import#throw_if_not_runnable ?
     raise "Destination workspace #{import.workspace.name} has been deleted" if import.workspace_import? && import.workspace.deleted?
     import.validate_source!
 

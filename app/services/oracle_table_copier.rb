@@ -7,6 +7,11 @@ class OracleTableCopier < TableCopier
     destination_connection.disconnect
   end
 
+  def self.cancel(import)
+    connection = import.schema.connect_as(import.user)
+    CancelableQuery.new(connection, import.handle, import.user).cancel
+  end
+
   private
 
   def copy_manager(jdbc_conn)
@@ -25,7 +30,8 @@ class OracleTableCopier < TableCopier
     @streamer ||= SqlStreamer.new(
         source_dataset.all_rows_sql(sample_count),
         source_connection,
-        {:show_headers => false}
+        {:show_headers => false},
+        CancelableQuery.new(source_connection, pipe_name, user)
     )
   end
 

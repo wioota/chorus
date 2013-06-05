@@ -9,7 +9,8 @@ describe TableCopier do
             :destination_table_name => destination_table_name,
             :user => user,
             :sample_count => sample_count,
-            :truncate => truncate
+            :truncate => truncate,
+            :pipe_name => pipe_name
         }
     )
   end
@@ -24,6 +25,7 @@ describe TableCopier do
     let(:source_connection) { Object.new }
     let(:sample_count) { nil }
     let(:truncate) { false }
+    let(:pipe_name) { 'import_handle' }
 
     before do
       stub(source_dataset).connect_as(user) { source_connection }
@@ -115,9 +117,26 @@ describe TableCopier do
 
     describe "#run" do
       it "should insert the data into the destination table" do
-        mock(source_connection).copy_table_data(%Q{"#{destination_schema.name}"."#{destination_table_name}"}, source_dataset.name, '', sample_count)
+        mock(source_connection).copy_table_data(%Q{"#{destination_schema.name}"."#{destination_table_name}"}, source_dataset.name, '', {
+            :limit => sample_count,
+            :check_id => pipe_name,
+            :user => user
+        })
         copier.run
       end
+    end
+  end
+
+  describe "cancel" do
+    let(:import) do
+      imports(:one).tap { |imp| imp.update_attribute(:to_table, datasets(:table).name) }
+    end
+
+    it "cancels the CancelableQuery" do
+      import.copier_class.should == TableCopier
+      mock(CancelableQuery).new(nil, import.handle, import.user) { |query| mock(query).cancel }
+
+      TableCopier.cancel(import)
     end
   end
 
@@ -128,6 +147,7 @@ describe TableCopier do
     let(:destination_schema) { database.schemas.find_by_name('test_schema') }
     let(:sample_count) { nil }
     let(:truncate) { false }
+    let(:pipe_name) { 'import_handle_2' }
 
     let(:source_conn) { source_dataset.connect_as(user) }
     let(:dest_conn) { destination_schema.connect_as(user) }

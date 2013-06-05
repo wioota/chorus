@@ -55,11 +55,4 @@ class SchemaImport < Import
     )
     Notification.create!(:recipient_id => user.id, :event_id => event.id)
   end
-
-  def cancel(success, message = nil)
-    super
-
-    connection = schema.connect_as(user)
-    CancelableQuery.new(connection, handle, user).cancel
-  end
 end

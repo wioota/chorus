@@ -51,6 +51,14 @@ class Import < ActiveRecord::Base
     import_schedule.update_attributes({:new_table => false}) if import_schedule
   end
 
+  def runnable?
+    success.nil? && !canceled?
+  end
+
+  def canceled?
+    canceled_at?
+  end
+
   def workspace_import?
     self.is_a?(WorkspaceImport)
   end
@@ -77,6 +85,7 @@ class Import < ActiveRecord::Base
 
   def cancel(success, message = nil)
     log "Terminating import: #{inspect}"
+    copier_class.cancel(self)
     update_status(success ? :passed : :failed, message)
   end
 
@@ -88,7 +97,11 @@ class Import < ActiveRecord::Base
     raise "Original source dataset #{source.scoped_name} has been deleted" if source.deleted?
   end
 
-  private
+  def mark_as_canceled!(message)
+    touch(:canceled_at)
+    self.cancel_message = message
+    save!
+  end
 
   def named_pipe
     return @named_pipe if @named_pipe
@@ -96,6 +109,8 @@ class Import < ActiveRecord::Base
     dir = Pathname.new ChorusConfig.instance['gpfdist.data_dir']
     @named_pipe = Dir.glob(dir.join "pipe*_#{handle}").first
   end
+
+  private
 
   def log(message)
     Rails.logger.info("Import Termination: #{message}")

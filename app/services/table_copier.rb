@@ -7,6 +7,10 @@ class TableCopier
     @attributes = attributes.with_indifferent_access
   end
 
+  def self.cancel(import)
+    CancelableQuery.new(nil, import.handle, import.user).cancel
+  end
+
   def start
     validate!
     initialize_destination_table
@@ -39,7 +43,7 @@ class TableCopier
   end
 
   def run
-    source_connection.copy_table_data(destination_table_fullname, source_dataset.name, source_dataset.query_setup_sql, sample_count)
+    source_connection.copy_table_data(destination_table_fullname, source_dataset.name, source_dataset.query_setup_sql, {:limit => sample_count, :check_id => pipe_name, :user => user})
   rescue StandardError => e
     raise ImportFailed, e.message
   end

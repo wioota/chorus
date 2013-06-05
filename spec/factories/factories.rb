@@ -155,6 +155,10 @@ FactoryGirl.define do
     after(:create) do |workspace|
       FactoryGirl.create(:membership, :workspace => workspace, :user => workspace.owner)
     end
+
+    factory :workspace_with_sandbox do
+      association :sandbox, factory: :gpdb_schema
+    end
   end
 
   factory :membership do

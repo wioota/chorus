@@ -200,4 +200,59 @@ describe Import, :greenplum_integration do
       Import.unfinished.should_not include(import)
     end
   end
+
+  describe "cancel" do
+    let(:import) { imports(:one) }
+
+    it "delegates cancellation to the table copier" do
+      mock(import.copier_class).cancel(import)
+      import.cancel(false, "canceled!")
+    end
+  end
+
+  describe "mark_as_canceled!" do
+    let(:message) { "canceled!" }
+
+    it "flags the current qc job as canceled" do
+      import.mark_as_canceled!(message)
+
+      import.reload.canceled_at.should_not be_nil
+      import.cancel_message.should == message
+    end
+  end
+
+  describe "#canceled?" do
+    it "returns true when the import has a canceled_at date" do
+      import.touch(:canceled_at)
+      import.should be_canceled
+    end
+
+    it "returns false when the import has no canceled_at date" do
+      import.canceled_at = nil
+      import.should_not be_canceled
+    end
+  end
+
+  describe "#runnable?" do
+    it "returns false when the import has a canceled_at date" do
+      import.touch(:canceled_at)
+      import.should_not be_runnable
+    end
+
+    it "returns false when the import has succeeded" do
+      import.success = true
+      import.should_not be_runnable
+    end
+
+    it "returns false when the import has failed" do
+      import.success = false
+      import.should_not be_runnable
+    end
+
+    it "returns true when the import has not been marked as succeeded or canceled" do
+      import.success = nil
+      import.canceled_at = nil
+      import.should be_runnable
+    end
+  end
 end

@@ -285,6 +285,43 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
     copier.pipe_name.should match(/pipe_\d+_\d+_#{pipe_name}$/)
   end
 
+  describe "cancel" do
+    let(:user) { import.user }
+    let(:source_connection) { Object.new }
+    let(:write_connection) { Object.new }
+
+    before do
+      stub(CrossDatabaseTableCopier).log.with_any_args
+      stub(import.source_dataset).connect_as(user) { source_connection }
+      stub(import.schema).connect_as(user) { write_connection }
+      stub(source_connection).running?.with_any_args { true }
+      stub(write_connection).running?.with_any_args { true }
+      stub(source_connection).kill.with_any_args
+      stub(write_connection).kill.with_any_args
+    end
+
+    it 'kills the source connection' do
+      mock(source_connection).kill("pipe%_#{import.created_at.to_i}_#{import.id}_w")
+
+      CrossDatabaseTableCopier.cancel(import)
+    end
+
+    it 'kills the write connection' do
+      mock(write_connection).kill("pipe%_#{import.created_at.to_i}_#{import.id}_r")
+
+      CrossDatabaseTableCopier.cancel(import)
+    end
+
+    it 'removes the named pipe from disk' do
+      dir = ChorusConfig.instance['gpfdist.data_dir']
+      FileUtils.mkdir_p dir
+      pipe_file = File.join(dir, "pipe_with_some_extra_stuff_#{import.created_at.to_i}_#{import.id}")
+      FileUtils.touch pipe_file
+      CrossDatabaseTableCopier.cancel(import)
+      File.exists?(pipe_file).should be_false
+    end
+  end
+
   def execute(database, sql_command, schema = schema, method = :run)
     with_database_connection(database) do |connection|
       connection.run("set search_path to #{schema.name}, public;")

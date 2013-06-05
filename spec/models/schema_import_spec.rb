@@ -109,27 +109,6 @@ describe SchemaImport do
       )
     end
 
-    before do
-      stub(import).log.with_any_args
-      stub.proxy(import).source_dataset { |dataset| stub(dataset).connect_as(user) { source_connection } }
-      stub.proxy(import).schema do |schema|
-        stub(schema).connect_as(user) do
-          destination_connection
-        end
-      end
-
-      stub(source_connection).running?.with_any_args { true }
-      stub(destination_connection).running?.with_any_args { true }
-      mock.proxy(CancelableQuery).new(destination_connection, import.handle, import.user) do |query|
-        mock(query).cancel
-      end
-      any_instance_of(Schema) do |schema|
-        stub(schema).refresh_datasets.with_any_args do
-          FactoryGirl.create(:gpdb_table, :name => destination_table_name, :schema => sandbox)
-        end
-      end
-    end
-
     describe "when the import is marked as successful" do
       let(:cancel_import) do
         import.cancel(true)

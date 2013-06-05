@@ -107,25 +107,13 @@ describe WorkspaceImport do
       stub(import).log.with_any_args
       stub(import.source_dataset).connect_as(user) { source_connection }
       stub(import.schema).connect_as(user) { destination_connection }
+      mock(import.copier_class).cancel(import)
 
-      stub(source_connection).running?.with_any_args { true }
-      stub(destination_connection).running?.with_any_args { true }
-      mock(source_connection).kill("pipe%_#{import.created_at.to_i}_#{import.id}_w")
-      mock(destination_connection).kill("pipe%_#{import.created_at.to_i}_#{import.id}_r")
       any_instance_of(Schema) do |schema|
         stub(schema).refresh_datasets.with_any_args do
           FactoryGirl.create(:gpdb_table, :name => destination_table_name, :schema => sandbox)
         end
       end
-    end
-
-    it 'removes the named pipe from disk' do
-      dir = ChorusConfig.instance['gpfdist.data_dir']
-      FileUtils.mkdir_p dir
-      pipe_file = File.join(dir, "pipe_with_some_extra_stuff_#{import.created_at.to_i}_#{import.id}")
-      FileUtils.touch pipe_file
-      import.cancel(true)
-      File.exists?(pipe_file).should be_false
     end
 
     describe "when the import is marked as successful" do

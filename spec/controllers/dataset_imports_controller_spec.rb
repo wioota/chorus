@@ -75,11 +75,13 @@ describe DatasetImportsController do
     let(:user) { users(:admin) }
     let(:import) { imports(:one) }
     let(:success) { false }
+    let(:message) { 'it failed' }
 
     let(:params) { {
         :id => import.id,
         :success => success.to_s,
-        :format => :json
+        :format => :json,
+        :message => message
     } }
 
     before do
@@ -90,12 +92,15 @@ describe DatasetImportsController do
       before do
         import.finished_at = nil
         import.save!
-        stub(ImportExecutor).cancel(import, success, anything)
       end
 
       it "cancels a running import" do
-        mock(ImportExecutor).cancel(import, success, nil)
+        any_instance_of(Import) do |import|
+          mock(import).mark_as_canceled!(message)
+        end
+
         put :update, params
+
         response.should be_success
       end
 
@@ -115,7 +120,10 @@ describe DatasetImportsController do
     it "authorizes only the admin" do
       log_out
       log_in(users(:owner))
-      dont_allow(ImportExecutor).cancel.with_any_args
+      any_instance_of(Import) do |import|
+        dont_allow(import).mark_as_canceled!
+      end
+
       put :update, params
 
       response.should be_forbidden
@@ -130,7 +138,9 @@ describe DatasetImportsController do
       end
 
       it "does nothing" do
-        dont_allow(ImportExecutor).cancel.with_any_args
+        any_instance_of(Import) do |import|
+          dont_allow(import).mark_as_canceled!.with_any_args
+        end
         put :update, params
         response.should be_success
       end

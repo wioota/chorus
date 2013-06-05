@@ -43,6 +43,20 @@ describe ImportExecutor do
         ImportExecutor.run(import.id)
       end
     end
+
+    context "when the import has already been canceled" do
+      before do
+        import.canceled_at = Time.now
+        import.save!
+      end
+
+      it "skips the import" do
+        any_instance_of ImportExecutor do |executor|
+          mock(executor).run.with_any_args.times(0)
+        end
+        ImportExecutor.run(import.id)
+      end
+    end
   end
 
   describe "#run" do

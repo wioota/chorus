@@ -64,33 +64,6 @@ class WorkspaceImport < Import
     Notification.create!(:recipient_id => user.id, :event_id => event.id)
   end
 
-  def cancel(success, message = nil)
-    super
-
-    read_pipe_searcher = "pipe%_#{handle}_r"
-    read_connection = schema.connect_as(user)
-    if read_connection.running? read_pipe_searcher
-      log "Found running reader on database #{schema.database.name} on data source #{schema.data_source.name}, killing it"
-      read_connection.kill read_pipe_searcher
-    else
-      log "Could not find running reader on database #{schema.database.name} on data source #{schema.data_source.name}"
-    end
-
-    write_pipe_searcher = "pipe%_#{handle}_w"
-    write_connection = source.connect_as(user)
-    if write_connection.running? write_pipe_searcher
-      log "Found running writer on database #{source.schema.database.name} on data source #{source.data_source.name}, killing it"
-      write_connection.kill write_pipe_searcher
-    else
-      log "Could not find running writer on database #{source.schema.database.name} on data source #{source.data_source.name}"
-    end
-
-    if named_pipe
-      log "Removing named pipe #{named_pipe}"
-      FileUtils.rm_f named_pipe
-    end
-  end
-
   def workspace_with_deleted
     workspace_without_deleted || Workspace.unscoped { reload.workspace_without_deleted }
   end

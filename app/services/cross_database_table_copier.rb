@@ -36,7 +36,7 @@ class CrossDatabaseTableCopier < TableCopier
         semaphore.release
       end }
 
-      semaphore.acquire
+      semaphore.acquire # blocks forever if neither reader_loop nor writer_loop ever returns
       acquire_result = semaphore.tryAcquire(5000, java.util.concurrent.TimeUnit::MILLISECONDS)
 
       #see if we need to recover from any errors.
@@ -57,13 +57,46 @@ class CrossDatabaseTableCopier < TableCopier
     destination_connection.disconnect
   end
 
+  def self.cancel(import)
+    read_pipe_searcher = "pipe%_#{import.handle}_r"
+    read_connection = import.schema.connect_as(import.user)
+    if read_connection.running? read_pipe_searcher
+      log "Found running reader on database #{import.schema.database.name} on data source #{import.schema.data_source.name}, killing it"
+      read_connection.kill read_pipe_searcher
+    else
+      log "Could not find running reader on database #{import.schema.database.name} on data source #{import.schema.data_source.name}"
+    end
+
+    write_pipe_searcher = "pipe%_#{import.handle}_w"
+    write_connection = import.source.connect_as(import.user)
+    if write_connection.running? write_pipe_searcher
+      log "Found running writer on database #{import.source.schema.database.name} on data source #{import.source.data_source.name}, killing it"
+      write_connection.kill write_pipe_searcher
+    else
+      log "Could not find running writer on database #{import.source.schema.database.name} on data source #{import.source.data_source.name}"
+    end
+
+    remove_pipe(import.named_pipe)
+  end
+
+  def self.remove_pipe(pipe)
+    if pipe
+      log "Removing named pipe #{pipe}"
+      FileUtils.rm_f pipe
+    end
+  end
+
+  def self.log(message)
+    Rails.logger.info("Cross Database Table Copier: #{message}")
+  end
+
   def write_data
-    source_connection.copy_table_data(%Q{"#{write_pipe_name}"}, source_dataset.name, '', sample_count)
+    source_connection.copy_table_data(%Q{"#{write_pipe_name}"}, source_dataset.name, '', {:limit => sample_count, :check_id => pipe_name, :user => user})
   end
 
   def reader_loop(count)
     while (destination_count - @initial_destination_count) < count
-      destination_connection.copy_table_data(destination_table_fullname, read_pipe_name, '')
+      destination_connection.copy_table_data(destination_table_fullname, read_pipe_name, '', {:check_id => pipe_name, :user => user})
     end
   end
 

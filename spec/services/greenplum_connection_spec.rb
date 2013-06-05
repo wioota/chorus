@@ -1262,13 +1262,19 @@ describe GreenplumConnection, :greenplum_integration do
       let(:source_table_name) { 'base_table1' }
       let(:limit) { nil }
       let(:check_id) { nil }
+      let(:user) { Object.new }
+      let(:copy_options) {{:limit => limit, :check_id => check_id, :user => user}}
       let(:conn) { Sequel.connect(db_url, db_options) }
       let(:setup_sql) { '' }
 
       let(:expected) { true }
-      let(:subject) { connection.copy_table_data(%Q{"#{schema_name}"."#{destination_table_name}"}, source_table_name, setup_sql, limit) }
+      subject do
+        connection.copy_table_data(%Q{"#{schema_name}"."#{destination_table_name}"}, source_table_name, setup_sql, copy_options)
+      end
 
       before do
+        stub(user).id { 'user id' }
+        stub(connection).current_user { current_user }
         conn.default_schema = schema_name
         conn.execute("SET search_path to \"#{schema_name}\"")
         conn.create_table(destination_table_name, :as => "select * from #{schema_name}.base_table1 limit 0")
@@ -1285,6 +1291,11 @@ describe GreenplumConnection, :greenplum_integration do
         expect {
           subject
         }.to change { conn.fetch("SELECT * from #{destination_table_name}").all.length }
+      end
+
+      it "uses CancelableQuery" do
+        mock(CancelableQuery).new(connection, check_id, user).mock!.execute(anything)
+        subject
       end
 
       context "with a limit" do

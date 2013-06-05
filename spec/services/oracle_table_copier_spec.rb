@@ -10,6 +10,7 @@ describe OracleTableCopier do
   let(:source_connection) { Object.new }
   let(:sample_count) { nil }
   let(:truncate) { false }
+  let(:pipe_name) { 'the_pipe_name' }
   let(:destination_exists) { false }
 
   let(:copier) do
@@ -20,7 +21,8 @@ describe OracleTableCopier do
             :destination_table_name => destination_table_name,
             :user => user,
             :sample_count => sample_count,
-            :truncate => truncate
+            :truncate => truncate,
+            :pipe_name => pipe_name
         }
     )
   end
@@ -122,6 +124,18 @@ describe OracleTableCopier do
     end
   end
 
+  describe "cancel" do
+    let(:import) do
+      imports(:oracle).tap { |imp| imp.update_attribute(:to_table, datasets(:table).name) }
+    end
+
+    it "cancels the CancelableQuery" do
+      stub(import.schema).connect_as(anything) { destination_connection }
+      mock(CancelableQuery).new(destination_connection, import.handle, import.user) { |query| mock(query).cancel }
+
+      OracleTableCopier.cancel(import)
+    end
+  end
 
   context "db integration", :oracle_integration, :greenplum_integration do
     let(:user) { OracleIntegration.real_account.owner }
@@ -143,6 +157,7 @@ describe OracleTableCopier do
       end
 
       it "should create the table and copy data in" do
+        mock.proxy(SqlStreamer).new(anything, anything, anything, is_a(CancelableQuery))
         expect do
           subject
         end.to change { dest_conn.table_exists?(destination_table_name) }.to(true)

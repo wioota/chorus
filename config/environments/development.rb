@@ -34,4 +34,5 @@ Chorus::Application.configure do
 
   # Only turn it on if you really need concurrent requests
   #config.allow_concurrency = true
+  #config.threadsafe!
 end

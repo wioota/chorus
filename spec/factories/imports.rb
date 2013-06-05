@@ -24,8 +24,10 @@ FactoryGirl.define do
     file_name nil
 
     factory :import, class: WorkspaceImport do
-      association :workspace, factory: :workspace
+      association :workspace, factory: :workspace_with_sandbox
       association :source, factory: :gpdb_table
+
+      after(:build) { |import| import.class.skip_callback(:validate) }
     end
 
     factory :schema_import, class: SchemaImport do

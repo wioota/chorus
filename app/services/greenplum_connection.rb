@@ -383,12 +383,13 @@ class GreenplumConnection < DataSourceConnection
       true
     end
 
-    def copy_table_data(destination_fullname, source_table_name, setup_sql, limit=nil)
+    def copy_table_data(destination_fullname, source_table_name, setup_sql, options = nil)
+      options ||= {}
       with_connection do |connection|
         connection.execute(setup_sql)
-        select_data = connection.from(source_table_name.to_sym).limit(limit)
-        copy_command = "INSERT INTO #{destination_fullname} (#{select_data.sql})"
-        connection.execute(copy_command)
+        select_data = connection.from(source_table_name.to_sym).limit(options[:limit])
+        copy_command = "INSERT INTO #{destination_fullname} (#{select_data.sql});"
+        CancelableQuery.new(self, options[:check_id], options[:user]).execute(copy_command)
       end
       true
     end

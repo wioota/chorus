@@ -13,4 +13,15 @@ describe "ChorusWorker" do
       end
     end
   end
+
+  describe "start" do
+    it "starts the ImportCanceler" do
+      QC.enqueue("Kernel.puts", 1)
+      mock(ImportCanceler).run
+      worker = ChorusWorker.new
+      t = Thread.new { worker.start }
+      worker.instance_variable_set(:@running, false)
+      t.join
+    end
+  end
 end
