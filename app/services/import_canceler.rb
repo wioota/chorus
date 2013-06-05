@@ -11,7 +11,11 @@ class ImportCanceler
   end
 
   def cancel_imports
-    imports_awaiting_cancel.each { |import| import.cancel false }
+    imports_awaiting_cancel.each do |import|
+      pa "Cancelling Import: #{import.id} (#{import.class})"
+      import.cancel false
+      pa "Done Cancelling Import: #{import.id}"
+    end
   end
 
   def imports_awaiting_cancel
