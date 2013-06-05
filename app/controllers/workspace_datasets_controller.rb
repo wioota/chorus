@@ -23,7 +23,7 @@ class WorkspaceDatasetsController < ApplicationController
     authorize! :can_edit_sub_objects, workspace
     datasets = Dataset.where(:id => params[:dataset_ids])
 
-    status = associate_many_datasets(datasets) ? :created : :unprocessable_entity
+    status = workspace.associate_datasets(current_user, datasets) ? :created : :unprocessable_entity
 
     render :json => {}, :status => status
   end
@@ -65,26 +65,6 @@ class WorkspaceDatasetsController < ApplicationController
 
   def workspace
     @workspace ||= Workspace.workspaces_for(current_user).find(params[:workspace_id])
-  end
-
-  def associate_many_datasets(datasets)
-    Workspace.transaction do
-      datasets.each do |dataset|
-        raise ActiveRecord::Rollback unless dataset.associable?
-
-        unless workspace.has_dataset?(dataset)
-          workspace.source_datasets << dataset
-          create_event_for_dataset(dataset, workspace)
-        end
-      end
-    end
-  end
-
-  def create_event_for_dataset(dataset, workspace)
-    Events::SourceTableCreated.by(current_user).add(
-        :dataset => dataset,
-        :workspace => workspace
-    )
   end
 end
 

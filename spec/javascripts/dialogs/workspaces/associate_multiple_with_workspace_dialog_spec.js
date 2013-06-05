@@ -66,5 +66,19 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
                 });
             });
         });
+
+        describe("when the request fails", function() {
+            beforeEach(function() {
+                this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+            });
+
+            it("displays the error message", function() {
+                expect(this.dialog.$(".errors")).toContainTranslation("field_error.BLANK", {field: "A"});
+            });
+
+            it("stops the loading spinner", function() {
+               expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+            });
+        });
     });
 });

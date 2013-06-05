@@ -534,6 +534,31 @@ describe Workspace do
     end
   end
 
+  describe "#associate_datasets" do
+    let(:workspace) { workspaces(:public) }
+    let(:dataset1) { datasets(:other_table) }
+    let(:dataset2) { datasets(:other_view) }
+    let(:user) { workspace.owner }
+    it "should associate multiple datasets with itself" do
+      workspace.has_dataset?(dataset1).should be_false
+      workspace.has_dataset?(dataset2).should be_false
+      workspace.associate_datasets(user, [dataset1, dataset2])
+      workspace.source_datasets.include?(dataset1).should be_true
+      workspace.source_datasets.include?(dataset2).should be_true
+    end
+
+    it "should raise an error when the dataset is already associated with a workspace" do
+      workspace.associate_datasets(user, [dataset1])
+      expect { workspace.associate_datasets(user, [dataset1]) }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "should create event and activity when associated" do
+      workspace.associate_datasets(user, [dataset1, dataset2])
+      events = Events::SourceTableCreated.by(user)
+      events.count.should == 2
+    end
+  end
+
   describe "callbacks" do
     let(:workspace) { workspaces(:public_with_no_collaborators) }
     let(:sandbox) { schemas(:default) }

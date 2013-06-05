@@ -40,7 +40,7 @@ chorus.dialogs.HdfsDataSourceWorkspacePicker = chorus.dialogs.PickWorkspace.exte
 
     showDialogError : function(errorText) {
         this.model.serverErrors = errorText.serverErrors ? errorText.serverErrors : {fields: {not_a_real_field: {GENERIC: {message: errorText}}}};
-        this.render();
+        this.showErrors(this.model);
     },
 
     launchCreateHdfsDialog: function() {

@@ -47,7 +47,7 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
             error: function(xhr) {
                 var data = JSON.parse(xhr.responseText);
                 self.serverErrors = data.errors;
-                self.render();
+                self.showErrors();
             }
         });
     }

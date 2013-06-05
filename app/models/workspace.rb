@@ -244,6 +244,25 @@ class Workspace < ActiveRecord::Base
     public? || member?(user)
   end
 
+  def associate_datasets(user, datasets)
+    should_raise_errors = (datasets.length == 1)
+    Workspace.transaction do
+      datasets.each do |dataset|
+        raise ActiveRecord::Rollback unless dataset.associable?
+
+        association = associated_datasets.build
+        association.dataset = dataset
+        if(should_raise_errors)
+          association.save!
+        else
+          association.save
+        end
+
+        create_event_for_dataset(user, dataset) if association.valid?
+      end
+    end
+  end
+
   private
 
   def skip_sandbox?(database_id, account, entity_subtype)
@@ -293,5 +312,12 @@ class Workspace < ActiveRecord::Base
 
   def create_workspace_name_change_event
     Events::WorkspaceChangeName.by(current_user).add(:workspace => self, :workspace_old_name => self.name_was)
+  end
+
+  def create_event_for_dataset(user, dataset)
+    Events::SourceTableCreated.by(user).add(
+        :dataset => dataset,
+        :workspace => self
+    )
   end
 end

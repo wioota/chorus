@@ -120,10 +120,23 @@ describe WorkspaceDatasetsController do
         events.count.should == 2
       end
 
+      it "should show an error if the dataset is already associated with the workspace" do
+        post :create, :workspace_id => workspace.to_param, :dataset_ids => [other_table.to_param]
+        post :create, :workspace_id => workspace.to_param, :dataset_ids => [other_table.to_param]
+        response.code.should == "422"
+      end
+
       context "when associating multiple datasets with a workspace" do
         it "does not show an error if some datasets are already associated" do
           post :create, :workspace_id => workspace.to_param, :dataset_ids => [gpdb_table.to_param, other_table.to_param]
           response.code.should == "201"
+        end
+
+        it "does not create an event for an invalid association" do
+          post :create, :workspace_id => workspace.to_param, :dataset_ids => [gpdb_table.to_param, other_table.to_param]
+          response.code.should == "201"
+          events = Events::SourceTableCreated.by(user)
+          events.count.should == 1
         end
       end
     end

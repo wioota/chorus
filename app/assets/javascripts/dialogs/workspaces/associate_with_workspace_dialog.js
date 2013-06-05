@@ -25,7 +25,7 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         var datasetSet = this.selectedItem().datasets();
         datasetSet.reset([this.model]);
         this.listenTo(datasetSet, "saved", this.saved);
-        this.listenTo(datasetSet, "saveFailed", this.bulkSaveFailed);
+        this.listenTo(datasetSet, "saveFailed", this.saveFailed);
 
         datasetSet.save();
         this.$("button.submit").startLoading("actions.associating");
@@ -38,14 +38,8 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         chorus.toast("dataset.associate.toast.one", {datasetTitle: this.model.get("objectName"), workspaceNameTarget: this.selectedItem().get("name")});
     },
 
-    saveFailed: function(xhr) {
-        var data = JSON.parse(xhr.responseText);
-        this.serverErrors = data.errors;
-        this.render();
-    },
-
-    bulkSaveFailed: function(model) {
-        this.serverErrors = model.serverErrors;
-        this.render();
+    saveFailed: function(model) {
+        this.showErrors(model);
+        this.$("button.submit").stopLoading();
     }
 });

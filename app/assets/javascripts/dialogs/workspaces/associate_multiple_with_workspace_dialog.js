@@ -1,5 +1,5 @@
 chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.extend({
-    constructorName: "AssociateWithWorkspace",
+    constructorName: "AssociateMultipleWithWorkspace",
 
     title: t("dataset.associate.title.other"),
     submitButtonTranslationKey: "dataset.associate.button.other",
@@ -18,6 +18,7 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
         datasetSet.reset(this.datasets.models);
 
         this.listenTo(datasetSet, "saved", this.saved);
+        this.listenTo(datasetSet, "saveFailed", this.saveFailed);
         datasetSet.save();
     },
 
@@ -28,5 +29,10 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
             count: this.datasets.length
         });
         this.closeModal();
+    },
+
+    saveFailed: function(model) {
+        this.showErrors(model);
+        this.$("button.submit").stopLoading();
     }
 });
