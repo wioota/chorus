@@ -38,6 +38,8 @@ class Workspace < ActiveRecord::Base
   validates_attachment_size :image, :less_than => ChorusConfig.instance['file_sizes_mb']['workspace_icon'].megabytes, :message => :file_size_exceeded
 
   before_update :unassociate_source_datasets_in_sandbox, :create_name_change_event
+  before_update :reindex_sandbox, :if => :show_sandbox_datasets_changed?
+
   before_save :update_has_added_sandbox
   after_create :add_owner_as_member
 
@@ -264,6 +266,10 @@ class Workspace < ActiveRecord::Base
   end
 
   private
+
+  def reindex_sandbox
+    QC.enqueue_if_not_queued("Schema.reindex_datasets", sandbox.id) if sandbox
+  end
 
   def skip_sandbox?(database_id, account, entity_subtype)
     !account || account.invalid_credentials? ||

@@ -680,6 +680,24 @@ describe Workspace do
     end
   end
 
+  describe "changing 'show sandbox datasets'" do
+    let(:workspace) { workspaces(:public) }
+    let(:schema_id) { workspace.sandbox.id }
+
+    it 'enqueue a reindex of the sandbox' do
+      mock(QC.default_queue).enqueue_if_not_queued("Schema.reindex_datasets", schema_id)
+      workspace.show_sandbox_datasets = !workspace.show_sandbox_datasets
+      workspace.save!
+    end
+
+    it 'does not do that by accident' do
+      stub(QC.default_queue).enqueue_if_not_queued.with_any_args
+      dont_allow(QC.default_queue).enqueue_if_not_queued("Schema.reindex_datasets", anything)
+      workspace.toggle(:public)
+      workspace.save!
+    end
+  end
+
   it_should_behave_like "taggable models", [:workspaces, :public]
 
   it_behaves_like 'a soft deletable model' do

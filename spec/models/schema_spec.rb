@@ -289,6 +289,16 @@ describe Schema do
     end
   end
 
+  describe ".reindex_datasets" do
+    it "sends 'reindex_datasets' to the schema" do
+      any_instance_of(Schema) do |schema|
+        mock(schema).refresh_datasets(anything, hash_including(:force_index => true))
+      end
+
+      Schema.reindex_datasets(schema.id)
+    end
+  end
+
   it_behaves_like 'a soft deletable model' do
     let(:model) { schema }
   end

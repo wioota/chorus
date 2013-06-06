@@ -11,7 +11,7 @@ class GpdbDataset < Dataset
   end
 
   def found_in_workspace_id
-    (bound_workspace_ids + schema.workspace_ids).uniq
+    (bound_workspace_ids + schema.workspaces.where(:show_sandbox_datasets => true).pluck(:id)).uniq
   end
 
   def self.total_entries(account, schema, options = {})

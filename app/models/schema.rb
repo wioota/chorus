@@ -59,6 +59,11 @@ class Schema < ActiveRecord::Base
     connect_with(data_source.account_for_user!(user), &block)
   end
 
+  def self.reindex_datasets(schema_id)
+    schema = find(schema_id)
+    schema.refresh_datasets(schema.data_source.owner_account, {:force_index => true})
+  end
+
   def refresh_datasets(account, options = {})
     ##Please do not instantiate all datasets in your schema: you will run out of memory
     ##This means no datasets.detect, datasets.select, datasets.reject, ...

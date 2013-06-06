@@ -163,4 +163,44 @@ describe GpdbDataset do
       end
     end
   end
+
+  describe 'found_in_workspace_id' do
+    context "when the dataset is associated with a workspace" do
+      let(:dataset) { datasets(:source_table) }
+      let(:workspace) { workspaces(:public) }
+
+      it 'includes the workspace ID' do
+        dataset.found_in_workspace_id.should include(workspace.id)
+      end
+    end
+
+    context "when the dataset is not associated with a workspace" do
+      let(:dataset) { datasets(:table) }
+
+      context "but the workspace's sandbox contains the dataset" do
+      let(:workspace) do
+        workspaces(:public).tap { |ws| ws.sandbox = dataset.schema; ws.save! }
+      end
+
+      before do
+        dataset.bound_workspaces.should_not include(workspace)
+      end
+
+        it "includes that workspace's id" do
+          dataset.found_in_workspace_id.should include(workspace.id)
+        end
+
+        context "and the workspace does not automatically show sandbox datasets" do
+          before do
+            workspace.show_sandbox_datasets = false
+            workspace.save!
+          end
+
+          it "does not include that workspace's id" do
+            dataset.found_in_workspace_id.should_not include(workspace.id)
+          end
+        end
+      end
+    end
+  end
 end
