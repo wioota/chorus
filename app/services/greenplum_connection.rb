@@ -314,7 +314,7 @@ class GreenplumConnection < DataSourceConnection
 
         query = query.select(:relations__reltuples => :row_count, :relations__relname => :name,
                              :pg_views__definition => :definition, :relations__relnatts => :column_count,
-                             :pg_stat_last_operation__statime => :last_analyzed)
+                             :pg_stat_last_operation__statime => :last_analyzed, :relations__oid => :oid)
 
         partition_count_query = connection[:pg_partitions].where(:schemaname => schema_name, :tablename => table_name).select { count(schemaname) }
         query = query.select_append(partition_count_query => :partition_count)
@@ -332,22 +332,32 @@ class GreenplumConnection < DataSourceConnection
         )
         query = query.select_append(table_type => :table_type)
 
-        disk_size = Sequel.case(
-            [
-                [Sequel.lit("position('''' in relations.relname) > 0"), 'unknown'],
-                [Sequel.lit("position('\\\\' in relations.relname) > 0"), 'unknown']
-            ],
-            Sequel.cast(Sequel.lit("pg_total_relation_size(relations.oid)"), String)
-        )
-        query = query.select_append(disk_size => :disk_size)
+        result = query_with_disk_size(query, connection)
 
-        result = query.first
         if result
           result[:row_count] = result[:row_count].to_i
           result[:disk_size] = result[:disk_size].to_i unless result[:disk_size] == 'unknown'
         end
         result
       end
+    end
+
+    def query_with_disk_size(query, connection)
+      begin # try the GPDB version first
+        disk_size = Sequel.case(
+          [
+            [Sequel.lit("position('''' in relations.relname) > 0"), 'unknown'],
+            [Sequel.lit("position('\\\\' in relations.relname) > 0"), 'unknown']
+          ],
+          Sequel.cast(Sequel.lit("pg_total_relation_size(relations.oid)"), String)
+        )
+
+        result = query.select_append(disk_size => :disk_size).first
+      rescue Sequel::DatabaseError # if the above query fails, assume we're querying HAWQ and use the equivalent HAWQ query instead
+        result = query.first
+        result[:disk_size] = connection.from(:"pg_aoseg__pg_aoseg_#{result[:oid]}").sum(:eof) if result
+      end
+      result
     end
 
     def primary_key_columns(table_name)

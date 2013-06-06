@@ -1542,4 +1542,26 @@ describe GreenplumConnection, :greenplum_integration do
       expect { connection.connect! }.not_to raise_error
     end
   end
+
+  context "for a HAWQ datasource" do
+    let(:database) { data_source.refresh_databases.find { |d| d.name == "gpadmin" } }
+    let(:dataset) { database.datasets.find_by_name("metadata_test_fixture") }
+    let(:schema) { dataset.schema }
+    let(:data_source_attributes) { {:entity_type => "gpdb_data_source", :name => "HAWQ", :description => "", :host => "chorus-gphd20-2", :port => "8432", :db_name => "gpadmin", :db_username => "gpadmin", :db_password => "secret", :shared => "false"} }
+    let(:data_source) do
+      entity_type = data_source_attributes.delete(:entity_type)
+      DataSource.create_for_entity_type(entity_type, users(:owner), data_source_attributes)
+    end
+    let(:account) { data_source.owner_account }
+    let(:connection) { GreenplumConnection.new(data_source, account, {:schema => schema.name}) }
+
+    describe "metadata_for_dataset(table_name)" do
+      it "provides the right data" do
+        metadata_for_dataset = connection.metadata_for_dataset(dataset.name)
+        metadata_for_dataset[:row_count].should_not == 0
+        metadata_for_dataset[:disk_size].should_not == 0
+        metadata_for_dataset[:name].should == dataset.name
+      end
+    end
+  end
 end
