@@ -28,6 +28,7 @@ class Workfile < ActiveRecord::Base
   validates :owner, presence: true
   validates_presence_of :file_name
   validates_uniqueness_of :file_name, :scope => :workspace_id
+  validates_format_of :file_name, :with => /^[a-zA-Z0-9_ \.\(\)\-]+$/
 
   before_validation :init_file_name, :on => :create
 

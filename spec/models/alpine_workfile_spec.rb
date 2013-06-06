@@ -19,6 +19,27 @@ describe AlpineWorkfile do
         model.errors_on(:workspace).should include(:ARCHIVED)
       end
     end
+
+    context 'file name with valid characters' do
+      it 'is valid' do
+        params[:file_name] = 'work_(-file).sql'
+        model.should be_valid
+      end
+    end
+
+    context 'file name with question mark' do
+      it 'is not valid' do
+        params[:file_name] = 'workfile?.sql'
+        model.should have_error_on(:file_name)
+      end
+    end
+
+    context 'file name with a slash' do
+      it 'is not valid' do
+        params[:file_name] = 'a/file.sql'
+        model.should have_error_on(:file_name)
+      end
+    end
   end
 
   it "has a content_type of work_flow" do
