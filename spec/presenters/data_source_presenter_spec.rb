@@ -29,6 +29,17 @@ describe DataSourcePresenter, :type => :view do
     end
   end
 
+  describe "#forbidden_hash" do
+    let(:hash) { presenter.forbidden_hash }
+
+    it "presents only the necessary information" do
+      hash.should have_key(:id)
+      hash.should have_key(:entity_type)
+      hash.should have_key(:owner_id)
+      hash.should have_key(:shared)
+    end
+  end
+
   it "should use ownerPresenter Hash method for owner" do
     owner = hash[:owner]
     owner.to_hash.should == (UserPresenter.new(user, view).presentation_hash)

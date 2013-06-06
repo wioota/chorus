@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
 
   def render_unprocessable_entity(e)
     present_errors({:fields => {:general =>
-                                    {:GENERIC => {:message => e.message}}}},
+                                  {:GENERIC => {:message => e.message}}}},
                    {:status => :unprocessable_entity})
   end
 
@@ -88,7 +88,7 @@ class ApplicationController < ActionController::Base
 
   def render_model_error(e)
     present_errors({:fields => {:general =>
-                                    {:GENERIC => {:message => e.message}}}},
+                                  {:GENERIC => {:message => e.message}}}},
                    {:status => :unprocessable_entity})
   end
 
@@ -139,10 +139,10 @@ class ApplicationController < ActionController::Base
 
     if model_or_collection.respond_to? :current_page
       json[:pagination] = {
-          :page => model_or_collection.current_page,
-          :per_page => model_or_collection.per_page,
-          :records => model_or_collection.total_entries,
-          :total => model_or_collection.per_page > 0 ? model_or_collection.total_pages : nil
+        :page => model_or_collection.current_page,
+        :per_page => model_or_collection.per_page,
+        :records => model_or_collection.total_entries,
+        :total => model_or_collection.per_page > 0 ? model_or_collection.total_pages : nil
       }
     end
 
@@ -158,7 +158,7 @@ class ApplicationController < ActionController::Base
 
     if model
       response_json[:errors] = {
-          :model_data => Presenter.present(model, view_context, :succinct => true)
+          :model_data => Presenter.present(model, view_context, :forbidden => true)
       }
     end
 

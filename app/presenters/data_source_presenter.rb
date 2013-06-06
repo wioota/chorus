@@ -27,6 +27,15 @@ class DataSourcePresenter < Presenter
     !rendering_activities? && !succinct?
   end
 
+  def forbidden_hash
+    {
+      :id => model.id,
+      :entity_type => model.entity_type_name,
+      :shared => model.shared,
+      :owner_id => model.owner_id,
+    }
+  end
+
   private
 
   def tags_hash

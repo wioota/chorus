@@ -40,21 +40,25 @@ class Presenter
   end
 
   def presentation_hash
+    return forbidden_hash if options[:forbidden]
+
     hash = to_hash
     hash.merge(complete_json) if hash
+  end
+
+  def forbidden_hash
+    {}
   end
 
   private
 
   def self.get_presenter_class(model, options)
-    if options[:presenter_class]
-      return options.delete(:presenter_class).to_s.constantize
-    end
-    case model
-      when Paperclip::Attachment
-        ImagePresenter
-      else
-        model.class.respond_to?(:presenter_class) ? model.class.presenter_class : "#{model.class.name}Presenter".constantize
+    return options.delete(:presenter_class).to_s.constantize if options[:presenter_class]
+
+    if model.is_a? Paperclip::Attachment
+      ImagePresenter
+    else
+      model.class.respond_to?(:presenter_class) ? model.class.presenter_class : "#{model.class.name}Presenter".constantize
     end
   end
 

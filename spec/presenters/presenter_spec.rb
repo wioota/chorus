@@ -37,6 +37,14 @@ describe Presenter, :type => :view do
     context "with a single model" do
       let(:object_to_present) { FactoryGirl.build(:user) }
 
+      context "when forbidden is true" do
+        let(:json) { Presenter.present(object_to_present, view, {:forbidden => true}) }
+
+        it "presents an empty hash" do
+          json.should be_empty
+        end
+      end
+
       it "passes its options on" do
         mock(Presenter).present_model(object_to_present, { view: true }, { test: true })
         Presenter.new(object_to_present, { view: true }).present(object_to_present, { test: true })
@@ -113,6 +121,15 @@ describe Presenter, :type => :view do
         json.length.should == 2
         json[0][:username].should == object_to_present[0].username
         json[1][:username].should == object_to_present[1].username
+      end
+
+      context "when forbidden is true" do
+        let(:json) { Presenter.present(object_to_present, view, {:forbidden => true}) }
+
+        it "presents an array of empty hashes" do
+          json.length.should == 2
+          json.each { |j| j.should be_empty }
+        end
       end
     end
 
