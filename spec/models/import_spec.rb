@@ -45,7 +45,7 @@ describe Import, :greenplum_integration do
 
     it "validates the presence of source_dataset if no file_name present" do
       import = FactoryGirl.build(:import, :workspace => workspace, :user => user, :source => nil, :file_name => nil)
-      import.should have_error_on(:scoped_source_dataset)
+      import.should have_error_on(:scoped_source)
       import.should have_error_on(:file_name)
     end
 

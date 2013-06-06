@@ -8,30 +8,42 @@ RSpec::Matchers.define :have_error_on do |attribute|
   end
 
   match do |model|
-    model.valid? if model.errors.empty?
-    @errors_on_attribute = model.errors[attribute]
-    @errors_on_attribute.should_not be_nil
+    model.valid? if model.errors.messages.empty?
+    result = model.errors.messages.any?
+    result &&= errors_on_attribute(model, attribute).any?
+    result &&= errors_on_attribute_with_key(model, attribute, message_key).any? if message_key
+    result &&= errors_on_attribute_with_key_and_options(model, attribute, message_key, options).any? if message_key && options
 
-    if @message_key
-      @errors_on_attribute_with_key = @errors_on_attribute.select { |error| error[0] == @message_key }
-      @errors_on_attribute_with_key.should_not be_empty
+    result
+  end
 
-      if @options
-        @errors_on_attribute_with_key_and_options = @errors_on_attribute_with_key.select { |error| error[1] == @options }
-        @errors_on_attribute_with_key_and_options.should_not be_empty
-      end
-    end
+  def message_key
+    @message_key
+  end
 
-    true
+  def options
+    @options
+  end
+
+  def errors_on_attribute(model, attribute)
+    model.errors.messages[attribute] || []
+  end
+
+  def errors_on_attribute_with_key(model, attribute, message_key)
+    errors_on_attribute(model, attribute).select { |error| error[0] == message_key }
+  end
+
+  def errors_on_attribute_with_key_and_options(model, attribute, message_key, options)
+    errors_on_attribute_with_key(model, attribute, message_key).select { |_, options_hash| options_hash == options }
   end
 
   failure_message_for_should do |model|
-    if @errors_on_attribute.nil?
-      "model had no errors on #{attribute}, actual errors were #{model.errors.inspect}"
-    elsif @errors_on_attribute_with_key.empty?
-      "model had no errors on #{attribute} with #{@message_key.inspect}, actual errors on #{attribute} were #{@errors_on_attribute.inspect}"
-    elsif @errors_on_attribute_with_key_and_options.empty?
-      "model had no errors on #{attribute} with #{@message_key.inspect} and #{@options.inspect}, actual errors on #{attribute} were #{@errors_on_attribute_with_key.inspect}"
+    if errors_on_attribute(model, attribute).nil? || errors_on_attribute(model, attribute).empty?
+      "model had no errors on #{attribute}, actual errors were #{model.errors.messages.inspect}"
+    elsif errors_on_attribute_with_key(model, attribute, message_key).empty?
+      "model had no errors on #{attribute} with #{message_key.inspect}, actual errors on #{attribute} were #{model.errors_on(attribute).inspect}"
+    elsif errors_on_attribute_with_key_and_options(model, attribute, message_key, options).empty?
+      "model had no errors on #{attribute} with #{message_key.inspect} and #{options.inspect}, actual errors on #{attribute} were #{errors_on_attribute_with_key(model, attribute, message_key).inspect}"
     end
   end
 

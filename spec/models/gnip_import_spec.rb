@@ -23,7 +23,7 @@ describe GnipImport do
       let(:table_exists) { true }
 
       it "is invalid" do
-        import.should have_error_on(:to_table)
+        import.should have_error_on(:base).with_message(:table_exists)
       end
     end
   end

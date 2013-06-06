@@ -25,15 +25,15 @@ describe GpdbDataSource do
 
     it "requires db username and password" do
       [:db_username, :db_password].each do |attribute|
-        data_source = GpdbDataSource.new(valid_input_attributes.merge(attribute => nil), :as => :create)
-        data_source.should have_error_on(:owner_account)
+        data_source = user.gpdb_data_sources.build(valid_input_attributes.merge(attribute => nil), :as => :create)
+        data_source.should have_error_on(attribute)
       end
     end
 
     it "requires that a real connection to GPDB requires valid credentials" do
       any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { false } }
-      data_source = GpdbDataSource.new(valid_input_attributes, :as => :create)
-      data_source.should have_error_on(:owner_account)
+      data_source = user.gpdb_data_sources.build(valid_input_attributes, :as => :create)
+      data_source.should have_error_on(:base).with_message(:INVALID_PASSWORD)
     end
 
     it "can save a new data_source that is shared" do

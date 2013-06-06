@@ -5,7 +5,6 @@ describe ChorusWorkfile do
     context 'file name with valid characters' do
       it 'is valid' do
         workfile = FactoryGirl.build(:chorus_workfile, :file_name => 'work_(-file).sql')
-
         workfile.should be_valid
       end
     end
@@ -13,7 +12,6 @@ describe ChorusWorkfile do
     context 'file name with question mark' do
       it 'is not valid' do
         workfile = FactoryGirl.build(:chorus_workfile, :file_name => 'workfile?.sql')
-
         workfile.should have_error_on(:file_name)
       end
     end
@@ -21,7 +19,6 @@ describe ChorusWorkfile do
     context 'file name with a slash' do
       it 'is not valid' do
         workfile = FactoryGirl.build(:chorus_workfile, :file_name => 'a/file.sql')
-
         workfile.should have_error_on(:file_name)
       end
     end
@@ -77,16 +74,16 @@ describe ChorusWorkfile do
 
       let(:attributes) do
         {
-            :description => 'Nice workfile, good workfile',
-            :versions_attributes => [{
-                                         :contents => contents
-                                     }],
-            :execution_schema => ({ :id => execution_schema.id } if execution_schema),
-            :workspace => workspace,
-            :owner => user
+          :description => 'Nice workfile, good workfile',
+          :versions_attributes => [{
+                                     :contents => contents
+                                   }],
+          :execution_schema => ({:id => execution_schema.id} if execution_schema),
+          :workspace => workspace,
+          :owner => user
         }
       end
-      let(:workfile) { ChorusWorkfile.build_for(attributes).tap{ |w| w.save! } }
+      let(:workfile) { ChorusWorkfile.build_for(attributes).tap { |w| w.save! } }
 
       before do
         workspace.sandbox = schemas(:default)
@@ -119,7 +116,7 @@ describe ChorusWorkfile do
     end
 
     context 'without a version' do
-      let(:workfile) { ChorusWorkfile.build_for(:file_name => 'workfile.sql', :workspace => workspace, :owner => user).tap{ |w| w.save! } }
+      let(:workfile) { ChorusWorkfile.build_for(:file_name => 'workfile.sql', :workspace => workspace, :owner => user).tap { |w| w.save! } }
 
       it_behaves_like 'file upload'
 
@@ -132,18 +129,21 @@ describe ChorusWorkfile do
     context 'with an image extension on a non-image file' do
       let(:attributes) do
         {
-            :versions_attributes => [{
-                                         :contents => test_file('not_an_image.jpg')
-                                     }],
-            :workspace => workspace,
-            :owner => user
+          :versions_attributes => [
+            {
+              :contents => test_file('not_an_image.jpg')
+            }
+          ],
+          :workspace => workspace,
+          :owner => user
         }
       end
 
       it 'is invalid' do
         workfile = ChorusWorkfile.build_for(attributes)
         workfile.save.should be_false
-        workfile.should have_error_on(:file_name)
+        workfile.should have_error_on(:versions)
+        workfile.versions.first.should have_error_on(:contents)
       end
     end
   end
