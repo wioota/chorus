@@ -13,8 +13,9 @@ chorus.Mixins.ClEditor = {
 
         options = options || {};
         var editorOptions = _.extend(options, {controls: "bold italic | bullets numbering | link unlink"});
-        return $container.find("textarea[name='"+ inputName +"']").cleditor(editorOptions)[0];
-
+        var editor = $container.find("textarea[name='"+ inputName +"']").cleditor(editorOptions)[0];
+        $(editor.doc).find("body").focus();
+        return editor;
     },
 
     onClickToolbarBold: function(e) {

@@ -685,8 +685,10 @@
     // ie6 does not support designMode.
     // ie7 & ie8 do not properly support designMode="off".
     try {
-      if (ie) editor.doc.body.contentEditable = !disabled;
-      else editor.doc.designMode = !disabled ? "on" : "off";
+//      if (ie) editor.doc.body.contentEditable = !disabled;
+//      else editor.doc.designMode = !disabled ? "on" : "off";
+        //Chrome does not show a cursor in design mode with no content
+        editor.doc.body.contentEditable = !disabled;
     }
     // Firefox 1.5 throws an exception that can be ignored
     // when toggling designMode from off to on.
