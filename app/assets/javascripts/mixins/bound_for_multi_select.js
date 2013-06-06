@@ -31,5 +31,14 @@ chorus.Mixins.BoundForMultiSelect = {
     anyUnselected: function () {
         this.$(".select_all").prop("checked", false);
         this.selectAllChecked = false;
+    },
+
+    unselectOnFetch: function() {
+        var selectNone = function() {
+            chorus.PageEvents.trigger('selectNone');
+        };
+        this.subscribePageEvent("choice:filter", selectNone);
+        this.subscribePageEvent("choice:sort", selectNone);
+        this.listenTo(this.collection, 'paginate searched', selectNone);
     }
 };

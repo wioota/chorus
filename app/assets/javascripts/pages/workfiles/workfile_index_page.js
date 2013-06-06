@@ -40,6 +40,11 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
                 eventName: "workfile:search"
             }
         });
+
+        this.subscribePageEvent("workfile:search", function() {
+            chorus.PageEvents.trigger('selectNone');
+        });
+
         this.subscribePageEvent("workfile:selected", this.setModel);
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({

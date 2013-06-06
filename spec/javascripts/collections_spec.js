@@ -360,6 +360,14 @@ describe("chorus.collections.Base", function() {
                 expect(this.server.lastFetch().url).toContainQueryParams({ per_page: 13 });
             });
         });
+
+        it("fires a paginate event after fetch succeeds", function() {
+            spyOnEvent(this.collection, "paginate");
+            this.collection.fetchPage(2, { foo: "bar" });
+            expect("paginate").not.toHaveBeenTriggeredOn(this.collection);
+            this.server.lastFetch().succeed();
+            expect("paginate").toHaveBeenTriggeredOn(this.collection);
+        });
     });
 
     describe("#totalRecordCount", function() {

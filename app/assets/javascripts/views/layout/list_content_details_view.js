@@ -17,6 +17,9 @@ chorus.views.ListContentDetails = chorus.views.Base.include(
     setup: function(){
         this.buttonView = this.options.buttonView || new chorus.views.ListContentDetailsButtonView(this.options);
         this.listenTo(this.collection, "remove", this.render);
+        if (this.options.multiSelect) {
+            this.unselectOnFetch();
+        }
     },
 
     fetchNextPage: function() {

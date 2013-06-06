@@ -87,8 +87,12 @@ chorus.collections = {
                 }
                 var url = this.url({ page: page });
                 options = _.extend({}, options, { url: url });
+                var success = options.success || $.noop;
+                options.success = _.bind(function() {
+                    this.trigger("paginate");
+                    success(arguments);
+                }, this);
                 this.fetch(options);
-                this.trigger("paginate");
             },
 
             fetchAll: (function(params) {

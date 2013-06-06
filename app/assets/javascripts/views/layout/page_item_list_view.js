@@ -57,6 +57,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         this.selectedIndex = 0;
         this.collection.bind("paginate", function() {
             this.selectedIndex = 0;
+            this.render();
         }, this);
 
         if(this.eventName) {

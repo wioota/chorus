@@ -49,7 +49,7 @@ describe("chorus.views.ListContentDetails", function() {
                 expect(this.view.$("span.explore")).not.toExist();
             });
 
-            describe("when the 'select all' link is clicked", function() {
+            describe("when the 'select all' checkbox is checked", function() {
                 it("triggers the 'selectAll' page event", function() {
                     this.view.$(".multiselect .select_all").prop("checked", true);
                     this.view.$(".multiselect .select_all").change();
@@ -57,7 +57,7 @@ describe("chorus.views.ListContentDetails", function() {
                 });
             });
 
-            describe("when the 'select none' link is clicked", function() {
+            describe("when the 'select all' checkbox is unchecked", function() {
                 it("triggers the 'selectNone' page event", function() {
                     this.view.$(".multiselect .select_all").prop("checked", false);
                     this.view.$(".multiselect .select_all").change();
@@ -252,6 +252,66 @@ describe("chorus.views.ListContentDetails", function() {
 
             it("displays 'loading'", function() {
                 expect(this.view.$(".loading_section")).toExist();
+            });
+        });
+    });
+
+    describe("multiSelect", function() {
+        beforeEach(function() {
+            spyOnEvent(chorus.PageEvents, "selectNone");
+        });
+
+        context("when the multiSelect option is true", function() {
+            beforeEach(function() {
+                this.view.options.multiSelect = true;
+                this.view.setup();
+            });
+
+            it("deselects all after a search", function() {
+                this.collection.trigger('searched');
+                expect("selectNone").toHaveBeenTriggeredOn(chorus.PageEvents);
+            });
+
+            it("deselects all after paginating", function() {
+                this.collection.trigger('paginate');
+                expect("selectNone").toHaveBeenTriggeredOn(chorus.PageEvents);
+            });
+
+            it("deselects all after filtering", function() {
+                chorus.PageEvents.trigger('choice:filter');
+                expect("selectNone").toHaveBeenTriggeredOn(chorus.PageEvents);
+            });
+
+            it("deselects all after sorting", function() {
+                chorus.PageEvents.trigger('choice:sort');
+                expect("selectNone").toHaveBeenTriggeredOn(chorus.PageEvents);
+            });
+        });
+
+        context("when multiSelect is false", function() {
+            beforeEach(function() {
+                this.view.options.multiSelect = false;
+                this.view.setup();
+            });
+
+            it("does not deselect all after a search", function() {
+                this.collection.trigger('searched');
+                expect("selectNone").not.toHaveBeenTriggeredOn(chorus.PageEvents);
+            });
+
+            it("does not deselect all after paginating", function() {
+                this.collection.trigger('paginate');
+                expect("selectNone").not.toHaveBeenTriggeredOn(chorus.PageEvents);
+            });
+
+            it("does not deselect all after filtering", function() {
+                chorus.PageEvents.trigger('choice:filter');
+                expect("selectNone").not.toHaveBeenTriggeredOn(chorus.PageEvents);
+            });
+
+            it("does not deselect all after sorting", function() {
+                chorus.PageEvents.trigger('choice:sort');
+                expect("selectNone").not.toHaveBeenTriggeredOn(chorus.PageEvents);
             });
         });
     });
