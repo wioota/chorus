@@ -8,10 +8,16 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         "click .invalid_credentials a.update_credentials": "launchAddCredentialsDialog",
         "click .actions .associate": "launchAssociateWithWorkspaceDialog",
         "click .dataset_preview": "launchDatasetPreviewDialog",
-        "click .actions a.analyze" : "launchAnalyzeAlert",
+        "click .actions a.analyze": "launchAnalyzeAlert",
         "click a.duplicate": "launchDuplicateChorusView",
         "click .edit_tags": "startEditingTags",
-        "click .new_work_flow": "launchWorkFlowDialog"
+        "click .new_work_flow": "launchWorkFlowDialog",
+        "click a.new_note": "launchNotesNewDialog",
+        "click a.create_database_view": "launchCreateDatabaseViewDialog",
+        "click a.import_now": "launchImportNowDialog",
+        "click a.create_schedule": "launchImportSchedulerDialog",
+        "click a.edit_schedule": "launchImportSchedulerDialog",
+        "click a.download": "launchDatasetDownloadDialog"
     },
 
     subviews: {
@@ -150,15 +156,59 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         dialog.launchModal();
     },
 
-    launchWorkFlowDialog: function (e) {
+    launchWorkFlowDialog: function(e) {
         e && e.preventDefault();
         var dialog = new chorus.dialogs.WorkFlowNewForDatasetList({workspace: this.resource.workspace(), collection: new chorus.collections.Base([this.resource])});
         dialog.launchModal();
     },
 
+    launchNotesNewDialog: function(e) {
+        e && e.preventDefault();
+        var dialogOptions = {
+            entityId: this.resource.id,
+            entityType: "dataset",
+            displayEntityType: this.resource.metaType()
+        };
+
+        if(this.resource.workspace()) {
+            _.extend(dialogOptions, {
+                workspaceId: this.resource.workspace().id,
+                allowWorkspaceAttachments: true
+            });
+        }
+
+        var dialog = new chorus.dialogs.NotesNew(dialogOptions);
+        dialog.launchModal();
+    },
+
+    launchCreateDatabaseViewDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.CreateDatabaseView({pageModel: this.resource});
+        dialog.launchModal();
+    },
+
+    launchImportNowDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.ImportNow({dataset: this.resource});
+        dialog.launchModal();
+    },
+
+    launchImportSchedulerDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.ImportScheduler({dataset: this.resource, workspace: this.resource.workspace(), action: $(e.currentTarget).data("action")});
+        dialog.launchModal();
+    },
+
+    launchDatasetDownloadDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.DatasetDownload({pageModel: this.resource});
+        dialog.launchModal();
+    },
+
     updateImportSchedule: function(importSchedule) {
-        if(!this.resource)
+        if(!this.resource) {
             return;
+        }
 
         this.resource.getImportSchedules().reset([importSchedule]);
         this.render();

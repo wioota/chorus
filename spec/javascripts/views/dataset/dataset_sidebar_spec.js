@@ -60,6 +60,8 @@ describe("chorus.views.DatasetSidebar", function() {
             this.server.reset();
             this.dataset = rspecFixtures.workspaceDataset.sourceTable();
             chorus.PageEvents.trigger("dataset:selected", this.dataset);
+            chorus.page = this.view;
+            $("#jasmine_content").append(this.view.$el);
         });
 
         it("displays the selected dataset name", function() {
@@ -305,9 +307,20 @@ describe("chorus.views.DatasetSidebar", function() {
         });
 
         it("displays a download link", function() {
-            expect(this.view.$("a.download")).toHaveData("dialog", "DatasetDownload");
             expect(this.view.$("a.download")).toHaveData("dataset", this.dataset);
             expect(this.view.$("a.download").text()).toMatchTranslation("actions.download");
+        });
+
+        context("when clicking the download link", function() {
+            beforeEach(function() {
+                this.modalSpy.reset();
+                this.view.$("a.download").click();
+            });
+
+            it("shows the dataset download dialog once", function() {
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetDownload);
+                expect(this.modalSpy.modals().length).toBe(1);
+            });
         });
 
         context("when in list mode", function() {
@@ -360,6 +373,8 @@ describe("chorus.views.DatasetSidebar", function() {
             beforeEach(function() {
                 this.view.resource._workspace = rspecFixtures.workspace();
                 this.view.render();
+                chorus.page = this.view;
+                $("#jasmine_content").append(this.view.$el);
             });
 
             function itDoesNotHaveACreateDatabaseViewLink() {
@@ -589,17 +604,42 @@ describe("chorus.views.DatasetSidebar", function() {
                                 expect(this.view.$("a.import_now")).toExist();
                             });
 
-                            it("has a 'create import schedule' link", function() {
+                            describe("clicking the import now link", function() {
+                                beforeEach(function() {
+                                    this.modalSpy.reset();
+                                    this.view.$("a.import_now").click();
+                                });
+
+                                it("should open the import now dialog once", function() {
+                                    expect(this.modalSpy.modals().length).toBe(1);
+                                    expect(this.modalSpy).toHaveModal(chorus.dialogs.ImportNow);
+                                });
+                            });
+
+                            it("has a 'create import schedule' link with the 'create_schedule data-action", function() {
                                 var createScheduleLink = this.view.$("a.create_schedule");
                                 expect(createScheduleLink.text()).toMatchTranslation("actions.create_schedule");
+                                expect(createScheduleLink.data("action")).toBe("create_schedule");
+                            });
+
+                            describe("clicking the create schedule link", function() {
+                                beforeEach(function() {
+                                    this.modalSpy.reset();
+                                    this.view.$("a.create_schedule").click();
+                                });
+
+                                it("should open the create schedule dialog once", function() {
+                                    expect(this.modalSpy.modals().length).toBe(1);
+                                    expect(this.modalSpy).toHaveModal(chorus.dialogs.ImportScheduler);
+                                });
                             });
 
                             it("should have the dataset attached as data-dataset", function() {
-                                expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("dataset")).toBe(this.dataset);
+                                expect(this.view.$("a.create_schedule").data("dataset")).toBe(this.dataset);
                             });
 
                             it("should have the workspace attached as data-workspace", function() {
-                                expect(this.view.$("a.create_schedule[data-dialog=ImportScheduler]").data("workspace")).toBe(this.view.resource.workspace());
+                                expect(this.view.$("a.create_schedule").data("workspace")).toBe(this.view.resource.workspace());
                             });
                         });
 
@@ -666,6 +706,23 @@ describe("chorus.views.DatasetSidebar", function() {
                             tableRef: "our_destinat..."
                         });
                     });
+
+                    describe("clicking the edit schedule link", function() {
+                        beforeEach(function() {
+                            this.modalSpy.reset();
+                            this.view.$("a.edit_schedule").click();
+                        });
+
+                        it("should open the edit schedule dialog once", function() {
+                            expect(this.modalSpy.modals().length).toBe(1);
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.ImportScheduler);
+                        });
+                    });
+
+                    it("has a 'edit import schedule' link with the 'eidt_schedule data-action", function() {
+                        expect(this.view.$("a.edit_schedule").data("action")).toBe("edit_schedule");
+                    });
+
                     itHasActionLinks(["import_now", "edit_schedule"]);
                 });
 
@@ -708,6 +765,18 @@ describe("chorus.views.DatasetSidebar", function() {
                 itDoesNotHaveACreateDatabaseViewLink();
             });
 
+            context("clicking the new notes link", function() {
+                beforeEach(function() {
+                    this.modalSpy.reset();
+                    this.view.$("a.new_note").click();
+                });
+
+                it("should launch the new notes dialog once", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
+                    expect(this.modalSpy.modals().length).toBe(1);
+                });
+            });
+
             context("when the dataset is a chorus view", function() {
                 beforeEach(function() {
                     this.dataset = rspecFixtures.workspaceDataset.chorusView({ objectName: "annes_table", query: "select * from foos;" });
@@ -722,7 +791,7 @@ describe("chorus.views.DatasetSidebar", function() {
                     });
 
                     it("shows the 'Create as a database view' link", function() {
-                        expect(this.view.$("a.create_database_view[data-dialog=CreateDatabaseView]")).toContainTranslation("actions.create_database_view");
+                        expect(this.view.$("a.create_database_view")).toContainTranslation("actions.create_database_view");
                     });
 
                     it("does not have an associate with another workspace link", function() {
@@ -737,8 +806,6 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     describe("clicking the 'duplicate' link", function() {
                         beforeEach(function() {
-                            chorus.page = this.view;
-                            $("#jasmine_content").append(this.view.$el);
                             this.modalSpy.reset();
                             this.view.$("a.duplicate").click();
                         });
@@ -753,6 +820,18 @@ describe("chorus.views.DatasetSidebar", function() {
 
                         it("passes the dialog a duplicate of the chorus view", function() {
                             expect(this.modalSpy.lastModal().model.attributes).toEqual(this.dataset.createDuplicateChorusView().attributes);
+                        });
+                    });
+
+                    describe("clicking the 'create database view' link", function() {
+                        beforeEach(function() {
+                            this.modalSpy.reset();
+                            this.view.$("a.create_database_view").click();
+                        });
+
+                        it("should launch the create database view dialog once", function() {
+                            expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateDatabaseView);
+                            expect(this.modalSpy.modals().length).toBe(1);
                         });
                     });
                 });
@@ -797,15 +876,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$('.actions .associate')).toContainTranslation("actions.associate_with_another_workspace");
                 this.view.$('.actions .associate').click();
                 expect(this.modalSpy).toHaveModal(chorus.dialogs.AssociateWithWorkspace);
-            });
-
-            it("has the 'add a note' link with the correct data", function() {
-                var notesNew = this.view.$("a.dialog[data-dialog=NotesNew]");
-
-                expect(notesNew).toHaveData("entityId", this.dataset.id);
-                expect(notesNew).toHaveData("entityType", "dataset");
-                expect(notesNew).toHaveData("displayEntityType", this.dataset.metaType());
-                expect(notesNew).toHaveData("allowWorkspaceAttachments", true);
             });
 
             context("when work_flows are enabled", function () {
@@ -857,15 +927,8 @@ describe("chorus.views.DatasetSidebar", function() {
             beforeEach(function() {
                 this.dataset = rspecFixtures.dataset({id: "XYZ"});
                 chorus.PageEvents.trigger("dataset:selected", this.dataset);
-            });
-
-            it("has the 'add a note' link with the correct data", function() {
-                var notesNew = this.view.$("a.dialog[data-dialog=NotesNew]");
-
-                expect(notesNew).toHaveData("entityId", this.dataset.id);
-                expect(notesNew).toHaveData("entityType", "dataset");
-                expect(notesNew).toHaveData("displayEntityType", this.dataset.metaType());
-                expect(notesNew).not.toHaveData("allowWorkspaceAttachments", true);
+                chorus.page = this.view;
+                $("#jasmine_content").append(this.view.$el);
             });
 
             it("does not have the 'Import Now' action", function() {
@@ -904,6 +967,18 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 it('doesnt show the associate link', function() {
                     expect(this.view.$('.actions .associate')).not.toExist();
+                });
+            });
+
+            context("clicking the new notes link", function() {
+                beforeEach(function() {
+                    this.modalSpy.reset();
+                    this.view.$("a.new_note").click();
+                });
+
+                it("should launch the new notes dialog once", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
+                    expect(this.modalSpy.modals().length).toBe(1);
                 });
             });
         });
