@@ -405,9 +405,21 @@ describe("chorus.views.DatasetSidebar", function() {
                         });
 
                         it("displays a delete link", function() {
-                            var el = this.view.$("a.alert[data-alert=DatasetDelete][data-key-prefix=" + keyPrefix + "]");
+                            var el = this.view.$("a.delete_dataset");
                             expect(el).toExist();
                             expect(el).toHaveText(t(textKey));
+                        });
+
+                        context("clicking the delete link", function() {
+                            beforeEach(function() {
+                                this.modalSpy.reset();
+                                this.view.$("a.delete_dataset").click();
+                            });
+
+                            it("shows the dataset delete alert once", function() {
+                                expect(this.modalSpy).toHaveModal(chorus.alerts.DatasetDelete);
+                                expect(this.modalSpy.modals().length).toBe(1);
+                            });
                         });
                     });
 
@@ -418,7 +430,7 @@ describe("chorus.views.DatasetSidebar", function() {
                         });
 
                         it("does not display a delete link", function() {
-                            expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
+                            expect(this.view.$("a.delete_dataset")).not.toExist();
                         });
                     });
                 } else {
@@ -716,6 +728,22 @@ describe("chorus.views.DatasetSidebar", function() {
                         it("should open the edit schedule dialog once", function() {
                             expect(this.modalSpy.modals().length).toBe(1);
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.ImportScheduler);
+                        });
+                    });
+
+                    it("shows the 'delete_schedule' link", function() {
+                        expect(this.view.$("a.delete_schedule")).toExist();
+                    });
+
+                    describe("clicking the delete schedule link", function() {
+                        beforeEach(function() {
+                            this.modalSpy.reset();
+                            this.view.$("a.delete_schedule").click();
+                        });
+
+                        it("should open the delete schedule alert once", function() {
+                            expect(this.modalSpy.modals().length).toBe(1);
+                            expect(this.modalSpy).toHaveModal(chorus.alerts.ImportScheduleDelete);
                         });
                     });
 

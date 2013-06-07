@@ -9,6 +9,8 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         "click .actions .associate": "launchAssociateWithWorkspaceDialog",
         "click .dataset_preview": "launchDatasetPreviewDialog",
         "click .actions a.analyze": "launchAnalyzeAlert",
+        "click a.delete_schedule": "launchImportScheduleDeleteAlert",
+        "click a.delete_dataset": "launchDatasetDeleteAlert",
         "click a.duplicate": "launchDuplicateChorusView",
         "click .edit_tags": "startEditingTags",
         "click .new_work_flow": "launchWorkFlowDialog",
@@ -147,6 +149,16 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     launchAnalyzeAlert: function(e) {
         e && e.preventDefault();
         new chorus.alerts.Analyze({model: this.resource}).launchModal();
+    },
+
+    launchImportScheduleDeleteAlert: function(e) {
+        e && e.preventDefault();
+        new chorus.alerts.ImportScheduleDelete({pageModel: this.resource}).launchModal();
+    },
+
+    launchDatasetDeleteAlert: function(e) {
+        e && e.preventDefault();
+        new chorus.alerts.DatasetDelete({pageModel: this.resource, keyPrefix: $(e.currentTarget).data("key-prefix")}).launchModal();
     },
 
     launchDuplicateChorusView: function(e) {

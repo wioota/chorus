@@ -67,7 +67,7 @@
                         {{#if canScheduleImports}}
                           {{#if hasSchedule}}
                               <li><a class="edit_schedule dialog" data-action="edit_schedule" href="#">{{t "actions.edit_schedule"}}</a></li>
-                              <li><a class="delete_schedule alert" data-alert="ImportScheduleDelete" href="#">{{t "actions.delete_schedule"}}</a></li>
+                              <li><a class="delete_schedule alert" href="#">{{t "actions.delete_schedule"}}</a></li>
                           {{else}}
                               <li><a class="create_schedule dialog" data-action="create_schedule" href="#">{{t "actions.create_schedule"}}</a></li>
                           {{/if}}
@@ -100,7 +100,7 @@
             {{/unless}}
 
             {{#unless workspaceArchived}}
-                {{#if isDeleteable}}<li><a href="#" class="alert" data-alert="DatasetDelete" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey functionCallContext=this}}</a></li>{{/if}}
+                {{#if isDeleteable}}<li><a href="#" class="delete_dataset alert" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey functionCallContext=this}}</a></li>{{/if}}
             {{/unless}}
         </ul>
     </div>
