@@ -38,13 +38,13 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     },
 
     render: function() {
-        if (!this.disabled) {
+        if(!this.disabled) {
             this._super("render", arguments);
         }
     },
 
     setColumn: function(column) {
-        if (column) {
+        if(column) {
             this.selectedColumn = column;
             this.tabs.statistics.column = column;
         } else {
@@ -93,7 +93,9 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     },
 
     statisticsFetchFailed: function() {
-        if(this.resource.statistics().statusCode === 403) { this.resource.invalidCredentials = true; }
+        if(this.resource.statistics().statusCode === 403) {
+            this.resource.invalidCredentials = true;
+        }
         this.render();
     },
 
@@ -101,7 +103,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         this.resource = dataset;
         this.tabs.statistics && this.tabs.statistics.teardown();
         this.tabs.activity && this.tabs.activity.teardown();
-        if (dataset) {
+        if(dataset) {
             this.createActivitiesTab(dataset);
             this.createStatisticsTab(dataset);
             this.fetchImports(dataset);
@@ -114,7 +116,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         this.render();
     },
 
-    resetStatistics: function(){
+    resetStatistics: function() {
         this.resource.statistics().fetch();
     },
 
