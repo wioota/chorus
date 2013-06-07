@@ -737,11 +737,17 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     describe("clicking the 'duplicate' link", function() {
                         beforeEach(function() {
+                            chorus.page = this.view;
+                            $("#jasmine_content").append(this.view.$el);
                             this.modalSpy.reset();
                             this.view.$("a.duplicate").click();
                         });
 
-                        it("launches the name chorus view dialog", function() {
+                        it("does not launch a submodal", function() {
+                            expect(this.modalSpy.modals().length).toBe(1);
+                        });
+
+                        it("launches the name chorus view dialog once", function() {
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.VerifyChorusView);
                         });
 

@@ -145,7 +145,8 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
     launchDuplicateChorusView: function(e) {
         e.preventDefault();
-        var dialog = new chorus.dialogs.VerifyChorusView({ model : this.resource.createDuplicateChorusView() });
+        var dialog = new chorus.dialogs.VerifyChorusView();
+        dialog.setModel(this.resource.createDuplicateChorusView());
         dialog.launchModal();
     },
 
