@@ -279,6 +279,19 @@ describe("chorus.views.TypeAheadSearch", function() {
                         expect(this.event.isDefaultPrevented()).toBeTruthy();
                     });
                 });
+
+                context("when search is disabled and an item is selected", function() {
+                    beforeEach(function() {
+                        spyOn(chorus.router, "navigate");
+                        this.view.disableSearch();
+                        this.view.downArrow();
+                        this.view.handleKeyEvent(this.event);
+                    });
+
+                    it("should not navigate away if search is disabled", function() {
+                        expect(chorus.router.navigate).not.toHaveBeenCalled();
+                    });
+                });
             });
         });
 

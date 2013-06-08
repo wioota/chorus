@@ -556,4 +556,15 @@ describe("chorus.views.Header", function() {
             });
         });
     });
+
+    describe('#disableSearch', function() {
+        beforeEach(function() {
+            spyOn(this.view.typeAheadView, "disableSearch");
+            this.view.disableSearch();
+        });
+
+        it("delegates to the type ahead search", function() {
+            expect(this.view.typeAheadView.disableSearch).toHaveBeenCalled();
+        });
+    });
 });

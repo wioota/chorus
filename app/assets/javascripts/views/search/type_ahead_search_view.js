@@ -74,10 +74,16 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
         }
     },
 
+    disableSearch: function() {
+        this.searchDisabled = true;
+    },
+
     enterKey: function() {
-        var selectedLi = this.$("li.selected");
-        if (selectedLi.length) {
-            chorus.router.navigate(selectedLi.find("a").attr("href"));
+        if (!this.searchDisabled) {
+            var selectedLi = this.$("li.selected");
+            if(selectedLi.length) {
+                chorus.router.navigate(selectedLi.find("a").attr("href"));
+            }
         }
     },
 

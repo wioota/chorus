@@ -5,6 +5,11 @@ chorus.pages.WorkFlowShowPage = chorus.pages.Base.include(
     additionalClass: "logged_in_layout",
     pageClass: "full_height",
 
+    events: {
+        "click a": "preventLinkNavigation",
+        "keydown .search input": "preventSearchNavigation"
+    },
+
     makeModel: function(workfileId) {
         this.model = new chorus.models.AlpineWorkfile({id: workfileId});
         this.handleFetchErrorsFor(this.model);
@@ -16,6 +21,7 @@ chorus.pages.WorkFlowShowPage = chorus.pages.Base.include(
         this.listenTo(this.model, "loaded", this.render);
         this.boundIframeListener = _.bind(this.respondToIframe, this);
         window.addEventListener('message', this.boundIframeListener);
+        this.preventNavigation();
     },
 
     teardown: function() {
@@ -34,6 +40,36 @@ chorus.pages.WorkFlowShowPage = chorus.pages.Base.include(
             chorus.requireLogin();
         } else if(event.data.action === 'go_to_workfile') {
             chorus.router.navigate(this.model.showUrl());
+        } else if(event.data.action === 'allow_close') {
+            chorus.router.navigate(this.intendedHref);
         }
+    },
+
+    preventNavigation: function() {
+        this.header.disableSearch();
+    },
+
+    preventLinkNavigation: function(e) {
+        e.preventDefault();
+        this.intendedHref = $(e.currentTarget).attr("href");
+        this.postMessageToIframe({'action': 'intent_to_close'}, '*');
+    },
+
+    preventSearchNavigation: function(e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+
+            var searchHref = this.$("li.selected a").attr("href");
+            this.intendedHref = searchHref || "#/search/" + $(e.currentTarget).val();
+            this.postMessageToIframe({'action': 'intent_to_close'}, '*');
+        }
+    },
+
+    postMessageToIframe: function(message, context) {
+        this.iframe().contentWindow.postMessage(message, context);
+    },
+
+    iframe: function() {
+        return this.$("iframe#alpine")[0];
     }
 });

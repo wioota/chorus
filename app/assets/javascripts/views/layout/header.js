@@ -5,8 +5,8 @@ chorus.views.Header = chorus.views.Base.extend({
         "click .username a": "togglePopupUsername",
         "click a.notifications": "togglePopupNotifications",
         "click .gear a": "togglePopupGear",
-        "submit .search form": "startSearch",
         "click .type_ahead_result a": "clearSearch",
+        "submit .search form": "startSearch",
         "keydown .search input": "searchKeyPressed"
     },
 
@@ -39,6 +39,10 @@ chorus.views.Header = chorus.views.Base.extend({
         }
 
         this.subscribePageEvent("notification:deleted", this.refreshNotifications);
+    },
+
+    disableSearch: function() {
+        this.typeAheadView.disableSearch();
     },
 
     updateNotifications: function() {
