@@ -29,7 +29,7 @@ describe("chorus.pages.WorkFlowShowPage", function() {
         context("when receiving a 'go_to_workfile' message", function() {
             it("routes to the workflow show page", function() {
                 var routerSpy;
-                runs(function(){
+                runs(function() {
                     routerSpy = spyOn(chorus.router, 'navigate');
                     expect(routerSpy).not.toHaveBeenCalled();
                     window.postMessage({action: 'go_to_workfile'}, '*');
@@ -171,9 +171,9 @@ describe("chorus.pages.WorkFlowShowPage", function() {
         });
     });
 
-    context("when the workfile has errors", function () {
-        context("when the errors come from the workspace", function () {
-            it("does the normal thing", function () {
+    context("when the workfile has errors", function() {
+        context("when the errors come from the workspace", function() {
+            it("does the normal thing", function() {
                 spyOn(Backbone.history, "loadUrl");
                 this.page.model.serverErrors = {
                     record: 'CHEESE',
@@ -186,8 +186,8 @@ describe("chorus.pages.WorkFlowShowPage", function() {
             });
         });
 
-        context("when the errors come from the data source", function () {
-            it("handles the workfile errors", function () {
+        context("when the errors come from the data source", function() {
+            it("handles the workfile errors", function() {
                 spyOn(this.page, "launchDataSourceAccountDialog");
                 this.page.model.serverErrors = {
                     record: 'CHEESE',
@@ -200,7 +200,7 @@ describe("chorus.pages.WorkFlowShowPage", function() {
             });
 
             it("routes to the login page when receiving an 'unauthorized' message", function() {
-                runs(function(){
+                runs(function() {
                     spyOn(chorus, 'requireLogin');
                     expect(chorus.requireLogin).not.toHaveBeenCalled();
                     window.postMessage({action: 'unauthorized'}, '*');

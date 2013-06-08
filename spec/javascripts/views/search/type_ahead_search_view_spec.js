@@ -35,14 +35,18 @@ describe("chorus.views.TypeAheadSearch", function() {
         it("should display the correct name and type for hdfs", function() {
             var hdfs = resultForEntityType(this.results, 'hdfs_file');
             var resultIndex = this.results.indexOf(hdfs);
-            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(hdfs.get("highlightedAttributes").name[0]);
             expect(result.find(".name").attr("href")).toBe(hdfs.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.hdfs_file");
         });
 
-        it("should display nothing for hdfs binary file", function(){
-            _.each(this.result.get("typeAhead").results, function(entry) { if(entry.entityType === "hdfs_file") {entry.isBinary = true; } });
+        it("should display nothing for hdfs binary file", function() {
+            _.each(this.result.get("typeAhead").results, function(entry) {
+                if(entry.entityType === "hdfs_file") {
+                    entry.isBinary = true;
+                }
+            });
             this.view.model = this.result;
             this.view.render();
             expect(this.view.$("span.type")).not.toContainTranslation("type_ahead.entity.hdfs_file");
@@ -51,7 +55,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         it("should display the correct name and type for workspace", function() {
             var workspace = resultForEntityType(this.results, 'workspace');
             var resultIndex = this.results.indexOf(workspace);
-            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(workspace.get("highlightedAttributes").name[0]);
             expect(result.find(".name").attr("href")).toBe(workspace.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.workspace");
@@ -60,7 +64,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         it("should display the correct name and type for gpdb_data_source", function() {
             var dataSource = resultForEntityType(this.results, 'gpdb_data_source');
             var resultIndex = this.results.indexOf(dataSource);
-            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(dataSource.get("highlightedAttributes").name[0]);
             expect(result.find(".name").attr("href")).toBe(dataSource.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.gpdb_data_source");
@@ -69,7 +73,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         it("should display the correct name and type for hdfs_data_source", function() {
             var dataSource = resultForEntityType(this.results, 'hdfs_data_source');
             var resultIndex = this.results.indexOf(dataSource);
-            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(dataSource.get("highlightedAttributes").name[0]);
             expect(result.find(".name").attr("href")).toBe(dataSource.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.hdfs_data_source");
@@ -78,7 +82,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         it("should display the correct name and type for user", function() {
             var user = resultForEntityType(this.results, 'user');
             var resultIndex = this.results.indexOf(user);
-            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe((user.get("highlightedAttributes").firstName[0] + ' ' + user.get("lastName")));
             expect(result.find(".name").attr("href")).toBe(user.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.user");
@@ -87,7 +91,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         it("should display the correct name and type for workfile", function() {
             var workfile = resultForEntityType(this.results, 'workfile');
             var resultIndex = this.results.indexOf(workfile);
-            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(workfile.get("highlightedAttributes").fileName[0]);
             expect(result.find(".name").attr("href")).toBe(workfile.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.workfile");
@@ -96,7 +100,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         it("should display the correct name and type for dataset", function() {
             var dataset = resultForEntityType(this.results, 'dataset');
             var resultIndex = this.results.indexOf(dataset);
-            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(dataset.get("highlightedAttributes").objectName[0]);
             expect(result.find(".name").attr("href")).toBe(dataset.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.dataset");
@@ -107,7 +111,7 @@ describe("chorus.views.TypeAheadSearch", function() {
                 return result.get("entityType") === 'dataset' && result.get("entitySubtype") === 'CHORUS_VIEW';
             });
             var resultIndex = this.results.indexOf(chorusView);
-            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(chorusView.get("highlightedAttributes").objectName[0]);
             expect(result.find(".name").attr("href")).toBe(chorusView.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.chorusView");
@@ -116,7 +120,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         it("should display the correct name and type for attachment", function() {
             var attachment = resultForEntityType(this.results, 'attachment');
             var resultIndex = this.results.indexOf(attachment);
-            var result = this.view.$("li.result:eq("+ resultIndex +")");
+            var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(attachment.get("highlightedAttributes").name[0]);
             expect(result.find(".name").attr("href")).toBe(attachment.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.attachment");
@@ -309,7 +313,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         context("when a second search happens with no results", function() {
             beforeEach(function() {
                 this.view.searchFor('test');
-                this.server.completeFetchFor(this.view.model, {typeAhead: { results:[]}});
+                this.server.completeFetchFor(this.view.model, {typeAhead: { results: []}});
             });
 
             it("should be empty", function() {
