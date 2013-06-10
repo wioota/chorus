@@ -32,7 +32,7 @@ chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
     tags: function() {
         if(!this._tags) {
             var tagNames = this.collection.map(function(model) {
-                return model.tags().pluck("name");
+                return _.invoke(model.tags().pluck("name"), "split", ',');
             });
             tagNames = _.uniq(_.flatten(tagNames));
 

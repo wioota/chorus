@@ -159,4 +159,18 @@ describe("chorus.dialogs.EditTags", function() {
             });
         });
     });
+
+    describe("#tags", function() {
+        beforeEach(function() {
+            this.dialog._tags = null;
+            this.collection.at(0).tags().add(new chorus.models.Tag({name: 'foo,bar,baz'}));
+        });
+        
+        it("splits tags containing commas", function() {
+            var tagNames = this.dialog.tags().pluck('name');
+            expect(tagNames).toContain('foo');
+            expect(tagNames).toContain('bar');
+            expect(tagNames).toContain('baz');
+        });
+    });
 });
