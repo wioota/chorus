@@ -244,6 +244,7 @@ describe("chorus.dialogs.FileImport", function() {
                         expect(collection.attributes.workspaceId).toEqual(242);
                         expect(collection.attributes.type).toEqual("SANDBOX_TABLE");
                         expect(collection.attributes.objectType).toEqual("TABLE");
+                        expect(collection.attributes.allImportDestinations).toEqual(true);
                     });
 
                     context("when no dataset is selected", function() {
