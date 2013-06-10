@@ -1,6 +1,7 @@
 describe("chorus.views.DatasetSidebar", function() {
     beforeEach(function() {
         stubClEditor();
+        stubDelay();
         this.modalSpy = stubModals();
         this.view = new chorus.views.DatasetSidebar();
         this.view.render();
