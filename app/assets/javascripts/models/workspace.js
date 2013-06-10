@@ -68,12 +68,12 @@ chorus.models.Workspace = chorus.models.Base.extend({
         });
     },
 
-    sandboxTables: function() {
-        this._sandboxTables = this._sandboxTables || new chorus.collections.WorkspaceDatasetSet([], {
+    sandboxTables: function(options) {
+        this._sandboxTables = this._sandboxTables || new chorus.collections.WorkspaceDatasetSet([], _.extend({
             workspaceId: this.id,
             type: "SANDBOX_TABLE",
             objectType: "TABLE"
-        });
+        }, options));
 
         return this._sandboxTables;
     },

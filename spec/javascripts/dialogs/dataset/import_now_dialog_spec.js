@@ -186,7 +186,9 @@ describe("chorus.dialogs.ImportNow", function() {
                     });
 
                     it("uses the workspace sandbox tables", function() {
-                        expect(this.modalStub.lastModal().collection).toEqual(this.dataset.workspace().sandboxTables());
+                        var collection = this.modalStub.lastModal().collection;
+                        expect(collection).toEqual(this.dataset.workspace().sandboxTables({allImportDestinations: true}));
+                        expect(collection.attributes.allImportDestinations).toBeTruthy();
                     });
 
                     context("after selecting a dataset", function() {

@@ -18,11 +18,17 @@ chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend
     },
 
     urlParams: function(options) {
-        return {
+        var params = {
             namePattern: this.attributes.namePattern,
             databaseId: this.attributes.database && this.attributes.database.id,
             entitySubtype: this.attributes.type
         };
+
+        if (this.attributes.allImportDestinations) {
+            params.allImportDestinations = true;
+        }
+
+        return params;
     },
 
     comparator: function(dataset) {

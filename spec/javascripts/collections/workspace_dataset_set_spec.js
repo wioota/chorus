@@ -38,10 +38,12 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
                 this.collection.attributes.type = "SOURCE_TABLE";
                 this.collection.attributes.objectType = "TABLE";
                 this.collection.attributes.namePattern = "Foo";
+                this.collection.attributes.allImportDestinations = true;
                 this.collection.attributes.database = rspecFixtures.database({id: "123"});
                 expect(this.collection.url({per_page: 10, page: 1})).toContainQueryParams({
                     entity_subtype: "SOURCE_TABLE",
                     namePattern: "Foo",
+                    allImportDestinations: "true",
                     databaseId: "123",
                     per_page: "10",
                     page: "1"
