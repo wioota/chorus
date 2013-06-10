@@ -7,6 +7,7 @@ class Tag < ActiveRecord::Base
 
   validates_uniqueness_of :name, :case_sensitive => false
   validates_length_of :name, :maximum => 100, :minimum => 1
+  validate :no_commas_in_name
 
   after_update :reindex_tagged_objects
   before_destroy do
@@ -32,6 +33,10 @@ class Tag < ActiveRecord::Base
   end
 
   private
+
+  def no_commas_in_name
+    errors.add(:name, :invalid) if name =~ /,/
+  end
 
   def reindex_tagged_objects
     taggings = Tagging.where(tag_id: id)

@@ -38,6 +38,11 @@ describe Tag do
         end
       end
     end
+
+    it "does not allow commas" do
+      tag = Tag.create(:name => "flower, tree")
+      tag.should have_error_on(:name)
+    end
   end
 
   describe "polymorphism" do
