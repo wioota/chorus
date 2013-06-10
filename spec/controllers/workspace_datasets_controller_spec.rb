@@ -67,26 +67,29 @@ describe WorkspaceDatasetsController do
       end
 
       it "filters db objects by type" do
-        options = {:entity_subtype => "SANDBOX_TABLE", :limit => 50}
-        mock(workspace).datasets(user, options) { the_datasets }
+        mock(workspace).datasets(user, hash_including(:entity_subtype => "SANDBOX_TABLE", :limit => 50)) { the_datasets }
         get :index, :workspace_id => workspace.to_param, :entity_subtype => 'SANDBOX_TABLE'
       end
 
       it "asks for datasets only from the selected database" do
-        options = {:database_id => workspace.sandbox.database.to_param, :limit => 50}
-        mock(workspace).datasets(user, options) { the_datasets }
+        mock(workspace).datasets(user, hash_including(:database_id => workspace.sandbox.database.to_param, :limit => 50)) { the_datasets }
         get :index, :workspace_id => workspace.to_param, :database_id => workspace.sandbox.database.to_param
       end
 
       describe "limiting datasets to load" do
         it "passes the limit parameter to workspace.datasets in the options hash and adds the sort option" do
-          mock(workspace).datasets(anything, {:limit => 5}) { the_datasets }
+          mock(workspace).datasets(anything, hash_including(:limit => 5)) { the_datasets }
           get :index, :workspace_id => workspace.to_param, :page => 1, :per_page => 5
         end
         it "sets the limit option to page * per_page" do
-          mock(workspace).datasets(anything, {:limit => 20}) { the_datasets }
+          mock(workspace).datasets(anything, hash_including(:limit => 20)) { the_datasets }
           get :index, :workspace_id => workspace.to_param, :page => 4, :per_page => 5
         end
+      end
+
+      it "respects 'all_import_destinations'" do
+        mock(workspace).datasets(anything, hash_including(:all_import_destinations => true)) { the_datasets }
+        get :index, :workspace_id => workspace.to_param, :all_import_destinations => true
       end
     end
 
@@ -225,7 +228,7 @@ describe WorkspaceDatasetsController do
         end
 
         context 'when the dataset connection blows up' do
-          let(:dataset) {gpdb_table }
+          let(:dataset) { gpdb_table }
 
           before do
             any_instance_of(WorkspaceDatasetsController) do |controller|

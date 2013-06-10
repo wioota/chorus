@@ -3,18 +3,12 @@ class WorkspaceDatasetsController < ApplicationController
 
   def index
     authorize! :show, workspace
-    options = {
-        :entity_subtype => params[:entity_subtype],
-        :database_id => params[:database_id],
-        :limit => params[:page].to_i * params[:per_page].to_i
-    }.reject { |_, v| v.nil? }
 
-    if params[:name_pattern]
-      options.merge!(:name_filter => params[:name_pattern])
-    end
+    params[:limit] = params[:page].to_i * params[:per_page].to_i
+    params[:name_filter] = params[:name_pattern]
+    params[:total_entries] = workspace.dataset_count(current_user, params)
 
-    params.merge!(:total_entries => workspace.dataset_count(current_user, options))
-    datasets = workspace.datasets(current_user, options).includes(Dataset.eager_load_associations).list_order
+    datasets = workspace.datasets(current_user, params).includes(Dataset.eager_load_associations).list_order
 
     present paginate(datasets), :presenter_options => { :workspace => workspace }
   end

@@ -192,6 +192,15 @@ describe Workspace do
             workspace.datasets(user).to_a.should =~ [source_table, chorus_view, chorus_view_from_source]
             workspace.dataset_count(user).should == 3
           end
+
+          context "and 'all import destinations' is passed" do
+            it "shows all sandbox datasets" do
+              stub(GpdbDataset).visible_to(account, schema, anything) {
+                workspace.sandbox.datasets
+              }
+              workspace.datasets(user, {:all_import_destinations => true}).to_a.should =~ workspace.sandbox.datasets
+            end
+          end
         end
 
         context "when connecting fails due to invalid credentials" do

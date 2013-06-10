@@ -111,8 +111,9 @@ class Workspace < ActiveRecord::Base
   end
 
   def filtered_datasets(options = {})
-    entity_subtype = options[:entity_subtype] if options
-    database_id = options[:database_id] if options
+    entity_subtype = options[:entity_subtype]
+    entity_subtype = 'SANDBOX_TABLE' if options[:all_import_destinations]
+    database_id = options[:database_id]
 
     scoped_source_datasets = scope_to_database(source_datasets, database_id)
     scoped_chorus_views = scope_to_database(chorus_views, database_id)
@@ -136,16 +137,12 @@ class Workspace < ActiveRecord::Base
   end
 
   def with_filtered_datasets(user, options = {})
-    entity_subtype = options[:entity_subtype]
-
-    extra_options = {}
-    extra_options.merge! :tables_only => true if entity_subtype == "SANDBOX_TABLE"
+    options.merge!(:tables_only => true) if options[:entity_subtype] == "SANDBOX_TABLE"
 
     account = sandbox && sandbox.database.account_for_user(user)
 
     datasets = filtered_datasets(options)
-    database_id = options[:id]
-    yield datasets, options.merge(extra_options), account, skip_sandbox?(database_id, account, entity_subtype)
+    yield datasets, options, account, skip_sandbox?(options, account)
   end
 
   def dataset_count(user, options = {})
@@ -271,11 +268,13 @@ class Workspace < ActiveRecord::Base
     QC.enqueue_if_not_queued("Schema.reindex_datasets", sandbox.id) if sandbox
   end
 
-  def skip_sandbox?(database_id, account, entity_subtype)
-    !account || account.invalid_credentials? ||
-        (database_id && (database_id != sandbox.database_id)) ||
+  def skip_sandbox?(options, account)
+    options ||= {}
+    entity_subtype = options[:entity_subtype]
+
+    (!account || account.invalid_credentials? ||
         ["CHORUS_VIEW", "SOURCE_TABLE"].include?(entity_subtype) ||
-        !show_sandbox_datasets
+        !show_sandbox_datasets) && !options[:all_import_destinations]
   end
 
   def unschedule_imports
