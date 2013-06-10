@@ -1,5 +1,6 @@
 describe("chorus.views.DatasetSidebar", function() {
     beforeEach(function() {
+        stubClEditor();
         this.modalSpy = stubModals();
         this.view = new chorus.views.DatasetSidebar();
         this.view.render();
@@ -1060,7 +1061,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$(".column_statistics .pair").eq(5).find(".key")).toContainTranslation("dataset.column_statistics.common");
                 expect(this.view.$(".column_statistics .pair").eq(6).find(".key")).toContainTranslation("dataset.column_statistics.pctnull");
                 expect(this.view.$(".column.description").find("h4")).toContainTranslation("dataset.column_statistics.description");
-
             });
 
             it("should display a comment for the column", function() {
