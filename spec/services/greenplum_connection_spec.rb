@@ -872,7 +872,6 @@ describe GreenplumConnection, :greenplum_integration do
           FROM pg_catalog.pg_class
           LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
           WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-          AND pg_catalog.pg_class.relkind in ('r', 'v')
           AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
           AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
           ORDER BY lower(replace(relname,'_', '')) ASC
@@ -920,7 +919,6 @@ describe GreenplumConnection, :greenplum_integration do
             FROM pg_catalog.pg_class
             LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
             WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-            AND pg_catalog.pg_class.relkind in ('r', 'v')
             AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
             AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
             ORDER BY lower(replace(relname,'_', '')) ASC
@@ -945,7 +943,6 @@ describe GreenplumConnection, :greenplum_integration do
               FROM pg_catalog.pg_class
               LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
               WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-              AND pg_catalog.pg_class.relkind in ('r', 'v')
               AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
               AND (pg_catalog.pg_class.relname ILIKE '%candy%')
               AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
@@ -973,7 +970,7 @@ describe GreenplumConnection, :greenplum_integration do
             FROM pg_catalog.pg_class
             LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
             WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-            AND pg_catalog.pg_class.relkind = 'r'
+            AND pg_catalog.pg_class.relstorage = 'h'
             AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
             AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
             ORDER BY lower(replace(relname,'_', '')) ASC
@@ -983,6 +980,10 @@ describe GreenplumConnection, :greenplum_integration do
         let(:subject) { connection.datasets(:tables_only => true) }
 
         it_should_behave_like "a well-behaved database query"
+
+        it "does not include external tables" do
+          connection.datasets(:tables_only => true).select {|dataset| dataset[:name] =~ /external/}.should be_empty
+        end
       end
 
       context "when multiple options are passed" do
@@ -992,7 +993,6 @@ describe GreenplumConnection, :greenplum_integration do
             FROM pg_catalog.pg_class
             LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
             WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-            AND pg_catalog.pg_class.relkind in ('r', 'v')
             AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
             AND (pg_catalog.pg_class.relname ILIKE '%candy%')
             AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
@@ -1014,7 +1014,6 @@ describe GreenplumConnection, :greenplum_integration do
           FROM pg_catalog.pg_class
           LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
           WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-          AND pg_catalog.pg_class.relkind in ('r', 'v')
           AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
           AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
         SQL
@@ -1060,7 +1059,6 @@ describe GreenplumConnection, :greenplum_integration do
             FROM pg_catalog.pg_class
             LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
             WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
-            AND pg_catalog.pg_class.relkind in ('r', 'v')
             AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
             AND (pg_catalog.pg_class.relname ILIKE '%candy%')
             AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
