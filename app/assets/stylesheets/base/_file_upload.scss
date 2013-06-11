@@ -18,7 +18,13 @@
         pading: 0;
         cursor: pointer;
         @include opacity(0);
+        z-index: 1;
      }
+}
+
+.mozfix {
+    -moz-transform: translate(80px);
+    display: inline-block;
 }
 
 .image_upload {
