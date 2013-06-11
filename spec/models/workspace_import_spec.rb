@@ -151,4 +151,67 @@ describe WorkspaceImport do
       end
     end
   end
+
+  describe "associating dataset to workspace" do
+    let(:workspace) { import.workspace }
+    let(:destination) { datasets(:table) }
+
+    before do
+      stub(import).mark_as_success
+      import.update_attributes(:new_table => false)
+    end
+
+    context "if the workspace does not automatically include sandbox datasets" do
+      before do
+        workspace.update_attributes(:show_sandbox_datasets => false)
+      end
+
+      context "for a successful import" do
+        it "should associate the destination dataset with the workspace" do
+          workspace.has_dataset?(destination).should be_false
+          import.destination_dataset = destination
+          import.update_status(:passed)
+          workspace.has_dataset?(destination).should be_true
+        end
+
+        it "should not raise an error if the destination dataset is already associated" do
+          workspace.associate_datasets(user, [destination])
+          workspace.has_dataset?(destination).should be_true
+          import.destination_dataset = destination
+          import.update_status(:passed)
+          workspace.has_dataset?(destination).should be_true
+        end
+      end
+
+      context "for a failed import" do
+        it "should associate an existing table" do
+          workspace.has_dataset?(destination).should be_false
+          import.destination_dataset = destination
+          import.update_status(:failed)
+          workspace.has_dataset?(destination).should be_true
+        end
+
+        it "should not associate a new table (it doesn't exist)" do
+          import.update_attributes(:new_table => true)
+          dont_allow(workspace).associate_datasets.with_any_args
+          import.update_status(:failed)
+        end
+      end
+    end
+
+    context "if the workspace does automatically include sandbox datasets" do
+      before do
+        workspace.update_attributes(:show_sandbox_datasets => true)
+      end
+
+      it "does not raise an error" do
+        workspace.has_dataset?(destination).should be_true
+        import.destination_dataset = destination
+        expect {
+          import.update_status(:passed)
+        }.not_to raise_error
+        workspace.has_dataset?(destination).should be_true
+      end
+    end
+  end
 end

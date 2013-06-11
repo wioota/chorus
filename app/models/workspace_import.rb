@@ -4,6 +4,17 @@ class WorkspaceImport < Import
   validate :workspace_is_not_archived
   alias_attribute :source_dataset, :source
 
+  def update_status(status, message=nil)
+    super(status, message)
+    associate_destination_dataset
+  end
+
+  def associate_destination_dataset
+    if (destination_dataset && !workspace.has_dataset?(destination_dataset))
+      workspace.associate_datasets(user, [destination_dataset])
+    end
+  end
+
   def schema
     workspace.sandbox
   end
