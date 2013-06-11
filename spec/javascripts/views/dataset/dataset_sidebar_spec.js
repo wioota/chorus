@@ -937,6 +937,18 @@ describe("chorus.views.DatasetSidebar", function() {
                         expect(this.view.$("a.new_work_flow")).toExist();
                     });
 
+                    context("when the user's credentials -- for the dataset -- are invalid", function() {
+                        beforeEach(function() {
+                            this.user = chorus.session.user();
+                            var errors = rspecFixtures.invalidCredentialsErrorJson();
+                            this.server.lastFetchFor(this.view.resource.statistics()).failForbidden(errors);
+                        });
+
+                        it("does not display a new workflow link", function () {
+                            expect(this.view.$("a.new_work_flow")).not.toExist();
+                        });
+                    });
+
                     describe("clicking the 'new work flow' link", function () {
                         beforeEach(function () {
                             this.view.$("a.new_work_flow").click();
