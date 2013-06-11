@@ -155,7 +155,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
     launchImportScheduleDeleteAlert: function(e) {
         e && e.preventDefault();
-        new chorus.alerts.ImportScheduleDelete({pageModel: this.resource}).launchModal();
+        new chorus.alerts.ImportScheduleDelete({model: this.resource.importSchedule()}).launchModal();
     },
 
     launchDatasetDeleteAlert: function(e) {

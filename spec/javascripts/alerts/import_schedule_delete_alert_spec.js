@@ -4,7 +4,7 @@ describe("chorus.alerts.ImportScheduleDelete", function() {
         this.schedules = rspecFixtures.datasetImportScheduleSet();
         setLoggedInUser({ id: "1011" });
         this.dataset._datasetImportSchedules = this.schedules;
-        this.alert = new chorus.alerts.ImportScheduleDelete({ pageModel: this.dataset });
+        this.alert = new chorus.alerts.ImportScheduleDelete({ model: this.dataset.importSchedule() });
     });
 
     it("does not have a redirect url", function() {
@@ -21,7 +21,6 @@ describe("chorus.alerts.ImportScheduleDelete", function() {
         beforeEach(function() {
             spyOn(chorus, "toast");
             this.changeSpy = jasmine.createSpy("change");
-            this.alert.pageModel.bind("change", this.changeSpy, this);
             this.alert.model.trigger("destroy", this.alert.model);
         });
 

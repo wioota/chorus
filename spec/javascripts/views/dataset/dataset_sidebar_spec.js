@@ -747,6 +747,10 @@ describe("chorus.views.DatasetSidebar", function() {
                             expect(this.modalSpy.modals().length).toBe(1);
                             expect(this.modalSpy).toHaveModal(chorus.alerts.ImportScheduleDelete);
                         });
+
+                        it("should initialize the alert with the correct schedule", function() {
+                           expect(this.modalSpy.lastModal().model).toBe(this.view.resource.importSchedule());
+                        });
                     });
 
                     it("has a 'edit import schedule' link with the 'eidt_schedule data-action", function() {
