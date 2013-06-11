@@ -514,4 +514,33 @@ describe("chorus.models.Workspace", function() {
             });
         });
     });
+
+    describe("#currentUserCanDuplicateChorusViews", function() {
+        context("the current user is a member", function () {
+            beforeEach(function () {
+                this.model.set({permission: ["duplicate_chorus_view"]});
+            });
+
+            it("returns true", function(){
+                expect(this.model.currentUserCanDuplicateChorusViews()).toBeTruthy();
+            });
+        });
+
+        context("the current user is an owner", function () {
+            beforeEach(function () {
+                this.model.set({permission: ["admin"]});
+            });
+
+            it("returns true", function(){
+                expect(this.model.currentUserCanDuplicateChorusViews()).toBeTruthy();
+            });
+        });
+
+        context("when the current user is not a member", function () {
+            it("returns false", function () {
+                this.model.set({permission: []});
+                expect(this.model.currentUserCanDuplicateChorusViews()).toBeFalsy();
+            });
+        });
+    });
 });

@@ -169,6 +169,10 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return this.isActive() && this._hasPermission(['admin', 'create_work_flow']);
     },
 
+    currentUserCanDuplicateChorusViews: function() {
+        return this._hasPermission(['admin', 'duplicate_chorus_view']);
+    },
+
     workspaceAdmin:function () {
         return this._hasPermission(['admin']);
     },

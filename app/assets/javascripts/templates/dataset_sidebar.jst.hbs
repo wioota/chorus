@@ -45,7 +45,9 @@
                     {{#if isChorusView}}
                         {{#unless noValidCredentials}}
                             <li><a class="create_database_view dialog" href="#">{{t "actions.create_database_view"}}</a></li>
-                            <li><a class="duplicate" href="#">{{t "dataset.chorusview.duplicate"}}</a></li>
+                            {{#if currentUserCanDuplicateChorusViews}}
+                                <li><a class="duplicate" href="#">{{t "dataset.chorusview.duplicate"}}</a></li>
+                            {{/if}}
                         {{/unless}}
                     {{else}}
                         <li><a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a></li>

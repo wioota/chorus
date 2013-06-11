@@ -402,4 +402,20 @@ describe("chorus.presenters.DatasetSidebar", function() {
         });
 
     });
+
+    context("with a chorus view", function() {
+        beforeEach(function() {
+            var resource = rspecFixtures.workspaceDataset.chorusView();
+            this.presenter = new chorus.presenters.DatasetSidebar(resource);
+        });
+        it("prohibits non-members from duplicating chorus views", function() {
+            spyOn(this.presenter.resource.workspace(), 'currentUserCanDuplicateChorusViews').andReturn(false);
+            expect(this.presenter.currentUserCanDuplicateChorusViews()).toBe(false);
+        });
+
+        it("permits members to duplicate chorus views", function() {
+            spyOn(this.presenter.resource.workspace(), 'currentUserCanDuplicateChorusViews').andReturn(true);
+            expect(this.presenter.currentUserCanDuplicateChorusViews()).toBe(true);
+        });
+    });
 });

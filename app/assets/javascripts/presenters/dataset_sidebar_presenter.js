@@ -71,6 +71,10 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
           this.resource.workspace().currentUserCanCreateWorkFlows();
     },
 
+    currentUserCanDuplicateChorusViews: function() {
+      return this.resource.workspace().currentUserCanDuplicateChorusViews();
+    },
+
     importsEnabled: function() {
         return (this.hasWorkspace() && this.resource.workspace().sandbox()) ||
             (this.resource && this.resource.isOracle());
