@@ -173,10 +173,6 @@ $cell-width: 150px;
 
       .column_mapping {
         font-size: 12px;
-        > span, a {
-          display: inline-block;
-          padding-top: 4px;
-        }
 
         a {
           @include ellipsis;
