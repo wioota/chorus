@@ -37,8 +37,9 @@ class Workspace < ActiveRecord::Base
   validate :archiver_is_set_when_archiving
   validates_attachment_size :image, :less_than => ChorusConfig.instance['file_sizes_mb']['workspace_icon'].megabytes, :message => :file_size_exceeded
 
-  before_update :unassociate_source_datasets_in_sandbox, :create_name_change_event
   before_update :reindex_sandbox, :if => :show_sandbox_datasets_changed?
+  before_update :create_name_change_event, :if => :name_changed?
+  before_update :unassociate_source_datasets_in_sandbox, :if =>  "sandbox_id_changed? || show_sandbox_datasets_changed?"
 
   before_save :update_has_added_sandbox
   after_create :add_owner_as_member
@@ -304,11 +305,11 @@ class Workspace < ActiveRecord::Base
     true
   end
   def create_name_change_event
-    create_workspace_name_change_event if name_changed?
+    create_workspace_name_change_event
   end
 
   def unassociate_source_datasets_in_sandbox
-    return true unless sandbox_id_changed? && sandbox
+    return true unless sandbox && show_sandbox_datasets
     source_datasets.each do |source_dataset|
       source_datasets.destroy(source_dataset) if sandbox.datasets.include? source_dataset
     end

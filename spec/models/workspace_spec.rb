@@ -604,16 +604,23 @@ describe Workspace do
           workspace.source_datasets << sandbox_dataset
           workspace.source_datasets << other_dataset
           workspace.sandbox_id = sandbox.id
-          workspace.save!
         end
 
         it "removes duplicate datasets" do
+          workspace.save!
           workspace.source_datasets.should_not include(sandbox_dataset)
           sandbox_dataset.reload.should_not be_nil
         end
 
         it "does not remove datasets from other schemas" do
+          workspace.save!
           workspace.source_datasets.should include(other_dataset)
+        end
+
+        it "does not remove source datasets if show_sandbox_datasets is false" do
+          workspace.show_sandbox_datasets = false
+          workspace.save!
+          workspace.source_datasets.should include(sandbox_dataset)
         end
       end
     end
@@ -704,6 +711,21 @@ describe Workspace do
       dont_allow(QC.default_queue).enqueue_if_not_queued("Schema.reindex_datasets", anything)
       workspace.toggle(:public)
       workspace.save!
+    end
+
+    it "should unassociate datasets in the sandbox" do
+      workspace.show_sandbox_datasets = false
+      workspace.save!
+      dataset = Dataset.where(:schema_id => schema_id).first
+      workspace.associate_datasets(workspace.owner, [dataset])
+      workspace.reload.has_dataset?(dataset).should be_true
+      workspace.show_sandbox_datasets = true
+      workspace.save!
+      workspace.source_datasets.should_not include(dataset)
+      workspace.reload.has_dataset?(dataset).should be_true
+      workspace.show_sandbox_datasets = false
+      workspace.save!
+      workspace.reload.has_dataset?(dataset).should be_false
     end
   end
 
