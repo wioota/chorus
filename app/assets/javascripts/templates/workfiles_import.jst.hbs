@@ -1,16 +1,6 @@
 <form action="/workspaces/{{workspace.id}}/workfiles" enctype="multipart/form-data" method="post">
-    <div class="details">
-        <img src="/images/workfiles/icon/plain.png"/>
-        <div class="file">
-            <div class="fileName"/>
-            <span class="file-wrapper">
-                <button class="choose button_action mozfix">{{t "workfiles.import_select_file"}}</button>
-                <input type="file" class="file-input" name="workfile[versions_attributes][0][contents]"/>
-            </span>
-            <span class="defaultText">{{t "workfile.no_file_selected"}}</span>
-        </div>
-    </div>
-    <div class="comment">
+    {{ uploadWidgetFor "workfile[versions_attributes][0][contents]" }}
+    <div class="comment hidden">
         <input type="text" name="workfile[description]" placeholder='{{t "workfiles.import_placeholder"}}' tabindex="1" maxlength="256"></input>
     </div>
     {{formControlsWithDisabledSubmit "workfiles.button.import"}}

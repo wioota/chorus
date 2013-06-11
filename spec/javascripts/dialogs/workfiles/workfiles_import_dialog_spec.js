@@ -36,7 +36,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         });
 
         it("shows no file selected text", function() {
-            expect(this.dialog.$(".file .defaultText")).not.toHaveClass("hidden");
+            expect(this.dialog.$(".file .empty_selection")).not.toHaveClass("hidden");
         });
     });
 
@@ -104,19 +104,19 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         });
 
         it("displays the chosen filename", function() {
-            expect(this.dialog.$(".fileName").text()).toBe("foo.bar");
+            expect(this.dialog.$(".file_name").text()).toBe("foo.bar");
         });
 
         it("displays the appropriate file icon", function() {
             expect(this.dialog.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("bar", "icon"));
         });
 
-        it("adds the 'chosen' class to the form", function() {
-            expect(this.dialog.$("form")).toHaveClass("chosen");
+        it("makes the comment field visible", function() {
+            expect(this.dialog.$(".comment")).not.toHaveClass("hidden");
         });
 
         it("hides the 'no file selected' text", function() {
-            expect(this.dialog.$(".file .defaultText")).toHaveClass("hidden");
+            expect(this.dialog.$(".file .empty_selection")).toHaveClass("hidden");
         });
 
         describe("validating file size", function(){

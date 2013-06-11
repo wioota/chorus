@@ -39,6 +39,10 @@ chorus.handlebarsHelpers.template = {
 
     spanFor: function(text, attributes) {
         return new Handlebars.SafeString($("<span></span>").text(text).attr(attributes || {}).outerHtml());
+    },
+
+    uploadWidgetFor: function(propertyName) {
+        return Handlebars.helpers.renderTemplate("components/upload_widget", { propertyName: propertyName });
     }
 };
 

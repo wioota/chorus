@@ -88,15 +88,16 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
 
         function fileChosen(e, data) {
             if (data.files.length > 0) {
-                self.$(".defaultText").addClass("hidden");
+                self.$(".empty_selection").addClass("hidden");
                 self.$("button.submit").prop("disabled", false);
                 self.uploadObj = data;
                 var filename = data.files[0].name;
                 self.uploadExtension = _.last(filename.split('.'));
                 var iconSrc = chorus.urlHelpers.fileIconUrl(self.uploadExtension, "icon");
                 self.$('img').attr('src', iconSrc);
-                self.$('.fileName').text(filename).attr('title', filename);
-                self.$("form").addClass("chosen");
+                self.$('img').removeClass('hidden');
+                self.$('.file_name').text(filename).attr('title', filename);
+                self.$(".comment").removeClass("hidden");
 
                 validateFile(data.files);
             }
