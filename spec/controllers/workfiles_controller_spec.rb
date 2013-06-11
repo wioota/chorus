@@ -356,13 +356,22 @@ describe WorkfilesController do
       end
 
       context "when the filename is not provided" do
-        let(:new_name) { nil }
+        let(:options) { {:id => public_workfile.to_param} }
 
         it "leaves the filename alone" do
           old_filename = public_workfile.file_name
           put :update, options
           response.should be_success
           public_workfile.reload.file_name.should == old_filename
+        end
+      end
+
+      context "when the filename is already taken" do
+        let(:new_name) { workfiles(:tableau).file_name }
+
+        it "responds with a validation error" do
+          put :update, options
+          response.code.should == '422'
         end
       end
     end

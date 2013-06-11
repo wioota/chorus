@@ -33,12 +33,13 @@ class WorkfilesController < ApplicationController
     workfile = Workfile.find(params[:id])
     authorize! :can_edit_sub_objects, workfile.workspace
     execution_schema = params[:workfile][:execution_schema]
+
     if execution_schema && execution_schema[:id]
       schema = GpdbSchema.find(execution_schema[:id])
       params[:workfile][:execution_schema] = schema
     end
 
-    workfile.update_attributes(params[:workfile])
+    workfile.update_attributes!(params[:workfile])
     present workfile, :presenter_options => {:include_execution_schema => true}
   end
 

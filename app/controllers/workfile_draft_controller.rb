@@ -23,7 +23,7 @@ class WorkfileDraftController < ApplicationController
     authorize! :can_edit_sub_objects, workfile.workspace
 
     draft = WorkfileDraft.find_by_owner_id_and_workfile_id!(current_user.id, params[:workfile_id])
-    draft.update_attributes(params[:workfile_draft])
+    draft.update_attributes!(params[:workfile_draft])
     present draft
   end
 
