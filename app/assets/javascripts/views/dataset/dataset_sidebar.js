@@ -181,6 +181,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         var dialogOptions = {
             entityId: this.resource.id,
             entityType: "dataset",
+            pageModel: this.resource,
             displayEntityType: this.resource.metaType()
         };
 

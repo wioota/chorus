@@ -805,6 +805,12 @@ describe("chorus.views.DatasetSidebar", function() {
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
                     expect(this.modalSpy.modals().length).toBe(1);
                 });
+
+                it("passes the right options to the dialog", function() {
+                    var modal = _.first(this.modalSpy.modals());
+                    expect(modal.pageModel).toBe(this.dataset);
+                });
+
             });
 
             context("when the dataset is a chorus view", function() {
