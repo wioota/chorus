@@ -126,6 +126,18 @@ describe("chorus.views.WorkfileSidebar", function() {
             });
         });
 
+        context("when it is an Alpine workile", function() {
+            beforeEach(function() {
+                var model = rspecFixtures.workfile.alpine();
+                this.view = chorus.views.WorkfileSidebar.buildFor({model: model});
+                this.view.render();
+            });
+
+            it("hides the copy link", function() {
+                expect(this.view.$('.actions a.dialog[data-dialog=CopyWorkfile]')).not.toExist();
+            });
+        });
+
         context("when it is a tableau workbook", function () {
             beforeEach(function () {
                 this.view = new chorus.views.WorkfileSidebar({ model: this.workfile, showVersions: true });
