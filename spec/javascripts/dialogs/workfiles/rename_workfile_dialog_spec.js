@@ -43,11 +43,17 @@ describe("chorus.dialogs.RenameWorkfile", function() {
 
     context("with invalid form values", function() {
         beforeEach(function() {
+            spyOn(this.dialog, "create");
             this.dialog.$('input').val("").keyup();
         });
 
-        it("does not let you submit the form", function() {
+        it("does not let you submit the form when clicking the button", function() {
             expect(this.dialog.$("button.submit")).toBeDisabled();
+        });
+
+        it("does not let you submit the form when hitting enter", function() {
+            this.dialog.$("form").submit();
+            expect(this.dialog.create).not.toHaveBeenCalled();
         });
     });
 
