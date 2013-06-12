@@ -188,6 +188,15 @@ describe Events::Base do
         event.destroy
       }.to change(event.datasets_notes, :count).to(0)
     end
+
+    it "deletes its notes_workflow_results when it is destroyed" do
+      event = Events::SourceTableCreated.last
+      event.notes_work_flow_results.create
+
+      expect {
+        event.destroy
+      }.to change(event.notes_work_flow_results, :count).to(0)
+    end
   end
 
   describe "with deleted" do

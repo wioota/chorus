@@ -41,7 +41,17 @@ module Events
                       else
                         model.class
                     end
-      Events.const_get("NoteOn#{model_class}").new(params, :as => :create)
+      note = Events.const_get("NoteOn#{model_class}").new(params, :as => :create)
+
+      build_work_flow_results(note, params)
+
+      note
+    end
+
+    def self.build_work_flow_results(note, params)
+      if params[:result_id]
+        note.notes_work_flow_results.build(:result_id => params[:result_id])
+      end
     end
 
     def self.insights

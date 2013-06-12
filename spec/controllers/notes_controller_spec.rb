@@ -88,6 +88,26 @@ describe NotesController do
         end
       end
     end
+
+    context "when adding a note with a work flow result attachment" do
+      let(:attributes) do
+        {
+            :entity_type => entity_type,
+            :entity_id => entity_id,
+            :body => "I'm a note",
+            :result_id => 123
+        }
+      end
+
+      it "should create a notes_work_flow_result record" do
+        expect do
+          post :create, attributes
+        end.to change(NotesWorkFlowResult, :count).by(1)
+
+        NotesWorkFlowResult.last.result_id.should == 123
+        response.should be_success
+      end
+    end
   end
 
   describe "#update" do

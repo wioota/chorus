@@ -38,6 +38,7 @@ module Events
     has_many :attachments, :class_name => 'Attachment', :foreign_key => 'note_id', :dependent => :destroy
     has_many :notes_workfiles, :foreign_key => 'note_id', :dependent => :destroy
     has_many :workfiles, :through => :notes_workfiles
+    has_many :notes_work_flow_results, :foreign_key => 'note_id', :dependent => :destroy
     has_many :datasets_notes, :foreign_key => 'note_id', :dependent => :destroy
     has_many :datasets, :through => :datasets_notes
     belongs_to :promoted_by, :class_name => 'User'
