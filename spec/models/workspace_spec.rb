@@ -716,7 +716,7 @@ describe Workspace do
     it "should unassociate datasets in the sandbox" do
       workspace.show_sandbox_datasets = false
       workspace.save!
-      dataset = Dataset.where(:schema_id => schema_id).first
+      dataset = Dataset.where(:schema_id => schema_id, :type => 'GpdbTable').first
       workspace.associate_datasets(workspace.owner, [dataset])
       workspace.reload.has_dataset?(dataset).should be_true
       workspace.show_sandbox_datasets = true

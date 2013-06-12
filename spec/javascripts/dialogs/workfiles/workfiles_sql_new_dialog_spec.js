@@ -43,7 +43,7 @@ describe("chorus.dialogs.WorkfilesSqlNew", function() {
             });
 
             it("does not let you submit the form", function() {
-                expect(this.dialog.model.get("fileName")).toBe("");
+                expect(this.dialog.$('form input[name=fileName]')).toHaveText("");
                 expect(this.dialog.$("form button.submit")).toBeDisabled();
             });
         });
