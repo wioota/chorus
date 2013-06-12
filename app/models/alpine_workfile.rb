@@ -28,6 +28,8 @@ class AlpineWorkfile < Workfile
   validates_presence_of :database_id
   validates_with AlpineWorkfileValidator
 
+  after_destroy :notify_alpine_of_deletion
+
   def entity_subtype
     'alpine'
   end
@@ -42,5 +44,11 @@ class AlpineWorkfile < Workfile
 
   def datasets
     @datasets ||= Dataset.where(:id => dataset_ids)
+  end
+
+private
+
+  def notify_alpine_of_deletion
+    Alpine::API.delete_work_flow(self)
   end
 end

@@ -50,6 +50,12 @@ describe AlpineWorkfile do
     model.entity_subtype.should == 'alpine'
   end
 
+  describe 'destruction' do
+    it 'notifies Alpine' do
+      mock(Alpine::API).delete_work_flow(model)
+      model.destroy
+    end
+  end
 
   describe "new" do
     context "when passed datasets" do
