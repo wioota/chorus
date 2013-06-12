@@ -94,6 +94,10 @@ describe("chorus.dialogs.RenameWorkfile", function() {
             it("stops the loading spinner", function() {
                 expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
             });
+
+            it("retains the original file name", function() {
+               expect(this.dialog.model.name()).toBe("originalName");
+            });
         });
     });
 });
