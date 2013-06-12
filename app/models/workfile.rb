@@ -115,15 +115,24 @@ class Workfile < ActiveRecord::Base
   def attempt_data_source_connection
   end
 
-  def copy(user, workspace)
-    workfile = self.class.new
-    workfile.file_name = file_name
-    workfile.description = description
-    workfile.workspace = workspace
-    workfile.owner = user
-    workfile.additional_data = additional_data
+  def copy(user, workspace, new_file_name = nil)
+    new_workfile = self.class.new
+    new_workfile.file_name = new_file_name.nil? ? file_name : new_file_name
+    new_workfile.description = description
+    new_workfile.workspace = workspace
+    new_workfile.owner = user
+    new_workfile.additional_data = additional_data
 
-    workfile
+    new_workfile
+  end
+
+  def copy!(user, workspace, new_file_name=nil)
+    new_workfile = self.copy(user, workspace, new_file_name)
+
+    new_workfile.resolve_name_conflicts = new_file_name.nil?
+    new_workfile.build_new_version(user, self.latest_workfile_version.contents, "") if new_workfile.respond_to?(:build_new_version)
+    new_workfile.save!
+    new_workfile
   end
 
   private

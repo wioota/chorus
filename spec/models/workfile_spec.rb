@@ -135,16 +135,40 @@ describe Workfile do
 
     it "copies the associated data" do
       new_workfile = workfile.copy(user, workspace)
-      new_workfile.file_name = workfile.file_name
-      new_workfile.description = workfile.description
-      new_workfile.workspace = workspace
-      new_workfile.owner = user
+      new_workfile.file_name.should == workfile.file_name
+      new_workfile.description.should == workfile.description
+      new_workfile.workspace.should == workspace
+      new_workfile.owner.should == user
     end
 
     it "copies any additional_data" do
       workfile.additional_data["something"] = "here"
       new_workfile = workfile.copy(user, workspace)
       new_workfile.additional_data["something"].should == "here"
+    end
+
+    it "should copy file to new name if new name is provided" do
+      test_name = "whatever.txt"
+      file = workfile.copy(user,workspace,test_name)
+      file.file_name.should == test_name
+    end
+  end
+
+  describe "copy!" do
+    let(:workfile) { workfiles(:public) }
+    let(:workspace) { workspaces(:private) }
+    let(:user) { users(:admin) }
+
+    it "copies stuff & saves the new workfile" do
+      mock.proxy(workfile).copy(user, workspace, 'fooo')
+      new_workfile = workfile.copy!(user, workspace, 'fooo')
+      new_workfile.should be_persisted
+    end
+
+    it "can throw errors" do
+      expect {
+        workfile.copy!(user, workspace, "////")
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 
