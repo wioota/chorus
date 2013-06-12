@@ -67,10 +67,12 @@ resource "Workfiles" do
 
     parameter :workfile_id, "Id of a workfile to copy"
     parameter :workspace_id, "Id of workspace to copy to"
+    parameter :file_name, "The name of the new copy"
 
-    required_parameters :workfile_id, :workspace_id
+    required_parameters :workfile_id
 
     let(:workspace_id) { workspace.to_param }
+    let(:file_name) { "copy.sql" }
 
     example_request "Copy a workfile to a workspace" do
       status.should == 201
