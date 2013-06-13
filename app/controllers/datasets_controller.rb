@@ -9,7 +9,7 @@ class DatasetsController < ApplicationController
     options[:name_filter] = params[:filter] if params[:filter]
     options[:tables_only] = params[:tables_only] if params[:tables_only]
 
-    refresh_options = options.merge(:limit => params[:page].to_i * params[:per_page].to_i)
+    refresh_options = options.merge(:limit => params[:page].to_i * params[:per_page].to_i, :skip_dataset_solr_index => true)
     datasets = schema.refresh_datasets(account, refresh_options).includes(Dataset.eager_load_associations)
     params.merge!(:total_entries => schema.dataset_count(account, options))
 

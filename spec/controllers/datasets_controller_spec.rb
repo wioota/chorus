@@ -13,7 +13,7 @@ describe DatasetsController do
   context "#index" do
     before do
       stub(Schema).find(schema.id.to_s) { schema }
-      mock(schema).refresh_datasets(anything, options) do
+      mock(schema).refresh_datasets(anything, hash_including(options)) do
         fake_relation([dataset1, dataset2, dataset3])
       end
       stub(schema).dataset_count { 122 }
