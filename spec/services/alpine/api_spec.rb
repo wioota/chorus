@@ -24,7 +24,7 @@ describe Alpine::API do
 
       mock(Net::HTTP::Delete).new(anything) do |string|
         uri = URI("http://localhost#{string}")
-        uri.path.should == '/main/chorus.do'
+        uri.path.should == '/alpinedatalabs/main/chorus.do'
 
         uri.query.should == {
           method: 'deleteWorkFlow',

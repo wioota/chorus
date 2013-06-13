@@ -7,14 +7,14 @@ module Alpine
       request = Net::HTTP::Delete.new(delete_path(work_flow))
 
       Net::HTTP.new(base_url).request(request)
-    rescue Exception => e
+    rescue SocketError => e
       pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
     end
 
-  private
+    private
 
     def self.delete_path(work_flow)
-      "/main/chorus.do?method=deleteWorkFlow&session_id=#{session_id}&workfile_id=#{work_flow.id}"
+      "/alpinedatalabs/main/chorus.do?method=deleteWorkFlow&session_id=#{session_id}&workfile_id=#{work_flow.id}"
     end
 
     def self.base_url
