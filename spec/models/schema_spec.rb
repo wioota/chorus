@@ -168,7 +168,7 @@ describe Schema do
       let(:found_datasets) { [{:type => "r", :name => dataset.name, :master_table => 't'}] }
 
       it "clears the stale flag" do
-        schema.refresh_datasets(account)
+        schema.refresh_datasets(account, :mark_stale => true)
         dataset.reload.should_not be_stale
       end
 

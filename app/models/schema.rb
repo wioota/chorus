@@ -64,6 +64,17 @@ class Schema < ActiveRecord::Base
     schema.refresh_datasets(schema.data_source.owner_account, {:force_index => true})
   end
 
+  def find_or_initialize_dataset(name, type)
+    dataset = datasets.views_tables.find_by_name(name)
+    unless dataset
+      klass = class_for_type type
+      dataset = klass.new(:name => name)
+      dataset.schema = self
+    end
+
+    dataset
+  end
+
   def refresh_datasets(account, options = {})
     ##Please do not instantiate all datasets in your schema: you will run out of memory
     ##This means no datasets.detect, datasets.select, datasets.reject, ...
@@ -74,12 +85,7 @@ class Schema < ActiveRecord::Base
     datasets_in_data_source = connect_with(account).datasets(options)
 
     datasets_in_data_source.each do |attrs|
-      dataset = datasets.views_tables.find_by_name(attrs[:name])
-      klass = class_for_type attrs.delete(:type)
-      unless dataset
-        dataset = klass.new(:name => attrs[:name])
-        dataset.schema = self
-      end
+      dataset = find_or_initialize_dataset(attrs[:name], attrs.delete(:type))
       attrs.merge!(:stale_at => nil) if dataset.stale?
       dataset.assign_attributes(attrs, :without_protection => true)
       begin
@@ -101,7 +107,7 @@ class Schema < ActiveRecord::Base
       #You might want to use a datasets.reject here.  Don't.
       #This will instantiate all the datasets at once and may use more memory than your JVM has available
       datasets.not_stale.find_each do |dataset|
-        unless dataset.is_a? ChorusView || found_datasets.include?(dataset.id)
+        unless dataset.is_a?(ChorusView) || found_datasets.include?(dataset.id)
           dataset.mark_stale!
         end
       end
