@@ -24,7 +24,7 @@ describe("chorus.views.DataSourceConfigurationDetails", function() {
 
         it("should display the properly translation for the host field", function() {
             this.view.render();
-            expect(this.view.$('.host_label').text()).toMatchTranslation("data_sources.sidebar.hadoop_host");
+            expect(this.view.$('.host_label').text()).toContainTranslation("data_sources.sidebar.hadoop_host");
         });
 
     });
@@ -37,7 +37,7 @@ describe("chorus.views.DataSourceConfigurationDetails", function() {
 
         it("should display the properly translation for the host field", function() {
             this.view.render();
-            expect(this.view.$('.host_label').text()).toMatchTranslation("data_sources.sidebar.host");
+            expect(this.view.$('.host_label').text()).toContainTranslation("data_sources.sidebar.host");
         });
     });
 });
