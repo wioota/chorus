@@ -4,7 +4,7 @@ class HdfsDataSource < ActiveRecord::Base
   include SoftDelete
   include CommonDataSourceBehavior
 
-  attr_accessible :name, :host, :port, :description, :username, :group_list
+  attr_accessible :name, :host, :port, :description, :username, :group_list, :job_tracker_host, :job_tracker_port
   belongs_to :owner, :class_name => 'User'
   has_many :activities, :as => :entity
   has_many :events, :through => :activities

@@ -246,6 +246,8 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                 this.dialog.$("input[name=host]").val("testhost3");
                 this.dialog.$("input[name=username]").val("username");
                 this.dialog.$("input[name=groupList]").val("groupList");
+                this.dialog.$("input[name=jobTrackerHost]").val("whatever");
+                this.dialog.$("input[name=jobTrackerPort]").val("3333");
                 this.dialog.$("button[type=submit]").submit();
             });
 
@@ -256,6 +258,8 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                 expect(this.dialog.model.get("username")).toBe("username");
                 expect(this.dialog.model.get("groupList")).toBe("groupList");
                 expect(this.dialog.model.has("dbName")).toBeFalsy();
+                expect(this.dialog.model.get("jobTrackerHost")).toBe("whatever");
+                expect(this.dialog.model.get("jobTrackerPort")).toBe("3333");
             });
         });
 

@@ -31,4 +31,14 @@
     <dt>{{t "data_sources.permissions.owner"}}</dt>
     <dd title="{{ownerName}}">{{ownerName}}</dd>
     {{/if}}
+    {{#if jobTrackerHost}}
+        <dt>{{t "data_sources.dialog.hadoop_job_tracker_host"}}</dt>
+        <dd class="job_tracker_host" title="{{jobTrackerHost}}">{{jobTrackerHost}}</dd>
+        <br />
+    {{/if}}
+    {{#if jobTrackerPort}}
+        <dt>{{t "data_sources.sidebar.port"}}</dt>
+        <dd class="job_tracker_port" title="{{jobTrackerPort}}">{{jobTrackerPort}}</dd>
+        <br />
+    {{/if}}
 </dl>

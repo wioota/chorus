@@ -10,7 +10,9 @@ describe Hdfs::DataSourceRegistrar do
       :port => 12345,
       :host => "server.emc.com",
       :username => "hadoop",
-      :group_list => "staff,team1"
+      :group_list => "staff,team1",
+      :job_tracker_host => "foobar",
+      :job_tracker_port => 3333
     }
   end
   let(:is_accessible) { true }
@@ -57,6 +59,8 @@ describe Hdfs::DataSourceRegistrar do
         data_source.description.should == data_source_attributes[:description]
         data_source.username.should == data_source_attributes[:username]
         data_source.group_list.should == data_source_attributes[:group_list]
+        data_source.job_tracker_host.should == data_source_attributes[:job_tracker_host]
+        data_source.job_tracker_port.should == data_source_attributes[:job_tracker_port]
       end
 
       it "makes a HdfsDataSourceCreated event" do

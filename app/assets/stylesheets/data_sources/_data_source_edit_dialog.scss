@@ -14,7 +14,8 @@
         display: inline-block;
     }
 
-    label[name=host], input[name=host] {
+    label[name=host], input[name=host],
+    label[name=jobTrackerHost], input[name=jobTrackerHost] {
         width: $host-width;
         display: inline-block;
     }
@@ -33,7 +34,7 @@
         margin-left: $input-spacing;
     }
 
-    .port {
+    .port, .job_tracker_port {
         width: $default-dialog-width - $host-width - 40px;
         margin-left: 4px;
         display: inline-block;

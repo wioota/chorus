@@ -7,6 +7,8 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
         "submit form": "save"
     },
 
+    formFields: ["name", "host", "port", "size", "dbName", "username", "groupList", "streamUrl", "password", "jobTrackerHost", "jobTrackerPort"],
+
     makeModel: function() {
         this.sourceModel = this.model;
         this.model = this.model.clone();
@@ -32,7 +34,7 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
             description: this.$("textarea[name=description]").val().trim()
         };
 
-        _.each(["name", "host", "port", "size", "dbName", "username", "groupList", "streamUrl", "password"], function(name) {
+        _.each(this.formFields, function(name) {
             var input = this.$("input[name=" + name + "]");
             if (input.length) {
                 attrs[name] = input.val().trim();
