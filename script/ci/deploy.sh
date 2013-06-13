@@ -2,7 +2,7 @@
 
 install_processes=`ps aux | grep chorusrails-installer | wc -l`
 
-if [[ $install_processes -gt 1 ]]; then
+if [[ $install_processes -le 1 ]]; then
     server=$1
     if [ -z $server ]; then
         server=stage
