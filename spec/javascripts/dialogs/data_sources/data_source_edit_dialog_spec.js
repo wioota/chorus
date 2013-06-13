@@ -91,7 +91,12 @@ describe("chorus.dialogs.DataSourceEdit", function() {
 
         describe('when editing a hdfs data source', function() {
             beforeEach(function() {
-                this.dataSource = rspecFixtures.hdfsDataSource({username: 'user', groupList: 'hadoop'});
+                this.dataSource = rspecFixtures.hdfsDataSource({
+                    username: 'user',
+                    groupList: 'hadoop',
+                    jobTrackerHost: 'job-tracker-host.emc.com',
+                    jobTrackerPort: "5000"
+                });
                 this.dialog = new chorus.dialogs.DataSourceEdit({ model: this.dataSource });
                 this.dialog.render();
             });
@@ -124,6 +129,16 @@ describe("chorus.dialogs.DataSourceEdit", function() {
             it("has a pre-populated and enabled 'group list' field", function() {
                 expect(this.dialog.$("input[name=groupList]").val()).toBe("hadoop");
                 expect(this.dialog.$("input[name=groupList]").prop("disabled")).toBeFalsy();
+            });
+
+            it("has a pre-populated and enabled 'job tracker host' field", function() {
+                expect(this.dialog.$("input[name=jobTrackerHost]").val()).toBe(this.dataSource.get('jobTrackerHost'));
+                expect(this.dialog.$("input[name=jobTrackerHost]").prop("disabled")).toBeFalsy();
+            });
+
+            it("has a pre-populated and enabled 'job tracker port' field", function() {
+                expect(this.dialog.$("input[name=jobTrackerPort]").val()).toBe(this.dataSource.get('jobTrackerPort'));
+                expect(this.dialog.$("input[name=jobTrackerPort]").prop("disabled")).toBeFalsy();
             });
         });
 

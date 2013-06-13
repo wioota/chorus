@@ -54,6 +54,8 @@ FactoryGirl.define do
     sequence(:name) { |n| "hdfs_data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:port) { |n| 5000+n }
+    sequence(:job_tracker_host) { |n| "job-tracker-host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
+    sequence(:job_tracker_port) { |n| 10000+n }
     owner
   end
 

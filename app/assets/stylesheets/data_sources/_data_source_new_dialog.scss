@@ -41,11 +41,13 @@
         }
 
         label[name=host], input[name=host],
-        label[name=database], input[name=database] {
+        label[name=database], input[name=database],
+        label[name=jobTrackerHost], input[name=jobTrackerHost] {
             width: $hostname-width;
         }
 
-        label[name=port], input[name=port] {
+        label[name=port], input[name=port],
+        label[name=jobTrackerPort], input[name=jobTrackerPort] {
             width: $fieldset-width - $hostname_width - $dialog-padding - 2px;
             margin-left: $input-spacing;
         }
