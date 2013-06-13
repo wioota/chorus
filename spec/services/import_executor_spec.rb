@@ -29,6 +29,10 @@ describe ImportExecutor do
   end
   let(:import_failure_message) { "" }
 
+  before do
+    stub(Alpine::API).delete_work_flow.with_any_args
+  end
+
   describe ".run" do
     context "when the import has already been run" do
       before do

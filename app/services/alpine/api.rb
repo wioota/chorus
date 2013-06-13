@@ -4,6 +4,8 @@ require 'uri'
 module Alpine
   module API
     def self.delete_work_flow(work_flow)
+      return unless ChorusConfig.work_flow_configured?
+
       request = Net::HTTP::Delete.new(delete_path(work_flow))
 
       Net::HTTP.new(base_url).request(request)

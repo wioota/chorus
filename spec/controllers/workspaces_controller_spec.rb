@@ -7,6 +7,7 @@ describe WorkspacesController do
   let(:other_user) { users(:the_collaborator) }
   before do
     log_in owner
+    stub(Alpine::API).delete_work_flow.with_any_args
   end
 
   describe "#index" do

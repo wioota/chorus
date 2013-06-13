@@ -18,6 +18,7 @@ resource "Workspaces" do
   before do
     log_in user
     stub(GpdbDataset).refresh.with_any_args { |account, schema, options| schema.datasets }
+    stub(Alpine::API).delete_work_flow.with_any_args
   end
 
   get "/workspaces" do

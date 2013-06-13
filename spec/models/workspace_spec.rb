@@ -2,6 +2,10 @@ require 'spec_helper'
 require 'timecop'
 
 describe Workspace do
+  before do
+    stub(Alpine::API).delete_work_flow.with_any_args
+  end
+
   it_behaves_like "a notable model" do
     let!(:note) do
       Events::NoteOnWorkspace.create!({

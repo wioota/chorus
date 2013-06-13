@@ -9,11 +9,12 @@ describe Alpine::API do
     before do
       user.password = 'anything'
       user.save
+      stub(ChorusConfig).work_flow_configured? { true }
 
       Session.create!(:username => user.username, :password => 'anything')
-      mock(User).current_user { user }
+      stub(User).current_user { user }
       any_instance_of(Session) do |sesh|
-        mock(sesh).session_id { mock_session_id }
+        stub(sesh).session_id { mock_session_id }
       end
     end
 
@@ -43,17 +44,31 @@ describe Alpine::API do
       Alpine::API.delete_work_flow(work_flow)
     end
 
-    context "when Alpine is unavailable" do
+    context 'when Alpine is unavailable' do
       before do
         any_instance_of(Net::HTTP) do |http|
           mock(http).request(anything) { raise SocketError.new('initialize: name or service not known') }
         end
       end
 
-      it "does not explode" do
+      it 'does not explode' do
         expect {
           Alpine::API.delete_work_flow(work_flow)
         }.to_not raise_error
+      end
+    end
+
+    context 'when work_flow is disabled' do
+      before do
+        stub(ChorusConfig).work_flow_configured? { false }
+      end
+
+      it 'does not make an http request' do
+        any_instance_of(Net::HTTP) do |http|
+          do_not_allow(http).request.with_any_args
+        end
+
+        Alpine::API.delete_work_flow(work_flow)
       end
     end
   end

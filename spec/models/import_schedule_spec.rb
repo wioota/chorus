@@ -17,6 +17,7 @@ describe ImportSchedule, :greenplum_integration do
     workspace.update_attribute :sandbox_id, schema.id
     import_schedule.user = user
     import_schedule.workspace = workspace
+    stub(Alpine::API).delete_work_flow.with_any_args
   end
 
   describe "validations" do
