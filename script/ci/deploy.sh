@@ -1,14 +1,20 @@
 #!/bin/bash
 
-server=$1
-if [ -z $server ]; then
-    server=stage
-fi
+install_processes=`ps aux | grep chorusrails-installer | wc -l`
 
-for file in greenplum-chorus-*.sh
-do
-  echo "Deploying $file"
-  chmod +x $file
-  rake deploy["$server","$file"]
-  exit $?
-done
+if [[ $install_processes -gt 1 ]]; then
+    server=$1
+    if [ -z $server ]; then
+        server=stage
+    fi
+
+    for file in greenplum-chorus-*.sh
+    do
+      echo "Deploying $file"
+      chmod +x $file
+      rake deploy["$server","$file"]
+      exit $?
+    done
+else
+    echo "The last install did not complete; bad things happen when two installs run at once."
+fi
