@@ -38,6 +38,21 @@ describe("chorus.models.HdfsDataSource", function() {
         expect(this.model.errors.name).toMatchTranslation("validation.required_pattern", {fieldName: "name"});
     });
 
+    it("requires a job tracker port, if a job tracker host is present", function() {
+        this.model.performValidation(this.attrs);
+        expect(this.model.errors.jobTrackerHost).toBeFalsy();
+        expect(this.model.errors.jobTrackerPort).toBeFalsy();
+
+        this.attrs.jobTrackerHost = "test-job-tracker.com";
+        expect(this.model.performValidation(this.attrs)).toBeFalsy();
+        expect(this.model.errors.jobTrackerPort).toBeTruthy();
+        this.attrs.jobTrackerPort = "foobar";
+        expect(this.model.performValidation(this.attrs)).toBeFalsy();
+        expect(this.model.errors.jobTrackerPort).toMatchTranslation("validation.required_pattern", {fieldName: "jobTrackerPort"});
+        this.attrs.jobTrackerPort = "4321";
+        expect(this.model.performValidation(this.attrs)).toBeTruthy();
+    });
+
     describe("#sharedAccountDetails", function() {
         it('returns the account name of the user who owns the data source and shared it', function() {
             var sharedAccountDetails = this.model.get("username") + ", " + this.model.get("groupList");

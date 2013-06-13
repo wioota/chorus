@@ -51,8 +51,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
 
         this.$("button.submit").startLoading("data_sources.new_dialog.saving");
         var values = this.fieldValues();
-        this.model.set(values);
-        this.model.save();
+        this.model.save(values);
     },
 
     dataSourceClass: function() {

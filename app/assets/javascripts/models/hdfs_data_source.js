@@ -25,6 +25,11 @@ chorus.models.HdfsDataSource = chorus.models.AbstractDataSource.extend({
         this.require("username", newAttrs);
         this.require("groupList", newAttrs);
         this.requirePattern("port", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
+        if (newAttrs.jobTrackerHost || newAttrs.jobTrackerPort) {
+            this.require("jobTrackerHost", newAttrs);
+            this.require("jobTrackerPort", newAttrs);
+            this.requirePattern("jobTrackerPort", chorus.ValidationRegexes.OnlyDigits(), newAttrs);
+        }
     },
 
     sharedAccountDetails: function() {
