@@ -17,4 +17,5 @@ if [[ $install_processes -le 1 ]]; then
     done
 else
     echo "The last install did not complete; bad things happen when two installs run at once."
+    exit 1
 fi
