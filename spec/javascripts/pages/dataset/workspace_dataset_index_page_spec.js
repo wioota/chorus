@@ -53,6 +53,17 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             this.page.collection.trigger('resourceNotFound', this.page.collection);
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/invalidRoute");
         });
+
+        context("when a single dataset fetch fails", function() {
+            beforeEach(function() {
+                var dataset = rspecFixtures.dataset();
+                this.page.collection.reset([dataset]);
+            });
+            it("does NOT navigate away", function() {
+                this.page.collection.at(0).trigger('unprocessableEntity', null);
+                expect(Backbone.history.loadUrl).not.toHaveBeenCalled();
+            });
+        });
     });
 
     context("when it does not have a sandbox", function() {

@@ -76,6 +76,9 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.breadcrumbs.requiredResources.add(this.workspace);
     },
 
+    // This prevents a 422 on a single dataset from redirecting the entire page.
+    unprocessableEntity: $.noop,
+
     makeModel: function(workspaceId) {
         this.loadWorkspace(workspaceId);
     },
