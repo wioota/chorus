@@ -1,6 +1,12 @@
 <dl>
     {{#if host}}
-    <dt>{{t "data_sources.sidebar.host"}}</dt>
+    <dt class="host_label">
+        {{#if isHadoop}}
+            {{t "data_sources.sidebar.hadoop_host"}}
+        {{else}}
+            {{t "data_sources.sidebar.host"}}
+        {{/if}}
+    </dt>
     <dd title="{{host}}">{{host}}</dd>
     <br />
     {{/if}}

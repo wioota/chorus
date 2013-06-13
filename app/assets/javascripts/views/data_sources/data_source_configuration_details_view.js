@@ -7,7 +7,8 @@ chorus.views.DataSourceConfigurationDetails = chorus.views.Base.extend({
             sharedAccountDetails: shared && this.model.sharedAccountDetails(),
             version: this.model.version(),
             shared: shared,
-            ownerName: this.model.owner().displayName()
+            ownerName: this.model.owner().displayName(),
+            isHadoop: this.model.isHadoop()
         };
     }
 });
