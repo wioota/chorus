@@ -1,4 +1,6 @@
-chorus.models.Attachment = chorus.models.Base.extend({
+chorus.models.Attachment = chorus.models.Base.include(
+    chorus.Mixins.Attachment
+).extend({
     constructorName: "Attachment",
     entityType: "attachment",
 

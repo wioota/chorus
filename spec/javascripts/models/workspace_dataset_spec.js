@@ -332,4 +332,10 @@ describe("chorus.models.WorkspaceDataset", function() {
             expect(this.dataset.get("workspace").id).toBe(this.newWorkspace.get("id"));
         });
     });
+
+    describe("#useExternalLink", function() {
+        it("returns false", function() {
+            expect(this.dataset.useExternalLink()).toBeFalsy();
+        });
+    });
 });

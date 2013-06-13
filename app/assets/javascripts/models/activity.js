@@ -180,6 +180,9 @@
                         case 'dataset':
                             klass = chorus.models.WorkspaceDataset;
                             break;
+                        case 'work_flow_result':
+                            klass = chorus.models.WorkFlowResult;
+                            break;
                         default:
                             klass = chorus.models.Attachment;
                             break;

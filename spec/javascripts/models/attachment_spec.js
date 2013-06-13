@@ -11,6 +11,7 @@ describe("chorus.models.Attachment", function() {
             expect(this.model.downloadUrl()).toBe("/attachments/123/download/");
         });
     });
+
     describe("#iconUrl", function() {
         it("uses type for the iconUrl", function() {
             this.model.set({type: 'csv'});
@@ -30,6 +31,10 @@ describe("chorus.models.Attachment", function() {
 
     it("returns its name", function() {
         expect(this.model.name()).toBe("attachmentName");
+    });
+
+    it("does not open its show url as an external page", function() {
+        expect(this.model.useExternalLink()).toBeFalsy();
     });
 
     describe("#thumbnailUrl", function() {

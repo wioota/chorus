@@ -10,7 +10,9 @@
     var TABLEAU = 'tableau_workbook';
     var OTHER = 'other';
 
-    chorus.models.Workfile = chorus.models.Base.extend({
+    chorus.models.Workfile = chorus.models.Base.include(
+        chorus.Mixins.Attachment
+    ).extend({
         constructorName: "Workfile",
         nameAttribute: 'fileName',
         entityType: "workfile",

@@ -67,4 +67,28 @@ describe("chorus.presenters.Attachment", function() {
             });
         });
     });
+
+    describe("useExternalLink", function() {
+        context("for WorkFlowResults", function() {
+            beforeEach(function() {
+                this.model = new chorus.models.WorkFlowResult();
+            });
+
+            it("is true", function() {
+                var presenter = new chorus.presenters.Attachment(this.model);
+                expect(presenter.useExternalLink()).toBeTruthy();
+            });
+        });
+
+        context("for other attachments", function() {
+            beforeEach(function() {
+                this.model = new chorus.models.Attachment();
+            });
+
+            it("is false", function() {
+                var presenter = new chorus.presenters.Attachment(this.model);
+                expect(presenter.useExternalLink()).toBeFalsy();
+            });
+        });
+    });
 });

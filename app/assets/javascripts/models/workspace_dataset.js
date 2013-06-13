@@ -1,4 +1,6 @@
-chorus.models.WorkspaceDataset = chorus.models.Dataset.extend({
+chorus.models.WorkspaceDataset = chorus.models.Dataset.include(
+    chorus.Mixins.Attachment
+).extend({
     constructorName: "WorkspaceDataset",
 
     urlTemplate: function(options) {

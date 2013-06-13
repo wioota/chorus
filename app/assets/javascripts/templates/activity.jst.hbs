@@ -26,7 +26,7 @@
         <ul class='attachments'>
         {{#eachFunctionResult attachments}}
             <li>
-                <a href="{{url}}">
+                <a href="{{url}}" {{#if useExternalLink}}target="_blank"{{/if}}>
                     <span class="image"><img src="{{iconSrc}}" /></span>
                     <span class="name" title="{{name}}">{{name}}</span>
                 </a>

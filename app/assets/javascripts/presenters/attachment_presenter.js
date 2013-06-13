@@ -10,5 +10,9 @@ chorus.presenters.Attachment = chorus.presenters.Base.extend({
 
     name: function() {
         return this.model.get("name") || this.model.get("objectName") || this.model.get("fileName");
+    },
+
+    useExternalLink: function() {
+      return this.model.useExternalLink();
     }
 });

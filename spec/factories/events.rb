@@ -73,6 +73,11 @@ FactoryGirl.define do
       body 'This is a note on a workspace'
     end
 
+    factory :note_on_workfile, :class => Events::NoteOnWorkfile do
+      association :workfile, :factory => :workfile
+      body 'This is a note on a workfile'
+    end
+
     factory :dataset_import_created_event, :class => Events::WorkspaceImportCreated do
       association :source_dataset, :factory => :gpdb_table
       destination_table 'new_table_for_import'

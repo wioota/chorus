@@ -528,4 +528,10 @@ describe("chorus.models.Workfile", function() {
             });
         });
     });
+
+    describe("#useExternalLink", function() {
+        it("should return false", function() {
+            expect(this.model.useExternalLink()).toBeFalsy();
+        });
+    });
 });
