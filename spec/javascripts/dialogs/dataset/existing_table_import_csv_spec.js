@@ -34,6 +34,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         }, { silent: true });
 
         this.dialog = new chorus.dialogs.ExistingTableImportCSV({model: this.model, csvOptions: this.csvOptions , datasetId: "dat-id"});
+
         this.columns = [
             {name: "col1", typeCategory: "WHOLE_NUMBER", ordinalPosition: "3"},
             {name: "col2", typeCategory: "STRING", ordinalPosition: "4"},
@@ -49,7 +50,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         this.server.completeFetchFor(this.dataset);
         this.qtip = stubQtip();
         stubDefer();
-        spyOn(this.dialog.dataGrid, "setDestinationColumns");
+        spyOn(this.dialog.dataGrid, "setDestinationColumns").andCallThrough();
         this.server.completeFetchFor(this.dialog.columnSet, this.columns);
     });
 
@@ -62,7 +63,6 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     });
 
     it("has the import button disabled by default", function() {
-        this.dialog.dataGrid.trigger("updatedDestinationCount", {count: 0, total: 5, frequencies: [0,0,0,0,0]});
         expect(this.dialog.$('button.submit')).toBeDisabled();
     });
 
@@ -78,19 +78,35 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         expect(this.dialog.$(".errors")).not.toBeEmpty();
     });
 
-    describe("with an existing toTable that has a funny name", function() {
-        beforeEach(function() {
-            this.dialog.tableName = "!@#$%^&*()_+";
-            this.dialog.$("a.automap").click();
-            this.server.reset();
-            this.dialog.$("button.submit").click();
-        });
-
-        it("still imports and passes client side validation", function() {
-            expect(this.server.lastCreateFor(this.dialog.model).url.length).toBeGreaterThan(0);
-        });
+    it("has instructions", function() {
+        expect(this.dialog.$('.directions')).toContainTranslation("dataset.import.table.existing.directions",
+            {
+                toTable: "existing_table"
+            });
     });
 
+    it("has a progress tracker", function() {
+        this.dialog.dataGrid.trigger("updatedDestinationCount", {count: 0, total: 5, frequencies: [0,0,0,0,0]});
+        expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 0, total: 5});
+    });
+
+    it("has an auto-map link", function() {
+        expect(this.dialog.$("a.automap")).toContainTranslation("dataset.import.table.automap");
+    });
+
+    it("checks the include header row checkbox by default", function() {
+        expect(this.dialog.$("#hasHeader")).toBeChecked();
+    });
+
+    describe("when validation fails", function() {
+        beforeEach(function() {
+            this.model.trigger("validationFailed");
+        });
+
+        it("disables the submit button", function() {
+            expect(this.dialog.$("button.submit")).toBeDisabled();
+        });
+    });
 
     describe("separators", function() {
         function hasRightSeparator(separator) {
@@ -212,22 +228,6 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         });
     });
 
-    it("has instructions", function() {
-        expect(this.dialog.$('.directions')).toContainTranslation("dataset.import.table.existing.directions",
-            {
-                toTable: "existing_table"
-            });
-    });
-
-    it("has a progress tracker", function() {
-        this.dialog.dataGrid.trigger("updatedDestinationCount", {count: 0, total: 5, frequencies: [0,0,0,0,0]});
-        expect(this.dialog.$(".progress")).toContainTranslation("dataset.import.table.progress", {count: 0, total: 5});
-    });
-
-    it("has an auto-map link", function() {
-        expect(this.dialog.$("a.automap")).toContainTranslation("dataset.import.table.automap");
-    });
-
     describe("clicking the 'automap' link", function() {
         beforeEach(function() {
             this.dialog.$("a.automap").click();
@@ -236,10 +236,6 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         it("displays the correct progress text", function() {
             expect(this.dialog.dataGrid.automap).toHaveBeenCalled();
         });
-    });
-
-    it("checks the include header row checkbox by default", function() {
-        expect(this.dialog.$("#hasHeader")).toBeChecked();
     });
 
     describe("the data grid subview", function() {
@@ -301,16 +297,24 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
     context("when all columns have been mapped", function() {
         beforeEach(function() {
             spyOn(this.dialog, "closeModal");
-            this.expectedColumnNames = [];
-            for (var i = 0; i < 5; i++) {
-                this.dialog.$(".column_mapping a:eq(" + i + ")").click();
-                this.qtip.find(".qtip:last .ui-tooltip-content li:eq(" + (i) + ") a").click();
-                this.expectedColumnNames.push(this.columns[i].name);
-            }
+            this.dialog.dataGrid.trigger("updatedDestinationCount", {count: 5, total: 5, frequencies: [1,1,1,1,1]});
         });
 
         it("enables the import button", function() {
             expect(this.dialog.$('button.submit')).toBeEnabled();
+        });
+
+        describe("with an existing toTable that has a funny name", function() {
+            beforeEach(function() {
+                this.dialog.tableName = "!@#$%^&*()_+";
+                this.dialog.$("a.automap").click();
+                this.server.reset();
+                this.dialog.$("button.submit").click();
+            });
+
+            it("still imports and passes client side validation", function() {
+                expect(this.server.lastCreateFor(this.dialog.model).url.length).toBeGreaterThan(0);
+            });
         });
 
         context("clicking import button with invalid fields", function() {

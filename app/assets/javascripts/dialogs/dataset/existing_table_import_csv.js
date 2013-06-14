@@ -41,7 +41,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
         this.listenTo(this.model, "saved", this.saved);
         this.listenTo(this.model, "saveFailed", this.saveFailed);
-        this.listenTo(this.model, "validationFailed", this.saveFailed);
+        this.listenTo(this.model, "validationFailed", this.validationFailed);
         this.listenTo(this.dataGrid, "updatedDestinationCount", this.updateDestinationCount);
     },
 
@@ -66,6 +66,11 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
     saveFailed: function() {
         this.$("button.submit").stopLoading();
+    },
+
+    validationFailed: function() {
+        this.saveFailed();
+        this.$("button.submit").prop("disabled", true);
     },
 
     postRender: function() {
