@@ -889,7 +889,7 @@ describe ChorusInstaller do
         installer.setup_database
         executor.call_order.should == [:initdb, :start_postgres, :rake, :stop_postgres]
         executor.calls[:initdb].should == [installer.data_path, installer.database_user]
-        executor.calls[:rake].should == ["db:create db:migrate db:seed enqueue_reindex"]
+        executor.calls[:rake].should == ["db:create db:migrate db:seed enqueue:refresh_and_reindex"]
 
         stats = File.stat("/usr/local/greenplum-chorus/releases/2.2.0.0/postgres/pwfile").mode
         sprintf("%o", stats).should == "100400"
@@ -904,7 +904,7 @@ describe ChorusInstaller do
       it "migrates the existing database" do
         installer.setup_database
         executor.call_order.should == [:start_postgres, :rake, :stop_postgres]
-        executor.calls[:rake].should == ["db:migrate enqueue_reindex"]
+        executor.calls[:rake].should == ["db:migrate enqueue:refresh_and_reindex"]
       end
     end
   end

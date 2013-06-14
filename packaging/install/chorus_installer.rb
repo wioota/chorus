@@ -312,7 +312,7 @@ class ChorusInstaller
       @executor.start_postgres
       log "Running database migrations..." do
         db_commands = "db:migrate"
-        db_commands += " enqueue_reindex"
+        db_commands += " enqueue:refresh_and_reindex"
         log "Running rake #{db_commands}"
         @executor.rake db_commands
         @executor.stop_postgres
@@ -327,7 +327,7 @@ class ChorusInstaller
         @executor.start_postgres
         db_commands = "db:create db:migrate"
         db_commands += " db:seed"
-        db_commands += " enqueue_reindex"
+        db_commands += " enqueue:refresh_and_reindex"
         log "Running rake #{db_commands}"
         @executor.rake db_commands
         @executor.stop_postgres
