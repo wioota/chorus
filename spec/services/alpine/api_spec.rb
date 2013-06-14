@@ -1,58 +1,45 @@
 require 'spec_helper'
 
 describe Alpine::API do
-pending do
   describe '.delete_work_flow' do
     let(:work_flow)  { workfiles('alpine.afm') }
     let(:mock_session_id) { 'fortytwo' }
     let(:user) { users(:admin) }
+    let(:full_request_url) { "http://localhost:8090/alpinedatalabs/main/chorus.do?method=deleteWorkFlow&session_id=#{mock_session_id}&workfile_id=#{work_flow.id}" }
 
     before do
       user.password = 'anything'
       user.save
+      stub.proxy(ChorusConfig.instance).[](anything)
       stub(ChorusConfig.instance).work_flow_configured? { true }
+      stub(ChorusConfig.instance).[]('work_flow.url') { 'http://localhost:8090' }
 
       Session.create!(:username => user.username, :password => 'anything')
       stub(User).current_user { user }
       any_instance_of(Session) do |sesh|
         stub(sesh).session_id { mock_session_id }
       end
+      VCR.configure do |c|
+        c.ignore_localhost = true
+      end
     end
 
-    it 'passes the necessary parameters in a DELETE request' do
-      any_instance_of(Net::HTTP) do |http|
-        stub(http).request
-      end
-
-      mock(Net::HTTP::Delete).new(anything) do |string|
-        uri = URI("http://localhost#{string}")
-        uri.path.should == '/alpinedatalabs/main/chorus.do'
-
-        uri.query.should == {
-          method: 'deleteWorkFlow',
-          session_id: mock_session_id,
-          workfile_id: work_flow.id
-        }.to_query
-      end
-
+    it 'makes a DELETE request with the necessary params' do
+      FakeWeb.register_uri(:delete, full_request_url, :status => 200)
       Alpine::API.delete_work_flow(work_flow)
-    end
-
-    it 'makes a request' do
-      any_instance_of(Net::HTTP) do |http|
-        mock(http).request be_a(Net::HTTP::Delete)
-      end
-      Alpine::API.delete_work_flow(work_flow)
+      FakeWeb.last_request.should be_a(Net::HTTP::Delete)
     end
 
     context 'when Alpine is unavailable' do
-      before do
-        any_instance_of(Net::HTTP) do |http|
-          mock(http).request(anything) { raise SocketError.new('initialize: name or service not known') }
-        end
+      it 'handles SocketError' do
+        FakeWeb.register_uri(:delete, full_request_url, :exception => SocketError)
+        expect {
+          Alpine::API.delete_work_flow(work_flow)
+        }.to_not raise_error
       end
 
-      it 'does not explode' do
+      it 'handles Errno::ECONNREFUSED' do
+        FakeWeb.register_uri(:delete, full_request_url, :exception => Errno::ECONNREFUSED)
         expect {
           Alpine::API.delete_work_flow(work_flow)
         }.to_not raise_error
@@ -73,5 +60,4 @@ pending do
       end
     end
   end
-end
 end
