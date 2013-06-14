@@ -9,7 +9,7 @@ describe Alpine::API do
     before do
       user.password = 'anything'
       user.save
-      stub(ChorusConfig).work_flow_configured? { true }
+      stub(ChorusConfig.instance).work_flow_configured? { true }
 
       Session.create!(:username => user.username, :password => 'anything')
       stub(User).current_user { user }
@@ -60,7 +60,7 @@ describe Alpine::API do
 
     context 'when work_flow is disabled' do
       before do
-        stub(ChorusConfig).work_flow_configured? { false }
+        stub(ChorusConfig.instance).work_flow_configured? { false }
       end
 
       it 'does not make an http request' do
