@@ -92,6 +92,13 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         this.model.serverErrors = errorText.serverErrors ? errorText.serverErrors : {fields: {not_a_real_field: {GENERIC: {message: errorText}}}};
     },
 
+    saveFailed: function() {
+        this._super("saveFailed", arguments);
+        if (this.model.statusCode === 403) {
+            this.showDialogError(t("hdfs_data_source.create_external.invalid_sandbox_credentials"));
+        }
+    },
+
     additionalContext: function() {
         var parentCtx = this._super("additionalContext", arguments);
         parentCtx.workspaces = _.pluck(this.workspaces.models, "attributes");

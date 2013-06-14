@@ -137,6 +137,20 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                 });
             });
 
+            context("when the user submits and they dont have the credentials to access the sandbox", function() {
+                beforeEach(function() {
+                    this.dialog.workspaces.get(this.dialog.$("select").val()).sandbox().dataSource().set('version', '4.1');
+                    spyOn(this.dialog, "showDialogError");
+                    this.dialog.$("button.submit").click();
+                });
+
+                it("should display an 'invalid credentials' error in the dialog", function() {
+                    this.server.lastCreate().failForbidden();
+                    expect(this.dialog.showDialogError).toHaveBeenCalledWith(t("hdfs_data_source.create_external.invalid_sandbox_credentials"));
+                });
+
+            });
+
             context("with valid values", function() {
                 beforeEach(function() {
                     this.dialog.$("select").val(this.workspace3.id);
