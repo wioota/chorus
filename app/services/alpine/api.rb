@@ -4,13 +4,13 @@ require 'uri'
 module Alpine
   module API
     def self.delete_work_flow(work_flow)
-      return unless ChorusConfig.instance.work_flow_configured?
-
-      request = Net::HTTP::Delete.new(delete_path(work_flow))
-
-      Net::HTTP.new(base_url).request(request)
-    rescue SocketError => e
-      pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
+      #return unless ChorusConfig.instance.work_flow_configured?
+      #
+      #request = Net::HTTP::Delete.new(delete_path(work_flow))
+      #
+      #Net::HTTP.new(base_url).request(request)
+    #rescue SocketError => e
+    #  pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
     end
 
     private

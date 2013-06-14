@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Alpine::API do
+pending do
   describe '.delete_work_flow' do
     let(:work_flow)  { workfiles('alpine.afm') }
     let(:mock_session_id) { 'fortytwo' }
@@ -72,4 +73,5 @@ describe Alpine::API do
       end
     end
   end
+end
 end
