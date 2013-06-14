@@ -17,5 +17,18 @@ describe CommentPresenter, :type => :view do
     it "presents a succinct author" do
       hash[:author].to_hash.should == (UserPresenter.new(comment.author, view, :succinct => true).presentation_hash)
     end
+
+    context "when the author is deleted" do
+      before do
+        Workspace.destroy_all
+        DataSource.destroy_all
+        comment.author.destroy
+        comment.reload
+      end
+
+      it "presents an author" do
+        hash[:author].should_not be_nil
+      end
+    end
   end
 end

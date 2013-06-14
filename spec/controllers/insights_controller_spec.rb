@@ -255,7 +255,6 @@ describe InsightsController do
     end
   end
 
-
   describe "#index (GET)" do
     before do
       log_in user
