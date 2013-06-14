@@ -3,7 +3,7 @@ class ChorusWorkfile < Workfile
   attr_accessible :svg_data, :as => [:create]
   attr_accessible :execution_schema
 
-  belongs_to :execution_schema, :class_name => 'GpdbSchema'
+  alias_attribute :execution_schema, :execution_location
 
   has_many :versions, :foreign_key => :workfile_id, :class_name => 'WorkfileVersion', :order => 'version_num DESC', :inverse_of => :workfile, :dependent => :destroy
   has_many :drafts, :class_name => 'WorkfileDraft', :foreign_key => :workfile_id

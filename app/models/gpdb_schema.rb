@@ -17,7 +17,7 @@ class GpdbSchema < Schema
   has_many :imports, class_name: 'SchemaImport', foreign_key: 'schema_id'
   has_many :imports_via_workspaces, :through => :workspaces, :source => :all_imports
 
-  has_many :workfiles_as_execution_schema, :class_name => 'Workfile', :foreign_key => :execution_schema_id, :dependent => :nullify
+  has_many :workfiles_as_execution_schema, :class_name => 'Workfile', :foreign_key => :execution_location_id, :dependent => :nullify
   has_many :views, :source => :datasets, :class_name => 'GpdbView', :foreign_key => :schema_id
   has_many :tables, :source => :datasets, :class_name => 'GpdbTable', :foreign_key => :schema_id
 

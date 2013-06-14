@@ -15,6 +15,7 @@ class Workfile < ActiveRecord::Base
 
   belongs_to :workspace
   belongs_to :owner, :class_name => 'User'
+  belongs_to :execution_location, :polymorphic => true
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
@@ -75,7 +76,7 @@ class Workfile < ActiveRecord::Base
                         {:most_recent_comments => :author},
                         {:most_recent_notes => :actor},
                         {
-                            :execution_schema => {
+                            :execution_location => {
                                 :scoped_parent => :data_source
                             }
                         }
