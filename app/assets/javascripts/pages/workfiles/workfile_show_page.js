@@ -23,6 +23,12 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
         this.onceLoaded(this.model, this.buildPage);
 
         this.breadcrumbs.requiredResources.add(this.model);
+
+        this.subscribePageEvent("workfile:rename", this.reload);
+    },
+
+    reload: function() {
+        window.location.reload();
     },
 
     crumbs: function() {

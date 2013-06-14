@@ -1,5 +1,6 @@
 describe("chorus.pages.WorkfileShowPage", function() {
     beforeEach(function() {
+        spyOn(chorus.pages.WorkfileShowPage.prototype, "reload");
         chorus.page = { workspace: rspecFixtures.workspace() };
         this.workspaceId = 4;
         this.workfileId = 5;
@@ -136,6 +137,16 @@ describe("chorus.pages.WorkfileShowPage", function() {
                         expect(this.modalSpy).not.toHaveModal(chorus.alerts.WorkfileDraft);
                     });
                 });
+            });
+        });
+
+        describe("workfile is renamed", function() {
+            beforeEach(function() {
+                chorus.PageEvents.trigger("workfile:rename");
+            });
+
+            it("reloads the page", function() {
+                expect(this.page.reload).toHaveBeenCalled();
             });
         });
     });

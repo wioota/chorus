@@ -80,6 +80,7 @@ describe("chorus.dialogs.RenameWorkfile", function() {
 
         context("when the save is successful", function() {
             beforeEach(function() {
+                spyOnEvent(chorus.PageEvents, "workfile:rename");
                 this.server.lastUpdate().succeed();
             });
 
@@ -90,6 +91,11 @@ describe("chorus.dialogs.RenameWorkfile", function() {
             it("re-renders", function() {
                 expect("change").toHaveBeenTriggeredOn(this.dialog.model);
             });
+
+            it("triggers a page event", function() {
+                expect("workfile:rename").toHaveBeenTriggeredOn(chorus.PageEvents);
+            });
+
         });
 
         context("when the save fails", function() {
