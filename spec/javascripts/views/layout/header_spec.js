@@ -233,6 +233,17 @@ describe("chorus.views.Header", function() {
                         expect(url).toMatchUrl("#/search/test_query%252Fwith%252Fslashes");
                     });
                 });
+
+                context("when the search input is empty", function() {
+                    beforeEach(function() {
+                        this.view.$(".search input:text").val("").trigger("textchange");
+                        this.view.$(".search form").trigger("submit");
+                    });
+                   
+                    it("should not search", function() {
+                       expect(chorus.router.navigate).not.toHaveBeenCalled();
+                    });
+                });
             });
         });
 

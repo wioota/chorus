@@ -171,10 +171,13 @@ chorus.views.Header = chorus.views.Base.extend({
 
     startSearch: function(e) {
         e.preventDefault();
-        var search = new chorus.models.SearchResult({
-            workspaceId: this.workspaceId,
-            query: this.$(".search input:text").val()
-        });
-        chorus.router.navigate(search.showUrl());
+        var query = this.$(".search input:text").val();
+        if (query.length > 0) {
+            var search = new chorus.models.SearchResult({
+                workspaceId: this.workspaceId,
+                query: query
+            });
+            chorus.router.navigate(search.showUrl());
+        }
     }
 });
