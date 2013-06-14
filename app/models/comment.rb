@@ -6,7 +6,7 @@ class Comment < ActiveRecord::Base
 
   attr_accessible :author_id, :body, :event_id
   belongs_to :event, :class_name => 'Events::Base'
-  unscoped_belongs_to :author, :class_name => 'User'
+  belongs_to :author, :class_name => 'User'
 
   validates_presence_of :author_id, :body, :event_id
 
@@ -15,4 +15,8 @@ class Comment < ActiveRecord::Base
 
   delegate :grouping_id, :type_name, :to => :event
   delegate_search_permissions_for :workspace, :dataset, :to => :event
+
+  def author
+    User.unscoped.find(author_id)
+  end
 end
