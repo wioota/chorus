@@ -32,6 +32,19 @@ class Workfile < ActiveRecord::Base
 
   before_validation :init_file_name, :on => :create
 
+  before_update :ensure_proper_content_type
+
+  def ensure_proper_content_type
+    file_is_an_image = self.content_type == 'image'
+    file_name_ends_in_SQL = self.file_name =~ (/^.*\.sql$/i)
+    file_name_ends_in_TXT = self.file_name =~ (/^.*\.txt$/i)
+
+    unless file_is_an_image
+      self.content_type='sql'  if file_name_ends_in_SQL
+      self.content_type='text' if file_name_ends_in_TXT
+    end
+  end
+
   after_create :create_workfile_created_event, :if => :current_user
   after_create :update_has_added_workfile_on_workspace
   after_create { touch(:user_modified_at) }

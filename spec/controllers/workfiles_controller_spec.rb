@@ -340,11 +340,12 @@ describe WorkfilesController do
       public_workfile.reload.execution_schema.should == schema
     end
 
-    context "updating file names" do
+    describe "updating file names" do
       let(:new_name) { "new_name.sql" }
+      let(:workfile) { public_workfile }
       let(:options) do
         {
-            :id => public_workfile.to_param,
+            :id => workfile.to_param,
             :file_name => new_name
         }
       end
@@ -352,7 +353,7 @@ describe WorkfilesController do
       it "updates the file name" do
         put :update, options
         response.should be_success
-        public_workfile.reload.file_name.should == new_name
+        workfile.reload.file_name.should == new_name
       end
 
       context "when the filename is not provided" do
@@ -372,6 +373,17 @@ describe WorkfilesController do
         it "responds with a validation error" do
           put :update, options
           response.code.should == '422'
+        end
+      end
+
+      context "when the user has appended .SQL" do
+        let(:new_name) { "yo.sql" }
+        let(:workfile) { workfiles("text.txt") }
+
+        it "turns into a SQLWorkfile" do
+          put :update, options
+          response.should be_success
+          workfile.reload.content_type.should == "sql"
         end
       end
     end

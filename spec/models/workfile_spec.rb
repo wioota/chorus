@@ -232,4 +232,50 @@ describe Workfile do
   it_behaves_like 'a soft deletable model' do
     let(:model) { workfiles(:public) }
   end
+
+  describe "changing the extension" do
+    subject { workfile.update_attributes(:file_name => new_file_name) }
+
+    context "renaming a text file to .sql" do
+      let(:workfile) { workfiles("text.txt") }
+      let(:new_file_name) { 'ham.sQl' }
+
+      it "changes the content_type to 'sql'" do
+        subject
+        workfile.reload.content_type.should == 'sql'
+      end
+    end
+
+    context "renaming a .png file to .sql" do
+      let(:workfile) { workfiles("image.png") }
+      let(:new_file_name) { 'ham.sql' }
+
+      it "does not change the content_type" do
+        expect do
+          subject
+        end.not_to change(workfile, :content_type)
+        workfile.reload.content_type.should == 'image'
+      end
+    end
+
+    context "renaming a sql file to .txt" do
+      let(:workfile) { workfiles("sql.sql") }
+      let(:new_file_name) { 'ham.tXt' }
+
+      it "changes the content_type to 'txt'" do
+        subject
+        workfile.reload.content_type.should == 'text'
+      end
+    end
+
+    context "renaming a sql file to .png" do
+      let(:workfile) { workfiles("sql.sql") }
+      let(:new_file_name) { 'ham.png' }
+
+      it "leaves the content_type alone" do
+        subject
+        workfile.reload.content_type.should == 'sql'
+      end
+    end
+  end
 end
