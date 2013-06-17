@@ -20,9 +20,8 @@ module Alpine
     attr_reader :config
 
     def request_deletion(work_flow)
-      request = Net::HTTP::Delete.new(delete_path(work_flow))
-      Net::HTTP.new(base_url.hostname, base_url.port).request(request)
-    rescue SocketError, Errno::ECONNREFUSED => e
+      Net::HTTP.new(base_url.host, base_url.port).delete(delete_path(work_flow))
+    rescue SocketError, Errno::ECONNREFUSED, TimeoutError => e
       pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
     end
 

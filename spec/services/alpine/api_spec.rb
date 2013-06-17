@@ -44,6 +44,13 @@ describe Alpine::API do
           Alpine::API.delete_work_flow(work_flow)
         }.to_not raise_error
       end
+
+      it 'handles TimeoutError' do
+        FakeWeb.register_uri(:delete, full_request_url, :exception => TimeoutError)
+        expect {
+          Alpine::API.delete_work_flow(work_flow)
+        }.to_not raise_error
+      end
     end
 
     context 'when work_flow is disabled' do
