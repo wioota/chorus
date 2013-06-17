@@ -20,8 +20,7 @@ describe CommentPresenter, :type => :view do
 
     context "when the author is deleted" do
       before do
-        Workspace.destroy_all
-        DataSource.destroy_all
+        comment.author = users(:not_a_member)
         comment.author.destroy
         comment.reload
       end
