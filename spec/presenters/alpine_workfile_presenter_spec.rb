@@ -26,5 +26,14 @@ describe AlpineWorkfilePresenter, :type => :view do
       workfile.execution_location.should be_a(GpdbDatabase)
       hash[:execution_location].should == Presenter.present(workfile.execution_location, view, :succinct => true)
     end
+
+    context "when presenting for a list_view" do
+      let(:options) { {:list_view => true} }
+      let(:workfile) { workfiles("alpine.afm") }
+
+      it "does not show the execution location, because that becomes an N+1 query and we don't need the data" do
+        hash.should_not have_key(:execution_location)
+      end
+    end
   end
 end

@@ -9,7 +9,7 @@ class AlpineWorkfilePresenter < WorkfilePresenter
       }
     end
 
-    workfile[:execution_location] = present(model.execution_location, :succinct => true)
+    workfile[:execution_location] = present(model.execution_location, :succinct => true) unless options[:list_view]
     workfile
   end
 end
