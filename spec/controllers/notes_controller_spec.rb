@@ -95,7 +95,7 @@ describe NotesController do
             :entity_type => entity_type,
             :entity_id => entity_id,
             :body => "I'm a note",
-            :result_id => 123
+            :result_id => "123"
         }
       end
 
@@ -104,7 +104,7 @@ describe NotesController do
           post :create, attributes
         end.to change(NotesWorkFlowResult, :count).by(1)
 
-        NotesWorkFlowResult.last.result_id.should == 123
+        NotesWorkFlowResult.last.result_id.should == "123"
         response.should be_success
       end
     end

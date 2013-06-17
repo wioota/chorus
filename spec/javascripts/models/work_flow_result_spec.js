@@ -1,12 +1,12 @@
 describe('chorus.models.WorkFlowResult', function() {
     beforeEach(function() {
-        this.model = new chorus.models.WorkFlowResult({workfileId: 2, resultId: 3});
+        this.model = new chorus.models.WorkFlowResult({workfileId: 2, id: "0.12334455634"});
     });
 
     it("has a showUrl", function() {
         var addonUrl = "/main/chorus.do?method=showResults&session_id=" +
             chorus.session.get("sessionId") +
-            "&workfile_id=2&result_id=3";
+            "&workfile_id=2&result_id=0.12334455634";
         var baseUrl = chorus.models.Config.instance().get('workFlowUrl');
         expect(this.model.showUrl()).toBe(baseUrl + addonUrl);
     });

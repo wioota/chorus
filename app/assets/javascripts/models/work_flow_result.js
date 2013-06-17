@@ -28,5 +28,5 @@ chorus.models.WorkFlowResult = chorus.models.Base.include(
         return true;
     },
 
-    urlTemplate: "main/chorus.do?method=showResults&session_id={{sessionId}}&workfile_id={{workfileId}}&result_id={{resultId}}"
+    urlTemplate: "main/chorus.do?method=showResults&session_id={{sessionId}}&workfile_id={{workfileId}}&result_id={{id}}"
 });

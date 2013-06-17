@@ -610,7 +610,7 @@ describe("chorus.models.Activity", function() {
                     { entityType: "attachment", id: 2 },
                     { entityType: "dataset", id: 3 },
                     { entityType: "workfile", entitySubtype: "alpine", id: 4 },
-                    { entityType: "work_flow_result", id: 5}
+                    { entityType: "work_flow_result", id: "0.12345"}
                 ]
             });
             this.attachments = this.model.attachments();

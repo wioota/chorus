@@ -142,7 +142,7 @@ describe EventPresenter, :type => :view do
         let(:attachment) { Attachment.first }
         let(:dataset) { datasets(:table) }
         let(:workfile) { workfiles(:public) }
-        let(:note_work_flow_result) { NotesWorkFlowResult.new({:result_id => 1234321}) }
+        let(:note_work_flow_result) { NotesWorkFlowResult.new({:result_id => "0.1234321"}) }
 
         it "contains the attachment" do
           event.workspace.sandbox = dataset.schema
