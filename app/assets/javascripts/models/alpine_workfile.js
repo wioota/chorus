@@ -30,7 +30,7 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
     iframeUrl: function() {
         var uri = this.alpineUrlBase();
         uri.addQuery({
-            database_id: this.get("databaseId"),
+            database_id: this.get("executionLocation").id,
             file_name: this.get("fileName"),
             workfile_id: this.id,
             session_id: chorus.session.get("sessionId"),

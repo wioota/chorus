@@ -2,7 +2,6 @@ describe("chorus.models.AlpineWorkfile", function() {
     beforeEach(function() {
         loadConfig();
         this.model = rspecFixtures.workfile.alpine({
-            databaseId: "3",
             fileName: "hello.afm",
             id: "23",
             workspace: {id: "32"},
@@ -46,7 +45,7 @@ describe("chorus.models.AlpineWorkfile", function() {
 
         expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
         expect(url).toContainQueryParams({
-            database_id: "3",
+            database_id: this.model.get('executionLocation').id,
             file_name: "hello.afm",
             workfile_id: "23",
             session_id: "hex",
