@@ -134,7 +134,7 @@ describe WorkfilesController do
         let(:alpine_workfile) { workfiles("alpine.afm") }
 
         before do
-          alpine_workfile.database_id = gpdb_databases(:default).id
+          alpine_workfile.execution_location = gpdb_databases(:default)
           alpine_workfile.save
         end
 

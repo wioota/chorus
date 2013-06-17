@@ -21,7 +21,7 @@ class AlpineWorkfile < Workfile
     end
   end
 
-  has_additional_data :database_id, :dataset_ids
+  has_additional_data :dataset_ids
 
   before_validation { self.content_type ='work_flow' }
   before_validation { self.execution_location = datasets.first.database unless datasets.empty? }
