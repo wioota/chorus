@@ -115,9 +115,10 @@ describe AlpineWorkfile do
 
   describe "#data_source" do
     let(:database) { gpdb_databases(:default) }
-    let(:workfile) { AlpineWorkfile.create(database_id: database.id, workspace: workspace) }
+    let(:workfile) { AlpineWorkfile.create(workspace: workspace) }
 
     it "returns the database's data source" do
+      workfile.execution_location = database
       workfile.data_source.should == database.data_source
     end
   end
