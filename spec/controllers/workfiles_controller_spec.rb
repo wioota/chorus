@@ -274,12 +274,13 @@ describe WorkfilesController do
 
     context 'when entity_subtype is alpine' do
       context "and a database has been chosen" do
+        let(:database) { gpdb_databases(:default) }
         let(:params) do
           {
               :entity_subtype => 'alpine',
               :workspace_id => workspace.to_param,
               :file_name => 'something',
-              :database_id => '42'
+              :database_id => database.to_param
           }
         end
 
@@ -287,7 +288,7 @@ describe WorkfilesController do
           mock_present do |model|
             model.should be_a AlpineWorkfile
             model.file_name.should == 'something'
-            model.additional_data['database_id'].should == '42'
+            model.execution_location.should == database
             model.workspace.should == workspace
           end
           post :create, params
@@ -309,7 +310,7 @@ describe WorkfilesController do
           mock_present do |model|
             model.should be_a AlpineWorkfile
             model.file_name.should == 'something'
-            model.additional_data['database_id'].should == datasets(:table).database.id
+            model.execution_location.should == datasets(:table).database
             model.additional_data['dataset_ids'].should =~ dataset_ids
             model.workspace.should == workspace
           end
@@ -425,9 +426,8 @@ describe WorkfilesController do
             :entity_subtype => 'alpine',
             :workspace_id => workspace.to_param,
             :file_name => 'something',
-            :database_id => '42',
-            :id => workfile.to_param,
-            :execution_schema => { :id => schema.to_param }
+            :database_id => gpdb_databases(:alternate).to_param,
+            :id => workfile.to_param
         }
       end
 

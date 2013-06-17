@@ -8,6 +8,8 @@ class AlpineWorkfilePresenter < WorkfilePresenter
           :updated_at => model.updated_at
       }
     end
+
+    workfile[:execution_location] = present(model.execution_location, :succinct => true)
     workfile
   end
 end

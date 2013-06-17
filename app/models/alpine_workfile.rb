@@ -24,8 +24,8 @@ class AlpineWorkfile < Workfile
   has_additional_data :database_id, :dataset_ids
 
   before_validation { self.content_type ='work_flow' }
-  before_validation { self.database_id = datasets.first.database.id unless datasets.empty? }
-  validates_presence_of :database_id
+  before_validation { self.execution_location = datasets.first.database unless datasets.empty? }
+  validates_presence_of :execution_location
   validates_with AlpineWorkfileValidator
 
   after_destroy :notify_alpine_of_deletion
@@ -39,7 +39,7 @@ class AlpineWorkfile < Workfile
   end
 
   def data_source
-    GpdbDatabase.find(database_id).data_source
+    execution_location.data_source
   end
 
   def datasets

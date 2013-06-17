@@ -136,6 +136,7 @@ class Workfile < ActiveRecord::Base
     new_workfile.workspace = workspace
     new_workfile.owner = user
     new_workfile.additional_data = additional_data
+    new_workfile.execution_location = execution_location
 
     new_workfile
   end

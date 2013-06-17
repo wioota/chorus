@@ -9,8 +9,10 @@ describe AlpineWorkfile do
   end
   let(:model) { Workfile.build_for(params).tap { |file| file.save } }
 
+  it { should belong_to :execution_location }
+
   describe "validations" do
-    it { should validate_presence_of :database_id }
+    it { should validate_presence_of :execution_location }
 
     context "with an archived workspace" do
       let(:workspace) { workspaces(:archived) }
@@ -63,8 +65,8 @@ describe AlpineWorkfile do
       let(:datasetB) { datasets(:other_table) }
       let(:params) { {dataset_ids: [datasetA.id, datasetB.id], workspace: workspace} }
 
-      it 'assigns the database ID' do
-        AlpineWorkfile.create(params).database_id.should == datasetA.database.id
+      it 'sets the execution location to the GpdbDatabase where the datasets live' do
+        AlpineWorkfile.create(params).execution_location.should == datasetA.database
       end
 
       it 'assigns the datasets' do

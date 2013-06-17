@@ -271,10 +271,10 @@ FixtureBuilder.configure do |fbuilder|
 
     #Alpine workfile
 
-    AlpineWorkfile.create({:file_name => 'alpine.afm',
+    AlpineWorkfile.create!({:file_name => 'alpine.afm',
                                      :workspace => public_workspace,
                                      :owner => owner,
-                                     :database_id => default_database.id,
+                                     :execution_location => default_database,
                                      :dataset_ids => %w(1 2 3),
                                     }, :without_protection => true)
 

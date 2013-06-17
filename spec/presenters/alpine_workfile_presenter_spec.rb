@@ -20,5 +20,11 @@ describe AlpineWorkfilePresenter, :type => :view do
         hash[:version_info].should == {:created_at => workfile.created_at, :updated_at => workfile.updated_at}
       end
     end
+
+    it "presents execution database" do
+      workfile.execution_location = gpdb_databases(:alternate)
+      workfile.execution_location.should be_a(GpdbDatabase)
+      hash[:execution_location].should == Presenter.present(workfile.execution_location, view, :succinct => true)
+    end
   end
 end
