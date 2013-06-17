@@ -14,7 +14,7 @@
     {{#if streamUrl}}
         <div class='pair'>
             <div class="key">{{t "data_sources.sidebar.stream_url"}}</div>
-            <div class="value" class="streamUrl" title="{{streamUrl}}">{{streamUrl}}</div>
+            <div class="value streamUrl" title="{{streamUrl}}">{{streamUrl}}</div>
         </div>
     {{/if}}
     {{#if port}}
@@ -32,7 +32,7 @@
     {{#if shared}}
         <div class='pair'>
             <div class="key">{{t "data_sources.shared_account"}}</div>
-            <div class="value" class="shared_account_info"
+            <div class="value shared_account_info"
                  title="{{sharedAccountDetails}}">{{sharedAccountDetails}}</div>
         </div>
     {{/if}}
@@ -51,13 +51,13 @@
     {{#if jobTrackerHost}}
         <div class='pair'>
             <div class="key">{{t "data_sources.dialog.hadoop_job_tracker_host"}}</div>
-            <div class="value" class="job_tracker_host" title="{{jobTrackerHost}}">{{jobTrackerHost}}</div>
+            <div class="value job_tracker_host" title="{{jobTrackerHost}}">{{jobTrackerHost}}</div>
         </div>
     {{/if}}
     {{#if jobTrackerPort}}
         <div class='pair'>
             <div class="key">{{t "data_sources.sidebar.port"}}</div>
-            <div class="value" class="job_tracker_port" title="{{jobTrackerPort}}">{{jobTrackerPort}}</div>
+            <div class="value job_tracker_port" title="{{jobTrackerPort}}">{{jobTrackerPort}}</div>
         </div>
     {{/if}}
 </div>
