@@ -24,7 +24,7 @@ class WorkfilesController < ApplicationController
     is_upload = !params[:workfile][:file_name]
     is_svg = params[:workfile][:svg_data]
     workfile.resolve_name_conflicts = (is_svg || is_upload)
-    workfile.execution_location = GpdbDatabase.find(params[:database_id]) if params[:database_id]
+    workfile.execution_location = GpdbDatabase.find(params[:workfile][:database_id]) if params[:workfile][:database_id]
     workfile.save!
 
     present workfile, presenter_options: {:workfile_as_latest_version => true}, status: :created
