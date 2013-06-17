@@ -100,5 +100,12 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
             spyOn(this.model.workspace(), 'canUpdate').andReturn(false);
             expect(this.view.canUpdate()).toBeFalsy();
         });
+
+        it("returns false when the workspace is archived", function() {
+            spyOn(this.model.workspace(), 'canUpdate').andReturn(true);
+            this.model.workspace().set('archivedAt', 'foobar');
+            expect(this.view.canUpdate()).toBeFalsy();
+        });
+
     });
 });

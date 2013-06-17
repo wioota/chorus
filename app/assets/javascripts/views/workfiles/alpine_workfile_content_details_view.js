@@ -28,6 +28,6 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
     },
 
     canUpdate: function(){
-        return this.model.workspace().canUpdate();
+        return this.model.workspace().isActive() && this.model.workspace().canUpdate();
     }
 });
