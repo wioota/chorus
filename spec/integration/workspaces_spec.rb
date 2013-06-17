@@ -55,6 +55,7 @@ describe "Workspaces" do
 
   describe "Delete a workspace" do
     it "deletes the workspace" do
+      stub(Alpine::API).delete_work_flow(anything)
       visit("#/workspaces/#{workspace.id}")
       wait_for_page_load
       click_link "Delete this Workspace"
