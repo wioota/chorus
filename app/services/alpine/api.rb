@@ -7,8 +7,10 @@ module Alpine
       new.delete_work_flow(work_flow)
     end
 
-    def initialize(config = nil)
-      @config = config || ChorusConfig.instance
+    def initialize(options = nil)
+      options ||= {}
+      @config = options[:config] || ChorusConfig.instance
+      @user = options[:user] || User.current_user
     end
 
     def delete_work_flow(work_flow)
@@ -17,7 +19,7 @@ module Alpine
 
     private
 
-    attr_reader :config
+    attr_reader :config, :user
 
     def request_deletion(work_flow)
       Net::HTTP.new(base_url.host, base_url.port).delete(delete_path(work_flow))
@@ -34,8 +36,7 @@ module Alpine
     end
 
     def session_id
-      session = Session.find_by_user_id(User.current_user.id)
-      session.session_id
+      Session.find_by_user_id(user.id).session_id
     end
   end
 end
