@@ -2,6 +2,10 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
     templateName: "alpine_workfile_content_details",
     additionalClass: "action_bar_highlighted",
 
+    events: {
+        'click a.change_workfile_database': 'changeWorkfileDatabase'
+    },
+
     setup: function () {
         var members = this.model.workspace().members();
         this.listenTo(members, 'reset loaded', this.render);
@@ -15,5 +19,10 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
             dataSourceName: this.model.executionLocation().dataSource.name,
             databaseName: this.model.executionLocation().name
         };
+    },
+
+    changeWorkfileDatabase: function(e) {
+        e.preventDefault();
+        new chorus.dialogs.ChangeWorkFlowExecutionLocation().launchModal();
     }
 });

@@ -46,4 +46,38 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
             });
         });
     });
+
+    describe("event handling", function() {
+
+        describe("a.change_workfile_database:clicked", function() {
+            beforeEach(function() {
+                this.view.render();
+                spyOn(this.view, "changeWorkfileDatabase");
+                this.view.delegateEvents();
+                this.view.$("a.change_workfile_database").click();
+            });
+            it("calls the changeWorkfileDatabase function", function() {
+                expect(this.view.changeWorkfileDatabase).toHaveBeenCalled();
+            });
+        });
+    });
+
+    describe("#changeWorkfileDatabase", function(){
+        var modalSpy;
+        beforeEach(function() {
+            modalSpy = stubModals();
+
+            this.event = jasmine.createSpyObj('click spy', ['preventDefault']);
+            this.view.changeWorkfileDatabase(this.event);
+        });
+
+        it("prevents the default click behavior", function() {
+            expect(this.event.preventDefault).toHaveBeenCalled();
+        });
+
+        it("shows the change schema dialog", function(){
+            expect(modalSpy).toHaveModal(chorus.dialogs.ChangeWorkFlowExecutionLocation);
+        });
+    });
+
 });
