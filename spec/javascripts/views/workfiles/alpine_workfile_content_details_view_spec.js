@@ -27,6 +27,17 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
             expect(this.view.$('a.open_file')).toHaveHref(this.model.workFlowShowUrl());
         });
 
+        context("when the execution location is a Greenplum database", function() {
+            it("shows the data source name and database name", function() {
+                var database = this.model.executionLocation();
+                var dataSource = database.dataSource;
+                expect(this.view.$('.execution_location')).toContainTranslation("work_flows.show.execution_location", {
+                    dataSourceName: dataSource.name,
+                    databaseName: database.name
+                });
+            });
+        });
+
         context("when the current user cannot open the workfile", function(){
             it("does not show the open file button", function(){
                this.model.canOpen.andReturn(false);

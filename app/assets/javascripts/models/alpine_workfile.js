@@ -69,5 +69,9 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
 
     workFlowShowUrl: function() {
         return "#/work_flows/" + this.id;
+    },
+
+    executionLocation: function() {
+        return this.get('executionLocation');
     }
 });

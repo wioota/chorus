@@ -97,4 +97,10 @@ describe("chorus.models.AlpineWorkfile", function() {
             });
         });
     });
+
+    describe("executionLocation", function() {
+       it("returns a tiny representation of the gpdb database", function() {
+           expect(this.model.executionLocation().id).toBe(this.model.get('executionLocation').id);
+       });
+    });
 });
