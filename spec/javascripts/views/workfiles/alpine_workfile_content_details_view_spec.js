@@ -47,18 +47,28 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
         });
     });
 
-    describe("event handling", function() {
+    context("when the user can edit the workfile", function() {
+        describe("event handling", function() {
+            describe("a.change_workfile_database:clicked", function() {
+                beforeEach(function() {
+                    spyOn(this.view, 'canUpdate').andReturn(true);
+                    this.view.render();
+                    spyOn(this.view, "changeWorkfileDatabase");
+                    this.view.delegateEvents();
+                    this.view.$("a.change_workfile_database").click();
+                });
+                it("calls the changeWorkfileDatabase function", function() {
+                    expect(this.view.changeWorkfileDatabase).toHaveBeenCalled();
+                });
+            });
+        });
+    });
 
-        describe("a.change_workfile_database:clicked", function() {
-            beforeEach(function() {
-                this.view.render();
-                spyOn(this.view, "changeWorkfileDatabase");
-                this.view.delegateEvents();
-                this.view.$("a.change_workfile_database").click();
-            });
-            it("calls the changeWorkfileDatabase function", function() {
-                expect(this.view.changeWorkfileDatabase).toHaveBeenCalled();
-            });
+    context("when the user cannot edit the workfile", function() {
+        it("does not show the change link", function() {
+            spyOn(this.view, 'canUpdate').andReturn(false);
+            this.view.render();
+            expect(this.view.$('a.change_workfile_database')).not.toExist();
         });
     });
 
@@ -80,4 +90,15 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
         });
     });
 
+    describe("#canUpdate", function() {
+        it("returns true when you can update the workspace", function() {
+            spyOn(this.model.workspace(), 'canUpdate').andReturn(true);
+            expect(this.view.canUpdate()).toBeTruthy();
+        });
+
+        it("returns false when you cannot update the workspace", function() {
+            spyOn(this.model.workspace(), 'canUpdate').andReturn(false);
+            expect(this.view.canUpdate()).toBeFalsy();
+        });
+    });
 });

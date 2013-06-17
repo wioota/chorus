@@ -17,12 +17,17 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
             workFlowShowUrl: this.model.workFlowShowUrl(),
             canOpen: this.model.canOpen(),
             dataSourceName: this.model.executionLocation().dataSource.name,
-            databaseName: this.model.executionLocation().name
+            databaseName: this.model.executionLocation().name,
+            canUpdate: this.canUpdate()
         };
     },
 
     changeWorkfileDatabase: function(e) {
         e.preventDefault();
         new chorus.dialogs.ChangeWorkFlowExecutionLocation().launchModal();
+    },
+
+    canUpdate: function(){
+        return this.model.workspace().canUpdate();
     }
 });

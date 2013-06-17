@@ -9,7 +9,7 @@
     <li>
         <span class="execution_location">{{t "work_flows.show.execution_location" dataSourceName=dataSourceName databaseName=databaseName}}</span>
     </li>
-    <li>
+    {{#if canUpdate}}<li>
         <a class="change_workfile_database" href="#">Change</a>
-    </li>
+    </li>{{/if}}
 </ul>
