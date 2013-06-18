@@ -1,13 +1,17 @@
 <ul class="list_horizontal">
     <li>
         {{#if canOpen}}
-        <a class="button button_action open_file" href="{{workFlowShowUrl}}">{{t "work_flows.show.open"}}</a>
+        <button class="button button_action open_file" {{#unless executionLocation}}disabled="disabled"{{/unless}}>{{t "work_flows.show.open"}}</button>
         {{else}}
         <button class="invisible button_action"></button>
         {{/if}}
     </li>
     <li>
+        {{#if executionLocation}}
         <span class="execution_location">{{t "work_flows.show.execution_location" dataSourceName=dataSourceName databaseName=databaseName}}</span>
+        {{else}}
+        <span class="execution_location">{{t "work_flows.show.no_execution_location"}}</span>
+        {{/if}}
     </li>
     {{#if canUpdate}}<li>
         <a class="change_workfile_database" href="#">Change</a>

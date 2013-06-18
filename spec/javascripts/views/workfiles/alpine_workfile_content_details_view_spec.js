@@ -20,11 +20,13 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
 
     describe("render", function() {
         it("shows the 'Open File' button", function() {
-            expect(this.view.$('a.open_file')).toContainTranslation('work_flows.show.open');
+            expect(this.view.$('.open_file')).toContainTranslation('work_flows.show.open');
         });
 
         it("links the 'Open File' button to the Alpine page", function() {
-            expect(this.view.$('a.open_file')).toHaveHref(this.model.workFlowShowUrl());
+            spyOn(chorus.router, 'navigate');
+            this.view.$('.open_file').click();
+            expect(chorus.router.navigate).toHaveBeenCalledWith(this.model.workFlowShowUrl());
         });
 
         context("when the execution location is a Greenplum database", function() {
@@ -35,6 +37,20 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
                     dataSourceName: dataSource.name,
                     databaseName: database.name
                 });
+            });
+        });
+
+        context("when the execution location is null", function() {
+            beforeEach(function() {
+                this.model.set('executionLocation', null);
+            });
+
+            it("displays 'none' for the database", function() {
+                expect(this.view.$('.execution_location')).toContainTranslation("work_flows.show.no_execution_location");
+            });
+
+            it('disables the Open File button', function() {
+                expect(this.view.$('.open_file')).toBeDisabled();
             });
         });
 

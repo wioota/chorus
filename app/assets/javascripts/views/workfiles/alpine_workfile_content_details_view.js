@@ -3,7 +3,8 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
     additionalClass: "action_bar_highlighted",
 
     events: {
-        'click a.change_workfile_database': 'changeWorkfileDatabase'
+        'click a.change_workfile_database': 'changeWorkfileDatabase',
+        'click .open_file': 'navigateToWorkFlow'
     },
 
     setup: function () {
@@ -13,13 +14,17 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
     },
 
     additionalContext: function () {
-        return  {
+        var ctx = {
             workFlowShowUrl: this.model.workFlowShowUrl(),
             canOpen: this.model.canOpen(),
-            dataSourceName: this.model.executionLocation().dataSource.name,
-            databaseName: this.model.executionLocation().name,
             canUpdate: this.canUpdate()
         };
+
+        if (this.model.executionLocation()) {
+            ctx.dataSourceName = this.model.executionLocation().dataSource.name;
+            ctx.databaseName = this.model.executionLocation().name;
+        }
+        return ctx;
     },
 
     changeWorkfileDatabase: function(e) {
@@ -29,5 +34,9 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
 
     canUpdate: function(){
         return this.model.workspace().isActive() && this.model.workspace().canUpdate();
+    },
+
+    navigateToWorkFlow:function(){
+        chorus.router.navigate(this.model.workFlowShowUrl());
     }
 });
