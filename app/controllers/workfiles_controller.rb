@@ -2,7 +2,6 @@ require 'will_paginate/array'
 
 class WorkfilesController < ApplicationController
   include DataSourceAuth
-  wrap_parameters :workfile, :exclude => []
 
   def show
     workfile = Workfile.find(params[:id])

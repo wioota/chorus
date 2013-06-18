@@ -206,8 +206,8 @@ describe WorkfilesController do
   describe "#create" do
     let(:params) { {
       :workspace_id => workspace.to_param,
-      :description => "Nice workfile, good workfile, I've always wanted a workfile like you",
-          :versions_attributes => [{:contents => file}]
+      :workfile => {:description => "Nice workfile, good workfile, I've always wanted a workfile like you",
+          :versions_attributes => [{:contents => file}]}
     } }
 
     it_behaves_like "an action that requires authentication", :post, :create, :workspace_id => '-1'
@@ -215,8 +215,8 @@ describe WorkfilesController do
     context "creating a new sql file" do
       let(:params) do
         {
-          :workspace_id => workspace.to_param,
-          :file_name => "new_file.sql"
+            :workspace_id => workspace.to_param,
+            :workfile => {:file_name => "new_file.sql"}
         }
       end
 
@@ -259,14 +259,14 @@ describe WorkfilesController do
     context 'creating a workfile from an svg document' do
       it 'works' do
         expect {
-          post :create, :workspace_id => workspace.to_param, :file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'
+          post :create, :workspace_id => workspace.to_param, :workfile => {:file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'}
         }.to change(Workfile, :count).by(1)
         Workfile.last.file_name.should == 'some_vis.png'
       end
 
       it 'resolves name conflicts' do
         FactoryGirl.create(:workfile, :workspace => workspace, :file_name => 'some_vis.png')
-        post :create, :workspace_id => workspace.to_param, :file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'
+        post :create, :workspace_id => workspace.to_param, :workfile => {:file_name => 'some_vis.png', :svg_data => '<svg xmlns="http://www.w3.org/2000/svg"></svg>'}
         response.code.should == '201'
         Workfile.last.file_name.should == 'some_vis_1.png'
       end
@@ -277,10 +277,12 @@ describe WorkfilesController do
         let(:database) { gpdb_databases(:default) }
         let(:params) do
           {
-              :entity_subtype => 'alpine',
               :workspace_id => workspace.to_param,
-              :file_name => 'something',
-              :database_id => database.to_param
+              :workfile => {
+                  :entity_subtype => 'alpine',
+                  :file_name => 'something',
+                  :database_id => database.to_param
+              }
           }
         end
 
@@ -299,10 +301,12 @@ describe WorkfilesController do
         let(:dataset_ids) { [datasets(:table).id, datasets(:other_table).id].map(&:to_s) }
         let(:params) do
           {
-              :entity_subtype => 'alpine',
               :workspace_id => workspace.to_param,
-              :file_name => 'something',
-              :dataset_ids => dataset_ids
+              :workfile => {
+                  :entity_subtype => 'alpine',
+                  :file_name => 'something',
+                  :dataset_ids => dataset_ids
+              }
           }
         end
 
@@ -325,7 +329,9 @@ describe WorkfilesController do
     let(:options) do
       {
           :id => public_workfile.to_param,
-          :execution_schema => { :id => schema.to_param }
+          :workfile => {
+              :execution_schema => { :id => schema.to_param }
+          }
       }
     end
 
@@ -347,7 +353,9 @@ describe WorkfilesController do
       let(:options) do
         {
             :id => workfile.to_param,
-            :file_name => new_name
+            :workfile => {
+                :file_name => new_name
+            }
         }
       end
 
