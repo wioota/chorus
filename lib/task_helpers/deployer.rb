@@ -48,10 +48,16 @@ class Deployer
     config['clean_install']
   end
 
+  def kill_workers?
+    !!config['kill_workers']
+  end
+
   def upload(package_file)
     write_install_answers
     remove_previous_chorusrails_install
     copy_legacy_data
+
+    ssh.run('pkill -9 -f ChorusWorker') if kill_workers?
 
     # run upgrade script
     installer_dir = "~/chorusrails-installer"
@@ -111,7 +117,7 @@ class Deployer
       # confirm the upgrade/install
       f.puts('y') unless clean_install.present?
 
-      # where to install 2.2
+      # where to install
       if legacy_path.present?
         f.puts(install_path)
       end

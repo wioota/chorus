@@ -2,6 +2,7 @@ stage: &stage
   host: chorus-staging
   install_path: ~/chorusrails-deploy-new
   postgres_build: 2
+  kill_workers: true
 
 upgrade21:
   host: chorus-chorus21-upgrade
