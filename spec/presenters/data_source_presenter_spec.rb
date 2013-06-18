@@ -37,6 +37,7 @@ describe DataSourcePresenter, :type => :view do
       hash.should have_key(:entity_type)
       hash.should have_key(:owner_id)
       hash.should have_key(:shared)
+      hash.should have_key(:name)
     end
   end
 

@@ -33,6 +33,7 @@ class DataSourcePresenter < Presenter
       :entity_type => model.entity_type_name,
       :shared => model.shared,
       :owner_id => model.owner_id,
+      :name => model.name
     }
   end
 
