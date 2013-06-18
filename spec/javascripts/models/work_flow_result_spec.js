@@ -4,7 +4,7 @@ describe('chorus.models.WorkFlowResult', function() {
     });
 
     it("has a showUrl", function() {
-        var addonUrl = "/main/chorus.do?method=showResults&session_id=" +
+        var addonUrl = "/alpinedatalabs/main/chorus.do?method=showResults&session_id=" +
             chorus.session.get("sessionId") +
             "&workfile_id=2&result_id=0.12334455634";
         var baseUrl = chorus.models.Config.instance().get('workFlowUrl');
