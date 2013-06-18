@@ -39,7 +39,7 @@
 
             img {
                 height: auto;
-                width:  auto;
+                width: auto;
                 max-width: $large-image-width + 5px;
                 max-height: $large-image-height;
             }
@@ -60,12 +60,12 @@
         }
 
         .item_information {
-            _overflow:visible;
+            _overflow: visible;
             line-height: 21px;
-            overflow:hidden;
+            overflow: hidden;
             padding-left: $padding-x;
             vertical-align: top;
-            zoom:1;
+            zoom: 1;
 
             .summary {
                 padding-bottom: 3px;
@@ -134,13 +134,9 @@
 
         .name {
             font-size: 18px;
-            line-height: 23px;
-
-            span {
-                display: inline-block;
-                @include ellipsis;
-                max-width: 68%;
-            }
+            display: inline-block;
+            max-width: 68%;
+            word-break: break-all;
         }
 
         .tag {
@@ -155,7 +151,7 @@
         .checkbox_placeholder {
             float: left;
             display: inline-block;
-            width:  18px;
+            width: 18px;
             height: 1px;
         }
 
@@ -221,12 +217,12 @@
                 }
             }
 
-
             &.selected {
                 $border-width: 2px;
 
                 background-color: white;
-                padding-bottom: $padding-y - ($border-width - 1px); // default border is 1px
+                padding-bottom: $padding-y - ($border-width - 1px);
+                // default border is 1px
                 border-bottom: $border-width solid $border-color;
 
                 a {
