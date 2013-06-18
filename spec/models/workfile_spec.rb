@@ -69,6 +69,12 @@ describe Workfile do
       new_workfile.should have_error_on(:file_name)
     end
 
+    it "enforces uniqueness only among non-deleted workfiles" do
+      existing_workfile.destroy
+      new_workfile = FactoryGirl.build(:workfile, :file_name => existing_workfile.file_name, :workspace => workspace)
+      new_workfile.should be_valid
+    end
+
     it "is valid if a workfile in another workspace has the same name" do
       new_workfile = FactoryGirl.build(:workfile, :file_name => existing_workfile.file_name, :workspace => other_workspace)
       new_workfile.should be_valid
