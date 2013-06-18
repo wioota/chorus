@@ -27,7 +27,7 @@ describe VersionDetector do
         end
       end
 
-      it "should raise upgrade_to_2_2_required" do
+      it "should raise upgrade to 2.2 required" do
         expect { subject }.to raise_error(InstallerErrors::InstallAborted, /Chorus must be upgraded to 2.2 before it can be upgraded to 2.3/)
       end
     end
@@ -63,8 +63,8 @@ describe VersionDetector do
     end
   end
 
-  describe "#can_upgrade_2_2?" do
-    subject { detector.can_upgrade_2_2? version }
+  describe "#can_upgrade?" do
+    subject { detector.can_upgrade? version }
     let(:version) { '2.2.0.1-8840ae71c' }
 
     context "when the most recent installed version is more recent" do

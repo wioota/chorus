@@ -44,12 +44,12 @@ describe ChorusInstaller do
       stub(installer).version { "2.2.0.1-8840ae71c" }
       stub(logger).logfile=(anything)
       stub(version_detector).destination_path=(anything)
-      stub(version_detector).can_upgrade_2_2?(anything) { upgrade_2_2 }
+      stub(version_detector).can_upgrade?(anything) { upgrade }
       stub(version_detector).check_for_legacy! { true }
       mock(io).prompt_or_default(:destination_path, default_path) { destination_path }
     end
 
-    let(:upgrade_2_2) { false }
+    let(:upgrade) { false }
     let(:default_path) { '/usr/local/greenplum-chorus' }
     let(:destination_path) { '/somewhere/chorus' }
 
@@ -102,12 +102,12 @@ describe ChorusInstaller do
     before do
       stub(installer).version { "2.2.0.1-8840ae71c" }
       installer.destination_path = destination_path
-      stub(version_detector).can_upgrade_2_2?(anything) { do_2_2_upgrade }
+      stub(version_detector).can_upgrade?(anything) { upgrade }
     end
     let(:default_path) { "/data/greenplum-chorus" }
     let(:data_path) { '/large_disk/data/' }
     let(:destination_path) { '/destination' }
-    let(:do_2_2_upgrade) { false }
+    let(:upgrade) { false }
 
     context "for a fresh install" do
       before do
@@ -128,8 +128,8 @@ describe ChorusInstaller do
       end
     end
 
-    context "When doing a 2_2 upgrade" do
-      let(:do_2_2_upgrade) { true }
+    context "When doing an upgrade" do
+      let(:upgrade) { true }
 
       it "should not prompt data directory" do
         installer.get_data_path

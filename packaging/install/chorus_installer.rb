@@ -79,7 +79,7 @@ class ChorusInstaller
 
     @destination_path = File.expand_path(relative_path)
     @version_detector.destination_path = @destination_path
-    prompt_for_2_2_upgrade if @version_detector.can_upgrade_2_2?(version)
+    prompt_for_upgrade if @version_detector.can_upgrade?(version)
     @version_detector.check_for_legacy!
 
     @logger.logfile = File.join(@destination_path, 'install.log')
@@ -90,7 +90,7 @@ class ChorusInstaller
   end
 
   def get_data_path
-    if !@version_detector.can_upgrade_2_2?(version)
+    if !@version_detector.can_upgrade?(version)
       relative_path = @io.prompt_or_default(:data_path, DEFAULT_DATA_PATH)
       self.data_path = File.expand_path(relative_path)
       log "Data path = #{@data_path}"
@@ -114,7 +114,7 @@ class ChorusInstaller
     @io.prompt_or_default(:passphrase, "")
   end
 
-  def prompt_for_2_2_upgrade
+  def prompt_for_upgrade
     @io.require_confirmation :confirm_upgrade
     self.install_mode = :upgrade_existing
   end
