@@ -16,7 +16,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
     noteDeleted: function(note) {
         if (this.collection.get(note.id)) {
             this.collection.remove(note);
-            this.render();
+            this.collection.fetch();
         }
     },
 

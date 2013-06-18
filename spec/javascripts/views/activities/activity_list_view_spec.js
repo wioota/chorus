@@ -16,9 +16,10 @@ describe("chorus.views.ActivityList", function() {
             this.view.render();
         });
 
-        it("re-renders when 'note:deleted' is fired", function() {
+        it("re-fetches the collection when 'note:deleted' is fired", function() {
+            this.server.reset();
             chorus.PageEvents.trigger('note:deleted', this.note);
-            expect(this.view.$("li[data-activity-id=" + this.note.id + "]")).not.toExist();
+            expect(this.server.lastFetchFor(this.collection)).toBeDefined();
         });
 
         it('re-renders when note:saved is fired', function() {
