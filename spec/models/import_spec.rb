@@ -133,7 +133,7 @@ describe Import, :greenplum_integration do
     context "when import passed" do
       it "marks the import as success and refreshes its schema" do
         mock(import).mark_as_success
-        mock(import).refresh_schema
+        mock(import).index_destination_dataset
         import.update_status(:passed)
       end
 

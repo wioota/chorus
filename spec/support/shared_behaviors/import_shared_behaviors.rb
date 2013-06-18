@@ -40,10 +40,11 @@ shared_examples_for :import_succeeds do |trigger|
       import.finished_at.should_not be_nil
     end
 
-    it "refreshes the schema" do
+    it "saves the dataset" do
       refreshed = false
+
       any_instance_of(Schema) do |schema|
-        stub(schema).refresh_datasets(sandbox.database.data_source.account_for_user!(user)) { refreshed = true }
+        stub(schema).find_or_initialize_dataset.with_any_args { stub(Object.new).save { refreshed = true } }
       end
       send(trigger)
       refreshed.should == true

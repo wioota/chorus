@@ -76,7 +76,7 @@ class Import < ActiveRecord::Base
     update_attribute(:success, passed)
 
     if passed
-      refresh_schema
+      index_destination_dataset
       mark_as_success
     else
       create_failed_event_and_notification(message)
@@ -125,9 +125,8 @@ class Import < ActiveRecord::Base
     end
   end
 
-  def refresh_schema
+  def index_destination_dataset
     # update rails db for new dataset
-    destination_account = schema.database.data_source.account_for_user!(user)
-    schema.refresh_datasets(destination_account) rescue ActiveRecord::JDBCError
+    schema.find_or_initialize_dataset(to_table).save
   end
 end

@@ -130,6 +130,8 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
         any_instance_of(CrossDatabaseTableCopier) do |pipe|
           stub(pipe).write_data { }
         end
+        stub(copier).semaphore_timeout { 1000 }
+
         destination_table_exists?.should be_false
         expect { copier.start }.to raise_error(TableCopier::ImportFailed)
         destination_table_exists?.should be_false
@@ -139,6 +141,8 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
         any_instance_of(CrossDatabaseTableCopier) do |pipe|
           stub(pipe).reader_loop { }
         end
+        stub(copier).semaphore_timeout { 1000 }
+
         destination_table_exists?.should be_false
         expect { copier.start }.to raise_error(TableCopier::ImportFailed)
         destination_table_exists?.should be_false

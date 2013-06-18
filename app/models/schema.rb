@@ -64,7 +64,7 @@ class Schema < ActiveRecord::Base
     schema.refresh_datasets(schema.data_source.owner_account, {:force_index => true})
   end
 
-  def find_or_initialize_dataset(name, type)
+  def find_or_initialize_dataset(name, type = 'r')
     dataset = datasets.views_tables.find_by_name(name)
     unless dataset
       klass = class_for_type type

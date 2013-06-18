@@ -37,7 +37,7 @@ class CrossDatabaseTableCopier < TableCopier
       end }
 
       semaphore.acquire # blocks forever if neither reader_loop nor writer_loop ever returns
-      acquire_result = semaphore.tryAcquire(5000, java.util.concurrent.TimeUnit::MILLISECONDS)
+      acquire_result = semaphore.tryAcquire(semaphore_timeout, java.util.concurrent.TimeUnit::MILLISECONDS)
 
       #see if we need to recover from any errors.
       if !reader_finished
@@ -55,6 +55,10 @@ class CrossDatabaseTableCopier < TableCopier
     FileUtils.rm pipe_file if pipe_file && File.exists?(pipe_file)
     source_connection.disconnect
     destination_connection.disconnect
+  end
+
+  def semaphore_timeout
+    300000
   end
 
   def self.cancel(import)
