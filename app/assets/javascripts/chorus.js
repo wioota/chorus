@@ -3,6 +3,7 @@ window.Chorus = function chorus$Global() {
     self.models = {};
     self.views = {};
     self.views.visualizations = {};
+    self.views.LocationPicker = {};
     self.pages = {};
     self.presenters = {};
     self.Mixins = {};

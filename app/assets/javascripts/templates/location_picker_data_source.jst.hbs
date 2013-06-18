@@ -1,0 +1,20 @@
+{{#if dataSource}}
+<div class="header_container">
+    <label>{{t "sandbox.select.data_source"}}</label>
+</div>
+<div class="title">
+    {{dataSource.attributes.name}}
+</div>
+{{else}}
+<div class="header_container">
+    <label class="required">{{t "sandbox.select.data_source"}}</label>
+</div>
+<div class="loading_text">
+    <span class="loading_spinner"></span>
+</div>
+
+<div class="unavailable hidden">{{t "sandbox.unavailable.data_source"}}</div>
+<div class="select_container hidden">
+    <select name="data_source"></select>
+</div>
+{{/if}}
