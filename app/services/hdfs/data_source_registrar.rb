@@ -16,7 +16,7 @@ module Hdfs
       data_source.attributes = connection_config.except(:version)
       verify_data_source_accessibility(data_source)
 
-      if data_source.name_changed?
+      if data_source.name_changed? && data_source.valid?
         Events::HdfsDataSourceChangedName.by(updater).add(
           :hdfs_data_source => data_source,
           :old_name => data_source.name_was,

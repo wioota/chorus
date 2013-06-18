@@ -87,10 +87,12 @@ describe Hdfs::DataSourceRegistrar do
         data_source_attributes[:name] = ''
       end
 
-      it "raises an exception" do
+      it "raises an exception and does not create an event" do
         expect do
-          described_class.update!(hdfs_data_source.id, data_source_attributes, user)
-        end.to raise_error(ActiveRecord::RecordInvalid)
+          expect do
+            described_class.update!(hdfs_data_source.id, data_source_attributes, user)
+          end.to raise_error(ActiveRecord::RecordInvalid)
+        end.to_not change { Events::HdfsDataSourceChangedName.count }
       end
     end
 
