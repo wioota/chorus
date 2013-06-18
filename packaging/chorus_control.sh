@@ -36,16 +36,16 @@ function start () {
     $bin/start-postgres.sh;
     EXIT_STATUS=`expr $EXIT_STATUS + $?`;
   fi
+  if should_handle solr;      then
+    $bin/start-solr.sh;
+    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
   if should_handle workers;   then
     $bin/start-workers.sh;
     EXIT_STATUS=`expr $EXIT_STATUS + $?`;
   fi
   if should_handle scheduler; then
     $bin/start-scheduler.sh;
-    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
-  fi
-  if should_handle solr;      then
-    $bin/start-solr.sh;
     EXIT_STATUS=`expr $EXIT_STATUS + $?`;
   fi
   if should_handle webserver; then
@@ -65,16 +65,16 @@ function stop () {
     $bin/stop-webserver.sh;
     EXIT_STATUS=`expr $EXIT_STATUS + $?`;
   fi
-  if should_handle solr;       then
-    $bin/stop-solr.sh;
-    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
-  fi
   if should_handle scheduler;  then
     $bin/stop-scheduler.sh;
     EXIT_STATUS=`expr $EXIT_STATUS + $?`;
   fi
   if should_handle workers;    then
     $bin/stop-workers.sh;
+    EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
+  if should_handle solr;       then
+    $bin/stop-solr.sh;
     EXIT_STATUS=`expr $EXIT_STATUS + $?`;
   fi
   if should_handle postgres;   then
