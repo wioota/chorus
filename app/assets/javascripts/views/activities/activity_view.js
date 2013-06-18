@@ -7,7 +7,11 @@ chorus.views.Activity = chorus.views.Base.extend({
         'click a.promote': 'promote',
         'click a.publish': 'publish',
         'click a.unpublish': 'unpublish',
-        'click a.update_credentials': 'launchUpdateCredentialsDialog'
+        'click a.update_credentials': 'launchUpdateCredentialsDialog',
+        'click a.delete_note': 'launchDeleteNoteConfirmAlert',
+        'click a.delete_notification': 'launchNotificationDeleteAlert',
+        'click a.edit_note': 'launchEditNoteDialog',
+        'click a.comment': 'launchCommentDialog'
     },
 
     subviews: {
@@ -81,6 +85,30 @@ chorus.views.Activity = chorus.views.Base.extend({
     launchUpdateCredentialsDialog: function(e) {
         e.preventDefault();
         new chorus.dialogs.DataSourceAccount({ dataSource: this.model.dataSource(), title: t("data_sources.account.edit.title") }).launchModal();
+    },
+
+    launchDeleteNoteConfirmAlert: function(e) {
+        e.preventDefault();
+        var alert = new chorus.alerts.DeleteNoteConfirmAlert({activity: this.model});
+        alert.launchModal();
+    },
+
+    launchNotificationDeleteAlert: function(e) {
+        e.preventDefault();
+        var alert = new chorus.alerts.NotificationDeleteAlert({activity: this.model});
+        alert.launchModal();
+    },
+
+    launchEditNoteDialog: function(e) {
+        e.preventDefault();
+        var dialog = new chorus.dialogs.EditNote({activity: this.model});
+        dialog.launchModal();
+    },
+
+    launchCommentDialog: function(e) {
+        e.preventDefault();
+        var dialog = new chorus.dialogs.Comment({activity: this.model, eventId: this.model.id});
+        dialog.launchModal();
     },
 
     postRender: function() {

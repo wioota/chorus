@@ -1,6 +1,7 @@
 chorus.dialogs.EditNote = chorus.dialogs.Base.include(
     chorus.Mixins.ClEditor
 ).extend({
+    constructorName: "EditNoteDialog",
     templateName: "edit_note",
     persistent: true,
 

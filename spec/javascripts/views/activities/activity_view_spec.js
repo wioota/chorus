@@ -145,6 +145,8 @@ describe("chorus.views.Activity", function() {
 
     beforeEach(function () {
         stubDefer();
+        stubClEditor();
+        this.modalSpy = stubModals();
         this.model = rspecFixtures.activity.dataSourceCreated();
         this.view = new chorus.views.Activity({ model:this.model });
     });
@@ -282,26 +284,57 @@ describe("chorus.views.Activity", function() {
             beforeEach(function () {
                 this.model = this.presenter.model = rspecFixtures.activity.noteOnGreenplumDataSource();
                 this.view = new chorus.views.Activity({ model:this.model });
+                chorus.page = this.view;
+                this.view.render();
+                $("#jasmine_content").append(this.view.$el);
             });
 
             it("displays a delete link or not, based on the presenter", function () {
                 spyOn(this.presenter, "canDelete").andReturn(true);
                 this.view.render();
-                expect(this.view.$("a.delete_link")).toExist();
+                expect(this.view.$("a.delete_note")).toExist();
 
                 this.presenter.canDelete.andReturn(false);
                 this.view.render();
-                expect(this.view.$("a.delete_link")).not.toExist();
+                expect(this.view.$("a.delete_note")).not.toExist();
+            });
+
+            context("when clicking the delete link", function() {
+               beforeEach(function() {
+                   this.modalSpy.reset();
+                   spyOn(this.presenter, "canDelete").andReturn(true);
+                   this.view.render();
+                   this.view.$("a.delete_note").click();
+               });
+
+                it("should launch the delete alert dialog once", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.alerts.DeleteNoteConfirmAlert);
+                    expect(this.modalSpy.modals().length).toBe(1);
+                });
             });
 
             it("displays an edit link or not, based on the presenter", function () {
                 spyOn(this.presenter, "canEdit").andReturn(true);
                 this.view.render();
-                expect(this.view.$("a.edit_link")).toExist();
+                expect(this.view.$("a.edit_note")).toExist();
 
                 this.presenter.canEdit.andReturn(false);
                 this.view.render();
-                expect(this.view.$("a.edit_link")).not.toExist();
+                expect(this.view.$("a.edit_note")).not.toExist();
+            });
+
+            context("when clicking the edit link", function() {
+                beforeEach(function() {
+                    this.modalSpy.reset();
+                    spyOn(this.presenter, "canEdit").andReturn(true);
+                    this.view.render();
+                    this.view.$("a.edit_link").click();
+                });
+
+                it("should launch the edit dialog once", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditNote);
+                    expect(this.modalSpy.modals().length).toBe(1);
+                });
             });
 
             itShouldRenderAPromoteLink();
@@ -328,7 +361,19 @@ describe("chorus.views.Activity", function() {
             });
 
             it("should have a NotificationDeleteAlert", function () {
-                expect(this.view.$("a[data-alert=NotificationDeleteAlert]")).toExist();
+                expect(this.view.$("a.delete_notification")).toExist();
+            });
+
+            context("clicking the delete link for notifications", function() {
+                beforeEach(function() {
+                    this.modalSpy.reset();
+                    this.view.$("a.delete_notification").click();
+                });
+
+                it("should launch the delete alert once", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.alerts.NotificationDeleteAlert);
+                    expect(this.modalSpy.modals().length).toBe(1);
+                });
             });
         });
 
@@ -484,9 +529,22 @@ describe("chorus.views.Activity", function() {
         });
 
         it("displays a comment link", function () {
-            var link = this.view.$(".links a.comment.dialog");
-            expect(link.data("dialog")).toBe("Comment");
-            expect(link.data("event-id").toString()).toEqual(this.model.id);
+            expect(this.view.$(".links a.comment")).toExist();
+        });
+
+        context("clicking the comment link", function() {
+            beforeEach(function() {
+                chorus.page = this.view;
+                $("#jasmine_content").append(this.view.$el);
+                this.modalSpy.reset();
+                this.view.$("a.comment").click();
+            });
+
+            it("displays the comment dialog once", function() {
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.Comment);
+                expect(this.modalSpy.modals().length).toBe(1);
+            });
+
         });
 
         context("isReadOnly", function () {
@@ -511,7 +569,6 @@ describe("chorus.views.Activity", function() {
 
     context("when there is a update_credentials link", function() {
         it("opens the dialog when clicked", function() {
-            this.modalSpy = stubModals();
             var model = rspecFixtures.activity.credentialsInvalid();
             this.view = new chorus.views.Activity({ model: model, isNotification: true });
             this.view.render();
