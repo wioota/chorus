@@ -25,11 +25,11 @@ describe WorkfileVersionsController do
     end
 
     it "deletes any saved workfile drafts for this workfile and user" do
-      workfile_drafts(:draft_default).update_attribute(:workfile_id, workfile.id)
-      draft_count(workfile, user).should == 1
+      any_instance_of(workfile.class) do |workfile|
+        mock(workfile).remove_draft(user)
+      end
 
       put :update, params
-      draft_count(workfile, user).should == 0
     end
 
     context "when the workfile version does not exist" do
@@ -52,20 +52,13 @@ describe WorkfileVersionsController do
 
   describe "#create" do
     let(:params) { {:workfile_id => workfile.id, :content => 'New content', :commit_message => 'A new version'} }
+
     before do
+      any_instance_of(workfile.class) do |workfile|
+        mock(workfile).create_new_version(user, hash_including(:content => 'New content', :commit_message => 'A new version'))
+      end
       workfile_version.contents = test_file('workfile.sql')
       workfile_version.save
-    end
-
-    it "changes the file content" do
-      post :create, params
-      workfile.reload
-
-      File.read(workfile.latest_workfile_version.contents.path).should == 'New content'
-
-      decoded_response[:version_info][:commit_message].should == 'A new version'
-      decoded_response[:version_info][:version_num].should == 2
-      decoded_response[:version_info][:content].should == 'New content'
     end
 
     it "presents the workfile version with the content" do
@@ -76,22 +69,6 @@ describe WorkfileVersionsController do
 
       post :create, params
       response.code.should == "201"
-    end
-
-    it "deletes any saved workfile drafts for this workfile and user" do
-      workfile_drafts(:draft_default).update_attribute(:workfile_id, workfile.id)
-      draft_count(workfile, user).should == 1
-      post :create, params
-      draft_count(workfile, user).should == 0
-    end
-
-    it "creates the activity stream for upgrade" do
-      post :create, params.merge(:commit_message => 'A new version -1')
-      event = Events::WorkfileUpgradedVersion.by(user).last
-      event.workfile.should == workfile
-      event.workspace.to_param.should == workfile.workspace.id.to_s
-      event.additional_data["version_num"].should == 2
-      event.additional_data["commit_message"].should == "A new version -1"
     end
   end
 
@@ -204,11 +181,6 @@ describe WorkfileVersionsController do
         response.code.should == "422"
         response.body.should include "ONLY_ONE_VERSION"
       end
-
     end
-  end
-
-  def draft_count(workfile, user)
-    workfile.drafts.where(:owner_id => user.id).count
   end
 end

@@ -126,6 +126,12 @@ class Workfile < ActiveRecord::Base
     'workfile'
   end
 
+  def create_new_version(*args)
+  end
+
+  def remove_draft(*args)
+  end
+
   def attempt_data_source_connection
   end
 

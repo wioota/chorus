@@ -13,6 +13,10 @@ describe Workfile do
     let!(:model) { FactoryGirl.create(:workfile) }
   end
 
+  it { should respond_to(:create_new_version) }
+  it { should respond_to(:attempt_data_source_connection) }
+  it { should respond_to(:remove_draft) }
+
   describe "validations" do
     it { should validate_presence_of :file_name }
     it { should validate_presence_of :workspace }

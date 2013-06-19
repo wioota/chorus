@@ -231,6 +231,57 @@ describe ChorusWorkfile do
     end
   end
 
+  describe 'remove_draft' do
+    let(:user) { users(:owner) }
+    let(:workfile) { workfiles(:public) }
+
+    before do
+      draft = workfile.drafts.build
+      draft.owner_id = user.id
+      draft.save
+    end
+
+    it 'deletes a draft belonging to the specified user' do
+      expect { workfile.remove_draft(user) }.to change(WorkfileDraft, :count).by(-1)
+    end
+  end
+
+  describe '#create_new_version' do
+    let(:user) { users(:owner) }
+    let(:workfile) { workfiles(:public) }
+
+    it 'changes the file content' do
+      workfile.create_new_version(user, {:content => 'New content', :commit_message => 'A new version'})
+
+      File.read(workfile.latest_workfile_version.contents.path).should == 'New content'
+      workfile.latest_workfile_version.commit_message.should == 'A new version'
+      workfile.latest_workfile_version.version_num.should == 2
+    end
+
+    it 'deletes any saved workfile drafts for this workfile and user' do
+      workfile_drafts(:draft_default).update_attribute(:workfile_id, workfile.id)
+      draft_count(workfile, user).should == 1
+      workfile.create_new_version(user, {})
+      draft_count(workfile, user).should == 0
+    end
+  end
+
+  describe '#create_event_for_upgrade' do
+    let(:workfile) { workfiles(:public) }
+    let(:user) { users(:owner) }
+
+    it 'adds a workfile upgraded version event' do
+      workfile.build_new_version(user, test_file('workfile.sql'), 'commit Message').save!
+      workfile.create_event_for_upgrade(user)
+
+      event = Events::WorkfileUpgradedVersion.by(user).last
+      event.workfile.should == workfile
+      event.workspace.to_param.should == workfile.workspace.id.to_s
+      event.additional_data["version_num"].should == workfile.latest_workfile_version.version_num
+      event.additional_data["commit_message"].should == 'commit Message'
+    end
+  end
+
   describe '#has_draft' do
     let(:workspace) { workspaces(:public) }
     let(:user) { workspace.owner }
@@ -252,5 +303,9 @@ describe ChorusWorkfile do
       workfile = workfiles(:private)
       workfile.execution_schema.should be_a GpdbSchema
     end
+  end
+
+  def draft_count(workfile, user)
+    workfile.drafts.where(:owner_id => user.id).count
   end
 end

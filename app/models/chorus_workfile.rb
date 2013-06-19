@@ -28,12 +28,47 @@ class ChorusWorkfile < Workfile
     )
   end
 
+  def create_new_version(user, params)
+    file = build_new_file(file_name, params[:content])
+    file.content_type = latest_workfile_version.contents_content_type
+    Workfile.transaction do
+      workfile_version = build_new_version(user, file, params[:commit_message])
+      workfile_version.save!
+      create_event_for_upgrade(user)
+      remove_draft(user)
+    end
+
+    reload
+  end
+
+  def build_new_file(file_name, content)
+    tempfile = Tempfile.new(file_name)
+    tempfile.write(content)
+    tempfile.close
+
+    ActionDispatch::Http::UploadedFile.new(:filename => file_name, :tempfile => tempfile)
+  end
+
+  def remove_draft(user)
+    drafts.find_by_owner_id(user.id).try(:destroy)
+  end
+
   def has_draft(current_user)
     !!WorkfileDraft.find_by_owner_id_and_workfile_id(current_user.id, id)
   end
 
   def entity_type_name
     'workfile'
+  end
+
+  def create_event_for_upgrade(user)
+    Events::WorkfileUpgradedVersion.by(user).add(
+        :workfile => self,
+        :workspace => workspace,
+        :version_num => latest_workfile_version.version_num,
+        :commit_message => latest_workfile_version.commit_message,
+        :version_id => latest_workfile_version.id
+    )
   end
 
   private
