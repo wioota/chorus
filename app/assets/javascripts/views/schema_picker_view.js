@@ -30,12 +30,10 @@
             this.initialDataSource = this.options.dataSource;
 
             this.schemaView = new chorus.views.LocationPicker.SchemaView({
-                parent: this,
                 allowCreate: this.options.allowCreate
             });
 
             this.databaseView = new chorus.views.LocationPicker.DatabaseView({
-                parent: this,
                 childPicker: this.schemaView,
                 allowCreate: this.options.allowCreate,
                 database: this.options.database
@@ -43,10 +41,15 @@
 
             this.dataSourceView = new chorus.views.LocationPicker.DataSourceView({
                 dataSource: this.initialDataSource,
-                parent: this, // GET RID OF ME !!!!
                 childPicker: this.databaseView
             });
-            this.sectionStates = {};
+
+            _([this.schemaView, this.databaseView, this.dataSourceView]).each(function(subview) {
+                this.listenTo(subview, 'change', this.triggerSchemaSelected);
+                this.listenTo(subview, 'error', function(collection) { this.trigger('error', collection); });
+                this.listenTo(subview, 'clearErrors', function() { this.trigger('clearErrors'); });
+            }, this);
+
             if(_.isUndefined(this.options.showSchemaSection)) {
                 this.options.showSchemaSection = true;
             }

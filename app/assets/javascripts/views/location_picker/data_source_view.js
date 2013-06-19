@@ -23,10 +23,10 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
     },
 
     dataSourceSelected: function() {
-        this.options.parent.trigger("clearErrors");
+        this.trigger("clearErrors");
         var selectedDataSource = this.getSelectedDataSource();
         this.setSelection(selectedDataSource);
-        this.options.parent.triggerSchemaSelected();
+        this.trigger('change');
         if(!selectedDataSource) {
             this.childPicker.hide();
         }

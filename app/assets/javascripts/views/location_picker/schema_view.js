@@ -32,7 +32,7 @@ chorus.views.LocationPicker.SchemaView = chorus.views.LocationPicker.SelectorVie
 
     showErrorForMissingSchema: function() {
         this.collection.serverErrors = {fields: {base: {SCHEMA_MISSING: {name: this.selection.name()}}}};
-        this.options.parent.trigger("error", this.collection);
+        this.trigger("error", this.collection);
     },
 
     fetchSchemas: function(selectedDatabase) {
@@ -46,9 +46,9 @@ chorus.views.LocationPicker.SchemaView = chorus.views.LocationPicker.SelectorVie
     },
 
     schemaSelected: function() {
-        this.options.parent.trigger("clearErrors");
+        this.trigger("clearErrors");
         this.selection = this.getSelectedSchema();
-        this.options.parent.triggerSchemaSelected();
+        this.trigger('change');
     },
 
     getSelectedSchema: function() {

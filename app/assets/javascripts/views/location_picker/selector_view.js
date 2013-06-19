@@ -69,7 +69,6 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
     fetchFailed: function(collection) {
         this.onFetchFailed();
         this.trigger("error", collection);
-        this.options.parent.trigger("error", collection);
     },
 
     restyle: function(state) {
@@ -110,7 +109,7 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
 
     clearSelection: function() {
         delete this.selection;
-        this.options.parent.triggerSchemaSelected();
+        this.trigger('change');
     },
 
     STATES: {
