@@ -1,6 +1,7 @@
 describe("chorus.dialogs.WorkFlowNew", function() {
     beforeEach(function() {
         this.workspace = rspecFixtures.workspace();
+        this.sandboxDatabase = this.workspace.sandbox().database();
         this.dialog = new chorus.dialogs.WorkFlowNew({workspace: this.workspace});
         this.dialog.render();
     });
@@ -23,23 +24,22 @@ describe("chorus.dialogs.WorkFlowNew", function() {
 
     context("when the workspace has a sandbox", function() {
         it("sets the default data source and database", function() {
-            var sandboxDatabase = this.dialog.options.workspace.sandbox().database();
-            expect(sandboxDatabase).toBeTruthy();
-            expect(this.dialog.executionLocationPicker.getSelectedDatabase()).toEqual(sandboxDatabase);
+            expect(this.sandboxDatabase).toBeTruthy();
+            expect(this.dialog.executionLocationPicker.getSelectedDatabase()).toEqual(this.sandboxDatabase);
         });
     });
 
     describe("submitting", function() {
         beforeEach(function() {
-            // start with a valid form submission
-            this.dialog.$("input[name='fileName']").val("stuff").keyup();
-
-            this.fakeDatabase = rspecFixtures.database();
-            spyOn(this.dialog.executionLocationPicker, "getSelectedDatabase").andReturn(this.fakeDatabase);
+            spyOn(this.dialog.executionLocationPicker, "ready").andReturn(true);
             this.dialog.executionLocationPicker.trigger('change');
         });
 
         describe("with valid form values", function() {
+            beforeEach(function() {
+                this.dialog.$("input[name='fileName']").val("stuff").keyup();
+            });
+
             it("enables the submit button", function() {
                 expect(this.dialog.$("form button.submit")).not.toBeDisabled();
             });
@@ -47,46 +47,46 @@ describe("chorus.dialogs.WorkFlowNew", function() {
             it("submits the form", function() {
                 this.dialog.$("form").submit();
                 expect(this.server.lastCreate().params()["workfile[entity_subtype]"]).toEqual('alpine');
-                expect(this.server.lastCreate().params()["workfile[database_id]"]).toEqual(this.fakeDatabase.id);
-            });
-        });
-
-        describe("when the workfile creation succeeds", function() {
-            beforeEach(function() {
-                spyOn(this.dialog, "closeModal");
-                spyOn(chorus.router, "navigate");
-                this.dialog.$("form").submit();
-                this.server.completeSaveFor(this.dialog.resource, {id: 42});
+                expect(parseInt(this.server.lastCreate().params()["workfile[database_id]"], 10)).toEqual(this.sandboxDatabase.id);
             });
 
-            it("closes the dialog", function() {
-               expect(this.dialog.closeModal).toHaveBeenCalled();
+            describe("when the workfile creation succeeds", function() {
+                beforeEach(function() {
+                    spyOn(this.dialog, "closeModal");
+                    spyOn(chorus.router, "navigate");
+                    this.dialog.$("form").submit();
+                    this.server.completeSaveFor(this.dialog.resource, {id: 42});
+                });
+
+                it("closes the dialog", function() {
+                    expect(this.dialog.closeModal).toHaveBeenCalled();
+                });
+
+                it("navigates to the workflow page", function() {
+                    expect(chorus.router.navigate).toHaveBeenCalledWith("#/work_flows/42");
+                });
             });
 
-            it("navigates to the workflow page", function() {
-               expect(chorus.router.navigate).toHaveBeenCalledWith("#/work_flows/42");
-            });
-        });
+            describe("when the save fails", function() {
+                beforeEach(function() {
+                    spyOn($.fn, 'stopLoading');
+                    this.dialog.$("form").submit();
+                    this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity();
+                });
 
-        describe("when the save fails", function() {
-            beforeEach(function() {
-                spyOn($.fn, 'stopLoading');
-                this.dialog.$("form").submit();
-                this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity();
-            });
+                it("removes the spinner from the button", function() {
+                    expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
+                });
 
-            it("removes the spinner from the button", function() {
-                expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
-            });
-
-            it("does not erase the fileName input", function() {
-                expect(this.dialog.$("input[name='fileName']").val()).toBe("stuff");
+                it("does not erase the fileName input", function() {
+                    expect(this.dialog.$("input[name='fileName']").val()).toBe("stuff");
+                });
             });
         });
 
         describe("when no database is selected", function() {
             it("disables the form", function() {
-                spyOn(this.dialog.executionLocationPicker, "ready").andReturn(false);
+                this.dialog.executionLocationPicker.ready.andReturn(false);
                 this.dialog.executionLocationPicker.trigger('change');
 
                 expect(this.dialog.$("form button.submit")).toBeDisabled();

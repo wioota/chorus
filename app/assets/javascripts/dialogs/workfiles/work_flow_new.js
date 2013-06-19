@@ -2,7 +2,7 @@
 
 chorus.dialogs.WorkFlowNew = chorus.dialogs.WorkFlowNewBase.extend({
     subviews: {
-        ".schema_picker": "executionLocationPicker"
+        ".database_picker": "executionLocationPicker"
     },
 
     userWillPickSchema: true,
