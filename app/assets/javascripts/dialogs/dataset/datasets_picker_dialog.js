@@ -39,5 +39,10 @@ chorus.dialogs.DatasetsPicker = chorus.dialogs.PickItems.extend({
         var previewColumnsDialog = new chorus.dialogs.PreviewColumns({model: dataset});
         previewColumnsDialog.title = this.title;
         this.launchSubModal(previewColumnsDialog);
+    },
+
+    modalClosed: function() {
+        this._super("modalClosed", arguments);
+        this.collection.search("");
     }
 });

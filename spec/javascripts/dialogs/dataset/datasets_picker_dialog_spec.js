@@ -83,6 +83,17 @@ describe("chorus.dialogs.DatasetsPicker", function() {
                     expect(dialog.$("ul li:eq(0)")).toHaveClass("selected");
                 });
             });
+
+            describe("closing the dialog", function() {
+                beforeEach(function() {
+                    datasets.search("searching");
+                    dialog.$("button.cancel").click();
+                });
+
+                it("resets the namePattern on the collection", function() {
+                    expect(datasets.attributes.namePattern).toBe("");
+                });
+            });
         });
     });
 });
