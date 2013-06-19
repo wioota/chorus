@@ -4,11 +4,7 @@ class WorkfileVersionsController < ApplicationController
   def update
     workfile = Workfile.find(params[:workfile_id])
     authorize! :can_edit_sub_objects, workfile.workspace
-    workfile_version = workfile.versions.find_by_id(params[:id])
-
-    unless workfile_version
-      raise ActiveRecord::RecordNotFound.new(workfile)
-    end
+    workfile_version = workfile.versions.find(params[:id])
 
     workfile_version.update_content(params[:workfile][:content])
     workfile.remove_draft(current_user)
@@ -27,7 +23,7 @@ class WorkfileVersionsController < ApplicationController
     workfile = Workfile.find(params[:workfile_id])
     authorize! :show, workfile.workspace
 
-    workfile_version = WorkfileVersion.find(params[:id])
+    workfile_version = workfile.versions.find(params[:id])
     present workfile_version, :presenter_options => {:contents => true}
   end
 
@@ -42,16 +38,17 @@ class WorkfileVersionsController < ApplicationController
     workfile = Workfile.find(params[:workfile_id])
     authorize! :can_edit_sub_objects, workfile.workspace
     workfile_versions = workfile.versions
-    version_num = WorkfileVersion.find(params[:id]).version_num
+    workfile_version = workfile_versions.find(params[:id])
+    version_num = workfile_version.version_num
 
     Workfile.transaction do
       if workfile_versions.length == 1
         raise ApiValidationError.new(:base, :only_one_version)
       elsif workfile.latest_workfile_version_id == params[:id].to_i
-        WorkfileVersion.find(params[:id]).destroy
+        workfile_version.destroy
         workfile.update_attributes!({:latest_workfile_version_id => workfile_versions[1].id}, :without_protection => true)
       else
-        WorkfileVersion.find(params[:id]).destroy
+        workfile_version.destroy
       end
 
       Events::WorkfileVersionDeleted.by(current_user).add(
