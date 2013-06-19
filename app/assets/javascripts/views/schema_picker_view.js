@@ -141,7 +141,7 @@
             return selectedSchema && selectedSchema.id;
         },
 
-        // FIX ME
+        // TODO: FIX ME
         getSectionsToRestyle: function() {
             return this.options.showSchemaSection ? ["dataSource", "database", "schema"] : ["dataSource", "database"];
         },
@@ -155,6 +155,10 @@
                 case "schema":
                     return this.schemaView;
             }
+        },
+
+        getSelectedSchema: function() {
+            return this.schemaView.getSelectedSchema();
         },
 
         setSelection: function(type, value) {
