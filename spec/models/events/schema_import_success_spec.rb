@@ -1,5 +1,4 @@
 require 'spec_helper'
-
 require_relative 'helpers'
 
 describe Events::SchemaImportSuccess do

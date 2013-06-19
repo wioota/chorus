@@ -1,5 +1,6 @@
 class AlpineWorkfile < Workfile
-  class TooManyDataBases < StandardError; end
+  TooManyDataBases = Class.new(StandardError)
+
   class AlpineWorkfileValidator < ActiveModel::Validator
     def validate(record)
       ensure_single_database(record)
@@ -44,6 +45,14 @@ class AlpineWorkfile < Workfile
 
   def datasets
     @datasets ||= Dataset.where(:id => dataset_ids)
+  end
+
+  def create_new_version(user, params)
+    Events::WorkFlowUpgradedVersion.by(user).add(
+      :workfile => self,
+      :workspace => workspace,
+      :commit_message => params[:commit_message]
+    )
   end
 
   private

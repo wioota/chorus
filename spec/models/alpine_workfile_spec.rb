@@ -122,4 +122,29 @@ describe AlpineWorkfile do
       workfile.data_source.should == database.data_source
     end
   end
+
+  describe "#latest_workfile_version" do
+    it 'returns nil' do
+      model.latest_workfile_version.should be_nil
+    end
+  end
+
+  describe "#create_new_version" do
+    let(:event_params) do
+      {
+        :commit_message => 'new work flow'
+      }
+    end
+
+    it 'creates a workfile version upgrade event with the provided commit message' do
+      expect do
+        model.create_new_version(user, event_params)
+      end.to change(Events::WorkFlowUpgradedVersion, :count).by(1)
+
+      event = Events::WorkFlowUpgradedVersion.last
+      event.commit_message.should == 'new work flow'
+      event.workfile.should == model
+      event.workspace.should == model.workspace
+    end
+  end
 end
