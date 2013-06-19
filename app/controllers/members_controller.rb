@@ -26,7 +26,7 @@ class MembersController < ApplicationController
     unless added_members.empty?
       member = User.find(added_members.first)
       num_added = added_members.count
-      member_added_event = Events::MembersAdded.by(current_user).add(:workspace => workspace, :member => member, :num_added => num_added.to_s)
+      member_added_event = Events::MembersAdded.by(current_user).add(:workspace => workspace, :member => member, :num_added => num_added)
     end
     added_members.each do |member_id|
       Notification.create!(:recipient_id => member_id.to_i, :event_id => member_added_event.id)

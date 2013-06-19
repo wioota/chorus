@@ -94,9 +94,9 @@ class WorkfileVersionsController < ApplicationController
     Events::WorkfileUpgradedVersion.by(current_user).add(
         :workfile => workfile,
         :workspace => workspace,
-        :version_num => version_num.to_s,
+        :version_num => version_num,
         :commit_message => commit_message,
-        :version_id => version_id.to_s
+        :version_id => version_id
     )
   end
 end

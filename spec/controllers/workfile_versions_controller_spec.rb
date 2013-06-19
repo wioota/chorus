@@ -81,7 +81,7 @@ describe WorkfileVersionsController do
     it "deletes any saved workfile drafts for this workfile and user" do
       workfile_drafts(:draft_default).update_attribute(:workfile_id, workfile.id)
       draft_count(workfile, user).should == 1
-
+\
       post :create, params
       draft_count(workfile, user).should == 0
     end
@@ -91,7 +91,7 @@ describe WorkfileVersionsController do
       event = Events::WorkfileUpgradedVersion.by(user).last
       event.workfile.should == workfile
       event.workspace.to_param.should == workfile.workspace.id.to_s
-      event.additional_data["version_num"].should == "2"
+      event.additional_data["version_num"].should == 2
       event.additional_data["commit_message"].should == "A new version -1"
     end
   end

@@ -54,7 +54,7 @@ module BulkData
               Events::PublicWorkspaceCreated.by(current_user).add(:workspace => workspace) :
               Events::PrivateWorkspaceCreated.by(current_user).add(:workspace => workspace)
           member = User.find(members_added.first)
-          member_added_event = Events::MembersAdded.by(current_user).add(:workspace => workspace, :member => member, :num_added => members_added.count.to_s)
+          member_added_event = Events::MembersAdded.by(current_user).add(:workspace => workspace, :member => member, :num_added => members_added.count)
         end
       end
     end
