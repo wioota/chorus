@@ -26,7 +26,8 @@
             ".schema": "schemaView"
         },
 
-        setup: function() {
+
+        buildSelectorViews: function() {
             this.initialDataSource = this.options.dataSource;
 
             this.schemaView = new chorus.views.LocationPicker.SchemaView({
@@ -43,13 +44,21 @@
                 dataSource: this.initialDataSource,
                 childPicker: this.databaseView
             });
+        },
 
+        bindToSelectorViews: function() {
             _([this.schemaView, this.databaseView, this.dataSourceView]).each(function(subview) {
                 this.listenTo(subview, 'change', this.triggerSchemaSelected);
-                this.listenTo(subview, 'error', function(collection) { this.trigger('error', collection); });
-                this.listenTo(subview, 'clearErrors', function() { this.trigger('clearErrors'); });
+                this.listenTo(subview, 'error', function(collection) {
+                    this.trigger('error', collection);
+                });
+                this.listenTo(subview, 'clearErrors', function() {
+                    this.trigger('clearErrors');
+                });
             }, this);
+        },
 
+        setSelectorViewDefaults: function() {
             if(_.isUndefined(this.options.showSchemaSection)) {
                 this.options.showSchemaSection = true;
             }
@@ -76,6 +85,12 @@
             if(this.databaseView.selection) {
                 this.schemaView.fetchSchemas(this.databaseView.selection);
             }
+        },
+
+        setup: function() {
+            this.buildSelectorViews();
+            this.bindToSelectorViews();
+            this.setSelectorViewDefaults();
         },
 
         postRender: function() {
@@ -142,11 +157,6 @@
         schemaId: function() {
             var selectedSchema = this.schemaView.getSelectedSchema();
             return selectedSchema && selectedSchema.id;
-        },
-
-        // TODO: FIX ME
-        getSectionsToRestyle: function() {
-            return this.options.showSchemaSection ? ["dataSource", "database", "schema"] : ["dataSource", "database"];
         },
 
         getPickerSubview: function(type) {
