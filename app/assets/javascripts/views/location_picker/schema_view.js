@@ -53,5 +53,13 @@ chorus.views.LocationPicker.SchemaView = chorus.views.LocationPicker.SelectorVie
 
     getSelectedSchema: function() {
         return this.collection && this.collection.get(this.$('select option:selected').val());
+    },
+
+    fieldValues: function() {
+        if(this.selection) {
+            return {schema: this.selection.get("id")};
+        } else {
+            return {schemaName: this.$("input.name:visible").val() };
+        }
     }
 });

@@ -56,5 +56,11 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         return this.collection.filter(function(dataSource) {
             return dataSource.get("dataSourceProvider") !== "Hadoop";
         });
+    },
+
+    fieldValues: function() {
+        return {
+            dataSource: this.selection && this.selection.get("id")
+        };
     }
 });

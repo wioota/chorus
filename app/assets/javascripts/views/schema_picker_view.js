@@ -9,7 +9,7 @@
         CREATE_NEW = 5,
         CREATE_NESTED = 6;
 
-    chorus.views.SchemaPicker = chorus.views.Base.extend({
+    chorus.views.SchemaPicker = chorus.views.LocationPicker.BaseView.extend({
         constructorName: "SchemaPickerView",
         templateName: "schema_picker",
 
@@ -26,10 +26,7 @@
             ".schema": "schemaView"
         },
 
-
         buildSelectorViews: function() {
-            this.initialDataSource = this.options.dataSource;
-
             this.schemaView = new chorus.views.LocationPicker.SchemaView({
                 allowCreate: this.options.allowCreate
             });
@@ -41,21 +38,13 @@
             });
 
             this.dataSourceView = new chorus.views.LocationPicker.DataSourceView({
-                dataSource: this.initialDataSource,
+                dataSource: this.options.dataSource,
                 childPicker: this.databaseView
             });
         },
 
         bindToSelectorViews: function() {
-            _([this.schemaView, this.databaseView, this.dataSourceView]).each(function(subview) {
-                this.listenTo(subview, 'change', this.triggerSchemaSelected);
-                this.listenTo(subview, 'error', function(collection) {
-                    this.trigger('error', collection);
-                });
-                this.listenTo(subview, 'clearErrors', function() {
-                    this.trigger('clearErrors');
-                });
-            }, this);
+            _([this.schemaView, this.databaseView, this.dataSourceView]).each(this.bindSubviewEvents, this);
         },
 
         setSelectorViewDefaults: function() {
@@ -85,12 +74,6 @@
             if(this.databaseView.selection) {
                 this.schemaView.fetchSchemas(this.databaseView.selection);
             }
-        },
-
-        setup: function() {
-            this.buildSelectorViews();
-            this.bindToSelectorViews();
-            this.setSelectorViewDefaults();
         },
 
         postRender: function() {
@@ -130,44 +113,17 @@
         },
 
         fieldValues: function() {
-            var selectedDataSource = this.dataSourceView.selection;
-            var selectedDatabase = this.databaseView.selection;
-            var selectedSchema = this.schemaView.selection;
-
-            var attrs = {
-                dataSource: selectedDataSource && selectedDataSource.get("id")
-            };
-
-            if(selectedDatabase && selectedDatabase.get('id')) {
-                attrs.database = selectedDatabase.get("id");
-            } else if(selectedDatabase && selectedDatabase.get("name")) {
-                attrs.databaseName = selectedDatabase.get('name');
-            } else {
-                attrs.databaseName = this.$(".database input.name:visible").val();
-            }
-
-            if(selectedSchema) {
-                attrs.schema = selectedSchema.get("id");
-            } else {
-                attrs.schemaName = this.$(".schema input.name:visible").val();
-            }
-            return attrs;
+            var attrs = {};
+            return _(attrs).extend(
+                this.schemaView.fieldValues(),
+                this.databaseView.fieldValues(),
+                this.dataSourceView.fieldValues()
+            );
         },
 
         schemaId: function() {
             var selectedSchema = this.schemaView.getSelectedSchema();
             return selectedSchema && selectedSchema.id;
-        },
-
-        getPickerSubview: function(type) {
-            switch (type) {
-                case "dataSource":
-                    return this.dataSourceView;
-                case "database":
-                    return this.databaseView;
-                case "schema":
-                    return this.schemaView;
-            }
         },
 
         getSelectedSchema: function() {
@@ -178,18 +134,10 @@
             return this.databaseView.selection;
         },
 
-        setSelection: function(type, value) {
-            this.getPickerSubview(type).setSelection(value);
-            this.triggerSchemaSelected();
-        },
-
-        triggerSchemaSelected: function() {
-            this.trigger("change", this.ready());
-        },
-
         ready: function() {
             var attrs = this.fieldValues();
-            return !!(attrs.dataSource && (attrs.database || attrs.databaseName) && (attrs.schema || attrs.schemaName || !this.options.showSchemaSection));
+            return !!(attrs.dataSource && (attrs.database || attrs.databaseName) && (attrs.schema ||
+                attrs.schemaName || !this.options.showSchemaSection));
         },
 
         additionalContext: function() {

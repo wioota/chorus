@@ -17,15 +17,15 @@ describe("chorus.dialogs.WorkFlowNew", function() {
        expect(this.dialog.$el).toContainTranslation("work_flows.new_dialog.info");
     });
 
-    it("creates a schema picker with the schema section hidden", function(){
-       expect(this.dialog.schemaPicker.options.showSchemaSection).toBeFalsy();
+    it("creates a location picker picker with the schema section hidden", function(){
+       expect(this.dialog.$('.schema')).not.toExist();
     });
 
     context("when the workspace has a sandbox", function() {
         it("sets the default data source and database", function() {
             var sandboxDatabase = this.dialog.options.workspace.sandbox().database();
             expect(sandboxDatabase).toBeTruthy();
-            expect(this.dialog.schemaPicker.getSelectedDatabase()).toEqual(sandboxDatabase);
+            expect(this.dialog.executionLocationPicker.getSelectedDatabase()).toEqual(sandboxDatabase);
         });
     });
 
@@ -35,8 +35,8 @@ describe("chorus.dialogs.WorkFlowNew", function() {
             this.dialog.$("input[name='fileName']").val("stuff").keyup();
 
             this.fakeDatabase = rspecFixtures.database();
-            spyOn(this.dialog.schemaPicker, "getSelectedDatabase").andReturn(this.fakeDatabase);
-            this.dialog.schemaPicker.trigger('change');
+            spyOn(this.dialog.executionLocationPicker, "getSelectedDatabase").andReturn(this.fakeDatabase);
+            this.dialog.executionLocationPicker.trigger('change');
         });
 
         describe("with valid form values", function() {
@@ -86,8 +86,8 @@ describe("chorus.dialogs.WorkFlowNew", function() {
 
         describe("when no database is selected", function() {
             it("disables the form", function() {
-                spyOn(this.dialog.schemaPicker, "ready").andReturn(false);
-                this.dialog.schemaPicker.trigger('change');
+                spyOn(this.dialog.executionLocationPicker, "ready").andReturn(false);
+                this.dialog.executionLocationPicker.trigger('change');
 
                 expect(this.dialog.$("form button.submit")).toBeDisabled();
             });
