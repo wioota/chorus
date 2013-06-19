@@ -69,7 +69,7 @@ resource "Workfiles: versions" do
     parameter :workfile_id, "Id of a workfile"
     parameter :owner_id, "Workfile owner"
     parameter :commit_message, "Commit message"
-    parameter :modifier_id, "Workfile modifier"
+    parameter :modifier_id, "Id of the user modifying the workfile"
     parameter :content, "Content of the file"
 
     required_parameters :owner_id, :workfile_id, :modifier_id
