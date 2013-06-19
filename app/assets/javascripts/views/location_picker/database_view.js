@@ -60,6 +60,7 @@ chorus.views.LocationPicker.DatabaseView = chorus.views.LocationPicker.SelectorV
             this.clearSelection();
             this.childPicker && this.childPicker.hide();
         }
+        this.trigger('change');
     },
 
     fieldValues: function() {
@@ -76,5 +77,10 @@ chorus.views.LocationPicker.DatabaseView = chorus.views.LocationPicker.SelectorV
 
     getSelectedDatabase: function() {
         return this.collection && this.collection.get(this.$('select option:selected').val());
+    },
+
+    ready: function() {
+        var attrs = this.fieldValues();
+        return !!(attrs.database || attrs.databaseName);
     }
 });

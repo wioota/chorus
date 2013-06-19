@@ -35,6 +35,21 @@ chorus.views.LocationPicker.BaseView = chorus.views.Base.extend({
         }
     },
 
+    // TODO: Am I used anywhere?
+    fieldValues: function() {
+        var attrs = {};
+        var subviewFieldValues = _(this.getSubViews()).invoke('fieldValues');
+        _(subviewFieldValues).each(function(fieldValues) {
+            _(attrs).extend(fieldValues);
+        });
+        return attrs;
+    },
+
+    ready: function() {
+        var readiness = _(this.getSubViews()).invoke('ready');
+        return _.all(readiness, _.identity);
+    },
+
     STATES: {
         HIDDEN: 0,
         LOADING: 1,

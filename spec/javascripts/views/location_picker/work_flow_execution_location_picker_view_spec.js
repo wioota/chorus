@@ -181,181 +181,171 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
         });
 
         context("when nothing is provided", function() {
-            context("when allowCreate is true", function() {
+            beforeEach(function() {
+                this.view = new chorus.views.WorkFlowExecutionLocationPicker();
+                spyOnEvent(this.view, 'change');
+                spyOnEvent(this.view, 'clearErrors');
+                this.view.render();
+                this.dialogContainer = $("<div class='dialog sandbox_new'></div>").append(this.view.el);
+                $('#jasmine_content').append(this.dialogContainer);
+            });
+
+            it("includes accessible=true by default", function() {
+                expect(this.server.lastFetch().url).toContainQueryParams({accessible: true});
+            });
+
+            it('renders a select for the data source', function() {
+                expect(this.view.$('.data_source select')).toExist();
+                expect(this.view.$('.data_source .title')).not.toExist();
+            });
+
+            it("fetches the list of data sources", function() {
+                expect(this.server.requests[0].url).toMatch("/data_sources/");
+            });
+
+            itDisplaysLoadingPlaceholderFor('dataSource');
+
+            itShowsUnavailableTextWhenResponseIsEmptyFor('dataSource');
+
+            itSortsTheSelectOptionsAlphabetically('dataSource');
+
+            context('when the data source list fetch completes', function() {
                 beforeEach(function() {
-                    this.view = new chorus.views.WorkFlowExecutionLocationPicker({ allowCreate: true });
-                    spyOnEvent(this.view, 'change');
-                    spyOnEvent(this.view, 'clearErrors');
-                    this.view.render();
-                    this.dialogContainer = $("<div class='dialog sandbox_new'></div>").append(this.view.el);
-                    $('#jasmine_content').append(this.dialogContainer);
+                    this.server.completeFetchAllFor(this.view.dataSourceView.collection, [
+                        rspecFixtures.gpdbDataSource({ name: "<script>alert(hi)<script>", shared: true, id: 1 }),
+                        rspecFixtures.gpdbDataSource({ shared: true, id: 2 }),
+                        rspecFixtures.gpdbDataSource({ shared: false, id: 3 })
+                    ]);
                 });
 
-                it("includes accessible=true by default", function() {
-                    expect(this.server.lastFetch().url).toContainQueryParams({accessible: true});
+                itShowsSelect('dataSource');
+                itPopulatesSelect('dataSource');
+                itHidesSection('database');
+
+                itDisplaysDefaultOptionFor('dataSource');
+
+                it("hides the loading placeholder", function() {
+                    expect(this.view.$(".data_source .loading_text")).toHaveClass("hidden");
                 });
 
-                it('renders a select for the data source', function() {
-                    expect(this.view.$('.data_source select')).toExist();
-                    expect(this.view.$('.data_source .title')).not.toExist();
-                });
-
-                it("fetches the list of data sources", function() {
-                    expect(this.server.requests[0].url).toMatch("/data_sources/");
-                });
-
-                itDisplaysLoadingPlaceholderFor('dataSource');
-
-                itShowsUnavailableTextWhenResponseIsEmptyFor('dataSource');
-
-                itSortsTheSelectOptionsAlphabetically('dataSource');
-
-                context('when the data source list fetch completes', function() {
+                describe("when the view re-renders due to its parent re-rendering", function() {
                     beforeEach(function() {
-                        this.server.completeFetchAllFor(this.view.dataSourceView.collection, [
-                            rspecFixtures.gpdbDataSource({ name: "<script>alert(hi)<script>", shared: true, id: 1 }),
-                            rspecFixtures.gpdbDataSource({ shared: true, id: 2 }),
-                            rspecFixtures.gpdbDataSource({ shared: false, id: 3 })
-                        ]);
+                        this.view.render();
                     });
 
-                    itShowsSelect('dataSource');
-                    itPopulatesSelect('dataSource');
-                    itHidesSection('database');
-
-                    itDisplaysDefaultOptionFor('dataSource');
-
-                    it("hides the loading placeholder", function() {
+                    it("still hides the loading placeholder", function() {
                         expect(this.view.$(".data_source .loading_text")).toHaveClass("hidden");
                     });
 
-                    describe("when the view re-renders due to its parent re-rendering", function() {
+                    it('keeps the same options in the data source select', function() {
+                        expect(this.view.$("select[name=data_source] option").length).toBe(4);
+                    });
+                });
+
+                context('choosing a data source', function() {
+                    beforeEach(function() {
+                        this.view.$(".data_source select").prop("selectedIndex", 1).change();
+                        this.selectedDataSource = this.view.dataSourceView.collection.get(this.view.$('.data_source select option:selected').val());
+                    });
+
+                    itDisplaysLoadingPlaceholderFor('database');
+                    itTriggersTheChangeEvent(false);
+
+                    context("when the response is empty for databases", function() {
                         beforeEach(function() {
-                            this.view.render();
+                            this.server.completeFetchFor(this.view.databaseView.collection, []);
                         });
 
-                        it("still hides the loading placeholder", function() {
-                            expect(this.view.$(".data_source .loading_text")).toHaveClass("hidden");
-                        });
+                        itShowsUnavailable("database");
 
-                        it('keeps the same options in the data source select', function() {
-                            expect(this.view.$("select[name=data_source] option").length).toBe(4);
+                        describe('choosing another data source', function() {
+                            beforeEach(function() {
+                                this.view.$(".data_source select").prop("selectedIndex", 2).change();
+                            });
+
+                            itDisplaysLoadingPlaceholderFor('database');
                         });
                     });
 
-                    context('choosing a data source', function() {
+                    it("fetches the list of databases", function() {
+                        expect(this.server.requests[1].url).toMatch("/data_sources/" + this.selectedDataSource.get('id') + "/databases");
+                    });
+
+                    itSortsTheSelectOptionsAlphabetically('database');
+
+                    context("when the database list fetch completes", function() {
                         beforeEach(function() {
-                            this.view.$(".data_source select").prop("selectedIndex", 1).change();
-                            this.selectedDataSource = this.view.dataSourceView.collection.get(this.view.$('.data_source select option:selected').val());
+                            this.server.completeFetchFor(this.view.databaseView.collection, [rspecFixtures.database(), rspecFixtures.database()]);
                         });
 
-                        itDisplaysLoadingPlaceholderFor('database');
-                        itTriggersTheChangeEvent(false);
+                        itShowsSelect('database');
+                        itPopulatesSelect('database');
+                        itDisplaysDefaultOptionFor('database');
 
-                        context("when the response is empty for databases", function() {
+                        it("hides the loading placeholder", function() {
+                            expect(this.view.$(".database .loading_text")).toHaveClass("hidden");
+                        });
+
+                        it("shows the 'new database' link", function() {
+                            expect(this.view.$(".database a.new")).not.toHaveClass("hidden");
+                        });
+
+                        context("choosing a database", function() {
                             beforeEach(function() {
-                                this.server.completeFetchFor(this.view.databaseView.collection, []);
+                                this.view._chorusEventSpies["change"].reset();
+                                var select = this.view.$(".database select");
+                                select.prop("selectedIndex", 1);
+                                select.change();
+                                this.selectedDatabase = this.view.databaseView.collection.get(this.view.$('.database select option:selected').val());
                             });
 
-                            itShowsUnavailable("database");
+                            itTriggersTheChangeEvent(true);
+                        });
+                    });
 
-                            describe('choosing another data source', function() {
-                                beforeEach(function() {
-                                    this.view.$(".data_source select").prop("selectedIndex", 2).change();
-                                });
-
-                                itDisplaysLoadingPlaceholderFor('database');
-                            });
+                    context("when the database list fetch fails", function() {
+                        beforeEach(function() {
+                            spyOnEvent(this.view, 'error');
+                            this.server.lastFetchAllFor(this.view.databaseView.collection).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                         });
 
-                        it("fetches the list of databases", function() {
-                            expect(this.server.requests[1].url).toMatch("/data_sources/" + this.selectedDataSource.get('id') + "/databases");
+                        it("hides the loading section", function() {
+                            expect(this.view.$(".database .loading_text")).toHaveClass("hidden");
                         });
 
-                        itSortsTheSelectOptionsAlphabetically('database');
-
-                        context("when the database list fetch completes", function() {
-                            beforeEach(function() {
-                                this.server.completeFetchFor(this.view.databaseView.collection, [rspecFixtures.database(), rspecFixtures.database()]);
-                            });
-
-                            itShowsSelect('database');
-                            itPopulatesSelect('database');
-                            itDisplaysDefaultOptionFor('database');
-
-                            it("hides the loading placeholder", function() {
-                                expect(this.view.$(".database .loading_text")).toHaveClass("hidden");
-                            });
-
-                            it("shows the 'new database' link", function() {
-                                expect(this.view.$(".database a.new")).not.toHaveClass("hidden");
-                            });
-
-                            context("choosing a database", function() {
-                                beforeEach(function() {
-                                    this.view._chorusEventSpies["change"].reset();
-                                    var select = this.view.$(".database select");
-                                    select.prop("selectedIndex", 1);
-                                    select.change();
-                                    this.selectedDatabase = this.view.databaseView.collection.get(this.view.$('.database select option:selected').val());
-                                });
-
-                                itTriggersTheChangeEvent(false);
-                            });
-                        });
-
-                        context("when the database list fetch fails", function() {
-                            beforeEach(function() {
-                                spyOnEvent(this.view, 'error');
-                                this.server.lastFetchAllFor(this.view.databaseView.collection).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
-                            });
-
-                            it("hides the loading section", function() {
-                                expect(this.view.$(".database .loading_text")).toHaveClass("hidden");
-                            });
-
-                            it("triggers error with the message", function() {
-                                expect("error").toHaveBeenTriggeredOn(this.view, [this.view.databaseView.collection]);
-                            });
+                        it("triggers error with the message", function() {
+                            expect("error").toHaveBeenTriggeredOn(this.view, [this.view.databaseView.collection]);
                         });
                     });
                 });
+            });
 
-                context('when the data source list fetch completes without any data sources', function() {
-                    beforeEach(function() {
-                        this.server.completeFetchAllFor(this.view.dataSourceView.collection, []);
-                    });
-
-                    itShowsUnavailable('dataSource');
-                    itHidesSection('database');
+            context('when the data source list fetch completes without any data sources', function() {
+                beforeEach(function() {
+                    this.server.completeFetchAllFor(this.view.dataSourceView.collection, []);
                 });
 
-                context('when the data source list fetch fails', function() {
-                    beforeEach(function() {
-                        spyOnEvent(this.view, 'error');
-                        this.server.lastFetchAllFor(this.view.dataSourceView.collection).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
-                    });
+                itShowsUnavailable('dataSource');
+                itHidesSection('database');
+            });
 
-                    it("triggers error with the message", function() {
-                        expect("error").toHaveBeenTriggeredOn(this.view, [this.view.dataSourceView.collection]);
-                    });
+            context('when the data source list fetch fails', function() {
+                beforeEach(function() {
+                    spyOnEvent(this.view, 'error');
+                    this.server.lastFetchAllFor(this.view.dataSourceView.collection).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                 });
 
-                context("when allowCreate is false", function() {
-                    beforeEach(function() {
-                        this.view = new chorus.views.WorkFlowExecutionLocationPicker({ allowCreate: false });
-                        this.view.render();
-                        this.dialogContainer = $("<div class='dialog sandbox_new'></div>").append(this.view.el);
-                        $('#jasmine_content').append(this.dialogContainer);
-                    });
-
-                    it("does not render creation markup", function() {
-                        expect(this.view.$(".database a.new")).not.toExist();
-                        expect(this.view.$(".database .create_container")).not.toExist();
-                        expect(this.view.$(".schema a.new")).not.toExist();
-                        expect(this.view.$(".schema .create_container")).not.toExist();
-                    });
+                it("triggers error with the message", function() {
+                    expect("error").toHaveBeenTriggeredOn(this.view, [this.view.dataSourceView.collection]);
                 });
+            });
+
+
+            it("does not render creation markup", function() {
+                expect(this.view.$(".database a.new")).not.toExist();
+                expect(this.view.$(".database .create_container")).not.toExist();
+                expect(this.view.$(".schema a.new")).not.toExist();
+                expect(this.view.$(".schema .create_container")).not.toExist();
             });
         });
 
@@ -367,57 +357,35 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
                     this.view.render();
                     this.server.completeFetchFor(this.view.databaseView.collection, [ rspecFixtures.database({ id: '5' }) ]);
                     this.view.$(".database select").val("5").change();
-                    this.server.completeFetchAllFor(this.view.schemaView.collection, [ rspecFixtures.schema({ id: '6' }) ]);
-                    this.view.$(".schema select").val("6").change();
                 });
 
                 it('uses the provided data source', function() {
                     expect(this.view.fieldValues()).toEqual({
                         dataSource: this.dataSource.get('id'),
-                        database: '5',
-                        schema: '6'
+                        database: '5'
                     });
                 });
             });
 
             context('with no data source provided', function() {
                 beforeEach(function() {
-                    this.view = new chorus.views.WorkFlowExecutionLocationPicker({ allowCreate: true });
+                    this.view = new chorus.views.WorkFlowExecutionLocationPicker();
                     $('#jasmine_content').append(this.view.el);
                     this.view.render();
                     this.server.completeFetchAllFor(this.view.dataSourceView.collection, [ rspecFixtures.gpdbDataSource({ id: '4' }) ]);
                     this.view.$(".data_source select").val("4").change();
                 });
 
-                context('when a data source, database, and schema are selected from the dropdowns', function() {
+                context('when a data source, database are selected from the dropdowns', function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.view.databaseView.collection, [ rspecFixtures.database({ id: '5' }) ]);
                         this.view.$(".database select").val("5").change();
-                        this.server.completeFetchAllFor(this.view.schemaView.collection, [ rspecFixtures.schema({ id: '6' }) ]);
-                        this.view.$(".schema select").val("6").change();
                     });
 
                     it('returns data source, database, and schema ids', function() {
                         expect(this.view.fieldValues()).toEqual({
                             dataSource: '4',
-                            database: '5',
-                            schema: '6'
-                        });
-                    });
-                });
-
-                context("when the user enters new database and schema names", function() {
-                    beforeEach(function() {
-                        this.view.$(".database a.new").click();
-                        this.view.$(".database input.name").val("New_Database");
-                        this.view.$(".schema input.name").val("New_Schema").keyup();
-                    });
-
-                    it('returns the data source id and the database and schema names', function() {
-                        expect(this.view.fieldValues()).toEqual({
-                            dataSource: '4',
-                            databaseName: 'New_Database',
-                            schemaName: 'New_Schema'
+                            database: '5'
                         });
                     });
                 });
@@ -426,15 +394,16 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
 
         describe("#ready", function() {
             beforeEach(function() {
-                this.view = new chorus.views.WorkFlowExecutionLocationPicker({ allowCreate: true });
+                this.view = new chorus.views.WorkFlowExecutionLocationPicker();
             });
 
             context('when a data source, database, and schema are selected', function() {
                 beforeEach(function() {
-                    spyOn(this.view, "fieldValues").andReturn({
-                        dataSource: 5,
-                        database: 6,
-                        schema: 7
+                    spyOn(this.view.databaseView, "fieldValues").andReturn({
+                        database: 6
+                    });
+                    spyOn(this.view.dataSourceView, "fieldValues").andReturn({
+                        dataSource: 5
                     });
                 });
 
@@ -446,7 +415,7 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
             context("when not completely specified", function() {
                 context('with only a data source', function() {
                     beforeEach(function() {
-                        spyOn(this.view, "fieldValues").andReturn({
+                        spyOn(this.view.dataSourceView, "fieldValues").andReturn({
                             dataSource: 5
                         });
                     });
@@ -458,53 +427,11 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
 
                 context('with a data source and a blank databaseName', function() {
                     beforeEach(function() {
-                        spyOn(this.view, "fieldValues").andReturn({
-                            dataSource: 5,
-                            databaseName: ""
-                        });
-                    });
-
-                    it("return false", function() {
-                        expect(this.view.ready()).toBeFalsy();
-                    });
-                });
-
-                context('with a data source, a database, and a blank schemaName', function() {
-                    beforeEach(function() {
-                        spyOn(this.view, "fieldValues").andReturn({
-                            dataSource: 5,
-                            database: 6,
-                            schemaName: ""
-                        });
-                    });
-
-                    it("return false", function() {
-                        expect(this.view.ready()).toBeFalsy();
-                    });
-                });
-            });
-
-            context("with showSchemaSection false", function() {
-                beforeEach(function() {
-                    this.view = new chorus.views.WorkFlowExecutionLocationPicker({ allowCreate: true, showSchemaSection: false });
-                });
-
-                context('with only a data source', function() {
-                    beforeEach(function() {
-                        spyOn(this.view, "fieldValues").andReturn({
+                        spyOn(this.view.dataSourceView, "fieldValues").andReturn({
                             dataSource: 5
                         });
-                    });
 
-                    it("return false", function() {
-                        expect(this.view.ready()).toBeFalsy();
-                    });
-                });
-
-                context('with a data source and a blank databaseName', function() {
-                    beforeEach(function() {
-                        spyOn(this.view, "fieldValues").andReturn({
-                            dataSource: 5,
+                        spyOn(this.view.databaseView, "fieldValues").andReturn({
                             databaseName: ""
                         });
                     });
@@ -514,21 +441,21 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
                     });
                 });
 
-                context('with a data source, a database, and a blank schemaName', function() {
+                context('with a data source and a database', function() {
                     beforeEach(function() {
-                        spyOn(this.view, "fieldValues").andReturn({
-                            dataSource: 5,
-                            database: 6,
-                            schemaName: ""
+                        spyOn(this.view.dataSourceView, "fieldValues").andReturn({
+                            dataSource: 5
+                        });
+                        spyOn(this.view.databaseView, "fieldValues").andReturn({
+                            database: 6
                         });
                     });
 
-                    it("return false", function() {
+                    it("return true", function() {
                         expect(this.view.ready()).toBeTruthy();
                     });
                 });
             });
         });
-
     });
 });

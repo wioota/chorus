@@ -922,9 +922,13 @@ describe("chorus.views.SchemaPicker", function() {
 
             context('when a data source, database, and schema are selected', function() {
                 beforeEach(function() {
-                    spyOn(this.view, "fieldValues").andReturn({
-                        dataSource: 5,
-                        database: 6,
+                    spyOn(this.view.databaseView, "fieldValues").andReturn({
+                        database: 6
+                    });
+                    spyOn(this.view.dataSourceView, "fieldValues").andReturn({
+                        dataSource: 5
+                    });
+                    spyOn(this.view.schemaView, "fieldValues").andReturn({
                         schema: 7
                     });
                 });
@@ -937,7 +941,7 @@ describe("chorus.views.SchemaPicker", function() {
             context("when not completely specified", function() {
                 context('with only a data source', function() {
                     beforeEach(function() {
-                        spyOn(this.view, "fieldValues").andReturn({
+                        spyOn(this.view.dataSourceView, "fieldValues").andReturn({
                             dataSource: 5
                         });
                     });
@@ -949,53 +953,11 @@ describe("chorus.views.SchemaPicker", function() {
 
                 context('with a data source and a blank databaseName', function() {
                     beforeEach(function() {
-                        spyOn(this.view, "fieldValues").andReturn({
-                            dataSource: 5,
-                            databaseName: ""
-                        });
-                    });
-
-                    it("return false", function() {
-                        expect(this.view.ready()).toBeFalsy();
-                    });
-                });
-
-                context('with a data source, a database, and a blank schemaName', function() {
-                    beforeEach(function() {
-                        spyOn(this.view, "fieldValues").andReturn({
-                            dataSource: 5,
-                            database: 6,
-                            schemaName: ""
-                        });
-                    });
-
-                    it("return false", function() {
-                        expect(this.view.ready()).toBeFalsy();
-                    });
-                });
-            });
-
-            context("with showSchemaSection false", function() {
-                beforeEach(function() {
-                    this.view = new chorus.views.SchemaPicker({ allowCreate: true, showSchemaSection: false });
-                });
-
-                context('with only a data source', function() {
-                    beforeEach(function() {
-                        spyOn(this.view, "fieldValues").andReturn({
+                        spyOn(this.view.dataSourceView, "fieldValues").andReturn({
                             dataSource: 5
                         });
-                    });
 
-                    it("return false", function() {
-                        expect(this.view.ready()).toBeFalsy();
-                    });
-                });
-
-                context('with a data source and a blank databaseName', function() {
-                    beforeEach(function() {
-                        spyOn(this.view, "fieldValues").andReturn({
-                            dataSource: 5,
+                        spyOn(this.view.databaseView, "fieldValues").andReturn({
                             databaseName: ""
                         });
                     });
@@ -1007,15 +969,21 @@ describe("chorus.views.SchemaPicker", function() {
 
                 context('with a data source, a database, and a blank schemaName', function() {
                     beforeEach(function() {
-                        spyOn(this.view, "fieldValues").andReturn({
-                            dataSource: 5,
-                            database: 6,
+
+                        spyOn(this.view.dataSourceView, "fieldValues").andReturn({
+                            dataSource: 5
+                        });
+                        spyOn(this.view.databaseView, "fieldValues").andReturn({
+                            database: 6
+                        });
+
+                        spyOn(this.view.schemaView, "fieldValues").andReturn({
                             schemaName: ""
                         });
                     });
 
                     it("return false", function() {
-                        expect(this.view.ready()).toBeTruthy();
+                        expect(this.view.ready()).toBeFalsy();
                     });
                 });
             });

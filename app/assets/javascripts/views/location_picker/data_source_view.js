@@ -62,5 +62,10 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         return {
             dataSource: this.selection && this.selection.get("id")
         };
+    },
+
+    ready: function() {
+        var attrs = this.fieldValues();
+        return !!attrs.dataSource;
     }
 });

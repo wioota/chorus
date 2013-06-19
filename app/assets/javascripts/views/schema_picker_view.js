@@ -41,6 +41,9 @@
                 dataSource: this.options.dataSource,
                 childPicker: this.databaseView
             });
+            this.registerSubView(this.schemaView);
+            this.registerSubView(this.databaseView);
+            this.registerSubView(this.dataSourceView);
         },
 
         bindToSelectorViews: function() {
@@ -112,15 +115,6 @@
             this.triggerSchemaSelected();
         },
 
-        fieldValues: function() {
-            var attrs = {};
-            return _(attrs).extend(
-                this.schemaView.fieldValues(),
-                this.databaseView.fieldValues(),
-                this.dataSourceView.fieldValues()
-            );
-        },
-
         schemaId: function() {
             var selectedSchema = this.schemaView.getSelectedSchema();
             return selectedSchema && selectedSchema.id;
@@ -132,12 +126,6 @@
 
         getSelectedDatabase: function() {
             return this.databaseView.selection;
-        },
-
-        ready: function() {
-            var attrs = this.fieldValues();
-            return !!(attrs.dataSource && (attrs.database || attrs.databaseName) && (attrs.schema ||
-                attrs.schemaName || !this.options.showSchemaSection));
         },
 
         additionalContext: function() {

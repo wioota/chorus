@@ -16,6 +16,8 @@ chorus.views.WorkFlowExecutionLocationPicker = chorus.views.LocationPicker.BaseV
             dataSource: this.options.dataSource,
             childPicker: this.databaseView
         });
+        this.registerSubView(this.databaseView);
+        this.registerSubView(this.dataSourceView);
     },
 
     bindToSelectorViews: function() {
@@ -33,9 +35,5 @@ chorus.views.WorkFlowExecutionLocationPicker = chorus.views.LocationPicker.BaseV
 
     getSelectedDatabase: function() {
         return this.options.defaultSchema.database();
-    },
-
-    ready: function() {
-        return true;
     }
 });

@@ -61,5 +61,10 @@ chorus.views.LocationPicker.SchemaView = chorus.views.LocationPicker.SelectorVie
         } else {
             return {schemaName: this.$("input.name:visible").val() };
         }
+    },
+
+    ready: function() {
+        var attrs = this.fieldValues();
+        return !!(attrs.schema || attrs.schemaName);
     }
 });
