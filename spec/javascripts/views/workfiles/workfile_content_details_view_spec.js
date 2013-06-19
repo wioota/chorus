@@ -1,7 +1,8 @@
 describe("chorus.views.WorkfileContentDetails", function() {
     beforeEach(function() {
         this.model = rspecFixtures.workfile.sql();
-        this.model.workspace().set({ archivedAt: null });
+        this.workspace = this.model.workspace();
+        this.workspace.set({ archivedAt: null });
     });
 
     describe(".buildFor", function() {
@@ -127,17 +128,37 @@ describe("chorus.views.WorkfileContentDetails", function() {
             this.view.render();
         });
 
-        it("has the save_as button in the details bar", function() {
-            expect(this.view.$("button.save_as").length).toBe(1);
-            expect(this.view.$("button.save_as")).toContainTranslation('workfile.content_details.save_as');
+        context("if the user can update and if the workspace is not archived.", function() {
+            beforeEach(function() {
+                spyOn(this.workspace, "isActive").andReturn(true);
+                spyOn(this.workspace, "canUpdate").andReturn(true);
+                this.view.render();
+            });
+
+            it("has the save_as button in the details bar", function() {
+                expect(this.view.$("button.save_as")).toExist();
+                expect(this.view.$("button.save_as")).toContainTranslation('workfile.content_details.save_as');
+            });
+
+            it("should not have disabled class from the save as link", function() {
+                expect(this.view.$(".save_as")).not.toBeDisabled();
+            });
+
+            it("should not display the autosave text", function() {
+                expect(this.view.$("span.auto_save")).toHaveClass("hidden");
+            });
         });
 
-        it("should not have disabled class from the save as link", function() {
-            expect(this.view.$(".save_as")).not.toBeDisabled();
-        });
+        context("if the user can't update", function() {
+            beforeEach(function() {
+                spyOn(this.workspace, "isActive").andReturn(true);
+                spyOn(this.workspace, "canUpdate").andReturn(false);
+                this.view.render();
+            });
 
-        it("should not display the autosave text", function() {
-            expect(this.view.$("span.auto_save")).toHaveClass("hidden");
+            it("does not have the save_as button in the details bar", function() {
+                expect(this.view.$("button.save_as")).toBeDisabled();
+            });
         });
 
         context("menus", function() {

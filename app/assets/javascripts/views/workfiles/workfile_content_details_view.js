@@ -24,7 +24,8 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.include(
 
     additionalContext: function() {
         return {
-            isLatestVersion: this.model.isLatestVersion()
+            isLatestVersion: this.model.isLatestVersion(),
+            disableSaveButton: !this.model.workspace().isActive() || !this.model.workspace().canUpdate()
         };
     },
 
@@ -52,10 +53,6 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.include(
 
         if (!this.model.isLatestVersion()) {
             this.fileMenu.disableItem("replace");
-        }
-
-        if (!this.model.workspace().isActive()) {
-            this.$(".save_as").attr("disabled", true);
         }
 
         this.bindStickyHeader();
