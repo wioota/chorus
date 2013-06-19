@@ -1,9 +1,9 @@
 (function() {
-    var hidden;
+    var presenterHelpers, headerDefinitions;
     chorus.presenters.Activity = chorus.presenters.Base.extend({
 
         headerHtml: function() {
-            var string = t(hidden.headerTranslationKey(this, this.isNotification()), hidden.headerParams(this));
+            var string = t(presenterHelpers.headerTranslationKey(this, this.isNotification()), presenterHelpers.headerParams(this));
             return new Handlebars.SafeString(string);
         },
 
@@ -132,252 +132,252 @@
         return model;
     }
 
-    hidden = {
-        headerParamOptions: {
-            CredentialsInvalid: {
-                links: [ "dataSource" ],
+    headerDefinitions =  {
+        CredentialsInvalid: {
+            links: [ "dataSource" ],
                 computed: [ "updateCredentialsLink" ]
-            },
-            DataSourceChangedName: {
-                links: [ "actor", "dataSource" ],
+        },
+        DataSourceChangedName: {
+            links: [ "actor", "dataSource" ],
                 attrs: [ "newName", "oldName" ]
-            },
-
-            HdfsDataSourceChangedName: {
-                links: [ "actor", "hdfsDataSource" ],
-                attrs: [ "newName", "oldName" ]
-            },
-
-            DataSourceCreated: {
-                links: [ "actor", "dataSource" ]
-            },
-
-            DataSourceDeleted: {
-                links: [ "actor", "dataSource" ]
-            },
-
-            GnipDataSourceCreated: {
-                links: [ "actor", "gnipDataSource" ]
-            },
-
-            HdfsDataSourceCreated: {
-                links: [ "actor", "hdfsDataSource" ]
-            },
-
-            DataSourceChangedOwner: {
-                links: [ "actor", "dataSource", "newOwner" ]
-            },
-
-            PublicWorkspaceCreated: {
-                links: [ "actor", "workspace" ]
-            },
-
-            PrivateWorkspaceCreated: {
-                links: [ "actor", "workspace" ]
-            },
-
-            WorkspaceMakePublic: {
-                links: [ "actor", "workspace" ]
-            },
-
-            WorkspaceToShowSandboxDatasets: {
-                links: [ "actor", "workspace" ]
-            },
-
-            WorkspaceToNoLongerShowSandboxDatasets: {
-                links: [ "actor", "workspace" ]
-            },
-
-            WorkspaceMakePrivate: {
-                links: [ "actor", "workspace" ]
-            },
-
-            WorkspaceArchived: {
-                links: [ "actor", "workspace" ]
-            },
-
-            WorkspaceDeleted: {
-                links: [ "actor", "workspace" ]
-            },
-
-            WorkspaceUnarchived: {
-                links: [ "actor", "workspace" ]
-            },
-
-            WorkfileCreated: {
-                links: [ "actor", "workfile", "workspace" ]
-            },
-
-            WorkspaceAddSandbox: {
-                links: [ "actor", "workspace" ]
-            },
-
-            SourceTableCreated: {
-                links: [ "actor", "dataset", "workspace" ],
-                computed: [ "datasetType" ]
-            },
-
-            UserAdded: {
-                links: [ "newUser"]
-            },
-
-            HdfsFileExtTableCreated: {
-                links: [ "actor", "hdfsEntry", "workspace", "dataset"]
-            },
-
-            HdfsDirectoryExtTableCreated: {
-                links: [ "actor", "hdfsEntry", "workspace", "dataset"]
-            },
-
-            HdfsPatternExtTableCreated: {
-                links: [ "actor", "hdfsEntry", "workspace", "dataset"],
-                attrs: ['filePattern']
-            },
-
-            NOTE: {
-                links: [ "actor", "noteObject", "workspace" ],
-                computed: [ "noteObjectType" ]
-            },
-
-            FileImportCreated: {
-                links: ["actor", "workspace", "dataset"],
-                attrs: ["importType"],
-                computed: ["importSourceLink", "datasetType", "destObjectOrName"]
-            },
-
-            FileImportSuccess: {
-                links: ["workspace", "dataset"],
-                attrs: ["importType"],
-                computed: ["importSourceLink", "datasetType", "destObjectOrName"]
-            },
-
-            FileImportFailed: {
-                links: ["workspace"],
-                attrs: ["importType", "destinationTable"],
-                computed: ["importSourceLink", "datasetType", "destObjectOrName"]
-            },
-
-            MembersAdded: {
-                links: ["actor", "workspace", "member"],
-                computed: ["count"]
-            },
-
-            WorkspaceImportCreated: {
-                links: ["actor", "workspace", "dataset"],
-                attrs: ["sourceTable"],
-                computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
-            },
-
-            ImportScheduleUpdated: {
-                links: ["actor", "workspace", "dataset"],
-                attrs: ["sourceTable"],
-                computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
-            },
-
-            ImportScheduleDeleted: {
-                links: ["actor", "workspace", "dataset"],
-                attrs: ["sourceTable"],
-                computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
-            },
-
-            WorkspaceImportSuccess: {
-                links: ["workspace", "dataset"],
-                attrs: ["sourceTable"],
-                computed: ["importSourceDatasetLink", "datasetType"]
-            },
-
-            WorkspaceImportFailed: {
-                links: ["workspace"],
-                attrs: ["sourceDataset"],
-                computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
-            },
-
-            SchemaImportSuccess: {
-                computed: ["destinationDatasetInSchemaLink", "sourceDatasetInSchemaLink", 'destinationSchemaLink']
-            },
-
-            SchemaImportFailed: {
-                computed: ["sourceDatasetInSchemaLink", 'destinationSchemaLink', 'destObjectOrNameInSchema']
-            },
-
-            SchemaImportCreated: {
-                links: ["actor", "schema"],
-                computed: ["sourceDatasetInSchemaLink", "datasetType", "destObjectOrNameInSchema"]
-            },
-
-            GnipStreamImportCreated: {
-                links: ["actor", "gnipDataSource", "dataset"],
-                attrs: ["destinationTable"],
-                computed: ["destObjectOrName"]
-            },
-
-            GnipStreamImportSuccess: {
-                links: ["workspace", "gnipDataSource", "dataset"]
-            },
-
-            GnipStreamImportFailed: {
-                links: ["workspace", "gnipDataSource"],
-                attrs: ["destinationTable"]
-            },
-
-            WorkfileUpgradedVersion: {
-                links: [ "actor", "workfile", "workspace" ],
-                computed: ["versionLink"]
-            },
-
-            WorkfileVersionDeleted: {
-                links: [ "actor", "workfile", "workspace" ],
-                attrs: ["versionNum"]
-            },
-
-            WorkFlowUpgradedVersion: {
-                links: [ "actor", "workfile"]
-            },
-
-            ChorusViewCreated: {
-                links: [ "actor", "workspace", "dataset"],
-                computed: [ "chorusViewSourceLink", "chorusViewSourceType" ]
-            },
-
-            ChorusViewChanged: {
-                links: ["actor", "workspace", "dataset"]
-            },
-
-            ViewCreated: {
-                links: [ "actor", "workspace", "dataset"],
-                computed: [ "chorusViewLink" ]
-            },
-
-            WorkspaceChangeName: {
-                links: ["actor", "workspace"],
-                computed: ["workspaceOldName"]
-            },
-
-            TableauWorkbookPublished: {
-                links: ["actor", "dataset"],
-                computed: ["datasetType", "tableauWorkbookLink", "tableauProjectLink"]
-            },
-
-            TableauWorkfileCreated: {
-                links: ["actor", "workspace", "dataset", "workfile"],
-                computed: ["datasetType"]
-            },
-
-            SUB_COMMENT: {
-                links: ["author"]
-            }
-
         },
 
+        HdfsDataSourceChangedName: {
+            links: [ "actor", "hdfsDataSource" ],
+                attrs: [ "newName", "oldName" ]
+        },
+
+        DataSourceCreated: {
+            links: [ "actor", "dataSource" ]
+        },
+
+        DataSourceDeleted: {
+            links: [ "actor", "dataSource" ]
+        },
+
+        GnipDataSourceCreated: {
+            links: [ "actor", "gnipDataSource" ]
+        },
+
+        HdfsDataSourceCreated: {
+            links: [ "actor", "hdfsDataSource" ]
+        },
+
+        DataSourceChangedOwner: {
+            links: [ "actor", "dataSource", "newOwner" ]
+        },
+
+        PublicWorkspaceCreated: {
+            links: [ "actor", "workspace" ]
+        },
+
+        PrivateWorkspaceCreated: {
+            links: [ "actor", "workspace" ]
+        },
+
+        WorkspaceMakePublic: {
+            links: [ "actor", "workspace" ]
+        },
+
+        WorkspaceToShowSandboxDatasets: {
+            links: [ "actor", "workspace" ]
+        },
+
+        WorkspaceToNoLongerShowSandboxDatasets: {
+            links: [ "actor", "workspace" ]
+        },
+
+        WorkspaceMakePrivate: {
+            links: [ "actor", "workspace" ]
+        },
+
+        WorkspaceArchived: {
+            links: [ "actor", "workspace" ]
+        },
+
+        WorkspaceDeleted: {
+            links: [ "actor", "workspace" ]
+        },
+
+        WorkspaceUnarchived: {
+            links: [ "actor", "workspace" ]
+        },
+
+        WorkfileCreated: {
+            links: [ "actor", "workfile", "workspace" ]
+        },
+
+        WorkspaceAddSandbox: {
+            links: [ "actor", "workspace" ]
+        },
+
+        SourceTableCreated: {
+            links: [ "actor", "dataset", "workspace" ],
+                computed: [ "datasetType" ]
+        },
+
+        UserAdded: {
+            links: [ "newUser"]
+        },
+
+        HdfsFileExtTableCreated: {
+            links: [ "actor", "hdfsEntry", "workspace", "dataset"]
+        },
+
+        HdfsDirectoryExtTableCreated: {
+            links: [ "actor", "hdfsEntry", "workspace", "dataset"]
+        },
+
+        HdfsPatternExtTableCreated: {
+            links: [ "actor", "hdfsEntry", "workspace", "dataset"],
+                attrs: ['filePattern']
+        },
+
+        NOTE: {
+            links: [ "actor", "noteObject", "workspace" ],
+                computed: [ "noteObjectType" ]
+        },
+
+        FileImportCreated: {
+            links: ["actor", "workspace", "dataset"],
+                attrs: ["importType"],
+                computed: ["importSourceLink", "datasetType", "destObjectOrName"]
+        },
+
+        FileImportSuccess: {
+            links: ["workspace", "dataset"],
+                attrs: ["importType"],
+                computed: ["importSourceLink", "datasetType", "destObjectOrName"]
+        },
+
+        FileImportFailed: {
+            links: ["workspace"],
+                attrs: ["importType", "destinationTable"],
+                computed: ["importSourceLink", "datasetType", "destObjectOrName"]
+        },
+
+        MembersAdded: {
+            links: ["actor", "workspace", "member"],
+                computed: ["count"]
+        },
+
+        WorkspaceImportCreated: {
+            links: ["actor", "workspace", "dataset"],
+                attrs: ["sourceTable"],
+                computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
+        },
+
+        ImportScheduleUpdated: {
+            links: ["actor", "workspace", "dataset"],
+                attrs: ["sourceTable"],
+                computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
+        },
+
+        ImportScheduleDeleted: {
+            links: ["actor", "workspace", "dataset"],
+                attrs: ["sourceTable"],
+                computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
+        },
+
+        WorkspaceImportSuccess: {
+            links: ["workspace", "dataset"],
+                attrs: ["sourceTable"],
+                computed: ["importSourceDatasetLink", "datasetType"]
+        },
+
+        WorkspaceImportFailed: {
+            links: ["workspace"],
+                attrs: ["sourceDataset"],
+                computed: ["importSourceDatasetLink", "datasetType", "destObjectOrName"]
+        },
+
+        SchemaImportSuccess: {
+            computed: ["destinationDatasetInSchemaLink", "sourceDatasetInSchemaLink", 'destinationSchemaLink']
+        },
+
+        SchemaImportFailed: {
+            computed: ["sourceDatasetInSchemaLink", 'destinationSchemaLink', 'destObjectOrNameInSchema']
+        },
+
+        SchemaImportCreated: {
+            links: ["actor", "schema"],
+                computed: ["sourceDatasetInSchemaLink", "datasetType", "destObjectOrNameInSchema"]
+        },
+
+        GnipStreamImportCreated: {
+            links: ["actor", "gnipDataSource", "dataset"],
+                attrs: ["destinationTable"],
+                computed: ["destObjectOrName"]
+        },
+
+        GnipStreamImportSuccess: {
+            links: ["workspace", "gnipDataSource", "dataset"]
+        },
+
+        GnipStreamImportFailed: {
+            links: ["workspace", "gnipDataSource"],
+                attrs: ["destinationTable"]
+        },
+
+        WorkfileUpgradedVersion: {
+            links: [ "actor", "workfile", "workspace" ],
+                computed: ["versionLink"]
+        },
+
+        WorkfileVersionDeleted: {
+            links: [ "actor", "workfile", "workspace" ],
+                attrs: ["versionNum"]
+        },
+
+        WorkFlowUpgradedVersion: {
+            links: [ "actor", "workfile"]
+        },
+
+        ChorusViewCreated: {
+            links: [ "actor", "workspace", "dataset"],
+                computed: [ "chorusViewSourceLink", "chorusViewSourceType" ]
+        },
+
+        ChorusViewChanged: {
+            links: ["actor", "workspace", "dataset"]
+        },
+
+        ViewCreated: {
+            links: [ "actor", "workspace", "dataset"],
+                computed: [ "chorusViewLink" ]
+        },
+
+        WorkspaceChangeName: {
+            links: ["actor", "workspace"],
+                computed: ["workspaceOldName"]
+        },
+
+        TableauWorkbookPublished: {
+            links: ["actor", "dataset"],
+                computed: ["datasetType", "tableauWorkbookLink", "tableauProjectLink"]
+        },
+
+        TableauWorkfileCreated: {
+            links: ["actor", "workspace", "dataset", "workfile"],
+                computed: ["datasetType"]
+        },
+
+        SUB_COMMENT: {
+            links: ["author"]
+        }
+
+    };
+
+    presenterHelpers = {
         headerParams: function(self) {
             var model = self.model;
             var action = model.get("action");
 
             var params = {};
-            var options = hidden.headerParamOptions[action];
+            var options = headerDefinitions[action];
             _.each(options.links, function(name) {
                 var associatedModel = model[name]();
-                params[name + "Link"] = hidden.modelLink(associatedModel);
+                params[name + "Link"] = presenterHelpers.modelLink(associatedModel);
             });
 
             _.each(options.attrs, function(name) {
@@ -385,7 +385,7 @@
             });
 
             _.each(options.computed, function(name) {
-                params[name] = hidden[name](self);
+                params[name] = presenterHelpers[name](self);
             });
 
             return params;
@@ -432,7 +432,7 @@
 
         headerTranslationKey: function(self, isNotification) {
             var mainKey = ["activity.header", self.model.get("action")].join(".");
-            var possibleStyles = _.compact(_.flatten([hidden.displayStyle(self.model, self.options.displayStyle, isNotification), hidden.defaultStyle(self.model, isNotification), 'default']));
+            var possibleStyles = _.compact(_.flatten([presenterHelpers.displayStyle(self.model, self.options.displayStyle, isNotification), presenterHelpers.defaultStyle(self.model, isNotification), 'default']));
             var key, n = possibleStyles.length;
 
             if (isNotification) {
@@ -478,7 +478,7 @@
                     return "workspace";
                 case "NoteOnDataset":
                 case "NoteOnWorkspaceDataset":
-                    return hidden.datasetType(self);
+                    return presenterHelpers.datasetType(self);
                 default:
                     return "";
             }
@@ -557,7 +557,7 @@
         destObjectOrName: function(self) {
             var dataset = self.model["dataset"]();
             if (dataset.get("id")) {
-                return hidden.modelLink(dataset);
+                return presenterHelpers.modelLink(dataset);
             }
             return self.model.get("destinationTable");
         },
