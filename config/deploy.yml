@@ -16,6 +16,7 @@ fresh_install:
   postgres_build: 2
   install_path: ~/chorusrails_freshinstall
   clean_install: true
+  kill_workers: true
 
 load_test:
   <<: *stage
