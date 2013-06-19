@@ -23,9 +23,9 @@ describe("chorus.dialogs.WorkFlowNew", function() {
 
     context("when the workspace has a sandbox", function() {
         it("sets the default data source and database", function() {
-            var database = this.dialog.options.workspace.sandbox().database();
-            expect(database).toBeTruthy();
-            expect(this.dialog.schemaPicker.selection.database).toEqual(database);
+            var sandboxDatabase = this.dialog.options.workspace.sandbox().database();
+            expect(sandboxDatabase).toBeTruthy();
+            expect(this.dialog.schemaPicker.getSelectedDatabase()).toEqual(sandboxDatabase);
         });
     });
 

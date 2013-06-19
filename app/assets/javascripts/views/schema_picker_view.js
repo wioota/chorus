@@ -161,7 +161,11 @@
         },
 
         getSelectedSchema: function() {
-            return this.schemaView.getSelectedSchema();
+            return this.schemaView.selection;
+        },
+
+        getSelectedDatabase: function() {
+            return this.databaseView.selection;
         },
 
         setSelection: function(type, value) {

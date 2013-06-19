@@ -37,7 +37,8 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
     },
 
     getSelectedDataSource: function() {
-        return this.collection && this.collection.get(this.$('select option:selected').val());
+        var dataSourceId = this.$('select option:selected').val();
+        return this.collection && this.collection.get(dataSourceId);
     },
 
     additionalContext: function() {
