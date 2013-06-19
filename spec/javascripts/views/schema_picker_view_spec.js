@@ -730,7 +730,6 @@ describe("chorus.views.SchemaPicker", function() {
                     ]);
                 });
 
-                itHidesSection("schema");
                 itDisplaysLoadingPlaceholderFor('database');
 
                 context("when the databases list does not include the selected database", function() {

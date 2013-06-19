@@ -49,7 +49,9 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
             this.clearSelection();
         }
 
-        chorus.styleSelect(select);
+        _.defer(function() {
+            chorus.styleSelect(select);
+        });
     },
 
     rebuildEmptySelect: function() {
