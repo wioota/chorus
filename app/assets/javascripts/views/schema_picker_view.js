@@ -76,8 +76,6 @@
         },
 
         postRender: function() {
-//            this.restyleAllSectionsToReflectStates();
-
             this.$('.loading_spinner').startLoading();
             this.$("input.name").bind("textchange", _.bind(this.triggerSchemaSelected, this));
         },
@@ -171,11 +169,6 @@
         ready: function() {
             var attrs = this.fieldValues();
             return !!(attrs.dataSource && (attrs.database || attrs.databaseName) && (attrs.schema || attrs.schemaName || !this.options.showSchemaSection));
-        },
-
-        showErrorForMissingSchema: function() {
-            this.schemas.serverErrors = {fields: {base: {SCHEMA_MISSING: {name: this.selection.schema.name()}}}};
-            this.trigger("error", this.schemas);
         },
 
         additionalContext: function() {

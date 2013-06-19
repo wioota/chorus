@@ -103,7 +103,7 @@ describe("chorus.views.SchemaPicker", function() {
             it("sorts the select options alphabetically for " + type, function() {
 
                 if(type === "dataSource") {
-                    this.server.completeFetchAllFor(this.view.dataSources, [
+                    this.server.completeFetchAllFor(this.view.dataSourceView.collection, [
                         rspecFixtures.gpdbDataSource({name: "Zoo"}),
                         rspecFixtures.gpdbDataSource({name: "Aardvark"}),
                         rspecFixtures.gpdbDataSource({name: "bear"})
@@ -115,7 +115,7 @@ describe("chorus.views.SchemaPicker", function() {
                         rspecFixtures.schema({name: "bear"})
                     ]);
                 } else { // type === 'database'
-                    this.server.completeFetchFor(this.view.databases, [
+                    this.server.completeFetchFor(this.view.databaseView.collection, [
                         rspecFixtures.database({name: "Zoo"}),
                         rspecFixtures.database({name: "Aardvark"}),
                         rspecFixtures.database({name: "bear"})]);

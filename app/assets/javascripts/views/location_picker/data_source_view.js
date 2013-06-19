@@ -43,7 +43,7 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
     additionalContext: function() {
         return {
             dataSource: this.options.dataSource
-        }
+        };
     },
 
     dataSourcesLoaded: function() {

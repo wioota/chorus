@@ -2,13 +2,20 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
 
     onSelection: $.noop,
     onFetchFailed: $.noop,
+    onMissingSelection: $.noop,
+
+    maybeHideChildren: function() {
+        var waitingForSelect = (this.stateValue === this.STATES.SELECT && !this.selection);
+        var notChoosable = _.contains([this.STATES.UNAVAILABLE, this.STATES.LOADING, this.STATES.HIDDEN], this.stateValue);
+        if(notChoosable || waitingForSelect) {
+            this.childPicker && this.childPicker.hide();
+        }
+    },
 
     setState: function(stateValue) {
         this.stateValue = stateValue;
         this.restyle(stateValue);
-        if (_.contains([this.STATES.UNAVAILABLE, this.STATES.LOADING, this.STATES.HIDDEN], stateValue)) {
-            this.childPicker && this.childPicker.hide();
-        }
+        this.maybeHideChildren();
     },
 
     hide: function() {
@@ -25,8 +32,6 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
     },
 
     populateSelect: function(defaultValue) {
-//        var models = (type === "dataSource") ? this.gpdbDataSources() : this[type + "s"].models;
-
         var select = this.rebuildEmptySelect();
 
         _.each(this.sortModels(this.collection && this.collection.models), function(model) {
@@ -40,7 +45,7 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
         });
 
         if(defaultValue !== undefined && !_.contains(_.pluck(this.collection.models, "id"), defaultValue)) {
-//            if(type === "schema") this.showErrorForMissingSchema(); IMPLEMENT ME
+            this.onMissingSelection();
             this.clearSelection();
         }
 
