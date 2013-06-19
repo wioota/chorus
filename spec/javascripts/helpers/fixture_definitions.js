@@ -52,6 +52,7 @@ window.rspecFixtureDefinitions = {
             workfileCreated: {},
             workfileUpgradedVersion: {},
             workfileVersionDeleted: {},
+            workFlowUpgradedVersion: {},
             workspaceChangeName: {},
             workspaceDeleted: {},
             workspaceMakePublic: {},

@@ -325,6 +325,7 @@ FixtureBuilder.configure do |fbuilder|
         @note_on_no_collaborators_private_workfile = Events::NoteOnWorkfile.create!({:note_target => no_collaborators_private, :body => 'notesearch never'}, :as => :create)
       end
       Events::WorkfileUpgradedVersion.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :workfile => no_collaborators_private, :commit_message => 'commit message', :version_id => no_collaborators_workfile_version.id, :version_num => 1)
+      Events::WorkFlowUpgradedVersion.by(no_collaborators).add(:workspace => no_collaborators_private_workspace, :workfile => no_collaborators_private, :commit_message => 'commit message')
 
       Events::WorkfileVersionDeleted.by(owner).add(:workspace => public_workspace, :workfile => public_workfile, :version_num => "15")
 

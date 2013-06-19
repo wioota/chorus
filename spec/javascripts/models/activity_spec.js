@@ -316,6 +316,10 @@ describe("chorus.models.Activity", function() {
             expect(rspecFixtures.activity.workfileUpgradedVersion().hasCommitMessage()).toBeTruthy();
         });
 
+        it("returns true for activity where action is work flow upgraded version and commit message is not empty", function() {
+            expect(rspecFixtures.activity.workFlowUpgradedVersion().hasCommitMessage()).toBeTruthy();
+        });
+
         it("returns true for activity where action is WorkfileCreated with commit message", function() {
             expect(rspecFixtures.activity.workfileCreated().hasCommitMessage()).toBeTruthy();
         });

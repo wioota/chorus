@@ -330,6 +330,10 @@
                 attrs: ["versionNum"]
             },
 
+            WorkFlowUpgradedVersion: {
+                links: [ "actor", "workfile"]
+            },
+
             ChorusViewCreated: {
                 links: [ "actor", "workspace", "dataset"],
                 computed: [ "chorusViewSourceLink", "chorusViewSourceType" ]

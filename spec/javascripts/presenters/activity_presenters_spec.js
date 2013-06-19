@@ -692,6 +692,28 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("work flow upgrade version", function() {
+        beforeEach(function() {
+            this.model = rspecFixtures.activity.workFlowUpgradedVersion();
+            this.presenter = new chorus.presenters.Activity(this.model);
+            this.actor = this.model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            this.workfile = this.model.workfile();
+            this.workspace = this.workfile.workspace();
+
+            expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.WorkFlowUpgradedVersion.default", {
+                    actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
+                    workfileLink: linkTo(this.workfile.showUrl(), this.workfile.name())
+                }
+            );
+        });
+    });
+
     context("workfile version deleted", function() {
         beforeEach(function() {
             this.model = rspecFixtures.activity.workfileVersionDeleted();

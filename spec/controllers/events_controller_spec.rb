@@ -291,6 +291,7 @@ describe EventsController do
         'workspaceImportSuccess' => Events::WorkspaceImportSuccess,
         'workspaceImportFailed' => Events::WorkspaceImportFailed,
         'workfileUpgradedVersion' => Events::WorkfileUpgradedVersion,
+        'workFlowUpgradedVersion' => Events::WorkFlowUpgradedVersion,
         'workfileVersionDeleted' => Events::WorkfileVersionDeleted,
         'chorusViewCreatedFromWorkfile' => Events::ChorusViewCreated.from_workfile,
         'chorusViewCreatedFromDataset' => Events::ChorusViewCreated.from_dataset,
