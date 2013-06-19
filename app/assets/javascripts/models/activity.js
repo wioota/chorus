@@ -210,9 +210,7 @@
         },
 
         hasCommitMessage: function() {
-            return (this.get("action") === "WorkfileUpgradedVersion" ||
-                this.get("action") === "WorkfileCreated" ) &&
-                this.get("commitMessage");
+            return this.get("commitMessage");
         },
 
         isUserGenerated: function () {
