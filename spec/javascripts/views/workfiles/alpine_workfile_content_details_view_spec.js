@@ -17,7 +17,6 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
         expect(chorus.views.AlpineWorkfileContentDetails.prototype.render).toHaveBeenCalled();
     });
 
-
     describe("render", function() {
         it("shows the 'Open File' button", function() {
             expect(this.view.$('.open_file')).toContainTranslation('work_flows.show.open');
@@ -33,9 +32,23 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
             it("shows the data source name and database name", function() {
                 var database = this.model.executionLocation();
                 var dataSource = database.dataSource;
-                expect(this.view.$('.execution_location')).toContainTranslation("work_flows.show.execution_location", {
+                expect(this.view.$('.execution_location')).toContainTranslation("work_flows.show.gpdb_execution_location", {
                     dataSourceName: dataSource.name,
                     databaseName: database.name
+                });
+            });
+        });
+        context("when the execution location is an Hdfs Data Source", function() {
+            beforeEach(function() {
+                this.model = rspecFixtures.workfile.alpineHdfs();
+                this.view = new chorus.views.AlpineWorkfileContentDetails({ model: this.model });
+                this.view.render();
+            });
+
+            it("shows the hdfs data source name", function() {
+                var hdfsDataSource = this.model.executionLocation();
+                expect(this.view.$('.execution_location')).toContainTranslation("work_flows.show.hdfs_execution_location", {
+                    dataSourceName: hdfsDataSource.name
                 });
             });
         });

@@ -8,7 +8,11 @@
     </li>
     <li>
         {{#if executionLocation}}
-        <span class="execution_location">{{t "work_flows.show.execution_location" dataSourceName=dataSourceName databaseName=databaseName}}</span>
+            {{#if executionLocationIsHdfs}}
+                <span class="execution_location">{{t "work_flows.show.hdfs_execution_location" dataSourceName=dataSourceName}}</span>
+            {{else}}
+                <span class="execution_location">{{t "work_flows.show.gpdb_execution_location" dataSourceName=dataSourceName databaseName=databaseName}}</span>
+            {{/if}}
         {{else}}
         <span class="execution_location">{{t "work_flows.show.no_execution_location"}}</span>
         {{/if}}

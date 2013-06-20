@@ -278,6 +278,13 @@ FixtureBuilder.configure do |fbuilder|
                                      :dataset_ids => %w(1 2 3),
                                     }, :without_protection => true)
 
+    AlpineWorkfile.create!({:file_name => 'alpine_hdfs.afm',
+                            :workspace => public_workspace,
+                            :owner => owner,
+                            :execution_location => hdfs_data_source,
+                            :dataset_ids => %w(1 2 3),
+                           }, :without_protection => true)
+
     #HDFS Entry
     @hdfs_file = FactoryGirl.create(:hdfs_entry, :path => '/foo/bar/baz.sql', :hdfs_data_source => hdfs_data_source)
     @directory = FactoryGirl.create(:hdfs_entry, :path => '/data/', :hdfs_data_source => hdfs_data_source, :is_directory => true)

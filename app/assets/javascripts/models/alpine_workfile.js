@@ -28,15 +28,22 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
     },
 
     iframeUrl: function() {
+        var executionLocation = this.get('executionLocation');
         var uri = this.alpineUrlBase();
-        uri.addQuery({
-            database_id: this.get("executionLocation").id,
+        var queryParams = {
             file_name: this.get("fileName"),
             workfile_id: this.id,
             session_id: chorus.session.get("sessionId"),
             method: "chorusEntry",
             "dataset_id[]": this.get("datasetIds")
-        });
+        };
+
+        if(executionLocation.entityType === 'hdfs_data_source') {
+            queryParams.hdfs_data_source_id = executionLocation.id;
+        } else {
+            queryParams.database_id = executionLocation.id;
+        }
+        uri.addQuery(queryParams);
 
         return uri.toString();
     },

@@ -94,22 +94,13 @@ describe AlpineWorkfile do
   end
 
   describe "#attempt_data_source_connection" do
-    let(:workfile) { AlpineWorkfile.create(database_id: 4, workspace: workspace) }
-    let(:data_source) { data_sources(:default) }
-    let(:connection) { Object.new }
-
     before do
       set_current_user(user)
-      stub(workfile).data_source { data_source }
-      stub(data_source).connect_as(user) { connection }
-      stub(connection).connect!
     end
 
-    context "when asked to connect" do
-      it "connects to the database" do
-        mock(connection).connect!
-        workfile.attempt_data_source_connection
-      end
+    it "tries to connect using the data source" do
+      mock(model.data_source).attempt_connection(user)
+      model.attempt_data_source_connection
     end
   end
 

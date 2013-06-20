@@ -156,6 +156,12 @@ describe HdfsDataSource do
     end
   end
 
+  describe "#attempt_connection" do
+    it "does not throw" do
+      subject.attempt_connection(nil)
+    end
+  end
+
   describe "after being created" do
     before do
       @new_data_source = HdfsDataSource.create({:owner => User.first, :name => "Hadoop", :host => "localhost", :port => "8020"}, { :without_protection => true })

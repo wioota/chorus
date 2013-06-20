@@ -44,6 +44,10 @@ class HdfsDataSource < ActiveRecord::Base
     hdfs_entries.create({:hdfs_data_source => self, :path => "/", :is_directory => true}, { :without_protection => true })
   end
 
+  def data_source
+    self
+  end
+
   private
 
   def enqueue_destroy_entries

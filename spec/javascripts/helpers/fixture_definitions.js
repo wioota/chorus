@@ -266,6 +266,9 @@ window.rspecFixtureDefinitions = {
             alpine: {
                 model: 'AlpineWorkfile'
             },
+            alpineHdfs: {
+              model: 'AlpineWorkfile'
+            },
             sql: {},
             binary: {},
             image: {},

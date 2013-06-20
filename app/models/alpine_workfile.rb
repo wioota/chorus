@@ -36,7 +36,7 @@ class AlpineWorkfile < Workfile
   end
 
   def attempt_data_source_connection
-    data_source.connect_as(current_user).connect!
+    data_source.attempt_connection(current_user)
   end
 
   def data_source

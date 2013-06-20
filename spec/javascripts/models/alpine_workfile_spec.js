@@ -40,17 +40,45 @@ describe("chorus.models.AlpineWorkfile", function() {
         });
     });
 
-    it("has the right iframeUrl", function() {
-        var url = this.model.iframeUrl();
+    context('when the execution location is a gpdb database', function() {
 
-        expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
-        expect(url).toContainQueryParams({
-            database_id: this.model.get('executionLocation').id,
-            file_name: "hello.afm",
-            workfile_id: "23",
-            session_id: "hex",
-            method: "chorusEntry",
-            "dataset_id[]": ["3", "4", "5" ]
+        it("has the right iframeUrl", function() {
+            var url = this.model.iframeUrl();
+
+            expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
+            expect(url).toContainQueryParams({
+                database_id: this.model.get('executionLocation').id,
+                file_name: "hello.afm",
+                workfile_id: "23",
+                session_id: "hex",
+                method: "chorusEntry",
+                "dataset_id[]": ["3", "4", "5" ]
+            });
+            expect(url).not.toContainQueryParams({hdfs_data_source_id: this.model.get('executionLocation').id});
+        });
+    });
+
+    context('when the execution location is an hdfs data source', function() {
+        beforeEach(function() {
+            this.model = rspecFixtures.workfile.alpineHdfs({
+                fileName: "hello.afm",
+                id: "23",
+                workspace: {id: "32"}
+            });
+        });
+
+        it("has the right iframeUrl", function() {
+            var url = this.model.iframeUrl();
+
+            expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
+            expect(url).toContainQueryParams({
+                hdfs_data_source_id: this.model.get('executionLocation').id,
+                file_name: "hello.afm",
+                workfile_id: "23",
+                session_id: "hex",
+                method: "chorusEntry"
+            });
+            expect(url).not.toContainQueryParams({database_id: this.model.get('executionLocation').id});
         });
     });
 

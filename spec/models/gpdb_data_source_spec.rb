@@ -235,6 +235,19 @@ describe GpdbDataSource do
     end
   end
 
+  describe "#attempt_connection" do
+    let(:data_source) { data_sources(:default) }
+    let(:user) { users(:default) }
+
+    it "should try to connect as the given user" do
+      mock(data_source).connect_as(user) do |connection|
+        mock(connection).connect!
+      end
+
+      data_source.attempt_connection(user)
+    end
+  end
+
   describe "#databases", :greenplum_integration do
     let(:account) { GreenplumIntegration.real_account }
 

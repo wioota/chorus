@@ -200,6 +200,7 @@ describe WorkfilesController do
       generate_workfile_fixture(:"binary.tar.gz", "binary.json")
       generate_workfile_fixture(:"tableau", "tableau.json")
       generate_workfile_fixture(:"alpine.afm", "alpine.json")
+      generate_workfile_fixture(:"alpine_hdfs.afm", "alpineHdfs.json")
     end
   end
 

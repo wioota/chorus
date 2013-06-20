@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>18,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>15,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
         \ summary_texts tag_names_texts file_name_texts description_texts version_comments_texts\
         \ database_name_texts table_description_texts schema_name_texts column_name_texts\
         \ column_description_texts query_texts body_texts name_stemmed_texts summary_stemmed_texts\
@@ -38,45 +38,45 @@ http_interactions:
         \ OR 1000004 OR 1000002 OR 1000006 OR 1000007 OR 1000008 OR 1000018 OR 1000019))','-(security_type_name_sm:ChorusView\
         \ AND -member_ids_im:1000006 AND -public_b:true)','(workspace_id_im:1000010\
         \ OR found_in_workspace_id_im:1000010)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>8,'ngroups'=>8,'groups'=>[{'groupValue'=>'GpdbTable\
-        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.6092914E7,'docs'=>[{'id'=>'GpdbTable\
+        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.5331362E7,'docs'=>[{'id'=>'GpdbTable\
         \ 1000011','column_description_texts'=>['searchquery column description','searchquery\
         \ column description 2'],'table_description_stemmed_texts'=>['searchquery\
         \ table description'],'name_texts'=>['searchquery_table'],'database_name_texts'=>['searchquery_database'],'name_stemmed_texts'=>['searchquery_table'],'table_description_texts'=>['searchquery\
         \ table description'],'column_name_stemmed_texts'=>['searchquery','searchquery\
         \ 2'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'column_name_texts'=>['searchquery','searchquery\
         \ 2'],'column_description_stemmed_texts'=>['searchquery column description','searchquery\
-        \ column description 2'],'score'=>1.6092914E7}]}},{'groupValue'=>'ChorusWorkfile\
-        \ 1000010','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>9843976.0,'docs'=>[{'id'=>'ChorusWorkfile\
-        \ 1000010','file_name_stemmed_texts'=>['Search Public'],'file_name_texts'=>['Search\
+        \ column description 2'],'score'=>1.5331362E7}]}},{'groupValue'=>'ChorusWorkfile\
+        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.084091E7,'docs'=>[{'id'=>'ChorusWorkfile\
+        \ 1000011','file_name_stemmed_texts'=>['Search Public'],'file_name_texts'=>['Search\
         \ Public'],'description_texts'=>['searchquery'],'version_comments_stemmed_texts'=>['','Committed\
-        \ to searchquery'],'version_comments_texts'=>['','Committed to searchquery'],'description_stemmed_texts'=>['searchquery'],'score'=>9843976.0}]}},{'groupValue'=>'ChorusView\
-        \ 1000021','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>4296805.0,'docs'=>[{'id'=>'ChorusView\
+        \ to searchquery'],'version_comments_texts'=>['','Committed to searchquery'],'description_stemmed_texts'=>['searchquery'],'score'=>1.084091E7}]}},{'groupValue'=>'ChorusView\
+        \ 1000021','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>3939799.0,'docs'=>[{'id'=>'ChorusView\
         \ 1000021','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['searchquery_chorus_view'],'database_name_texts'=>['searchquery_database'],'name_stemmed_texts'=>['searchquery_chorus_view'],'query_stemmed_texts'=>['select\
         \ searchquery from a_table'],'table_description_texts'=>['bogus'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'query_texts'=>['select\
-        \ searchquery from a_table'],'score'=>4296805.0}]}},{'groupValue'=>'ChorusView\
-        \ 1000022','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>3580671.0,'docs'=>[{'id'=>'ChorusView\
+        \ searchquery from a_table'],'score'=>3939799.0}]}},{'groupValue'=>'ChorusView\
+        \ 1000022','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>3283166.0,'docs'=>[{'id'=>'ChorusView\
         \ 1000022','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['searchquery_chorus_view_private'],'database_name_texts'=>['searchquery_database'],'name_stemmed_texts'=>['searchquery_chorus_view_private'],'query_stemmed_texts'=>['select\
         \ searchquery from a_table'],'table_description_texts'=>['bogus'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'query_texts'=>['select\
-        \ searchquery from a_table'],'score'=>3580671.0}]}},{'groupValue'=>'Workspace\
-        \ 1000010','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>9016.101,'docs'=>[{'id'=>'Workspace\
+        \ searchquery from a_table'],'score'=>3283166.0}]}},{'groupValue'=>'Workspace\
+        \ 1000010','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>8443.765,'docs'=>[{'id'=>'Workspace\
         \ 1000010','name_texts'=>['Search Public'],'name_stemmed_texts'=>['Search\
-        \ Public'],'summary_stemmed_texts'=>['searchquery'],'summary_texts'=>['searchquery'],'score'=>9016.101}]}},{'groupValue'=>'GpdbTable\
-        \ 1000016','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7825.5957,'docs'=>[{'id'=>'GpdbTable\
+        \ Public'],'summary_stemmed_texts'=>['searchquery'],'summary_texts'=>['searchquery'],'score'=>8443.765}]}},{'groupValue'=>'GpdbTable\
+        \ 1000016','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7326.515,'docs'=>[{'id'=>'GpdbTable\
         \ 1000016','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['typeahead_gpdb_table'],'database_name_texts'=>['searchquery_database'],'name_stemmed_texts'=>['typeahead_gpdb_table'],'table_description_texts'=>['bogus'],'column_name_stemmed_texts'=>['bogus','bogus\
         \ 2'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'column_name_texts'=>['bogus','bogus\
-        \ 2'],'score'=>7825.5957}]}},{'groupValue'=>'GpdbTable 1000018','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7825.5957,'docs'=>[{'id'=>'GpdbTable\
+        \ 2'],'score'=>7326.515}]}},{'groupValue'=>'GpdbTable 1000018','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7326.515,'docs'=>[{'id'=>'GpdbTable\
         \ 1000018','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['searchable_tag'],'database_name_texts'=>['searchquery_database'],'name_stemmed_texts'=>['searchable_tag'],'tag_names_stemmed_texts'=>['typeahead'],'table_description_texts'=>['bogus'],'tag_names_texts'=>['typeahead'],'column_name_stemmed_texts'=>['bogus','bogus\
         \ 2'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'column_name_texts'=>['bogus','bogus\
-        \ 2'],'score'=>7825.5957}]}},{'groupValue'=>'ChorusView 1000017','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7825.5957,'docs'=>[{'id'=>'ChorusView\
+        \ 2'],'score'=>7326.515}]}},{'groupValue'=>'ChorusView 1000017','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7326.515,'docs'=>[{'id'=>'ChorusView\
         \ 1000017','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['typeahead_chorus_view'],'database_name_texts'=>['searchquery_database'],'name_stemmed_texts'=>['typeahead_chorus_view'],'query_stemmed_texts'=>['select\
         \ 1'],'table_description_texts'=>['bogus'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'query_texts'=>['select\
-        \ 1'],'score'=>7825.5957}]}}]}},'highlighting'=>{'GpdbTable 1000011'=>{'database_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_table'],'table_description_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
+        \ 1'],'score'=>7326.515}]}}]}},'highlighting'=>{'GpdbTable 1000011'=>{'database_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_table'],'table_description_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
         \ table description'],'schema_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema'],'column_description_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
         \ column description','@@@hl@@@searchquery@@@endhl@@@ column description 2'],'table_description_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
         \ table description'],'column_description_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
         \ column description','@@@hl@@@searchquery@@@endhl@@@ column description 2'],'database_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_table'],'schema_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema'],'column_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@','@@@hl@@@searchquery@@@endhl@@@\
         \ 2'],'column_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@','@@@hl@@@searchquery@@@endhl@@@\
-        \ 2']},'ChorusWorkfile 1000010'=>{'description_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'description_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'version_comments_stemmed_texts'=>['Committed\
+        \ 2']},'ChorusWorkfile 1000011'=>{'description_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'description_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'version_comments_stemmed_texts'=>['Committed\
         \ to @@@hl@@@searchquery@@@endhl@@@'],'version_comments_texts'=>['Committed\
         \ to @@@hl@@@searchquery@@@endhl@@@']},'ChorusView 1000021'=>{'query_stemmed_texts'=>['select\
         \ @@@hl@@@searchquery@@@endhl@@@ from a_table'],'database_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'query_texts'=>['select\
@@ -89,5 +89,5 @@ http_interactions:
         \ 1000018'=>{'database_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'schema_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema'],'database_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'schema_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema']},'ChorusView\
         \ 1000017'=>{'database_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'schema_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema'],'database_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'schema_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema']}}}"
     http_version: '1.1'
-  recorded_at: Fri, 24 May 2013 21:42:54 GMT
+  recorded_at: Thu, 20 Jun 2013 19:19:16 GMT
 recorded_with: VCR 2.3.0
