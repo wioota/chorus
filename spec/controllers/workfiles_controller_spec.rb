@@ -297,6 +297,31 @@ describe WorkfilesController do
         end
       end
 
+      context "and an hdfs data source has been chosen" do
+        let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
+        let(:params) do
+          {
+            :workspace_id => workspace.to_param,
+            :workfile => {
+              :entity_subtype => 'alpine',
+              :file_name => 'something',
+              :hdfs_data_source_id => hdfs_data_source.id
+            }
+          }
+        end
+
+        it 'creates an AlpineWorkfile' do
+          mock_present do |model|
+            model.should be_a AlpineWorkfile
+            model.file_name.should == 'something'
+            model.execution_location.should == hdfs_data_source
+            model.workspace.should == workspace
+          end
+          post :create, params
+        end
+      end
+
+
       context "and a list of datasets have been chosen" do
         let(:dataset_ids) { [datasets(:table).id, datasets(:other_table).id].map(&:to_s) }
         let(:params) do
