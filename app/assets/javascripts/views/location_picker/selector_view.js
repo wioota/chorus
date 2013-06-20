@@ -31,18 +31,23 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
         this.restyle(this.stateValue);
     },
 
-    populateSelect: function(defaultValue) {
-        var select = this.rebuildEmptySelect();
-
-        _.each(this.sortModels(this.collection && this.collection.models), function(model) {
+    appendModelToSelect: function(select, defaultValue) {
+        return function(model) {
             var option = $("<option/>")
                 .prop("value", model.get("id"))
                 .text(Handlebars.Utils.escapeExpression(model.get("name")));
+
             if(model.get("id") === defaultValue) {
                 option.attr("selected", "selected");
             }
             select.append(option);
-        });
+        };
+    },
+
+    populateSelect: function(defaultValue) {
+        var select = this.rebuildEmptySelect();
+
+        _.each(this.sortModels(this.collection && this.collection.models), this.appendModelToSelect(select, defaultValue));
 
         if(defaultValue !== undefined && !_.contains(_.pluck(this.collection.models, "id"), defaultValue)) {
             this.onMissingSelection();
