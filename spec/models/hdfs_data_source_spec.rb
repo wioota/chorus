@@ -46,6 +46,16 @@ describe HdfsDataSource do
       expect { subject.destroy }.to change { Events::DataSourceDeleted.count }.by(1)
       Events::DataSourceDeleted.last.data_source.should == subject
     end
+
+    it "removes itself from the execution location field of any workfiles it owns" do
+      workfiles = subject.workfiles_as_execution_location.all
+      workfiles.length.should > 0
+
+      subject.destroy
+      workfiles.each do |workfile|
+        workfile.reload.execution_location_id.should be_nil
+      end
+    end
   end
 
   describe "#check_status!" do

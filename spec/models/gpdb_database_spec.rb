@@ -238,6 +238,24 @@ describe GpdbDatabase do
         DataSourceAccount.find_by_id(account.id).should_not be_nil
       end
     end
+
+    it "removes itself from the execution location field of any workfiles it owns" do
+      workfiles = database.workfiles_as_execution_location.all
+      workfiles.length.should > 0
+
+      # execution_location is polymorphic, so we want to make sure that only the workfiles associated with
+      # GpdbDatabase X get nullified, not the ones with GpdbSchema X or HdfsDataSource X
+      hdfs_data_source = HdfsDataSource.find database.id
+      hdfs_data_source.should_not be_nil
+      hdfs_data_source.workfiles_as_execution_location.length.should > 0
+
+      database.destroy
+      workfiles.each do |workfile|
+        workfile.reload.execution_location_id.should be_nil
+      end
+
+      hdfs_data_source.workfiles_as_execution_location.length.should > 0
+    end
   end
 
   describe "destroy_databases" do

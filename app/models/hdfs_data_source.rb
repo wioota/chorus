@@ -9,6 +9,7 @@ class HdfsDataSource < ActiveRecord::Base
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   has_many :hdfs_entries
+  has_many :workfiles_as_execution_location, :class_name => 'Workfile',  :as => :execution_location, :dependent => :nullify
   validates_presence_of :name, :host, :port
   validates_length_of :name, :maximum => 64
 

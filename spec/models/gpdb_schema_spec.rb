@@ -295,12 +295,12 @@ describe GpdbSchema do
     end
 
     it "removes any execution schemas from associated workfiles" do
-      workfiles = schema.workfiles_as_execution_schema
+      workfiles = schema.workfiles_as_execution_location.all
       workfiles.length.should > 0
 
       schema.destroy
       workfiles.each do |workfile|
-        workfile.reload.execution_schema_id.should be_nil
+        workfile.reload.execution_location_id.should be_nil
       end
     end
 

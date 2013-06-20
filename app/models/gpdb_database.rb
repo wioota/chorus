@@ -14,6 +14,7 @@ class GpdbDatabase < ActiveRecord::Base
   has_many :datasets, :through => :schemas
   has_many :data_source_account_permissions, :as => :accessed
   has_many :data_source_accounts, :through => :data_source_account_permissions
+  has_many :workfiles_as_execution_location, :class_name => 'Workfile', :as => :execution_location, :dependent => :nullify
   #has_and_belongs_to_many :data_source_accounts, join_table: :data_source_account_permissions, foreign_key: :accessed_id
 
   before_save :mark_schemas_as_stale
