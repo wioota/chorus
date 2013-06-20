@@ -25,9 +25,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:06 GMT
+  recorded_at: Thu, 20 Jun 2013 00:52:19 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -64,7 +64,7 @@ http_interactions:
       encoding: US-ASCII
       string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:06 GMT
+  recorded_at: Thu, 20 Jun 2013 00:52:19 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -101,7 +101,7 @@ http_interactions:
       encoding: US-ASCII
       string: "{'responseHeader'=>{'status'=>0,'QTime'=>1}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:06 GMT
+  recorded_at: Thu, 20 Jun 2013 00:52:19 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -124,9 +124,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>15}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>9}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:06 GMT
+  recorded_at: Thu, 20 Jun 2013 00:52:19 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -149,7 +149,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8,'params'=>{'facet'=>'true','group.ngroups'=>'true','sort'=>'sort_name_s\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4,'params'=>{'facet'=>'true','group.ngroups'=>'true','sort'=>'sort_name_s\
         \ asc','group.limit'=>'3','wt'=>'ruby','rows'=>'50','start'=>'0','q'=>'*:*','group.truncate'=>'true','f.type_name_s.facet.mincount'=>'1','group.field'=>'grouping_id_s','facet.field'=>'type_name_s','group'=>'true','fq'=>['type:(User\
         \ OR GpdbDataSource OR HdfsDataSource OR GnipDataSource OR Workspace OR Workfile\
         \ OR Dataset OR HdfsEntry OR Attachment OR OracleDataSource OR Events\\\\\
@@ -172,7 +172,7 @@ http_interactions:
         \ nice description'],'version_comments_stemmed_texts'=>[''],'version_comments_texts'=>[''],'description_stemmed_texts'=>['A\
         \ nice description']}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Workfile',2]},'facet_dates'=>{},'facet_ranges'=>{}}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:06 GMT
+  recorded_at: Thu, 20 Jun 2013 00:52:19 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -208,9 +208,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>6}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:06 GMT
+  recorded_at: Thu, 20 Jun 2013 00:52:19 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -233,9 +233,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>15}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>9}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:06 GMT
+  recorded_at: Thu, 20 Jun 2013 00:52:19 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -258,7 +258,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8,'params'=>{'facet'=>'true','group.ngroups'=>'true','sort'=>'sort_name_s\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5,'params'=>{'facet'=>'true','group.ngroups'=>'true','sort'=>'sort_name_s\
         \ asc','group.limit'=>'3','wt'=>'ruby','rows'=>'50','start'=>'0','q'=>'*:*','group.truncate'=>'true','f.type_name_s.facet.mincount'=>'1','group.field'=>'grouping_id_s','facet.field'=>'type_name_s','group'=>'true','fq'=>['type:(User\
         \ OR GpdbDataSource OR HdfsDataSource OR GnipDataSource OR Workspace OR Workfile\
         \ OR Dataset OR HdfsEntry OR Attachment OR OracleDataSource OR Events\\\\\
@@ -280,7 +280,7 @@ http_interactions:
         \ nice description']}]}},{'groupValue'=>'ChorusWorkfile 1000008','doclist'=>{'numFound'=>1,'start'=>0,'docs'=>[{'id'=>'ChorusWorkfile\
         \ 1000008','file_name_stemmed_texts'=>['Public'],'tag_names_stemmed_texts'=>['tagSort'],'tag_names_texts'=>['tagSort'],'file_name_texts'=>['Public'],'description_texts'=>['searchquery'],'version_comments_stemmed_texts'=>[''],'version_comments_texts'=>[''],'description_stemmed_texts'=>['searchquery']}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Workfile',2]},'facet_dates'=>{},'facet_ranges'=>{}}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:06 GMT
+  recorded_at: Thu, 20 Jun 2013 00:52:19 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -509,9 +509,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>17}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>10}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:07 GMT
+  recorded_at: Thu, 20 Jun 2013 00:52:20 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -534,9 +534,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>22}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>15}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:07 GMT
+  recorded_at: Thu, 20 Jun 2013 00:52:20 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -569,57 +569,57 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>24}}"
-    http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:07 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><commit/>"
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>14}}"
-    http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:07 GMT
-- request:
-    method: post
-    uri: http://localhost:8981/solr/update?wt=ruby
-    body:
-      encoding: US-ASCII
-      string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><commit/>"
-    headers:
-      content-type:
-      - text/xml
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      content-type:
-      - text/plain; charset=utf-8
-      connection:
-      - close
-      server:
-      - Jetty(6.1-SNAPSHOT)
-    body:
-      encoding: US-ASCII
       string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:10:07 GMT
+  recorded_at: Thu, 20 Jun 2013 00:52:20 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><commit/>"
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>10}}"
+    http_version: '1.1'
+  recorded_at: Thu, 20 Jun 2013 00:52:20 GMT
+- request:
+    method: post
+    uri: http://localhost:8981/solr/update?wt=ruby
+    body:
+      encoding: US-ASCII
+      string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><commit/>"
+    headers:
+      content-type:
+      - text/xml
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - text/plain; charset=utf-8
+      connection:
+      - close
+      server:
+      - Jetty(6.1-SNAPSHOT)
+    body:
+      encoding: US-ASCII
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>11}}"
+    http_version: '1.1'
+  recorded_at: Thu, 20 Jun 2013 00:52:20 GMT
 recorded_with: VCR 2.3.0
