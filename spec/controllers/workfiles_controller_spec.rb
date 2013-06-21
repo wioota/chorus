@@ -322,17 +322,16 @@ describe WorkfilesController do
         end
       end
 
-
       context "and a list of datasets have been chosen" do
         let(:dataset_ids) { [datasets(:table).id, datasets(:other_table).id].map(&:to_s) }
         let(:params) do
           {
-              :workspace_id => workspace.to_param,
-              :workfile => {
-                  :entity_subtype => 'alpine',
-                  :file_name => 'something',
-                  :dataset_ids => dataset_ids
-              }
+            :workspace_id => workspace.to_param,
+            :workfile => {
+              :entity_subtype => 'alpine',
+              :file_name => 'something',
+              :dataset_ids => dataset_ids
+            }
           }
         end
 

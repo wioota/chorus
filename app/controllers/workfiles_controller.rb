@@ -20,14 +20,8 @@ class WorkfilesController < ApplicationController
     workspace = Workspace.find(params[:workspace_id])
     authorize! :can_edit_sub_objects, workspace
 
-    workfile_params = params[:workfile]
-    workfile = Workfile.build_for(workfile_params.merge(:workspace => workspace, :owner => current_user))
-    is_upload = !workfile_params[:file_name]
-    is_svg = workfile_params[:svg_data]
-    workfile.resolve_name_conflicts = (is_svg || is_upload)
-    workfile.execution_location = GpdbDatabase.find(workfile_params[:database_id]) if workfile_params[:database_id]
-    workfile.execution_location = HdfsDataSource.find(workfile_params[:hdfs_data_source_id]) if workfile_params[:hdfs_data_source_id]
-    workfile.save!
+    workfile = Workfile.build_for(params[:workfile].merge(:workspace => workspace, :owner => current_user))
+    workfile.update_from_params!(params[:workfile])
 
     present workfile, presenter_options: {:workfile_as_latest_version => true}, status: :created
   end

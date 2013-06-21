@@ -28,6 +28,13 @@ class ChorusWorkfile < Workfile
     )
   end
 
+  def update_from_params!(params)
+    is_upload = !params[:file_name]
+    is_svg = params[:svg_data]
+    self.resolve_name_conflicts = (is_svg || is_upload)
+    save!
+  end
+
   def create_new_version(user, params)
     file = build_new_file(file_name, params[:content])
     file.content_type = latest_workfile_version.contents_content_type

@@ -22,6 +22,12 @@ class AlpineWorkfile < Workfile
     execution_location.data_source
   end
 
+  def update_from_params!(params)
+    self.execution_location = GpdbDatabase.find(params[:database_id]) if params[:database_id]
+    self.execution_location = HdfsDataSource.find(params[:hdfs_data_source_id]) if params[:hdfs_data_source_id]
+    save!
+  end
+
   def datasets
     @datasets ||= Dataset.where(:id => dataset_ids)
   end
