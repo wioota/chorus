@@ -115,6 +115,28 @@ describe AlpineWorkfile do
         end
       end
     end
+
+    context "when passed hdfs entries and gpdb datasets" do
+      let(:datasetA) { datasets(:table) }
+      let(:datasetB) { datasets(:other_table) }
+      let(:hdfs_entry_A) { hdfs_entries(:hdfs_entries_001) }
+      let(:hdfs_entry_B) { hdfs_entries(:hdfs_entries_002) }
+      let(:dataset_ids) { [datasetA.id, datasetB.id] }
+      let(:hdfs_entry_ids) { [hdfs_entry_A.id, hdfs_entry_B.id] }
+      let(:params) do
+        {
+          :dataset_ids => dataset_ids,
+          :hdfs_entry_ids => hdfs_entry_ids,
+          :workspace => workspace
+        }
+      end
+
+      it "is invalid" do
+        AlpineWorkfile.create(params).should have_error_on(:base)
+          .with_message(:incompatible_params)
+          .with_options(:fields => "dataset_ids, hdfs_entry_ids")
+      end
+    end
   end
 
   describe "#attempt_data_source_connection" do
