@@ -1,8 +1,8 @@
 describe("chorus.dialogs.WorkFlowNewForHdfsEntryList", function() {
     beforeEach(function() {
-        var hdfsEntry1 = rspecFixtures.hdfsFile({id: 1});
-        var hdfsEntry2 = rspecFixtures.hdfsFile({id: 2});
-        this.workspace = rspecFixtures.workspace();
+        var hdfsEntry1 = backboneFixtures.hdfsFile({id: 1});
+        var hdfsEntry2 = backboneFixtures.hdfsFile({id: 2});
+        this.workspace = backboneFixtures.workspace();
         this.dialog = new chorus.dialogs.WorkFlowNewForHdfsEntryList({
             workspace: this.workspace,
             collection: new chorus.collections.Base([hdfsEntry1, hdfsEntry2])

@@ -21,10 +21,10 @@ describe("chorus.dialogs.HdfsWorkFlowWorkspacePicker", function() {
 
     describe("choosing a workspace and submitting the form",function(){
         beforeEach(function() {
-            this.firstWorkspace = rspecFixtures.workspace();
+            this.firstWorkspace = backboneFixtures.workspace();
             var workspaces = [
             this.firstWorkspace,
-            rspecFixtures.workspace()
+            backboneFixtures.workspace()
         ];
         this.server.completeFetchAllFor(this.dialog.collection, workspaces);
             this.dialog.$("li:eq(0)").click();
