@@ -100,6 +100,7 @@ predef:             # Names of predefined global variables - comma-separated str
   - clearAjaxRequests
   - sinon
   - backboneFixtures
+  - BackboneFixtures
   - stubModals
   - spyOnEvent
   - setLoggedInUser
