@@ -63,7 +63,8 @@ describe("chorus.models.AlpineWorkfile", function() {
             this.model = backboneFixtures.workfile.alpineHdfs({
                 fileName: "hello.afm",
                 id: "23",
-                workspace: {id: "32"}
+                workspace: {id: "32"},
+                hdfsEntryIds: [1,2,3]
             });
         });
 
@@ -76,7 +77,9 @@ describe("chorus.models.AlpineWorkfile", function() {
                 file_name: "hello.afm",
                 workfile_id: "23",
                 session_id: "hex",
-                method: "chorusEntry"
+                method: "chorusEntry",
+                "hdfs_entry_id[]": [1,2,3]
+
             });
             expect(url).not.toContainQueryParams({database_id: this.model.get('executionLocation').id});
         });

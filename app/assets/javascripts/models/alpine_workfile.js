@@ -34,14 +34,15 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
             file_name: this.get("fileName"),
             workfile_id: this.id,
             session_id: chorus.session.get("sessionId"),
-            method: "chorusEntry",
-            "dataset_id[]": this.get("datasetIds")
+            method: "chorusEntry"
         };
 
         if(executionLocation.entityType === 'hdfs_data_source') {
             queryParams.hdfs_data_source_id = executionLocation.id;
+            queryParams["hdfs_entry_id[]"] = this.get("hdfsEntryIds");
         } else {
             queryParams.database_id = executionLocation.id;
+            queryParams["dataset_id[]"] = this.get("datasetIds");
         }
         uri.addQuery(queryParams);
 
