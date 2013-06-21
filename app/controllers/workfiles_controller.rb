@@ -1,6 +1,7 @@
 require 'will_paginate/array'
 
 class WorkfilesController < ApplicationController
+  wrap_parameters :workfile
   include DataSourceAuth
 
   def show
