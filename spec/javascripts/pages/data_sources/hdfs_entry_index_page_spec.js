@@ -53,6 +53,59 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
             );
         });
 
+        it("does not display the multiple selection section", function() {
+            expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
+        });
+
+        describe('multiselect', function() {
+            beforeEach(function() {
+                chorus.PageEvents.trigger("hdfs_entry:checked", this.page.collection);
+            });
+
+            it("creates the multi select sidebar", function() {
+                expect(this.page.multiSelectSidebarMenu).toBeDefined();
+                expect(this.page.multiSelectSidebarMenu).toBeA(chorus.views.MultipleSelectionSidebarMenu);
+                expect(this.page.multiSelectSidebarMenu.options.selectEvent).toEqual("hdfs_entry:checked");
+            });
+
+            context('when work flows are enabled', function() {
+                beforeEach(function() {
+                    chorus.models.Config.instance().set('workFlowConfigured', true);
+                    this.page = new chorus.pages.HdfsEntryIndexPage("1234", "4");
+                    this.page.render();
+                });
+
+                it("shows an action for creating a work flow from the selected entries", function() {
+                    expect(this.page.$('a.new_work_flow')).toExist();
+                    expect(this.page.$('a.new_work_flow')).toContainTranslation("sidebar.new_work_flow");
+                });
+
+                describe("clicking the create new work flow link", function() {
+                    beforeEach(function() {
+                        this.modalSpy = stubModals();
+                        this.page.$("a.new_work_flow").click();
+                    });
+
+                    it("should launch the workspace picker dialog", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.HdfsWorkFlowWorkspacePicker);
+                        expect(this.modalSpy.lastModal().options.hdfsEntries).toBe(this.page.multiSelectSidebarMenu.selectedModels);
+                    });
+                });
+            });
+
+            context('when work flows are not enabled', function() {
+                beforeEach(function() {
+                    chorus.models.Config.instance().set('workFlowConfigured', false);
+                    this.page = new chorus.pages.HdfsEntryIndexPage("1234", "4");
+                    this.page.render();
+                });
+
+                it("does not show an action for creating a work flow from the selected entries", function() {
+                    expect(this.page.$('a.new_work_flow')).not.toExist();
+                });
+            });
+        });
+
         it("has the right breadcrumbs", function() {
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");

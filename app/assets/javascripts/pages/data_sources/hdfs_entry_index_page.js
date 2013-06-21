@@ -37,16 +37,28 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
             hdfsDataSourceId: this.hdfsDataSourceId
         });
 
+        var actions = [
+            '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
+        ];
+
+        var actionEvents = {
+            'click .edit_tags': _.bind(function() {
+                new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+            }, this)
+        };
+
+        if (chorus.models.Config.instance().get("workFlowConfigured")) {
+            actions.push('<a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a>');
+            actionEvents['click .new_work_flow'] = _.bind(function() {
+                new chorus.dialogs.HdfsWorkFlowWorkspacePicker({
+                    hdfsEntries: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+            }, this);
+        }
+
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "hdfs_entry:checked",
-            actions: [
-                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
-            ],
-            actionEvents: {
-                'click .edit_tags': _.bind(function() {
-                    new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
-                }, this)
-            }
+            actions: actions,
+            actionEvents: actionEvents
         });
 
         this.subscribePageEvent("hdfs_entry:selected", this.entrySelected);
