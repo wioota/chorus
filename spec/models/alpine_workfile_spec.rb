@@ -74,7 +74,6 @@ describe AlpineWorkfile do
       end
 
       context "and the datasets are from multiple databases" do
-        before { stub(ActiveModel::Validations::HelperMethods).validates_presence_of }
         let(:datasetB) { FactoryGirl.create(:gpdb_table) }
 
         it "assigns too_many_databases error" do
@@ -83,11 +82,36 @@ describe AlpineWorkfile do
       end
 
       context "and at least one of the datasets is a chorus view" do
-        before { stub(ActiveModel::Validations::HelperMethods).validates_presence_of }
         let(:datasetB) { datasets(:chorus_view) }
 
         it "assigns too_many_databases error" do
           AlpineWorkfile.create(params).errors_on(:datasets).should include(:chorus_view_selected)
+        end
+      end
+    end
+
+    context "when passed hdfs entries" do
+      let(:hdfs_entry_A) { hdfs_entries(:hdfs_entries_001) }
+      let(:hdfs_entry_B) { hdfs_entries(:hdfs_entries_002) }
+      let(:params) { {hdfs_entry_ids: [hdfs_entry_A.id, hdfs_entry_B.id], workspace: workspace} }
+
+      it 'sets the execution location to the Hdfs Data Source where the hdfs entries live' do
+        AlpineWorkfile.create(params).execution_location.should == hdfs_entry_A.hdfs_data_source
+      end
+
+      it 'assigns the hdfs entries' do
+        AlpineWorkfile.create(params).hdfs_entries.should =~ [hdfs_entry_A, hdfs_entry_B]
+      end
+
+      it 'does not have errors related to the hdfs entries' do
+        AlpineWorkfile.create(params).should_not have_error_on(:hdfs_entries)
+      end
+
+      context "and the hdfs entries are from multiple Hdfs Data Sources" do
+        let(:hdfs_entry_B) { FactoryGirl.create(:hdfs_entry) }
+
+        it "assigns too_many_databases error" do
+          AlpineWorkfile.create(params).errors_on(:hdfs_entries).should include(:too_many_hdfs_data_sources)
         end
       end
     end

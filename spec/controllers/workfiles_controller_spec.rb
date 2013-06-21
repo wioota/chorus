@@ -346,6 +346,31 @@ describe WorkfilesController do
           post :create, params
         end
       end
+
+      context "and a list of hdfs entries has been chosen" do
+        let(:hdfs_entry_ids) { [hdfs_entries(:hdfs_entries_001).id, hdfs_entries(:hdfs_entries_002).id] }
+        let(:params) do
+          {
+            :workspace_id => workspace.to_param,
+            :workfile => {
+              :entity_subtype => 'alpine',
+              :file_name => 'something',
+              :hdfs_entry_ids => hdfs_entry_ids
+            }
+          }
+        end
+
+        it 'creates an AlpineWorkfile' do
+          mock_present do |model|
+            model.should be_a AlpineWorkfile
+            model.file_name.should == 'something'
+            model.execution_location.should == hdfs_entries(:hdfs_entries_001).hdfs_data_source
+            model.additional_data['hdfs_entry_ids'].should =~ hdfs_entry_ids.map(&:to_s)
+            model.workspace.should == workspace
+          end
+          post :create, params
+        end
+      end
     end
   end
 

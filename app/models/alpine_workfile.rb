@@ -1,10 +1,11 @@
 class AlpineWorkfile < Workfile
   TooManyDataBases = Class.new(StandardError)
 
-  has_additional_data :dataset_ids
+  has_additional_data :dataset_ids, :hdfs_entry_ids
 
   before_validation { self.content_type ='work_flow' }
   before_validation { self.execution_location = datasets.first.database unless datasets.empty? }
+  before_validation { self.execution_location = hdfs_entries.first.hdfs_data_source unless hdfs_entries.empty? }
   validates_presence_of :execution_location
   validates_with AlpineWorkfileValidator
 
@@ -30,6 +31,10 @@ class AlpineWorkfile < Workfile
 
   def datasets
     @datasets ||= Dataset.where(:id => dataset_ids)
+  end
+
+  def hdfs_entries
+    @hdfs_entries ||= HdfsEntry.where(:id => hdfs_entry_ids)
   end
 
   def create_new_version(user, params)
