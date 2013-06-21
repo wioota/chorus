@@ -3,7 +3,11 @@ class HdfsDataSourceAccess < AdminFullAccess
     hdfs_data_source.owner == current_user
   end
 
-  def show?(hdfs_data_source)
+  def show?(_)
+    true
+  end
+
+  def show_contents?(_)
     true
   end
 end

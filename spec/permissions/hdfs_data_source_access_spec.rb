@@ -38,4 +38,10 @@ describe HdfsDataSourceAccess do
       end
     end
   end
+
+  describe "#show_contents?" do
+    it "is always true" do
+      subject.show_contents?('hamu sando').should be_true
+    end
+  end
 end
