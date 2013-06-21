@@ -69,7 +69,7 @@ GIT
 
 GIT
   remote: git://github.com/pivotal-chorus/backbone_fixtures_rails.git
-  revision: 919d0d685f58f0e9a18bcf505f0e25b00240f53c
+  revision: 170d4b862e37c1aafa5d962954d8036611760be5
   specs:
     backbone_fixtures_rails (0.0.1)
       jasmine
