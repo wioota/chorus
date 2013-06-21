@@ -1,6 +1,6 @@
 describe("chorus.dialogs.WorkfilesAttach", function() {
     beforeEach(function() {
-        this.workfiles = rspecFixtures.workfileSet();
+        this.workfiles = backboneFixtures.workfileSet();
 
         this.workfile1 = this.workfiles.models[0];
         this.workfile1.get("versionInfo").updatedAt = "2020-06-12T17:39:11Z";

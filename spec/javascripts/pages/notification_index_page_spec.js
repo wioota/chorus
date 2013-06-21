@@ -15,7 +15,7 @@ describe("chorus.pages.NotificationIndexPage", function() {
         beforeEach(function() {
             spyOn(chorus.collections.NotificationSet.prototype, "markAllRead").andCallThrough();
 
-            this.collection = rspecFixtures.notificationSet();
+            this.collection = backboneFixtures.notificationSet();
             this.server.completeFetchFor(this.collection);
         });
 

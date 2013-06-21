@@ -1,7 +1,7 @@
 describe("chorus.views.ChartConfiguration", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-        this.columns = rspecFixtures.databaseColumnSet([
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable();
+        this.columns = backboneFixtures.databaseColumnSet([
             {typeCategory: "ANIMAL", name: "B Liger"},
             {typeCategory: "REAL_NUMBER", name: "a Speed"},
             {typeCategory: "WHOLE_NUMBER", name: "A Milk Duds"},
@@ -20,7 +20,7 @@ describe("chorus.views.ChartConfiguration", function() {
 
     describe("#buildForType(chartType)", function() {
         it("returns a data source of the subclass for the given chart type", function() {
-            var options = {collection: rspecFixtures.databaseColumnSet()};
+            var options = {collection: backboneFixtures.databaseColumnSet()};
             var views = [
                 chorus.views.ChartConfiguration.buildForType("frequency", options),
                 chorus.views.ChartConfiguration.buildForType("boxplot", options),
@@ -69,7 +69,7 @@ describe("chorus.views.ChartConfiguration", function() {
             beforeEach(function() {
                 spyOn(this.view, "clearSqlErrors");
                 spyOn(this.view, "showSqlErrors");
-                this.view.model = rspecFixtures.workspaceDataset.datasetTable();
+                this.view.model = backboneFixtures.workspaceDataset.datasetTable();
                 this.view.$('button.create').click();
                 this.task = this.view.task;
                 spyOn(this.task, 'cancel').andCallThrough();

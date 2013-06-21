@@ -1,6 +1,6 @@
 describe("chorus.dialogs.EditWorkspace", function() {
     beforeEach(function() {
-        this.workspace = rspecFixtures.workspace({
+        this.workspace = backboneFixtures.workspace({
             name: "my name",
             summary: "my summary",
             id: "457",
@@ -129,7 +129,7 @@ describe("chorus.dialogs.EditWorkspace", function() {
 
                 context("when show_sandbox_datasets is set to false", function() {
                     beforeEach(function() {
-                        var workspace = rspecFixtures.workspace({showSandboxDatasets: false});
+                        var workspace = backboneFixtures.workspace({showSandboxDatasets: false});
                         this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: workspace });
                         this.dialog.render();
                     });
@@ -142,7 +142,7 @@ describe("chorus.dialogs.EditWorkspace", function() {
 
             context("without a sandbox", function() {
                 beforeEach(function() {
-                    var workspace = rspecFixtures.workspace();
+                    var workspace = backboneFixtures.workspace();
                     workspace.unset("sandboxInfo");
                     this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: workspace });
                     this.dialog.render();

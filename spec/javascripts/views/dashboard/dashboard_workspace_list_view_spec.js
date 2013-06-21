@@ -1,7 +1,7 @@
 describe("chorus.views.DashboardWorkspaceList", function() {
     beforeEach(function() {
-        this.workspace1 = rspecFixtures.workspace({ name: "Broccoli", latestCommentList: [] });
-        this.workspace2 = rspecFixtures.workspace({ name: "Camels", latestCommentList: [] });
+        this.workspace1 = backboneFixtures.workspace({ name: "Broccoli", latestCommentList: [] });
+        this.workspace2 = backboneFixtures.workspace({ name: "Camels", latestCommentList: [] });
         this.collection = new chorus.collections.WorkspaceSet([this.workspace1, this.workspace2]);
         this.collection.loaded = true;
         this.view = new chorus.views.DashboardWorkspaceList({collection: this.collection});
@@ -27,7 +27,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
 
         context("when a workspace has recent comments", function() {
             beforeEach(function() {
-                var workspace = rspecFixtures.workspace();
+                var workspace = backboneFixtures.workspace();
                 this.workspace1.comments().reset(workspace.comments().models);
                 this.workspace1.comments().each(function(comment, index) {
                     var timestamp = (50 - index).hours().ago().toString("yyyy-MM-ddThh:mm:ssZ");
@@ -197,7 +197,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
         describe("when note is deleted", function() {
             beforeEach(function() {
                 spyOn(this.view.collection, "fetchAll").andCallThrough();
-                chorus.PageEvents.trigger("note:deleted", rspecFixtures.activity.noteOnGreenplumDataSource());
+                chorus.PageEvents.trigger("note:deleted", backboneFixtures.activity.noteOnGreenplumDataSource());
             });
 
             itRefreshesWorkspaces();

@@ -1,6 +1,6 @@
 describe("chorus.views.ListContentDetails", function() {
     beforeEach(function() {
-        this.collection = rspecFixtures.userSet();
+        this.collection = backboneFixtures.userSet();
         this.collection.pagination = {
             "total": 2,
             "page": 1,

@@ -1,7 +1,7 @@
 describe("chorus.models.TaggingsUpdater", function() {
     beforeEach(function(){
-        this.entity1 = rspecFixtures.dataset({id: 123});
-        this.entity2 = rspecFixtures.dataset({id: 456});
+        this.entity1 = backboneFixtures.dataset({id: 123});
+        this.entity2 = backboneFixtures.dataset({id: 456});
         this.collection = new chorus.collections.Base([this.entity1.attributes, this.entity2.attributes]);
         this.tag = new chorus.models.Tag({name: "foo"});
 

@@ -1,8 +1,8 @@
 describe("chorus.models.DatasetFilter", function() {
     beforeEach(function() {
         this.model = new chorus.models.DatasetFilter();
-        this.column = rspecFixtures.databaseColumnSet().at(0);
-        this.column.dataset = rspecFixtures.dataset({ objectName: "Mom"});
+        this.column = backboneFixtures.databaseColumnSet().at(0);
+        this.column.dataset = backboneFixtures.dataset({ objectName: "Mom"});
         this.model.set({column: this.column, comparator: "someComparator", input: {value: "one"}});
     });
 

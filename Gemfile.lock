@@ -68,6 +68,15 @@ GIT
       multi_json (~> 1.0)
 
 GIT
+  remote: git://github.com/pivotal-chorus/backbone_fixtures_rails.git
+  revision: 919d0d685f58f0e9a18bcf505f0e25b00240f53c
+  specs:
+    backbone_fixtures_rails (0.0.1)
+      jasmine
+      railties (~> 3.1)
+      rspec
+
+GIT
   remote: git://github.com/pivotal/jasmine-gem.git
   revision: 63e8d46556a421cbb3b511b52cd8c2188d72b9db
   specs:
@@ -391,6 +400,7 @@ DEPENDENCIES
   activerecord-jdbcpostgresql-adapter
   allowy
   attr_encrypted
+  backbone_fixtures_rails!
   bullet
   capybara (~> 2.0.0)
   capybara-screenshot

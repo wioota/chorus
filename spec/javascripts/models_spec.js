@@ -1018,14 +1018,14 @@ describe("chorus.models.Base", function() {
     describe("#set", function() {
       context("when we pass a model to the constructor of an model", function () {
         it("creates a new model with the attributes of the parameter", function() {
-          var parameterModel = rspecFixtures.user({ firstName: "Santa", lastName: "Claus" });
+          var parameterModel = backboneFixtures.user({ firstName: "Santa", lastName: "Claus" });
           this.model = new chorus.models.Base(parameterModel);
 
           expect(this.model.get("firstName")).toBe(parameterModel.get("firstName"));
         });
 
         it ("does not create the functions of a parameter model on the new model", function () {
-          var parameterModel = rspecFixtures.user({ firstName: "Santa", lastName: "Claus" });
+          var parameterModel = backboneFixtures.user({ firstName: "Santa", lastName: "Claus" });
           this.model = new chorus.models.Base(parameterModel);
 
           expect(this.model.workspaces).toBeUndefined();

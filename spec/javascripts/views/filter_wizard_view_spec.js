@@ -1,7 +1,7 @@
 describe("chorus.views.FilterWizard", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-        this.columnSet = this.dataset.columns().reset(rspecFixtures.databaseColumnSet().models.slice(0, 2));
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable();
+        this.columnSet = this.dataset.columns().reset(backboneFixtures.databaseColumnSet().models.slice(0, 2));
         this.view = new chorus.views.DatasetFilterWizard({columnSet: this.columnSet});
     });
 

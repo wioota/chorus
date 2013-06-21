@@ -65,7 +65,7 @@ describe("ListHeaderView", function() {
 
         context("when sandbox is provided", function() {
             beforeEach(function() {
-                this.workspace = rspecFixtures.workspace();
+                this.workspace = backboneFixtures.workspace();
                 this.view.options.sandbox = this.workspace.sandbox();
                 this.view.render();
             });
@@ -79,7 +79,7 @@ describe("ListHeaderView", function() {
 
         context("when sandbox is provided", function() {
             beforeEach(function() {
-                this.workspace = rspecFixtures.workspace();
+                this.workspace = backboneFixtures.workspace();
                 this.view.options.sandbox = this.workspace.sandbox();
                 this.view.render();
             });

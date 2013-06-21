@@ -1,13 +1,13 @@
 describe("chorus.views.WorkfileSidebar", function() {
     beforeEach(function(){
-        this.workfile = rspecFixtures.workfile.sql();
+        this.workfile = backboneFixtures.workfile.sql();
     });
 
     context("when workfile is passed to setup", function() {
         beforeEach(function() {
             spyOn(chorus.views.Sidebar.prototype, "jumpToTop");
             spyOn(chorus.views.WorkfileSidebar.prototype, "recalculateScrolling").andCallThrough();
-            this.workfile = rspecFixtures.workfile.text();
+            this.workfile = backboneFixtures.workfile.text();
             this.view = new chorus.views.WorkfileSidebar({ model: this.workfile });
         });
 
@@ -29,14 +29,14 @@ describe("chorus.views.WorkfileSidebar", function() {
 
         context("with a sql workfile", function() {
             beforeEach(function() {
-                this.workfile = rspecFixtures.workfile.sql();
+                this.workfile = backboneFixtures.workfile.sql();
                 this.view = new chorus.views.WorkfileSidebar({ model : this.workfile });
 
                 this.view.model.fetch();
                 this.view.model.workspace().fetch();
 
                 this.server.completeFetchFor(this.workfile);
-                this.server.completeFetchFor(this.workfile.workspace(), rspecFixtures.workspace({
+                this.server.completeFetchFor(this.workfile.workspace(), backboneFixtures.workspace({
                     id: this.workfile.workspace().id
                 }));
 
@@ -59,7 +59,7 @@ describe("chorus.views.WorkfileSidebar", function() {
 
         context("with a non-sql workfile", function() {
             beforeEach(function() {
-                this.workfile = rspecFixtures.workfile.text({ userModifiedAt: "2011-11-22T10:46:03Z" });
+                this.workfile = backboneFixtures.workfile.text({ userModifiedAt: "2011-11-22T10:46:03Z" });
                 expect(this.workfile.isText()).toBeTruthy();
 
                 this.view = new chorus.views.WorkfileSidebar({ model : this.workfile });
@@ -68,7 +68,7 @@ describe("chorus.views.WorkfileSidebar", function() {
                 this.view.model.workspace().fetch();
 
                 this.server.completeFetchFor(this.workfile);
-                this.server.completeFetchFor(this.workfile.workspace(), rspecFixtures.workspace({
+                this.server.completeFetchFor(this.workfile.workspace(), backboneFixtures.workspace({
                     id: this.workfile.workspace().id,
                     permission: ["read", "commenting", "update"]
                 }));
@@ -128,7 +128,7 @@ describe("chorus.views.WorkfileSidebar", function() {
 
         context("when it is an Alpine workile", function() {
             beforeEach(function() {
-                var model = rspecFixtures.workfile.alpine();
+                var model = backboneFixtures.workfile.alpine();
                 this.view = chorus.views.WorkfileSidebar.buildFor({model: model});
                 this.view.render();
             });
@@ -161,7 +161,7 @@ describe("chorus.views.WorkfileSidebar", function() {
 
         context("with an archived workspace", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workfile.sql();
+                this.model = backboneFixtures.workfile.sql();
                 this.model.loaded = false;
                 this.model.workspace().loaded = false;
                 this.view = new chorus.views.WorkfileSidebar({ model : this.model });
@@ -170,7 +170,7 @@ describe("chorus.views.WorkfileSidebar", function() {
                 this.model.workspace().fetch();
 
                 this.server.completeFetchFor(this.model);
-                this.server.completeFetchFor(this.model.workspace(), rspecFixtures.workspace({ archivedAt: "2012-05-08T21:40:14Z" }));
+                this.server.completeFetchFor(this.model.workspace(), backboneFixtures.workspace({ archivedAt: "2012-05-08T21:40:14Z" }));
 
                 this.view.render();
             });
@@ -206,14 +206,14 @@ describe("chorus.views.WorkfileSidebar", function() {
 
         describe("when the user is not a workspace member", function() {
             beforeEach(function() {
-                this.workfile = rspecFixtures.workfile.text();
+                this.workfile = backboneFixtures.workfile.text();
                 this.view = new chorus.views.WorkfileSidebar({ model : this.workfile });
 
                 this.view.model.fetch();
                 this.view.model.workspace().fetch();
 
                 this.server.completeFetchFor(this.workfile);
-                this.server.completeFetchFor(this.workfile.workspace(), rspecFixtures.workspace({
+                this.server.completeFetchFor(this.workfile.workspace(), backboneFixtures.workspace({
                     id: this.workfile.workspace().id,
                     permission: ["read", "commenting"]
                 }));
@@ -260,7 +260,7 @@ describe("chorus.views.WorkfileSidebar", function() {
         beforeEach(function() {
             spyOn(chorus.views.Sidebar.prototype, "jumpToTop");
             spyOn(chorus.views.WorkfileSidebar.prototype, "recalculateScrolling").andCallThrough();
-            this.workfile = rspecFixtures.workfile.text();
+            this.workfile = backboneFixtures.workfile.text();
             this.view = new chorus.views.WorkfileSidebar({ model: this.workfile, showVersions: true });
         });
 
@@ -395,20 +395,20 @@ describe("chorus.views.WorkfileSidebar", function() {
 
     describe(".buildFor", function() {
         it("instantiates an AlpineWorkfileSidebar view when the file is an alpine workfile", function() {
-            var model = rspecFixtures.workfile.alpine();
+            var model = backboneFixtures.workfile.alpine();
             var view = chorus.views.WorkfileSidebar.buildFor({model: model});
             expect(view).toBeA(chorus.views.AlpineWorkfileSidebar);
         });
 
         it("instantiates an WorkfileSidebar view when the file a chorus workfile", function() {
-            var model = rspecFixtures.workfile.sql();
+            var model = backboneFixtures.workfile.sql();
             var view = chorus.views.WorkfileSidebar.buildFor({model: model});
             expect(view).toBeA(chorus.views.WorkfileSidebar);
             expect(view).not.toBeA(chorus.views.AlpineWorkfileSidebar);
         });
 
         it("passes options to the Sidebar constructor", function() {
-            var model = rspecFixtures.workfile.sql();
+            var model = backboneFixtures.workfile.sql();
             var view = chorus.views.WorkfileSidebar.buildFor({model: model, foo: 'bar'});
             expect(view.options.foo).toBe('bar');
         });

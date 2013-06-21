@@ -23,7 +23,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
         describe("when we are in quickstart mode", function() {
             context("as the workspace owner", function(){
                 beforeEach(function() {
-                    this.model = rspecFixtures.workspace({
+                    this.model = backboneFixtures.workspace({
                         owner: { id: "4" },
                         hasAddedMember: false,
                         hasAddedWorkfile: false,
@@ -75,7 +75,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
         describe("when we are not in quickstart mode", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workspace({
+                this.model = backboneFixtures.workspace({
                     owner: { id: "4" },
                     hasAddedMember: true,
                     hasAddedWorkfile: true,
@@ -118,8 +118,8 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
         context("when the model has loaded", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.model, rspecFixtures.workspace({id: 4, summary: "this is a summary", name: "Cool Workspace"}));
-                this.server.completeFetchFor(this.page.model.activities(), [rspecFixtures.activity.noteOnWorkfileCreated(), rspecFixtures.activity.insightOnGreenplumDataSource()]);
+                this.server.completeFetchFor(this.page.model, backboneFixtures.workspace({id: 4, summary: "this is a summary", name: "Cool Workspace"}));
+                this.server.completeFetchFor(this.page.model.activities(), [backboneFixtures.activity.noteOnWorkfileCreated(), backboneFixtures.activity.insightOnGreenplumDataSource()]);
                 this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightsCount, [], {}, { records: 5 });
                 this.page.render();
             });

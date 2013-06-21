@@ -18,7 +18,7 @@ describe("chorus.views.ExistingTableImportDataGrid", function() {
             {name: "col6", typeCategory: "WHOLE_NUMBER"}
         ];
 
-        this.columnSet = rspecFixtures.databaseColumnSet(this.destinationColumns);
+        this.columnSet = backboneFixtures.databaseColumnSet(this.destinationColumns);
 
         this.rows = [
             ["val1.1", "val1.2", "val1.3", "val1.4", "val1.5"],

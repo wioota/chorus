@@ -1,7 +1,7 @@
 describe("chorus.pages.WorkfileIndexPage", function() {
     beforeEach(function() {
-        this.workspace = rspecFixtures.workspace();
-        this.model = rspecFixtures.workfile.sql({workspace: {id: this.workspace.id}});
+        this.workspace = backboneFixtures.workspace();
+        this.model = backboneFixtures.workfile.sql({workspace: {id: this.workspace.id}});
         spyOn(chorus.views.WorkfileSidebar, 'buildFor').andCallThrough();
         this.page = new chorus.pages.WorkfileIndexPage(this.workspace.id);
     });
@@ -121,7 +121,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
     describe("when the workspace and workfile collection fetches completes", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
-            this.server.completeFetchFor(this.page.collection, rspecFixtures.workfileSet());
+            this.server.completeFetchFor(this.page.collection, backboneFixtures.workfileSet());
         });
 
         it("shows the page title", function() {
@@ -164,8 +164,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
             this.server.completeFetchAllFor(this.page.collection, [
-                rspecFixtures.workfile.sql({fileName: "bar"}),
-                rspecFixtures.workfile.sql({fileName: "foo"})
+                backboneFixtures.workfile.sql({fileName: "bar"}),
+                backboneFixtures.workfile.sql({fileName: "foo"})
             ]);
         });
 

@@ -1,6 +1,6 @@
 describe("chorus.views.KaggleUserItem", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.kaggleUserSet([
+        this.model = backboneFixtures.kaggleUserSet([
             {
                 fullName: "Joe Kaggle",
                 location: "San Francisco",

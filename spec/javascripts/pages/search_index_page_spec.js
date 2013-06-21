@@ -35,7 +35,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("when the search result fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
+                this.server.completeFetchFor(this.page.search, backboneFixtures.searchResult());
             });
 
             it("doesn't display the list content details", function() {
@@ -344,7 +344,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("when the search result is fetched", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
+                this.server.completeFetchFor(this.page.search, backboneFixtures.searchResult());
             });
 
             it("selects the 'all of chorus' option in the 'search in' menu", function() {
@@ -383,7 +383,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("when the search result is fetched", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
+                this.server.completeFetchFor(this.page.search, backboneFixtures.searchResult());
             });
 
             it("selects the 'my workspaces' option in the 'search in' menu", function() {
@@ -400,7 +400,7 @@ describe("chorus.pages.SearchIndexPage", function() {
         beforeEach(function() {
             this.page = new chorus.pages.SearchIndexPage("my_workspaces", "workfile", this.query);
             this.search = this.page.search;
-            spyOn(this.search, "workspace").andReturn(rspecFixtures.workspace());
+            spyOn(this.search, "workspace").andReturn(backboneFixtures.workspace());
         });
 
         it("fetches the right search result", function() {
@@ -411,7 +411,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("when the search result is fetched", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
+                this.server.completeFetchFor(this.page.search, backboneFixtures.searchResult());
             });
 
             it("selects the 'my workspaces' option in the 'search in' menu", function() {
@@ -431,7 +431,7 @@ describe("chorus.pages.SearchIndexPage", function() {
     describe("multiple selection", function() {
         beforeEach(function() {
             this.page = new chorus.pages.SearchIndexPage(this.query);
-            this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
+            this.server.completeFetchFor(this.page.search, backboneFixtures.searchResult());
         });
 
         it("does not display the multiple selection menu until items have been selected", function() {
@@ -440,7 +440,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         context("when an item has been checked", function() {
             beforeEach(function() {
-                this.workfile = rspecFixtures.workfile.sql();
+                this.workfile = backboneFixtures.workfile.sql();
                 this.selectedModels = new chorus.collections.Base([this.workfile]);
                 chorus.PageEvents.trigger("checked", this.selectedModels);
             });

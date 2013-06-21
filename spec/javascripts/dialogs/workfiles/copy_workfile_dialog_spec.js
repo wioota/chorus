@@ -2,8 +2,8 @@ describe("chorus.dialogs.CopyWorkfile", function() {
     beforeEach(function() {
         this.workspaceId = '4';
         this.workfileId = '10';
-        this.workfile = rspecFixtures.workfile.text({ id: this.workfileId, workspace: {id: this.workspaceId} });
-        this.workspace = rspecFixtures.workspace({ id: this.workspaceId });
+        this.workfile = backboneFixtures.workfile.text({ id: this.workfileId, workspace: {id: this.workspaceId} });
+        this.workspace = backboneFixtures.workspace({ id: this.workspaceId });
         setLoggedInUser({id: 4003});
         chorus.session.trigger("saved");
 
@@ -19,13 +19,13 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
     describe("after the workfile and workspaces are fetched", function() {
         beforeEach(function() {
-            this.workspace = rspecFixtures.workspace({ name: "me_neither" });
+            this.workspace = backboneFixtures.workspace({ name: "me_neither" });
 
             this.server.completeFetchFor(this.workfile);
             this.server.completeFetchFor(chorus.session.user().workspaces(), [
-                rspecFixtures.workspace({ name: "im_not_the_current_one'" }),
+                backboneFixtures.workspace({ name: "im_not_the_current_one'" }),
                 this.workspace,
-                rspecFixtures.workspace({ name: "yes_im_the_current_one", id: this.workspaceId })
+                backboneFixtures.workspace({ name: "yes_im_the_current_one", id: this.workspaceId })
             ]);
         });
 

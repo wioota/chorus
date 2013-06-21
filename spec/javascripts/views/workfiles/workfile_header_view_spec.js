@@ -1,6 +1,6 @@
 describe("chorus.views.WorkfileHeader", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workfile.sql({
+        this.model = backboneFixtures.workfile.sql({
             tags: [{name: "alpha"}],
             workspace: {id: 123}
         });

@@ -1,7 +1,7 @@
 describe("chorus.collections.DatabaseColumnSet", function() {
     describe("database table column", function() {
         beforeEach(function() {
-            var table = rspecFixtures.workspaceDataset.datasetTable({
+            var table = backboneFixtures.workspaceDataset.datasetTable({
                 schema: {name: 'schema1'},
                 objectName: 'table1',
                 id: '1'
@@ -15,7 +15,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         describe("when a model is added", function() {
             it("sets the dataset on the added column", function() {
-                this.columns.add(rspecFixtures.databaseColumnSet().at(0));
+                this.columns.add(backboneFixtures.databaseColumnSet().at(0));
                 expect(this.columns.models[0].dataset).toBe(this.columns.dataset);
             });
         });
@@ -23,7 +23,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
     describe("database view column", function() {
         beforeEach(function() {
-            var view = rspecFixtures.workspaceDataset.datasetView({
+            var view = backboneFixtures.workspaceDataset.datasetView({
                 schema: {name: 'schema1'},
                 objectName: 'view1',
                 id: '3'
@@ -37,7 +37,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         context("when the names need to be url encoded", function() {
             beforeEach(function() {
-                var table = rspecFixtures.workspaceDataset.datasetView({
+                var table = backboneFixtures.workspaceDataset.datasetView({
                     schema: {name: 'baz'},
                     objectName: '!!!',
                     id: '4'
@@ -54,7 +54,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
     describe("database chorus view column", function() {
         beforeEach(function() {
-            var chorusView = rspecFixtures.workspaceDataset.chorusView({
+            var chorusView = backboneFixtures.workspaceDataset.chorusView({
                 workspace: {
                     id: '10'
                 },
@@ -71,7 +71,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
     describe("#urlParams", function() {
         context("when type attribute is meta", function() {
             beforeEach(function() {
-                this.columns = rspecFixtures.workspaceDataset.datasetView().columns({type: "meta"});
+                this.columns = backboneFixtures.workspaceDataset.datasetView().columns({type: "meta"});
             });
 
             it("should include the 'type' parameter in the url", function() {
@@ -81,7 +81,7 @@ describe("chorus.collections.DatabaseColumnSet", function() {
 
         context("when type attribute is unspecified", function() {
             beforeEach(function() {
-                this.columns = rspecFixtures.workspaceDataset.datasetView().columns();
+                this.columns = backboneFixtures.workspaceDataset.datasetView().columns();
             });
 
             it("should not include the 'type' parameter in the url", function() {

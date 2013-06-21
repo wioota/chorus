@@ -1,7 +1,7 @@
 describe("chorus.views.CreateChorusViewSidebar", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable({objectName : "My_table"});
-        this.dataset.columns().reset([rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable({objectName : "My_table"});
+        this.dataset.columns().reset([backboneFixtures.databaseColumn(), backboneFixtures.databaseColumn(), backboneFixtures.databaseColumn()]);
         var aggregateColumnSet = new chorus.collections.DatabaseColumnSet();
         aggregateColumnSet.reset(this.dataset.columns().models);
         this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset, aggregateColumnSet: aggregateColumnSet});
@@ -62,8 +62,8 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
 
         context("when a join is added to the chorus view", function() {
             beforeEach(function() {
-                this.otherDataset = rspecFixtures.workspaceDataset.datasetTable();
-                this.otherDataset.columns().reset([rspecFixtures.databaseColumn()]);
+                this.otherDataset = backboneFixtures.workspaceDataset.datasetTable();
+                this.otherDataset.columns().reset([backboneFixtures.databaseColumn()]);
                 this.dataset.columns().models[0].dataset.aliasedName="a";
                 this.chorusView.addJoin(this.dataset.columns().models[0], this.otherDataset.columns().models[0], 'inner');
             });
@@ -170,9 +170,9 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 spyOn(chorus.PageEvents, "trigger").andCallThrough();
                 this.column1 = this.dataset.columns().models[0];
 
-                this.joinedDataset = rspecFixtures.workspaceDataset.datasetTable();
+                this.joinedDataset = backboneFixtures.workspaceDataset.datasetTable();
                 this.joinedColumns = this.joinedDataset.columns();
-                this.joinedColumns.reset([rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
+                this.joinedColumns.reset([backboneFixtures.databaseColumn(), backboneFixtures.databaseColumn()]);
                 this.column2 = this.joinedColumns.models[0];
 
                 this.chorusView.addJoin(this.column1, this.column2, 'inner');

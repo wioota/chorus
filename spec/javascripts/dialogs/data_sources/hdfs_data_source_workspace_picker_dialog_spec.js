@@ -6,7 +6,7 @@ describe("chorus.dialogs.HdfsDataSourceWorkspacePicker", function() {
         stubModals();
 
         this.dialog = new chorus.dialogs.HdfsDataSourceWorkspacePicker({
-            model: rspecFixtures.hdfsDir({
+            model: backboneFixtures.hdfsDir({
                 path: '/data',
                 name: 'foo'
             }),
@@ -14,8 +14,8 @@ describe("chorus.dialogs.HdfsDataSourceWorkspacePicker", function() {
         });
         this.dialog.launchModal();
 
-        this.workspace1 = rspecFixtures.workspace({name: "Foo"});
-        this.workspace2 = rspecFixtures.workspace({name: "Bar"});
+        this.workspace1 = backboneFixtures.workspace({name: "Foo"});
+        this.workspace2 = backboneFixtures.workspace({name: "Bar"});
         this.workspaces = new chorus.collections.WorkspaceSet([this.workspace1, this.workspace2]);
     });
 
@@ -73,10 +73,10 @@ describe("chorus.dialogs.HdfsDataSourceWorkspacePicker", function() {
                 context("when the hdfs entries fetch completes", function() {
                     beforeEach(function() {
                         var hdfsFiles = [
-                            rspecFixtures.hdfsFile(),
-                            rspecFixtures.hdfsFile(),
-                            rspecFixtures.hdfsFile(),
-                            rspecFixtures.hdfsDir()
+                            backboneFixtures.hdfsFile(),
+                            backboneFixtures.hdfsFile(),
+                            backboneFixtures.hdfsFile(),
+                            backboneFixtures.hdfsDir()
                         ];
                         this.server.completeFetchFor(this.dialog.hdfsFiles, hdfsFiles);
                     });
@@ -96,7 +96,7 @@ describe("chorus.dialogs.HdfsDataSourceWorkspacePicker", function() {
                 context("when the hdfs entries fetch completes with no text files", function() {
                     beforeEach(function() {
                         var hdfsFiles2 = [
-                            rspecFixtures.hdfsDirJson()
+                            backboneFixtures.hdfsDirJson()
                         ];
                         this.server.completeFetchFor(this.dialog.hdfsFiles, hdfsFiles2);
 

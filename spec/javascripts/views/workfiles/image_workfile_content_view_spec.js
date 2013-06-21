@@ -1,6 +1,6 @@
 describe("chorus.views.ImageWorkfileContent", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workfile.image();
+        this.model = backboneFixtures.workfile.image();
         this.view = new chorus.views.ImageWorkfileContent({ model : this.model });
     });
 

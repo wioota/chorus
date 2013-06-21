@@ -1,8 +1,8 @@
 describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
     describe("delete confirmation clicked from activity", function() {
         beforeEach(function() {
-            this.activity = rspecFixtures.activity.noteOnGreenplumDataSource();
-            this.collection = new chorus.collections.ActivitySet([this.activity], { entity: rspecFixtures.workspace({id: 10000})} );
+            this.activity = backboneFixtures.activity.noteOnGreenplumDataSource();
+            this.collection = new chorus.collections.ActivitySet([this.activity], { entity: backboneFixtures.workspace({id: 10000})} );
             this.pageModel = new chorus.models.Base();
             this.alert = new chorus.alerts.DeleteNoteConfirmAlert({ activity: this.activity, pageModel: this.pageModel});
             this.alert.render();
@@ -51,8 +51,8 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
 
         describe("when the activity is an INSIGHT", function() {
             beforeEach(function() {
-                this.activity = rspecFixtures.activity.insightOnGreenplumDataSource();
-                this.collection = new chorus.collections.ActivitySet([this.activity], { entity: rspecFixtures.workspace({id: 10000})} );
+                this.activity = backboneFixtures.activity.insightOnGreenplumDataSource();
+                this.collection = new chorus.collections.ActivitySet([this.activity], { entity: backboneFixtures.workspace({id: 10000})} );
                 this.alert = new chorus.alerts.DeleteNoteConfirmAlert({ activity: this.activity, pageModel: this.pageModel});
                 this.alert.render();
                 this.alert.$('button.submit').click();

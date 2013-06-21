@@ -1,6 +1,6 @@
 describe("chorus.views.SearchAttachment", function() {
     beforeEach(function() {
-        var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
+        var search = backboneFixtures.searchResultWithAttachmentOnWorkspaceNote();
         this.result = search.attachments().at(0);
         this.view = new chorus.views.SearchAttachment({model: this.result});
         this.view.render();
@@ -21,7 +21,7 @@ describe("chorus.views.SearchAttachment", function() {
 
     context("with tabular data", function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnDatasetNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnDatasetNote();
             this.result = search.attachments().at(0);
             this.view = new chorus.views.SearchAttachment({model: this.result});
             this.view.render();
@@ -40,7 +40,7 @@ describe("chorus.views.SearchAttachment", function() {
 
     context("with workfile in a workspace", function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnWorkfileNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnWorkfileNote();
             this.result = search.attachments().at(0);
             this.view = new chorus.views.SearchAttachment({model: this.result});
             this.view.render();
@@ -66,7 +66,7 @@ describe("chorus.views.SearchAttachment", function() {
 
     context("with file in a hdfs", function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnHdfsNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnHdfsNote();
             this.result = search.attachments().at(0);
             this.view = new chorus.views.SearchAttachment({model: this.result});
             this.view.render();
@@ -87,7 +87,7 @@ describe("chorus.views.SearchAttachment", function() {
 
     context("with workspace", function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnWorkspaceNote();
             this.result = search.attachments().at(0);
             this.view = new chorus.views.SearchAttachment({model: this.result});
             this.view.render();
@@ -108,7 +108,7 @@ describe("chorus.views.SearchAttachment", function() {
 
     context('with data source', function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnDataSourceNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnDataSourceNote();
             this.result = search.attachments().at(0);
             this.view = new chorus.views.SearchAttachment({model: this.result});
             this.view.render();

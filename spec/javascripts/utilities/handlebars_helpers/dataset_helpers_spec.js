@@ -66,7 +66,7 @@ describe('chorus.handlebarsHelpers.dataset', function() {
 
     describe("datasetLocation", function () {
         beforeEach(function () {
-            this.model = rspecFixtures.dataset();
+            this.model = backboneFixtures.dataset();
             this.result = Handlebars.helpers.datasetLocation(this.model).toString();
         });
 
@@ -88,7 +88,7 @@ describe('chorus.handlebarsHelpers.dataset', function() {
         });
 
         it("includes the highlighted database and schema name", function () {
-            var searchResult = rspecFixtures.searchResult({
+            var searchResult = backboneFixtures.searchResult({
                 datasets: {
                     results:[{
                         schema:{
@@ -105,7 +105,7 @@ describe('chorus.handlebarsHelpers.dataset', function() {
 
         context('when the dataset schemas parent is a data source', function() {
             beforeEach(function() {
-                this.model = rspecFixtures.oracleDataset();
+                this.model = backboneFixtures.oracleDataset();
                 this.result = $(Handlebars.helpers.datasetLocation(this.model).toString());
             });
 
@@ -133,7 +133,7 @@ describe('chorus.handlebarsHelpers.dataset', function() {
 
         context("when credentials are not present", function () {
             beforeEach(function () {
-                this.model = rspecFixtures.dataset({hasCredentials:false});
+                this.model = backboneFixtures.dataset({hasCredentials:false});
                 this.result = Handlebars.helpers.datasetLocation(this.model).toString();
             });
 
@@ -147,7 +147,7 @@ describe('chorus.handlebarsHelpers.dataset', function() {
 
         context("when user provided a label", function () {
             beforeEach(function() {
-                this.model = rspecFixtures.workspaceDataset.datasetTable();
+                this.model = backboneFixtures.workspaceDataset.datasetTable();
                 this.result = Handlebars.helpers.datasetLocation(this.model, 'workspace.sandbox_schema').toString();
             });
 
@@ -169,31 +169,31 @@ describe('chorus.handlebarsHelpers.dataset', function() {
             });
 
             it("returns Chorus view if dataset is Chorus_view", function () {
-                this.chorusView = rspecFixtures.workspaceDataset.chorusView();
+                this.chorusView = backboneFixtures.workspaceDataset.chorusView();
                 Handlebars.helpers.humanizedDatasetType(this.chorusView.attributes);
                 expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.CHORUS_VIEW.CHORUS_VIEW');
             });
 
             it("returns Source Table", function() {
-                this.sourceTable = rspecFixtures.workspaceDataset.sourceTable();
+                this.sourceTable = backboneFixtures.workspaceDataset.sourceTable();
                 Handlebars.helpers.humanizedDatasetType(this.sourceTable.attributes);
                 expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.SOURCE_TABLE.TABLE');
             });
 
             it("returns Source View", function() {
-                this.sourceView = rspecFixtures.workspaceDataset.sourceView();
+                this.sourceView = backboneFixtures.workspaceDataset.sourceView();
                 Handlebars.helpers.humanizedDatasetType(this.sourceView.attributes);
                 expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.SOURCE_TABLE.VIEW');
             });
 
             it("returns Sandbox Table", function() {
-                this.sandBoxTable = rspecFixtures.workspaceDataset.datasetTable();
+                this.sandBoxTable = backboneFixtures.workspaceDataset.datasetTable();
                 Handlebars.helpers.humanizedDatasetType(this.sandBoxTable.attributes);
                 expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.SANDBOX_TABLE.BASE_TABLE');
             });
 
             it("returns Sandbox View", function() {
-                this.sandBoxView = rspecFixtures.workspaceDataset.datasetView();
+                this.sandBoxView = backboneFixtures.workspaceDataset.datasetView();
                 Handlebars.helpers.humanizedDatasetType(this.sandBoxView.attributes);
                 expect(window.t).toHaveBeenCalledWith('dataset.entitySubtypes.SANDBOX_TABLE.VIEW');
             });
@@ -206,15 +206,15 @@ describe('chorus.handlebarsHelpers.dataset', function() {
             });
 
             it("returns the correct dataset type translation", function() {
-                Handlebars.helpers.humanizedDatasetType({ entitySubtype: "type" }, rspecFixtures.datasetStatisticsTable({ objectType: "objectType" }));
+                Handlebars.helpers.humanizedDatasetType({ entitySubtype: "type" }, backboneFixtures.datasetStatisticsTable({ objectType: "objectType" }));
                 expect(window.t).toHaveBeenCalledWith("dataset.entitySubtypes.type.objectType");
             });
         });
     });
     describe("#importFrequencyForModel", function() {
         it("returns a frequency string for a source dataset", function() {
-            var model = rspecFixtures.dataset();
-            var schedule = rspecFixtures.datasetImportScheduleSet().last();
+            var model = backboneFixtures.dataset();
+            var schedule = backboneFixtures.datasetImportScheduleSet().last();
             schedule.set("sourceDatasetId", model.id);
             spyOn(model, "importSchedule").andReturn(schedule);
             spyOn(model, "importFrequency").andReturn("WEEKLY");

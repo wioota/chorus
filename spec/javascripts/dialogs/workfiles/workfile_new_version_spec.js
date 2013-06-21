@@ -1,6 +1,6 @@
 describe("chorus.dialogs.WorkfileNewVersion", function() {
     beforeEach(function() {
-        this.workfile = rspecFixtures.workfile.sql({
+        this.workfile = backboneFixtures.workfile.sql({
             id: 55,
             workspace: { id: 44 },
             versionInfo: { id: 4 },

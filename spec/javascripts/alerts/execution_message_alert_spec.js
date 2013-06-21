@@ -1,6 +1,6 @@
 describe("chorus.alerts.ExecutionMessage", function() {
     beforeEach(function() {
-        this.task = rspecFixtures.workfileExecutionResults();
+        this.task = backboneFixtures.workfileExecutionResults();
         this.alert = new chorus.alerts.ExecutionMessage({ model: this.task });
         this.alert.render();
     });
@@ -40,7 +40,7 @@ describe("chorus.alerts.ExecutionMessage", function() {
 
     context("when there are warnings", function() {
         beforeEach(function() {
-            this.task = rspecFixtures.workfileExecutionResultsWithWarning();
+            this.task = backboneFixtures.workfileExecutionResultsWithWarning();
             this.alert.model = this.task;
             this.alert.render();
         });

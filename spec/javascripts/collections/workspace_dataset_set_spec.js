@@ -39,7 +39,7 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
                 this.collection.attributes.objectType = "TABLE";
                 this.collection.attributes.namePattern = "Foo";
                 this.collection.attributes.allImportDestinations = true;
-                this.collection.attributes.database = rspecFixtures.database({id: "123"});
+                this.collection.attributes.database = backboneFixtures.database({id: "123"});
                 expect(this.collection.url({per_page: 10, page: 1})).toContainQueryParams({
                     entity_subtype: "SOURCE_TABLE",
                     namePattern: "Foo",
@@ -54,8 +54,8 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
 
     describe("save", function() {
         it("includes the datasetId params", function() {
-            this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 1234, objectName: 'second'}));
-            this.collection.add(rspecFixtures.workspaceDataset.datasetTable({id: 5678, objectName: 'first'}));
+            this.collection.add(backboneFixtures.workspaceDataset.datasetTable({id: 1234, objectName: 'second'}));
+            this.collection.add(backboneFixtures.workspaceDataset.datasetTable({id: 5678, objectName: 'first'}));
             this.collection.save();
 
             var bodyParams = decodeURIComponent(this.server.lastCreateFor(this.collection).requestBody).split("&");
@@ -67,9 +67,9 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
     describe("sorting", function() {
         context("without a sorting override", function() {
             beforeEach(function() {
-                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({objectName: 'zTable'}));
-                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({objectName: 'a_zTable'}));
-                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({objectName: 'aTable'}));
+                this.collection.add(backboneFixtures.workspaceDataset.datasetTable({objectName: 'zTable'}));
+                this.collection.add(backboneFixtures.workspaceDataset.datasetTable({objectName: 'a_zTable'}));
+                this.collection.add(backboneFixtures.workspaceDataset.datasetTable({objectName: 'aTable'}));
             });
 
             it("sorts by objectName without _", function() {
@@ -82,8 +82,8 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
         context("with a sorting override", function() {
             beforeEach(function() {
                 this.collection = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: 10000, unsorted: true});
-                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({objectName: 'zTable'}));
-                this.collection.add(rspecFixtures.workspaceDataset.datasetTable({objectName: 'aTable'}));
+                this.collection.add(backboneFixtures.workspaceDataset.datasetTable({objectName: 'zTable'}));
+                this.collection.add(backboneFixtures.workspaceDataset.datasetTable({objectName: 'aTable'}));
             });
 
             it("does not sort", function() {

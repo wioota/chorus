@@ -1,6 +1,6 @@
 describe("chorus.views.WorkfileContentDetails", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workfile.sql();
+        this.model = backboneFixtures.workfile.sql();
         this.workspace = this.model.workspace();
         this.workspace.set({ archivedAt: null });
     });
@@ -8,7 +8,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
     describe(".buildFor", function() {
         context("when the given workfile is an image", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workfile.image();
+                this.model = backboneFixtures.workfile.image();
             });
 
             it("instantiates an ImageWorkfileContentDetails view with the given workfile", function() {
@@ -19,7 +19,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
         context("when the given workfile is a SQL file", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workfile.sql();
+                this.model = backboneFixtures.workfile.sql();
             });
 
             context("when its workspace is active (not archived)", function() {
@@ -57,7 +57,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
         context("when the given workfile is an Alpine file", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workfile.binary({ fileType: "alpine" });
+                this.model = backboneFixtures.workfile.binary({ fileType: "alpine" });
                 spyOn(chorus.views, "AlpineWorkfileContentDetails");
                 this.view = chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
@@ -69,7 +69,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
         context("when the given workfile is an Tableau file", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workfile.tableau();
+                this.model = backboneFixtures.workfile.tableau();
                 spyOn(chorus.views, "TableauWorkfileContentDetails");
                 this.view = chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
@@ -81,7 +81,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
         context("when the workfile is a binary file", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workfile.binary();
+                this.model = backboneFixtures.workfile.binary();
                 this.view = chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
 
@@ -92,7 +92,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
         context("when given anything else", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workfile.text();
+                this.model = backboneFixtures.workfile.text();
                 this.view = chorus.views.WorkfileContentDetails.buildFor(this.model);
             });
 
@@ -104,7 +104,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
 
     describe("custom scrolling", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.workfile.text();
+            this.model = backboneFixtures.workfile.text();
             this.view = chorus.views.WorkfileContentDetails.buildFor(this.model);
             spyOn(this.view, "scrollHandler");
             this.view.render();

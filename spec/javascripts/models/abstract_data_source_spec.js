@@ -40,16 +40,16 @@ describe("chorus.models.AbstractDataSource", function() {
     describe("#isOwner", function() {
         it("returns true if object has same id", function() {
             var owner = this.dataSource.owner();
-            var otherOwnerUser = rspecFixtures.user({id: owner.get('id')});
+            var otherOwnerUser = backboneFixtures.user({id: owner.get('id')});
             expect(this.dataSource.isOwner(otherOwnerUser)).toBeTruthy();
         });
         it("returns false if id is different", function() {
-            var otherOwnerUser = rspecFixtures.user({id: 'notanowner'});
+            var otherOwnerUser = backboneFixtures.user({id: 'notanowner'});
             expect(this.dataSource.isOwner(otherOwnerUser)).toBeFalsy();
         });
         it("returns false if object is of different type", function() {
             var owner = this.dataSource.owner();
-            var brokenParameter = rspecFixtures.gpdbDataSource({id: owner.get('id')});
+            var brokenParameter = backboneFixtures.gpdbDataSource({id: owner.get('id')});
             expect(this.dataSource.isOwner(brokenParameter)).toBeFalsy();
         });
     });

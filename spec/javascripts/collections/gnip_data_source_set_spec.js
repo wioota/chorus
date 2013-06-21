@@ -1,11 +1,11 @@
 describe("chorus.collections.GnipDataSourceSet", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.GnipDataSourceSet([
-            rspecFixtures.gnipDataSource({ name: "Gun_instance" }),
-            rspecFixtures.gnipDataSource({ name: "cat_instance" }),
-            rspecFixtures.gnipDataSource({ name: "Fat_instance" }),
-            rspecFixtures.gnipDataSource({ name: "egg_instance" }),
-            rspecFixtures.gnipDataSource({ name: "Dog_instance" })
+            backboneFixtures.gnipDataSource({ name: "Gun_instance" }),
+            backboneFixtures.gnipDataSource({ name: "cat_instance" }),
+            backboneFixtures.gnipDataSource({ name: "Fat_instance" }),
+            backboneFixtures.gnipDataSource({ name: "egg_instance" }),
+            backboneFixtures.gnipDataSource({ name: "Dog_instance" })
         ]);
     });
 

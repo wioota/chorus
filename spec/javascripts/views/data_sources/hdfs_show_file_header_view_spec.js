@@ -1,6 +1,6 @@
 describe("chorus.views.HdfsShowFileHeader", function() {
     beforeEach(function() {
-        this.hdfsEntry = rspecFixtures.hdfsFile();
+        this.hdfsEntry = backboneFixtures.hdfsFile();
         this.view = new chorus.views.HdfsShowFileHeader({model: this.hdfsEntry});
     });
 

@@ -1,7 +1,7 @@
 describe("chorus.dialogs.CreateDatabaseView", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.workspaceDataset.chorusView({workspace: {id: "42"}});
-        this.schema = rspecFixtures.schema();
+        this.dataset = backboneFixtures.workspaceDataset.chorusView({workspace: {id: "42"}});
+        this.schema = backboneFixtures.schema();
         spyOn(this.schema, "canonicalName").andReturn("I.D.S");
         spyOn(this.dataset, "schema").andReturn(this.schema);
         this.view = new chorus.dialogs.CreateDatabaseView({ pageModel: this.dataset });

@@ -1,6 +1,6 @@
 describe("chorus.views.KaggleUserInformation", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.kaggleUserSet().at(0);
+        this.model = backboneFixtures.kaggleUserSet().at(0);
         this.model.set({favoriteTechnique: "my favorite technique"});
         this.model.set({favoriteSoftware: "javascript!"});
         this.view = new chorus.views.KaggleUserInformation({model: this.model});

@@ -1,6 +1,6 @@
 describe("chorus.views.WorkfileIndexPageButtons", function() {
     beforeEach(function() {
-        this.workspace = rspecFixtures.workspace();
+        this.workspace = backboneFixtures.workspace();
         this.workspace.loaded = false;
         this.view = new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
         this.qtipElement = stubQtip();

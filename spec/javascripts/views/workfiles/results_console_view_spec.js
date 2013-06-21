@@ -247,7 +247,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("when another execution completed event occurs", function() {
                     beforeEach(function() {
-                        chorus.PageEvents.trigger("file:executionSucceeded", rspecFixtures.workfileExecutionResults());
+                        chorus.PageEvents.trigger("file:executionSucceeded", backboneFixtures.workfileExecutionResults());
                     });
 
                     it("still renders only one data table", function() {
@@ -368,7 +368,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                             this.modalSpy = stubModals();
                             spyOn($, "fileDownload");
                             this.view.showDownloadDialog = true;
-                            this.view.dataset = rspecFixtures.dataset();
+                            this.view.dataset = backboneFixtures.dataset();
                             this.view.$("a.download_csv").click();
                         });
 
@@ -481,7 +481,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             describe("when the execution is completed", function() {
                 context("and there are results", function() {
                     beforeEach(function() {
-                        this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
+                        this.server.completeSaveFor(this.task, backboneFixtures.workfileExecutionResults());
                         chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
@@ -513,7 +513,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("and the task does not have results", function() {
                     beforeEach(function() {
-                        this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResultsEmpty());
+                        this.server.completeSaveFor(this.task, backboneFixtures.workfileExecutionResultsEmpty());
                         chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
@@ -532,7 +532,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
-                        this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
+                        this.server.completeSaveFor(this.task, backboneFixtures.workfileExecutionResults());
                         chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
@@ -543,7 +543,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("when the spinner has been started", function() {
                     beforeEach(function() {
                         delete this.view.elapsedTimer;
-                        this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
+                        this.server.completeSaveFor(this.task, backboneFixtures.workfileExecutionResults());
                         chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
@@ -553,7 +553,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("and there was an execution error", function() {
                     beforeEach(function() {
-                        this.server.lastCreateFor(this.task).failUnprocessableEntity(rspecFixtures.workfileExecutionErrorJson()['errors']);
+                        this.server.lastCreateFor(this.task).failUnprocessableEntity(backboneFixtures.workfileExecutionErrorJson()['errors']);
                         chorus.PageEvents.trigger("file:executionFailed", this.task);
                     });
 
@@ -593,7 +593,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                     context("when the sql is executed again without errors", function() {
                         beforeEach(function() {
-                            this.server.completeSaveFor(this.task, rspecFixtures.workfileExecutionResults());
+                            this.server.completeSaveFor(this.task, backboneFixtures.workfileExecutionResults());
                             chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                         });
 
@@ -665,7 +665,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
         context("when the task was successfully executed previously", function() {
             beforeEach(function() {
-                this.task = rspecFixtures.workfileExecutionResults();
+                this.task = backboneFixtures.workfileExecutionResults();
                 this.task.loaded = true;
                 this.view.execute(this.task);
             });

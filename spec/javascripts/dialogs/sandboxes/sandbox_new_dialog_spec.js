@@ -1,6 +1,6 @@
 describe("chorus.dialogs.SandboxNew", function() {
     beforeEach(function() {
-        this.workspace = rspecFixtures.workspace({id: 45});
+        this.workspace = backboneFixtures.workspace({id: 45});
         spyOn(chorus, "toast");
         spyOn(chorus, 'styleSelect');
         spyOn(chorus.router, 'reload');
@@ -20,7 +20,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
     context("when the SchemaPicker triggers an error", function() {
         beforeEach(function() {
-            var modelWithError = rspecFixtures.schemaSet();
+            var modelWithError = backboneFixtures.schemaSet();
             modelWithError.serverErrors = { fields: { a: { BLANK: {} } } };
             this.dialog.schemaPicker.trigger("error", modelWithError);
         });

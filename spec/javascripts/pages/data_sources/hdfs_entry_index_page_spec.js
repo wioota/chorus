@@ -1,7 +1,7 @@
 describe("chorus.pages.HdfsEntryIndexPage", function() {
     beforeEach(function() {
-        this.hdfsDataSource = rspecFixtures.hdfsDataSource({id: "1234", name: "Data Source Name"});
-        this.hdfsEntry = rspecFixtures.hdfsDir({
+        this.hdfsDataSource = backboneFixtures.hdfsDataSource({id: "1234", name: "Data Source Name"});
+        this.hdfsEntry = backboneFixtures.hdfsDir({
             hdfsDataSource: this.hdfsDataSource.attributes,
             id: "4",
             name: "myDir",

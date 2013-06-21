@@ -14,7 +14,7 @@ describe("chorus.views.UserSidebar", function() {
 
     context("when the fetch completes", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.view.collection, [ rspecFixtures.activity.dataSourceCreated() ]);
+            this.server.completeFetchFor(this.view.collection, [ backboneFixtures.activity.dataSourceCreated() ]);
         });
 
         it("has an activity list", function() {
@@ -105,7 +105,7 @@ describe("chorus.views.UserSidebar", function() {
 
         describe("#setUser(user)", function() {
             beforeEach(function() {
-                this.user2 = rspecFixtures.user({ title: "Lame Test-Driver" });
+                this.user2 = backboneFixtures.user({ title: "Lame Test-Driver" });
                 this.view.setUser(this.user2);
             });
 
@@ -120,7 +120,7 @@ describe("chorus.views.UserSidebar", function() {
 
             it("is called when user:selected is triggered", function() {
                 this.view.setUser.reset();
-                chorus.PageEvents.trigger("user:selected", rspecFixtures.user());
+                chorus.PageEvents.trigger("user:selected", backboneFixtures.user());
                 expect(this.view.setUser).toHaveBeenCalled();
             });
         });

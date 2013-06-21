@@ -2,8 +2,8 @@ describe("chorus.views.BoxplotChartConfiguration", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workspaceDataset.chorusView({objectName: "Foo"});
-                this.columns = rspecFixtures.databaseColumnSet([
+                this.model = backboneFixtures.workspaceDataset.chorusView({objectName: "Foo"});
+                this.columns = backboneFixtures.databaseColumnSet([
                     {typeCategory: "ANIMAL", name: "B Liger"},
                     {typeCategory: "REAL_NUMBER", name: "a Speed"},
                     {typeCategory: "WHOLE_NUMBER", name: "A Milk Duds"}
@@ -118,8 +118,8 @@ describe("chorus.views.BoxplotChartConfiguration", function() {
 
         context("with only one valid column", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workspaceDataset.chorusView({objectName: "Foo"});
-                this.columns = rspecFixtures.databaseColumnSet([{typeCategory: "ANIMAL", name: "a Speed"}]);
+                this.model = backboneFixtures.workspaceDataset.chorusView({objectName: "Foo"});
+                this.columns = backboneFixtures.databaseColumnSet([{typeCategory: "ANIMAL", name: "a Speed"}]);
                 this.view = new chorus.views.BoxplotChartConfiguration({model: this.model, collection: this.columns});
                 this.view.render();
             });
@@ -132,7 +132,7 @@ describe("chorus.views.BoxplotChartConfiguration", function() {
 
         describe("'create chart' button", function() {
             beforeEach(function() {
-                this.columns = rspecFixtures.databaseColumnSet([]);
+                this.columns = backboneFixtures.databaseColumnSet([]);
                 this.view = new chorus.views.BoxplotChartConfiguration({collection: this.columns});
                 spyOn(chorus, 'styleSelect');
                 this.view.render();

@@ -120,7 +120,7 @@ describe("chorus.Mixins.Taggable", function() {
 
     describe("#updateTags", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.workfile.sql({id: "123", tags: [
+            this.model = backboneFixtures.workfile.sql({id: "123", tags: [
                 {name: "tag1"},
                 {name: "tag2"}
             ]});

@@ -1,9 +1,9 @@
 describe("chorus.views.DatasetList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.SchemaDatasetSet([
-            rspecFixtures.workspaceDataset.chorusView({ hasCredentials: true, objectName: "foo" }),
-            rspecFixtures.workspaceDataset.datasetTable({ hasCredentials: true, objectName: "bar" }),
-            rspecFixtures.workspaceDataset.datasetTable({ objectName: "baz" })
+            backboneFixtures.workspaceDataset.chorusView({ hasCredentials: true, objectName: "foo" }),
+            backboneFixtures.workspaceDataset.datasetTable({ hasCredentials: true, objectName: "bar" }),
+            backboneFixtures.workspaceDataset.datasetTable({ objectName: "baz" })
         ], { dataSourceId: "1", databaseName: "two", schemaName: "three" });
         this.collection.loaded = true;
 

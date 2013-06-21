@@ -37,7 +37,7 @@ describe("chorus.models.Session", function() {
         context("when the model does not have errors", function() {
             beforeEach(function() {
                 this.model.set({ foo: "bar", bro: "baz" });
-                this.model._user = rspecFixtures.user();
+                this.model._user = backboneFixtures.user();
                 this.model.sandboxPermissionsCreated['4'] = true;
                 this.model.logout();
             });
@@ -66,7 +66,7 @@ describe("chorus.models.Session", function() {
 
     describe("loggedIn", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.session();
+            this.model = backboneFixtures.session();
         });
 
         it("returns true when there's a user", function () {
@@ -84,7 +84,7 @@ describe("chorus.models.Session", function() {
 
     describe("#fetch", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.session();
+            this.model = backboneFixtures.session();
 
             this.errorSpy = jasmine.createSpy("error");
             this.model.fetch({
@@ -149,7 +149,7 @@ describe("chorus.models.Session", function() {
 
         context("when a user has been fetched", function() {
             beforeEach(function() {
-                this.session = rspecFixtures.session();
+                this.session = backboneFixtures.session();
             });
 
             it("returns a User", function() {
@@ -169,7 +169,7 @@ describe("chorus.models.Session", function() {
 
     describe("resuming", function() {
         beforeEach(function() {
-            this.session = rspecFixtures.session();
+            this.session = backboneFixtures.session();
         });
 
         describe("#rememberPathBeforeLoggedOut", function() {

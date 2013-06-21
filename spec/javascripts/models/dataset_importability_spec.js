@@ -1,6 +1,6 @@
 describe("chorus.models.DatasetImportability", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.dataset({id: 12});
+        this.dataset = backboneFixtures.dataset({id: 12});
 
         this.model = new chorus.models.DatasetImportability({
             datasetId: this.dataset.id

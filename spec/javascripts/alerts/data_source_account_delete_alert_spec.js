@@ -1,6 +1,6 @@
 describe("chorus.alerts.DataSourceAccountDelete", function() {
     beforeEach(function() {
-        this.dataSource = rspecFixtures.gpdbDataSource({ id: '456' });
+        this.dataSource = backboneFixtures.gpdbDataSource({ id: '456' });
         setLoggedInUser({ id: "1011" });
         this.alert = new chorus.alerts.DataSourceAccountDelete({ dataSource: this.dataSource });
     });

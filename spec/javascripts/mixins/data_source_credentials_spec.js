@@ -71,7 +71,7 @@ describe("chorus.Mixins.DataSourceCredentials", function() {
         describe("#dataSourceRequiringCredentials", function() {
             context('when a fetch failed because of missing data source credentials', function() {
                 it("returns a data source model with the right id and attributes", function() {
-                    var errorJson = rspecFixtures.invalidCredentialsErrorJson();
+                    var errorJson = backboneFixtures.invalidCredentialsErrorJson();
 
                     this.collection.fetch();
                     this.server.lastFetchFor(this.collection).respondJson(403, errorJson);
@@ -102,7 +102,7 @@ describe("chorus.Mixins.DataSourceCredentials", function() {
 
         context("for a dataSource with individual accounts", function() {
             beforeEach(function() {
-                this.errorJson = rspecFixtures.invalidCredentialsErrorJson({errors: {model_data: {shared: false}}});
+                this.errorJson = backboneFixtures.invalidCredentialsErrorJson({errors: {model_data: {shared: false}}});
             });
 
             itHandlesAddingMissingCredentials();
@@ -112,7 +112,7 @@ describe("chorus.Mixins.DataSourceCredentials", function() {
 
         context("for a shared dataSource", function() {
             beforeEach(function() {
-                this.errorJson = rspecFixtures.invalidCredentialsErrorJson({errors: {model_data: {shared: true}}});
+                this.errorJson = backboneFixtures.invalidCredentialsErrorJson({errors: {model_data: {shared: true}}});
             });
 
             context("when the user is an Admin", function() {
@@ -124,7 +124,7 @@ describe("chorus.Mixins.DataSourceCredentials", function() {
 
             context("when the user is the Owner", function() {
                 beforeEach(function() {
-                    this.errorJson = rspecFixtures.invalidCredentialsErrorJson(
+                    this.errorJson = backboneFixtures.invalidCredentialsErrorJson(
                         {errors: { model_data: {owner_id: chorus.session.user().get('id') } } }
                     );
                 });
@@ -135,7 +135,7 @@ describe("chorus.Mixins.DataSourceCredentials", function() {
             context("when the user is neither an Admin nor the Owner", function() {
                 beforeEach(function() {
                     chorus.session.user().set('admin', false);
-                    this.errorJson = rspecFixtures.invalidCredentialsErrorJson(
+                    this.errorJson = backboneFixtures.invalidCredentialsErrorJson(
                         {errors: { model_data: {owner_id: 'some_nonsense', shared: true } } }
                     );
                 });

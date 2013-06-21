@@ -120,7 +120,7 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
             this.dataSource.set({
                 shared: true
             });
-            this.dataSource._accountForCurrentUser = rspecFixtures.dataSourceAccount();
+            this.dataSource._accountForCurrentUser = backboneFixtures.dataSourceAccount();
             this.view.render();
         });
 
@@ -144,7 +144,7 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
 
         it('displays edit data source link when user is owner', function() {
             setLoggedInUser({ username: "benjamin", admin: false});
-            this.dataSource.accounts().reset([rspecFixtures.dataSourceAccount({owner: {id: chorus.session.user().get('id')}})]);
+            this.dataSource.accounts().reset([backboneFixtures.dataSourceAccount({owner: {id: chorus.session.user().get('id')}})]);
             this.dataSource.set({owner: {id: chorus.session.user().get('id')}});
             this.view.render();
             expect(this.view.$(".actions .edit_data_source")).toExist();
@@ -189,7 +189,7 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
 
             context('when the user has set up an account for the data source', function() {
                 beforeEach(function() {
-                    var account = rspecFixtures.dataSourceAccount();
+                    var account = backboneFixtures.dataSourceAccount();
                     spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
                     this.view.render();
                 });
@@ -235,9 +235,9 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
 
         context("when the current user is an admin", function() {
             beforeEach(function() {
-                var account = rspecFixtures.dataSourceAccount();
+                var account = backboneFixtures.dataSourceAccount();
                 spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
-                this.dataSource.accounts().add([rspecFixtures.dataSourceAccount(), rspecFixtures.dataSourceAccount(), rspecFixtures.dataSourceAccount({id: null})]);
+                this.dataSource.accounts().add([backboneFixtures.dataSourceAccount(), backboneFixtures.dataSourceAccount(), backboneFixtures.dataSourceAccount({id: null})]);
                 setLoggedInUser({ username: "benjamin", admin: true});
                 this.view.render();
             });
@@ -319,7 +319,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
 
     context('when a gpdb data source is selected', function() {
         beforeEach(function() {
-            this.dataSource = rspecFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
+            this.dataSource = backboneFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub);
 
@@ -338,7 +338,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.dataSource.activities());
-                var dataSourceAccountSet = rspecFixtures.dataSourceAccountSet();
+                var dataSourceAccountSet = backboneFixtures.dataSourceAccountSet();
                 dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
                 this.server.completeFetchAllFor(this.dataSource.accounts(), dataSourceAccountSet.models);
                 this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
@@ -371,10 +371,10 @@ describe("chorus.views.DataSourceListSidebar", function() {
                 describe('for existing greenplum data source', function() {
                     context('and the data source has a shared account', function() {
                         beforeEach(function() {
-                            var dataSource = rspecFixtures.gpdbDataSource({"shared": true});
+                            var dataSource = backboneFixtures.gpdbDataSource({"shared": true});
                             dataSource.loaded = true;
                             this.view.setDataSource(dataSource);
-                            var dataSourceAccountSet = rspecFixtures.dataSourceAccountSet();
+                            var dataSourceAccountSet = backboneFixtures.dataSourceAccountSet();
                             dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
                             this.server.completeFetchFor(dataSource.accounts(), dataSourceAccountSet.models);
                             this.server.completeFetchFor(dataSource.accountForCurrentUser());
@@ -415,7 +415,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
 
     context('when a oracle data source is selected', function() {
         beforeEach(function() {
-            this.dataSource = rspecFixtures.oracleDataSource({name: "Harry's House of Glamour", version: "99.999" });
+            this.dataSource = backboneFixtures.oracleDataSource({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
             spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub);
 
@@ -434,7 +434,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
             beforeEach(function() {
                 spyOn(chorus.views.Sidebar.prototype, 'postRender');
                 this.server.completeFetchFor(this.dataSource.activities());
-                var dataSourceAccountSet = rspecFixtures.dataSourceAccountSet();
+                var dataSourceAccountSet = backboneFixtures.dataSourceAccountSet();
                 dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
                 this.server.completeFetchAllFor(this.dataSource.accounts(), dataSourceAccountSet.models);
                 this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
@@ -457,10 +457,10 @@ describe("chorus.views.DataSourceListSidebar", function() {
                 describe('for existing data source', function() {
                     context('and the data source has a shared account', function() {
                         beforeEach(function() {
-                            var dataSource = rspecFixtures.oracleDataSource({shared: true});
+                            var dataSource = backboneFixtures.oracleDataSource({shared: true});
                             dataSource.loaded = true;
                             this.view.setDataSource(dataSource);
-                            var dataSourceAccountSet = rspecFixtures.dataSourceAccountSet();
+                            var dataSourceAccountSet = backboneFixtures.dataSourceAccountSet();
                             dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
                             this.server.completeFetchFor(dataSource.accounts(), dataSourceAccountSet.models);
                             this.server.completeFetchFor(dataSource.accountForCurrentUser());
@@ -501,7 +501,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
 
     context('when a hadoop data source is selected', function() {
         beforeEach(function() {
-            this.dataSource = rspecFixtures.hdfsDataSource({
+            this.dataSource = backboneFixtures.hdfsDataSource({
                 name: "Harry's House of Glamour",
                 username: "hadoop",
                 groupList: "hadoop",
@@ -530,7 +530,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
 
     context('when a gnip data source is selected', function() {
         beforeEach(function() {
-            this.dataSource = rspecFixtures.gnipDataSource({name: "Harry's House of Glamour", username: "gnip" });
+            this.dataSource = backboneFixtures.gnipDataSource({name: "Harry's House of Glamour", username: "gnip" });
             this.view = new chorus.views.DataSourceListSidebar();
             chorus.PageEvents.trigger("data_source:selected", this.dataSource);
             this.server.completeFetchFor(this.dataSource.activities());
@@ -558,7 +558,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
         beforeEach(function() {
             this.view = new chorus.views.DataSourceListSidebar();
             this.view.render();
-            this.dataSource = rspecFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
+            this.dataSource = backboneFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
             this.view.setDataSource(this.dataSource);
             this.modalSpy = stubModals();
         });
@@ -573,7 +573,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
         beforeEach(function() {
             this.view = new chorus.views.DataSourceListSidebar();
             this.view.render();
-            this.dataSource = rspecFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
+            this.dataSource = backboneFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
             this.view.setDataSource(this.dataSource);
         });
 

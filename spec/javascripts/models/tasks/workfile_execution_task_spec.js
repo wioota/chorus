@@ -1,6 +1,6 @@
 describe("chorus.models.WorkfileExecutionTask", function() {
     beforeEach(function() {
-        this.workfile = rspecFixtures.workfile.sql({id: 1});
+        this.workfile = backboneFixtures.workfile.sql({id: 1});
         this.model = new chorus.models.WorkfileExecutionTask({
             workfile: this.workfile,
             sql: "show tables"
@@ -37,7 +37,7 @@ describe("chorus.models.WorkfileExecutionTask", function() {
         beforeEach(function() {
             this.columns = [ { name:"id" }, { name:"title"} ];
             this.rows = [ ['1', 'president'], ['2', 'vice president']];
-            this.model = rspecFixtures.workfileExecutionResults({
+            this.model = backboneFixtures.workfileExecutionResults({
                 columns : this.columns,
                 rows : this.rows
             });

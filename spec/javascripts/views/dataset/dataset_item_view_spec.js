@@ -11,7 +11,7 @@ describe("chorus.views.DatasetItem", function() {
     }
 
     beforeEach(function() {
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable({
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable({
             objectName: "john_the_table"
         });
         this.qtipSpy = stubQtip();
@@ -32,7 +32,7 @@ describe("chorus.views.DatasetItem", function() {
 
     xdescribe("found in workspaces tooltip (when rendered from the schema browse page)", function() {
         beforeEach(function() {
-            this.dataset = rspecFixtures.dataset();
+            this.dataset = backboneFixtures.dataset();
 
             this.view = new chorus.views.DatasetItem({ model: this.dataset, hasActiveWorkspace: true });
             this.view.render();
@@ -178,7 +178,7 @@ describe("chorus.views.DatasetItem", function() {
     });
 
     it("works with database objects as well as datasets", function() {
-        var table = rspecFixtures.dataset({objectName: 'yyy'});
+        var table = backboneFixtures.dataset({objectName: 'yyy'});
         var view = new chorus.views.DatasetItem({ model: table });
         view.render();
         expect(view.$(".name")).toHaveHref(table.showUrl());

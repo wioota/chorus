@@ -1,7 +1,7 @@
 describe("chorus.dialogs.SqlPreview", function () {
     describe("#render", function () {
         beforeEach(function () {
-            var model = rspecFixtures.workspaceDataset.chorusView({query: "select awesome from sql"});
+            var model = backboneFixtures.workspaceDataset.chorusView({query: "select awesome from sql"});
             this.dialog = new chorus.dialogs.SqlPreview({ model: model });
             spyOn(_, 'defer');
             spyOn(CodeMirror, 'fromTextArea').andReturn({ refresh: $.noop });
@@ -44,7 +44,7 @@ describe("chorus.dialogs.SqlPreview", function () {
 
                 describe("when the data preview succeeds", function () {
                     beforeEach(function () {
-                        this.server.completeSaveFor(this.dialog.resultsConsole.model, rspecFixtures.dataPreviewTaskResults());
+                        this.server.completeSaveFor(this.dialog.resultsConsole.model, backboneFixtures.dataPreviewTaskResults());
                     });
 
                     it("shows the result table", function () {

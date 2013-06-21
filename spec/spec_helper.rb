@@ -95,7 +95,6 @@ RSpec.configure do |config|
   config.include CustomValidators, :type => :model
   config.include JsonHelper, :type => :controller
   config.include JsonHelper, :type => :request
-  config.include FixtureGenerator, :type => :controller
   config.include Paperclip::Shoulda::Matchers
   config.include GpdbTestHelpers
   config.include AllowyRSpecHelpers

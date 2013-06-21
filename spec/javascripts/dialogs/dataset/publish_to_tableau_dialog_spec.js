@@ -1,6 +1,6 @@
 describe("chorus.dialogs.PublishToTableauDialog", function () {
     beforeEach(function () {
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable({objectName:"myDataset"});
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable({objectName:"myDataset"});
         this.model = this.dataset.deriveTableauWorkbook();
         this.dialog = new chorus.dialogs.PublishToTableau({model:this.model, dataset: this.dataset});
         this.dialog.render();

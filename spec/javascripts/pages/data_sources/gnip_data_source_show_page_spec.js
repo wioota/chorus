@@ -1,6 +1,6 @@
 describe("chorus.pages.GnipDataSourceShowPage", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.gnipDataSource({name: "gnip"});
+        this.model = backboneFixtures.gnipDataSource({name: "gnip"});
         this.page = new chorus.pages.GnipDataSourceShowPage(this.model.id);
     });
 

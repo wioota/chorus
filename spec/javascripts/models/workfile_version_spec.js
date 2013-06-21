@@ -1,6 +1,6 @@
 describe("chorus.models.WorkfileVersion", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workfileVersion({
+        this.model = backboneFixtures.workfileVersion({
             id: 1,
             versionInfo: {
                 id: 123,

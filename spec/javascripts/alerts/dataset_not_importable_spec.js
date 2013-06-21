@@ -1,6 +1,6 @@
 describe("chorus.alerts.DatasetNotImportable", function() {
     beforeEach(function() {
-        this.datasetImportability = rspecFixtures.datasetImportabilityForUnimportableDataset({
+        this.datasetImportability = backboneFixtures.datasetImportabilityForUnimportableDataset({
             importability: false,
             invalidColumns: ["foo", "bar"],
             supportedColumnTypes: ["supported_type1", "supported_type2"]

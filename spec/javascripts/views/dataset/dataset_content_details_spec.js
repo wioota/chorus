@@ -3,8 +3,8 @@ describe("chorus.views.DatasetContentDetails", function() {
         beforeEach(function() {
             this.$columnList = $("<ul/>");
             this.qtipMenu = stubQtip();
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            this.collection = this.dataset.columns([rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
+            this.dataset = backboneFixtures.workspaceDataset.datasetTable();
+            this.collection = this.dataset.columns([backboneFixtures.databaseColumn(), backboneFixtures.databaseColumn()]);
 
             this.view = new chorus.views.DatasetContentDetails({
                 dataset: this.dataset,
@@ -14,7 +14,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             spyOn(this.view, "scrollHandler");
             spyOn(this.view.filterWizardView, 'resetFilters').andCallThrough();
             spyOn(chorus, "search");
-            this.server.completeFetchFor(this.dataset.statistics(), rspecFixtures.datasetStatisticsView());
+            this.server.completeFetchFor(this.dataset.statistics(), backboneFixtures.datasetStatisticsView());
             this.view.render();
             $("#jasmine_content").append(this.view.el);
         });
@@ -82,9 +82,9 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("when there is no sql", function() {
                     beforeEach(function() {
-                        var dataset = rspecFixtures.workspaceDataset.datasetTable();
+                        var dataset = backboneFixtures.workspaceDataset.datasetTable();
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
-                        this.server.completeFetchFor(dataset.statistics(), rspecFixtures.datasetStatisticsTable());
+                        this.server.completeFetchFor(dataset.statistics(), backboneFixtures.datasetStatisticsTable());
                         this.view.render();
                     });
 
@@ -96,7 +96,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
             context("when the object is a CHORUS VIEW", function() {
                 beforeEach(function() {
-                    var dataset = rspecFixtures.workspaceDataset.chorusView();
+                    var dataset = backboneFixtures.workspaceDataset.chorusView();
                     this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection});
                     this.server.completeFetchFor(dataset.statistics());
                     this.view.render();
@@ -540,8 +540,8 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("when the workspace is archived", function() {
                     beforeEach(function() {
-                        var dataset = rspecFixtures.workspaceDataset.datasetTable();
-                        var workspace = rspecFixtures.workspace({ archivedAt: "2012-05-08 21:40:14"});
+                        var dataset = backboneFixtures.workspaceDataset.datasetTable();
+                        var workspace = backboneFixtures.workspace({ archivedAt: "2012-05-08 21:40:14"});
                         dataset.initialQuery = "select * from abc";
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection, workspace: workspace});
                         this.server.completeFetchFor(dataset.statistics());
@@ -563,7 +563,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("when the workspace is active", function() {
                     beforeEach(function() {
-                        var dataset = rspecFixtures.workspaceDataset.datasetTable();
+                        var dataset = backboneFixtures.workspaceDataset.datasetTable();
                         this.dataset = dataset;
                         var workspace = dataset.workspace();
                         dataset.initialQuery = "select * from abc";
@@ -615,8 +615,8 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("when the workspace is archived", function() {
                     beforeEach(function() {
-                        var dataset = rspecFixtures.workspaceDataset.chorusView();
-                        var workspace = rspecFixtures.workspace({ archivedAt: "2012-05-08 21:40:14" });
+                        var dataset = backboneFixtures.workspaceDataset.chorusView();
+                        var workspace = backboneFixtures.workspace({ archivedAt: "2012-05-08 21:40:14" });
                         dataset.initialQuery = "select * from abc";
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection, workspace: workspace});
                         this.server.completeFetchFor(dataset.statistics());
@@ -634,7 +634,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                 context("when the workspace is not archived", function() {
                     beforeEach(function() {
-                        var dataset = rspecFixtures.workspaceDataset.chorusView();
+                        var dataset = backboneFixtures.workspaceDataset.chorusView();
                         dataset.initialQuery = "select * from abc";
                         var workspace = dataset.workspace();
                         this.view = new chorus.views.DatasetContentDetails({dataset: dataset, collection: this.collection, workspace: workspace});
@@ -729,7 +729,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
         describe("column count bar", function() {
             beforeEach(function() {
-                this.column = rspecFixtures.databaseColumn();
+                this.column = backboneFixtures.databaseColumn();
             });
 
             it("renders", function() {
@@ -778,7 +778,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
             describe("showErrorWithDetailsLink", function() {
                 beforeEach(function() {
-                    this.errorsource = rspecFixtures.dataPreviewTaskResults();
+                    this.errorsource = backboneFixtures.dataPreviewTaskResults();
                     this.alertClass = chorus.alerts.VisualizationError;
                     this.view.showErrorWithDetailsLink(this.errorsource, this.alertClass);
                 });
@@ -874,8 +874,8 @@ describe("chorus.views.DatasetContentDetails", function() {
         beforeEach(function() {
             this.$columnList = $("<ul/>");
             this.qtipMenu = stubQtip();
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            this.collection = this.dataset.columns([rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
+            this.dataset = backboneFixtures.workspaceDataset.datasetTable();
+            this.collection = this.dataset.columns([backboneFixtures.databaseColumn(), backboneFixtures.databaseColumn()]);
 
             this.view = new chorus.views.DatasetContentDetails({
                 dataset: this.dataset,
@@ -894,8 +894,8 @@ describe("chorus.views.DatasetContentDetails", function() {
         beforeEach(function() {
             this.$columnList = $("<ul/>");
             this.qtipMenu = stubQtip();
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            this.collection = this.dataset.columns([rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
+            this.dataset = backboneFixtures.workspaceDataset.datasetTable();
+            this.collection = this.dataset.columns([backboneFixtures.databaseColumn(), backboneFixtures.databaseColumn()]);
 
             this.view = new chorus.views.DatasetContentDetails({
                 dataset: this.dataset,
@@ -903,7 +903,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                 $columnList: this.$columnList
             });
 
-            this.statistics = rspecFixtures.datasetStatisticsView();
+            this.statistics = backboneFixtures.datasetStatisticsView();
             this.server.completeFetchFor(this.dataset.statistics(), this.statistics);
         });
 
@@ -914,7 +914,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
     describe("when initialized with a dataset with errors", function() {
         beforeEach(function() {
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+            this.dataset = backboneFixtures.workspaceDataset.datasetTable();
             this.dataset.serverErrors = {record: "MISSING_DB_OBJECT"};
             this.collection = this.dataset.columns();
             this.$columnList = $("<ul/>");

@@ -1,9 +1,9 @@
 describe("chorus.collections.CsvHdfsFileSet", function () {
     beforeEach(function() {
         this.collection = new chorus.collections.CsvHdfsFileSet([
-            rspecFixtures.hdfsFile().attributes,
-            rspecFixtures.hdfsDir().attributes,
-            rspecFixtures.hdfsFile().attributes
+            backboneFixtures.hdfsFile().attributes,
+            backboneFixtures.hdfsDir().attributes,
+            backboneFixtures.hdfsFile().attributes
         ], { id: 123, hdfsDataSource: {id: 1}});
     });
 

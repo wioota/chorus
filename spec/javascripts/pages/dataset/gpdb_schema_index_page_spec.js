@@ -1,6 +1,6 @@
 describe("chorus.pages.GpdbSchemaIndexPage", function() {
     beforeEach(function() {
-        this.database = rspecFixtures.database({id: "5678", name: "Foo", dataSource: {id: "1234", name: "Foo"}});
+        this.database = backboneFixtures.database({id: "5678", name: "Foo", dataSource: {id: "1234", name: "Foo"}});
         this.page = new chorus.pages.GpdbSchemaIndexPage("5678");
         this.page.render();
     });
@@ -26,7 +26,7 @@ describe("chorus.pages.GpdbSchemaIndexPage", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.database);
             this.server.completeFetchFor(this.page.collection, [
-                rspecFixtures.schema({name: "bar"}), rspecFixtures.schema({name: "foo"})
+                backboneFixtures.schema({name: "bar"}), backboneFixtures.schema({name: "foo"})
             ]);
         });
 

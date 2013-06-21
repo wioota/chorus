@@ -2,12 +2,12 @@ describe("chorus.views.ColumnSelect", function () {
     beforeEach(function () {
         stubDefer();
         this.selectMenuStub = stubSelectMenu();
-        this.dataset = rspecFixtures.dataset();
+        this.dataset = backboneFixtures.dataset();
         this.columns = this.dataset.columns().reset([
-            rspecFixtures.databaseColumn({ name:"source_column_1" }),
-            rspecFixtures.databaseColumn({ name:"source_column_2" }),
-            rspecFixtures.databaseColumn({ name:"source_column_3" }),
-            rspecFixtures.databaseColumn({ name:"source_column_4", typeCategory:'OTHER' })
+            backboneFixtures.databaseColumn({ name:"source_column_1" }),
+            backboneFixtures.databaseColumn({ name:"source_column_2" }),
+            backboneFixtures.databaseColumn({ name:"source_column_3" }),
+            backboneFixtures.databaseColumn({ name:"source_column_4", typeCategory:'OTHER' })
         ]);
         this.view = new chorus.views.ColumnSelect({collection:this.columns});
     });
@@ -187,7 +187,7 @@ describe("chorus.views.ColumnSelect", function () {
 
     describe("collectionModelContext", function () {
         it("returns the quoted name", function () {
-            var model = rspecFixtures.databaseColumn({ name:"source_column_1" });
+            var model = backboneFixtures.databaseColumn({ name:"source_column_1" });
             model.dataset = this.dataset;
             expect(this.view.collectionModelContext(model).quotedName).toBe(model.quotedName());
         });

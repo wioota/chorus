@@ -5,8 +5,8 @@ describe("chorus.dialogs.KaggleInsertDatasetSchemaPicker", function() {
         dialog = new chorus.dialogs.KaggleInsertDatasetSchema({ workspaceId : "33" });
         datasets = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: "33" });
         datasetModels = [
-                            rspecFixtures.workspaceDataset.datasetTable({ objectName: "A", id: "REAL_ID" }),
-                            rspecFixtures.workspaceDataset.chorusView({ objectName: "B", id: "AGENT_SMITH" })
+                            backboneFixtures.workspaceDataset.datasetTable({ objectName: "A", id: "REAL_ID" }),
+                            backboneFixtures.workspaceDataset.chorusView({ objectName: "B", id: "AGENT_SMITH" })
                         ];
     });
 

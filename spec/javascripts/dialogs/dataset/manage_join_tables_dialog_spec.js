@@ -2,14 +2,14 @@ describe("chorus.dialogs.ManageJoinTables", function () {
     beforeEach(function () {
         this.qtip = stubQtip();
         stubModals();
-        this.originalDataset = rspecFixtures.workspaceDataset.datasetTable({
+        this.originalDataset = backboneFixtures.workspaceDataset.datasetTable({
             objectName:"original",
             entitySubtype:"SOURCE_TABLE",
             objectType:"TABLE",
             id:"abc"
         });
         this.dataSourceName = "john";
-        var dataset = rspecFixtures.workspaceDataset.datasetTable({
+        var dataset = backboneFixtures.workspaceDataset.datasetTable({
             objectName:"original",
             schema:{
                 database:{
@@ -46,25 +46,25 @@ describe("chorus.dialogs.ManageJoinTables", function () {
 
     describe("when the fetches complete", function () {
         beforeEach(function () {
-            this.firstSchema = rspecFixtures.schema({name:"Bob", database:this.schema.database().attributes });
-            this.secondSchema = rspecFixtures.schema({name:"Ted", database:this.schema.database().attributes });
+            this.firstSchema = backboneFixtures.schema({name:"Bob", database:this.schema.database().attributes });
+            this.secondSchema = backboneFixtures.schema({name:"Ted", database:this.schema.database().attributes });
             this.server.completeFetchFor(this.dialog.schemas, [this.firstSchema, this.schema, this.secondSchema]);
 
-            this.dataset1 = rspecFixtures.workspaceDataset.datasetTable({
+            this.dataset1 = backboneFixtures.workspaceDataset.datasetTable({
                 objectName:"cats",
                 entitySubtype:"SOURCE_TABLE",
                 objectType:"VIEW",
                 id:'"10000"|"dca_demo"|"ddemo"|"VIEW"|"cats"'
             });
 
-            this.dataset2 = rspecFixtures.workspaceDataset.datasetTable({
+            this.dataset2 = backboneFixtures.workspaceDataset.datasetTable({
                 objectName:"dogs",
                 entitySubtype:"SOURCE_TABLE",
                 objectType:"TABLE",
                 id:'"10000"|"dca_demo"|"ddemo"|"TABLE"|"dogs"'
             });
 
-            this.dataset3 = rspecFixtures.workspaceDataset.datasetTable({
+            this.dataset3 = backboneFixtures.workspaceDataset.datasetTable({
                 objectName:"lions",
                 entitySubtype:"SOURCE_TABLE",
                 objectType:"VIEW",
@@ -217,9 +217,9 @@ describe("chorus.dialogs.ManageJoinTables", function () {
                         describe("when the datasets are fetched", function () {
                             beforeEach(function () {
                                 this.server.completeFetchFor(this.firstSchema.datasets(), [
-                                    rspecFixtures.workspaceDataset.datasetTable({ objectName:"fred" }),
-                                    rspecFixtures.workspaceDataset.datasetTable({ objectName:"lou" }),
-                                    rspecFixtures.workspaceDataset.datasetTable({ objectName:"bryan" })
+                                    backboneFixtures.workspaceDataset.datasetTable({ objectName:"fred" }),
+                                    backboneFixtures.workspaceDataset.datasetTable({ objectName:"lou" }),
+                                    backboneFixtures.workspaceDataset.datasetTable({ objectName:"bryan" })
                                 ]);
                             });
 

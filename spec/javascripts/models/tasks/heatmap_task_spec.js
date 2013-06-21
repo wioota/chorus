@@ -5,7 +5,7 @@ describe("chorus.models.HeatmapTask", function() {
             yAxis: "height",
             xBins: 5,
             yBins: 6,
-            dataset: rspecFixtures.workspaceDataset.datasetTable({objectName: "users"})
+            dataset: backboneFixtures.workspaceDataset.datasetTable({objectName: "users"})
         });
     });
 

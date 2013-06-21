@@ -1,6 +1,6 @@
 describe('chorus.models.DataSource', function() {
     beforeEach(function() {
-            this.model = new chorus.models.DataSource({id: 1, owner: rspecFixtures.user()});
+            this.model = new chorus.models.DataSource({id: 1, owner: backboneFixtures.user()});
         }
     );
 
@@ -13,12 +13,12 @@ describe('chorus.models.DataSource', function() {
 
     describe('#canHaveIndividualAccounts', function(){
         it('is true for greenplum data sources', function(){
-            var gpdbDataSource = rspecFixtures.gpdbDataSource();
+            var gpdbDataSource = backboneFixtures.gpdbDataSource();
             expect(gpdbDataSource.canHaveIndividualAccounts()).toBeTruthy();
         });
 
         it('is true for oracle data sources', function(){
-            var oracleDataSource = rspecFixtures.gpdbDataSource();
+            var oracleDataSource = backboneFixtures.gpdbDataSource();
             expect(oracleDataSource.canHaveIndividualAccounts()).toBeTruthy();
         });
     });
@@ -43,8 +43,8 @@ describe('chorus.models.DataSource', function() {
 
     describe("#accountForUser", function() {
         beforeEach(function() {
-            this.user = rspecFixtures.user();
-            this.model.set(rspecFixtures.gpdbDataSource().attributes);
+            this.user = backboneFixtures.user();
+            this.model.set(backboneFixtures.gpdbDataSource().attributes);
             this.account = this.model.accountForUser(this.user);
         });
 
@@ -63,10 +63,10 @@ describe('chorus.models.DataSource', function() {
 
     describe("#accountForCurrentUser", function() {
         beforeEach(function() {
-            this.model.set(rspecFixtures.gpdbDataSource().attributes);
-            this.currentUser = rspecFixtures.user();
+            this.model.set(backboneFixtures.gpdbDataSource().attributes);
+            this.currentUser = backboneFixtures.user();
             setLoggedInUser(this.currentUser.attributes);
-            this.model.set(rspecFixtures.gpdbDataSource().attributes);
+            this.model.set(backboneFixtures.gpdbDataSource().attributes);
         });
 
         it("memoizes", function() {
@@ -93,10 +93,10 @@ describe('chorus.models.DataSource', function() {
 
     describe("#accountForOwner", function() {
         beforeEach(function() {
-            this.model.set(rspecFixtures.gpdbDataSource().attributes);
+            this.model.set(backboneFixtures.gpdbDataSource().attributes);
 
             var owner = this.owner = this.model.owner();
-            this.accounts = rspecFixtures.dataSourceAccountSet();
+            this.accounts = backboneFixtures.dataSourceAccountSet();
             this.accounts.each(function(account) {
                 account.set({
                     owner: {
@@ -117,7 +117,7 @@ describe('chorus.models.DataSource', function() {
 
     describe("#accounts", function() {
         beforeEach(function() {
-            this.model.set(rspecFixtures.gpdbDataSource().attributes);
+            this.model.set(backboneFixtures.gpdbDataSource().attributes);
 
             this.dataSourceAccounts = this.model.accounts();
         });
@@ -137,7 +137,7 @@ describe('chorus.models.DataSource', function() {
 
     describe("#usage", function() {
         beforeEach(function() {
-            this.model.set(rspecFixtures.gpdbDataSource().attributes);
+            this.model.set(backboneFixtures.gpdbDataSource().attributes);
 
             this.dataSourceUsage = this.model.usage();
         });
@@ -156,7 +156,7 @@ describe('chorus.models.DataSource', function() {
 
         context("when the data source is Oracle", function() {
            it('returns null', function() {
-              this.model = rspecFixtures.oracleDataSource();
+              this.model = backboneFixtures.oracleDataSource();
               expect(this.model.usage()).toBeNull();
            });
         });
@@ -188,13 +188,13 @@ describe('chorus.models.DataSource', function() {
     describe("#sharedAccountDetails", function() {
         beforeEach(function() {
             this.owner = this.model.owner();
-            this.accounts = rspecFixtures.dataSourceAccountSet();
+            this.accounts = backboneFixtures.dataSourceAccountSet();
             this.accounts.models[1].set({owner: this.owner.attributes});
             spyOn(this.model, "accounts").andReturn(this.accounts);
         });
 
         it("returns the account name of the user who owns the data source and shared it", function() {
-            this.user = rspecFixtures.user();
+            this.user = backboneFixtures.user();
             this.account = this.model.accountForUser(this.user);
             expect(this.model.sharedAccountDetails()).toBe(this.model.accountForOwner().get("dbUsername"));
         });

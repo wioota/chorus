@@ -1,6 +1,6 @@
 describe("chorus.views.SearchWorkfile", function() {
     beforeEach(function() {
-        this.result = rspecFixtures.searchResult({workfiles: {results: [
+        this.result = backboneFixtures.searchResult({workfiles: {results: [
             {
                 id: "1",
                 workspace: {id: "2", name: "Test"},

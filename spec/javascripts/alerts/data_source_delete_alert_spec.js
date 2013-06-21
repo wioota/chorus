@@ -1,6 +1,6 @@
 describe("chorus.alerts.DataSourceDelete", function() {
     beforeEach(function() {
-        this.dataSource = rspecFixtures.gpdbDataSource();
+        this.dataSource = backboneFixtures.gpdbDataSource();
         this.alert = new chorus.alerts.DataSourceDelete({ model: this.dataSource });
     });
 
@@ -17,7 +17,7 @@ describe("chorus.alerts.DataSourceDelete", function() {
 
     describe("for a hdfs data source", function() {
         beforeEach(function() {
-            this.alert.model = rspecFixtures.hdfsDataSource();
+            this.alert.model = backboneFixtures.hdfsDataSource();
         });
 
         it("has the correct text", function() {
@@ -27,7 +27,7 @@ describe("chorus.alerts.DataSourceDelete", function() {
 
     describe("for a greenplum data source", function() {
         beforeEach(function() {
-            this.alert.model = rspecFixtures.gpdbDataSource();
+            this.alert.model = backboneFixtures.gpdbDataSource();
         });
 
         it("has the correct text", function() {
@@ -37,7 +37,7 @@ describe("chorus.alerts.DataSourceDelete", function() {
 
     describe("for an oracle data source", function() {
         beforeEach(function() {
-            this.alert.model = rspecFixtures.oracleDataSource();
+            this.alert.model = backboneFixtures.oracleDataSource();
         });
 
         it("has the correct text", function() {

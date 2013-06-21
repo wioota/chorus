@@ -54,7 +54,7 @@ describe("chorus.presenters.Activity", function() {
     describe("common aspects", function() {
         context("activity with a workspace", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.activity.workfileCreated();
+                this.model = backboneFixtures.activity.workfileCreated();
                 this.workfile = this.model.workfile();
                 this.workspace = this.model.workspace();
                 this.presenter = new chorus.presenters.Activity(this.model);
@@ -97,7 +97,7 @@ describe("chorus.presenters.Activity", function() {
 
         context("activity without a workspace", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                this.model = backboneFixtures.activity.noteOnGreenplumDataSource();
                 this.noteObject = this.model.dataSource();
                 this.presenter = new chorus.presenters.Activity(this.model);
                 this.actor = this.model.actor();
@@ -120,7 +120,7 @@ describe("chorus.presenters.Activity", function() {
 
         describe("#canDelete", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                this.model = backboneFixtures.activity.noteOnGreenplumDataSource();
                 this.presenter = new chorus.presenters.Activity(this.model);
             });
 
@@ -148,7 +148,7 @@ describe("chorus.presenters.Activity", function() {
 
         describe("#canEdit", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                this.model = backboneFixtures.activity.noteOnGreenplumDataSource();
                 this.presenter = new chorus.presenters.Activity(this.model);
             });
 
@@ -170,7 +170,7 @@ describe("chorus.presenters.Activity", function() {
         describe("#isNote", function() {
             context ("when it is a note" , function() {
                 beforeEach(function() {
-                    this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                    this.model = backboneFixtures.activity.noteOnGreenplumDataSource();
                     this.presenter = new chorus.presenters.Activity(this.model);
                 });
                 it("returns true", function() {
@@ -181,7 +181,7 @@ describe("chorus.presenters.Activity", function() {
 
             context ("when it is a not a note" , function() {
                 beforeEach(function() {
-                    this.model = rspecFixtures.activity.dataSourceCreated();
+                    this.model = backboneFixtures.activity.dataSourceCreated();
                     this.presenter = new chorus.presenters.Activity(this.model);
                 });
                 it("returns false", function() {
@@ -193,7 +193,7 @@ describe("chorus.presenters.Activity", function() {
 
         describe("isNotification and isReadOnly", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                this.model = backboneFixtures.activity.noteOnGreenplumDataSource();
                 var presenter_options = {
                     isNotification: true,
                     isReadOnly: true
@@ -210,12 +210,12 @@ describe("chorus.presenters.Activity", function() {
 
         describe("#hasError", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                this.model = backboneFixtures.activity.noteOnGreenplumDataSource();
             });
 
             context("when the activity has errorObjects", function() {
                 it("is true", function() {
-                    this.model = rspecFixtures.activity.datasetImportFailedWithModelErrors();
+                    this.model = backboneFixtures.activity.datasetImportFailedWithModelErrors();
                     expect(this.model.get("errorObjects")).toBeTruthy();
                     this.presenter = new chorus.presenters.Activity(this.model);
                     expect(this.presenter.hasError()).toBeTruthy();
@@ -224,7 +224,7 @@ describe("chorus.presenters.Activity", function() {
 
             context("when the activity has errorMessage", function() {
                 it("is true", function() {
-                    this.model = rspecFixtures.activity.fileImportFailed();
+                    this.model = backboneFixtures.activity.fileImportFailed();
                     expect(this.model.get("errorMessage")).toBeTruthy();
                     this.presenter = new chorus.presenters.Activity(this.model);
                     expect(this.presenter.hasError()).toBeTruthy();
@@ -233,7 +233,7 @@ describe("chorus.presenters.Activity", function() {
 
             context("when the activity has neither", function() {
                 it("is false", function() {
-                    this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                    this.model = backboneFixtures.activity.noteOnGreenplumDataSource();
                     expect(this.model.get("errorObjects")).toBeFalsy();
                     expect(this.model.get("errorMessage")).toBeFalsy();
                     this.presenter = new chorus.presenters.Activity(this.model);
@@ -245,7 +245,7 @@ describe("chorus.presenters.Activity", function() {
 
     describe("#promotionDetails", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.insightOnGreenplumDataSource();
+            this.model = backboneFixtures.activity.insightOnGreenplumDataSource();
             var presenter_options = {
             };
             this.presenter = new chorus.presenters.Activity(this.model, presenter_options);
@@ -264,7 +264,7 @@ describe("chorus.presenters.Activity", function() {
 
         context(" when insight is published", function () {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.insightOnGreenplumDataSource({
+                this.model = backboneFixtures.activity.insightOnGreenplumDataSource({
                     isPublished:true
                 });
                 var presenter_options = {
@@ -281,7 +281,7 @@ describe("chorus.presenters.Activity", function() {
 
         context(" when insight is Not published", function () {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.insightOnGreenplumDataSource({
+                this.model = backboneFixtures.activity.insightOnGreenplumDataSource({
                     isPublished:false
                 });
                 var presenter_options = {
@@ -298,7 +298,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("data source created", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.dataSourceCreated();
+            this.model = backboneFixtures.activity.dataSourceCreated();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.dataSource = this.model.dataSource();
             this.actor = this.model.actor();
@@ -318,7 +318,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("data source deleted", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.dataSourceDeleted();
+            this.model = backboneFixtures.activity.dataSourceDeleted();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.dataSource = this.model.dataSource();
             this.actor = this.model.actor();
@@ -338,7 +338,7 @@ describe("chorus.presenters.Activity", function() {
 
     context('hadoop data source created', function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.hdfsDataSourceCreated();
+            this.model = backboneFixtures.activity.hdfsDataSourceCreated();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.hdfsDataSource = this.model.hdfsDataSource();
             this.actor = this.model.actor();
@@ -358,7 +358,7 @@ describe("chorus.presenters.Activity", function() {
 
     context('gnip data source created', function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.gnipDataSourceCreated();
+            this.model = backboneFixtures.activity.gnipDataSourceCreated();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.gnipDataSource = this.model.gnipDataSource();
             this.actor = this.model.actor();
@@ -378,7 +378,7 @@ describe("chorus.presenters.Activity", function() {
 
     context('relational data source changed owner', function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.dataSourceChangedOwner();
+            this.model = backboneFixtures.activity.dataSourceChangedOwner();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.dataSource = this.model.dataSource();
             this.newOwner = this.model.newOwner();
@@ -400,7 +400,7 @@ describe("chorus.presenters.Activity", function() {
 
     context('relational data source changed name', function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.dataSourceChangedName({
+            this.model = backboneFixtures.activity.dataSourceChangedName({
                 newName: "jane",
                 oldName: "john"
             });
@@ -425,7 +425,7 @@ describe("chorus.presenters.Activity", function() {
 
     context('hadoop data source changed name', function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.hdfsDataSourceChangedName({
+            this.model = backboneFixtures.activity.hdfsDataSourceChangedName({
                 newName: "jane",
                 oldName: "john"
             });
@@ -450,7 +450,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("public workspace created", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.publicWorkspaceCreated();
+            this.model = backboneFixtures.activity.publicWorkspaceCreated();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
         });
@@ -471,7 +471,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("private workspace created", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.privateWorkspaceCreated();
+            this.model = backboneFixtures.activity.privateWorkspaceCreated();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
         });
@@ -492,7 +492,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("workspace made public", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.workspaceMakePublic();
+            this.model = backboneFixtures.activity.workspaceMakePublic();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
         });
@@ -513,7 +513,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("workspace made private", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.workspaceMakePrivate();
+            this.model = backboneFixtures.activity.workspaceMakePrivate();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
         });
@@ -534,7 +534,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("workspace archived", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.workspaceArchived();
+            this.model = backboneFixtures.activity.workspaceArchived();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
         });
@@ -556,7 +556,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("workspace deleted", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.workspaceDeleted({
+            this.model = backboneFixtures.activity.workspaceDeleted({
                 workspace :{
                     id: 1,
                     name: "abc",
@@ -583,7 +583,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("workspace unarchived", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.workspaceUnarchived();
+            this.model = backboneFixtures.activity.workspaceUnarchived();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
         });
@@ -605,7 +605,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("workfile created", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.workfileCreated();
+            this.model = backboneFixtures.activity.workfileCreated();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
         });
@@ -628,7 +628,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("workfile upgrade version", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.workfileUpgradedVersion();
+            this.model = backboneFixtures.activity.workfileUpgradedVersion();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
         });
@@ -694,7 +694,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("work flow upgrade version", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.workFlowUpgradedVersion();
+            this.model = backboneFixtures.activity.workFlowUpgradedVersion();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
         });
@@ -716,7 +716,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("workfile version deleted", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.workfileVersionDeleted();
+            this.model = backboneFixtures.activity.workfileVersionDeleted();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
         });
@@ -740,7 +740,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("source table created", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.sourceTableCreated({ dataset: { objectType: "VIEW" } });
+            this.model = backboneFixtures.activity.sourceTableCreated({ dataset: { objectType: "VIEW" } });
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
         });
@@ -764,7 +764,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("sandbox added", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.sandboxAdded();
+            this.model = backboneFixtures.activity.sandboxAdded();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
         });
@@ -785,7 +785,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("add a hdfs file as external table", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.hdfsFileExtTableCreated();
+            this.model = backboneFixtures.activity.hdfsFileExtTableCreated();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
@@ -809,7 +809,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("add a hdfs directory as external table", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.hdfsDirectoryExtTableCreated();
+            this.model = backboneFixtures.activity.hdfsDirectoryExtTableCreated();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
@@ -833,7 +833,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("add a hdfs directory as external table with file pattern", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.hdfsPatternExtTableCreated({filePattern: '*.csv'});
+            this.model = backboneFixtures.activity.hdfsPatternExtTableCreated({filePattern: '*.csv'});
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
@@ -858,7 +858,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("file import success", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.fileImportSuccess();
+            this.model = backboneFixtures.activity.fileImportSuccess();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
@@ -883,7 +883,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("workspace import success", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.workspaceImportSuccess();
+            this.model = backboneFixtures.activity.workspaceImportSuccess();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
@@ -909,7 +909,7 @@ describe("chorus.presenters.Activity", function() {
     context('schema import created', function(){
 
         beforeEach(function() {
-            this.model = rspecFixtures.activity.schemaImportCreated();
+            this.model = backboneFixtures.activity.schemaImportCreated();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.schema = this.model.schema();
@@ -921,8 +921,8 @@ describe("chorus.presenters.Activity", function() {
 
         context("after the destination dataset exists", function(){
             beforeEach(function(){
-                this.destination = rspecFixtures.dataset();
-                this.model = rspecFixtures.activity.schemaImportCreated({dataset: this.destination});
+                this.destination = backboneFixtures.dataset();
+                this.model = backboneFixtures.activity.schemaImportCreated({dataset: this.destination});
                 this.presenter = new chorus.presenters.Activity(this.model);
             });
 
@@ -957,7 +957,7 @@ describe("chorus.presenters.Activity", function() {
 
     context('schema import success', function(){
         beforeEach(function() {
-            this.model = rspecFixtures.activity.schemaImportSuccess();
+            this.model = backboneFixtures.activity.schemaImportSuccess();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.schema = this.model.dataset().schema();
@@ -980,7 +980,7 @@ describe("chorus.presenters.Activity", function() {
 
     context('schema import failed', function(){
         beforeEach(function() {
-            this.model = rspecFixtures.activity.schemaImportFailed();
+            this.model = backboneFixtures.activity.schemaImportFailed();
             this.actor = this.model.actor();
             this.sourceDataset = this.model.importSource();
         });
@@ -1026,7 +1026,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("file import failed", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.fileImportFailed();
+            this.model = backboneFixtures.activity.fileImportFailed();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
@@ -1053,7 +1053,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("dataset import failed", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.workspaceImportFailed();
+            this.model = backboneFixtures.activity.workspaceImportFailed();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
@@ -1076,12 +1076,12 @@ describe("chorus.presenters.Activity", function() {
 
     context("note on a hdfs file", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.noteOnHdfsFileCreated({
+            this.model = backboneFixtures.activity.noteOnHdfsFileCreated({
                 hdfsFile: { isDir: false, id: 4567, name: "path.csv", hdfsDataSource: {id: 1234}}
             });
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
-            this.hdfsFile = rspecFixtures.hdfsDir({
+            this.hdfsFile = backboneFixtures.hdfsDir({
                 id: 4567,
                 hdfsDataSource: { id: 1234 },
                 name: "path.csv",
@@ -1104,7 +1104,7 @@ describe("chorus.presenters.Activity", function() {
 
     context('note on a gpdb data source', function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.noteOnGreenplumDataSource({
+            this.model = backboneFixtures.activity.noteOnGreenplumDataSource({
                 dataSource: {
                     id: 42,
                     name: 'my_data_source'
@@ -1112,7 +1112,7 @@ describe("chorus.presenters.Activity", function() {
             });
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
-            this.dataSource = rspecFixtures.gpdbDataSource({id: 42, name: 'my_data_source'});
+            this.dataSource = backboneFixtures.gpdbDataSource({id: 42, name: 'my_data_source'});
         });
 
         itHasTheActorIcon();
@@ -1130,7 +1130,7 @@ describe("chorus.presenters.Activity", function() {
 
     context('note on a gnip data source', function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.noteOnGnipDataSourceCreated({
+            this.model = backboneFixtures.activity.noteOnGnipDataSourceCreated({
                 gnipDataSource: {
                     id: 42,
                     name: 'my_gnip_data_source'
@@ -1138,7 +1138,7 @@ describe("chorus.presenters.Activity", function() {
             });
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
-            this.dataSource = rspecFixtures.gnipDataSource({id: 42, name: 'my_gnip_data_source'});
+            this.dataSource = backboneFixtures.gnipDataSource({id: 42, name: 'my_gnip_data_source'});
         });
 
         itHasTheActorIcon();
@@ -1156,7 +1156,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("note on a workspace ", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.noteOnWorkspaceCreated({
+            this.model = backboneFixtures.activity.noteOnWorkspaceCreated({
                 workspace: {
                     name: 'le_workspace',
                     id: 42
@@ -1164,7 +1164,7 @@ describe("chorus.presenters.Activity", function() {
             });
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
-            this.workspace = rspecFixtures.workspace({id: 42, name: 'le_workspace' });
+            this.workspace = backboneFixtures.workspace({id: 42, name: 'le_workspace' });
         });
 
         itHasTheActorIcon();
@@ -1182,7 +1182,7 @@ describe("chorus.presenters.Activity", function() {
 
     context('note on a hadoop data source', function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.noteOnHdfsDataSourceCreated({
+            this.model = backboneFixtures.activity.noteOnHdfsDataSourceCreated({
                 hdfsDataSource: {
                     id: 42,
                     name: 'my_data_source'
@@ -1190,7 +1190,7 @@ describe("chorus.presenters.Activity", function() {
             });
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
-            this.dataSource = rspecFixtures.hdfsDataSource({id: 42, name: 'my_data_source'});
+            this.dataSource = backboneFixtures.hdfsDataSource({id: 42, name: 'my_data_source'});
         });
 
         itHasTheActorIcon();
@@ -1208,7 +1208,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("note on a dataset", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.noteOnDatasetCreated({
+            this.model = backboneFixtures.activity.noteOnDatasetCreated({
                 dataset: { id: 42, objectName: "lunch_boxes" }
             });
             this.presenter = new chorus.presenters.Activity(this.model);
@@ -1231,7 +1231,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("note on a workspace dataset", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.noteOnWorkspaceDatasetCreated({
+            this.model = backboneFixtures.activity.noteOnWorkspaceDatasetCreated({
                 dataset: { id: 42, objectName: "lunch_boxes" },
                 workspace: { id: 55, name: "paleo_eaters" }
             });
@@ -1257,7 +1257,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("workspace name change", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.workspaceChangeName({
+            this.model = backboneFixtures.activity.workspaceChangeName({
                 workspace: { id: 55, name: "paleo_eaters" },
                 workspaceOldName: "old_name"
             });
@@ -1281,7 +1281,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("members added event", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.membersAdded({
+            this.model = backboneFixtures.activity.membersAdded({
                 workspace: { id: 55, name: "paleo_eaters" },
                 member: { id: 66, firstName: "Susie", lastName: "Cupcake"}
             });
@@ -1389,7 +1389,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("file import created event", function() {
         beforeEach(function () {
-            this.model = rspecFixtures.activity.fileImportCreated();
+            this.model = backboneFixtures.activity.fileImportCreated();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
@@ -1421,8 +1421,8 @@ describe("chorus.presenters.Activity", function() {
             });
             context("when importing to an existing table", function () {
                 beforeEach(function () {
-                    this.datasetModel = rspecFixtures.dataset();
-                    this.model = rspecFixtures.activity.fileImportCreated({dataset: this.datasetModel});
+                    this.datasetModel = backboneFixtures.dataset();
+                    this.model = backboneFixtures.activity.fileImportCreated({dataset: this.datasetModel});
                     this.dataset = this.model.dataset();
                     this.activity_data["destObjectOrName"] = linkTo(this.dataset.showUrl(), this.dataset.name());
                     this.presenter = new chorus.presenters.Activity(this.model);
@@ -1440,8 +1440,8 @@ describe("chorus.presenters.Activity", function() {
     context("gnip import created event", function() {
         context("when dataset does not yet exist", function() {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.gnipStreamImportCreated();
-                this.dataset = rspecFixtures.dataset();
+                this.model = backboneFixtures.activity.gnipStreamImportCreated();
+                this.dataset = backboneFixtures.dataset();
                 this.presenter = new chorus.presenters.Activity(this.model);
                 this.actor = this.model.actor();
                 this.gnipDataSource = this.model.gnipDataSource();
@@ -1463,8 +1463,8 @@ describe("chorus.presenters.Activity", function() {
 
         context("when dataset exists", function() {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.gnipStreamImportCreated();
-                this.dataset = rspecFixtures.dataset();
+                this.model = backboneFixtures.activity.gnipStreamImportCreated();
+                this.dataset = backboneFixtures.dataset();
                 this.dataset.set({ workspace: this.model.get('workspace') });
                 var workspaceDataset = new chorus.models.WorkspaceDataset(this.dataset);
                 this.model.set({ dataset: this.dataset });
@@ -1491,7 +1491,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("gnip import success event", function() {
         beforeEach(function () {
-            this.model = rspecFixtures.activity.gnipStreamImportSuccess();
+            this.model = backboneFixtures.activity.gnipStreamImportSuccess();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.workspace = this.model.workspace();
             this.dataset = this.model.dataset();
@@ -1514,7 +1514,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("gnip import failure event", function() {
         beforeEach(function () {
-            this.model = rspecFixtures.activity.gnipStreamImportFailed();
+            this.model = backboneFixtures.activity.gnipStreamImportFailed();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.workspace = this.model.workspace();
             this.gnipDataSource = this.model.gnipDataSource();
@@ -1537,8 +1537,8 @@ describe("chorus.presenters.Activity", function() {
 
     context("workspace import created event", function() {
         beforeEach(function () {
-            this.datasetModel = rspecFixtures.dataset();
-            this.model = rspecFixtures.activity.workspaceImportCreated({dataset: this.datasetModel});
+            this.datasetModel = backboneFixtures.dataset();
+            this.model = backboneFixtures.activity.workspaceImportCreated({dataset: this.datasetModel});
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
@@ -1563,14 +1563,14 @@ describe("chorus.presenters.Activity", function() {
             });
             context("when importing to a new table", function () {
                 beforeEach(function() {
-                    this.datasetModel = rspecFixtures.dataset();
-                    this.model = rspecFixtures.activity.workspaceImportCreated();
+                    this.datasetModel = backboneFixtures.dataset();
+                    this.model = backboneFixtures.activity.workspaceImportCreated();
                     this.dataset = this.model.dataset();
                     this.presenter = new chorus.presenters.Activity(this.model);
                     this.activity_data["destObjectOrName"] =  "other_table";
                 });
                 it("displays the destination table name without link", function () {
-                    rspecFixtures.activity.workspaceImportCreated();
+                    backboneFixtures.activity.workspaceImportCreated();
                     expect(this.presenter.headerHtml().toString()).toMatchTranslation(
                         "activity.header.WorkspaceImportCreated.default",
                         this.activity_data
@@ -1579,8 +1579,8 @@ describe("chorus.presenters.Activity", function() {
             });
             context("when importing to an existing table", function () {
                 beforeEach(function () {
-                    this.datasetModel = rspecFixtures.dataset();
-                    this.model = rspecFixtures.activity.workspaceImportCreated({dataset: this.datasetModel});
+                    this.datasetModel = backboneFixtures.dataset();
+                    this.model = backboneFixtures.activity.workspaceImportCreated({dataset: this.datasetModel});
                     this.dataset = this.model.dataset();
                     this.presenter = new chorus.presenters.Activity(this.model);
                 });
@@ -1601,8 +1601,8 @@ describe("chorus.presenters.Activity", function() {
 
     context("import schedule updated event", function() {
         beforeEach(function () {
-            this.datasetModel = rspecFixtures.dataset();
-            this.model = rspecFixtures.activity.importScheduleUpdated({dataset: this.datasetModel});            this.presenter = new chorus.presenters.Activity(this.model);
+            this.datasetModel = backboneFixtures.dataset();
+            this.model = backboneFixtures.activity.importScheduleUpdated({dataset: this.datasetModel});            this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
             this.dataset = this.model.dataset();
@@ -1626,8 +1626,8 @@ describe("chorus.presenters.Activity", function() {
             });
             context("when importing to a new table", function () {
                 beforeEach(function() {
-                    this.datasetModel = rspecFixtures.dataset();
-                    this.model = rspecFixtures.activity.importScheduleUpdated();
+                    this.datasetModel = backboneFixtures.dataset();
+                    this.model = backboneFixtures.activity.importScheduleUpdated();
                     this.dataset = this.model.dataset();
                     this.presenter = new chorus.presenters.Activity(this.model);
                     this.activity_data["destObjectOrName"] =  "other_table";
@@ -1641,8 +1641,8 @@ describe("chorus.presenters.Activity", function() {
             });
             context("when importing to an existing table", function () {
                 beforeEach(function () {
-                    this.datasetModel = rspecFixtures.dataset();
-                    this.model = rspecFixtures.activity.importScheduleUpdated({dataset: this.datasetModel});
+                    this.datasetModel = backboneFixtures.dataset();
+                    this.model = backboneFixtures.activity.importScheduleUpdated({dataset: this.datasetModel});
                     this.dataset = this.model.dataset();
                     this.presenter = new chorus.presenters.Activity(this.model);
                 });
@@ -1663,8 +1663,8 @@ describe("chorus.presenters.Activity", function() {
 
     context("import schedule deleted event", function() {
         beforeEach(function () {
-            this.datasetModel = rspecFixtures.dataset();
-            this.model = rspecFixtures.activity.importScheduleDeleted({dataset: this.datasetModel});            this.presenter = new chorus.presenters.Activity(this.model);
+            this.datasetModel = backboneFixtures.dataset();
+            this.model = backboneFixtures.activity.importScheduleDeleted({dataset: this.datasetModel});            this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
             this.dataset = this.model.dataset();
@@ -1688,8 +1688,8 @@ describe("chorus.presenters.Activity", function() {
             });
             context("when importing to a new table", function () {
                 beforeEach(function() {
-                    this.datasetModel = rspecFixtures.dataset();
-                    this.model = rspecFixtures.activity.importScheduleDeleted();
+                    this.datasetModel = backboneFixtures.dataset();
+                    this.model = backboneFixtures.activity.importScheduleDeleted();
                     this.dataset = this.model.dataset();
                     this.presenter = new chorus.presenters.Activity(this.model);
                     this.activity_data["destObjectOrName"] =  "other_table_deleted";
@@ -1703,8 +1703,8 @@ describe("chorus.presenters.Activity", function() {
             });
             context("when importing to an existing table", function () {
                 beforeEach(function () {
-                    this.datasetModel = rspecFixtures.dataset();
-                    this.model = rspecFixtures.activity.importScheduleDeleted({dataset: this.datasetModel});
+                    this.datasetModel = backboneFixtures.dataset();
+                    this.model = backboneFixtures.activity.importScheduleDeleted({dataset: this.datasetModel});
                     this.dataset = this.model.dataset();
                     this.presenter = new chorus.presenters.Activity(this.model);
                 });
@@ -1726,7 +1726,7 @@ describe("chorus.presenters.Activity", function() {
     context("chorus view created event", function() {
         context("from dataset", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.activity.chorusViewCreatedFromDataset();
+                this.model = backboneFixtures.activity.chorusViewCreatedFromDataset();
                 this.presenter = new chorus.presenters.Activity(this.model);
                 this.actor = this.model.actor();
                 this.workspace = this.model.workspace();
@@ -1767,7 +1767,7 @@ describe("chorus.presenters.Activity", function() {
 
         context("from duplication of a ChorusView", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.activity.chorusViewCreatedFromDataset();
+                this.model = backboneFixtures.activity.chorusViewCreatedFromDataset();
                 this.presenter = new chorus.presenters.Activity(this.model);
                 this.actor = this.model.actor();
                 this.workspace = this.model.workspace();
@@ -1809,7 +1809,7 @@ describe("chorus.presenters.Activity", function() {
 
         context("from workfile", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.activity.chorusViewCreatedFromWorkfile();
+                this.model = backboneFixtures.activity.chorusViewCreatedFromWorkfile();
                 this.presenter = new chorus.presenters.Activity(this.model);
                 this.actor = this.model.actor();
                 this.workspace = this.model.workspace();
@@ -1848,7 +1848,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("dataset changed query event", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.chorusViewChanged();
+            this.model = backboneFixtures.activity.chorusViewChanged();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
@@ -1884,7 +1884,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("database view created from chorus view", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.viewCreated();
+            this.model = backboneFixtures.activity.viewCreated();
             this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
@@ -1922,7 +1922,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("tableau workbook published", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.tableauWorkbookPublished({
+            this.model = backboneFixtures.activity.tableauWorkbookPublished({
                 workspace: { id: 55, name: "paleo_eaters" },
                 workbookName: "fancy_workbook",
                 workbookUrl: "http://example.com/workbooks/fancy_workbook",
@@ -1952,7 +1952,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("tableau workbook published", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.tableauWorkfileCreated({
+            this.model = backboneFixtures.activity.tableauWorkfileCreated({
                 workspace: { id: 55, name: "paleo_eaters" },
                 workbookName: "fancy_workbook"
             });
@@ -1980,7 +1980,7 @@ describe("chorus.presenters.Activity", function() {
 
     context("credentials invalid", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.activity.credentialsInvalid();
+            this.model = backboneFixtures.activity.credentialsInvalid();
             this.presenter = new chorus.presenters.Activity(this.model, {isNotification: true});
             this.actor = this.model.actor();
             this.dataSource = this.model.dataSource();

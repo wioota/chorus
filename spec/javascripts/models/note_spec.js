@@ -10,7 +10,7 @@ describe("chorus.models.Note", function() {
     }
 
     beforeEach(function() {
-        var activity = rspecFixtures.activity.noteOnGreenplumDataSource({
+        var activity = backboneFixtures.activity.noteOnGreenplumDataSource({
             id: '41',
             actor: {
                 id: "45",
@@ -77,9 +77,9 @@ describe("chorus.models.Note", function() {
         describe("saving the dataset attachments", function() {
             it("assigns the 'datasetIds' field as a list of dataset ids", function() {
                 this.model.datasets = new chorus.collections.WorkspaceDatasetSet([
-                    rspecFixtures.workspaceDataset.datasetTable({ objectName: "table_a", id: 'a'}),
-                    rspecFixtures.workspaceDataset.datasetTable({ objectName: "table_b", id: 'b'}),
-                    rspecFixtures.workspaceDataset.datasetTable({ objectName: "table_c", id: 'c'})
+                    backboneFixtures.workspaceDataset.datasetTable({ objectName: "table_a", id: 'a'}),
+                    backboneFixtures.workspaceDataset.datasetTable({ objectName: "table_b", id: 'b'}),
+                    backboneFixtures.workspaceDataset.datasetTable({ objectName: "table_c", id: 'c'})
                 ]);
 
                 this.model.save();
@@ -90,9 +90,9 @@ describe("chorus.models.Note", function() {
 
         describe("saving the workfile attachments", function() {
             it("assigns the 'workfileIds' field as a list of workfile ids", function() {
-                this.model1 = rspecFixtures.workfile.sql();
-                this.model2 = rspecFixtures.workfile.text();
-                this.model3 = rspecFixtures.workfile.binary();
+                this.model1 = backboneFixtures.workfile.sql();
+                this.model2 = backboneFixtures.workfile.text();
+                this.model3 = backboneFixtures.workfile.binary();
 
                 this.model.workfiles = new chorus.collections.WorkfileSet([this.model1, this.model2, this.model3], {workspaceId: 1234});
 

@@ -58,7 +58,7 @@ describe('chorus.handlebarsHelpers.search', function() {
     describe("searchResultCommentTitle", function () {
         context("when the comment is an insight", function () {
             beforeEach(function () {
-                this.comment = rspecFixtures.activity.noteOnWorkfileCreated({isInsight:true}).attributes;
+                this.comment = backboneFixtures.activity.noteOnWorkfileCreated({isInsight:true}).attributes;
             });
 
             it("returns the insight title", function () {
@@ -68,7 +68,7 @@ describe('chorus.handlebarsHelpers.search', function() {
 
         context("when the comment is a comment", function () {
             beforeEach(function () {
-                this.comment = rspecFixtures.activity.noteOnWorkfileCreated().attributes;
+                this.comment = backboneFixtures.activity.noteOnWorkfileCreated().attributes;
                 this.comment.isComment = true;
             });
 
@@ -79,7 +79,7 @@ describe('chorus.handlebarsHelpers.search', function() {
 
         context("when the comment nothing special", function () {
             beforeEach(function () {
-                this.comment = rspecFixtures.commentJson();
+                this.comment = backboneFixtures.commentJson();
             });
 
             it("returns the note title", function () {
@@ -89,7 +89,7 @@ describe('chorus.handlebarsHelpers.search', function() {
 
         context("when the comment has a subType", function() {
             beforeEach(function() {
-                this.comment = rspecFixtures.activity.noteOnWorkfileCreated().attributes;
+                this.comment = backboneFixtures.activity.noteOnWorkfileCreated().attributes;
                 this.comment.subType = "table_description";
             });
 

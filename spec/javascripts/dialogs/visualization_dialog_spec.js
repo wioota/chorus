@@ -175,9 +175,9 @@ describe("chorus.dialogs.Visualization", function() {
         spyOn(chorus.views.ResultsConsole.prototype, "initializeDataGrid");
         spyOn(chorus.Modal.prototype, "closeModal");
 
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable();
         this.columns = this.dataset.columns();
-        this.columns.reset(rspecFixtures.databaseColumnSet().models);
+        this.columns.reset(backboneFixtures.databaseColumnSet().models);
 
         this.chartOptions = {type: "boxplot", name: "Foo"};
 
@@ -189,7 +189,7 @@ describe("chorus.dialogs.Visualization", function() {
         this.filters = new chorus.collections.DatasetFilterSet([filter1, filter2, incompleteFilter1, incompleteFilter2]);
 
         spyOn(this.filters, "clone").andCallThrough();
-        var task = rspecFixtures.boxplotTask();
+        var task = backboneFixtures.boxplotTask();
         task.loaded = false;
         this.dialog = new chorus.dialogs.Visualization({model: this.dataset, task: task, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
 
@@ -226,18 +226,18 @@ describe("chorus.dialogs.Visualization", function() {
 
                     describe("when the workspace fetch completes", function() {
                         it("keeps the save button enabled", function() {
-                            this.server.completeFetchFor(this.dialog.model.workspace(), rspecFixtures.workspace());
+                            this.server.completeFetchFor(this.dialog.model.workspace(), backboneFixtures.workspace());
                             expect(this.dialog.$("button.save")).toBeEnabled();
                         });
 
                         it("keeps the 'show data table' link visible", function() {
-                            this.server.completeFetchFor(this.dialog.model.workspace(), rspecFixtures.workspace());
+                            this.server.completeFetchFor(this.dialog.model.workspace(), backboneFixtures.workspace());
                             expect(this.dialog.$("a.show")).not.toHaveClass('hidden');
                         });
 
                         context("when the workspace is archived", function() {
                             it("does not include the 'save as workfile' option", function() {
-                                this.server.completeFetchFor(this.dialog.model.workspace(), rspecFixtures.workspace({ archivedAt: "12/21/2012" }));
+                                this.server.completeFetchFor(this.dialog.model.workspace(), backboneFixtures.workspace({ archivedAt: "12/21/2012" }));
                                 this.dialog.$("button.save").click();
                                 expect(this.qtip.find("[data-menu-name='save_as_workfile']")).not.toExist();
                             });
@@ -245,7 +245,7 @@ describe("chorus.dialogs.Visualization", function() {
 
                         context("when the workspace is not archived", function() {
                             it("includes the 'save as workfile' option", function() {
-                                this.server.completeFetchFor(this.dialog.model.workspace(), rspecFixtures.workspace({ archivedAt: null }));
+                                this.server.completeFetchFor(this.dialog.model.workspace(), backboneFixtures.workspace({ archivedAt: null }));
                                 this.dialog.$("button.save").click();
                                 expect(this.qtip.find("[data-menu-name='save_as_workfile']")).toExist();
                             });
@@ -256,8 +256,8 @@ describe("chorus.dialogs.Visualization", function() {
                 context('when the dataset doesnt belong to a workspace (from schema browser)', function() {
                     beforeEach(function() {
                         this.server.reset();
-                        var dataset = rspecFixtures.dataset();
-                        var task = rspecFixtures.boxplotTask();
+                        var dataset = backboneFixtures.dataset();
+                        var task = backboneFixtures.boxplotTask();
                         this.dialog = new chorus.dialogs.Visualization({model: dataset, task: task, chartOptions: this.chartOptions, filters: this.filters, columnSet: this.columns});
                     });
                     it("doesn't add workspace as a requiredResources", function() {
@@ -329,7 +329,7 @@ describe("chorus.dialogs.Visualization", function() {
                 this.chartOptions["type"] = "histogram";
                 this.dialog = new chorus.dialogs.Visualization({
                     model: this.dataset,
-                    task: rspecFixtures.boxplotTask(),
+                    task: backboneFixtures.boxplotTask(),
                     chartOptions: this.chartOptions,
                     filters: this.filters,
                     columnSet: this.columns
@@ -349,7 +349,7 @@ describe("chorus.dialogs.Visualization", function() {
                     chartOptions: this.chartOptions,
                     filters: this.filters,
                     columnSet: this.columns,
-                    task: rspecFixtures.boxplotTask({ rows: [] })
+                    task: backboneFixtures.boxplotTask({ rows: [] })
                 });
             });
 
@@ -362,7 +362,7 @@ describe("chorus.dialogs.Visualization", function() {
     describe("#isSufficientDataForTimeseries", function () {
         beforeEach(function () {
             this.chartOptions["type"] = "timeseries";
-            var task = rspecFixtures.timeseriesTask();
+            var task = backboneFixtures.timeseriesTask();
 
             this.dialog = new chorus.dialogs.Visualization({
                 model:this.dataset,
@@ -695,7 +695,7 @@ describe("chorus.dialogs.Visualization", function() {
                 beforeEach(function() {
                     this.dialog = new chorus.dialogs.Visualization({
                         model: this.dataset,
-                        task: rspecFixtures.boxplotTask(),
+                        task: backboneFixtures.boxplotTask(),
                         chartOptions: this.chartOptions,
                         filters: this.filters,
                         columnSet: this.columns
@@ -793,7 +793,7 @@ describe("chorus.dialogs.Visualization", function() {
 
                     context("when a workspace is selected", function() {
                         beforeEach(function() {
-                            this.workspace = rspecFixtures.workspace({id: "543"});
+                            this.workspace = backboneFixtures.workspace({id: "543"});
                             this.dialog.workspacePicker.trigger("workspace:selected", this.workspace);
                         });
 

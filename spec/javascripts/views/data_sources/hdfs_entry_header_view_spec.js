@@ -1,7 +1,7 @@
 describe("chorus.views.HdfsEntryHeader", function() {
     beforeEach(function() {
-        this.dataSource = rspecFixtures.hdfsDataSource();
-        this.hdfsEntry = rspecFixtures.hdfsDir();
+        this.dataSource = backboneFixtures.hdfsDataSource();
+        this.hdfsEntry = backboneFixtures.hdfsDir();
 
         this.view = new chorus.views.HdfsEntryHeader({dataSource: this.dataSource, hdfsEntry: this.hdfsEntry});
     });

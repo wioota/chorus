@@ -1,7 +1,7 @@
 describe("chorus.views.SearchResultList", function() {
     context("body", function() {
         beforeEach(function() {
-            this.result = rspecFixtures.searchResult();
+            this.result = backboneFixtures.searchResult();
             this.result.set({
                 query: "foo",
                 workspaceId: 123
@@ -34,7 +34,7 @@ describe("chorus.views.SearchResultList", function() {
 
     describe("header", function() {
         beforeEach(function() {
-            this.result = rspecFixtures.searchResult();
+            this.result = backboneFixtures.searchResult();
             this.result.set({query: "foo"});
             this.collection = this.result.users();
             this.view = new chorus.views.SearchResultList({ collection: this.collection, search: this.result, entityType: "user"});
@@ -43,8 +43,8 @@ describe("chorus.views.SearchResultList", function() {
         context("when there are three or fewer results", function() {
             beforeEach(function() {
                 this.collection = new chorus.collections.SchemaDatasetSet([
-                    rspecFixtures.datasetJson(),
-                    rspecFixtures.datasetJson()
+                    backboneFixtures.datasetJson(),
+                    backboneFixtures.datasetJson()
                 ]);
                 this.collection.pagination = { records: 2 };
                 this.view = new chorus.views.SearchResultList({collection: this.collection, search: this.result, entityType: "dataset"});
@@ -119,12 +119,12 @@ describe("chorus.views.SearchResultList", function() {
 
                 context("has no results at all", function() {
                     beforeEach(function() {
-                        var collection = rspecFixtures.userSet([], {total: 0});
+                        var collection = backboneFixtures.userSet([], {total: 0});
                         collection.pagination = { records: 0 };
                         this.view = new chorus.views.SearchResultList({
                             collection: collection,
                             entityType: "user",
-                            search: rspecFixtures.searchResult()
+                            search: backboneFixtures.searchResult()
                         });
 
                         this.view.render();
@@ -151,7 +151,7 @@ describe("chorus.views.SearchResultList", function() {
 
             context("when it's inside of workspace context", function() {
                 beforeEach(function() {
-                    spyOn(this.result, 'workspace').andReturn(rspecFixtures.workspace());
+                    spyOn(this.result, 'workspace').andReturn(backboneFixtures.workspace());
                     this.view.render();
                 });
 
@@ -164,7 +164,7 @@ describe("chorus.views.SearchResultList", function() {
 
     describe("selection", function() {
         beforeEach(function() {
-            this.result = rspecFixtures.searchResult();
+            this.result = backboneFixtures.searchResult();
             this.result.set({ query: "foo" });
 
             this.dataSources = this.result.dataSources();

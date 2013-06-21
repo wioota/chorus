@@ -28,19 +28,19 @@ describe("chorus.views.DataSourceIndex", function() {
     context('when the data sources are fetched', function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.dataSources, [
-                rspecFixtures.gpdbDataSource({name : "GP9", id: "1"}),
-                rspecFixtures.gpdbDataSource({name : "gP1", id: "2"}),
-                rspecFixtures.oracleDataSource({name : "oracle", id: "3"})
+                backboneFixtures.gpdbDataSource({name : "GP9", id: "1"}),
+                backboneFixtures.gpdbDataSource({name : "gP1", id: "2"}),
+                backboneFixtures.oracleDataSource({name : "oracle", id: "3"})
             ]);
             this.server.completeFetchFor(this.hdfsDataSources, [
-                rspecFixtures.hdfsDataSource({name : "Hadoop9", id: "1"}),
-                rspecFixtures.hdfsDataSource({name : "hadoop1", id: "2"}),
-                rspecFixtures.hdfsDataSource({name : "Hadoop10", id: "3"})
+                backboneFixtures.hdfsDataSource({name : "Hadoop9", id: "1"}),
+                backboneFixtures.hdfsDataSource({name : "hadoop1", id: "2"}),
+                backboneFixtures.hdfsDataSource({name : "Hadoop10", id: "3"})
             ]);
             this.server.completeFetchFor(this.gnipDataSources, [
-                rspecFixtures.gnipDataSource({name : "Gnip1", id:"1"}),
-                rspecFixtures.gnipDataSource({name : "Gnip2", id: "2"}),
-                rspecFixtures.gnipDataSource({name : "Gnip3", id: "3"})
+                backboneFixtures.gnipDataSource({name : "Gnip1", id:"1"}),
+                backboneFixtures.gnipDataSource({name : "Gnip2", id: "2"}),
+                backboneFixtures.gnipDataSource({name : "Gnip3", id: "3"})
             ]);
         });
 
@@ -104,7 +104,7 @@ describe("chorus.views.DataSourceIndex", function() {
 
         context("when a data source is added", function() {
             beforeEach(function() {
-                this.newDataSource = rspecFixtures.oracleDataSource({id: 31415, name: "new data source"});
+                this.newDataSource = backboneFixtures.oracleDataSource({id: 31415, name: "new data source"});
                 spyOn(this.view.dataSources, "fetchAll").andCallThrough();
                 spyOn(this.view.hdfsDataSources, "fetchAll").andCallThrough();
                 spyOn(this.view.gnipDataSources, "fetchAll").andCallThrough();
@@ -122,20 +122,20 @@ describe("chorus.views.DataSourceIndex", function() {
                     this.selectedSpy = jasmine.createSpy("selected");
                     chorus.PageEvents.on("data_source:selected", this.selectedSpy);
                     this.server.completeFetchFor(this.dataSources, [
-                        rspecFixtures.gpdbDataSource({name: "GP9", id: "1"}),
-                        rspecFixtures.gpdbDataSource({name: "gP1", id: "2"}),
+                        backboneFixtures.gpdbDataSource({name: "GP9", id: "1"}),
+                        backboneFixtures.gpdbDataSource({name: "gP1", id: "2"}),
                         this.newDataSource,
-                        rspecFixtures.oracleDataSource({name: "oracle", id: "3"})
+                        backboneFixtures.oracleDataSource({name: "oracle", id: "3"})
                     ]);
                     this.server.completeFetchFor(this.hdfsDataSources, [
-                        rspecFixtures.hdfsDataSource({name: "Hadoop9", id: "1"}),
-                        rspecFixtures.hdfsDataSource({name: "hadoop1", id: "2"}),
-                        rspecFixtures.hdfsDataSource({name: "Hadoop10", id: "3"})
+                        backboneFixtures.hdfsDataSource({name: "Hadoop9", id: "1"}),
+                        backboneFixtures.hdfsDataSource({name: "hadoop1", id: "2"}),
+                        backboneFixtures.hdfsDataSource({name: "Hadoop10", id: "3"})
                     ]);
                     this.server.completeFetchFor(this.gnipDataSources, [
-                        rspecFixtures.gnipDataSource({name: "Gnip1", id: "1"}),
-                        rspecFixtures.gnipDataSource({name: "Gnip2", id: "2"}),
-                        rspecFixtures.gnipDataSource({name: "Gnip3", id: "3"})
+                        backboneFixtures.gnipDataSource({name: "Gnip1", id: "1"}),
+                        backboneFixtures.gnipDataSource({name: "Gnip2", id: "2"}),
+                        backboneFixtures.gnipDataSource({name: "Gnip3", id: "3"})
                     ]);
                 });
 
@@ -188,8 +188,8 @@ describe("chorus.views.DataSourceIndex", function() {
 
             it("allows models of different entity types to share an id", function() {
                 this.view.selectedModels.reset([
-                    rspecFixtures.gpdbDataSource({id: 1}),
-                    rspecFixtures.hdfsDataSource({id: 1})
+                    backboneFixtures.gpdbDataSource({id: 1}),
+                    backboneFixtures.hdfsDataSource({id: 1})
                 ]);
                 expect(this.view.selectedModels.length).toBe(2);
             });

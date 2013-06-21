@@ -1,6 +1,6 @@
 describe("chorus.pages.WorkspaceDatasetShowPage", function() {
     beforeEach(function() {
-        this.workspace = rspecFixtures.workspace({
+        this.workspace = backboneFixtures.workspace({
             id: '100',
             "sandboxInfo": {
                 id: 6, name: "schema",
@@ -11,7 +11,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
         var sandboxInfo = this.workspace.sandbox();
 
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable({
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable({
             schema: {
                 name: sandboxInfo.get("name"),
                 database: {
@@ -75,8 +75,8 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                 describe("when the columnSet fetch completes", function() {
                     beforeEach(function() {
                         this.server.lastFetchAllFor(this.columnSet).succeed([
-                            rspecFixtures.databaseColumn(),
-                            rspecFixtures.databaseColumn()
+                            backboneFixtures.databaseColumn(),
+                            backboneFixtures.databaseColumn()
                         ]);
                     });
 
@@ -102,7 +102,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
         it("navigates to the chorus view show page if the dataset turns out to be a chorus view", function() {
             spyOn(chorus.router, "navigate");
-            var chorusView = rspecFixtures.workspaceDataset.chorusView({workspace: { id: this.workspace.get("id") }});
+            var chorusView = backboneFixtures.workspaceDataset.chorusView({workspace: { id: this.workspace.get("id") }});
             this.server.completeFetchFor(this.dataset, chorusView.attributes);
             expect(chorus.router.navigate).toHaveBeenCalledWith(chorusView.showUrl());
         });
@@ -113,7 +113,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
             this.server.completeFetchFor(this.workspace);
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.dataset);
-            this.server.completeFetchAllFor(this.columnSet, [rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
+            this.server.completeFetchAllFor(this.columnSet, [backboneFixtures.databaseColumn(), backboneFixtures.databaseColumn()]);
             this.server.completeFetchFor(this.dataset.statistics());
         });
 
@@ -175,7 +175,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
             context("when the dataset has an import schedule", function() {
                 beforeEach(function() {
-                    var schedules = rspecFixtures.datasetImportScheduleSet();
+                    var schedules = backboneFixtures.datasetImportScheduleSet();
                     this.server.completeFetchFor(this.page.dataset.getImportSchedules(), schedules.models);
                     expect(this.page.dataset.importSchedule().frequency()).toBe("WEEKLY");
                     this.page.render();

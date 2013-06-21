@@ -1,8 +1,8 @@
 describe("chorus.dialogs.WorkFlowNewForDatasetList", function() {
     beforeEach(function() {
-        var dataset1 = rspecFixtures.dataset({id: 1});
-        var dataset2 = rspecFixtures.dataset({id: 2});
-        this.workspace = rspecFixtures.workspace();
+        var dataset1 = backboneFixtures.dataset({id: 1});
+        var dataset2 = backboneFixtures.dataset({id: 2});
+        this.workspace = backboneFixtures.workspace();
         this.dialog = new chorus.dialogs.WorkFlowNewForDatasetList({
             workspace: this.workspace,
             collection: new chorus.collections.Base([dataset1, dataset2])

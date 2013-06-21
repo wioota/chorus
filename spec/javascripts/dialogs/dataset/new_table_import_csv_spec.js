@@ -2,7 +2,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
     beforeEach(function() {
         spyOn(chorus.views.NewTableImportDataGrid.prototype, "initializeDataGrid");
         chorus.page = {};
-        chorus.page.workspace = rspecFixtures.workspace({
+        chorus.page.workspace = backboneFixtures.workspace({
             sandboxInfo: {
                 name: "mySchema",
                 database: { name: "myDatabase", dataSource: { name: "myDataSource" } }

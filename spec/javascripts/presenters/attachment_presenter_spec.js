@@ -1,7 +1,7 @@
 describe("chorus.presenters.Attachment", function() {
     context("given a model with its own page", function() {
         it("includes the model's show url", function() {
-            var model = rspecFixtures.workfile.text();
+            var model = backboneFixtures.workfile.text();
             expect(model.hasOwnPage()).toBeTruthy();
             var presenter = new chorus.presenters.Attachment(model);
             expect(presenter.url()).toBe(model.showUrl());
@@ -19,7 +19,7 @@ describe("chorus.presenters.Attachment", function() {
 
     describe("name", function() {
         it("uses objectName if available", function() {
-            var model = rspecFixtures.workspaceDataset.datasetTable();
+            var model = backboneFixtures.workspaceDataset.datasetTable();
             var presenter = new chorus.presenters.Attachment(model);
             expect(presenter.name()).toBe(model.get('objectName'));
         });
@@ -31,13 +31,13 @@ describe("chorus.presenters.Attachment", function() {
         });
 
         it("uses file name if available", function() {
-            var model = rspecFixtures.workfile.text();
+            var model = backboneFixtures.workfile.text();
             var presenter = new chorus.presenters.Attachment(model);
             expect(presenter.name()).toBe(model.get('fileName'));
         });
 
         it("uses nothing otherwise", function() {
-            var model = rspecFixtures.hdfsFile();
+            var model = backboneFixtures.hdfsFile();
             model.unset("name");
             var presenter = new chorus.presenters.Attachment(model);
             expect(presenter.name()).toBeUndefined();

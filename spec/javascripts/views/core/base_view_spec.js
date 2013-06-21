@@ -763,7 +763,7 @@ describe("chorus.views.Base", function() {
 
             context("when there are requiredResources", function() {
                 beforeEach(function() {
-                    this.resource = rspecFixtures.user();
+                    this.resource = backboneFixtures.user();
                     this.view.requiredResources.push(this.resource);
                     spyOn(this.view.requiredResources, 'allResponded');
                 });

@@ -1,6 +1,6 @@
 describe("chorus.dialogs.WorkFlowNew", function() {
     beforeEach(function() {
-        this.workspace = rspecFixtures.workspace();
+        this.workspace = backboneFixtures.workspace();
         this.sandboxDatabase = this.workspace.sandbox().database();
         this.dialog = new chorus.dialogs.WorkFlowNew({workspace: this.workspace});
         this.dialog.render();

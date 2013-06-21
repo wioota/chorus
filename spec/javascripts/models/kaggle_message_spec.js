@@ -1,6 +1,6 @@
 describe("chorus.models.KaggleMessage", function() {
     beforeEach(function () {
-        this.kaggleUser = rspecFixtures.kaggleUserSet().at(0);
+        this.kaggleUser = backboneFixtures.kaggleUserSet().at(0);
         this.kaggleUser.set({'id': 1});
         this.attrs = {
             recipients: new chorus.collections.KaggleUserSet(this.kaggleUser),

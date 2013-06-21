@@ -92,7 +92,7 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
             });
 
             it("includes a section for every type of item when both fetches completes", function() {
-                this.server.completeFetchFor(this.page.search, rspecFixtures.searchResult());
+                this.server.completeFetchFor(this.page.search, backboneFixtures.searchResult());
 
                 var sections = this.page.$(".search_result_list ul");
                 expect(sections.filter(".user_list.selectable")).toExist();

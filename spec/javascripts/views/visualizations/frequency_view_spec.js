@@ -9,10 +9,10 @@ describe("chorus.views.visualizations.FrequencyView", function() {
         centerY = chorus.svgHelpers.centerY;
 
     beforeEach(function() {
-        var dataset = rspecFixtures.dataset();
+        var dataset = backboneFixtures.dataset();
         this.task = dataset.makeFrequencyTask({"bins": 3, "yAxis": "fruits"});
         this.task.save();
-        this.server.lastCreate().succeed(rspecFixtures.frequencyTaskJson({response: {"bins": 3, "y_axis": "fruits"}}).response);
+        this.server.lastCreate().succeed(backboneFixtures.frequencyTaskJson({response: {"bins": 3, "y_axis": "fruits"}}).response);
 
         this.view = new chorus.views.visualizations.Frequency({ model: this.task });
         this.addMatchers(chorus.svgHelpers.matchers);
@@ -21,7 +21,7 @@ describe("chorus.views.visualizations.FrequencyView", function() {
     describe("changing model", function() {
         it("does not cause render to be called", function() {
             spyOn(chorus.views.visualizations.Frequency.prototype, 'render');
-            var task = rspecFixtures.dataset().makeFrequencyTask({"bins": 3, "yAxis": "fruits"});
+            var task = backboneFixtures.dataset().makeFrequencyTask({"bins": 3, "yAxis": "fruits"});
             var view = new chorus.views.visualizations.Frequency({ model: task });
 
             task.set({rows: []});

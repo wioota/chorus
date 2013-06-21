@@ -1,6 +1,6 @@
 describe("MainContentList", function() {
     beforeEach(function() {
-        this.collection = rspecFixtures.userSet();
+        this.collection = backboneFixtures.userSet();
     });
 
     context("when no title override is provided", function() {
@@ -130,7 +130,7 @@ describe("MainContentList", function() {
     context("when useCustomList is true", function() {
         beforeEach(function() {
             this.view = new chorus.views.MainContentList({
-                collection: rspecFixtures.schemaDatasetSet(),
+                collection: backboneFixtures.schemaDatasetSet(),
                 modelClass: "Dataset",
                 useCustomList: true
             });

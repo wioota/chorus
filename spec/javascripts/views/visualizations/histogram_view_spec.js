@@ -14,7 +14,7 @@ describe("chorus.views.visualizations.Histogram", function() {
                 { bin: [40, 49], frequency: 2000 }
             ],
             "chart[xAxis]": "I am the x axis",
-            dataset: rspecFixtures.workspaceDataset.datasetTable({objectName: "users"})
+            dataset: backboneFixtures.workspaceDataset.datasetTable({objectName: "users"})
         });
 
         this.view = new chorus.views.visualizations.Histogram({

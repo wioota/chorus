@@ -1,6 +1,6 @@
 describe("chorus.dialogs.DataSourceUsage", function() {
     beforeEach(function() {
-        this.dataSource = rspecFixtures.gpdbDataSource({
+        this.dataSource = backboneFixtures.gpdbDataSource({
             name: "pasta",
             host: "greenplum",
             port: "8555",
@@ -24,7 +24,7 @@ describe("chorus.dialogs.DataSourceUsage", function() {
 
         context("when the usage and config have been fetched", function() {
             beforeEach(function(){
-                this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.dataSourceDetails());
+                this.server.completeFetchFor(this.dataSource.usage(), backboneFixtures.dataSourceDetails());
                 this.workspaces = this.dialog.usage.get("workspaces");
             });
 

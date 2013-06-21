@@ -1,14 +1,14 @@
 describe("chorus.views.ImageUpload", function() {
     beforeEach(function() {
         loadConfig();
-        this.user = rspecFixtures.user({
+        this.user = backboneFixtures.user({
             username: "franklin",
             id : 13,
             image: { original: "/foo", icon: "/icon" }
         });
         this.view = new chorus.views.ImageUpload({model : this.user});
         this.view.model.loaded = true;
-        this.imageJson = rspecFixtures.imageJson();
+        this.imageJson = backboneFixtures.imageJson();
     });
 
     describe("#render", function() {

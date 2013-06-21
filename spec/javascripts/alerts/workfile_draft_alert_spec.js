@@ -1,7 +1,7 @@
 describe("chorus.alerts.WorkfileDraft", function() {
     beforeEach(function() {
         this.useFakeTimers();
-        this.workfile = rspecFixtures.workfile.sql();
+        this.workfile = backboneFixtures.workfile.sql();
         this.alert = new chorus.alerts.WorkfileDraft({ model: this.workfile });
         this.alert.render();
     });
@@ -20,7 +20,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
             beforeEach(function() {
                 this.changeSpy = jasmine.createSpy();
                 this.alert.model.bind('change', this.changeSpy);
-                var draft = rspecFixtures.draft({workfileId: this.workfile.get("id")});
+                var draft = backboneFixtures.draft({workfileId: this.workfile.get("id")});
                 this.expectedContent = draft.get("content");
                 this.server.completeFetchFor(draft);
             });

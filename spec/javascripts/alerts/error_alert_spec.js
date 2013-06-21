@@ -4,7 +4,7 @@ describe("chorus.alerts.Error", function() {
         text: 'i am text'
     });
     beforeEach(function() {
-        this.modelWithError = rspecFixtures.userWithErrors();
+        this.modelWithError = backboneFixtures.userWithErrors();
         this.modelWithError.fetch();
         this.server.lastFetchFor(this.modelWithError).failUnprocessableEntity(this.modelWithError.attributes);
         this.alert = new FakeAlert({model: this.modelWithError});

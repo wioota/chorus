@@ -2,7 +2,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     describe("after workspaces are fetched", function() {
         context("when the model is a source table/view with multiple workspaces", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.dataset({
+                this.model = backboneFixtures.dataset({
                     associatedWorkspaces: [
                         {id: "123"},
                         {id: "645"}
@@ -10,9 +10,9 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 });
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
-                    rspecFixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
-                    rspecFixtures.workspace({ name: "im_not_the_current_one" }),
-                    rspecFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                    backboneFixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
+                    backboneFixtures.workspace({ name: "im_not_the_current_one" }),
+                    backboneFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
                 ]);
             });
 
@@ -24,13 +24,13 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
         context("when the model is a source table/view with no workspaces", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workspaceDataset.datasetTable();
+                this.model = backboneFixtures.workspaceDataset.datasetTable();
                 this.model.unset("associatedWorkspaces");
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
-                    rspecFixtures.workspace({ name: "im_not_the_current_one'" }),
-                    rspecFixtures.workspace({ name: "me_neither" }),
-                    rspecFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                    backboneFixtures.workspace({ name: "im_not_the_current_one'" }),
+                    backboneFixtures.workspace({ name: "me_neither" }),
+                    backboneFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
                 ]);
             });
 
@@ -43,12 +43,12 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
         });
         context("when the model is a sandbox table/view or a chorus view (in a workspace)", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workspaceDataset.datasetTable({workspace: {id: "645"}});
+                this.model = backboneFixtures.workspaceDataset.datasetTable({workspace: {id: "645"}});
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
-                    rspecFixtures.workspace({ name: "im_not_the_current_one'" }),
-                    rspecFixtures.workspace({ name: "me_neither" }),
-                    rspecFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                    backboneFixtures.workspace({ name: "im_not_the_current_one'" }),
+                    backboneFixtures.workspace({ name: "me_neither" }),
+                    backboneFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
                 ]);
             });
 
@@ -63,14 +63,14 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
     describe("clicking Associate Dataset", function() {
         context("for a dataset that is not a chorus_view", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.dataset();
-                this.workspace = rspecFixtures.workspace({ name: "im_not_the_current_one" });
+                this.model = backboneFixtures.dataset();
+                this.workspace = backboneFixtures.workspace({ name: "im_not_the_current_one" });
 
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
-                    rspecFixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
+                    backboneFixtures.workspace({ name: "im_also_the_current_one'", id: "123" }),
                     this.workspace,
-                    rspecFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                    backboneFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
                 ]);
 
                 spyOn(chorus.router, "navigate");
@@ -146,9 +146,9 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
         context("when the dataset is a Chorus View", function() {
             beforeEach(function() {
-                this.currentWorkspace = rspecFixtures.workspace({ name: "im_also_the_current_one'", id: "987" });
-                this.workspace = rspecFixtures.workspace({ name: "im_not_the_current_one", id: "123"});
-                this.model = rspecFixtures.workspaceDataset.chorusView({ workspace: { id: "987" } });
+                this.currentWorkspace = backboneFixtures.workspace({ name: "im_also_the_current_one'", id: "987" });
+                this.workspace = backboneFixtures.workspace({ name: "im_not_the_current_one", id: "123"});
+                this.model = backboneFixtures.workspaceDataset.chorusView({ workspace: { id: "987" } });
 
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.dialog.render();
@@ -156,7 +156,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     this.currentWorkspace,
                     this.workspace,
-                    rspecFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
+                    backboneFixtures.workspace({ name: "yes_im_the_current_one", id: "645" })
                 ]);
 
                 spyOn(chorus, "toast");

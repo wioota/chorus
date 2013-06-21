@@ -1,6 +1,6 @@
 describe("chorus.models.Notification", function() {
     beforeEach(function() {
-        this.collection = rspecFixtures.notificationSet();
+        this.collection = backboneFixtures.notificationSet();
         this.notification = this.collection.at(0);
     });
 

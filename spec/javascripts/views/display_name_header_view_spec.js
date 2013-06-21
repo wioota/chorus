@@ -1,6 +1,6 @@
 describe("chorus.views.DisplayNameHeader", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.user({
+        this.model = backboneFixtures.user({
             tags: [
                 {name: "alpha"}
             ]

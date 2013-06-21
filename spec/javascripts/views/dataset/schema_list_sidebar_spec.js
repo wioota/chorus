@@ -2,7 +2,7 @@ describe("chorus.views.SchemaListSidebar", function() {
     beforeEach(function() {
         this.view = new chorus.views.SchemaListSidebar();
 
-        this.schema = rspecFixtures.schema();
+        this.schema = backboneFixtures.schema();
         chorus.PageEvents.trigger("schema:selected", this.schema);
     });
 
@@ -11,7 +11,7 @@ describe("chorus.views.SchemaListSidebar", function() {
     });
 
     it("displays the new name when a new schema is selected", function() {
-        var schema = rspecFixtures.schema();
+        var schema = backboneFixtures.schema();
         chorus.PageEvents.trigger("schema:selected", schema);
         expect(this.view.$(".name")).toContainText(schema.get("name"));
     });

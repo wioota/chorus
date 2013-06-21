@@ -2,8 +2,8 @@ describe("chorus.models.ChorusView", function() {
 
     function addJoin(self, sourceColumn) {
         sourceColumn || (sourceColumn = self.sourceDataset.columns().models[0]);
-        var joinedDataset = rspecFixtures.workspaceDataset.datasetTable();
-        var columnSet = rspecFixtures.databaseColumnSet();
+        var joinedDataset = backboneFixtures.workspaceDataset.datasetTable();
+        var columnSet = backboneFixtures.databaseColumnSet();
         joinedDataset.columns().reset([columnSet.at(0), columnSet.at(1)]);
         var joinedColumn = joinedDataset.columns().models[0];
         self.model.addJoin(sourceColumn, joinedColumn, 'inner');
@@ -11,8 +11,8 @@ describe("chorus.models.ChorusView", function() {
     }
 
     beforeEach(function() {
-        this.sourceDataset = rspecFixtures.workspaceDataset.datasetTable();
-        var columnSet = rspecFixtures.databaseColumnSet();
+        this.sourceDataset = backboneFixtures.workspaceDataset.datasetTable();
+        var columnSet = backboneFixtures.databaseColumnSet();
         this.sourceDataset.columns().reset([columnSet.at(0), columnSet.at(1), columnSet.at(2)]);
         this.model = this.sourceDataset.deriveChorusView();
         this.model.aggregateColumnSet = new chorus.collections.DatabaseColumnSet(this.sourceDataset.columns().models);
@@ -326,8 +326,8 @@ describe("chorus.models.ChorusView", function() {
 
         context("when two columns are selected", function() {
             beforeEach(function() {
-                this.column1 = rspecFixtures.databaseColumn({name: "Foo"});
-                this.column2 = rspecFixtures.databaseColumn({name: "bar"});
+                this.column1 = backboneFixtures.databaseColumn({name: "Foo"});
+                this.column2 = backboneFixtures.databaseColumn({name: "bar"});
                 this.sourceDataset.columns().reset([this.column1, this.column2]);
                 this.model.addColumn(this.column1);
                 this.model.addColumn(this.column2);

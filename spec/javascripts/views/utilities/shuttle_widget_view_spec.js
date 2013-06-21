@@ -1,6 +1,6 @@
 describe("chorus.views.ShuttleWidget", function() {
     beforeEach(function() {
-        this.collection = rspecFixtures.userSet([
+        this.collection = backboneFixtures.userSet([
             {id: 10000, firstName: "a", lastName: "a", admin: false, image: {icon: "foo1.png", original: "bad.png"}},
             {id: 10001, firstName: "b", lastName: "b", admin: true, image: {icon: "foo2.png"}},
             {id: 10002, firstName: "a", lastName: "c", admin: false, image: {icon: "foo3.png"}}

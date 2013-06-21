@@ -55,7 +55,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
     context("with a dataset and no workspace", function() {
         var presenter, resource;
         beforeEach(function() {
-            resource = rspecFixtures.dataset();
+            resource = backboneFixtures.dataset();
             presenter = new chorus.presenters.DatasetSidebar(resource);
         });
 
@@ -68,7 +68,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
         describe("#nextImport", function() {
             context("No next import", function() {
                 beforeEach(function() {
-                    var schedule = rspecFixtures.datasetImportScheduleSet().last();
+                    var schedule = backboneFixtures.datasetImportScheduleSet().last();
                     schedule.set('nextImportAt', null);
                     spyOn(resource, 'importSchedule').andReturn(schedule);
                 });
@@ -83,7 +83,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
             context("The destination dataset exists", function() {
                 beforeEach(function() {
-                    var schedule = rspecFixtures.datasetImportScheduleSet().last();
+                    var schedule = backboneFixtures.datasetImportScheduleSet().last();
                     schedule.set({
                         toTable: "My New Table",
                         workspaceId: 13,
@@ -104,7 +104,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
             });
             context("The destination dataset does not yet exist", function() {
                 beforeEach(function() {
-                    var schedule = rspecFixtures.datasetImportScheduleSet().last();
+                    var schedule = backboneFixtures.datasetImportScheduleSet().last();
                     schedule.set({
                         toTable: "My New Table",
                         workspaceId: 13,
@@ -129,7 +129,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
         describe("#lastImport", function() {
             context("for a source table", function() {
                 beforeEach(function() {
-                    this.datasetImport = rspecFixtures.workspaceImportSet().last();
+                    this.datasetImport = backboneFixtures.workspaceImportSet().last();
                     this.datasetImport.set({
                         sourceDataset: { id: resource.get('id') },
                         completedStamp: Date.parse("Today - 33 days").toJSONString(),
@@ -246,7 +246,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
             context("for a sandbox table", function() {
                 beforeEach(function() {
-                    this.datasetImport = rspecFixtures.workspaceImportSet().first();
+                    this.datasetImport = backboneFixtures.workspaceImportSet().first();
                     this.datasetImport.set({
                         sourceDataset: { id: resource.get('id') + 1, objectName: "the_juice"},
                         completedStamp: Date.parse("Today - 33 days").toJSONString(),
@@ -341,7 +341,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
     context("with a workspace dataset", function() {
         var presenter, sidebar, resource;
         beforeEach(function() {
-            resource = rspecFixtures.workspaceDataset.datasetTable();
+            resource = backboneFixtures.workspaceDataset.datasetTable();
             resource.workspace()._sandbox = new chorus.models.Sandbox({ id: 123 });
             presenter = new chorus.presenters.DatasetSidebar(resource);
         });
@@ -353,7 +353,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
         context("with a table", function() {
             beforeEach(function() {
-                this.resource = rspecFixtures.workspaceDataset.datasetTable();
+                this.resource = backboneFixtures.workspaceDataset.datasetTable();
                 this.resource.workspace()._sandbox = new chorus.models.Sandbox({ id: 123 });
                 this.presenter = new chorus.presenters.DatasetSidebar(this.resource);
             });
@@ -389,7 +389,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
     context("with an Oracle dataset", function() {
         beforeEach(function() {
-            var resource = rspecFixtures.oracleDataset();
+            var resource = backboneFixtures.oracleDataset();
             this.presenter = new chorus.presenters.DatasetSidebar(resource);
         });
 
@@ -405,7 +405,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
     context("with a chorus view", function() {
         beforeEach(function() {
-            var resource = rspecFixtures.workspaceDataset.chorusView();
+            var resource = backboneFixtures.workspaceDataset.chorusView();
             this.presenter = new chorus.presenters.DatasetSidebar(resource);
         });
         it("prohibits non-members from duplicating chorus views", function() {

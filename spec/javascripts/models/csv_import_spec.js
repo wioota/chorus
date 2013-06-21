@@ -1,6 +1,6 @@
 describe("chorus.models.CSVImport", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.csvImport();
+        this.model = backboneFixtures.csvImport();
         this.model.set({
                 csvId:this.model.id,
                 id:null

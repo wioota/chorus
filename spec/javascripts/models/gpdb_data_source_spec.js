@@ -1,6 +1,6 @@
 describe("chorus.models.GpdbDataSource", function() {
     beforeEach(function() {
-        this.dataSource = rspecFixtures.gpdbDataSource({id: 1});
+        this.dataSource = backboneFixtures.gpdbDataSource({id: 1});
     });
 
     it("has the right entity type", function() {

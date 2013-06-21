@@ -52,7 +52,7 @@ describe("chorus.views.ImportSchedule", function() {
 
     describe("#setFieldValues(model)", function() {
         beforeEach(function() {
-            var importModel = rspecFixtures.datasetImportScheduleSet().last();
+            var importModel = backboneFixtures.datasetImportScheduleSet().last();
             importModel.set({
                 id:'12',
                 truncate:true,

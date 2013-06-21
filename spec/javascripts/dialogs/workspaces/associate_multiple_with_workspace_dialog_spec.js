@@ -1,9 +1,9 @@
 describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
     beforeEach(function() {
         this.datasets = new chorus.collections.SchemaDatasetSet([
-            rspecFixtures.dataset({ id: '123' }),
-            rspecFixtures.dataset({ id: '456' }),
-            rspecFixtures.dataset({ id: '789' })
+            backboneFixtures.dataset({ id: '123' }),
+            backboneFixtures.dataset({ id: '456' }),
+            backboneFixtures.dataset({ id: '789' })
         ]);
 
         this.dialog = new chorus.dialogs.AssociateMultipleWithWorkspace({
@@ -19,8 +19,8 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
     describe("when the workspaces are fetched and one is chosen", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(chorus.session.user().workspaces(), [
-                rspecFixtures.workspace({ name: "abra", id: "11" }),
-                rspecFixtures.workspace({ name: "cadabra", id: "12" })
+                backboneFixtures.workspace({ name: "abra", id: "11" }),
+                backboneFixtures.workspace({ name: "cadabra", id: "12" })
             ]);
 
             this.dialog.$("li:eq(1)").click();

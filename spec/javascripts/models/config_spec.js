@@ -1,7 +1,7 @@
 describe("chorus.models.Config", function() {
     var config;
     beforeEach(function() {
-        config = rspecFixtures.config();
+        config = backboneFixtures.config();
     });
 
     it("has a valid url", function() {

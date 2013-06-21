@@ -1,6 +1,6 @@
 describe("chorus.models.DataSourceAccount", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.dataSourceAccount({ id: '72', dataSourceId: '1045' });
+        this.model = backboneFixtures.dataSourceAccount({ id: '72', dataSourceId: '1045' });
     });
 
     it("wraps parameters in 'account'", function() {

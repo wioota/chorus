@@ -1,6 +1,6 @@
 describe("chorus.views.SqlWorkfileContentDetails", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workfile.sql({ fileName: 'test.sql', versionInfo: { content: "select * from foo" } });
+        this.model = backboneFixtures.workfile.sql({ fileName: 'test.sql', versionInfo: { content: "select * from foo" } });
         this.model.workspace().set({
             sandboxInfo: {
                 id: 4, name: "schema",
@@ -22,7 +22,7 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
 
         context("when the workfile does not have an execution schema", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.workfile.sql({ fileName: 'test.sql', versionInfo: { content: "select * from foo" } });
+                this.model = backboneFixtures.workfile.sql({ fileName: 'test.sql', versionInfo: { content: "select * from foo" } });
                 this.model.set("executionSchema", null);
                 this.view = new chorus.views.SqlWorkfileContentDetails({ model: this.model, contentView: this.contentView });
                 this.view.render();

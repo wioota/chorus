@@ -12,8 +12,8 @@ jasmine.sharedExamples.importIntoNewTableIsSelected = function() {
 describe("chorus.dialogs.ImportNow", function() {
     context('importing into a workspace', function() {
         beforeEach(function() {
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable({workspace: {id: 123}});
-            this.importSchedules = rspecFixtures.datasetImportScheduleSet();
+            this.dataset = backboneFixtures.workspaceDataset.datasetTable({workspace: {id: 123}});
+            this.importSchedules = backboneFixtures.datasetImportScheduleSet();
             _.extend(this.importSchedules.attributes, {
                 datasetId: this.dataset.get('id'),
                 workspaceId: this.dataset.get("workspace").id
@@ -193,7 +193,7 @@ describe("chorus.dialogs.ImportNow", function() {
 
                     context("after selecting a dataset", function() {
                         beforeEach(function() {
-                            var datasets = [rspecFixtures.workspaceDataset.datasetTable({ objectName: "myDatasetWithAReallyReallyLongName" })];
+                            var datasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "myDatasetWithAReallyReallyLongName" })];
                             chorus.modal.trigger("datasets:selected", datasets);
                         });
 
@@ -338,7 +338,7 @@ describe("chorus.dialogs.ImportNow", function() {
 
     describe("importing into a schema", function() {
         beforeEach(function() {
-            this.dataset = rspecFixtures.oracleDataset();
+            this.dataset = backboneFixtures.oracleDataset();
             this.dialog = new chorus.dialogs.ImportNow({
                 dataset: this.dataset
             });
@@ -359,7 +359,7 @@ describe("chorus.dialogs.ImportNow", function() {
         context("when the server responds that the data types are invalid", function(){
             beforeEach(function() {
                 spyOn(this.dialog, "closeModal");
-                var expectedResponse = rspecFixtures.datasetImportabilityForUnimportableDataset({
+                var expectedResponse = backboneFixtures.datasetImportabilityForUnimportableDataset({
                     invalidColumns: ["foo", "bar"]
                 });
                 var model = new chorus.models.DatasetImportability({
@@ -379,7 +379,7 @@ describe("chorus.dialogs.ImportNow", function() {
 
         context("when the server responds that the data types are valid", function () {
             beforeEach(function() {
-                var expectedResponse = rspecFixtures.datasetImportability();
+                var expectedResponse = backboneFixtures.datasetImportability();
                 var model = new chorus.models.DatasetImportability({
                     datasetId: this.dataset.id
                 });
@@ -414,7 +414,7 @@ describe("chorus.dialogs.ImportNow", function() {
 
             context("when a schema has been selected", function() {
                 beforeEach(function() {
-                    this.schema = rspecFixtures.schema({id: 456, name: "ThisIsAReallyLongSchemaNameForPeopleThatLikeVerbosity"});
+                    this.schema = backboneFixtures.schema({id: 456, name: "ThisIsAReallyLongSchemaNameForPeopleThatLikeVerbosity"});
                     this.modalSpy = stubModals();
                     this.dialog.$("a.select_schema").click();
                     this.modalSpy.lastModal().trigger("schema:selected", this.schema);

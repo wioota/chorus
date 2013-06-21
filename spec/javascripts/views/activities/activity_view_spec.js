@@ -147,14 +147,14 @@ describe("chorus.views.Activity", function() {
         stubDefer();
         stubClEditor();
         this.modalSpy = stubModals();
-        this.model = rspecFixtures.activity.dataSourceCreated();
+        this.model = backboneFixtures.activity.dataSourceCreated();
         this.view = new chorus.views.Activity({ model:this.model });
     });
 
     describe("html content", function () {
         describe("#show", function () {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                this.model = backboneFixtures.activity.noteOnGreenplumDataSource();
                 this.view = new chorus.views.Activity({ model:this.model });
                 this.view.render();
 
@@ -169,7 +169,7 @@ describe("chorus.views.Activity", function() {
 
         context("when the activity is a note", function () {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                this.model = backboneFixtures.activity.noteOnGreenplumDataSource();
                 this.view = new chorus.views.Activity({ model:this.model });
                 this.view.render();
             });
@@ -185,7 +185,7 @@ describe("chorus.views.Activity", function() {
 
         context("when the activity's action is workfile upgrade versionwith a commit message", function () {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.workfileUpgradedVersion();
+                this.model = backboneFixtures.activity.workfileUpgradedVersion();
                 this.view = new chorus.views.Activity({ model:this.model });
                 this.view.render();
             });
@@ -200,7 +200,7 @@ describe("chorus.views.Activity", function() {
 
         context("when the activity has errors", function () {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.fileImportFailed();
+                this.model = backboneFixtures.activity.fileImportFailed();
                 this.view = new chorus.views.Activity({ model:this.model });
                 expect(this.view.context().hasError()).toBeTruthy();
                 this.view.render();
@@ -217,7 +217,7 @@ describe("chorus.views.Activity", function() {
 
         context("when the activity is an insight", function () {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.insightOnGreenplumDataSource();
+                this.model = backboneFixtures.activity.insightOnGreenplumDataSource();
                 this.view = new chorus.views.Activity({ model:this.model });
                 this.view.render();
             });
@@ -233,7 +233,7 @@ describe("chorus.views.Activity", function() {
 
         context("when the activity is something else", function () {
             beforeEach(function () {
-                this.model = rspecFixtures.activity.fileImportSuccess();
+                this.model = backboneFixtures.activity.fileImportSuccess();
                 this.view = new chorus.views.Activity({ model:this.model });
                 this.view.render();
             });
@@ -282,7 +282,7 @@ describe("chorus.views.Activity", function() {
 
         describe("for notes", function () {
             beforeEach(function () {
-                this.model = this.presenter.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                this.model = this.presenter.model = backboneFixtures.activity.noteOnGreenplumDataSource();
                 this.view = new chorus.views.Activity({ model:this.model });
                 chorus.page = this.view;
                 this.view.render();
@@ -341,7 +341,7 @@ describe("chorus.views.Activity", function() {
 
             context("when the note is already an insight", function () {
                 beforeEach(function () {
-                    this.model = this.presenter.model = rspecFixtures.activity.insightOnGreenplumDataSource();
+                    this.model = this.presenter.model = backboneFixtures.activity.insightOnGreenplumDataSource();
                     this.view = new chorus.views.Activity({ model:this.model });
                 });
 
@@ -379,7 +379,7 @@ describe("chorus.views.Activity", function() {
 
         describe("attachment rendering", function () {
             it("displays info for each attached file", function () {
-                this.model = rspecFixtures.activity.noteOnGreenplumDataSource();
+                this.model = backboneFixtures.activity.noteOnGreenplumDataSource();
                 this.presenter.model = this.model;
                 this.view.render();
                 var attachmentLis = this.view.$("ul.attachments li");
@@ -569,7 +569,7 @@ describe("chorus.views.Activity", function() {
 
     context("when there is a update_credentials link", function() {
         it("opens the dialog when clicked", function() {
-            var model = rspecFixtures.activity.credentialsInvalid();
+            var model = backboneFixtures.activity.credentialsInvalid();
             this.view = new chorus.views.Activity({ model: model, isNotification: true });
             this.view.render();
             this.view.$('.update_credentials').click();

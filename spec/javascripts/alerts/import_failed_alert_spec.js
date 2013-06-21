@@ -22,7 +22,7 @@ describe("chorus.alerts.ImportFailed", function() {
         context("when the error is an errors object", function() {
             describe("when the task is fetched", function() {
                 beforeEach(function() {
-                    this.server.lastFetch().succeed(rspecFixtures.activity.datasetImportFailedWithModelErrors());
+                    this.server.lastFetch().succeed(backboneFixtures.activity.datasetImportFailedWithModelErrors());
                 });
 
                 it("renders the error details", function() {

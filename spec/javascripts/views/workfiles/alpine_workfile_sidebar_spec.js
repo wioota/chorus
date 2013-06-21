@@ -1,6 +1,6 @@
 describe('chorus.views.AlpineWorkfileSidebar', function(){
     beforeEach(function(){
-        this.workfile = rspecFixtures.workfile.alpine();
+        this.workfile = backboneFixtures.workfile.alpine();
         this.view = new chorus.views.AlpineWorkfileSidebar({model: this.workfile, showVersions: true});
         this.view.render();
     });

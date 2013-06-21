@@ -1,6 +1,6 @@
 describe("chorus.views.DataGrid", function() {
     beforeEach(function() {
-        this.task = rspecFixtures.dataPreviewTaskResults({
+        this.task = backboneFixtures.dataPreviewTaskResults({
             columns: [
                 { name: "id", typeCategory: "WHOLE_NUMBER" },
                 { name: "city", typeCategory: "OTHER" },

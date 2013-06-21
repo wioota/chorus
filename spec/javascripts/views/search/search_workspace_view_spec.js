@@ -1,6 +1,6 @@
 describe("chorus.views.SearchWorkspace", function() {
     beforeEach(function() {
-        this.result = rspecFixtures.searchResult({workspaces: {results: [
+        this.result = backboneFixtures.searchResult({workspaces: {results: [
             {
                 entityType: "workspace",
                 id: "10000",
@@ -63,7 +63,7 @@ describe("chorus.views.SearchWorkspace", function() {
 
     context("the description does not contain the search string", function() {
         beforeEach(function() {
-            this.result = rspecFixtures.searchResult({workspaces: {results: [
+            this.result = backboneFixtures.searchResult({workspaces: {results: [
                 {
                     entityType: "workspace",
                     id: "10000",

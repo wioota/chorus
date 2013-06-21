@@ -30,7 +30,7 @@ describe("chorus.pages.UserShow", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.user = rspecFixtures.user({username: "edcadmin", id: "42", firstName: "EDC", lastName: "Admin"});
+            this.user = backboneFixtures.user({username: "edcadmin", id: "42", firstName: "EDC", lastName: "Admin"});
             this.page = new chorus.pages.UserShowPage(this.user.get("id"));
             this.server.completeFetchFor(this.user);
         });

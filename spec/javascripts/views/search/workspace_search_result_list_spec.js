@@ -1,6 +1,6 @@
 describe("chorus.views.WorkspaceSearchResultList", function() {
     beforeEach(function() {
-        this.search = rspecFixtures.searchResultInWorkspace({
+        this.search = backboneFixtures.searchResultInWorkspace({
             thisWorkspace: { numFound: 9 }
         });
         this.search.set({ query: "foo", workspaceId: "10001" });

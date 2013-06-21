@@ -1,6 +1,6 @@
 describe("chorus.views.TypeAheadSearch", function() {
     beforeEach(function() {
-        this.result = rspecFixtures.typeAheadSearchResult();
+        this.result = backboneFixtures.typeAheadSearchResult();
         this.result.set({query: "test"});
         this.view = new chorus.views.TypeAheadSearch();
         this.view.searchFor("test");

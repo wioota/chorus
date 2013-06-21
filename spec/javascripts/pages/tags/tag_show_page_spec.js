@@ -27,7 +27,7 @@ describe("chorus.pages.TagShowPage", function() {
         context("when tags are found", function() {
             beforeEach(function() {
                 page.render();
-                this.server.completeFetchFor(page.search, rspecFixtures.searchResult());
+                this.server.completeFetchFor(page.search, backboneFixtures.searchResult());
             });
 
             it('displays the page title', function() {
@@ -42,7 +42,7 @@ describe("chorus.pages.TagShowPage", function() {
         context("when no tags are found", function() {
             beforeEach(function() {
                 page.render();
-                this.server.completeFetchFor(page.search, rspecFixtures.emptySearchResult());
+                this.server.completeFetchFor(page.search, backboneFixtures.emptySearchResult());
             });
 
             it("displays a special message", function() {

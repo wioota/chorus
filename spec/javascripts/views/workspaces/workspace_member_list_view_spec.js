@@ -1,7 +1,7 @@
 describe("chorus.views.WorkspaceMemberList", function() {
     var members;
     beforeEach(function() {
-        this.workspace = rspecFixtures.workspace();
+        this.workspace = backboneFixtures.workspace();
         members = this.members = this.workspace.members();
     });
 
@@ -23,7 +23,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
         describe("when there are fewer than 24 members", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.members,
-                    [rspecFixtures.user({id: 123}), rspecFixtures.user({id: 456})],
+                    [backboneFixtures.user({id: 123}), backboneFixtures.user({id: 456})],
                     {requireRows: true, per_page: 24},
                     {records:2}
                 );
@@ -55,14 +55,14 @@ describe("chorus.views.WorkspaceMemberList", function() {
 
             describe("when a workspace:selected event is trigger", function() {
                 beforeEach(function() {
-                    this.workspace = rspecFixtures.workspace({id: 456});
+                    this.workspace = backboneFixtures.workspace({id: 456});
                 });
 
                 it("fetches and renders members from the new workspace", function() {
                     expect(this.view.$(".members li a").length).toEqual(2);
                     chorus.PageEvents.trigger("workspace:selected", this.workspace);
                     this.server.completeFetchFor(this.workspace.members(),
-                        [rspecFixtures.user({id: 123})],
+                        [backboneFixtures.user({id: 123})],
                         {records:1}
                     );
                     expect(this.view.$(".members li a").length).toEqual(1);
@@ -73,7 +73,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
         describe("when there are more than 24 members", function() {
             beforeEach(function() {
                 var memberList = _.map(_.range(0,25), function(id) {
-                    return rspecFixtures.user({id: id});
+                    return backboneFixtures.user({id: id});
                 });
                 this.server.completeFetchFor(this.members,
                     memberList,
@@ -99,7 +99,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
 
         it('resetting the members causes a re-render', function() {
             expect(this.view.$(".members li a").length).toEqual(0);
-            members.reset([rspecFixtures.user()]);
+            members.reset([backboneFixtures.user()]);
             expect(this.view.$(".members li a").length).toEqual(1);
         });
     });
@@ -107,8 +107,8 @@ describe("chorus.views.WorkspaceMemberList", function() {
     describe("when a workspace:selected event is trigger", function() {
         beforeEach(function() {
             this.view = new chorus.views.WorkspaceMemberList();
-            this.workspace = rspecFixtures.workspace({id: 456});
-            this.workspace.members().reset([rspecFixtures.user({id: 789})]);
+            this.workspace = backboneFixtures.workspace({id: 456});
+            this.workspace.members().reset([backboneFixtures.user({id: 789})]);
         });
 
         it("renders members from the new workspace", function() {

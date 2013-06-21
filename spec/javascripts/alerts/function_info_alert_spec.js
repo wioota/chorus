@@ -2,7 +2,7 @@ xdescribe("chorus.alerts.FunctionInfo", function() {
     var model, alert;
 
     beforeEach(function() {
-        model = rspecFixtures.schemaFunctionSet([{
+        model = backboneFixtures.schemaFunctionSet([{
             name: "infinite_loop",
             argTypes: [ "text", "int4", "float64" ],
             argNames: [ "name", "age", "height" ],

@@ -1,6 +1,6 @@
 describe("chorus.models.Attachment", function() {
     beforeEach(function() {
-        var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
+        var search = backboneFixtures.searchResultWithAttachmentOnWorkspaceNote();
         this.model = search.attachments().at(0);
         this.model.set({ id: "97", name: "attachmentName" });
     });
@@ -50,7 +50,7 @@ describe("chorus.models.Attachment", function() {
 
     describe("#isImage", function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnWorkspaceNote();
             this.model = search.attachments().at(0);
         });
 
@@ -64,20 +64,20 @@ describe("chorus.models.Attachment", function() {
 
     describe("#showUrlTemplate", function() {
         it("shows the URL for a workspace", function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnWorkspaceNote();
             var model = search.attachments().at(0);
             var workspace = model.workspace();
             expect(model.showUrl()).toBe("#/workspaces/" + workspace.id);
         });
 
         it("shows the URL for a dataset with no workspace", function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnDatasetNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnDatasetNote();
             var model = search.attachments().at(0);
             expect(model.showUrl()).toBe("#/datasets/" + model.dataset().id);
         });
 
         it("shows the URL for a workfile in a workspace", function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnWorkfileNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnWorkfileNote();
             var model = search.attachments().at(0);
             var workfile = model.workfile();
             var workspace = workfile.workspace();
@@ -86,7 +86,7 @@ describe("chorus.models.Attachment", function() {
         });
 
         it('shows the URL for a data source', function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnDataSourceNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnDataSourceNote();
             var model = search.attachments().at(0);
             var dataSource = model.dataSource();
             expect(dataSource.id).toBeDefined();
@@ -94,7 +94,7 @@ describe("chorus.models.Attachment", function() {
         });
 
         it("shows the URL for an hdfsFile", function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnHdfsNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnHdfsNote();
             var model = search.attachments().at(0);
             var hdfs = model.hdfsFile();
             var hadoop = model.hdfsDataSource();
@@ -104,7 +104,7 @@ describe("chorus.models.Attachment", function() {
 
     describe("workspace", function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnWorkspaceNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnWorkspaceNote();
             this.model = search.attachments().at(0);
         });
 
@@ -131,7 +131,7 @@ describe("chorus.models.Attachment", function() {
 
     describe("workfile", function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnWorkfileNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnWorkfileNote();
             this.model = search.attachments().at(0);
         });
 
@@ -154,7 +154,7 @@ describe("chorus.models.Attachment", function() {
 
     describe("hdfs", function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnHdfsNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnHdfsNote();
             this.model = search.attachments().at(0);
         });
 
@@ -176,7 +176,7 @@ describe("chorus.models.Attachment", function() {
 
     describe('data source', function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnDataSourceNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnDataSourceNote();
             this.model = search.attachments().at(0);
         });
 
@@ -188,7 +188,7 @@ describe("chorus.models.Attachment", function() {
 
         it("dynamically assigns the data source type", function() {
             expect(this.model.dataSource()).toBeA(chorus.models.GpdbDataSource);
-            var search = rspecFixtures.searchResultWithAttachmentOnHadoopNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnHadoopNote();
             var model = search.attachments().at(0);
             expect(model.dataSource()).toBeA(chorus.models.HdfsDataSource);
         });
@@ -205,7 +205,7 @@ describe("chorus.models.Attachment", function() {
 
     describe("dataset", function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResultWithAttachmentOnDatasetNote();
+            var search = backboneFixtures.searchResultWithAttachmentOnDatasetNote();
             this.model = search.attachments().at(0);
         });
 

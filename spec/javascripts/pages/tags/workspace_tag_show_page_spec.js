@@ -1,7 +1,7 @@
 describe("chorus.pages.WorkspaceTagShowPage", function() {
     var tag, page, workspace;
     beforeEach(function() {
-        workspace = rspecFixtures.workspace({id: 101});
+        workspace = backboneFixtures.workspace({id: 101});
         tag = new chorus.models.Tag({name: "tag-name"});
         page = new chorus.pages.WorkspaceTagShowPage(workspace.id, "this_workspace", "all", tag.name());
     });
@@ -111,7 +111,7 @@ describe("chorus.pages.WorkspaceTagShowPage", function() {
             });
 
             it("includes a section for every type of item when both fetches completes", function() {
-                this.server.completeFetchFor(page.search, rspecFixtures.searchResult());
+                this.server.completeFetchFor(page.search, backboneFixtures.searchResult());
 
                 var sections = page.$(".search_result_list ul");
                 expect(sections.filter(".user_list.selectable")).toExist();

@@ -1,6 +1,6 @@
 describe("chorus.Mixins.Urls", function() {
     beforeEach(function() {
-        this.object = rspecFixtures.workspace({ id: '45' });
+        this.object = backboneFixtures.workspace({ id: '45' });
         this.object.isDeleted = function() { return false; };
     });
 

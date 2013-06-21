@@ -7,7 +7,7 @@ describe("chorus.pages.WorkFlowShowPage", function() {
 
     context("when the workfile is loaded", function() {
         beforeEach(function() {
-            this.workfile = rspecFixtures.workfile.alpine({id: 4});
+            this.workfile = backboneFixtures.workfile.alpine({id: 4});
             this.workfile.urlParams = {connect: true};
             this.server.completeFetchFor(this.workfile);
         });
@@ -100,7 +100,7 @@ describe("chorus.pages.WorkFlowShowPage", function() {
                         searchInput.val("sfo");
                         searchInput.trigger("keydown");
                         searchInput.trigger("keyup");
-                        this.server.lastFetch().succeed(rspecFixtures.typeAheadSearchResult());
+                        this.server.lastFetch().succeed(backboneFixtures.typeAheadSearchResult());
 
                         searchInput.trigger(jQuery.Event("keydown", {keyCode: 40}));
                         searchInput.trigger(jQuery.Event("keyup", {keyCode: 40}));

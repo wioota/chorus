@@ -1,6 +1,6 @@
 describe("chorus.views.WorkfileItem", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workfile.sql({ id: "24" });
+        this.model = backboneFixtures.workfile.sql({ id: "24" });
         this.view = new chorus.views.WorkfileItem({ model: this.model });
         this.view.render();
     });

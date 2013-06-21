@@ -1,7 +1,7 @@
 describe("chorus.views.UserShow", function() {
     describe("#render", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.user({
+            this.model = backboneFixtures.user({
                 email: "a@b.com",
                 title: "My Title",
                 dept: "My Department",

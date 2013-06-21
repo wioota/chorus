@@ -99,7 +99,7 @@ predef:             # Names of predefined global variables - comma-separated str
   - mostRecentAjaxRequest
   - clearAjaxRequests
   - sinon
-  - rspecFixtures
+  - backboneFixtures
   - stubModals
   - spyOnEvent
   - setLoggedInUser

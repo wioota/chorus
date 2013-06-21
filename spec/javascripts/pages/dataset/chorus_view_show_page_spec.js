@@ -2,7 +2,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
     beforeEach(function() {
         chorus.page = {workspace: this.workspace};
 
-        this.chorusView = rspecFixtures.workspaceDataset.chorusView();
+        this.chorusView = backboneFixtures.workspaceDataset.chorusView();
         this.workspace = this.chorusView.workspace();
 
         this.columnSet = this.chorusView.columns();
@@ -36,7 +36,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
 
                 describe("when the columnSet fetch completes", function() {
                     beforeEach(function() {
-                        this.server.completeFetchAllFor(this.columnSet, rspecFixtures.databaseColumnSet());
+                        this.server.completeFetchAllFor(this.columnSet, backboneFixtures.databaseColumnSet());
                     });
 
                     describe("when editing a chorus view", function() {
@@ -79,7 +79,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
             this.server.completeFetchFor(this.workspace);
             this.resizedSpy = spyOnEvent(this.page, 'resized');
             this.server.completeFetchFor(this.chorusView);
-            this.server.completeFetchAllFor(this.columnSet, [rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
+            this.server.completeFetchAllFor(this.columnSet, [backboneFixtures.databaseColumn(), backboneFixtures.databaseColumn()]);
             this.server.completeFetchFor(this.chorusView.statistics());
         });
 
@@ -135,7 +135,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                     beforeEach(function() {
                         this.page.mainContent.content.render.reset();
                         this.page.mainContent.content.selectAll();
-                        var otherColumn = rspecFixtures.databaseColumn();
+                        var otherColumn = backboneFixtures.databaseColumn();
                         otherColumn.dataset = this.page.model;
                         this.page.columnSet.add(otherColumn);
                         chorus.PageEvents.trigger('cancel:sidebar', 'chorus_view');

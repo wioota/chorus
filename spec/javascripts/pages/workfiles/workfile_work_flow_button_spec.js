@@ -1,6 +1,6 @@
 describe("workfile work flow button", function () {
     beforeEach(function () {
-        this.workspace = rspecFixtures.workspace();
+        this.workspace = backboneFixtures.workspace();
         this.workspace.loaded = false;
         this.qtipElement = stubQtip();
     });

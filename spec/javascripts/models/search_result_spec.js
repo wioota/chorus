@@ -227,7 +227,7 @@ describe("chorus.models.SearchResult", function() {
     describe("#getResults", function() {
         context("when the search result is scoped to a single workspace", function() {
             it("returns the collection of items in that workspace", function() {
-                this.model = rspecFixtures.searchResultInWorkspace();
+                this.model = backboneFixtures.searchResultInWorkspace();
                 this.model.set({ workspaceId: "101", searchIn: "this_workspace" });
                 expect(this.model.getResults()).toBeDefined();
                 expect(this.model.getResults()).toBe(this.model.workspaceItems());
@@ -236,7 +236,7 @@ describe("chorus.models.SearchResult", function() {
 
         context("when the search results is filtered to a single entity type", function() {
             it("returns the results collection for that entity type", function() {
-                this.model = rspecFixtures.searchResultWithEntityTypeUser();
+                this.model = backboneFixtures.searchResultWithEntityTypeUser();
                 this.model.set({ entityType: "user" });
                 expect(this.model.getResults()).toBeDefined();
                 expect(this.model.getResults()).toBe(this.model.users());
@@ -245,7 +245,7 @@ describe("chorus.models.SearchResult", function() {
 
         context("when the search result is filtered by workspace AND by entity type", function() {
             it("returns the collection for its entity type", function() {
-                this.model = rspecFixtures.searchResultInWorkspaceWithEntityTypeWorkfile();
+                this.model = backboneFixtures.searchResultInWorkspaceWithEntityTypeWorkfile();
                 this.model.set({ entityType: "workfile", searchIn: "this_workspace", workspaceId: "101" });
                 this.model.unset("thisWorkspace");
                 expect(this.model.getResults()).toBeDefined();
@@ -255,7 +255,7 @@ describe("chorus.models.SearchResult", function() {
 
         context("when the search result has no entity type and is not scoped to a single workspace", function() {
             it("returns undefined", function() {
-                this.model = rspecFixtures.searchResult();
+                this.model = backboneFixtures.searchResult();
                 expect(this.model.getResults()).toBeUndefined();
             });
         });
@@ -263,17 +263,17 @@ describe("chorus.models.SearchResult", function() {
 
     describe("child collection methods", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.searchResultInWorkspace({
+            this.model = backboneFixtures.searchResultInWorkspace({
                 thisWorkspace: {
                     numFound: 171,
                     results: []
                 }
             });
             this.model.workspaceItems().reset([
-                rspecFixtures.workfile.sql(),
-                rspecFixtures.dataset(),
-                rspecFixtures.workspaceDataset.chorusView(),
-                rspecFixtures.workspace()
+                backboneFixtures.workfile.sql(),
+                backboneFixtures.dataset(),
+                backboneFixtures.workspaceDataset.chorusView(),
+                backboneFixtures.workspace()
             ]);
         });
 
@@ -306,7 +306,7 @@ describe("chorus.models.SearchResult", function() {
 
         describe("#workfiles", function() {
             it("returns a Search WorkfileSet", function() {
-                this.model = rspecFixtures.searchResult();
+                this.model = backboneFixtures.searchResult();
                 this.workfiles = this.model.workfiles();
                 expect(this.workfiles).toBeA(chorus.collections.Search.WorkfileSet);
             });
@@ -314,7 +314,7 @@ describe("chorus.models.SearchResult", function() {
 
         describe("#dataset", function() {
             it("returns a collection of tabular data", function() {
-                this.model = rspecFixtures.searchResult();
+                this.model = backboneFixtures.searchResult();
                 expect(this.model.datasets()).toBeA(chorus.collections.Search.DatasetSet);
             });
         });
@@ -400,7 +400,7 @@ describe("chorus.models.SearchResult", function() {
 
             it("is preserved through fetches", function() {
                 this.model.fetch();
-                this.server.completeFetchFor(this.model, rspecFixtures.searchResult());
+                this.server.completeFetchFor(this.model, backboneFixtures.searchResult());
                 expect(this.model.entityType()).toBe("foo");
             });
         });
@@ -422,7 +422,7 @@ describe("chorus.models.SearchResult", function() {
 
             it("is preserved through fetches", function() {
                 this.model.fetch();
-                this.server.completeFetchFor(this.model, rspecFixtures.searchResult());
+                this.server.completeFetchFor(this.model, backboneFixtures.searchResult());
                 expect(this.model.currentPageNumber()).toBe(5);
             });
         });
@@ -431,7 +431,7 @@ describe("chorus.models.SearchResult", function() {
     describe("#total", function() {
         context("when there are results", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.emptySearchResult();
+                this.model = backboneFixtures.emptySearchResult();
                 this.model.set({
                     thisWorkspace: {
                         numFound: 3
@@ -449,7 +449,7 @@ describe("chorus.models.SearchResult", function() {
 
         context("when there are no results", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.emptySearchResult();
+                this.model = backboneFixtures.emptySearchResult();
             });
 
             it("returns 0", function() {
@@ -460,7 +460,7 @@ describe("chorus.models.SearchResult", function() {
 
     describe("#isConstrained", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.searchResult();
+            this.model = backboneFixtures.searchResult();
         });
 
         context("when isScoped returns true", function() {
@@ -499,7 +499,7 @@ describe("chorus.models.SearchResult", function() {
 
     describe("triggering invalidated", function() {
         beforeEach(function() {
-            var search = rspecFixtures.searchResult();
+            var search = backboneFixtures.searchResult();
             this.model = search;
             this.model.selectedItem = search.users().at(0);
             spyOnEvent(this.model.selectedItem, 'invalidated');
@@ -514,7 +514,7 @@ describe("chorus.models.SearchResult", function() {
     describe("#download", function() {
         var searchResult;
         beforeEach(function() {
-            searchResult = rspecFixtures.searchResult();
+            searchResult = backboneFixtures.searchResult();
 
             this.model.selectedItem = searchResult.datasets().at(0);
             spyOn(this.model.selectedItem, "download");
@@ -529,7 +529,7 @@ describe("chorus.models.SearchResult", function() {
     describe("#name", function() {
         var searchResult;
         beforeEach(function() {
-            searchResult = rspecFixtures.searchResult();
+            searchResult = backboneFixtures.searchResult();
 
             this.model.selectedItem = searchResult.datasets().at(0);
             this.model.selectedItem.set({"objectName": "the_name"});

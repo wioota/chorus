@@ -1,14 +1,14 @@
 describe("chorus.collections.Search", function() {
     beforeEach(function() {
-        this.search = rspecFixtures.searchResult({
+        this.search = backboneFixtures.searchResult({
             dataSources: {
                 numFound: 131,
                 results: [
-                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gpdbDataSourceJson({ response: { name: "dataSource101", id: '101' } }).response),
-                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.hdfsDataSourceJson({ response: { name: "dataSource102", id: '102' } }).response),
-                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gnipDataSourceJson({ response: { name: "dataSource103", id: '103' } }).response),
-                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gpdbDataSourceJson({ response: { name: "dataSource104", id: '104' } }).response),
-                    chorus.Mixins.Fetching.camelizeKeys(rspecFixtures.gpdbDataSourceJson({ response: { name: "dataSource105", id: '105' } }).response)
+                    chorus.Mixins.Fetching.camelizeKeys(backboneFixtures.gpdbDataSourceJson({ response: { name: "dataSource101", id: '101' } }).response),
+                    chorus.Mixins.Fetching.camelizeKeys(backboneFixtures.hdfsDataSourceJson({ response: { name: "dataSource102", id: '102' } }).response),
+                    chorus.Mixins.Fetching.camelizeKeys(backboneFixtures.gnipDataSourceJson({ response: { name: "dataSource103", id: '103' } }).response),
+                    chorus.Mixins.Fetching.camelizeKeys(backboneFixtures.gpdbDataSourceJson({ response: { name: "dataSource104", id: '104' } }).response),
+                    chorus.Mixins.Fetching.camelizeKeys(backboneFixtures.gpdbDataSourceJson({ response: { name: "dataSource105", id: '105' } }).response)
                 ]
             }
         });
@@ -57,9 +57,9 @@ describe("chorus.collections.Search", function() {
                 dataSources: {
                     numFound: 51,
                     results: [
-                        rspecFixtures.gpdbDataSourceJson({ response: { name: "dataSource121", id: '121' } }).response,
-                        rspecFixtures.gpdbDataSourceJson({ response: { name: "dataSource122", id: '122' } }).response,
-                        rspecFixtures.gpdbDataSourceJson({ response: { name: "dataSource123", id: '123' } }).response
+                        backboneFixtures.gpdbDataSourceJson({ response: { name: "dataSource121", id: '121' } }).response,
+                        backboneFixtures.gpdbDataSourceJson({ response: { name: "dataSource122", id: '122' } }).response,
+                        backboneFixtures.gpdbDataSourceJson({ response: { name: "dataSource123", id: '123' } }).response
                     ]
                 }}));
 

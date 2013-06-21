@@ -1,6 +1,6 @@
 describe("chorus.models.WorkspaceDataset", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable({
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable({
             id: '1011',
             workspace: {
                 id: "44"
@@ -89,7 +89,7 @@ describe("chorus.models.WorkspaceDataset", function() {
 
     describe("#createDuplicateChorusView", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.workspaceDataset.chorusView();
+            this.model = backboneFixtures.workspaceDataset.chorusView();
             this.copy = this.model.createDuplicateChorusView();
         });
 
@@ -151,7 +151,7 @@ describe("chorus.models.WorkspaceDataset", function() {
     describe("#iconUrl", function() {
         context("when the user does not have credentials", function() {
             beforeEach(function() {
-                this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+                this.dataset = backboneFixtures.workspaceDataset.datasetTable();
                 this.unlockedIconUrl = this.dataset.iconUrl();
                 this.dataset.set({hasCredentials: false});
             });
@@ -213,7 +213,7 @@ describe("chorus.models.WorkspaceDataset", function() {
         });
 
         it("is true if there are imports", function() {
-            this.dataset.getImports().add(rspecFixtures.workspaceImportSet().models);
+            this.dataset.getImports().add(backboneFixtures.workspaceImportSet().models);
             expect(this.dataset.hasImport()).toBeTruthy();
         });
     });
@@ -224,7 +224,7 @@ describe("chorus.models.WorkspaceDataset", function() {
         });
 
         it("returns the first import if there are more than one", function() {
-            var imports = rspecFixtures.workspaceImportSet().models;
+            var imports = backboneFixtures.workspaceImportSet().models;
             this.dataset.getImports().add(imports);
             expect(imports.length).toBeGreaterThan(1);
             expect(this.dataset.lastImport()).toBe(_.first(imports));
@@ -324,7 +324,7 @@ describe("chorus.models.WorkspaceDataset", function() {
 
     describe("#setWorkspace", function() {
         beforeEach(function() {
-            this.newWorkspace = rspecFixtures.workspace();
+            this.newWorkspace = backboneFixtures.workspace();
             this.dataset.setWorkspace(this.newWorkspace);
         });
 

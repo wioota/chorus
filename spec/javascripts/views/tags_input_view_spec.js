@@ -317,7 +317,7 @@ describe("chorus.views.TagsInput", function() {
         var input;
 
         beforeEach(function() {
-            var suggestions = rspecFixtures.tagSetJson({
+            var suggestions = backboneFixtures.tagSetJson({
                 response: [{name: "alpha"}, {name: "beta"}, {name: "gamma"}]
             });
             $("#jasmine_content").append(view.el);

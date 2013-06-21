@@ -1,13 +1,13 @@
 describe("chorus.views.DataSourceWorkspaceUsagesWidget", function() {
     beforeEach(function() {
-        this.dataSource = rspecFixtures.gpdbDataSource({"shared": true});
+        this.dataSource = backboneFixtures.gpdbDataSource({"shared": true});
         this.dataSource.loaded = false;
         this.view = new chorus.views.DataSourceWorkspaceUsagesWidget({model: this.dataSource});
     });
 
     describe("#setDataSource", function() {
         beforeEach(function() {
-            this.otherDataSource = rspecFixtures.gpdbDataSource({"shared": true});
+            this.otherDataSource = backboneFixtures.gpdbDataSource({"shared": true});
             this.view.setDataSource(this.otherDataSource);
         });
 
@@ -22,7 +22,7 @@ describe("chorus.views.DataSourceWorkspaceUsagesWidget", function() {
 
     context("when the user doesn't have permission to fetch the data source workspace usage", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.dataSourceDetailsWithoutPermission());
+            this.server.completeFetchFor(this.dataSource.usage(), backboneFixtures.dataSourceDetailsWithoutPermission());
         });
 
         it("renders without the workspace usage section", function() {
@@ -39,7 +39,7 @@ describe("chorus.views.DataSourceWorkspaceUsagesWidget", function() {
 
     context("when the workspace usage fetch completes", function() {
         beforeEach(function() {
-            this.server.completeFetchFor(this.dataSource.usage(), rspecFixtures.dataSourceDetails());
+            this.server.completeFetchFor(this.dataSource.usage(), backboneFixtures.dataSourceDetails());
         });
 
         context("when there are no workspaces", function() {

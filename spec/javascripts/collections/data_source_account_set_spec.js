@@ -6,8 +6,8 @@ describe("chorus.collections.DataSourceAccountSet", function() {
     describe("#users", function() {
         beforeEach(function() {
             this.accountSet.reset([
-                rspecFixtures.dataSourceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
-                rspecFixtures.dataSourceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } })
+                backboneFixtures.dataSourceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                backboneFixtures.dataSourceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } })
             ]);
             this.users = this.accountSet.users();
         });
@@ -49,9 +49,9 @@ describe("chorus.collections.DataSourceAccountSet", function() {
     describe("sort", function() {
         beforeEach(function() {
             this.accountSet.reset([
-                rspecFixtures.dataSourceAccount({ owner: { firstName: 'fred', lastName: 'zzz' } }),
-                rspecFixtures.dataSourceAccount({ owner: { firstName: 'barnie', lastName: 'zzz' } }),
-                rspecFixtures.dataSourceAccount({ owner: { firstName: 'sammy', lastName: 'aaa' } })
+                backboneFixtures.dataSourceAccount({ owner: { firstName: 'fred', lastName: 'zzz' } }),
+                backboneFixtures.dataSourceAccount({ owner: { firstName: 'barnie', lastName: 'zzz' } }),
+                backboneFixtures.dataSourceAccount({ owner: { firstName: 'sammy', lastName: 'aaa' } })
             ]);
         });
         it("sorts by last name, and first name", function() {
@@ -66,8 +66,8 @@ describe("chorus.collections.DataSourceAccountSet", function() {
         context("when all of the accounts are persisted", function() {
             beforeEach(function() {
                 this.accountSet.reset([
-                    rspecFixtures.dataSourceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
-                    rspecFixtures.dataSourceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } })
+                    backboneFixtures.dataSourceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                    backboneFixtures.dataSourceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } })
                 ]);
             });
 
@@ -79,9 +79,9 @@ describe("chorus.collections.DataSourceAccountSet", function() {
         context("when some of the accounts are not persisted", function() {
             beforeEach(function() {
                 this.accountSet.reset([
-                    rspecFixtures.dataSourceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
-                    rspecFixtures.dataSourceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } }),
-                    rspecFixtures.dataSourceAccount({ id: null, owner: { id: '3', firstName: 'wilma', lastName: 'flinstone' } })
+                    backboneFixtures.dataSourceAccount({ owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                    backboneFixtures.dataSourceAccount({ owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } }),
+                    backboneFixtures.dataSourceAccount({ id: null, owner: { id: '3', firstName: 'wilma', lastName: 'flinstone' } })
                 ]);
             });
 
@@ -93,9 +93,9 @@ describe("chorus.collections.DataSourceAccountSet", function() {
         context("when none of the accounts are persisted", function() {
             beforeEach(function() {
                 this.accountSet.reset([
-                    rspecFixtures.dataSourceAccount({ id: null, owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
-                    rspecFixtures.dataSourceAccount({ id: null, owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } }),
-                    rspecFixtures.dataSourceAccount({ id: null, owner: { id: '3', firstName: 'wilma', lastName: 'flinstone' } })
+                    backboneFixtures.dataSourceAccount({ id: null, owner: { id: '1', firstName: 'barnie', lastName: 'rubble' } }),
+                    backboneFixtures.dataSourceAccount({ id: null, owner: { id: '2', firstName: 'fred', lastName: 'flinstone' } }),
+                    backboneFixtures.dataSourceAccount({ id: null, owner: { id: '3', firstName: 'wilma', lastName: 'flinstone' } })
                 ]);
             });
 

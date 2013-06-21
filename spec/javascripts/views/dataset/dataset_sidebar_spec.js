@@ -16,7 +16,7 @@ describe("chorus.views.DatasetSidebar", function() {
             });
 
             it("does not have 'Import Now' even if there's a workspace", function() {
-                this.view.resource._workspace = rspecFixtures.workspace();
+                this.view.resource._workspace = backboneFixtures.workspace();
                 this.view.render();
                 expect(this.view.$(".actions .import_now")).not.toExist();
             });
@@ -60,7 +60,7 @@ describe("chorus.views.DatasetSidebar", function() {
     context("when a dataset is selected", function() {
         beforeEach(function() {
             this.server.reset();
-            this.dataset = rspecFixtures.workspaceDataset.sourceTable();
+            this.dataset = backboneFixtures.workspaceDataset.sourceTable();
             chorus.PageEvents.trigger("dataset:selected", this.dataset);
             chorus.page = this.view;
             $("#jasmine_content").append(this.view.$el);
@@ -92,7 +92,7 @@ describe("chorus.views.DatasetSidebar", function() {
             context("when the statistics fail with invalid credentials", function() {
                 beforeEach(function() {
                     spyOn(this.view, 'postRender');
-                    var errors = rspecFixtures.invalidCredentialsErrorJson();
+                    var errors = backboneFixtures.invalidCredentialsErrorJson();
                     this.server.lastFetchFor(this.view.resource.statistics()).failForbidden(errors);
                 });
 
@@ -133,7 +133,7 @@ describe("chorus.views.DatasetSidebar", function() {
             });
 
             it("does not display for a view", function() {
-                this.dataset = rspecFixtures.workspaceDataset.datasetView();
+                this.dataset = backboneFixtures.workspaceDataset.datasetView();
                 chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 expect(this.view.$(".actions a.analyze")).not.toExist();
             });
@@ -167,7 +167,7 @@ describe("chorus.views.DatasetSidebar", function() {
             context("when the user has invalid credentials", function() {
                 beforeEach(function() {
                     this.user = chorus.session.user();
-                    var errors = rspecFixtures.invalidCredentialsErrorJson();
+                    var errors = backboneFixtures.invalidCredentialsErrorJson();
                     this.server.lastFetchFor(this.view.resource.statistics()).failForbidden(errors);
                 });
 
@@ -299,7 +299,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
         context("when an oracle dataset is selected", function() {
             beforeEach(function() {
-                this.oracleDataset = rspecFixtures.oracleDataset({id: 12});
+                this.oracleDataset = backboneFixtures.oracleDataset({id: 12});
                 chorus.PageEvents.trigger("dataset:selected", this.oracleDataset);
             });
 
@@ -354,10 +354,10 @@ describe("chorus.views.DatasetSidebar", function() {
 
         context("when there is an archived workspace", function() {
             beforeEach(function() {
-                this.view.resource._workspace = rspecFixtures.workspace({ archivedAt: "2012-05-08T21:40:14Z", permission: ["update", "admin"] });
+                this.view.resource._workspace = backboneFixtures.workspace({ archivedAt: "2012-05-08T21:40:14Z", permission: ["update", "admin"] });
                 this.view.options.listMode = true;
                 this.view.render();
-                this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+                this.dataset = backboneFixtures.workspaceDataset.datasetTable();
                 this.dataset._workspace = this.view.resource._workspace;
                 chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 this.server.completeFetchFor(this.view.imports, []);
@@ -373,7 +373,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
         context("by a workspace data tab", function() {
             beforeEach(function() {
-                this.view.resource._workspace = rspecFixtures.workspace();
+                this.view.resource._workspace = backboneFixtures.workspace();
                 this.view.render();
                 chorus.page = this.view;
                 $("#jasmine_content").append(this.view.$el);
@@ -402,7 +402,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     context("and the logged-in user has update permission on the workspace", function() {
                         beforeEach(function() {
-                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6004, permission: ["update"] });
+                            this.view.resource._workspace = backboneFixtures.workspace({ id: 6004, permission: ["update"] });
                             this.view.render();
                         });
 
@@ -427,7 +427,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     context("and the logged-in user does not have update permission on the workspace", function() {
                         beforeEach(function() {
-                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6005, permission: ["read"] });
+                            this.view.resource._workspace = backboneFixtures.workspace({ id: 6005, permission: ["read"] });
                             this.view.render();
                         });
 
@@ -468,8 +468,8 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("and the selected dataset is a sandbox table or view", function() {
                 beforeEach(function() {
-                    this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-                    this.view.resource._workspace = rspecFixtures.workspace({ id: 6007, permission: ["update"] });
+                    this.dataset = backboneFixtures.workspaceDataset.datasetTable();
+                    this.view.resource._workspace = backboneFixtures.workspace({ id: 6007, permission: ["update"] });
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 });
 
@@ -489,7 +489,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("when the dataset has a last import (as a destination dataset)", function() {
                     beforeEach(function() {
-                        this.imports = rspecFixtures.workspaceImportSet();
+                        this.imports = backboneFixtures.workspaceImportSet();
                         this.lastImport = this.imports.last();
                         this.lastImport.set({
                             startedStamp: "2012-02-29T14:23:58Z",
@@ -515,7 +515,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("and the dataset has received an import from a file", function() {
                     beforeEach(function() {
-                        this.csvImport = rspecFixtures.csvImportSet().first();
+                        this.csvImport = backboneFixtures.csvImportSet().first();
                         this.csvImport.set({
                             startedStamp: "2012-02-29T13:35:38Z",
                             completedStamp: "2012-02-29T14:35:38Z",
@@ -551,7 +551,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     context("when the user has permission to update in the workspace", function() {
                         beforeEach(function() {
-                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6002, permission: ["update"] });
+                            this.view.resource._workspace = backboneFixtures.workspace({ id: 6002, permission: ["update"] });
                             this.view.render();
                         });
 
@@ -577,7 +577,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     context("when the user does not have permission to update things in the workspace", function() {
                         beforeEach(function() {
-                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6003, permission: ["read"] });
+                            this.view.resource._workspace = backboneFixtures.workspace({ id: 6003, permission: ["read"] });
                             this.view.render();
                         });
 
@@ -609,7 +609,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     context("and the current user has update permissions on the workspace", function() {
                         beforeEach(function() {
-                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6008, permission: ["update"] });
+                            this.view.resource._workspace = backboneFixtures.workspace({ id: 6008, permission: ["update"] });
                             this.view.render();
                         });
 
@@ -680,7 +680,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     context("and the current user does not have update permissions on the workspace", function() {
                         beforeEach(function() {
-                            this.view.resource._workspace = rspecFixtures.workspace({ id: 6009, permission: ["read"] });
+                            this.view.resource._workspace = backboneFixtures.workspace({ id: 6009, permission: ["read"] });
                             this.view.render();
                         });
 
@@ -700,7 +700,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("when the dataset has an import schedule", function() {
                     beforeEach(function() {
-                        var importSchedules = rspecFixtures.datasetImportScheduleSet();
+                        var importSchedules = backboneFixtures.datasetImportScheduleSet();
 
                         this.importSchedule = importSchedules.last();
                         this.importSchedule.set({
@@ -710,7 +710,7 @@ describe("chorus.views.DatasetSidebar", function() {
                             startDatetime: "2012-02-29T14:23:58Z",
                             nextImportAt: Date.formatForApi(Date.today().add(1).year())
                         });
-                        this.view.resource._workspace = rspecFixtures.workspace({ id: 6010, permission: ["update"] });
+                        this.view.resource._workspace = backboneFixtures.workspace({ id: 6010, permission: ["update"] });
                         this.server.completeFetchFor(this.dataset.getImportSchedules(), importSchedules.models);
                     });
 
@@ -762,7 +762,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("when the dataset has a last import", function() {
                     beforeEach(function() {
-                        this.imports = rspecFixtures.workspaceImportSet();
+                        this.imports = backboneFixtures.workspaceImportSet();
                         this.lastImport = this.imports.last();
                         this.lastImport.set({
                             startedStamp: "2012-02-29T14:23:58Z",
@@ -790,7 +790,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("when the dataset is a source view", function() {
                 beforeEach(function() {
-                    this.dataset = rspecFixtures.workspaceDataset.sourceView();
+                    this.dataset = backboneFixtures.workspaceDataset.sourceView();
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 });
 
@@ -819,7 +819,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("when the dataset is a chorus view", function() {
                 beforeEach(function() {
-                    this.dataset = rspecFixtures.workspaceDataset.chorusView({ objectName: "annes_table", query: "select * from foos;" });
+                    this.dataset = backboneFixtures.workspaceDataset.chorusView({ objectName: "annes_table", query: "select * from foos;" });
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
                     this.server.completeFetchFor(this.dataset.getImportSchedules(), []);
                 });
@@ -887,7 +887,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("when the user has invalid credentials", function() {
                     beforeEach(function() {
-                        var errors = rspecFixtures.invalidCredentialsErrorJson();
+                        var errors = backboneFixtures.invalidCredentialsErrorJson();
                         this.server.lastFetchFor(this.view.resource.statistics()).failForbidden(errors);
                     });
 
@@ -902,7 +902,7 @@ describe("chorus.views.DatasetSidebar", function() {
             context("when the dataset is a source table", function() {
                 _.each(["TABLE", "EXTERNAL_TABLE", "MASTER_TABLE", "HDFS_EXTERNAL_TABLE"], function(type) {
                     beforeEach(function() {
-                        this.dataset = rspecFixtures.workspaceDataset.sourceTable({ objectType: type});
+                        this.dataset = backboneFixtures.workspaceDataset.sourceTable({ objectType: type});
                         chorus.PageEvents.trigger("dataset:selected", this.dataset);
                     });
 
@@ -922,7 +922,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 beforeEach(function () {
                     chorus.models.Config.instance().set("workFlowConfigured", true);
                     this.view = new chorus.views.DatasetSidebar();
-                    this.dataset = rspecFixtures.workspaceDataset.sourceTable();
+                    this.dataset = backboneFixtures.workspaceDataset.sourceTable();
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
                     this.workspace = this.view.resource.workspace();
                 });
@@ -940,7 +940,7 @@ describe("chorus.views.DatasetSidebar", function() {
                     context("when the user's credentials -- for the dataset -- are invalid", function() {
                         beforeEach(function() {
                             this.user = chorus.session.user();
-                            var errors = rspecFixtures.invalidCredentialsErrorJson();
+                            var errors = backboneFixtures.invalidCredentialsErrorJson();
                             this.server.lastFetchFor(this.view.resource.statistics()).failForbidden(errors);
                         });
 
@@ -977,7 +977,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
         context("when there is not a workspace", function() {
             beforeEach(function() {
-                this.dataset = rspecFixtures.dataset({id: "XYZ"});
+                this.dataset = backboneFixtures.dataset({id: "XYZ"});
                 chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 chorus.page = this.view;
                 $("#jasmine_content").append(this.view.$el);
@@ -992,7 +992,7 @@ describe("chorus.views.DatasetSidebar", function() {
                     chorus.models.Config.instance().set("workFlowConfigured", true);
                     this.view = new chorus.views.DatasetSidebar();
                     this.view.render();
-                    this.dataset = rspecFixtures.dataset({id: "XYZ"});
+                    this.dataset = backboneFixtures.dataset({id: "XYZ"});
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 });
 
@@ -1013,7 +1013,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context('when the dataset is an oracle dataset', function() {
                 beforeEach(function() {
-                    this.dataset = rspecFixtures.oracleDataset();
+                    this.dataset = backboneFixtures.oracleDataset();
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 });
 
@@ -1050,8 +1050,8 @@ describe("chorus.views.DatasetSidebar", function() {
 
     describe("column statistics", function() {
         beforeEach(function() {
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-            this.column = rspecFixtures.databaseColumnSet([{},{
+            this.dataset = backboneFixtures.workspaceDataset.datasetTable();
+            this.column = backboneFixtures.databaseColumnSet([{},{
                 dataType: "int8",
                 typeCategory: "WHOLE_NUMBER",
                 statistics: {
@@ -1198,8 +1198,8 @@ describe("chorus.views.DatasetSidebar", function() {
 
     describe("when importSchedule:changed is triggered", function() {
         beforeEach(function() {
-            this.view.resource = rspecFixtures.workspaceDataset.datasetTable();
-            this.newImportSchedule = rspecFixtures.datasetImportScheduleSet().at(0);
+            this.view.resource = backboneFixtures.workspaceDataset.datasetTable();
+            this.newImportSchedule = backboneFixtures.datasetImportScheduleSet().at(0);
             spyOn(this.view, 'render').andCallThrough();
             chorus.PageEvents.trigger("importSchedule:changed", this.newImportSchedule);
         });
@@ -1213,7 +1213,7 @@ describe("chorus.views.DatasetSidebar", function() {
     describe("translations for all objectTypes", function() {
         _.each(["CHORUS_VIEW", "VIEW", "TABLE", "TABLE", "HDFS_EXTERNAL_TABLE", "EXTERNAL_TABLE"], function(type) {
             it("does not have any missing translations for" + type, function() {
-                this.dataset = rspecFixtures.workspaceDataset.datasetTable({objectType: type});
+                this.dataset = backboneFixtures.workspaceDataset.datasetTable({objectType: type});
                 chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 expect(this.view.tabs.activity.options.type).not.toContain("missing");
             });

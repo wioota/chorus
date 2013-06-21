@@ -1,6 +1,6 @@
 describe("chorus.dialogs.DatasetPreview", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable();
         spyOn(chorus.views.ResultsConsole.prototype, 'execute').andCallThrough();
         spyOn(chorus.dialogs.DatasetPreview.prototype, "closeModal");
         this.view = new chorus.dialogs.DatasetPreview({

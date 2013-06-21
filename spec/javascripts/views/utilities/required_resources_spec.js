@@ -1,8 +1,8 @@
 describe("chorus.RequiredResources", function() {
     beforeEach(function() {
         this.requiredResources = new chorus.RequiredResources();
-        this.model = rspecFixtures.user();
-        this.collection = rspecFixtures.workfileSet();
+        this.model = backboneFixtures.user();
+        this.collection = backboneFixtures.workfileSet();
     });
 
     it('allows you to add Model objects', function() {
@@ -60,7 +60,7 @@ describe("chorus.RequiredResources", function() {
 
         context("when all resources have not yet been fetched", function() {
             it("should not trigger the allResourcesResponded event", function() {
-                var otherModel = rspecFixtures.dataset();
+                var otherModel = backboneFixtures.dataset();
 
                 delete this.model.statusCode;
                 delete otherModel.statusCode;

@@ -1,6 +1,6 @@
 describe("chorus.views.FunctionTab", function () {
     beforeEach(function () {
-        this.schema = rspecFixtures.workspace({ sandboxInfo:{ name:"righteous_tables" } }).sandbox().schema();
+        this.schema = backboneFixtures.workspace({ sandboxInfo:{ name:"righteous_tables" } }).sandbox().schema();
         this.modalSpy = stubModals();
         spyOn(this.schema.functions(), "fetch").andCallThrough();
         this.view = new chorus.views.FunctionTab({schema:this.schema});
@@ -54,10 +54,10 @@ describe("chorus.views.FunctionTab", function () {
                 beforeEach(function () {
                     this.server.completeFetchFor(this.schema.database().schemas(), [
                         this.schema,
-                        rspecFixtures.schema({ name:"awesome_tables", id:"5" }),
-                        rspecFixtures.schema({ name:"orphaned_tables", id:"6" })
+                        backboneFixtures.schema({ name:"awesome_tables", id:"5" }),
+                        backboneFixtures.schema({ name:"orphaned_tables", id:"6" })
                     ]);
-                    this.server.completeFetchFor(this.view.collection, rspecFixtures.schemaFunctionSet([
+                    this.server.completeFetchFor(this.view.collection, backboneFixtures.schemaFunctionSet([
                         {
                             name:"a_laplace_transform",
                             argTypes:[ "text", "int4", "float64" ],
@@ -192,7 +192,7 @@ describe("chorus.views.FunctionTab", function () {
 
                         describe("when the function fetch completes", function () {
                             beforeEach(function () {
-                                this.server.completeFetchFor(this.view.collection, rspecFixtures.schemaFunctionSet().models);
+                                this.server.completeFetchFor(this.view.collection, backboneFixtures.schemaFunctionSet().models);
                             });
 
                             it("removes the loading spinner", function () {
@@ -243,8 +243,8 @@ describe("chorus.views.FunctionTab", function () {
                     beforeEach(function () {
                         this.server.completeFetchFor(this.schema.database().schemas(), [
                             this.schema,
-                            rspecFixtures.schema({ name:"awesome_tables", id:"5" }),
-                            rspecFixtures.schema({ name:"orphaned_tables", id:"6" })
+                            backboneFixtures.schema({ name:"awesome_tables", id:"5" }),
+                            backboneFixtures.schema({ name:"orphaned_tables", id:"6" })
                         ]);
 
                         this.server.lastFetchFor(this.view.collection).failUnprocessableEntity(

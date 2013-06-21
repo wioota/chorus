@@ -14,7 +14,7 @@ describe("chorus.models.Sandbox", function() {
     }
 
     beforeEach(function() {
-        this.model = rspecFixtures.workspace().sandbox();
+        this.model = backboneFixtures.workspace().sandbox();
     });
 
     describe("#url", function() {

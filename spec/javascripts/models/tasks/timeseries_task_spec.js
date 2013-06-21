@@ -5,7 +5,7 @@ describe("chorus.models.TimeseriesTask", function() {
             yAxis: "height",
             timeInterval: 'minute',
             aggregation: 'sum',
-            dataset: rspecFixtures.workspaceDataset.datasetTable({objectName: "users"})
+            dataset: backboneFixtures.workspaceDataset.datasetTable({objectName: "users"})
         });
     });
 

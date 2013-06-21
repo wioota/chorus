@@ -1,6 +1,6 @@
 describe("chorus.views.SearchUser", function() {
     beforeEach(function() {
-        this.result = rspecFixtures.searchResult();
+        this.result = backboneFixtures.searchResult();
         this.model = this.result.users().models[0];
         this.model.set({
             highlightedAttributes: {

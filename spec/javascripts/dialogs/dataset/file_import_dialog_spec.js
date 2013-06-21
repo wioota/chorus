@@ -2,16 +2,16 @@ describe("chorus.dialogs.FileImport", function() {
     beforeEach(function() {
         chorus.models.Config.instance().set({fileSizesMbCsvImports: 1 });
         chorus.page = {};
-        chorus.page.workspace = rspecFixtures.workspace({id: 242});
+        chorus.page.workspace = backboneFixtures.workspace({id: 242});
         this.modalSpy = stubModals();
         this.fakeFileUpload = stubFileUpload();
         this.validDatasets = [
-            rspecFixtures.workspaceDataset.datasetTable({objectName: "table_a", workspace: {id: 242}}),
-            rspecFixtures.workspaceDataset.datasetTable({objectName: "1_table_b", workspace: {id: 243}})
+            backboneFixtures.workspaceDataset.datasetTable({objectName: "table_a", workspace: {id: 242}}),
+            backboneFixtures.workspaceDataset.datasetTable({objectName: "1_table_b", workspace: {id: 243}})
         ];
         this.invalidDatasets = [
-            rspecFixtures.workspaceDataset.sourceTable(),
-            rspecFixtures.workspaceDataset.datasetView()
+            backboneFixtures.workspaceDataset.sourceTable(),
+            backboneFixtures.workspaceDataset.datasetView()
         ];
         this.datasets = this.validDatasets.concat(this.invalidDatasets);
         this.dialog = new chorus.dialogs.FileImport({
@@ -266,7 +266,7 @@ describe("chorus.dialogs.FileImport", function() {
 
                     context("when a dataset is selected", function() {
                         beforeEach(function() {
-                            this.datasets = [rspecFixtures.workspaceDataset.datasetTable({ objectName: "myDataset" })];
+                            this.datasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "myDataset" })];
                             chorus.modal.trigger("datasets:selected", this.datasets);
                         });
 
@@ -339,7 +339,7 @@ describe("chorus.dialogs.FileImport", function() {
                         beforeEach(function() {
                             spyOn(chorus.router, "navigate");
                             spyOn(chorus, "toast");
-                            this.workfile = rspecFixtures.workfile.text({id: "23", fileName: "myFile"});
+                            this.workfile = backboneFixtures.workfile.text({id: "23", fileName: "myFile"});
                             this.data = {
                                 result: {
                                     response: this.workfile.attributes
@@ -380,7 +380,7 @@ describe("chorus.dialogs.FileImport", function() {
                         beforeEach(function() {
                             spyOn(chorus.router, "navigate");
                             spyOn(chorus, "toast");
-                            this.workfile = rspecFixtures.workfile.text({id: "23", fileName: "myFile"});
+                            this.workfile = backboneFixtures.workfile.text({id: "23", fileName: "myFile"});
                             this.fakeFileUpload.HTTPResponseFail('{"errors":{"fields":{"someField":{"BLANK":{}}}}}', 422, "Unprocessable Entity", {noResult: true});
                         });
 
@@ -428,7 +428,7 @@ describe("chorus.dialogs.FileImport", function() {
                         beforeEach(function() {
                             this.data = {
                                 result: {
-                                    response: rspecFixtures.csvImport({contents: ["col1,col2,col3", "val1,val2,val3"]}).attributes,
+                                    response: backboneFixtures.csvImport({contents: ["col1,col2,col3", "val1,val2,val3"]}).attributes,
                                     status: "ok"
                                 }
                             };
@@ -477,7 +477,7 @@ describe("chorus.dialogs.FileImport", function() {
                         beforeEach(function() {
                             this.data = {
                                 result: {
-                                    response: rspecFixtures.csvImport({contents: []}).attributes,
+                                    response: backboneFixtures.csvImport({contents: []}).attributes,
                                     status: "ok"
                                 }
                             };
@@ -508,7 +508,7 @@ describe("chorus.dialogs.FileImport", function() {
                         beforeEach(function() {
                             this.data = {
                                 result: {
-                                    response: rspecFixtures.csvImport({contents: ['"foo,"bar"']}).attributes,
+                                    response: backboneFixtures.csvImport({contents: ['"foo,"bar"']}).attributes,
                                     status: "ok"
                                 }
                             };

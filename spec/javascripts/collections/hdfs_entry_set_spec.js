@@ -1,7 +1,7 @@
 describe("chorus.collections.HdfsEntrySet", function() {
     context('when the collection has path and data source set', function() {
         beforeEach(function() {
-            this.hdfsEntrySet = new chorus.collections.HdfsEntrySet([rspecFixtures.hdfsFile()], {
+            this.hdfsEntrySet = new chorus.collections.HdfsEntrySet([backboneFixtures.hdfsFile()], {
                 path: '/data/somewhere',
                 hdfsDataSource: {id: 222},
                 id: 11
@@ -35,7 +35,7 @@ describe("chorus.collections.HdfsEntrySet", function() {
 
         describe("add", function() {
             it("keeps the path and data source already set on the entry", function() {
-                var entry = rspecFixtures.hdfsFile({path: '/data/foo', hdfsDataSource: {id: '10000'}});
+                var entry = backboneFixtures.hdfsFile({path: '/data/foo', hdfsDataSource: {id: '10000'}});
                 this.hdfsEntrySet.add(entry);
                 expect(this.hdfsEntrySet.at(0).get('path')).toBe('/data/foo');
                 expect(this.hdfsEntrySet.at(0).get('hdfsDataSource').id).toBe('10000');

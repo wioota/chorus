@@ -95,7 +95,7 @@ describe("chorus.views.UserNewLdap", function() {
                 context("when the username matches an LDAP user", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.ldapUsers, [
-                            rspecFixtures.user({
+                            backboneFixtures.user({
                                 username: "john_henry",
                                 firstName: "John",
                                 lastName: "Henry",

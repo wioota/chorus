@@ -163,9 +163,9 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
             describe("when workfiles are selected", function() {
                 beforeEach(function() {
-                    this.workfile1 = rspecFixtures.workfile.sql({ id: 1, fileName: "greed.sql", fileType: "sql" });
-                    this.workfile2 = rspecFixtures.workfile.text({ id: 2, fileName: "generosity.cpp", fileType: "cpp" });
-                    this.workfile3 = rspecFixtures.workfile.binary({ id: 3, fileName: "sloth", fileType: "N/A" });
+                    this.workfile1 = backboneFixtures.workfile.sql({ id: 1, fileName: "greed.sql", fileType: "sql" });
+                    this.workfile2 = backboneFixtures.workfile.text({ id: 2, fileName: "generosity.cpp", fileType: "cpp" });
+                    this.workfile3 = backboneFixtures.workfile.binary({ id: 3, fileName: "sloth", fileType: "N/A" });
 
                     this.modalSpy.lastModal().trigger("files:selected", [this.workfile1, this.workfile2, this.workfile3]);
                 });
@@ -201,8 +201,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                     context("when additional workfiles are selected", function() {
                         beforeEach(function() {
-                            this.newWorkfile1 = rspecFixtures.workfile.text({id: 4});
-                            this.newWorkfile2 = rspecFixtures.workfile.text({id: 1});
+                            this.newWorkfile1 = backboneFixtures.workfile.text({id: 4});
+                            this.newWorkfile2 = backboneFixtures.workfile.text({id: 1});
                             this.modalSpy.lastModal().trigger("files:selected", [this.newWorkfile1, this.newWorkfile2]);
                         });
 
@@ -271,8 +271,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             describe("when datasets are selected", function() {
                 beforeEach(function() {
                     this.datasets = [
-                        rspecFixtures.workspaceDataset.datasetTable({objectName: 'table1', id: '1'}),
-                        rspecFixtures.workspaceDataset.datasetTable({objectName: 'table2', id: '2'})
+                        backboneFixtures.workspaceDataset.datasetTable({objectName: 'table1', id: '1'}),
+                        backboneFixtures.workspaceDataset.datasetTable({objectName: 'table2', id: '2'})
                     ];
                     this.modalSpy.lastModal().trigger("datasets:selected", this.datasets);
                 });
@@ -306,8 +306,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                     context("when additional datasets are selected", function() {
                         beforeEach(function() {
                             this.newDatasets = [
-                                rspecFixtures.workspaceDataset.datasetTable({objectName: 'table1', id: '1'}),
-                                rspecFixtures.workspaceDataset.datasetTable({objectName: 'table4', id: '4'})
+                                backboneFixtures.workspaceDataset.datasetTable({objectName: 'table1', id: '1'}),
+                                backboneFixtures.workspaceDataset.datasetTable({objectName: 'table4', id: '4'})
                             ];
                             this.modalSpy.lastModal().trigger("datasets:selected", this.newDatasets);
                         });

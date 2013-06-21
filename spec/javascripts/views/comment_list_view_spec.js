@@ -1,7 +1,7 @@
 describe("chorus.views.CommentList", function() {
     beforeEach(function() {
         stubDefer();
-        this.comment1 = rspecFixtures.comment({
+        this.comment1 = backboneFixtures.comment({
             body : "Yes we can",
             author : {
                 firstName : "Barack",
@@ -10,12 +10,12 @@ describe("chorus.views.CommentList", function() {
             },
             timestamp: "2010-01-01 01:00:00"
         });
-        this.comment2 = rspecFixtures.comment({
+        this.comment2 = backboneFixtures.comment({
             body : "No hate plz",
             timestamp: "2010-01-01 02:00:00"
 
         });
-        this.comment3 = rspecFixtures.comment({timestamp: "2010-01-01 03:00:00"});
+        this.comment3 = backboneFixtures.comment({timestamp: "2010-01-01 03:00:00"});
         this.comments = new chorus.collections.CommentSet([this.comment1, this.comment2, this.comment3], {});
         this.view = new chorus.views.CommentList({ collection: this.comments, initialLimit: 2 });
     });

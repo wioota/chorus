@@ -8,7 +8,7 @@ describe("chorus.views.DataSourceItem", function() {
 
     describe("when the model is a data source", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.gpdbDataSource(_.extend(this.sharedAttributes, {
+            this.model = backboneFixtures.gpdbDataSource(_.extend(this.sharedAttributes, {
                 online: true}));
             this.view = new chorus.views.DataSourceItem({model: this.model});
             this.view.render();
@@ -54,7 +54,7 @@ describe("chorus.views.DataSourceItem", function() {
 
     describe("when the model is a gnip data source", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.gnipDataSource(this.sharedAttributes);
+            this.model = backboneFixtures.gnipDataSource(this.sharedAttributes);
             this.view = new chorus.views.DataSourceItem({model: this.model});
             this.view.render();
         });
@@ -71,7 +71,7 @@ describe("chorus.views.DataSourceItem", function() {
 
     describe("when the model is a hdfs data source", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.hdfsDataSource(this.sharedAttributes);
+            this.model = backboneFixtures.hdfsDataSource(this.sharedAttributes);
             this.view = new chorus.views.DataSourceItem({model: this.model});
             this.view.render();
         });

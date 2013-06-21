@@ -1,8 +1,8 @@
 describe('chorus.pages.OracleSchemaIndexPage', function(){
     beforeEach(function() {
-        this.oracle = rspecFixtures.oracleDataSource({name: "Davis"});
+        this.oracle = backboneFixtures.oracleDataSource({name: "Davis"});
         this.page = new chorus.pages.OracleSchemaIndexPage(this.oracle.id);
-        this.schemas = rspecFixtures.oracleSchemaSet([rspecFixtures.oracleSchema({name: "schema1"}).attributes, rspecFixtures.oracleSchema({name: "schema2"}).attributes]);
+        this.schemas = backboneFixtures.oracleSchemaSet([backboneFixtures.oracleSchema({name: "schema1"}).attributes, backboneFixtures.oracleSchema({name: "schema2"}).attributes]);
     });
 
     it("includes the DataSourceCredentials mixin", function() {
@@ -77,7 +77,7 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
         beforeEach(function() {
             launchModalSpy = spyOn(chorus.dialogs.DataSourceAccount.prototype, 'launchModal');
             this.server.completeFetchFor(this.page.dataSource);
-            this.server.lastFetchFor(this.page.collection).failForbidden(rspecFixtures.invalidCredentialsErrorJson().errors);
+            this.server.lastFetchFor(this.page.collection).failForbidden(backboneFixtures.invalidCredentialsErrorJson().errors);
         });
 
         it("launches the DataSourceAccount dialog", function() {

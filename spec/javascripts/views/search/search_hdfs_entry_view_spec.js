@@ -1,6 +1,6 @@
 describe("chorus.views.SearchHdfsEntry", function() {
     beforeEach(function() {
-        this.result = rspecFixtures.searchResult();
+        this.result = backboneFixtures.searchResult();
         this.model = this.result.hdfs_entries().first();
         this.model.set('highlightedAttributes', {});
     });

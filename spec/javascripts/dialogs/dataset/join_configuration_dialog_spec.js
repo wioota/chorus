@@ -1,12 +1,12 @@
 describe("chorus.dialogs.JoinConfiguration", function() {
     beforeEach(function() {
-        this.sourceTable = rspecFixtures.workspaceDataset.datasetTable();
-        this.sourceTable.columns().reset(rspecFixtures.databaseColumnSet().models);
+        this.sourceTable = backboneFixtures.workspaceDataset.datasetTable();
+        this.sourceTable.columns().reset(backboneFixtures.databaseColumnSet().models);
 
         this.chorusView = this.sourceTable.deriveChorusView();
         this.chorusView.aggregateColumnSet = new chorus.collections.DatabaseColumnSet();
 
-        this.destinationTable = rspecFixtures.dataset({
+        this.destinationTable = backboneFixtures.dataset({
             objectType: "SANDBOX_TABLE",
             objectName: "lions_den"
         });
@@ -32,7 +32,7 @@ describe("chorus.dialogs.JoinConfiguration", function() {
 
         describe("when the fetch completes successfully for the destination table's columns", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.destinationTable.columns(), rspecFixtures.databaseColumnSet().models);
+                this.server.completeFetchFor(this.destinationTable.columns(), backboneFixtures.databaseColumnSet().models);
             });
 
             it("should have a header", function() {

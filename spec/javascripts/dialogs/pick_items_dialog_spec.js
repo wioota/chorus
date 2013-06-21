@@ -5,9 +5,9 @@ describe("chorus.dialogs.PickItems", function() {
         spyOn(chorus.dialogs.PickItems.prototype, "submit").andCallThrough();
         spyOn(chorus.dialogs.PickItems.prototype, "selectionFinished").andCallThrough();
 
-        this.user1 = rspecFixtures.user({ firstName: "A", lastName: "User" });
-        this.user2 = rspecFixtures.user({ firstName: "B", lastName: "User" });
-        this.user3 = rspecFixtures.user({ firstName: "C", lastName: "User" });
+        this.user1 = backboneFixtures.user({ firstName: "A", lastName: "User" });
+        this.user2 = backboneFixtures.user({ firstName: "B", lastName: "User" });
+        this.user3 = backboneFixtures.user({ firstName: "C", lastName: "User" });
 
         this.users = new chorus.collections.UserSet([this.user1, this.user2, this.user3]);
         var Subclass = chorus.dialogs.PickItems.extend({ modelClass: "User" });
@@ -316,9 +316,9 @@ describe("chorus.dialogs.PickItems", function() {
         var dataset1, dataset2, dataset3;
 
         beforeEach(function() {
-            dataset1 = rspecFixtures.workspaceDataset.datasetTable();
-            dataset2 = rspecFixtures.workspaceDataset.datasetTable();
-            dataset3 = rspecFixtures.workspaceDataset.datasetTable();
+            dataset1 = backboneFixtures.workspaceDataset.datasetTable();
+            dataset2 = backboneFixtures.workspaceDataset.datasetTable();
+            dataset3 = backboneFixtures.workspaceDataset.datasetTable();
 
             this.datasets = new chorus.collections.WorkspaceDatasetSet([
                 dataset1,

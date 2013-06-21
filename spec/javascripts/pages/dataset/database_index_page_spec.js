@@ -1,6 +1,6 @@
 describe("chorus.pages.DatabaseIndexPage", function() {
     beforeEach(function() {
-        this.dataSource = rspecFixtures.gpdbDataSource({id: "1234", name: "Data Source Name"});
+        this.dataSource = backboneFixtures.gpdbDataSource({id: "1234", name: "Data Source Name"});
         this.page = new chorus.pages.DatabaseIndexPage("1234");
         this.page.render();
     });
@@ -36,7 +36,7 @@ describe("chorus.pages.DatabaseIndexPage", function() {
     describe("when all of the fetches complete", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.dataSource);
-            this.server.completeFetchFor(this.page.collection, [rspecFixtures.database({name: "bar"}), rspecFixtures.database({name: "foo"})]);
+            this.server.completeFetchFor(this.page.collection, [backboneFixtures.database({name: "bar"}), backboneFixtures.database({name: "foo"})]);
         });
 
         it("should have title in the mainContentList", function() {
@@ -82,7 +82,7 @@ describe("chorus.pages.DatabaseIndexPage", function() {
         beforeEach(function() {
             launchModalSpy = spyOn(chorus.dialogs.DataSourceAccount.prototype, 'launchModal');
             this.server.completeFetchFor(this.dataSource);
-            this.server.lastFetchAllFor(this.page.collection).failForbidden(rspecFixtures.invalidCredentialsErrorJson().errors);
+            this.server.lastFetchAllFor(this.page.collection).failForbidden(backboneFixtures.invalidCredentialsErrorJson().errors);
         });
 
         it("launches the DataSourceAccount dialog", function() {

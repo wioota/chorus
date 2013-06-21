@@ -26,7 +26,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
             object0.cid = 'c44';
             object1.cid = 'c55';
 
-            this.schema = rspecFixtures.workspace({ sandboxInfo: { name: "righteous_tables" } }).sandbox().schema();
+            this.schema = backboneFixtures.workspace({ sandboxInfo: { name: "righteous_tables" } }).sandbox().schema();
             this.collection = new chorus.collections.Base([object0, object1]);
 
             spyOn(this.collection.models[0], 'toText').andReturn('object1');
@@ -56,8 +56,8 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
                 this.server.completeFetchFor(this.schema.database().schemas(), [
                     this.schema,
-                    rspecFixtures.schema({ name: "awesome_tables", id: "5" }),
-                    rspecFixtures.schema({ name: "orphaned_tables", id: "6" })
+                    backboneFixtures.schema({ name: "awesome_tables", id: "5" }),
+                    backboneFixtures.schema({ name: "orphaned_tables", id: "6" })
                 ]);
             });
 
@@ -108,8 +108,8 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
                     context("when the execution schema is in the same database as the view's schema", function() {
                         beforeEach(function() {
-                            this.executionSchema = rspecFixtures.schema({id: 101, name: 'other_schema', database: this.schema.get('database')});
-                            this.workfile = new chorus.models.Workfile(rspecFixtures.workfile.sql({executionSchema: this.executionSchema.attributes}));
+                            this.executionSchema = backboneFixtures.schema({id: 101, name: 'other_schema', database: this.schema.get('database')});
+                            this.workfile = new chorus.models.Workfile(backboneFixtures.workfile.sql({executionSchema: this.executionSchema.attributes}));
                             chorus.PageEvents.trigger("workfile:changed", this.workfile);
                         });
 
@@ -121,8 +121,8 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
                     context("when the execution schema is not in the same database as the view's schema", function() {
                         beforeEach(function() {
-                            this.executionSchema = rspecFixtures.schema({id: 101, name: 'other_schema', database: {id: 102, name: 'other_database'}});
-                            this.workfile = new chorus.models.Workfile(rspecFixtures.workfile.sql({executionSchema: this.executionSchema.attributes}));
+                            this.executionSchema = backboneFixtures.schema({id: 101, name: 'other_schema', database: {id: 102, name: 'other_database'}});
+                            this.workfile = new chorus.models.Workfile(backboneFixtures.workfile.sql({executionSchema: this.executionSchema.attributes}));
                             chorus.PageEvents.trigger("workfile:changed", this.workfile);
                         });
 
@@ -138,7 +138,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
     context("when there are no valid credentials", function() {
         beforeEach(function() {
-            this.schema = rspecFixtures.workspace({ sandboxInfo: { name: "righteous_tables" } }).sandbox().schema();
+            this.schema = backboneFixtures.workspace({ sandboxInfo: { name: "righteous_tables" } }).sandbox().schema();
             this.collection = new chorus.collections.Base([]);
 
             var subclass = chorus.views.DatabaseSidebarList.extend({

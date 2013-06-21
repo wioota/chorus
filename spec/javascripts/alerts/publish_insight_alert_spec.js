@@ -1,6 +1,6 @@
 describe("chorus.alerts.PublishInsight", function() {
     beforeEach(function() {
-        this.activity = rspecFixtures.activity.noteOnDatasetCreated();
+        this.activity = backboneFixtures.activity.noteOnDatasetCreated();
     });
 
     context("when publishing", function() {

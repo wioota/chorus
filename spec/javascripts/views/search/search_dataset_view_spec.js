@@ -1,6 +1,6 @@
 describe("chorus.views.SearchDataset", function() {
     beforeEach(function() {
-        this.result = rspecFixtures.searchResult();
+        this.result = backboneFixtures.searchResult();
         this.result.set({query: "foo"});
         this.model = this.result.datasets().models[0];
         this.view = new chorus.views.SearchDataset({model: this.model});
@@ -40,7 +40,7 @@ describe("chorus.views.SearchDataset", function() {
 
     context("when the search results include a chorus view", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.workspaceDataset.chorusView({ workspace: { name: "Chorus View Thing" }, entitySubtype: "CHORUS_VIEW" });
+            this.model = backboneFixtures.workspaceDataset.chorusView({ workspace: { name: "Chorus View Thing" }, entitySubtype: "CHORUS_VIEW" });
             this.view = new chorus.views.SearchDataset({model: this.model});
             this.view.render();
         });

@@ -21,7 +21,7 @@ describe("chorus.dialogs.SchemaPicker", function() {
 
     describe("with a pre-selected schema", function() {
         beforeEach(function() {
-            this.schema = rspecFixtures.schema();
+            this.schema = backboneFixtures.schema();
             this.dialog = new chorus.dialogs.SchemaPicker({ action: "select_import_schema", schema: this.schema });
             this.dialog.render();
         });
@@ -49,7 +49,7 @@ describe("chorus.dialogs.SchemaPicker", function() {
         });
 
         it("triggers schema:selected when submit is clicked", function() {
-            this.schema = rspecFixtures.schema();
+            this.schema = backboneFixtures.schema();
             spyOn(this.dialog.schemaPicker, "getSelectedSchema").andReturn(this.schema);
 
             this.selectedSpy = jasmine.createSpy("schemaSelected");
@@ -68,7 +68,7 @@ describe("chorus.dialogs.SchemaPicker", function() {
 
     context("when the SchemaPicker triggers an error", function() {
         beforeEach(function() {
-            var modelWithError = rspecFixtures.schemaSet();
+            var modelWithError = backboneFixtures.schemaSet();
             modelWithError.serverErrors = { fields: { a: { BLANK: {} } } };
             this.dialog.schemaPicker.trigger("error", modelWithError);
         });

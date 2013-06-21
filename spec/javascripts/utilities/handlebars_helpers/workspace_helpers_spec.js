@@ -50,7 +50,7 @@ describe('chorus.handlebarsHelpers.workspace', function() {
 
         context("when the first arguments is an array", function () {
             beforeEach(function () {
-                this.workspaceList = [rspecFixtures.workspace().attributes, rspecFixtures.workspace().attributes];
+                this.workspaceList = [backboneFixtures.workspace().attributes, backboneFixtures.workspace().attributes];
                 this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
             });
 
@@ -90,7 +90,7 @@ describe('chorus.handlebarsHelpers.workspace', function() {
 
         context("when there is exactly 1 'found in' workspace", function () {
             beforeEach(function () {
-                this.workspaceList = new chorus.collections.WorkspaceSet([rspecFixtures.workspace()]);
+                this.workspaceList = new chorus.collections.WorkspaceSet([backboneFixtures.workspace()]);
                 this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
             });
             itIncludesTheFoundInWorkspaceInformation();
@@ -106,7 +106,7 @@ describe('chorus.handlebarsHelpers.workspace', function() {
 
         context("when there are exactly 2 'found in' workspaces", function () {
             beforeEach(function () {
-                this.workspaceList = new chorus.collections.WorkspaceSet([rspecFixtures.workspace(), rspecFixtures.workspace()]);
+                this.workspaceList = new chorus.collections.WorkspaceSet([backboneFixtures.workspace(), backboneFixtures.workspace()]);
                 this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
             });
 
@@ -119,7 +119,7 @@ describe('chorus.handlebarsHelpers.workspace', function() {
 
         context("when there are exactly 3 'found in' workspaces", function () {
             beforeEach(function () {
-                this.workspaceList = new chorus.collections.WorkspaceSet([rspecFixtures.workspace(), rspecFixtures.workspace(), rspecFixtures.workspace()]);
+                this.workspaceList = new chorus.collections.WorkspaceSet([backboneFixtures.workspace(), backboneFixtures.workspace(), backboneFixtures.workspace()]);
                 this.result = Handlebars.helpers.usedInWorkspaces(this.workspaceList, this.contextObject).toString();
             });
 

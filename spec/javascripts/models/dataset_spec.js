@@ -15,7 +15,7 @@ describe("chorus.models.Dataset", function() {
     };
 
     beforeEach(function() {
-        this.dataset = rspecFixtures.dataset({
+        this.dataset = backboneFixtures.dataset({
             id: 45,
             schema: {
                 id: 1,
@@ -69,8 +69,8 @@ describe("chorus.models.Dataset", function() {
 
     describe('#isOracle', function(){
         beforeEach(function() {
-            this.oracleDataset = rspecFixtures.oracleDataset();
-            this.gpdbDataset = rspecFixtures.dataset();
+            this.oracleDataset = backboneFixtures.oracleDataset();
+            this.gpdbDataset = backboneFixtures.dataset();
         });
 
         it('returns whether the parent data source is an oracle data source', function(){
@@ -81,8 +81,8 @@ describe("chorus.models.Dataset", function() {
 
     describe('#isGreenplum', function(){
         beforeEach(function() {
-            this.gpdbDataset = rspecFixtures.dataset();
-            this.oracleDataset = rspecFixtures.oracleDataset();
+            this.gpdbDataset = backboneFixtures.dataset();
+            this.oracleDataset = backboneFixtures.oracleDataset();
         });
 
         it('returns whether the parent data source is greenplum', function(){
@@ -178,7 +178,7 @@ describe("chorus.models.Dataset", function() {
                 _.each(mediumIconMap, function(subMap, type) {
                     _.each(subMap, function(filename, objectType) {
 
-                        var model = rspecFixtures.dataset({ entitySubtype: type, objectType: objectType});
+                        var model = backboneFixtures.dataset({ entitySubtype: type, objectType: objectType});
                         expect(model.iconUrl({ size: "medium" })).toBe("/images/" + filename);
 
                     });
@@ -191,7 +191,7 @@ describe("chorus.models.Dataset", function() {
                 _.each(largeIconMap, function(subMap, type) {
                     _.each(subMap, function(filename, objectType) {
 
-                        var model = rspecFixtures.dataset({ entitySubtype: type, objectType: objectType});
+                        var model = backboneFixtures.dataset({ entitySubtype: type, objectType: objectType});
                         expect(model.iconUrl({ size: "large" })).toBe("/images/" + filename);
 
                     });
@@ -204,7 +204,7 @@ describe("chorus.models.Dataset", function() {
                 _.each(largeIconMap, function(subMap, type) {
                     _.each(subMap, function(filename, objectType) {
 
-                        var model = rspecFixtures.dataset({ entitySubtype: type, objectType: objectType});
+                        var model = backboneFixtures.dataset({ entitySubtype: type, objectType: objectType});
                         expect(model.iconUrl()).toBe("/images/" + filename);
 
                     });
@@ -215,38 +215,38 @@ describe("chorus.models.Dataset", function() {
 
     describe("#canBeImportSource", function() {
         it("returns true if the object is a Dataset (with a workspace id) but not a Sandbox Dataset", function() {
-            var table = rspecFixtures.dataset();
+            var table = backboneFixtures.dataset();
             expect(table.canBeImportSource()).toBeFalsy();
 
-            var dataset = rspecFixtures.workspaceDataset.datasetTable();
+            var dataset = backboneFixtures.workspaceDataset.datasetTable();
             expect(dataset.canBeImportSource()).toBeFalsy();
 
-            dataset = rspecFixtures.workspaceDataset.datasetView();
+            dataset = backboneFixtures.workspaceDataset.datasetView();
             expect(dataset.canBeImportSource()).toBeFalsy();
 
-            dataset = rspecFixtures.workspaceDataset.sourceTable();
+            dataset = backboneFixtures.workspaceDataset.sourceTable();
             expect(dataset.canBeImportSource()).toBeTruthy();
 
-            dataset = rspecFixtures.workspaceDataset.chorusView();
+            dataset = backboneFixtures.workspaceDataset.chorusView();
             expect(dataset.canBeImportSource()).toBeTruthy();
         });
     });
 
     describe("#canBeImportDestination", function() {
         it("returns true if the object is a Dataset (with a workspace id)", function() {
-            var table = rspecFixtures.dataset();
+            var table = backboneFixtures.dataset();
             expect(table.canBeImportDestination()).toBeFalsy();
 
-            var dataset = rspecFixtures.workspaceDataset.datasetTable();
+            var dataset = backboneFixtures.workspaceDataset.datasetTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = rspecFixtures.workspaceDataset.datasetView();
+            dataset = backboneFixtures.workspaceDataset.datasetView();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = rspecFixtures.workspaceDataset.datasetTable();
+            dataset = backboneFixtures.workspaceDataset.datasetTable();
             expect(dataset.canBeImportDestination()).toBeTruthy();
 
-            dataset = rspecFixtures.workspaceDataset.chorusView();
+            dataset = backboneFixtures.workspaceDataset.chorusView();
             expect(dataset.canBeImportDestination()).toBeTruthy();
         });
     });
@@ -282,7 +282,7 @@ describe("chorus.models.Dataset", function() {
 
     describe("#setSchema", function() {
         it("sets the schema", function() {
-            var newSchema = rspecFixtures.schema();
+            var newSchema = backboneFixtures.schema();
             this.dataset.setSchema(newSchema);
             expect(this.dataset.schema().attributes).toEqual(newSchema.attributes);
         });
@@ -290,7 +290,7 @@ describe("chorus.models.Dataset", function() {
 
     describe("#lastComment", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.dataset({
+            this.model = backboneFixtures.dataset({
                 recentComments: [
                     {
                         author: {
@@ -331,7 +331,7 @@ describe("chorus.models.Dataset", function() {
 
         context("when the data doesn't have any comments", function() {
             it("returns null", function() {
-                expect(rspecFixtures.dataset({recentComments: null}).lastComment()).toBeUndefined();
+                expect(backboneFixtures.dataset({recentComments: null}).lastComment()).toBeUndefined();
             });
         });
     });
@@ -347,7 +347,7 @@ describe("chorus.models.Dataset", function() {
 
         _.each(expectedTypeMap, function(str, type) {
             it("works for " + type, function() {
-                expect(rspecFixtures.dataset({ objectType: type }).metaType()).toBe(str);
+                expect(backboneFixtures.dataset({ objectType: type }).metaType()).toBe(str);
             });
         });
     });
@@ -394,7 +394,7 @@ describe("chorus.models.Dataset", function() {
 
         context("with a saved chorus view", function() {
             beforeEach(function() {
-                this.dataset = rspecFixtures.workspaceDataset.chorusView();
+                this.dataset = backboneFixtures.workspaceDataset.chorusView();
                 this.preview = this.dataset.preview();
             });
 
@@ -424,8 +424,8 @@ describe("chorus.models.Dataset", function() {
 
         context("with a new chorus view", function() {
             beforeEach(function() {
-                var sourceDataset = rspecFixtures.workspaceDataset.datasetTable();
-                this.dataset = rspecFixtures.workspaceDataset.chorusView({
+                var sourceDataset = backboneFixtures.workspaceDataset.datasetTable();
+                this.dataset = backboneFixtures.workspaceDataset.chorusView({
                     query: "select * from hello_world",
                     objectName: "my_chorusview"
                 });
@@ -555,7 +555,7 @@ describe("chorus.models.Dataset", function() {
 
         context("with chorus view", function() {
             beforeEach(function() {
-                this.dataset = rspecFixtures.workspaceDataset.chorusView({objectName: "ChorusView", query: "SELECT a,b FROM xyz;"});
+                this.dataset = backboneFixtures.workspaceDataset.chorusView({objectName: "ChorusView", query: "SELECT a,b FROM xyz;"});
             });
 
             it("creates an appropriate string (trimmed, remove semicolon, and alias to pg-quoted CV name)", function() {
@@ -601,7 +601,7 @@ describe("chorus.models.Dataset", function() {
 
         context("when the model has a 'query'", function() {
             beforeEach(function() {
-                this.dataset = rspecFixtures.workspaceDataset.chorusView();
+                this.dataset = backboneFixtures.workspaceDataset.chorusView();
             });
 
             context("when a datasetNumber is not set", function() {
@@ -626,12 +626,12 @@ describe("chorus.models.Dataset", function() {
 
     describe("#workspace", function() {
         it("is a chorus.models.Workspace when it has a workspace", function() {
-            this.dataset.set({workspace: rspecFixtures.workspaceJson()});
+            this.dataset.set({workspace: backboneFixtures.workspaceJson()});
             expect(this.dataset.workspace()).toBeA(chorus.models.Workspace);
         });
 
         it("memoizes", function() {
-            this.dataset.set({workspace: rspecFixtures.workspaceJson()});
+            this.dataset.set({workspace: backboneFixtures.workspaceJson()});
             expect(this.dataset.workspace()).toEqual(this.dataset.workspace());
         });
 
@@ -643,7 +643,7 @@ describe("chorus.models.Dataset", function() {
     describe("#workspacesAssociated", function() {
         context("when there are workspaces associated", function() {
             beforeEach(function() {
-                this.dataset = rspecFixtures.dataset({associatedWorkspaces: [
+                this.dataset = backboneFixtures.dataset({associatedWorkspaces: [
                     {id: "43", name: "working_hard"},
                     {id: "54", name: "hardly_working"}
                 ]
@@ -695,7 +695,7 @@ describe("chorus.models.Dataset", function() {
 
     describe("#tableauWorkbooks", function() {
         beforeEach(function() {
-            this.dataset = rspecFixtures.dataset({tableauWorkbooks: [
+            this.dataset = backboneFixtures.dataset({tableauWorkbooks: [
                 {id: "100000", name: "first" },
                 {id: "100001", name: "second" }
             ]
@@ -775,19 +775,19 @@ describe("chorus.models.Dataset", function() {
 
     describe("#isDeleteable", function() {
         it("is true when the tabular data is a source table", function() {
-            expect(rspecFixtures.workspaceDataset.sourceTable().isDeleteable()).toBeTruthy();
+            expect(backboneFixtures.workspaceDataset.sourceTable().isDeleteable()).toBeTruthy();
         });
 
         it("is true when the tabular data is a source view", function() {
-            expect(rspecFixtures.workspaceDataset.sourceView().isDeleteable()).toBeTruthy();
+            expect(backboneFixtures.workspaceDataset.sourceView().isDeleteable()).toBeTruthy();
         });
 
         it("is true when the tabular data is a chorus view", function() {
-            expect(rspecFixtures.workspaceDataset.chorusView().isDeleteable()).toBeTruthy();
+            expect(backboneFixtures.workspaceDataset.chorusView().isDeleteable()).toBeTruthy();
         });
 
         it("is false otherwise", function() {
-            expect(rspecFixtures.workspaceDataset.datasetTable().isDeleteable()).toBeFalsy();
+            expect(backboneFixtures.workspaceDataset.datasetTable().isDeleteable()).toBeFalsy();
         });
     });
 
@@ -932,27 +932,27 @@ describe("chorus.models.Dataset", function() {
         var dataset;
         
         it("returns true for a sandbox table", function() {
-            dataset = rspecFixtures.workspaceDataset.datasetTable();
+            dataset = backboneFixtures.workspaceDataset.datasetTable();
             expect(dataset.isGpdbTable()).toBeTruthy();
         });
 
         it("returns true for a source table", function() {
-            dataset = rspecFixtures.dataset();
+            dataset = backboneFixtures.dataset();
             expect(dataset.isGpdbTable()).toBeTruthy();
         });
 
         it("returns false for views", function() {
-            dataset = rspecFixtures.workspaceDataset.datasetView();
+            dataset = backboneFixtures.workspaceDataset.datasetView();
             expect(dataset.isGpdbTable()).toBeFalsy();
         });
 
         it("returns false for chorus views", function() {
-            dataset = rspecFixtures.workspaceDataset.chorusView();
+            dataset = backboneFixtures.workspaceDataset.chorusView();
             expect(dataset.isGpdbTable()).toBeFalsy();
         });
 
         it('returns false when the dataset is not greenplum', function(){
-            dataset = rspecFixtures.oracleDataset();
+            dataset = backboneFixtures.oracleDataset();
             expect(dataset.isGpdbTable()).toBeFalsy();
         });
     });
@@ -964,8 +964,8 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("is true if there are imports", function() {
-            var importDataset = rspecFixtures.workspaceDataset.datasetTable();
-            importDataset.getImports().add(rspecFixtures.workspaceImportSet().models);
+            var importDataset = backboneFixtures.workspaceDataset.datasetTable();
+            importDataset.getImports().add(backboneFixtures.workspaceImportSet().models);
             expect(importDataset.hasImport()).toBeTruthy();
         });
     });
@@ -981,8 +981,8 @@ describe("chorus.models.Dataset", function() {
         beforeEach(function() {
             dataset = new inheritedModelClass();
             dataset.set({
-                workspace: rspecFixtures.workspace(),
-                schema: rspecFixtures.schema(),
+                workspace: backboneFixtures.workspace(),
+                schema: backboneFixtures.schema(),
                 hasCredentials: true
             });
             dataset.importConfiguration = false;
@@ -1013,7 +1013,7 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("should export when data source is Oracle", function () {
-            dataset = rspecFixtures.oracleDataset();
+            dataset = backboneFixtures.oracleDataset();
             expect(dataset.canExport()).toBeTruthy();
         });
     });
@@ -1024,12 +1024,12 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("fails if there is a config, but it isn't loaded", function() {
-            var importDataset = rspecFixtures.workspaceDataset.datasetTable();
+            var importDataset = backboneFixtures.workspaceDataset.datasetTable();
             expect(this.dataset.isImportConfigLoaded()).toBeFalsy();
         });
 
         it("succeeds if there's a loaded config", function() {
-            var importDataset = rspecFixtures.workspaceDataset.datasetTable();
+            var importDataset = backboneFixtures.workspaceDataset.datasetTable();
             importDataset.getImportSchedules().fetch();
             this.server.completeFetchFor(importDataset.getImportSchedules());
             expect(importDataset.isImportConfigLoaded()).toBeTruthy();
@@ -1038,7 +1038,7 @@ describe("chorus.models.Dataset", function() {
 
     describe("#workspaceArchived", function() {
         beforeEach(function() {
-            this.dataset._workspace = rspecFixtures.workspace();
+            this.dataset._workspace = backboneFixtures.workspace();
         });
 
         it("returns false for no workspace", function() {
@@ -1074,7 +1074,7 @@ describe("chorus.models.Dataset", function() {
 
         it("returns false when the workspace is archived", function() {
             this.dataset.set({ hasCredentials: true, objectType: "TABLE" });
-            this.dataset._workspace = rspecFixtures.workspace({ archivedAt: "2012-12-12"});
+            this.dataset._workspace = backboneFixtures.workspace({ archivedAt: "2012-12-12"});
             expect(this.dataset.canAnalyze()).toBeFalsy();
         });
 
@@ -1108,7 +1108,7 @@ describe("chorus.models.Dataset", function() {
 
     describe("Analyze", function() {
         beforeEach(function() {
-            this.dataset = rspecFixtures.dataset({
+            this.dataset = backboneFixtures.dataset({
                 id: 543
             });
         });

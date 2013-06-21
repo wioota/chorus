@@ -1,6 +1,6 @@
 describe("chorus.dialogs.DataSourceEdit", function() {
     beforeEach(function() {
-        this.dataSource = rspecFixtures.gpdbDataSource({
+        this.dataSource = backboneFixtures.gpdbDataSource({
             name: "pasta",
             host: "greenplum",
             port: "8555",
@@ -91,7 +91,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
 
         describe('when editing a hdfs data source', function() {
             beforeEach(function() {
-                this.dataSource = rspecFixtures.hdfsDataSource({
+                this.dataSource = backboneFixtures.hdfsDataSource({
                     username: 'user',
                     groupList: 'hadoop',
                     jobTrackerHost: 'job-tracker-host.emc.com',
@@ -144,7 +144,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
 
         describe('when editing a gnip data source', function() {
             beforeEach(function() {
-                this.dataSource = rspecFixtures.gnipDataSource({
+                this.dataSource = backboneFixtures.gnipDataSource({
                     name: "myGnip",
                     username: "me@fun.com",
                     streamUrl: "https://some.thing.com",

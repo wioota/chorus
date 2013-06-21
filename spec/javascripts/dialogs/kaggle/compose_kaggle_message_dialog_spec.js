@@ -1,9 +1,9 @@
 describe("chorus.dialogs.ComposeKaggleMessage", function () {
     beforeEach(function () {
         this.qtip = stubQtip(".more-info");
-        setLoggedInUser(rspecFixtures.user({email:'user@chorus.com'}));
+        setLoggedInUser(backboneFixtures.user({email:'user@chorus.com'}));
         this.kaggleUser = new chorus.models.KaggleUser({fullName:"Batman"});
-        this.workspace = rspecFixtures.workspace();
+        this.workspace = backboneFixtures.workspace();
         this.dialog = new chorus.dialogs.ComposeKaggleMessage({
             recipients:new chorus.collections.KaggleUserSet(this.kaggleUser),
             workspace:this.workspace
@@ -100,8 +100,8 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
                 var datasets;
                 beforeEach(function () {
                     datasets = [
-                        rspecFixtures.workspaceDataset.datasetTable({ objectName:"i_bought_a_zoo" }),
-                        rspecFixtures.workspaceDataset.datasetTable({ objectName:"bourne_identity" })
+                        backboneFixtures.workspaceDataset.datasetTable({ objectName:"i_bought_a_zoo" }),
+                        backboneFixtures.workspaceDataset.datasetTable({ objectName:"bourne_identity" })
                     ];
                     chorus.modal.trigger("datasets:selected", datasets);
                 });
@@ -120,10 +120,10 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
                     beforeEach(function () {
                         _.each(datasets, function (dataset, i) {
                             this.server.completeFetchAllFor(dataset.columns(), [
-                                rspecFixtures.databaseColumn({name:"Rhino_" + i, typeCategory:"STRING" }),
-                                rspecFixtures.databaseColumn({name:"Sloth_" + i, typeCategory:"WHOLE_NUMBER" })
+                                backboneFixtures.databaseColumn({name:"Rhino_" + i, typeCategory:"STRING" }),
+                                backboneFixtures.databaseColumn({name:"Sloth_" + i, typeCategory:"WHOLE_NUMBER" })
                             ]);
-                            this.server.completeFetchFor(dataset.statistics(), rspecFixtures.datasetStatisticsTable({ rows:11 * (i + 1) }));
+                            this.server.completeFetchFor(dataset.statistics(), backboneFixtures.datasetStatisticsTable({ rows:11 * (i + 1) }));
                         }, this);
                     });
 
@@ -153,7 +153,7 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
 
                 describe("when some of the fetches don't complete", function () {
                     beforeEach(function () {
-                        this.server.completeFetchAllFor(datasets[0].columns(), rspecFixtures.databaseColumnSet([
+                        this.server.completeFetchAllFor(datasets[0].columns(), backboneFixtures.databaseColumnSet([
                             {name:"Rhino_0", description:"awesome", typeCategory:"STRING" },
                             {name:"Sloth_0", description:"lazy", typeCategory:"WHOLE_NUMBER" }
                         ]));

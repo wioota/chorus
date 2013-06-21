@@ -1,10 +1,10 @@
 describe("chorus.views.HdfsEntryList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.HdfsEntrySet([
-            rspecFixtures.hdfsDir({count: 1}),
-            rspecFixtures.hdfsFile(),
-            rspecFixtures.hdfsFile(),
-            rspecFixtures.hdfsDir({count: -1})
+            backboneFixtures.hdfsDir({count: 1}),
+            backboneFixtures.hdfsFile(),
+            backboneFixtures.hdfsFile(),
+            backboneFixtures.hdfsDir({count: -1})
         ], {hdfsDataSource: {id: "1234"}, path: "/abc" });
 
         this.view = new chorus.views.HdfsEntryList({collection: this.collection});
@@ -18,14 +18,14 @@ describe("chorus.views.HdfsEntryList", function() {
     describe("checkability with uncheckable models", function() {
         beforeEach(function() {
             this.files = [
-                rspecFixtures.hdfsFile(),
-                rspecFixtures.hdfsFile(),
-                rspecFixtures.hdfsFile()
+                backboneFixtures.hdfsFile(),
+                backboneFixtures.hdfsFile(),
+                backboneFixtures.hdfsFile()
             ];
 
             this.directories = [
-                rspecFixtures.hdfsDir({count: 1}),
-                rspecFixtures.hdfsDir({count: -1})
+                backboneFixtures.hdfsDir({count: 1}),
+                backboneFixtures.hdfsDir({count: -1})
             ];
 
             this.collection = new chorus.collections.HdfsEntrySet(this.files,

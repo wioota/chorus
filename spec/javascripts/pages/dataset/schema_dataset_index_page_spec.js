@@ -1,8 +1,8 @@
 describe("chorus.pages.SchemaDatasetIndexPage", function() {
     beforeEach(function() {
         spyOn(_, "debounce").andCallThrough();
-        this.schema = rspecFixtures.schema({id: "789", name: "Bar/", database: {id: "456", name: "Foo%", dataSource: {id: "123", name: "ADataSource"}} });
-        this.dataSource = rspecFixtures.gpdbDataSource({ id: "123" });
+        this.schema = backboneFixtures.schema({id: "789", name: "Bar/", database: {id: "456", name: "Foo%", dataSource: {id: "123", name: "ADataSource"}} });
+        this.dataSource = backboneFixtures.gpdbDataSource({ id: "123" });
         this.page = new chorus.pages.SchemaDatasetIndexPage("789");
     });
 
@@ -60,8 +60,8 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
 
             this.server.completeFetchFor(this.schema);
             this.server.completeFetchFor(this.page.collection, [
-                rspecFixtures.dataset({ objectName: "bar" }),
-                rspecFixtures.dataset({ objectName: "foo", objectType: "VIEW" })
+                backboneFixtures.dataset({ objectName: "bar" }),
+                backboneFixtures.dataset({ objectName: "foo", objectType: "VIEW" })
             ]);
         });
 
@@ -100,7 +100,7 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
 
         context("when the schema has only an associated data source and not a database", function() {
             beforeEach(function() {
-                this.schema = rspecFixtures.oracleSchema({id: "789", name: "Bar/", dataSource: {id: "123", name: "A Data Source"}});
+                this.schema = backboneFixtures.oracleSchema({id: "789", name: "Bar/", dataSource: {id: "123", name: "A Data Source"}});
                 this.page = new chorus.pages.SchemaDatasetIndexPage("789");
                 this.server.completeFetchFor(this.schema);
             });
@@ -232,7 +232,7 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
         });
 
         it('resets the multi-selection sidebar actions', function(){
-            this.server.completeFetchFor(this.page.collection, rspecFixtures.schemaDatasetSet().models);
+            this.server.completeFetchFor(this.page.collection, backboneFixtures.schemaDatasetSet().models);
             expect(this.page.multiSelectSidebarMenu.setActions).toHaveBeenCalledWith([
                 '<a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a>',
                 '<a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a>'
@@ -241,7 +241,7 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
 
         context("when the collection is oracle datasets", function () {
             it("doesn't add the associate to workspace action", function () {
-                this.server.completeFetchFor(this.page.collection, [rspecFixtures.oracleDataset()]);
+                this.server.completeFetchFor(this.page.collection, [backboneFixtures.oracleDataset()]);
                 expect(this.page.multiSelectSidebarMenu.setActions).toHaveBeenCalledWith([
                     '<a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a>'
                 ]);

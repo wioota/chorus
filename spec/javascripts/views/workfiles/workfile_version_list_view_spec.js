@@ -1,6 +1,6 @@
 describe("chorus.views.WorkfileVersionList", function() {
     beforeEach(function() {
-        var version2attributes = rspecFixtures.workfileVersion({
+        var version2attributes = backboneFixtures.workfileVersion({
             versionInfo: {
                 modifier: {firstName: 'Bob', lastName: 'Doe'},
                 id: 1,
@@ -9,7 +9,7 @@ describe("chorus.views.WorkfileVersionList", function() {
             }
         }).attributes;
 
-        var version1attributes = rspecFixtures.workfileVersion({
+        var version1attributes = backboneFixtures.workfileVersion({
             versionInfo: {
                 modifier: {firstName: 'Rob', lastName: 'Doe'},
                 versionNum: 1,

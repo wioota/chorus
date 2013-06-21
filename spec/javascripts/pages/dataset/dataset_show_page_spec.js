@@ -1,6 +1,6 @@
 describe("chorus.pages.DatasetShowPage", function () {
     beforeEach(function () {
-        this.dataset = rspecFixtures.dataset();
+        this.dataset = backboneFixtures.dataset();
         this.columnSet = this.dataset.columns();
         this.page = new chorus.pages.DatasetShowPage(
             this.dataset.id
@@ -111,7 +111,7 @@ describe("chorus.pages.DatasetShowPage", function () {
 
             describe("when the dataset does not have a database", function() {
                 beforeEach(function() {
-                    this.dataset = rspecFixtures.oracleDataset();
+                    this.dataset = backboneFixtures.oracleDataset();
                     this.page = new chorus.pages.DatasetShowPage(this.dataset.id);
                     this.page.render();
                     this.server.completeFetchFor(this.dataset);
@@ -152,7 +152,7 @@ describe("chorus.pages.DatasetShowPage", function () {
 
         context("when the columns and statistics fetches complete", function () {
             beforeEach(function () {
-                this.server.completeFetchAllFor(this.columnSet, [rspecFixtures.databaseColumn(), rspecFixtures.databaseColumn()]);
+                this.server.completeFetchAllFor(this.columnSet, [backboneFixtures.databaseColumn(), backboneFixtures.databaseColumn()]);
                 this.server.completeFetchFor(this.dataset.statistics());
             });
 
@@ -216,7 +216,7 @@ describe("chorus.pages.DatasetShowPage", function () {
 
     context("when the dataset fetch 403s", function () {
         beforeEach(function () {
-            this.errorJson = rspecFixtures.invalidCredentialsErrorJson(
+            this.errorJson = backboneFixtures.invalidCredentialsErrorJson(
                 {errors: { model_data: {owner_id: 'some_nonsense', shared: true } } }
             );
             spyOn(Backbone.history, "loadUrl");

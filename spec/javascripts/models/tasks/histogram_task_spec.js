@@ -3,7 +3,7 @@ describe("chorus.models.HistogramTask", function() {
         this.model = new chorus.models.HistogramTask({
             bins: 5,
             xAxis: "height",
-            dataset: rspecFixtures.workspaceDataset.datasetTable({objectName: "users"})
+            dataset: backboneFixtures.workspaceDataset.datasetTable({objectName: "users"})
         });
     });
 

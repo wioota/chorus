@@ -1,6 +1,6 @@
 describe("chorus.dialogs.DataSourceAccount", function() {
     beforeEach(function() {
-        this.dataSource = rspecFixtures.gpdbDataSource();
+        this.dataSource = backboneFixtures.gpdbDataSource();
         this.dialog = new chorus.dialogs.DataSourceAccount({
             dataSource: this.dataSource,
             title: t("data_sources.account.add.title")

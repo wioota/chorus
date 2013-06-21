@@ -1,10 +1,10 @@
 describe("chorus.views.KaggleUserSidebar", function () {
     beforeEach(function () {
         this.modalSpy = stubModals();
-        this.collection = new chorus.collections.KaggleUserSet([rspecFixtures.kaggleUserSet().at(0)]);
+        this.collection = new chorus.collections.KaggleUserSet([backboneFixtures.kaggleUserSet().at(0)]);
 
         this.model = this.collection.at(0);
-        this.workspace = rspecFixtures.workspace();
+        this.workspace = backboneFixtures.workspace();
         this.view = new chorus.views.KaggleUserSidebar({workspace:this.workspace});
         this.view.setKaggleUser(this.model);
         this.view.render();

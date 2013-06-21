@@ -1,7 +1,7 @@
 describe("chorus.views.DataSourceConfigurationDetails", function() {
     context("hdfs data source", function() {
         beforeEach(function() {
-            this.dataSource = rspecFixtures.hdfsDataSource({
+            this.dataSource = backboneFixtures.hdfsDataSource({
                 jobTrackerHost: 'foobar',
                 jobTrackerPort: '1234'
             });
@@ -31,7 +31,7 @@ describe("chorus.views.DataSourceConfigurationDetails", function() {
 
     context("greenplum/oracle data source", function() {
         beforeEach(function() {
-            this.dataSource = rspecFixtures.gpdbDataSource();
+            this.dataSource = backboneFixtures.gpdbDataSource();
             this.view = new chorus.views.DataSourceConfigurationDetails({model: this.dataSource});
         });
 

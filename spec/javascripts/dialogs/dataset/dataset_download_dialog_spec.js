@@ -3,7 +3,7 @@ describe("chorus.dialogs.DatasetDownload", function() {
         var radioButtonSpecify, radioButtonAll;
 
         beforeEach(function() {
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+            this.dataset = backboneFixtures.workspaceDataset.datasetTable();
             spyOn(this.dataset, 'download');
             this.dialog = new chorus.dialogs.DatasetDownload({ pageModel: this.dataset });
             this.dialog.render();
@@ -118,7 +118,7 @@ describe("chorus.dialogs.DatasetDownload", function() {
 
     describe("with a search result", function() {
         beforeEach(function() {
-            var searchResult = rspecFixtures.searchResult();
+            var searchResult = backboneFixtures.searchResult();
             this.selectedItem = searchResult.selectedItem = searchResult.datasets().at(0);
             this.selectedItem.set({"objectName" : "test_dataset"});
             this.dialog = new chorus.dialogs.DatasetDownload({ pageModel: searchResult });

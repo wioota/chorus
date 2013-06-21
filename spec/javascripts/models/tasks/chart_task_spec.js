@@ -1,6 +1,6 @@
 describe("chorus.models.ChartTask", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable({ id: 5, schema: {name: 'animals'}, objectName: 'dog_breeds'});
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable({ id: 5, schema: {name: 'animals'}, objectName: 'dog_breeds'});
         var chartSubclass = chorus.models.ChartTask.extend({});
         chartSubclass.prototype.chartType = "fantastic";
         this.model = new chartSubclass({ dataset: this.dataset });
@@ -29,7 +29,7 @@ describe("chorus.models.ChartTask", function() {
 
     describe("getRows", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.boxplotTask();
+            this.model = backboneFixtures.boxplotTask();
         });
 
         it("includes unique and original names", function() {

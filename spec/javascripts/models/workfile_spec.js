@@ -1,6 +1,6 @@
 describe("chorus.models.Workfile", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workfile.sql({workspace: { id: "10000"}, id: '10020'});
+        this.model = backboneFixtures.workfile.sql({workspace: { id: "10000"}, id: '10020'});
     });
 
     it("has the correct entityType", function() {
@@ -28,7 +28,7 @@ describe("chorus.models.Workfile", function() {
 
     describe("#executionSchema", function() {
         beforeEach(function() {
-            this.schemaJson = rspecFixtures.schemaJson()['response'];
+            this.schemaJson = backboneFixtures.schemaJson()['response'];
             this.model.set({ executionSchema: this.schemaJson});
         });
 
@@ -121,7 +121,7 @@ describe("chorus.models.Workfile", function() {
 
     describe("urls", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.workfile.sql({
+            this.model = backboneFixtures.workfile.sql({
                 id: 5,
                 workspace: { id: 10 },
                 versionInfo: { contentUrl: "this/is/content/url" }
@@ -182,14 +182,14 @@ describe("chorus.models.Workfile", function() {
     describe("isImage", function() {
         context("when the workfile is an image", function() {
             it("returns true", function() {
-                var workfile = rspecFixtures.workfile.image();
+                var workfile = backboneFixtures.workfile.image();
                 expect(workfile.isImage()).toBeTruthy();
             });
         });
 
         context("when the workfile is NOT an image", function() {
             it("returns false", function() {
-                var workfile = rspecFixtures.workfile.sql();
+                var workfile = backboneFixtures.workfile.sql();
                 expect(workfile.isImage()).toBeFalsy();
             });
         });
@@ -197,50 +197,50 @@ describe("chorus.models.Workfile", function() {
 
     describe("isSql", function() {
         it("returns true when the workfile is a sql file", function() {
-            var workfile = rspecFixtures.workfile.sql();
+            var workfile = backboneFixtures.workfile.sql();
             expect(workfile.isSql()).toBeTruthy();
         });
 
         it("returns false when the workfile is NOT a sql file", function() {
-            var workfile = rspecFixtures.workfile.binary();
+            var workfile = backboneFixtures.workfile.binary();
             expect(workfile.isSql()).toBeFalsy();
         });
     });
 
     describe("isAlpine", function() {
         it("returns true when the workfile is a afm file", function() {
-            var workfile = rspecFixtures.workfile.binary({ fileType: "alpine" });
+            var workfile = backboneFixtures.workfile.binary({ fileType: "alpine" });
             expect(workfile.isAlpine()).toBeTruthy();
         });
 
         it("returns false when the workfile is NOT an afm file", function() {
-            var workfile = rspecFixtures.workfile.sql();
+            var workfile = backboneFixtures.workfile.sql();
             expect(workfile.isAlpine()).toBeFalsy();
         });
     });
 
     describe("isTableau", function() {
         it("returns true when the workfile is a tableau file", function() {
-            var workfile = rspecFixtures.workfile.tableau();
+            var workfile = backboneFixtures.workfile.tableau();
             expect(workfile.isTableau()).toBeTruthy();
         });
     });
 
     describe("isBinary", function() {
         it("returns true when the workfile is a binary file", function() {
-            var workfile = rspecFixtures.workfile.binary();
+            var workfile = backboneFixtures.workfile.binary();
             expect(workfile.isBinary()).toBeTruthy();
         });
 
         it("returns false when the workfile is NOT a binary file", function() {
-            var workfile = rspecFixtures.workfile.sql();
+            var workfile = backboneFixtures.workfile.sql();
             expect(workfile.isBinary()).toBeFalsy();
         });
     });
 
     describe("#extension", function() {
         it("returns the extension from the file's name", function() {
-            var workfile = rspecFixtures.workfile.sql();
+            var workfile = backboneFixtures.workfile.sql();
             expect(workfile.extension()).toBe("sql");
 
             workfile.set({ fileName: "foo.cpp" });
@@ -262,7 +262,7 @@ describe("chorus.models.Workfile", function() {
 
     describe("createDraft", function() {
         beforeEach(function() {
-            this.workfile = rspecFixtures.workfile.sql();
+            this.workfile = backboneFixtures.workfile.sql();
         });
 
         it("sets the required attributes", function() {
@@ -344,17 +344,17 @@ describe("chorus.models.Workfile", function() {
 
     describe("isText", function() {
         it("returns true for plain text files", function() {
-            var workfile = rspecFixtures.workfile.text();
+            var workfile = backboneFixtures.workfile.text();
             expect(workfile.isText()).toBeTruthy();
         });
 
         it("returns true for sql files", function() {
-            var workfile = rspecFixtures.workfile.sql();
+            var workfile = backboneFixtures.workfile.sql();
             expect(workfile.isText()).toBeTruthy();
         });
 
         it("returns false for image files", function() {
-            var workfile = rspecFixtures.workfile.image();
+            var workfile = backboneFixtures.workfile.image();
             expect(workfile.isText()).toBeFalsy();
         });
     });
@@ -507,7 +507,7 @@ describe("chorus.models.Workfile", function() {
     describe("#iconUrl", function() {
         context("when the workfile is an image", function() {
             it("returns the url of the image thumbnail", function() {
-                var workfile = rspecFixtures.workfile.image({
+                var workfile = backboneFixtures.workfile.image({
                     versionInfo: { iconUrl: "some/file" }
                 });
 
@@ -518,11 +518,11 @@ describe("chorus.models.Workfile", function() {
 
         context("when the workfile is not an image", function() {
             it("proxies to fileIconUrl helper", function() {
-                var workfile = rspecFixtures.workfile.text({ fileName: "foo.cpp" });
+                var workfile = backboneFixtures.workfile.text({ fileName: "foo.cpp" });
                 expect(workfile.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('cpp', 'large'));
                 expect(workfile.iconUrl({ size: "icon" })).toBe(chorus.urlHelpers.fileIconUrl('cpp', 'icon'));
 
-                workfile = rspecFixtures.workfile.text({ fileName: "foo.java" });
+                workfile = backboneFixtures.workfile.text({ fileName: "foo.java" });
                 expect(workfile.iconUrl()).toBe(chorus.urlHelpers.fileIconUrl('java', 'large'));
                 expect(workfile.iconUrl({ size: "icon" })).toBe(chorus.urlHelpers.fileIconUrl('java', 'icon'));
             });

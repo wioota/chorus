@@ -2,7 +2,7 @@ describe("chorus.views.DataTabDatasetColumnList", function() {
     beforeEach(function() {
         spyOn($.fn, "draggable");
 
-        this.dataset = rspecFixtures.dataset({ objectName: "brian_the_table", schema: {name: "john_the_schema"} });
+        this.dataset = backboneFixtures.dataset({ objectName: "brian_the_table", schema: {name: "john_the_schema"} });
         this.view = new chorus.views.DataTabDatasetColumnList({ dataset: this.dataset });
     });
 
@@ -33,8 +33,8 @@ describe("chorus.views.DataTabDatasetColumnList", function() {
 
         context("when there are columns", function() {
             beforeEach(function() {
-                this.columnA = rspecFixtures.databaseColumn({name: "column_1", dataType: "text" });
-                this.columnB = rspecFixtures.databaseColumn({name: "column_2", dataType: "timestamp with time zone"});
+                this.columnA = backboneFixtures.databaseColumn({name: "column_1", dataType: "text" });
+                this.columnB = backboneFixtures.databaseColumn({name: "column_2", dataType: "timestamp with time zone"});
 
                 this.server.completeFetchAllFor(this.dataset.columns(), [
                     this.columnA,

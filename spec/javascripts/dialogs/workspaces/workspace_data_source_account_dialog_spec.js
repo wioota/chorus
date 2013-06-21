@@ -1,7 +1,7 @@
 describe("chorus.dialogs.WorkspaceDataSourceAccount", function() {
     beforeEach(function() {
-        this.workspace = rspecFixtures.workspace();
-        this.account = rspecFixtures.dataSourceAccount();
+        this.workspace = backboneFixtures.workspace();
+        this.account = backboneFixtures.dataSourceAccount();
         this.dialog = new chorus.dialogs.WorkspaceDataSourceAccount({ model: this.account, pageModel: this.workspace});
         this.dialog.render();
     });

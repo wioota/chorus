@@ -1,6 +1,6 @@
 describe("chorus.models.GnipDataSource", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.gnipDataSource({id: 123});
+        this.model = backboneFixtures.gnipDataSource({id: 123});
         this.attrs = {
             name: "someName",
             streamUrl: "someUrl",

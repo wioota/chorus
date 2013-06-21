@@ -1,7 +1,7 @@
 describe("chorus.dialogs.ImportStreamWorkspacePicker", function() {
     beforeEach(function() {
         stubModals();
-        this.workspaces = rspecFixtures.workspaceSet();
+        this.workspaces = backboneFixtures.workspaceSet();
         this.dialog = new chorus.dialogs.ImportStreamWorkspacePicker();
         this.dialog.launchModal();
     });

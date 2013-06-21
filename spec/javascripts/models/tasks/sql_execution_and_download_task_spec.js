@@ -1,7 +1,7 @@
 describe("chorus.models.SqlExecutionAndDownloadTask", function() {
     beforeEach(function() {
         this.model = new chorus.models.SqlExecutionAndDownloadTask({
-            workfile: rspecFixtures.workfile.sql({id: '1', fileName: 'a_workfile'}),
+            workfile: backboneFixtures.workfile.sql({id: '1', fileName: 'a_workfile'}),
             sql: 'select 2',
             schemaId: '5',
             numOfRows: '6'

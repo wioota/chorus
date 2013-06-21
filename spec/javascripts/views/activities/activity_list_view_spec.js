@@ -2,8 +2,8 @@ describe("chorus.views.ActivityList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.ActivitySet([]);
         this.collection.reset([
-            rspecFixtures.activity.dataSourceCreated(),
-            rspecFixtures.activity.dataSourceCreated()
+            backboneFixtures.activity.dataSourceCreated(),
+            backboneFixtures.activity.dataSourceCreated()
         ]);
         this.collection.loaded = true;
         this.view = new chorus.views.ActivityList({collection: this.collection, additionalClass: "foo_class", type: "Foo"});
@@ -11,7 +11,7 @@ describe("chorus.views.ActivityList", function() {
 
     describe("pageEvent subscriptions", function() {
         beforeEach(function() {
-            this.note = rspecFixtures.activity.noteOnGreenplumDataSource();
+            this.note = backboneFixtures.activity.noteOnGreenplumDataSource();
             this.collection.add(this.note);
             this.view.render();
         });
@@ -23,7 +23,7 @@ describe("chorus.views.ActivityList", function() {
         });
 
         it('re-renders when note:saved is fired', function() {
-            this.newNote = rspecFixtures.activity.noteOnGreenplumDataSource({id: this.note.id, body: 'A New Note'});
+            this.newNote = backboneFixtures.activity.noteOnGreenplumDataSource({id: this.note.id, body: 'A New Note'});
             chorus.PageEvents.trigger('note:saved', this.newNote);
             expect(this.view.$("li[data-activity-id=" + this.note.id + "]")).toContainText("A New Note");
         });
@@ -161,9 +161,9 @@ describe("chorus.views.ActivityList", function() {
                         this.view.$(".more_items a").click();
 
                         this.server.completeFetchFor(this.collection, [
-                            rspecFixtures.activity.dataSourceCreated(),
-                            rspecFixtures.activity.dataSourceCreated(),
-                            rspecFixtures.activity.dataSourceCreated()
+                            backboneFixtures.activity.dataSourceCreated(),
+                            backboneFixtures.activity.dataSourceCreated(),
+                            backboneFixtures.activity.dataSourceCreated()
                         ], { page: nextPage });
                     });
 
@@ -203,10 +203,10 @@ describe("chorus.views.ActivityList", function() {
             context("with partial pagination information in the response", function() {
                 beforeEach(function() {
                     this.collection.reset([
-                        rspecFixtures.activity.dataSourceCreated(),
-                        rspecFixtures.activity.dataSourceCreated(),
-                        rspecFixtures.activity.dataSourceCreated(),
-                        rspecFixtures.activity.dataSourceCreated()
+                        backboneFixtures.activity.dataSourceCreated(),
+                        backboneFixtures.activity.dataSourceCreated(),
+                        backboneFixtures.activity.dataSourceCreated(),
+                        backboneFixtures.activity.dataSourceCreated()
                     ]);
 
                     this.collection.pagination = {};

@@ -1,11 +1,11 @@
 describe("chorus.pages.WorkfileShowPage", function() {
     beforeEach(function() {
         spyOn(chorus.pages.WorkfileShowPage.prototype, "reload");
-        chorus.page = { workspace: rspecFixtures.workspace() };
+        chorus.page = { workspace: backboneFixtures.workspace() };
         this.workspaceId = 4;
         this.workfileId = 5;
-        this.workspace = rspecFixtures.workspace({id: this.workspaceId});
-        this.model = rspecFixtures.workfile.sql({id: this.workfileId, workspace: {id: this.workspaceId}});
+        this.workspace = backboneFixtures.workspace({id: this.workspaceId});
+        this.model = backboneFixtures.workfile.sql({id: this.workfileId, workspace: {id: this.workspaceId}});
         stubDefer();
     });
 
@@ -116,7 +116,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
             context('and the workfile has a draft', function() {
                 beforeEach(function() {
-                    this.model.set({'draftInfo': rspecFixtures.draftJson().response, hasDraft: true});
+                    this.model.set({'draftInfo': backboneFixtures.draftJson().response, hasDraft: true});
                     this.modalSpy = stubModals();
                     this.server.completeFetchFor(this.model);
                 });
@@ -153,7 +153,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.workfile.sql({id: this.workfileId,
+            this.model = backboneFixtures.workfile.sql({id: this.workfileId,
                 workspace: {
                     id: this.workspaceId,
                     name: "Cool Workspace"
@@ -216,8 +216,8 @@ describe("chorus.pages.WorkfileShowPage", function() {
         }
 
         beforeEach(function() {
-            this.schema = rspecFixtures.schema({id: defaultSchemaId});
-            this.model = rspecFixtures.workfile.sql({
+            this.schema = backboneFixtures.schema({id: defaultSchemaId});
+            this.model = backboneFixtures.workfile.sql({
                 id: this.workfileId,
                 workspace: {
                     id: this.workspaceId,
@@ -251,7 +251,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
             });
 
             it("does not change the sidebar dataset list", function() {
-                this.page.sidebar.tabs.data.schema = rspecFixtures.schema({id: 4});
+                this.page.sidebar.tabs.data.schema = backboneFixtures.schema({id: 4});
                 changeWorkfileVersion(2, this.model, this.server);
                 expect(this.page.sidebar.tabs.data.schema.id).toEqual(4);
             });

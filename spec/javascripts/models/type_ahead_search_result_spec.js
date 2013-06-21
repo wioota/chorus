@@ -1,6 +1,6 @@
 describe("chorus.models.TypeAheadSearchResult", function() {
     beforeEach(function() {
-        this.result = rspecFixtures.typeAheadSearchResult();
+        this.result = backboneFixtures.typeAheadSearchResult();
     });
 
     describe("fixtures", function() {

@@ -2,7 +2,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
     beforeEach(function() {
         spyOn(_, "debounce").andCallThrough();
         this.modalSpy = stubModals();
-        this.workspace = rspecFixtures.workspace({
+        this.workspace = backboneFixtures.workspace({
             id: 9999,
             permission: [
                 "update"
@@ -56,7 +56,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
         context("when a single dataset fetch fails", function() {
             beforeEach(function() {
-                var dataset = rspecFixtures.dataset();
+                var dataset = backboneFixtures.dataset();
                 this.page.collection.reset([dataset]);
             });
             it("does NOT navigate away", function() {
@@ -91,8 +91,8 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             describe("when the fetch returns two items", function() {
                 beforeEach(function() {
                     this.datasets = [
-                        rspecFixtures.workspaceDataset.datasetTable(),
-                        rspecFixtures.workspaceDataset.datasetTable()
+                        backboneFixtures.workspaceDataset.datasetTable(),
+                        backboneFixtures.workspaceDataset.datasetTable()
                     ];
                     this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
                 });
@@ -161,8 +161,8 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
     context("after the workspace and collection have loaded", function() {
         beforeEach(function() {
             this.datasets = [
-                rspecFixtures.workspaceDataset.datasetTable(),
-                rspecFixtures.workspaceDataset.datasetTable()
+                backboneFixtures.workspaceDataset.datasetTable(),
+                backboneFixtures.workspaceDataset.datasetTable()
             ];
             this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
             this.account = this.workspace.sandbox().dataSource().accountForCurrentUser();
@@ -332,7 +332,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             context("when the account loads and is empty and the data source account maps are individual", function() {
                 beforeEach(function() {
                     spyOnEvent(this.page.collection, 'reset');
-                    this.server.completeFetchFor(this.account, rspecFixtures.dataSourceAccount({"id":null}));
+                    this.server.completeFetchFor(this.account, backboneFixtures.dataSourceAccount({"id":null}));
                     expect(this.page.dataSource.isShared()).toBeFalsy();
                 });
 
@@ -359,7 +359,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                         this.server.reset();
                         this.page = new chorus.pages.WorkspaceDatasetIndexPage(this.workspace.get("id"));
                         this.server.completeFetchFor(this.workspace);
-                        this.server.completeFetchFor(this.page.account, rspecFixtures.dataSourceAccount({"id":null}));
+                        this.server.completeFetchFor(this.page.account, backboneFixtures.dataSourceAccount({"id":null}));
                     });
 
                     it("should not pop up the WorkspaceDataSourceAccountDialog", function() {
@@ -373,7 +373,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                     spyOnEvent(this.page.collection, 'reset');
                     this.page.dataSource.set({"shared": true});
                     expect(this.page.dataSource.isShared()).toBeTruthy();
-                    this.server.completeFetchFor(this.page.account, rspecFixtures.dataSourceAccount({"id":null}));
+                    this.server.completeFetchFor(this.page.account, backboneFixtures.dataSourceAccount({"id":null}));
                 });
 
                 it("does not pop up a WorkspaceDataSourceAccount dialog", function() {
@@ -383,7 +383,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
             context("when the account loads and is valid", function() {
                 beforeEach(function() {
-                    this.server.completeFetchFor(this.account, rspecFixtures.dataSourceAccount());
+                    this.server.completeFetchFor(this.account, backboneFixtures.dataSourceAccount());
                 });
 
                 it("does not pop up the WorkspaceDataSourceAccountDialog", function() {
@@ -523,7 +523,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             this.server.completeFetchFor(this.workspace);
             this.page.render();
 
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+            this.dataset = backboneFixtures.workspaceDataset.datasetTable();
             chorus.PageEvents.trigger("dataset:selected", this.dataset);
         });
 

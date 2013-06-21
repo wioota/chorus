@@ -3,7 +3,7 @@ describe("chorus.alerts.WorkfileConflict", function() {
         this.modalSpy = stubModals();
         this.useFakeTimers();
 
-        this.workfile = rspecFixtures.workfile.sql({ versionInfo: { content : "version content" } });
+        this.workfile = backboneFixtures.workfile.sql({ versionInfo: { content : "version content" } });
         this.message = "This work file has been modified by Christine Klunk";
         this.workfile.serverErrors = {fields: {version: {GENERIC: {message: this.message}}}};
         this.alert = new chorus.alerts.WorkfileConflict({ model : this.workfile });
@@ -53,7 +53,7 @@ describe("chorus.alerts.WorkfileConflict", function() {
             spyOn(this.alert, "closeModal");
             spyOnEvent(this.alert.model, "invalidated");
             this.alert.$("button.cancel").click();
-            this.draft = rspecFixtures.draft({workfileId: this.workfile.get("id")});
+            this.draft = backboneFixtures.draft({workfileId: this.workfile.get("id")});
         });
 
         it("fetches the draft", function() {

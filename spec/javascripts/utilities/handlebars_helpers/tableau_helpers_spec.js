@@ -9,8 +9,8 @@ describe('chorus.handlebarsHelpers.tableau', function() {
         context("when the first arguments is an array", function () {
             beforeEach(function () {
                 this.workbookList = [
-                    rspecFixtures.tableauWorkbook({name: "foo", url: "foo.com"}).attributes,
-                    rspecFixtures.tableauWorkbook({name: "bar", url: "bar.com"}).attributes
+                    backboneFixtures.tableauWorkbook({name: "foo", url: "foo.com"}).attributes,
+                    backboneFixtures.tableauWorkbook({name: "bar", url: "bar.com"}).attributes
                 ];
                 this.result = Handlebars.helpers.usedInTableau(this.workbookList).toString();
             });
@@ -34,7 +34,7 @@ describe('chorus.handlebarsHelpers.tableau', function() {
 
     describe("fromTableau", function () {
         beforeEach(function () {
-            this.workfile = rspecFixtures.workfile.tableau();
+            this.workfile = backboneFixtures.workfile.tableau();
         });
 
         it("show the tableau information", function () {

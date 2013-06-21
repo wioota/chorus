@@ -31,12 +31,12 @@ describe("sinon extensions", function() {
             });
 
             it("returns a 200 status", function() {
-                this.xhr.succeed(rspecFixtures.user());
+                this.xhr.succeed(backboneFixtures.user());
                 expect(this.xhr.status).toBe(200);
             });
 
             it("returns the right content-type", function() {
-                this.xhr.succeed(rspecFixtures.user());
+                this.xhr.succeed(backboneFixtures.user());
                 expect(this.xhr.responseHeaders["Content-Type"]).toBe("application/json");
             });
 

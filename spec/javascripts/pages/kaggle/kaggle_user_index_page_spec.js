@@ -1,7 +1,7 @@
 describe("chorus.pages.KaggleUserIndexPage", function() {
     beforeEach(function() {
-        this.workspace = rspecFixtures.workspace({name: "kagSpace"});
-        this.kaggleUsers = rspecFixtures.kaggleUserSet();
+        this.workspace = backboneFixtures.workspace({name: "kagSpace"});
+        this.kaggleUsers = backboneFixtures.kaggleUserSet();
         this.page = new chorus.pages.KaggleUserIndexPage(this.workspace.id);
     });
 

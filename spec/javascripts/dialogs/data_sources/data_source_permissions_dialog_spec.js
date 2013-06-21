@@ -43,7 +43,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
 
                 describe("after re-fetching the accounts", function() {
                     beforeEach(function() {
-                        this.dataSourceAccount = rspecFixtures.dataSourceAccount({owner: { id: this.newOwner.get("id")}});
+                        this.dataSourceAccount = backboneFixtures.dataSourceAccount({owner: { id: this.newOwner.get("id")}});
                         this.server.completeFetchFor(this.dialog.collection, [this.dataSourceAccount]);
                     });
 
@@ -86,7 +86,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
     describe("#setup", function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll');
-            this.dataSource = rspecFixtures.gpdbDataSource({shared: true, id: "5"});
+            this.dataSource = backboneFixtures.gpdbDataSource({shared: true, id: "5"});
             this.dialog = new chorus.dialogs.DataSourcePermissions({ dataSource: this.dataSource });
         });
 
@@ -102,8 +102,8 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
 
     context('when the data source is a shared account', function() {
         beforeEach(function() {
-            this.dataSource = rspecFixtures.gpdbDataSource({"shared":true});
-            var account = rspecFixtures.dataSourceAccount({
+            this.dataSource = backboneFixtures.gpdbDataSource({"shared":true});
+            var account = backboneFixtures.dataSourceAccount({
                 dbUsername: 'some_db_username',
                 dataSourceId: this.dataSource.id
             });
@@ -159,11 +159,11 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                 describe("when the user fetch completes", function() {
                     beforeEach(function() {
                         this.dialog.users.reset([
-                            rspecFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
+                            backboneFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
                             this.dataSource.owner(),
-                            rspecFixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
-                            rspecFixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
-                            rspecFixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
+                            backboneFixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
+                            backboneFixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
+                            backboneFixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
                         ]);
                     });
 
@@ -301,8 +301,8 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
     context('when the data source has individual accounts', function() {
         beforeEach(function() {
             spyOn(chorus.collections.UserSet.prototype, 'fetchAll').andCallThrough();
-            this.owner = rspecFixtures.user({firstName: 'EDC', lastName: 'Admin'});
-            this.dataSource = rspecFixtures.gpdbDataSource({owner: {
+            this.owner = backboneFixtures.user({firstName: 'EDC', lastName: 'Admin'});
+            this.dataSource = backboneFixtures.gpdbDataSource({owner: {
                 id: this.owner.get("id"),
                 username: this.owner.get("username"),
                 firstName: this.owner.get("firstName"),
@@ -311,9 +311,9 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
             });
             this.accounts = this.dataSource.accounts();
             this.accounts.add([
-                rspecFixtures.dataSourceAccount({ id: '1', dataSourceId: this.dataSource.id, owner: { firstName: "bob", lastName: "zzap", id: '111' } }),
-                rspecFixtures.dataSourceAccount({ id: '2', dataSourceId: this.dataSource.id, owner: { firstName: "jim", lastName: "aardvark", id: '222' } }),
-                rspecFixtures.dataSourceAccount({ id: '3', dataSourceId: this.dataSource.id, owner: this.owner.attributes })
+                backboneFixtures.dataSourceAccount({ id: '1', dataSourceId: this.dataSource.id, owner: { firstName: "bob", lastName: "zzap", id: '111' } }),
+                backboneFixtures.dataSourceAccount({ id: '2', dataSourceId: this.dataSource.id, owner: { firstName: "jim", lastName: "aardvark", id: '222' } }),
+                backboneFixtures.dataSourceAccount({ id: '3', dataSourceId: this.dataSource.id, owner: this.owner.attributes })
             ]);
             this.dialog = new chorus.dialogs.DataSourcePermissions({ dataSource: this.dataSource });
             this.dialog.launchModal();
@@ -550,11 +550,11 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
         describe("when the chorus users are fetched", function() {
             beforeEach(function() {
                 this.dialog.users.reset([
-                    rspecFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
+                    backboneFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
                     this.dataSource.owner(),
-                    rspecFixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
-                    rspecFixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
-                    rspecFixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
+                    backboneFixtures.user({ firstName: "harold", lastName: "four", id: '444' }),
+                    backboneFixtures.user({ firstName: "suzie", lastName: "three", id: '333' }),
+                    backboneFixtures.user({ firstName: "bob", lastName: "zzap", id: '111' })
                 ]);
             });
 
@@ -758,8 +758,8 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
             describe("when the fetch for all chorus users completes", function() {
                 beforeEach(function() {
                     this.dialog.users.reset([
-                        rspecFixtures.user({ firstName: "<script>alert('hi')</script>", lastName: "cannon" }),
-                        rspecFixtures.user({ firstName: "ben", lastName: "maulden" })
+                        backboneFixtures.user({ firstName: "<script>alert('hi')</script>", lastName: "cannon" }),
+                        backboneFixtures.user({ firstName: "ben", lastName: "maulden" })
                     ]);
                 });
 

@@ -123,7 +123,7 @@ describe("chorus.pages.Base", function() {
 
         context("when the page depends on resources", function() {
             beforeEach(function() {
-                this.resource = rspecFixtures.user();
+                this.resource = backboneFixtures.user();
                 this.view.handleFetchErrorsFor(this.resource);
             });
 
@@ -344,7 +344,7 @@ describe("chorus.pages.Base", function() {
 
     describe("loadWorkspace", function(){
         beforeEach(function() {
-            this.workspace = rspecFixtures.workspace({id: 123});
+            this.workspace = backboneFixtures.workspace({id: 123});
             this.page = new chorus.pages.Base();
         });
 

@@ -1,7 +1,7 @@
 describe("chorus.pages.HdfsShowFilePage", function() {
     beforeEach(function() {
-        this.hdfsDataSource = rspecFixtures.hdfsDataSource({id: 1234, name: "MyDataSource"});
-        this.file = rspecFixtures.hdfsFile({
+        this.hdfsDataSource = backboneFixtures.hdfsDataSource({id: 1234, name: "MyDataSource"});
+        this.file = backboneFixtures.hdfsFile({
             id: 789,
             path: "/my/path/my file.txt",
             name: "my file.txt",

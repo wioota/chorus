@@ -1,9 +1,9 @@
 describe("chorus.views.PageItemList", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.UserSet([
-            rspecFixtures.user({id: 123}),
-            rspecFixtures.user({id: 456}),
-            rspecFixtures.user({id: 789})
+            backboneFixtures.user({id: 123}),
+            backboneFixtures.user({id: 456}),
+            backboneFixtures.user({id: 789})
         ], {schemaId: "3"});
 
         this.view = new chorus.views.PageItemList({

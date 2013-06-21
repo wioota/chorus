@@ -1,6 +1,6 @@
 describe("chorus.views.NotificationList", function() {
     beforeEach(function() {
-        this.collection = rspecFixtures.notificationSet();
+        this.collection = backboneFixtures.notificationSet();
         var brokenNotification = new chorus.models.Notification();
         brokenNotification.set({ action: "IMPORT_SUCCESS" });
         this.collection.add(brokenNotification);

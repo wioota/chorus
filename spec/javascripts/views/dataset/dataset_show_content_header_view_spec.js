@@ -1,11 +1,11 @@
 describe("chorus.views.DatasetShowContentHeader", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.dataset({
+        this.model = backboneFixtures.dataset({
             tags: [
                 {name: "alpha"}
             ],
-            associatedWorkspaces: [rspecFixtures.workspaceJson(), rspecFixtures.workspaceJson(), rspecFixtures.workspaceJson()],
-            tableauWorkbooks: [rspecFixtures.tableauWorkbook().attributes, rspecFixtures.tableauWorkbook().attributes, rspecFixtures.tableauWorkbook().attributes]
+            associatedWorkspaces: [backboneFixtures.workspaceJson(), backboneFixtures.workspaceJson(), backboneFixtures.workspaceJson()],
+            tableauWorkbooks: [backboneFixtures.tableauWorkbook().attributes, backboneFixtures.tableauWorkbook().attributes, backboneFixtures.tableauWorkbook().attributes]
         });
         this.model.loaded = false;
         delete this.model.statusCode;

@@ -1,6 +1,6 @@
 describe("chorus.views.SearchResultCommentList", function() {
     beforeEach(function() {
-        var commentJson = rspecFixtures.commentJson();
+        var commentJson = backboneFixtures.commentJson();
 
         this.view = new chorus.views.SearchResultCommentList({
             comments: [

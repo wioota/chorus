@@ -1,6 +1,6 @@
 describe("chorus.models.DataSourceUsage", function() {
     beforeEach(function() {
-        this.usage = rspecFixtures.dataSourceDetails();
+        this.usage = backboneFixtures.dataSourceDetails();
         this.usage.set({ dataSourceId: 123 });
         this.workspaces = this.usage.get('workspaces');
     });

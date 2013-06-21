@@ -1,6 +1,6 @@
 describe("chorus.views.TableauWorkfileContentDetails", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workfile.tableau();
+        this.model = backboneFixtures.workfile.tableau();
         this.model.set({workbookUrl: 'http://example.com/workbooks/myWorkbook'});
         this.view = new chorus.views.TableauWorkfileContentDetails({ model: this.model });
     });

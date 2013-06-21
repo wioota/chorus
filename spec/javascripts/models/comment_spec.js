@@ -1,6 +1,6 @@
 describe("chorus.models.Comment", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.comment({
+        this.model = backboneFixtures.comment({
             id: '41',
             author: {
                 id: "45",

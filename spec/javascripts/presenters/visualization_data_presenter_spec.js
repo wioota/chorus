@@ -1,7 +1,7 @@
 describe("chorus.presenters.visualizations", function() {
     describe("Timeseries", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.timeseriesTask({
+            this.model = backboneFixtures.timeseriesTask({
                 rows: [
                     { time: '2012-01-01', value: 321 },
                     { time: '2012-02-21', value: 124 },
@@ -39,7 +39,7 @@ describe("chorus.presenters.visualizations", function() {
 
         describe("with time-only data", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.timeseriesTask({
+                this.model = backboneFixtures.timeseriesTask({
                     rows: [
                         { time: '0000-00-00 01:02:03', value: 321 },
                         { time: '2012-02-21 03:04:05', value: 124 }
@@ -62,7 +62,7 @@ describe("chorus.presenters.visualizations", function() {
 
     describe("Boxplot", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.boxplotTask({
+            this.model = backboneFixtures.boxplotTask({
                 rows: [
                     { bucket: 'beluga', min: 100, firstQuartile: 100, median: 250, thirdQuartile: 300, max: 400, percentage: "25.3%" },
                     { bucket: 'aardvark', min: 1, firstQuartile: 1, median: 2.5, thirdQuartile: 3, max: 4, percentage: "25%" },
@@ -88,7 +88,7 @@ describe("chorus.presenters.visualizations", function() {
         });
 
         it("makes sure minY and maxY aren't the same", function() {
-            this.model = rspecFixtures.boxplotTask({
+            this.model = backboneFixtures.boxplotTask({
                 rows: [
                     { bucket: 'beluga', min: -100, firstQuartile: -100, median: -100, thirdQuartile: -100, max: -100, percentage: "25.3%" }
                 ]
@@ -101,7 +101,7 @@ describe("chorus.presenters.visualizations", function() {
 
     describe("histogram", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.histogramTask({
+            this.model = backboneFixtures.histogramTask({
                 rows: [
                     { bin: [0,9], frequency: 5 },
                     { bin: [10,19], frequency: 8 },
@@ -124,7 +124,7 @@ describe("chorus.presenters.visualizations", function() {
 
     describe("Heatmap", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.heatmapTask({
+            this.model = backboneFixtures.heatmapTask({
                 rows: [
                     { yLabel: [30, 71.8], xLabel: [0, 1.8], value: 39541, y: 1, x: 1 },
                     { yLabel: [71.8, 113.6], xLabel: [0, 1.8], value: 39873, y: 2, x: 1 },

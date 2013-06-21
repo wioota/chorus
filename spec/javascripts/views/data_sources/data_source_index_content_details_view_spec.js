@@ -1,16 +1,16 @@
 describe("chorus.views.DataSourceIndexContentDetails", function() {
     beforeEach(function() {
         var dataSources = new chorus.collections.DataSourceSet([
-            rspecFixtures.gpdbDataSource(),
-            rspecFixtures.gpdbDataSource()
+            backboneFixtures.gpdbDataSource(),
+            backboneFixtures.gpdbDataSource()
         ]);
         var hdfsDataSources = new chorus.collections.HdfsDataSourceSet([
-            rspecFixtures.hdfsDataSource(),
-            rspecFixtures.hdfsDataSource()
+            backboneFixtures.hdfsDataSource(),
+            backboneFixtures.hdfsDataSource()
         ]);
         var gnipDataSources = new chorus.collections.GnipDataSourceSet([
-            rspecFixtures.gnipDataSource(),
-            rspecFixtures.gnipDataSource()
+            backboneFixtures.gnipDataSource(),
+            backboneFixtures.gnipDataSource()
         ]);
 
         this.view = new chorus.views.DataSourceIndexContentDetails({

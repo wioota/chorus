@@ -1,7 +1,7 @@
 describe("chorus.dialogs.ImportScheduler", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-        this.importSchedules = rspecFixtures.datasetImportScheduleSet();
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable();
+        this.importSchedules = backboneFixtures.datasetImportScheduleSet();
         _.extend(this.importSchedules.attributes, {
             datasetId: this.dataset.get('id'),
             workspaceId: this.dataset.get("workspace").id
@@ -11,7 +11,7 @@ describe("chorus.dialogs.ImportScheduler", function() {
             datasetId: this.dataset.get('id'),
             workspaceId: this.dataset.get('workspace').id
         });
-        this.workspace = rspecFixtures.workspace(this.dataset.get('workspace'));
+        this.workspace = backboneFixtures.workspace(this.dataset.get('workspace'));
         this.importSchedule.unset('sampleCount');
         this.importSchedule.unset('id');
     });

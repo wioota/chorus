@@ -1,7 +1,7 @@
 describe("chorus.views.SqlWorkfileContentView", function() {
     beforeEach(function() {
-        this.workfile = rspecFixtures.workfile.sql({ versionInfo: { content: "select * from foos where bar_id = 1;" } });
-        this.schema = rspecFixtures.schema({
+        this.workfile = backboneFixtures.workfile.sql({ versionInfo: { content: "select * from foos where bar_id = 1;" } });
+        this.schema = backboneFixtures.schema({
             id: '4',
             name: "schema",
             database: {
@@ -120,7 +120,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         beforeEach(function() {
                             this.spy = jasmine.createSpy();
                             chorus.PageEvents.on("workfile:changed", this.spy);
-                            this.server.lastCreate().succeed(rspecFixtures.workfileExecutionResults());
+                            this.server.lastCreate().succeed(backboneFixtures.workfileExecutionResults());
                         });
 
                         it("triggers file:executionSucceeded", function() {
@@ -190,7 +190,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
             describe("with selected text", function() {
                 context("when the workfile has an execution schema, and/or the workspace has a sandbox", function() {
                     beforeEach(function() {
-                        this.schema = rspecFixtures.schema({id: "77", database: {id: "88", dataSource: {id: "99"}}});
+                        this.schema = backboneFixtures.schema({id: "77", database: {id: "88", dataSource: {id: "99"}}});
                         spyOn(this.view.textContent.editor, "getSelection").andReturn("select 1 from table");
                     });
 

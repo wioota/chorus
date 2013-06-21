@@ -27,9 +27,9 @@ describe("chorus.dialogs.PickWorkspace", function() {
         context("when the fetch completes", function() {
             beforeEach(function() {
                 this.server.completeFetchAllFor(this.dialog.collection, [
-                    rspecFixtures.workspace({name: "Foo"}),
-                    rspecFixtures.workspace({name: "Bar"}),
-                    rspecFixtures.workspace({name: "Baz"})
+                    backboneFixtures.workspace({name: "Foo"}),
+                    backboneFixtures.workspace({name: "Bar"}),
+                    backboneFixtures.workspace({name: "Baz"})
                 ]);
             });
 

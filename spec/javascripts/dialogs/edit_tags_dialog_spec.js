@@ -1,14 +1,14 @@
 describe("chorus.dialogs.EditTags", function() {
     beforeEach(function() {
-        this.model1 = rspecFixtures.workfile.sql({tags: [
+        this.model1 = backboneFixtures.workfile.sql({tags: [
             {name: "tag1"},
             {name: "tag2"}
         ]});
-        this.model2 = rspecFixtures.workfile.sql({tags: [
+        this.model2 = backboneFixtures.workfile.sql({tags: [
             {name: "tag1"},
             {name: "tag3"}
         ]});
-        this.collection = rspecFixtures.workfileSet();
+        this.collection = backboneFixtures.workfileSet();
         this.collection.reset([
             this.model1.attributes, this.model2.attributes
         ]);
@@ -56,19 +56,19 @@ describe("chorus.dialogs.EditTags", function() {
 
     describe("editing tags", function() {
         beforeEach(function() {
-            this.model1 = rspecFixtures.workfile.sql({
+            this.model1 = backboneFixtures.workfile.sql({
                 tags: [
                     {name: "tag1"},
                     {name: "tag2"}
                 ]
             });
-            this.model2 = rspecFixtures.workfile.sql({
+            this.model2 = backboneFixtures.workfile.sql({
                 tags: [
                     {name: "tag1"},
                     {name: "tag3"}
                 ]
             });
-            this.collection = rspecFixtures.workfileSet();
+            this.collection = backboneFixtures.workfileSet();
             this.collection.reset([this.model1, this.model2]);
             this.dialog = new chorus.dialogs.EditTags({collection: this.collection});
             spyOn(this.collection, "updateTags").andCallThrough();

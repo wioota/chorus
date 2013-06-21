@@ -10,7 +10,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
                 workspaceId: "22",
                 entityType: "dataset",
                 allowWorkspaceAttachments: "true",
-                pageModel: rspecFixtures.workspaceDataset.datasetTable(),
+                pageModel: backboneFixtures.workspaceDataset.datasetTable(),
                 attachVisualization: {
                     fileName: "hello-frequency.png",
                     svgData: "<svg/>"

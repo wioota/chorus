@@ -1,6 +1,6 @@
 describe("chorus.views.SearchDataSource", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.hdfsDataSource();
+        this.model = backboneFixtures.hdfsDataSource();
         this.model.tags().reset([{name: "tag1"}, {name: "tag2"}]);
         this.view = new chorus.views.SearchDataSource({ model: this.model });
         this.view.render();

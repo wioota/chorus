@@ -1,12 +1,12 @@
 describe("chorus.views.DashboardDataSourceList", function() {
     beforeEach(function(){
-        this.dataSource1 = rspecFixtures.oracleDataSource({ name: "broccoli" });
-        this.dataSource2 = rspecFixtures.hdfsDataSource({ name: "Camels" });
-        this.dataSource3 = rspecFixtures.hdfsDataSource({ name: "doppler" });
-        this.dataSource4 = rspecFixtures.gpdbDataSource({ name: "Ego" });
-        this.dataSource5 = rspecFixtures.gpdbDataSource({ name: "fatoush" });
-        this.dataSource6 = rspecFixtures.gnipDataSource({ name: "kangaroo" });
-        this.dataSource7 = rspecFixtures.gnipDataSource({ name: "chicken" });
+        this.dataSource1 = backboneFixtures.oracleDataSource({ name: "broccoli" });
+        this.dataSource2 = backboneFixtures.hdfsDataSource({ name: "Camels" });
+        this.dataSource3 = backboneFixtures.hdfsDataSource({ name: "doppler" });
+        this.dataSource4 = backboneFixtures.gpdbDataSource({ name: "Ego" });
+        this.dataSource5 = backboneFixtures.gpdbDataSource({ name: "fatoush" });
+        this.dataSource6 = backboneFixtures.gnipDataSource({ name: "kangaroo" });
+        this.dataSource7 = backboneFixtures.gnipDataSource({ name: "chicken" });
         this.collection = new chorus.collections.DataSourceSet([
             this.dataSource5,
             this.dataSource2,

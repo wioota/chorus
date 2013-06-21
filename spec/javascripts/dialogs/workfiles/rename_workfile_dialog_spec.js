@@ -1,7 +1,7 @@
 describe("chorus.dialogs.RenameWorkfile", function() {
     context("when the workfile is sql", function() {
         beforeEach(function(){
-            this.workfile = rspecFixtures.workfile.sql({fileName: "originalName.sql"});
+            this.workfile = backboneFixtures.workfile.sql({fileName: "originalName.sql"});
             this.dialog = new chorus.dialogs.RenameWorkfile({model: this.workfile});
             this.dialog.render();
         });
@@ -28,7 +28,7 @@ describe("chorus.dialogs.RenameWorkfile", function() {
     });
 
     beforeEach(function() {
-        this.workfile = rspecFixtures.workfile.image({fileName: "originalName"});
+        this.workfile = backboneFixtures.workfile.image({fileName: "originalName"});
         this.dialog = new chorus.dialogs.RenameWorkfile({model: this.workfile});
         this.dialog.render();
     });

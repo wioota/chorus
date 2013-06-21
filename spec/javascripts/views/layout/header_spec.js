@@ -1,6 +1,6 @@
 describe("chorus.views.Header", function() {
     beforeEach(function() {
-        chorus.session = rspecFixtures.session({user: {id: 55}});
+        chorus.session = backboneFixtures.session({user: {id: 55}});
         chorus._navigated();
         this.view = new chorus.views.Header();
         spyOn(this.view, "render").andCallThrough();
@@ -31,25 +31,25 @@ describe("chorus.views.Header", function() {
             this.view.render.reset();
 
             this.server.completeFetchFor(this.view.notifications, [
-                rspecFixtures.notification({id: '1'}),
-                rspecFixtures.notification({id: '2'}),
-                rspecFixtures.notification({id: '3'}),
-                rspecFixtures.notification({id: '4'}),
-                rspecFixtures.notification({id: '5'}),
-                rspecFixtures.notification({id: '6'}),
-                rspecFixtures.notification({id: '7'})
+                backboneFixtures.notification({id: '1'}),
+                backboneFixtures.notification({id: '2'}),
+                backboneFixtures.notification({id: '3'}),
+                backboneFixtures.notification({id: '4'}),
+                backboneFixtures.notification({id: '5'}),
+                backboneFixtures.notification({id: '6'}),
+                backboneFixtures.notification({id: '7'})
             ]);
         });
 
         context("when there are at least 5 unread notifications", function() {
             beforeEach(function() {
                 this.server.completeFetchAllFor(this.view.unreadNotifications, [
-                    rspecFixtures.notification(),
-                    rspecFixtures.notification(),
-                    rspecFixtures.notification(),
-                    rspecFixtures.notification(),
-                    rspecFixtures.notification(),
-                    rspecFixtures.notification()
+                    backboneFixtures.notification(),
+                    backboneFixtures.notification(),
+                    backboneFixtures.notification(),
+                    backboneFixtures.notification(),
+                    backboneFixtures.notification(),
+                    backboneFixtures.notification()
                 ]);
             });
 
@@ -69,8 +69,8 @@ describe("chorus.views.Header", function() {
             beforeEach(function() {
                 this.server.completeFetchAllFor(this.view.unreadNotifications,
                     [
-                        rspecFixtures.notification({ id: '1' }),
-                        rspecFixtures.notification({ id: '2' })
+                        backboneFixtures.notification({ id: '1' }),
+                        backboneFixtures.notification({ id: '2' })
                     ],
                     null,
                     {
@@ -100,8 +100,8 @@ describe("chorus.views.Header", function() {
             this.view.session.trigger("loaded");
             this.server.completeFetchAllFor(this.view.unreadNotifications,
                 [
-                    rspecFixtures.notification(),
-                    rspecFixtures.notification()
+                    backboneFixtures.notification(),
+                    backboneFixtures.notification()
                 ],
                 null,
                 {
@@ -111,11 +111,11 @@ describe("chorus.views.Header", function() {
                 });
             this.server.completeFetchFor(this.view.notifications,
                 [
-                    rspecFixtures.notification(),
-                    rspecFixtures.notification(),
-                    rspecFixtures.notification(),
-                    rspecFixtures.notification(),
-                    rspecFixtures.notification()
+                    backboneFixtures.notification(),
+                    backboneFixtures.notification(),
+                    backboneFixtures.notification(),
+                    backboneFixtures.notification(),
+                    backboneFixtures.notification()
                 ]);
         });
 
@@ -454,10 +454,10 @@ describe("chorus.views.Header", function() {
                         beforeEach(function() {
                             this.server.completeFetchAllFor(this.view.unreadNotifications, [], null, { total: 0, page: 1, records: 0 });
                             this.server.completeFetchAllFor(this.view.notifications, [
-                                rspecFixtures.notification(),
-                                rspecFixtures.notification(),
-                                rspecFixtures.notification(),
-                                rspecFixtures.notification()
+                                backboneFixtures.notification(),
+                                backboneFixtures.notification(),
+                                backboneFixtures.notification(),
+                                backboneFixtures.notification()
                             ]);
                         });
 
@@ -482,8 +482,8 @@ describe("chorus.views.Header", function() {
     context("when in dev mode", function() {
         beforeEach(function() {
             this.users = new chorus.collections.UserSet([
-                rspecFixtures.user({firstName: "user", lastName: "one", id: "1", admin: false}),
-                rspecFixtures.user({firstName: "user", lastName: "two", id: "2", admin: false})
+                backboneFixtures.user({firstName: "user", lastName: "one", id: "1", admin: false}),
+                backboneFixtures.user({firstName: "user", lastName: "two", id: "2", admin: false})
             ]);
             chorus.isDevMode.andReturn(true);
 
@@ -541,7 +541,7 @@ describe("chorus.views.Header", function() {
 
                     context("when the login finish successfully", function() {
                         beforeEach(function() {
-                            this.server.completeSaveFor(chorus.session, rspecFixtures.session({user: this.users.at(0).attributes}));
+                            this.server.completeSaveFor(chorus.session, backboneFixtures.session({user: this.users.at(0).attributes}));
                         });
 
                         it("updates the chorus.session.user model", function() {

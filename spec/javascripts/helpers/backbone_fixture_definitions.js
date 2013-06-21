@@ -1,4 +1,4 @@
-window.rspecFixtureDefinitions = {
+window.BackboneFixtureDefinitions = {
     activity: {
         unique: [ "id" ],
 

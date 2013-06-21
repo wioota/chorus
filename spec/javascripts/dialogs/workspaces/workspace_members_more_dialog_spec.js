@@ -1,7 +1,7 @@
 describe("chorus.dialogs.WorkspaceMembersMore", function() {
     var workspace, dialog;
     beforeEach(function() {
-        workspace = rspecFixtures.workspace();
+        workspace = backboneFixtures.workspace();
         dialog = new chorus.dialogs.WorkspaceMembersMore({ pageModel: workspace });
         this.choice = "lastName";
     });
@@ -27,7 +27,7 @@ describe("chorus.dialogs.WorkspaceMembersMore", function() {
 
                 this.members = new chorus.collections.UserSet();
                 _.times(25, function() {
-                    self.members.add(rspecFixtures.user());
+                    self.members.add(backboneFixtures.user());
                 });
 
                 this.sortedMembers = _.sortBy(this.members.models, function(member) {

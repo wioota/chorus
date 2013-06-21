@@ -72,6 +72,7 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
   gem 'fakeweb'
   gem 'jshint_on_rails'
   gem 'sunspot_solr', :github => 'taktsoft/sunspot' # https://github.com/sunspot/sunspot/pull/267
+  gem 'backbone_fixtures_rails', :github => "pivotal-chorus/backbone_fixtures_rails"
 end
 
 group :development do

@@ -2,7 +2,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
     stubKeyboardMetaKey();
     beforeEach(function() {
         chorus._navigated();
-        this.textfile = rspecFixtures.workfile.text();
+        this.textfile = backboneFixtures.workfile.text();
         spyOn(this.textfile.workspace(), 'isActive').andReturn(true);
         this.view = new chorus.views.TextWorkfileContent({model: this.textfile, hotkeys: { 'r': 'some:event' }});
         this.saveInterval = this.view.saveInterval;

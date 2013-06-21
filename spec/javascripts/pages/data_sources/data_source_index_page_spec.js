@@ -68,14 +68,14 @@ describe("chorus.pages.DataSourceIndexPage", function() {
         });
 
         it("sets the page model when a 'data_source:selected' event is triggered", function() {
-            var dataSource = rspecFixtures.gpdbDataSource();
+            var dataSource = backboneFixtures.gpdbDataSource();
             expect(this.page.model).not.toBe(dataSource);
             chorus.PageEvents.trigger('data_source:selected', dataSource);
             expect(this.page.model).toBe(dataSource);
         });
 
         it("clears the page model when a 'clear_selection' event is triggered", function() {
-            var dataSource = rspecFixtures.gpdbDataSource();
+            var dataSource = backboneFixtures.gpdbDataSource();
             chorus.PageEvents.trigger('data_source:selected', dataSource);
             chorus.PageEvents.trigger('clear_selection');
             expect(this.page.model).toBeUndefined();
@@ -95,17 +95,17 @@ describe("chorus.pages.DataSourceIndexPage", function() {
     describe("when the data sources are fetched", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(this.dataSourceSet, [
-                rspecFixtures.oracleDataSource(),
-                rspecFixtures.gpdbDataSource()
+                backboneFixtures.oracleDataSource(),
+                backboneFixtures.gpdbDataSource()
             ]);
 
             this.server.completeFetchAllFor(this.hdfsDataSourceSet, [
-                rspecFixtures.hdfsDataSource(),
-                rspecFixtures.hdfsDataSource()
+                backboneFixtures.hdfsDataSource(),
+                backboneFixtures.hdfsDataSource()
             ]);
             this.server.completeFetchAllFor(this.gnipDataSourceSet, [
-                rspecFixtures.gnipDataSource(),
-                rspecFixtures.gnipDataSource()
+                backboneFixtures.gnipDataSource(),
+                backboneFixtures.gnipDataSource()
             ]);
         });
 
@@ -134,7 +134,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
 
             context("when a row has been checked", function() {
                 beforeEach(function() {
-                    var dataSources = new chorus.collections.DataSourceSet([rspecFixtures.gpdbDataSource()]);
+                    var dataSources = new chorus.collections.DataSourceSet([backboneFixtures.gpdbDataSource()]);
                     chorus.PageEvents.trigger("data_source:checked", dataSources);
                 });
 

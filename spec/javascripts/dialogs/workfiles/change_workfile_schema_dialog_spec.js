@@ -1,6 +1,6 @@
 describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workfile.sql();
+        this.model = backboneFixtures.workfile.sql();
         this.dialog = new chorus.dialogs.ChangeWorkfileSchema({ model: this.model });
         this.dialog.render();
     });
@@ -25,8 +25,8 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
 
     describe("pre-populating the current schema", function() {
         beforeEach(function() {
-            this.executionSchema = rspecFixtures.schema({id: 321});
-            this.model = rspecFixtures.workfile.sql();
+            this.executionSchema = backboneFixtures.schema({id: 321});
+            this.model = backboneFixtures.workfile.sql();
             this.model._executionSchema = this.executionSchema;
             this.dialog = new chorus.dialogs.ChangeWorkfileSchema({ model: this.model });
             this.dialog.render();
@@ -135,7 +135,7 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
 
     context("when the SchemaPicker triggers an error", function() {
         beforeEach(function() {
-            var modelWithError = rspecFixtures.schemaSet();
+            var modelWithError = backboneFixtures.schemaSet();
             modelWithError.serverErrors = { fields: { a: { BLANK: {} } } };
             this.dialog.schemaPicker.trigger("error", modelWithError);
         });

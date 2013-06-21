@@ -42,7 +42,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
         context("when the model is a directory", function() {
             beforeEach(function() {
-                this.hdfsEntry = rspecFixtures.hdfsDir();
+                this.hdfsEntry = backboneFixtures.hdfsDir();
                 chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
             });
 
@@ -137,7 +137,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                     it("show the user an error", function() {
                         spyOn(chorus, 'toast');
                         this.view.$('a.external_table').click();
-                        this.server.lastFetchFor(this.hdfsEntry).failUnprocessableEntity(rspecFixtures.hdfsContentsErrorJson().errors);
+                        this.server.lastFetchFor(this.hdfsEntry).failUnprocessableEntity(backboneFixtures.hdfsContentsErrorJson().errors);
 
                         expect(chorus.toast).toHaveBeenCalledWith("record_error.HDFS_CONTENTS_UNAVAILABLE");
                     });

@@ -2,10 +2,10 @@ describe("chorus.views.DataTabDatasetList", function() {
     beforeEach(function() {
         spyOn(chorus.PageEvents, "trigger").andCallThrough();
         this.collection = new chorus.collections.SchemaDatasetSet([
-            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "1234",  entitySubtype: "SANDBOX_TABLE", objectType: "TABLE" }),
-            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "Data1", entitySubtype: "SANDBOX_TABLE", objectType: "VIEW" }),
-            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "Data2", entitySubtype: "SANDBOX_TABLE", objectType: "TABLE" }),
-            rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "zebra", entitySubtype: "SANDBOX_TABLE", objectType: "VIEW" })
+            backboneFixtures.dataset({ schema: { name: "schema_name"}, objectName: "1234",  entitySubtype: "SANDBOX_TABLE", objectType: "TABLE" }),
+            backboneFixtures.dataset({ schema: { name: "schema_name"}, objectName: "Data1", entitySubtype: "SANDBOX_TABLE", objectType: "VIEW" }),
+            backboneFixtures.dataset({ schema: { name: "schema_name"}, objectName: "Data2", entitySubtype: "SANDBOX_TABLE", objectType: "TABLE" }),
+            backboneFixtures.dataset({ schema: { name: "schema_name"}, objectName: "zebra", entitySubtype: "SANDBOX_TABLE", objectType: "VIEW" })
         ]);
         this.view = new chorus.views.DataTabDatasetList({collection: this.collection});
         this.view.render();
@@ -28,8 +28,8 @@ describe("chorus.views.DataTabDatasetList", function() {
         describe("pagination", function() {
             beforeEach(function() {
                 this.collection.reset([
-                    rspecFixtures.dataset({objectName: "Table 1"}),
-                    rspecFixtures.dataset({objectName: "Table 2"})
+                    backboneFixtures.dataset({objectName: "Table 1"}),
+                    backboneFixtures.dataset({objectName: "Table 2"})
                 ]);
             });
 
@@ -57,7 +57,7 @@ describe("chorus.views.DataTabDatasetList", function() {
                 context("after additional models are added to the collection", function() {
                     beforeEach(function() {
                         this.originalViews = this.view.datasetViews;
-                        this.collection.add(rspecFixtures.dataset({objectName: "Table 3"}));
+                        this.collection.add(backboneFixtures.dataset({objectName: "Table 3"}));
                     });
 
                     it('does not regenerate subviews immediately', function() {

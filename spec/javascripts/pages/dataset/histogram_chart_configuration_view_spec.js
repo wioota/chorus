@@ -2,8 +2,8 @@ describe("chorus.views.HistogramChartConfiguration", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
-                this.columns = rspecFixtures.databaseColumnSet();
-                this.columns.add(rspecFixtures.databaseColumn({typeCategory: 'SmellyThings'}));
+                this.columns = backboneFixtures.databaseColumnSet();
+                this.columns.add(backboneFixtures.databaseColumn({typeCategory: 'SmellyThings'}));
                 this.view = new chorus.views.HistogramChartConfiguration({collection: this.columns});
                 this.view.render();
             });

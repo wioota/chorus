@@ -60,7 +60,7 @@ describe("chorus.models.User", function() {
 
     describe("#workspaces", function() {
         beforeEach(function() {
-            this.user = rspecFixtures.user({username: "dr_charlzz", id: "457"});
+            this.user = backboneFixtures.user({username: "dr_charlzz", id: "457"});
             this.workspaces = this.user.workspaces();
         });
 
@@ -103,7 +103,7 @@ describe("chorus.models.User", function() {
 
     describe("#activeWorkspaces", function() {
         beforeEach(function() {
-            this.user = rspecFixtures.user({username: "dr_charlzz", id: "457"});
+            this.user = backboneFixtures.user({username: "dr_charlzz", id: "457"});
             this.workspaces = this.user.activeWorkspaces();
         });
 
@@ -144,7 +144,7 @@ describe("chorus.models.User", function() {
         });
 
         it("should return a truthy value for a valid user", function() {
-            var model = rspecFixtures.user();
+            var model = backboneFixtures.user();
             model.set({ password: "foo", passwordConfirmation: "foo" });
             expect(model.performValidation()).toBeTruthy();
         });
@@ -188,7 +188,7 @@ describe("chorus.models.User", function() {
 
         context("when the user is in LDAP", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.user({
+                this.model = backboneFixtures.user({
                     firstName: "bob",
                     lastName: "jenkins",
                     username: "bobjenk",
@@ -215,7 +215,7 @@ describe("chorus.models.User", function() {
 
         context("when the user is already saved", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.user({
+                this.model = backboneFixtures.user({
                     id: "5",
                     firstName: "bob",
                     lastName: "jenkins",
@@ -248,7 +248,7 @@ describe("chorus.models.User", function() {
 
         beforeEach(function() {
             spyOn(chorus, "cachebuster").andReturn(12345);
-            user = rspecFixtures.user({
+            user = backboneFixtures.user({
                 username: 'foo',
                 id: "bar",
                 image: {
@@ -278,7 +278,7 @@ describe("chorus.models.User", function() {
 
     describe("#createImageUrl", function() {
         it("gives the right url back", function() {
-            var user = rspecFixtures.user({
+            var user = backboneFixtures.user({
                 username: 'elephant',
                 id: "55"
             });
@@ -289,7 +289,7 @@ describe("chorus.models.User", function() {
 
     describe("#picklistImageUrl", function() {
         it("uses the right URL", function() {
-            var user = rspecFixtures.user({username: 'foo', id: "bar"});
+            var user = backboneFixtures.user({username: 'foo', id: "bar"});
             expect(user.picklistImageUrl()).toBe(user.fetchImageUrl({ size: "original" }));
         });
     });
@@ -305,7 +305,7 @@ describe("chorus.models.User", function() {
 
         context("when firstName and lastName are blank, but fullName exists", function() {
             it("uses fullName", function() {
-                var user = rspecFixtures.user({
+                var user = backboneFixtures.user({
                     firstName: '',
                     lastName: ''
                 });

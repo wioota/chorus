@@ -2,7 +2,7 @@ describe("chorus.dialogs.DatasetsAttach", function() {
     var datasetModels;
 
     beforeEach(function() {
-        datasetModels = [rspecFixtures.workspaceDataset.datasetTable(), rspecFixtures.workspaceDataset.datasetTable()];
+        datasetModels = [backboneFixtures.workspaceDataset.datasetTable(), backboneFixtures.workspaceDataset.datasetTable()];
 
         this.datasets = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: "33"});
 

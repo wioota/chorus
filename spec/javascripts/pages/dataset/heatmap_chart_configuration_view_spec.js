@@ -2,12 +2,12 @@ describe("chorus.views.HeatmapChartConfiguration", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
-                this.columns = rspecFixtures.databaseColumnSet([
+                this.columns = backboneFixtures.databaseColumnSet([
                     {typeCategory: 'REAL_NUMBER', name: "Rotten Eggs"},
                     {typeCategory: 'REAL_NUMBER', name: "Zesty Eggs"}
                 ]);
 
-                this.model = rspecFixtures.workspaceDataset.chorusView({objectName: "Foo"});
+                this.model = backboneFixtures.workspaceDataset.chorusView({objectName: "Foo"});
                 this.view = new chorus.views.HeatmapChartConfiguration({model: this.model, collection: this.columns});
 
                 spyOn(chorus, 'styleSelect').andCallFake(_.bind(function() {

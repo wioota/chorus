@@ -1,6 +1,6 @@
 describe("chorus.views.ActivityListHeader", function() {
     beforeEach(function() {
-        this.workspace = rspecFixtures.workspace();
+        this.workspace = backboneFixtures.workspace();
         this.collection = this.workspace.activities();
 
         this.view = new chorus.views.ActivityListHeader({
@@ -66,7 +66,7 @@ describe("chorus.views.ActivityListHeader", function() {
 
                 context("when it has a tag box subview in options", function() {
                     beforeEach(function() {
-                        this.workspace = rspecFixtures.workspace(
+                        this.workspace = backboneFixtures.workspace(
                             {tags: [{name: 'alpha'}]
                         });
                         this.view = new chorus.views.ActivityListHeader({

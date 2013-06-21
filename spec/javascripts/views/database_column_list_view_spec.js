@@ -1,9 +1,9 @@
 describe("chorus.views.DatabaseColumnList", function() {
     describe("#render", function() {
         beforeEach(function() {
-            this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+            this.dataset = backboneFixtures.workspaceDataset.datasetTable();
             this.dataset.setDatasetNumber(1);
-            this.collection = rspecFixtures.databaseColumnSet([
+            this.collection = backboneFixtures.databaseColumnSet([
                 {
                     name: "column_name_1",
                     typeCategory: "BOOLEAN",

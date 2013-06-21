@@ -12,6 +12,7 @@
 #
 src_files:
   - assets/application.js
+  - assets/backbone_fixtures.js
 
 non_spec_src_files:
 
@@ -36,8 +37,7 @@ stylesheets:
 #   - helpers/**/*.js
 #
 helpers:
-  - helpers/fixture_definitions.js
-  - helpers/fixture_generator.js
+  - helpers/backbone_fixture_definitions.js
   - helpers/shared_examples/_init.js
   - helpers/**/*.js
 

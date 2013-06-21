@@ -2,13 +2,13 @@ describe("chorus.views.TimeseriesChartConfiguration", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
-                this.columns = rspecFixtures.databaseColumnSet([
+                this.columns = backboneFixtures.databaseColumnSet([
                     {typeCategory: 'REAL_NUMBER', name: "Sandwich"},
                     {typeCategory: 'TIME', name: "Stopwatch"},
                     {typeCategory: 'FOO', name: "A Foo"}
                 ]);
 
-                this.model = rspecFixtures.workspaceDataset.chorusView({objectName: "Foo"});
+                this.model = backboneFixtures.workspaceDataset.chorusView({objectName: "Foo"});
                 this.valueMenuQtip = stubQtip(".value .limiter a");
                 this.timeMenuQtip = stubQtip(".time .limiter a");
                 this.view = new chorus.views.TimeseriesChartConfiguration({model: this.model, collection: this.columns});
@@ -73,7 +73,7 @@ describe("chorus.views.TimeseriesChartConfiguration", function() {
 
         context("with half of the columns", function() {
             beforeEach(function() {
-                this.columns = rspecFixtures.databaseColumnSet([{typeCategory: 'REAL_NUMBER', name: "Sandwich"}]);
+                this.columns = backboneFixtures.databaseColumnSet([{typeCategory: 'REAL_NUMBER', name: "Sandwich"}]);
                 this.view = new chorus.views.TimeseriesChartConfiguration({model: this.model, collection: this.columns});
                 this.view.render();
             });

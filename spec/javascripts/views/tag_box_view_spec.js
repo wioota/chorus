@@ -1,6 +1,6 @@
 describe("chorus.views.TagBox", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workfile.sql({
+        this.model = backboneFixtures.workfile.sql({
             tags: []
         });
         this.model.loaded = false;

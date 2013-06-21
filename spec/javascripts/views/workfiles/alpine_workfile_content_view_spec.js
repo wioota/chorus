@@ -1,6 +1,6 @@
 describe("chorus.views.AlpineWorkfileContent", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workfile.alpine();
+        this.model = backboneFixtures.workfile.alpine();
         this.view = new chorus.views.AlpineWorkfileContent({ model: this.model });
         this.view.render();
     });

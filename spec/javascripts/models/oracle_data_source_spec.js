@@ -1,6 +1,6 @@
 describe("chorus.models.OracleDataSource", function() {
     beforeEach(function() {
-        this.dataSource = rspecFixtures.oracleDataSource({id: 1});
+        this.dataSource = backboneFixtures.oracleDataSource({id: 1});
         this.dataSource.set({
             dbName: 'RockinDB',
             dbUsername: 'system',

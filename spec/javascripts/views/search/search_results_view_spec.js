@@ -1,6 +1,6 @@
 describe("chorus.views.SearchResults", function() {
     var makeSearchResults = function() {
-        var results = rspecFixtures.searchResult();
+        var results = backboneFixtures.searchResult();
         results.set({
             entityType: "all",
             workspaceId: '10001'
@@ -10,7 +10,7 @@ describe("chorus.views.SearchResults", function() {
 
     context("when there are no search results", function() {
         beforeEach(function() {
-            this.model = rspecFixtures.emptySearchResult();
+            this.model = backboneFixtures.emptySearchResult();
             this.model.set({ query: "foo" });
             this.view = new chorus.views.SearchResults({model: this.model});
             this.view.render();
@@ -102,7 +102,7 @@ describe("chorus.views.SearchResults", function() {
 
         context("when searching for only workfiles in a particular workspace", function() {
             beforeEach(function() {
-                this.model = rspecFixtures.searchResultInWorkspaceWithEntityTypeWorkfile();
+                this.model = backboneFixtures.searchResultInWorkspaceWithEntityTypeWorkfile();
                 this.model.set({
                     entityType: "workfile",
                     workspaceId: "101",
@@ -144,7 +144,7 @@ describe("chorus.views.SearchResults", function() {
 
             context("when the li is in the 'this workspace' section", function() {
                 beforeEach(function() {
-                    this.model = rspecFixtures.searchResultInWorkspace();
+                    this.model = backboneFixtures.searchResultInWorkspace();
                     this.model.set({
                         workspaceId: "101",
                         searchIn: "this_workspace"
@@ -249,7 +249,7 @@ describe("chorus.views.SearchResults", function() {
 
             describe("when workspace specific items are found", function() {
                 beforeEach(function() {
-                    this.model = rspecFixtures.searchResultInWorkspace();
+                    this.model = backboneFixtures.searchResultInWorkspace();
                     this.model.set({
                         workspaceId: "101",
                         searchIn: "this_workspace"

@@ -1,6 +1,6 @@
 describe("chorus.views.DataTabDataset", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.dataset({ schema: { name: "schema_name"}, objectName: "1234",  entitySubtype: "SANDBOX_TABLE", objectType: "TABLE" });
+        this.dataset = backboneFixtures.dataset({ schema: { name: "schema_name"}, objectName: "1234",  entitySubtype: "SANDBOX_TABLE", objectType: "TABLE" });
         this.view = new chorus.views.DataTabDataset({model: this.dataset});
         this.qtip = stubQtip();
         this.view.render();
@@ -26,7 +26,7 @@ describe("chorus.views.DataTabDataset", function() {
         it("toggles the column list", function() {
             this.view.$('.name a').click();
             this.server.completeFetchAllFor(this.dataset.columns(), [
-                rspecFixtures.databaseColumn({name: "column_1"})
+                backboneFixtures.databaseColumn({name: "column_1"})
             ]);
             expect(this.view.$(".data_tab_dataset_column_list")).toContainText("column_1");
 
@@ -39,7 +39,7 @@ describe("chorus.views.DataTabDataset", function() {
         beforeEach(function() {
             this.view.$('.toggle_visibility').click();
             this.server.completeFetchAllFor(this.dataset.columns(), [
-                rspecFixtures.databaseColumn({name: "column_1"})
+                backboneFixtures.databaseColumn({name: "column_1"})
             ]);
         });
 

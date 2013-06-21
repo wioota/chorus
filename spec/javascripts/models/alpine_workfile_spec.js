@@ -1,7 +1,7 @@
 describe("chorus.models.AlpineWorkfile", function() {
     beforeEach(function() {
         loadConfig();
-        this.model = rspecFixtures.workfile.alpine({
+        this.model = backboneFixtures.workfile.alpine({
             fileName: "hello.afm",
             id: "23",
             workspace: {id: "32"},
@@ -60,7 +60,7 @@ describe("chorus.models.AlpineWorkfile", function() {
 
     context('when the execution location is an hdfs data source', function() {
         beforeEach(function() {
-            this.model = rspecFixtures.workfile.alpineHdfs({
+            this.model = backboneFixtures.workfile.alpineHdfs({
                 fileName: "hello.afm",
                 id: "23",
                 workspace: {id: "32"}

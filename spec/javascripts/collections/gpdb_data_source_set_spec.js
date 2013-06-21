@@ -1,11 +1,11 @@
 describe("chorus.collections.GpdbDataSourceSet", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.GpdbDataSourceSet([
-            rspecFixtures.gpdbDataSource({ name: "Gun_instance" }),
-            rspecFixtures.gpdbDataSource({ name: "cat_instance" }),
-            rspecFixtures.gpdbDataSource({ name: "Fat_instance" }),
-            rspecFixtures.gpdbDataSource({ name: "egg_instance" }),
-            rspecFixtures.gpdbDataSource({ name: "Dog_instance" })
+            backboneFixtures.gpdbDataSource({ name: "Gun_instance" }),
+            backboneFixtures.gpdbDataSource({ name: "cat_instance" }),
+            backboneFixtures.gpdbDataSource({ name: "Fat_instance" }),
+            backboneFixtures.gpdbDataSource({ name: "egg_instance" }),
+            backboneFixtures.gpdbDataSource({ name: "Dog_instance" })
         ]);
     });
 

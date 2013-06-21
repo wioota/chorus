@@ -2,7 +2,7 @@ describe("chorus.views.DataTab", function () {
     beforeEach(function () {
         spyOn(chorus.PageEvents, "trigger").andCallThrough();
 
-        chorus.page = { workspace:rspecFixtures.workspace({name:"new_workspace"}) };
+        chorus.page = { workspace:backboneFixtures.workspace({name:"new_workspace"}) };
         this.schema = chorus.page.workspace.sandbox().schema();
         spyOn(chorus.views.DataTabDatasetList.prototype, "rebuildDatasetViews").andCallThrough();
         this.view = new chorus.views.DataTab({schema:this.schema});
@@ -30,14 +30,14 @@ describe("chorus.views.DataTab", function () {
                 var datasets, schemas;
                 beforeEach(function () {
                     schemas = new chorus.collections.SchemaSet([
-                        rspecFixtures.schema({name:"Schema 1"}),
-                        rspecFixtures.schema({name:"Schema 2"})
+                        backboneFixtures.schema({name:"Schema 1"}),
+                        backboneFixtures.schema({name:"Schema 2"})
                     ]);
 
                     spyOn(this.view, "render").andCallThrough();
                     this.server.completeFetchFor(this.view.schemas, schemas.models);
                     this.server.completeFetchFor(this.schema.datasets(), [
-                        rspecFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" })
+                        backboneFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" })
                     ]);
                     this.view.render();
 
@@ -104,7 +104,7 @@ describe("chorus.views.DataTab", function () {
                         beforeEach(function () {
                             this.view.listview.render.reset();
                             this.server.completeFetchFor(this.schema.datasets(), [
-                                rspecFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" })
+                                backboneFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" })
                             ], {page:2});
                         });
 
@@ -140,7 +140,7 @@ describe("chorus.views.DataTab", function () {
                 });
 
                 it("renders the datasets after the fetch completes", function() {
-                    this.server.completeFetchFor(this.view.collection, [rspecFixtures.dataset()]);
+                    this.server.completeFetchFor(this.view.collection, [backboneFixtures.dataset()]);
                     expect(this.view.render).toHaveBeenCalled();
                 });
             });
@@ -190,7 +190,7 @@ describe("chorus.views.DataTab", function () {
         context("after the tables and views are loaded", function () {
             beforeEach(function () {
                 this.server.completeFetchFor(this.schema.datasets(), [
-                    rspecFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" })
+                    backboneFixtures.dataset({ objectName:"Data1", entitySubtype:"SANDBOX_TABLE", objectType:"VIEW" })
                 ]);
                 this.qtip = stubQtip("li");
                 this.view.render();
@@ -285,13 +285,13 @@ describe("chorus.views.DataTab", function () {
 
     describe("after workfile changed", function () {
         beforeEach(function () {
-            this.executionSchema = rspecFixtures.workspace().sandbox().schema();
+            this.executionSchema = backboneFixtures.workspace().sandbox().schema();
         });
 
         context("when the workfile execution schema is this workspace", function() {
             beforeEach(function() {
                 this.view.setSchemaToCurrentWorkspace();
-                chorus.PageEvents.trigger("workfile:changed", rspecFixtures.workfile.text({executionSchema: this.executionSchema.attributes}));
+                chorus.PageEvents.trigger("workfile:changed", backboneFixtures.workfile.text({executionSchema: this.executionSchema.attributes}));
             });
 
             it("updates focusSchema", function () {
@@ -301,7 +301,7 @@ describe("chorus.views.DataTab", function () {
 
         context("when the workfile execution schema is anything else", function() {
             beforeEach(function() {
-                chorus.PageEvents.trigger("workfile:changed", rspecFixtures.workfile.text({executionSchema: this.executionSchema.attributes}));
+                chorus.PageEvents.trigger("workfile:changed", backboneFixtures.workfile.text({executionSchema: this.executionSchema.attributes}));
             });
 
             it("updates focusSchema", function () {

@@ -1,6 +1,6 @@
 describe("chorus.pages.DashboardPage", function() {
     beforeEach(function() {
-        chorus.session = rspecFixtures.session();
+        chorus.session = backboneFixtures.session();
         this.page = new chorus.pages.DashboardPage();
     });
 
@@ -19,16 +19,16 @@ describe("chorus.pages.DashboardPage", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(this.page.dataSourceSet, [
-                                         rspecFixtures.gpdbDataSource(),
-                                         rspecFixtures.oracleDataSource()
+                                         backboneFixtures.gpdbDataSource(),
+                                         backboneFixtures.oracleDataSource()
             ]);
             this.server.completeFetchAllFor(this.page.hdfsDataSourceSet, [
-                                         rspecFixtures.hdfsDataSource(),
-                                         rspecFixtures.hdfsDataSource()
+                                         backboneFixtures.hdfsDataSource(),
+                                         backboneFixtures.hdfsDataSource()
             ]);
             this.server.completeFetchAllFor(this.page.gnipDataSourceSet, [
-                                         rspecFixtures.gnipDataSource(),
-                                         rspecFixtures.gnipDataSource()
+                                         backboneFixtures.gnipDataSource(),
+                                         backboneFixtures.gnipDataSource()
             ]);
 
             this.page.render();
@@ -60,12 +60,12 @@ describe("chorus.pages.DashboardPage", function() {
             beforeEach(function() {
                 this.server.completeFetchAllFor(
                     this.page.userSet,
-                    rspecFixtures.userSet()
+                    backboneFixtures.userSet()
                 );
             });
 
             it("shows the number of users", function() {
-                expect(this.page.$("#user_count a")).toContainTranslation("dashboard.user_count", {count: rspecFixtures.userSet().length});
+                expect(this.page.$("#user_count a")).toContainTranslation("dashboard.user_count", {count: backboneFixtures.userSet().length});
                 expect(this.page.$("#user_count")).not.toHaveClass("hidden");
             });
         });
@@ -74,18 +74,18 @@ describe("chorus.pages.DashboardPage", function() {
     context("#setup", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(this.page.dataSourceSet, [
-                rspecFixtures.gpdbDataSource(),
-                rspecFixtures.oracleDataSource()
+                backboneFixtures.gpdbDataSource(),
+                backboneFixtures.oracleDataSource()
             ]);
 
             this.server.completeFetchAllFor(this.page.hdfsDataSourceSet, [
-                rspecFixtures.hdfsDataSource(),
-                rspecFixtures.hdfsDataSource()
+                backboneFixtures.hdfsDataSource(),
+                backboneFixtures.hdfsDataSource()
             ]);
 
             this.server.completeFetchAllFor(this.page.gnipDataSourceSet, [
-                rspecFixtures.gnipDataSource(),
-                rspecFixtures.gnipDataSource()
+                backboneFixtures.gnipDataSource(),
+                backboneFixtures.gnipDataSource()
             ]);
         });
 

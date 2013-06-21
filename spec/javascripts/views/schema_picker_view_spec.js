@@ -104,21 +104,21 @@ describe("chorus.views.SchemaPicker", function() {
 
                 if(type === "dataSource") {
                     this.server.completeFetchAllFor(this.view.dataSourceView.collection, [
-                        rspecFixtures.gpdbDataSource({name: "Zoo"}),
-                        rspecFixtures.gpdbDataSource({name: "Aardvark"}),
-                        rspecFixtures.gpdbDataSource({name: "bear"})
+                        backboneFixtures.gpdbDataSource({name: "Zoo"}),
+                        backboneFixtures.gpdbDataSource({name: "Aardvark"}),
+                        backboneFixtures.gpdbDataSource({name: "bear"})
                     ]);
                 } else if(type === "schema") {
                     this.server.completeFetchFor(this.view.schemaView.collection, [
-                        rspecFixtures.schema({name: "Zoo"}),
-                        rspecFixtures.schema({name: "Aardvark"}),
-                        rspecFixtures.schema({name: "bear"})
+                        backboneFixtures.schema({name: "Zoo"}),
+                        backboneFixtures.schema({name: "Aardvark"}),
+                        backboneFixtures.schema({name: "bear"})
                     ]);
                 } else { // type === 'database'
                     this.server.completeFetchFor(this.view.databaseView.collection, [
-                        rspecFixtures.database({name: "Zoo"}),
-                        rspecFixtures.database({name: "Aardvark"}),
-                        rspecFixtures.database({name: "bear"})]);
+                        backboneFixtures.database({name: "Zoo"}),
+                        backboneFixtures.database({name: "Aardvark"}),
+                        backboneFixtures.database({name: "bear"})]);
                 }
 
                 var className = _.str.underscored(type);
@@ -135,7 +135,7 @@ describe("chorus.views.SchemaPicker", function() {
 
         context('when data source is provided', function() {
             beforeEach(function() {
-                this.dataSource = rspecFixtures.gpdbDataSource();
+                this.dataSource = backboneFixtures.gpdbDataSource();
                 this.view = new chorus.views.SchemaPicker({ dataSource: this.dataSource });
                 $("#jasmine_content").append(this.view.el);
                 this.view.render();
@@ -166,8 +166,8 @@ describe("chorus.views.SchemaPicker", function() {
 
         context('when a data source and a database are provided', function() {
             beforeEach(function() {
-                this.dataSource = rspecFixtures.gpdbDataSource();
-                this.database = rspecFixtures.database({dataSource: { id: this.dataSource.get("id") } });
+                this.dataSource = backboneFixtures.gpdbDataSource();
+                this.database = backboneFixtures.database({dataSource: { id: this.dataSource.get("id") } });
                 this.database.unset('id');
                 this.view = new chorus.views.SchemaPicker({ dataSource: this.dataSource, database: this.database });
 
@@ -195,7 +195,7 @@ describe("chorus.views.SchemaPicker", function() {
             context("when the schema fetch completes", function() {
                 beforeEach(function() {
                     spyOnEvent(this.view, 'change');
-                    this.server.completeFetchFor(this.database.schemas(), [rspecFixtures.schema()]);
+                    this.server.completeFetchFor(this.database.schemas(), [backboneFixtures.schema()]);
                     this.view.$(".schema select").prop("selectedIndex", 1).change();
                     $('#jasmine_content').append(this.view.el);
                 });
@@ -244,9 +244,9 @@ describe("chorus.views.SchemaPicker", function() {
                 context('when the data source list fetch completes', function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.view.dataSourceView.collection, [
-                            rspecFixtures.gpdbDataSource({ name: "<script>alert(hi)<script>", shared: true, id: 1 }),
-                            rspecFixtures.gpdbDataSource({ shared: true, id: 2 }),
-                            rspecFixtures.gpdbDataSource({ shared: false, id: 3 })
+                            backboneFixtures.gpdbDataSource({ name: "<script>alert(hi)<script>", shared: true, id: 1 }),
+                            backboneFixtures.gpdbDataSource({ shared: true, id: 2 }),
+                            backboneFixtures.gpdbDataSource({ shared: false, id: 3 })
                         ]);
                     });
 
@@ -317,7 +317,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                         context("when the database list fetch completes", function() {
                             beforeEach(function() {
-                                this.server.completeFetchFor(this.view.databaseView.collection, [rspecFixtures.database(), rspecFixtures.database()]);
+                                this.server.completeFetchFor(this.view.databaseView.collection, [backboneFixtures.database(), backboneFixtures.database()]);
                             });
 
                             itShowsSelect('database');
@@ -427,7 +427,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                                 context("when the schema list fetch completes", function() {
                                     beforeEach(function() {
-                                        this.server.completeFetchAllFor(this.view.schemaView.collection, [rspecFixtures.schema({name: 'SCHEMA!'})]);
+                                        this.server.completeFetchAllFor(this.view.schemaView.collection, [backboneFixtures.schema({name: 'SCHEMA!'})]);
                                     });
 
                                     itShowsSelect("schema");
@@ -697,8 +697,8 @@ describe("chorus.views.SchemaPicker", function() {
             context('when the data sources list does not include the selected data source', function() {
                 beforeEach(function() {
                     this.server.completeFetchAllFor(this.view.dataSourceView.collection, [
-                        rspecFixtures.gpdbDataSource({id: 1, name: "A"}),
-                        rspecFixtures.gpdbDataSource({id: 2, name: "B"})
+                        backboneFixtures.gpdbDataSource({id: 1, name: "A"}),
+                        backboneFixtures.gpdbDataSource({id: 2, name: "B"})
                     ]);
                     this.server.lastFetchAllFor(this.view.databaseView.collection).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                     this.server.lastFetchAllFor(this.view.schemaView.collection).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
@@ -724,9 +724,9 @@ describe("chorus.views.SchemaPicker", function() {
             context('when the data source list fetch completes', function() {
                 beforeEach(function() {
                     this.server.completeFetchAllFor(this.view.dataSourceView.collection, [
-                        rspecFixtures.gpdbDataSource(),
+                        backboneFixtures.gpdbDataSource(),
                         this.dataSource.attributes,
-                        rspecFixtures.gpdbDataSource()
+                        backboneFixtures.gpdbDataSource()
                     ]);
                 });
 
@@ -735,8 +735,8 @@ describe("chorus.views.SchemaPicker", function() {
                 context("when the databases list does not include the selected database", function() {
                     beforeEach(function() {
                         this.server.completeFetchAllFor(this.view.databaseView.collection, [
-                            rspecFixtures.database({id: 1, name: "A"}),
-                            rspecFixtures.database({id: 2, name: "B"})
+                            backboneFixtures.database({id: 1, name: "A"}),
+                            backboneFixtures.database({id: 2, name: "B"})
                         ]);
                         this.server.lastFetchAllFor(this.view.schemaView.collection).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                     });
@@ -749,9 +749,9 @@ describe("chorus.views.SchemaPicker", function() {
                 context("when the database list fetch completes", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.view.databaseView.collection, [
-                            rspecFixtures.database(),
+                            backboneFixtures.database(),
                             this.database.attributes,
-                            rspecFixtures.database()]);
+                            backboneFixtures.database()]);
                     });
 
                     itShowsSelect("database");
@@ -760,9 +760,9 @@ describe("chorus.views.SchemaPicker", function() {
                     context("when the schema list fetch completes", function() {
                         beforeEach(function() {
                             this.server.completeFetchAllFor(this.view.schemaView.collection, [
-                                rspecFixtures.schema(),
+                                backboneFixtures.schema(),
                                 this.schema.attributes,
-                                rspecFixtures.schema()
+                                backboneFixtures.schema()
                             ]);
                         });
 
@@ -787,7 +787,7 @@ describe("chorus.views.SchemaPicker", function() {
                         beforeEach(function() {
                             spyOnEvent(this.view, 'error');
                             this.server.completeFetchAllFor(this.view.schemaView.collection, [
-                                rspecFixtures.schema()
+                                backboneFixtures.schema()
                             ]);
                         });
 
@@ -827,11 +827,11 @@ describe("chorus.views.SchemaPicker", function() {
                 this.view = new chorus.views.SchemaPicker({ allowCreate: true });
                 $('#jasmine_content').append(this.view.el);
                 this.view.render();
-                this.server.completeFetchAllFor(this.view.dataSourceView.collection, [ rspecFixtures.gpdbDataSource({ id: '4' }) ]);
+                this.server.completeFetchAllFor(this.view.dataSourceView.collection, [ backboneFixtures.gpdbDataSource({ id: '4' }) ]);
                 this.view.$(".data_source select").val("4").change();
-                this.server.completeFetchFor(this.view.databaseView.collection, [ rspecFixtures.database({ id: '5' }) ]);
+                this.server.completeFetchFor(this.view.databaseView.collection, [ backboneFixtures.database({ id: '5' }) ]);
                 this.view.$(".database select").val("5").change();
-                this.server.completeFetchAllFor(this.view.schemaView.collection, [ rspecFixtures.schema({ id: '6' }) ]);
+                this.server.completeFetchAllFor(this.view.schemaView.collection, [ backboneFixtures.schema({ id: '6' }) ]);
                 this.view.$(".schema select").val("6").change();
             });
 
@@ -853,12 +853,12 @@ describe("chorus.views.SchemaPicker", function() {
         describe("#fieldValues", function() {
             context('with a data source provided', function() {
                 beforeEach(function() {
-                    this.dataSource = rspecFixtures.gpdbDataSource();
+                    this.dataSource = backboneFixtures.gpdbDataSource();
                     this.view = new chorus.views.SchemaPicker({ dataSource: this.dataSource });
                     this.view.render();
-                    this.server.completeFetchFor(this.view.databaseView.collection, [ rspecFixtures.database({ id: '5' }) ]);
+                    this.server.completeFetchFor(this.view.databaseView.collection, [ backboneFixtures.database({ id: '5' }) ]);
                     this.view.$(".database select").val("5").change();
-                    this.server.completeFetchAllFor(this.view.schemaView.collection, [ rspecFixtures.schema({ id: '6' }) ]);
+                    this.server.completeFetchAllFor(this.view.schemaView.collection, [ backboneFixtures.schema({ id: '6' }) ]);
                     this.view.$(".schema select").val("6").change();
                 });
 
@@ -876,15 +876,15 @@ describe("chorus.views.SchemaPicker", function() {
                     this.view = new chorus.views.SchemaPicker({ allowCreate: true });
                     $('#jasmine_content').append(this.view.el);
                     this.view.render();
-                    this.server.completeFetchAllFor(this.view.dataSourceView.collection, [ rspecFixtures.gpdbDataSource({ id: '4' }) ]);
+                    this.server.completeFetchAllFor(this.view.dataSourceView.collection, [ backboneFixtures.gpdbDataSource({ id: '4' }) ]);
                     this.view.$(".data_source select").val("4").change();
                 });
 
                 context('when a data source, database, and schema are selected from the dropdowns', function() {
                     beforeEach(function() {
-                        this.server.completeFetchFor(this.view.databaseView.collection, [ rspecFixtures.database({ id: '5' }) ]);
+                        this.server.completeFetchFor(this.view.databaseView.collection, [ backboneFixtures.database({ id: '5' }) ]);
                         this.view.$(".database select").val("5").change();
-                        this.server.completeFetchAllFor(this.view.schemaView.collection, [ rspecFixtures.schema({ id: '6' }) ]);
+                        this.server.completeFetchAllFor(this.view.schemaView.collection, [ backboneFixtures.schema({ id: '6' }) ]);
                         this.view.$(".schema select").val("6").change();
                     });
 

@@ -20,7 +20,7 @@ describe("chorus.models.DatabaseColumn", function() {
 
         context("when there is dataset", function() {
             beforeEach(function() {
-                this.dataset = rspecFixtures.workspaceDataset.datasetTable({ id: 45, objectName: 'taaab'});
+                this.dataset = backboneFixtures.workspaceDataset.datasetTable({ id: 45, objectName: 'taaab'});
                 this.model.dataset = this.dataset;
                 this.model.initialize();
             });

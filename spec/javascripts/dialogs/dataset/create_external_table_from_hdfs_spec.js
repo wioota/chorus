@@ -4,7 +4,7 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
         spyOn(chorus.views.NewTableImportDataGrid.prototype, "initializeDataGrid");
 
         chorus.page = {};
-        chorus.page.workspace = rspecFixtures.workspace({
+        chorus.page.workspace = backboneFixtures.workspace({
             sandboxInfo: {
                 name: "mySchema",
                 database: { name: "myDatabase", dataSource: { name: "myDataSource" } }
@@ -61,10 +61,10 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
     context("when the workspace fetch completes and there are workspaces", function() {
         beforeEach(function() {
             spyOn(chorus, "styleSelect");
-            this.workspace1 = rspecFixtures.workspace();
-            this.workspace2 = rspecFixtures.workspace();
+            this.workspace1 = backboneFixtures.workspace();
+            this.workspace2 = backboneFixtures.workspace();
             this.workspace2.unset("sandboxInfo");
-            this.workspace3 = rspecFixtures.workspace();
+            this.workspace3 = backboneFixtures.workspace();
             this.server.completeFetchAllFor(new chorus.collections.WorkspaceSet([], {userId: "54321"}),
                 [this.workspace1, this.workspace2, this.workspace3]);
         });

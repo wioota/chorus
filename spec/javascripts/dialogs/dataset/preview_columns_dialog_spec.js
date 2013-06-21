@@ -2,7 +2,7 @@ describe("chorus.dialogs.PreviewColumns", function() {
     beforeEach(function() {
         stubModals();
         spyOn(chorus, "search");
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable();
         this.dialog = new chorus.dialogs.PreviewColumns({model: this.dataset});
         this.dialog.render();
     });
@@ -17,7 +17,7 @@ describe("chorus.dialogs.PreviewColumns", function() {
 
     describe("when the fetch completes successfully", function() {
         beforeEach(function() {
-            this.server.completeFetchAllFor(this.dataset.columns(), rspecFixtures.databaseColumnSet([
+            this.server.completeFetchAllFor(this.dataset.columns(), backboneFixtures.databaseColumnSet([
                 {name: "Rhino", dataType: "text"     , description: "awesome"},
                 {name: "Giraffe", dataType: "float8" , description: "tall"},
                 {name: "Sloth", dataType: "int4"     , description: "lazy"},

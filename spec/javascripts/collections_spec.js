@@ -188,9 +188,9 @@ describe("chorus.collections.Base", function() {
 
     describe("#findWhere", function() {
         beforeEach(function() {
-            this.m1 = rspecFixtures.user({ firstName: "john", lastName: "coltrane", id: "5", admin: false });
-            this.m2 = rspecFixtures.user({ firstName: "ravi", lastName: "coltrane", id: "6", admin: true });
-            this.m3 = rspecFixtures.user({ firstName: "john", lastName: "medeski", id: "7", admin: true  });
+            this.m1 = backboneFixtures.user({ firstName: "john", lastName: "coltrane", id: "5", admin: false });
+            this.m2 = backboneFixtures.user({ firstName: "ravi", lastName: "coltrane", id: "6", admin: true });
+            this.m3 = backboneFixtures.user({ firstName: "john", lastName: "medeski", id: "7", admin: true  });
             this.collection.reset([ this.m1, this.m2, this.m3 ]);
         });
 
@@ -438,15 +438,15 @@ describe("chorus.collections.Base", function() {
 
     describe("#updateTags", function() {
         beforeEach(function() {
-            this.model1 = rspecFixtures.workfile.sql({id: "123", tags: [
+            this.model1 = backboneFixtures.workfile.sql({id: "123", tags: [
                 {name: "tag1"},
                 {name: "tag2"}
             ]});
-            this.model2 = rspecFixtures.workfile.sql({id: "456", tags: [
+            this.model2 = backboneFixtures.workfile.sql({id: "456", tags: [
                 {name: "tag1"},
                 {name: "tag3"}
             ]});
-            this.collection = rspecFixtures.workfileSet();
+            this.collection = backboneFixtures.workfileSet();
             this.collection.reset([this.model1, this.model2]);
             this.tag = new chorus.models.Tag({name: 'foo'});
             this.fakeTaggingsUpdater = new chorus.models.TaggingsUpdater({collection: this.collection});

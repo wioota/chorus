@@ -89,7 +89,7 @@ describe("chorus.pages.UserIndexPage", function() {
 
     describe("setting the model on a page event", function() {
         beforeEach(function() {
-            this.user = rspecFixtures.user({ firstName: "Super", lastName: "Man" });
+            this.user = backboneFixtures.user({ firstName: "Super", lastName: "Man" });
         });
 
         it("sets the model to user on a user:selected event", function() {
@@ -101,7 +101,7 @@ describe("chorus.pages.UserIndexPage", function() {
 
     describe("multiple selection", function() {
         beforeEach(function() {
-            this.users = rspecFixtures.userSet();
+            this.users = backboneFixtures.userSet();
             this.users.sortAsc("firstName");
             this.server.completeFetchFor(this.users);
         });

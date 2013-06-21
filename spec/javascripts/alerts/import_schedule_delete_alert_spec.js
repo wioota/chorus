@@ -1,7 +1,7 @@
 describe("chorus.alerts.ImportScheduleDelete", function() {
     beforeEach(function() {
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable();
-        this.schedules = rspecFixtures.datasetImportScheduleSet();
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable();
+        this.schedules = backboneFixtures.datasetImportScheduleSet();
         setLoggedInUser({ id: "1011" });
         this.dataset._datasetImportSchedules = this.schedules;
         this.alert = new chorus.alerts.ImportScheduleDelete({ model: this.dataset.importSchedule() });

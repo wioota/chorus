@@ -1,7 +1,7 @@
 describe("chorus.dialogs.WorkfilesImport", function() {
     beforeEach(function() {
         chorus.models.Config.instance().set({fileSizesMbWorkfiles: 10});
-        this.model = rspecFixtures.workfile.sql({ workspace: { id: 4 } });
+        this.model = backboneFixtures.workfile.sql({ workspace: { id: 4 } });
         var workfileSet = new chorus.collections.WorkfileSet([this.model], { workspaceId: 4 });
         this.dialog = new chorus.dialogs.WorkfilesImport({ workspaceId: 4, pageModel: this.model, pageCollection: workfileSet });
     });

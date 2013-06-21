@@ -1,6 +1,6 @@
 describe("chorus.views.WorkspaceShowSidebar", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.workspace({
+        this.model = backboneFixtures.workspace({
             name: "A Cool Workspace",
             id: '123',
             image: {
@@ -127,7 +127,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
 
             context("and the workspace has a sandbox", function() {
                 beforeEach(function() {
-                    spyOn(this.model, "sandbox").andReturn(rspecFixtures.workspace().sandbox());
+                    spyOn(this.model, "sandbox").andReturn(backboneFixtures.workspace().sandbox());
                     this.view.render();
                 });
 

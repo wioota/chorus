@@ -1,7 +1,7 @@
 describe("chorus.views.DatasetEditChorusViewSidebar", function() {
     beforeEach(function() {
-        chorus.page = { workspace: rspecFixtures.workspace() };
-        this.dataset = rspecFixtures.workspaceDataset.chorusView();
+        chorus.page = { workspace: backboneFixtures.workspace() };
+        this.dataset = backboneFixtures.workspaceDataset.chorusView();
         this.view = new chorus.views.DatasetEditChorusViewSidebar({model: this.dataset });
         this.server.completeAllFetches();
     });

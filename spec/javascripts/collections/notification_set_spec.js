@@ -1,6 +1,6 @@
 describe("chorus.collections.NotificationSet", function() {
     beforeEach(function() {
-        this.collection = rspecFixtures.notificationSet();
+        this.collection = backboneFixtures.notificationSet();
     });
 
     it("is composed of notifications", function() {
@@ -64,7 +64,7 @@ describe("chorus.collections.NotificationSet", function() {
             });
 
             it("sets 'unread' to true on each model", function() {
-                var model = rspecFixtures.notificationSet().at(0);
+                var model = backboneFixtures.notificationSet().at(0);
                 this.collection.add(model);
                 expect(model.get("unread")).toBeTruthy();
             });
@@ -72,7 +72,7 @@ describe("chorus.collections.NotificationSet", function() {
 
         context("when the notification set does not have the type 'unread'", function() {
             it("does not set the 'unread' attribute on the model", function() {
-                var model = rspecFixtures.notificationSet().at(0);
+                var model = backboneFixtures.notificationSet().at(0);
                 model.unset('unread');
                 this.collection.add(model);
                 expect(model.get("unread")).toBeUndefined();

@@ -4,7 +4,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         spyOn(chorus.views.ExistingTableImportDataGrid.prototype, 'automap');
 
         chorus.page = {};
-        chorus.page.workspace = rspecFixtures.workspace({
+        chorus.page.workspace = backboneFixtures.workspace({
             sandboxInfo: {
                 name: "mySchema",
                 database: { name: "myDatabase", dataSource: { name: "myDataSource" } }
@@ -43,7 +43,7 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
             {name: "col5", typeCategory: "WHOLE_NUMBER", ordinalPosition: "5"},
             {name: "col6", typeCategory: "WHOLE_NUMBER", ordinalPosition: "6"}
         ];
-        this.dataset = rspecFixtures.workspaceDataset.datasetTable({
+        this.dataset = backboneFixtures.workspaceDataset.datasetTable({
             id: "dat-id",
             workspace: {id: this.model.get("workspaceId")}
         });

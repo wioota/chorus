@@ -19,9 +19,7 @@
         return translatedText;
     }
 
-    var loadTemplatesOnce = _.once(function() {
-        var allFixturesLoaded = false;
-
+    var dealWithChromeBackgrounding = _.once(function() {
         // Code that only needs to be run once before all the tests run
         _.debounce = function(func, timeout) { return func; };
 
@@ -35,30 +33,6 @@
         });
 
         $('.jasmine_reporter .title').after('<span class="product_version">Greenplum Chorus 2.2</span>');
-
-        function loadAllFixtures() {
-            var fixtureContainer = $("<div id='fixtures'/>");
-            $("body").append(fixtureContainer);
-            return $.ajax({
-                async: true,
-                cache: false,
-                dataType: 'html',
-                url: '/__fixtures',
-                success: function(data) {
-                    fixtureContainer.append(data);
-                    allFixturesLoaded = true;
-                },
-                error: function(data) {
-                    window.alert("Sorry but I couldn't load the fixtures! Things will go REALLY poorly from here...");
-                    allFixturesLoaded = true;
-                }
-            });
-        }
-
-        runs(loadAllFixtures);
-        waitsFor(function() {
-            return allFixturesLoaded;
-        }, "all templates and fixtures to be loaded", 5000);
     });
 
     var regexEqualityTester = function(a, b) {
@@ -86,7 +60,8 @@
     jasmine.getEnv().addEqualityTester(backboneModelEqualityTester);
 
     beforeEach(function() {
-        loadTemplatesOnce();
+        dealWithChromeBackgrounding();
+        BackboneFixtures.jasmineSetup(chorus.models, chorus.collections, chorus.models.Base, chorus.collections.Base);
 
         // loadTemplatesOnce does asynchronous ajax requests in a waitsFor
         runs(function() {
@@ -416,7 +391,7 @@
     _.each(window.itBehavesLike, function(value, key) { window.xitBehavesLike[key] = $.noop; });
 
     window.loadConfig = function() {
-        chorus.models.Config.instance().set(rspecFixtures.config().attributes);
+        chorus.models.Config.instance().set(backboneFixtures.config().attributes);
     };
 
     window.unsetLoggedInUser = function() {
@@ -454,7 +429,7 @@
         if(options instanceof chorus.models.User) {
             options = options.attributes;
         }
-        target.session = rspecFixtures.session({user: options});
+        target.session = backboneFixtures.session({user: options});
     };
 
     window.stubView = function(html, options) {

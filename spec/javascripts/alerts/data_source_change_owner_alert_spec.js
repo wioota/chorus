@@ -1,6 +1,6 @@
 describe("chorus.alerts.DataSourceChangedOwner", function() {
     beforeEach(function() {
-        this.user = rspecFixtures.user({ firstName: "Boxiong", lastName: "Ding" });
+        this.user = backboneFixtures.user({ firstName: "Boxiong", lastName: "Ding" });
         this.alert = new chorus.alerts.DataSourceChangedOwner({ model: this.user });
         this.alert.render();
     });

@@ -1,7 +1,7 @@
 describe("chorus.dialogs.RunAndDownload", function() {
     beforeEach(function() {
-        chorus.page = { workspace: rspecFixtures.workspace({ id: 999 }) };
-        this.workfile = rspecFixtures.workfile.sql({ fileType: "SQL", workspace: {
+        chorus.page = { workspace: backboneFixtures.workspace({ id: 999 }) };
+        this.workfile = backboneFixtures.workfile.sql({ fileType: "SQL", workspace: {
             id: chorus.page.workspace.get("id")
         }});
         this.dialog = new chorus.dialogs.RunAndDownload({ pageModel: this.workfile, selection: true });

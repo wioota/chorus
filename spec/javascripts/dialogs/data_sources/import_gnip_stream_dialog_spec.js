@@ -1,6 +1,6 @@
 describe("ImportGnipStream", function () {
     beforeEach(function () {
-        this.gnip = rspecFixtures.gnipDataSource({id: 123});
+        this.gnip = backboneFixtures.gnipDataSource({id: 123});
         this.dialog = new chorus.dialogs.ImportGnipStream({pageModel: this.gnip});
     });
 
@@ -41,7 +41,7 @@ describe("ImportGnipStream", function () {
 
             describe("after workspace is selected", function () {
                 beforeEach(function () {
-                    this.workspace = rspecFixtures.workspace({name: "WorkspaceForGnip"});
+                    this.workspace = backboneFixtures.workspace({name: "WorkspaceForGnip"});
                     this.dialog.workspace_picker.trigger("workspace:selected", this.workspace);
                 });
                 it("updates the workspace selection link", function () {

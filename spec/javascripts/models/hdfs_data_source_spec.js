@@ -1,6 +1,6 @@
 describe("chorus.models.HdfsDataSource", function() {
     beforeEach(function() {
-        this.model = rspecFixtures.hdfsDataSource({id : 123, username: "hadoop", groupList: "hadoop"});
+        this.model = backboneFixtures.hdfsDataSource({id : 123, username: "hadoop", groupList: "hadoop"});
         this.attrs = {};
     });
 
