@@ -116,13 +116,6 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return this.get("name");
     },
 
-    displayShortName:function (length) {
-        length = length || 20;
-
-        var name = this.displayName() || "";
-        return (name.length < length) ? name : name.slice(0, length) + "...";
-    },
-
     fetchImageUrl:function (options) {
         var size = (options && options.size) || "original";
         var url = this.get("image") && this.get("image")[size];

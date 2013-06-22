@@ -91,7 +91,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         return [
             {label: t("breadcrumbs.home"), url: "#/"},
             {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
-            {label: this.workspace.loaded ? this.workspace.displayShortName() : "...", url: this.workspace.showUrl()},
+            {label: this.workspace.loaded ? this.workspace.displayName() : "...", url: this.workspace.showUrl()},
             {label: t("breadcrumbs.workfiles.all")}
         ];
     },

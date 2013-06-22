@@ -87,7 +87,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         return [
             {label: t("breadcrumbs.home"), url: "#/"},
             {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
-            {label: this.workspace.displayShortName(), url: this.workspace.showUrl()},
+            {label: this.workspace.displayName(), url: this.workspace.showUrl()},
             {label: t("breadcrumbs.workspaces_data")}
         ];
     },

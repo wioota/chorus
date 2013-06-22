@@ -43,7 +43,7 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
         return [
             {label: t("breadcrumbs.home"), url: "#/"},
             {label: t("breadcrumbs.workspaces"), url: "#/workspaces"},
-            {label: this.workspace && this.workspace.loaded ? this.workspace.displayShortName() : "...", url: this.workspace && this.workspace.showUrl()},
+            {label: this.workspace && this.workspace.loaded ? this.workspace.displayName() : "...", url: this.workspace && this.workspace.showUrl()},
             {label: "Kaggle"}
         ];
     },

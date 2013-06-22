@@ -190,18 +190,6 @@ describe("chorus.pages.WorkfileShowPage", function() {
 
                 expect(this.page.$(".breadcrumb:eq(4)").text().trim()).toBe(this.model.get('fileName'));
             });
-
-            context("with a long workspace name", function() {
-                beforeEach(function() {
-                    this.page.model.workspace().set({name: "LongLongLongLongLongWorkspaceName"});
-                    this.page.render();
-                });
-
-                it("ellipsizes the workspace name in the breadcrumb view", function() {
-                    expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/4");
-                    expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("LongLongLongLongLong...");
-                });
-            });
         });
     });
 

@@ -30,18 +30,6 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
             expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toMatchTranslation("breadcrumbs.workfiles.all");
         });
-
-        context("with a long workspace name", function() {
-            beforeEach(function() {
-                this.page.mainContent.model.set({name: "LongLongLongLongLongWorkspaceName"});
-                this.page.render();
-            });
-
-            it("ellipsizes the workspace name in the breadcrumb view", function() {
-                expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/" + this.model.workspace().id);
-                expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("LongLongLongLongLong...");
-            });
-        });
     });
 
     describe("#setup", function() {

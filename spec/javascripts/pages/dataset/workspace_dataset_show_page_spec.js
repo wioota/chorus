@@ -136,7 +136,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
             it("links to workspace show for the third crumb", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2).attr("href")).toBe(this.workspace.showUrl());
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2).text()).toBe(this.workspace.displayShortName());
+                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2).text()).toBe(this.workspace.displayName());
             });
 
             it("links to the workspace data tab for the fourth crumb", function() {

@@ -40,6 +40,7 @@
 
     > .breadcrumbs {
         padding-top: 50px;
+        margin-right: $sidebar-width + ($sidebar-padding-x);
     }
 
     #sidebar_wrapper {

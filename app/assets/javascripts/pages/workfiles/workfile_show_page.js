@@ -35,7 +35,7 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
         return [
             {label:t("breadcrumbs.home"), url:"#/"},
             {label:t("breadcrumbs.workspaces"), url:'#/workspaces'},
-            {label: this.workspace.loaded ? this.workspace.displayShortName(20) : "...", url:this.workspace.showUrl()},
+            {label: this.workspace.loaded ? this.workspace.displayName() : "...", url:this.workspace.showUrl()},
             {label:t("breadcrumbs.workfiles.all"), url:this.workspace.workfilesUrl()},
             {label:this.model.loaded ? this.model.get("fileName") : "..." }
         ];

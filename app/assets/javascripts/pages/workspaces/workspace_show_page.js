@@ -39,7 +39,7 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
         return [
             {label: t("breadcrumbs.home"), url: "#/"},
             {label: t("breadcrumbs.workspaces"), url: "#/workspaces"},
-            {label: this.model && this.model.loaded ? this.model.displayShortName() : "..."}
+            {label: this.model && this.model.loaded ? this.model.displayName() : "..."}
         ];
     }
 });

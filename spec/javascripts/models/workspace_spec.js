@@ -296,28 +296,6 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
-    describe("#displayShortName", function() {
-        context("with a short name", function() {
-            beforeEach(function() {
-                this.model = backboneFixtures.workspace({name: "Short Name"});
-            });
-
-            it("returns the full name", function() {
-                expect(this.model.displayShortName()).toBe("Short Name");
-            });
-        });
-
-        context("with a long name", function() {
-            beforeEach(function() {
-                this.model = backboneFixtures.workspace({name: "A Much, Much Longer Name"});
-            });
-
-            it("returns the shortened name", function() {
-                expect(this.model.displayShortName(6)).toBe("A Much...");
-            });
-        });
-    });
-
     describe("#createImageUrl", function() {
         beforeEach(function() {
             this.model = backboneFixtures.workspace({id: 10013});

@@ -28,7 +28,6 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
         it("shows the breadcrumbs", function() {
             expect(this.page.model.loaded).toBeTruthy();
-            expect(this.page.$(".breadcrumbs .spacer").length).toBe(3);
 
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
