@@ -68,8 +68,8 @@ GIT
       multi_json (~> 1.0)
 
 GIT
-  remote: git://github.com/pivotal-chorus/backbone_fixtures_rails.git
-  revision: 170d4b862e37c1aafa5d962954d8036611760be5
+  remote: git://github.com/charleshansen/backbone_fixtures_rails.git
+  revision: efce1d689106e4f7c63620e0d45661a6f80e1689
   specs:
     backbone_fixtures_rails (0.0.1)
       jasmine
