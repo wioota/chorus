@@ -16,7 +16,9 @@ describe("chorus.dialogs.HdfsDataSourceWorkspacePicker", function() {
 
         this.workspace1 = backboneFixtures.workspace({name: "Foo"});
         this.workspace2 = backboneFixtures.workspace({name: "Bar"});
-        this.workspaces = new chorus.collections.WorkspaceSet([this.workspace1, this.workspace2]);
+        this.workspace3 = backboneFixtures.workspace({name: "no_sandbox"});
+        this.workspace3.unset("sandboxInfo");
+        this.workspaces = new chorus.collections.WorkspaceSet([this.workspace1, this.workspace2, this.workspace3]);
     });
 
     it("has the correct title and button", function() {
@@ -31,6 +33,16 @@ describe("chorus.dialogs.HdfsDataSourceWorkspacePicker", function() {
 
         it("renders all the workspaces", function() {
             expect(this.dialog.$("li").length).toBe(2);
+        });
+
+        it("does not render workspaces without sandboxes", function() {
+            expect(this.workspace3.sandbox()).toBeFalsy();
+            expect(this.dialog.$(".name")).not.toContainText("no_sandbox");
+        });
+
+        it("removes no-sandbox workspaces even after filtering", function() {
+            this.dialog.collection.search("");
+            expect(this.dialog.collection.get(this.workspace3.id)).toBeUndefined();
         });
 
         context("when a workspace is selected", function() {

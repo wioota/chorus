@@ -11,6 +11,10 @@ chorus.dialogs.HdfsDataSourceWorkspacePicker = chorus.dialogs.PickWorkspace.exte
     },
 
     resourcesLoaded: function() {
+        var noSandboxes = this.collection.select(function(ws) {
+            return !ws.sandbox();
+        });
+        this.collection.remove(noSandboxes, {silent: true});
         this.render();
     },
 
