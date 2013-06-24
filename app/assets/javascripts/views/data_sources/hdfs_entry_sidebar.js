@@ -9,7 +9,8 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     events : {
         'click .external_table': 'createExternalTable',
         'click .directory_external_table': "openDirectoryExternalTable",
-        "click .edit_tags": "startEditingTags"
+        "click .edit_tags": "startEditingTags",
+        "click .add_note": "launchNotesNewDialog"
     },
 
     setup: function() {
@@ -100,6 +101,20 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
                 contents: this.resource.get('contents')
             }
         });
+        dialog.launchModal();
+    },
+
+    launchNotesNewDialog: function(e) {
+        e && e.preventDefault();
+        var dialogOptions = {
+            pageModel: this.resource,
+            entityId: this.resource.id,
+            entityType: "hdfs_file",
+            allowWorkspaceAttachments: false,
+            displayEntityType: t("hdfs.file_lower")
+        };
+
+        var dialog = new chorus.dialogs.NotesNew(dialogOptions);
         dialog.launchModal();
     },
 

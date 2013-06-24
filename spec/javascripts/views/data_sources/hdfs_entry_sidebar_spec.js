@@ -92,8 +92,17 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             itHasTheRightDefaultBehavior(true);
 
-            it("adds the entity id", function() {
-                expect(this.view.$("a.add_note").attr("data-entity-id")).toBe("55");
+            it("opens the notes new dialog once when the add_note button is clicked", function() {
+                this.view.$("a.add_note").click();
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
+                expect(this.modalSpy.modals().length).toBe(1);
+                expect(this.modalSpy.lastModal().options).toEqual(jasmine.objectContaining({
+                    pageModel: this.hfdsEntry,
+                    entityId: this.hdfsEntry.id,
+                    entityType: 'hdfs_file',
+                    allowWorkspaceAttachments: false,
+                    displayEntityType: t("hdfs.file_lower")
+                }));
             });
 
             describe('clicking the edit tags link', function(){
