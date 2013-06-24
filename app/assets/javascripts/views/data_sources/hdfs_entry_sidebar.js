@@ -72,11 +72,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     },
 
     additionalContext: function() {
-        return {
-            workFlowEnabled: chorus.models.Config.instance().get('workFlowConfigured'),
-            entityId: this.resource && this.resource.id,
-            lastUpdatedStamp: t("hdfs.last_updated", { when : Handlebars.helpers.relativeTimestamp(this.resource && this.resource.get("lastUpdatedStamp"))})
-        };
+        return new chorus.presenters.HdfsEntrySidebar(this.resource);
     },
 
     createExternalTable: function(e) {

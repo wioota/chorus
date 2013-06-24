@@ -51,10 +51,6 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return !this.options.searchPage && this.hasWorkspace() && this.resource.isDeleteable() && this.resource.workspace().canUpdate();
     },
 
-    workFlowsEnabled: function () {
-        return chorus.models.Config.instance().get("workFlowConfigured");
-    },
-
     realWorkspace: function() {
         // this.workspace gets overriden by options hash passed by pages.
         return this.options.searchPage ? null : this.resource.workspace();
