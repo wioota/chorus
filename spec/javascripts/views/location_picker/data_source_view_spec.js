@@ -1,18 +1,35 @@
 describe("chorus.views.LocationPicker.DataSourceView", function() {
+
     beforeEach(function() {
         this.gpdbDataSource = backboneFixtures.gpdbDataSource();
-
+        this.hdfsDataSource = backboneFixtures.hdfsDataSource();
     });
 
     context("when 'showHdfsDataSources' is true", function() {
         beforeEach(function() {
+           this.databasePicker = jasmine.createSpyObj('DatabaseView', ['hide']);
            this.view = new chorus.views.LocationPicker.DataSourceView({
-               showHdfsDataSources: true
+               showHdfsDataSources: true,
+               childPicker: this.databasePicker
            });
         });
 
         it("should fetch both hdfs and gpdb data sources", function() {
             expect(this.server.requests.length).toBe(2);
+        });
+
+        context("selecting an HDFS data source", function() {
+            beforeEach(function() {
+                this.server.completeFetchAllFor(this.view.gpdbDataSources, [this.gpdbDataSource]);
+                this.server.completeFetchAllFor(this.view.hdfsDataSources, [this.hdfsDataSource]);
+                this.view.render();
+                this.databasePicker.hide.reset();
+                this.view.$('select').prop('selectedIndex', 2).change();
+            });
+
+            it("hides the database selector", function() {
+                expect(this.databasePicker.hide).toHaveBeenCalled();
+            });
         });
     });
 

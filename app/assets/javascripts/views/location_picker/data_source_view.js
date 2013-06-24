@@ -46,7 +46,7 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         var selectedDataSource = this.getSelectedDataSource();
         this.setSelection(selectedDataSource);
         this.trigger('change');
-        if(!selectedDataSource) {
+        if(!selectedDataSource || selectedDataSource.entityType === "hdfs_data_source") {
             this.childPicker.hide();
         }
     },
