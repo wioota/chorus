@@ -40,6 +40,42 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             }
         }
 
+        function itBehavesLikeAWorkFlowCreator() {
+            context("when work flows are enabled", function() {
+                beforeEach(function() {
+                    chorus.models.Config.instance().set('workFlowConfigured', true);
+                    this.view.render();
+                });
+
+                it("has a new work flow link", function() {
+                    expect(this.view.$("a.new_work_flow")).toContainTranslation("sidebar.new_work_flow");
+                });
+
+                context("when clicking the new work flow link", function() {
+                    beforeEach(function () {
+                        this.view.$("a.new_work_flow").click();
+                    });
+
+                    it("launches the dialog for creating a new work flow", function () {
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.HdfsWorkFlowWorkspacePicker);
+                        expect(this.modalSpy.lastModal().options.hdfsEntries.length).toBe(1);
+                        expect(this.modalSpy.lastModal().options.hdfsEntries).toContain(this.hdfsEntry);
+                    });
+                });
+            });
+
+            context("when work flows are not enabled", function() {
+                beforeEach(function() {
+                    chorus.models.Config.instance().set('workFlowConfigured', false);
+                    this.view.render();
+                });
+
+                it("does note have a new work flow link", function() {
+                    expect(this.view.$("a.new_work_flow")).not.toExist();
+                });
+            });
+        }
+
         context("when the model is a directory", function() {
             beforeEach(function() {
                 this.hdfsEntry = backboneFixtures.hdfsDir();
@@ -91,6 +127,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             });
 
             itHasTheRightDefaultBehavior(true);
+            itBehavesLikeAWorkFlowCreator();
 
             it("opens the notes new dialog once when the add_note button is clicked", function() {
                 this.view.$("a.add_note").click();
@@ -198,6 +235,8 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
                 chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
             });
+
+            itBehavesLikeAWorkFlowCreator();
 
             it("does not have a create external table link", function() {
                 expect(this.view.$("a.external_table")).not.toExist();

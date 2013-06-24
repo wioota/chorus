@@ -10,7 +10,8 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         'click .external_table': 'createExternalTable',
         'click .directory_external_table': "openDirectoryExternalTable",
         "click .edit_tags": "startEditingTags",
-        "click .add_note": "launchNotesNewDialog"
+        "click .add_note": "launchNotesNewDialog",
+        "click .new_work_flow": "launchWorkFlowNewDialog"
     },
 
     setup: function() {
@@ -72,6 +73,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function() {
         return {
+            workFlowEnabled: chorus.models.Config.instance().get('workFlowConfigured'),
             entityId: this.resource && this.resource.id,
             lastUpdatedStamp: t("hdfs.last_updated", { when : Handlebars.helpers.relativeTimestamp(this.resource && this.resource.get("lastUpdatedStamp"))})
         };
@@ -126,5 +128,13 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     startEditingTags: function(e) {
         e.preventDefault();
         new chorus.dialogs.EditTags({collection: new chorus.collections.Base([this.resource])}).launchModal();
+    },
+
+    launchWorkFlowNewDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.HdfsWorkFlowWorkspacePicker({
+            hdfsEntries: new chorus.collections.HdfsEntrySet([this.resource])
+        });
+        dialog.launchModal();
     }
 });
