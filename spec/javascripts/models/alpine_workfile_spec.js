@@ -78,7 +78,7 @@ describe("chorus.models.AlpineWorkfile", function() {
                 workfile_id: "23",
                 session_id: "hex",
                 method: "chorusEntry",
-                "hdfs_entry_id[]": [1,2,3]
+                "hdfs_dataset_id[]": [1,2,3]
 
             });
             expect(url).not.toContainQueryParams({database_id: this.model.get('executionLocation').id});
