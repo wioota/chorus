@@ -7,7 +7,7 @@ chorus.views.LocationPicker.DatabaseView = chorus.views.LocationPicker.SelectorV
     },
 
     setup: function() {
-        this.childPicker = this.options.childPicker;
+        this._super('setup');
         this.setState(this.options.database ? this.STATES.STATIC : this.STATES.LOADING);
     },
 

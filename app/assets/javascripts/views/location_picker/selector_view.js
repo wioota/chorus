@@ -4,11 +4,18 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
     onFetchFailed: $.noop,
     onMissingSelection: $.noop,
 
+    setup: function() {
+        this.childPicker = this.options.childPicker;
+    },
+
     maybeHideChildren: function() {
+        if (!this.childPicker || this.childPicker.isHidden()) {
+            return;
+        }
         var waitingForSelect = (this.stateValue === this.STATES.SELECT && !this.selection);
         var notChoosable = _.contains([this.STATES.UNAVAILABLE, this.STATES.LOADING, this.STATES.HIDDEN], this.stateValue);
         if(notChoosable || waitingForSelect) {
-            this.childPicker && this.childPicker.hide();
+            this.childPicker.hide();
         }
     },
 
@@ -20,6 +27,10 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
 
     hide: function() {
         this.setState(this.STATES.HIDDEN);
+    },
+
+    isHidden: function() {
+        return this.stateValue === this.STATES.HIDDEN;
     },
 
     setSelection: function(model) {

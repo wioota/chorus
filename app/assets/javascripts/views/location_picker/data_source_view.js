@@ -8,7 +8,7 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
     },
 
     setup: function() {
-        this.childPicker = this.options.childPicker;
+        this._super('setup');
 
         if(this.options.dataSource) {
             this.setState(this.STATES.STATIC);

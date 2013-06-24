@@ -6,9 +6,6 @@ chorus.views.LocationPicker.SchemaView = chorus.views.LocationPicker.SelectorVie
         "change select": "schemaSelected"
     },
 
-    setup: function() {
-    },
-
     additionalContext: function() {
         return {
             allowCreate: this.options.allowCreate
