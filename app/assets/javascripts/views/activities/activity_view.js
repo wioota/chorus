@@ -107,7 +107,7 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     launchCommentDialog: function(e) {
         e.preventDefault();
-        var dialog = new chorus.dialogs.Comment({activity: this.model, eventId: this.model.id});
+        var dialog = new chorus.dialogs.Comment({pageModel: this.model, eventId: this.model.id});
         dialog.launchModal();
     },
 
