@@ -21,6 +21,9 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
             } else {
                 this.collection = new chorus.collections.Base();
             }
+            this.collection.comparator = function(dataSource) {
+                return dataSource.name();
+            };
             this.collectGpdbDataSources();
             this.setState(this.STATES.LOADING);
         }

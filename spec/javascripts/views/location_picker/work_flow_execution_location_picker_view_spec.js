@@ -50,7 +50,7 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
 
         function itPopulatesSelect(type) {
             it("populates the select for for " + type + "s", function() {
-                var escapedName = Handlebars.Utils.escapeExpression(this.view.getPickerSubview(type).collection.models[0].get('name'));
+                var escapedName = Handlebars.Utils.escapeExpression(this.view.getPickerSubview(type).collection.at(0).get('name'));
                 var className = _.str.underscored(type);
                 expect(this.view.$("." + className + " select option:eq(1)").text()).toBe(escapedName);
             });
@@ -150,13 +150,11 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
                 $('#jasmine_content').append(this.dialogContainer);
             });
 
-            it("includes accessible=true by default", function() {
-                expect(this.server.requests[0].url).toContainQueryParams({accessible: true});
-            });
-
             it("fetches the list of data sources", function() {
-                expect(this.server.requests[0].url).toMatch("/data_sources/");
-                expect(this.server.requests[1].url).toMatch("/hdfs_data_sources");
+                var requestUrls = _(this.server.requests).pluck('url').sort();
+                expect(requestUrls[0]).toMatch("/data_sources/");
+                expect(requestUrls[1]).toMatch("/hdfs_data_sources");
+                expect(requestUrls[0]).toContainQueryParams({accessible: true});
             });
 
             itDisplaysLoadingPlaceholderFor('dataSource');
