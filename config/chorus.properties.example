@@ -138,10 +138,6 @@ ldap.attribute.title = title
 newrelic.enabled = false
 newrelic.license_key = NEWRELIC_LICENSE_KEY
 
-# Alpine
-alpine.url = http://alpine_host:8080
-alpine.api_key =
-
 #ORACLE
 oracle.enabled = true
 

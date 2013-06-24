@@ -31,15 +31,6 @@ describe ConfigurationsController do
       decoded_response.kaggle_configured.should == 'value'
     end
 
-    it "includes the alpine configuration" do
-      stub(ChorusConfig.instance).[]('alpine.url') { 'http://test.example.com:8080' }
-      stub(ChorusConfig.instance).[]('alpine.api_key') { 'abcdefg' }
-      get :show
-      response.code.should == "200"
-      decoded_response.alpine_url.should == 'http://test.example.com:8080'
-      decoded_response.alpine_api_key.should == 'abcdefg'
-    end
-
     it "includes the work flow configuration" do
       stub(ChorusConfig.instance).[]('work_flow.url') { 'http://test.example.com:8080' }
       stub(ChorusConfig.instance).[]('work_flow.enabled') { true }
@@ -47,15 +38,6 @@ describe ConfigurationsController do
       response.code.should == "200"
       decoded_response.work_flow_configured.should be_true
       decoded_response.work_flow_url.should == 'http://test.example.com:8080'
-    end
-
-    it "does not include the alpine configuration when it is not fully configured" do
-      stub(ChorusConfig.instance).[]('alpine.url') { '' }
-      stub(ChorusConfig.instance).[]('alpine.api_key') { 'abcdefg' }
-      get :show
-      response.code.should == "200"
-      decoded_response.should_not have_key('alpine_url')
-      decoded_response.should_not have_key('alpine_api_key')
     end
 
     it "includes the gnip_configured? value" do
@@ -131,9 +113,6 @@ describe ConfigurationsController do
       stub(ChorusConfig.instance).[]('file_sizes_mb.attachment') { 10 }
       stub(ChorusConfig.instance).[]('execution_timeout_in_minutes') { 15 }
       stub(ChorusConfig.instance).[]('default_preview_row_limit') { 20 }
-      stub(ChorusConfig.instance).[]('alpine.url') { 'http://text.example:8080' }
-      stub(ChorusConfig.instance).[]('alpine.api_key') { 'abcdefg' }
-      stub(ChorusConfig.instance).alpine_configured? { true }
       stub(ChorusConfig.instance).oracle_configured? { true }
       get :show
     end

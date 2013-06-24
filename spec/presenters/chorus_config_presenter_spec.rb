@@ -27,25 +27,11 @@ describe ChorusConfigPresenter, :type => :view do
       hash[:kaggle_configured].should == 'value'
     end
 
-    it "includes the alpine configuration" do
-      stub(config).[]('alpine.url') { 'http://test.example.com:8080' }
-      stub(config).[]('alpine.api_key') { 'abcdefg' }
-      hash[:alpine_url].should == 'http://test.example.com:8080'
-      hash[:alpine_api_key].should == 'abcdefg'
-    end
-
     it "includes the work flow configuration" do
       stub(config).[]('work_flow.url') { 'http://test.example.com:8080' }
       stub(config).[]('work_flow.enabled') { true }
       hash[:work_flow_configured].should be_true
       hash[:work_flow_url].should == 'http://test.example.com:8080'
-    end
-
-    it "does not include the alpine configuration when it is not fully configured" do
-      stub(config).[]('alpine.url') { '' }
-      stub(config).[]('alpine.api_key') { 'abcdefg' }
-      hash.should_not have_key('alpine_url')
-      hash.should_not have_key('alpine_api_key')
     end
 
     it "includes the gnip_configured? value" do

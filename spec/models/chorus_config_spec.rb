@@ -165,43 +165,6 @@ describe ChorusConfig do
     end
   end
 
-  describe "#alpine_configured?" do
-    it 'returns true if alpine.url and alpine.api_key are set' do
-      config.config = {
-          'alpine' => {
-              'url' => 'test',
-              'api_key' => 'key'
-          }
-      }
-      config.alpine_configured?.should == true
-    end
-
-    it 'returns false if the alpine.url is not set' do
-      config.config = {
-          'alpine' => {
-              'url' => '',
-              'api_key' => 'key'
-          }
-      }
-      config.alpine_configured?.should == false
-    end
-
-    it 'returns false if the alpine.api_key is not set' do
-      config.config = {
-          'alpine' => {
-              'url' => 'test',
-              'api_key' => ''
-          }
-      }
-      config.alpine_configured?.should == false
-    end
-
-    it 'returns false if the enabled key is undefined' do
-      config.config = {}
-      config.alpine_configured?.should == false
-    end
-  end
-
   describe "Work flow integration" do
     let(:work_flow_config) do
       {

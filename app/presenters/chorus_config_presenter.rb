@@ -17,20 +17,6 @@ class ChorusConfigPresenter < Presenter
         :oracle_configured => model.oracle_configured?,
         :work_flow_configured => model.work_flow_configured?,
         :work_flow_url => model['work_flow.url']
-
-    }.merge(alpine_config)
-  end
-
-  private
-
-  def alpine_config
-    if model.alpine_configured?
-      {
-          :alpine_url => model['alpine.url'],
-          :alpine_api_key => model['alpine.api_key']
-      }
-    else
-      {}
-    end
+    }
   end
 end

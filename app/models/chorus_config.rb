@@ -38,10 +38,6 @@ class ChorusConfig
     !!self['gnip.enabled']
   end
 
-  def alpine_configured?
-    !!(self['alpine.url'].present? && self['alpine.api_key'].present?)
-  end
-
   def work_flow_configured?
     !!(self['work_flow.url'].present? && self['work_flow.enabled'].present?)
   end
