@@ -4,13 +4,13 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
         var yesterday = new Date().addDays(-1).toString("yyyy-MM-ddTHH:mm:ssZ");
 
-        this.file = backboneFixtures.hdfsFile({id: 8675309, lastUpdatedStamp: yesterday});
-        this.view = new chorus.views.HdfsShowFileSidebar({ model: this.file });
+        this.hdfsEntry = backboneFixtures.hdfsFile({id: 8675309, lastUpdatedStamp: yesterday});
+        this.view = new chorus.views.HdfsShowFileSidebar({ model: this.hdfsEntry });
     });
 
     describe("#setup", function() {
         it("fetches the ActivitySet for the hdfs file", function() {
-            expect(this.file.activities()).toHaveBeenFetched();
+            expect(this.hdfsEntry.activities()).toHaveBeenFetched();
         });
     });
 
@@ -20,7 +20,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
         });
 
         it("has the right title (the filename)", function() {
-            expect(this.view.$(".file_name")).toContainText(this.file.get('name'));
+            expect(this.view.$(".file_name")).toContainText(this.hdfsEntry.get('name'));
         });
 
         it("shows the correct last_updated value", function() {
@@ -28,9 +28,23 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
         });
 
         it("shows the 'add a note' link", function() {
-            expect(this.view.$("a.dialog").data("dialog")).toBe("NotesNew");
-            expect(this.view.$("a.dialog").data("entity-id")).toBe(8675309);
-            expect(this.view.$("a.dialog").data("entity-type")).toBe("hdfs_file");
+            expect(this.view.$("a.add_note")).toContainTranslation("actions.add_note");
+        });
+
+        describe("clicking the add note link", function() {
+            it("opens the Notes New dialog", function() {
+                this.modalSpy = stubModals();
+                this.view.$("a.add_note").click();
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
+                expect(this.modalSpy.modals().length).toBe(1);
+                expect(this.modalSpy.lastModal().options).toEqual(jasmine.objectContaining({
+                    pageModel: this.hdfsEntry,
+                    entityId: this.hdfsEntry.id,
+                    entityType: 'hdfs_file',
+                    allowWorkspaceAttachments: false,
+                    displayEntityType: t("hdfs.file_lower")
+                }));
+            });
         });
 
         it("has an activity list", function() {
@@ -58,12 +72,12 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
         it("should re-render when csv_import:started is triggered", function() {
             this.server.reset();
             chorus.PageEvents.trigger("csv_import:started");
-            expect(this.file.activities()).toHaveBeenFetched();
+            expect(this.hdfsEntry.activities()).toHaveBeenFetched();
         });
 
         context("when the hdfs file is non-binary and has no server errors", function() {
             beforeEach(function() {
-                this.file.set("isBinary", false);
+                this.hdfsEntry.set("isBinary", false);
                 this.view.render();
             });
 
@@ -74,7 +88,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
         context("when the hdfs file is binary", function() {
             beforeEach(function() {
-                this.file.set("isBinary", true);
+                this.hdfsEntry.set("isBinary", true);
                 this.view.render();
             });
 
@@ -85,7 +99,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
         context("when the hdfs file has server errors", function() {
             beforeEach(function() {
-                this.file.serverErrors= {record: "HDFS_SOMETHING_VERY_BAD"};
+                this.hdfsEntry.serverErrors= {record: "HDFS_SOMETHING_VERY_BAD"};
                 this.view.render();
             });
 
@@ -96,7 +110,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
         context("when the hdfs file has not loaded", function() {
             beforeEach(function() {
-                this.file.loaded = false;
+                this.hdfsEntry.loaded = false;
                 this.view.render();
             });
 

@@ -3,7 +3,8 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
     constructorName: "HdfsShowFileSidebar",
 
     events: {
-        "click a.external_table": "createExternalTable"
+        "click a.external_table": "createExternalTable",
+        "click a.add_note": "launchNotesNewDialog"
     },
 
     subviews:{
@@ -55,6 +56,20 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
         });
 
         var dialog = new chorus.dialogs.CreateExternalTableFromHdfs({model: hdfsExternalTable, csvOptions: csvOptions});
+        dialog.launchModal();
+    },
+
+    launchNotesNewDialog: function(e) {
+        e && e.preventDefault();
+        var dialogOptions = {
+            pageModel: this.resource,
+            entityId: this.resource.id,
+            entityType: "hdfs_file",
+            allowWorkspaceAttachments: false,
+            displayEntityType: t("hdfs.file_lower")
+        };
+
+        var dialog = new chorus.dialogs.NotesNew(dialogOptions);
         dialog.launchModal();
     }
 });
