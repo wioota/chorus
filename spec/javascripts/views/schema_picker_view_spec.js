@@ -770,7 +770,7 @@ describe("chorus.views.SchemaPicker", function() {
                         });
 
                         it('selects the data source', function() {
-                            expect(this.view.$('.data_source select option:selected').val()).toEqual('789GpdbDataSource');
+                            expect(this.view.$('.data_source select option:selected').val()).toEqual('789');
                         });
 
                         it("selects the database", function() {
@@ -831,7 +831,7 @@ describe("chorus.views.SchemaPicker", function() {
                 $('#jasmine_content').append(this.view.el);
                 this.view.render();
                 this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, [ backboneFixtures.gpdbDataSource({ id: '4' }) ]);
-                this.view.$(".data_source select").val("4GpdbDataSource").change();
+                this.view.$(".data_source select").val("4").change();
                 this.server.completeFetchFor(this.view.databaseView.collection, [ backboneFixtures.database({ id: '5' }) ]);
                 this.view.$(".database select").val("5").change();
                 this.server.completeFetchAllFor(this.view.schemaView.collection, [ backboneFixtures.schema({ id: '6' }) ]);
@@ -880,7 +880,7 @@ describe("chorus.views.SchemaPicker", function() {
                     $('#jasmine_content').append(this.view.el);
                     this.view.render();
                     this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, [ backboneFixtures.gpdbDataSource({ id: '4' }) ]);
-                    this.view.$(".data_source select").val("4GpdbDataSource").change();
+                    this.view.$(".data_source select").val("4").change();
                 });
 
                 context('when a data source, database, and schema are selected from the dropdowns', function() {

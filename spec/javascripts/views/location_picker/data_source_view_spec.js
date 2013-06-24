@@ -7,7 +7,7 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
 
     context("when 'showHdfsDataSources' is true", function() {
         beforeEach(function() {
-           this.databasePicker = jasmine.createSpyObj('DatabaseView', ['hide']);
+           this.databasePicker = jasmine.createSpyObj('DatabaseView', ['hide', 'isHidden']);
            this.view = new chorus.views.LocationPicker.DataSourceView({
                showHdfsDataSources: true,
                childPicker: this.databasePicker

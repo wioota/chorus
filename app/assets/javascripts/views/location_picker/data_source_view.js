@@ -13,13 +13,15 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         if(this.options.dataSource) {
             this.setState(this.STATES.STATIC);
         } else {
-            this.collection = new (chorus.collections.Base.include(chorus.Mixins.MultiModelSet))();
             this.dataSourceCollections = [];
-            this.collectGpdbDataSources();
 
             if (this.options.showHdfsDataSources) {
+                this.collection = new (chorus.collections.Base.include(chorus.Mixins.MultiModelSet))();
                 this.collectHdfsDataSources();
+            } else {
+                this.collection = new chorus.collections.Base();
             }
+            this.collectGpdbDataSources();
             this.setState(this.STATES.LOADING);
         }
     },
