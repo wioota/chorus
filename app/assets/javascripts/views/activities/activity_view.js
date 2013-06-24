@@ -55,7 +55,7 @@ chorus.views.Activity = chorus.views.Base.extend({
                 this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: 'body', attributeIsHtmlSafe: true});
             }
             if(this.model.hasCommitMessage()) {
-                this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: 'commitMessage', attributeIsHtmlSafe: false});
+                this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: 'commitMessage', attributeIsHtmlSafe: true});
             }
         }
         this.failureContent = this.failureContent || new chorus.views.ErrorDetails({model: this.model});

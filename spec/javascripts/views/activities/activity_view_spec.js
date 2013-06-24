@@ -194,6 +194,7 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$(".activity_content .body")).not.toExist();
                 expect(this.view.$(".activity_content .truncated_text")).toExist();
                 expect(this.view.$(".activity_content .truncated_text .styled_text")).toContainText(this.model.get("commitMessage"));
+                expect(this.view.htmlContent.options.attributeIsHtmlSafe).toBeTruthy();
                 expect(this.view.htmlContent).toBeA(chorus.views.TruncatedText);
             });
         });
