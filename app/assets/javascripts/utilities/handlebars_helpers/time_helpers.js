@@ -1,12 +1,12 @@
 chorus.handlebarsHelpers.time = {
     displayTimestamp: function(timestamp) {
         var date = Date.parseFromApi(timestamp);
-        return date ? date.toString("MMMM d") : "WHENEVER";
+        return date ? date.toString("MMMM d") : "";
     },
 
     relativeTimestamp: function(timestamp) {
         var date = Date.parseFromApi(timestamp);
-        return date ? date.toRelativeTime(60000) : "WHENEVER";
+        return date ? date.toRelativeTime(60000) : "";
     }
 };
 

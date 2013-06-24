@@ -5,11 +5,11 @@ describe('chorus.handlebarsHelpers.time', function() {
         });
 
         it("tolerates bogus timestamps", function () {
-            expect(Handlebars.helpers.displayTimestamp("invalid")).toBe("WHENEVER");
+            expect(Handlebars.helpers.displayTimestamp("invalid")).toBe("");
         });
 
         it("tolerates undefined", function () {
-            expect(Handlebars.helpers.displayTimestamp()).toBe("WHENEVER");
+            expect(Handlebars.helpers.displayTimestamp()).toBe("");
         });
     });
 
@@ -20,11 +20,11 @@ describe('chorus.handlebarsHelpers.time', function() {
         });
 
         it("tolerates bogus timestamps", function () {
-            expect(Handlebars.helpers.relativeTimestamp("invalid")).toBe("WHENEVER");
+            expect(Handlebars.helpers.relativeTimestamp("invalid")).toBe("");
         });
 
         it("tolerates undefined", function () {
-            expect(Handlebars.helpers.relativeTimestamp()).toBe("WHENEVER");
+            expect(Handlebars.helpers.relativeTimestamp()).toBe("");
         });
     });
 });
