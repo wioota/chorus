@@ -31,25 +31,33 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
         this.restyle(this.stateValue);
     },
 
-    appendModelToSelect: function(select, defaultValue) {
-        return function(model) {
-            var option = $("<option/>")
-                .prop("value", model.get("id"))
-                .text(Handlebars.Utils.escapeExpression(model.get("name")));
+    modelIsSelected: function(defaultValue, model) {
+        var modelIsSelected = defaultValue && model.id === defaultValue.id;
+        return modelIsSelected;
+    },
 
-            if(model.get("id") === defaultValue) {
+    appendModelToSelect: function(select, defaultValue) {
+        return _.bind(function(model) {
+            var option = $("<option/>")
+                .prop("value", model.id)
+                .text(Handlebars.Utils.escapeExpression(model.get("name")));
+            if(this.modelIsSelected(defaultValue, model)) {
                 option.attr("selected", "selected");
             }
             select.append(option);
-        };
+        }, this);
+    },
+
+    selectionIsMissing: function(defaultValue) {
+        var selectionIsMissing = (defaultValue !== undefined && !_.contains(_.pluck(this.collection.models, "id"), defaultValue.id));
+        return selectionIsMissing;
     },
 
     populateSelect: function(defaultValue) {
         var select = this.rebuildEmptySelect();
 
         _.each(this.sortModels(this.collection && this.collection.models), this.appendModelToSelect(select, defaultValue));
-
-        if(defaultValue !== undefined && !_.contains(_.pluck(this.collection.models, "id"), defaultValue)) {
+        if(this.selectionIsMissing(defaultValue)) {
             this.onMissingSelection();
             this.clearSelection();
         }
@@ -92,7 +100,7 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
             case this.STATES.SELECT:
                 section.find(".select_container").removeClass("hidden");
                 var currentSelection = this.selection;
-                this.populateSelect(currentSelection && currentSelection.id);
+                this.populateSelect(currentSelection);
                 break;
             case this.STATES.CREATE_NEW:
                 section.find(".create_container").removeClass("hidden");

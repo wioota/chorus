@@ -77,11 +77,16 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
         function itShowsUnavailableTextWhenResponseIsEmptyFor(type) {
             context("when the response is empty for " + type, function() {
                 beforeEach(function() {
-                    var collection = this.view.getPickerSubview(type).collection;
-                    expect(collection).not.toBeFalsy();
                     if(type === 'dataSource') {
-                        this.server.completeFetchAllFor(collection, []);
+                        var gpdbDataSources = this.view.getPickerSubview(type).gpdbDataSources;
+                        var hdfsDataSources = this.view.getPickerSubview(type).hdfsDataSources;
+                        expect(gpdbDataSources).not.toBeFalsy();
+                        expect(hdfsDataSources).not.toBeFalsy();
+                        this.server.completeFetchAllFor(gpdbDataSources, []);
+                        this.server.completeFetchAllFor(hdfsDataSources, []);
                     } else {
+                        var collection = this.view.getPickerSubview(type).collection;
+                        expect(collection).not.toBeFalsy();
                         this.server.completeFetchFor(collection, []);
                     }
                 });
@@ -103,10 +108,12 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
             it("sorts the select options alphabetically for " + type, function() {
 
                 if(type === "dataSource") {
-                    this.server.completeFetchAllFor(this.view.dataSourceView.collection, [
-                        backboneFixtures.gpdbDataSource({name: "Zoo"}),
-                        backboneFixtures.gpdbDataSource({name: "Aardvark"}),
+                    this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, [
                         backboneFixtures.gpdbDataSource({name: "bear"})
+                    ]);
+                    this.server.completeFetchAllFor(this.view.dataSourceView.hdfsDataSources, [
+                        backboneFixtures.hdfsDataSource({name: "Zoo"}),
+                        backboneFixtures.hdfsDataSource({name: "Aardvark"})
                     ]);
                 } else if(type === "schema") {
                     this.server.completeFetchFor(this.view.schemaView.collection, [
@@ -194,16 +201,12 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
             });
 
             it("includes accessible=true by default", function() {
-                expect(this.server.lastFetch().url).toContainQueryParams({accessible: true});
-            });
-
-            it('renders a select for the data source', function() {
-                expect(this.view.$('.data_source select')).toExist();
-                expect(this.view.$('.data_source .title')).not.toExist();
+                expect(this.server.requests[0].url).toContainQueryParams({accessible: true});
             });
 
             it("fetches the list of data sources", function() {
                 expect(this.server.requests[0].url).toMatch("/data_sources/");
+                expect(this.server.requests[1].url).toMatch("/hdfs_data_sources");
             });
 
             itDisplaysLoadingPlaceholderFor('dataSource');
@@ -212,12 +215,20 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
 
             itSortsTheSelectOptionsAlphabetically('dataSource');
 
-            context('when the data source list fetch completes', function() {
+            context('when the data source list fetches complete', function() {
                 beforeEach(function() {
-                    this.server.completeFetchAllFor(this.view.dataSourceView.collection, [
-                        backboneFixtures.gpdbDataSource({ name: "<script>alert(hi)<script>", shared: true, id: 1 }),
-                        backboneFixtures.gpdbDataSource({ shared: true, id: 2 }),
-                        backboneFixtures.gpdbDataSource({ shared: false, id: 3 })
+                    this.firstGdpbDataSource = backboneFixtures.gpdbDataSource({ name: "alphabeticalA", shared: true, id: 1 });
+                    this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, [
+                        this.firstGdpbDataSource,
+                        backboneFixtures.gpdbDataSource({ name: "alphabeticalC", shared: true, id: 2 }),
+                        backboneFixtures.gpdbDataSource({ name: "alphabeticalD", shared: false, id: 3 })
+                    ]);
+
+                    this.firstHdfsDataSource = backboneFixtures.hdfsDataSource({name: "alphabeticalB", id: 1});
+                    this.server.completeFetchAllFor(this.view.dataSourceView.hdfsDataSources, [
+                        this.firstHdfsDataSource,
+                        backboneFixtures.hdfsDataSource({ name: "alphabeticalE", id: 2 }),
+                        backboneFixtures.hdfsDataSource({ name: "alphabeticalF", id: 3 })
                     ]);
                 });
 
@@ -241,14 +252,14 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
                     });
 
                     it('keeps the same options in the data source select', function() {
-                        expect(this.view.$("select[name=data_source] option").length).toBe(4);
+                        expect(this.view.$("select[name=data_source] option").length).toBe(7);
                     });
                 });
 
-                context('choosing a data source', function() {
+                context('choosing a gpdb data source', function() {
                     beforeEach(function() {
+                        this.server.reset();
                         this.view.$(".data_source select").prop("selectedIndex", 1).change();
-                        this.selectedDataSource = this.view.dataSourceView.collection.get(this.view.$('.data_source select option:selected').val());
                     });
 
                     itDisplaysLoadingPlaceholderFor('database');
@@ -261,9 +272,9 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
 
                         itShowsUnavailable("database");
 
-                        describe('choosing another data source', function() {
+                        describe('choosing another gpdb data source', function() {
                             beforeEach(function() {
-                                this.view.$(".data_source select").prop("selectedIndex", 2).change();
+                                this.view.$(".data_source select").prop("selectedIndex", 3).change();
                             });
 
                             itDisplaysLoadingPlaceholderFor('database');
@@ -271,7 +282,7 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
                     });
 
                     it("fetches the list of databases", function() {
-                        expect(this.server.requests[1].url).toMatch("/data_sources/" + this.selectedDataSource.get('id') + "/databases");
+                        expect(this.server.requests[0].url).toMatch("/data_sources/" + this.firstGdpbDataSource.get('id') + "/databases");
                     });
 
                     itSortsTheSelectOptionsAlphabetically('database');
@@ -316,82 +327,53 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
                             expect(this.view.$(".database .loading_text")).toHaveClass("hidden");
                         });
 
-                        it("triggers error with the message", function() {
+                        it("triggers an error with the message", function() {
                             expect("error").toHaveBeenTriggeredOn(this.view, [this.view.databaseView.collection]);
                         });
+                    });
+                });
+
+                context('choosing an hdfs data source', function() {
+                    beforeEach(function() {
+                        this.server.reset();
+                        this.view.$(".data_source select").prop("selectedIndex", 2).change();
+                    });
+
+                    itTriggersTheChangeEvent();
+
+                    it("does not fetch", function() {
+                        expect(this.server.requests.length).toBe(0);
                     });
                 });
             });
 
             context('when the data source list fetch completes without any data sources', function() {
                 beforeEach(function() {
-                    this.server.completeFetchAllFor(this.view.dataSourceView.collection, []);
+                    this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, []);
+                    this.server.completeFetchAllFor(this.view.dataSourceView.hdfsDataSources, []);
                 });
 
                 itShowsUnavailable('dataSource');
                 itHidesSection('database');
             });
 
-            context('when the data source list fetch fails', function() {
+            context('when one of the data source list fetches fails', function() {
                 beforeEach(function() {
                     spyOnEvent(this.view, 'error');
-                    this.server.lastFetchAllFor(this.view.dataSourceView.collection).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+                    this.server.lastFetchAllFor(this.view.dataSourceView.gpdbDataSources).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+                    this.server.completeFetchAllFor(this.view.dataSourceView.hdfsDataSources, []);
                 });
 
                 it("triggers error with the message", function() {
-                    expect("error").toHaveBeenTriggeredOn(this.view, [this.view.dataSourceView.collection]);
+                    expect("error").toHaveBeenTriggeredOn(this.view, [this.view.dataSourceView.gpdbDataSources]);
                 });
             });
-
 
             it("does not render creation markup", function() {
                 expect(this.view.$(".database a.new")).not.toExist();
                 expect(this.view.$(".database .create_container")).not.toExist();
                 expect(this.view.$(".schema a.new")).not.toExist();
                 expect(this.view.$(".schema .create_container")).not.toExist();
-            });
-        });
-
-        describe("#fieldValues", function() {
-            context('with a data source provided', function() {
-                beforeEach(function() {
-                    this.dataSource = backboneFixtures.gpdbDataSource();
-                    this.view = new chorus.views.WorkFlowExecutionLocationPicker({ dataSource: this.dataSource });
-                    this.view.render();
-                    this.server.completeFetchFor(this.view.databaseView.collection, [ backboneFixtures.database({ id: '5' }) ]);
-                    this.view.$(".database select").val("5").change();
-                });
-
-                it('uses the provided data source', function() {
-                    expect(this.view.fieldValues()).toEqual({
-                        dataSource: this.dataSource.get('id'),
-                        database: '5'
-                    });
-                });
-            });
-
-            context('with no data source provided', function() {
-                beforeEach(function() {
-                    this.view = new chorus.views.WorkFlowExecutionLocationPicker();
-                    $('#jasmine_content').append(this.view.el);
-                    this.view.render();
-                    this.server.completeFetchAllFor(this.view.dataSourceView.collection, [ backboneFixtures.gpdbDataSource({ id: '4' }) ]);
-                    this.view.$(".data_source select").val("4").change();
-                });
-
-                context('when a data source, database are selected from the dropdowns', function() {
-                    beforeEach(function() {
-                        this.server.completeFetchFor(this.view.databaseView.collection, [ backboneFixtures.database({ id: '5' }) ]);
-                        this.view.$(".database select").val("5").change();
-                    });
-
-                    it('returns data source, database, and schema ids', function() {
-                        expect(this.view.fieldValues()).toEqual({
-                            dataSource: '4',
-                            database: '5'
-                        });
-                    });
-                });
             });
         });
 

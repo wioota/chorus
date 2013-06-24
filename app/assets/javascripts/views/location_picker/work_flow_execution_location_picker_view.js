@@ -11,9 +11,11 @@ chorus.views.WorkFlowExecutionLocationPicker = chorus.views.LocationPicker.BaseV
         this.databaseView = new chorus.views.LocationPicker.DatabaseView();
 
         this.dataSourceView = new chorus.views.LocationPicker.DataSourceView({
+            showHdfsDataSources: true,
             dataSource: this.options.dataSource,
             childPicker: this.databaseView
         });
+
         this.registerSubView(this.databaseView);
         this.registerSubView(this.dataSourceView);
     },
