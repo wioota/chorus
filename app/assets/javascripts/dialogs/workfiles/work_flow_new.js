@@ -8,8 +8,9 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.WorkFlowNewBase.extend({
     userWillPickSchema: true,
 
     setupSubviews: function(){
+        var sandbox = this.options.workspace.sandbox();
         this.executionLocationPicker = new chorus.views.WorkFlowExecutionLocationPicker({
-            database: this.options.workspace.sandbox().database()
+            database: sandbox && sandbox.database()
         });
         this.listenTo(this.executionLocationPicker, "change", this.toggleSubmitDisabled);
     },
@@ -24,5 +25,4 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.WorkFlowNewBase.extend({
             databaseId: this.executionLocationPicker.getSelectedDatabase().id
         };
     }
-
 });

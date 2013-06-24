@@ -29,6 +29,20 @@ describe("chorus.dialogs.WorkFlowNew", function() {
         });
     });
 
+    context("when the workspace does not have a sandbox", function() {
+        beforeEach(function() {
+            this.workspace._sandbox = null;
+            this.workspace.set('sandboxInfo', null);
+            this.dialog = new chorus.dialogs.WorkFlowNew({workspace: this.workspace});
+            this.dialog.render();
+        });
+
+        it("does not set a default data source or database", function() {
+            expect(this.dialog.executionLocationPicker.getSelectedDataSource()).toBeFalsy();
+            expect(this.dialog.executionLocationPicker.getSelectedDatabase()).toBeFalsy();
+        });
+    });
+
     describe("submitting", function() {
         beforeEach(function() {
             spyOn(this.dialog.executionLocationPicker, "ready").andReturn(true);

@@ -33,6 +33,10 @@ chorus.views.WorkFlowExecutionLocationPicker = chorus.views.LocationPicker.BaseV
         }
     },
 
+    getSelectedDataSource: function() {
+        return this.dataSourceView.selection;
+    },
+
     getSelectedDatabase: function() {
         return this.databaseView.selection;
     }
