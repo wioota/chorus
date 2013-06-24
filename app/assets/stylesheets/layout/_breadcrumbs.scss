@@ -1,6 +1,4 @@
 .breadcrumbs {
-    @include background-image(linear-gradient($body-glow-color, $body-background-color));
-
     ol {
         padding: $padding-y ($padding-x + $guts-padding + 1px);
     }
