@@ -8,6 +8,9 @@
         <ul>
             {{#if isDir}}
                 <li><a class="directory_external_table" href="#">{{t "hdfs_data_source.create_directory_external_table"}}</a></li>
+                {{#if workFlowEnabled}}
+                    <li><a class="new_work_flow" href="#">{{t "sidebar.new_work_flow"}}</a></li>
+                {{/if}}
             {{else}}
                 {{#unless isBinary}}
                     <li><a class="external_table" href="#">{{t "hdfs.create_external_table"}}</a></li>

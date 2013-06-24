@@ -78,11 +78,13 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
         context("when the model is a directory", function() {
             beforeEach(function() {
+                this.modalSpy = stubModals();
                 this.hdfsEntry = backboneFixtures.hdfsDir();
                 chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
             });
 
             itHasTheRightDefaultBehavior(false);
+            itBehavesLikeAWorkFlowCreator();
 
             it("does not have a link to add a note", function() {
                 expect(this.view.$("a.dialog.add_note")).not.toExist();
@@ -92,9 +94,8 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             it("has a link to create an external table", function() {
                 expect(this.view.$("a.directory_external_table")).toExist();
                 expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs_data_source.create_directory_external_table");
-                var modalSpy = stubModals();
                 this.view.$("a.directory_external_table").click();
-                expect(modalSpy).toHaveModal(chorus.dialogs.HdfsDataSourceWorkspacePicker);
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.HdfsDataSourceWorkspacePicker);
             });
 
             it("calls the base implementation for postRender", function() {
