@@ -1,11 +1,14 @@
 <div class="info">
     <div title="{{fileName}}" class="file_name">{{fileName}}</div>
-    <div class="last_updated">{{lastUpdated}}</div>
+    <div class="last_updated">{{lastUpdatedStamp}}</div>
 </div>
 <div class="actions">
     <ul>
         {{#if canCreateExternalTable}}
             <li><a class="external_table" href="#">{{t "hdfs.create_external_table"}}</a></li>
+        {{/if}}
+        {{#if workFlowsEnabled}}
+            <li><a class="new_work_flow" href="#">{{t "sidebar.new_work_flow"}}</a></li>
         {{/if}}
         <li><a class="add_note" href="#">{{t "actions.add_note"}}</a></li>
     </ul>

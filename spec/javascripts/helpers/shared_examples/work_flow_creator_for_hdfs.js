@@ -2,6 +2,7 @@ jasmine.sharedExamples.WorkFlowCreatorForHdfs = function() {
     context("when work flows are enabled", function() {
         beforeEach(function() {
             chorus.models.Config.instance().set('workFlowConfigured', true);
+            this.modalSpy = this.modalSpy || stubModals();
             this.view.render();
         });
 

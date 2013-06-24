@@ -19,6 +19,8 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
             this.view.render();
         });
 
+        itBehavesLike.WorkFlowCreatorForHdfs();
+
         it("has the right title (the filename)", function() {
             expect(this.view.$(".file_name")).toContainText(this.hdfsEntry.get('name'));
         });
