@@ -476,6 +476,8 @@
                     return "file";
                 case "NoteOnWorkspace":
                     return "workspace";
+                case "NoteOnWorkfile":
+                    return "workfile";
                 case "NoteOnDataset":
                 case "NoteOnWorkspaceDataset":
                     return presenterHelpers.datasetType(self);

@@ -1102,6 +1102,26 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("note on a workfile", function() {
+        beforeEach(function() {
+            this.model = backboneFixtures.activity.noteOnWorkfileCreated();
+            this.presenter = new chorus.presenters.Activity(this.model);
+            this.actor = this.model.actor();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.NOTE.without_workspace", {
+                    actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
+                    noteObjectLink: linkTo(this.model.workfile().showUrl(), this.model.workfile().name()),
+                    noteObjectType: "workfile"
+                }
+            );
+        });
+    });
+
     context('note on a gpdb data source', function() {
         beforeEach(function() {
             this.model = backboneFixtures.activity.noteOnGreenplumDataSource({
