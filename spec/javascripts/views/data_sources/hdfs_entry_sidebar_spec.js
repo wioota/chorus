@@ -97,7 +97,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
                 expect(this.modalSpy.modals().length).toBe(1);
                 expect(this.modalSpy.lastModal().options).toEqual(jasmine.objectContaining({
-                    pageModel: this.hfdsEntry,
+                    pageModel: this.hdfsEntry,
                     entityId: this.hdfsEntry.id,
                     entityType: 'hdfs_file',
                     allowWorkspaceAttachments: false,
