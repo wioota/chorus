@@ -1,14 +1,4 @@
 (function() {
-
-    // states
-    var HIDDEN = 0,
-        LOADING = 1,
-        SELECT = 2,
-        STATIC = 3,
-        UNAVAILABLE = 4,
-        CREATE_NEW = 5,
-        CREATE_NESTED = 6;
-
     chorus.views.SchemaPicker = chorus.views.LocationPicker.BaseView.extend({
         constructorName: "SchemaPickerView",
         templateName: "schema_picker",
@@ -46,25 +36,21 @@
             this.registerSubView(this.dataSourceView);
         },
 
-        bindToSelectorViews: function() {
-            _([this.schemaView, this.databaseView, this.dataSourceView]).each(this.bindSubviewEvents, this);
-        },
-
         setSelectorViewDefaults: function() {
             if(_.isUndefined(this.options.showSchemaSection)) {
                 this.options.showSchemaSection = true;
             }
 
-            this.databaseView.setState(HIDDEN);
-            this.schemaView.setState(HIDDEN);
+            this.databaseView.hide();
+            this.schemaView.hide();
 
             if(this.options.defaultSchema) {
                 this.setSelection('dataSource', this.options.defaultSchema.database().dataSource());
                 this.setSelection('database', this.options.defaultSchema.database());
                 this.setSelection('schema', this.options.defaultSchema);
-                this.dataSourceView.setState(LOADING);
-                this.databaseView.setState(LOADING);
-                this.schemaView.setState(LOADING);
+                this.dataSourceView.loading();
+                this.databaseView.loading();
+                this.schemaView.loading();
             } else {
                 this.setSelection('dataSource', this.options.dataSource);
                 this.setSelection('database', this.options.database);
@@ -88,19 +74,15 @@
         createNewDatabase: function(e) {
             e.preventDefault();
             this.trigger("clearErrors");
-            this.databaseView.clearSelection();
-            this.schemaView.clearSelection();
-            this.databaseView.setState(CREATE_NEW);
-            this.schemaView.setState(CREATE_NESTED);
-            this.$(".schema input.name").val(chorus.models.Schema.DEFAULT_NAME);
+            this.databaseView.createNew();
+            this.schemaView.createNested();
+
         },
 
         createNewSchema: function(e) {
             e.preventDefault();
             this.trigger("clearErrors");
-            this.schemaView.clearSelection();
-            this.schemaView.setState(CREATE_NEW);
-            this.$(".schema input.name").val("");
+            this.schemaView.createNew();
         },
 
         cancelNewDatabase: function(e) {

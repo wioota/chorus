@@ -19,6 +19,17 @@ chorus.views.LocationPicker.SchemaView = chorus.views.LocationPicker.SelectorVie
         }
     },
 
+    createNested: function() {
+        this.clearSelection();
+        this.setState(this.STATES.CREATE_NESTED);
+        this.$("input.name").val(chorus.models.Schema.DEFAULT_NAME);
+    },
+
+    createNew: function() {
+        this._super('createNew');
+        this.$("input.name").val("");
+    },
+
     onFetchFailed: function() {
         this.clearSelection();
     },

@@ -20,12 +20,8 @@ chorus.views.WorkFlowExecutionLocationPicker = chorus.views.LocationPicker.BaseV
         this.registerSubView(this.dataSourceView);
     },
 
-    bindToSelectorViews: function() {
-        _([this.databaseView, this.dataSourceView]).each(this.bindSubviewEvents, this);
-    },
-
     setSelectorViewDefaults: function() {
-        this.databaseView.setState(this.STATES.HIDDEN);
+        this.databaseView.hide();
         this.setSelection('dataSource', this.options.dataSource);
         this.setSelection('database', this.options.database);
         if(this.dataSourceView.selection && !this.options.database) {

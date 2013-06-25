@@ -29,6 +29,15 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
         this.setState(this.STATES.HIDDEN);
     },
 
+    loading: function() {
+        this.setState(this.STATES.LOADING);
+    },
+
+    createNew: function() {
+        this.clearSelection();
+        this.setState(this.STATES.CREATE_NEW);
+    },
+
     isHidden: function() {
         return this.stateValue === this.STATES.HIDDEN;
     },

@@ -15,6 +15,10 @@ chorus.views.LocationPicker.BaseView = chorus.views.Base.extend({
         });
     },
 
+    bindToSelectorViews: function() {
+        _(this.getSubViews()).each(this.bindSubviewEvents, this);
+    },
+
     setSelection: function(type, value) {
         this.getPickerSubview(type).setSelection(value);
         this.triggerSchemaSelected();
@@ -47,15 +51,5 @@ chorus.views.LocationPicker.BaseView = chorus.views.Base.extend({
     ready: function() {
         var readiness = _(this.getSubViews()).invoke('ready');
         return _.all(readiness, _.identity);
-    },
-
-    STATES: {
-        HIDDEN: 0,
-        LOADING: 1,
-        SELECT: 2,
-        STATIC: 3,
-        UNAVAILABLE: 4,
-        CREATE_NEW: 5,
-        CREATE_NESTED: 6
     }
 });
