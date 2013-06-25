@@ -67,12 +67,12 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         var allValid = true;
         var selectedWorkspace = this.workspaces.get(this.$("option:selected").val());
 
+        var performedValidation = this._super("performValidation");
+
         if(selectedWorkspace.sandbox().dataSource().version() < "4.1") {
             this.showDialogError(t("hdfs_data_source.gpdb_version.too_old_41"));
             allValid = false;
         }
-
-        var performedValidation = this._super("performValidation");
         return allValid && performedValidation;
     },
 
@@ -86,10 +86,6 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         });
 
         this.workspaces.reset(withSandboxes, {silent: true});
-    },
-
-    showDialogError : function(errorText) {
-        this.model.serverErrors = errorText.serverErrors ? errorText.serverErrors : {fields: {not_a_real_field: {GENERIC: {message: errorText}}}};
     },
 
     saveFailed: function() {

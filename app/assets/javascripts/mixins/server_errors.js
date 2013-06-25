@@ -34,6 +34,9 @@ chorus.Mixins.ServerErrors = {
                 output = [t(fullKey)];
             }
         }
+        if (this.serverErrors.message) {
+            output.push(this.serverErrors.message);
+        }
 
         return output;
     },

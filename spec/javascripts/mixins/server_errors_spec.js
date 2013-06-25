@@ -27,18 +27,24 @@ describe("chorus.Mixins.ServerErrors", function() {
             });
 
             it("catches errors that are not directly on model fields", function() {
-                this.host.serverErrors = {"record":"NOT_FOUND"};
+                this.host.serverErrors = {"record": "NOT_FOUND"};
                 expect(_.first(this.host.serverErrorMessages())).toBe("The record you requested could not be found");
             });
 
             it("includes fields on server errors", function() {
-                this.host.serverErrors = {"record":"DATA_SOURCE_DRIVER_NOT_CONFIGURED", dataSource: "Oracle"};
+                this.host.serverErrors = {"record": "DATA_SOURCE_DRIVER_NOT_CONFIGURED", dataSource: "Oracle"};
                 expect(_.first(this.host.serverErrorMessages())).toBe("Unable to connect to the Oracle data source. Please make sure the Oracle driver is configured correctly.");
             });
 
             it("catches errors for external services", function() {
                 this.host.serverErrors = {"service": "SOLR_UNREACHABLE"};
                 expect(_.first(this.host.serverErrorMessages())).toMatchTranslation("service_error.SOLR_UNREACHABLE");
+            });
+
+            it("returns error messages without translation", function() {
+                var errorMessage = "THIS IS AN ERROR";
+                this.host.serverErrors = {"message": errorMessage};
+                expect(_.first(this.host.serverErrorMessages())).toBe(errorMessage);
             });
         });
 

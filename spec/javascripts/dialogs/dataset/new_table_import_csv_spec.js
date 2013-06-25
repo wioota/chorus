@@ -316,6 +316,11 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             expect(this.dialog.importDataGrid.markColumnNameInputAsInvalid).toHaveBeenCalledWith(1);
         });
 
+        it("Displays a dialog error about the columns", function() {
+            expect(this.dialog.$(".errors")).toContainTranslation("dataset.import.invalid_columns", {numInvalid: 2, numTotal: 5});
+            expect(this.dialog.$(".errors")).not.toHaveClass("hidden");
+        });
+
         describe("performValidation", function() {
             it("does not validate", function() {
                 expect(this.dialog.performValidation()).toBe(false);

@@ -83,4 +83,16 @@ describe("chorus.views.Dialog", function() {
             expect("close.facebox").toHaveBeenTriggeredOn($(document));
         });
     });
+
+    describe("#showDialogError", function() {
+        beforeEach(function() {
+            this.dialog.render();
+            this.dialog.model = new chorus.models.Base();
+        });
+        it("shows text given to it", function() {
+            var errorMessage = "OMG IM AN ERROR";
+            this.dialog.showDialogError(errorMessage);
+            expect(this.dialog.$(".errors")).toContainText(errorMessage);
+        });
+    });
 });

@@ -44,5 +44,13 @@ chorus.dialogs.Base = chorus.Modal.extend({
 
     revealed: function () {
         $("#facebox").removeClass().addClass("dialog_facebox");
+    },
+
+    showDialogError : function(errorText) {
+        var resource = this.resource || this.model;
+        var serverErrors = resource.serverErrors || {};
+        serverErrors.message = errorText;
+        resource.serverErrors = serverErrors;
+        this.displayServerErrors(resource);
     }
 });

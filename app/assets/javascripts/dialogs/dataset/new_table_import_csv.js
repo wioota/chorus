@@ -96,6 +96,10 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
     },
 
     saveFailed: function() {
+        if(this.model.serverErrors) {
+            this.showErrors();
+        }
+
         this.$("button.submit").stopLoading();
     },
 
@@ -131,15 +135,12 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             this.$("button.submit").startLoading(this.loadingKey);
             this.model.save();
         }
-
-        if(this.model.serverErrors) {
-            this.showErrors();
-        }
     },
 
     performValidation: function() {
         var pattern = chorus.ValidationRegexes.ChorusIdentifier64();
         var allValid = true;
+        var invalidCount = 0;
 
         var $tableName = this.$(".directions input:text");
 
@@ -154,9 +155,14 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         _.each(names, function(name, i) {
             if(!name.match(pattern)) {
                 allValid = false;
+                invalidCount += 1;
                 this.importDataGrid.markColumnNameInputAsInvalid(i);
             }
         }, this);
+
+        if(!allValid) {
+            this.showDialogError(t("dataset.import.invalid_columns", {numInvalid: invalidCount, numTotal: names.length}));
+        }
 
         return allValid;
     },

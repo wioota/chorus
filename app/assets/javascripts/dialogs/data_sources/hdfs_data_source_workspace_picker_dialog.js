@@ -23,15 +23,10 @@ chorus.dialogs.HdfsDataSourceWorkspacePicker = chorus.dialogs.PickWorkspace.exte
     },
 
     submit : function() {
-        this.model.serverErrors = [];
-
         if(this.selectedItem().sandbox().dataSource().version() < "4.2") {
             this.showDialogError(t("hdfs_data_source.gpdb_version.too_old_42"));
             return;
         }
-
-        var path = this.model.get("path");
-        var separator = (path === "/") ? "" : "/";
 
         this.hdfsFiles = new chorus.collections.CsvHdfsFileSet([], {
             hdfsDataSource : this.model.get("hdfsDataSource"),
@@ -40,11 +35,6 @@ chorus.dialogs.HdfsDataSourceWorkspacePicker = chorus.dialogs.PickWorkspace.exte
         this.hdfsFiles.bindOnce("loaded", this.launchCreateHdfsDialog, this);
         this.hdfsFiles.fetchAll();
         this.trigger("workspace:selected", this.selectedItem());
-    },
-
-    showDialogError : function(errorText) {
-        this.model.serverErrors = errorText.serverErrors ? errorText.serverErrors : {fields: {not_a_real_field: {GENERIC: {message: errorText}}}};
-        this.showErrors(this.model);
     },
 
     launchCreateHdfsDialog: function() {

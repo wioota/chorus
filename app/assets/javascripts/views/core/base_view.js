@@ -87,8 +87,12 @@ chorus.views.Base = chorus.views.Bare.extend({
             var $input = self.$("input[name=" + key + "], form textarea[name=" + key + "]");
             self.markInputAsInvalid($input, val, isModal);
         });
+        this.displayServerErrors(model);
+    },
 
+    displayServerErrors: function(model) {
         this.$(".errors").replaceWith(Handlebars.VM.invokePartial(Handlebars.partials.errorDiv, "errorDiv", this.context(model), Handlebars.helpers, Handlebars.partials));
+        this.$(".errors").removeClass("hidden");
     },
 
     markInputAsInvalid: function($input, message, isModal) {
