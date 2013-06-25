@@ -26,6 +26,7 @@ describe HdfsDataSourcePresenter, :type => :view do
       hash.should have_key(:group_list)
       hash.should have_key(:online)
       hash.should have_key(:tags)
+      hash.should have_key(:supports_work_flows)
       hash.should have_key(:job_tracker_host)
       hash.should have_key(:job_tracker_port)
       hash[:entity_type].should == 'hdfs_data_source'
@@ -38,5 +39,13 @@ describe HdfsDataSourcePresenter, :type => :view do
 
     it_behaves_like "activity stream data source presenter"
     it_behaves_like :succinct_data_source_presenter
+
+    context "in succinct mode" do
+      let(:options) { { :succinct => true } }
+
+      it "should have the correct keys" do
+        hash.should have_key(:supports_work_flows)
+      end
+    end
   end
 end

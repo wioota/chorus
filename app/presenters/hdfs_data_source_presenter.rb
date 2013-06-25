@@ -4,6 +4,7 @@ class HdfsDataSourcePresenter < Presenter
     hash = {
         :id => model.id,
         :name => model.name,
+        :supports_work_flows => model.supports_work_flows,
         :entity_type => model.entity_type_name,
         :is_deleted => model.deleted?
     }

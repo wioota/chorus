@@ -195,6 +195,35 @@ describe HdfsDataSource do
     end
   end
 
+  describe "supports_work_flows" do
+    let(:data_source) { hdfs_data_sources(:hdfs_data_source44445) }
+    context "when the data source has a job tracker host and port" do
+      it "returns true" do
+        expect(data_source.supports_work_flows).to be_true
+      end
+    end
+
+    context "when the job tracker host is missing" do
+      before do
+        data_source.job_tracker_host = nil
+      end
+
+      it "returns true" do
+        expect(data_source.supports_work_flows).to be_false
+      end
+    end
+
+    context "when the job tracker host is missing" do
+      before do
+        data_source.job_tracker_port = nil
+      end
+
+      it "returns true" do
+        expect(data_source.supports_work_flows).to be_false
+      end
+    end
+  end
+
   it_should_behave_like "taggable models", [:hdfs_data_sources, :hadoop]
 
   it_behaves_like 'a soft deletable model' do

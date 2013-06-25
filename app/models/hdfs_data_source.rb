@@ -53,6 +53,10 @@ class HdfsDataSource < ActiveRecord::Base
     self
   end
 
+  def supports_work_flows
+    !!(job_tracker_host && job_tracker_port)
+  end
+
   private
 
   def enqueue_destroy_entries
