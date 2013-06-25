@@ -47,6 +47,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
         beforeEach(function() {
             spyOn(this.dialog.executionLocationPicker, "ready").andReturn(true);
             this.dialog.executionLocationPicker.trigger('change');
+            spyOn(this.dialog.executionLocationPicker, 'getSelectedDataSource');
         });
 
         describe("with valid form values", function() {
@@ -58,47 +59,67 @@ describe("chorus.dialogs.WorkFlowNew", function() {
                 expect(this.dialog.$("form button.submit")).not.toBeDisabled();
             });
 
-            it("submits the form", function() {
-                this.dialog.$("form").submit();
-                expect(this.server.lastCreate().params()["workfile[entity_subtype]"]).toEqual('alpine');
-                expect(parseInt(this.server.lastCreate().params()["workfile[database_id]"], 10)).toEqual(this.sandboxDatabase.id);
+            context("when selecting gpdb data source", function() {
+                beforeEach(function() {
+                    this.dialog.executionLocationPicker.getSelectedDataSource.andReturn(this.sandboxDatabase.dataSource());
+                });
+
+                it("submits the form with the right parameters", function() {
+                    this.dialog.$("form").submit();
+                    expect(this.server.lastCreate().params()["workfile[entity_subtype]"]).toEqual('alpine');
+                    expect(parseInt(this.server.lastCreate().params()["workfile[database_id]"], 10)).toEqual(this.sandboxDatabase.id);
+                });
+
+                describe("when the workfile creation succeeds", function() {
+                    beforeEach(function() {
+                        spyOn(this.dialog, "closeModal");
+                        spyOn(chorus.router, "navigate");
+                        this.dialog.$("form").submit();
+                        this.server.completeSaveFor(this.dialog.resource, {id: 42});
+                    });
+
+                    it("closes the dialog", function() {
+                        expect(this.dialog.closeModal).toHaveBeenCalled();
+                    });
+
+                    it("navigates to the workflow page", function() {
+                        expect(chorus.router.navigate).toHaveBeenCalledWith("#/work_flows/42");
+                    });
+                });
+
+                describe("when the save fails", function() {
+                    beforeEach(function() {
+                        spyOn($.fn, 'stopLoading');
+                        this.dialog.$("form").submit();
+                        this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity();
+                    });
+
+                    it("removes the spinner from the button", function() {
+                        expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
+                    });
+
+                    it("does not erase the fileName input", function() {
+                        expect(this.dialog.$("input[name='fileName']").val()).toBe("stuff");
+                    });
+                });
             });
 
-            describe("when the workfile creation succeeds", function() {
+            context("when selecting hdfs data source", function() {
                 beforeEach(function() {
-                    spyOn(this.dialog, "closeModal");
-                    spyOn(chorus.router, "navigate");
-                    this.dialog.$("form").submit();
-                    this.server.completeSaveFor(this.dialog.resource, {id: 42});
+                    this.hdfsDataSource = backboneFixtures.hdfsDataSource();
+                    this.hdfsDataSource.id = '123Garbage';
+                    this.dialog.executionLocationPicker.getSelectedDataSource.andReturn(this.hdfsDataSource);
                 });
 
-                it("closes the dialog", function() {
-                    expect(this.dialog.closeModal).toHaveBeenCalled();
-                });
-
-                it("navigates to the workflow page", function() {
-                    expect(chorus.router.navigate).toHaveBeenCalledWith("#/work_flows/42");
-                });
-            });
-
-            describe("when the save fails", function() {
-                beforeEach(function() {
-                    spyOn($.fn, 'stopLoading');
-                    this.dialog.$("form").submit();
-                    this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity();
-                });
-
-                it("removes the spinner from the button", function() {
-                    expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
-                });
-
-                it("does not erase the fileName input", function() {
-                    expect(this.dialog.$("input[name='fileName']").val()).toBe("stuff");
+                it("submits the form with the right parameters", function() {
+                    this.dialog.$('form').submit();
+                    expect(this.server.lastCreate().params()["workfile[entity_subtype]"]).toEqual('alpine');
+                    expect(this.server.lastCreate().params()["workfile[hdfs_data_source_id]"]).toEqual(this.hdfsDataSource.get('id'));
                 });
             });
         });
 
-        describe("when no database is selected", function() {
+        describe("when the location picker is not ready", function() {
             it("disables the form", function() {
                 this.dialog.executionLocationPicker.ready.andReturn(false);
                 this.dialog.executionLocationPicker.trigger('change');

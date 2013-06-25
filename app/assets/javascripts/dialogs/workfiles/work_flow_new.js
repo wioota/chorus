@@ -20,9 +20,15 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.WorkFlowNewBase.extend({
     },
 
     resourceAttributes: function () {
-        return {
-            fileName: this.getFileName(),
-            databaseId: this.executionLocationPicker.getSelectedDatabase().id
+        var workFlowParams = {
+            fileName: this.getFileName()
         };
+        var selectedDataSource = this.executionLocationPicker.getSelectedDataSource();
+        if (selectedDataSource.get('entityType') === 'gpdb_data_source') {
+            workFlowParams['database_id'] = this.executionLocationPicker.getSelectedDatabase().id;
+        } else {
+            workFlowParams['hdfs_data_source_id'] = selectedDataSource.get('id');
+        }
+        return workFlowParams;
     }
 });
