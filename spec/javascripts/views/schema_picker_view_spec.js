@@ -225,10 +225,6 @@ describe("chorus.views.SchemaPicker", function() {
                     expect(this.view.$(".schema .create_container")).toExist();
                 });
 
-                it("includes accessible=true by default", function() {
-                    expect(this.server.lastFetch().url).toContainQueryParams({accessible: true});
-                });
-
                 it('renders a hidden select for the data source', function() {
                     expect(this.view.$('.data_source select')).toExist();
                     expect(this.view.$('.data_source .title')).not.toExist();

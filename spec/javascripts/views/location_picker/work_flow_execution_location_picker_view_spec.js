@@ -154,7 +154,6 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
                 var requestUrls = _(this.server.requests).pluck('url').sort();
                 expect(requestUrls[0]).toMatch("/data_sources/");
                 expect(requestUrls[1]).toMatch("/hdfs_data_sources");
-                expect(requestUrls[0]).toContainQueryParams({accessible: true});
             });
 
             itDisplaysLoadingPlaceholderFor('dataSource');

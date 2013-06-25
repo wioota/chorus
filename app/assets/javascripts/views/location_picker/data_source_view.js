@@ -39,7 +39,6 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
 
     collectGpdbDataSources: function() {
         this.gpdbDataSources = new chorus.collections.GpdbDataSourceSet();
-        this.gpdbDataSources.attributes.accessible = true;
         this.dataSourceCollections.push(this.gpdbDataSources);
         this.onceLoaded(this.gpdbDataSources, this.resourcesLoaded);
         this.listenTo(this.gpdbDataSources, "fetchFailed", this.fetchFailed);

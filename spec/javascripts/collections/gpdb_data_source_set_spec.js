@@ -9,17 +9,8 @@ describe("chorus.collections.GpdbDataSourceSet", function() {
         ]);
     });
 
-    it("does not include the accessible parameter by default", function() {
-        expect(this.collection.urlParams().accessible).toBeFalsy();
-    });
-
     it("specifies an entity type when fetching", function() {
         expect(this.collection.urlParams().entityType).toBe("gpdb_data_source");
-    });
-
-    it("includes accessible=true when requested", function() {
-        this.collection.attributes.accessible = true;
-        expect(this.collection.urlParams().accessible).toBeTruthy();
     });
 
     it('sorts the data sources by name, case insensitively', function() {
