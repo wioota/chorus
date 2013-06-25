@@ -85,8 +85,9 @@ class Import < ActiveRecord::Base
   end
 
   def cancel(success, message = nil)
-    log "Terminating import: #{inspect}"
-    copier_class.cancel(self)
+    begin
+      log "Terminating import: #{inspect}"
+      copier_class.cancel(self)
     rescue => e
       log "Error canceling import, #{e.inspect}"
       log "Stack = #{e.backtrace}"
