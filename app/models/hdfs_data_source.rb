@@ -19,6 +19,10 @@ class HdfsDataSource < ActiveRecord::Base
   after_destroy :enqueue_destroy_entries
   after_destroy :create_deleted_event, :if => :current_user
 
+  def self.with_job_tracker
+    where('job_tracker_host IS NOT NULL and job_tracker_port IS NOT NULL')
+  end
+
   def url
     "gphdfs://#{host}:#{port}/"
   end

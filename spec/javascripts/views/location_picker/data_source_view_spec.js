@@ -18,6 +18,10 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
             expect(this.server.requests.length).toBe(2);
         });
 
+        it("adds the 'jobTracker' param to the hdfs data source set", function() {
+            expect(this.view.hdfsDataSources.attributes.jobTracker).toBeTruthy();
+        });
+
         context("selecting an HDFS data source", function() {
             beforeEach(function() {
                 this.server.completeFetchAllFor(this.view.gpdbDataSources, [this.gpdbDataSource]);

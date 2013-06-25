@@ -31,6 +31,7 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
 
     collectHdfsDataSources: function() {
         this.hdfsDataSources = new chorus.collections.HdfsDataSourceSet();
+        this.hdfsDataSources.attributes.jobTracker = true;
         this.dataSourceCollections.push(this.hdfsDataSources);
         this.onceLoaded(this.hdfsDataSources, this.resourcesLoaded);
         this.listenTo(this.hdfsDataSources, "fetchFailed", this.fetchFailed);

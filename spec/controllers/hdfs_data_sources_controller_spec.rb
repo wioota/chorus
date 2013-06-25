@@ -68,12 +68,22 @@ describe HdfsDataSourcesController do
 
   describe "#index" do
     it "presents all hadoop data sources" do
-      mock_present { |models| models.to_a.to_a.should =~ HdfsDataSource.all.to_a }
+      mock_present { |models| models.to_a.should =~ HdfsDataSource.all.to_a }
       get :index
     end
 
     it_behaves_like "a paginated list"
     it_behaves_like :succinct_list
+
+    context "when job_tracker is true" do
+      it "returns only the hdfs data sources with job tracker info" do
+        get :index, :job_tracker => true
+        decoded_response.each do |data_source|
+          data_source.job_tracker_host.should be_present
+          data_source.job_tracker_port.should be_present
+        end
+      end
+    end
   end
 
   describe "#show" do

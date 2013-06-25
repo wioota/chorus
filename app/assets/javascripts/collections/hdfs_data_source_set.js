@@ -14,6 +14,10 @@ chorus.collections.HdfsDataSourceSet = chorus.collections.Base.extend({
             params.succinct = true;
         }
 
+        if (this.attributes.jobTracker) {
+            params.jobTracker = true;
+        }
+
         return params;
     }
 });

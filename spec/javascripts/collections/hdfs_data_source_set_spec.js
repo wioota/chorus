@@ -13,5 +13,11 @@ describe("chorus.collections.HdfsDataSourceSet", function() {
             this.collection.attributes.succinct = true;
             expect(this.collection.urlParams().succinct).toBe(true);
         });
+
+        it("includes the 'jobTracker' attribute when specified", function() {
+            expect(this.collection.urlParams().jobTracker).toBeUndefined();
+            this.collection.attributes.jobTracker = true;
+            expect(this.collection.urlParams().jobTracker).toBe(true);
+        });
     });
 });

@@ -201,4 +201,9 @@ describe HdfsDataSource do
     let(:model) { subject }
   end
 
+  describe '.with_job_tracker' do
+    it 'only includes the hdfs data sources with job tracker info' do
+      HdfsDataSource.with_job_tracker.should =~ (HdfsDataSource.all - [hdfs_data_sources(:hadoop)])
+    end
+  end
 end
