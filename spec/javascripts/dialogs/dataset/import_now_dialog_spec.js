@@ -139,8 +139,9 @@ describe("chorus.dialogs.ImportNow", function() {
                         expect(this.dialog.$(".limit input:checkbox")).not.toBeChecked();
                     });
 
-                    it("should have a disabled textfield for the 'Limit Rows' value", function() {
+                    it("should have a disabled textfield for the 'Limit Rows' value with the appropriate length", function() {
                         expect(this.dialog.$(".limit input:text")).toBeDisabled();
+                        expect(this.dialog.$(".limit input:text").attr("maxlength")).toBe("10");
                     });
                 });
 

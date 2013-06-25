@@ -15,6 +15,7 @@ class Import < ActiveRecord::Base
   validates :scoped_source, :presence => true, :unless => :file_name
   validates :file_name, :presence => true, :unless => :scoped_source
   validate :tables_have_consistent_schema, :unless => :file_name, :on => :create
+  validates_numericality_of :sample_count, :only_integer => true, :less_than_or_equal_to => 2147483647, :allow_blank => true
 
   after_create :create_import_event
   after_create :enqueue_import, :unless => :file_name

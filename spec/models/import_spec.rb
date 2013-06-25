@@ -110,6 +110,24 @@ describe Import, :greenplum_integration do
 
       import.should be_valid
     end
+
+    it "validates that the sample_count is between 0 and 19 digits long" do
+      import.sample_count = '500'
+      import.should be_valid
+
+      import.sample_count = ''
+      import.should be_valid
+
+      import.sample_count = nil
+      import.should be_valid
+
+      import.sample_count = '1' * 10
+      import.should be_valid
+
+      import.sample_count = '1' * 11
+      import.should_not be_valid
+      import.should have_error_on(:sample_count, :invalid)
+    end
   end
 
   describe "#handle" do
