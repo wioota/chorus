@@ -37,7 +37,6 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
     setEntry: function(entry) {
         this.resource && this.stopListening(this.resource, "unprocessableEntity");
-
         this.resource = entry;
         if (entry) {
             entry.entityId = this.resource.id;
@@ -72,7 +71,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     },
 
     additionalContext: function() {
-        return new chorus.presenters.HdfsEntrySidebar(this.resource);
+        return new chorus.presenters.HdfsEntrySidebar(this.resource, this.options);
     },
 
     createExternalTable: function(e) {

@@ -1,6 +1,7 @@
 jasmine.sharedExamples.WorkFlowCreatorForHdfs = function() {
-    context("when work flows are enabled", function() {
+    context("when work flows are enabled and the hdfs data source supports work flows", function() {
         beforeEach(function() {
+            this.view.options.hdfsDataSource = backboneFixtures.hdfsDataSource({supportsWorkFlows: true});
             chorus.models.Config.instance().set('workFlowConfigured', true);
             this.modalSpy = this.modalSpy || stubModals();
             this.view.render();
@@ -20,6 +21,18 @@ jasmine.sharedExamples.WorkFlowCreatorForHdfs = function() {
                 expect(this.modalSpy.lastModal().options.hdfsEntries.length).toBe(1);
                 expect(this.modalSpy.lastModal().options.hdfsEntries).toContain(this.hdfsEntry);
             });
+        });
+    });
+
+    context("when work flows are enabled but the hdfs data source does not support work flows", function() {
+        beforeEach(function() {
+            this.view.options.hdfsDataSource = backboneFixtures.hdfsDataSource({supportsWorkFlows: false});
+            chorus.models.Config.instance().set('workFlowConfigured', true);
+            this.view.render();
+        });
+
+        it("does note have a new work flow link", function() {
+            expect(this.view.$("a.new_work_flow")).not.toExist();
         });
     });
 

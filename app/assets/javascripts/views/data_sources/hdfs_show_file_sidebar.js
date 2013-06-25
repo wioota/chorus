@@ -32,7 +32,7 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
     },
 
     additionalContext: function() {
-        return new chorus.presenters.HdfsEntrySidebar(this.model);
+        return new chorus.presenters.HdfsEntrySidebar(this.model, this.options);
     },
 
     createExternalTable: function(e) {

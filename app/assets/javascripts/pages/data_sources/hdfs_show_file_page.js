@@ -19,7 +19,10 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
             contentDetails:new chorus.views.HdfsShowFileDetails({ model:this.model })
         });
 
-        this.sidebar = new chorus.views.HdfsShowFileSidebar({ model: this.model });
+        this.sidebar = new chorus.views.HdfsShowFileSidebar({
+            model: this.model,
+            hdfsDataSource: this.hdfsDataSource
+        });
 
         this.listenTo(this.hdfsDataSource, "loaded", this.render);
         this.listenTo(this.model, "serverResponded", this.render); // re-render when model is fetched even if it has errors

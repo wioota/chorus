@@ -5,7 +5,8 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
         var yesterday = new Date().addDays(-1).toString("yyyy-MM-ddTHH:mm:ssZ");
 
         this.hdfsEntry = backboneFixtures.hdfsFile({id: 8675309, lastUpdatedStamp: yesterday});
-        this.view = new chorus.views.HdfsShowFileSidebar({ model: this.hdfsEntry });
+        this.hdfsDataSource = backboneFixtures.hdfsDataSource({supportsWorkFlows: true});
+        this.view = new chorus.views.HdfsShowFileSidebar({ model: this.hdfsEntry, hdfsDataSource: this.hdfsDataSource});
     });
 
     describe("#setup", function() {

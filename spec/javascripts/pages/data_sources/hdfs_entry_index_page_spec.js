@@ -119,8 +119,10 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         });
 
         it("has a sidebar", function() {
-            expect($(this.page.el).find(this.page.sidebar.el)).toExist();
-            expect(this.page.sidebar).toBeA(chorus.views.HdfsEntrySidebar);
+            var sidebar = this.page.sidebar;
+            expect($(this.page.el).find(sidebar.el)).toExist();
+            expect(sidebar).toBeA(chorus.views.HdfsEntrySidebar);
+            expect(sidebar.options.hdfsDataSource.id.toString()).toBe(this.hdfsDataSource.id);
         });
 
         describe("when an entry is selected", function() {

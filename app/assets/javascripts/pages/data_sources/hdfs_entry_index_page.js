@@ -34,7 +34,8 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
         });
 
         this.sidebar = new chorus.views.HdfsEntrySidebar({
-            hdfsDataSourceId: this.hdfsDataSourceId
+            hdfsDataSourceId: this.hdfsDataSourceId,
+            hdfsDataSource: this.dataSource
         });
 
         var actions = [

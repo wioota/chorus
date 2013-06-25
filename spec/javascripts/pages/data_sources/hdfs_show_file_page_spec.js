@@ -47,6 +47,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
         it("has the correct sidebar", function() {
             expect(this.page.sidebar).toBeA(chorus.views.HdfsShowFileSidebar);
+            expect(this.page.sidebar.options.hdfsDataSource.id).toBe(this.hdfsDataSource.id);
         });
 
         it("has a header file", function() {

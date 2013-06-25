@@ -13,5 +13,9 @@ chorus.presenters.HdfsEntrySidebar = chorus.presenters.Base.extend({
 
     canCreateExternalTable: function() {
         return this.resource && this.resource.loaded && !this.resource.get("isBinary") && !this.resource.serverErrors;
+    },
+
+    canCreateWorkFlows: function() {
+        return this.workFlowsEnabled() && this.options.hdfsDataSource && this.options.hdfsDataSource.get('supportsWorkFlows');
     }
 });
