@@ -17,6 +17,10 @@ chorus.handlebarsHelpers.template = {
         return Handlebars.helpers.renderTemplate("components/form_controls", { submitText: submitText, cancelText: cancelText, disabled: true});
     },
 
+    infoBlock: function(infoTranslation) {
+        return Handlebars.helpers.renderTemplate("components/info_block", {info: infoTranslation});
+    },
+
     renderTemplateIf: function(conditional, templateName, context) {
         if (conditional) {
             return Handlebars.helpers.renderTemplate(templateName, context);
