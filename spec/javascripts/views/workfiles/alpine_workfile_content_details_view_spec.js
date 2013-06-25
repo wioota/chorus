@@ -31,10 +31,10 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
         context("when the execution location is a Greenplum database", function() {
             it("shows the data source name and database name", function() {
                 var database = this.model.executionLocation();
-                var dataSource = database.dataSource;
+                var dataSource = database.dataSource();
                 expect(this.view.$('.execution_location')).toContainTranslation("work_flows.show.gpdb_execution_location", {
-                    dataSourceName: dataSource.name,
-                    databaseName: database.name
+                    dataSourceName: dataSource.get("name"),
+                    databaseName: database.get("name")
                 });
             });
         });
@@ -48,7 +48,7 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
             it("shows the hdfs data source name", function() {
                 var hdfsDataSource = this.model.executionLocation();
                 expect(this.view.$('.execution_location')).toContainTranslation("work_flows.show.hdfs_execution_location", {
-                    dataSourceName: hdfsDataSource.name
+                    dataSourceName: hdfsDataSource.get("name")
                 });
             });
         });

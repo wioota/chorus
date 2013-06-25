@@ -80,6 +80,6 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
     },
 
     executionLocation: function() {
-        return this.get('executionLocation');
+        return new chorus.models.DynamicExecutionLocation(this.get('executionLocation'));
     }
 });

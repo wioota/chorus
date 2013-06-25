@@ -130,8 +130,10 @@ describe("chorus.models.AlpineWorkfile", function() {
     });
 
     describe("executionLocation", function() {
-       it("returns a tiny representation of the gpdb database", function() {
-           expect(this.model.executionLocation().id).toBe(this.model.get('executionLocation').id);
+       it("returns a dynamic execution location", function() {
+           spyOn(chorus.models, 'DynamicExecutionLocation').andCallThrough();
+           expect(this.model.executionLocation()).toBeA(chorus.models.Database);
+           expect(chorus.models.DynamicExecutionLocation).toHaveBeenCalledWith(this.model.get('executionLocation'));
        });
     });
 });

@@ -22,12 +22,12 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
         var executionLocation = this.model.executionLocation();
 
         if (executionLocation) {
-            if (executionLocation.entityType === "gpdb_database") {
-                ctx.dataSourceName = executionLocation.dataSource.name;
-                ctx.databaseName = executionLocation.name;
+            if (executionLocation.get("entityType") === "gpdb_database") {
+                ctx.dataSourceName = executionLocation.dataSource().get("name");
+                ctx.databaseName = executionLocation.get("name");
             } else {
                 ctx.executionLocationIsHdfs = true;
-                ctx.dataSourceName = executionLocation.name;
+                ctx.dataSourceName = executionLocation.get("name");
             }
         }
         return ctx;
