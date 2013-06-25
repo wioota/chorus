@@ -330,63 +330,76 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
                 this.view = new chorus.views.WorkFlowExecutionLocationPicker();
             });
 
-            context('when a data source, database, and schema are selected', function() {
-                beforeEach(function() {
-                    spyOn(this.view.databaseView, "fieldValues").andReturn({
-                        database: 6
-                    });
-                    spyOn(this.view.dataSourceView, "fieldValues").andReturn({
-                        dataSource: 5
-                    });
-                });
-
-                it("return true", function() {
-                    expect(this.view.ready()).toBeTruthy();
-                });
-            });
-
-            context("when not completely specified", function() {
-                context('with only a data source', function() {
+            context("when choosing a gpdb database as execution location", function() {
+                context('when a data source, database, and schema are selected', function() {
                     beforeEach(function() {
-                        spyOn(this.view.dataSourceView, "fieldValues").andReturn({
-                            dataSource: 5
-                        });
-                    });
-
-                    it("return false", function() {
-                        expect(this.view.ready()).toBeFalsy();
-                    });
-                });
-
-                context('with a data source and a blank databaseName', function() {
-                    beforeEach(function() {
-                        spyOn(this.view.dataSourceView, "fieldValues").andReturn({
-                            dataSource: 5
-                        });
-
-                        spyOn(this.view.databaseView, "fieldValues").andReturn({
-                            databaseName: ""
-                        });
-                    });
-
-                    it("return false", function() {
-                        expect(this.view.ready()).toBeFalsy();
-                    });
-                });
-
-                context('with a data source and a database', function() {
-                    beforeEach(function() {
-                        spyOn(this.view.dataSourceView, "fieldValues").andReturn({
-                            dataSource: 5
-                        });
                         spyOn(this.view.databaseView, "fieldValues").andReturn({
                             database: 6
+                        });
+                        spyOn(this.view.dataSourceView, "fieldValues").andReturn({
+                            dataSource: 5
                         });
                     });
 
                     it("return true", function() {
                         expect(this.view.ready()).toBeTruthy();
                     });
+                });
+
+                context("when not completely specified", function() {
+                    context('with only a data source', function() {
+                        beforeEach(function() {
+                            spyOn(this.view.dataSourceView, "fieldValues").andReturn({
+                                dataSource: 5
+                            });
+                        });
+
+                        it("return false", function() {
+                            expect(this.view.ready()).toBeFalsy();
+                        });
+                    });
+
+                    context('with a data source and a blank databaseName', function() {
+                        beforeEach(function() {
+                            spyOn(this.view.dataSourceView, "fieldValues").andReturn({
+                                dataSource: 5
+                            });
+
+                            spyOn(this.view.databaseView, "fieldValues").andReturn({
+                                databaseName: ""
+                            });
+                        });
+
+                        it("return false", function() {
+                            expect(this.view.ready()).toBeFalsy();
+                        });
+                    });
+
+                    context('with a data source and a database', function() {
+                        beforeEach(function() {
+                            spyOn(this.view.dataSourceView, "fieldValues").andReturn({
+                                dataSource: 5
+                            });
+                            spyOn(this.view.databaseView, "fieldValues").andReturn({
+                                database: 6
+                            });
+                        });
+
+                        it("return true", function() {
+                            expect(this.view.ready()).toBeTruthy();
+                        });
+                    });
+                });
+            });
+
+            context("when choosing an hdfs data source as execution location", function() {
+                beforeEach(function() {
+                    this.hdfsDataSource = backboneFixtures.hdfsDataSource({name: "Zoo"});
+                    this.view.dataSourceView.setSelection(this.hdfsDataSource);
+                });
+
+                it("returns true", function() {
+                    expect(this.view.ready()).toBeTruthy();
                 });
             });
         });

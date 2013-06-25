@@ -39,5 +39,11 @@ chorus.views.WorkFlowExecutionLocationPicker = chorus.views.LocationPicker.BaseV
 
     getSelectedDatabase: function() {
         return this.databaseView.selection;
+    },
+
+    ready: function() {
+        var selectedDataSource = this.getSelectedDataSource();
+        var isHdfs = (selectedDataSource && selectedDataSource.get("entityType") === "hdfs_data_source");
+        return this._super('ready') || isHdfs;
     }
 });
