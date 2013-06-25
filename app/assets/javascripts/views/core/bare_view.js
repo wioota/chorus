@@ -218,7 +218,7 @@ chorus.views.Bare = Backbone.View.include(
         },
 
         getSubview: function(property) {
-            return _.isFunction(this[property]) ? this[property]() : this[property];
+            return _.result(this, property);
         },
 
         renderHelps: function() {

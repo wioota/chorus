@@ -12,13 +12,6 @@ chorus.views.LocationPicker.SchemaView = chorus.views.LocationPicker.SelectorVie
         };
     },
 
-    schemasLoaded: function() {
-        if(this.stateValue !== this.STATES.HIDDEN) {
-            var state = (this.collection.length === 0) ? this.STATES.UNAVAILABLE : this.STATES.SELECT;
-            this.setState(state);
-        }
-    },
-
     createNested: function() {
         this.clearSelection();
         this.setState(this.STATES.CREATE_NESTED);
@@ -46,11 +39,11 @@ chorus.views.LocationPicker.SchemaView = chorus.views.LocationPicker.SelectorVie
     fetchSchemas: function(selectedDatabase) {
         this.collection = selectedDatabase.schemas();
         if(!this.collection.loaded) { // TEST ME
-            this.setState(this.STATES.LOADING);
+            this.loading();
         }
         this.collection.fetchAllIfNotLoaded();
         this.listenTo(this.collection, "fetchFailed", this.fetchFailed);
-        this.onceLoaded(this.collection, this.schemasLoaded);
+        this.onceLoaded(this.collection, this.collectionLoaded);
     },
 
     schemaSelected: function() {

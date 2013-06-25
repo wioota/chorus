@@ -33,6 +33,18 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
         this.setState(this.STATES.LOADING);
     },
 
+    unavailable: function() {
+        this.setState(this.STATES.UNAVAILABLE);
+    },
+
+    selecting: function() {
+        this.setState(this.STATES.SELECT);
+    },
+
+    fixed: function() {
+        this.setState(this.STATES.STATIC);
+    },
+
     createNew: function() {
         this.clearSelection();
         this.setState(this.STATES.CREATE_NEW);
@@ -45,6 +57,16 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
     setSelection: function(model) {
         this.selection = model;
         this.onSelection();
+    },
+
+    collectionLoaded: function() {
+        if(!this.isHidden()) {
+            if (this.collection.length === 0) {
+                this.unavailable();
+            } else {
+                this.selecting();
+            }
+        }
     },
 
     postRender: function() {
@@ -119,8 +141,7 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
                 break;
             case this.STATES.SELECT:
                 section.find(".select_container").removeClass("hidden");
-                var currentSelection = this.selection;
-                this.populateSelect(currentSelection);
+                this.populateSelect(this.selection);
                 break;
             case this.STATES.CREATE_NEW:
                 section.find(".create_container").removeClass("hidden");

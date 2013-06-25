@@ -11,7 +11,7 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         this._super('setup');
 
         if(this.options.dataSource) {
-            this.setState(this.STATES.STATIC);
+            this.fixed();
         } else {
             this.dataSourceCollections = [];
 
@@ -25,7 +25,7 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
                 return dataSource.name();
             };
             this.collectGpdbDataSources();
-            this.setState(this.STATES.LOADING);
+            this.loading();
         }
     },
 
@@ -86,8 +86,7 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
             });
 
             this.collection.reset(_(models).flatten());
-            var state = (this.collection.length === 0) ? this.STATES.UNAVAILABLE : this.STATES.SELECT;
-            this.setState(state);
+            this.collectionLoaded();
         }
     },
 

@@ -29,14 +29,7 @@ chorus.views.LocationPicker.BaseView = chorus.views.Base.extend({
     },
 
     getPickerSubview: function(type) {
-        switch (type) {
-            case "dataSource":
-                return this.dataSourceView;
-            case "database":
-                return this.databaseView;
-            case "schema":
-                return this.schemaView;
-        }
+        return this[type + "View"];
     },
 
     fieldValues: function() {

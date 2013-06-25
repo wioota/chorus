@@ -70,13 +70,11 @@
             this.$("input.name").bind("textchange", _.bind(this.triggerSchemaSelected, this));
         },
 
-
         createNewDatabase: function(e) {
             e.preventDefault();
             this.trigger("clearErrors");
             this.databaseView.createNew();
             this.schemaView.createNested();
-
         },
 
         createNewSchema: function(e) {
@@ -86,14 +84,16 @@
         },
 
         cancelNewDatabase: function(e) {
-            e.preventDefault();
-            this.databaseView.databasesLoaded();
-            this.triggerSchemaSelected();
+            this.cancel(e, this.databaseView);
         },
 
         cancelNewSchema: function(e) {
+            this.cancel(e, this.schemaView);
+        },
+
+        cancel: function(e, view) {
             e.preventDefault();
-            this.schemaView.schemasLoaded();
+            view.collectionLoaded();
             this.triggerSchemaSelected();
         },
 

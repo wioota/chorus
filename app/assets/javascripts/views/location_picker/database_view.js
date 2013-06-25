@@ -8,7 +8,7 @@ chorus.views.LocationPicker.DatabaseView = chorus.views.LocationPicker.SelectorV
 
     setup: function() {
         this._super('setup');
-        this.setState(this.options.database ? this.STATES.STATIC : this.STATES.LOADING);
+        this.options.database ? this.fixed() : this.loading();
     },
 
     additionalContext: function() {
@@ -22,7 +22,7 @@ chorus.views.LocationPicker.DatabaseView = chorus.views.LocationPicker.SelectorV
         this.clearSelection();
         this.childPicker && this.childPicker.clearSelection();
         if (dataSource) {
-            this.setState(this.STATES.LOADING);
+            this.loading();
             this.fetchDatabases(dataSource);
         }
     },
@@ -35,14 +35,7 @@ chorus.views.LocationPicker.DatabaseView = chorus.views.LocationPicker.SelectorV
         this.collection = selectedDataSource.databases();
         this.collection.fetchAllIfNotLoaded();
         this.listenTo(this.collection, "fetchFailed", this.fetchFailed);
-        this.onceLoaded(this.collection, this.databasesLoaded);
-    },
-
-    databasesLoaded: function() {
-        if (this.stateValue !== this.STATES.HIDDEN) {
-            var state = (this.collection.length === 0) ? this.STATES.UNAVAILABLE : this.STATES.SELECT;
-            this.setState(state);
-        }
+        this.onceLoaded(this.collection, this.collectionLoaded);
     },
 
     databaseSelected: function() {
@@ -53,7 +46,7 @@ chorus.views.LocationPicker.DatabaseView = chorus.views.LocationPicker.SelectorV
         if(selectedDatabase) {
             this.selection = selectedDatabase;
             if (this.childPicker) {
-                this.childPicker.setState(this.STATES.LOADING);
+                this.childPicker.loading();
                 this.childPicker.fetchSchemas(selectedDatabase);
             }
         } else {
