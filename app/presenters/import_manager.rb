@@ -14,6 +14,10 @@ class ImportManager < DelegateClass(Import)
     SQL
   end
 
+  def source_dataset
+    super if defined?(super)
+  end
+
   def connection(type)
     schema = (type == :reader ? schema : source_dataset.schema)
     schema.connect_as(user)

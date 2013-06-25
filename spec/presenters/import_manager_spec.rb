@@ -20,4 +20,12 @@ describe ImportManager do
       end
     end
   end
+
+  describe "#using_pipe?" do
+    let(:import) { imports(:csv) }
+
+    it "returns false for csv imports" do
+      import_manager.using_pipe?.should be_false
+    end
+  end
 end

@@ -42,8 +42,8 @@
       <td><%= show_process { import.busy?(:writer) } %></td>
       <td><%= show_process { import.busy?(:reader) } %></td>
 
-      <td><%= data_source_description_for_schema(import.source_dataset.schema) %></td>
-      <td><%= link_to_source(import)%></td>
+      <td><%= data_source_description_for_schema(import.source_dataset.schema) if import.source_dataset%></td>
+      <td><%= link_to_source(import) if import.source_dataset%></td>
 
       <td><%= data_source_description_for_schema(import.schema) %></td>
       <td><%= link_to_destination(import) %></td>
