@@ -107,7 +107,8 @@ resource "Workfiles" do
     let(:database_id) { gpdb_databases(:default).id }
 
     parameter :entity_subtype, ""
-    parameter :database_id, "Database Id"
+    parameter :database_id, "GPDB Database Id"
+    parameter :hdfs_data_source_id, "HDFS Data Source Id"
     parameter :workspace_id, "Workspace Id"
     parameter :description, "Workfile description"
     parameter :file_name, "Filename"
