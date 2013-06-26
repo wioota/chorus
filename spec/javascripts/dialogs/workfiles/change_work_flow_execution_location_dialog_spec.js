@@ -40,6 +40,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
 
         context("saving", function() {
             beforeEach(function() {
+                this.model.set("hdfs_data_source_id", "not_empty");
                 spyOn(this.model, "save").andCallThrough();
                 spyOn(this.dialog.executionLocationPicker, "ready").andReturn(true);
                 spyOn(this.dialog, "closeModal");
@@ -53,6 +54,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
 
             it("saves the model", function(){
                 expect(this.server.lastUpdate().params()["workfile[database_id]"]).toEqual(this.executionLocation.id.toString());
+                expect(this.server.lastUpdate().params()["workfile[hdfs_data_source_id]"]).toBeUndefined();
             });
 
             context("when save succeeds", function(){
@@ -101,6 +103,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
 
         context("saving", function() {
             beforeEach(function() {
+                this.model.set("database_id", "NOT_EMPTY");
                 spyOn(this.model, "save").andCallThrough();
                 spyOn(this.dialog.executionLocationPicker, "ready").andReturn(true);
                 spyOn(this.dialog, "closeModal");
@@ -114,6 +117,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
 
             it("saves the model", function(){
                 expect(this.server.lastUpdate().params()["workfile[hdfs_data_source_id]"]).toEqual(this.executionLocation.id.toString());
+                expect(this.server.lastUpdate().params()["workfile[database_id]"]).toBeUndefined();
             });
 
             context("when save succeeds", function(){

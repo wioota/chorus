@@ -50,6 +50,8 @@ chorus.dialogs.ChangeWorkFlowExecutionLocation = chorus.dialogs.Base.extend({
         e.preventDefault();
 
         var params = this.getWorkFlowParams();
+        this.model.unset("database_id");
+        this.model.unset("hdfs_data_source_id");
         this.model.save(params);
         this.$("button.submit").startLoading("actions.saving");
         this.$("button.cancel").prop("disabled", true);
