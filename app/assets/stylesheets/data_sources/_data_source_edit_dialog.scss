@@ -39,4 +39,8 @@
         margin-left: 4px;
         display: inline-block;
     }
+
+    select, .ui-selectmenu-button .ui-button {
+        width: 300px;
+    }
 }

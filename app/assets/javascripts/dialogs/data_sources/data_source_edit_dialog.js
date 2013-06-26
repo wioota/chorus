@@ -7,7 +7,7 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
         "submit form": "save"
     },
 
-    formFields: ["name", "host", "port", "size", "dbName", "username", "groupList", "streamUrl", "password", "jobTrackerHost", "jobTrackerPort"],
+    formFields: ["name", "host", "port", "size", "dbName", "username", "groupList", "streamUrl", "password", "jobTrackerHost", "jobTrackerPort", "hdfsVersion"],
 
     makeModel: function() {
         this.sourceModel = this.model;
@@ -20,11 +20,33 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
         this.listenTo(this.model, "validationFailed", this.saveFailed);
     },
 
+    postRender: function() {
+        this.$(".hdfs_version").val(this.model.get("hdfsVersion"));
+        _.defer(_.bind(function() {
+            chorus.styleSelect(this.$("select.hdfs_version"), { format: function(text, option) {
+                var aliasedName = $(option).attr("name");
+                return '<span class='+ aliasedName +'></span>' + text;
+            } });
+        }, this));
+    },
+
     additionalContext: function() {
         return {
             gpdbOrOracleDataSource: this.model.get("entityType") === "gpdb_data_source" || this.model.get("entityType") === "oracle_data_source",
             hdfsDataSource: this.model.constructorName === "HdfsDataSource",
-            gnipDataSource: this.model.constructorName === "GnipDataSource"
+            gnipDataSource: this.model.constructorName === "GnipDataSource",
+            hdfsVersions: [
+                "Apache Hadoop 0.20.2",
+                "Apache Hadoop 0.20.203",
+                "Apache Hadoop 1.0.4",
+                "Cloudera CDH3",
+                "Cloudera CDH4",
+                "Greenplum HD 0.20",
+                "Greenplum HD 1.1",
+                "Greenplum HD 1.2",
+                "MapR",
+                "Pivotal HD"
+            ]
         };
     },
 
@@ -35,7 +57,7 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
         };
 
         _.each(this.formFields, function(name) {
-            var input = this.$("input[name=" + name + "]");
+            var input = this.$("input[name=" + name + "], select[name=" + name + "]");
             if (input.length) {
                 attrs[name] = input.val().trim();
             }

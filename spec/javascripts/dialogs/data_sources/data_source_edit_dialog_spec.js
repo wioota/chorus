@@ -95,7 +95,8 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                     username: 'user',
                     groupList: 'hadoop',
                     jobTrackerHost: 'job-tracker-host.emc.com',
-                    jobTrackerPort: "5000"
+                    jobTrackerPort: "5000",
+                    hdfsVersion: "Greenplum HD 1.2"
                 });
                 this.dialog = new chorus.dialogs.DataSourceEdit({ model: this.dataSource });
                 this.dialog.render();
@@ -139,6 +140,11 @@ describe("chorus.dialogs.DataSourceEdit", function() {
             it("has a pre-populated and enabled 'job tracker port' field", function() {
                 expect(this.dialog.$("input[name=jobTrackerPort]").val()).toBe(this.dataSource.get('jobTrackerPort'));
                 expect(this.dialog.$("input[name=jobTrackerPort]").prop("disabled")).toBeFalsy();
+            });
+
+            it("has a pre-populated and enabled 'hdfs version' selector", function() {
+                expect(this.dialog.$("select[name=hdfsVersion]").val()).toBe(this.dataSource.get('hdfsVersion'));
+                expect(this.dialog.$("select[name=hdfsVersion]").prop("disabled")).toBeFalsy();
             });
         });
 
@@ -248,6 +254,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                 this.dialog.$("input[name=groupList]").val("groupList");
                 this.dialog.$("input[name=jobTrackerHost]").val("whatever");
                 this.dialog.$("input[name=jobTrackerPort]").val("3333");
+                this.dialog.$("select[name=hdfsVersion]").val("Greenplum HD 1.1");
                 this.dialog.$("button[type=submit]").submit();
             });
 
@@ -260,6 +267,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                 expect(this.dialog.model.has("dbName")).toBeFalsy();
                 expect(this.dialog.model.get("jobTrackerHost")).toBe("whatever");
                 expect(this.dialog.model.get("jobTrackerPort")).toBe("3333");
+                expect(this.dialog.model.get("hdfsVersion")).toBe("Greenplum HD 1.1");
             });
         });
 

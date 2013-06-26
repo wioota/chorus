@@ -12,10 +12,16 @@ class HdfsDataSource < ActiveRecord::Base
   has_many :workfiles_as_execution_location, :class_name => 'Workfile', :as => :execution_location, :dependent => :nullify
   validates_presence_of :name, :host, :port, :hdfs_version
   validates_inclusion_of :hdfs_version, :in => [
-    'Pivotal HD',
-    'MapR',
-    'Greenplum HD 1.2',
-    'Greenplum HD 0.20'
+    "Apache Hadoop 0.20.2",
+    "Apache Hadoop 0.20.203",
+    "Apache Hadoop 1.0.4",
+    "Cloudera CDH3",
+    "Cloudera CDH4",
+    "Greenplum HD 0.20",
+    "Greenplum HD 1.1",
+    "Greenplum HD 1.2",
+    "MapR",
+    "Pivotal HD"
   ]
   validates_length_of :name, :maximum => 64
 

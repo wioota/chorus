@@ -2,6 +2,15 @@
     <label class="required">{{t "data_sources.dialog.data_source_name"}}</label>
     <input type="text" name="name" maxlength="64" value="{{name}}" tabindex="1"/>
 
+    {{#if hdfsDataSource}}
+        <label class="required">{{t "data_sources.dialog.hdfs_version"}}</label><br/>
+        <select class="hdfs_version" name="hdfsVersion">
+            {{#each hdfsVersions}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select><br/>
+    {{/if}}
+
     <label>{{t "data_sources.dialog.description"}}</label>
     <textarea name="description" maxlength="4095" rows="6" tabindex="2">{{description}}</textarea>
     <input type="hidden" name="provisionType" value="{{provisionType}}"/>
