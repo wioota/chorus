@@ -129,7 +129,8 @@ chorus.views.Header = chorus.views.Base.extend({
             notifications: this.unreadNotifications,
             fullName: user && user.displayName(),
             displayName: user && user.displayShortName(),
-            userUrl: user && user.showUrl()
+            userUrl: user && user.showUrl(),
+            alpineBranded: chorus.models.Config.instance().get("alpineBranded")
         });
     },
 
