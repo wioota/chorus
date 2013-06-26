@@ -25,9 +25,23 @@ class ChorusConfig
     nil
   end
 
+  def hdfs_versions
+    [
+      "Apache Hadoop 0.20.2",
+      "Apache Hadoop 0.20.203",
+      "Apache Hadoop 1.0.4",
+      "Cloudera CDH3",
+      "Cloudera CDH4",
+      "Greenplum HD 0.20",
+      "Greenplum HD 1.1",
+      "Greenplum HD 1.2",
+      "MapR",
+      "Pivotal HD"
+    ]
+  end
   def gpfdist_configured?
     (self['gpfdist.url'] && self['gpfdist.write_port'] && self['gpfdist.read_port'] &&
-        self['gpfdist.data_dir'] && self['gpfdist.ssl.enabled'] != nil && true)
+        self['gpfdist.data_dir'] && self['gpfdist.ssl.enabled'] != nil)
   end
 
   def tableau_configured?

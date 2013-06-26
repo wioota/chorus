@@ -84,7 +84,7 @@ describe ChorusConfigPresenter, :type => :view do
     end
 
     it "includes the hdfs versions" do
-      stub(config).[]('hdfs.versions') { %w(An array of versions) }
+      stub(config).hdfs_versions { %w(An array of versions) }
       hash[:hdfs_versions].should == %w(An array of versions)
     end
   end
