@@ -27,20 +27,8 @@ describe HdfsDataSource do
     it { should validate_presence_of :host }
     it { should validate_presence_of :name }
     it { should validate_presence_of :port }
-    it { should validate_presence_of :hdfs_version }
     it do
-      should ensure_inclusion_of(:hdfs_version).in_array([
-        "Apache Hadoop 0.20.2",
-        "Apache Hadoop 0.20.203",
-        "Apache Hadoop 1.0.4",
-        "Cloudera CDH3",
-        "Cloudera CDH4",
-        "Greenplum HD 0.20",
-        "Greenplum HD 1.1",
-        "Greenplum HD 1.2",
-        "MapR",
-        "Pivotal HD"
-      ])
+      should ensure_inclusion_of(:hdfs_version).in_array(ChorusConfig.instance['hdfs.versions'])
     end
 
     it_should_behave_like "it validates with DataSourceNameValidator"

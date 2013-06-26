@@ -35,18 +35,7 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
             gpdbOrOracleDataSource: this.model.get("entityType") === "gpdb_data_source" || this.model.get("entityType") === "oracle_data_source",
             hdfsDataSource: this.model.constructorName === "HdfsDataSource",
             gnipDataSource: this.model.constructorName === "GnipDataSource",
-            hdfsVersions: [
-                "Apache Hadoop 0.20.2",
-                "Apache Hadoop 0.20.203",
-                "Apache Hadoop 1.0.4",
-                "Cloudera CDH3",
-                "Cloudera CDH4",
-                "Greenplum HD 0.20",
-                "Greenplum HD 1.1",
-                "Greenplum HD 1.2",
-                "MapR",
-                "Pivotal HD"
-            ]
+            hdfsVersions: chorus.models.Config.instance().get("hdfsVersions")
         };
     },
 

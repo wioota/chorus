@@ -82,5 +82,10 @@ describe ChorusConfigPresenter, :type => :view do
 
       hash[:visualization_overlay_string].should == ('FOR OFFICIAL USE ONLY'*50)[0...40]
     end
+
+    it "includes the hdfs versions" do
+      stub(config).[]('hdfs.versions') { %w(An array of versions) }
+      hash[:hdfs_versions].should == %w(An array of versions)
+    end
   end
 end

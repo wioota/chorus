@@ -1,5 +1,6 @@
 describe("chorus.dialogs.DataSourceEdit", function() {
     beforeEach(function() {
+        loadConfig();
         this.dataSource = backboneFixtures.gpdbDataSource({
             name: "pasta",
             host: "greenplum",

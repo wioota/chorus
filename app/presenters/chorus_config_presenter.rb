@@ -17,7 +17,8 @@ class ChorusConfigPresenter < Presenter
         :oracle_configured => model.oracle_configured?,
         :work_flow_configured => model.work_flow_configured?,
         :work_flow_url => model['work_flow.url'],
-        :alpine_branded => model['alpine.branded.enabled']
+        :alpine_branded => model['alpine.branded.enabled'],
+        :hdfs_versions => model['hdfs.versions']
     }
   end
 end

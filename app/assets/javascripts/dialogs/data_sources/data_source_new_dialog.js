@@ -28,21 +28,11 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
     },
 
     additionalContext: function() {
+        var config = chorus.models.Config.instance();
         return {
-            gnipConfigured:  chorus.models.Config.instance().get('gnipConfigured'),
-            oracleConfigured:  chorus.models.Config.instance().get('oracleConfigured'),
-            hdfsVersions: [
-                "Apache Hadoop 0.20.2",
-                "Apache Hadoop 0.20.203",
-                "Apache Hadoop 1.0.4",
-                "Cloudera CDH3",
-                "Cloudera CDH4",
-                "Greenplum HD 0.20",
-                "Greenplum HD 1.1",
-                "Greenplum HD 1.2",
-                "MapR",
-                "Pivotal HD"
-            ]
+            gnipConfigured:  config.get('gnipConfigured'),
+            oracleConfigured:  config.get('oracleConfigured'),
+            hdfsVersions: config.get("hdfsVersions")
         };
     },
 
