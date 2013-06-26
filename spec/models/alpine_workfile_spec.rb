@@ -17,8 +17,21 @@ describe AlpineWorkfile do
     context "with an archived workspace" do
       let(:workspace) { workspaces(:archived) }
 
-      it "is invalid" do
-        model.errors_on(:workspace).should include(:ARCHIVED)
+      context "on create" do
+        it "is invalid" do
+          model.errors_on(:workspace).should include(:ARCHIVED)
+        end
+      end
+
+      context "on update" do
+        let(:model) { workfiles('alpine.afm') }
+
+        it "is valid" do
+          model.workspace = workspace
+          model.workspace.should be_archived
+          model.update_attributes(:file_name => 'foobar')
+          model.errors_on(:workspace).should_not be_present
+        end
       end
     end
 

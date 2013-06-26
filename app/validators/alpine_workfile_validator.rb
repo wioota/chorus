@@ -3,7 +3,6 @@ class AlpineWorkfileValidator < ActiveModel::Validator
     ensure_datasets_xor_hdfs_entries(record)
     ensure_single_database(record)
     ensure_no_chorus_views(record)
-    ensure_active_workspace(record)
     ensure_single_hdfs_data_source(record)
   end
 
@@ -14,10 +13,6 @@ class AlpineWorkfileValidator < ActiveModel::Validator
 
   def ensure_no_chorus_views(record)
     record.errors[:datasets] << :chorus_view_selected if record.datasets.map(&:type).include?("ChorusView")
-  end
-
-  def ensure_active_workspace(record)
-    record.errors[:workspace] << :ARCHIVED if record.workspace && record.workspace.archived?
   end
 
   def ensure_single_hdfs_data_source(record)

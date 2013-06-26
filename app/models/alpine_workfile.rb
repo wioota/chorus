@@ -8,6 +8,7 @@ class AlpineWorkfile < Workfile
   before_validation { self.execution_location = hdfs_entries.first.hdfs_data_source unless hdfs_entries.empty? }
   validates_presence_of :execution_location
   validates_with AlpineWorkfileValidator
+  validate :ensure_active_workspace, :on => :create
 
   after_destroy :notify_alpine_of_deletion
 
@@ -52,5 +53,9 @@ class AlpineWorkfile < Workfile
     # config.threadsafe! or config.allow_concurrency = true in your config/environments/development.rb
     # Otherwise, this will time out.
     Alpine::API.delete_work_flow(self)
+  end
+
+  def ensure_active_workspace
+    self.errors[:workspace] << :ARCHIVED if workspace && workspace.archived?
   end
 end
