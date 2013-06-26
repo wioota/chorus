@@ -14,8 +14,8 @@ class ImportManager < DelegateClass(Import)
     SQL
   end
 
-  def source_dataset
-    super if defined?(super)
+  def has_source_dataset?
+    respond_to?(:source_dataset)
   end
 
   def connection(type)
@@ -36,7 +36,7 @@ class ImportManager < DelegateClass(Import)
   end
 
   def using_pipe?
-    source_dataset.is_a? GpdbDataset
+    source_dataset.is_a? GpdbDataset if has_source_dataset?
   end
 
   def destination_dataset
