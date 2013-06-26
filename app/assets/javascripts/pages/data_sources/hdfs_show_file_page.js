@@ -14,7 +14,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
 
         this.mainContent = new chorus.views.MainContentView({
             model:this.model,
-            content:new chorus.views.HdfsShowFileView({model:this.model}),
+            content:new chorus.views.ReadOnlyTextContent({model:this.model}),
             contentHeader:new chorus.views.HdfsShowFileHeader({ model:this.model }),
             contentDetails:new chorus.views.HdfsShowFileDetails({ model:this.model })
         });

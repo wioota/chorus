@@ -92,7 +92,7 @@ describe WorkfileVersionPresenter, :type => :view do
         context "for a very large file" do
           before do
             stub(version).contents_file_size { 100.megabytes }
-            mock(version).get_content(1.megabytes/2)
+            mock(version).get_content(131072)
           end
 
           it "it should display a truncated preview of the file, with partial_file flag set" do

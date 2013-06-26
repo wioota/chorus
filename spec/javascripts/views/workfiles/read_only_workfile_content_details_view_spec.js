@@ -33,5 +33,16 @@ describe("chorus.views.ReadOnlyWorkfileContentDetails", function() {
             expect(this.view.$(".not_previewable")).toContainTranslation("workfile.workspace_archived");
         });
     });
+
+    describe("PartialWorkfileContentDetails subclass", function() {
+        beforeEach(function() {
+            this.view = new chorus.views.PartialWorkfileContentDetails({model: this.model});
+            this.view.render();
+        });
+
+        it("explains the workfile is not editable", function() {
+            expect(this.view.$(".not_previewable")).toContainTranslation("workfile.partial_file");
+        });
+    });
 });
 

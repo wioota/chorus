@@ -31,7 +31,7 @@ class WorkfileVersionPresenter < Presenter
   end
 
   def max_presentable_content_size
-    1.megabyte/2
+    (1.megabyte/8).to_i
   end
 
   def owner_hash

@@ -1,5 +1,6 @@
 chorus.views.SqlWorkfileContentDetails = chorus.views.WorkfileContentDetails.extend({
     templateName: "sql_workfile_content_details",
+    constructorName: "SqlWorkContentDetailsView",
 
     setup: function() {
         this._super("setup", arguments);

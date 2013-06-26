@@ -147,6 +147,10 @@
             return this.get("fileType") === ALPINE;
         },
 
+        isPartialFile: function() {
+            return this.get('versionInfo') && !!this.get('versionInfo').partialFile;
+        },
+
         isTableau: function() {
             return this.get("fileType") === TABLEAU;
         },

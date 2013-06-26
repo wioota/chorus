@@ -55,6 +55,17 @@ describe("chorus.views.WorkfileContentDetails", function() {
             });
         });
 
+        context("when the given workfile is a partial file", function() {
+            beforeEach(function() {
+                this.model = backboneFixtures.workfile.sql({versionInfo: {partialFile: true}});
+            });
+
+            it("instantiates a ReadOnlyWorkfileContentDetails", function() {
+                var contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
+                expect(contentDetails).toBeA(chorus.views.PartialWorkfileContentDetails);
+            });
+        });
+
         context("when the given workfile is an Alpine file", function() {
             beforeEach(function() {
                 this.model = backboneFixtures.workfile.binary({ fileType: "alpine" });

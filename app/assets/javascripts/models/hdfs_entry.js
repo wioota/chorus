@@ -35,6 +35,10 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
 
     },
 
+    content: function() {
+        return (this.get("contents") && this.get("contents").join("\n")) || "";
+    },
+
     parent: function() {
         return _.last(this.pathSegments());
     },

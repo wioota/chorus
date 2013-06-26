@@ -56,7 +56,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         });
 
         it("shows the hdfs file", function() {
-            expect(this.page.mainContent.content).toBeA(chorus.views.HdfsShowFileView);
+            expect(this.page.mainContent.content).toBeA(chorus.views.ReadOnlyTextContent);
             expect(this.page.mainContent.content.model.get('content')).toBe(this.file.get('content'));
             expect(this.page.mainContent.content.model.get('path')).toBe(this.file.get('path'));
             expect(this.page.mainContent.content.model.get('contents').length).toBe(2);

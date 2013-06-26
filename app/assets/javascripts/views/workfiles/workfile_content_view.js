@@ -7,6 +7,10 @@ chorus.views.WorkfileContent = chorus.views.Base.extend({
                 return new chorus.views.ImageWorkfileContent({ model:model });
             }
 
+            if (model.isPartialFile()) {
+                return new chorus.views.ReadOnlyTextContent({ model:model });
+            }
+
             if (model.isSql()) {
                 return new chorus.views.SqlWorkfileContent({ model:model });
             }

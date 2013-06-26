@@ -219,6 +219,18 @@ describe("chorus.models.Workfile", function() {
         });
     });
 
+    describe("isPartialFile", function() {
+        it("returns true when the workfile is a partial file", function() {
+            var workfile = backboneFixtures.workfile.sql({ versionInfo: {partialFile: true} });
+            expect(workfile.isPartialFile()).toBeTruthy();
+        });
+
+        it("returns false when the workfile is not a partial file", function() {
+            var workfile = backboneFixtures.workfile.sql({ versionInfo: {partialFile: false} });
+            expect(workfile.isPartialFile()).toBeFalsy();
+        });
+    });
+
     describe("isTableau", function() {
         it("returns true when the workfile is a tableau file", function() {
             var workfile = backboneFixtures.workfile.tableau();

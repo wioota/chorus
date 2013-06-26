@@ -97,6 +97,10 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.include(
             return new chorus.views.ImageWorkfileContentDetails({ model:model });
         }
 
+        if (model.isPartialFile()) {
+            return new chorus.views.PartialWorkfileContentDetails({ model:model });
+        }
+
         if (model.isSql()) {
             if (model.workspace().isActive()) {
                 return new chorus.views.SqlWorkfileContentDetails({ model:model, contentView: contentView });

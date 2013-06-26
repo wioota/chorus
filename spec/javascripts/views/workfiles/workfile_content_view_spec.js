@@ -16,6 +16,18 @@ describe("chorus.views.WorkfileContent", function() {
             });
         });
 
+        context("when the given workfile is a partial file", function() {
+            beforeEach(function() {
+                this.model = backboneFixtures.workfile.text({versionInfo: {partialFile: true}});
+                spyOn(chorus.views, "ReadOnlyTextContent");
+                chorus.views.WorkfileContent.buildFor(this.model);
+            });
+
+            it("instantiates an TextWorkfileContent view with the given workfile", function() {
+                expect(chorus.views.ReadOnlyTextContent).toHaveBeenCalledWith({ model : this.model });
+            });
+        });
+
         context("when the given workfile is a text file", function() {
             beforeEach(function() {
                 this.model = backboneFixtures.workfile.text();

@@ -63,6 +63,20 @@ describe("chorus.models.HdfsEntry", function() {
         });
     });
 
+    describe("#content", function() {
+       it("returns the contents", function() {
+           var model = backboneFixtures.hdfsFile({ contents: ["first line", "second line"] });
+           expect(model.content()).toBe("first line\nsecond line");
+       });
+
+       context("when the entry is a directory", function() {
+          it("returns the empty string", function() {
+              var model = backboneFixtures.hdfsDir();
+              expect(model.content()).toBe("");
+          });
+       });
+    });
+
     describe("pathSegments", function() {
         beforeEach(function() {
             this.model = new chorus.models.HdfsEntry({
