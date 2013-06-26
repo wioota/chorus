@@ -10,23 +10,19 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
     setup: function() {
         this._super('setup');
 
-        if(this.options.dataSource) {
-            this.fixed();
-        } else {
-            this.dataSourceCollections = [];
+        this.dataSourceCollections = [];
 
-            if (this.options.showHdfsDataSources) {
-                this.collection = new (chorus.collections.Base.include(chorus.Mixins.MultiModelSet))();
-                this.collectHdfsDataSources();
-            } else {
-                this.collection = new chorus.collections.Base();
-            }
-            this.collection.comparator = function(dataSource) {
-                return dataSource.name();
-            };
-            this.collectGpdbDataSources();
-            this.loading();
+        if(this.options.showHdfsDataSources) {
+            this.collection = new (chorus.collections.Base.include(chorus.Mixins.MultiModelSet))();
+            this.collectHdfsDataSources();
+        } else {
+            this.collection = new chorus.collections.Base();
         }
+        this.collection.comparator = function(dataSource) {
+            return dataSource.name();
+        };
+        this.collectGpdbDataSources();
+        this.loading();
     },
 
     collectHdfsDataSources: function() {
@@ -67,12 +63,6 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         return this.collection && this.collection.get(dataSourceId);
     },
 
-    additionalContext: function() {
-        return {
-            dataSource: this.options.dataSource
-        };
-    },
-
     allDataSourcesLoaded: function() {
         return _(this.dataSourceCollections).all(function(dataSourceSet) {
             return dataSourceSet.loaded;
@@ -80,7 +70,7 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
     },
 
     resourcesLoaded: function() {
-        if (this.allDataSourcesLoaded()) {
+        if(this.allDataSourcesLoaded()) {
             var models = this.dataSourceCollections.map(function(dataSourceSet) {
                 return dataSourceSet.models;
             });

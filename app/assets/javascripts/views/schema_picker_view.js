@@ -23,12 +23,10 @@
 
             this.databaseView = new chorus.views.LocationPicker.DatabaseView({
                 childPicker: this.schemaView,
-                allowCreate: this.options.allowCreate,
-                database: this.options.database
+                allowCreate: this.options.allowCreate
             });
 
             this.dataSourceView = new chorus.views.LocationPicker.DataSourceView({
-                dataSource: this.options.dataSource,
                 childPicker: this.databaseView
             });
             this.registerSubView(this.schemaView);

@@ -1,11 +1,3 @@
-{{#if database}}
-<div class="header_container">
-    <label>{{t "sandbox.select.database"}}</label>
-</div>
-<div class="title">
-    {{database.attributes.name}}
-</div>
-{{else}}
 <div class="header_container">
     {{#if allowCreate}}
     <a class="new hidden" href="">{{t "sandbox.new.database"}}</a>
@@ -25,5 +17,4 @@
     <input class="name" name="databaseName" maxlength="63" placeholder="{{t "sandbox.database.name.placeholder"}}"></input>
     <a class="cancel" href="#">{{t "actions.cancel"}}</a>
 </div>
-{{/if}}
 {{/if}}

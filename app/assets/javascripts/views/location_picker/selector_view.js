@@ -41,10 +41,6 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
         this.setState(this.STATES.SELECT);
     },
 
-    fixed: function() {
-        this.setState(this.STATES.STATIC);
-    },
-
     createNew: function() {
         this.clearSelection();
         this.setState(this.STATES.CREATE_NEW);

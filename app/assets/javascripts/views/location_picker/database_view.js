@@ -8,13 +8,12 @@ chorus.views.LocationPicker.DatabaseView = chorus.views.LocationPicker.SelectorV
 
     setup: function() {
         this._super('setup');
-        this.options.database ? this.fixed() : this.loading();
+        this.loading();
     },
 
     additionalContext: function() {
         return {
-            allowCreate: this.options.allowCreate,
-            database: this.options.database
+            allowCreate: this.options.allowCreate
         };
     },
 
