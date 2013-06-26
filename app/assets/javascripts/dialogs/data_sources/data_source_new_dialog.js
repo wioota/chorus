@@ -31,7 +31,8 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         var config = chorus.models.Config.instance();
         return {
             gnipConfigured:  config.get('gnipConfigured'),
-            oracleConfigured:  config.get('oracleConfigured')
+            oracleConfigured:  config.get('oracleConfigured'),
+            defaultGpdbFields: {dbName: "postgres"}
         };
     },
 

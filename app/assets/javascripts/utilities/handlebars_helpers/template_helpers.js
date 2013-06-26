@@ -59,6 +59,10 @@ chorus.handlebarsHelpers.template = {
             hdfsVersions: chorus.models.Config.instance().get("hdfsVersions"),
             selectOne: selectOne
         });
+    },
+
+    gpdbOrOracleDataSourceFields: function(context) {
+        return Handlebars.helpers.renderTemplate("data_sources/gpdb_or_oracle_data_source_fields", context || {});
     }
 };
 

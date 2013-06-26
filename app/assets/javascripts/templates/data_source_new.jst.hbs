@@ -16,13 +16,7 @@
         <label>{{t "data_sources.dialog.description"}}</label>
         <textarea rows="3" name="description"/>
 
-        <label class="required" name="host">{{t "data_sources.dialog.host"}}</label>
-        <label class="required" name="port">{{t "data_sources.dialog.port"}}</label>
-        <input type="text" name="host"/>
-        <input type="text" name="port"/>
-
-        <label class="required" name="dbName">{{t "data_sources.dialog.db_name"}}</label>
-        <input type="text" name="dbName" value="postgres"/>
+        {{gpdbOrOracleDataSourceFields defaultGpdbFields}}
 
         <label class="required db_username" name="dbUsername">{{t "data_sources.dialog.database_account"}}</label>
         <label class="required db_password" name="dbPassword">{{t "data_sources.dialog.database_password"}}</label>
@@ -45,13 +39,7 @@
     <label>{{t "data_sources.dialog.description"}}</label>
     <textarea rows="3" name="description"/>
 
-    <label class="required" name="host">{{t "data_sources.dialog.host"}}</label>
-    <label class="required" name="port">{{t "data_sources.dialog.port"}}</label>
-    <input type="text" name="host"/>
-    <input type="text" name="port"/>
-
-    <label class="required" name="dbName">{{t "data_sources.dialog.database_name"}}</label>
-    <input type="text" name="dbName" value=""/>
+    {{gpdbOrOracleDataSourceFields}}
 
     <label class="required db_username" name="dbUsername">{{t "data_sources.dialog.database_account"}}</label>
     <label class="required db_password" name="dbPassword">{{t "data_sources.dialog.database_password"}}</label>
