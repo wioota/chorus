@@ -7,6 +7,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
             name: "myDir",
             path: "/foo"
         });
+        spyOn(chorus.pages.HdfsEntryIndexPage.prototype, 'setupMultiSelectSidebar').andCallThrough();
         this.page = new chorus.pages.HdfsEntryIndexPage("1234", "4");
     });
 
@@ -58,9 +59,6 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         });
 
         describe('multiselect', function() {
-            beforeEach(function() {
-                chorus.PageEvents.trigger("hdfs_entry:checked", this.page.collection);
-            });
 
             it("creates the multi select sidebar", function() {
                 expect(this.page.multiSelectSidebarMenu).toBeDefined();
@@ -68,41 +66,10 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                 expect(this.page.multiSelectSidebarMenu.options.selectEvent).toEqual("hdfs_entry:checked");
             });
 
-            context('when work flows are enabled', function() {
-                beforeEach(function() {
-                    chorus.models.Config.instance().set('workFlowConfigured', true);
-                    this.page = new chorus.pages.HdfsEntryIndexPage("1234", "4");
-                    this.page.render();
-                });
-
-                it("shows an action for creating a work flow from the selected entries", function() {
-                    expect(this.page.$('a.new_work_flow')).toExist();
-                    expect(this.page.$('a.new_work_flow')).toContainTranslation("sidebar.new_work_flow");
-                });
-
-                describe("clicking the create new work flow link", function() {
-                    beforeEach(function() {
-                        this.modalSpy = stubModals();
-                        this.page.$("a.new_work_flow").click();
-                    });
-
-                    it("should launch the workspace picker dialog", function() {
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.HdfsWorkFlowWorkspacePicker);
-                        expect(this.modalSpy.lastModal().options.hdfsEntries).toBe(this.page.multiSelectSidebarMenu.selectedModels);
-                    });
-                });
-            });
-
-            context('when work flows are not enabled', function() {
-                beforeEach(function() {
-                    chorus.models.Config.instance().set('workFlowConfigured', false);
-                    this.page = new chorus.pages.HdfsEntryIndexPage("1234", "4");
-                    this.page.render();
-                });
-
-                it("does not show an action for creating a work flow from the selected entries", function() {
-                    expect(this.page.$('a.new_work_flow')).not.toExist();
-                });
+            it("sets up the multiselect sidebar when the data source is loaded", function() {
+                this.page.setupMultiSelectSidebar.reset();
+                this.page.dataSource.trigger('loaded');
+                expect(this.page.setupMultiSelectSidebar).toHaveBeenCalled();
             });
         });
 
@@ -138,6 +105,66 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         });
 
         itBehavesLike.aPageWithMultiSelect();
+    });
+
+    describe("#setupMultiSelectSidebar", function() {
+        context('when work flows are enabled', function() {
+            beforeEach(function() {
+                chorus.models.Config.instance().set('workFlowConfigured', true);
+            });
+
+            context('when the HDFS data source supports work flows', function() {
+                beforeEach(function() {
+                    this.page.dataSource.set('supportsWorkFlows', true);
+                    this.page.setupMultiSelectSidebar();
+                    this.page.render();
+                    chorus.PageEvents.trigger("hdfs_entry:checked", this.page.collection);
+                });
+
+                it("shows an action for creating a work flow from the selected entries", function() {
+                    expect(this.page.$('a.new_work_flow')).toExist();
+                    expect(this.page.$('a.new_work_flow')).toContainTranslation("sidebar.new_work_flow");
+                });
+
+                describe("clicking the create new work flow link", function() {
+                    beforeEach(function() {
+                        this.modalSpy = stubModals();
+                        this.page.$("a.new_work_flow").click();
+                    });
+
+                    it("should launch the workspace picker dialog", function() {
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.HdfsWorkFlowWorkspacePicker);
+                        expect(this.modalSpy.lastModal().options.hdfsEntries).toBe(this.page.multiSelectSidebarMenu.selectedModels);
+                    });
+                });
+            });
+
+            context('when the HDFS data source does not support work flows', function() {
+                beforeEach(function() {
+                    this.page.dataSource.set('supportsWorkFlows', false);
+                    this.page.setupMultiSelectSidebar();
+                    this.page.render();
+                    chorus.PageEvents.trigger("hdfs_entry:checked", this.page.collection);
+                });
+
+                it("does not show an action for creating a work flow from the selected entries", function() {
+                    expect(this.page.$('a.new_work_flow')).not.toExist();
+                });
+            });
+
+        });
+
+        context('when work flows are not enabled', function() {
+            beforeEach(function() {
+                chorus.models.Config.instance().set('workFlowConfigured', false);
+                this.page = new chorus.pages.HdfsEntryIndexPage("1234", "4");
+                this.page.render();
+            });
+
+            it("does not show an action for creating a work flow from the selected entries", function() {
+                expect(this.page.$('a.new_work_flow')).not.toExist();
+            });
+        });
     });
 
     describe("when the path is long", function () {

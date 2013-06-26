@@ -3,10 +3,36 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
     ).extend({
     helpId: "instances",
 
-    setup:function (hdfsDataSourceId, id) {
+    setupMultiSelectSidebar: function() {
+        var actions = [
+            '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
+        ];
+
+        var actionEvents = {
+            'click .edit_tags': _.bind(function() {
+                new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+            }, this)
+        };
+
+        var workFlowConfigured = chorus.models.Config.instance().get("workFlowConfigured");
+        if(workFlowConfigured && this.dataSource.get('supportsWorkFlows')) {
+            actions.push('<a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a>');
+            actionEvents['click .new_work_flow'] = _.bind(function() {
+                new chorus.dialogs.HdfsWorkFlowWorkspacePicker({
+                    hdfsEntries: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+            }, this);
+        }
+
+        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
+            selectEvent: "hdfs_entry:checked",
+            actions: actions,
+            actionEvents: actionEvents
+        });
+    },
+
+    setup: function(hdfsDataSourceId, id) {
         this.dataSource = new chorus.models.HdfsDataSource({ id: hdfsDataSourceId });
         this.dataSource.fetch();
-        this.listenTo(this.dataSource, "loaded", this.dataSourceFetched);
         this.hdfsDataSourceId = hdfsDataSourceId;
 
         this.hdfsEntry = new chorus.models.HdfsEntry({
@@ -38,30 +64,8 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
             hdfsDataSource: this.dataSource
         });
 
-        var actions = [
-            '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
-        ];
-
-        var actionEvents = {
-            'click .edit_tags': _.bind(function() {
-                new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
-            }, this)
-        };
-
-        if (chorus.models.Config.instance().get("workFlowConfigured")) {
-            actions.push('<a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a>');
-            actionEvents['click .new_work_flow'] = _.bind(function() {
-                new chorus.dialogs.HdfsWorkFlowWorkspacePicker({
-                    hdfsEntries: this.multiSelectSidebarMenu.selectedModels}).launchModal();
-            }, this);
-        }
-
-        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
-            selectEvent: "hdfs_entry:checked",
-            actions: actions,
-            actionEvents: actionEvents
-        });
-
+        this.listenTo(this.dataSource, 'loaded', this.setupMultiSelectSidebar);
+        this.listenTo(this.dataSource, "loaded", this.dataSourceFetched);
         this.subscribePageEvent("hdfs_entry:selected", this.entrySelected);
 
         this.listenTo(this.hdfsEntry, "loaded", this.entryFetched);
