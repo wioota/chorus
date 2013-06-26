@@ -35,7 +35,9 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
 
     changeWorkfileDatabase: function(e) {
         e.preventDefault();
-        new chorus.dialogs.ChangeWorkFlowExecutionLocation().launchModal();
+        new chorus.dialogs.ChangeWorkFlowExecutionLocation({
+            model: this.model
+        }).launchModal();
     },
 
     canUpdate: function(){

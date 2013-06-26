@@ -36,7 +36,8 @@ class WorkfilesController < ApplicationController
       params[:workfile][:execution_schema] = schema
     end
 
-    workfile.update_attributes!(params[:workfile])
+    workfile.assign_attributes(params[:workfile])
+    workfile.update_from_params!(params[:workfile])
     present workfile, :presenter_options => {:include_execution_schema => true}
   end
 

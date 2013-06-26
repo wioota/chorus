@@ -23,7 +23,7 @@ chorus.views.WorkFlowExecutionLocationPicker = chorus.views.LocationPicker.BaseV
         this.databaseView.hide();
         this.setSelection('dataSource', this.options.dataSource);
         this.setSelection('database', this.options.database);
-        if(this.dataSourceView.selection && !this.options.database) {
+        if(this.dataSourceView.selection && !this.options.database && this.options.dataSource.databases) {
             this.databaseView.fetchDatabases(this.dataSourceView.selection);
         }
     },

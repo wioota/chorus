@@ -55,7 +55,7 @@ describe WorkfilesController do
     end
 
     describe "pagination" do
-      let(:sorted_workfiles) { workspace.workfiles.sort_by!{|wf| wf.file_name.downcase } }
+      let(:sorted_workfiles) { workspace.workfiles.sort_by! { |wf| wf.file_name.downcase } }
 
       it "defaults the per_page to fifty" do
         get :index, :workspace_id => workspace.id
@@ -493,6 +493,56 @@ describe WorkfilesController do
         put :update, params
         response.should be_success
         workfile.reload.file_name.should == 'something'
+      end
+
+      context "and a database has been chosen" do
+        let(:database) { gpdb_databases(:default) }
+        let(:params) do
+          {
+            :id => workfile.to_param,
+            :workspace_id => workspace.to_param,
+            :workfile => {
+              :entity_subtype => 'alpine',
+              :file_name => 'something',
+              :database_id => database.to_param
+            }
+          }
+        end
+
+        it 'updates an AlpineWorkfile' do
+          mock_present do |model|
+            model.should be_a AlpineWorkfile
+            model.file_name.should == 'something'
+            model.execution_location.should == database
+            model.workspace.should == workspace
+          end
+          put :update, params
+        end
+      end
+
+      context "and an hdfs data source has been chosen" do
+        let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
+        let(:params) do
+          {
+            :id => workfile.to_param,
+            :workspace_id => workspace.to_param,
+            :workfile => {
+              :entity_subtype => 'alpine',
+              :file_name => 'something',
+              :hdfs_data_source_id => hdfs_data_source.id
+            }
+          }
+        end
+
+        it 'updates an AlpineWorkfile' do
+          mock_present do |model|
+            model.should be_a AlpineWorkfile
+            model.file_name.should == 'something'
+            model.execution_location.should == hdfs_data_source
+            model.workspace.should == workspace
+          end
+          put :update, params
+        end
       end
     end
   end
