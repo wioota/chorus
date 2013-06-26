@@ -47,6 +47,8 @@ module Properties
         true
       when 'false'
         false
+      when /^\[.*\]$/
+         value.gsub('[', '').gsub(']', '').split(',').map(&:strip)
       when /^-?\d+$/
         value.to_i
       when /^-?\d+\.?\d*$/

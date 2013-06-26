@@ -11,6 +11,12 @@ describe Properties do
       types.decimal=-7.5
       types.true=true
       types.false=false
+      types.array=[\\
+        An,\\
+        array,\\
+        of,\\
+        strings\\
+      ]
 
       #I am a comment
       #comment= comment_value
@@ -69,6 +75,10 @@ describe Properties do
       it "handles booleans" do
         hash["types"]["true"].should == true
         hash["types"]["false"].should == false
+      end
+
+      it "handles arrays" do
+        hash["types"]["array"].should =~ %w(An array of strings)
       end
     end
 
