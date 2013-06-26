@@ -92,8 +92,10 @@ class WorkfileVersion < ActiveRecord::Base
     end
   end
 
-  def get_content
-    File.read(contents.path) if text? || sql?
+  def get_content(to_offset = nil)
+    args = [contents.path]
+    args << to_offset if to_offset
+    File.read(*args) if (text? || sql?)
   end
 
   private

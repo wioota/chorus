@@ -11,10 +11,15 @@ class WorkfileVersionPresenter < Presenter
         :created_at => model.created_at,
         :updated_at => model.updated_at,
         :content_url => model.contents.url,
+        :partial_file => partial_file?,
         :icon_url => icon_url,
         :content => content_value
       }
     })
+  end
+
+  def partial_file?
+    model.contents_file_size > max_presentable_content_size
   end
 
   def workfile_hash
@@ -22,7 +27,11 @@ class WorkfileVersionPresenter < Presenter
   end
 
   def content_value
-    options[:contents] ? model.get_content : nil
+    options[:contents] ? model.get_content(max_presentable_content_size) : nil
+  end
+
+  def max_presentable_content_size
+    1.megabyte/2
   end
 
   def owner_hash

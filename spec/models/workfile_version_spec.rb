@@ -149,6 +149,15 @@ describe WorkfileVersion do
       end
     end
 
+    context "when there's a file size limit" do
+      let(:workfile_version) { workfiles(:'sql.sql').versions.first }
+      let(:offset) { 5 }
+
+      it "only returns the first [limit] characters" do
+        workfile_version.get_content(offset).size.should == offset
+      end
+    end
+
     context "when the file is NOT a text or sql file" do
       let(:workfile_version) { workfiles(:'image.png').versions.first }
       it "returns nil" do
