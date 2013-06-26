@@ -7,7 +7,8 @@ class UserPresenter < Presenter
         :first_name => model.first_name,
         :last_name => model.last_name,
         :image => present(model.image),
-        :entity_type => model.entity_type_name
+        :entity_type => model.entity_type_name,
+        :is_deleted => model.deleted?
     }
     unless rendering_activities? || succinct?
       results.merge!(

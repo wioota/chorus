@@ -27,28 +27,30 @@ describe UserPresenter, :type => :view do
     context "When rendering the activity stream" do
       let(:options) { {:activity_stream => true} }
 
-      it "only renders the id, first/last name, username, and image" do
+      it "renders the appropriate keys" do
         hash[:id].should == user.id
         hash[:username].should == user.username
         hash[:first_name].should == user.first_name
         hash[:last_name].should == user.last_name
         hash[:entity_type].should == 'user'
         hash[:image].to_hash.should == (ImagePresenter.new(user.image, view).presentation_hash)
-        hash.keys.size.should == 6
+        hash[:is_deleted].should == user.deleted?
+        hash.keys.size.should == 7
       end
     end
 
     context "rendering succinct json" do
       let(:options) { {:succinct => true} }
 
-      it "should only render the id and name" do
+      it "renders the appropriate keys" do
         hash[:id].should == user.id
         hash[:username].should == user.username
         hash[:first_name].should == user.first_name
         hash[:last_name].should == user.last_name
         hash[:entity_type].should == 'user'
         hash[:image].to_hash.should == (ImagePresenter.new(user.image, view).presentation_hash)
-        hash.keys.size.should == 6
+        hash[:is_deleted].should == user.deleted?
+        hash.keys.size.should == 7
       end
     end
   end
