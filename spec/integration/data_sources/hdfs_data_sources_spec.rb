@@ -18,8 +18,9 @@ describe 'Data Sources', :hdfs_integration do
           fill_in 'port', :with => WEBPATH['hdfs_data_source_db']['port']
           fill_in 'username', :with => WEBPATH['hdfs_data_source_db']['username']
           fill_in 'groupList', :with => WEBPATH['hdfs_data_source_db']['group_list']
+          select_item('[name=hdfsVersion]', 'Greenplum HD 1.1')
         end
-        click_button "Add Data Source"
+        click_button 'Add Data Source'
       end
 
       find('.hdfs_data_source ul').should have_content('BestHadoop')
