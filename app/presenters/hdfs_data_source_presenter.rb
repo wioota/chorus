@@ -18,7 +18,8 @@ class HdfsDataSourcePresenter < Presenter
           :username => model.username,
           :group_list => model.group_list,
           :job_tracker_host => model.job_tracker_host,
-          :job_tracker_port => model.job_tracker_port
+          :job_tracker_port => model.job_tracker_port,
+          :hdfs_version => model.hdfs_version
       }.merge(owner_hash).
       merge(tags_hash))
     end

@@ -136,6 +136,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                     form.find("input[name=port]").val("1234");
                     form.find("input.username").val("user");
                     form.find("input.group_list").val("hadoop");
+                    form.find("select[name=hdfsVersion]").val("Cloudera CDH4");
 
                     form.find("input[name=name]").trigger("change");
                 });
@@ -152,6 +153,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                     expect(values.port).toBe("1234");
                     expect(values.username).toBe("user");
                     expect(values.groupList).toBe("hadoop");
+                    expect(values.hdfsVersion).toBe("Cloudera CDH4");
                 });
 
                 it("#fieldValues includes 'shared'", function() {

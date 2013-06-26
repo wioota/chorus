@@ -12,7 +12,8 @@ describe Hdfs::DataSourceRegistrar do
       :username => "hadoop",
       :group_list => "staff,team1",
       :job_tracker_host => "foobar",
-      :job_tracker_port => 3333
+      :job_tracker_port => 3333,
+      :hdfs_version => "Pivotal HD"
     }
   end
   let(:is_accessible) { true }

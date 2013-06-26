@@ -25,6 +25,7 @@ resource "Hdfs" do
     parameter :description, "Description of data source"
     parameter :host, "Host IP or address of HDFS data source"
     parameter :port, "Port of HDFS data source"
+    parameter :hdfs_version, "HDFS Version for the HDFS data source"
     parameter :username, "Username for connection to data source"
     parameter :group_list, "Group list for connection"
 
@@ -32,10 +33,11 @@ resource "Hdfs" do
     let(:description) { "Can you tell me how to get..." }
     let(:host) { "sesame.street.local" }
     let(:port) { "8020" }
+    let(:hdfs_version) { "Pivotal HD" }
     let(:username) { "big" }
     let(:group_list) { "bird" }
 
-    required_parameters :name, :host, :port, :username, :group_list
+    required_parameters :name, :host, :port, :username, :group_list, :hdfs_version
 
     example_request "Register a HDFS data source" do
       status.should == 201
@@ -48,6 +50,7 @@ resource "Hdfs" do
     parameter :description, "Description of data source"
     parameter :host, "Host IP or address of HDFS data source"
     parameter :port, "Port of HDFS data source"
+    parameter :hdfs_version, "HDFS Version for the HDFS data source"
     parameter :username, "Username for connection to data source"
     parameter :group_list, "Group list for connection"
 
@@ -57,9 +60,10 @@ resource "Hdfs" do
     let(:port) { "8121" }
     let(:username) { "donaldd" }
     let(:group_list) { "scroogemcduck" }
+    let(:hdfs_version) { "Pivotal HD" }
     let(:id) { data_source.id }
 
-    required_parameters :name, :host, :port, :username, :group_list
+    required_parameters :name, :host, :port, :username, :group_list, :hdfs_version
 
     example_request "Update the details on a HDFS data source" do
       status.should == 200

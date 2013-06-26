@@ -4,13 +4,19 @@ class HdfsDataSource < ActiveRecord::Base
   include SoftDelete
   include CommonDataSourceBehavior
 
-  attr_accessible :name, :host, :port, :description, :username, :group_list, :job_tracker_host, :job_tracker_port
+  attr_accessible :name, :host, :port, :description, :username, :group_list, :job_tracker_host, :job_tracker_port, :hdfs_version
   belongs_to :owner, :class_name => 'User'
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   has_many :hdfs_entries
-  has_many :workfiles_as_execution_location, :class_name => 'Workfile',  :as => :execution_location, :dependent => :nullify
-  validates_presence_of :name, :host, :port
+  has_many :workfiles_as_execution_location, :class_name => 'Workfile', :as => :execution_location, :dependent => :nullify
+  validates_presence_of :name, :host, :port, :hdfs_version
+  validates_inclusion_of :hdfs_version, :in => [
+    'Pivotal HD',
+    'MapR',
+    'Greenplum HD 1.2',
+    'Greenplum HD 0.20'
+  ]
   validates_length_of :name, :maximum => 64
 
   validates_with DataSourceNameValidator
@@ -46,7 +52,7 @@ class HdfsDataSource < ActiveRecord::Base
   end
 
   def create_root_entry
-    hdfs_entries.create({:hdfs_data_source => self, :path => "/", :is_directory => true}, { :without_protection => true })
+    hdfs_entries.create({:hdfs_data_source => self, :path => "/", :is_directory => true}, {:without_protection => true})
   end
 
   def data_source

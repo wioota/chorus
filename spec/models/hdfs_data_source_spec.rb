@@ -27,6 +27,15 @@ describe HdfsDataSource do
     it { should validate_presence_of :host }
     it { should validate_presence_of :name }
     it { should validate_presence_of :port }
+    it { should validate_presence_of :hdfs_version }
+    it do
+      should ensure_inclusion_of(:hdfs_version).in_array([
+        'Pivotal HD',
+        'MapR',
+        'Greenplum HD 1.2',
+        'Greenplum HD 0.20'
+      ])
+    end
 
     it_should_behave_like "it validates with DataSourceNameValidator"
 
@@ -174,7 +183,7 @@ describe HdfsDataSource do
 
   describe "after being created" do
     before do
-      @new_data_source = HdfsDataSource.create({:owner => User.first, :name => "Hadoop", :host => "localhost", :port => "8020"}, { :without_protection => true })
+      @new_data_source = HdfsDataSource.create({:owner => User.first, :name => "Hadoop", :host => "localhost", :port => "8020", :hdfs_version => "Pivotal HD"}, { :without_protection => true })
     end
 
     it "creates an HDFS root entry" do
