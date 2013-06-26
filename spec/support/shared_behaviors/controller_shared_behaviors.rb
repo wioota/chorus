@@ -43,6 +43,15 @@ shared_examples_for "prefixed file downloads" do
       do_request
       response.headers["Content-Disposition"].should == "attachment; filename=\"#{prefix[0..19]}#{expected_filename}\""
     end
+    
+    context "when the prefix config option contains double quotes" do
+      let(:prefix) { 'foo"bar"'}
+
+      it "strips out double quotes" do
+        do_request
+        response.headers["Content-Disposition"].should == "attachment; filename=\"foobar#{expected_filename}\""
+      end
+    end
   end
 
   context "when file_download.name_prefix is not set" do
