@@ -16,7 +16,8 @@ class ChorusConfigPresenter < Presenter
         :default_preview_row_limit => model['default_preview_row_limit'] || 100,
         :oracle_configured => model.oracle_configured?,
         :work_flow_configured => model.work_flow_configured?,
-        :work_flow_url => model['work_flow.url']
+        :work_flow_url => model['work_flow.url'],
+        :alpine_branded => model['alpine.branded.enabled']
     }
   end
 end

@@ -11,6 +11,12 @@ chorus.views.Login = chorus.views.Base.extend({
         this.listenTo(this.model, "saved", this.onLogin);
     },
 
+    additionalContext: function() {
+        return {
+          alpineBranded: chorus.models.Config.instance().get('alpineBranded')
+        };
+    },
+
     postRender : function() {
         this.$(".legal .version").load("/VERSION" + "?buster=" + chorus.cachebuster(), function(response) {
             $(this).text(response.slice(0, 19));
