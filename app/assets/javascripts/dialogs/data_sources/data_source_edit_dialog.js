@@ -34,8 +34,7 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
         return {
             gpdbOrOracleDataSource: this.model.get("entityType") === "gpdb_data_source" || this.model.get("entityType") === "oracle_data_source",
             hdfsDataSource: this.model.constructorName === "HdfsDataSource",
-            gnipDataSource: this.model.constructorName === "GnipDataSource",
-            hdfsVersions: chorus.models.Config.instance().get("hdfsVersions")
+            gnipDataSource: this.model.constructorName === "GnipDataSource"
         };
     },
 

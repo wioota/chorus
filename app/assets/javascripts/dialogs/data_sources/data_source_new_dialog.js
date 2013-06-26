@@ -31,8 +31,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         var config = chorus.models.Config.instance();
         return {
             gnipConfigured:  config.get('gnipConfigured'),
-            oracleConfigured:  config.get('oracleConfigured'),
-            hdfsVersions: config.get("hdfsVersions")
+            oracleConfigured:  config.get('oracleConfigured')
         };
     },
 

@@ -73,13 +73,7 @@
         <label class="required">{{t "data_sources.dialog.data_source_name"}}</label>
         <input type="text" name="name" maxlength="64"/>
 
-        <label class="required">{{t "data_sources.dialog.hdfs_version"}}</label><br/>
-        <select class="hdfs_version" name="hdfsVersion" id="hdfs_version">
-            <option selected name="select_one" value="">{{t "selectbox.select_one"}}</option>
-            {{#each hdfsVersions}}
-                <option value="{{this}}">{{this}}</option>
-            {{/each}}
-        </select><br/>
+        {{hdfsVersionsSelect}}
 
         <label>{{t "data_sources.dialog.description"}}</label>
         <textarea rows="3" name="description"></textarea>

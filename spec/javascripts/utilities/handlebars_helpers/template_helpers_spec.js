@@ -52,4 +52,27 @@ describe('chorus.handlebarsHelpers.template', function() {
             expect(Handlebars.helpers.renderTemplate).toHaveBeenCalledWith("data_sources/hdfs_data_source_fields", {});
         });
     });
+
+    describe("hdfsVersionsSelect", function() {
+        beforeEach(function() {
+            this.versions = chorus.models.Config.instance().get("hdfsVersions");
+            spyOn(Handlebars.helpers, "renderTemplate");
+        });
+
+        it("renders the template for hdfs data source with the passed context", function() {
+            Handlebars.helpers.hdfsVersionsSelect(false);
+            expect(Handlebars.helpers.renderTemplate).toHaveBeenCalledWith("data_sources/hdfs_versions_select", {
+                selectOne: false,
+                hdfsVersions: this.versions
+            });
+        });
+
+        it("renders the template for hdfs data source with an empty context when none is specified", function() {
+            Handlebars.helpers.hdfsVersionsSelect();
+            expect(Handlebars.helpers.renderTemplate).toHaveBeenCalledWith("data_sources/hdfs_versions_select", {
+                selectOne: true,
+                hdfsVersions: this.versions
+            });
+        });
+    });
 });

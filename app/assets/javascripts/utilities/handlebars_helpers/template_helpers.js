@@ -51,6 +51,14 @@ chorus.handlebarsHelpers.template = {
 
     hdfsDataSourceFields: function(context) {
         return Handlebars.helpers.renderTemplate("data_sources/hdfs_data_source_fields", context || {});
+    },
+
+    hdfsVersionsSelect: function(selectOne) {
+        selectOne = selectOne === undefined ? true : selectOne;
+        return Handlebars.helpers.renderTemplate("data_sources/hdfs_versions_select", {
+            hdfsVersions: chorus.models.Config.instance().get("hdfsVersions"),
+            selectOne: selectOne
+        });
     }
 };
 
