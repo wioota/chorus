@@ -36,4 +36,20 @@ describe('chorus.handlebarsHelpers.template', function() {
             expect(Handlebars.helpers.spanFor("text")).toBeA(Handlebars.SafeString);
         });
     });
+
+    describe("hdfsDataSourceFields", function() {
+        beforeEach(function() {
+            spyOn(Handlebars.helpers, "renderTemplate");
+        });
+
+        it("renders the template for hdfs data source with the passed context", function() {
+            Handlebars.helpers.hdfsDataSourceFields({param_one: "param"});
+            expect(Handlebars.helpers.renderTemplate).toHaveBeenCalledWith("data_sources/hdfs_data_source_fields", {param_one: "param"});
+        });
+
+        it("renders the template for hdfs data source with an empty context when none is specified", function() {
+            Handlebars.helpers.hdfsDataSourceFields();
+            expect(Handlebars.helpers.renderTemplate).toHaveBeenCalledWith("data_sources/hdfs_data_source_fields", {});
+        });
+    });
 });

@@ -84,20 +84,7 @@
         <label>{{t "data_sources.dialog.description"}}</label>
         <textarea rows="3" name="description"></textarea>
 
-        <label class="required" name="host">{{t "data_sources.dialog.hadoop_host"}}</label>
-        <label class="required" name="port">{{t "data_sources.dialog.port"}}</label>
-        <input type="text" name="host"/>
-        <input type="text" name="port"/>
-
-        <label name="jobTrackerHost">{{t "data_sources.dialog.hadoop_job_tracker_host"}}</label>
-        <label name="jobTrackerPort">{{t "data_sources.dialog.port"}}</label>
-        <input type="text" name="jobTrackerHost"/>
-        <input type="text" name="jobTrackerPort"/>
-
-        <label class="username required" name="username">{{t "data_sources.dialog.hadoop_account"}}</label>
-        <label class="group_list required" name="groupList">{{t "data_sources.dialog.hadoop_group_list"}}</label>
-        <input class="username" type="text" name="username" maxlength="255"/>
-        <input class="group_list" type="text" name="groupList" maxlength="255"/>
+        {{hdfsDataSourceFields}}
     </form>
 </div>
 

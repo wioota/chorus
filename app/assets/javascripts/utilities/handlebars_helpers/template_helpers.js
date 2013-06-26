@@ -47,6 +47,10 @@ chorus.handlebarsHelpers.template = {
 
     uploadWidgetFor: function(propertyName) {
         return Handlebars.helpers.renderTemplate("components/upload_widget", { propertyName: propertyName });
+    },
+
+    hdfsDataSourceFields: function(context) {
+        return Handlebars.helpers.renderTemplate("data_sources/hdfs_data_source_fields", context || {});
     }
 };
 
