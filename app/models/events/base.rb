@@ -41,15 +41,15 @@ module Events
     has_many :notes_work_flow_results, :foreign_key => 'note_id', :dependent => :destroy
     has_many :datasets_notes, :foreign_key => 'note_id', :dependent => :destroy
     has_many :datasets, :through => :datasets_notes
-    belongs_to :promoted_by, :class_name => 'User'
 
     belongs_to :actor, :class_name => 'User'
     belongs_to :target1, :polymorphic => true
     belongs_to :target2, :polymorphic => true
     belongs_to :target3, :polymorphic => true
     belongs_to :workspace
+    belongs_to :promoted_by, :class_name => 'User'
 
-    [:actor, :workspace, :target1, :target2, :target3].each do |method|
+    [:actor, :workspace, :target1, :target2, :target3, :promoted_by].each do |method|
       define_method("#{method}_with_deleted") do
         original_method = :"#{method}_without_deleted"
         send(original_method) || try_unscoped(method) { send(original_method, true) }
@@ -160,12 +160,12 @@ module Events
     private
 
     def try_unscoped(method, &block)
-      type = target_class(method).try(:unscoped,&block)
+      target_class(method).try(:unscoped, &block)
     end
 
     def target_class(method)
       case method
-        when :actor then User
+        when :actor, :promoted_by then User
         when :workspace then Workspace
         else
           type = try(:"#{method}_type")

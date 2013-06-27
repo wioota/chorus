@@ -205,6 +205,7 @@ describe Events::Base do
         stub(data_source).running? { false }
       end
     end
+
     describe "workspace" do
       it "still has access to the workspace" do
         workspace = Workspace.last
@@ -233,6 +234,24 @@ describe Events::Base do
         event.reload
         event.target1.should == target1
         event.target2.should == target2
+      end
+    end
+
+    describe "promoted_by" do
+      let(:promoter) { users(:not_a_member) }
+      let(:event) { Events::Base.create!({:actor => promoter}, :as => :create) }
+
+      before do
+        event.promoted_by = promoter
+        event.save!
+        event.reload
+      end
+
+      it "still has access to the promoter" do
+        event.promoted_by.should == promoter
+        promoter.destroy
+        event.reload
+        event.promoted_by.should == promoter
       end
     end
   end
