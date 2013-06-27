@@ -167,7 +167,6 @@ chorus.collections = {
                     model = this.get(models[i]);
                     if (!model) continue;
                     delete this._byId[model.id];
-                    delete this._byCid[model.cid];
                     index = this.indexOf(model);
                     this.models.splice(index, 1);
                     this.length--;

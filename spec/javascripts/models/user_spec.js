@@ -226,7 +226,7 @@ describe("chorus.models.User", function() {
                     password: "original_password",
                     passwordConfirmation: "original_password"
                 });
-                this.model.change();
+                this.model.trigger('change');
             });
 
             context("when the password has not changed", function() {

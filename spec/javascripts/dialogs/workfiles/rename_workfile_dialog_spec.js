@@ -81,7 +81,7 @@ describe("chorus.dialogs.RenameWorkfile", function() {
         context("when the save is successful", function() {
             beforeEach(function() {
                 spyOnEvent(chorus.PageEvents, "workfile:rename");
-                this.server.lastUpdate().succeed();
+                this.server.lastUpdate().succeed({fileName: "anotherNameThatDoesnMakeAnySense"});
             });
 
             it("closes the modal", function() {
@@ -109,6 +109,10 @@ describe("chorus.dialogs.RenameWorkfile", function() {
 
             it("retains the original file name", function() {
                expect(this.dialog.model.name()).toBe("originalName");
+            });
+
+            it("keeps the invalid name in the input", function() {
+               expect(this.dialog.$("input").val()).toBe("newName.sql");
             });
         });
     });

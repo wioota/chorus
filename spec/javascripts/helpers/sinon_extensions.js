@@ -111,10 +111,12 @@ _.extend(sinon.fakeServer, {
     },
 
     completeFetchFor: function(model, response, options, pagination) {
+        var triggerChangeManually = !response;
         response = this.makeFakeResponse(model, response);
         var fetch = this.lastFetchFor(model, options);
         if (fetch) {
             fetch.succeed(response, pagination);
+            if(triggerChangeManually) { model.trigger("change");}
         } else {
             throw "No fetch found for " + model.url() + ". Found fetches for: [" + _.pluck(this.fetches(), 'url').join(', ') + "]";
         }

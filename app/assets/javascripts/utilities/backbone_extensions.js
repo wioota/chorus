@@ -78,13 +78,13 @@ Backbone.sync = function(method, model, options) {
     }
 
     var success = options.success;
-    options.success = function(resp, status, xhr) {
-        if (success) success(resp, status, xhr);
+    options.success = function(resp) {
+        if (success) success(model, resp, options);
         model.trigger('sync', model, resp, options);
     };
 
     var error = options.error;
-    options.error = function(xhr, status, thrown) {
+    options.error = function(xhr) {
         if (error) error(model, xhr, options);
         model.trigger('error', model, xhr, options);
     };

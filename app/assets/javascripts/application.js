@@ -14,7 +14,7 @@
 //= require_tree ./templates
 //= require jquery
 //= require vendor/underscore-1.4.4
-//= require vendor/backbone-0.9.9
+//= require vendor/backbone-0.9.10
 //= require vendor/jquery.ui.core
 //= require vendor/jquery.ui.widget
 //= require vendor/jquery.ui.mouse

@@ -81,7 +81,6 @@ describe("chorus.views.HdfsEntryList", function() {
         describe("when browsing the root directory", function() {
             beforeEach(function() {
                 this.collection.attributes.path = "/";
-                this.collection.reset(this.collection.models);
                 this.view.render();
             });
 
