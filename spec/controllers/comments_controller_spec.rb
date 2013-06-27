@@ -98,6 +98,20 @@ describe CommentsController do
         }.by(1)
       end
     end
+
+    context "when the event is not a note" do
+      let(:event) { events(:owner_creates_gpdb_data_source) }
+      let(:commenter) { users(:the_collaborator) }
+
+      before do
+        Comment.create!({:event => event, :author => commenter, :body => "I am a comment"}, :without_protection => true)
+        post :create, @params
+      end
+
+      it "does not notify the event actor" do
+        Notification.where(:recipient_id => event_author.id, :event_id => event.id).should_not exist
+      end
+    end
   end
 
   describe "#show" do

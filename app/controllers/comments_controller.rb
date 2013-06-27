@@ -19,12 +19,14 @@ class CommentsController < ApplicationController
     users_to_notify = event.comments.map(&:author_id)
     users_to_notify << event.actor_id
     users_to_notify = users_to_notify.uniq - [current_user.id]
-    users_to_notify.each do |user_id|
-      Notification.create!(
-          :recipient_id => user_id,
-          :event => event,
-          :comment_id => comment.id
-      )
+    if event.is_a?(Events::Note)
+      users_to_notify.each do |user_id|
+        Notification.create!(
+            :recipient_id => user_id,
+            :event => event,
+            :comment_id => comment.id
+        )
+      end
     end
 
     present comment, :status => :created
