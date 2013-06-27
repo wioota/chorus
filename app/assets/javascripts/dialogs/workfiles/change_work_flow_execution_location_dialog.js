@@ -1,6 +1,7 @@
 chorus.dialogs.ChangeWorkFlowExecutionLocation = chorus.dialogs.Base.extend({
     templateName:"change_work_flow_execution_location",
     title: t("work_flows.change_execution_location.title"),
+    constructorName: "ChangeWorkFlowExecutionLocation",
 
     subviews: {
         ".location_picker": "executionLocationPicker"
