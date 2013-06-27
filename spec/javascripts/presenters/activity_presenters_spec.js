@@ -1407,6 +1407,55 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("user added event", function() {
+        beforeEach(function() {
+            this.model = backboneFixtures.activity.userCreated();
+            this.actor = this.model.actor();
+            this.newUser = this.model.newUser();
+            this.presenter = new chorus.presenters.Activity(this.model);
+
+            this.activity_data = {
+                newUserLink: linkTo(this.newUser.showUrl(), this.newUser.name())
+            };
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html for the default style", function() {
+            expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.UserAdded.default",
+                this.activity_data
+            );
+        });
+
+        it("has the right header html for the without_workspace style", function() {
+            expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.UserAdded.without_workspace",
+                this.activity_data
+            );
+        });
+
+        context("for notifications", function() {
+            beforeEach(function() {
+                this.presenter =new chorus.presenters.Activity(this.model, {isNotification: true});
+            });
+
+            it("has the right header html for the default style", function() {
+                expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.UserAdded.notification.default",
+                    this.activity_data
+                );
+            });
+
+            it("has the right header html for the without_workspace style", function() {
+                expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.UserAdded.notification.without_workspace",
+                    this.activity_data
+                );
+            });
+        });
+    });
+
     context("file import created event", function() {
         beforeEach(function () {
             this.model = backboneFixtures.activity.fileImportCreated();
