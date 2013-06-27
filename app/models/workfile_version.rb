@@ -65,7 +65,7 @@ class WorkfileVersion < ActiveRecord::Base
   end
 
   def text?
-    content_type && content_type.include?('text')
+    content_type && content_type.include?('text') && !content_type.include?('opendocument')
   end
 
   def sql?

@@ -33,6 +33,13 @@ describe WorkfileVersion do
       its(:text?) { should be_true }
     end
 
+    context "with a odt file" do
+      let(:filename) { "open_office_file.odt" }
+      its(:file_type) { should == "other" }
+      its(:image?) { should be_false }
+      its(:text?) { should be_false }
+    end
+
     context "with a sql file" do
       let(:filename) { "workfile.sql" }
       its(:file_type) { should == "sql" }
