@@ -67,6 +67,10 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
 
         itBehavesLike.aPageWithMultiSelect();
 
+        it("has the right title", function() {
+            expect(this.page.$(".content_header h1").text()).toBe(this.page.schema.canonicalName());
+        });
+
         it("calls teardown on the old mainContent", function() {
             expect(this.originalMainContent.teardown).toHaveBeenCalled();
         });
@@ -120,10 +124,6 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
 
                 expect(this.page.$("#breadcrumbs .breadcrumb .slug").text()).toBe(this.page.schema.get("name"));
             });
-        });
-
-        it("has the right title", function() {
-            expect(this.page.$(".content_header h1").text()).toBe(this.page.schema.canonicalName());
         });
 
         describe("the main content list", function() {
@@ -245,6 +245,13 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
                 expect(this.page.multiSelectSidebarMenu.setActions).toHaveBeenCalledWith([
                     '<a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a>'
                 ]);
+            });
+        });
+
+        context("when the collection has no datasets", function() {
+            it("does not render any actions in the sidebar", function() {
+                this.server.completeFetchFor(this.page.collection, []);
+                expect(this.page.multiSelectSidebarMenu.setActions).not.toHaveBeenCalled();
             });
         });
     });
