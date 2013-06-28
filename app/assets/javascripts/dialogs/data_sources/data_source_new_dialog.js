@@ -6,8 +6,8 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
 
     events: {
         "change select.data_sources": "showFieldset",
-        "click button.submit": "createDataSource",
-        "click a.close_errors": "clearServerErrors"
+        "click a.close_errors": "clearServerErrors",
+        "submit form": "createDataSource"
     },
 
     postRender: function() {

@@ -4,6 +4,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
         stubDefer();
         this.selectMenuStub = stubSelectMenu();
         spyOn(chorus, 'styleSelect').andCallThrough();
+        spyOn(chorus.dialogs.DataSourcesNew.prototype, "createDataSource").andCallThrough();
         this.dialog = new chorus.dialogs.DataSourcesNew();
         $('#jasmine_content').append(this.dialog.el);
         this.dialog.render();
@@ -261,7 +262,13 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
     describe("submitting the form", function() {
         beforeEach(function() {
+            this.dialog.$("select.data_sources").val(this.dialog.$("select.data_sources option:last").val());
             chorus.models.Config.instance().set({ gnipConfigured: true, gnipUrl: "www.example.com", gnipPort: 433, oracleConfigured:true });
+        });
+
+        it("hitting enter should submit the form", function() {
+            this.dialog.$("form").submit();
+            expect(chorus.dialogs.DataSourcesNew.prototype.createDataSource).toHaveBeenCalled();
         });
 
         function testUpload() {
