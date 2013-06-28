@@ -38,10 +38,10 @@
     <div class="data_sources_form collapsed register_existing_oracle">
         <div class="description">{{t "data_sources.new_dialog.register_existing_oracle_help_text"}}</div>
         <label class="required">{{t "data_sources.dialog.data_source_name"}}</label>
-        <input type="text" name="name" maxlength="64"/>
+        <input type="text" name="name" maxlength="64" tabindex="1"/>
 
         <label>{{t "data_sources.dialog.description"}}</label>
-        <textarea rows="3" name="description"/>
+        <textarea rows="3" name="description" tabindex="1"/>
 
         {{gpdbOrOracleDataSourceFields}}
 
