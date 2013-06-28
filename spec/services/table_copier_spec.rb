@@ -34,6 +34,7 @@ describe TableCopier do
 
       stub(destination_schema).connect_as(user) { destination_connection }
       stub(destination_schema).connect_with(account) { destination_connection }
+      stub(destination_connection).is_hawq? { false }
     end
 
     describe "#initialize_destination_table" do
@@ -169,6 +170,23 @@ describe TableCopier do
         source_columns = source_conn.column_info(source_dataset.name, '').map { |hash| hash.slice(:attname, :format_type) }
         dest_columns = dest_conn.column_info(destination_table_name, '').map { |hash| hash.slice(:attname, :format_type) }
         source_columns.should == dest_columns
+      end
+
+      context "when the destination is a HAWQ data source", :hawq_integration do
+        let(:destination_schema) { destination_data_source.databases.first.schemas.first }
+        let!(:destination_data_source) { HawqIntegration.real_data_source }
+
+        let(:source_dataset) { GreenplumIntegration.real_database.datasets.first  }
+
+        before do
+          destination_data_source.refresh_databases
+        end
+
+        it "can create the destination table" do
+          expect do
+            copier.initialize_destination_table
+          end.not_to raise_error
+        end
       end
     end
 

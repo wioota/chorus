@@ -69,7 +69,7 @@ class TableCopier
   end
 
   def primary_key_clause
-    if chorus_view?
+    if chorus_view? || is_hawq?
       primary_key_rows = []
     else
       primary_key_rows = primary_key_columns
@@ -115,6 +115,10 @@ class TableCopier
 
   def chorus_view?
     source_dataset.is_a?(ChorusView)
+  end
+
+  def is_hawq?
+    destination_connection.is_hawq?
   end
 
   def destination_table_fullname

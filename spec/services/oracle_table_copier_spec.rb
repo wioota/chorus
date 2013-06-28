@@ -37,6 +37,7 @@ describe OracleTableCopier do
       stub(destination_schema).connect_with(account) { destination_connection }
 
       stub(destination_connection).table_exists?(destination_table_name) { destination_exists }
+      stub(destination_connection).is_hawq? { false }
       stub(source_connection).column_info(source_dataset.name, anything) do
         [
             {:attname => "BIN_DOUBLE", :format_type => "BINARY_DOUBLE"},
