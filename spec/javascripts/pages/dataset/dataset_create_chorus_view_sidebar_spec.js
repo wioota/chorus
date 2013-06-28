@@ -6,7 +6,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         aggregateColumnSet.reset(this.dataset.columns().models);
         this.view = new chorus.views.CreateChorusViewSidebar({model: this.dataset, aggregateColumnSet: aggregateColumnSet});
         this.chorusView = this.view.chorusView;
-        this.modals = stubModals();
+        this.modalSpy = stubModals();
     });
 
     describe("#render", function() {
@@ -38,14 +38,24 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(addJoinLink.text()).toMatchTranslation("dataset.chorusview.sidebar.add_join");
             });
 
-            it("launches a 'manage join tables' dialog", function() {
-                expect(addJoinLink).toHaveData("dialog", "ManageJoinTables");
-            });
-
             it("has a reference to a chorus view derived from the current dataset", function() {
                 var chorusView = addJoinLink.data("chorusView");
                 expect(chorusView).toBeA(chorus.models.ChorusView);
                 expect(chorusView.sourceObject).toBe(this.dataset);
+            });
+
+            context("clicking on it", function() {
+                beforeEach(function() {
+                    this.modalSpy.reset();
+                    $('#jasmine_content').append(this.view.$el);
+                    chorus.page = this.view;
+                    this.view.$("a.add_join").click();
+                });
+
+                it("shows the ManageJoinTables dialog once", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.ManageJoinTables);
+                    expect(this.modalSpy.modals().length).toBe(1);
+                });
             });
         });
 
@@ -235,13 +245,13 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             });
 
             it("launches a preview sql dialog with the chorus view as its model", function() {
-                var lastModal = this.modals.lastModal();
+                var lastModal = this.modalSpy.lastModal();
                 expect(lastModal).toBeA(chorus.dialogs.SqlPreview);
                 expect(lastModal.model).toBe(this.view.chorusView);
             });
 
             it("sets the right sql on the chorus view", function() {
-                var lastModal = this.modals.lastModal();
+                var lastModal = this.modalSpy.lastModal();
                 expect(lastModal.model.get("query")).toBe(this.view.sql());
             });
         });

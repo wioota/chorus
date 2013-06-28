@@ -5,7 +5,8 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
         "click button.create": "createChorusView",
         "click a.remove": "removeColumnClicked",
         "click img.delete": "removeJoinClicked",
-        "click a.preview": "previewSqlLinkClicked"
+        "click a.preview": "previewSqlLinkClicked",
+        "click a.add_join": "launchManageJoinTableDialog"
     },
 
     setup: function() {
@@ -82,5 +83,14 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
 
     sql: function() {
         return [this.chorusView.generateSelectClause(), this.chorusView.generateFromClause(), this.whereClause()].join("\n");
+    },
+
+    launchManageJoinTableDialog: function(e) {
+        e.preventDefault();
+        var dialog = new chorus.dialogs.ManageJoinTables({
+            pageModel: this.model,
+            chorusView: this.chorusView
+        });
+        dialog.launchModal();
     }
 });
