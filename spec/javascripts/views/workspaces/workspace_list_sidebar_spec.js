@@ -1,12 +1,13 @@
 describe("chorus.views.WorkspaceListSidebar", function() {
     beforeEach(function() {
+        this.modalSpy = stubModals();
         this.view = new chorus.views.WorkspaceListSidebar();
     });
 
     context("no workspaces exist", function() {
         it("does not have actions to add a note and to add an insight", function() {
-            expect(this.view.$(".actions a[data-dialog=NotesNew]")).not.toContainTranslation("actions.add_note");
-            expect(this.view.$(".actions a[data-dialog=InsightsNew]")).not.toContainTranslation("actions.add_insight");
+            expect(this.view.$(".actions a.new_note")).not.toExist();
+            expect(this.view.$(".actions a.new_insight")).not.toExist();
         });
     });
 
@@ -61,13 +62,40 @@ describe("chorus.views.WorkspaceListSidebar", function() {
         });
 
         it("has actions to add a note and to add an insight", function() {
-            expect(this.view.$(".actions a[data-dialog=NotesNew]")).toContainTranslation("actions.add_note");
-            expect(this.view.$(".actions a[data-dialog=InsightsNew]")).toContainTranslation("actions.add_insight");
+            expect(this.view.$(".actions a.new_note")).toContainTranslation("actions.add_note");
+            expect(this.view.$(".actions a.new_insight")).toContainTranslation("actions.add_insight");
+        });
+
+        context("clicking the add note link", function() {
+            beforeEach(function() {
+                this.modalSpy.reset();
+                $('#jasmine_content').append(this.view.$el);
+                chorus.page = this.view;
+                this.view.$("a.new_note").click();
+            });
+
+            it("should launch the NotesNew dialog once", function() {
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
+                expect(this.modalSpy.modals().length).toBe(1);
+            });
+        });
+
+        context("clicking the add insights link", function() {
+            beforeEach(function() {
+                this.modalSpy.reset();
+                $('#jasmine_content').append(this.view.$el);
+                chorus.page = this.view;
+                this.view.$("a.new_insight").click();
+            });
+
+            it("should launch the InsightsNew dialog once", function() {
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.InsightsNew);
+                expect(this.modalSpy.modals().length).toBe(1);
+            });
         });
 
         describe('clicking the edit tags link', function(){
             beforeEach(function(){
-                this.modalSpy = stubModals();
                 this.view.$('.edit_tags').click();
             });
 

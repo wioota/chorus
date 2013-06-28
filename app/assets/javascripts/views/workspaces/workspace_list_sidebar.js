@@ -8,7 +8,9 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
     },
 
     events: {
-        "click .edit_tags": 'startEditingTags'
+        "click .edit_tags": 'startEditingTags',
+        "click a.new_note": 'launchNotesNewDialog',
+        "click a.new_insight": 'launchInsightsNewDialog'
     },
 
     setup: function() {
@@ -59,5 +61,29 @@ chorus.views.WorkspaceListSidebar = chorus.views.Sidebar.extend({
     startEditingTags: function(e) {
         e.preventDefault();
         new chorus.dialogs.EditTags({collection: new chorus.collections.Base([this.model])}).launchModal();
+    },
+
+    launchNotesNewDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.NotesNew({
+            pageModel: this.model,
+            entityId: this.model.id,
+            entityType: "workspace",
+            workspaceId: this.model.id,
+            allowWorkspaceAttachments: true
+        });
+        dialog.launchModal();
+    },
+
+    launchInsightsNewDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.InsightsNew({
+            pageModel: this.model,
+            entityId: this.model.id,
+            entityType: "workspace",
+            workspaceId: this.model.id,
+            allowWorkspaceAttachments: true
+        });
+        dialog.launchModal();
     }
 });

@@ -133,7 +133,7 @@ describe("chorus.views.WorkfileSidebar", function() {
                     this.view.$("a.new_note").click();
                 });
 
-                it("should launch the WorkfileDelete alert once", function() {
+                it("should launch the NotesNew dialog once", function() {
                     expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
                     expect(this.modalSpy.modals().length).toBe(1);
                 });
