@@ -5,8 +5,6 @@ describe("chorus.views.BreadcrumbView", function() {
             this.crumbsArray = [
                 {label : "Home", url : "#/"},
                 {label : "Foo", url : "#/foo"},
-                {label : "DataDialog", dialog: "FakeDialogName", data : { obj: this.dataObject }},
-                {label : "SimpleDialog", dialog: "FakeDialogName"},
                 {label : "Bar"}
             ];
         });
@@ -18,11 +16,11 @@ describe("chorus.views.BreadcrumbView", function() {
             });
 
             it("renders the breadcrumbs", function() {
-                expect(this.view.$(".breadcrumb").length).toBe(5);
+                expect(this.view.$(".breadcrumb").length).toBe(3);
             });
 
             it("renders a link to all breadcrumbs except the last one", function() {
-                expect(this.view.$(".breadcrumb a").length).toBe(4);
+                expect(this.view.$(".breadcrumb a").length).toBe(2);
             });
 
             it("renders links to breadcrumbs", function() {
@@ -33,21 +31,7 @@ describe("chorus.views.BreadcrumbView", function() {
             it("sets title attributes", function() {
                 expect(this.view.$(".breadcrumb:eq(0) a").attr("title")).toBe("Home");
                 expect(this.view.$(".breadcrumb:eq(1) a").attr("title")).toBe("Foo");
-                expect(this.view.$(".breadcrumb:eq(2) a").attr("title")).toBe("DataDialog");
-                expect(this.view.$(".breadcrumb:eq(3) a").attr("title")).toBe("SimpleDialog");
-                expect(this.view.$(".breadcrumb:eq(4) span").attr("title")).toBe("Bar");
-            });
-
-            it("sets the data-dialog option and the class 'dialog' if there's a dialog option", function() {
-                expect(this.view.$(".breadcrumb:eq(2) a").attr("data-dialog")).toBe("FakeDialogName");
-                expect(this.view.$(".breadcrumb:eq(2) a")).toHaveClass("dialog");
-                expect(this.view.$(".breadcrumb:eq(3) a").attr("data-dialog")).toBe("FakeDialogName");
-                expect(this.view.$(".breadcrumb:eq(3) a")).toHaveClass("dialog");
-            });
-
-            it("adds any extra specified data objects to the element", function() {
-                expect(this.view.$(".breadcrumb:eq(2) a").data("obj")).toBe(this.dataObject);
-                expect(this.view.$(".breadcrumb:eq(3) a").data("obj")).toBeUndefined();
+                expect(this.view.$(".breadcrumb:eq(2) span").attr("title")).toBe("Bar");
             });
         });
 
@@ -62,7 +46,7 @@ describe("chorus.views.BreadcrumbView", function() {
             });
 
             it("renders the breadcrumbs", function() {
-                expect(this.view.$(".breadcrumb").length).toBe(5);
+                expect(this.view.$(".breadcrumb").length).toBe(3);
             });
         });
     });
