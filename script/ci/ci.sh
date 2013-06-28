@@ -6,6 +6,7 @@ fi
 
 export GPDB_HOST=chorus-gpdb-ci
 export HADOOP_HOST=chorus-gphd02
+export HAWQ_HOST=chorus-gphd20-2
 export ORACLE_HOST=chorus-oracle
 
 if [[ -z "$JASMINE_PORT" ]]; then
