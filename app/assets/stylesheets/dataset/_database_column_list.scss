@@ -21,6 +21,7 @@
                 .type_name {
                     @include database-column-type;
                     height: 14px;
+                    vertical-align: top;
                     display: inline-block;
                     padding: 2px 8px 2px 8px;
                 }
