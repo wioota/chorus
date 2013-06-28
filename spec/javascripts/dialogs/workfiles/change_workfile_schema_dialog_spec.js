@@ -35,6 +35,16 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
         it("passes the current schema to the picker", function() {
             expect(this.dialog.schemaPicker.options.defaultSchema).toEqual(this.executionSchema);
         });
+
+        describe("when the user does not have credentials for the datasource", function() {
+            beforeEach(function() {
+                this.server.lastFetchFor(this.dialog.schemaPicker.schemaView.collection).failForbidden();
+            });
+
+            it("should show a 403 error message", function() {
+               expect(this.dialog.$(".errors")).toContainTranslation("schema_picker.change_workfile_schema.invalid_credentials");
+            });
+        });
     });
 
     describe("saving", function() {
