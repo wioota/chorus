@@ -15,18 +15,18 @@
     <div class="actions">
         <ul>
             {{#if showAddNoteLink}}
-                <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="workfile" data-workspace-id={{workspace.id}} data-allow-workspace-attachments="true" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>
+                <li><a class="new_note dialog" href="#">{{t "actions.add_note"}}</a></li>
             {{/if}}
             <li><a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a></li>
-            {{#if showEditLinks}}<li><a class="rename" href="#">Rename</a></li>{{/if}}
+            {{#if showEditLinks}}<li><a class="rename" href="#">{{t "workfile.rename.button"}}</a></li>{{/if}}
             {{#if showCopyLink}}
-                <li><a href="#" class="dialog" data-dialog="CopyWorkfile" data-workfile-id="{{id}}" data-workspace-id="{{workspace.id}}" data-active-only="true">{{t "actions.copy_to_another_workspace"}}</a></li>
+                <li><a href="#" class="copy dialog">{{t "actions.copy_to_another_workspace"}}</a></li>
             {{/if}}
             {{#if showDownloadLink}}
                 <li><a href="{{downloadUrl}}" class="download">{{t "actions.download"}}</a></li>
             {{/if}}
             {{#if showEditLinks}}
-                <li><a href="#" class="alert" data-alert="WorkfileDelete" data-workfile-id="{{id}}" data-workspace-id="{{workspace.id}}" data-workfile-name="{{fileName}}">{{t "workfile.delete.button"}}</a></li>
+                <li><a href="#" class="delete alert">{{t "workfile.delete.button"}}</a></li>
             {{/if}}
         </ul>
     </div>

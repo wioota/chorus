@@ -8,6 +8,7 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
         showDownloadLink: true,
         showUpdatedTime: true
     },
+
     subviews:{
         '.tab_control': 'tabs'
     },
@@ -15,7 +16,10 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
     events: {
         "click a.version_list": 'displayVersionList',
         "click .edit_tags": 'startEditingTags',
-        "click .rename": 'launchRenameDialog'
+        "click .rename": 'launchRenameDialog',
+        "click .delete": 'launchWorkfileDeleteDialog',
+        "click .copy": 'launchCopyWorkfileDialog',
+        "click .new_note": 'launchNotesNewDialog'
     },
 
     setup:function () {
@@ -147,8 +151,39 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
     launchRenameDialog: function(e) {
         e && e.preventDefault();
         new chorus.dialogs.RenameWorkfile({model: this.model}).launchModal();
-    }
+    },
 
+    launchWorkfileDeleteDialog: function(e) {
+        e && e.preventDefault();
+        var alert = new chorus.alerts.WorkfileDelete({
+            workfileId: this.model.id,
+            workspaceId: this.model.workspace().id,
+            workfileName: this.model.get("fileName")
+        });
+        alert.launchModal();
+    },
+
+    launchCopyWorkfileDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.CopyWorkfile({
+            workfileId: this.model.id,
+            workspaceId: this.model.workspace().id,
+            activeOnly: true
+        });
+        dialog.launchModal();
+    },
+
+    launchNotesNewDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.NotesNew({
+            pageModel: this.model,
+            entityId: this.model.id,
+            entityType: "workfile",
+            workspaceId: this.model.workspace().id,
+            allowWorkspaceAttachments: true
+        });
+        dialog.launchModal();
+    }
 },
 {
     typeMap: {

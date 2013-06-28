@@ -1,6 +1,7 @@
 describe("chorus.views.WorkfileSidebar", function() {
     beforeEach(function(){
         this.workfile = backboneFixtures.workfile.sql();
+        this.modalSpy = stubModals();
     });
 
     context("when workfile is passed to setup", function() {
@@ -44,11 +45,22 @@ describe("chorus.views.WorkfileSidebar", function() {
             });
 
             it("displays a link to copy the workfile to another workspace", function() {
-                var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
+                var copyLink = this.view.$(".actions a.copy");
                 expect(copyLink).toExist();
-                expect(copyLink).toHaveAttr("data-workspace-id", this.view.model.workspace().id);
-                expect(copyLink).toHaveAttr("data-workfile-id", this.view.model.get("id"));
-                expect(copyLink).toHaveAttr("data-active-only", 'true');
+            });
+
+            context("clicking on the copy workfile link", function() {
+                beforeEach(function() {
+                    this.modalSpy.reset();
+                    $('#jasmine_content').append(this.view.$el);
+                    chorus.page = this.view;
+                    this.view.$("a.copy").click();
+                });
+
+                it("should open the CopyWorkfile dialog once", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.CopyWorkfile);
+                    expect(this.modalSpy.modals().length).toBe(1);
+                });
             });
 
             it("has an activities tab", function() {
@@ -83,10 +95,8 @@ describe("chorus.views.WorkfileSidebar", function() {
             });
 
             it("displays a link to copy the workfile to another workspace", function() {
-                var copyLink = this.view.$(".actions a[data-dialog=CopyWorkfile]");
+                var copyLink = this.view.$(".actions a.copy");
                 expect(copyLink).toExist();
-                expect(copyLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id);
-                expect(copyLink).toHaveAttr("data-workfile-id", this.workfile.get("id"));
             });
 
             it("displays the filename", function() {
@@ -106,19 +116,27 @@ describe("chorus.views.WorkfileSidebar", function() {
             });
 
             it("displays a link to delete the workfile", function() {
-                var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
+                var deleteLink = this.view.$(".actions a.delete");
                 expect(deleteLink).toExist();
-                expect(deleteLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id);
-                expect(deleteLink).toHaveAttr("data-workfile-id", this.workfile.get("id"));
             });
 
             it("displays a link to add a note", function() {
-                var addLink = this.view.$(".actions a.dialog[data-dialog=NotesNew]");
+                var addLink = this.view.$(".actions a.new_note");
                 expect(addLink).toExist();
-                expect(addLink).toHaveAttr("data-entity-type", "workfile");
-                expect(addLink).toHaveAttr("data-entity-id", this.workfile.get("id"));
-                expect(addLink).toHaveAttr("data-workspace-id", this.workfile.workspace().id);
-                expect(addLink).toHaveAttr("data-allow-workspace-attachments", "true");
+            });
+
+            context("clicking the add note link", function() {
+                beforeEach(function() {
+                    this.modalSpy.reset();
+                    $('#jasmine_content').append(this.view.$el);
+                    chorus.page = this.view;
+                    this.view.$("a.new_note").click();
+                });
+
+                it("should launch the WorkfileDelete alert once", function() {
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
+                    expect(this.modalSpy.modals().length).toBe(1);
+                });
             });
 
             it("displays the activity list", function() {
@@ -134,7 +152,7 @@ describe("chorus.views.WorkfileSidebar", function() {
             });
 
             it("hides the copy link", function() {
-                expect(this.view.$('.actions a.dialog[data-dialog=CopyWorkfile]')).not.toExist();
+                expect(this.view.$('.actions a.copy')).not.toExist();
             });
         });
 
@@ -146,7 +164,7 @@ describe("chorus.views.WorkfileSidebar", function() {
             });
 
             it("hide the copy and download links", function () {
-                expect(this.view.$('.actions a.dialog[data-dialog=CopyWorkfile]')).not.toExist();
+                expect(this.view.$('.actions a.copy')).not.toExist();
                 expect(this.view.$('.actions a.download')).not.toExist();
             });
 
@@ -176,8 +194,8 @@ describe("chorus.views.WorkfileSidebar", function() {
             });
 
             it("should not show the delete and add note links", function() {
-                expect(this.view.$(".actions a[data-alert=WorkfileDelete]")).not.toExist();
-                expect(this.view.$(".actions a[data-dialog=NotesNew]")).not.toExist();
+                expect(this.view.$(".actions a.delete")).not.toExist();
+                expect(this.view.$(".actions a.new_note")).not.toExist();
             });
 
             it("should not show the functions or data tab", function() {
@@ -222,7 +240,7 @@ describe("chorus.views.WorkfileSidebar", function() {
             });
 
             it("hides the link to delete the workfile", function() {
-                var deleteLink = this.view.$(".actions a[data-alert=WorkfileDelete]");
+                var deleteLink = this.view.$(".actions a.delete");
                 expect(deleteLink).not.toExist();
             });
 
@@ -233,7 +251,7 @@ describe("chorus.views.WorkfileSidebar", function() {
 
         describe('clicking the edit tags link', function(){
             beforeEach(function(){
-                this.modalSpy = stubModals();
+                this.modalSpy.reset();
                 this.view.$('.edit_tags').click();
             });
 
@@ -246,7 +264,7 @@ describe("chorus.views.WorkfileSidebar", function() {
 
         describe('clicking the rename link', function() {
            beforeEach(function() {
-               this.modalSpy = stubModals();
+               this.modalSpy.reset();
                this.view.$('.rename').click();
            });
 
@@ -313,8 +331,22 @@ describe("chorus.views.WorkfileSidebar", function() {
         });
 
         it('shows the editing links', function(){
-            expect(this.view.$('.actions')).toContainTranslation('actions.add_note');
+            expect(this.view.$('.actions')).toContainTranslation('workfile.rename.button');
             expect(this.view.$('.actions')).toContainTranslation('workfile.delete.button');
+        });
+
+        context("clicking the delete workfile link", function() {
+            beforeEach(function() {
+                this.modalSpy.reset();
+                $('#jasmine_content').append(this.view.$el);
+                chorus.page = this.view;
+                this.view.$("a.delete").click();
+            });
+
+            it("should launch the WorkfileDelete alert once", function() {
+               expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileDelete);
+               expect(this.modalSpy.modals().length).toBe(1);
+            });
         });
     });
 
