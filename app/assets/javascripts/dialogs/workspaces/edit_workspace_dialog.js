@@ -98,9 +98,12 @@ chorus.dialogs.EditWorkspace = chorus.dialogs.Base.include(
             }
 
             this.$("button.submit").startLoading("actions.saving");
-            this.model.save(attrs, {unprocessableEntity: function() {
-                /* Bypass page level error handling for this save */
-            }});
+            this.model.save(attrs, {
+                unprocessableEntity: function() {
+                    /* Bypass page level error handling for this save */
+                },
+                wait: true
+            });
         },
 
         saved: function() {
