@@ -496,7 +496,7 @@ describe WorkfilesController do
       end
 
       context "and a database has been chosen" do
-        let(:database) { gpdb_databases(:default) }
+        let(:database) { gpdb_databases(:alternate) }
         let(:params) do
           {
             :id => workfile.to_param,
@@ -518,10 +518,67 @@ describe WorkfilesController do
           end
           put :update, params
         end
+
+        context "and it had hdfs_entries previously selected" do
+          let(:hdfs_file) { hdfs_entries(:hdfs_file) }
+
+          before do
+            workfile.hdfs_entry_ids = [hdfs_file.id]
+            workfile.save!
+          end
+
+          it "removes the previous entries" do
+            mock_present do |model|
+              model.should be_a AlpineWorkfile
+              model.execution_location.should == database
+              model.hdfs_entry_ids.should be_nil
+            end
+            put :update, params
+          end
+
+          context "and the execution location is not actually changing" do
+            let(:params) do
+              {
+                :id => workfile.to_param,
+                :workspace_id => workspace.to_param,
+                :workfile => {
+                  :entity_subtype => 'alpine',
+                  :file_name => 'something',
+                  :hdfs_data_source_id => hdfs_file.hdfs_data_source.to_param
+                }
+              }
+            end
+
+            it "does not remove the previous hdfs entries" do
+              mock_present do |model|
+                model.should be_a AlpineWorkfile
+                model.execution_location.should == hdfs_file.hdfs_data_source
+                model.hdfs_entry_ids.should == [hdfs_file.id]
+              end
+              put :update, params
+            end
+          end
+        end
+
+        context "and it had datasets previously selected" do
+          before do
+            workfile.dataset_ids = [datasets(:table).id]
+            workfile.save!
+          end
+
+          it "removes the previous datasets" do
+            mock_present do |model|
+              model.should be_a AlpineWorkfile
+              model.execution_location.should == database
+              model.dataset_ids.should be_nil
+            end
+            put :update, params
+          end
+        end
       end
 
       context "and an hdfs data source has been chosen" do
-        let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
+        let(:hdfs_data_source) { hdfs_data_sources(:hdfs_data_source44445) }
         let(:params) do
           {
             :id => workfile.to_param,
@@ -542,6 +599,63 @@ describe WorkfilesController do
             model.workspace.should == workspace
           end
           put :update, params
+        end
+
+        context "and it had hdfs_entries previously selected" do
+          before do
+            workfile.hdfs_entry_ids = [hdfs_entries(:hdfs_file).id]
+            workfile.save!
+          end
+
+          it "removes the previous entries" do
+            mock_present do |model|
+              model.should be_a AlpineWorkfile
+              model.execution_location.should == hdfs_data_source
+              model.hdfs_entry_ids.should be_nil
+            end
+            put :update, params
+          end
+        end
+
+        context "and it had datasets previously selected" do
+          let(:dataset) { datasets(:table) }
+
+          before do
+            workfile.dataset_ids = [dataset.id]
+            workfile.save!
+          end
+
+          it "removes the previous datasets" do
+            mock_present do |model|
+              model.should be_a AlpineWorkfile
+              model.execution_location.should == hdfs_data_source
+              model.dataset_ids.should be_nil
+            end
+            put :update, params
+          end
+
+          context "and the execution location is not actually changing" do
+            let(:params) do
+              {
+                :id => workfile.to_param,
+                :workspace_id => workspace.to_param,
+                :workfile => {
+                  :entity_subtype => 'alpine',
+                  :file_name => 'something',
+                  :database_id => dataset.database.to_param
+                }
+              }
+            end
+
+            it "does not remove the previous datasets" do
+              mock_present do |model|
+                model.should be_a AlpineWorkfile
+                model.execution_location.should == dataset.database
+                model.dataset_ids.should == [dataset.id]
+              end
+              put :update, params
+            end
+          end
         end
       end
     end
