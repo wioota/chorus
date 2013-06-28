@@ -1,6 +1,7 @@
 describe("chorus.views.WorkspaceMemberList", function() {
     var members;
     beforeEach(function() {
+        this.modalSpy = stubModals();
         this.workspace = backboneFixtures.workspace();
         members = this.members = this.workspace.members();
     });
@@ -50,7 +51,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
             });
 
             it("does not have the more workspace members link", function() {
-                expect(this.view.$(".members a.dialog[data-dialog=WorkspaceMembersMore]").length).toBe(0);
+                expect(this.view.$(".members a.more_members")).not.toExist();
             });
 
             describe("when a workspace:selected event is trigger", function() {
@@ -87,8 +88,10 @@ describe("chorus.views.WorkspaceMemberList", function() {
             });
 
             it("has a X more workspace members link", function() {
-                expect(this.view.$(".members a.dialog[data-dialog=WorkspaceMembersMore]").length).toBe(1);
+                expect(this.view.$(".members a.more_members")).toExist();
             });
+
+            itBehavesLike.aDialogLauncher("more_members", chorus.dialogs.WorkspaceMembersMore);
         });
 
         it('setting the workspace a second time does not fetch the members', function(){

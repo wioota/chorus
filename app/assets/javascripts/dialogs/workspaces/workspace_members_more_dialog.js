@@ -9,7 +9,7 @@ chorus.dialogs.WorkspaceMembersMore = chorus.dialogs.Base.extend({
     },
 
     setup:function () {
-        this.collection = this.pageModel.members();
+        this.collection = this.options.collection || this.pageModel.members();
         this.collection.fetchAllIfNotLoaded();
         this.collection.bind("reset", this.render, this);
         this.setupSortMenu();

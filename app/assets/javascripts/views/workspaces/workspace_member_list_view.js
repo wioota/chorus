@@ -3,6 +3,10 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
     templateName: "workspace_member_list",
     numberOfMembersToShow: 24,
 
+    events: {
+        "click a.more_members": "launchWorkspaceMembersMoreDialog"
+    },
+
     setup: function() {
         this.subscribePageEvent("workspace:selected", this.setWorkspace);
         if (this.options.collection) {
@@ -46,5 +50,13 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
         var collection = this.collection.chain().first(this.numberOfMembersToShow).map(detailsForMember);
 
         return collection.value();
+    },
+
+    launchWorkspaceMembersMoreDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.WorkspaceMembersMore({
+            collection: this.collection
+        });
+        dialog.launchModal();
     }
 });

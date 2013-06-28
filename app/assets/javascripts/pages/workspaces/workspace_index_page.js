@@ -54,7 +54,7 @@ chorus.pages.WorkspaceIndexPage = chorus.pages.Base.extend({
         this.collection.fetch();
     },
 
-    setModel: function(workfile) {
-        this.model = workfile;
+    setModel: function(workspace) {
+        this.model = workspace;
     }
 });
