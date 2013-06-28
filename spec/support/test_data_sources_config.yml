@@ -51,3 +51,10 @@ data_sources:
       account:
         db_username: "system"
         db_password: "oracle"
+  hawq:
+    - host: "chorus-gphd20-2"
+      port: 8432
+      db_name: "postgres"
+      account:
+        db_username: "gpadmin"
+        db_password: "secret"

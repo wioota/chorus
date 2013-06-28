@@ -1569,4 +1569,22 @@ describe GreenplumConnection, :greenplum_integration do
       end
     end
   end
+
+  describe "is_hawq?", :hawq_integration do
+    context "when the data source is a hawq server" do
+      let(:data_source) { HawqIntegration.real_data_source }
+
+      it "returns true" do
+        data_source.connect_as_owner.is_hawq?.should be_true
+      end
+    end
+
+    context "when the data source is a gpdb server" do
+      let(:data_source) { GreenplumIntegration.real_data_source }
+
+      it "returns false" do
+        data_source.connect_as_owner.is_hawq?.should be_false
+      end
+    end
+  end
 end

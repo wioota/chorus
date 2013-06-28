@@ -102,6 +102,13 @@ class GreenplumConnection < DataSourceConnection
     GreenplumSqlResult.new(:warnings => warnings, :result_set => result_set)
   end
 
+  def is_hawq?
+    with_connection do |connection|
+      version_info = connection.fetch("SELECT version()").first[:version]
+      version_info.include? "HAWQ"
+    end
+  end
+
   private
 
   def error_class

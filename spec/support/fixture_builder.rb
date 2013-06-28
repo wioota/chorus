@@ -558,6 +558,10 @@ FixtureBuilder.configure do |fbuilder|
       OracleIntegration.real_schema.refresh_datasets(real_oracle_data_source.account_for_user!(owner))
     end
 
+    if ENV['HAWQ_HOST']
+      FactoryGirl.create(:gpdb_data_source, HawqIntegration.data_source_config(HawqIntegration.hostname).merge(:name => HawqIntegration.hostname, :owner => admin))
+    end
+
     #Notification
     notes = Events::NoteOnDataSource.by(owner).order(:id)
 

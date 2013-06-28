@@ -23,4 +23,8 @@ RSpec.configure do |config|
     warn "No Oracle data source detected in environment variable 'ORACLE_HOST'.  Skipping Oracle integration tests"
     config.filter_run_excluding :oracle_integration => true
   end
+
+  unless ENV['HAWQ_HOST']
+    config.filter_run_excluding :hawq_integration => true
+  end
 end
