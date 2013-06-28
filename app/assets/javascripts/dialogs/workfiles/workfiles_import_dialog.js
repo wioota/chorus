@@ -6,6 +6,10 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
 
     persistent: true,
 
+    subviews: {
+        ".location_picker": "executionLocationPicker"
+    },
+
     events: {
         "click button.submit": "upload",
         "submit form": "upload",
@@ -27,7 +31,20 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             }
         });
 
+        this.buildLocationPicker();
+
         this._super("setup");
+    },
+
+    buildLocationPicker: function () {
+        this.executionLocationPicker = new chorus.views.WorkFlowExecutionLocationPicker();
+        this.listenTo(this.executionLocationPicker, "change", this.enableOrDisableSubmitButton);
+        this.listenTo(this.executionLocationPicker, "error", this.showErrors);
+        this.listenTo(this.executionLocationPicker, "clearErrors", this.clearErrors);
+    },
+
+    enableOrDisableSubmitButton: function () {
+        this.$("button.submit").prop("disabled", !this.executionLocationPicker.ready());
     },
 
     upload: function(e) {
@@ -87,17 +104,31 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         }
 
         function fileChosen(e, data) {
-            if (data.files.length > 0) {
-                self.$(".empty_selection").addClass("hidden");
+            function acceptFile() {
+                self.$(".comment").removeClass("hidden");
                 self.$("button.submit").prop("disabled", false);
-                self.uploadObj = data;
+            }
+
+            function acceptAlpineFile() {
+                this.$('.work_flow_detail').removeClass("hidden");
+            }
+
+            if (data.files.length > 0) {
                 var filename = data.files[0].name;
                 self.uploadExtension = _.last(filename.split('.'));
+
+                self.$(".empty_selection").addClass("hidden");
+                self.uploadObj = data;
                 var iconSrc = chorus.urlHelpers.fileIconUrl(self.uploadExtension, "icon");
-                self.$('img').attr('src', iconSrc);
-                self.$('img').removeClass('hidden');
+                self.$('img.file_icon').attr('src', iconSrc);
+                self.$('img.file_icon').removeClass('hidden');
                 self.$('.file_name').text(filename).attr('title', filename);
-                self.$(".comment").removeClass("hidden");
+
+                if (self.uploadExtension.toLowerCase() === 'afm') {
+                    acceptAlpineFile();
+                } else {
+                    acceptFile();
+                }
 
                 validateFile(data.files);
             }

@@ -68,7 +68,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         });
     });
 
-    context("when clicking upload a file button", function() {
+    context("when clicking the 'upload a file' button", function() {
         beforeEach(function() {
             spyOn(this.dialog, 'chooseFile').andCallThrough();
             this.dialog.render();
@@ -85,7 +85,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         });
     });
 
-    context("when a file has been chosen", function() {
+    context("when a non-Alpine file has been chosen", function() {
         beforeEach(function() {
             this.fakeUpload = stubFileUpload();
             spyOn(this.dialog, "closeModal").andCallThrough();
@@ -280,5 +280,30 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 expect(this.fakeUpload.wasSubmitted).toBeTruthy();
             });
         });
+    });
+
+    context("when a .afm file has been chosen", function () {
+        beforeEach(function () {
+            this.fakeUpload = stubFileUpload();
+            this.dialog.render();
+            this.fakeUpload.add([ "foo.afm" ]);
+        });
+
+        it("shows an execution_location_picker", function () {
+            var executionLocationPicker = this.dialog.$(".execution_location_picker");
+            expect(executionLocationPicker).toExist();
+        });
+
+        it("should only enable the submit button when the execution location picker is ready", function () {
+            this.dialog.executionLocationPicker.trigger('change');
+            expect(this.dialog.$("button.submit")).toBeDisabled();
+
+            spyOn(this.dialog.executionLocationPicker, 'ready').andReturn(true);
+            spyOn(this.dialog.executionLocationPicker, 'getSelectedDataSource');
+
+            this.dialog.executionLocationPicker.trigger('change');
+            expect(this.dialog.$("button.submit")).toBeEnabled();
+        });
+
     });
 });
