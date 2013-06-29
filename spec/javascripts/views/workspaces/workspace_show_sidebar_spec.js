@@ -1,5 +1,6 @@
 describe("chorus.views.WorkspaceShowSidebar", function() {
     beforeEach(function() {
+        this.modalSpy = stubModals();
         this.model = backboneFixtures.workspace({
             name: "A Cool Workspace",
             id: '123',
@@ -106,12 +107,15 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             });
 
             it("has a link to delete the workspace", function() {
-                expect(this.view.$("a.alert[data-alert=WorkspaceDelete]").text().trim()).toMatchTranslation("actions.delete_workspace");
+                expect(this.view.$("a.delete_workspace").text().trim()).toMatchTranslation("actions.delete_workspace");
             });
 
             it("has a link to edit members of the workspace", function() {
-                expect(this.view.$("a.dialog[data-dialog=WorkspaceEditMembers]").text().trim()).toMatchTranslation("workspace.edit_members");
+                expect(this.view.$("a.edit_workspace_members").text().trim()).toMatchTranslation("workspace.edit_members");
             });
+
+            itBehavesLike.aDialogLauncher("a.delete_workspace", chorus.alerts.WorkspaceDelete);
+            itBehavesLike.aDialogLauncher("a.edit_workspace_members", chorus.dialogs.WorkspaceEditMembers);
 
             context("and the workspace does not have a sandbox", function() {
                 beforeEach(function() {
@@ -120,9 +124,10 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
                 });
 
                 it("has a link to add a new sandbox", function() {
-                    expect(this.view.$("a.dialog[data-dialog=SandboxNew]").text().trim()).toMatchTranslation("sandbox.create_a_sandbox");
-                    expect(this.view.$("a.dialog[data-dialog=SandboxNew]").data("workspaceId").toString()).toBe(this.model.get("id"));
+                    expect(this.view.$("a.new_sandbox").text().trim()).toMatchTranslation("sandbox.create_a_sandbox");
                 });
+
+                itBehavesLike.aDialogLauncher("a.new_sandbox", chorus.dialogs.SandboxNew);
             });
 
             context("and the workspace has a sandbox", function() {
@@ -132,7 +137,7 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
                 });
 
                 it("does not have a link to add a new sandbox", function() {
-                    expect(this.view.$("a.dialog[data-dialog=SandboxNew]")).not.toExist();
+                    expect(this.view.$("a.new_sandbox")).not.toExist();
                 });
             });
         });
@@ -163,11 +168,11 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             });
 
             it("does not have a link to delete the workspace", function() {
-                expect(this.view.$("a[data-alert=WorkspaceDelete]").length).toBe(0);
+                expect(this.view.$("a.delete_workspace").length).toBe(0);
             });
 
             it("does not have a link to edit the workspace members", function() {
-                expect(this.view.$("a[data-dialog=WorkspaceEditMembers]").length).toBe(0);
+                expect(this.view.$("a.edit_workspace_members").length).toBe(0);
             });
         });
 
@@ -178,15 +183,18 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
                 this.view.model.set({archivedAt: "2012-05-08 21:40:14"});
                 this.view.render();
             });
+
             it("does not have the 'add or edit members link'", function() {
-                expect(this.view.$('a[data-dialog="WorkspaceEditMembers"]')).not.toExist();
+                expect(this.view.$('a.edit_workspace_members')).not.toExist();
             });
+
             it("does not have the 'add a sandbox' link", function() {
-               expect(this.view.$('a[data-dialog="SandboxNew"]')).not.toExist();
+               expect(this.view.$('a.new_sandbox')).not.toExist();
             });
+
             it("does not have 'add a note' or 'ad an insight' link", function() {
-               expect(this.view.$('a[data-dialog="NotesNew"]')).not.toExist();
-               expect(this.view.$('a[data-dialog="InsightsNew"]')).not.toExist();
+               expect(this.view.$('a.new_note')).not.toExist();
+               expect(this.view.$('a.new_insight')).not.toExist();
             });
 
             context("when kaggle is configured", function() {
@@ -199,20 +207,19 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
         });
 
         it("has a link to add a note", function() {
-            expect(this.view.$("a[data-dialog=NotesNew]").text().trim()).toMatchTranslation("actions.add_note");
-            expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-type")).toBe("workspace");
-            expect(this.view.$("a[data-dialog=NotesNew]").attr("data-entity-id")).toBe(this.model.get("id"));
-            expect(this.view.$("a[data-dialog=NotesNew]").attr("data-workspace-id")).toBe(this.model.get("id"));
+            expect(this.view.$("a.new_note").text().trim()).toMatchTranslation("actions.add_note");
         });
 
         it("has a link to add an insight", function() {
-            expect(this.view.$("a[data-dialog=InsightsNew]").text().trim()).toMatchTranslation("actions.add_insight");
-            expect(this.view.$("a[data-dialog=InsightsNew]").attr("data-workspace-id")).toBe(this.model.get("id"));
+            expect(this.view.$("a.new_insight").text().trim()).toMatchTranslation("actions.add_insight");
         });
 
         it("should have a members list subview", function() {
             expect(this.view.$(".workspace_member_list")[0]).toBe(this.view.workspaceMemberList.el);
         });
+
+        itBehavesLike.aDialogLauncher("a.new_note", chorus.dialogs.NotesNew);
+        itBehavesLike.aDialogLauncher("a.new_insight", chorus.dialogs.InsightsNew);
     });
 
     describe("#post_render", function() {

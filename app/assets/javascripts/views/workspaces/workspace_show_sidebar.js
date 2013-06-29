@@ -1,9 +1,16 @@
 chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
     constructorName: "WorkspaceShowSidebarView",
     templateName:"workspace_show_sidebar",
+
     events: {
-        "click .edit_workspace": 'launchEditWorkspaceDialog'
+        "click .edit_workspace": 'launchEditWorkspaceDialog',
+        "click .edit_workspace_members": 'launchWorkspaceEditMembersDialog',
+        "click .delete_workspace": 'launchWorkspaceDeleteAlert',
+        "click .new_note": 'launchNotesNewDialog',
+        "click .new_sandbox": 'launchSandboxNewDialog',
+        "click .new_insight": 'launchInsightsNewDialog'
     },
+
     subviews: {
         ".workspace_member_list": "workspaceMemberList"
     },
@@ -42,5 +49,47 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
         this.onceLoaded(this.model.members(), function () {
             this.editWorkspaceDialog.launchModal();
         });
+    },
+
+    launchNotesNewDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.NotesNew({
+            pageModel: this.model,
+            entityId: this.model.id,
+            entityType: "workspace",
+            workspaceId: this.model.id,
+            allowWorkspaceAttachments: true
+        });
+        dialog.launchModal();
+    },
+
+    launchSandboxNewDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.SandboxNew({workspaceId: this.model.id});
+        dialog.launchModal();
+    },
+
+    launchInsightsNewDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.InsightsNew({
+            pageModel: this.model,
+            entityId: this.model.id,
+            entityType: "workspace",
+            workspaceId: this.model.id,
+            allowWorkspaceAttachments: true
+        });
+        dialog.launchModal();
+    },
+
+    launchWorkspaceEditMembersDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.WorkspaceEditMembers({pageModel: this.model});
+        dialog.launchModal();
+    },
+
+    launchWorkspaceDeleteAlert: function(e) {
+        e && e.preventDefault();
+        var alert = new chorus.alerts.WorkspaceDelete({model: this.model});
+        alert.launchModal();
     }
 });
