@@ -1,8 +1,9 @@
 .dialog {
     .dialog_header {
-        height: 54px;
+        min-height: 54px;
         border-bottom: 1px solid $border-color;
         background-color: $dialog-background-color;
+        word-break: break-all;
 
         h1 {
             @include heading-normal;
