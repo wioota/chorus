@@ -1,5 +1,6 @@
 describe("chorus.views.UserSidebar", function() {
     beforeEach(function() {
+        this.modalSpy = stubModals();
         chorus.models.Config.instance().set({externalAuthEnabled: false});
         this.user = new chorus.models.User({username: "bill", id: "42"});
 
@@ -28,19 +29,22 @@ describe("chorus.views.UserSidebar", function() {
             });
 
             it("shows a 'delete user' action when current user is not the same user", function() {
-                expect(this.view.$(".actions a.delete_user[data-alert=UserDelete]")).toExist();
+                expect(this.view.$(".actions a.delete_user")).toExist();
             });
 
             it("does not show the 'delete user' action when current user is the same user", function() {
                 setLoggedInUser({admin: true, username: this.user.get("username")});
                 this.view.render();
 
-                expect(this.view.$(".actions a.delete_user[data-alert=UserDelete]")).not.toExist();
+                expect(this.view.$(".actions a.delete_user")).not.toExist();
             });
 
             it("displays the 'change password' link", function() {
-                expect(this.view.$("a.change_password[data-dialog=ChangePassword]")).toExist();
+                expect(this.view.$("a.change_password")).toExist();
             });
+
+            itBehavesLike.aDialogLauncher("a.change_password", chorus.dialogs.ChangePassword);
+            itBehavesLike.aDialogLauncher("a.delete_user", chorus.alerts.UserDelete);
         });
 
         context("when logged in as an non-admin", function() {
@@ -65,7 +69,7 @@ describe("chorus.views.UserSidebar", function() {
                 });
 
                 it("has the 'change password' link", function() {
-                    expect(this.view.$("a.change_password[data-dialog=ChangePassword]")).toExist();
+                    expect(this.view.$("a.change_password")).toExist();
                 });
 
                 context("and the 'editMode' option was passed", function() {
@@ -90,7 +94,6 @@ describe("chorus.views.UserSidebar", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: true});
                 this.view.options.listMode = true;
-                this.modalSpy = stubModals();
                 this.view.render();
             });
 

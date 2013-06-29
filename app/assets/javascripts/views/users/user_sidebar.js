@@ -7,7 +7,9 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
     },
 
     events: {
-        "click .edit_tags": "startEditingTags"
+        "click .edit_tags": "startEditingTags",
+        "click .change_password": "launchChangePasswordDialog",
+        "click .delete_user": "launchUserDeleteAlert"
     },
 
     setup: function() {
@@ -54,5 +56,23 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
     startEditingTags: function(e) {
         e.preventDefault();
         new chorus.dialogs.EditTags({collection: new chorus.collections.Base([this.model])}).launchModal();
+    },
+
+    launchChangePasswordDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.ChangePassword({
+            model: this.model,
+            username: this.model.get("username")
+        });
+        dialog.launchModal();
+    },
+
+    launchUserDeleteAlert: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.alerts.UserDelete({
+            model: this.model,
+            id: this.model.id
+        });
+        dialog.launchModal();
     }
 });
