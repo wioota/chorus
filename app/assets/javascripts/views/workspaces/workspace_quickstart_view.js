@@ -5,7 +5,11 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
     useLoadingSection: true,
 
     events: {
-        "click a.dismiss": "visitShowPage"
+        "click a.dismiss": "visitShowPage",
+        "click .import_workfiles": 'launchImportWorkfilesDialog',
+        "click .edit_workspace": 'launchEditWorkspaceDialog',
+        "click .edit_workspace_members": 'launchWorkspaceEditMembersDialog',
+        "click .new_sandbox": 'launchSandboxNewDialog'
     },
 
     additionalContext: function() {
@@ -47,5 +51,32 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
 
         e && e.preventDefault();
         chorus.router.navigate($(e.currentTarget).attr("href"));
+    },
+
+    launchEditWorkspaceDialog: function (e) {
+        e && e.preventDefault();
+
+        this.editWorkspaceDialog = new chorus.dialogs.EditWorkspace({model: this.model});
+        this.onceLoaded(this.model.members(), function () {
+            this.editWorkspaceDialog.launchModal();
+        });
+    },
+
+    launchSandboxNewDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.SandboxNew({workspaceId: this.model.id, noReload: true});
+        dialog.launchModal();
+    },
+
+    launchWorkspaceEditMembersDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.WorkspaceEditMembers({pageModel: this.model});
+        dialog.launchModal();
+    },
+
+    launchImportWorkfilesDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.WorkfilesImport({model: this.model, workspaceId: this.model.id});
+        dialog.launchModal();
     }
 });

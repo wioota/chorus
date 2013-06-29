@@ -1,5 +1,6 @@
 describe("chorus.views.WorkspaceQuickstart", function() {
     beforeEach(function() {
+        this.modalSpy = stubModals();
         this.model = backboneFixtures.workspace({id: "999", hasAddedSandbox: false, hasAddedWorkfile: false});
         this.model.loaded = true;
         spyOn(chorus.router, "navigate");
@@ -88,15 +89,12 @@ describe("chorus.views.WorkspaceQuickstart", function() {
             expect(this.view.$(".add_team_members .text")).toContainTranslation("workspace.quickstart.add_team_members.text");
         });
 
-        it("launches the right dialog", function() {
-            expect(this.view.$(".add_team_members a")).toHaveClass("dialog");
-            expect(this.view.$(".add_team_members a").data("dialog")).toBe("WorkspaceEditMembers");
-        });
-
         it("hides the box when hasAddedMember is true", function() {
             this.view.model.set({"hasAddedMember": true});
             expect(this.view.$(".add_team_members")).not.toExist();
         });
+
+        itBehavesLike.aDialogLauncher("a.edit_workspace_members", chorus.dialogs.WorkspaceEditMembers);
     });
 
     describe("the 'Add a Sandbox' section", function() {
@@ -118,20 +116,12 @@ describe("chorus.views.WorkspaceQuickstart", function() {
             expect(this.view.$(".add_sandbox .text")).toContainTranslation("workspace.quickstart.add_sandbox.text");
         });
 
-        it("launches the right dialog", function() {
-            expect(link).toHaveClass("dialog");
-            expect(link).toHaveData("dialog", "SandboxNew");
-            expect(link).toHaveData("workspaceId", 999);
-        });
-
-        it("makes the sandbox dialog *not* reload the page on completion", function() {
-            expect(link).toHaveData("noReload", true);
-        });
-
         it("hides the box when hasAddedSandbox is true", function() {
             this.view.model.set({"hasAddedSandbox": true});
             expect(this.view.$(".add_sandbox")).not.toExist();
         });
+
+        itBehavesLike.aDialogLauncher("a.new_sandbox", chorus.dialogs.SandboxNew);
     });
 
     describe("the 'Add Work Files' section", function() {
@@ -153,16 +143,13 @@ describe("chorus.views.WorkspaceQuickstart", function() {
             expect(this.view.$(".add_workfiles .text")).toContainTranslation("workspace.quickstart.add_workfiles.text");
         });
 
-        it("launches the right dialog", function() {
-            expect(link).toHaveClass("dialog");
-            expect(link).toHaveData("dialog", "WorkfilesImport");
-            expect(link).toHaveData("workspaceId", 999);
-        });
-
         it("hides the box when hasAddedWorkfile is true", function() {
             this.view.model.set({"hasAddedWorkfile": true});
             expect(this.view.$(".add_workfiles")).not.toExist();
         });
+
+        itBehavesLike.aDialogLauncher("a.import_workfiles", chorus.dialogs.WorkfilesImport);
+
     });
 
     describe("the 'Edit Workspace Settings' section", function() {
@@ -185,8 +172,9 @@ describe("chorus.views.WorkspaceQuickstart", function() {
 
         it("launches the right dialog", function() {
             expect(this.view.$(link)).toHaveClass("dialog");
-            expect(this.view.$(link).data("dialog")).toBe("EditWorkspace");
         });
+
+        itBehavesLike.aDialogLauncher("a.edit_workspace", chorus.dialogs.EditWorkspace);
     });
 
     describe("when the workspace is edited", function() {
