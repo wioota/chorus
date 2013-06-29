@@ -1,5 +1,6 @@
 describe("chorus.views.ResultsConsoleView", function() {
     beforeEach(function() {
+        this.modalSpy = stubModals();
         this.task = new chorus.models.DataPreviewTask({
             checkId: "foo"
         });
@@ -365,23 +366,16 @@ describe("chorus.views.ResultsConsoleView", function() {
                 describe("clicking the download link", function() {
                     context("with the show download dialog option", function() {
                         beforeEach(function() {
-                            this.modalSpy = stubModals();
                             spyOn($, "fileDownload");
                             this.view.showDownloadDialog = true;
                             this.view.dataset = backboneFixtures.dataset();
                             this.view.$("a.download_csv").click();
                         });
 
-                        it("should launch the dialog", function() {
-                            expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetDownload);
-                        });
+                        itBehavesLike.aDialogLauncher("a.download_csv", chorus.dialogs.DatasetDownload);
 
                         it("should not have called $.fileDownload", function() {
                             expect($.fileDownload).not.toHaveBeenCalled();
-                        });
-
-                        it("should have a page model for the dataset download dialog", function() {
-                            expect(this.modalSpy.lastModal().pageModel).toBeA(chorus.models.Dataset);
                         });
                     });
 
@@ -491,10 +485,9 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                     describe("clicking the execution view details link", function() {
                         it("launches an execution message alert", function() {
-                            var fakeModal = stubModals();
                             this.view.$(".execution a.view_details").click();
 
-                            var alert = fakeModal.lastModal();
+                            var alert = this.modalSpy.lastModal();
                             expect(alert).toBeA(chorus.alerts.ExecutionMessage);
                             expect($(alert.el)).toContainTranslation('sql_execution.success');
                         });
@@ -605,7 +598,6 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                     describe("clicking on view details", function() {
                         it("should open an execution message alert", function() {
-                            this.modalSpy = stubModals();
                             this.view.$(".view_details").click();
                             expect(this.modalSpy).toHaveModal(chorus.alerts.ExecutionError);
                         });

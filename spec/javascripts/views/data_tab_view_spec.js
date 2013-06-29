@@ -242,10 +242,7 @@ describe("chorus.views.DataTab", function () {
                     expect(this.view.$('.no_credentials')).toExist();
                 });
 
-                it("launches the correct dialog when the 'click here' credentials link is clicked", function () {
-                    this.view.$('.no_credentials .add_credentials').click();
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.DataSourceAccount);
-                });
+                itBehavesLike.aDialogLauncher(".no_credentials .add_credentials", chorus.dialogs.DataSourceAccount);
             });
 
             context("when the user's account doesn't have access to the schema", function() {

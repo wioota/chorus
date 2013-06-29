@@ -58,9 +58,9 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             it("has a link to create an external table", function() {
                 expect(this.view.$("a.directory_external_table")).toExist();
                 expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs_data_source.create_directory_external_table");
-                this.view.$("a.directory_external_table").click();
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.HdfsDataSourceWorkspacePicker);
             });
+
+            itBehavesLike.aDialogLauncher("a.directory_external_table", chorus.dialogs.HdfsDataSourceWorkspacePicker);
 
             it("calls the base implementation for postRender", function() {
                 spyOn(chorus.views.Sidebar.prototype, "postRender");
@@ -93,31 +93,8 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             itHasTheRightDefaultBehavior(true);
             itBehavesLike.WorkFlowCreatorForHdfs();
-
-            it("opens the notes new dialog once when the add_note button is clicked", function() {
-                this.view.$("a.add_note").click();
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
-                expect(this.modalSpy.modals().length).toBe(1);
-                expect(this.modalSpy.lastModal().options).toEqual(jasmine.objectContaining({
-                    pageModel: this.hdfsEntry,
-                    entityId: this.hdfsEntry.id,
-                    entityType: 'hdfs_file',
-                    allowWorkspaceAttachments: false,
-                    displayEntityType: t("hdfs.file_lower")
-                }));
-            });
-
-            describe('clicking the edit tags link', function(){
-                beforeEach(function(){
-                    this.view.$('.edit_tags').click();
-                });
-
-                it('opens the tag edit dialog', function(){
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                    expect(this.modalSpy.lastModal().collection.length).toBe(1);
-                    expect(this.modalSpy.lastModal().collection).toContain(this.hdfsEntry);
-                });
-            });
+            itBehavesLike.aDialogLauncher("a.add_note", chorus.dialogs.NotesNew);
+            itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
 
             context("when the file is at root", function() {
                 beforeEach(function() {
@@ -207,17 +184,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 expect(this.view.$("a.external_table")).not.toExist();
             });
 
-            describe('clicking the edit tags link', function(){
-                beforeEach(function(){
-                    this.view.$('.edit_tags').click();
-                });
-
-                it('opens the tag edit dialog', function(){
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                    expect(this.modalSpy.lastModal().collection.length).toBe(1);
-                    expect(this.modalSpy.lastModal().collection).toContain(this.hdfsEntry);
-                });
-            });
+            itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
         });
 
         context("when there is no model", function() {

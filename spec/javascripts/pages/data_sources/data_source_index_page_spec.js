@@ -134,6 +134,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
 
             context("when a row has been checked", function() {
                 beforeEach(function() {
+                    this.modalSpy = stubModals();
                     var dataSources = new chorus.collections.DataSourceSet([backboneFixtures.gpdbDataSource()]);
                     chorus.PageEvents.trigger("data_source:checked", dataSources);
                 });
@@ -146,17 +147,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
                     expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
                 });
 
-                describe("clicking the 'edit_tags' link", function() {
-                    beforeEach(function() {
-                        this.modalSpy = stubModals();
-                        this.page.$(".multiple_selection a.edit_tags").click();
-                    });
-
-                    it("launches the dialog for editing tags", function() {
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                        expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
-                    });
-                });
+                itBehavesLike.aDialogLauncher(".multiple_selection a.edit_tags", chorus.dialogs.EditTags);
             });
 
             context("when all data sources for a single type are selected", function () {

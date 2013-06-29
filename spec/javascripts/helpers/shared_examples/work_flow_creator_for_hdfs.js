@@ -11,17 +11,7 @@ jasmine.sharedExamples.WorkFlowCreatorForHdfs = function() {
             expect(this.view.$("a.new_work_flow")).toContainTranslation("sidebar.new_work_flow");
         });
 
-        context("when clicking the new work flow link", function() {
-            beforeEach(function() {
-                this.view.$("a.new_work_flow").click();
-            });
-
-            it("launches the dialog for creating a new work flow", function() {
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.HdfsWorkFlowWorkspacePicker);
-                expect(this.modalSpy.lastModal().options.hdfsEntries.length).toBe(1);
-                expect(this.modalSpy.lastModal().options.hdfsEntries).toContain(this.hdfsEntry);
-            });
-        });
+        itBehavesLike.aDialogLauncher("a.new_work_flow", chorus.dialogs.HdfsWorkFlowWorkspacePicker);
     });
 
     context("when work flows are enabled but the hdfs data source does not support work flows", function() {

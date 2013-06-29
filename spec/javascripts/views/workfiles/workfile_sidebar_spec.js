@@ -49,24 +49,12 @@ describe("chorus.views.WorkfileSidebar", function() {
                 expect(copyLink).toExist();
             });
 
-            context("clicking on the copy workfile link", function() {
-                beforeEach(function() {
-                    this.modalSpy.reset();
-                    $('#jasmine_content').append(this.view.$el);
-                    chorus.page = this.view;
-                    this.view.$("a.copy").click();
-                });
-
-                it("should open the CopyWorkfile dialog once", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.CopyWorkfile);
-                    expect(this.modalSpy.modals().length).toBe(1);
-                });
-            });
-
             it("has an activities tab", function() {
                 expect(this.view.$('.tab_control .activity_list')).toExist();
                 expect(this.view.tabs.activity).toBeA(chorus.views.ActivityList);
             });
+
+            itBehavesLike.aDialogLauncher("a.copy", chorus.dialogs.CopyWorkfile);
         });
 
         context("with a non-sql workfile", function() {
@@ -125,23 +113,11 @@ describe("chorus.views.WorkfileSidebar", function() {
                 expect(addLink).toExist();
             });
 
-            context("clicking the add note link", function() {
-                beforeEach(function() {
-                    this.modalSpy.reset();
-                    $('#jasmine_content').append(this.view.$el);
-                    chorus.page = this.view;
-                    this.view.$("a.new_note").click();
-                });
-
-                it("should launch the NotesNew dialog once", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
-                    expect(this.modalSpy.modals().length).toBe(1);
-                });
-            });
-
             it("displays the activity list", function() {
                 expect(this.view.$(".activity_list")).toExist();
             });
+
+            itBehavesLike.aDialogLauncher("a.new_note", chorus.dialogs.NotesNew);
         });
 
         context("when it is an Alpine workile", function() {
@@ -249,29 +225,8 @@ describe("chorus.views.WorkfileSidebar", function() {
             });
         });
 
-        describe('clicking the edit tags link', function(){
-            beforeEach(function(){
-                this.modalSpy.reset();
-                this.view.$('.edit_tags').click();
-            });
-
-            it('opens the tag edit dialog', function(){
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                expect(this.modalSpy.lastModal().collection.length).toBe(1);
-                expect(this.modalSpy.lastModal().collection).toContain(this.workfile);
-            });
-        });
-
-        describe('clicking the rename link', function() {
-           beforeEach(function() {
-               this.modalSpy.reset();
-               this.view.$('.rename').click();
-           });
-
-           it('opens the rename workfile dialog', function() {
-               expect(this.modalSpy).toHaveModal(chorus.dialogs.RenameWorkfile);
-           });
-        });
+        itBehavesLike.aDialogLauncher(".edit_tags", chorus.dialogs.EditTags);
+        itBehavesLike.aDialogLauncher(".rename", chorus.dialogs.RenameWorkfile);
     });
 
     context("when showVersions is true", function() {
@@ -335,19 +290,7 @@ describe("chorus.views.WorkfileSidebar", function() {
             expect(this.view.$('.actions')).toContainTranslation('workfile.delete.button');
         });
 
-        context("clicking the delete workfile link", function() {
-            beforeEach(function() {
-                this.modalSpy.reset();
-                $('#jasmine_content').append(this.view.$el);
-                chorus.page = this.view;
-                this.view.$("a.delete").click();
-            });
-
-            it("should launch the WorkfileDelete alert once", function() {
-               expect(this.modalSpy).toHaveModal(chorus.alerts.WorkfileDelete);
-               expect(this.modalSpy.modals().length).toBe(1);
-            });
-        });
+        itBehavesLike.aDialogLauncher("a.delete", chorus.alerts.WorkfileDelete);
     });
 
     context('when showEditingLinks is false', function(){

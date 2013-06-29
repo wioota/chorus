@@ -225,18 +225,13 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$("a.delete_note")).not.toExist();
             });
 
-            context("when clicking the delete link", function() {
-               beforeEach(function() {
-                   this.modalSpy.reset();
-                   spyOn(this.presenter, "canDelete").andReturn(true);
-                   this.view.render();
-                   this.view.$("a.delete_note").click();
-               });
-
-                it("should launch the delete alert dialog once", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.alerts.DeleteNoteConfirmAlert);
-                    expect(this.modalSpy.modals().length).toBe(1);
+            context("when the delete link is clickable", function() {
+                beforeEach(function() {
+                    spyOn(this.presenter, "canDelete").andReturn(true);
+                    this.view.render();
                 });
+
+                itBehavesLike.aDialogLauncher("a.delete_note", chorus.alerts.DeleteNoteConfirmAlert);
             });
 
             it("displays an edit link or not, based on the presenter", function () {
@@ -251,16 +246,11 @@ describe("chorus.views.Activity", function() {
 
             context("when clicking the edit link", function() {
                 beforeEach(function() {
-                    this.modalSpy.reset();
                     spyOn(this.presenter, "canEdit").andReturn(true);
                     this.view.render();
-                    this.view.$("a.edit_link").click();
                 });
 
-                it("should launch the edit dialog once", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditNote);
-                    expect(this.modalSpy.modals().length).toBe(1);
-                });
+                itBehavesLike.aDialogLauncher("a.edit_link", chorus.dialogs.EditNote);
             });
 
             itShouldRenderAPromoteLink();
@@ -272,7 +262,7 @@ describe("chorus.views.Activity", function() {
                 });
 
                 itShouldNotRenderAPromoteLink();
-                
+
                 it("displays the note's promotion details if it is an insight", function () {
                     this.view.render();
                     expect(this.view.$("span.promoted_by")).toExist();
@@ -290,17 +280,7 @@ describe("chorus.views.Activity", function() {
                 expect(this.view.$("a.delete_notification")).toExist();
             });
 
-            context("clicking the delete link for notifications", function() {
-                beforeEach(function() {
-                    this.modalSpy.reset();
-                    this.view.$("a.delete_notification").click();
-                });
-
-                it("should launch the delete alert once", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.alerts.NotificationDeleteAlert);
-                    expect(this.modalSpy.modals().length).toBe(1);
-                });
-            });
+            itBehavesLike.aDialogLauncher("a.delete_notification", chorus.alerts.NotificationDeleteAlert);
         });
 
         describe("attachment rendering", function () {
@@ -458,24 +438,7 @@ describe("chorus.views.Activity", function() {
             expect(this.view.$(".links a.comment")).toExist();
         });
 
-        context("clicking the comment link", function() {
-            beforeEach(function() {
-                chorus.page = this.view;
-                $("#jasmine_content").append(this.view.$el);
-                this.modalSpy.reset();
-                this.view.$("a.comment").click();
-            });
-
-            it("displays the comment dialog once", function() {
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.Comment);
-                expect(this.modalSpy.modals().length).toBe(1);
-                expect(this.modalSpy.lastModal().options).toEqual(jasmine.objectContaining({
-                    pageModel: this.model,
-                    eventId: this.model.id
-                }));
-            });
-
-        });
+        itBehavesLike.aDialogLauncher("a.comment", chorus.dialogs.Comment);
 
         context("isReadOnly", function () {
             beforeEach(function () {
@@ -498,12 +461,12 @@ describe("chorus.views.Activity", function() {
     });
 
     context("when there is a update_credentials link", function() {
-        it("opens the dialog when clicked", function() {
+        beforeEach(function() {
             var model = backboneFixtures.activity.credentialsInvalid();
             this.view = new chorus.views.Activity({ model: model, isNotification: true });
             this.view.render();
-            this.view.$('.update_credentials').click();
-            expect(this.modalSpy).toHaveModal(chorus.dialogs.DataSourceAccount);
         });
+
+        itBehavesLike.aDialogLauncher(".update_credentials", chorus.dialogs.DataSourceAccount);
     });
 });

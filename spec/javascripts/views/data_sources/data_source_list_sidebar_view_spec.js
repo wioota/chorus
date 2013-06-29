@@ -14,18 +14,7 @@ jasmine.sharedExamples.aSidebar = function() {
         expect(this.view.$("a[data-dialog=NotesNew]").data("entityType")).toBe(this.dataSource.entityType);
     });
 
-    describe('clicking the edit tags link', function() {
-        beforeEach(function() {
-            this.modalSpy = stubModals();
-            this.view.$('.edit_tags').click();
-        });
-
-        it('opens the tag edit dialog', function() {
-            expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-            expect(this.modalSpy.lastModal().collection.length).toBe(1);
-            expect(this.modalSpy.lastModal().collection).toContain(this.dataSource);
-        });
-    });
+    itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
 
     describe("clear", function() {
         beforeEach(function() {
@@ -69,17 +58,7 @@ jasmine.sharedExamples.aSidebar = function() {
             expect(this.view.$(".actions .delete_data_source")).toExist();
         });
 
-        context('click on delete data source', function() {
-            beforeEach(function() {
-                this.modalSpy = stubModals();
-                this.view.$('.delete_data_source').click();
-            });
-
-            it('opens the delete data source alert', function(){
-                expect(this.modalSpy).toHaveModal(chorus.alerts.DataSourceDelete);
-                expect(this.modalSpy.lastModal().model).toBe(this.dataSource);
-            });
-        });
+        itBehavesLike.aDialogLauncher(".delete_data_source", chorus.alerts.DataSourceDelete);
     });
 
     context('when user is an admin', function() {
@@ -304,6 +283,10 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
 };
 
 describe("chorus.views.DataSourceListSidebar", function() {
+    beforeEach(function() {
+        this.modalSpy = stubModals();
+    });
+
     context('when no data source is selected', function() {
         beforeEach(function() {
             this.view = new chorus.views.DataSourceListSidebar();
@@ -560,7 +543,6 @@ describe("chorus.views.DataSourceListSidebar", function() {
             this.view.render();
             this.dataSource = backboneFixtures.gpdbDataSource({name: "Harry's House of Glamour", version: "99.999" });
             this.view.setDataSource(this.dataSource);
-            this.modalSpy = stubModals();
         });
 
         it("launches the remove credentials modal", function() {

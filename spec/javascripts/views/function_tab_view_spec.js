@@ -233,10 +233,7 @@ describe("chorus.views.FunctionTab", function () {
                         expect(this.view.$('.no_credentials')).toExist();
                     });
 
-                    it("launches the correct dialog when the 'click here' credentials link is clicked", function () {
-                        this.view.$('.no_credentials .add_credentials').click();
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.DataSourceAccount);
-                    });
+                    itBehavesLike.aDialogLauncher(".no_credentials .add_credentials", chorus.dialogs.DataSourceAccount);
                 });
 
                 context("fails with unprocessable entity", function () {

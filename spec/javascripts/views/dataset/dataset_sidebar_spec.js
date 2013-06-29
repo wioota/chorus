@@ -138,15 +138,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$(".actions a.analyze")).not.toExist();
             });
 
-            context("when the run analyze link is clicked", function() {
-                beforeEach(function() {
-                    this.view.$(".actions a.analyze").click();
-                });
-
-                it("displays an alert dialog", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.alerts.Analyze);
-                });
-            });
+            itBehavesLike.aDialogLauncher(".actions a.analyze", chorus.alerts.Analyze);
 
             context("when the analyze:running event is trigger", function() {
                 it("re-fetches the dataset statistics", function() {
@@ -313,17 +305,7 @@ describe("chorus.views.DatasetSidebar", function() {
             expect(this.view.$("a.download").text()).toMatchTranslation("actions.download");
         });
 
-        context("when clicking the download link", function() {
-            beforeEach(function() {
-                this.modalSpy.reset();
-                this.view.$("a.download").click();
-            });
-
-            it("shows the dataset download dialog once", function() {
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.DatasetDownload);
-                expect(this.modalSpy.modals().length).toBe(1);
-            });
-        });
+        itBehavesLike.aDialogLauncher("a.download", chorus.dialogs.DatasetDownload);
 
         context("when in list mode", function() {
             beforeEach(function() {
@@ -412,17 +394,7 @@ describe("chorus.views.DatasetSidebar", function() {
                             expect(el).toHaveText(t(textKey));
                         });
 
-                        context("clicking the delete link", function() {
-                            beforeEach(function() {
-                                this.modalSpy.reset();
-                                this.view.$("a.delete_dataset").click();
-                            });
-
-                            it("shows the dataset delete alert once", function() {
-                                expect(this.modalSpy).toHaveModal(chorus.alerts.DatasetDelete);
-                                expect(this.modalSpy.modals().length).toBe(1);
-                            });
-                        });
+                        itBehavesLike.aDialogLauncher("a.delete_dataset", chorus.alerts.DatasetDelete);
                     });
 
                     context("and the logged-in user does not have update permission on the workspace", function() {
@@ -618,34 +590,10 @@ describe("chorus.views.DatasetSidebar", function() {
                                 expect(this.view.$("a.import_now")).toExist();
                             });
 
-                            describe("clicking the import now link", function() {
-                                beforeEach(function() {
-                                    this.modalSpy.reset();
-                                    this.view.$("a.import_now").click();
-                                });
-
-                                it("should open the import now dialog once", function() {
-                                    expect(this.modalSpy.modals().length).toBe(1);
-                                    expect(this.modalSpy).toHaveModal(chorus.dialogs.ImportNow);
-                                });
-                            });
-
                             it("has a 'create import schedule' link with the 'create_schedule data-action", function() {
                                 var createScheduleLink = this.view.$("a.create_schedule");
                                 expect(createScheduleLink.text()).toMatchTranslation("actions.create_schedule");
                                 expect(createScheduleLink.data("action")).toBe("create_schedule");
-                            });
-
-                            describe("clicking the create schedule link", function() {
-                                beforeEach(function() {
-                                    this.modalSpy.reset();
-                                    this.view.$("a.create_schedule").click();
-                                });
-
-                                it("should open the create schedule dialog once", function() {
-                                    expect(this.modalSpy.modals().length).toBe(1);
-                                    expect(this.modalSpy).toHaveModal(chorus.dialogs.ImportScheduler);
-                                });
                             });
 
                             it("should have the dataset attached as data-dataset", function() {
@@ -655,6 +603,9 @@ describe("chorus.views.DatasetSidebar", function() {
                             it("should have the workspace attached as data-workspace", function() {
                                 expect(this.view.$("a.create_schedule").data("workspace")).toBe(this.view.resource.workspace());
                             });
+
+                            itBehavesLike.aDialogLauncher("a.import_now", chorus.dialogs.ImportNow);
+                            itBehavesLike.aDialogLauncher("a.create_schedule", chorus.dialogs.ImportScheduler);
                         });
 
                         context("and the workspace does not have a sandbox", function() {
@@ -721,36 +672,8 @@ describe("chorus.views.DatasetSidebar", function() {
                         });
                     });
 
-                    describe("clicking the edit schedule link", function() {
-                        beforeEach(function() {
-                            this.modalSpy.reset();
-                            this.view.$("a.edit_schedule").click();
-                        });
-
-                        it("should open the edit schedule dialog once", function() {
-                            expect(this.modalSpy.modals().length).toBe(1);
-                            expect(this.modalSpy).toHaveModal(chorus.dialogs.ImportScheduler);
-                        });
-                    });
-
                     it("shows the 'delete_schedule' link", function() {
                         expect(this.view.$("a.delete_schedule")).toExist();
-                    });
-
-                    describe("clicking the delete schedule link", function() {
-                        beforeEach(function() {
-                            this.modalSpy.reset();
-                            this.view.$("a.delete_schedule").click();
-                        });
-
-                        it("should open the delete schedule alert once", function() {
-                            expect(this.modalSpy.modals().length).toBe(1);
-                            expect(this.modalSpy).toHaveModal(chorus.alerts.ImportScheduleDelete);
-                        });
-
-                        it("should initialize the alert with the correct schedule", function() {
-                           expect(this.modalSpy.lastModal().model).toBe(this.view.resource.importSchedule());
-                        });
                     });
 
                     it("has a 'edit import schedule' link with the 'eidt_schedule data-action", function() {
@@ -758,6 +681,9 @@ describe("chorus.views.DatasetSidebar", function() {
                     });
 
                     itHasActionLinks(["import_now", "edit_schedule"]);
+
+                    itBehavesLike.aDialogLauncher("a.edit_schedule", chorus.dialogs.ImportScheduler);
+                    itBehavesLike.aDialogLauncher("a.delete_schedule", chorus.alerts.ImportScheduleDelete);
                 });
 
                 context("when the dataset has a last import", function() {
@@ -799,23 +725,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 itDoesNotHaveACreateDatabaseViewLink();
             });
 
-            context("clicking the new notes link", function() {
-                beforeEach(function() {
-                    this.modalSpy.reset();
-                    this.view.$("a.new_note").click();
-                });
-
-                it("should launch the new notes dialog once", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
-                    expect(this.modalSpy.modals().length).toBe(1);
-                });
-
-                it("passes the right options to the dialog", function() {
-                    var modal = _.first(this.modalSpy.modals());
-                    expect(modal.pageModel).toBe(this.dataset);
-                });
-
-            });
+            itBehavesLike.aDialogLauncher("a.new_note", chorus.dialogs.NotesNew);
 
             context("when the dataset is a chorus view", function() {
                 beforeEach(function() {
@@ -850,30 +760,14 @@ describe("chorus.views.DatasetSidebar", function() {
                             this.view.$("a.duplicate").click();
                         });
 
-                        it("does not launch a submodal", function() {
-                            expect(this.modalSpy.modals().length).toBe(1);
-                        });
-
-                        it("launches the name chorus view dialog once", function() {
-                            expect(this.modalSpy).toHaveModal(chorus.dialogs.VerifyChorusView);
-                        });
+                        itBehavesLike.aDialogLauncher("a.duplicate", chorus.dialogs.VerifyChorusView);
 
                         it("passes the dialog a duplicate of the chorus view", function() {
                             expect(this.modalSpy.lastModal().model.attributes).toEqual(this.dataset.createDuplicateChorusView().attributes);
                         });
                     });
 
-                    describe("clicking the 'create database view' link", function() {
-                        beforeEach(function() {
-                            this.modalSpy.reset();
-                            this.view.$("a.create_database_view").click();
-                        });
-
-                        it("should launch the create database view dialog once", function() {
-                            expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateDatabaseView);
-                            expect(this.modalSpy.modals().length).toBe(1);
-                        });
-                    });
+                    itBehavesLike.aDialogLauncher("a.create_database_view", chorus.dialogs.CreateDatabaseView);
                 });
 
                 context("current user does not have credentials on the dataset", function() {
@@ -914,9 +808,9 @@ describe("chorus.views.DatasetSidebar", function() {
 
             it("has an 'associate with another workspace' link", function() {
                 expect(this.view.$('.actions .associate')).toContainTranslation("actions.associate_with_another_workspace");
-                this.view.$('.actions .associate').click();
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.AssociateWithWorkspace);
             });
+
+            itBehavesLike.aDialogLauncher(".actions a.associate", chorus.dialogs.AssociateWithWorkspace);
 
             context("when work_flows are enabled", function () {
                 beforeEach(function () {
@@ -949,17 +843,7 @@ describe("chorus.views.DatasetSidebar", function() {
                         });
                     });
 
-                    describe("clicking the 'new work flow' link", function () {
-                        beforeEach(function () {
-                            this.view.$("a.new_work_flow").click();
-                        });
-
-                        it("launches the dialog for creating a new work flow", function () {
-                            expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkFlowNewForDatasetList);
-                            expect(this.modalSpy.lastModal().collection.length).toBe(1);
-                            expect(this.modalSpy.lastModal().collection).toContain(this.dataset);
-                        });
-                    });
+                    itBehavesLike.aDialogLauncher("a.new_work_flow", chorus.dialogs.WorkFlowNewForDatasetList);
                 });
 
                 context("when the current user is not a member of the workspace", function () {
@@ -1022,30 +906,10 @@ describe("chorus.views.DatasetSidebar", function() {
                 });
             });
 
-            context("clicking the new notes link", function() {
-                beforeEach(function() {
-                    this.modalSpy.reset();
-                    this.view.$("a.new_note").click();
-                });
-
-                it("should launch the new notes dialog once", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
-                    expect(this.modalSpy.modals().length).toBe(1);
-                });
-            });
+            itBehavesLike.aDialogLauncher("a.new_note", chorus.dialogs.NotesNew);
         });
 
-        describe('clicking the edit tags link', function() {
-            beforeEach(function() {
-                this.view.$('.edit_tags').click();
-            });
-
-            it('opens the tag edit dialog', function() {
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                expect(this.modalSpy.lastModal().collection.length).toBe(1);
-                expect(this.modalSpy.lastModal().collection).toContain(this.dataset);
-            });
-        });
+        itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
     });
 
     describe("column statistics", function() {

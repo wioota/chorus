@@ -66,44 +66,8 @@ describe("chorus.views.WorkspaceListSidebar", function() {
             expect(this.view.$(".actions a.new_insight")).toContainTranslation("actions.add_insight");
         });
 
-        context("clicking the add note link", function() {
-            beforeEach(function() {
-                this.modalSpy.reset();
-                $('#jasmine_content').append(this.view.$el);
-                chorus.page = this.view;
-                this.view.$("a.new_note").click();
-            });
-
-            it("should launch the NotesNew dialog once", function() {
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
-                expect(this.modalSpy.modals().length).toBe(1);
-            });
-        });
-
-        context("clicking the add insights link", function() {
-            beforeEach(function() {
-                this.modalSpy.reset();
-                $('#jasmine_content').append(this.view.$el);
-                chorus.page = this.view;
-                this.view.$("a.new_insight").click();
-            });
-
-            it("should launch the InsightsNew dialog once", function() {
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.InsightsNew);
-                expect(this.modalSpy.modals().length).toBe(1);
-            });
-        });
-
-        describe('clicking the edit tags link', function(){
-            beforeEach(function(){
-                this.view.$('.edit_tags').click();
-            });
-
-            it('opens the tag edit dialog', function(){
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                expect(this.modalSpy.lastModal().collection.length).toBe(1);
-                expect(this.modalSpy.lastModal().collection).toContain(this.workspace);
-            });
-        });
+        itBehavesLike.aDialogLauncher("a.new_note", chorus.dialogs.NotesNew);
+        itBehavesLike.aDialogLauncher("a.new_insight", chorus.dialogs.InsightsNew);
+        itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
     });
 });

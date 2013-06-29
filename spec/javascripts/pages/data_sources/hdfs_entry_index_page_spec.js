@@ -115,6 +115,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
 
             context('when the HDFS data source supports work flows', function() {
                 beforeEach(function() {
+                    this.modalSpy = stubModals();
                     this.page.dataSource.set('supportsWorkFlows', true);
                     this.page.setupMultiSelectSidebar();
                     this.page.render();
@@ -126,17 +127,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
                     expect(this.page.$('a.new_work_flow')).toContainTranslation("sidebar.new_work_flow");
                 });
 
-                describe("clicking the create new work flow link", function() {
-                    beforeEach(function() {
-                        this.modalSpy = stubModals();
-                        this.page.$("a.new_work_flow").click();
-                    });
-
-                    it("should launch the workspace picker dialog", function() {
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.HdfsWorkFlowWorkspacePicker);
-                        expect(this.modalSpy.lastModal().options.hdfsEntries).toBe(this.page.multiSelectSidebarMenu.selectedModels);
-                    });
-                });
+                itBehavesLike.aDialogLauncher("a.new_work_flow", chorus.dialogs.HdfsWorkFlowWorkspacePicker);
             });
 
             context('when the HDFS data source does not support work flows', function() {

@@ -138,6 +138,7 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
     context("when there are no valid credentials", function() {
         beforeEach(function() {
+            this.modalSpy = stubModals();
             this.schema = backboneFixtures.workspace({ sandboxInfo: { name: "righteous_tables" } }).sandbox().schema();
             this.collection = new chorus.collections.Base([]);
 
@@ -158,13 +159,6 @@ describe("chorus.views.DatabaseSidebarList", function() {
             });
         });
 
-        it("should display the add credentials dialog when the add credential link is clicked", function() {
-            var modalSpy = stubModals();
-            this.view.$(".add_credentials").click();
-            expect(modalSpy).toHaveModal(chorus.dialogs.DataSourceAccount);
-
-            var dialog = modalSpy.lastModal();
-            expect(dialog.model.get("dataSourceId")).toBeDefined();
-        });
+        itBehavesLike.aDialogLauncher(".add_credentials", chorus.dialogs.DataSourceAccount);
     });
 });

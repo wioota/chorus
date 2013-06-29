@@ -17,6 +17,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            this.modalSpy = stubModals();
             this.view.render();
         });
 
@@ -34,21 +35,7 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
             expect(this.view.$("a.add_note")).toContainTranslation("actions.add_note");
         });
 
-        describe("clicking the add note link", function() {
-            it("opens the Notes New dialog", function() {
-                this.modalSpy = stubModals();
-                this.view.$("a.add_note").click();
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.NotesNew);
-                expect(this.modalSpy.modals().length).toBe(1);
-                expect(this.modalSpy.lastModal().options).toEqual(jasmine.objectContaining({
-                    pageModel: this.hdfsEntry,
-                    entityId: this.hdfsEntry.id,
-                    entityType: 'hdfs_file',
-                    allowWorkspaceAttachments: false,
-                    displayEntityType: t("hdfs.file_lower")
-                }));
-            });
-        });
+        itBehavesLike.aDialogLauncher("a.add_note", chorus.dialogs.NotesNew);
 
         it("has an activity list", function() {
             expect(this.view.$(".activity_list")).toExist()
@@ -58,19 +45,11 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
             expect(this.view.$('.tabbed_area .activity_list')).toExist();
         });
 
-        describe("clicking the external table link", function() {
-            beforeEach(function() {
-                this.modalSpy = stubModals();
-                var $linkExternalTable = this.view.$("a.external_table");
-                expect($linkExternalTable).toExist();
-                $linkExternalTable.click();
-            });
-
-            it("launches the right dialog", function() {
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs);
-                expect(chorus.modal.model.get("hdfs_entry_id")).toBe(8675309);
-            });
+        it("should have an external table link", function() {
+            expect(this.view.$("a.external_table")).toExist();
         });
+
+        itBehavesLike.aDialogLauncher("a.external_table", chorus.dialogs.CreateExternalTableFromHdfs);
 
         it("should re-render when csv_import:started is triggered", function() {
             this.server.reset();

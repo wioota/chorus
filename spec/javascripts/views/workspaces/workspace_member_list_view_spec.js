@@ -91,7 +91,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
                 expect(this.view.$(".members a.more_members")).toExist();
             });
 
-            itBehavesLike.aDialogLauncher("more_members", chorus.dialogs.WorkspaceMembersMore);
+            itBehavesLike.aDialogLauncher("a.more_members", chorus.dialogs.WorkspaceMembersMore);
         });
 
         it('setting the workspace a second time does not fetch the members', function(){

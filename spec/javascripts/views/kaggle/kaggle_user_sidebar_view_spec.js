@@ -46,18 +46,6 @@ describe("chorus.views.KaggleUserSidebar", function () {
             expect(this.view.tabs.information.el).toBe(this.view.$(".tabbed_area .kaggle_user_information")[0]);
         });
 
-        describe("sending a message", function () {
-            beforeEach(function () {
-                this.view.$(".actions a.sendMessage").click();
-            });
-
-            it("opens the send message dialog", function () {
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.ComposeKaggleMessage);
-                var modal = this.modalSpy.lastModal();
-                expect(modal.recipients.at(0)).toEqual(this.model);
-                expect(modal.recipients.length).toEqual(1);
-                expect(modal.workspace).toEqual(this.workspace);
-            });
-        });
+        itBehavesLike.aDialogLauncher(".actions a.sendMessage", chorus.dialogs.ComposeKaggleMessage);
     });
 });

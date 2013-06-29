@@ -94,13 +94,7 @@ describe("chorus.views.UserSidebar", function() {
                 this.view.render();
             });
 
-            it('shows the edit tags link', function(){
-                this.view.$('.edit_tags').click();
-
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                expect(this.modalSpy.lastModal().collection.length).toBe(1);
-                expect(this.modalSpy.lastModal().collection).toContain(this.user);
-            });
+            itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
         });
 
         describe("#setUser(user)", function() {

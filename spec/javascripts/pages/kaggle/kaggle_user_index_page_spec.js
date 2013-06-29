@@ -58,6 +58,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
 
             context("when a row has been checked", function() {
                 beforeEach(function() {
+                    this.modalSpy = stubModals();
                     chorus.PageEvents.trigger("kaggle_user:checked", this.kaggleUsers.clone());
                 });
 
@@ -69,18 +70,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
                     expect(this.page.$(".multiple_selection a.send_message")).toExist();
                 });
 
-                describe("clicking the 'send_message' link", function() {
-                    beforeEach(function() {
-                        this.modalSpy = stubModals();
-                        this.page.$(".multiple_selection a.send_message").click();
-                    });
-
-                    it("launches the dialog for sending a kaggle message", function() {
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.ComposeKaggleMessage);
-                        expect(this.modalSpy.lastModal().recipients).toBe(this.page.multiSelectSidebarMenu.selectedModels);
-
-                    });
-                });
+                itBehavesLike.aDialogLauncher(".multiple_selection a.send_message", chorus.dialogs.ComposeKaggleMessage);
             });
         });
     });

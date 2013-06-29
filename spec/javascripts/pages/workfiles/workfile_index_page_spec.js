@@ -122,6 +122,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
             context("when a row has been checked", function() {
                 beforeEach(function() {
+                    this.modalSpy = stubModals();
                     chorus.PageEvents.trigger("workfile:checked", this.page.collection.clone());
                 });
 
@@ -133,17 +134,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                     expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
                 });
 
-                describe("clicking the 'edit_tags' link", function() {
-                    beforeEach(function() {
-                        this.modalSpy = stubModals();
-                        this.page.$(".multiple_selection a.edit_tags").click();
-                    });
-
-                    it("launches the dialog for editing tags", function() {
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                        expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
-                    });
-                });
+                itBehavesLike.aDialogLauncher(".multiple_selection a.edit_tags", chorus.dialogs.EditTags);
             });
         });
     });

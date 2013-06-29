@@ -53,6 +53,7 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
 
         context("when a row has been checked", function() {
             beforeEach(function() {
+                this.modalSpy = stubModals();
                 chorus.PageEvents.trigger(this.page.mainContent.content.eventName + ":checked", this.page.collection.clone());
             });
 
@@ -64,17 +65,7 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
                 expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
             });
 
-            describe("clicking the 'edit_tags' link", function() {
-                beforeEach(function() {
-                    this.modalSpy = stubModals();
-                    this.page.$(".multiple_selection a.edit_tags").click();
-                });
-
-                it("launches the dialog for editing tags", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                    expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
-                });
-            });
+            itBehavesLike.aDialogLauncher(".multiple_selection a.edit_tags", chorus.dialogs.EditTags);
         });
     });
 };

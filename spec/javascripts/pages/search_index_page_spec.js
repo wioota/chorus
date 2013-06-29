@@ -1,6 +1,7 @@
 describe("chorus.pages.SearchIndexPage", function() {
     beforeEach(function() {
         this.query = "50/50";
+        this.modalSpy = stubModals();
     });
 
     it("has a helpId", function() {
@@ -162,11 +163,11 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("show the 'add a note' link in the sidebar", function() {
-                        expect(this.page.sidebar.$("a[data-dialog='NotesNew']")).toExist();
+                        expect(this.page.sidebar.$("a.new_note")).toExist();
                     });
 
                     it("show the 'add an insight' link in the sidebar", function() {
-                        expect(this.page.sidebar.$("a[data-dialog='InsightsNew']")).toExist();
+                        expect(this.page.sidebar.$("a.new_insight")).toExist();
                     });
                 });
             });
@@ -453,17 +454,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
             });
 
-            describe("clicking the 'edit_tags' link", function() {
-                beforeEach(function() {
-                    this.modalSpy = stubModals();
-                    this.page.$(".multiple_selection a.edit_tags").click();
-                });
-
-                it("launches the dialog for editing tags", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditTags);
-                    expect(this.modalSpy.lastModal().collection).toBe(this.page.multiSelectSidebarMenu.selectedModels);
-                });
-            });
+            itBehavesLike.aDialogLauncher(".multiple_selection a.edit_tags", chorus.dialogs.EditTags);
         });
     });
 

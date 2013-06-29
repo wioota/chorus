@@ -31,16 +31,7 @@ describe("chorus.views.WorkfileIndexPageButtons", function() {
                 expect(this.view.$("button.new_workfile")).toContainTranslation("actions.create_workfile");
             });
 
-            context("clicking the import workfile button", function() {
-                beforeEach(function() {
-                    this.view.$("button.import_workfile").click();
-                });
-
-                it("launches the WorkfilesImport dialog", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkfilesImport);
-                    expect(this.modalSpy.lastModal().options.workspaceId).toBe(this.workspace.id);
-                });
-            });
+            itBehavesLike.aDialogLauncher("button.import_workfile", chorus.dialogs.WorkfilesImport);
 
             context("clicking the create workfile button", function() {
                 beforeEach(function() {

@@ -44,19 +44,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
                 expect(chorusView.sourceObject).toBe(this.dataset);
             });
 
-            context("clicking on it", function() {
-                beforeEach(function() {
-                    this.modalSpy.reset();
-                    $('#jasmine_content').append(this.view.$el);
-                    chorus.page = this.view;
-                    this.view.$("a.add_join").click();
-                });
-
-                it("shows the ManageJoinTables dialog once", function() {
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.ManageJoinTables);
-                    expect(this.modalSpy.modals().length).toBe(1);
-                });
-            });
+            itBehavesLike.aDialogLauncher("a.add_join", chorus.dialogs.ManageJoinTables);
         });
 
         it("always enables the create chorus view button", function() {
