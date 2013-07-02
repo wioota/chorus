@@ -4,8 +4,7 @@ class AlpineWorkfile < Workfile
   has_additional_data :dataset_ids, :hdfs_entry_ids
 
   before_validation { self.content_type ='work_flow' }
-  before_validation { self.execution_location = datasets.first.database unless datasets.empty? }
-  before_validation { self.execution_location = hdfs_entries.first.hdfs_data_source unless hdfs_entries.empty? }
+  before_validation :determine_execution_location
   validates_presence_of :execution_location
   validates_with AlpineWorkfileValidator
   validate :ensure_active_workspace, :on => :create
@@ -25,14 +24,17 @@ class AlpineWorkfile < Workfile
   end
 
   def update_from_params!(params)
-    self.execution_location = GpdbDatabase.find(params[:database_id]) if params[:database_id]
-    self.execution_location = HdfsDataSource.find(params[:hdfs_data_source_id]) if params[:hdfs_data_source_id]
+    self.execution_location = GpdbDatabase.find(params[:database_id]) unless params[:database_id].to_s == ""
+    self.execution_location = HdfsDataSource.find(params[:hdfs_data_source_id]) unless params[:hdfs_data_source_id].to_s == ""
 
     if execution_location_id_changed? || execution_location_type_changed?
       self.hdfs_entry_ids = nil
       self.dataset_ids = nil
     end
 
+    self.resolve_name_conflicts = !params[:file_name]
+
+    self.file_name = params[:versions_attributes]["0"][:contents].original_filename if params[:versions_attributes]
     save!
   end
 
@@ -53,6 +55,11 @@ class AlpineWorkfile < Workfile
   end
 
   private
+
+  def determine_execution_location
+    self.execution_location = datasets.first.database unless datasets.empty?
+    self.execution_location = hdfs_entries.first.hdfs_data_source unless hdfs_entries.empty?
+  end
 
   def notify_alpine_of_deletion
     # This will only work in development mode if you have alpine running locally and you have

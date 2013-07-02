@@ -1,6 +1,13 @@
 require 'factory_girl'
 
 FactoryGirl.define do
+  factory :alpine_workfile do
+    owner
+    workspace
+    description 'A nice description'
+    file_name 'machine_learning.afm'
+  end
+
   factory :workfile do
     owner
     workspace

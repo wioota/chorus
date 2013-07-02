@@ -205,11 +205,13 @@ describe WorkfilesController do
   end
 
   describe "#create" do
-    let(:params) { {
-      :workspace_id => workspace.to_param,
-      :workfile => {:description => "Nice workfile, good workfile, I've always wanted a workfile like you",
-          :versions_attributes => [{:contents => file}]}
-    } }
+    let(:params) do
+      {
+        :workspace_id => workspace.to_param,
+        :workfile => {:description => "Nice workfile, good workfile, I've always wanted a workfile like you",
+                      :versions_attributes => [{:contents => file}]}
+      }
+    end
 
     it_behaves_like "an action that requires authentication", :post, :create, :workspace_id => '-1'
 
@@ -235,6 +237,8 @@ describe WorkfilesController do
 
     context "uploading a file" do
       it 'creates a workfile' do
+        Workfile.last.file_name.should_not == 'workfile.sql'
+
         post :create, params
         response.code.should == "201"
         Workfile.last.file_name.should == 'workfile.sql'
@@ -253,6 +257,32 @@ describe WorkfilesController do
         it 'returns 422' do
           post :create, params
           response.code.should == '422'
+        end
+      end
+
+      describe 'uploading a WorkFlow' do
+        let(:description) { "Nice workfile, good workfile, I've always wanted a workfile like you" }
+        let(:file) { test_file('workflow.afm', "text/xml") }
+        let(:hdfs) { hdfs_data_sources(:hadoop) }
+        let(:params) do
+          {
+            :workspace_id => workspace.to_param,
+            :workfile => {
+              :description => description,
+              :entity_subtype => 'alpine',
+              :versions_attributes => {"0" => {:contents => file}},
+              :hdfs_data_source_id => hdfs.id,
+              :database_id => ""
+            }
+          }
+        end
+
+        it "creates a workflow 201" do
+          Workfile.last.file_name.should_not == 'workflow.afm'
+
+          post :create, params
+          response.code.should == "201"
+          Workfile.last.file_name.should == 'workflow.afm'
         end
       end
     end

@@ -11,6 +11,48 @@ describe AlpineWorkfile do
 
   it { should belong_to :execution_location }
 
+  describe 'update from params' do
+    context "when uploading an AFM" do
+      let(:description) { "Nice workfile, good workfile, I've always wanted a workfile like you" }
+      let(:file) { OpenStruct.new(:original_filename => 'machine_learner.afm') }
+      let(:workfile) { Workfile.build_for(params) }
+      let(:hdfs) { hdfs_data_sources(:hadoop) }
+      let(:params) do
+        {
+          :description => description,
+          :entity_subtype => 'alpine',
+          :versions_attributes => {"0" => {:contents => file}},
+          :hdfs_data_source_id => hdfs.id,
+          :database_id => "",
+          :workspace => workspace,
+          :owner => user
+        }
+      end
+
+      it "resolves name conflicts" do
+        workfile.update_from_params!(params)
+        workfile.file_name.should eq("machine_learner.afm")
+
+        second_workfile = Workfile.build_for(params)
+        second_workfile.update_from_params!(params)
+        second_workfile.file_name.should eq("machine_learner_1.afm")
+      end
+    end
+
+    context "when renaming or creating a workflow" do
+      let(:params) {{:file_name => 'already_taken.afm'}}
+      let(:workfile) { FactoryGirl.build(:alpine_workfile) }
+
+      before { FactoryGirl.build(:workfile, :file_name => 'already_taken.afm') }
+
+      it "does not resolve name conflicts" do
+        expect do
+          workfile.update_from_params!(params)
+        end.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+  end
+
   describe "validations" do
     it { should validate_presence_of :execution_location }
 

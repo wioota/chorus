@@ -305,5 +305,28 @@ describe("chorus.dialogs.WorkfilesImport", function() {
             expect(this.dialog.$("button.submit")).toBeEnabled();
         });
 
+        it("sets entitySubtype to 'alpine'", function () {
+            expect(this.dialog.$('input#entity_subtype')).toHaveValue('alpine');
+        });
+
+        describe("changing the execution location", function() {
+            beforeEach(function () {
+                this.hdfs = backboneFixtures.hdfsDataSource();
+
+                var hdfsDataSources = this.dialog.executionLocationPicker.dataSourceView.hdfsDataSources;
+                this.server.completeFetchAllFor(hdfsDataSources, [this.hdfs]);
+
+                var dataSources = this.dialog.executionLocationPicker.dataSourceView.gpdbDataSources;
+                this.server.completeFetchAllFor(dataSources, []);
+
+            });
+
+            it("sets values on the form", function () {
+                expect(this.dialog.$('input#hdfs_data_source_id')).not.toHaveValue(this.hdfs.id);
+
+                this.dialog.$(".data_source select").prop("selectedIndex", 1).change();
+                expect(this.dialog.$('input#hdfs_data_source_id')).toHaveValue(this.hdfs.id);
+            });
+        });
     });
 });

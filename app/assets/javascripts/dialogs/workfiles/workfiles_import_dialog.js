@@ -38,13 +38,30 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
 
     buildLocationPicker: function () {
         this.executionLocationPicker = new chorus.views.WorkFlowExecutionLocationPicker();
-        this.listenTo(this.executionLocationPicker, "change", this.enableOrDisableSubmitButton);
+        this.listenTo(this.executionLocationPicker, "change", this.executionLocationChanged);
         this.listenTo(this.executionLocationPicker, "error", this.showErrors);
         this.listenTo(this.executionLocationPicker, "clearErrors", this.clearErrors);
     },
 
     enableOrDisableSubmitButton: function () {
         this.$("button.submit").prop("disabled", !this.executionLocationPicker.ready());
+    },
+
+    setPickedValues: function () {
+        var selectedDataSource = this.executionLocationPicker.getSelectedDataSource();
+        if (selectedDataSource) {
+            if(selectedDataSource.get('entityType') === 'gpdb_data_source') {
+                var selectedDatabase = this.executionLocationPicker.getSelectedDatabase();
+                selectedDatabase && this.$('input#database_id').val(selectedDatabase.get('id'));
+            } else {
+                this.$('input#hdfs_data_source_id').val(selectedDataSource.get('id'));
+            }
+        }
+    },
+
+    executionLocationChanged: function () {
+        this.setPickedValues();
+        this.enableOrDisableSubmitButton();
     },
 
     upload: function(e) {
@@ -104,13 +121,20 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         }
 
         function fileChosen(e, data) {
+            function prepareFileIcon() {
+                var iconSrc = chorus.urlHelpers.fileIconUrl(self.uploadExtension, "icon");
+                self.$('img.file_icon').attr('src', iconSrc);
+                self.$('img.file_icon').removeClass('hidden');
+            }
+
             function acceptFile() {
                 self.$(".comment").removeClass("hidden");
                 self.$("button.submit").prop("disabled", false);
             }
 
             function acceptAlpineFile() {
-                this.$('.work_flow_detail').removeClass("hidden");
+                self.$('.work_flow_detail').removeClass("hidden");
+                self.$('input#entity_subtype').val('alpine');
             }
 
             if (data.files.length > 0) {
@@ -119,9 +143,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
 
                 self.$(".empty_selection").addClass("hidden");
                 self.uploadObj = data;
-                var iconSrc = chorus.urlHelpers.fileIconUrl(self.uploadExtension, "icon");
-                self.$('img.file_icon').attr('src', iconSrc);
-                self.$('img.file_icon').removeClass('hidden');
+                prepareFileIcon();
                 self.$('.file_name').text(filename).attr('title', filename);
 
                 if (self.uploadExtension.toLowerCase() === 'afm') {
