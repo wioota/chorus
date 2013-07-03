@@ -328,5 +328,18 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 expect(this.dialog.$('input#hdfs_data_source_id')).toHaveValue(this.hdfs.id);
             });
         });
+
+        describe("uploading", function() {
+            describe("when the work flow is not created due to an alpine connection error", function() {
+                beforeEach(function() {
+                    this.dialog.model.serverErrors = { fields: { base: { ALPINE_CONNECTION_ERROR: {} } } };
+                    this.dialog.resource.trigger('saveFailed');
+                });
+
+                it("should display the correct error message", function() {
+                   expect(this.dialog.$(".errors")).toContainTranslation("field_error.ALPINE_CONNECTION_ERROR");
+                });
+            });
+        });
     });
 });

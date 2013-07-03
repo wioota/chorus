@@ -29,6 +29,10 @@ describe AlpineWorkfile do
         }
       end
 
+      before do
+        any_instance_of(Alpine::API) { |api| stub(api).session_id }
+      end
+
       it "resolves name conflicts" do
         workfile.update_from_params!(params)
         workfile.file_name.should eq("workflow")
@@ -49,11 +53,24 @@ describe AlpineWorkfile do
           mock(Alpine::API).create_work_flow(model, file_contents)
           model.update_from_params!(params)
         end
+
+        context "when alpine responds with a failure" do
+          before do
+            any_instance_of(Alpine::API) { |api| stub(api).create_work_flow(model, file_contents) { raise Net::ProtocolError.new } }
+          end
+
+          it "should not create the workfile" do
+            expect {
+              model.update_from_params!(params)
+            }.to raise_error(ApiValidationError)
+            Workfile.find_by_id(workfile.id).should be_nil
+          end
+        end
       end
     end
 
     context "when renaming or creating a workflow" do
-      let(:params) {{:file_name => 'already_taken_flow'}}
+      let(:params) { {:file_name => 'already_taken_flow'} }
       let(:workfile) { FactoryGirl.build(:alpine_workfile) }
 
       before { FactoryGirl.build(:workfile, :file_name => 'already_taken_flow') }

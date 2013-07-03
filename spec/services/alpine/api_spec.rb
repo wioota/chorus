@@ -72,7 +72,7 @@ describe Alpine::API do
   end
 
   describe '#create_work_flow' do
-    let(:full_request_url)  { "#{alpine_base_uri}/alpinedatalabs/main/chorus.do?method=createWorkFlow&session_id=#{mock_session_id}&file_name=#{work_flow.file_name}" }
+    let(:full_request_url)  { "#{alpine_base_uri}/alpinedatalabs/main/chorus.do?method=importWorkFlow&session_id=#{mock_session_id}&file_name=#{work_flow.file_name}&workfile_id=#{work_flow.id}" }
     let(:file)              { test_file('workflow.afm', "text/xml") }
     let(:file_contents)     { file.read }
 
@@ -93,23 +93,6 @@ describe Alpine::API do
         end
 
         subject.create_work_flow(work_flow, file_contents)
-      end
-    end
-
-    context 'when Alpine is unavailable' do
-      it 'handles SocketError' do
-        FakeWeb.register_uri(:post, full_request_url, :exception => SocketError)
-        expect { subject.create_work_flow(work_flow, file_contents) }.to_not raise_error
-      end
-
-      it 'handles Errno::ECONNREFUSED' do
-        FakeWeb.register_uri(:post, full_request_url, :exception => Errno::ECONNREFUSED)
-        expect { subject.create_work_flow(work_flow, file_contents) }.to_not raise_error
-      end
-
-      it 'handles TimeoutError' do
-        FakeWeb.register_uri(:post, full_request_url, :exception => TimeoutError)
-        expect { subject.create_work_flow(work_flow, file_contents) }.to_not raise_error
       end
     end
   end

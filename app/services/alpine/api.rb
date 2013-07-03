@@ -32,9 +32,7 @@ module Alpine
     attr_reader :config, :user
 
     def request_creation(body, work_flow)
-      request_base.post(create_path(work_flow), body)
-    rescue SocketError, Errno::ECONNREFUSED, TimeoutError => e
-      pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
+      request_base.post(create_path(work_flow), body, {"Content-Type" => "application/xml"})
     end
 
     def request_deletion(work_flow)
@@ -48,7 +46,7 @@ module Alpine
     end
 
     def create_path(work_flow)
-      "/alpinedatalabs/main/chorus.do?method=createWorkFlow&session_id=#{session_id}&file_name=#{work_flow.file_name}"
+      "/alpinedatalabs/main/chorus.do?method=importWorkFlow&session_id=#{session_id}&file_name=#{work_flow.file_name}&workfile_id=#{work_flow.id}"
     end
 
     def base_url

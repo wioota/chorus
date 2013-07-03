@@ -26,9 +26,13 @@ class AlpineWorkfile < Workfile
   def update_from_params!(params)
     update_execution_location(params)
     update_file_name(params)
-    notify_alpine_of_upload(scoop_file_from(params)) if (save! && !params[:file_name])
-  end
 
+    Workfile.transaction do
+      notify_alpine_of_upload(scoop_file_from(params)) if (save! && !params[:file_name])
+    end
+  rescue Net::ProtocolError, SocketError, Errno::ECONNREFUSED, TimeoutError => e
+    raise ApiValidationError.new(:base, :alpine_connection_error)
+  end
 
   def datasets
     @datasets ||= Dataset.where(:id => dataset_ids)
