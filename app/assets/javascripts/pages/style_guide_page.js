@@ -88,31 +88,31 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
         this.models.database = new chorus.models.Database({
             "name": "Some database",
-            "dataSource": this.models.gpdbDataSource
+            "dataSource": this.models.gpdbDataSource.attributes
         });
 
         this.models.otherDatabase = new chorus.models.Database({
             "name": "Another database",
-            "dataSource": this.models.gpdbDataSource
+            "dataSource": this.models.gpdbDataSource.attributes
         });
 
         this.models.schema = new chorus.models.Schema({
             "name": "Some schema",
-            "database": this.models.database,
+            "database": this.models.database.attributes,
             "datasetCount": 3,
             "refreshedAt": true
         });
 
         this.models.otherSchema = new chorus.models.Schema({
             "name": "Other schema",
-            "database": this.models.database,
+            "database": this.models.database.attributes,
             refreshedAt: null
         });
 
         this.models.dataset = new chorus.models.Dataset({
             type: "SOURCE_TABLE",
             objectName: "table",
-            schema: this.models.schema,
+            schema: this.models.schema.attributes,
             entityType: "dataset",
             objectType: "TABLE",
             tags: tagList,
@@ -130,7 +130,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
         this.models.otherDataset = new chorus.models.Dataset({
             "type": "SOURCE_TABLE",
             "objectName": "other table",
-            "schema": this.models.schema,
+            "schema": this.models.schema.attributes,
             "tags": [
                 this.models.tag
             ],
@@ -147,7 +147,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 versionNum: 23,
                 content: "Rainbows!"
             },
-            workspace: this.models.workspace,
+            workspace: this.models.workspace.attributes,
             recentComments: [
                 {
                     author: {
@@ -160,7 +160,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                     timestamp: "2013-03-25T17:49:58Z"
                 }
             ],
-            executionSchema: this.models.schema
+            executionSchema: this.models.schema.attributes
         });
 
         this.models.workfileWithErrors = this.models.workfile.clone();
@@ -193,7 +193,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
         this.models.archivedWorkfile = new chorus.models.Workfile({
             fileName: "Archived SQL Workfile",
             fileType: "sql",
-            workspace: this.models.archivedWorkspace,
+            workspace: this.models.archivedWorkspace.attributes,
             completeJson: true
         });
 
@@ -219,23 +219,23 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
         this.models.otherUser = new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/default-user-icon.png"}});
         this.models.thirdUser = new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/default-user-icon.png"}});
 
-        this.models.hdfsFile = new chorus.models.HdfsEntry({"name": "foo.cpp", isDir: false, hdfsDataSource: this.models.hdfsDataSource, contents: ["a,b,1", "b,c,2", "d,e,3"], tags: tagList, size: 1024, completeJson: true});
-        this.models.hdfsDir = new chorus.models.HdfsEntry({name: "TestExpression", path: '/arbitrary/path', isDir: true, hdfsDataSource: this.models.hdfsDataSource, tags: tagList, count: 4, completeJson: true});
+        this.models.hdfsFile = new chorus.models.HdfsEntry({"name": "foo.cpp", isDir: false, hdfsDataSource: this.models.hdfsDataSource.attributes, contents: ["a,b,1", "b,c,2", "d,e,3"], tags: tagList, size: 1024, completeJson: true});
+        this.models.hdfsDir = new chorus.models.HdfsEntry({name: "TestExpression", path: '/arbitrary/path', isDir: true, hdfsDataSource: this.models.hdfsDataSource.attributes, tags: tagList, count: 4, completeJson: true});
 
         this.models.activity = new chorus.models.Activity({
             "action": "DataSourceChangedOwner",
-            "actor": this.models.user,
-            "dataSource": this.models.gpdbDataSource,
-            "newOwner": this.models.otherUser,
+            "actor": this.models.user.attributes,
+            "dataSource": this.models.gpdbDataSource.attributes,
+            "newOwner": this.models.otherUser.attributes,
             "timestamp": "2013-01-31T20:14:27Z"
         });
 
         this.models.otherActivity = new chorus.models.Activity({
             action: "WorkfileCreated",
-            actor: this.models.user,
-            workfile: this.models.workfile,
+            actor: this.models.user.attributes,
+            workfile: this.models.workfile.attributes,
             commitMessage: "I am committed to this workfile",
-            workspace: this.models.workspace,
+            workspace: this.models.workspace.attributes,
             timestamp: "2013-01-31T20:14:27Z"
         });
 
@@ -304,15 +304,15 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             }
         });
 
-        this.models.chorusView = new chorus.models.ChorusView(_.extend(this.models.dataset.attributes, {objectName: 'My Favorite Chorus View', query: "SELECT * FROM everywhere;", workspace: this.models.workspace}));
+        this.models.chorusView = new chorus.models.ChorusView(_.extend(this.models.dataset.attributes, {objectName: 'My Favorite Chorus View', query: "SELECT * FROM everywhere;", workspace: this.models.workspace.attributes}));
 
         this.models.note = new chorus.models.Activity({
             action: "NOTE",
             actionType: "NoteOnWorkspace",
-            actor: this.models.user,
+            actor: this.models.user.attributes,
             id: 26,
             body: "Notey note note note! :D",
-            workspace: this.models.workspace,
+            workspace: this.models.workspace.attributes,
             timestamp: "2013-03-29T18:18:49Z",
             attachments: [
                 {
