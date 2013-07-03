@@ -5,7 +5,7 @@ describe SqlStreamer do
   let(:row_limit) { nil }
   let(:options) { { :quiet_null => false } }
   let(:streamer) { SqlStreamer.new(sql, connection, options) }
-  let(:streamer_options) { { :quiet_null => false } }
+  let(:streamer_options) { { :quiet_null => false, :rescue_connection_errors => false } }
 
   let(:streamed_data) { [
       {:id => 1, :something => 'hello'},
@@ -15,7 +15,7 @@ describe SqlStreamer do
 
   let(:connection) do
     obj = Object.new
-    mock(obj).stream_sql(sql, streamer_options, anything) do |sql, options, cancelable_query, block|
+    mock(obj).stream_sql(sql, hash_including(streamer_options), anything) do |sql, options, cancelable_query, block|
       streamed_data.each { |row| block.call row }
       true
     end
@@ -95,7 +95,9 @@ describe SqlStreamer do
       end
     end
 
-    context "for connection errors" do
+    context "connection errors" do
+      let(:streamer_options) { options }
+
       let(:connection) {
         obj = Object.new
         mock(obj).stream_sql(sql, streamer_options, anything) do |sql, options, block|
@@ -105,10 +107,23 @@ describe SqlStreamer do
         obj
       }
 
-      it "returns the error message" do
-        enumerator = streamer.enum
-        enumerator.next.should == "Some friendly error message"
-        finish_enumerator enumerator
+      context "when you want to raise errors" do
+        let(:options) { {:rescue_connection_errors => false, :quiet_null => true } }
+        it "raises error" do
+          expect {
+            streamer.enum.next
+          }.to raise_error(GreenplumConnection::DatabaseError)
+        end
+      end
+
+      context "when errors should be rescued" do
+        let(:options) { {:rescue_connection_errors => true, :quiet_null => true } }
+
+        it "returns the error message" do
+          enumerator = streamer.enum
+          enumerator.next.should == "Some friendly error message"
+          finish_enumerator enumerator
+        end
       end
     end
 

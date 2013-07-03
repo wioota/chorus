@@ -34,7 +34,8 @@ class CancelableQuery
     else
       false
     end
-  rescue Exception
+  rescue Exception => e
+    Rails.logger.debug("Cancelable Query Cancel failed with error #{e.inspect}") if e.respond_to?(:inspect)
     false
   end
 

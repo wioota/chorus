@@ -52,6 +52,15 @@ shared_examples_for "prefixed file downloads" do
         response.headers["Content-Disposition"].should == "attachment; filename=\"foobar#{expected_filename}\""
       end
     end
+
+    context "when there is no prefix" do
+      let(:prefix) { nil }
+
+      it "returns the original filename" do
+        do_request
+        response.headers["Content-Disposition"].should == "attachment; filename=\"#{expected_filename}\""
+      end
+    end
   end
 
   context "when file_download.name_prefix is not set" do

@@ -18,7 +18,7 @@ namespace :bulk_data do
     end
 
     task :add_instance, [:admin_username, :data_source_name] => :environment do |t, args|
-      BulkData.create_gpdb_instance args[:admin_username], args[:data_source_name]
+      BulkData.create_gpdb_data_source args[:admin_username], args[:data_source_name]
     end
 
     task :add_sandboxes, [:admin_username, :data_source_name] => :environment do |t, args|

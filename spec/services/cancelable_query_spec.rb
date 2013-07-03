@@ -145,7 +145,7 @@ describe CancelableQuery do
           end
         end
         let(:query_connection) { gpdb_data_source.connect_with(account) }
-        let(:stream) { CancelableQuery.new(query_connection, check_id, user).stream("SELECT pg_sleep(15)", {}) }
+        let(:stream) { CancelableQuery.new(query_connection, check_id, user).stream("SELECT pg_sleep(15)", {:rescue_connection_errors => true}) }
         let(:running_statements) { CancelableQuery.class_variable_get(:@@running_statements) }
 
         it 'cancels the query and throws a query error' do

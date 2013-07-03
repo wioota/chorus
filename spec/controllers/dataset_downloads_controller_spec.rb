@@ -17,7 +17,8 @@ describe DatasetDownloadsController do
     let(:streamer_options) do
       {
         :row_limit => 12,
-        :quiet_null => true
+        :quiet_null => true,
+        :rescue_connection_errors => true
       }
     end
 
@@ -32,7 +33,7 @@ describe DatasetDownloadsController do
       stub(Dataset).find(table.id.to_s) { table }
 
       streamer = Object.new
-      mock(SqlStreamer).new(table.all_rows_sql(12), connection, streamer_options) { streamer }
+      mock(SqlStreamer).new(table.all_rows_sql(12), connection, hash_including(streamer_options)) { streamer }
       mock(streamer).enum { "i am the enum" }
 
       log_in user
@@ -64,7 +65,8 @@ describe DatasetDownloadsController do
           {
               :row_limit => 12,
               :header => false,
-              :quiet_null => true
+              :quiet_null => true,
+              :rescue_connection_errors => true
           }
         end
 

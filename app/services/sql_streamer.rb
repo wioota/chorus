@@ -20,6 +20,7 @@ class SqlStreamer
     @stream_options = {}
     @stream_options[:limit] = options[:row_limit] if options[:row_limit].to_i > 0
     @stream_options[:quiet_null] = !!options[:quiet_null]
+    @stream_options[:rescue_connection_errors] = !!options[:rescue_connection_errors]
     @cancelable_query = cancelable_query
   end
 
@@ -44,6 +45,7 @@ class SqlStreamer
           y << empty_results_error
         end
       rescue Exception => e
+        raise e unless @stream_options[:rescue_connection_errors]
         y << e.message
       end
       #Ruby enumerators leak active record connections due to details of Fibers in jRuby (at least ~1.7.0)

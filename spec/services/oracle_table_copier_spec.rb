@@ -131,8 +131,9 @@ describe OracleTableCopier do
     end
 
     it "cancels the CancelableQuery" do
-      stub(import.schema).connect_as(anything) { destination_connection }
-      mock(CancelableQuery).new(destination_connection, import.handle, import.user) { |query| mock(query).cancel }
+      stub(import.source_dataset.data_source).connect_as(import.user) { source_connection }
+      mock(CancelableQuery).new(source_connection, import.handle, import.user) { |query| mock(query).cancel }
+      mock(OracleTableCopier).kill_session.with_any_args
 
       OracleTableCopier.cancel(import)
     end
