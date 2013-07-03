@@ -42,9 +42,10 @@ describe("chorus.dialogs.DataSourcesNew", function() {
         });
 
         it("has select box for 'Greenplum Database', 'HDFS Cluster'", function() {
-            expect(this.dialog.$("select.data_sources option").length).toBe(3);
+            expect(this.dialog.$("select.data_sources option").length).toBe(4);
             expect(this.dialog.$("select.data_sources option").eq(1).text()).toMatchTranslation("datasource.greenplum");
             expect(this.dialog.$("select.data_sources option").eq(2).text()).toMatchTranslation("datasource.hdfs");
+            expect(this.dialog.$("select.data_sources option").eq(3).text()).toMatchTranslation("datasource.hawq");
         });
 
         it("starts with no select box selected", function() {
@@ -95,6 +96,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                     expect(values.dbUsername).toBe("user");
                     expect(values.dbPassword).toBe("my_password");
                     expect(values.dbName).toBe("foo");
+                    expect(values.isHawq).toBeFalsy();
                 });
             });
 
@@ -113,6 +115,66 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
             });
         });
+
+        describe("selecting the 'HAWQ' option", function() {
+            beforeEach(function() {
+                this.dialog.$(".data_sources").val("register_existing_hawq").change();
+            });
+
+            it("un-collapses the 'register an existing data source'", function() {
+                expect(this.dialog.$(".data_sources_form").not(".collapsed").length).toBe(1);
+                expect(this.dialog.$(".register_existing_greenplum")).not.toHaveClass("collapsed");
+            });
+
+            it("enables the submit button", function() {
+                expect(this.dialog.$("button.submit")).toBeEnabled();
+            });
+
+            it("uses 'postgres' as the default database name", function() {
+                expect(this.dialog.$(".register_existing_greenplum input[name=dbName]").val()).toBe("postgres");
+            });
+
+            describe("filling out the form", function() {
+                beforeEach(function() {
+                    this.dialog.$(".register_existing_greenplum input[name=name]").val("DataSource_Name");
+                    this.dialog.$(".register_existing_greenplum textarea[name=description]").val("DataSource Description");
+                    this.dialog.$(".register_existing_greenplum input[name=host]").val("foo.bar");
+                    this.dialog.$(".register_existing_greenplum input[name=port]").val("1234");
+                    this.dialog.$(".register_existing_greenplum input[name=dbUsername]").val("user");
+                    this.dialog.$(".register_existing_greenplum input[name=dbPassword]").val("my_password");
+                    this.dialog.$(".register_existing_greenplum input[name=dbName]").val("foo");
+
+                    this.dialog.$(".register_existing_greenplum input[name=name]").trigger("change");
+                });
+
+                it("gets the fieldValues", function() {
+                    var values = this.dialog.fieldValues();
+                    expect(values.name).toBe("DataSource_Name");
+                    expect(values.description).toBe("DataSource Description");
+                    expect(values.host).toBe("foo.bar");
+                    expect(values.port).toBe("1234");
+                    expect(values.dbUsername).toBe("user");
+                    expect(values.dbPassword).toBe("my_password");
+                    expect(values.dbName).toBe("foo");
+                    expect(values.isHawq).toBeTruthy();
+                });
+            });
+
+            context("changing to 'Select one' option", function() {
+                beforeEach(function() {
+                    this.dialog.$("select.data_sources").val("").change();
+                });
+
+                it("should hides all forms", function() {
+                    expect(this.dialog.$(".data_sources_form")).toHaveClass("collapsed");
+                });
+
+                it("should disable the submit button", function() {
+                    expect(this.dialog.$("button.submit")).toBeDisabled();
+                });
+            });
+        });
+
 
         describe("selecting the 'HDFS cluster' option", function() {
             beforeEach(function() {

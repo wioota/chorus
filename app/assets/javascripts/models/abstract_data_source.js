@@ -3,7 +3,8 @@ chorus.models.AbstractDataSource = chorus.models.Base.extend({
     _imagePrefix: "/images/data_sources/",
 
     providerIconUrl: function() {
-        return this._imagePrefix + 'icon_' + this.get('entityType') + '.png';
+        var dataSourceType = this.get("isHawq") ? "hawq_data_source" : this.get("entityType");
+        return this._imagePrefix + 'icon_' + dataSourceType + '.png';
     },
 
     iconUrl: function () {

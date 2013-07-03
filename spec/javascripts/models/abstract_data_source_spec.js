@@ -3,9 +3,17 @@ describe("chorus.models.AbstractDataSource", function() {
         this.dataSource = new chorus.models.AbstractDataSource({id : 1, version: "1234", owner:{firstName: "John", lastName: "Doe", id: 2}});
     });
 
-    it("has the right providerIconUrl", function() {
-        this.dataSource.set({entityType: "foo"});
-        expect(this.dataSource.providerIconUrl()).toBe("/images/data_sources/icon_foo.png");
+    describe("#providerIconUrl", function () {
+        it("has the right providerIconUrl for hawq data sources", function () {
+            this.dataSource.set({entityType: "foo"});
+            this.dataSource.set({isHawq: true});
+            expect(this.dataSource.providerIconUrl()).toBe("/images/data_sources/icon_hawq_data_source.png");
+        });
+
+        it("has the right providerIconUrl non hawq data sources", function() {
+            this.dataSource.set({entityType: "foo"});
+            expect(this.dataSource.providerIconUrl()).toBe("/images/data_sources/icon_foo.png");
+        });
     });
 
     describe("#stateIconUrl and #stateText", function() {

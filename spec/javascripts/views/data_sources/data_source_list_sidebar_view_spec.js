@@ -327,6 +327,17 @@ describe("chorus.views.DataSourceListSidebar", function() {
                 this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
             });
 
+            describe("when isHawq is true", function () {
+                beforeEach(function () {
+                    this.dataSource.set("isHawq", true);
+                    this.view.render();
+                });
+
+                it ('displays "HAWQ Data Source" as its type', function() {
+                    expect(this.view.$(".data_source_type")).toContainText(t("data_sources.provider.hawq_data_source"));
+                });
+            });
+
             itBehavesLike.aSidebar();
             itBehavesLike.aSidebarWithAGreenplumOrOracleDataSourceSelected();
 

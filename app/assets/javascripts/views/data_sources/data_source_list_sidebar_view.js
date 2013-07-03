@@ -25,6 +25,7 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
             return {};
         }
 
+        var dataSourceType = this.model.get("isHawq") ? "hawq_data_source" : this.model.get("entityType");
         var dataSourceAccounts = this.dataSource.accounts();
         var dataSourceAccountsCount = dataSourceAccounts.persistedAccountCount ? dataSourceAccounts.persistedAccountCount() : dataSourceAccounts.length;
 
@@ -36,7 +37,7 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
             dataSourceAccountsCount: dataSourceAccountsCount,
             isOnlineOrOffline: this.dataSource.isOnline() || this.dataSource.isOffline(),
             entityType: this.model.entityType,
-            dataSourceProvider: t("data_sources.provider." + this.model.get('entityType')),
+            dataSourceProvider: t("data_sources.provider." + dataSourceType),
             shared: this.model.isShared && this.model.isShared(),
             isGnip: this.model.isGnip(),
             isOracle: this.model.isOracle()
