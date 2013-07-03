@@ -349,7 +349,7 @@ class ChorusInstaller
     @executor.extract_postgres @postgres_package
   end
 
-  def stop_old_install
+  def stop_previous_release
     return unless upgrade_existing?
     log "Stopping Chorus..." do
       @executor.stop_previous_release
@@ -410,7 +410,7 @@ class ChorusInstaller
       validate_data_sources
 
       log "Shutting down previous Chorus install..." do
-        stop_old_install
+        stop_previous_release
       end
     end
 

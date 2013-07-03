@@ -909,14 +909,14 @@ describe ChorusInstaller do
     end
   end
 
-  describe "#stop_old_install" do
+  describe "#stop_previous_release" do
     context "when installing fresh" do
       before do
         dont_allow(installer).system
       end
 
       it "should do nothing" do
-        installer.stop_old_install
+        installer.stop_previous_release
       end
     end
 
@@ -929,7 +929,7 @@ describe ChorusInstaller do
       end
 
       it "should stop the previous version" do
-        installer.stop_old_install
+        installer.stop_previous_release
       end
     end
   end
@@ -1052,7 +1052,7 @@ describe ChorusInstaller do
         mock(executor).start_previous_release
       end
 
-      it "starts up the old install" do
+      it "starts up the previous installation" do
         installer.remove_and_restart_previous!
       end
 
