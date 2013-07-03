@@ -30,7 +30,10 @@ describe AlpineWorkfile do
       end
 
       before do
-        any_instance_of(Alpine::API) { |api| stub(api).session_id }
+        any_instance_of(Alpine::API) { |api|
+          stub(api).session_id
+          stub(api).create_work_flow
+        }
       end
 
       it "resolves name conflicts" do

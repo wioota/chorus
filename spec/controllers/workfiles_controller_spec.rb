@@ -277,12 +277,19 @@ describe WorkfilesController do
           }
         end
 
+        before do
+          any_instance_of(Alpine::API) { |api|
+            stub(api).session_id
+            stub(api).create_work_flow
+          }
+        end
+
         it "creates a workflow 201" do
-          Workfile.last.file_name.should_not == 'workflow.afm'
+          Workfile.last.file_name.should_not == 'workflow'
 
           post :create, params
           response.code.should == "201"
-          Workfile.last.file_name.should == 'workflow.afm'
+          Workfile.last.file_name.should == 'workflow'
         end
       end
     end
