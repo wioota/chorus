@@ -24,19 +24,11 @@ class AlpineWorkfile < Workfile
   end
 
   def update_from_params!(params)
-    self.execution_location = GpdbDatabase.find(params[:database_id]) unless params[:database_id].to_s == ""
-    self.execution_location = HdfsDataSource.find(params[:hdfs_data_source_id]) unless params[:hdfs_data_source_id].to_s == ""
-
-    if execution_location_id_changed? || execution_location_type_changed?
-      self.hdfs_entry_ids = nil
-      self.dataset_ids = nil
-    end
-
-    self.resolve_name_conflicts = !params[:file_name]
-
-    self.file_name = params[:versions_attributes]["0"][:contents].original_filename if params[:versions_attributes]
-    save!
+    update_execution_location(params)
+    update_file_name(params)
+    notify_alpine_of_upload(scoop_file_from(params)) if (save! && !params[:file_name])
   end
+
 
   def datasets
     @datasets ||= Dataset.where(:id => dataset_ids)
@@ -56,6 +48,30 @@ class AlpineWorkfile < Workfile
 
   private
 
+  def update_file_name(params)
+    self.resolve_name_conflicts = !params[:file_name]
+    self.file_name = scoop_file_name(params) if params[:versions_attributes]
+  end
+
+  def scoop_file_name(params)
+    full_name = params[:versions_attributes]["0"][:contents].original_filename
+    full_name.gsub('.afm', '')
+  end
+
+  def scoop_file_from(params)
+    params[:versions_attributes]['0'][:contents].read
+  end
+
+  def update_execution_location(params)
+    self.execution_location = GpdbDatabase.find(params[:database_id]) unless params[:database_id].to_s == ""
+    self.execution_location = HdfsDataSource.find(params[:hdfs_data_source_id]) unless params[:hdfs_data_source_id].to_s == ""
+
+    if execution_location_id_changed? || execution_location_type_changed?
+      self.hdfs_entry_ids = nil
+      self.dataset_ids = nil
+    end
+  end
+
   def determine_execution_location
     self.execution_location = datasets.first.database unless datasets.empty?
     self.execution_location = hdfs_entries.first.hdfs_data_source unless hdfs_entries.empty?
@@ -66,6 +82,10 @@ class AlpineWorkfile < Workfile
     # config.threadsafe! or config.allow_concurrency = true in your config/environments/development.rb
     # Otherwise, this will time out.
     Alpine::API.delete_work_flow(self)
+  end
+
+  def notify_alpine_of_upload(file_contents)
+    Alpine::API.create_work_flow(self, file_contents)
   end
 
   def ensure_active_workspace

@@ -4,7 +4,7 @@ describe "alpine workfiles" do
   pending do
     let(:workspace) { workspaces(:public) }
     let(:user) { workspace.owner }
-    let(:workfile) { workfiles(:'alpine.afm') }
+    let(:workfile) { workfiles('alpine_flow') }
 
     subject { page }
 

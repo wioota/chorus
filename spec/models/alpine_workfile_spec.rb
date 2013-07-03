@@ -14,7 +14,7 @@ describe AlpineWorkfile do
   describe 'update from params' do
     context "when uploading an AFM" do
       let(:description) { "Nice workfile, good workfile, I've always wanted a workfile like you" }
-      let(:file) { OpenStruct.new(:original_filename => 'machine_learner.afm') }
+      let(:file) { test_file('workflow.afm', "text/xml") }
       let(:workfile) { Workfile.build_for(params) }
       let(:hdfs) { hdfs_data_sources(:hadoop) }
       let(:params) do
@@ -31,19 +31,32 @@ describe AlpineWorkfile do
 
       it "resolves name conflicts" do
         workfile.update_from_params!(params)
-        workfile.file_name.should eq("machine_learner.afm")
+        workfile.file_name.should eq("workflow")
 
         second_workfile = Workfile.build_for(params)
         second_workfile.update_from_params!(params)
-        second_workfile.file_name.should eq("machine_learner_1.afm")
+        second_workfile.file_name.should eq("workflow_1")
+      end
+
+      describe "notifying alpine" do
+        let(:file_contents) do
+          contents = params[:versions_attributes]['0'][:contents].read
+          params[:versions_attributes]['0'][:contents].rewind
+          contents
+        end
+
+        it "POSTs the correct xml" do
+          mock(Alpine::API).create_work_flow(model, file_contents)
+          model.update_from_params!(params)
+        end
       end
     end
 
     context "when renaming or creating a workflow" do
-      let(:params) {{:file_name => 'already_taken.afm'}}
+      let(:params) {{:file_name => 'already_taken_flow'}}
       let(:workfile) { FactoryGirl.build(:alpine_workfile) }
 
-      before { FactoryGirl.build(:workfile, :file_name => 'already_taken.afm') }
+      before { FactoryGirl.build(:workfile, :file_name => 'already_taken_flow') }
 
       it "does not resolve name conflicts" do
         expect do
@@ -66,7 +79,7 @@ describe AlpineWorkfile do
       end
 
       context "on update" do
-        let(:model) { workfiles('alpine.afm') }
+        let(:model) { workfiles('alpine_flow') }
 
         it "is valid" do
           model.workspace = workspace

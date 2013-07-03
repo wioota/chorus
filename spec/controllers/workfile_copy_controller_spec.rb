@@ -75,7 +75,7 @@ describe WorkfileCopyController do
       end
 
       context "if the workfile does not have versions" do
-        let(:workfile) { workfiles("alpine.afm") }
+        let(:workfile) { workfiles("alpine_flow") }
 
         it "works" do
           post :create, :workfile_id => workfile.id, :file_name => "copied_workfile.sql"

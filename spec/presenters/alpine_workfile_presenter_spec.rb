@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe AlpineWorkfilePresenter, :type => :view do
   let(:user) { users(:owner) }
-  let(:workfile) { workfiles(:'alpine.afm') }
+  let(:workfile) { workfiles(:'alpine_flow') }
   let(:options) { {} }
   let(:presenter) { AlpineWorkfilePresenter.new(workfile, view, options) }
 
@@ -29,7 +29,7 @@ describe AlpineWorkfilePresenter, :type => :view do
 
     context "when presenting for a list_view" do
       let(:options) { {:list_view => true} }
-      let(:workfile) { workfiles("alpine.afm") }
+      let(:workfile) { workfiles("alpine_flow") }
 
       it "does not show the execution location, because that becomes an N+1 query and we don't need the data" do
         hash.should_not have_key(:execution_location)

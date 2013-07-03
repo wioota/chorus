@@ -131,7 +131,7 @@ describe WorkfilesController do
       end
 
       context "for an alpine workfile" do
-        let(:alpine_workfile) { workfiles("alpine.afm") }
+        let(:alpine_workfile) { workfiles("alpine_flow") }
 
         before do
           alpine_workfile.execution_location = gpdb_databases(:default)
@@ -199,8 +199,8 @@ describe WorkfilesController do
       generate_workfile_fixture(:"image.png", "image.json")
       generate_workfile_fixture(:"binary.tar.gz", "binary.json")
       generate_workfile_fixture(:"tableau", "tableau.json")
-      generate_workfile_fixture(:"alpine.afm", "alpine.json")
-      generate_workfile_fixture(:"alpine_hdfs.afm", "alpineHdfs.json")
+      generate_workfile_fixture(:"alpine_flow", "alpine.json")
+      generate_workfile_fixture(:"alpine_hadoop_flow", "alpineHdfs.json")
     end
   end
 
@@ -508,7 +508,7 @@ describe WorkfilesController do
     end
 
     context "for alpine workfiles" do
-      let(:workfile) { workfiles(:'alpine.afm') }
+      let(:workfile) { workfiles(:'alpine_flow') }
       let(:params) do
         {
             :entity_subtype => 'alpine',
