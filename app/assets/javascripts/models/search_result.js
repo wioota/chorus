@@ -178,8 +178,8 @@
                     return this.dataSources();
                 case "hdfs_entry":
                     return this.hdfs_entries();
-                case "other_files":
-                    return this.other_files();
+                case "attachment":
+                    return this.attachments();
             }
         },
 

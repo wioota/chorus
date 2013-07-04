@@ -253,6 +253,18 @@ describe("chorus.models.SearchResult", function() {
             });
         });
 
+        context("when the search result is filtered by attachment", function() {
+            beforeEach(function() {
+                this.model = backboneFixtures.emptySearchResult();
+                this.model.set({ entityType: "attachment" });
+            });
+
+            it("defines a collection", function() {
+                expect(this.model.getResults()).toBeDefined();
+                expect(this.model.getResults()).toBeA(chorus.collections.Search.AttachmentSet);
+            });
+        });
+
         context("when the search result has no entity type and is not scoped to a single workspace", function() {
             it("returns undefined", function() {
                 this.model = backboneFixtures.searchResult();
@@ -344,7 +356,7 @@ describe("chorus.models.SearchResult", function() {
         });
 
         describe("#attachments", function() {
-            it("returns a Search ArtifactSet", function() {
+            it("returns a Search AttachmentSet", function() {
                 expect(this.model.attachments()).toBeA(chorus.collections.Search.AttachmentSet);
             });
         });
