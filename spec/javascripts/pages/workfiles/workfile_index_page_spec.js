@@ -71,8 +71,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         });
 
         it("creates the correct buttons", function() {
-            expect(this.page.buttonView).toBeA(chorus.views.WorkfileIndexPageButtons);
-            expect(this.page.buttonView.model.get("id")).toBe(this.workspace.get("id"));
+            expect(this.page.mainContent.contentDetails.buttonView).toBeA(chorus.views.WorkfileIndexPageButtons);
+            expect(this.page.mainContent.contentDetails.buttonView.model.get("id")).toBe(this.workspace.get("id"));
         });
     });
 

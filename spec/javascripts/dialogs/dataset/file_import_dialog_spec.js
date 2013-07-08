@@ -2,7 +2,8 @@ describe("chorus.dialogs.FileImport", function() {
     beforeEach(function() {
         chorus.models.Config.instance().set({fileSizesMbCsvImports: 1 });
         chorus.page = {};
-        chorus.page.workspace = backboneFixtures.workspace({id: 242});
+        this.workspace = backboneFixtures.workspace({id: 242});
+
         this.modalSpy = stubModals();
         this.fakeFileUpload = stubFileUpload();
         this.validDatasets = [
@@ -15,8 +16,7 @@ describe("chorus.dialogs.FileImport", function() {
         ];
         this.datasets = this.validDatasets.concat(this.invalidDatasets);
         this.dialog = new chorus.dialogs.FileImport({
-            workspaceId: 242,
-            canonicalName: "FooBar"
+            workspace: this.workspace
         });
         spyOn(this.dialog, "modalClosed").andCallThrough();
         this.dialog.launchModal();
@@ -33,7 +33,7 @@ describe("chorus.dialogs.FileImport", function() {
     });
 
     it("has text describing where the file should be imported", function() {
-        expect(this.dialog.$(".where")).toContainTranslation("dataset.import.where", {canonicalName: "FooBar"});
+        expect(this.dialog.$(".where")).toContainTranslation("dataset.import.where", {canonicalName: this.workspace.sandbox().canonicalName() });
     });
 
     it("has a 'Cancel' button", function() {

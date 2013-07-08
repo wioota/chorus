@@ -30,6 +30,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
 
         this.buildSidebar();
 
+        this.buttonView = new chorus.views.WorkspaceDatasetIndexPageButtons({model: this.workspace});
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Dataset",
@@ -37,7 +38,10 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             model: this.workspace,
             useCustomList: true,
             title: t("dataset.title"),
-            contentDetailsOptions: { multiSelect: true },
+            contentDetailsOptions: {
+                multiSelect: true,
+                buttonView: this.buttonView
+            },
             search: {
                 placeholder: t("workspace.search"),
                 onTextChange: onTextChangeFunction
@@ -53,16 +57,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
                     ],
                     event: "filter"
                 }
-            },
-            buttons: [
-                {
-                    view: "FileImport",
-                    text: t("dataset.import.title"),
-                    dataAttributes : [{name: 'workspace-id', value: this.workspace.get("id") }],
-                    helpText: t("dataset.import.need_sandbox", {hereLink: '<a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="'+this.workspace.get("id")+'">'+t("actions.click_here")+'</a>'}),
-                    disabled: true
-                }
-            ]
+            }
         });
 
         this.mainContent.contentHeader.bind("choice:filter", function(choice) {
@@ -96,35 +91,17 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.mainContent.contentHeader.options.sandbox = this.workspace.sandbox();
         this.render();
 
-        var targetButton = this.mainContent.options.buttons[0];
-
         if (this.workspace.isActive()) {
             this.mainContent.content.options.hasActiveWorkspace = true;
-        } else {
-            this.mainContent.contentDetails.options.buttons = [];
         }
 
         if(this.workspace.sandbox()) {
-            if(this.workspace.canUpdate()) {
-                targetButton.dataAttributes.push({name: "canonical-name", value: this.workspace.sandbox().canonicalName()});
-                targetButton.disabled = false;
-                delete targetButton.helpText;
-            } else {
-                this.mainContent.contentDetails.options.buttons = [];
-            }
-
             this.dataSource = this.workspace.sandbox().dataSource();
             this.account = this.workspace.sandbox().dataSource().accountForCurrentUser();
 
             this.listenTo(this.account, "loaded", this.checkAccount);
 
             this.account.fetchIfNotLoaded();
-        } else {
-            var loggedInUser = chorus.session.user();
-
-            if(loggedInUser.get("id") !== this.workspace.get("owner").id && !loggedInUser.get("admin")) {
-                targetButton.helpText = t("dataset.import.need_sandbox_no_permissions");
-            }
         }
         this.mainContent.contentDetails.render();
         this.onceLoaded(this.workspace.members(), this.setSidebarActions);

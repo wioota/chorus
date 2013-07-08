@@ -16,7 +16,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
         expect(this.page.helpId).toBe("datasets");
     });
 
-    describe("#initialize", function() {
+    describe("#setup", function() {
         it("fetches the workspace", function() {
             expect(this.workspace).toHaveBeenFetched();
         });
@@ -36,6 +36,11 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
         it("#render shows a loading message", function() {
             this.page.render();
             expect(this.page.$(".loading_section")).toExist();
+        });
+
+        it("creates the correct buttons", function() {
+            expect(this.page.mainContent.contentDetails.buttonView).toBeA(chorus.views.WorkspaceDatasetIndexPageButtons);
+            expect(this.page.mainContent.contentDetails.buttonView.model.get("id")).toBe(this.workspace.get("id"));
         });
     });
 
@@ -99,24 +104,6 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
                 it("has two items", function() {
                     expect(this.page.collection.length).toBe(2);
-                });
-            });
-
-            describe("the import file button", function() {
-                beforeEach(function() {
-                    this.page.render();
-                });
-
-                it("is disabled", function() {
-                    expect(this.page.mainContent.contentDetails.$("button")).toBeDisabled();
-                });
-
-                it("has a help icon", function() {
-                    expect(this.page.mainContent.contentDetails.$('img.help')).toExist();
-                });
-
-                it("has the correct help text", function() {
-                    expect(this.page.mainContent.contentDetails.$("img.help").attr("data-text")).toBe(helpText);
                 });
             });
         }
@@ -279,36 +266,10 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 expect(this.server.lastFetchFor(this.account)).not.toBeUndefined();
             });
 
-            describe("the 'import file' button", function() {
-                beforeEach(function() {
-                    this.page.render();
-                });
-
-                it("has the right text", function() {
-                    expect(this.page.$("button[data-dialog='FileImport']").text()).toMatchTranslation("dataset.import.title");
-                });
-
-                it("has the right data attributes", function() {
-                    expect(this.page.$("button[data-dialog='FileImport']").data("workspaceId").toString()).toBe(this.workspace.id.toString());
-                    expect(this.page.$("button[data-dialog='FileImport']").data("canonicalName")).toBe(this.workspace.sandbox().canonicalName());
-                });
-
-                describe("when the button is clicked", function() {
-                    beforeEach(function() {
-                        this.page.$("button[data-dialog='FileImport']").click();
-                    });
-
-                    it("launches an Import File dialog", function() {
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.FileImport);
-                    });
-                });
-
-                it("displays the sandbox location in the header", function () {
-                    expect(this.page.mainContent.contentHeader.$(".found_in a").eq(0).text()).toBe(this.workspace.sandbox().dataSource().name());
-                    expect(this.page.mainContent.contentHeader.$(".found_in a").eq(1).text()).toBe(this.workspace.sandbox().database().name());
-                    expect(this.page.mainContent.contentHeader.$(".found_in a").eq(2).text()).toBe(this.workspace.sandbox().schema().name());
-                });
-
+            it("displays the sandbox location in the header", function () {
+                expect(this.page.mainContent.contentHeader.$(".found_in a").eq(0).text()).toBe(this.workspace.sandbox().dataSource().name());
+                expect(this.page.mainContent.contentHeader.$(".found_in a").eq(1).text()).toBe(this.workspace.sandbox().database().name());
+                expect(this.page.mainContent.contentHeader.$(".found_in a").eq(2).text()).toBe(this.workspace.sandbox().schema().name());
             });
 
             context("when the account loads and is empty and the data source account maps are individual", function() {

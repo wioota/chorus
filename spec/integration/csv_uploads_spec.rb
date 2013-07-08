@@ -11,7 +11,8 @@ describe "CSV Uploads", :greenplum_integration do
   it "uploads a csv file into a new table" do
     login(users(:admin))
     visit("#/workspaces/#{workspace.id}/datasets")
-    click_button "Import File"
+    click_button "Add Data"
+    click_link "Import File"
     csv_file = File.join(File.dirname(__FILE__), '../fixtures/test.csv')
     within_modal do
       attach_file("csv[contents]", csv_file)

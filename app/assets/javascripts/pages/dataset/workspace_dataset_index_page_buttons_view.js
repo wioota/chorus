@@ -12,11 +12,11 @@ chorus.views.WorkspaceDatasetIndexPageButtons = chorus.views.Base.extend({
     menuEvents: {
         "a.import_file": function(e) {
             e && e.preventDefault();
-            new chorus.dialogs.FileImport({workspaceId: this.model.get('id')}).launchModal();
+            new chorus.dialogs.FileImport({ workspace: this.model }).launchModal();
         },
         "a.create_file_mask": function(e) {
             e && e.preventDefault();
-            new chorus.dialogs.CreateFileMask({workspace: this.model}).launchModal();
+            new chorus.dialogs.CreateFileMask({ workspace: this.model }).launchModal();
         }
     },
 
@@ -30,6 +30,9 @@ chorus.views.WorkspaceDatasetIndexPageButtons = chorus.views.Base.extend({
             orientation: "right",
             contentEvents: this.menuEvents
         });
+        if (!this.model.sandbox() || !this.canUpdate()) {
+          this.$(".import_file").closest("li").addClass("hidden");
+        }
     },
 
     additionalContext: function() {

@@ -4,9 +4,14 @@ chorus.dialogs.FileImport = chorus.dialogs.Base.extend({
     templateName: "dataset_import",
     title: t("dataset.import.title"),
 
+    makeModel: function() {
+        this.workspace = this.options.workspace;
+        this.resource = this.model = this.csvImport = new chorus.models.CSVImport({ workspaceId: this.workspace.id });
+        this.csvOptions = {hasHeader: true};
+    },
+
     setup: function() {
         this.config = chorus.models.Config.instance();
-        this._super("setup");
     },
 
     events: {
@@ -19,8 +24,7 @@ chorus.dialogs.FileImport = chorus.dialogs.Base.extend({
     launchDatasetPickerDialog: function(e) {
         e.preventDefault();
         if (!this.saving) {
-            var workspace = new chorus.models.Workspace({id: this.options.workspaceId});
-            var datasetDialog = new chorus.dialogs.DatasetsPicker({ collection: workspace.sandboxTables({allImportDestinations: true}) });
+            var datasetDialog = new chorus.dialogs.DatasetsPicker({ collection: this.workspace.sandboxTables({allImportDestinations: true}) });
             this.listenTo(datasetDialog, "datasets:selected", this.datasetsChosen);
             this.launchSubModal(datasetDialog);
         }
@@ -74,12 +78,7 @@ chorus.dialogs.FileImport = chorus.dialogs.Base.extend({
     },
 
     additionalContext: function() {
-        return { canonicalName: this.options.canonicalName };
-    },
-
-    makeModel: function() {
-        this.resource = this.model = this.csvImport = new chorus.models.CSVImport({ workspaceId: this.options.workspaceId });
-        this.csvOptions = {hasHeader: true};
+        return { canonicalName: this.workspace.sandbox().canonicalName() };
     },
 
     importDestination: function() {
@@ -98,7 +97,7 @@ chorus.dialogs.FileImport = chorus.dialogs.Base.extend({
         if (this.importTarget === "workfile") {
             $(this.uploadObj.fileInput[0]).attr("name", "workfile[versions_attributes][0][contents]");
             this.$("button.submit").startLoading("actions.uploading");
-            this.uploadObj.url = "/workspaces/" + this.options.workspaceId + "/workfiles";
+            this.uploadObj.url = "/workspaces/" + this.workspace.id + "/workfiles";
             this.uploadObj.source = "fs";
             this.request = this.uploadObj.submit();
         } else {
@@ -113,7 +112,7 @@ chorus.dialogs.FileImport = chorus.dialogs.Base.extend({
             if (this.csvImport.performValidation()) {
                 this.$("button.submit").startLoading("actions.uploading");
                 this.clearErrors();
-                this.uploadObj.url = "/workspaces/" + this.options.workspaceId + "/csv";
+                this.uploadObj.url = "/workspaces/" + this.workspace.id + "/csv";
                 this.uploadObj.type = "POST";
                 this.uploadObj.source = "fs";
                 this.request = this.uploadObj.submit();

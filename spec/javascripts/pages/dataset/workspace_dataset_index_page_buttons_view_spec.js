@@ -45,7 +45,7 @@ describe("chorus.views.WorkspaceDatasetIndexPageButtons", function() {
                         expect(this.qtipElement.find('.import_file')).toContainTranslation('actions.import_file');
                         this.qtipElement.find('.import_file').click();
                         expect(this.modalSpy).toHaveModal(chorus.dialogs.FileImport);
-                        expect(this.modalSpy.lastModal().options.workspaceId).toBe(this.workspace.id);
+                        expect(this.modalSpy.lastModal().options.workspace).toBe(this.workspace);
                     });
                 });
 
@@ -60,7 +60,40 @@ describe("chorus.views.WorkspaceDatasetIndexPageButtons", function() {
                 });
             });
 
+            context("when the workspace does not have a sandbox", function() {
+                beforeEach(function() {
+                    spyOn(this.view.model, "sandbox");
+                    this.view.render();
+                });
+
+                it("hides the 'Import File' option", function() {
+                    this.view.$("button.add_data").click();
+                    expect(this.qtipElement.find(".import_file").closest("li")).toHaveClass("hidden");
+                    expect(this.qtipElement.find(".create_file_mask").closest("li")).not.toHaveClass("hidden");
+                });
+            });
         });
 
+        context("when the user can't update the workspace", function() {
+            beforeEach(function() {
+                spyOn(this.view.model, "canUpdate").andReturn(false);
+                this.view.render();
+            });
+
+            it("does not render any buttons", function() {
+                expect(this.view.$("button").length).toBe(0);
+            });
+        });
+
+        context("when the workspace is archived", function() {
+            beforeEach(function() {
+                this.view.model.set("archivedAt", true);
+                this.view.render();
+            });
+
+            it("does not render any buttons", function() {
+                expect(this.view.$("button").length).toBe(0);
+            });
+        });
     });
 });
