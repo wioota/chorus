@@ -41,6 +41,30 @@ describe GpdbDataSource do
       data_source.shared.should == true
       data_source.should be_valid
     end
+
+    describe "validating hawq data sources" do
+      let :valid_input_attributes do
+        {
+          :name => "create_spec_name",
+          :port => 12345,
+          :host => "server.emc.com",
+          :db_name => "postgres",
+          :description => "old description",
+          :db_username => "bob",
+          :db_password => "secret",
+          :is_hawq => true
+        }
+      end
+
+      before do
+        any_instance_of(DataSource) { |ds| stub(ds).is_hawq_data_source? { false } }
+      end
+
+      it "must validate that it is, in fact, a hawq data source" do
+        data_source = user.gpdb_data_sources.build(valid_input_attributes, :as => :create)
+        data_source.should have_error_on(:base).with_message(:INVALID_HAWQ_DATA_SOURCE)
+      end
+    end
   end
 
   describe "#create_database" do

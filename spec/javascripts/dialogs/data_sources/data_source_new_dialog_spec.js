@@ -175,7 +175,6 @@ describe("chorus.dialogs.DataSourcesNew", function() {
             });
         });
 
-
         describe("selecting the 'HDFS cluster' option", function() {
             beforeEach(function() {
                 this.dialog.$("select.data_sources").val("register_existing_hdfs").change();
@@ -464,6 +463,44 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                 expect(params["data_source[name]"]).toBe("DataSource_Name");
                 expect(params["data_source[description]"]).toBe("DataSource Description");
                 expect(params["data_source[db_name]"]).toBe("foo");
+            });
+
+            testUpload();
+        });
+
+        context("registering a hawq database", function() {
+            beforeEach(function() {
+                this.dialog.$("select.data_sources").val("register_existing_hawq").change();
+
+                var section = this.dialog.$(".register_existing_greenplum");
+                section.find("input[name=name]").val("DataSource_Name");
+                section.find("textarea[name=description]").val("DataSource Description");
+                section.find("input[name=host]").val("foo.bar");
+                section.find("input[name=port]").val("1234");
+                section.find("input[name=dbUsername]").val("user");
+                section.find("input[name=dbPassword]").val("my_password");
+                section.find("input[name=dbName]").val("foo");
+                section.find("input[name=name]").trigger("change");
+            });
+
+            it("sends the right params", function() {
+                this.dialog.$("button.submit").click();
+                var params = this.server.lastCreate().params();
+                expect(params['data_source[entity_type]']).toBe('gpdb_data_source');
+                expect(params["data_source[name]"]).toBe("DataSource_Name");
+                expect(params["data_source[description]"]).toBe("DataSource Description");
+                expect(params["data_source[db_name]"]).toBe("foo");
+            });
+
+            context("when the data source is not actually a hawq data source", function() {
+                beforeEach(function() {
+                    this.dialog.model.set({serverErrors: { fields: { base: { INVALID_HAWQ_DATA_SOURCE: {} } } }});
+                    this.dialog.model.trigger("saveFailed");
+                });
+
+                it("display the correct error", function() {
+                    expect(this.dialog.$(".errors").text()).toContainTranslation("field_error.INVALID_HAWQ_DATA_SOURCE");
+                });
             });
 
             testUpload();

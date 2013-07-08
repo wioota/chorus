@@ -92,6 +92,11 @@ class DataSource < ActiveRecord::Base
     success
   end
 
+  def is_hawq_data_source?(account)
+    connection = connect_with(account)
+    connection.is_hawq? if :is_hawq
+  end
+
   def connect_with(account, options = {})
     connection = connection_class.new(self, account, options.reverse_merge({:logger => Rails.logger}))
 
