@@ -43,8 +43,8 @@ class DataSourceAccount < ActiveRecord::Base
     if association.loaded?
       association.loaded! if association.stale_target?
     end
-    check_hawq = data_source.is_hawq if data_source
     return unless data_source && db_username.present? && db_password.present?
+    check_hawq = data_source.is_hawq
     unless data_source.valid_db_credentials?(self)
       check_hawq = false
       errors.add(:base, :INVALID_PASSWORD)
