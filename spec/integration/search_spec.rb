@@ -86,7 +86,7 @@ describe "Search" do
   describe "hdfs search" do
     let(:model_type) { "hdfs_entry" }
     let(:found_model_text) { hdfs_entries(:searchable).name }
-    let(:model_link) { "HDFS Files" }
+    let(:model_link) { "Hadoop Files" }
     it_behaves_like "model specific search"
   end
 end

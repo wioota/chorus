@@ -18,7 +18,7 @@ describe("chorus.Mixins.ServerErrors", function() {
 
             it("returns a custom error message", function() {
                 this.host.serverErrors = {fields: {workspaces: {EMPTY: {}}}};
-                expect(_.first(this.host.serverErrorMessages())).toBe("You must have access to a workspace with a sandbox to create an hdfs external table for this file");
+                expect(_.first(this.host.serverErrorMessages())).toMatchTranslation('field_error.workspaces.EMPTY');
             });
 
             it("interpolates extra arguments", function() {
@@ -28,7 +28,7 @@ describe("chorus.Mixins.ServerErrors", function() {
 
             it("catches errors that are not directly on model fields", function() {
                 this.host.serverErrors = {"record": "NOT_FOUND"};
-                expect(_.first(this.host.serverErrorMessages())).toBe("The record you requested could not be found");
+                expect(_.first(this.host.serverErrorMessages())).toMatchTranslation('record_error.NOT_FOUND');
             });
 
             it("includes fields on server errors", function() {
