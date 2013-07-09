@@ -36,13 +36,13 @@ http_interactions:
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Dataset)\
         \ AND -data_source_account_ids_im:(1000001 OR 1000004 OR 1000002 OR 1000006\
         \ OR 1000007 OR 1000008 OR 1000018 OR 1000019))','-(security_type_name_sm:ChorusView\
-        \ AND -member_ids_im:1000006 AND -public_b:true)'],'hl'=>'on','defType'=>'edismax','rows'=>'3'}},'response'=>{'numFound'=>2,'start'=>0,'maxScore'=>5213678.0,'docs'=>[{'id'=>'GpdbTable\
-        \ 1000013','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['typeahead-with-dash'],'database_name_texts'=>['shared_database'],'name_stemmed_texts'=>['typeahead-with-dash'],'table_description_texts'=>['bogus'],'column_name_stemmed_texts'=>['bogus','bogus\
+        \ AND -member_ids_im:1000006 AND -public_b:true)'],'hl'=>'on','defType'=>'edismax','rows'=>'3'}},'response'=>{'numFound'=>2,'start'=>0,'maxScore'=>5405824.0,'docs'=>[{'id'=>'GpdbTable\
+        \ 1000014','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['typeahead-with-dash'],'database_name_texts'=>['shared_database'],'name_stemmed_texts'=>['typeahead-with-dash'],'table_description_texts'=>['bogus'],'column_name_stemmed_texts'=>['bogus','bogus\
         \ 2'],'schema_name_stemmed_texts'=>['shared_schema'],'schema_name_texts'=>['shared_schema'],'database_name_stemmed_texts'=>['shared_database'],'column_name_texts'=>['bogus','bogus\
-        \ 2'],'score'=>5213678.0},{'id'=>'GpdbTable 1000014','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['typeahead_with_underscore'],'database_name_texts'=>['shared_database'],'name_stemmed_texts'=>['typeahead_with_underscore'],'table_description_texts'=>['bogus'],'column_name_stemmed_texts'=>['bogus','bogus\
+        \ 2'],'score'=>5405824.0},{'id'=>'GpdbTable 1000015','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['typeahead_with_underscore'],'database_name_texts'=>['shared_database'],'name_stemmed_texts'=>['typeahead_with_underscore'],'table_description_texts'=>['bogus'],'column_name_stemmed_texts'=>['bogus','bogus\
         \ 2'],'schema_name_stemmed_texts'=>['shared_schema'],'schema_name_texts'=>['shared_schema'],'database_name_stemmed_texts'=>['shared_database'],'column_name_texts'=>['bogus','bogus\
-        \ 2'],'score'=>4468867.0}]},'highlighting'=>{'GpdbTable 1000013'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@-@@@hl@@@wi@@@endhl@@@th-dash']},'GpdbTable\
-        \ 1000014'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@_@@@hl@@@wi@@@endhl@@@th_underscore']}}}"
+        \ 2'],'score'=>4633563.5}]},'highlighting'=>{'GpdbTable 1000014'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@-@@@hl@@@wi@@@endhl@@@th-dash']},'GpdbTable\
+        \ 1000015'=>{'name_texts'=>['@@@hl@@@typeahead@@@endhl@@@_@@@hl@@@wi@@@endhl@@@th_underscore']}}}"
     http_version: '1.1'
-  recorded_at: Fri, 24 May 2013 21:42:00 GMT
+  recorded_at: Tue, 09 Jul 2013 20:42:16 GMT
 recorded_with: VCR 2.3.0

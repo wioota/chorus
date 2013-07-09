@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>9,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
         \ database_name_texts table_description_texts schema_name_texts column_name_texts\
         \ column_description_texts query_texts tag_names_texts body_texts name_stemmed_texts\
         \ database_name_stemmed_texts table_description_stemmed_texts schema_name_stemmed_texts\
@@ -33,9 +33,9 @@ http_interactions:
         \ AND -data_source_account_ids_im:(1000001 OR 1000004 OR 1000002 OR 1000006\
         \ OR 1000007 OR 1000008 OR 1000018 OR 1000019))','-(security_type_name_sm:ChorusView\
         \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>1,'ngroups'=>1,'groups'=>[{'groupValue'=>'ChorusView\
-        \ 1000022','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>10.936972,'docs'=>[{'id'=>'Comment\
-        \ 1000004','body_stemmed_texts'=>['commentsearch'],'body_texts'=>['commentsearch'],'score'=>10.936972}]}}]}},'highlighting'=>{'Comment\
+        \ 1000023','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>10.962726,'docs'=>[{'id'=>'Comment\
+        \ 1000004','body_stemmed_texts'=>['commentsearch'],'body_texts'=>['commentsearch'],'score'=>10.962726}]}}]}},'highlighting'=>{'Comment\
         \ 1000004'=>{'body_texts'=>['@@@hl@@@commentsearch@@@endhl@@@'],'body_stemmed_texts'=>['@@@hl@@@commentsearch@@@endhl@@@']}}}"
     http_version: '1.1'
-  recorded_at: Thu, 20 Jun 2013 00:52:16 GMT
+  recorded_at: Tue, 09 Jul 2013 20:42:13 GMT
 recorded_with: VCR 2.3.0
