@@ -1,0 +1,22 @@
+<form>
+    <label class="required">{{t "create_file_mask_dialog.mask_name"}}</label>
+    <input class="name">
+    <div class="data_source">
+        <div class="loading_text{{#if loaded}} hidden{{/if}}"><span class="loading_spinner"></span></div>
+        <label class="required">{{t "create_file_mask_dialog.data_source_select_title"}}</label><br/>
+        {{#if dataSourcesPresent}}
+            <select class="data_sources{{#unless loaded}} hidden{{/unless}}">
+                <option value="">{{t "selectbox.select_one"}}</option>
+                {{#each dataSources}}
+                    <option value={{id}}>{{name}}</option>
+                {{/each}}
+            </select>
+        {{else}}
+            <span class="unavailable_text">{{t "create_file_mask_dialog.no_data_sources"}}</span>
+        {{/if}}
+    </div>
+    <label class="required">{{t "create_file_mask_dialog.file_mask"}}</label>
+    <input class="mask">
+
+    {{formControlsWithDisabledSubmit "create_file_mask_dialog.submit"}}
+</form>
