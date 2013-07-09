@@ -150,6 +150,8 @@ FixtureBuilder.configure do |fbuilder|
     alternate_schema = FactoryGirl.create(:gpdb_schema, :name => 'alternate', :database => alternate_database)
     FactoryGirl.create(:gpdb_table, :name => "alternate", :schema => alternate_schema)
 
+    FactoryGirl.create(:hdfs_dataset, :name => "hadoop", :hdfs_data_source => hdfs_data_source)
+
     # Search setup
     searchquery_database = FactoryGirl.create(:gpdb_database, :data_source => owners_data_source, :name => 'searchquery_database')
     searchquery_schema = FactoryGirl.create(:gpdb_schema, :name => "searchquery_schema", :database => searchquery_database)

@@ -245,6 +245,7 @@ class Workspace < ActiveRecord::Base
   end
 
   def associate_datasets(user, datasets)
+    #TODO: Take single datasets
     should_raise_errors = (datasets.length == 1)
     Workspace.transaction do
       datasets.each do |dataset|

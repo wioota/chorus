@@ -121,6 +121,12 @@ FactoryGirl.define do
     end
   end
 
+  factory :hdfs_dataset do
+    sequence(:name) { |n| "#{Faker::Company.name}_#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    association :hdfs_data_source, :factory => :hdfs_data_source
+    file_mask "/*"
+  end
+
   factory :gpdb_dataset_column do
     sequence(:name) { |n| "column#{n}" }
     data_type "text"
@@ -168,8 +174,6 @@ FactoryGirl.define do
     user
     workspace
   end
-
-
 
   factory :associated_dataset do
     association :dataset, :factory => :gpdb_table

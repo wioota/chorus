@@ -6,7 +6,7 @@ class Dataset < ActiveRecord::Base
 
   unscoped_belongs_to :schema
 
-  validates_presence_of :scoped_schema
+  validates_presence_of :scoped_schema, :if => :needs_schema?
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:schema_id, :type, :deleted_at]
 
@@ -41,6 +41,10 @@ class Dataset < ActiveRecord::Base
   attr_accessible :name
 
   delegate :data_source, :accessible_to, :connect_with, :connect_as, :to => :schema
+
+  def needs_schema?
+    true
+  end
 
   def self.eager_load_associations
     [:tags,
