@@ -82,26 +82,36 @@ describe("chorus.dialogs.CreateFileMask", function() {
 
 
             it("starts the spinner loading", function () {
-
+                expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
             });
 
             context("when the save succeeds", function () {
-                it("closes the modal", function() {
+                beforeEach(function () {
+                    spyOn(this.dialog, 'closeModal');
+                    spyOn(chorus, 'toast');
+                    this.server.completeSaveFor(this.dialog.model);
+                });
 
+                it("closes the modal", function() {
+                    expect(this.dialog.closeModal).toHaveBeenCalled();
                 });
 
                 it("gives a toast", function() {
-
+                    expect(chorus.toast).toHaveBeenCalledWith('create_file_mask_dialog.toast');
                 });
             });
 
             context("when the post fails", function () {
-                it("displays server errors", function () {
+                beforeEach(function() {
+                    this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity();
+                });
 
+                it("displays server errors", function () {
+                    expect(this.dialog.$('.errors')).not.toHaveClass('hidden');
                 });
 
                 it("stops the spinner", function() {
-
+                    expect(this.dialog.$('button.submit').isLoading()).toBeFalsy();
                 });
             });
         });

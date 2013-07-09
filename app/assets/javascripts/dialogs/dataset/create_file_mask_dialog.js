@@ -8,6 +8,7 @@ chorus.dialogs.CreateFileMask = chorus.dialogs.Base.include(chorus.Mixins.Dialog
 
     setup: function() {
         this.workspace = this.options.workspace;
+        this.model = new chorus.models.HdfsDataset({ workspaceId: this.workspace.id });
         this.dataSources = new chorus.collections.HdfsDataSourceSet();
         this.dataSources.fetchAll();
         this.onceLoaded(this.dataSources, this.dataSourcesLoaded);
@@ -19,6 +20,9 @@ chorus.dialogs.CreateFileMask = chorus.dialogs.Base.include(chorus.Mixins.Dialog
         });
 
         this.events["change select"] = this.toggleSubmitDisabled;
+
+        this.listenTo(this.model, "saved", this.modelSaved);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
     },
 
     checkInput: function() {
@@ -45,10 +49,18 @@ chorus.dialogs.CreateFileMask = chorus.dialogs.Base.include(chorus.Mixins.Dialog
     },
 
     create: function() {
-        this.dataset = new chorus.models.HdfsDataset({
-            workspaceId: this.workspace.id
-        });
-        this.dataset.save(this.getFields());
+        this.$("button.submit").startLoading();
+        this.model.save(this.getFields());
+    },
+
+    modelSaved: function() {
+        chorus.toast("create_file_mask_dialog.toast");
+        this.closeModal();
+    },
+
+    saveFailed: function() {
+        this.$("button.submit").stopLoading();
+        this.showErrors(this.model);
     },
 
     getFields: function() {
