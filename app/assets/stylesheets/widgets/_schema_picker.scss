@@ -1,12 +1,6 @@
 .schema_picker, .database_picker, .location_picker {
-  $inner-width: $default-dialog-width - 65px;
     a {
         font-size: 13px;
-    }
-
-    select {
-        display: block;
-        width: $inner-width;
     }
 
     .data_source .header_container {
