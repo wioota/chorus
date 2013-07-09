@@ -36,10 +36,5 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         this.model.fetch();
         this.closeModal();
         chorus.toast("dataset.associate.toast.one", {datasetTitle: this.model.get("objectName"), workspaceNameTarget: this.selectedItem().get("name")});
-    },
-
-    saveFailed: function(model) {
-        this.showErrors(model);
-        this.$("button.submit").stopLoading();
     }
 });

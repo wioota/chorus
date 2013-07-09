@@ -40,6 +40,6 @@ chorus.dialogs.RenameWorkfile = chorus.dialogs.Base.include(chorus.Mixins.Dialog
 
     saveFailed: function() {
         this.model.set({fileName: this.oldFileName}, {silent: true});
-        this.$("button.submit").stopLoading();
+        this._super("saveFailed");
     }
 });

@@ -35,9 +35,5 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.include(chorus.Mixins.Dialo
     saved:function () {
         this.closeModal();
         chorus.router.navigate(this.model.showUrl());
-    },
-
-    saveFailed: function() {
-        this.$("button.submit").stopLoading();
     }
 });

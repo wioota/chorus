@@ -109,9 +109,5 @@ chorus.dialogs.EditWorkspace = chorus.dialogs.Base.include(
         saved: function() {
             this.model.trigger("invalidated");
             this.closeModal();
-        },
-
-        saveFailed: function() {
-            this.$("button.submit").stopLoading();
         }
     });

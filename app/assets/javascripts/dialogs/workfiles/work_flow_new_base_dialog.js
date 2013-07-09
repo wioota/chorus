@@ -34,10 +34,6 @@ chorus.dialogs.WorkFlowNewBase = chorus.dialogs.Base.include(chorus.Mixins.Dialo
         return this.$("input[name=fileName]").val().trim();
     },
 
-    saveFailed: function() {
-        this.$("button.submit").stopLoading();
-    },
-
     workfileSaved: function() {
         this.closeModal();
         chorus.router.navigate(this.resource.showUrl({workFlow: true}));

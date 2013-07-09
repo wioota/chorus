@@ -80,7 +80,7 @@ describe("chorus.dialogs.NameChorusView", function() {
             beforeEach(function() {
                 spyOn(chorus.router, "navigate");
                 spyOnEvent($(document), "close.facebox");
-                this.dialog.model.set({serverErrors : { fields: { a: { BLANK: {} } } }});
+                this.dialog.model.set({serverErrors : { fields: { a: { BLANK: {} } } }}, {silent: true});
                 this.dialog.model.trigger("saveFailed");
             });
 

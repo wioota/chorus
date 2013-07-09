@@ -41,10 +41,5 @@ chorus.dialogs.PublishToTableau = chorus.dialogs.Base.extend({
         this.closeModal();
         this.dataset.tableauWorkbooks().add(this.model);
         this.dataset.trigger("change");
-    },
-
-    saveFailed: function() {
-        this.$("button.submit").stopLoading();
-        this.$("button.cancel").prop("disabled", false);
     }
 });

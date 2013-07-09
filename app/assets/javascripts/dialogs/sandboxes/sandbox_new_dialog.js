@@ -69,11 +69,6 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.closeModal();
     },
 
-    saveFailed: function() {
-        this.$("button.submit").stopLoading();
-        this.showErrors(this.model);
-    },
-
     enableOrDisableSaveButton: function(schemaVal) {
         this.$("button.submit").prop("disabled", !schemaVal);
     }

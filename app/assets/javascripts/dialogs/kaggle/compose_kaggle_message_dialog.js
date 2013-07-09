@@ -52,10 +52,6 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
         });
     },
 
-    saveFailed:function () {
-        this.$("button.submit").stopLoading();
-    },
-
     clearServerErrors : function() {
         this.model.serverErrors = {};
     },

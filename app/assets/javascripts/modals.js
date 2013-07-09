@@ -142,6 +142,16 @@ chorus.Modal = chorus.views.Base.extend({
     beginReveal: function() {
         this.revealed();
         this.$(this.focusSelector).focus();
+    },
+
+    saveFailed: function(model) {
+        this.$("button.submit").stopLoading();
+        this.$("button.cancel").prop("disabled", false);
+        if(model) {
+            this.showErrors(model);
+        } else {
+            this.showErrors();
+        }
     }
 });
 

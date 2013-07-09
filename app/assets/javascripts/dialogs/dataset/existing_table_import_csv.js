@@ -64,10 +64,6 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
         chorus.router.navigate(this.dataset.showUrl());
     },
 
-    saveFailed: function() {
-        this.$("button.submit").stopLoading();
-    },
-
     validationFailed: function() {
         this.saveFailed();
         this.$("button.submit").prop("disabled", true);

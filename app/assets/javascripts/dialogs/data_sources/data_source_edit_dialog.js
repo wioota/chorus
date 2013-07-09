@@ -60,10 +60,5 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
         this.sourceModel.set(this.model.attributes);
         chorus.toast("data_sources.edit_dialog.saved_message");
         this.closeModal();
-    },
-
-    saveFailed: function() {
-        this.$("button.submit").stopLoading();
-        this.$("button.cancel").prop("disabled", false);
     }
 });

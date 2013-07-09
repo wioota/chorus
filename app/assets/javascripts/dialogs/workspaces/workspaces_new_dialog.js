@@ -14,7 +14,7 @@ chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.include(
 
     setup:function () {
         this.listenTo(this.resource, "saved", this.workspaceSaved);
-        this.listenTo(this.resource, "saveFailed", function() { this.$("button.submit").stopLoading(); });
+        this.listenTo(this.resource, "saveFailed", this.saveFailed);
         this.disableFormUnlessValid({formSelector: "form.new_workspace", inputSelector: "input[name='name']"});
     },
 

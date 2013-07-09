@@ -1,12 +1,12 @@
 chorus.dialogs.NameChorusView = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
-    constructorName: "AssignChorusViewName",
+    constructorName: "NameChorusViewDialog",
     templateName: "name_chorus_view",
     title: t("dataset.name_chorus_view.title"),
 
     setup: function() {
         this.listenTo(this.model, "saved", this.chorusViewCreated);
-        this.listenTo(this.model, "saveFailed", this.chorusViewFailed);
-        this.listenTo(this.model, "validationFailed", this.chorusViewFailed);
+        this.listenTo(this.model, "validationFailed", this.saveFailed);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
         this.disableFormUnlessValid({
             formSelector: "form",
             inputSelector: "input[name=objectName]"
@@ -24,9 +24,5 @@ chorus.dialogs.NameChorusView = chorus.dialogs.Base.include(chorus.Mixins.Dialog
     chorusViewCreated: function() {
         this.closeModal();
         chorus.router.navigate(this.model.showUrl());
-    },
-
-    chorusViewFailed: function() {
-        this.$("button.submit").stopLoading();
     }
 });

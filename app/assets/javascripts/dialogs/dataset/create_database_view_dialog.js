@@ -49,10 +49,6 @@ chorus.dialogs.CreateDatabaseView = chorus.dialogs.Base.extend({
         chorus.router.navigate(databaseView.showUrl());
     },
 
-    saveFailed: function() {
-        this.$("button.submit").stopLoading();
-    },
-
     canonicalName: function() {
         return this.dataset.schema().canonicalName();
     }

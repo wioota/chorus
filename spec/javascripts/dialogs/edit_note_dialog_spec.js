@@ -112,10 +112,6 @@ describe("chorus.dialogs.EditNote", function() {
                 this.server.lastUpdate().succeed();
             });
 
-            it("removes the spinner from the button", function() {
-                expect($.fn.stopLoading).toHaveBeenCalledOnSelector("button.submit");
-            });
-
             it("closes the dialog", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
             });

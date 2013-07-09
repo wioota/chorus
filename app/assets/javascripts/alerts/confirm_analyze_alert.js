@@ -14,11 +14,6 @@ chorus.alerts.Analyze = chorus.alerts.Confirm.extend({
         this.model.analyze().save();
     },
 
-    saveFailed: function() {
-        this.$("button.submit").stopLoading();
-        this.showErrors(this.model.analyze());
-    },
-
     saved: function() {
         chorus.PageEvents.trigger("analyze:running");
         chorus.toast("analyze.alert.toast", {name: this.model.name()});

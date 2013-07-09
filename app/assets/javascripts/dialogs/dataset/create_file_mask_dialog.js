@@ -58,11 +58,6 @@ chorus.dialogs.CreateFileMask = chorus.dialogs.Base.include(chorus.Mixins.Dialog
         this.closeModal();
     },
 
-    saveFailed: function() {
-        this.$("button.submit").stopLoading();
-        this.showErrors(this.model);
-    },
-
     getFields: function() {
         return {
             name: this.$("input.name").val(),

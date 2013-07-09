@@ -81,11 +81,6 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         chorus.PageEvents.trigger("csv_import:started");
     },
 
-    saveFailed: function() {
-        this.showErrors();
-        this.$("button.submit").stopLoading();
-    },
-
     updateModel: function() {
         var $names = this.$(".column_name input:text");
         var tableName = this.$(".directions input:text").val();

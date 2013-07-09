@@ -29,10 +29,5 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
             count: this.datasets.length
         });
         this.closeModal();
-    },
-
-    saveFailed: function(model) {
-        this.showErrors(model);
-        this.$("button.submit").stopLoading();
     }
 });

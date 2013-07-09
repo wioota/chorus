@@ -15,7 +15,7 @@ chorus.dialogs.RenameTag = chorus.dialogs.Base.extend({
 
     postRender: function() {
         this.input = this.$(".rename_tag_input");
-        this.submitButton = this.$("button[type=submit]");
+        this.submitButton = this.$("button.submit");
     },
 
     getName: function() {
@@ -34,11 +34,6 @@ chorus.dialogs.RenameTag = chorus.dialogs.Base.extend({
         this.model.trigger("change");
         chorus.toast("tag.rename", {name: this.model.name()});
         this.closeModal();
-    },
-
-    saveFailed: function() {
-        this.submitButton.stopLoading();
-        this.showErrors();
     },
 
     checkInput : function() {
