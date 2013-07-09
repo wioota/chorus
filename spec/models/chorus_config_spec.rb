@@ -404,4 +404,35 @@ describe ChorusConfig do
 
     end
   end
+
+  describe "branding" do
+    context "is greenplum" do
+      before do
+        config.config = {'alpine' => {'branded' => {'enabled' => false}}}
+      end
+
+      it "has the greenplum title" do
+        config.branding_title.should == "Greenplum Chorus"
+      end
+
+      it "has the greenplum favicon" do
+        config.branding_favicon.should == "favicon.ico"
+      end
+    end
+
+    context "is alpine" do
+      before do
+        config.config = {'alpine' => {'branded' => {'enabled' => true}}}
+      end
+
+      it "has the alpine title" do
+        config.branding_title.should == "Alpine Ensemble"
+      end
+
+      it "has the alpine favicon" do
+        config.branding_favicon.should == "alpine-favicon.ico"
+      end
+    end
+  end
+
 end

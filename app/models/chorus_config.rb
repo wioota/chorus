@@ -122,6 +122,14 @@ class ChorusConfig
     self['public_url']
   end
 
+  def branding_title
+    self['alpine.branded.enabled'] ? "Alpine Ensemble" : "Greenplum Chorus"
+  end
+
+  def branding_favicon
+    self['alpine.branded.enabled'] ? "alpine-favicon.ico" : "favicon.ico"
+  end
+
   private
 
   def set_root_dir(root_dir)
