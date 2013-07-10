@@ -183,6 +183,17 @@ describe EventsController do
         end
       end
 
+      context "for a HDFS Dataset" do
+        let(:object) { datasets(:hadoop) }
+
+        it "presents the hdfs dataset's activities" do
+          mock_present { |models| models.should include(event) }
+
+          get :index, :entity_type => "dataset", :entity_id => object.id
+          response.code.should == "200"
+        end
+      end
+
       context "for an hdfs file" do
         let(:object) { HdfsEntry.last }
 

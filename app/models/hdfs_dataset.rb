@@ -16,6 +16,10 @@ class HdfsDataset < Dataset
       dataset
   end
 
+  def self.source_class
+    HdfsDataSource
+  end
+
   def associable?
     true
   end
