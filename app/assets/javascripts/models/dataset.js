@@ -358,12 +358,6 @@ chorus.models.Dataset = chorus.models.Base.include(
         "CHORUS_VIEW": "query"
     },
 
-    entityTypeMap: {
-        "SOURCE_TABLE": "dataset",
-        "SANDBOX_TABLE": "dataset",
-        "CHORUS_VIEW": "chorusView"
-    },
-
     iconMap: {
         "CHORUS_VIEW": {
             CHORUS_VIEW: "chorus_view"
@@ -383,6 +377,10 @@ chorus.models.Dataset = chorus.models.Base.include(
             "MASTER_TABLE": "sandbox_table",
             "VIEW": "sandbox_view",
             "HDFS_EXTERNAL_TABLE": "sandbox_table"
+        },
+
+        "HDFS": {
+            "VIEW": "hdfs_dataset"
         }
     }
 });

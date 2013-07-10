@@ -65,94 +65,119 @@ describe('chorus.handlebarsHelpers.dataset', function() {
     });
 
     describe("datasetLocation", function () {
-        beforeEach(function () {
-            this.model = backboneFixtures.dataset();
-            this.result = Handlebars.helpers.datasetLocation(this.model).toString();
-        });
-
-        it("includes the from text", function () {
-            expect($(this.result)).toContainTranslation('dataset.from', {location:''});
-        });
-
-        it('includes the data source name, database name, and schema name', function () {
-            var dataSource = this.model.dataSource();
-            expect($(this.result).find("a.data_source")).toContainText(dataSource.name());
-            expect($(this.result).find("a.data_source")).toHaveHref(dataSource.showUrl());
-
-            var database = this.model.database();
-            expect($(this.result).find("a.database")).toContainText(database.name());
-            expect($(this.result).find("a.database")).toHaveHref(database.showUrl());
-
-            expect($(this.result).find("a.schema")).toContainText(this.model.schema().name());
-            expect($(this.result).find("a.schema").attr("href")).toMatchUrl(this.model.schema().showUrl());
-        });
-
-        it("includes the highlighted database and schema name", function () {
-            var searchResult = backboneFixtures.searchResult({
-                datasets: {
-                    results:[{
-                        schema:{
-                            highlightedAttributes:{ name:['schema_<em>name</em>'] },
-                            database:{
-                                highlightedAttributes:{ name:['db_<em>name</em>'] }
-                            }
-                        }
-                    }]}});
-            this.model = searchResult.datasets().at(0);
-            this.result = Handlebars.helpers.datasetLocation(this.model).toString();
-            expect($(this.result).find('em').length).toBe(2);
-        });
-
-        context('when the dataset schemas parent is a data source', function() {
-            beforeEach(function() {
-                this.model = backboneFixtures.oracleDataset();
-                this.result = $(Handlebars.helpers.datasetLocation(this.model).toString());
-            });
-
-            it("doesn't include a database name", function() {
-                var dataSource = this.model.dataSource();
-                expect(this.result.find("a.data_source")).toContainText(dataSource.name());
-                expect(this.result.find("a.data_source")).toHaveHref(dataSource.showUrl());
-
-                expect(this.result.find("a.database")).not.toExist();
-
-                expect(this.result.find("a.schema")).toContainText(this.model.schema().name());
-                expect(this.result.find("a.schema").attr("href")).toMatchUrl(this.model.schema().showUrl());
-            });
-        });
-
-        context("when the dataset's schema has not been loaded correctly", function () {
-            beforeEach(function() {
-                this.model = new chorus.models.Dataset();
-            });
-
-            it("returns the empty string", function() {
-                expect(Handlebars.helpers.datasetLocation(this.model).toString()).toEqual("");
-            });
-        });
-
-        context("when credentials are not present", function () {
+        context("for a DB object", function () {
             beforeEach(function () {
-                this.model = backboneFixtures.dataset({hasCredentials:false});
+                this.model = backboneFixtures.dataset();
                 this.result = Handlebars.helpers.datasetLocation(this.model).toString();
             });
 
+            it("includes the from text", function () {
+                expect($(this.result)).toContainTranslation('dataset.from', {location: ''});
+            });
+
             it('includes the data source name, database name, and schema name', function () {
-                expect($(this.result)).toContainText(this.model.dataSource().name());
-                expect($(this.result)).toContainText(this.model.database().name());
-                expect($(this.result)).toContainText(this.model.schema().name());
-                expect($(this.result).find('a')).not.toExist();
+                var dataSource = this.model.dataSource();
+                expect($(this.result).find("a.data_source")).toContainText(dataSource.name());
+                expect($(this.result).find("a.data_source")).toHaveHref(dataSource.showUrl());
+
+                var database = this.model.database();
+                expect($(this.result).find("a.database")).toContainText(database.name());
+                expect($(this.result).find("a.database")).toHaveHref(database.showUrl());
+
+                expect($(this.result).find("a.schema")).toContainText(this.model.schema().name());
+                expect($(this.result).find("a.schema").attr("href")).toMatchUrl(this.model.schema().showUrl());
+            });
+
+            it("includes the highlighted database and schema name", function () {
+                var searchResult = backboneFixtures.searchResult({
+                    datasets: {
+                        results: [
+                            {
+                                schema: {
+                                    highlightedAttributes: { name: ['schema_<em>name</em>'] },
+                                    database: {
+                                        highlightedAttributes: { name: ['db_<em>name</em>'] }
+                                    }
+                                }
+                            }
+                        ]}});
+                this.model = searchResult.datasets().at(0);
+                this.result = Handlebars.helpers.datasetLocation(this.model).toString();
+                expect($(this.result).find('em').length).toBe(2);
+            });
+
+            context('when the dataset schemas parent is a data source', function () {
+                beforeEach(function () {
+                    this.model = backboneFixtures.oracleDataset();
+                    this.result = $(Handlebars.helpers.datasetLocation(this.model).toString());
+                });
+
+                it("doesn't include a database name", function () {
+                    var dataSource = this.model.dataSource();
+                    expect(this.result.find("a.data_source")).toContainText(dataSource.name());
+                    expect(this.result.find("a.data_source")).toHaveHref(dataSource.showUrl());
+
+                    expect(this.result.find("a.database")).not.toExist();
+
+                    expect(this.result.find("a.schema")).toContainText(this.model.schema().name());
+                    expect(this.result.find("a.schema").attr("href")).toMatchUrl(this.model.schema().showUrl());
+                });
+            });
+
+            context("when the dataset's schema has not been loaded correctly", function () {
+                beforeEach(function () {
+                    this.model = new chorus.models.Dataset();
+                });
+
+                it("returns the empty string", function () {
+                    expect(Handlebars.helpers.datasetLocation(this.model).toString()).toEqual("");
+                });
+            });
+
+            context("when credentials are not present", function () {
+                beforeEach(function () {
+                    this.model = backboneFixtures.dataset({hasCredentials: false});
+                    this.result = Handlebars.helpers.datasetLocation(this.model).toString();
+                });
+
+                it('includes the data source name, database name, and schema name', function () {
+                    expect($(this.result)).toContainText(this.model.dataSource().name());
+                    expect($(this.result)).toContainText(this.model.database().name());
+                    expect($(this.result)).toContainText(this.model.schema().name());
+                    expect($(this.result).find('a')).not.toExist();
+                });
+            });
+
+            context("when user provided a label", function () {
+                beforeEach(function () {
+                    this.model = backboneFixtures.workspaceDataset.datasetTable();
+                    this.result = Handlebars.helpers.datasetLocation(this.model, 'workspace.sandbox_schema').toString();
+                });
+
+                it("includes the label text", function () {
+                    expect($(this.result)).toContainTranslation('workspace.sandbox_schema', {location: ''});
+                });
             });
         });
 
-        context("when user provided a label", function () {
-            beforeEach(function() {
-                this.model = backboneFixtures.workspaceDataset.datasetTable();
-                this.result = Handlebars.helpers.datasetLocation(this.model, 'workspace.sandbox_schema').toString();
+        context("for a filesystem object", function () {
+            beforeEach(function () {
+                this.model = backboneFixtures.workspaceDataset.hdfsDataset();
+                this.result = Handlebars.helpers.datasetLocation(this.model).toString();
             });
 
-            it("includes the label text", function() {
-                expect($(this.result)).toContainTranslation('workspace.sandbox_schema', {location: ''});
+            it("includes the from text", function () {
+                expect($(this.result)).toContainTranslation('dataset.from', {location: ''});
+            });
+
+            it('includes the data source name, database name, and schema name', function () {
+                var dataSource = this.model.dataSource();
+                expect($(this.result).find("a.data_source")).toContainText(dataSource.name());
+                expect($(this.result).find("a.data_source")).toHaveHref(dataSource.showUrl());
+
+                expect($(this.result).find("a.database")).not.toExist();
+
+                expect($(this.result).find("a.schema")).not.toExist();
             });
         });
     });

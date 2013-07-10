@@ -310,7 +310,10 @@ window.BackboneFixtureDefinitions = {
             datasetTable: {},
             datasetView: {},
             sourceTable: {},
-            sourceView: {}
+            sourceView: {},
+            hdfsDataset: {
+                model: 'HdfsDataset'
+            }
         }
     },
 

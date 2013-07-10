@@ -55,7 +55,7 @@ class DatasetPresenter < Presenter
   end
 
   def sandbox_table?
-    options[:workspace] && !model.source_dataset_for(options[:workspace])
+    options[:workspace] && !model.source_dataset_for(options[:workspace]) unless model.is_a?(HdfsDataset)
   end
 
   def workspace_hash

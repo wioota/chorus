@@ -25,32 +25,51 @@ chorus.handlebarsHelpers.dataset = {
         return new Handlebars.SafeString(t("dataset.content_details.definition", {sql_prompt: promptSpan, sql: sqlSpan}));
     },
 
-    datasetLocation: function(databaseObject, label) {
-        label = _.isString(label) ? label : "dataset.from";
-        if (!databaseObject.schema()) return "";
-        var dataSource = databaseObject.dataSource();
-        var schema = databaseObject.schema();
-        var database = databaseObject.database();
+    datasetLocation: function(dataset, label) {
+        var locationPieces = [];
+        var dataSource;
+        var dataSourceName;
 
-        var schemaPieces = [];
-        var dataSourceName = dataSource.name();
-        var databaseName = (database && Handlebars.helpers.withSearchResults(database).name()) || "";
-        var schemaName = Handlebars.helpers.withSearchResults(schema).name();
+        function locateDBDataset() {
+            dataSource = dataset.dataSource();
+            dataSourceName = dataSource.name();
+            var schema = dataset.schema();
+            var database = dataset.database();
 
-        if (databaseObject.get('hasCredentials') === false) {
-            schemaPieces.push(dataSourceName);
-            if (databaseName.toString()) {
-                schemaPieces.push(databaseName);
+            var databaseName = (database && Handlebars.helpers.withSearchResults(database).name()) || "";
+            var schemaName = Handlebars.helpers.withSearchResults(schema).name();
+
+            if (dataset.get('hasCredentials') === false) {
+                locationPieces.push(dataSourceName);
+                if (databaseName.toString()) {
+                    locationPieces.push(databaseName);
+                }
+                locationPieces.push(schemaName);
+            } else {
+                locationPieces.push(Handlebars.helpers.linkTo(dataSource.showUrl(), dataSourceName, {"class": "data_source"}).toString());
+                if (databaseName.toString()) {
+                    locationPieces.push(Handlebars.helpers.linkTo(database.showUrl(), databaseName, {"class": "database"}).toString());
+                }
+                locationPieces.push(Handlebars.helpers.linkTo(schema.showUrl(), schemaName, {'class': 'schema'}).toString());
             }
-            schemaPieces.push(schemaName);
-        } else {
-            schemaPieces.push(Handlebars.helpers.linkTo(dataSource.showUrl(), dataSourceName, {"class": "data_source"}).toString());
-            if (databaseName.toString()) {
-                schemaPieces.push(Handlebars.helpers.linkTo(database.showUrl(), databaseName, {"class": "database"}).toString());
-            }
-            schemaPieces.push(Handlebars.helpers.linkTo(schema.showUrl(), schemaName, {'class': 'schema'}).toString());
         }
-        return new Handlebars.SafeString($("<span></span>").html(t(label, {location: schemaPieces.join('.')})).outerHtml());
+
+        function locateHdfsDataset() {
+            dataSource = dataset.dataSource();
+            dataSourceName = dataSource.name();
+            locationPieces.push(Handlebars.helpers.linkTo(dataSource.showUrl(), dataSourceName, {"class": "data_source"}).toString());
+        }
+
+        if (dataset.get('entitySubtype') === 'HDFS') {
+            locateHdfsDataset();
+        } else {
+            if (!dataset.schema()) return "";
+            locateDBDataset();
+        }
+
+        label = _.isString(label) ? label : "dataset.from";
+        var translation = t(label, {location: locationPieces.join('.')});
+        return new Handlebars.SafeString($("<span></span>").html(translation).outerHtml());
     },
 
     humanizedDatasetType: function(dataset, statistics) {

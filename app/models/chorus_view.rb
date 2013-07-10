@@ -103,6 +103,6 @@ class ChorusView < GpdbDataset
   end
 
   def verify_in_source(user)
-    true
+    schema.verify_in_source(user)
   end
 end

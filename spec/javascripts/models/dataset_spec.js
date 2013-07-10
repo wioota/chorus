@@ -149,6 +149,10 @@ describe("chorus.models.Dataset", function() {
                 "MASTER_TABLE": "sandbox_table_large.png",
                 "VIEW": "sandbox_view_large.png",
                 "HDFS_EXTERNAL_TABLE": "sandbox_table_large.png"
+            },
+
+            "HDFS": {
+                "VIEW": "hdfs_dataset_large.png"
             }
         };
 

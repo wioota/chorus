@@ -30,7 +30,7 @@ class WorkspaceDatasetsController < ApplicationController
 
     authorize_data_source_access(dataset)
 
-    if dataset.schema.verify_in_source(current_user) && dataset.verify_in_source(current_user)
+    if dataset.verify_in_source(current_user)
       present dataset, {:presenter_options => {:workspace => workspace}}
     else
       render_dataset_with_error(dataset)

@@ -4,7 +4,7 @@ class SchemasController < ApplicationController
   def show
     schema = Schema.find(params[:id])
     authorize_data_source_access(schema)
-    schema.verify_in_source(current_user)
+    schema.verify_in_source(user)
 
     present schema
   end

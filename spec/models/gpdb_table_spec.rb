@@ -8,6 +8,7 @@ describe GpdbTable do
 
   before do
     stub(table.schema).connect_with(account) { connection }
+    stub(table.schema.parent).connect_with(account) { connection }
   end
 
   describe "#analyze" do
@@ -18,12 +19,22 @@ describe GpdbTable do
   end
 
   describe '#verify_in_source' do
-    it 'is true if the table exists in greenplum' do
+    it 'is true if the table & schema exist in greenplum' do
+      stub(connection).schema_exists?(table.schema.name) { true }
       stub(connection).table_exists?(table.name) { true }
       table.verify_in_source(user).should be_true
     end
 
-    it 'is false if the table exists in greenplum' do
+    it 'is false if the table or schema do not exist in greenplum' do
+      stub(connection).schema_exists?(table.schema.name) { true }
+      stub(connection).table_exists?(table.name) { false }
+      table.verify_in_source(user).should be_false
+
+      stub(connection).schema_exists?(table.schema.name) { false }
+      stub(connection).table_exists?(table.name) { true }
+      table.verify_in_source(user).should be_false
+
+      stub(connection).schema_exists?(table.schema.name) { false }
       stub(connection).table_exists?(table.name) { false }
       table.verify_in_source(user).should be_false
     end

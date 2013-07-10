@@ -72,14 +72,12 @@ describe("chorus.dialogs.CreateFileMask", function() {
 
             it("posts with the correct values", function() {
                 var params = this.server.lastCreate().params();
-                expect(params).toEqual({
-                    'hdfs_dataset[name]': "Jim Carrey",
-                    'hdfs_dataset[data_source_id]': this.dataSources[2].id,
-                    'hdfs_dataset[file_mask]': "foo.*.bar",
-                    'hdfs_dataset[workspace_id]': this.workspace.id
-                });
+                expect(params['hdfs_dataset[name]']).toEqual("Jim Carrey");
+                expect(params['hdfs_dataset[data_source_id]']).toEqual(this.dataSources[2].id);
+                expect(params['hdfs_dataset[file_mask]']).toEqual("foo.*.bar");
+                expect(params['hdfs_dataset[workspace_id]']).toEqual(this.workspace.id);
+                expect(params['hdfs_dataset[entity_subtype]']).toEqual('HDFS');
             });
-
 
             it("starts the spinner loading", function () {
                 expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();

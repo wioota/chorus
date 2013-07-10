@@ -11,7 +11,7 @@ describe HdfsDatasetsController do
     let(:params) do
       {:hdfs_dataset => {
           :file_mask => 'foo/*/bar',
-          :hdfs_data_source_id => hdfs_data_source.id,
+          :data_source_id => hdfs_data_source.id,
           :workspace_id => workspace.id,
           :name => Faker::Name.name
       }}

@@ -11,7 +11,8 @@ describe WorkspaceDatasetsController do
     let(:other_table) { datasets(:other_table) }
     let(:source_table) { datasets(:source_table) }
     let(:source_view) { datasets(:source_view) }
-    let(:the_datasets) { fake_relation [gpdb_table, gpdb_view] }
+    let(:hdfs_dataset) { datasets(:hadoop) }
+    let(:the_datasets) { fake_relation [gpdb_table, gpdb_view, hdfs_dataset] }
 
     before do
       log_in user
@@ -185,7 +186,6 @@ describe WorkspaceDatasetsController do
           end
         end
 
-
         context "when the dataset is a table" do
           let(:dataset) { gpdb_table }
 
@@ -223,6 +223,14 @@ describe WorkspaceDatasetsController do
           let(:dataset) { source_view }
 
           generate_fixture "workspaceDataset/sourceView.json" do
+            get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+          end
+        end
+
+        context "when the dataset is a Hadoop file mask pretending to be a dataset" do
+          let(:dataset) { hdfs_dataset }
+
+          generate_fixture "workspaceDataset/hdfsDataset.json" do
             get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
           end
         end

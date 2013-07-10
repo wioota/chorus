@@ -20,12 +20,15 @@ class HdfsDataset < Dataset
     true
   end
 
-
   def needs_schema?
     false
   end
 
   def accessible_to(user)
+    true
+  end
+
+  def verify_in_source(user)
     true
   end
 end
