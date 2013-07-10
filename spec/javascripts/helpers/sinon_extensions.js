@@ -152,8 +152,10 @@ _.extend(sinon.fakeServer, {
     },
 
     completeFetchAllFor: function(model, results, options, pagination) {
-        options = options || {page: 1, per_page: 1000};
-        pagination = pagination || {page: 1, total: 1, records: results ? results.length : 1};
+        options = options || {};
+        options = _.extend({page: 1, per_page: 1000}, options);
+        pagination = pagination || {};
+        pagination = _.extend({page: 1, total: 1, records: results ? results.length : 1}, pagination);
         this.completeFetchFor(model, results, options, pagination);
     },
 

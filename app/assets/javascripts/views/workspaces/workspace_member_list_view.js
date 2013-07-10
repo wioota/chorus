@@ -28,7 +28,7 @@ chorus.views.WorkspaceMemberList = chorus.views.Base.extend({
     setCollection: function(collection) {
         this.setModel(collection);
         this.collection = collection;
-        collection.fetchIfNotLoaded({per_page: this.numberOfMembersToShow});
+        this.collection.fetchAllIfNotLoaded();
     },
 
     setWorkspace: function(workspace) {

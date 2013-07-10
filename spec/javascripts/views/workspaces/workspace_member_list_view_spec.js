@@ -23,9 +23,9 @@ describe("chorus.views.WorkspaceMemberList", function() {
 
         describe("when there are fewer than 24 members", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.members,
+                this.server.completeFetchAllFor(this.members,
                     [backboneFixtures.user({id: 123}), backboneFixtures.user({id: 456})],
-                    {requireRows: true, per_page: 24},
+                    {requireRows: true},
                     {records:2}
                 );
             });
@@ -62,7 +62,7 @@ describe("chorus.views.WorkspaceMemberList", function() {
                 it("fetches and renders members from the new workspace", function() {
                     expect(this.view.$(".members li a").length).toEqual(2);
                     chorus.PageEvents.trigger("workspace:selected", this.workspace);
-                    this.server.completeFetchFor(this.workspace.members(),
+                    this.server.completeFetchAllFor(this.workspace.members(),
                         [backboneFixtures.user({id: 123})],
                         {records:1}
                     );
@@ -76,9 +76,9 @@ describe("chorus.views.WorkspaceMemberList", function() {
                 var memberList = _.map(_.range(0,25), function(id) {
                     return backboneFixtures.user({id: id});
                 });
-                this.server.completeFetchFor(this.members,
+                this.server.completeFetchAllFor(this.members,
                     memberList,
-                    {requireRows: true, per_page: 24},
+                    {requireRows: true},
                     {records: memberList.length}
                 );
             });
