@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>62,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>300,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
         \ last_name_texts username_texts email_texts tag_names_texts name_texts description_texts\
         \ summary_texts file_name_texts version_comments_texts database_name_texts\
         \ table_description_texts schema_name_texts column_name_texts column_description_texts\
@@ -54,8 +54,8 @@ http_interactions:
         \ table description'],'column_name_stemmed_texts'=>['searchquery','searchquery\
         \ 2'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'column_name_texts'=>['searchquery','searchquery\
         \ 2'],'column_description_stemmed_texts'=>['searchquery column description','searchquery\
-        \ column description 2'],'score'=>1.5346056E7}]}},{'groupValue'=>'User 1000006','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.4468401E7,'docs'=>[{'id'=>'User\
-        \ 1000006','first_name_texts'=>['searchquery'],'username_texts'=>['owner'],'first_name_stemmed_texts'=>['searchquery'],'email_texts'=>['searchquery@roob.org'],'username_stemmed_texts'=>['owner'],'last_name_stemmed_texts'=>['Funk'],'last_name_texts'=>['Funk'],'email_stemmed_texts'=>['searchquery@roob.org'],'score'=>1.4468401E7}]}},{'groupValue'=>'LinkedTableauWorkfile\
+        \ column description 2'],'score'=>1.5346056E7}]}},{'groupValue'=>'User 1000006','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.4146609E7,'docs'=>[{'id'=>'User\
+        \ 1000006','first_name_texts'=>['searchquery'],'username_texts'=>['owner'],'first_name_stemmed_texts'=>['searchquery'],'email_texts'=>['searchquery@schmeler.biz'],'username_stemmed_texts'=>['owner'],'last_name_stemmed_texts'=>['VonRueden'],'last_name_texts'=>['VonRueden'],'email_stemmed_texts'=>['searchquery@schmeler.biz'],'score'=>1.4146609E7}]}},{'groupValue'=>'LinkedTableauWorkfile\
         \ 1000002','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.2494933E7,'docs'=>[{'id'=>'LinkedTableauWorkfile\
         \ 1000002','file_name_stemmed_texts'=>['searchquery'],'file_name_texts'=>['searchquery'],'score'=>1.2494933E7}]}},{'groupValue'=>'ChorusWorkfile\
         \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.0851301E7,'docs'=>[{'id'=>'ChorusWorkfile\
@@ -140,7 +140,7 @@ http_interactions:
         \ table description'],'column_description_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
         \ column description','@@@hl@@@searchquery@@@endhl@@@ column description 2'],'database_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_table'],'column_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@','@@@hl@@@searchquery@@@endhl@@@\
         \ 2'],'schema_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema'],'column_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@','@@@hl@@@searchquery@@@endhl@@@\
-        \ 2']},'User 1000006'=>{'first_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@@roob.org'],'first_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_texts'=>['@@@hl@@@searchquery@@@endhl@@@@roob.org']},'LinkedTableauWorkfile\
+        \ 2']},'User 1000006'=>{'first_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@@schmeler.biz'],'first_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_texts'=>['@@@hl@@@searchquery@@@endhl@@@@schmeler.biz']},'LinkedTableauWorkfile\
         \ 1000002'=>{'file_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'file_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@']},'ChorusWorkfile\
         \ 1000011'=>{'description_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'description_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'version_comments_stemmed_texts'=>['Committed\
         \ to @@@hl@@@searchquery@@@endhl@@@'],'version_comments_texts'=>['Committed\
@@ -183,5 +183,5 @@ http_interactions:
         \ example gnip account'],'description_texts'=>['a @@@hl@@@searchquery@@@endhl@@@\
         \ example gnip account']}}}"
     http_version: '1.1'
-  recorded_at: Wed, 10 Jul 2013 18:58:35 GMT
+  recorded_at: Wed, 10 Jul 2013 20:50:17 GMT
 recorded_with: VCR 2.3.0
