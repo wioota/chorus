@@ -558,6 +558,7 @@ describe("chorus global", function() {
 
     describe("#requireLogin", function() {
         beforeEach(function() {
+            stubDefer();
             this.chorus.initialize();
             Backbone.history.fragment = "/foo";
             setLoggedInUser({id: "1", username: "iAmNumberOne"}, this.chorus);
