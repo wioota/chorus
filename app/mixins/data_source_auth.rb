@@ -11,6 +11,8 @@ module DataSourceAuth
   end
 
   def account_for_current_user(resource)
-    resource.data_source.account_for_user!(current_user)
+    if resource.data_source.respond_to? :account_for_user!
+      resource.data_source.account_for_user!(current_user)
+    end
   end
 end

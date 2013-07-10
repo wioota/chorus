@@ -156,6 +156,12 @@ FactoryGirl.define do
     end
   end
 
+  factory :hdfs_dataset_statistics do
+    initialize_with do
+      new({ 'file_mask' => 'A file mask' })
+    end
+  end
+
   factory :workspace do
     sequence(:name) { |n| "workspace#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     owner

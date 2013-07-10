@@ -22,25 +22,35 @@ class DatasetStatistics
   def self.build_for(dataset, account)
     if dataset.kind_of?(ChorusView)
       build_for_chorus_view(dataset, account)
+    elsif dataset.kind_of?(HdfsDataset)
+      build_for_hdfs_dataset(dataset)
     else
-      connection = dataset.schema.connect_with(account)
-      metadata = connection.metadata_for_dataset(dataset.name)
-
-      if metadata
-        if metadata['partition_count'].to_i > 0
-          metadata['disk_size'] = partition_disk_size(connection, dataset.name, metadata)
-        end
-
-        self.new(metadata)
-      end
+      build_for_db_dataset(account, dataset)
     end
   end
 
   private
 
+  def self.build_for_db_dataset(account, dataset)
+    connection = dataset.schema.connect_with(account)
+    metadata = connection.metadata_for_dataset(dataset.name)
+
+    if metadata
+      if metadata['partition_count'].to_i > 0
+        metadata['disk_size'] = partition_disk_size(connection, dataset.name, metadata)
+      end
+
+      self.new(metadata)
+    end
+  end
+
   def self.build_for_chorus_view(dataset, account)
     result = dataset.schema.connect_with(account).prepare_and_execute_statement(dataset.query, :describe_only => true)
     self.new('column_count' => result.columns.count)
+  end
+
+  def self.build_for_hdfs_dataset(dataset)
+    HdfsDatasetStatistics.new('file_mask' => dataset.file_mask)
   end
 
   def self.partition_disk_size(connection, name, metadata)

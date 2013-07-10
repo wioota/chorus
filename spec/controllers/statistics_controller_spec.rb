@@ -105,5 +105,17 @@ describe StatisticsController do
         end
       end
     end
+
+    context 'when the dataset is a HdfsDataset' do
+      let!(:table) { datasets(:hadoop) }
+      let(:data_source_account) { nil }
+
+      it "should retrieve the db object for a schema" do
+        get :show, :dataset_id => table.to_param
+
+        response.code.should == "200"
+        decoded_response.file_mask.should == table.file_mask
+      end
+    end
   end
 end

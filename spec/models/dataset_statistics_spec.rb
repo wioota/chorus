@@ -89,5 +89,13 @@ describe DatasetStatistics do
         DatasetStatistics.build_for(chorus_view, account).column_count.should == 5
       end
     end
+
+     context "for Hdfs Datasets" do
+       let(:dataset) { datasets(:hadoop) }
+
+       it 'retreives the file_mask' do
+         DatasetStatistics.build_for(dataset, nil).file_mask.should == dataset.file_mask
+       end
+     end
   end
 end
