@@ -35,4 +35,16 @@ describe HdfsDatasetsController do
       }.to change { workspace.associated_datasets.count }.by(1)
     end
   end
+
+  describe '#update' do
+    let(:dataset) { datasets(:hadoop) }
+    let!(:old_name) { dataset.name }
+    let(:new_name) { 'Cephalopodiatry' }
+
+    it "updates the attributes of the appropriate hdfs Dataset" do
+      expect {
+        put :update, :name => new_name, :id => dataset.id
+      }.to change { dataset.reload.name }.from(old_name).to(new_name)
+    end
+  end
 end

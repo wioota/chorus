@@ -1,6 +1,6 @@
 describe("chorus.models.HdfsDataset", function() {
     beforeEach(function () {
-        this.model = backboneFixtures.workspaceDataset.hdfsDataset();
+        this.model = backboneFixtures.workspaceDataset.hdfsDataset({id: null});
     });
 
     describe('dataSource', function () {
@@ -10,20 +10,18 @@ describe("chorus.models.HdfsDataset", function() {
     });
 
     describe("#urlTemplate", function() {
-        context("when it is a post", function() {
-            it("returns the correct url", function () {
-                expect(this.model.url({ method: 'create' })).toMatchUrl("/hdfs_datasets");
-            });
+        it("returns the correct create url", function () {
+            expect(this.model.url({ method: 'create' })).toMatchUrl("/hdfs_datasets/");
         });
 
-        context("when it is anything else", function() {
-            beforeEach(function () {
-                this.model.set("id", 1234);
-            });
+        it("returns the correct update url", function () {
+            this.model.set("id", 1234);
+            expect(this.model.url({ method: 'update' })).toMatchUrl("/hdfs_datasets/1234");
+        });
 
-            it("returns the correct url", function () {
-                expect(this.model.url({ method: 'read' })).toMatchUrl("/datasets/1234");
-            });
+        it("returns the show url when it is anything else", function () {
+            this.model.set("id", 1234);
+            expect(this.model.url({ method: 'read' })).toMatchUrl("/datasets/1234");
         });
     });
 });

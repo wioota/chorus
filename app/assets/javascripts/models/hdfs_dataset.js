@@ -3,8 +3,11 @@ chorus.models.HdfsDataset = chorus.models.WorkspaceDataset.extend({
 
     urlTemplate: function(options) {
         var method = options && options.method;
-        if(method === "create") {
-            return "hdfs_datasets";
+        if(method === "create" || method === "update") {
+            var base = "hdfs_datasets/";
+
+            var completeUrl = this.id ? base + this.id : base;
+            return completeUrl;
         } else {
             return "datasets/{{id}}";
         }
