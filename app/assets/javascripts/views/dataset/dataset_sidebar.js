@@ -19,7 +19,8 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         "click a.import_now": "launchImportNowDialog",
         "click a.create_schedule": "launchImportSchedulerDialog",
         "click a.edit_schedule": "launchImportSchedulerDialog",
-        "click a.download": "launchDatasetDownloadDialog"
+        "click a.download": "launchDatasetDownloadDialog",
+        "click a.edit_hdfs_dataset": "launchEditHdfsDatasetDialog"
     },
 
     subviews: {
@@ -217,6 +218,12 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     launchDatasetDownloadDialog: function(e) {
         e && e.preventDefault();
         var dialog = new chorus.dialogs.DatasetDownload({pageModel: this.resource});
+        dialog.launchModal();
+    },
+
+    launchEditHdfsDatasetDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.EditHdfsDatasetDialog({model: this.resource});
         dialog.launchModal();
     },
 

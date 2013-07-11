@@ -289,6 +289,15 @@ describe("chorus.views.DatasetSidebar", function() {
             });
         });
 
+        context("for a hdfs dataset", function() {
+            beforeEach(function () {
+                this.dataset = backboneFixtures.workspaceDataset.hdfsDataset();
+                chorus.PageEvents.trigger("dataset:selected", this.dataset);
+            });
+
+            itBehavesLike.aDialogLauncher("a.edit_hdfs_dataset", chorus.dialogs.EditHdfsDatasetDialog);
+        });
+
         context("when an oracle dataset is selected", function() {
             beforeEach(function() {
                 this.oracleDataset = backboneFixtures.oracleDataset({id: 12});

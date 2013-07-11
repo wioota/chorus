@@ -262,5 +262,9 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         if (!name) return "";
         var length = 15;
         return (name.length < length) ? name : name.slice(0, length-3).trim() + "...";
+    },
+
+    editHdfsDataset: function() {
+        return this.resource.get("entitySubtype") === "HDFS";
     }
 });

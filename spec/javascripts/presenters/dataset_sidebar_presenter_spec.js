@@ -418,4 +418,15 @@ describe("chorus.presenters.DatasetSidebar", function() {
             expect(this.presenter.currentUserCanDuplicateChorusViews()).toBe(true);
         });
     });
+
+    context("with an hdfs dataset", function() {
+        beforeEach(function() {
+            var resource = backboneFixtures.workspaceDataset.hdfsDataset();
+            this.presenter = new chorus.presenters.DatasetSidebar(resource);
+        });
+
+        it("permits editing file mask", function() {
+            expect(this.presenter.editHdfsDataset()).toBe(true);
+        });
+    });
 });

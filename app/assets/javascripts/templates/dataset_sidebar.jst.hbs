@@ -61,6 +61,9 @@
             {{/if}}
 
             <li><a class="edit_tags">{{t "sidebar.edit_tags"}}</a></li>
+            {{#if editHdfsDataset}}
+                <li><a class="edit_hdfs_dataset">{{t "actions.edit_hdfs_dataset"}}</a></li>
+            {{/if}}
 
             {{#unless workspaceArchived}}
                 {{#if canExport}}
