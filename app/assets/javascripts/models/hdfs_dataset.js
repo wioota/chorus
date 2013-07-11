@@ -1,6 +1,14 @@
 chorus.models.HdfsDataset = chorus.models.WorkspaceDataset.extend({
     constructorName: "HdfsDataset",
-    urlTemplate: "hdfs_datasets",
+
+    urlTemplate: function(options) {
+        var method = options && options.method;
+        if(method === "create") {
+            return "hdfs_datasets";
+        } else {
+            return "datasets/{{id}}";
+        }
+    },
 
     initialize: function () {
         this._super('initialize');

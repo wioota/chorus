@@ -152,7 +152,7 @@ describe("chorus.models.Dataset", function() {
             },
 
             "HDFS": {
-                "VIEW": "hdfs_dataset_large.png"
+                "HDFS": "hdfs_dataset_large.png"
             }
         };
 
@@ -346,7 +346,8 @@ describe("chorus.models.Dataset", function() {
             "VIEW": "view",
             "EXTERNAL_TABLE": "table",
             "MASTER_TABLE": "table",
-            "CHORUS_VIEW": "query"
+            "CHORUS_VIEW": "query",
+            "HDFS": "file_mask"
         };
 
         _.each(expectedTypeMap, function(str, type) {

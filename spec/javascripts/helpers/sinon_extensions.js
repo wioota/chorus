@@ -51,7 +51,7 @@ _.extend(sinon.fakeServer, {
     lastUpdateFor: function(model) {
         return _.last(_.filter(this.updates(), function(potentialRequest) {
             var uri = new URI(potentialRequest.url);
-            var modelUri = new URI(model.url());
+            var modelUri = new URI(model.url({method: "update"}));
             return uri.equals(modelUri);
         }));
     },
@@ -59,7 +59,7 @@ _.extend(sinon.fakeServer, {
     lastDestroyFor: function(model) {
         return _.last(_.filter(this.destroys(), function(potentialRequest) {
             var uri = new URI(potentialRequest.url);
-            var modelUri = new URI(model.url());
+            var modelUri = new URI(model.url({method: "destroy"}));
             return uri.equals(modelUri);
         }));
     },
@@ -67,7 +67,7 @@ _.extend(sinon.fakeServer, {
     lastCreateFor: function(model) {
         return _.last(_.filter(this.creates(), function(potentialRequest) {
             var uri = new URI(potentialRequest.url);
-            var modelUri = new URI(model.url());
+            var modelUri = new URI(model.url({method: "create"}));
             return uri.equals(modelUri);
         }));
     },

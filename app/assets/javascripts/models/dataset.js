@@ -355,7 +355,8 @@ chorus.models.Dataset = chorus.models.Base.include(
         "VIEW": "view",
         "EXTERNAL_TABLE": "table",
         "MASTER_TABLE": "table",
-        "CHORUS_VIEW": "query"
+        "CHORUS_VIEW": "query",
+        "HDFS": "file_mask"
     },
 
     iconMap: {
@@ -380,7 +381,7 @@ chorus.models.Dataset = chorus.models.Base.include(
         },
 
         "HDFS": {
-            "VIEW": "hdfs_dataset"
+            "HDFS": "hdfs_dataset"
         }
     }
 });

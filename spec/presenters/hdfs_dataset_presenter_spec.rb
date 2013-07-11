@@ -13,6 +13,6 @@ describe HdfsDatasetPresenter, :type => :view do
     hash[:hdfs_data_source][:id].should == dataset.hdfs_data_source.id
     hash[:hdfs_data_source][:name].should == dataset.hdfs_data_source.name
     hash[:entity_subtype].should == 'HDFS'
-    hash[:object_type].should == 'VIEW'
+    hash[:object_type].should == 'HDFS'
   end
 end
