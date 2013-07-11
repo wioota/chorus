@@ -470,6 +470,27 @@ describe Workspace do
     let(:workspace) { workspaces(:public_with_no_collaborators) }
     let(:dataset) { FactoryGirl.create(:gpdb_table) }
 
+    context "when the Dataset has no Schema and the Workspace has no Sandbox" do
+      let(:dataset) { datasets(:hadoop) }
+      let(:workspace) { workspaces(:typeahead_private) } # Trust me, it has no sandbox
+
+      context "when the dataset is in source datasets" do
+        before do
+          workspace.associate_datasets(users(:owner), [dataset])
+        end
+
+        it "returns true" do
+          workspace.has_dataset?(dataset).should be_true
+        end
+      end
+
+      context "when the dataset is unassociated" do
+        it "returns false" do
+          workspace.has_dataset?(dataset).should be_false
+        end
+      end
+    end
+
     context "when the workspace automatically adds sandbox tables" do
       before do
         workspace.show_sandbox_datasets = true
