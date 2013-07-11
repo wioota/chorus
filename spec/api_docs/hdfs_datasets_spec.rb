@@ -19,4 +19,19 @@ resource 'HdfsDataset' do
       status.should == 201
     end
   end
+
+  put "/hdfs_datasets/:id" do
+    parameter :id, "Hadoop File Mask Id"
+    parameter :name, "Name"
+    parameter :file_mask, "Hadoop File Mask"
+    required_parameters :id
+
+    let(:id) { datasets(:hadoop).id }
+    let(:name) { Faker::Name.name }
+    let(:file_mask) { "/foo/*/bar" }
+
+    example_request "Update a Hadoop File Mask Dataset" do
+      status.should == 200
+    end
+  end
 end
