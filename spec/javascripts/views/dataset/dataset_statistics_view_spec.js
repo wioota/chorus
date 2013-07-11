@@ -1,4 +1,5 @@
 describe("chorus.views.DatasetStatistics", function() {
+    context("for a DB Dataset", function () {
     beforeEach(function() {
         this.dataset = backboneFixtures.workspaceDataset.datasetTable();
         this.view = new chorus.views.DatasetStatistics({ model: this.dataset });
@@ -113,6 +114,51 @@ describe("chorus.views.DatasetStatistics", function() {
                 this.stats.fetch();
                 this.server.completeFetchFor(this.stats);
                 expect(this.view.postRender).toHaveBeenCalled();
+            });
+        });
+    });
+    });
+
+    context("for a HDFS Dataset", function () {
+        beforeEach(function() {
+            this.dataset = backboneFixtures.workspaceDataset.hdfsDataset();
+            this.view = new chorus.views.DatasetStatistics({ model: this.dataset });
+            this.view.render();
+        });
+
+        it("fetches the statistics for the dataset", function() {
+            expect(this.dataset.statistics()).toHaveBeenFetched();
+        });
+
+        context("when the statistics arrive", function() {
+            beforeEach(function() {
+                this.stats = this.dataset.statistics();
+                this.server.completeFetchFor(this.stats, backboneFixtures.hdfsDatasetStatisticsJson().response);
+            });
+
+            it("displays the dataset's name", function() {
+                expect(this.view.$(".table_name").text()).toBe(this.dataset.get("objectName"));
+            });
+
+            it("displays the dataset's file_mask", function() {
+                expect(this.view.$(".file_mask .value").text()).toBe(this.dataset.get("fileMask"));
+            });
+
+            it("displays the dataset's translated type", function() {
+                var humanizedDatasetType = Handlebars.helpers.humanizedDatasetType(this.dataset.attributes, this.dataset.statistics());
+                var text = this.view.$(".table_type").text();
+
+                expect(text).not.toMatchTranslation("loading");
+                expect(text).toBe(humanizedDatasetType);
+            });
+
+            describe("when the statistics are re-fetched", function() {
+                it("re-renders", function() {
+                    spyOn(this.view, 'postRender');
+                    this.stats.fetch();
+                    this.server.completeFetchFor(this.stats);
+                    expect(this.view.postRender).toHaveBeenCalled();
+                });
             });
         });
     });

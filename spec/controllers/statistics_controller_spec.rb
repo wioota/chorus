@@ -107,14 +107,18 @@ describe StatisticsController do
     end
 
     context 'when the dataset is a HdfsDataset' do
-      let!(:table) { datasets(:hadoop) }
+      let!(:dataset) { datasets(:hadoop) }
       let(:data_source_account) { nil }
 
       it "should retrieve the db object for a schema" do
-        get :show, :dataset_id => table.to_param
+        get :show, :dataset_id => dataset.to_param
 
         response.code.should == "200"
-        decoded_response.file_mask.should == table.file_mask
+        decoded_response.file_mask.should == dataset.file_mask
+      end
+
+      generate_fixture "hdfsDatasetStatistics.json" do
+        get :show, :dataset_id => dataset.to_param
       end
     end
   end

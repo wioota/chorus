@@ -105,6 +105,8 @@ window.BackboneFixtureDefinitions = {
         model: "DatasetStatistics"
     },
 
+    hdfsDatasetStatistics: { model: "DatasetStatistics" },
+
     draft: {},
 
     forbiddenDataSource: {},

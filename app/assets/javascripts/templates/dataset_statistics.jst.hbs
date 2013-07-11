@@ -42,6 +42,12 @@
                 <div class="value" title="{{statistics.formattedDiskSize}}">{{statistics.formattedDiskSize}}</div>
             </div>
             {{/if}}
+            {{#if statistics.fileMask}}
+                <div class="pair file_mask">
+                    <div class="key">{{t "dataset.statistics.file_mask"}}</div>
+                    <div class="value" title="{{statistics.fileMask}}">{{statistics.fileMask}}</div>
+                </div>
+            {{/if}}
         </div>
         {{#if statistics.description}}
         <div class='description'>
