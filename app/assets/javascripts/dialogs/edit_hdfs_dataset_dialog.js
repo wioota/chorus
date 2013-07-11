@@ -35,6 +35,7 @@ chorus.dialogs.EditHdfsDatasetDialog = chorus.dialogs.Base.include(chorus.Mixins
 
     modelSaved: function() {
         chorus.toast("edit_hdfs_dataset.toast");
+        this.model.trigger('invalidated');
         this.closeModal();
     }
 });

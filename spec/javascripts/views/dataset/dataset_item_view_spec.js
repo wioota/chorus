@@ -187,13 +187,19 @@ describe("chorus.views.DatasetItem", function() {
 
     describe("when the model received an 'invalidated' trigger", function() {
         beforeEach(function() {
-            spyOn(this.dataset, "fetch");
+            spyOn(this.view, "render");
         });
 
         it("reloads the model", function() {
             this.dataset.trigger("invalidated");
-            expect(this.dataset.fetch).toHaveBeenCalled();
+            expect(this.dataset).toHaveBeenFetched();
         });
+
+        it("rerenders the view", function () {
+            this.dataset.trigger("invalidated");
+            expect(this.view.render).toHaveBeenCalled();
+        });
+
     });
 
     describe("presenting tags", function() {

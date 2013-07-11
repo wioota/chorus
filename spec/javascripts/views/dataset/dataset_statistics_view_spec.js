@@ -6,6 +6,13 @@ describe("chorus.views.DatasetStatistics", function() {
         this.view.render();
     });
 
+    describe("when the model received an 'invalidated' trigger", function() {
+        it("reloads the model", function() {
+            this.dataset.trigger('invalidated');
+            expect(this.dataset.statistics()).toHaveBeenFetched();
+        });
+    });
+
     it("fetches the statistics for the dataset", function() {
         expect(this.dataset.statistics()).toHaveBeenFetched();
     });
@@ -124,6 +131,13 @@ describe("chorus.views.DatasetStatistics", function() {
             this.dataset = backboneFixtures.workspaceDataset.hdfsDataset();
             this.view = new chorus.views.DatasetStatistics({ model: this.dataset });
             this.view.render();
+        });
+
+        describe("when the model received an 'invalidated' trigger", function() {
+            it("reloads the model", function() {
+                this.dataset.trigger('invalidated');
+                expect(this.dataset.statistics()).toHaveBeenFetched();
+            });
         });
 
         it("fetches the statistics for the dataset", function() {
