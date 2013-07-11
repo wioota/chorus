@@ -36,7 +36,7 @@ describe("chorus.views.WorkspaceDatasetIndexPageButtons", function() {
 
                 it("enables the 'Import File' and 'Hadoop File Mask' button", function() {
                     expect(this.qtipElement.find(".import_file")).not.toHaveClass("disabled");
-                    expect(this.qtipElement.find(".create_file_mask")).not.toHaveClass("disabled");
+                    expect(this.qtipElement.find(".create_hdfs_dataset")).not.toHaveClass("disabled");
                 });
 
                 context("clicking on 'Import File'", function() {
@@ -50,11 +50,11 @@ describe("chorus.views.WorkspaceDatasetIndexPageButtons", function() {
                 });
 
                 context("clicking on 'Hadoop File Mask'", function() {
-                    it("launches the CreateFileMask dialog", function() {
-                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.CreateFileMask);
-                        expect(this.qtipElement.find('.create_file_mask')).toContainTranslation('actions.create_file_mask');
-                        this.qtipElement.find('.create_file_mask').click();
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateFileMask);
+                    it("launches the CreateHdfsDataset dialog", function() {
+                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.CreateHdfsDataset);
+                        expect(this.qtipElement.find('.create_hdfs_dataset')).toContainTranslation('actions.create_hdfs_dataset');
+                        this.qtipElement.find('.create_hdfs_dataset').click();
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateHdfsDataset);
                         expect(this.modalSpy.lastModal().options.workspace).toBe(this.workspace);
                     });
                 });
@@ -69,7 +69,7 @@ describe("chorus.views.WorkspaceDatasetIndexPageButtons", function() {
                 it("hides the 'Import File' option", function() {
                     this.view.$("button.add_data").click();
                     expect(this.qtipElement.find(".import_file").closest("li")).toHaveClass("hidden");
-                    expect(this.qtipElement.find(".create_file_mask").closest("li")).not.toHaveClass("hidden");
+                    expect(this.qtipElement.find(".create_hdfs_dataset").closest("li")).not.toHaveClass("hidden");
                 });
             });
         });

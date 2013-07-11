@@ -6,7 +6,7 @@ chorus.views.WorkspaceDatasetIndexPageButtons = chorus.views.Base.extend({
 
     createActions: [
         {className: 'import_file', text: t("actions.import_file")},
-        {className: 'create_file_mask', text: t("actions.create_file_mask")}
+        {className: 'create_hdfs_dataset', text: t("actions.create_hdfs_dataset")}
     ],
 
     menuEvents: {
@@ -14,9 +14,9 @@ chorus.views.WorkspaceDatasetIndexPageButtons = chorus.views.Base.extend({
             e && e.preventDefault();
             new chorus.dialogs.FileImport({ workspace: this.model }).launchModal();
         },
-        "a.create_file_mask": function(e) {
+        "a.create_hdfs_dataset": function(e) {
             e && e.preventDefault();
-            new chorus.dialogs.CreateFileMask({ workspace: this.model }).launchModal();
+            new chorus.dialogs.CreateHdfsDataset({ workspace: this.model }).launchModal();
         }
     },
 

@@ -1,18 +1,18 @@
-describe("chorus.dialogs.CreateFileMask", function() {
+describe("chorus.dialogs.CreateHdfsDataset", function() {
     beforeEach(function() {
         this.modalSpy = stubModals();
         this.workspace = backboneFixtures.workspace();
         this.dataSources = [backboneFixtures.hdfsDataSource(), backboneFixtures.hdfsDataSource(), backboneFixtures.hdfsDataSource()];
-        this.dialog = new chorus.dialogs.CreateFileMask({ workspace: this.workspace });
+        this.dialog = new chorus.dialogs.CreateHdfsDataset({ workspace: this.workspace });
         this.dialog.launchModal();
     });
 
     it("shows the right title", function() {
-        expect(this.dialog.title).toMatchTranslation("create_file_mask_dialog.title");
+        expect(this.dialog.title).toMatchTranslation("create_hdfs_dataset_dialog.title");
     });
 
     it("has the create and cancel buttons", function() {
-        expect(this.dialog.$("button.submit")).toContainTranslation("create_file_mask_dialog.submit");
+        expect(this.dialog.$("button.submit")).toContainTranslation("create_hdfs_dataset_dialog.submit");
         expect(this.dialog.$("button.cancel")).toContainTranslation("actions.cancel");
     });
 
@@ -43,7 +43,7 @@ describe("chorus.dialogs.CreateFileMask", function() {
             });
 
             it("displays a message", function() {
-                expect(this.dialog.$(".data_source")).toContainTranslation("create_file_mask_dialog.no_data_sources");
+                expect(this.dialog.$(".data_source")).toContainTranslation("create_hdfs_dataset_dialog.no_data_sources");
             });
         });
     });
@@ -95,7 +95,7 @@ describe("chorus.dialogs.CreateFileMask", function() {
                 });
 
                 it("gives a toast", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith('create_file_mask_dialog.toast');
+                    expect(chorus.toast).toHaveBeenCalledWith('create_hdfs_dataset_dialog.toast');
                 });
             });
 

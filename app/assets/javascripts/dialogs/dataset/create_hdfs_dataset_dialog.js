@@ -1,10 +1,10 @@
-chorus.dialogs.CreateFileMask = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
+chorus.dialogs.CreateHdfsDataset = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
 
-    constructorName: "CreateFileMaskDialog",
+    constructorName: "CreateHdfsDatasetDialog",
 
-    templateName: "create_file_mask",
+    templateName: "create_hdfs_dataset",
 
-    title: t("create_file_mask_dialog.title"),
+    title: t("create_hdfs_dataset_dialog.title"),
 
     setup: function() {
         this.workspace = this.options.workspace;
@@ -54,7 +54,7 @@ chorus.dialogs.CreateFileMask = chorus.dialogs.Base.include(chorus.Mixins.Dialog
     },
 
     modelSaved: function() {
-        chorus.toast("create_file_mask_dialog.toast");
+        chorus.toast("create_hdfs_dataset_dialog.toast");
         this.closeModal();
     },
 
