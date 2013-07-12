@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>27,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>25,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
         \ last_name_texts username_texts email_texts tag_names_texts name_texts description_texts\
         \ summary_texts file_name_texts version_comments_texts database_name_texts\
         \ table_description_texts schema_name_texts column_name_texts column_description_texts\
@@ -48,14 +48,14 @@ http_interactions:
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
         \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>3,'ngroups'=>3,'groups'=>[{'groupValue'=>'ChorusView\
         \ 1000023','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>13.89083,'docs'=>[{'id'=>'Events::NoteOnWorkspaceDataset\
-        \ 1000056','body_stemmed_texts'=>['workspacedatasetnotesearch'],'body_texts'=>['workspacedatasetnotesearch'],'score'=>13.89083}]}},{'groupValue'=>'GpdbTable\
-        \ 1000012','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>13.89083,'docs'=>[{'id'=>'Events::NoteOnWorkspaceDataset\
         \ 1000057','body_stemmed_texts'=>['workspacedatasetnotesearch'],'body_texts'=>['workspacedatasetnotesearch'],'score'=>13.89083}]}},{'groupValue'=>'GpdbTable\
+        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>13.89083,'docs'=>[{'id'=>'Events::NoteOnWorkspaceDataset\
+        \ 1000058','body_stemmed_texts'=>['workspacedatasetnotesearch'],'body_texts'=>['workspacedatasetnotesearch'],'score'=>13.89083}]}},{'groupValue'=>'GpdbTable\
         \ 1000007','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>13.89083,'docs'=>[{'id'=>'Events::NoteOnWorkspaceDataset\
-        \ 1000058','body_stemmed_texts'=>['workspacedatasetnotesearch'],'body_texts'=>['workspacedatasetnotesearch'],'score'=>13.89083}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Dataset',3]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'Events::NoteOnWorkspaceDataset\
-        \ 1000056'=>{'body_stemmed_texts'=>['@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'],'body_texts'=>['@@@hl@@@workspacedatasetnotesearch@@@endhl@@@']},'Events::NoteOnWorkspaceDataset\
+        \ 1000059','body_stemmed_texts'=>['workspacedatasetnotesearch'],'body_texts'=>['workspacedatasetnotesearch'],'score'=>13.89083}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Dataset',3]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'Events::NoteOnWorkspaceDataset\
         \ 1000057'=>{'body_stemmed_texts'=>['@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'],'body_texts'=>['@@@hl@@@workspacedatasetnotesearch@@@endhl@@@']},'Events::NoteOnWorkspaceDataset\
-        \ 1000058'=>{'body_stemmed_texts'=>['@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'],'body_texts'=>['@@@hl@@@workspacedatasetnotesearch@@@endhl@@@']}}}"
+        \ 1000058'=>{'body_stemmed_texts'=>['@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'],'body_texts'=>['@@@hl@@@workspacedatasetnotesearch@@@endhl@@@']},'Events::NoteOnWorkspaceDataset\
+        \ 1000059'=>{'body_stemmed_texts'=>['@@@hl@@@workspacedatasetnotesearch@@@endhl@@@'],'body_texts'=>['@@@hl@@@workspacedatasetnotesearch@@@endhl@@@']}}}"
     http_version: '1.1'
-  recorded_at: Tue, 09 Jul 2013 20:42:12 GMT
+  recorded_at: Fri, 12 Jul 2013 18:43:10 GMT
 recorded_with: VCR 2.3.0
