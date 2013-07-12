@@ -24,7 +24,7 @@ chorus.models.HdfsDataset = chorus.models.WorkspaceDataset.extend({
         return new chorus.models.HdfsDataSource(this.get("hdfsDataSource"));
     },
 
-    content: function () {
-        return this.get('content');
+    content: function() {
+        return (this.get("content") && this.get("content").join("\n")) || "";
     }
 });

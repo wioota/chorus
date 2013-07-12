@@ -53,4 +53,31 @@ describe HdfsDataset do
       dataset.file_mask.should == file_mask
     end
   end
+
+  describe 'contents' do
+    let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
+    before do
+      any_instance_of(Hdfs::QueryService) do |h|
+        stub(h).show(dataset.file_mask) { ["content"] }
+      end
+    end
+
+    it "returns the contents of the hdfs dataset" do
+      dataset.contents.should == ['content']
+    end
+
+    context "corrupted file in file mask" do
+      before do
+        any_instance_of(Hdfs::QueryService) do |h|
+          stub(h).show(dataset.file_mask) { raise FileNotFoundError, "File not found on HDFS" }
+        end
+      end
+
+      it "raises HdfsContentsError when not able to read the file" do
+        expect {
+          dataset.contents
+        }.to raise_error(HdfsDataset::HdfsContentsError)
+      end
+    end
+  end
 end

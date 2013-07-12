@@ -1,7 +1,7 @@
 describe("chorus.pages.HdfsDatasetShowPage", function () {
     beforeEach(function () {
         this.dataset = backboneFixtures.workspaceDataset.hdfsDataset();
-        this.dataset.set("content", "hello, from, hadoop");
+        this.dataset.set("content", ["hello, from, hadoop"]);
         this.workspace = this.dataset.workspace();
         this.datasetId = this.dataset.get('id');
 
@@ -53,7 +53,7 @@ describe("chorus.pages.HdfsDatasetShowPage", function () {
 
         it("shows the dataset content", function() {
             expect(this.page.mainContent.content).toBeA(chorus.views.ReadOnlyTextContent);
-            expect(this.page.mainContent.content.model.get('content')).toBe(this.dataset.get("content"));
+            expect(this.page.mainContent.content.model.get('content')).toEqual(this.dataset.get("content"));
         });
 
         it("shows the DatasetShowContentHeader", function () {
@@ -66,6 +66,17 @@ describe("chorus.pages.HdfsDatasetShowPage", function () {
 
         it("sets up the sidebar", function () {
             expect(this.page.sidebar).toBeA(chorus.views.DatasetSidebar);
+        });
+    });
+
+    describe("when the hdfs dataset is invalidated", function() {
+        beforeEach(function () {
+            this.server.reset();
+            this.page.model.trigger("invalidated");
+        });
+
+        it("the hdfs dataset should refetch", function() {
+            expect(this.page.model).toHaveBeenFetched();
         });
     });
 });

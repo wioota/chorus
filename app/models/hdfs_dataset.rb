@@ -7,6 +7,8 @@ class HdfsDataset < Dataset
   belongs_to :hdfs_data_source
   delegate :data_source, :connect_with, :connect_as, :to => :hdfs_data_source
 
+  HdfsContentsError = Class.new(StandardError)
+
   def self.assemble!(attributes, hdfs_data_source, workspace, user)
       dataset = HdfsDataset.new attributes
       dataset.hdfs_data_source = hdfs_data_source
@@ -14,6 +16,13 @@ class HdfsDataset < Dataset
 
       workspace.associate_datasets(user, [dataset])
       dataset
+  end
+
+  def contents
+    hdfs_query = Hdfs::QueryService.new(hdfs_data_source.host, hdfs_data_source.port, hdfs_data_source.username, hdfs_data_source.version)
+    hdfs_query.show(file_mask)
+  rescue StandardError => e
+    raise HdfsContentsError.new(e)
   end
 
   def self.source_class

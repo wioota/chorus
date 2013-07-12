@@ -3,7 +3,12 @@ require "spec_helper"
 describe HdfsDatasetsController do
   let(:user) { users(:owner) }
 
-  before { log_in user }
+  before do
+    log_in user
+    any_instance_of(HdfsDataset) do |ds|
+      stub(ds).contents { ["content"] }
+    end
+  end
 
   describe '#create' do
     let(:workspace) { workspaces(:public) }

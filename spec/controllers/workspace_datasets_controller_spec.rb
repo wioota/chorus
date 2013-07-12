@@ -35,6 +35,9 @@ describe WorkspaceDatasetsController do
       before do
         stub(workspace).datasets { the_datasets }
         stub(workspace).dataset_count { 42 }
+        any_instance_of(HdfsDataset) do |ds|
+          stub(ds).contents { ["content"] }
+        end
       end
       it "uses authorization" do
         mock(subject).authorize! :show, workspace
@@ -229,6 +232,12 @@ describe WorkspaceDatasetsController do
 
         context "when the dataset is a Hadoop file mask pretending to be a dataset" do
           let(:dataset) { hdfs_dataset }
+
+          before do
+            any_instance_of(HdfsDataset) do |ds|
+              stub(ds).contents { ["content"] }
+            end
+          end
 
           generate_fixture "workspaceDataset/hdfsDataset.json" do
             get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
