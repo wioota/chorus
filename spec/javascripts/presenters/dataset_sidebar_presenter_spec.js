@@ -426,7 +426,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
         });
 
         it("permits editing file mask", function() {
-            expect(this.presenter.editHdfsDataset()).toBe(true);
+            expect(this.presenter.isPresentingHdfsDataset()).toBe(true);
         });
     });
 });

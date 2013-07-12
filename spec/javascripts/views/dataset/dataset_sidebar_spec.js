@@ -289,15 +289,6 @@ describe("combo.chorus.views.DatasetSidebar", function() {
             });
         });
 
-        context("for a hdfs dataset", function() {
-            beforeEach(function () {
-                this.dataset = backboneFixtures.workspaceDataset.hdfsDataset();
-                chorus.PageEvents.trigger("dataset:selected", this.dataset);
-            });
-
-            itBehavesLike.aDialogLauncher("a.edit_hdfs_dataset", chorus.dialogs.EditHdfsDataset);
-        });
-
         context("when an oracle dataset is selected", function() {
             beforeEach(function() {
                 this.oracleDataset = backboneFixtures.oracleDataset({id: 12});
@@ -333,6 +324,19 @@ describe("combo.chorus.views.DatasetSidebar", function() {
 
                 it("displays the preview data dialog", function() {
                     expect(chorus.modal).toBeA(chorus.dialogs.DatasetPreview);
+                });
+            });
+
+            context("for a hdfs dataset", function() {
+                beforeEach(function () {
+                    this.dataset = backboneFixtures.workspaceDataset.hdfsDataset();
+                    chorus.PageEvents.trigger("dataset:selected", this.dataset);
+                });
+
+                itBehavesLike.aDialogLauncher("a.edit_hdfs_dataset", chorus.dialogs.EditHdfsDataset);
+
+                it("does not display the 'Preview Data' link", function() {
+                    expect(this.view.$('.actions .dataset_preview')).not.toExist();
                 });
             });
         });

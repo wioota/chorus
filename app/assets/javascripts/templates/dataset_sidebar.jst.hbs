@@ -61,7 +61,7 @@
             {{/if}}
 
             <li><a class="edit_tags">{{t "sidebar.edit_tags"}}</a></li>
-            {{#if editHdfsDataset}}
+            {{#if isPresentingHdfsDataset}}
                 <li><a class="edit_hdfs_dataset">{{t "actions.edit_hdfs_dataset"}}</a></li>
             {{/if}}
 
@@ -95,7 +95,9 @@
 
             {{#unless noValidCredentials}}
                 {{#if listMode}}
+                    {{#unless isPresentingHdfsDataset}}
                     <li><a class="dataset_preview" href="#">{{t "actions.dataset_preview"}}</a></li>
+                    {{/unless}}
                 {{/if}}
 
                 <li><a class="download dialog" href="#">{{t "actions.download"}}</a></li>

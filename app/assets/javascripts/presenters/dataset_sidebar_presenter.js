@@ -264,7 +264,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return (name.length < length) ? name : name.slice(0, length-3).trim() + "...";
     },
 
-    editHdfsDataset: function() {
+    isPresentingHdfsDataset: function() {
         return this.resource.get("entitySubtype") === "HDFS";
     }
 });
