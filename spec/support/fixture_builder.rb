@@ -150,8 +150,6 @@ FixtureBuilder.configure do |fbuilder|
     alternate_schema = FactoryGirl.create(:gpdb_schema, :name => 'alternate', :database => alternate_database)
     FactoryGirl.create(:gpdb_table, :name => "alternate", :schema => alternate_schema)
 
-    FactoryGirl.create(:hdfs_dataset, :name => "hadoop", :hdfs_data_source => hdfs_data_source)
-
     # Search setup
     searchquery_database = FactoryGirl.create(:gpdb_database, :data_source => owners_data_source, :name => 'searchquery_database')
     searchquery_schema = FactoryGirl.create(:gpdb_schema, :name => "searchquery_schema", :database => searchquery_database)
@@ -233,6 +231,10 @@ FixtureBuilder.configure do |fbuilder|
     Events::WorkspaceMakePublic.by(owner).add(:workspace => public_workspace, :actor => owner)
     Events::WorkspaceMakePrivate.by(owner).add(:workspace => private_workspace, :actor => owner)
     Events::WorkspaceDeleted.by(owner).add(:workspace => public_workspace, :actor => owner)
+
+    # HDFS Datasets need a workspace association
+    attrs = FactoryGirl.build(:hdfs_dataset, :name => "hadoop", :hdfs_data_source => hdfs_data_source).attributes
+    HdfsDataset.assemble!(attrs.merge!(:file_mask => 'slash/star/*'), hdfs_data_source, public_workspace, owner)
 
     # Chorus View
     chorus_view = FactoryGirl.create(:chorus_view, :name => "chorus_view", :schema => default_schema, :query => "select * from a_table", :workspace => public_workspace)

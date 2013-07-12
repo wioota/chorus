@@ -19,13 +19,13 @@ describe AlpineWorkfile do
       let(:hdfs) { hdfs_data_sources(:hadoop) }
       let(:params) do
         {
-          :description => description,
-          :entity_subtype => 'alpine',
-          :versions_attributes => {"0" => {:contents => file}},
-          :hdfs_data_source_id => hdfs.id,
-          :database_id => "",
-          :workspace => workspace,
-          :owner => user
+            :description => description,
+            :entity_subtype => 'alpine',
+            :versions_attributes => {"0" => {:contents => file}},
+            :hdfs_data_source_id => hdfs.id,
+            :database_id => "",
+            :workspace => workspace,
+            :owner => user
         }
       end
 
@@ -149,31 +149,51 @@ describe AlpineWorkfile do
 
   describe "new" do
     context "when passed datasets" do
-      let(:datasetA) { datasets(:table) }
-      let(:datasetB) { datasets(:other_table) }
-      let(:params) { {dataset_ids: [datasetA.id, datasetB.id], workspace: workspace} }
+      context "in a DB" do
+        let(:datasetA) { datasets(:table) }
+        let(:datasetB) { datasets(:other_table) }
+        let(:params) { {dataset_ids: [datasetA.id, datasetB.id], workspace: workspace} }
 
-      it 'sets the execution location to the GpdbDatabase where the datasets live' do
-        AlpineWorkfile.create(params).execution_location.should == datasetA.database
-      end
+        it 'sets the execution location to the GpdbDatabase where the datasets live' do
+          AlpineWorkfile.create(params).execution_location.should == datasetA.database
+        end
 
-      it 'assigns the datasets' do
-        AlpineWorkfile.create(params).datasets.should =~ [datasetA, datasetB]
-      end
+        it 'assigns the datasets' do
+          AlpineWorkfile.create(params).datasets.should =~ [datasetA, datasetB]
+        end
 
-      context "and the datasets are from multiple databases" do
-        let(:datasetB) { FactoryGirl.create(:gpdb_table) }
+        context "and the datasets are from multiple databases" do
+          let(:datasetB) { FactoryGirl.create(:gpdb_table) }
 
-        it "assigns too_many_databases error" do
-          AlpineWorkfile.create(params).errors_on(:datasets).should include(:too_many_databases)
+          it "assigns too_many_databases error" do
+            AlpineWorkfile.create(params).errors_on(:datasets).should include(:too_many_databases)
+          end
+        end
+
+        context "and at least one of the datasets is a chorus view" do
+          let(:datasetB) { datasets(:chorus_view) }
+
+          it "assigns too_many_databases error" do
+            AlpineWorkfile.create(params).errors_on(:datasets).should include(:chorus_view_selected)
+          end
         end
       end
 
-      context "and at least one of the datasets is a chorus view" do
-        let(:datasetB) { datasets(:chorus_view) }
+      context "in a Hadoop Filesystem" do
+        let(:datasetA) { datasets(:hadoop) }
+        let(:datasetB) { FactoryGirl.create(:hdfs_dataset, :hdfs_data_source => datasetA.hdfs_data_source) }
+        let(:params) { {dataset_ids: [datasetA.id, datasetB.id], workspace: workspace} }
 
-        it "assigns too_many_databases error" do
-          AlpineWorkfile.create(params).errors_on(:datasets).should include(:chorus_view_selected)
+        it 'sets the execution location to the HdfsDatSource where the datasets live' do
+          AlpineWorkfile.create(params).execution_location.should == datasetA.hdfs_data_source
+        end
+
+        context "and the datasets are from multiple Hdfs Data Sources" do
+          let(:datasetB) { FactoryGirl.create(:hdfs_dataset) }
+
+          it "assigns too_many_datasources error" do
+            AlpineWorkfile.create(params).errors_on(:datasets).should include(:too_many_databases)
+          end
         end
       end
     end
@@ -213,16 +233,16 @@ describe AlpineWorkfile do
       let(:hdfs_entry_ids) { [hdfs_entry_A.id, hdfs_entry_B.id] }
       let(:params) do
         {
-          :dataset_ids => dataset_ids,
-          :hdfs_entry_ids => hdfs_entry_ids,
-          :workspace => workspace
+            :dataset_ids => dataset_ids,
+            :hdfs_entry_ids => hdfs_entry_ids,
+            :workspace => workspace
         }
       end
 
       it "is invalid" do
         AlpineWorkfile.create(params).should have_error_on(:base)
-          .with_message(:incompatible_params)
-          .with_options(:fields => "dataset_ids, hdfs_entry_ids")
+                                             .with_message(:incompatible_params)
+                                             .with_options(:fields => "dataset_ids, hdfs_entry_ids")
       end
     end
   end
@@ -257,7 +277,7 @@ describe AlpineWorkfile do
   describe "#create_new_version" do
     let(:event_params) do
       {
-        :commit_message => 'new work flow'
+          :commit_message => 'new work flow'
       }
     end
 

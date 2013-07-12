@@ -196,6 +196,10 @@ class Dataset < ActiveRecord::Base
     raise NotImplementedError
   end
 
+  def execution_location
+    raise NotImplementedError
+  end
+
   private
 
   def cancel_imports

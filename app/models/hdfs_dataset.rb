@@ -35,4 +35,8 @@ class HdfsDataset < Dataset
   def verify_in_source(user)
     true
   end
+
+  def execution_location
+    hdfs_data_source
+  end
 end

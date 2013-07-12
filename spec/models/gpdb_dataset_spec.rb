@@ -15,6 +15,12 @@ describe GpdbDataset do
     end
   end
 
+  describe 'execution_location' do
+    it "returns the Dataset's parent database" do
+      dataset.execution_location.should == dataset.database
+    end
+  end
+
   describe "associations" do
     it { should have_many :associated_datasets }
     it { should have_many :bound_workspaces }

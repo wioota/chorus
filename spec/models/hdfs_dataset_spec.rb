@@ -8,6 +8,12 @@ describe HdfsDataset do
     it { should belong_to(:hdfs_data_source) }
   end
 
+  describe 'execution_location' do
+    it "returns the Dataset's Hadoop DataSource" do
+      dataset.execution_location.should == dataset.hdfs_data_source
+    end
+  end
+
   describe 'associable?' do
     it 'is true' do
       dataset.should be_associable

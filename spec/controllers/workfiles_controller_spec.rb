@@ -408,7 +408,41 @@ describe WorkfilesController do
           post :create, params
         end
       end
+
+      context "and a list of HdfsDatasets has been chosen" do
+        let(:workspace_id) { dataset.bound_workspaces.first.id }
+        let(:hdfs_data_source) { dataset.hdfs_data_source }
+        let(:dataset) { datasets(:hadoop) }
+        let(:another_dataset) { FactoryGirl.create(:hdfs_dataset, :hdfs_data_source => dataset.execution_location) }
+        let(:dataset_ids) { [dataset.id.to_s, another_dataset.id.to_s] }
+
+        let(:params) do
+          {
+              :workfile => {
+                  :workspace => {
+                      :id => workspace_id
+                  },
+                  :entity_subtype => "alpine",
+                  :file_name => 'analytical-derivations',
+                  :dataset_ids => dataset_ids
+              },
+              :workspace_id => workspace_id
+          }
+        end
+
+        it 'creates an AlpineWorkfile' do
+          mock_present do |model|
+            model.should be_a AlpineWorkfile
+            model.file_name.should == 'analytical-derivations'
+            model.execution_location.should == hdfs_data_source
+            model.additional_data['dataset_ids'].should =~ dataset_ids
+            model.workspace.should == workspace
+          end
+          post :create, params
+        end
+      end
     end
+
   end
 
   describe "#update" do

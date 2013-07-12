@@ -587,9 +587,9 @@ describe Workspace do
     end
 
     it "should create event and activity when associated" do
-      workspace.associate_datasets(user, [dataset1, dataset2])
-      events = Events::SourceTableCreated.by(user)
-      events.count.should == 2
+      expect {
+        workspace.associate_datasets(user, [dataset1, dataset2])
+      }.to change(Events::SourceTableCreated.by(user), :count).by(2)
     end
   end
 

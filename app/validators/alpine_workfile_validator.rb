@@ -1,13 +1,13 @@
 class AlpineWorkfileValidator < ActiveModel::Validator
   def validate(record)
     ensure_datasets_xor_hdfs_entries(record)
-    ensure_single_database(record)
+    ensure_single_execution_location(record)
     ensure_no_chorus_views(record)
     ensure_single_hdfs_data_source(record)
   end
 
-  def ensure_single_database(record)
-    record_datasets_map = record.datasets.map(&:database)
+  def ensure_single_execution_location(record)
+    record_datasets_map = record.datasets.map(&:execution_location)
     record.errors[:datasets] << :too_many_databases unless record_datasets_map.uniq.count <= 1
   end
 

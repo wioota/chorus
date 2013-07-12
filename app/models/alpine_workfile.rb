@@ -77,7 +77,8 @@ class AlpineWorkfile < Workfile
   end
 
   def determine_execution_location
-    self.execution_location = datasets.first.database unless datasets.empty?
+    # Validations will ensure that all datasets/entries have the same execution location
+    self.execution_location = datasets.first.execution_location unless datasets.empty?
     self.execution_location = hdfs_entries.first.hdfs_data_source unless hdfs_entries.empty?
   end
 

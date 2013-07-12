@@ -59,6 +59,10 @@ class GpdbDataset < Dataset
     false
   end
 
+  def execution_location
+    database
+  end
+
   private
 
   def create_import_event(params, user)
@@ -72,4 +76,3 @@ class GpdbDataset < Dataset
     )
   end
 end
-
