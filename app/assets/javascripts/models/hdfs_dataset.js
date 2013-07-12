@@ -13,6 +13,8 @@ chorus.models.HdfsDataset = chorus.models.WorkspaceDataset.extend({
         }
     },
 
+    showUrlTemplate: "workspaces/{{workspace.id}}/hadoop_datasets/{{id}}",
+
     initialize: function () {
         this._super('initialize');
         this.attributes.entitySubtype = "HDFS";
@@ -20,5 +22,9 @@ chorus.models.HdfsDataset = chorus.models.WorkspaceDataset.extend({
 
     dataSource: function() {
         return new chorus.models.HdfsDataSource(this.get("hdfsDataSource"));
+    },
+
+    content: function () {
+        return this.get('content');
     }
 });

@@ -9,7 +9,7 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
             {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
             {label: this.workspace.displayName(), url: this.workspace.showUrl()},
             {label: t("breadcrumbs.workspaces_data"), url: this.workspace.datasets().showUrl()},
-            {label: this.dataset.get('objectName')}
+            {label: this.dataset.name()}
         ];
     },
 
@@ -109,5 +109,6 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
         if(this.dataset.isChorusView()) {
             chorus.router.navigate(this.dataset.showUrl());
         }
+        //do something for hdfs
     }
 });

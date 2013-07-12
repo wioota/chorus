@@ -24,4 +24,9 @@ describe("chorus.models.HdfsDataset", function() {
             expect(this.model.url({ method: 'read' })).toMatchUrl("/datasets/1234");
         });
     });
+
+    it("has the correct showUrl", function () {
+        this.model.set({id: "123", workspace: {id: "789"}});
+        expect(this.model.showUrl()).toMatchUrl("#/workspaces/789/hadoop_datasets/123");
+    });
 });
