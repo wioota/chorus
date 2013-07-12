@@ -17,7 +17,7 @@ chorus.dialogs.EditHdfsDatasetDialog = chorus.dialogs.Base.include(chorus.Mixins
 
     checkInput: function() {
         return (this.$("input.name").val().trim().length > 0) &&
-            (this.$("input.mask").val().trim().length > 0);
+            (this.$("input.file_mask").val().trim().length > 0);
     },
 
     create: function() {
@@ -29,7 +29,7 @@ chorus.dialogs.EditHdfsDatasetDialog = chorus.dialogs.Base.include(chorus.Mixins
         return {
             name: this.$("input.name").val(),
             datasetId: this.model.id,
-            fileMask: this.$("input.mask").val()
+            fileMask: this.$("input.file_mask").val()
         };
     },
 

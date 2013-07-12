@@ -27,7 +27,7 @@ chorus.dialogs.CreateHdfsDataset = chorus.dialogs.Base.include(chorus.Mixins.Dia
 
     checkInput: function() {
         return (this.$("input.name").val().trim().length > 0) &&
-            (this.$("input.mask").val().trim().length > 0) &&
+            (this.$("input.file_mask").val().trim().length > 0) &&
             this.$("select").val().trim();
     },
 
@@ -62,7 +62,7 @@ chorus.dialogs.CreateHdfsDataset = chorus.dialogs.Base.include(chorus.Mixins.Dia
         return {
             name: this.$("input.name").val(),
             dataSourceId: this.$(".data_source select").val(),
-            fileMask: this.$("input.mask").val()
+            fileMask: this.$("input.file_mask").val()
         };
     }
 });
