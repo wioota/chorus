@@ -12,4 +12,11 @@ describe("chorus.views.HdfsDatasetContentDetails", function() {
     it("has the readonly text", function() {
         expect(this.view.$el).toContainTranslation('hdfs.read_only');
     });
+
+    it("does not show a file mask if the model is not loaded yet", function () {
+        this.model = new chorus.models.HdfsDataset();
+        this.view = new chorus.views.HdfsDatasetContentDetails({ model: this.model });
+        this.view.render();
+        expect(this.view.$el.text().trim()).toBe(t("hdfs.read_only"));
+    });
 });
