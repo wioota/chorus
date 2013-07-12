@@ -15,7 +15,7 @@ describe("chorus.dialogs.EditHdfsDatasetDialog", function() {
     });
 
     it("prepopulates the dataset's file mask", function () {
-        expect(this.dialog.$("input.mask").val()).toEqual(this.dataset.get('fileMask'));
+        expect(this.dialog.$("input.file_mask").val()).toEqual(this.dataset.get('fileMask'));
     });
 
     it("has the save and cancel buttons", function() {
@@ -26,7 +26,7 @@ describe("chorus.dialogs.EditHdfsDatasetDialog", function() {
     context("when the form is filled in", function() {
         beforeEach(function() {
             this.dialog.$("input.name").val("Jim Carrey").change();
-            this.dialog.$("input.mask").val("foo.*.bar").change().keyup();
+            this.dialog.$("input.file_mask").val("foo.*.bar").change().keyup();
         });
 
         it("enables the submit button", function() {

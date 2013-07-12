@@ -53,7 +53,7 @@ describe("chorus.dialogs.CreateHdfsDataset", function() {
             this.server.completeFetchAllFor(this.dialog.dataSources, this.dataSources);
             this.dialog.$("input.name").val("Jim Carrey").change();
             this.dialog.$(".data_source select").val(this.dataSources[2].id).change();
-            this.dialog.$("input.mask").val("foo.*.bar").change().keyup();
+            this.dialog.$("input.file_mask").val("foo.*.bar").change().keyup();
         });
 
         it("enables the submit button", function() {
