@@ -125,7 +125,7 @@ describe("chorus.dialogs.Visualization", function() {
                 beforeEach(function() {
                     chorus.views.ResultsConsole.prototype.initializeDataGrid.reset();
 
-                    this.server.completeSaveFor(this.dialog.task);
+                    this.server.completeCreateFor(this.dialog.task);
                 });
 
                 it("re-draws the chart", function() {
@@ -758,7 +758,7 @@ describe("chorus.dialogs.Visualization", function() {
                         context("when the save completes", function() {
                             beforeEach(function() {
                                 spyOn(chorus, "toast");
-                                this.server.completeSaveFor(this.dialog.workfile, {fileName: "Foo-boxplot_2.png"});
+                                this.server.completeCreateFor(this.dialog.workfile, {fileName: "Foo-boxplot_2.png"});
                             });
 
                             it("should restore the save as workfile button", function() {

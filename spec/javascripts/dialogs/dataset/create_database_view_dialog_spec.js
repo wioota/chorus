@@ -68,7 +68,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                 context("save succeeds", function() {
                     it("shows a toast", function() {
                         spyOn(chorus, "toast");
-                        this.server.completeSaveFor(this.view.model, {id: 'foo', workspace: {id: 25} });
+                        this.server.completeCreateFor(this.view.model, {id: 'foo', workspace: {id: 25} });
                         expect(chorus.toast).toHaveBeenCalledWith("create_database_view.toast_success", {
                             viewName: "a_name",
                             canonicalName: "I.D.S"
@@ -78,7 +78,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                     context("and returned data includes a workspace", function() {
                         it("navigates to show page of new db view", function() {
                             spyOn(chorus.router, 'navigate');
-                            this.server.completeSaveFor(this.view.model, {id: 'foo', workspace: {id: 25} });
+                            this.server.completeCreateFor(this.view.model, {id: 'foo', workspace: {id: 25} });
                             expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/25/datasets/foo");
                         });
                     });
@@ -86,7 +86,7 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                     context("and returned data does not have a workspace", function() {
                         it("uses the Chorus View's workspace to navigate to the show page of the new db view", function() {
                             spyOn(chorus.router, 'navigate');
-                            this.server.completeSaveFor(this.view.model, { id: 'foo' });
+                            this.server.completeCreateFor(this.view.model, { id: 'foo' });
                             expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/42/datasets/foo");
                         });
                     });

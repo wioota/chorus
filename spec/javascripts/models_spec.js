@@ -1001,7 +1001,7 @@ describe("chorus.models.Base", function() {
             context("after saving model", function() {
                 beforeEach(function() {
                     this.model.save();
-                    this.server.completeSaveFor(this.model, {attr2: 'something different', attr3: 'brand new attr'});
+                    this.server.completeCreateFor(this.model, {attr2: 'something different', attr3: 'brand new attr'});
                 });
 
                 it("has unsaved changes still", function() {

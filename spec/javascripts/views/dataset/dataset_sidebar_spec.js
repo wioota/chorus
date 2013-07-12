@@ -197,7 +197,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                 spyOn(chorus.router, "reload");
                                 chorus.modal.$('input').val('stuff');
                                 chorus.modal.$('form').submit();
-                                this.server.completeSaveFor(chorus.modal.model);
+                                this.server.completeCreateFor(chorus.modal.model);
                             });
 
                             it("reloads the current page", function() {
@@ -278,7 +278,7 @@ describe("chorus.views.DatasetSidebar", function() {
                             spyOn(chorus.router, "reload");
                             chorus.modal.$('input').val('stuff');
                             chorus.modal.$('form').submit();
-                            this.server.completeSaveFor(chorus.modal.model);
+                            this.server.completeCreateFor(chorus.modal.model);
                         });
 
                         it("reloads the current page", function() {

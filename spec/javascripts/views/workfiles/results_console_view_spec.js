@@ -475,7 +475,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             describe("when the execution is completed", function() {
                 context("and there are results", function() {
                     beforeEach(function() {
-                        this.server.completeSaveFor(this.task, backboneFixtures.workfileExecutionResults());
+                        this.server.completeCreateFor(this.task, backboneFixtures.workfileExecutionResults());
                         chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
@@ -506,7 +506,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("and the task does not have results", function() {
                     beforeEach(function() {
-                        this.server.completeSaveFor(this.task, backboneFixtures.workfileExecutionResultsEmpty());
+                        this.server.completeCreateFor(this.task, backboneFixtures.workfileExecutionResultsEmpty());
                         chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
@@ -525,7 +525,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                 context("when the spinner has not yet been started", function() {
                     beforeEach(function() {
-                        this.server.completeSaveFor(this.task, backboneFixtures.workfileExecutionResults());
+                        this.server.completeCreateFor(this.task, backboneFixtures.workfileExecutionResults());
                         chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
@@ -536,7 +536,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 context("when the spinner has been started", function() {
                     beforeEach(function() {
                         delete this.view.elapsedTimer;
-                        this.server.completeSaveFor(this.task, backboneFixtures.workfileExecutionResults());
+                        this.server.completeCreateFor(this.task, backboneFixtures.workfileExecutionResults());
                         chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
@@ -586,7 +586,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                     context("when the sql is executed again without errors", function() {
                         beforeEach(function() {
-                            this.server.completeSaveFor(this.task, backboneFixtures.workfileExecutionResults());
+                            this.server.completeCreateFor(this.task, backboneFixtures.workfileExecutionResults());
                             chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                         });
 

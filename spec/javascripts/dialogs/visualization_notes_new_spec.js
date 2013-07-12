@@ -53,7 +53,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
                 this.dialog.$("textarea[name=body]").val("The body of a note");
                 this.dialog.$("form").trigger("submit");
                 spyOnEvent(this.dialog.pageModel, "invalidated");
-                this.server.completeSaveFor(this.dialog.model, _.extend({id: 2}, this.dialog.model.attributes));
+                this.server.completeCreateFor(this.dialog.model, _.extend({id: 2}, this.dialog.model.attributes));
             });
 
             it("calls super#modelSaved", function() {

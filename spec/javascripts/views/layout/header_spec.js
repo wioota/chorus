@@ -541,7 +541,7 @@ describe("chorus.views.Header", function() {
 
                     context("when the login finish successfully", function() {
                         beforeEach(function() {
-                            this.server.completeSaveFor(chorus.session, backboneFixtures.session({user: this.users.at(0).attributes}));
+                            this.server.completeCreateFor(chorus.session, backboneFixtures.session({user: this.users.at(0).attributes}));
                         });
 
                         it("updates the chorus.session.user model", function() {

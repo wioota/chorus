@@ -74,7 +74,7 @@ describe("chorus.dialogs.WorkfilesSqlNew", function() {
                 beforeEach(function() {
                     spyOn(chorus.router, "navigate");
                     spyOnEvent($(document), "close.facebox");
-                    this.server.completeSaveFor(this.dialog.model, _.extend({}, this.dialog.model.attributes, {
+                    this.server.completeCreateFor(this.dialog.model, _.extend({}, this.dialog.model.attributes, {
                         fileType: 'SQL',
                         id: '10108'
                     }));

@@ -687,7 +687,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
 
                             context("after the save returns successfully", function() {
                                 beforeEach(function() {
-                                    this.server.completeSaveFor(this.dialog.account);
+                                    this.server.completeCreateFor(this.dialog.account);
                                 });
 
                                 it("re-renders the dialog", function() {

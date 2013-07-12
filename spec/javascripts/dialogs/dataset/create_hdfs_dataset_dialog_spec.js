@@ -87,7 +87,7 @@ describe("chorus.dialogs.CreateHdfsDataset", function() {
                 beforeEach(function () {
                     spyOn(this.dialog, 'closeModal');
                     spyOn(chorus, 'toast');
-                    this.server.completeSaveFor(this.dialog.model);
+                    this.server.completeCreateFor(this.dialog.model);
                 });
 
                 it("closes the modal", function() {

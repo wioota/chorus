@@ -77,12 +77,12 @@ describe("chorus.dialogs.DataSourceAccount", function() {
 
             it("calls chorus.router.reload() after saving", function() {
                 expect(chorus.router.reload).not.toHaveBeenCalled();
-                this.server.completeSaveFor(this.dialog.model);
+                this.server.completeCreateFor(this.dialog.model);
                 expect(chorus.router.reload).toHaveBeenCalled();
             });
 
             it("does not navigate back", function() {
-                this.server.completeSaveFor(this.dialog.model);
+                this.server.completeCreateFor(this.dialog.model);
                 expect(window.history.back).not.toHaveBeenCalled();
             });
         });

@@ -146,7 +146,7 @@ describe("chorus.views.UserNewLdap", function() {
                 context("when user creation is successful", function() {
                     it("redirects to user index", function() {
                         spyOn(chorus.router, "navigate");
-                        this.server.completeSaveFor(this.user);
+                        this.server.completeCreateFor(this.user);
                         expect(chorus.router.navigate).toHaveBeenCalledWith("/users");
                     });
                 });

@@ -68,7 +68,7 @@ describe("ImportGnipStream", function () {
                         beforeEach(function () {
                             spyOn(chorus, "toast");
                             spyOnEvent($(document), "close.facebox");
-                            this.server.completeSaveFor(this.dialog.model);
+                            this.server.completeCreateFor(this.dialog.model);
                         });
                         it("closes the dialog", function() {
                             expect("close.facebox").toHaveBeenTriggeredOn($(document));

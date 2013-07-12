@@ -132,7 +132,7 @@ _.extend(sinon.fakeServer, {
         }
     },
 
-    completeSaveFor: function(model, response) {
+    completeCreateFor: function(model, response) {
         response = this.makeFakeResponse(model, response);
         var create = this.lastCreateFor(model);
         if (create) {

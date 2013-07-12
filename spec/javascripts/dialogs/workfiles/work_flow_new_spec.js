@@ -75,7 +75,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
                         spyOn(this.dialog, "closeModal");
                         spyOn(chorus.router, "navigate");
                         this.dialog.$("form").submit();
-                        this.server.completeSaveFor(this.dialog.resource, {id: 42});
+                        this.server.completeCreateFor(this.dialog.resource, {id: 42});
                     });
 
                     it("closes the dialog", function() {

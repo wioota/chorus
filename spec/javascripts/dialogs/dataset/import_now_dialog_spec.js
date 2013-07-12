@@ -309,7 +309,7 @@ describe("chorus.dialogs.ImportNow", function() {
                             beforeEach(function() {
                                 spyOn(chorus, "toast");
                                 spyOn(this.dialog, "closeModal");
-                                this.server.completeSaveFor(this.dialog.model);
+                                this.server.completeCreateFor(this.dialog.model);
                             });
 
                             it("should display a toast", function() {

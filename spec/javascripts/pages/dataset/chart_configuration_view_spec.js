@@ -142,7 +142,7 @@ describe("chorus.views.ChartConfiguration", function() {
 
             describe("when the save completes", function() {
                 beforeEach(function() {
-                    this.server.completeSaveFor(this.view.task);
+                    this.server.completeCreateFor(this.view.task);
                 });
 
                 it("starts up the visualization dialog", function() {
