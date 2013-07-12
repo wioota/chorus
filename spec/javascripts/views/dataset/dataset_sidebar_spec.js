@@ -338,6 +338,10 @@ describe("combo.chorus.views.DatasetSidebar", function() {
                 it("does not display the 'Preview Data' link", function() {
                     expect(this.view.$('.actions .dataset_preview')).not.toExist();
                 });
+
+                it("does not display the 'Download' link", function() {
+                    expect(this.view.$(".actions a.download")).not.toExist();
+                });
             });
         });
 

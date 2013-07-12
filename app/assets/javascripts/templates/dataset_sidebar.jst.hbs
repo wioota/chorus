@@ -93,17 +93,17 @@
                 <li><a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a></li>
             {{/if}}
 
-            {{#unless noValidCredentials}}
-                {{#if listMode}}
-                    {{#unless isPresentingHdfsDataset}}
-                    <li><a class="dataset_preview" href="#">{{t "actions.dataset_preview"}}</a></li>
-                    {{/unless}}
-                {{/if}}
+            {{#unless isPresentingHdfsDataset}}
+                {{#unless noValidCredentials}}
+                    {{#if listMode}}
+                        <li><a class="dataset_preview" href="#">{{t "actions.dataset_preview"}}</a></li>
+                    {{/if}}
 
-                <li><a class="download dialog" href="#">{{t "actions.download"}}</a></li>
-                {{#if canAnalyze}}
-                   <li><a class="analyze" href="#">{{t "dataset.actions.analyze"}}</a></li>
-                {{/if}}
+                    <li><a class="download dialog" href="#">{{t "actions.download"}}</a></li>
+                    {{#if canAnalyze}}
+                       <li><a class="analyze" href="#">{{t "dataset.actions.analyze"}}</a></li>
+                    {{/if}}
+                {{/unless}}
             {{/unless}}
 
             {{#unless workspaceArchived}}
