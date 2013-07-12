@@ -1,8 +1,8 @@
-describe("chorus.dialogs.EditHdfsDatasetDialog", function() {
+describe("combo.chorus.dialogs.EditHdfsDataset", function() {
     beforeEach(function() {
         this.modalSpy = stubModals();
         this.dataset = backboneFixtures.workspaceDataset.hdfsDataset();
-        this.dialog = new chorus.dialogs.EditHdfsDatasetDialog({model: this.dataset});
+        this.dialog = new chorus.dialogs.EditHdfsDataset({model: this.dataset});
         this.dialog.launchModal();
     });
 

@@ -223,7 +223,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
     launchEditHdfsDatasetDialog: function(e) {
         e && e.preventDefault();
-        var dialog = new chorus.dialogs.EditHdfsDatasetDialog({model: this.resource});
+        var dialog = new chorus.dialogs.EditHdfsDataset({model: this.resource});
         dialog.launchModal();
     },
 

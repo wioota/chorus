@@ -1,4 +1,4 @@
-describe("chorus.views.DatasetSidebar", function() {
+describe("combo.chorus.views.DatasetSidebar", function() {
     beforeEach(function() {
         stubClEditor();
         stubDelay();
@@ -295,7 +295,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 chorus.PageEvents.trigger("dataset:selected", this.dataset);
             });
 
-            itBehavesLike.aDialogLauncher("a.edit_hdfs_dataset", chorus.dialogs.EditHdfsDatasetDialog);
+            itBehavesLike.aDialogLauncher("a.edit_hdfs_dataset", chorus.dialogs.EditHdfsDataset);
         });
 
         context("when an oracle dataset is selected", function() {
