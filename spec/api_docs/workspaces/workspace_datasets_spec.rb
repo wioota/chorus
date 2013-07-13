@@ -16,6 +16,11 @@ resource "Workspaces" do
   end
 
   get "/workspaces/:workspace_id/datasets" do
+    before do
+      any_instance_of(HdfsDataset) do |ds|
+        stub(ds).contents { ["content"] }
+      end
+    end
     parameter :workspace_id, "Id of a workspace"
     parameter :type, "Specific type of datasets (SANDBOX_TABLE, SANDBOX_DATASET, CHORUS_VIEW, SOURCE_TABLE, NON_CHORUS_VIEW)"
     parameter :database_id, "Id of a database (Results will be scoped to this database)"

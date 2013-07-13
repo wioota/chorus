@@ -1,7 +1,12 @@
 require 'spec_helper'
 
 resource 'HdfsDataset' do
-  before { log_in users(:owner) }
+  before do
+    log_in users(:owner)
+    any_instance_of(HdfsDataset) do |ds|
+      stub(ds).contents { ["contents"] }
+    end
+  end
 
   post "/hdfs_datasets" do
     parameter :data_source_id, "Hadoop DataSource ID"
@@ -28,7 +33,7 @@ resource 'HdfsDataset' do
 
     let(:id) { datasets(:hadoop).id }
     let(:name) { Faker::Name.name }
-    let(:file_mask) { "/foo/*/bar" }
+    let(:file_mask) { "/*" }
 
     example_request "Update a Hadoop File Mask Dataset" do
       status.should == 200
