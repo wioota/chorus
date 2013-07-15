@@ -97,17 +97,17 @@ describe("chorus.models.Dataset", function() {
 
     describe("#initialize", function() {
         it("doesn't override type when entitySubtype already exists", function() {
-            var model = new chorus.models.Dataset({ entitySubtype: "foo"});
+            var model = new chorus.models.DynamicDataset({ entitySubtype: "foo"});
             expect(model.get("entitySubtype")).toBe("foo");
         });
 
         it("sets entitySubtype to datasetType if datasetType exists", function() {
-            var model = new chorus.models.Dataset({ datasetType: "foo"});
+            var model = new chorus.models.DynamicDataset({ datasetType: "foo"});
             expect(model.get("entitySubtype")).toBe("foo");
         });
 
         it("sets entitySubtype to SOURCE_TABLE if neither entitySubtype nor datasetType exists", function() {
-            var model = new chorus.models.Dataset({});
+            var model = new chorus.models.DynamicDataset({});
             expect(model.get("entitySubtype")).toBe("SOURCE_TABLE");
         });
     });

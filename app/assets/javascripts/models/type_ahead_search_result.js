@@ -18,7 +18,7 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
                 case "hdfs_file":
                     return new chorus.models.HdfsEntry(result);
                 case "dataset":
-                    return new chorus.models.Dataset(result);
+                    return new chorus.models.DynamicDataset(result);
                 case "chorus_view":
                     return new chorus.models.ChorusView(result);
                 case "gpdb_data_source":

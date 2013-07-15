@@ -157,6 +157,21 @@ describe("chorus.models.Activity", function() {
             it("adds the workspace data to the dataset", function() {
                 expect(dataset.get("workspace").id).toBe(10);
             });
+
+            context("when the dataset is an HDFS Dataset", function () {
+                beforeEach(function () {
+                    activity = backboneFixtures.activity.sourceTableCreated({
+                        dataset: { id: 9, entitySubtype: "HDFS" }, workspace: {id: 10}
+                    });
+
+                    dataset = activity.dataset();
+                });
+
+                it("returns an HDFS Dataset with the right data", function() {
+                    expect(dataset).toBeA(chorus.models.HdfsDataset);
+                    expect(dataset.id).toBe(9);
+                });
+            });
         });
 
         describe("#sourceDataset", function() {

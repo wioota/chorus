@@ -20,6 +20,29 @@ describe HdfsDataset do
     end
   end
 
+  describe "in_workspace?" do
+    context "when the dataset is not in the workspace" do
+      let(:workspace) { workspaces(:empty_workspace) }
+
+      it "returns false" do
+        dataset.in_workspace?(workspace).should be_false
+      end
+    end
+
+    context "when the chorus view is in the workspace" do
+      let(:workspace) { workspaces(:public) }
+      before do
+        dataset.bound_workspaces = []
+        workspace.associate_datasets(users(:owner), [dataset])
+      end
+
+      it "returns false" do
+        dataset.reload.in_workspace?(workspace).should be_true
+      end
+    end
+
+  end
+
   describe "workspace association" do
     let(:workspace) { workspaces(:public) }
     before do

@@ -25,6 +25,10 @@ describe("chorus.models.ChorusView", function() {
         }, this);
     });
 
+    it("has the right url for read", function() {
+        expect(this.model.url({method: "read"})).toMatchUrl('/workspaces/' +  this.model.workspace().id + '/datasets/');
+    });
+
     it("has the right url when duplicate is true", function() {
         this.model.attributes.sourceObjectId = "100";
         this.model.duplicate= true;

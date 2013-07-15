@@ -37,20 +37,6 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
         this.subscribePageEvent("cancel:sidebar", this.hideSidebar);
     },
 
-    constructSidebarForType: function(type) {
-        if (type === 'chorus_view') {
-            this.dataset.setDatasetNumber(1);
-            this.sidebar.disabled = true;
-            this.mainContent.content.selectMulti = true;
-            this.mainContent.content.showDatasetName = true;
-            this.mainContent.content.render();
-            this.mainContent.content.selectNone();
-            this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model: this.model, aggregateColumnSet: this.columnSet});
-        } else {
-            this._super('constructSidebarForType', arguments);
-        }
-    },
-
     showSidebar: function(type) {
         this.$('.sidebar_content.primary').addClass("hidden");
         this.$('.sidebar_content.secondary').removeClass("hidden");
@@ -98,17 +84,5 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
             showLocation: true,
             workspaceId: this.workspace.id
         }, options));
-    },
-
-    datasetLoaded: function() {
-        this._super("datasetLoaded");
-        this.checkEntityType();
-    },
-
-    checkEntityType: function() {
-        if(this.dataset.isChorusView()) {
-            chorus.router.navigate(this.dataset.showUrl());
-        }
-        //do something for hdfs
     }
 });

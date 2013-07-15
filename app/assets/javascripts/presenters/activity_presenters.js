@@ -375,6 +375,7 @@
 
             var params = {};
             var options = headerDefinitions[action];
+
             _.each(options.links, function(name) {
                 var associatedModel = model[name]();
                 params[name + "Link"] = presenterHelpers.modelLink(associatedModel);
@@ -544,11 +545,11 @@
         },
 
         destinationDatasetInSchemaLink: function(self){
-            return (new chorus.models.Dataset(self.model.dataset().attributes)).showLink();
+            return (new chorus.models.DynamicDataset(self.model.dataset().attributes)).showLink();
         },
 
         sourceDatasetInSchemaLink: function(self){
-            return (new chorus.models.Dataset(self.model.importSource().attributes)).showLink();
+            return (new chorus.models.DynamicDataset(self.model.importSource().attributes)).showLink();
         },
 
         datasetLink: function(self) {
@@ -568,7 +569,7 @@
         destObjectOrNameInSchema: function(self) {
             var dataset = self.model["dataset"]();
             if (dataset.get("id")){
-                return (new chorus.models.Dataset(dataset.attributes)).showLink();
+                return (new chorus.models.DynamicDataset(dataset.attributes)).showLink();
             }
             return self.model.get("destinationTable");
         },

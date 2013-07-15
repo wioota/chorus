@@ -9,8 +9,13 @@ chorus.models.HdfsDataset = chorus.models.WorkspaceDataset.extend({
             var completeUrl = this.id ? base + this.id : base;
             return completeUrl;
         } else {
-            return "datasets/{{id}}";
+            return "workspaces/{{workspace.id}}/datasets/{{id}}";
         }
+    },
+
+    iconUrl: function(options) {
+        var size = (options && options.size) || "large";
+        return "/images/hdfs_dataset_" + size + ".png";
     },
 
     showUrlTemplate: "workspaces/{{workspace.id}}/hadoop_datasets/{{id}}",

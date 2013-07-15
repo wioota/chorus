@@ -18,7 +18,7 @@ class DatasetsController < ApplicationController
 
   def show
     authorize_data_source_access(Dataset.find(params[:id]))
-    table = Dataset.find_and_verify_in_source(params[:id].to_i, current_user)
-    present table
+    dataset = Dataset.find_and_verify_in_source(params[:id].to_i, current_user)
+    present dataset, params
   end
 end

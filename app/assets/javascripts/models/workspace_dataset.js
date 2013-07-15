@@ -7,21 +7,13 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.include(
         options = options || {};
         if(options.download) {
             return this._super("urlTemplate", arguments);
-        } else if(this.isChorusView() &&
-            (_.indexOf(["create", "update", "delete"], options.method) > -1)) {
-            return "chorus_views/{{id}}";
         } else {
             return "workspaces/{{workspace.id}}/datasets/{{id}}";
         }
     },
 
     showUrlTemplate: function() {
-        var resource = this.isChorusView() ? "chorus_views" : "datasets";
-        return "workspaces/{{workspace.id}}/" + resource + "/{{id}}";
-    },
-
-    isChorusView: function() {
-        return this.get("entitySubtype") === "CHORUS_VIEW";
+        return "workspaces/{{workspace.id}}/datasets/{{id}}";
     },
 
     iconUrl: function() {
@@ -62,17 +54,6 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.include(
         chorusView.duplicate = true;
         chorusView.sourceObject = this;
         return chorusView;
-    },
-
-    statistics: function() {
-        var stats = this._super("statistics");
-
-        if (this.isChorusView() && !stats.datasetId) {
-            stats.set({ workspace: this.get("workspace")});
-            stats.datasetId = this.get("id");
-        }
-
-        return stats;
     },
 
     getImports: function() {
@@ -155,14 +136,5 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.include(
 
     setWorkspace: function(workspace) {
         this.set({workspace: {id: workspace.id}});
-    },
-
-    activities: function() {
-        var original = this._super("activities", arguments);
-        if (this.isChorusView()) {
-            original.attributes.workspace = this.get("workspace");
-        }
-
-        return original;
     }
 });

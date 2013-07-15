@@ -21,7 +21,7 @@ describe("chorus.models.HdfsDataset", function() {
 
         it("returns the show url when it is anything else", function () {
             this.model.set("id", 1234);
-            expect(this.model.url({ method: 'read' })).toMatchUrl("/datasets/1234");
+            expect(this.model.url({method: "read"})).toMatchUrl('/workspaces/' +  this.model.workspace().id + '/datasets/1234');
         });
     });
 

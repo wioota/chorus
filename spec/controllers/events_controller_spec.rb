@@ -280,7 +280,7 @@ describe EventsController do
         'workspaceArchived' => Events::WorkspaceArchived,
         'workspaceUnarchived' => Events::WorkspaceUnarchived,
         'workfileCreated' => Events::WorkfileCreated,
-        'sourceTableCreated' => Events::SourceTableCreated,
+        'sourceTableCreated' => :source_table_created,
         'userCreated' => Events::UserAdded,
         'sandboxAdded' => Events::WorkspaceAddSandbox,
         'insightOnGreenplumDataSource' => :insight_on_greenplum,
@@ -327,9 +327,9 @@ describe EventsController do
         'datasetImportFailedWithModelErrors' => :import_failed_with_model_errors
     }
 
-    FIXTURE_FILES.each do |file_name, event_relation|
+    FIXTURE_FILES.each do |file_name, event_class|
       generate_fixture "activity/#{file_name}.json" do
-        event = event_relation.is_a?(Symbol) ? events(event_relation) : event_relation.last!
+        event = event_class.is_a?(Symbol) ? events(event_class) : event_class.last!
         Activity.global.create!(:event => event)
         get :show, :id => event.to_param
       end

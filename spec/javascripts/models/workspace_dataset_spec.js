@@ -13,6 +13,13 @@ describe("chorus.models.WorkspaceDataset", function() {
             objectType: "foo",
             objectName: "japanese_teas"
         });
+
+        this.chorusView = backboneFixtures.workspaceDataset.chorusView({
+            id: '1011',
+            workspace: {
+                id: "44"
+            }
+        });
     });
 
     describe("show url", function() {
@@ -22,12 +29,9 @@ describe("chorus.models.WorkspaceDataset", function() {
         });
 
         context("when the dataset is a chorus view", function() {
-          beforeEach(function() {
-              this.dataset.set({entitySubtype: "CHORUS_VIEW"});
-          });
 
           it("has the right showUrl", function() {
-            expect(this.dataset.showUrl()).toMatchUrl("#/workspaces/44/chorus_views/1011");
+            expect(this.chorusView.showUrl()).toMatchUrl("#/workspaces/44/chorus_views/1011");
           });
         });
     });
@@ -41,10 +45,10 @@ describe("chorus.models.WorkspaceDataset", function() {
     });
 
     it("has the right chorus view url", function() {
-        this.dataset.set({entitySubtype: "CHORUS_VIEW"});
-        expect(this.dataset.url({ method : "delete"})).toMatchUrl("/chorus_views/1011");
-        expect(this.dataset.url({ method : "update"})).toMatchUrl("/chorus_views/1011");
-        expect(this.dataset.url({ method : "get"})).toMatchUrl("/workspaces/44/datasets/1011");
+        expect(this.chorusView.url({ method : "delete"})).toMatchUrl("/chorus_views/1011");
+        expect(this.chorusView.url({ method : "update"})).toMatchUrl("/chorus_views/1011");
+        var readUrl = this.chorusView.url({ method: "read"});
+        expect(readUrl).toMatchUrl("/workspaces/44/datasets/1011");
     });
 
     describe("when the 'invalidated' event is triggered", function() {
@@ -65,24 +69,6 @@ describe("chorus.models.WorkspaceDataset", function() {
                 var dataset = this.dataset;
                 dataset.trigger("invalidated");
                 expect(dataset).not.toHaveBeenFetched();
-            });
-        });
-    });
-
-    describe("#isChorusView", function() {
-        context("when the dataset is a chorus view", function() {
-            beforeEach(function() {
-                this.dataset.set({entitySubtype: "CHORUS_VIEW", query: "SELECT * FROM whatever"});
-            });
-
-            it("should return true", function() {
-                expect(this.dataset.isChorusView()).toBeTruthy();
-            });
-        });
-
-        context("when the dataset is not a chorus view", function() {
-            it("should return false", function() {
-                expect(this.dataset.isChorusView()).toBeFalsy();
             });
         });
     });
@@ -113,11 +99,12 @@ describe("chorus.models.WorkspaceDataset", function() {
     describe("#statistics", function() {
         context("for a chorus view", function() {
             beforeEach(function() {
-                this.dataset.set({ entitySubtype: "CHORUS_VIEW" });
+                this.dataset = this.chorusView;
             });
 
             it("sets the workspace info into the statistics object", function() {
-                expect(this.dataset.statistics().get("workspace")).toEqual(this.dataset.get("workspace"));
+                var workspace = this.dataset.statistics().get("workspace");
+                expect(workspace).toEqual(this.dataset.get("workspace"));
             });
 
             it("sets the dataset id onto the statistics object as 'datasetId'", function() {
@@ -129,7 +116,7 @@ describe("chorus.models.WorkspaceDataset", function() {
     describe("#activities", function() {
         context("for a chorus view", function() {
             beforeEach(function() {
-                this.dataset.set({ entitySubtype: "CHORUS_VIEW" });
+                this.dataset = this.chorusView;
             });
 
             it("sets the workspace info into the ActivitySet object", function() {

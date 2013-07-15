@@ -170,18 +170,10 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     preview: function() {
-        if (this.isChorusView() && (this.isNew() || this.unsavedChanges().query)) {
-            return new chorus.models.ChorusViewPreviewTask({
-                query: this.query(),
-                schemaId: this.schema().id,
-                objectName: this.name()
-            });
-        } else {
-            return new chorus.models.DataPreviewTask({
-                dataset: {id: this.id},
-                objectName: this.name()
-            });
-        }
+        return new chorus.models.DataPreviewTask({
+            dataset: {id: this.id},
+            objectName: this.name()
+        });
     },
 
     download: function(options) {

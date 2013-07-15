@@ -945,7 +945,7 @@ describe("chorus.presenters.Activity", function() {
             this.actor = this.model.actor();
             this.schema = this.model.schema();
             this.destination = this.model.dataset();
-            this.sourceDataset = new chorus.models.Dataset(this.model.get('sourceDataset'));
+            this.sourceDataset = new chorus.models.DynamicDataset(this.model.get('sourceDataset'));
         });
 
         itHasTheActorIcon();
@@ -1001,8 +1001,8 @@ describe("chorus.presenters.Activity", function() {
         it("has the right header html", function() {
             expect(this.presenter.headerHtml().toString()).toMatchTranslation(
                 "activity.header.SchemaImportSuccess.default", {
-                    sourceDatasetInSchemaLink: (new chorus.models.Dataset(this.sourceDataset.attributes)).showLink(),
-                    destinationDatasetInSchemaLink: (new chorus.models.Dataset(this.dataset.attributes)).showLink(),
+                    sourceDatasetInSchemaLink: (new chorus.models.DynamicDataset(this.sourceDataset.attributes)).showLink(),
+                    destinationDatasetInSchemaLink: (new chorus.models.DynamicDataset(this.dataset.attributes)).showLink(),
                     destinationSchemaLink: this.dataset.schema().showLink()
                 }
             );
@@ -1027,9 +1027,9 @@ describe("chorus.presenters.Activity", function() {
             it("has the right header html", function() {
                 expect(this.presenter.headerHtml().toString()).toMatchTranslation(
                     "activity.header.SchemaImportFailed.default", {
-                        sourceDatasetInSchemaLink: (new chorus.models.Dataset(this.sourceDataset.attributes)).showLink(),
+                        sourceDatasetInSchemaLink: (new chorus.models.DynamicDataset(this.sourceDataset.attributes)).showLink(),
                         destinationSchemaLink: this.dataset.schema().showLink(),
-                        destObjectOrNameInSchema: (new chorus.models.Dataset(this.dataset.attributes)).showLink()
+                        destObjectOrNameInSchema: (new chorus.models.DynamicDataset(this.dataset.attributes)).showLink()
                     }
                 );
             });
@@ -1046,7 +1046,7 @@ describe("chorus.presenters.Activity", function() {
             it("has the right header html", function() {
                 expect(this.presenter.headerHtml().toString()).toMatchTranslation(
                     "activity.header.SchemaImportFailed.default", {
-                        sourceDatasetInSchemaLink: (new chorus.models.Dataset(this.sourceDataset.attributes)).showLink(),
+                        sourceDatasetInSchemaLink: (new chorus.models.DynamicDataset(this.sourceDataset.attributes)).showLink(),
                         destinationSchemaLink: (new chorus.models.Schema(this.model.get('schema'))).showLink(),
                         destObjectOrNameInSchema: this.model.get('destinationTable')
                     }

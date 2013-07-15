@@ -18,9 +18,16 @@
 
     function makeAssociationMethod(associate, setupFunction) {
         return function() {
-            var className = CLASS_MAP[associate];
-            var modelClass = chorus.models[className];
-            var model = new modelClass(this.get(associate));
+            var model;
+
+            if ( associate === 'dataset' && this.get(associate)) {
+                model = new chorus.models.DynamicDataset(this.get(associate));
+            } else {
+                var className = CLASS_MAP[associate];
+                var modelClass = chorus.models[className];
+                model = new modelClass(this.get(associate));
+            }
+
             if (setupFunction) setupFunction.call(this, model);
             return model;
         };
@@ -93,8 +100,7 @@
                     model.set(this.get("workspace"));
                     break;
                 case "NoteOnDataset":
-                    model = new chorus.models.Dataset();
-                    model.set(this.get("dataset"));
+                    model = new chorus.models.DynamicDataset(this.get("dataset"));
                     break;
                 case "NoteOnWorkspaceDataset":
                     model = new chorus.models.WorkspaceDataset();

@@ -18,4 +18,10 @@ describe("chorus.models.DynamicDataset", function() {
         var model = new chorus.models.DynamicDataset(backboneFixtures.dataset().attributes);
         expect(model).toBeA(chorus.models.Dataset);
     });
+
+    it("does not need attributes", function () {
+        var model = new chorus.models.DynamicDataset();
+        expect(model).toBeA(chorus.models.Dataset);
+    });
+
 });

@@ -109,7 +109,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             refreshedAt: null
         });
 
-        this.models.dataset = new chorus.models.Dataset({
+        this.models.dataset = new chorus.models.DynamicDataset({
             type: "SOURCE_TABLE",
             objectName: "table",
             schema: this.models.schema.attributes,
@@ -127,7 +127,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             "invalidColumns": []
         });
 
-        this.models.otherDataset = new chorus.models.Dataset({
+        this.models.otherDataset = new chorus.models.DynamicDataset({
             "type": "SOURCE_TABLE",
             "objectName": "other table",
             "schema": this.models.schema.attributes,

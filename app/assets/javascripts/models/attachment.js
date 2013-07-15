@@ -89,7 +89,7 @@ chorus.models.Attachment = chorus.models.Base.include(
                 if (dataset.entitySubtype === "CHORUS_VIEW") {
                     this._dataset = new chorus.models.ChorusView(dataset);
                 } else if(_.isEmpty(this.get("workspace"))) {
-                    this._dataset = new chorus.models.Dataset(dataset);
+                    this._dataset = new chorus.models.DynamicDataset(dataset);
                 } else {
                     this._dataset = new chorus.models.WorkspaceDataset(dataset);
                     this._dataset.set({ workspace: this.get('workspace') });

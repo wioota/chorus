@@ -29,6 +29,10 @@ class HdfsDataset < Dataset
     HdfsDataSource
   end
 
+  def in_workspace?(workspace)
+    bound_workspaces.include?(workspace)
+  end
+
   def associable?
     true
   end

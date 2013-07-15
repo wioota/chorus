@@ -100,7 +100,8 @@ describe('chorus.handlebarsHelpers.dataset', function() {
                                     }
                                 }
                             }
-                        ]}});
+                        ]}
+                });
                 this.model = searchResult.datasets().at(0);
                 this.result = Handlebars.helpers.datasetLocation(this.model).toString();
                 expect($(this.result).find('em').length).toBe(2);
@@ -126,7 +127,7 @@ describe('chorus.handlebarsHelpers.dataset', function() {
 
             context("when the dataset's schema has not been loaded correctly", function () {
                 beforeEach(function () {
-                    this.model = new chorus.models.Dataset();
+                    this.model = new chorus.models.DynamicDataset();
                 });
 
                 it("returns the empty string", function () {

@@ -4,11 +4,13 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
 
     showUrlTemplate: "workspaces/{{workspace.id}}/chorus_views/{{id}}",
 
-    urlTemplate: function() {
+    urlTemplate: function(options) {
         if(this.duplicate) {
             return "chorus_views/" + this.get("sourceObjectId") + "/duplicate";
+        } else if (options.method === "read") {
+            return "workspaces/{{workspace.id}}/datasets/{{id}}";
         } else {
-            return this._super("urlTemplate", arguments);
+            return "chorus_views/{{id}}";
         }
     },
     
@@ -18,6 +20,38 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
 
     workspaceId: function() {
         return this.workspace().id;
+    },
+
+    isChorusView: function() {
+        return true;
+    },
+
+    preview: function () {
+        if (this.isNew() || this.unsavedChanges().query) {
+            return new chorus.models.ChorusViewPreviewTask({
+                query: this.query(),
+                schemaId: this.schema().id,
+                objectName: this.name()
+            });
+        } else {
+            return this._super('preview');
+        }
+    },
+
+    statistics: function() {
+        var stats = this._super("statistics");
+        if (!stats.datasetId) {
+            stats.set({ workspace: this.get("workspace")});
+            stats.datasetId = this.get("id");
+        }
+
+        return stats;
+    },
+
+    activities: function() {
+        var activities = this._super("activities", arguments);
+        activities.attributes.workspace = this.get("workspace");
+        return activities;
     },
 
     initialize: function() {

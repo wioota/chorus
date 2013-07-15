@@ -234,7 +234,7 @@ FixtureBuilder.configure do |fbuilder|
 
     # HDFS Datasets need a workspace association
     attrs = FactoryGirl.build(:hdfs_dataset, :name => "hadoop", :hdfs_data_source => hdfs_data_source).attributes
-    HdfsDataset.assemble!(attrs.merge!(:file_mask => 'slash/star/*'), hdfs_data_source, public_workspace, owner)
+    hadoop_dadoop = HdfsDataset.assemble!(attrs.merge!(:file_mask => 'slash/star/*'), hdfs_data_source, public_workspace, owner)
 
     # Chorus View
     chorus_view = FactoryGirl.create(:chorus_view, :name => "chorus_view", :schema => default_schema, :query => "select * from a_table", :workspace => public_workspace)
@@ -478,7 +478,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::DataSourceChangedOwner.by(admin).add(:data_source => gpdb_data_source, :new_owner => no_collaborators)
     Events::DataSourceChangedName.by(admin).add(:data_source => gpdb_data_source, :old_name => 'mahna_mahna', :new_name => gpdb_data_source.name)
     Events::HdfsDataSourceChangedName.by(admin).add(:hdfs_data_source => hdfs_data_source, :old_name => 'Slartibartfast', :new_name => hdfs_data_source.name)
-    Events::SourceTableCreated.by(admin).add(:dataset => default_table, :workspace => public_workspace)
+    @source_table_created = Events::SourceTableCreated.by(admin).add(:dataset => hadoop_dadoop, :workspace => public_workspace)
     Events::WorkspaceAddSandbox.by(owner).add(:sandbox_schema => default_schema, :workspace => public_workspace)
     Events::WorkspaceArchived.by(admin).add(:workspace => public_workspace)
     Events::WorkspaceUnarchived.by(admin).add(:workspace => public_workspace)

@@ -37,7 +37,13 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
         if(type === 'edit_chorus_view') {
             this.secondarySidebar = new chorus.views.DatasetEditChorusViewSidebar({model: this.model});
         } else {
-            this._super('constructSidebarForType', arguments);
+            this.dataset.setDatasetNumber(1);
+            this.sidebar.disabled = true;
+            this.mainContent.content.selectMulti = true;
+            this.mainContent.content.showDatasetName = true;
+            this.mainContent.content.render();
+            this.mainContent.content.selectNone();
+            this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model: this.model, aggregateColumnSet: this.columnSet});
         }
     },
 

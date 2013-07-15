@@ -21,8 +21,8 @@ describe("chorus.views.DatabaseSidebarList", function() {
 
     context("when there is a schema", function() {
         beforeEach(function() {
-            var object0 = new chorus.models.Dataset();
-            var object1 = new chorus.models.Dataset();
+            var object0 = new chorus.models.DynamicDataset();
+            var object1 = new chorus.models.DynamicDataset();
             object0.cid = 'c44';
             object1.cid = 'c55';
 
