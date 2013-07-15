@@ -60,7 +60,7 @@ describe("chorus.pages.HdfsDatasetShowPage", function () {
             expect(this.page.mainContent.contentHeader).toBeA(chorus.views.DatasetShowContentHeader);
         });
 
-        it("shows the DatasetShowContentHeader", function () {
+        it("shows the DatasetShowContentDetails", function () {
             expect(this.page.mainContent.contentDetails).toBeA(chorus.views.HdfsDatasetContentDetails);
         });
 

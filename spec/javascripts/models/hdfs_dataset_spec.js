@@ -35,4 +35,10 @@ describe("chorus.models.HdfsDataset", function() {
             expect(this.model.content()).toBe("first line\nsecond line");
         });
     });
+
+    describe("#asWorkspaceDataset", function () {
+        it("returns a HdfsDataset", function () {
+            expect(this.model.asWorkspaceDataset()).toBeA(chorus.models.HdfsDataset);
+        });
+    });
 });

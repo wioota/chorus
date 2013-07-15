@@ -738,27 +738,58 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
-    context("source table created", function() {
-        beforeEach(function() {
-            this.model = backboneFixtures.activity.sourceTableCreated({ dataset: { objectType: "VIEW" } });
-            this.presenter = new chorus.presenters.Activity(this.model);
-            this.actor = this.model.actor();
+    context("datasets associated", function() {
+        context("when the dataset is from Hadoop", function () {
+            beforeEach(function() {
+                this.model = backboneFixtures.activity.sourceTableCreated({ dataset: { entitySubtype: 'HDFS', objectType: 'HDFS'} });
+                this.presenter = new chorus.presenters.Activity(this.model);
+                this.actor = this.model.actor();
+            });
+
+            itHasTheActorIcon();
+
+            it("has the right header html", function() {
+                this.dataset = this.model.dataset();
+                this.workspace = this.model.workspace();
+
+                var datasetType     = t("dataset.entitySubtypes." + this.model.dataset().get('entitySubtype') + "." + this.model.dataset().get('objectType'));
+                var datasetLink     = linkTo(this.dataset.showUrl(), this.dataset.name());
+                var workspaceLink   = linkTo(this.workspace.showUrl(), this.workspace.name());
+                var actorLink       = linkTo(this.actor.showUrl(), this.actor.name());
+
+                expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.SourceTableCreated.default", {
+                        actorLink: actorLink,
+                        workspaceLink: workspaceLink,
+                        datasetLink: datasetLink,
+                        datasetType: datasetType
+                    }
+                );
+            });
         });
 
-        itHasTheActorIcon();
+        context("when the dataset is from a SQL DB", function () {
+            beforeEach(function() {
+                this.model = backboneFixtures.activity.sourceTableCreated({ dataset: { objectType: 'VIEW' } });
+                this.presenter = new chorus.presenters.Activity(this.model);
+                this.actor = this.model.actor();
+            });
 
-        it("has the right header html", function() {
-            this.dataset = this.model.dataset();
-            this.workspace = this.model.workspace();
+            itHasTheActorIcon();
 
-            expect(this.presenter.headerHtml().toString()).toMatchTranslation(
-                "activity.header.SourceTableCreated.default", {
-                    actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
-                    workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name()),
-                    datasetLink: linkTo(this.dataset.showUrl(), this.dataset.name()),
-                    datasetType: t("dataset.entitySubtypes.view")
-                }
-            );
+            it("has the right header html", function() {
+                this.dataset = this.model.dataset();
+                this.workspace = this.model.workspace();
+
+                expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.SourceTableCreated.default", {
+                        actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
+                        workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name()),
+                        datasetLink: linkTo(this.dataset.showUrl(), this.dataset.name()),
+                        datasetType: t("dataset.entitySubtypes.view")
+                    }
+                );
+            });
         });
     });
 
