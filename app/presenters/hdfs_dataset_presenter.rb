@@ -3,7 +3,7 @@ class HdfsDatasetPresenter < DatasetPresenter
     super.merge({
         :file_mask => model.file_mask,
         :hdfs_data_source => model.hdfs_data_source,
-        :object_type => subtype
+        :object_type => 'MASK'
     })
   end
 
@@ -12,6 +12,9 @@ class HdfsDatasetPresenter < DatasetPresenter
       :content => model.contents
     })
   end
+
+
+  private
 
   def subtype
     'HDFS'

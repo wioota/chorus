@@ -152,7 +152,7 @@ describe("chorus.models.Dataset", function() {
             },
 
             "HDFS": {
-                "HDFS": "hdfs_dataset_large.png"
+                "MASK": "hdfs_dataset_large.png"
             }
         };
 
@@ -341,14 +341,7 @@ describe("chorus.models.Dataset", function() {
     });
 
     describe("#metaType", function() {
-        var expectedTypeMap = {
-            "TABLE": "table",
-            "VIEW": "view",
-            "EXTERNAL_TABLE": "table",
-            "MASTER_TABLE": "table",
-            "CHORUS_VIEW": "query",
-            "HDFS": "file_mask"
-        };
+        var expectedTypeMap = chorus.models.Dataset.metaTypeMap;
 
         _.each(expectedTypeMap, function(str, type) {
             it("works for " + type, function() {

@@ -741,7 +741,7 @@ describe("chorus.presenters.Activity", function() {
     context("datasets associated", function() {
         context("when the dataset is from Hadoop", function () {
             beforeEach(function() {
-                this.model = backboneFixtures.activity.sourceTableCreated({ dataset: { entitySubtype: 'HDFS', objectType: 'HDFS'} });
+                this.model = backboneFixtures.activity.sourceTableCreated({ dataset: { entitySubtype: 'HDFS', objectType: 'MASK'} });
                 this.presenter = new chorus.presenters.Activity(this.model);
                 this.actor = this.model.actor();
             });
@@ -752,7 +752,7 @@ describe("chorus.presenters.Activity", function() {
                 this.dataset = this.model.dataset();
                 this.workspace = this.model.workspace();
 
-                var datasetType     = t("dataset.entitySubtypes." + this.model.dataset().get('entitySubtype') + "." + this.model.dataset().get('objectType'));
+                var datasetType     = t("dataset.entitySubtypes.mask");
                 var datasetLink     = linkTo(this.dataset.showUrl(), this.dataset.name());
                 var workspaceLink   = linkTo(this.workspace.showUrl(), this.workspace.name());
                 var actorLink       = linkTo(this.actor.showUrl(), this.actor.name());

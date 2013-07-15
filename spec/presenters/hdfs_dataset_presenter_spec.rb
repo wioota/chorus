@@ -24,7 +24,7 @@ describe HdfsDatasetPresenter, :type => :view do
         hash[:hdfs_data_source][:id].should == dataset.hdfs_data_source.id
         hash[:hdfs_data_source][:name].should == dataset.hdfs_data_source.name
         hash[:entity_subtype].should == 'HDFS'
-        hash[:object_type].should == 'HDFS'
+        hash[:object_type].should == 'MASK'
         hash[:content].should be_nil
       end
     end
@@ -38,7 +38,7 @@ describe HdfsDatasetPresenter, :type => :view do
         hash[:hdfs_data_source][:id].should == dataset.hdfs_data_source.id
         hash[:hdfs_data_source][:name].should == dataset.hdfs_data_source.name
         hash[:entity_subtype].should == 'HDFS'
-        hash[:object_type].should == 'HDFS'
+        hash[:object_type].should == 'MASK'
         hash[:content].should == dataset.contents
       end
     end
