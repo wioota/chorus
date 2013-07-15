@@ -201,6 +201,7 @@ describe WorkfilesController do
       generate_workfile_fixture(:"tableau", "tableau.json")
       generate_workfile_fixture(:"alpine_flow", "alpine.json")
       generate_workfile_fixture(:"alpine_hadoop_flow", "alpineHdfs.json")
+      generate_workfile_fixture(:"alpine_hadoop_dataset_flow", "alpineHdfsDatasetFlow.json")
     end
   end
 

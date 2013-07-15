@@ -59,28 +59,57 @@ describe("chorus.models.AlpineWorkfile", function() {
     });
 
     context('when the execution location is an hdfs data source', function() {
-        beforeEach(function() {
-            this.model = backboneFixtures.workfile.alpineHdfs({
-                fileName: "hello.afm",
-                id: "23",
-                workspace: {id: "32"},
-                hdfsEntryIds: [1,2,3]
+
+        context('when the workflow is based off of hdfs entries', function() {
+            beforeEach(function() {
+                this.model = backboneFixtures.workfile.alpineHdfs({
+                    fileName: "hello.afm",
+                    id: "23",
+                    workspace: {id: "32"},
+                    hdfsEntryIds: [1,2,3]
+                });
+            });
+
+            it("has the right iframeUrl", function() {
+                var url = this.model.iframeUrl();
+
+                expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
+                expect(url).toContainQueryParams({
+                    hdfs_data_source_id: this.model.get('executionLocation').id,
+                    file_name: "hello.afm",
+                    workfile_id: "23",
+                    session_id: "hex",
+                    method: "chorusEntry",
+                    "hdfs_entry_id[]": [1,2,3]
+                });
+                expect(url).not.toContainQueryParams({database_id: this.model.get('executionLocation').id});
             });
         });
 
-        it("has the right iframeUrl", function() {
-            var url = this.model.iframeUrl();
-
-            expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
-            expect(url).toContainQueryParams({
-                hdfs_data_source_id: this.model.get('executionLocation').id,
-                file_name: "hello.afm",
-                workfile_id: "23",
-                session_id: "hex",
-                method: "chorusEntry",
-                "hdfs_entry_id[]": [1,2,3]
+        context("when the workflow is based off of hdfs datasets", function() {
+            beforeEach(function() {
+                this.model = backboneFixtures.workfile.alpineHdfsDatasetFlow({
+                    fileName: "hello.afm",
+                    id: "23",
+                    workspace: {id: "32"},
+                    datasetIds: [4,5,6]
+                });
             });
-            expect(url).not.toContainQueryParams({database_id: this.model.get('executionLocation').id});
+
+            it("has the right iframeUrl", function() {
+                var url = this.model.iframeUrl();
+
+                expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
+                expect(url).toContainQueryParams({
+                    hdfs_data_source_id: this.model.get('executionLocation').id,
+                    file_name: "hello.afm",
+                    workfile_id: "23",
+                    session_id: "hex",
+                    method: "chorusEntry",
+                    "hdfs_dataset_id[]": [4,5,6]
+                });
+                expect(url).not.toContainQueryParams({database_id: this.model.get('executionLocation').id});
+            });
         });
     });
 

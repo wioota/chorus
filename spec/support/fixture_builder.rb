@@ -287,7 +287,14 @@ FixtureBuilder.configure do |fbuilder|
                             :workspace => public_workspace,
                             :owner => owner,
                             :execution_location => hdfs_data_source,
-                            :hdfs_entry_ids => hdfs_data_source.hdfs_entries.limit(3).map(&:id),
+                            :hdfs_entry_ids => hdfs_data_source.hdfs_entries.limit(3).pluck(:id),
+                           }, :without_protection => true)
+
+    AlpineWorkfile.create!({:file_name => 'alpine_hadoop_dataset_flow',
+                            :workspace => public_workspace,
+                            :owner => owner,
+                            :execution_location => hdfs_data_source,
+                            :dataset_ids => HdfsDataset.limit(3).pluck(:id),
                            }, :without_protection => true)
 
     #HDFS Entry
