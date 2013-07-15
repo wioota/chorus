@@ -30,6 +30,9 @@ chorus.pages.HdfsDatasetShowPage = chorus.pages.Base.extend({
 
         this.sidebar = new chorus.views.DatasetSidebar({ model: this.model });
         this.listenTo(this.model, "invalidated", function() { this.model.fetch(); });
+
+        this.sidebar.setDataset(this.dataset);
+        this.listenTo(this.mainContent.contentDetails, "transform:sidebar", this.showSidebar);
     }
 
 });

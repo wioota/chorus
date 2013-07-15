@@ -67,6 +67,12 @@ describe("chorus.pages.HdfsDatasetShowPage", function () {
         it("sets up the sidebar", function () {
             expect(this.page.sidebar).toBeA(chorus.views.DatasetSidebar);
         });
+
+        it("sets up sidebar activities & statistics", function () {
+            expect(this.page.$('.activity_list')).toExist();
+            expect(this.page.$('.dataset_statistics')).toExist();
+        });
+
     });
 
     describe("when the hdfs dataset is invalidated", function() {
