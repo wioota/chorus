@@ -6,7 +6,7 @@ chorus.dialogs.CreateHdfsDataset = chorus.dialogs.HdfsDatasetAttributes.extend({
 
     findModel: function () {
         this.workspace = this.options.workspace;
-        return new chorus.models.HdfsDataset({ workspaceId: this.workspace.id });
+        return new chorus.models.HdfsDataset({ workspace: {id: this.workspace.id} });
     },
 
     loadDataSources: function() {
@@ -17,6 +17,11 @@ chorus.dialogs.CreateHdfsDataset = chorus.dialogs.HdfsDatasetAttributes.extend({
 
     checkDataSource: function () {
         return this.$("select").val().trim();
+    },
+
+    modelSaved: function () {
+        this._super("modelSaved");
+        chorus.router.navigate(this.model.showUrl());
     },
 
     additionalContext: function() {
