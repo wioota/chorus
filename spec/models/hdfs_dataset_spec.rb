@@ -2,10 +2,58 @@ require "spec_helper"
 
 describe HdfsDataset do
   let(:dataset) { datasets(:hadoop) }
+  let(:user) { users(:owner) }
 
   describe 'validations' do
     it { should validate_presence_of :file_mask }
     it { should belong_to(:hdfs_data_source) }
+
+    describe 'can only be created in an active workspace' do
+      let(:dataset) { FactoryGirl.build(:hdfs_dataset) }
+
+      context 'if the workspace is archived' do
+        let(:workspace) { workspaces(:archived) }
+
+        it 'produces an error' do
+          expect  {
+            workspace.associate_datasets(user, [dataset])
+          }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+
+      context 'produces no errors if the workspace is not archived' do
+        let(:workspace) { workspaces(:empty_workspace) }
+
+        it 'produces no error' do
+          workspace.associate_datasets(user, [dataset])
+          dataset.should_not have_error_on(:dataset)
+        end
+      end
+    end
+
+    describe 'can only be updated if all workspaces are active' do
+      context 'if the workspace is archived' do
+        before do
+          workspace = dataset.bound_workspaces.first
+          workspace.archived = 'true'
+          workspace.archiver = user
+          workspace.save!
+          puts "the workspace is archived? #{workspace.archived?}"
+        end
+
+        it 'produces an error' do
+          dataset.update_attributes({name: 'shenanigans'})
+          dataset.should have_error_on(:dataset)
+        end
+      end
+
+      context 'if the workspace is not archived' do
+        it 'produces no error' do
+          dataset.update_attributes({name: 'shenanigans'})
+          dataset.should_not have_error_on(:dataset)
+        end
+      end
+    end
   end
 
   describe 'execution_location' do

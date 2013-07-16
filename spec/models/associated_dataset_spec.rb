@@ -3,13 +3,30 @@ require 'spec_helper'
 describe AssociatedDataset do
   let(:gpdb_table) { FactoryGirl.create(:gpdb_table) }
   let(:workspace) { workspaces(:public) }
-  let!(:associated_dataset) {
-    FactoryGirl.create(:associated_dataset, :workspace => workspace, :dataset => gpdb_table)
-  }
 
   describe "validations" do
     it { should validate_presence_of(:dataset) }
     it { should validate_presence_of(:workspace) }
+
+    describe 'ensure_active_workspace' do
+      context 'if the workspace is archived' do
+        let(:workspace) { workspaces(:archived) }
+
+        it 'produces an error' do
+          association = FactoryGirl.build(:associated_dataset, :dataset => datasets(:hadoop), :workspace => workspace)
+          association.should have_error_on(:dataset)
+        end
+      end
+
+      context 'produces no errors if the workspace is not archived' do
+        let(:workspace) { workspaces(:empty_workspace) }
+
+        it 'produces no error' do
+          association = FactoryGirl.build(:associated_dataset, :dataset => datasets(:hadoop), :workspace => workspace)
+          association.should_not have_error_on(:dataset)
+        end
+      end
+    end
 
     it 'doesnt allow associating a chorus view to a workspace' do
       association = FactoryGirl.build(:associated_dataset, :dataset => datasets(:chorus_view))
@@ -17,6 +34,7 @@ describe AssociatedDataset do
     end
 
     it "doesnt have duplicate workspace_id + dataset_id" do
+      FactoryGirl.create(:associated_dataset, :workspace => workspace, :dataset => gpdb_table)
       association = FactoryGirl.build(:associated_dataset, :workspace => workspace, :dataset => gpdb_table)
       association.should have_error_on(:dataset).with_message(:already_associated).with_options(:workspace_name => workspace.name)
     end
@@ -51,13 +69,12 @@ describe AssociatedDataset do
     end
 
     it "doesnt validate against deleted associations" do
-      associated_dataset.destroy
       association = FactoryGirl.build(:associated_dataset, :workspace => workspace, :dataset => gpdb_table)
       association.save.should be_true
     end
   end
 
   it_behaves_like 'a soft deletable model' do
-    let(:model) { associated_dataset}
+    let(:model) { FactoryGirl.create(:associated_dataset, :workspace => workspace, :dataset => gpdb_table) }
   end
 end

@@ -2,7 +2,7 @@ class HdfsDataset < Dataset
   alias_attribute :file_mask, :query
   attr_accessible :file_mask
   validates_presence_of :file_mask
-
+  validate :ensure_active_workspace, :on => :update
 
   belongs_to :hdfs_data_source
   delegate :data_source, :connect_with, :connect_as, :to => :hdfs_data_source
@@ -51,5 +51,10 @@ class HdfsDataset < Dataset
 
   def execution_location
     hdfs_data_source
+  end
+
+  def ensure_active_workspace
+    any_archived = bound_workspaces.find { |workspace| workspace.archived? }
+    self.errors[:dataset] << :ARCHIVED if any_archived
   end
 end
