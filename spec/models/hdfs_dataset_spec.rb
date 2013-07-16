@@ -38,7 +38,12 @@ describe HdfsDataset do
           workspace.archived = 'true'
           workspace.archiver = user
           workspace.save!
-          puts "the workspace is archived? #{workspace.archived?}"
+        end
+
+        it 'still allows tagging' do
+          dataset.tags << Tag.new(:name => "fancy tag")
+          dataset.save!
+          dataset.should_not have_error_on(:dataset)
         end
 
         it 'produces an error' do

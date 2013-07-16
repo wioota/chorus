@@ -61,11 +61,10 @@
             {{/if}}
 
             <li><a class="edit_tags">{{t "sidebar.edit_tags"}}</a></li>
-            {{#if isPresentingHdfsDataset}}
-                <li><a class="edit_hdfs_dataset">{{t "actions.edit_hdfs_dataset"}}</a></li>
-            {{/if}}
-
             {{#unless workspaceArchived}}
+                {{#if isPresentingHdfsDataset}}
+                    <li><a class="edit_hdfs_dataset">{{t "actions.edit_hdfs_dataset"}}</a></li>
+                {{/if}}
                 {{#if canExport}}
                     {{#if importsEnabled}}
                         <li><a class="import_now dialog" href="#">{{t "actions.import_now"}}</a></li>

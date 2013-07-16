@@ -334,6 +334,18 @@ describe("combo.chorus.views.DatasetSidebar", function() {
                 it("does not display the 'Download' link", function() {
                     expect(this.view.$(".actions a.download")).not.toExist();
                 });
+
+                context("when the workspace is archived", function () {
+                    beforeEach(function () {
+                        spyOn(this.dataset, 'workspaceArchived').andReturn(true);
+                        this.view.render();
+                    });
+
+                    it("only shows the tags link", function () {
+                        expect(this.view.$(".actions a").length).toEqual(1);
+                        expect(this.view.$(".actions a.edit_tags")).toExist();
+                    });
+                });
             });
         });
 

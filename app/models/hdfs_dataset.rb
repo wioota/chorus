@@ -2,7 +2,7 @@ class HdfsDataset < Dataset
   alias_attribute :file_mask, :query
   attr_accessible :file_mask
   validates_presence_of :file_mask
-  validate :ensure_active_workspace, :on => :update
+  validate :ensure_active_workspace, :on => :update, :if => Proc.new { |f| f.changed? }
 
   belongs_to :hdfs_data_source
   delegate :data_source, :connect_with, :connect_as, :to => :hdfs_data_source
