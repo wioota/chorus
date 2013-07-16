@@ -1045,7 +1045,7 @@ describe("chorus.models.Base", function() {
                expect(model.statusCode).toBe(204);
            });
 
-           it("sets leave the status code alone if already set", function() {
+           it("leaves the status code alone if already set", function() {
                var model = new chorus.models.Base();
                model.statusCode = 123;
                model.set({completeJson: true});
