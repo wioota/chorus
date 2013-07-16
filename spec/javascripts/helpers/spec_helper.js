@@ -90,6 +90,14 @@
 
             this.addMatchers({
                 toBeA: function(klass) {
+                     if (klass.prototype && klass.prototype.constructorName) {
+                        this.message = function () {
+                            return [
+                                "Expected a '" + this.actual.constructorName + "' to be an instance of '" + klass.prototype.constructorName +"'.",
+                                "Expected a '" + this.actual.constructorName + "' to be an instance of something other than '" + klass.prototype.constructorName +"'!"
+                            ];
+                        };
+                    }
                     if (_.isFunction(klass)) {
                         return this.actual instanceof klass;
                     } else {
