@@ -75,7 +75,7 @@ describe("combo.chorus.dialogs.CreateHdfsDataset", function() {
                 expect(params['hdfs_dataset[name]']).toEqual("Jim Carrey");
                 expect(params['hdfs_dataset[data_source_id]']).toEqual(this.dataSources[2].id);
                 expect(params['hdfs_dataset[file_mask]']).toEqual("foo.*.bar");
-                expect(params['hdfs_dataset[workspace][id]']).toEqual(this.workspace.id);
+                expect(params['hdfs_dataset[workspace_id]']).toEqual(this.workspace.id);
                 expect(params['hdfs_dataset[entity_subtype]']).toEqual('HDFS');
             });
 

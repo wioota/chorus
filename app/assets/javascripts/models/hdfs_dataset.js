@@ -20,9 +20,13 @@ chorus.models.HdfsDataset = chorus.models.WorkspaceDataset.extend({
 
     showUrlTemplate: "workspaces/{{workspace.id}}/hadoop_datasets/{{id}}",
 
-    initialize: function () {
+    initialize: function (options) {
         this._super('initialize');
         this.attributes.entitySubtype = "HDFS";
+        this.attributes.objectType = "MASK";
+        if (options.workspace) {
+            this.attributes.workspaceId = options.workspace.id;
+        }
     },
 
     dataSource: function() {

@@ -2,6 +2,7 @@ require "spec_helper"
 
 describe HdfsDatasetsController do
   let(:user) { users(:owner) }
+  let(:workspace) { workspaces(:public) }
 
   before do
     log_in user
@@ -11,15 +12,12 @@ describe HdfsDatasetsController do
   end
 
   describe '#create' do
-    let(:workspace) { workspaces(:public) }
     let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
     let(:params) do
       {:hdfs_dataset => {
           :file_mask => 'foo/*/bar',
           :data_source_id => hdfs_data_source.id,
-          :workspace => {
-              :id => workspace.id
-          },
+          :workspace_id => workspace.id,
           :name => Faker::Name.name
       }}
     end
@@ -41,6 +39,11 @@ describe HdfsDatasetsController do
         post :create, params
       }.to change { workspace.associated_datasets.count }.by(1)
     end
+
+    it "uses authorization" do
+      mock(subject).authorize! :can_edit_sub_objects, workspace
+      post :create, params
+    end
   end
 
   describe '#update' do
@@ -52,6 +55,11 @@ describe HdfsDatasetsController do
       expect {
         put :update, :name => new_name, :id => dataset.id
       }.to change { dataset.reload.name }.from(old_name).to(new_name)
+    end
+
+    it "uses authorization" do
+      mock(subject).authorize! :can_edit_sub_objects, workspace
+      put :update, :name => new_name, :id => dataset.id
     end
   end
 end
