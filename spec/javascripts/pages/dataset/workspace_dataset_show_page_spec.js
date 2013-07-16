@@ -114,6 +114,18 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
             it("sets workspace", function() {
                 expect(this.page.sidebar.options.workspace).toBeTruthy();
             });
+
+            describe("deriving a chorus view", function () {
+                beforeEach(function () {
+                    spyOn(this.page, 'constructSidebarForType');
+                });
+
+                it("shows the dataset_create_chorus_view_sidebar", function () {
+                    this.page.$('.derive').click();
+                    expect(this.page.constructSidebarForType).toHaveBeenCalledWith('chorus_view');
+                });
+            });
+
         });
 
         describe("breadcrumbs", function() {

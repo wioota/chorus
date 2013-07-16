@@ -84,5 +84,19 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
             showLocation: true,
             workspaceId: this.workspace.id
         }, options));
+    },
+
+    constructSidebarForType: function(type) {
+        if (type === 'chorus_view') {
+            this.dataset.setDatasetNumber(1);
+            this.sidebar.disabled = true;
+            this.mainContent.content.selectMulti = true;
+            this.mainContent.content.showDatasetName = true;
+            this.mainContent.content.render();
+            this.mainContent.content.selectNone();
+            this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model: this.model, aggregateColumnSet: this.columnSet});
+        } else {
+            this._super('constructSidebarForType', arguments);
+        }
     }
 });

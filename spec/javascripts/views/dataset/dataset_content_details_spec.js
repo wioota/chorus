@@ -402,7 +402,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                 });
             });
 
-            context("and the derive a chorus view button is clicked", function() {
+            context("and the 'derive a chorus view button' is clicked", function() {
                 beforeEach(function() {
                     this.view.filterWizardView.resetFilters.reset();
                     this.chorusViewSpy = spyOnEvent(this.view, "transform:sidebar");

@@ -1,4 +1,5 @@
 chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
+    constructorName: 'CreateChorusViewSidebar',
     templateName: "dataset_create_chorus_view_sidebar",
 
     events: {
