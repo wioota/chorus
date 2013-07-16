@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>9,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>28,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
         \ last_name_texts username_texts email_texts tag_names_texts name_texts description_texts\
         \ summary_texts file_name_texts version_comments_texts database_name_texts\
         \ table_description_texts schema_name_texts column_name_texts column_description_texts\
@@ -47,12 +47,12 @@ http_interactions:
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workspace)\
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
         \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>2,'ngroups'=>2,'groups'=>[{'groupValue'=>'Attachment\
-        \ 1000004','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>8148844.0,'docs'=>[{'id'=>'Attachment\
-        \ 1000004','name_texts'=>['searchquery_workspace'],'name_stemmed_texts'=>['searchquery_workspace'],'score'=>8148844.0}]}},{'groupValue'=>'Attachment\
-        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>6790703.0,'docs'=>[{'id'=>'Attachment\
-        \ 1000011','name_texts'=>['searchquery_workspace_dataset'],'name_stemmed_texts'=>['searchquery_workspace_dataset'],'score'=>6790703.0}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Attachment',2]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'Attachment\
+        \ 1000004','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>8164408.0,'docs'=>[{'id'=>'Attachment\
+        \ 1000004','name_texts'=>['searchquery_workspace'],'name_stemmed_texts'=>['searchquery_workspace'],'score'=>8164408.0}]}},{'groupValue'=>'Attachment\
+        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>6803673.0,'docs'=>[{'id'=>'Attachment\
+        \ 1000011','name_texts'=>['searchquery_workspace_dataset'],'name_stemmed_texts'=>['searchquery_workspace_dataset'],'score'=>6803673.0}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Attachment',2]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'Attachment\
         \ 1000004'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_@@@hl@@@workspace@@@endhl@@@'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_@@@hl@@@workspace@@@endhl@@@']},'Attachment\
         \ 1000011'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_@@@hl@@@workspace@@@endhl@@@_dataset'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_@@@hl@@@workspace@@@endhl@@@_dataset']}}}"
     http_version: '1.1'
-  recorded_at: Fri, 12 Jul 2013 20:41:01 GMT
+  recorded_at: Tue, 16 Jul 2013 16:13:47 GMT
 recorded_with: VCR 2.3.0

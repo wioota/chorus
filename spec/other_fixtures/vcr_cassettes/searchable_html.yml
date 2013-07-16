@@ -25,9 +25,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>538}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>107}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:08:15 GMT
+  recorded_at: Tue, 16 Jul 2013 16:12:36 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -50,9 +50,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>303}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>140}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:08:15 GMT
+  recorded_at: Tue, 16 Jul 2013 16:12:37 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -75,9 +75,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>36,'params'=>{'fl'=>'* score','start'=>'0','q'=>'twinkletwinklelittlestar','qf'=>'html_field_texts','wt'=>'ruby','fq'=>'type:SearchableHtmlTestClass','defType'=>'edismax','rows'=>'30'}},'response'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.1506981,'docs'=>[{'id'=>'SearchableHtmlTestClass\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>15,'params'=>{'fl'=>'* score','start'=>'0','q'=>'twinkletwinklelittlestar','qf'=>'html_field_texts','wt'=>'ruby','fq'=>'type:SearchableHtmlTestClass','defType'=>'edismax','rows'=>'30'}},'response'=>{'numFound'=>1,'start'=>0,'maxScore'=>21.148394,'docs'=>[{'id'=>'SearchableHtmlTestClass\
         \ 1','html_field_texts'=>['hello twinkletwinklelittlestar'],'html_field_stemmed_texts'=>['hello\
-        \ twinkletwinklelittlestar'],'score'=>1.1506981}]}}"
+        \ twinkletwinklelittlestar'],'score'=>21.148394}]}}"
     http_version: '1.1'
-  recorded_at: Tue, 28 May 2013 17:08:15 GMT
+  recorded_at: Tue, 16 Jul 2013 16:12:37 GMT
 recorded_with: VCR 2.3.0
