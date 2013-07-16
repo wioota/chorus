@@ -24,7 +24,7 @@ chorus.models.HdfsDataset = chorus.models.WorkspaceDataset.extend({
         this._super('initialize');
         this.attributes.entitySubtype = "HDFS";
         this.attributes.objectType = "MASK";
-        if (options.workspace) {
+        if (options && options.workspace) {
             this.attributes.workspaceId = options.workspace.id;
         }
     },

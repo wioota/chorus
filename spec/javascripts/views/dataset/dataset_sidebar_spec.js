@@ -317,15 +317,7 @@ describe("combo.chorus.views.DatasetSidebar", function() {
                 expect(this.view.$('.actions .dataset_preview')).toContainTranslation('actions.dataset_preview');
             });
 
-            describe("when the 'Preview Data' link is clicked", function() {
-                beforeEach(function() {
-                    this.view.$(".dataset_preview").click();
-                });
-
-                it("displays the preview data dialog", function() {
-                    expect(chorus.modal).toBeA(chorus.dialogs.DatasetPreview);
-                });
-            });
+            itBehavesLike.aDialogLauncher("a.dataset_preview", chorus.dialogs.DatasetPreview);
 
             context("for a hdfs dataset", function() {
                 beforeEach(function () {
