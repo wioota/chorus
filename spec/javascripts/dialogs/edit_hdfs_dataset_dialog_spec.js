@@ -49,6 +49,10 @@ describe("combo.chorus.dialogs.EditHdfsDataset", function() {
                 expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
             });
 
+            it("adds the saving text to the submit button", function () {
+                expect(this.dialog.$("button.submit")).toContainTranslation('actions.saving');
+            });
+
             context("when the save succeeds", function () {
                 beforeEach(function () {
                     spyOn(this.dialog, 'closeModal');

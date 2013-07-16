@@ -1,4 +1,5 @@
 chorus.dialogs.HdfsDatasetAttributes = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
+    constructorName: 'HdfsDatasetAttributes',
     templateName: "hdfs_dataset_attributes",
 
     setup: function () {
@@ -45,7 +46,7 @@ chorus.dialogs.HdfsDatasetAttributes = chorus.dialogs.Base.include(chorus.Mixins
 
 
     create: function () {
-        this.$("button.submit").startLoading();
+        this.$("button.submit").startLoading('actions.saving');
         this.model.save(this.getFields(), {wait: true});
     },
 
