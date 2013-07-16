@@ -8,9 +8,9 @@ class HdfsDatasetPresenter < DatasetPresenter
   end
 
   def complete_hash
-    super.merge({
-      :content => model.contents
-    })
+    hash = super
+    hash.merge!({:content => model.contents}) if with_content
+    hash
   end
 
 
@@ -18,5 +18,9 @@ class HdfsDatasetPresenter < DatasetPresenter
 
   def subtype
     'HDFS'
+  end
+
+  def with_content
+    @options[:with_content]
   end
 end

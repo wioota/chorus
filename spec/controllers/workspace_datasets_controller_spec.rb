@@ -39,6 +39,7 @@ describe WorkspaceDatasetsController do
           stub(ds).contents { ["content"] }
         end
       end
+
       it "uses authorization" do
         mock(subject).authorize! :show, workspace
         get :index, :workspace_id => workspace.to_param
@@ -94,6 +95,14 @@ describe WorkspaceDatasetsController do
       it "respects 'all_import_destinations'" do
         mock(workspace).datasets(anything, hash_including(:all_import_destinations => true)) { the_datasets }
         get :index, :workspace_id => workspace.to_param, :all_import_destinations => true
+      end
+
+      context "presenting HDFS Datasets" do
+        it "does not present their contents" do
+          get :index, :workspace_id => hdfs_dataset.bound_workspaces.first.id
+          dataset_json = decoded_response.select {|dataset| dataset["id"] == hdfs_dataset.id }
+          dataset_json.pop.should_not have_key(:content)
+        end
       end
     end
 
@@ -241,6 +250,11 @@ describe WorkspaceDatasetsController do
 
           generate_fixture "workspaceDataset/hdfsDataset.json" do
             get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+          end
+
+          it "presents their content" do
+            get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+            decoded_response.should have_key(:content)
           end
         end
 
