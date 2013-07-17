@@ -16,7 +16,10 @@ describe "Dataset", :database_integration do
     wait_for_page_load
 
     first('.select_all').click
-    click_link 'Associate with a workspace'
+
+    within '.multiple_selection_sidebar_menu' do
+      click_link 'Associate with a workspace'
+    end
 
     within_modal do
       within ".items.collection_list" do
