@@ -770,7 +770,7 @@ describe("chorus.presenters.Activity", function() {
 
         context("when the dataset is from a SQL DB", function () {
             beforeEach(function() {
-                this.model = backboneFixtures.activity.sourceTableCreated({ dataset: { objectType: 'VIEW' } });
+                this.model = backboneFixtures.activity.sourceTableCreated({ dataset: { entitySubtype: 'VIEW', objectType: 'VIEW' } });
                 this.presenter = new chorus.presenters.Activity(this.model);
                 this.actor = this.model.actor();
             });
