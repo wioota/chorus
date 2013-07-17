@@ -19,20 +19,24 @@ chorus.pages.HdfsDatasetShowPage = chorus.pages.Base.extend({
 
     setup: function() {
         this.model.fetch();
-        this.breadcrumbs.requiredResources.add(this.dataset);
 
-        this.mainContent = new chorus.views.MainContentView({
-            model:this.model,
-            content:new chorus.views.ReadOnlyTextContent({model:this.model}),
-            contentHeader:new chorus.views.DatasetShowContentHeader({ model:this.model }),
-            contentDetails:new chorus.views.HdfsDatasetContentDetails({ model:this.model })
+        this.mainContent = new chorus.views.LoadingSection();
+        this.listenTo(this.model, "loaded", this.setupMainContent);
+        this.listenTo(this.model, "invalidated", function () {
+            this.model.fetch();
         });
+    },
 
+    setupMainContent: function() {
+        this.breadcrumbs.requiredResources.add(this.dataset);
+        this.mainContent = new chorus.views.MainContentView({
+            model: this.model,
+            content: new chorus.views.ReadOnlyTextContent({model: this.model}),
+            contentHeader: new chorus.views.DatasetShowContentHeader({ model: this.model }),
+            contentDetails: new chorus.views.HdfsDatasetContentDetails({ model: this.model })
+        });
         this.sidebar = new chorus.views.DatasetSidebar({ model: this.model });
-        this.listenTo(this.model, "invalidated", function() { this.model.fetch(); });
-
         this.sidebar.setDataset(this.dataset);
-        this.listenTo(this.mainContent.contentDetails, "transform:sidebar", this.showSidebar);
+        this.render();
     }
-
 });

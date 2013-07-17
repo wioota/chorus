@@ -14,9 +14,14 @@ describe("chorus.pages.HdfsDatasetShowPage", function () {
             expect(this.page.model.get("id")).toBe(this.datasetId);
         });
 
-        it("has a helpId", function() {
+        it("has a helpId", function () {
             expect(this.page.helpId).toBe("dataset");
         });
+    });
+
+    it("shows only a loading spinner initially", function () {
+        expect(this.page.mainContent).toBeA(chorus.views.LoadingSection);
+        expect(this.page.sidebar).toBeUndefined();
     });
 
     describe("when the workspace and dataset fetches complete", function () {
@@ -25,33 +30,38 @@ describe("chorus.pages.HdfsDatasetShowPage", function () {
             this.server.completeFetchFor(this.dataset);
         });
 
-        describe("breadcrumbs", function() {
-            it("links to home for the first crumb", function() {
+        it("sets up the main content", function () {
+            expect(this.page.mainContent).toBeA(chorus.views.MainContentView);
+            expect(this.page.sidebar).not.toBeUndefined();
+        });
+
+        describe("breadcrumbs", function () {
+            it("links to home for the first crumb", function () {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).text()).toBe(t("breadcrumbs.home"));
             });
 
-            it("links to /workspaces for the second crumb", function() {
+            it("links to /workspaces for the second crumb", function () {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).attr("href")).toBe("#/workspaces");
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).text()).toBe(t("breadcrumbs.workspaces"));
             });
 
-            it("links to workspace show for the third crumb", function() {
+            it("links to workspace show for the third crumb", function () {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2).attr("href")).toBe(this.workspace.showUrl());
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2).text()).toBe(this.workspace.displayName());
             });
 
-            it("links to the workspace data tab for the fourth crumb", function() {
+            it("links to the workspace data tab for the fourth crumb", function () {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).attr("href")).toBe(this.workspace.showUrl() + "/datasets");
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).text()).toBe(t("breadcrumbs.workspaces_data"));
             });
 
-            it("displays the object name for the fifth crumb", function() {
+            it("displays the object name for the fifth crumb", function () {
                 expect(this.page.$("#breadcrumbs .breadcrumb .slug").text()).toBe(this.dataset.name());
             });
         });
 
-        it("shows the dataset content", function() {
+        it("shows the dataset content", function () {
             expect(this.page.mainContent.content).toBeA(chorus.views.ReadOnlyTextContent);
             expect(this.page.mainContent.content.model.get('content')).toEqual(this.dataset.get("content"));
         });
@@ -75,13 +85,13 @@ describe("chorus.pages.HdfsDatasetShowPage", function () {
 
     });
 
-    describe("when the hdfs dataset is invalidated", function() {
+    describe("when the hdfs dataset is invalidated", function () {
         beforeEach(function () {
             this.server.reset();
             this.page.model.trigger("invalidated");
         });
 
-        it("the hdfs dataset should refetch", function() {
+        it("the hdfs dataset should refetch", function () {
             expect(this.page.model).toHaveBeenFetched();
         });
     });
