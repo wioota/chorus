@@ -99,7 +99,7 @@ describe WorkspaceDatasetsController do
 
       context "presenting HDFS Datasets" do
         it "does not present their contents" do
-          get :index, :workspace_id => hdfs_dataset.bound_workspaces.first.id
+          get :index, :workspace_id => hdfs_dataset.workspace_id
           dataset_json = decoded_response.select {|dataset| dataset["id"] == hdfs_dataset.id }
           dataset_json.pop.should_not have_key(:content)
         end

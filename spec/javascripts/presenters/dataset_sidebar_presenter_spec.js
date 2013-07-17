@@ -426,7 +426,15 @@ describe("chorus.presenters.DatasetSidebar", function() {
         });
 
         it("permits editing file mask", function() {
-            expect(this.presenter.isPresentingHdfsDataset()).toBe(true);
+            expect(this.presenter.isHdfsDataset()).toBeTruthy();
+        });
+
+        it("does not allow importing at all", function () {
+           expect(this.presenter.importsEnabled()).toBeFalsy();
+        });
+
+        it("does not allow exporting at all", function () {
+           expect(this.presenter.canExport()).toBeFalsy();
         });
     });
 });

@@ -411,7 +411,7 @@ describe WorkfilesController do
       end
 
       context "and a list of HdfsDatasets has been chosen" do
-        let(:workspace_id) { dataset.bound_workspaces.first.id }
+        let(:workspace_id) { dataset.workspace_id }
         let(:hdfs_data_source) { dataset.hdfs_data_source }
         let(:dataset) { datasets(:hadoop) }
         let(:another_dataset) { FactoryGirl.create(:hdfs_dataset, :hdfs_data_source => dataset.execution_location) }

@@ -123,7 +123,8 @@ FactoryGirl.define do
 
   factory :hdfs_dataset do
     sequence(:name) { |n| "#{Faker::Company.name}_#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
-    association :hdfs_data_source, :factory => :hdfs_data_source
+    hdfs_data_source
+    workspace
     file_mask "/*"
   end
 

@@ -233,8 +233,8 @@ FixtureBuilder.configure do |fbuilder|
     Events::WorkspaceDeleted.by(owner).add(:workspace => public_workspace, :actor => owner)
 
     # HDFS Datasets need a workspace association
-    attrs = FactoryGirl.build(:hdfs_dataset, :name => "hadoop", :hdfs_data_source => hdfs_data_source).attributes
-    hadoop_dadoop = HdfsDataset.assemble!(attrs.merge!(:file_mask => 'slash/star/*'), hdfs_data_source, public_workspace, owner)
+    attrs = FactoryGirl.build(:hdfs_dataset, :name => "hadoop", :hdfs_data_source => hdfs_data_source, :workspace => public_workspace).attributes
+    hadoop_dadoop = HdfsDataset.assemble!(attrs.merge!(:file_mask => 'slash/star/*'), hdfs_data_source, public_workspace)
 
     # Chorus View
     chorus_view = FactoryGirl.create(:chorus_view, :name => "chorus_view", :schema => default_schema, :query => "select * from a_table", :workspace => public_workspace)

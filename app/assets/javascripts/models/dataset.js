@@ -34,6 +34,10 @@ chorus.models.Dataset = chorus.models.Base.include(
         return entitySubtype && (entitySubtype === "SOURCE_TABLE" || entitySubtype === "CHORUS_VIEW");
     },
 
+    isHdfsDataset: function () {
+        return this.get('entitySubtype') === "HDFS";
+    },
+
     isOracle: function() {
       return this.dataSource().isOracle();
     },

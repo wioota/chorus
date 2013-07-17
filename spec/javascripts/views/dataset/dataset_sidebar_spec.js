@@ -1,4 +1,4 @@
-describe("combo.chorus.views.DatasetSidebar", function() {
+describe("chorus.views.DatasetSidebar", function() {
     beforeEach(function() {
         stubClEditor();
         stubDelay();
@@ -333,6 +333,14 @@ describe("combo.chorus.views.DatasetSidebar", function() {
 
                 it("does not display the 'Download' link", function() {
                     expect(this.view.$(".actions a.download")).not.toExist();
+                });
+
+                it("does not display the import links", function () {
+                    expect(this.view.$(".actions a.import_now")).not.toExist();
+                });
+
+                it("does not display the associate links", function () {
+                    expect(this.view.$(".actions a.associate")).not.toExist();
                 });
 
                 context("when the workspace is archived", function () {
@@ -913,7 +921,7 @@ describe("combo.chorus.views.DatasetSidebar", function() {
             });
 
             it("has a link to associate the dataset with a workspace", function() {
-                expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_workspace');
+                expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_another_workspace');
             });
 
             context('when the dataset is an oracle dataset', function() {

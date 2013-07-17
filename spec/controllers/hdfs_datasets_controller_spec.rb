@@ -34,12 +34,6 @@ describe HdfsDatasetsController do
       decoded_response.should_not be_empty
     end
 
-    it 'associates the dataset with the given workspace' do
-      expect {
-        post :create, params
-      }.to change { workspace.associated_datasets.count }.by(1)
-    end
-
     it "uses authorization" do
       mock(subject).authorize! :can_edit_sub_objects, workspace
       post :create, params

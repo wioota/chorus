@@ -433,16 +433,6 @@ describe HdfsEntry do
     end
   end
 
-  describe ".from_param(param)" do
-    it "uses the hadoop data source id and file-system path specified in the string" do
-      entry = hdfs_entries(:hdfs_file)
-      hdfs_entry = HdfsEntry.from_param(entry.id)
-
-      hdfs_entry.hdfs_data_source_id.should == entry.hdfs_data_source.id
-      hdfs_entry.path.should == entry.path
-    end
-  end
-
   describe "destroy_entries" do
     it "destroys entries for given data source id" do
       data_source = hdfs_data_sources(:hadoop)

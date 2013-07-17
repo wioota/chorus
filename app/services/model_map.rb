@@ -15,6 +15,6 @@ module ModelMap
   end
 
   def self.model_from_params(entity_type, entity_id)
-    class_from_type(entity_type).from_param(entity_id)
+    class_from_type(entity_type).find(entity_id)
   end
 end

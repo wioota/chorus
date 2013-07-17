@@ -154,6 +154,9 @@ describe Workspace do
     let!(:sandbox_view) { FactoryGirl.create(:gpdb_view, schema: schema) }
     let!(:source_table) { FactoryGirl.create(:gpdb_table, schema: other_schema) }
     let!(:other_table) { FactoryGirl.create(:gpdb_table, schema: other_schema) }
+    let!(:hdfs_dataset) {
+      FactoryGirl.create(:hdfs_dataset, name: "hdfs_dataset", file_mask: "/*", workspace: workspace)
+    }
     let!(:chorus_view) {
       FactoryGirl.create(:chorus_view, name: "chorus_view", schema: schema, query: "select * from a_table", workspace: workspace)
     }
@@ -171,8 +174,8 @@ describe Workspace do
 
       context "when the user does not have a data source account" do
         it "lets them see associated datasets and chorus views only" do
-          workspace.datasets(user).to_a.should =~ [source_table, chorus_view, chorus_view_from_source]
-          workspace.dataset_count(user).should == 3
+          workspace.datasets(user).to_a.should =~ [source_table, chorus_view, chorus_view_from_source, hdfs_dataset]
+          workspace.dataset_count(user).should == 4
         end
       end
 
@@ -188,13 +191,13 @@ describe Workspace do
             workspace.show_sandbox_datasets = false
             workspace.save
             stub(GpdbDataset).visible_to(account, schema, anything) {
-              [sandbox_table, source_table, chorus_view, sandbox_view, chorus_view_from_source]
+              [sandbox_table, source_table, chorus_view, hdfs_dataset, sandbox_view, chorus_view_from_source]
             }
           end
 
           it "shows associated datasets and chorus views only" do
-            workspace.datasets(user).to_a.should =~ [source_table, chorus_view, chorus_view_from_source]
-            workspace.dataset_count(user).should == 3
+            workspace.datasets(user).to_a.should =~ [source_table, chorus_view, hdfs_dataset, chorus_view_from_source]
+            workspace.dataset_count(user).should == 4
           end
 
           context "and 'all import destinations' is passed" do
@@ -214,8 +217,8 @@ describe Workspace do
           end
 
           it "lets them see associated datasets and chorus views only" do
-            workspace.datasets(user).to_a.should =~ [source_table, chorus_view, chorus_view_from_source]
-            workspace.dataset_count(user).should == 3
+            workspace.datasets(user).to_a.should =~ [source_table, chorus_view, chorus_view_from_source, hdfs_dataset]
+            workspace.dataset_count(user).should == 4
           end
         end
 
@@ -227,8 +230,8 @@ describe Workspace do
           end
 
           it "includes datasets in the workspace's sandbox and all of its source datasets" do
-            workspace.datasets(user).to_a.should =~ [sandbox_table, source_table, chorus_view, sandbox_view, chorus_view_from_source]
-            workspace.dataset_count(user).should == 1 + 2 + magic_number
+            workspace.datasets(user).to_a.should =~ [sandbox_table, source_table, chorus_view, sandbox_view, chorus_view_from_source, hdfs_dataset]
+            workspace.dataset_count(user).should == 1 + 2 + 1 + magic_number
           end
 
           it "filters by entity_subtype" do
@@ -287,6 +290,7 @@ describe Workspace do
           workspace_datasets = workspace.datasets(user, {:database_id => dataset1.schema.database.id})
           workspace_datasets.should include(dataset1)
           workspace_datasets.should include(chorus_view)
+          workspace_datasets.should_not include(hdfs_dataset)
           workspace_datasets.should_not include(dataset2)
         end
       end
@@ -314,6 +318,10 @@ describe Workspace do
         workspace.datasets(user).to_a.should include(chorus_view)
       end
 
+      it "includes the workspace's hdfs datasets" do
+        workspace.datasets(user).to_a.should include(hdfs_dataset)
+      end
+
       context "when the workspace has associated datasets and a database_id is given" do
         let!(:chorus_view) { FactoryGirl.create(:chorus_view, :workspace => workspace, :schema => dataset1.schema) }
         let(:dataset1) { datasets(:table) }
@@ -335,7 +343,7 @@ describe Workspace do
 
       before do
         workspace.associated_datasets.destroy_all
-        workspace.chorus_views.destroy_all
+        workspace.directly_associated_datasets.destroy_all
       end
 
       it "returns an empty relation" do
@@ -469,27 +477,6 @@ describe Workspace do
   describe "#has_dataset" do
     let(:workspace) { workspaces(:public_with_no_collaborators) }
     let(:dataset) { FactoryGirl.create(:gpdb_table) }
-
-    context "when the Dataset has no Schema and the Workspace has no Sandbox" do
-      let(:dataset) { datasets(:hadoop) }
-      let(:workspace) { workspaces(:typeahead_private) } # Trust me, it has no sandbox
-
-      context "when the dataset is in source datasets" do
-        before do
-          workspace.associate_datasets(users(:owner), [dataset])
-        end
-
-        it "returns true" do
-          workspace.has_dataset?(dataset).should be_true
-        end
-      end
-
-      context "when the dataset is unassociated" do
-        it "returns false" do
-          workspace.has_dataset?(dataset).should be_false
-        end
-      end
-    end
 
     context "when the workspace automatically adds sandbox tables" do
       before do

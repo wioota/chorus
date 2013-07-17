@@ -36,7 +36,6 @@
         {{nextImport}}
     </div>
 
-
     <div class="actions">
         <ul>
             {{#if realWorkspace}}
@@ -49,20 +48,19 @@
                                 <li><a class="duplicate" href="#">{{t "dataset.chorusview.duplicate"}}</a></li>
                             {{/if}}
                         {{/unless}}
-                    {{else}}
-                        <li><a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a></li>
                     {{/if}}
                 {{/unless}}
             {{else}}
                 <li><a class="new_note dialog" href="#">{{t "actions.add_note"}}</a></li>
-                {{#if canAssociate}}
-                    <li><a class="associate" href="#">{{t "actions.associate_with_workspace"}}</a></li>
-                {{/if}}
+            {{/if}}
+
+            {{#if canAssociate}}
+                <li><a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a></li>
             {{/if}}
 
             <li><a class="edit_tags">{{t "sidebar.edit_tags"}}</a></li>
             {{#unless workspaceArchived}}
-                {{#if isPresentingHdfsDataset}}
+                {{#if isHdfsDataset}}
                     <li><a class="edit_hdfs_dataset">{{t "actions.edit_hdfs_dataset"}}</a></li>
                 {{/if}}
                 {{#if canExport}}
@@ -92,7 +90,7 @@
                 <li><a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a></li>
             {{/if}}
 
-            {{#unless isPresentingHdfsDataset}}
+            {{#unless isHdfsDataset}}
                 {{#unless noValidCredentials}}
                     {{#if listMode}}
                         <li><a class="dataset_preview" href="#">{{t "actions.dataset_preview"}}</a></li>

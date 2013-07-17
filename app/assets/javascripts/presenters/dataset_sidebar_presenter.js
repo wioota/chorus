@@ -44,7 +44,11 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     canAssociate: function() {
-        return this.resource.isGreenplum();
+        if (!this.hasWorkspace()) {
+            return this.resource.isGreenplum();
+        }
+
+        return !(this.resource.workspaceArchived() || this.resource.isChorusView() || this.resource.isHdfsDataset());
     },
 
     isDeleteable: function() {
@@ -73,7 +77,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     importsEnabled: function() {
-        return (this.hasWorkspace() && this.resource.workspace().sandbox()) ||
+        return !!(this.hasWorkspace() && this.resource.workspace().sandbox() && !this.resource.isHdfsDataset()) ||
             (this.resource && this.resource.isOracle());
     },
 
@@ -222,6 +226,10 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return this.resource ? this.resource.isChorusView() : "";
     },
 
+    isHdfsDataset: function() {
+        return this.resource ? this.resource.isHdfsDataset() : "";
+    },
+
     hasDataSourceAccount: function() {
         return !!this.resource.dataSource().accountForCurrentUser().id;
     },
@@ -262,9 +270,5 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         if (!name) return "";
         var length = 15;
         return (name.length < length) ? name : name.slice(0, length-3).trim() + "...";
-    },
-
-    isPresentingHdfsDataset: function() {
-        return this.resource.get("entitySubtype") === "HDFS";
     }
 });

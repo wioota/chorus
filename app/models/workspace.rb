@@ -26,6 +26,7 @@ class Workspace < ActiveRecord::Base
 
   has_many :csv_files
 
+  has_many :directly_associated_datasets, :dependent => :destroy, :class_name => 'Dataset'
   has_many :associated_datasets, :dependent => :destroy
   has_many :source_datasets, :through => :associated_datasets, :source => :dataset
   has_many :all_imports, :class_name => 'Import'
@@ -117,7 +118,7 @@ class Workspace < ActiveRecord::Base
     database_id = options[:database_id]
 
     scoped_source_datasets = scope_to_database(source_datasets, database_id)
-    scoped_chorus_views = scope_to_database(chorus_views, database_id)
+    scoped_directly_associated_datasets = scope_to_database(directly_associated_datasets, database_id)
 
     datasets = []
     case entity_subtype
@@ -127,7 +128,7 @@ class Workspace < ActiveRecord::Base
       when "SOURCE_TABLE", "NON_CHORUS_VIEW" then
         datasets << scoped_source_datasets
       else
-        datasets << scoped_source_datasets << scoped_chorus_views
+        datasets << scoped_source_datasets << scoped_directly_associated_datasets
     end
 
     datasets.map do |relation|

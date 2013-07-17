@@ -3,6 +3,7 @@ require "spec_helper"
 describe ChorusView do
   describe "validations" do
     it { should validate_presence_of(:workspace) }
+    it { should belong_to(:workspace) }
     it { should validate_presence_of(:query) }
 
     describe "#validate_query", :greenplum_integration do

@@ -1,20 +1,20 @@
 class HdfsDataset < Dataset
   alias_attribute :file_mask, :query
   attr_accessible :file_mask
-  validates_presence_of :file_mask
-  validate :ensure_active_workspace, :on => :update, :if => Proc.new { |f| f.changed? }
+  validates_presence_of :file_mask, :workspace
+  validate :ensure_active_workspace, :if => Proc.new { |f| f.changed? }
 
   belongs_to :hdfs_data_source
+  belongs_to :workspace
   delegate :data_source, :connect_with, :connect_as, :to => :hdfs_data_source
 
   HdfsContentsError = Class.new(StandardError)
 
-  def self.assemble!(attributes, hdfs_data_source, workspace, user)
+  def self.assemble!(attributes, hdfs_data_source, workspace)
       dataset = HdfsDataset.new attributes
       dataset.hdfs_data_source = hdfs_data_source
+      dataset.workspace = workspace
       dataset.save!
-
-      workspace.associate_datasets(user, [dataset])
       dataset
   end
 
@@ -30,11 +30,11 @@ class HdfsDataset < Dataset
   end
 
   def in_workspace?(workspace)
-    bound_workspaces.include?(workspace)
+    self.workspace == workspace
   end
 
   def associable?
-    true
+    false
   end
 
   def needs_schema?
@@ -54,7 +54,6 @@ class HdfsDataset < Dataset
   end
 
   def ensure_active_workspace
-    any_archived = bound_workspaces.find { |workspace| workspace.archived? }
-    self.errors[:dataset] << :ARCHIVED if any_archived
+    self.errors[:dataset] << :ARCHIVED if workspace && workspace.archived?
   end
 end

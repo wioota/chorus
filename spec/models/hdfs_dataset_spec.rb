@@ -7,6 +7,8 @@ describe HdfsDataset do
   describe 'validations' do
     it { should validate_presence_of :file_mask }
     it { should belong_to(:hdfs_data_source) }
+    it { should belong_to(:workspace) }
+    it { should validate_presence_of(:workspace) }
 
     describe 'can only be created in an active workspace' do
       let(:dataset) { FactoryGirl.build(:hdfs_dataset) }
@@ -15,8 +17,9 @@ describe HdfsDataset do
         let(:workspace) { workspaces(:archived) }
 
         it 'produces an error' do
+          dataset.workspace_id = workspace.id
           expect  {
-            workspace.associate_datasets(user, [dataset])
+            dataset.save!
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
       end
@@ -25,7 +28,7 @@ describe HdfsDataset do
         let(:workspace) { workspaces(:empty_workspace) }
 
         it 'produces no error' do
-          workspace.associate_datasets(user, [dataset])
+          dataset.update_attributes(:workspace_id => workspace.id)
           dataset.should_not have_error_on(:dataset)
         end
       end
@@ -34,7 +37,7 @@ describe HdfsDataset do
     describe 'can only be updated if all workspaces are active' do
       context 'if the workspace is archived' do
         before do
-          workspace = dataset.bound_workspaces.first
+          workspace = dataset.workspace
           workspace.archived = 'true'
           workspace.archiver = user
           workspace.save!
@@ -68,8 +71,8 @@ describe HdfsDataset do
   end
 
   describe 'associable?' do
-    it 'is true' do
-      dataset.should be_associable
+    it 'is false' do
+      dataset.should_not be_associable
     end
   end
 
@@ -82,29 +85,10 @@ describe HdfsDataset do
       end
     end
 
-    context "when the chorus view is in the workspace" do
-      let(:workspace) { workspaces(:public) }
-      before do
-        dataset.bound_workspaces = []
-        workspace.associate_datasets(users(:owner), [dataset])
+    context "when the dataset is in the workspace" do
+      it "returns true" do
+        dataset.in_workspace?(dataset.workspace).should be_true
       end
-
-      it "returns false" do
-        dataset.reload.in_workspace?(workspace).should be_true
-      end
-    end
-
-  end
-
-  describe "workspace association" do
-    let(:workspace) { workspaces(:public) }
-    before do
-      dataset.bound_workspaces = []
-      workspace.associate_datasets(users(:owner), [dataset])
-    end
-
-    it "can be bound to workspaces" do
-      dataset.reload.bound_workspaces.should include workspace
     end
   end
 
@@ -119,13 +103,12 @@ describe HdfsDataset do
     let(:data_source) { hdfs_data_sources(:hadoop) }
     let(:workspace)   { workspaces(:public) }
     let(:user)        { users(:owner) }
-    let(:dataset)     { HdfsDataset.assemble!(attributes, data_source, workspace, user) }
+    let(:dataset)     { HdfsDataset.assemble!(attributes, data_source, workspace) }
 
     it "creates a dataset associated with the given datasource & workspace" do
       # Method under test hidden in test setup, in 'let' block :dataset.
-
       dataset.data_source.should == data_source
-      dataset.bound_workspaces.should include(workspace)
+      dataset.workspace.should == workspace
       dataset.file_mask.should == file_mask
     end
   end
