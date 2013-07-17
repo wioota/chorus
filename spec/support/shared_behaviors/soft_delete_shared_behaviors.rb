@@ -17,7 +17,7 @@ shared_examples_for 'a soft deletable model' do
     end
 
     it "should still exist in the database" do
-      expect { model.class.unscoped.find(model.id) }.not_to raise_error(ActiveRecord::RecordNotFound)
+      expect { model.class.unscoped.find(model.id) }.not_to raise_error
     end
 
     it "sets deleted_at" do

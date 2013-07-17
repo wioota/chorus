@@ -109,7 +109,7 @@ describe WorkfilePresenter, :type => :view do
           it "presents the comment before the notes" do
             recent_comments[0][:author].to_hash.should == Presenter.present(user, view, :succinct => true)
             recent_comments[0][:body].should == "comment on yesterday's note"
-            recent_comments[0][:timestamp].should == comment_timestamp
+            recent_comments[0][:timestamp].to_i.should == comment_timestamp.to_i
           end
         end
 

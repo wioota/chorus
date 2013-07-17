@@ -46,7 +46,7 @@ group :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
   gem 'rr'
   gem 'fuubar'
   gem 'factory_girl'
-  gem 'shoulda-matchers',    :require => false
+  gem 'shoulda-matchers', '~> 1.4.2'
   gem 'rspec-rails'
   gem 'journey'
   gem 'timecop'
@@ -62,7 +62,8 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
   gem 'foreman', '>= 0.62',      :require => false
   gem 'rake',                    :require => false
   gem 'ruby-debug',              :require => false
-  gem 'jasmine', :github => 'pivotal/jasmine-gem'
+
+  gem 'jasmine', '~> 1.3.2'
   gem 'rspec_api_documentation', :github => "GreenplumChorus/rspec_api_documentation"
   gem 'forgery'
   gem 'sunspot_matchers'

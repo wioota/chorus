@@ -49,7 +49,7 @@ describe InstallerIO do
         let(:user_input) { input }
 
         it "should not cancel the install" do
-          expect { subject }.not_to raise_error(InstallerErrors::InstallAborted, /Cancelled by user/)
+          expect { subject }.not_to raise_error()
         end
       end
     end

@@ -29,7 +29,7 @@ shared_examples_for 'something that can go stale' do
 
       Timecop.freeze(now) do
         bread.mark_stale!
-        bread.stale_at.should == now
+        bread.stale_at.to_i.should == now.to_i
       end
     end
 

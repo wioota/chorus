@@ -118,12 +118,13 @@ describe WorkspacePresenter, :type => :view do
           hash[:number_of_comments].should == 4
           hash[:number_of_insights].should == 2
           hash[:latest_comment_list].size.should == 5
-          hash[:latest_comment_list].should_not include(presenter.present(event))
-          hash[:latest_comment_list].should_not include(presenter.present(@comment))
+          comment_ids = hash[:latest_comment_list].map { |comment| comment[:id] }
+          comment_ids.should_not include(presenter.present(event)[:id])
+          comment_ids.should_not include(presenter.present(@comment)[:id])
         end
 
         it "uses updated_at timestamp to sort" do
-          hash[:latest_comment_list][4].should == (presenter.present(@event_to_be_promoted))
+          hash[:latest_comment_list][4][:id].should == presenter.present(@event_to_be_promoted)[:id]
         end
       end
     end

@@ -404,7 +404,7 @@ describe ChorusInstaller do
         it "doesn't raise" do
           expect {
             installer.create_shared_structure
-          }.to_not raise_error(InstallerErrors::InstallAborted)
+          }.to_not raise_error
         end
       end
     end
@@ -416,7 +416,7 @@ describe ChorusInstaller do
       it "doesn't raise" do
         expect {
           installer.create_shared_structure
-        }.to_not raise_error(InstallerErrors::InstallAborted)
+        }.to_not raise_error
       end
     end
   end
