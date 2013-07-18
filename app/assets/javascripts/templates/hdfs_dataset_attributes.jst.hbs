@@ -20,7 +20,7 @@
     {{/unless}}
 
     <label class="required mtm">{{t "create_hdfs_dataset_dialog.file_mask"}}</label>
-    <input class="file_mask" maxlength="4096" value="{{fileMask}}">
+    <input class="file_mask" maxlength="4096" value="{{fileMask}}" placeholder="{{t "create_hdfs_dataset_dialog.placeholder"}}">
 
     {{#if id}}
         {{formControls "edit_hdfs_dataset.submit"}}
