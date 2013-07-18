@@ -12,21 +12,6 @@ require 'allowy/rspec'
 require 'shoulda-matchers'
 require 'factory_girl'
 
-module Shoulda # :nodoc:
-  module Matchers
-    module ActiveModel # :nodoc:
-      module Helpers
-        def default_error_message(key, options = {})
-          model_name = options.delete(:model_name)
-          attribute = options.delete(:attribute)
-          [key, options]
-        end
-      end
-    end
-  end
-end
-
-
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f unless f.match /fixture_builder/ }

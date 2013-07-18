@@ -46,7 +46,7 @@ group :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
   gem 'rr'
   gem 'fuubar'
   gem 'factory_girl'
-  gem 'shoulda-matchers', '~> 1.4.2'
+  gem 'shoulda-matchers'
   gem 'rspec-rails'
   gem 'journey'
   gem 'timecop'
