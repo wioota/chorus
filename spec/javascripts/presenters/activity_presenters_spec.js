@@ -1969,6 +1969,29 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("hdfs dataset updated event", function () {
+        beforeEach(function () {
+            this.model = backboneFixtures.activity.hdfsDatasetUpdated();
+            this.presenter = new chorus.presenters.Activity(this.model);
+            this.actor = this.model.actor();
+            this.workspace = this.model.workspace();
+            this.dataset = this.model.dataset();
+
+            this.translation_params = {
+                actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
+                hdfsDatasetType: t("dataset.entitySubtypes.mask"),
+                datasetLink: linkTo(this.dataset.showUrl(), this.dataset.name()),
+                workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name())
+            };
+        });
+
+        it("has the right header html", function () {
+            expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.HdfsDatasetUpdated.default", this.translation_params
+            );
+        });
+    });
+
     context("dataset changed query event", function() {
         beforeEach(function() {
             this.model = backboneFixtures.activity.chorusViewChanged();

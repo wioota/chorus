@@ -237,6 +237,7 @@ FixtureBuilder.configure do |fbuilder|
     hadoop_dadoop = HdfsDataset.assemble!(attrs.merge!(:file_mask => 'slash/star/*'), hdfs_data_source, public_workspace)
 
     Events::HdfsDatasetCreated.by(owner).add(:workspace => public_workspace, :dataset => hadoop_dadoop, :hdfs_data_source => hdfs_data_source)
+    Events::HdfsDatasetUpdated.by(owner).add(:workspace => public_workspace, :dataset => hadoop_dadoop, :hdfs_data_source => hdfs_data_source)
 
     # Chorus View
     chorus_view = FactoryGirl.create(:chorus_view, :name => "chorus_view", :schema => default_schema, :query => "select * from a_table", :workspace => public_workspace)

@@ -9,6 +9,12 @@ class HdfsDatasetsController < ApplicationController
 
     dataset     = HdfsDataset.assemble!(params[:hdfs_dataset], data_source, workspace)
 
+    Events::HdfsDatasetCreated.by(current_user).add(
+        :workspace => workspace,
+        :dataset => dataset,
+        :hdfs_data_source => data_source
+    )
+
     present dataset, :status => :created
   end
 
@@ -16,6 +22,13 @@ class HdfsDatasetsController < ApplicationController
     dataset = Dataset.find(params[:id])
     authorize! :can_edit_sub_objects, dataset.workspace
     dataset.update_attributes!(params[:hdfs_dataset])
+
+    Events::HdfsDatasetUpdated.by(current_user).add(
+        :workspace => dataset.workspace,
+        :dataset => dataset,
+        :hdfs_data_source => dataset.hdfs_data_source
+    )
+
     present dataset
   end
 

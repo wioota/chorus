@@ -22,6 +22,10 @@ describe HdfsDatasetsController do
       }}
     end
 
+    before do
+      set_current_user(user)
+    end
+
     it 'creates a Hadoop dataset from a file mask & data source' do
       expect {
         post :create, params
@@ -38,12 +42,26 @@ describe HdfsDatasetsController do
       mock(subject).authorize! :can_edit_sub_objects, workspace
       post :create, params
     end
+
+    it 'makes a HdfsDatasetCreated event' do
+      expect {
+        post :create, params
+      }.to change(Events::HdfsDatasetCreated, :count).by(1)
+      event = Events::HdfsDatasetCreated.by(user).last
+      event.workspace.id.should == params[:hdfs_dataset][:workspace_id]
+      event.dataset.name.should == params[:hdfs_dataset][:name]
+      event.action.should == "HdfsDatasetCreated"
+    end
   end
 
   describe '#update' do
     let(:dataset) { datasets(:hadoop) }
     let!(:old_name) { dataset.name }
     let(:new_name) { 'Cephalopodiatry' }
+
+    before do
+      set_current_user(user)
+    end
 
     it "updates the attributes of the appropriate hdfs Dataset" do
       expect {
@@ -54,6 +72,16 @@ describe HdfsDatasetsController do
     it "uses authorization" do
       mock(subject).authorize! :can_edit_sub_objects, workspace
       put :update, :name => new_name, :id => dataset.id
+    end
+
+    it 'makes a HdfsDatasetUpdated event' do
+      expect {
+        put :update, :name => new_name, :id => dataset.id
+      }.to change(Events::HdfsDatasetUpdated, :count).by(1)
+      event = Events::HdfsDatasetUpdated.by(user).last
+      event.workspace.id.should == dataset.reload.workspace.id
+      event.dataset.name.should == new_name
+      event.action.should == "HdfsDatasetUpdated"
     end
   end
 

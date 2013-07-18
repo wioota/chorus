@@ -368,8 +368,11 @@
 
         HdfsDatasetCreated: {
             links: ["actor", "workspace", "dataset"]
-        }
+        },
 
+        HdfsDatasetUpdated: {
+            links: ["actor", "workspace", "dataset"]
+        }
     };
 
     presenterHelpers = {

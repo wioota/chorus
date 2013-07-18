@@ -111,23 +111,6 @@ describe HdfsDataset do
       dataset.workspace.should == workspace
       dataset.file_mask.should == file_mask
     end
-
-    it 'makes a HdfsDatasetCreated event' do
-      set_current_user(user)
-      expect {
-        HdfsDataset.assemble!(attributes, data_source, workspace)
-      }.to change(Events::HdfsDatasetCreated, :count).by(1)
-      event = Events::HdfsDatasetCreated.by(user).last
-      event.workspace.id.should == dataset.workspace.id
-      event.dataset.name.should == attributes[:name]
-      event.action.should == "HdfsDatasetCreated"
-    end
-
-    it 'doesnt make a HdfsDatasetCreated event if there is no current user' do
-      expect {
-        HdfsDataset.assemble!(attributes, data_source, workspace)
-      }.to_not change(Events::HdfsDatasetCreated, :count)
-    end
   end
 
   describe 'contents' do
