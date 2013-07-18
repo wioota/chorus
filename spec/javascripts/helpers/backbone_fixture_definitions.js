@@ -19,6 +19,7 @@ window.BackboneFixtureDefinitions = {
             gnipStreamImportCreated: {},
             gnipStreamImportFailed: {},
             gnipStreamImportSuccess: {},
+            hdfsDatasetCreated: {},
             hdfsDataSourceCreated: {},
             hdfsDataSourceChangedName: {},
             hdfsFileExtTableCreated: {},

@@ -364,6 +364,10 @@
 
         SUB_COMMENT: {
             links: ["author"]
+        },
+
+        HdfsDatasetCreated: {
+            links: ["actor", "workspace", "dataset"]
         }
 
     };

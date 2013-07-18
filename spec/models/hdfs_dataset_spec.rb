@@ -103,13 +103,30 @@ describe HdfsDataset do
     let(:data_source) { hdfs_data_sources(:hadoop) }
     let(:workspace)   { workspaces(:public) }
     let(:user)        { users(:owner) }
-    let(:dataset)     { HdfsDataset.assemble!(attributes, data_source, workspace) }
 
     it "creates a dataset associated with the given datasource & workspace" do
       # Method under test hidden in test setup, in 'let' block :dataset.
+      dataset = HdfsDataset.assemble!(attributes, data_source, workspace)
       dataset.data_source.should == data_source
       dataset.workspace.should == workspace
       dataset.file_mask.should == file_mask
+    end
+
+    it 'makes a HdfsDatasetCreated event' do
+      set_current_user(user)
+      expect {
+        HdfsDataset.assemble!(attributes, data_source, workspace)
+      }.to change(Events::HdfsDatasetCreated, :count).by(1)
+      event = Events::HdfsDatasetCreated.by(user).last
+      event.workspace.id.should == dataset.workspace.id
+      event.dataset.name.should == attributes[:name]
+      event.action.should == "HdfsDatasetCreated"
+    end
+
+    it 'doesnt make a HdfsDatasetCreated event if there is no current user' do
+      expect {
+        HdfsDataset.assemble!(attributes, data_source, workspace)
+      }.to_not change(Events::HdfsDatasetCreated, :count)
     end
   end
 

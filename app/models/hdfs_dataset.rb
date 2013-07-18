@@ -4,9 +4,12 @@ class HdfsDataset < Dataset
   validates_presence_of :file_mask, :workspace
   validate :ensure_active_workspace, :if => Proc.new { |f| f.changed? }
 
+
   belongs_to :hdfs_data_source
   belongs_to :workspace
   delegate :data_source, :connect_with, :connect_as, :to => :hdfs_data_source
+
+  after_create :make_hdfs_dataset_created_event, :if => :current_user
 
   HdfsContentsError = Class.new(StandardError)
 
@@ -55,5 +58,13 @@ class HdfsDataset < Dataset
 
   def ensure_active_workspace
     self.errors[:dataset] << :ARCHIVED if workspace && workspace.archived?
+  end
+
+  def make_hdfs_dataset_created_event
+    Events::HdfsDatasetCreated.by(current_user).add(
+        :workspace => workspace,
+        :dataset => self,
+        :hdfs_data_source => hdfs_data_source
+    )
   end
 end
