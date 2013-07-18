@@ -55,7 +55,7 @@ group :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
   gem 'fakefs',              :require => false
   gem 'chunky_png'
   gem 'database_cleaner',    :require => false
-  gem 'poltergeist', :github => "brutuscat/poltergeist"
+  gem 'poltergeist'
 end
 
 group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
