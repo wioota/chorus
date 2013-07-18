@@ -39,4 +39,15 @@ resource 'HdfsDataset' do
       status.should == 200
     end
   end
+
+  delete "/hdfs_datasets/:id" do
+    parameter :id, "Hadoop File Mask Id"
+    required_parameters :id
+
+    let(:id) { datasets(:hadoop).id }
+
+    example_request "Delete a Hadoop File Mask Dataset" do
+      status.should == 200
+    end
+  end
 end
