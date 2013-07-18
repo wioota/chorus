@@ -4,8 +4,7 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
 
     events: {
         "click a.external_table": "createExternalTable",
-        "click a.add_note": "launchNotesNewDialog",
-        "click a.new_work_flow": "launchWorkFlowNewDialog"
+        "click a.add_note": "launchNotesNewDialog"
     },
 
     subviews:{
@@ -62,14 +61,6 @@ chorus.views.HdfsShowFileSidebar = chorus.views.Sidebar.extend({
         };
 
         var dialog = new chorus.dialogs.NotesNew(dialogOptions);
-        dialog.launchModal();
-    },
-
-    launchWorkFlowNewDialog: function(e) {
-        e && e.preventDefault();
-        var dialog = new chorus.dialogs.HdfsWorkFlowWorkspacePicker({
-            hdfsEntries: new chorus.collections.HdfsEntrySet([this.resource])
-        });
         dialog.launchModal();
     }
 });

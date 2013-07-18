@@ -197,54 +197,6 @@ describe AlpineWorkfile do
         end
       end
     end
-
-    context "when passed hdfs entries" do
-      let(:hdfs_entry_A) { hdfs_entries(:hdfs_entries_001) }
-      let(:hdfs_entry_B) { hdfs_entries(:hdfs_entries_002) }
-      let(:params) { {hdfs_entry_ids: [hdfs_entry_A.id, hdfs_entry_B.id], workspace: workspace} }
-
-      it 'sets the execution location to the Hdfs Data Source where the hdfs entries live' do
-        AlpineWorkfile.create(params).execution_location.should == hdfs_entry_A.hdfs_data_source
-      end
-
-      it 'assigns the hdfs entries' do
-        AlpineWorkfile.create(params).hdfs_entries.should =~ [hdfs_entry_A, hdfs_entry_B]
-      end
-
-      it 'does not have errors related to the hdfs entries' do
-        AlpineWorkfile.create(params).should_not have_error_on(:hdfs_entries)
-      end
-
-      context "and the hdfs entries are from multiple Hdfs Data Sources" do
-        let(:hdfs_entry_B) { FactoryGirl.create(:hdfs_entry) }
-
-        it "assigns too_many_databases error" do
-          AlpineWorkfile.create(params).errors_on(:hdfs_entries).should include(:too_many_hdfs_data_sources)
-        end
-      end
-    end
-
-    context "when passed hdfs entries and gpdb datasets" do
-      let(:datasetA) { datasets(:table) }
-      let(:datasetB) { datasets(:other_table) }
-      let(:hdfs_entry_A) { hdfs_entries(:hdfs_entries_001) }
-      let(:hdfs_entry_B) { hdfs_entries(:hdfs_entries_002) }
-      let(:dataset_ids) { [datasetA.id, datasetB.id] }
-      let(:hdfs_entry_ids) { [hdfs_entry_A.id, hdfs_entry_B.id] }
-      let(:params) do
-        {
-            :dataset_ids => dataset_ids,
-            :hdfs_entry_ids => hdfs_entry_ids,
-            :workspace => workspace
-        }
-      end
-
-      it "is invalid" do
-        AlpineWorkfile.create(params).should have_error_on(:base)
-                                             .with_message(:incompatible_params)
-                                             .with_options(:fields => "dataset_ids, hdfs_entry_ids")
-      end
-    end
   end
 
   describe "#attempt_data_source_connection" do

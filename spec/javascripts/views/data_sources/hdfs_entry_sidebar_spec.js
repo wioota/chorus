@@ -48,7 +48,6 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             });
 
             itHasTheRightDefaultBehavior(false);
-            itBehavesLike.WorkFlowCreatorForHdfs();
 
             it("does not have a link to add a note", function() {
                 expect(this.view.$("a.dialog.add_note")).not.toExist();
@@ -92,7 +91,6 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             });
 
             itHasTheRightDefaultBehavior(true);
-            itBehavesLike.WorkFlowCreatorForHdfs();
             itBehavesLike.aDialogLauncher("a.add_note", chorus.dialogs.NotesNew);
             itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
 
@@ -177,8 +175,6 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
                 chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
             });
-
-            itBehavesLike.WorkFlowCreatorForHdfs();
 
             it("does not have a create external table link", function() {
                 expect(this.view.$("a.external_table")).not.toExist();

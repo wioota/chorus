@@ -200,7 +200,6 @@ describe WorkfilesController do
       generate_workfile_fixture(:"binary.tar.gz", "binary.json")
       generate_workfile_fixture(:"tableau", "tableau.json")
       generate_workfile_fixture(:"alpine_flow", "alpine.json")
-      generate_workfile_fixture(:"alpine_hadoop_flow", "alpineHdfs.json")
       generate_workfile_fixture(:"alpine_hadoop_dataset_flow", "alpineHdfsDatasetFlow.json")
     end
   end
@@ -379,31 +378,6 @@ describe WorkfilesController do
             model.file_name.should == 'something'
             model.execution_location.should == datasets(:table).database
             model.additional_data['dataset_ids'].should =~ dataset_ids
-            model.workspace.should == workspace
-          end
-          post :create, params
-        end
-      end
-
-      context "and a list of hdfs entries has been chosen" do
-        let(:hdfs_entry_ids) { [hdfs_entries(:hdfs_entries_001).id, hdfs_entries(:hdfs_entries_002).id] }
-        let(:params) do
-          {
-            :workspace_id => workspace.to_param,
-            :workfile => {
-              :entity_subtype => 'alpine',
-              :file_name => 'something',
-              :hdfs_entry_ids => hdfs_entry_ids
-            }
-          }
-        end
-
-        it 'creates an AlpineWorkfile' do
-          mock_present do |model|
-            model.should be_a AlpineWorkfile
-            model.file_name.should == 'something'
-            model.execution_location.should == hdfs_entries(:hdfs_entries_001).hdfs_data_source
-            model.additional_data['hdfs_entry_ids'].should =~ hdfs_entry_ids.map(&:to_s)
             model.workspace.should == workspace
           end
           post :create, params
@@ -591,47 +565,6 @@ describe WorkfilesController do
           put :update, params
         end
 
-        context "and it had hdfs_entries previously selected" do
-          let(:hdfs_file) { hdfs_entries(:hdfs_file) }
-
-          before do
-            workfile.hdfs_entry_ids = [hdfs_file.id]
-            workfile.save!
-          end
-
-          it "removes the previous entries" do
-            mock_present do |model|
-              model.should be_a AlpineWorkfile
-              model.execution_location.should == database
-              model.hdfs_entry_ids.should be_nil
-            end
-            put :update, params
-          end
-
-          context "and the execution location is not actually changing" do
-            let(:params) do
-              {
-                :id => workfile.to_param,
-                :workspace_id => workspace.to_param,
-                :workfile => {
-                  :entity_subtype => 'alpine',
-                  :file_name => 'something',
-                  :hdfs_data_source_id => hdfs_file.hdfs_data_source.to_param
-                }
-              }
-            end
-
-            it "does not remove the previous hdfs entries" do
-              mock_present do |model|
-                model.should be_a AlpineWorkfile
-                model.execution_location.should == hdfs_file.hdfs_data_source
-                model.hdfs_entry_ids.should == [hdfs_file.id]
-              end
-              put :update, params
-            end
-          end
-        end
-
         context "and it had datasets previously selected" do
           before do
             workfile.dataset_ids = [datasets(:table).id]
@@ -671,22 +604,6 @@ describe WorkfilesController do
             model.workspace.should == workspace
           end
           put :update, params
-        end
-
-        context "and it had hdfs_entries previously selected" do
-          before do
-            workfile.hdfs_entry_ids = [hdfs_entries(:hdfs_file).id]
-            workfile.save!
-          end
-
-          it "removes the previous entries" do
-            mock_present do |model|
-              model.should be_a AlpineWorkfile
-              model.execution_location.should == hdfs_data_source
-              model.hdfs_entry_ids.should be_nil
-            end
-            put :update, params
-          end
         end
 
         context "and it had datasets previously selected" do

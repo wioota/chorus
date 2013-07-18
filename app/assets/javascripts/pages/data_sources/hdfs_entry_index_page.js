@@ -14,15 +14,6 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
             }, this)
         };
 
-        var workFlowConfigured = chorus.models.Config.instance().get("workFlowConfigured");
-        if(workFlowConfigured && this.dataSource.get('supportsWorkFlows')) {
-            actions.push('<a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a>');
-            actionEvents['click .new_work_flow'] = _.bind(function() {
-                new chorus.dialogs.HdfsWorkFlowWorkspacePicker({
-                    hdfsEntries: this.multiSelectSidebarMenu.selectedModels}).launchModal();
-            }, this);
-        }
-
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "hdfs_entry:checked",
             actions: actions,

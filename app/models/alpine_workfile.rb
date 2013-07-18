@@ -1,7 +1,7 @@
 class AlpineWorkfile < Workfile
   TooManyDataBases = Class.new(StandardError)
 
-  has_additional_data :dataset_ids, :hdfs_entry_ids
+  has_additional_data :dataset_ids
 
   before_validation { self.content_type ='work_flow' }
   before_validation :determine_execution_location
@@ -38,10 +38,6 @@ class AlpineWorkfile < Workfile
     @datasets ||= Dataset.where(:id => dataset_ids)
   end
 
-  def hdfs_entries
-    @hdfs_entries ||= HdfsEntry.where(:id => hdfs_entry_ids)
-  end
-
   def create_new_version(user, params)
     Events::WorkFlowUpgradedVersion.by(user).add(
       :workfile => self,
@@ -71,7 +67,6 @@ class AlpineWorkfile < Workfile
     self.execution_location = HdfsDataSource.find(params[:hdfs_data_source_id]) unless params[:hdfs_data_source_id].to_s == ""
 
     if execution_location_id_changed? || execution_location_type_changed?
-      self.hdfs_entry_ids = nil
       self.dataset_ids = nil
     end
   end
@@ -79,7 +74,6 @@ class AlpineWorkfile < Workfile
   def determine_execution_location
     # Validations will ensure that all datasets/entries have the same execution location
     self.execution_location = datasets.first.execution_location unless datasets.empty?
-    self.execution_location = hdfs_entries.first.hdfs_data_source unless hdfs_entries.empty?
   end
 
   def notify_alpine_of_deletion
