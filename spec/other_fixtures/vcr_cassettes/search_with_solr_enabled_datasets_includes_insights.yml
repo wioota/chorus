@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>14,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>18,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
         \ last_name_texts username_texts email_texts tag_names_texts name_texts description_texts\
         \ summary_texts file_name_texts version_comments_texts database_name_texts\
         \ table_description_texts schema_name_texts column_name_texts column_description_texts\
@@ -47,11 +47,11 @@ http_interactions:
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workspace)\
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
         \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>1,'ngroups'=>1,'groups'=>[{'groupValue'=>'GpdbTable\
-        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>13.689183,'docs'=>[{'id'=>'Events::NoteOnDataset\
-        \ 1000055','body_stemmed_texts'=>['insightsearch ftw'],'body_texts'=>['insightsearch\
-        \ ftw'],'score'=>13.689183}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Dataset',1]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'Events::NoteOnDataset\
-        \ 1000055'=>{'body_stemmed_texts'=>['@@@hl@@@insightsearch@@@endhl@@@ ftw'],'body_texts'=>['@@@hl@@@insightsearch@@@endhl@@@\
+        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>11.546114,'docs'=>[{'id'=>'Events::NoteOnDataset\
+        \ 1000056','body_stemmed_texts'=>['insightsearch ftw'],'body_texts'=>['insightsearch\
+        \ ftw'],'score'=>11.546114}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Dataset',1]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'Events::NoteOnDataset\
+        \ 1000056'=>{'body_stemmed_texts'=>['@@@hl@@@insightsearch@@@endhl@@@ ftw'],'body_texts'=>['@@@hl@@@insightsearch@@@endhl@@@\
         \ ftw']}}}"
     http_version: '1.1'
-  recorded_at: Wed, 17 Jul 2013 17:40:50 GMT
+  recorded_at: Thu, 18 Jul 2013 20:40:54 GMT
 recorded_with: VCR 2.3.0

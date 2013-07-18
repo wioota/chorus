@@ -37,5 +37,5 @@ http_interactions:
         \ 2'],'schema_name_stemmed_texts'=>['shared_schema'],'schema_name_texts'=>['shared_schema'],'database_name_stemmed_texts'=>['shared_database'],'column_name_texts'=>['bogus','bogus\
         \ 2'],'score'=>3956298.5}]}}]}},'highlighting'=>{'GpdbTable 1000012'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_shared_table'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_shared_table']}}}"
     http_version: '1.1'
-  recorded_at: Tue, 16 Jul 2013 16:16:04 GMT
+  recorded_at: Thu, 18 Jul 2013 20:40:54 GMT
 recorded_with: VCR 2.3.0
