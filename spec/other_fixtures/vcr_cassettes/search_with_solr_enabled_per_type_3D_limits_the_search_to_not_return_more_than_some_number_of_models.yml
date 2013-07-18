@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>19,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>13,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
         \ last_name_texts username_texts email_texts tag_names_texts name_texts description_texts\
         \ summary_texts file_name_texts version_comments_texts database_name_texts\
         \ table_description_texts schema_name_texts column_name_texts column_description_texts\
@@ -47,12 +47,12 @@ http_interactions:
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workspace)\
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
         \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>2,'ngroups'=>2,'groups'=>[{'groupValue'=>'User\
-        \ 1000000','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>8933913.0,'docs'=>[{'id'=>'User\
-        \ 1000000','first_name_texts'=>['Admin_44445'],'username_texts'=>['admin'],'first_name_stemmed_texts'=>['Admin_44445'],'email_texts'=>['admin_44445@sawayn.net'],'username_stemmed_texts'=>['admin'],'last_name_stemmed_texts'=>['AlphaSearch'],'last_name_texts'=>['AlphaSearch'],'email_stemmed_texts'=>['admin_44445@sawayn.net'],'score'=>8933913.0}]}},{'groupValue'=>'User\
-        \ 1000001','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>8933913.0,'docs'=>[{'id'=>'User\
-        \ 1000001','first_name_texts'=>['Admin_44446'],'username_texts'=>['evil_admin'],'first_name_stemmed_texts'=>['Admin_44446'],'email_texts'=>['admin_44446@thiel.org'],'username_stemmed_texts'=>['evil_admin'],'last_name_stemmed_texts'=>['AlphaSearch'],'last_name_texts'=>['AlphaSearch'],'email_stemmed_texts'=>['admin_44446@thiel.org'],'score'=>8933913.0}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['User',2]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'User\
+        \ 1000000','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>8880151.0,'docs'=>[{'id'=>'User\
+        \ 1000000','first_name_texts'=>['Admin_44445'],'username_texts'=>['admin'],'first_name_stemmed_texts'=>['Admin_44445'],'email_texts'=>['admin_44445@lind.net'],'username_stemmed_texts'=>['admin'],'last_name_stemmed_texts'=>['AlphaSearch'],'last_name_texts'=>['AlphaSearch'],'email_stemmed_texts'=>['admin_44445@lind.net'],'score'=>8880151.0}]}},{'groupValue'=>'User\
+        \ 1000001','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>8880151.0,'docs'=>[{'id'=>'User\
+        \ 1000001','first_name_texts'=>['Admin_44446'],'username_texts'=>['evil_admin'],'first_name_stemmed_texts'=>['Admin_44446'],'email_texts'=>['admin_44446@kutchpowlowski.name'],'username_stemmed_texts'=>['evil_admin'],'last_name_stemmed_texts'=>['AlphaSearch'],'last_name_texts'=>['AlphaSearch'],'email_stemmed_texts'=>['admin_44446@kutchpowlowski.name'],'score'=>8880151.0}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['User',2]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'User\
         \ 1000000'=>{'last_name_stemmed_texts'=>['@@@hl@@@Alpha@@@endhl@@@@@@hl@@@Search@@@endhl@@@'],'last_name_texts'=>['@@@hl@@@Alpha@@@endhl@@@@@@hl@@@Search@@@endhl@@@']},'User\
         \ 1000001'=>{'last_name_stemmed_texts'=>['@@@hl@@@Alpha@@@endhl@@@@@@hl@@@Search@@@endhl@@@'],'last_name_texts'=>['@@@hl@@@Alpha@@@endhl@@@@@@hl@@@Search@@@endhl@@@']}}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 20:40:57 GMT
+  recorded_at: Thu, 18 Jul 2013 21:29:59 GMT
 recorded_with: VCR 2.3.0

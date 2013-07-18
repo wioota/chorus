@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
         \ database_name_texts table_description_texts schema_name_texts column_name_texts\
         \ column_description_texts query_texts tag_names_texts body_texts name_stemmed_texts\
         \ database_name_stemmed_texts table_description_stemmed_texts schema_name_stemmed_texts\
@@ -37,5 +37,5 @@ http_interactions:
         \ 2'],'schema_name_stemmed_texts'=>['shared_schema'],'schema_name_texts'=>['shared_schema'],'database_name_stemmed_texts'=>['shared_database'],'column_name_texts'=>['bogus','bogus\
         \ 2'],'score'=>3956298.5}]}}]}},'highlighting'=>{'GpdbTable 1000012'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_shared_table'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_shared_table']}}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 20:40:54 GMT
+  recorded_at: Thu, 18 Jul 2013 21:29:55 GMT
 recorded_with: VCR 2.3.0

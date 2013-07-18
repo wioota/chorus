@@ -35,5 +35,5 @@ http_interactions:
         \ 1000012','name_texts'=>['attachmentsearch'],'name_stemmed_texts'=>['attachmentsearch'],'score'=>2.0751936E7}]}}]}},'highlighting'=>{'Attachment\
         \ 1000012'=>{'name_texts'=>['@@@hl@@@attachmentsearch@@@endhl@@@'],'name_stemmed_texts'=>['@@@hl@@@attachmentsearch@@@endhl@@@']}}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 20:40:57 GMT
+  recorded_at: Thu, 18 Jul 2013 21:29:58 GMT
 recorded_with: VCR 2.3.0

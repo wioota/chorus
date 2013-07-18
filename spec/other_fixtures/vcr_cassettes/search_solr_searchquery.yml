@@ -22,9 +22,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>0}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>1}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 20:40:53 GMT
+  recorded_at: Thu, 18 Jul 2013 21:29:55 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -47,9 +47,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>1}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 20:40:53 GMT
+  recorded_at: Thu, 18 Jul 2013 21:29:55 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -72,7 +72,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>37,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>29,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
         \ last_name_texts username_texts email_texts tag_names_texts name_texts description_texts\
         \ summary_texts file_name_texts version_comments_texts database_name_texts\
         \ table_description_texts schema_name_texts column_name_texts column_description_texts\
@@ -104,8 +104,8 @@ http_interactions:
         \ table description'],'column_name_stemmed_texts'=>['searchquery','searchquery\
         \ 2'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'column_name_texts'=>['searchquery','searchquery\
         \ 2'],'column_description_stemmed_texts'=>['searchquery column description','searchquery\
-        \ column description 2'],'score'=>1.6073034E7}]}},{'groupValue'=>'User 1000006','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.4964252E7,'docs'=>[{'id'=>'User\
-        \ 1000006','first_name_texts'=>['searchquery'],'username_texts'=>['owner'],'first_name_stemmed_texts'=>['searchquery'],'email_texts'=>['searchquery@nader.info'],'username_stemmed_texts'=>['owner'],'last_name_stemmed_texts'=>['Bergnaum'],'last_name_texts'=>['Bergnaum'],'email_stemmed_texts'=>['searchquery@nader.info'],'score'=>1.4964252E7}]}},{'groupValue'=>'LinkedTableauWorkfile\
+        \ column description 2'],'score'=>1.6073034E7}]}},{'groupValue'=>'User 1000006','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.5153802E7,'docs'=>[{'id'=>'User\
+        \ 1000006','first_name_texts'=>['searchquery'],'username_texts'=>['owner'],'first_name_stemmed_texts'=>['searchquery'],'email_texts'=>['searchquery@terryharris.net'],'username_stemmed_texts'=>['owner'],'last_name_stemmed_texts'=>['Kohler'],'last_name_texts'=>['Kohler'],'email_stemmed_texts'=>['searchquery@terryharris.net'],'score'=>1.5153802E7}]}},{'groupValue'=>'LinkedTableauWorkfile\
         \ 1000002','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.0908344E7,'docs'=>[{'id'=>'LinkedTableauWorkfile\
         \ 1000002','file_name_stemmed_texts'=>['searchquery'],'file_name_texts'=>['searchquery'],'score'=>1.0908344E7}]}},{'groupValue'=>'ChorusWorkfile\
         \ 1000012','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>9850768.0,'docs'=>[{'id'=>'ChorusWorkfile\
@@ -116,7 +116,7 @@ http_interactions:
         \ 1000000','name_texts'=>['searchquery'],'name_stemmed_texts'=>['searchquery'],'description_texts'=>['Just\
         \ for searchquery and greenplumsearch'],'description_stemmed_texts'=>['Just\
         \ for searchquery and greenplumsearch'],'score'=>5806409.5},{'id'=>'Events::NoteOnDataSource\
-        \ 1000043','body_stemmed_texts'=>['i love searchquery'],'body_texts'=>['i\
+        \ 1000044','body_stemmed_texts'=>['i love searchquery'],'body_texts'=>['i\
         \ love searchquery'],'score'=>11.217057}]}},{'groupValue'=>'Attachment 1000006','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>5080608.5,'docs'=>[{'id'=>'Attachment\
         \ 1000006','name_texts'=>['searchquery_workfile'],'name_stemmed_texts'=>['searchquery_workfile'],'score'=>5080608.5}]}},{'groupValue'=>'Attachment\
         \ 1000008','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>5080608.5,'docs'=>[{'id'=>'Attachment\
@@ -190,14 +190,14 @@ http_interactions:
         \ table description'],'column_description_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
         \ column description','@@@hl@@@searchquery@@@endhl@@@ column description 2'],'database_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_table'],'column_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@','@@@hl@@@searchquery@@@endhl@@@\
         \ 2'],'schema_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema'],'column_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@','@@@hl@@@searchquery@@@endhl@@@\
-        \ 2']},'User 1000006'=>{'first_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@@nader.info'],'first_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_texts'=>['@@@hl@@@searchquery@@@endhl@@@@nader.info']},'LinkedTableauWorkfile\
+        \ 2']},'User 1000006'=>{'first_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@@terryharris.net'],'first_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_texts'=>['@@@hl@@@searchquery@@@endhl@@@@terryharris.net']},'LinkedTableauWorkfile\
         \ 1000002'=>{'file_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'file_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@']},'ChorusWorkfile\
         \ 1000012'=>{'description_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'description_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'version_comments_stemmed_texts'=>['Committed\
         \ to @@@hl@@@searchquery@@@endhl@@@'],'version_comments_texts'=>['Committed\
         \ to @@@hl@@@searchquery@@@endhl@@@']},'GpdbDataSource 1000000'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'description_stemmed_texts'=>['Just\
         \ for @@@hl@@@searchquery@@@endhl@@@ and greenplumsearch'],'description_texts'=>['Just\
         \ for @@@hl@@@searchquery@@@endhl@@@ and greenplumsearch'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@']},'Events::NoteOnDataSource\
-        \ 1000043'=>{'body_stemmed_texts'=>['i love @@@hl@@@searchquery@@@endhl@@@'],'body_texts'=>['i\
+        \ 1000044'=>{'body_stemmed_texts'=>['i love @@@hl@@@searchquery@@@endhl@@@'],'body_texts'=>['i\
         \ love @@@hl@@@searchquery@@@endhl@@@']},'Attachment 1000006'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_workfile'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_workfile']},'Attachment\
         \ 1000008'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_dataset'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_dataset']},'Attachment\
         \ 1000009'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_hadoop'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_hadoop']},'Attachment\
@@ -233,5 +233,5 @@ http_interactions:
         \ example gnip account'],'description_texts'=>['a @@@hl@@@searchquery@@@endhl@@@\
         \ example gnip account']}}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 20:40:58 GMT
+  recorded_at: Thu, 18 Jul 2013 21:30:00 GMT
 recorded_with: VCR 2.3.0
