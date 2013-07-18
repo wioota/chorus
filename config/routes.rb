@@ -17,7 +17,7 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :hdfs_datasets, :only => [:create, :update]
+  resources :hdfs_datasets, :only => [:create, :update, :destroy]
 
   resources :data_sources, :only => [:index, :show, :create, :update, :destroy] do
     resources :databases, :only => [:index], :controller => 'databases'

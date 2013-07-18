@@ -3,7 +3,7 @@ chorus.models.HdfsDataset = chorus.models.WorkspaceDataset.extend({
 
     urlTemplate: function(options) {
         var method = options && options.method;
-        if(method === "create" || method === "update") {
+        if(method === "create" || method === "update" || method === "delete") {
             var base = "hdfs_datasets/";
 
             var completeUrl = this.id ? base + this.id : base;
@@ -43,5 +43,9 @@ chorus.models.HdfsDataset = chorus.models.WorkspaceDataset.extend({
 
     canExport:function () {
         return false;
+    },
+
+    isDeleteable: function () {
+        return true;
     }
 });

@@ -436,5 +436,9 @@ describe("chorus.presenters.DatasetSidebar", function() {
         it("does not allow exporting at all", function () {
            expect(this.presenter.canExport()).toBeFalsy();
         });
+
+        it("is deletable", function () {
+           expect(this.presenter.isDeleteable()).toBeTruthy();
+        });
     });
 });

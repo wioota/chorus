@@ -20,7 +20,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     deleteKey: function(target) {
         var keyTable = {
             "CHORUS_VIEW": {
-                deleteMsgKey: "delete",
+                deleteMsgKey: "chorus_view",
                 deleteTextKey: "actions.delete"
             },
             "SOURCE_TABLE_VIEW":{
@@ -30,6 +30,10 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
             "SOURCE_TABLE":{
                 deleteMsgKey: "disassociate_table",
                 deleteTextKey: "actions.delete_association"
+            },
+            "HDFS": {
+                deleteMsgKey: "hdfs_dataset",
+                deleteTextKey: "actions.delete"
             }
         };
 

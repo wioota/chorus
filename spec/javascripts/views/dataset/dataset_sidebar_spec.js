@@ -327,6 +327,8 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 itBehavesLike.aDialogLauncher("a.edit_hdfs_dataset", chorus.dialogs.EditHdfsDataset);
 
+                itBehavesLike.aDialogLauncher("a.delete_dataset", chorus.alerts.DatasetDelete);
+
                 it("does not display the 'Preview Data' link", function() {
                     expect(this.view.$('.actions .dataset_preview')).not.toExist();
                 });

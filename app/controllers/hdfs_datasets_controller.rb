@@ -18,4 +18,11 @@ class HdfsDatasetsController < ApplicationController
     dataset.update_attributes!(params[:hdfs_dataset])
     present dataset
   end
+
+  def destroy
+    dataset = Dataset.find(params[:id])
+    authorize! :can_edit_sub_objects, dataset.workspace
+    dataset.destroy
+    render :json => {}
+  end
 end

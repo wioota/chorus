@@ -23,6 +23,12 @@ describe("chorus.models.HdfsDataset", function() {
             this.model.set("id", 1234);
             expect(this.model.url({method: "read"})).toMatchUrl('/workspaces/' +  this.model.workspace().id + '/datasets/1234');
         });
+
+        it("returns the correct delete url", function () {
+            this.model.set("id", 1234);
+            expect(this.model.url({ method: 'delete' })).toMatchUrl("/hdfs_datasets/1234");
+        });
+
     });
 
     it("has the correct showUrl", function () {
@@ -39,6 +45,12 @@ describe("chorus.models.HdfsDataset", function() {
     describe("#asWorkspaceDataset", function () {
         it("returns a HdfsDataset", function () {
             expect(this.model.asWorkspaceDataset()).toBeA(chorus.models.HdfsDataset);
+        });
+    });
+
+    describe("#isDeletable", function () {
+        it("is deletable", function () {
+            expect(this.model.isDeleteable()).toBeTruthy();
         });
     });
 });

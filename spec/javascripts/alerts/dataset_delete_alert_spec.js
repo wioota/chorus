@@ -1,7 +1,7 @@
 describe("chorus.alerts.DatasetDelete", function() {
     beforeEach(function() {
         this.model = backboneFixtures.workspaceDataset.chorusView();
-        this.alert = new chorus.alerts.DatasetDelete({ keyPrefix: 'delete', pageModel : this.model });
+        this.alert = new chorus.alerts.DatasetDelete({ keyPrefix: 'chorus_view', pageModel : this.model });
         stubModals();
         this.alert.launchModal();
     });
@@ -11,11 +11,11 @@ describe("chorus.alerts.DatasetDelete", function() {
     });
 
     it("has the correct title", function() {
-        expect(this.alert.title).toBe(t("dataset.delete.title", this.model.name()));
+        expect(this.alert.title).toBe(t("dataset_delete.chorus_view.title", this.model.name()));
     });
 
     it("has the correct text", function() {
-        expect(this.alert.text).toBe(t("dataset.delete.text"));
+        expect(this.alert.text).toBe(t("dataset_delete.chorus_view.text"));
     });
 
     describe("when the alert closes", function() {
@@ -43,7 +43,7 @@ describe("chorus.alerts.DatasetDelete", function() {
         });
 
         it("displays a toast message", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("dataset.delete.toast", {datasetName: this.name});
+            expect(chorus.toast).toHaveBeenCalledWith("dataset_delete.chorus_view.toast", {datasetName: this.name});
         });
 
         it("navigates to the dataset list page", function() {

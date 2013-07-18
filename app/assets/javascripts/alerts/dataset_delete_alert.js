@@ -5,10 +5,10 @@ chorus.alerts.DatasetDelete = chorus.alerts.ModelDelete.extend({
         this._super("setup");
 
         var keyPrefix = this.options.keyPrefix;
-        this.text = t("dataset." + keyPrefix + ".text");
-        this.title = t("dataset." + keyPrefix + ".title");
-        this.ok = t("dataset." + keyPrefix + ".button");
-        this.deleteMessage = "dataset." + keyPrefix + ".toast";
+        this.text = t("dataset_delete." + keyPrefix + ".text");
+        this.title = t("dataset_delete." + keyPrefix + ".title");
+        this.ok = t("dataset_delete." + keyPrefix + ".button");
+        this.deleteMessage = "dataset_delete." + keyPrefix + ".toast";
     },
 
     deleteMessageParams:function () {

@@ -56,4 +56,19 @@ describe HdfsDatasetsController do
       put :update, :name => new_name, :id => dataset.id
     end
   end
+
+  describe '#destroy' do
+    let(:dataset) { datasets(:hadoop) }
+
+    it "uses authorization" do
+      mock(controller).authorize!(:can_edit_sub_objects, workspace)
+      delete :destroy, :id => dataset.id
+    end
+
+    it "lets a workspace member soft delete an hdfs dataset" do
+      delete :destroy, :id => dataset.to_param
+      response.should be_success
+      dataset.reload.deleted?.should be_true
+    end
+  end
 end
