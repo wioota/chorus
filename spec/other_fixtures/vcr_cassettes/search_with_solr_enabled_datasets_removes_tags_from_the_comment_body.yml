@@ -33,7 +33,7 @@ http_interactions:
       encoding: US-ASCII
       string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 21:29:56 GMT
+  recorded_at: Thu, 18 Jul 2013 23:01:07 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -56,9 +56,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 21:29:56 GMT
+  recorded_at: Thu, 18 Jul 2013 23:01:07 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -81,7 +81,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>12,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>14,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
         \ last_name_texts username_texts email_texts tag_names_texts name_texts description_texts\
         \ summary_texts file_name_texts version_comments_texts database_name_texts\
         \ table_description_texts schema_name_texts column_name_texts column_description_texts\
@@ -106,13 +106,13 @@ http_interactions:
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workspace)\
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
         \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>1,'ngroups'=>1,'groups'=>[{'groupValue'=>'GpdbTable\
-        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>11.683386,'docs'=>[{'id'=>'Comment\
+        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>11.672513,'docs'=>[{'id'=>'Comment\
         \ 1000003','body_stemmed_texts'=>['sometext searchwithhtml ftw'],'body_texts'=>['sometext\
-        \ searchwithhtml ftw'],'score'=>11.683386}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Dataset',1]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'Comment\
+        \ searchwithhtml ftw'],'score'=>11.672513}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Dataset',1]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'Comment\
         \ 1000003'=>{'body_stemmed_texts'=>['sometext @@@hl@@@searchwithhtml@@@endhl@@@\
         \ ftw'],'body_texts'=>['sometext @@@hl@@@searchwithhtml@@@endhl@@@ ftw']}}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 21:29:56 GMT
+  recorded_at: Thu, 18 Jul 2013 23:01:07 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -138,7 +138,7 @@ http_interactions:
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">Events::NoteOnWorkfile</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000007</field><field\
         \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000008</field><field\
-        \ name=\"grouping_id_s\">ChorusWorkfile 1000016</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusWorkfile 1000015</field><field name=\"type_name_s\"\
         >Workfile</field><field name=\"security_type_name_sm\">Workfile</field><field\
         \ name=\"security_type_name_sm\">Workfile</field><field name=\"body_texts\"\
         >note on workfile</field></doc><doc><field name=\"id\">Events::NoteOnWorkfile\
@@ -147,7 +147,7 @@ http_interactions:
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">Events::NoteOnWorkfile</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000007</field><field\
         \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000008</field><field\
-        \ name=\"grouping_id_s\">ChorusWorkfile 1000010</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusWorkfile 1000009</field><field name=\"type_name_s\"\
         >Workfile</field><field name=\"security_type_name_sm\">Workfile</field><field\
         \ name=\"security_type_name_sm\">Workfile</field><field name=\"body_texts\"\
         >notesearch forever</field></doc><doc><field name=\"id\">Events::NoteOnWorkfile\
@@ -156,7 +156,7 @@ http_interactions:
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">Events::NoteOnWorkfile</field><field\
         \ name=\"member_ids_im\">1000003</field><field name=\"member_ids_im\">1000007</field><field\
         \ name=\"public_b\">false</field><field name=\"workspace_id_im\">1000006</field><field\
-        \ name=\"grouping_id_s\">ChorusWorkfile 1000007</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusWorkfile 1000006</field><field name=\"type_name_s\"\
         >Workfile</field><field name=\"security_type_name_sm\">Workfile</field><field\
         \ name=\"security_type_name_sm\">Workfile</field><field name=\"body_texts\"\
         >notesearch never</field></doc><doc><field name=\"id\">Events::NoteOnDataSource\
@@ -227,7 +227,7 @@ http_interactions:
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">Events::NoteOnWorkfile</field><field\
         \ name=\"member_ids_im\">1000006</field><field name=\"member_ids_im\">1000007</field><field\
         \ name=\"public_b\">true</field><field name=\"workspace_id_im\">1000008</field><field\
-        \ name=\"grouping_id_s\">ChorusWorkfile 1000017</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">ChorusWorkfile 1000016</field><field name=\"type_name_s\"\
         >Workfile</field><field name=\"security_type_name_sm\">Workfile</field><field\
         \ name=\"security_type_name_sm\">Workfile</field><field name=\"body_texts\"\
         >My awesome workfile</field></doc><doc><field name=\"id\">Events::NoteOnGnipDataSource\
@@ -363,9 +363,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>6}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 21:29:56 GMT
+  recorded_at: Thu, 18 Jul 2013 23:01:07 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -390,7 +390,7 @@ http_interactions:
       encoding: US-ASCII
       string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 21:29:56 GMT
+  recorded_at: Thu, 18 Jul 2013 23:01:07 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -415,5 +415,5 @@ http_interactions:
       encoding: US-ASCII
       string: "{'responseHeader'=>{'status'=>0,'QTime'=>1}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 21:29:56 GMT
+  recorded_at: Thu, 18 Jul 2013 23:01:07 GMT
 recorded_with: VCR 2.3.0

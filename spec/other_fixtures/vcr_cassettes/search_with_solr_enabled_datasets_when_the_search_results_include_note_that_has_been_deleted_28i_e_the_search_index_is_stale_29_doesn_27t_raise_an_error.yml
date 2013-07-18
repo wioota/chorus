@@ -47,18 +47,18 @@ http_interactions:
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workspace)\
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
         \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>3,'ngroups'=>3,'groups'=>[{'groupValue'=>'GpdbTable\
-        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>5.4926386,'docs'=>[{'id'=>'Events::NoteOnDataset\
+        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>5.4838314,'docs'=>[{'id'=>'Events::NoteOnDataset\
         \ 1000056','body_stemmed_texts'=>['notesearch ftw'],'body_texts'=>['notesearch\
-        \ ftw'],'score'=>5.4926386}]}},{'groupValue'=>'ChorusWorkfile 1000010','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>4.806059,'docs'=>[{'id'=>'Events::NoteOnWorkfile\
+        \ ftw'],'score'=>5.4838314}]}},{'groupValue'=>'ChorusWorkfile 1000009','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>4.7983522,'docs'=>[{'id'=>'Events::NoteOnWorkfile\
         \ 1000027','body_stemmed_texts'=>['notesearch forever'],'body_texts'=>['notesearch\
-        \ forever'],'score'=>4.806059}]}},{'groupValue'=>'Workspace 1000008','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>4.806059,'docs'=>[{'id'=>'Events::NoteOnWorkspace\
+        \ forever'],'score'=>4.7983522}]}},{'groupValue'=>'Workspace 1000008','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>4.7983522,'docs'=>[{'id'=>'Events::NoteOnWorkspace\
         \ 1000061','body_stemmed_texts'=>['notesearch forever'],'body_texts'=>['notesearch\
-        \ forever'],'score'=>4.806059}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Dataset',1,'Workfile',1,'Workspace',1]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'Events::NoteOnDataset\
+        \ forever'],'score'=>4.7983522}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Dataset',1,'Workfile',1,'Workspace',1]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'Events::NoteOnDataset\
         \ 1000056'=>{'body_stemmed_texts'=>['@@@hl@@@notesearch@@@endhl@@@ ftw'],'body_texts'=>['@@@hl@@@notesearch@@@endhl@@@\
         \ ftw']},'Events::NoteOnWorkfile 1000027'=>{'body_stemmed_texts'=>['@@@hl@@@notesearch@@@endhl@@@\
         \ forever'],'body_texts'=>['@@@hl@@@notesearch@@@endhl@@@ forever']},'Events::NoteOnWorkspace\
         \ 1000061'=>{'body_stemmed_texts'=>['@@@hl@@@notesearch@@@endhl@@@ forever'],'body_texts'=>['@@@hl@@@notesearch@@@endhl@@@\
         \ forever']}}}"
     http_version: '1.1'
-  recorded_at: Thu, 18 Jul 2013 21:29:57 GMT
+  recorded_at: Thu, 18 Jul 2013 23:01:08 GMT
 recorded_with: VCR 2.3.0
