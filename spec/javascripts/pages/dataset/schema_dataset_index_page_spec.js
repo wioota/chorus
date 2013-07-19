@@ -234,7 +234,7 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
         it('resets the multi-selection sidebar actions', function(){
             this.server.completeFetchFor(this.page.collection, backboneFixtures.schemaDatasetSet().models);
             expect(this.page.multiSelectSidebarMenu.setActions).toHaveBeenCalledWith([
-                '<a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a>',
+                '<a class="associate" href="#">{{t "actions.associate_with_a_workspace"}}</a>',
                 '<a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a>'
             ]);
         });

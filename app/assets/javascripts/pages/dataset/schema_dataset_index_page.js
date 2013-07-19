@@ -88,7 +88,7 @@ chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
         if (this.collection.length !== 0) {
             var actions = [];
             if (this.collection.first().isGreenplum()) {
-                actions.push('<a class="associate" href="#">{{t "actions.associate_with_another_workspace"}}</a>');
+                actions.push('<a class="associate" href="#">{{t "actions.associate_with_a_workspace"}}</a>');
             }
             actions.push('<a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a>');
             this.multiSelectSidebarMenu.setActions(actions);

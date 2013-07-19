@@ -40,9 +40,22 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             }
         }
 
-        context("when the model is a directory", function() {
+        context("when there is a model", function() {
             beforeEach(function() {
                 this.modalSpy = stubModals();
+                this.hdfsEntry = backboneFixtures.hdfsDir();
+                chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
+            });
+
+            it("should have a link 'associate with workspace'", function() {
+                expect(this.view.$("a.associate_with_workspace")).toExist();
+                expect(this.view.$("a.associate_with_workspace").text()).toMatchTranslation("actions.associate_with_a_workspace");
+            });
+
+            itBehavesLike.aDialogLauncher("a.associate_with_workspace", chorus.dialogs.AssociateHdfsDatasetFromEntry);
+
+            context("when the model is a directory", function() {
+            beforeEach(function() {
                 this.hdfsEntry = backboneFixtures.hdfsDir();
                 chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
             });
@@ -59,7 +72,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs_data_source.create_directory_external_table");
             });
 
-            itBehavesLike.aDialogLauncher("a.directory_external_table", chorus.dialogs.HdfsDataSourceWorkspacePicker);
+//            itBehavesLike.aDialogLauncher("a.directory_external_table", chorus.dialogs.HdfsDataSourceWorkspacePicker);
 
             it("calls the base implementation for postRender", function() {
                 spyOn(chorus.views.Sidebar.prototype, "postRender");
@@ -74,8 +87,6 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 var page = new chorus.pages.Base();
                 $(page.el).append(this.view.el);
                 chorus.bindModalLaunchingClicks(page);
-
-                this.modalSpy = stubModals();
 
                 this.hdfsEntry = new chorus.models.HdfsEntry({
                     id: 55,
@@ -162,8 +173,6 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 $(page.el).append(this.view.el);
                 chorus.bindModalLaunchingClicks(page);
 
-                this.modalSpy = stubModals();
-
                 this.hdfsEntry = new chorus.models.HdfsEntry({
                     hdfsDataSource: {
                         id: 111
@@ -182,7 +191,8 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
         });
-
+        });
+        
         context("when there is no model", function() {
             it("does not render anything", function() {
                 this.view.render();
