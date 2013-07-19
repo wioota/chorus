@@ -10,5 +10,6 @@ chorus.dialogs.AssociateHdfsDatasetFromEntry = chorus.dialogs.HdfsDatasetAttribu
 
     postRender: function() {
         this.$("input.name").val(this.options.entry.get('name'));
+        this.$("input.file_mask").val(this.options.entry.get('path'));
     }
 });

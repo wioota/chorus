@@ -12,6 +12,10 @@ describe("chorus.dialogs.AssociateHdfsDatasetFromEntry", function() {
     });
 
     it("should prefill name from selected file name", function() {
-        expect(this.dialog.$('input.name').val()).toEqual(this.entry.name());
+        expect(this.dialog.$('input.name').val()).toEqual(this.entry.get('name'));
+    });
+
+    it("should prefill file mask from the selected file's paths", function() {
+        expect(this.dialog.$('input.file_mask').val()).toEqual(this.entry.get('path'));
     });
 });
