@@ -51,6 +51,7 @@ chorus.dialogs.HdfsDatasetAttributes = chorus.dialogs.Base.include(chorus.Mixins
     },
 
     loadDataSources: $.noop,
+
     checkDataSource: function () {
         return true;
     }
