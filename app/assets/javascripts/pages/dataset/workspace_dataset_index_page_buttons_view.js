@@ -6,7 +6,8 @@ chorus.views.WorkspaceDatasetIndexPageButtons = chorus.views.Base.extend({
 
     createActions: [
         {className: 'import_file', text: t("actions.import_file")},
-        {className: 'create_hdfs_dataset', text: t("actions.create_hdfs_dataset")}
+        {className: 'create_hdfs_dataset', text: t("actions.create_hdfs_dataset")},
+        {className: 'browse_data_sources', text: t("actions.browse_data_sources")}
     ],
 
     menuEvents: {
@@ -17,6 +18,11 @@ chorus.views.WorkspaceDatasetIndexPageButtons = chorus.views.Base.extend({
         "a.create_hdfs_dataset": function(e) {
             e && e.preventDefault();
             new chorus.dialogs.CreateHdfsDataset({ workspace: this.model }).launchModal();
+        },
+        "a.browse_data_sources": function(e) {
+            e && e.preventDefault();
+            var data_source_url = "/data_sources";
+            chorus.router.navigate(data_source_url);
         }
     },
 

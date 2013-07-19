@@ -37,6 +37,7 @@ describe("chorus.views.WorkspaceDatasetIndexPageButtons", function() {
                 it("enables the 'Import File' and 'Hadoop File Mask' button", function() {
                     expect(this.qtipElement.find(".import_file")).not.toHaveClass("disabled");
                     expect(this.qtipElement.find(".create_hdfs_dataset")).not.toHaveClass("disabled");
+                    expect(this.qtipElement.find(".browse_data_sources")).not.toHaveClass("disabled");
                 });
 
                 context("clicking on 'Import File'", function() {
@@ -56,6 +57,18 @@ describe("chorus.views.WorkspaceDatasetIndexPageButtons", function() {
                         this.qtipElement.find('.create_hdfs_dataset').click();
                         expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateHdfsDataset);
                         expect(this.modalSpy.lastModal().options.workspace).toBe(this.workspace);
+                    });
+                });
+
+                context("clicking on 'Browse Data Sources'", function () {
+                    beforeEach(function () {
+                        spyOn(chorus.router, "navigate");
+                        this.data_source_url = "/data_sources";
+                        this.qtipElement.find('.browse_data_sources').click();
+                    });
+
+                    it("navigates to the data sources index page", function () {
+                        expect(chorus.router.navigate).toHaveBeenCalledWith(this.data_source_url);
                     });
                 });
             });
