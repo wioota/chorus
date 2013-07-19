@@ -4,7 +4,7 @@
         <img class="logo" src="images/uap-badge.png"/>
     {{/unless}}
     <form class="login" action="/auth/login/" method="post">
-    <img class="logo" src="{{#if alpineBranded}}images/alpine-login-logo.png{{else}}images/login-logo.png{{/if}}"/>
+    <img class="logo {{#if alpineBranded}}alpine{{/if}}" src="{{#if alpineBranded}}images/alpine-login-logo.png{{else}}images/login-logo.png{{/if}}"/>
         <div class="content">
             <label for="username">{{t "login.username"}}</label>
             <input type="text" name="username" id="username" maxlength="256"/>
@@ -24,7 +24,7 @@
             <img class="emc" src="/images/emc-logo.png">
         {{/unless}}
     </div>
-    <div class="legal">
+    <div class="legal {{#if alpineBranded}}alpine{{/if}}">
         <p>
             {{t "login.version"}} <span class="version"></span>|<span class="copyright">{{#if alpineBranded}}{{t "login.alpine_copyright"}}{{else}}{{t "login.copyright"}}{{/if}}</span>
         </p>
