@@ -28,7 +28,8 @@ chorus.dialogs.CreateHdfsDataset = chorus.dialogs.HdfsDatasetAttributes.extend({
         return {
             loaded: this.dataSources.loaded,
             dataSources: this.dataSources.models,
-            dataSourcesPresent: this.dataSources.length > 0
+            dataSourcesLoaded: this.dataSources.length > 0,
+            needsDataSource: true
         };
     },
 

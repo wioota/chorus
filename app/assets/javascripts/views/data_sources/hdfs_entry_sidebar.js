@@ -136,7 +136,10 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
     launchAssociateWithWorkspaceDialog: function(e) {
         e && e.preventDefault();
-        var dialog = new chorus.dialogs.AssociateHdfsDatasetFromEntry({entry: this.resource});
+        var hdfsDataset = new chorus.models.HdfsDataset({
+            hdfsDataSource: new chorus.models.HdfsDataSource({id: this.options.hdfsDataSourceId})
+        });
+        var dialog = new chorus.dialogs.AssociateHdfsDatasetFromEntry({entry: this.resource, model: hdfsDataset});
 
         dialog.launchModal();
     }

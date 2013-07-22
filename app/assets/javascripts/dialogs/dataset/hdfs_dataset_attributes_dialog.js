@@ -32,10 +32,14 @@ chorus.dialogs.HdfsDatasetAttributes = chorus.dialogs.Base.include(chorus.Mixins
     getFields: function () {
         return {
             name: this.$("input.name").val(),
-            dataSourceId: this.$(".data_source select").val(),
+            dataSourceId: this.getDatasourceId(),
             datasetId: this.model.id,
             fileMask: this.$("input.file_mask").val()
         };
+    },
+
+    getDatasourceId: function () {
+        return this.$(".data_source select").val();
     },
 
     checkInput: function () {
@@ -54,6 +58,13 @@ chorus.dialogs.HdfsDatasetAttributes = chorus.dialogs.Base.include(chorus.Mixins
 
     checkDataSource: function () {
         return true;
+    },
+
+    additionalContext: function () {
+        return {
+            needsDataSource: false,
+            needsWorkspace: false
+        };
     }
 
 });

@@ -33,11 +33,17 @@ describe("chorus.views.HdfsShowFileSidebar", function() {
             expect(this.view.$("a.add_note")).toContainTranslation("actions.add_note");
         });
 
+        it("shows the 'associate with workspace' link", function() {
+            expect(this.view.$("a.associate_with_workspace")).toContainTranslation("actions.associate_with_a_workspace");
+        });
+
         itBehavesLike.aDialogLauncher("a.add_note", chorus.dialogs.NotesNew);
 
+        itBehavesLike.aDialogLauncher("a.associate_with_workspace", chorus.dialogs.AssociateHdfsDatasetFromEntry);
+
         it("has an activity list", function() {
-            expect(this.view.$(".activity_list")).toExist()
-;        });
+            expect(this.view.$(".activity_list")).toExist();
+        });
 
         it("should have an activities tab", function() {
             expect(this.view.$('.tabbed_area .activity_list')).toExist();
