@@ -16,13 +16,13 @@ describe("chorus.dialogs.RenameWorkfile", function() {
 
         context("submitting the form", function() {
             beforeEach(function(){
+                spyOn(this.workfile, 'save').andCallThrough();
                 this.dialog.$('input').val("newName").change();
                 this.dialog.$("form").submit();
             });
 
             it ("should append .sql to the fileName", function() {
-                expect(this.workfile.get("fileName")).toBe("newName.sql");
-                expect(this.workfile).toHaveBeenUpdated();
+                expect(this.workfile.save).toHaveBeenCalledWith({fileName: 'newName.sql'}, {wait: true});
             });
         });
     });
@@ -57,9 +57,10 @@ describe("chorus.dialogs.RenameWorkfile", function() {
         });
     });
 
-    context("when submitting the form", function() {
+    describe("submitting the form", function() {
         beforeEach(function() {
             spyOn(this.dialog, "closeModal");
+            spyOn(this.workfile, 'save').andCallThrough();
             spyOnEvent(this.dialog.model, "change");
             this.dialog.$('input').val("newName.sql").change();
             this.dialog.$("form").submit();
@@ -70,8 +71,7 @@ describe("chorus.dialogs.RenameWorkfile", function() {
         });
 
         it("should update the workfile", function() {
-            expect(this.workfile.get("fileName")).toBe("newName.sql");
-            expect(this.workfile).toHaveBeenUpdated();
+            expect(this.workfile.save).toHaveBeenCalledWith({fileName: 'newName.sql'}, {wait: true});
         });
 
         it("should be loading", function() {
@@ -81,7 +81,7 @@ describe("chorus.dialogs.RenameWorkfile", function() {
         context("when the save is successful", function() {
             beforeEach(function() {
                 spyOnEvent(chorus.PageEvents, "workfile:rename");
-                this.server.lastUpdate().succeed({fileName: "anotherNameThatDoesnMakeAnySense"});
+                this.server.lastUpdate().succeed({fileName: "anotherNameThatMakesPerfectSense"});
             });
 
             it("closes the modal", function() {

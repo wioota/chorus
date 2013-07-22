@@ -27,20 +27,12 @@ chorus.dialogs.RenameWorkfile = chorus.dialogs.Base.include(chorus.Mixins.Dialog
 
     create: function(e) {
         var fileName = this.$("input").val();
-        this.oldFileName = this.model.name();
-        this.model.set({fileName: this.isSqlFile() ? fileName + ".sql" : fileName }, {silent: true});
-        this.model.save();
+        this.model.save({fileName: this.isSqlFile() ? fileName + ".sql" : fileName }, {wait: true});
         this.$("button.submit").startLoading("actions.renaming");
     },
 
     saved: function() {
         this.closeModal();
         chorus.PageEvents.trigger('workfile:rename');
-
-    },
-
-    saveFailed: function() {
-        this.model.set({fileName: this.oldFileName}, {silent: true});
-        this._super("saveFailed");
     }
 });
