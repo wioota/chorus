@@ -11,6 +11,7 @@ describe HdfsDatasetPresenter, :type => :view do
     any_instance_of(HdfsDataset) do |ds|
       stub(ds).contents { "contents" }
     end
+    set_current_user(users(:admin))
   end
 
   describe "#to_hash" do
@@ -38,6 +39,7 @@ describe HdfsDatasetPresenter, :type => :view do
         hash[:object_name].should == dataset.name
         hash[:hdfs_data_source][:id].should == dataset.hdfs_data_source.id
         hash[:hdfs_data_source][:name].should == dataset.hdfs_data_source.name
+        hash[:workspace][:id].should == dataset.workspace.id
         hash[:entity_subtype].should == 'HDFS'
         hash[:object_type].should == 'MASK'
         hash[:content].should be_nil

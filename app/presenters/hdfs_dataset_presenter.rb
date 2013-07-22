@@ -8,11 +8,11 @@ class HdfsDatasetPresenter < DatasetPresenter
   end
 
   def complete_hash
+    options[:workspace] = model.workspace
     hash = super
     hash.merge!({:content => model.contents}) if with_content
     hash
   end
-
 
   private
 

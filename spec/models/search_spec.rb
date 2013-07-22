@@ -150,7 +150,7 @@ describe Search do
         Search.new(user, :query => 'whatever', :entity_type => :dataset).search
         Sunspot.session.should have_search_params(:with) {
           any_of do
-            without :security_type_name, Dataset.security_type_name
+            without :security_type_name, RelationalDataset.name
           end
         }
       end
@@ -285,6 +285,7 @@ describe Search do
     let(:private_workfile) { workfiles(:private) }
     let(:public_workfile) { workfiles(:public) }
     let(:dataset) { datasets(:searchquery_table) }
+    let(:hadoop_dataset) { datasets(:searchquery_hadoop) }
     let(:typeahead_dataset) { datasets(:typeahead_gpdb_table) }
     let(:shared_dataset) { datasets(:searchquery_shared_table) }
     let(:chorus_view) { datasets(:searchquery_chorus_view) }
@@ -329,7 +330,7 @@ describe Search do
         create_and_record_search do |search|
           search.num_found[:users].should == 1
           search.num_found[:data_sources].should == 3
-          search.num_found[:datasets].should == 7
+          search.num_found[:datasets].should == 8
         end
       end
 
@@ -343,7 +344,7 @@ describe Search do
       it "includes the number of workspace specific results found" do
         workspace = workspaces(:search_public)
         create_and_record_search(owner, :query => 'searchquery', :workspace_id => workspace.id) do |search|
-          search.num_found[:this_workspace].should == 8
+          search.num_found[:this_workspace].should == 9
         end
       end
     end
@@ -411,7 +412,12 @@ describe Search do
 
       it "returns the Dataset objects found" do
         create_and_record_search do |search|
-          search.datasets.should =~ [dataset, shared_dataset, chorus_view, typeahead_dataset, datasets(:typeahead_chorus_view), datasets(:searchquery_chorus_view_private), datasets(:searchable_tag)]
+          search.datasets.should =~ [
+            dataset, shared_dataset, chorus_view,
+            typeahead_dataset, datasets(:typeahead_chorus_view),
+            datasets(:searchquery_chorus_view_private), datasets(:searchable_tag),
+            hadoop_dataset
+          ]
         end
       end
 
@@ -419,7 +425,7 @@ describe Search do
         user = users(:no_collaborators)
         user.data_source_accounts.joins(:data_source_account_permissions).should be_empty
         create_and_record_search(user, :query => 'searchquery', :entity_type => :dataset) do |search|
-          search.datasets.should == [shared_dataset]
+          search.datasets.should =~ [shared_dataset, hadoop_dataset]
         end
       end
 
@@ -521,7 +527,7 @@ describe Search do
           end
         end
 
-        it "includes chorus views associated with matching notes" do
+        it "includes chorus views associated with matching comments" do
           create_and_record_search(user, :query => 'commentsearch', :entity_type => 'Dataset') do |search|
             search.datasets.should include(chorus_view)
           end
@@ -772,7 +778,7 @@ end
 describe "SearchExtensions" do
   describe "security_type_name" do
     it "returns an array including the type_name of all ancestors" do
-      ChorusView.security_type_name.should =~ [ChorusView.type_name, GpdbDataset.type_name, Dataset.type_name]
+      ChorusView.security_type_name.should =~ [ChorusView.type_name, GpdbDataset.type_name, Dataset.type_name, RelationalDataset.type_name]
     end
 
     it "data_sources behave the same way" do

@@ -1,6 +1,6 @@
 require 'stale'
 
-class GpdbDataset < Dataset
+class GpdbDataset < RelationalDataset
   delegate :definition, :to => :statistics
   delegate :database, :to => :schema
 

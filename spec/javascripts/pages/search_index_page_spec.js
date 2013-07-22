@@ -183,14 +183,17 @@ describe("chorus.pages.SearchIndexPage", function() {
 
                 describe("clicking on a tabular data search result", function() {
                     beforeEach(function() {
-                        this.datasetLIs.eq(1).trigger("click");
-                        this.dataset = this.page.model.datasets().at(1);
+                        this.dataset = this.page.model.datasets().find(function (dataset) {
+                            return dataset.get('objectName') === 'searchquery_shared_table';
+                        });
+                        this.datasetResult = this.datasetLIs.find('.name:contains("' + this.dataset.name() + '")').closest('li');
+                        this.datasetResult.trigger("click");
                         //The sidebar requires extra setup for a chorus view
                         expect(this.dataset.isChorusView()).toBeFalsy();
                     });
 
                     it("selects that tabular data item", function() {
-                        expect(this.datasetLIs.eq(1)).toHaveClass("selected");
+                        expect(this.datasetResult).toHaveClass("selected");
                     });
 
                     it("shows the tabular data item in the sidebar", function() {

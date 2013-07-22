@@ -109,7 +109,7 @@ class Search
     @num_found ||= begin
       found_so_far = Hash.new(0)
 
-      return found_so_far if tag_missing? || query_empty?
+      return found_so_far if (tag_missing? || query_empty?)
 
       if count_using_facets?
         search.facet(:type_name).rows.each do |facet|

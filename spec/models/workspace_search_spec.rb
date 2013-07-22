@@ -76,6 +76,7 @@ describe WorkspaceSearch do
     let(:matching_table) { datasets(:searchquery_table) }
     let(:matching_view) { datasets(:searchquery_chorus_view) }
     let(:typeahead_dataset) { datasets(:typeahead_gpdb_table) }
+    let(:hdfs_dataset) { datasets(:searchquery_hadoop) }
     before do
       index_solr_fixtures_once
     end
@@ -84,7 +85,7 @@ describe WorkspaceSearch do
       it "returns the total number of results found" do
         VCR.use_cassette('workspace_search_solr_query_as_owner') do
           search = WorkspaceSearch.new(owner, :query => 'searchquery', :workspace_id => workspace.id)
-          search.num_found.should == 8
+          search.num_found.should == 9
         end
       end
     end
@@ -93,7 +94,10 @@ describe WorkspaceSearch do
       it "returns the founds results" do
         VCR.use_cassette('workspace_search_solr_query_as_owner') do
           search = WorkspaceSearch.new(owner, :query => 'searchquery', :workspace_id => workspace.id)
-          search.results.should =~ [workfile, matching_table, matching_view, workspace, typeahead_dataset, datasets(:typeahead_chorus_view), datasets(:searchquery_chorus_view_private), datasets(:searchable_tag)]
+          search.results.should =~ [
+            workfile, matching_table, matching_view, workspace, typeahead_dataset, hdfs_dataset,
+            datasets(:typeahead_chorus_view), datasets(:searchquery_chorus_view_private), datasets(:searchable_tag)
+          ]
         end
       end
 

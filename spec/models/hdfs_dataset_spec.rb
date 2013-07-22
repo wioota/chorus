@@ -139,4 +139,23 @@ describe HdfsDataset do
       end
     end
   end
+
+  describe "search fields" do
+    it "indexes text fields" do
+      HdfsDataset.should have_searchable_field :name
+      HdfsDataset.should have_searchable_field :query
+    end
+
+    it "unindexes the dataset when it becomes stale" do
+      mock(dataset).solr_remove_from_index
+      dataset.mark_stale!
+    end
+
+    it "reindexes the dataset when it becomes un stale" do
+      dataset.mark_stale!
+      mock(dataset).solr_index
+      dataset.stale_at = nil
+      dataset.save!
+    end
+  end
 end

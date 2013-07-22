@@ -65,13 +65,21 @@ class Dataset < ActiveRecord::Base
   def self.add_search_permissions(current_user, search)
     search.build do
       any_of do
-        without :security_type_name, Dataset.security_type_name
+        # Restrict all documents that inherit from RelationalDataset
+        # such that they must match data_source_account_ids visible to the current user
+        without :security_type_name, RelationalDataset.name
         account_ids = current_user.accessible_account_ids
         with :data_source_account_ids, account_ids unless account_ids.blank?
       end
 
       any_of do
-        without :security_type_name, "ChorusView"
+        without :security_type_name, ChorusView.name
+        with :member_ids, current_user.id
+        with :public, true
+      end
+
+      any_of do
+        without :security_type_name, HdfsDataset.name
         with :member_ids, current_user.id
         with :public, true
       end

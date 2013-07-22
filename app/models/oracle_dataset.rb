@@ -1,4 +1,4 @@
-class OracleDataset < Dataset
+class OracleDataset < RelationalDataset
   def database_name
    ''
   end

@@ -40,13 +40,19 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
             shown: this.collection.models.length,
             total: this.collection.pagination.records,
             hideHeaders: this.search && this.search.isPaginated() && !this.search.workspace(),
-            moreResults: (this.collection.models.length < this.collection.pagination.records),
+            moreResults: this.moreRecordsThanShown(),
             title: this.title()
         };
     },
 
     title: function() {
          return t("search.type." + this.entityType);
+    },
+
+    moreRecordsThanShown: function () {
+        var localModels = this.collection.models;
+        var remoteModelCount = this.collection.pagination.records;
+        return (localModels.length < remoteModelCount);
     },
 
     showAll: function(e) {

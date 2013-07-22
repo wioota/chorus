@@ -34,7 +34,7 @@ describe WorkspaceSearchController do
       index_solr_fixtures_once
 
       VCR.use_cassette "workspace_search_solr_query_as_owner" do
-        get :show, :query => 'searchquery', :workspace_id => workspace.id
+        get :show, :query => 'searchquery', :workspace_id => workspace.id, :per_page => 50
       end
     end
 

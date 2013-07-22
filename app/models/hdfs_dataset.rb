@@ -1,13 +1,16 @@
 class HdfsDataset < Dataset
+  include SharedSearch
+
   alias_attribute :file_mask, :query
   attr_accessible :file_mask
   validates_presence_of :file_mask, :workspace
   validate :ensure_active_workspace, :if => Proc.new { |f| f.changed? }
 
-
   belongs_to :hdfs_data_source
   belongs_to :workspace
   delegate :data_source, :connect_with, :connect_as, :to => :hdfs_data_source
+
+  include_shared_search_fields :workspace, :workspace
 
   HdfsContentsError = Class.new(StandardError)
 
@@ -17,6 +20,21 @@ class HdfsDataset < Dataset
       dataset.workspace = workspace
       dataset.save!
       dataset
+  end
+
+  ## include bogus definitions for fields that are searchable in other models
+  [:database_name, :table_description, :schema_name, :column_name, :column_description].each do |searchable_field|
+    define_method(searchable_field) do
+      nil
+    end
+  end
+
+  def data_source_account_ids
+    []
+  end
+
+  def found_in_workspace_id
+    [workspace_id]
   end
 
   def contents

@@ -1,7 +1,7 @@
 describe("chorus.views.WorkspaceSearchResultList", function() {
     beforeEach(function() {
         this.search = backboneFixtures.searchResultInWorkspace({
-            thisWorkspace: { numFound: 9 }
+            thisWorkspace: { numFound: 50 }
         });
         this.search.set({ query: "foo", workspaceId: "10001" });
         this.search.workspace().set({ name: "John the workspace" });
@@ -30,6 +30,7 @@ describe("chorus.views.WorkspaceSearchResultList", function() {
     describe("#clicking 'show all'", function() {
         beforeEach(function() {
             spyOn(chorus.router, 'navigate');
+            expect(this.view.$("a.show_all")).toExist();
             this.view.$("a.show_all").click();
         });
 
