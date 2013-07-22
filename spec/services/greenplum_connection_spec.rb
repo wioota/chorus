@@ -974,7 +974,7 @@ describe GreenplumConnection, :greenplum_integration do
             LEFT OUTER JOIN pg_partition_rule on (pg_partition_rule.parchildrelid = pg_catalog.pg_class.oid AND pg_catalog.pg_class.relhassubclass = 'f')
             WHERE pg_catalog.pg_class.relnamespace in (SELECT oid from pg_namespace where pg_namespace.nspname = :schema)
             AND pg_catalog.pg_class.relkind = 'r'
-            AND pg_catalog.pg_class.relstorage = 'h'
+            AND pg_catalog.pg_class.relstorage in ('h','a')
             AND (pg_catalog.pg_class.relhassubclass = 't' OR pg_partition_rule.parchildrelid IS NULL)
             AND pg_catalog.pg_class.oid NOT IN (SELECT parchildrelid FROM pg_partition_rule)
             ORDER BY lower(replace(relname,'_', '')) ASC
