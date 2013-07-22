@@ -72,7 +72,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs_data_source.create_directory_external_table");
             });
 
-//            itBehavesLike.aDialogLauncher("a.directory_external_table", chorus.dialogs.HdfsDataSourceWorkspacePicker);
+            itBehavesLike.aDialogLauncher("a.directory_external_table", chorus.dialogs.HdfsDataSourceWorkspacePicker);
 
             it("calls the base implementation for postRender", function() {
                 spyOn(chorus.views.Sidebar.prototype, "postRender");
