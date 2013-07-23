@@ -4,4 +4,8 @@ class JobsController < ApplicationController
     render json: []
   end
 
+  def create
+    Job.create!
+    head :created
+  end
 end
