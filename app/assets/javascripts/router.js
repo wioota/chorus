@@ -44,6 +44,7 @@
             ["workspaces/:workspaceId/workfiles/:workfileId/versions/:versionId", "WorkfileShow"],
             ["workspaces/:workspaceId/datasets", "WorkspaceDatasetIndex"],
             ["workspaces/:workspaceId/kaggle", "KaggleUserIndex"],
+            ["workspaces/:workspaceId/jobs", "JobsIndex"],
             ["workspaces/:workspaceId/search/:query", "WorkspaceSearchIndex"],
             ["workspaces/:workspaceId/search/:scope/:entityType/:query", "WorkspaceSearchIndex"],
             ["workspaces/:workspaceId/tags/:name", "WorkspaceTagShow"],
