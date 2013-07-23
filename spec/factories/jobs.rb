@@ -72,4 +72,9 @@ FactoryGirl.define do
     new_table true
     association :source, :factory => :gnip_data_source
   end
+
+  factory :job do
+    name Faker::Company.bs.titlecase
+    association :workspace
+  end
 end

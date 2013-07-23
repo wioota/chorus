@@ -13,6 +13,7 @@ class Workspace < ActiveRecord::Base
   belongs_to :archiver, :class_name => 'User'
   belongs_to :owner, :class_name => 'User'
   has_many :import_schedules, :dependent => :destroy
+  has_many :jobs, :dependent => :destroy
   has_many :memberships, :inverse_of => :workspace
   has_many :members, :through => :memberships, :source => :user
   has_many :workfiles, :dependent => :destroy

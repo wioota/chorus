@@ -366,6 +366,10 @@ FixtureBuilder.configure do |fbuilder|
       FactoryGirl.create(:chorus_workfile, :file_name => "code.cpp", :owner => owner, :workspace => public_workspace, :versions_attributes => [{:contents => file}])
     end
 
+    ##Jobs
+    FactoryGirl.create(:job, :workspace => public_workspace)
+
+    #Imports
     dataset_import_created = FactoryGirl.create(:dataset_import_created_event,
                                                 :workspace => public_workspace, :dataset => nil,
                                                 :source_dataset => default_table, :destination_table => 'new_table_for_import'
