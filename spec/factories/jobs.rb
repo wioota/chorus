@@ -74,7 +74,7 @@ FactoryGirl.define do
   end
 
   factory :job do
-    name Faker::Company.bs.titlecase
+    name { Faker::Company.bs.titlecase }
     association :workspace
     next_run 2.days.from_now
     frequency %w( hourly daily weekly monthly ).sample

@@ -11,7 +11,7 @@ describe("chorus.views.JobSidebar", function () {
 
     context("when the job is enabled", function () {
         beforeEach(function () {
-            expect(this.job.get('state')).not.toEqual("disabled");
+            this.job.set("state", "scheduled");
         });
 
         it("shows a disable link", function () {

@@ -367,6 +367,11 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     ##Jobs
+    default_job = FactoryGirl.create(:job, :workspace => public_workspace)
+    fbuilder.name :default, default_job
+
+    FactoryGirl.create(:job, :workspace => public_workspace)
+    FactoryGirl.create(:job, :workspace => public_workspace)
     FactoryGirl.create(:job, :workspace => public_workspace)
 
     #Imports

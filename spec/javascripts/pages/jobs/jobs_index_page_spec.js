@@ -92,8 +92,8 @@ describe("chorus.pages.JobsIndexPage", function () {
     describe("search", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
-            var collection = backboneFixtures.jobSet();
-            this.server.completeFetchAllFor(this.page.collection, [collection.at(0), collection.at(1)]);
+            this.collection = backboneFixtures.jobSet();
+            this.server.completeFetchAllFor(this.page.collection, [this.collection.at(0), this.collection.at(1)]);
 
         });
 
@@ -101,7 +101,7 @@ describe("chorus.pages.JobsIndexPage", function () {
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Job", {count: 2});
             expect(this.page.$("input.search")).toHaveAttr("placeholder", t("job.search_placeholder"));
 
-            this.page.$("input.search").val("name1").trigger("keyup");
+            this.page.$("input.search").val(this.collection.at(0).get("name")).trigger("keyup");
 
             expect(this.page.$("li.item_wrapper:eq(1)")).toHaveClass("hidden");
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Job", {count: 1});
