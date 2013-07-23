@@ -7,8 +7,12 @@ describe JobsController do
     let(:workspace) { workspaces(:public) }
     let(:post_params) do
       {
-        :workspace_id => workspace,
-        :name => "Weekly TPS Reports"
+        :workspace_id => workspace.id,
+        :job => {
+          :frequency => 'daily',
+          :name => 'Weekly TPS Reports',
+          :next_run => 1.day.from_now
+        }
       }
     end
 
@@ -22,5 +26,10 @@ describe JobsController do
         post :create, post_params
       end.to change(Job, :count).by(1)
     end
+    #
+    #it "presents the created job" do
+    #  post :create, post_params
+    #  decoded_response.should == post_params[:job]
+    #end
   end
 end

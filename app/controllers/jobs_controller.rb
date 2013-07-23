@@ -5,7 +5,7 @@ class JobsController < ApplicationController
   end
 
   def create
-    Job.create!
+    Job.create! params[:job]
     head :created
   end
 end
