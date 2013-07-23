@@ -64,6 +64,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
         it("passes the multiSelect option to the list content details", function() {
             expect(this.page.mainContent.contentDetails.options.multiSelect).toBeTruthy();
+            expect(this.page.multiSelectSidebarMenu).toBeTruthy();
         });
 
         it("passes the workspaceIdForTagLink option as listItemOptions to the main content options", function() {

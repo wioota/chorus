@@ -83,6 +83,33 @@
             }
         }
 
+        .job_item {
+            .frequency, .next_run, .last_run {
+                display: inline-block;                
+            }
+            
+            .frequency {
+                width: 120px;
+            }
+
+            .next_run, .last_run {
+                width: 220px;
+            }
+
+            .state {
+                .loading_spinner {
+                    right: 0;
+                    left: -10px;
+                    top: 10px;
+                }
+
+                color: $color-text4;
+                position: absolute;
+                right: 20px;
+                top: 20px;
+            }
+        }
+
         .main_text {
             display: inline-block;
         }

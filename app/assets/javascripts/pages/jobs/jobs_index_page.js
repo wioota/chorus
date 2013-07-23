@@ -6,6 +6,7 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
         this.buttonView = new chorus.views.JobIndexPageButtons({model: this.workspace});
 
         this.collection = new chorus.collections.JobSet([], {workspaceId: workspaceId});
+        this.collection.sortAsc("name");
         this.collection.fetchAll();
 
         this.mainContent = new chorus.views.MainContentList({
@@ -14,8 +15,46 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
             contentDetailsOptions: {
                 multiSelect: true,
                 buttonView: this.buttonView
+            },
+            linkMenus: {
+                sort: {
+                    title: t("job.header.menu.sort.title"),
+                    options: [
+                        {data: "alpha", text: t("job.header.menu.sort.alphabetically")},
+                        {data: "date", text: t("job.header.menu.sort.by_date")}
+                    ],
+                    event: "sort"
+                }
+            },
+            search: {
+                placeholder: t("job.search_placeholder"),
+                eventName: "job:search"
             }
         });
+
+        this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
+            selectEvent: "job:checked",
+            actions: [
+                '<a class="disable_jobs">{{t "job.actions.disable_job"}}</a>',
+                '<a class="delete_jobs">{{t "job.actions.delete_job"}}</a>'
+            ],
+            actionEvents: {
+                'click .disable_jobs': _.bind(function() {}, this),
+                'click .delete_jobs': _.bind(function() {}, this)
+            }
+        });
+
+        this.mainContent.contentHeader.bind("choice:sort", function(choice) {
+            var field = choice === "alpha" ? "name" : "nextRun";
+            this.collection.sortAsc(field);
+            this.collection.fetchAll();
+        }, this);
+
+        this.subscribePageEvent("job:search", function() {
+            chorus.PageEvents.trigger('selectNone');
+        });
+
+        this.subscribePageEvent("job:selected", this.setModel);
 
         this.requiredResources.add(this.workspace);
         this.breadcrumbs.requiredResources.add(this.workspace);
@@ -32,5 +71,14 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
 
     makeModel: function(workspaceId) {
         this.loadWorkspace(workspaceId);
+    },
+
+    setModel: function (job) {
+        this.model = job;
+        if(this.sidebar) {
+            this.sidebar.teardown(true);
+        }
+        this.sidebar = new chorus.views.JobSidebar({model: this.model});
+        this.renderSubview('sidebar');
     }
 });

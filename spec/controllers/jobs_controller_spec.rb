@@ -1,10 +1,25 @@
 require 'spec_helper'
 
 describe JobsController do
+  let(:user) { users(:owner) }
+  let(:workspace) { workspaces(:public) }
+
+  before do
+    log_in user
+  end
+
+  describe "#index" do
+    it "responds with a success" do
+      get :index, :workspace_id => workspace.id
+      response.code.should == "200"
+    end
+
+    generate_fixture "jobSet.json" do
+      get :index, :workspace_id => workspace.id
+    end
+  end
+
   describe '#create' do
-    before { log_in user }
-    let(:user) { users(:owner) }
-    let(:workspace) { workspaces(:public) }
     let(:post_params) do
       {
         :workspace_id => workspace.id,

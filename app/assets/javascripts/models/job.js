@@ -1,3 +1,3 @@
-chorus.models.Jobs = chorus.models.Base.extend({
-
+chorus.models.Job = chorus.models.Base.extend({
+    showUrlTemplate: "workspaces/{{workspace.id}}/jobs/{{id}}"
 });

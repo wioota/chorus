@@ -1,10 +1,11 @@
 jQuery.fn.extend({
-    startLoading: function(translationKey) {
+    startLoading: function(translationKey, opts) {
+        opts = opts || {};
         this.each(function() {
             var el = $(this);
             if (el.isLoading()) return;
 
-            var spinner = new Spinner({
+            var spinner = new Spinner(_.extend({
                 lines: 12,
                 length: 3,
                 width: 2,
@@ -13,7 +14,7 @@ jQuery.fn.extend({
                 speed: 1,
                 trail: 75,
                 shadow: false
-            }).spin();
+            }, opts)).spin();
 
             var originalHtml = el.html();
             var text = translationKey ? t(translationKey) : '';

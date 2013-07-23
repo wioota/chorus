@@ -1,0 +1,16 @@
+<div class="info">
+    <div title="{{name}}" class="name">{{name}}</div>
+</div>
+
+<div class="actions">
+    <ul>
+        <li><a href="#" class="edit_job dialog" href="#">{{t "job.actions.edit_job"}}</a></li>
+        <li><a href="#" class="edit_job dialog" href="#">{{t "job.actions.run_job"}}</a></li>
+        {{#if enabled}}
+            <li><a href="#" class="disable dialog" href="#">{{t "job.actions.disable_job"}}</a></li>
+        {{else}}
+            <li><a href="#" class="enable dialog" href="#">{{t "job.actions.enable_job"}}</a></li>
+        {{/if}}
+        <li><a href="#" class="delete_job dialog" href="#">{{t "job.actions.delete_job"}}</a></li>
+    </ul>
+</div>
