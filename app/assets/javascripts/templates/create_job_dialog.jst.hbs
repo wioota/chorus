@@ -2,20 +2,25 @@
     <label class="required">{{t "create_job_dialog.name"}}</label>
     <input class='name' type='text'/>
 
+    <legend class="subtitle">
+        <div class="text">{{t "create_job_dialog.schedule"}}</div>
+        <hr />
+    </legend>
+
+    <label>{{t "create_job_dialog.schedule_explanation"}}</label>
 
     <div class="options">
-        <div class="on_demand">
+        <div class="on_demand row">
             <input type="radio" id="onDemand" name="jobType" value="on_demand" checked="checked"/>
             <label for="onDemand">{{t "create_job_dialog.on_demand"}}</label>
         </div>
 
 
-        <div class="on_schedule">
+        <div class="on_schedule row">
             <input type="radio" id="onSchedule" name="jobType" value="on_schedule"/>
             <label for="onSchedule">{{t "create_job_dialog.on_schedule"}}</label>
 
             <fieldset disabled class="interval_options">
-                <label>{{t "create_job_dialog.interval_value"}}</label>
                 <input class='interval_value' type='text' maxlength="3"/>
 
                 <select class='interval_unit'>

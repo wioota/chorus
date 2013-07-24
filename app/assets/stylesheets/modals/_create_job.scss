@@ -1,0 +1,41 @@
+@import "_common.scss";
+
+.create_job_dialog {
+  .row {
+    line-height: 34px;
+    vertical-align: middle;
+  }
+
+  .options {
+    margin: 5px 20px 0 20px;
+  }
+
+  fieldset {
+    display: inline-block;
+    border: none;
+    padding: 0 15px 0px;
+
+    &.disabled {
+      padding-bottom: 0;
+    }
+    .interval_value {
+      width: 40px;
+      display: inline;
+    }
+    select, .ui-selectmenu-button .ui-button {
+      width: 100px;
+    }
+  }
+
+  legend.subtitle {
+    padding: 10px 10px 10px 0px;
+    width: 100%;
+    @include font-normal-alpha;
+
+    .text {
+      float: left;
+      padding-right: 10px;
+    }
+  }
+
+}
