@@ -31,6 +31,16 @@
             right: -$padding-x;
         }
 
+        .drag_handle {
+            position: absolute;
+            background-color: gray;
+            top: 0;
+            bottom: 0;
+            left: -$padding-x;
+            width: $padding-x;
+            cursor: move;
+        }
+
         .image {
             display: block;
             float: left;
@@ -107,6 +117,16 @@
                 position: absolute;
                 right: 20px;
                 top: 20px;
+            }
+        }
+
+        .job_task_item {
+            .index {
+                float: left;
+                margin-left: 5px;
+                margin-top: 12px;
+                margin-right: 4px;
+                font-weight: bold;
             }
         }
 

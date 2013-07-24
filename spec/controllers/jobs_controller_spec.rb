@@ -59,6 +59,20 @@ describe JobsController do
     end
   end
 
+  describe '#show' do
+    let(:job) { jobs(:default) }
+
+    it "responds with a job" do
+      get :show, :workspace_id => workspace.id, :id => job.id
+      response.code.should == "200"
+      decoded_response[:id].should == job.id
+    end
+
+    generate_fixture "job.json" do
+      get :show, :workspace_id => workspace.id, :id => job.id
+    end
+  end
+
   describe '#create' do
     let(:post_params) do
       {

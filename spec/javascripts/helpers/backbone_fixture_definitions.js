@@ -143,6 +143,8 @@ window.BackboneFixtureDefinitions = {
 
     invalidCredentialsError: {},
 
+    job: {},
+
     jobSet: {},
 
     dataSourceAccount: { unique: ["id"] },

@@ -8,6 +8,14 @@ class JobsController < ApplicationController
     present paginate(jobs)
   end
 
+  def show
+    job = Job.find(params[:id])
+    workspace = job.workspace
+    authorize! :show, workspace
+
+    present job
+  end
+
   def create
     Job.create! params[:job]
     head :created

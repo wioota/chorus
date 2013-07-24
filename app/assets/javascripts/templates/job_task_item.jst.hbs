@@ -1,0 +1,20 @@
+<span class="index">{{index}}.</span>
+
+<span class="image">
+    <img src="{{iconUrl}}"/>
+</span>
+
+<div class="item_information">
+
+    <div class="item_name">
+        {{#if url}}
+            <a title="{{name}}" class="name" href="{{url}}">{{name}}</a>
+        {{else}}
+            <span class="name">{{name}}</span>
+        {{/if}}
+    </div>
+
+    <div class="item_metadata">
+        <span class="type">{{t typeKey}}</span>
+    </div>
+</div>
