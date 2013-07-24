@@ -85,8 +85,9 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     constructFileContent: function() {
         var columnNames = _.pluck(this.resource.getColumns(), "name");
+        var uniqueNames = _.pluck(this.resource.getColumns(), "uniqueName");
         return new chorus.utilities.CsvWriter(
-            columnNames, this.resource.getRows(), this.options).toCsv();
+            columnNames, uniqueNames, this.resource.getRows(), this.options).toCsv();
 
     },
 
