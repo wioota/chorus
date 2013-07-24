@@ -1,0 +1,32 @@
+<form action="#">
+    <label class="required">{{t "create_job_dialog.name"}}</label>
+    <input class='name' type='text'/>
+
+
+    <div class="options">
+        <div class="on_demand">
+            <input type="radio" id="onDemand" name="jobType" value="on_demand" checked="checked"/>
+            <label for="onDemand">{{t "create_job_dialog.on_demand"}}</label>
+        </div>
+
+
+        <div class="on_schedule">
+            <input type="radio" id="onSchedule" name="jobType" value="on_schedule"/>
+            <label for="onSchedule">{{t "create_job_dialog.on_schedule"}}</label>
+
+            <fieldset disabled class="interval_options">
+                <label>{{t "create_job_dialog.interval_value"}}</label>
+                <input class='interval_value' type='text' maxlength="3"/>
+
+                <select class='interval_unit'>
+                    <option value="hours">{{t "job.interval_unit.hours"}}</option>
+                    <option value="days">{{t "job.interval_unit.days"}}</option>
+                    <option value="weeks">{{t "job.interval_unit.weeks"}}</option>
+                    <option value="months">{{t "job.interval_unit.months"}}</option>
+                </select>
+            </fieldset>
+        </div>
+    </div>
+
+    {{formControlsWithDisabledSubmit "create_job_dialog.submit"}}
+</form>

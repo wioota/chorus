@@ -1,4 +1,5 @@
 chorus.models.Job = chorus.models.Base.extend({
+    constructorName: "Job",
     urlTemplate: "workspaces/{{workspace.id}}/jobs/{{id}}",
     showUrlTemplate: "workspaces/{{workspace.id}}/jobs/{{id}}",
 
