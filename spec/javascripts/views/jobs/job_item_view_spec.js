@@ -17,8 +17,31 @@ describe("chorus.views.JobItem", function () {
         expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job.png");
     });
 
-    it("includes the job's frequency", function () {
-       expect(this.view.$(".frequency")).toContainTranslation("job.frequency." + this.model.get("frequency"));
+    describe("frequency", function () {
+        context("when the Job is run on Demand", function () {
+            beforeEach(function () {
+                this.model.set('intervalUnit', 'on_demand');
+            });
+
+            it("displays the 'on demand' text", function () {
+                expect(this.view.$(".frequency")).toContainTranslation("job.frequency.on_demand");
+            });
+        });
+
+        context("when the Job is run on a schedule", function () {
+            var three, days;
+
+            beforeEach(function () {
+                three = 3; days = 'days';
+                this.model.set('intervalValue', three);
+                this.model.set('intervalUnit', days);
+            });
+
+            it("displays the schedule text", function () {
+                var $frequency = this.view.$(".frequency");
+                expect($frequency).toContainTranslation("job.frequency.on_schedule", {intervalValue: three, intervalUnit: days});
+            });
+        });
     });
 
     it("includes the job's state", function () {

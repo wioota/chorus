@@ -15,5 +15,9 @@ chorus.models.Job = chorus.models.Base.extend({
             this._tasks = new chorus.collections.JobTaskSet(this.get("tasks"), {parse: true});
         }
         return this._tasks;
+    },
+
+    runsOnDemand: function () {
+        return this.get("intervalUnit") === "on_demand";
     }
 });
