@@ -1,14 +1,15 @@
 class Job < ActiveRecord::Base
   include SoftDelete
 
-  attr_accessible :enabled, :name, :frequency, :next_run, :last_run
+  attr_accessible :enabled, :name, :next_run, :last_run, :interval_unit, :interval_value
+  cattr_reader :valid_interval_units; @@valid_interval_units = %w(hours days weeks months on_demand)
 
   belongs_to :workspace
   has_many :job_tasks
 
-  frequencies = %w( hourly daily weekly monthly demand custom )
-  validates :frequency, :presence => true, :inclusion => {:in => frequencies }
-  validates_presence_of :next_run
+  validates :interval_unit, :presence => true, :inclusion => {:in => valid_interval_units }
+  validates_presence_of :interval_value
+  #validates_presence_of :next_run
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:workspace_id, :deleted_at]
 

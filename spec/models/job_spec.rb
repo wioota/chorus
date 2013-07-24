@@ -4,10 +4,12 @@ describe Job do
   describe 'validations' do
     it { should validate_presence_of :next_run }
     it { should validate_presence_of :name }
-    it { should validate_presence_of :frequency }
-    it { should ensure_inclusion_of(:frequency).in_array(%w( hourly daily weekly monthly demand custom )) }
+    it { should validate_presence_of :interval_unit }
+    it { should validate_presence_of :interval_value }
+    it { should ensure_inclusion_of(:interval_unit).in_array(Job.valid_interval_units) }
     it { should have_many :job_tasks }
-
+    
+    
     describe "name uniqueness validation" do
       let(:workspace) { workspaces(:public) }
       let(:other_workspace) { workspaces(:private) }
@@ -41,6 +43,7 @@ describe Job do
 
   describe '#create!' do
     let(:attrs) { FactoryGirl.attributes_for(:job) }
+
     it "is disabled by default" do
       job = Job.create! attrs
       job.should_not be_enabled

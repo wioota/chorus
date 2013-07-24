@@ -2,6 +2,7 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
     constructorName: 'CreateJob',
     templateName: 'create_job_dialog',
     title: t('create_job_dialog.title'),
+    message: 'create_job_dialog.toast',
 
     events: {
         "change input:radio": 'toggleIntervalOptions'
@@ -18,6 +19,8 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
             inputSelector: "input",
             checkInput: _.bind(this.checkInput, this)
         });
+
+        this.listenTo(this.model, "saved", this.modelSaved);
         this.toggleSubmitDisabled();
     },
 
@@ -59,5 +62,11 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
 
     toggleIntervalOptions: function () {
         this.$('.interval_options').prop('disabled', this.isOnDemand());
+    },
+
+    modelSaved: function () {
+        chorus.toast(this.message);
+        this.model.trigger('invalidated');
+        this.closeModal();
     }
 });

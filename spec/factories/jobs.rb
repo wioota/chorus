@@ -77,7 +77,8 @@ FactoryGirl.define do
     name { Faker::Company.bs.titlecase }
     association :workspace
     next_run 2.days.from_now
-    frequency { %w( hourly daily weekly monthly ).sample }
+    interval_unit { %w( hourly daily weekly monthly ).sample }
+    interval_value { rand(100)+1 }
   end
 
   factory :job_task do

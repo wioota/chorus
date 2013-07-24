@@ -49,6 +49,36 @@ describe("chorus.dialogs.CreateJob", function () {
                     expect(params['job[interval_unit]']).toEqual(this.plannedJob.intervalUnit);
                     expect(params['job[interval_value]']).toEqual("0");
                 });
+
+                context("when the save fails", function () {
+                    beforeEach(function () {
+                        this.server.lastCreate().failUnprocessableEntity({
+                            fields: {
+                                BASE: { SOME_FAKE_ERROR: {}}
+                            }
+                        });
+                    });
+
+                    it("should display the errors for the model", function() {
+                        expect(this.dialog.$(".errors li")).toExist();
+                    });
+                });
+
+                context("when the save succeeds", function () {
+                    beforeEach(function () {
+                        spyOn(this.dialog, "closeModal");
+                        spyOn(chorus, "toast");
+                        this.server.lastCreate().succeed();
+                    });
+
+                    it("it should close the modal", function () {
+                        expect(this.dialog.closeModal).toHaveBeenCalled();
+                    });
+
+                    it("should create a toast", function () {
+                        expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message);
+                    });
+                });
             });
 
         });
@@ -119,7 +149,5 @@ describe("chorus.dialogs.CreateJob", function () {
             });
         });
     });
-
-
 
 });

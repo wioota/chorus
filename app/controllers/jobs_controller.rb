@@ -17,7 +17,12 @@ class JobsController < ApplicationController
   end
 
   def create
-    Job.create! params[:job]
-    head :created
+    workspace = Workspace.find(params[:workspace_id])
+    authorize! :can_edit_sub_objects, workspace
+
+    job = Job.create!(params[:job])
+    workspace.jobs << job
+
+    present job, :status => :created
   end
 end

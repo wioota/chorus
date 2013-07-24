@@ -76,31 +76,40 @@ describe JobsController do
   end
 
   describe '#create' do
-    let(:post_params) do
+    let(:planned_job) { FactoryGirl.attributes_for(:job) }
+    let(:params) do
       {
         :workspace_id => workspace.id,
-        :job => {
-          :frequency => 'daily',
-          :name => 'Weekly TPS Reports',
-          :next_run => 1.day.from_now
-        }
+        :job => planned_job
       }
     end
 
+    it "uses authorization" do
+      mock(subject).authorize! :can_edit_sub_objects, workspace
+      post :create, params
+    end
+
     it "returns 201" do
-      post :create, post_params
+      post :create, params
       response.code.should == "201"
     end
 
     it "creates a Job" do
       expect do
-        post :create, post_params
+        post :create, params
       end.to change(Job, :count).by(1)
     end
-    #
-    #it "presents the created job" do
-    #  post :create, post_params
-    #  decoded_response.should == post_params[:job]
-    #end
+
+    it "adds a created Job with a given Workspace" do
+      expect do
+        post :create, params
+      end.to change {workspace.reload.jobs.count}.by(1)
+    end
+
+    it 'renders the created job as JSON' do
+      post :create, params
+      response.code.should == "201"
+      decoded_response.should_not be_empty
+    end
   end
 end
