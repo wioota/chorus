@@ -1,5 +1,6 @@
 describe("chorus.dialogs.CreateJob", function () {
     beforeEach(function () {
+        stubDefer();
         this.plannedJob = {name: 'Apples', intervalValue: '2', intervalUnit: 'weeks'};
 
         this.workspace = backboneFixtures.workspace();
@@ -17,7 +18,6 @@ describe("chorus.dialogs.CreateJob", function () {
         beforeEach(function () {
             this.plannedJob.intervalUnit = 'on_demand';
         });
-
 
         it("leaves interval fields disabled", function () {
             expect(this.dialog.$('select.interval_unit')).toBeDisabled();
@@ -52,7 +52,7 @@ describe("chorus.dialogs.CreateJob", function () {
 
                 context("when the save fails", function () {
                     beforeEach(function () {
-                        this.server.lastCreate().failUnprocessableEntity({
+                        this.server.lastCreateFor(this.dialog.model).failUnprocessableEntity({
                             fields: {
                                 BASE: { SOME_FAKE_ERROR: {}}
                             }
@@ -80,7 +80,6 @@ describe("chorus.dialogs.CreateJob", function () {
                     });
                 });
             });
-
         });
 
         context("with invalid field values", function () {
@@ -144,10 +143,13 @@ describe("chorus.dialogs.CreateJob", function () {
         });
 
         context("with invalid field values", function () {
+            beforeEach(function () {
+                this.dialog.$('input.interval_value').val('').trigger("keyup");
+            });
+
             it("leaves the form disabled", function () {
                 expect(this.dialog.$('button.submit')).toBeDisabled();
             });
         });
     });
-
 });

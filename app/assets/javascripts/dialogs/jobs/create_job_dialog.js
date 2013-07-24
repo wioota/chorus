@@ -7,7 +7,7 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
     events: {
         "change input:radio": 'toggleIntervalOptions'
     },
-    
+
     makeModel: function () {
         this.workspace = this.options.workspace;
         this.model = new chorus.models.Job({ workspace: {id: this.workspace.id} });
@@ -25,14 +25,20 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
     },
 
     postRender: function () {
-        _.defer(_.bind(function() {
+        _.defer(_.bind(function () {
             chorus.styleSelect(this.$("select"));
         }, this));
     },
 
     checkInput: function () {
-        // todo: form logic
-        return true;
+        var name = this.$('input.name').val();
+        if (!name) return false;
+
+        if (this.isOnDemand()) {
+            return name.length > 0;
+        } else {
+            return name.length > 0 && this.getIntervalValue().length > 0;
+        }
     },
 
     create: function () {
