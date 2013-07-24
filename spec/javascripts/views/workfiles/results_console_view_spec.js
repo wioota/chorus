@@ -388,7 +388,10 @@ describe("chorus.views.ResultsConsoleView", function() {
 
                         it("starts the file download", function() {
                             var content = new chorus.utilities.CsvWriter(
-                                _.pluck(this.view.resource.getColumns(), "name"), this.view.resource.getRows()).toCsv();
+                                _.pluck(this.view.resource.getColumns(), "name"),
+                                _.pluck(this.view.resource.getColumns(), "uniqueName"),
+                                this.view.resource.getRows()
+                            ).toCsv();
                             expect($.fileDownload).toHaveBeenCalledWith("/download_data",
                                 {
                                     data: {
