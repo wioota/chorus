@@ -4,6 +4,7 @@ class Job < ActiveRecord::Base
   attr_accessible :enabled, :name, :frequency, :next_run, :last_run
 
   belongs_to :workspace
+  has_many :job_tasks
 
   frequencies = %w( hourly daily weekly monthly demand custom )
   validates :frequency, :presence => true, :inclusion => {:in => frequencies }

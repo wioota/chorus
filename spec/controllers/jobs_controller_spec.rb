@@ -10,9 +10,10 @@ describe JobsController do
   end
 
   describe "#index" do
-    it "responds with a success" do
+    it "responds with jobs but without their associated tasks" do
       get :index, :workspace_id => workspace.id
       response.code.should == "200"
+      decoded_response[0][:tasks].should be_nil
     end
 
     it "sorts by name by default" do
@@ -62,10 +63,11 @@ describe JobsController do
   describe '#show' do
     let(:job) { jobs(:default) }
 
-    it "responds with a job" do
+    it "responds with a job and its associated tasks" do
       get :show, :workspace_id => workspace.id, :id => job.id
       response.code.should == "200"
       decoded_response[:id].should == job.id
+      decoded_response[:tasks].should_not be_nil
     end
 
     generate_fixture "job.json" do

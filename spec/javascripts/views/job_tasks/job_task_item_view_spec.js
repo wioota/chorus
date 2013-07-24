@@ -11,18 +11,18 @@ describe("chorus.views.JobTaskItem", function () {
     });
 
     it("includes the correct task icon", function() {
-        this.model.set('type', 'run_work_flow');
+        this.model.set('action', 'run_work_flow');
         expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/icon/afm.png");
 
-        this.model.set('type', 'run_sql_file');
+        this.model.set('action', 'run_sql_file');
         expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/icon/sql.png");
 
-        this.model.set('type', 'import_source_data');
+        this.model.set('action', 'import_source_data');
         expect(this.view.$("img")).toHaveAttr("src", "/images/import_icon.png");
     });
 
     it("links the task's name to its show page", function() {
-        expect(this.view.$(".type")).toContainTranslation("job_task.type." + this.model.get("type"));
+        expect(this.view.$(".action")).toContainTranslation("job_task.action." + this.model.get("action"));
     });
 
     describe("when the model received an 'invalidated' trigger", function() {

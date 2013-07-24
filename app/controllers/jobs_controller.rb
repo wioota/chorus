@@ -5,7 +5,7 @@ class JobsController < ApplicationController
 
     jobs = workspace.jobs.order_by(params[:order])
 
-    present paginate(jobs)
+    present paginate(jobs), :presenter_options => {:list_view => true}
   end
 
   def show

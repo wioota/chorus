@@ -6,6 +6,7 @@ describe Job do
     it { should validate_presence_of :name }
     it { should validate_presence_of :frequency }
     it { should ensure_inclusion_of(:frequency).in_array(%w( hourly daily weekly monthly demand custom )) }
+    it { should have_many :job_tasks }
 
     describe "name uniqueness validation" do
       let(:workspace) { workspaces(:public) }

@@ -374,6 +374,12 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:job, :workspace => public_workspace)
     FactoryGirl.create(:job, :workspace => public_workspace)
 
+    default_job_task = FactoryGirl.create(:job_task, :job => default_job, :action => 'import_source_data')
+    fbuilder.name :default, default_job_task
+
+    FactoryGirl.create(:job_task, :job => default_job, :action => 'run_work_flow')
+    FactoryGirl.create(:job_task, :job => default_job, :action => 'run_sql_file')
+
     #Imports
     dataset_import_created = FactoryGirl.create(:dataset_import_created_event,
                                                 :workspace => public_workspace, :dataset => nil,

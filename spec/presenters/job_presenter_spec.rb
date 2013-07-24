@@ -12,17 +12,26 @@ describe JobPresenter, :type => :view do
   end
 
   describe "#to_hash" do
-    let(:hash) { presenter.to_hash }
+    let(:keys) { [:workspace, :name, :last_run, :next_run, :frequency, :state, :id] }
 
-    it "includes the right keys" do
-      hash.should have_key(:workspace)
-      hash.should have_key(:name)
-      hash.should have_key(:last_run)
-      hash.should have_key(:next_run)
-      hash.should have_key(:frequency)
-      hash.should have_key(:state)
-      hash.should have_key(:id)
+    context "list_view" do
+      let(:options) { {list_view: true} }
+      let(:hash) { presenter.to_hash }
+      it "includes the right keys" do
+        keys.each do |key|
+          hash.should have_key(key)
+        end
+        hash.should_not have_key(:tasks)
+      end
     end
 
+    context "not list_view" do
+      let(:hash) { presenter.to_hash }
+      it "includes the right keys" do
+        (keys + [:tasks]).each do |key|
+          hash.should have_key(key)
+        end
+      end
+    end
    end
 end

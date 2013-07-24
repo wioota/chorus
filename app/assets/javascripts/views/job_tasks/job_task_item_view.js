@@ -8,22 +8,22 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
     },
 
     additionalContext: function () {
-        var type = this.model.get("type");
+        var action = this.model.get("action");
         return {
             draggable: true,
             checkable: false,
             url: this.model.showUrl(),
-            typeKey: "job_task.type." + type,
-            iconUrl: this.iconUrlForType(type)
+            actionKey: "job_task.action." + action,
+            iconUrl: this.iconUrlForType(action)
         };
     },
 
-    iconUrlForType: function (type) {
+    iconUrlForType: function (action) {
         var iconMap = {
             run_work_flow: "/images/workfiles/icon/afm.png",
             run_sql_file: "/images/workfiles/icon/sql.png",
             import_source_data: "/images/import_icon.png"
         };
-        return iconMap[type];
+        return iconMap[action];
     }
 });

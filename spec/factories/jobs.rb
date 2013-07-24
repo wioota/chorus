@@ -77,6 +77,13 @@ FactoryGirl.define do
     name { Faker::Company.bs.titlecase }
     association :workspace
     next_run 2.days.from_now
-    frequency %w( hourly daily weekly monthly ).sample
+    frequency { %w( hourly daily weekly monthly ).sample }
+  end
+
+  factory :job_task do
+    name { Faker::Company.bs.titlecase }
+    sequence(:index) { |n| n }
+    job
+    action { %w( import_source_data run_work_flow run_sql_file ).sample }
   end
 end
