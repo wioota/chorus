@@ -10,6 +10,24 @@ describe("chorus.alerts.DatasetDelete", function() {
         expect(this.alert.persistent).toBeTruthy();
     });
 
+    it("has the correct title and text for each type", function () {
+        var tableAlert = new chorus.alerts.DatasetDelete({ keyPrefix: 'table', pageModel : this.model });
+        expect(tableAlert.title).toMatchTranslation("dataset_delete.table.title");
+        expect(tableAlert.text).toMatchTranslation("dataset_delete.table.text");
+
+        var viewAlert = new chorus.alerts.DatasetDelete({ keyPrefix: 'view', pageModel : this.model });
+        expect(viewAlert.title).toMatchTranslation("dataset_delete.view.title");
+        expect(viewAlert.text).toMatchTranslation("dataset_delete.view.text");
+
+        var chorusViewAlert = new chorus.alerts.DatasetDelete({ keyPrefix: 'chorus_view', pageModel : this.model });
+        expect(chorusViewAlert.title).toMatchTranslation("dataset_delete.chorus_view.title");
+        expect(chorusViewAlert.text).toMatchTranslation("dataset_delete.chorus_view.text");
+
+        var hdfsDatasetAlert = new chorus.alerts.DatasetDelete({ keyPrefix: 'hdfs_dataset', pageModel : this.model });
+        expect(hdfsDatasetAlert.title).toMatchTranslation("dataset_delete.hdfs_dataset.title");
+        expect(hdfsDatasetAlert.text).toMatchTranslation("dataset_delete.hdfs_dataset.text");
+    });
+
     it("has the correct title", function() {
         expect(this.alert.title).toBe(t("dataset_delete.chorus_view.title", this.model.name()));
     });

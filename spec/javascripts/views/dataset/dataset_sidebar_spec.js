@@ -400,16 +400,13 @@ describe("chorus.views.DatasetSidebar", function() {
 
             function itShowsTheAppropriateDeleteLink(shouldBePresent, type) {
                 if(shouldBePresent) {
-                    var keyPrefix, textKey;
+                    var textKey;
 
                     if(type === "chorus view") {
-                        keyPrefix = "delete";
                         textKey = "actions.delete";
                     } else if(type === "view") {
-                        keyPrefix = "disassociate_view";
                         textKey = "actions.delete_association";
                     } else {
-                        keyPrefix = "disassociate_table";
                         textKey = "actions.delete_association";
                     }
 
