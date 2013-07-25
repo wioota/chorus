@@ -114,6 +114,7 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
         chorus.toast(this.message);
         this.model.trigger('invalidated');
         this.closeModal();
+        chorus.router.navigate(this.model.showUrl());
     },
 
     additionalContext: function () {

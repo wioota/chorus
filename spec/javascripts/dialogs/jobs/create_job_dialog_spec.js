@@ -13,6 +13,9 @@ describe("chorus.dialogs.CreateJob", function () {
             meridian: 'am'
         };
         this.workspace = backboneFixtures.workspace();
+
+        spyOn(chorus.router, "navigate");
+
         this.dialog = new chorus.dialogs.CreateJob({workspace: this.workspace});
         spyOn(this.dialog.endDatePicker, "disable");
         this.dialog.render();
@@ -86,6 +89,10 @@ describe("chorus.dialogs.CreateJob", function () {
 
                     it("should create a toast", function () {
                         expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message);
+                    });
+
+                    it("should navigate to the job's show page", function () {
+                        expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl());
                     });
                 });
             });
@@ -168,6 +175,26 @@ describe("chorus.dialogs.CreateJob", function () {
                         expect(params['job[next_run]']).toEqual(date.toUTCString());
                         expect(params['job[end_run]']).not.toExist();
                     });
+
+                    context("when the save succeeds", function () {
+                        beforeEach(function () {
+                            spyOn(this.dialog, "closeModal");
+                            spyOn(chorus, "toast");
+                            this.server.lastCreate().succeed();
+                        });
+
+                        it("it should close the modal", function () {
+                            expect(this.dialog.closeModal).toHaveBeenCalled();
+                        });
+
+                        it("should create a toast", function () {
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message);
+                        });
+
+                        it("should navigate to the job's show page", function () {
+                            expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl());
+                        });
+                    });
                 });
             });
 
@@ -200,6 +227,26 @@ describe("chorus.dialogs.CreateJob", function () {
                         expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
                         expect(params['job[next_run]']).toEqual(date.toUTCString());
                         expect(params['job[end_run]']).toEqual(endDate.toUTCString());
+                    });
+
+                    context("when the save succeeds", function () {
+                        beforeEach(function () {
+                            spyOn(this.dialog, "closeModal");
+                            spyOn(chorus, "toast");
+                            this.server.lastCreate().succeed();
+                        });
+
+                        it("it should close the modal", function () {
+                            expect(this.dialog.closeModal).toHaveBeenCalled();
+                        });
+
+                        it("should create a toast", function () {
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message);
+                        });
+
+                        it("should navigate to the job's show page", function () {
+                            expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl());
+                        });
                     });
                 });
             });
