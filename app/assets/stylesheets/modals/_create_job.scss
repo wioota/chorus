@@ -34,7 +34,7 @@
     .next_run {
       padding-top: 10px;
 
-      .date_widget {
+      .start_date_widget, .end_date_widget {
         display: inline-block;
       }
 
@@ -45,6 +45,10 @@
         select, .ui-selectmenu-button .ui-button {
           width: 50px;
         }
+      }
+
+      .end_date_container {
+        padding-top: 20px;
       }
     }
   }

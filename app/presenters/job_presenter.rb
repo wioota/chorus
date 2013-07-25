@@ -6,6 +6,7 @@ class JobPresenter < Presenter
       :workspace => present(model.workspace, options.merge(:succinct => options[:succinct] || options[:list_view])),
       :name => model.name,
       :next_run => model.next_run,
+      :end_run => model.end_run,
       :last_run => model.last_run,
       :interval_unit => model.interval_unit,
       :interval_value => model.interval_value,

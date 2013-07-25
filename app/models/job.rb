@@ -1,7 +1,7 @@
 class Job < ActiveRecord::Base
   include SoftDelete
 
-  attr_accessible :enabled, :name, :next_run, :last_run, :interval_unit, :interval_value
+  attr_accessible :enabled, :name, :next_run, :last_run, :interval_unit, :interval_value, :end_run
   cattr_reader :valid_interval_units; @@valid_interval_units = %w(hours days weeks months on_demand)
 
   belongs_to :workspace

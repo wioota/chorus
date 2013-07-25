@@ -14,6 +14,7 @@ describe("chorus.dialogs.CreateJob", function () {
         };
         this.workspace = backboneFixtures.workspace();
         this.dialog = new chorus.dialogs.CreateJob({workspace: this.workspace});
+        spyOn(this.dialog.endDatePicker, "disable");
         this.dialog.render();
     });
 
@@ -113,13 +114,17 @@ describe("chorus.dialogs.CreateJob", function () {
                 expect(this.dialog.$(".interval_unit option[value=days]")).toContainTranslation("job.interval_unit.days");
                 expect(this.dialog.$(".interval_unit option[value=weeks]")).toContainTranslation("job.interval_unit.weeks");
                 expect(this.dialog.$(".interval_unit option[value=months]")).toContainTranslation("job.interval_unit.months");
-
                 expect(this.dialog.$(".interval_unit").val()).toBe("hours");
             });
 
-            it("should show the date controls", function() {
-                expect(this.dialog.$(".date_widget")).toExist();
+            it("should show the start date controls", function() {
+                expect(this.dialog.$(".start_date_widget")).toExist();
             });
+
+            it("should show the end date controls", function () {
+                expect(this.dialog.$(".end_date_widget")).toExist();
+            });
+
         });
 
         context("with valid field values", function () {
@@ -139,23 +144,63 @@ describe("chorus.dialogs.CreateJob", function () {
                 expect(this.dialog.$('button.submit')).toBeEnabled();
             });
 
-            describe("submitting the form", function () {
+            context("with no end run", function () {
+                it("should disable the end date widget", function () {
+                    expect(this.dialog.endDatePicker.disable).toHaveBeenCalled();
+                });
+
+                describe("submitting the form", function () {
+                    beforeEach(function () {
+                        this.dialog.$("form").submit();
+                    });
+
+                    it("posts the form elements to the API", function () {
+                        var postUrl = this.server.lastCreateFor(this.dialog.model).url;
+                        expect(postUrl).toContain("/workspaces/" + this.workspace.id + "/jobs");
+                    });
+
+                    it("posts with the correct values", function() {
+                        var params = this.server.lastCreate().params();
+                        var date = new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, this.jobPlan.hour, this.jobPlan.minute);
+                        expect(params['job[name]']).toEqual(this.jobPlan.name);
+                        expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
+                        expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
+                        expect(params['job[next_run]']).toEqual(date.toUTCString());
+                        expect(params['job[end_run]']).not.toExist();
+                    });
+                });
+            });
+
+            context("with an end run", function () {
                 beforeEach(function () {
-                    this.dialog.$("form").submit();
+                    spyOn(this.dialog.endDatePicker, "enable");
+                    this.dialog.$(".end_date_enabled").prop("checked", "checked").trigger("change");
                 });
 
-                it("posts the form elements to the API", function () {
-                    var postUrl = this.server.lastCreateFor(this.dialog.model).url;
-                    expect(postUrl).toContain("/workspaces/" + this.workspace.id + "/jobs");
+                it("should enable the end date widget", function () {
+                    expect(this.dialog.endDatePicker.enable).toHaveBeenCalled();
                 });
 
-                it("posts with the correct values", function() {
-                    var params = this.server.lastCreate().params();
-                    var date = new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, this.jobPlan.hour, this.jobPlan.minute);
-                    expect(params['job[name]']).toEqual(this.jobPlan.name);
-                    expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
-                    expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
-                    expect(params['job[next_run]']).toEqual(date.toUTCString());
+                describe("submitting the form", function () {
+                    beforeEach(function () {
+                        this.dialog.$("form").submit();
+                    });
+
+                    it("posts the form elements to the API", function () {
+                        var postUrl = this.server.lastCreateFor(this.dialog.model).url;
+                        expect(postUrl).toContain("/workspaces/" + this.workspace.id + "/jobs");
+                    });
+
+                    it("posts with the correct values", function() {
+                        var params = this.server.lastCreate().params();
+                        var date = new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, this.jobPlan.hour, this.jobPlan.minute);
+                        var endDate = new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day);
+                        expect(params['job[name]']).toEqual(this.jobPlan.name);
+                        expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
+                        expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
+                        expect(params['job[next_run]']).toEqual(date.toUTCString());
+                        expect(params['job[end_run]']).toEqual(endDate.toUTCString());
+                    });
                 });
             });
         });

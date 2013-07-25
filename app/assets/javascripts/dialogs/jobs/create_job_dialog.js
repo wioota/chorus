@@ -5,11 +5,13 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
     message: 'create_job_dialog.toast',
 
     subviews: {
-        ".date": "datePicker"
+        ".start_date": "startDatePicker",
+        ".end_date": "endDatePicker"
     },
 
     events: {
-        "change input:radio": 'toggleScheduleOptions'
+        "change input:radio": 'toggleScheduleOptions',
+        "change .end_date_enabled": 'toggleEndRunDateWidget'
     },
 
     makeModel: function () {
@@ -18,8 +20,11 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
     },
 
     setup: function () {
-        this.datePicker = new chorus.views.DatePicker();
-        this.registerSubView(this.datePicker);
+        this.startDatePicker = new chorus.views.DatePicker({selector: 'start_date'});
+        this.registerSubView(this.startDatePicker);
+
+        this.endDatePicker = new chorus.views.DatePicker({selector: 'end_date'});
+        this.registerSubView(this.endDatePicker);
 
         this.disableFormUnlessValid({
             formSelector: "form",
@@ -35,6 +40,9 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
         _.defer(_.bind(function () {
             chorus.styleSelect(this.$("select"));
         }, this));
+
+        this.$('.end_date').prop("disabled", "disabled");
+        this.endDatePicker.disable();
     },
 
     checkInput: function () {
@@ -45,7 +53,7 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
             return name.length > 0;
         } else {
             return name.length > 0 && this.getIntervalValue().length > 0 &&
-                this.datePicker.getDate().toString() !== "Invalid Date";
+                this.startDatePicker.getDate().toString() !== "Invalid Date";
         }
     },
 
@@ -59,7 +67,8 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
             name: this.$('input.name').val(),
             intervalUnit: this.getIntervalUnit(),
             intervalValue: this.getIntervalValue(),
-            nextRun: this.isOnDemand() ? null : this.buildDate().toUTCString()
+            nextRun: this.isOnDemand() ? null : this.buildStartDate().toUTCString(),
+            endRun: this.isOnDemand() || !this.endDateEnabled() ? null : this.buildEndDate().toUTCString()
         };
     },
 
@@ -75,8 +84,8 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
         return this.isOnDemand() ? '0' : this.$('input.interval_value').val();
     },
 
-    buildDate: function () {
-        var date = this.datePicker.getDate();
+    buildStartDate: function () {
+        var date = this.startDatePicker.getDate();
         var hourBase = parseInt(this.$('select.hour').val(), 10);
         var hour = this.$('select.meridian').val() === "am" ? hourBase : hourBase + 12;
         date.setHours(hour);
@@ -84,9 +93,21 @@ chorus.dialogs.CreateJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormH
         return date;
     },
 
+    buildEndDate: function () {
+        return this.endDatePicker.getDate();
+    },
+
     toggleScheduleOptions: function () {
         this.$('.interval_options').toggleClass('hidden', this.isOnDemand());
         this.toggleSubmitDisabled();
+    },
+
+    toggleEndRunDateWidget: function () {
+        this.endDateEnabled() ? this.endDatePicker.enable() : this.endDatePicker.disable();
+    },
+
+    endDateEnabled: function () {
+        return this.$(".end_date_enabled").prop("checked");
     },
 
     modelSaved: function () {

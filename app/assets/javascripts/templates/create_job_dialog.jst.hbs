@@ -36,8 +36,8 @@
                 <label class="">{{t "create_job_dialog.next_run_date"}}</label>
 
                 <div>
-                    <div class="date_widget">
-                        <div class='date'></div>
+                    <div class="start_date_widget">
+                        <div class='start_date'></div>
                     </div>
                     <div class="time">
                         <select class="hour">
@@ -54,6 +54,13 @@
                             <option value="am">{{t "create_job_dialog.meridian.am"}}</option>
                             <option value="pm">{{t "create_job_dialog.meridian.pm"}}</option>
                         </select>
+                    </div>
+                </div>
+                <div class="end_date_container">
+                    <input type="checkbox" id="end_date_enabled" class="end_date_enabled"/>
+                    <label for="end_date_enabled">{{t "create_job_dialog.end_date_enabled"}}</label>
+                    <div class="end_date_widget" disabled="disabled">
+                        <div class='end_date'></div>
                     </div>
                 </div>
             </div>

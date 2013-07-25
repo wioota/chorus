@@ -3,13 +3,18 @@ chorus.views.DatePicker = chorus.views.Base.extend({
 
     setup: function () {
         this.date = this.options.date || new Date();
+        this.selector = this.options.selector || "date";
     },
 
     postRender: function () {
+        this.daySelector = this.$("." + this.selector + " input.day");
+        this.monthSelector = this.$("." + this.selector + " input.month");
+        this.yearSelector = this.$("." + this.selector + " input.year");
+
         var dateMatchers = {
-            "%Y": this.$(".date input.year"),
-            "%m": this.$(".date input.month"),
-            "%d": this.$(".date input.day")
+            "%Y": this.yearSelector,
+            "%m": this.monthSelector,
+            "%d": this.daySelector
         };
 
         chorus.datePicker(dateMatchers, { disableBeforeToday: true });
@@ -17,21 +22,25 @@ chorus.views.DatePicker = chorus.views.Base.extend({
 
     getDate: function () {
         var date = new Date(
-            parseInt(this.$(".date input.year").val(), 10),
-            parseInt(this.$(".date input.month").val(), 10) - 1,
-            parseInt(this.$(".date input.day").val(), 10)
+            parseInt(this.yearSelector.val(), 10),
+            parseInt(this.monthSelector.val(), 10) - 1,
+            parseInt(this.daySelector.val(), 10)
         );
         return date;
     },
 
     disable: function () {
-        var $date = this.$(".date input.year");
-        datePickerController.disable($date.attr("id"));
+        this.daySelector.prop("disabled", "disabled");
+        this.monthSelector.prop("disabled", "disabled");
+        this.yearSelector.prop("disabled", "disabled");
+        datePickerController.disable(this.yearSelector.attr("id"));
     },
 
     enable: function () {
-        var $date = this.$(".date input.year");
-        datePickerController.enable($date.attr("id"));
+        this.daySelector.prop("disabled", false);
+        this.monthSelector.prop("disabled", false);
+        this.yearSelector.prop("disabled", false);
+        datePickerController.enable(this.yearSelector.attr("id"));
     },
 
     additionalContext: function() {
@@ -40,7 +49,8 @@ chorus.views.DatePicker = chorus.views.Base.extend({
                 month: this.date.getMonth() + 1,
                 day: this.date.getDate(),
                 year: this.date.getFullYear()
-            }
+            },
+            selector: this.selector
         };
     }
 });
