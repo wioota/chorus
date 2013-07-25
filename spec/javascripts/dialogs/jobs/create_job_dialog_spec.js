@@ -101,6 +101,7 @@ describe("chorus.dialogs.CreateJob", function () {
         describe("selecting 'on schedule'", function () {
             beforeEach(function () {
                 this.dialog.$('input:radio#onSchedule').prop("checked", true).trigger('change');
+                this.dialog.$('input:radio#onDemand').prop("checked", false).trigger('change');
             });
 
             it("should show schedule options", function () {
@@ -124,6 +125,7 @@ describe("chorus.dialogs.CreateJob", function () {
         context("with valid field values", function () {
             beforeEach(function () {
                 this.dialog.$('input:radio#onSchedule').prop("checked", true).trigger("change");
+                this.dialog.$('input:radio#onDemand').prop("checked", false).trigger("change");
                 var dialog = this.dialog;
                 var jobPlan = this.jobPlan;
                 _.each(_.keys(this.jobPlan), function (prop) {
