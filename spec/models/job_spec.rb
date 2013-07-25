@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Job do
   describe 'validations' do
-    #it { should validate_presence_of :next_run }
     it { should validate_presence_of :name }
     it { should validate_presence_of :interval_unit }
     it { should validate_presence_of :interval_value }

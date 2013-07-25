@@ -1,8 +1,17 @@
 describe("chorus.dialogs.CreateJob", function () {
     beforeEach(function () {
         stubDefer();
-        this.plannedJob = {name: 'Apples', intervalValue: '2', intervalUnit: 'weeks'};
-
+        this.jobPlan = {
+            name: 'Apples',
+            interval_value: '2',
+            interval_unit: 'weeks',
+            month: "7",
+            day: "9",
+            year: "3013",
+            hour: '1',
+            minute: '5',
+            meridian: 'am'
+        };
         this.workspace = backboneFixtures.workspace();
         this.dialog = new chorus.dialogs.CreateJob({workspace: this.workspace});
         this.dialog.render();
@@ -16,17 +25,16 @@ describe("chorus.dialogs.CreateJob", function () {
 
     context("creating a Job that runs On Demand", function () {
         beforeEach(function () {
-            this.plannedJob.intervalUnit = 'on_demand';
+            this.jobPlan.interval_unit = 'on_demand';
         });
 
-        it("leaves interval fields disabled", function () {
-            expect(this.dialog.$('select.interval_unit')).toBeDisabled();
-            expect(this.dialog.$('input.interval_value')).toBeDisabled();
+        it("leaves scheduling options hidden", function () {
+            expect(this.dialog.$('.interval_options')).toHaveClass('hidden');
         });
 
         context("with valid field values", function () {
             beforeEach(function () {
-                this.dialog.$('input.name').val(this.plannedJob.name).trigger("keyup");
+                this.dialog.$('input.name').val(this.jobPlan.name).trigger("keyup");
             });
 
             it("should enable the submit button", function () {
@@ -45,8 +53,8 @@ describe("chorus.dialogs.CreateJob", function () {
 
                 it("posts with the correct values", function() {
                     var params = this.server.lastCreate().params();
-                    expect(params['job[name]']).toEqual(this.plannedJob.name);
-                    expect(params['job[interval_unit]']).toEqual(this.plannedJob.intervalUnit);
+                    expect(params['job[name]']).toEqual(this.jobPlan.name);
+                    expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
                     expect(params['job[interval_value]']).toEqual("0");
                 });
 
@@ -95,12 +103,11 @@ describe("chorus.dialogs.CreateJob", function () {
                 this.dialog.$('input:radio#onSchedule').prop("checked", true).trigger('change');
             });
 
-            it("enables the interval fields", function () {
-                expect(this.dialog.$('select.interval_unit')).toBeEnabled();
-                expect(this.dialog.$('input.interval_value')).toBeEnabled();
+            it("should show schedule options", function () {
+                expect(this.dialog.$('.interval_options')).not.toHaveClass('hidden');
             });
 
-            it("should have a select with hourly, daily, weekly, monthly as options", function() {
+            it("should have a select with hours, days, weeks, months as options", function() {
                 expect(this.dialog.$(".interval_unit option[value=hours]")).toContainTranslation("job.interval_unit.hours");
                 expect(this.dialog.$(".interval_unit option[value=days]")).toContainTranslation("job.interval_unit.days");
                 expect(this.dialog.$(".interval_unit option[value=weeks]")).toContainTranslation("job.interval_unit.weeks");
@@ -108,15 +115,22 @@ describe("chorus.dialogs.CreateJob", function () {
 
                 expect(this.dialog.$(".interval_unit").val()).toBe("hours");
             });
+
+            it("should show the date controls", function() {
+                expect(this.dialog.$(".date_widget")).toExist();
+            });
         });
 
         context("with valid field values", function () {
             beforeEach(function () {
-                this.dialog.$('input.name').val(this.plannedJob.name).trigger("keyup");
                 this.dialog.$('input:radio#onSchedule').prop("checked", true).trigger("change");
-
-                this.dialog.$('input.interval_value').val(this.plannedJob.intervalValue).trigger("keyup");
-                this.dialog.$('select.interval_unit').val(this.plannedJob.intervalUnit).trigger("change");
+                var dialog = this.dialog;
+                var jobPlan = this.jobPlan;
+                _.each(_.keys(this.jobPlan), function (prop) {
+                    var selects = ['interval_unit', 'meridian', 'hour', 'minute'];
+                    var element = (_.contains(selects, prop) ? 'select.' : 'input.');
+                    dialog.$(element + prop).val(jobPlan[prop]).trigger("change").trigger("keyup");
+                });
             });
 
             it("should enable the submit button", function () {
@@ -135,9 +149,11 @@ describe("chorus.dialogs.CreateJob", function () {
 
                 it("posts with the correct values", function() {
                     var params = this.server.lastCreate().params();
-                    expect(params['job[name]']).toEqual(this.plannedJob.name);
-                    expect(params['job[interval_unit]']).toEqual(this.plannedJob.intervalUnit);
-                    expect(params['job[interval_value]']).toEqual(this.plannedJob.intervalValue);
+                    var date = new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, this.jobPlan.hour, this.jobPlan.minute);
+                    expect(params['job[name]']).toEqual(this.jobPlan.name);
+                    expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
+                    expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
+                    expect(params['job[next_run]']).toEqual(date.toUTCString());
                 });
             });
         });

@@ -9,7 +9,6 @@ class Job < ActiveRecord::Base
 
   validates :interval_unit, :presence => true, :inclusion => {:in => valid_interval_units }
   validates_presence_of :interval_value
-  #validates_presence_of :next_run
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:workspace_id, :deleted_at]
 

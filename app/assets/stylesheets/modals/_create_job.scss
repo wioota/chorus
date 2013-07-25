@@ -1,9 +1,10 @@
 @import "_common.scss";
 
 .create_job_dialog {
+
   .row {
-    line-height: 34px;
     vertical-align: middle;
+    line-height: 34px;
   }
 
   .options {
@@ -21,9 +22,30 @@
     .interval_value {
       width: 40px;
       display: inline;
+      margin-left: 5px;
     }
+
     select, .ui-selectmenu-button .ui-button {
+      vertical-align: middle;
       width: 100px;
+      margin-bottom: 5px;
+    }
+
+    .next_run {
+      padding-top: 10px;
+
+      .date_widget {
+        display: inline-block;
+      }
+
+      .time {
+        display: inline-block;
+        padding-left: 10px;
+
+        select, .ui-selectmenu-button .ui-button {
+          width: 50px;
+        }
+      }
     }
   }
 

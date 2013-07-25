@@ -1,0 +1,19 @@
+@import "_common.scss";
+
+.date {
+  .label {
+    width: 150px;
+    @include font-menu;
+    display: inline-block;
+  }
+
+  input {
+    width: 50px;
+    display: inline-block;
+  }
+}
+
+.row {
+  line-height: 34px;
+  vertical-align: middle;
+}

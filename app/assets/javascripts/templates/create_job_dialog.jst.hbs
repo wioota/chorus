@@ -4,7 +4,7 @@
 
     <legend class="subtitle">
         <div class="text">{{t "create_job_dialog.schedule"}}</div>
-        <hr />
+        <hr/>
     </legend>
 
     <label>{{t "create_job_dialog.schedule_explanation"}}</label>
@@ -19,18 +19,45 @@
         <div class="on_schedule row">
             <input type="radio" id="onSchedule" name="jobType" value="on_schedule"/>
             <label for="onSchedule">{{t "create_job_dialog.on_schedule"}}</label>
-
-            <fieldset disabled class="interval_options">
-                <input class='interval_value' type='text' maxlength="3"/>
-
-                <select class='interval_unit'>
-                    <option value="hours">{{t "job.interval_unit.hours"}}</option>
-                    <option value="days">{{t "job.interval_unit.days"}}</option>
-                    <option value="weeks">{{t "job.interval_unit.weeks"}}</option>
-                    <option value="months">{{t "job.interval_unit.months"}}</option>
-                </select>
-            </fieldset>
         </div>
+
+        <fieldset class="interval_options hidden">
+            <label>{{t "create_job_dialog.run_every"}}</label>
+            <input class='interval_value' type='text' maxlength="3"/>
+
+            <select class='interval_unit'>
+                <option value="hours">{{t "job.interval_unit.hours"}}</option>
+                <option value="days">{{t "job.interval_unit.days"}}</option>
+                <option value="weeks">{{t "job.interval_unit.weeks"}}</option>
+                <option value="months">{{t "job.interval_unit.months"}}</option>
+            </select>
+
+            <div class='next_run'>
+                <label class="">{{t "create_job_dialog.next_run_date"}}</label>
+
+                <div>
+                    <div class="date_widget">
+                        <div class='date'></div>
+                    </div>
+                    <div class="time">
+                        <select class="hour">
+                            {{#each hours}}
+                                <option value="{{value}}">{{value}}</option>
+                            {{/each}}
+                        </select>
+                        <select class="minute">
+                            {{#each minutes}}
+                                <option value="{{value}}">{{label}}</option>
+                            {{/each}}
+                        </select>
+                        <select class="meridian">
+                            <option value="am">{{t "create_job_dialog.meridian.am"}}</option>
+                            <option value="pm">{{t "create_job_dialog.meridian.pm"}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
     </div>
 
     {{formControlsWithDisabledSubmit "create_job_dialog.submit"}}
