@@ -1,6 +1,6 @@
 class JobsController < ApplicationController
+
   def index
-    workspace = Workspace.find(params[:workspace_id])
     authorize! :show, workspace
 
     jobs = workspace.jobs.order_by(params[:order])
@@ -9,15 +9,15 @@ class JobsController < ApplicationController
   end
 
   def show
-    job = Job.find(params[:id])
-    workspace = job.workspace
     authorize! :show, workspace
+
+    job = workspace.jobs.find(params[:id])
 
     present job
   end
 
   def create
-    workspace = Workspace.find(params[:workspace_id])
+
     authorize! :can_edit_sub_objects, workspace
 
     job = Job.create!(params[:job])
@@ -25,4 +25,21 @@ class JobsController < ApplicationController
 
     present job, :status => :created
   end
+
+  def update
+
+    authorize! :can_edit_sub_objects, workspace
+
+    job = workspace.jobs.find(params[:id])
+    job.update_attributes(params[:job])
+
+    present job, :status => :ok
+  end
+
+  protected
+
+  def workspace
+    @workspace ||= Workspace.find(params[:workspace_id])
+  end
+
 end

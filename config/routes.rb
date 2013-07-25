@@ -79,7 +79,7 @@ Chorus::Application.routes.draw do
     resource :image, :only => [:create, :show], :controller => :workspace_images
     resource :sandbox, :only => [:create]
     resources :workfiles, :only => [:create, :index]
-    resources :jobs, :only => [:index, :create, :show]
+    resources :jobs, :only => [:index, :create, :show, :update]
     resource :quickstart, :only => [:destroy], :controller => 'workspace_quickstart'
     resources :imports, :only => [:create], :controller => 'workspaces/imports'
 

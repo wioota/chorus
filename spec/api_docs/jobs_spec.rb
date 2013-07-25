@@ -25,6 +25,19 @@ resource 'Job' do
     end
   end
 
+  put "/workspaces/:workspace_id/jobs/:id" do
+    parameter :workspace_id, "Workspace ID"
+    parameter :id, "Job ID"
+    required_parameters :id, :workspace_id
+
+    let(:workspace_id) { workspaces(:public).id }
+    let(:id) { workspaces(:public).jobs.first.id }
+
+    example_request "Update a job in a workspace" do
+      status.should == 200
+    end
+  end
+
   get "/workspaces/:workspace_id/jobs" do
     parameter :workspace_id, "Workspace ID"
     required_parameters :workspace_id

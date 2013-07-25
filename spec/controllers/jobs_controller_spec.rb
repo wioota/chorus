@@ -112,4 +112,29 @@ describe JobsController do
       decoded_response.should_not be_empty
     end
   end
+
+  describe '#update' do
+    let(:job) { FactoryGirl.create(:job, workspace: workspace, enabled: false) }
+    let(:params) do
+      {
+          id: job.id,
+          workspace_id: workspace.id,
+          job: {
+            enabled: true
+          }
+      }
+    end
+
+    it "uses authorization" do
+      mock(subject).authorize! :can_edit_sub_objects, workspace
+      put :update, params
+    end
+
+    it "updates a job" do
+      expect do
+        put :update, params
+        job.reload
+      end.to change(job, :enabled).from(false).to(true)
+    end
+  end
 end
