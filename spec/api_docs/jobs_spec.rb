@@ -6,14 +6,16 @@ resource 'Job' do
   end
 
   post "/workspaces/:workspace_id/jobs" do
-    parameter :frequency, "Frequency"
+    parameter :interval_unit, "Interval Unit"
+    parameter :interval_value, "Interval Value"
     parameter :name, "Name"
     parameter :next_run, "Next time to run"
     parameter :workspace_id, "Workspace ID"
-    required_parameters :name, :frequency, :next_run, :workspace_id
+    required_parameters :name, :interval_value, :interval_unit, :next_run, :workspace_id
 
 
-    let(:frequency) { "weekly" }
+    let(:interval_value) { "1" }
+    let(:interval_unit) { "weeks" }
     let(:name) { "TPS reports" }
     let(:next_run) { 3.days.from_now }
     let(:workspace_id) { Workspace.first.id }
