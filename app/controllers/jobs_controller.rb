@@ -27,7 +27,6 @@ class JobsController < ApplicationController
   end
 
   def update
-
     authorize! :can_edit_sub_objects, workspace
 
     job = workspace.jobs.find(params[:id])

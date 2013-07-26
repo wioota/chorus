@@ -22,8 +22,8 @@ describe("chorus.dialogs.CreateJob", function () {
     });
 
     it("has all the dialog pieces", function () {
-        expect(this.dialog.title).toMatchTranslation("create_job_dialog.title");
-        expect(this.dialog.$('button.submit').text()).toMatchTranslation("create_job_dialog.submit");
+        expect(this.dialog.title).toMatchTranslation("job.dialog.title");
+        expect(this.dialog.$('button.submit').text()).toMatchTranslation("job.dialog.submit");
         expect(this.dialog.$('button.cancel').text()).toMatchTranslation("actions.cancel");
     });
 

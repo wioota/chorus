@@ -4,7 +4,8 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
 
     events: {
         "click .disable": "disableJob",
-        "click .enable": "enableJob"
+        "click .enable": "enableJob",
+        'click .edit_job': 'launchEditDialog'
     },
 
     disableJob: function(e) {
@@ -18,12 +19,13 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
     },
 
     additionalContext: function () {
-        if (!this.model) {
-            return {};
-        }
-
-        return {
+        return this.model ? {
             enabled: this.model.get('state') !== 'disabled'
-        };
+        } : {};
+    },
+
+    launchEditDialog: function (e) {
+        e && e.preventDefault();
+        new chorus.dialogs.EditJob({model: this.model}).launchModal();
     }
 });

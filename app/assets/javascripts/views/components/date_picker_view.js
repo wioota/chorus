@@ -8,8 +8,14 @@ chorus.views.DatePicker = chorus.views.Base.extend({
 
     postRender: function () {
         this.daySelector = this.$("." + this.selector + " input.day");
+        this.daySelector.val(this.date.getDate());
+
         this.monthSelector = this.$("." + this.selector + " input.month");
+        this.monthSelector.val(this.date.getMonth() + 1);
+
         this.yearSelector = this.$("." + this.selector + " input.year");
+        this.yearSelector.val(this.date.getFullYear());
+
 
         var dateMatchers = {
             "%Y": this.yearSelector,

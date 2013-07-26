@@ -5,7 +5,7 @@ describe("chorus.views.JobSidebar", function () {
         this.view.render();
     });
 
-    it("displays the job name", function() {
+    it("displays the job name", function () {
         expect(this.view.$(".name")).toContainText(this.job.get("name"));
     });
 
@@ -51,5 +51,12 @@ describe("chorus.views.JobSidebar", function () {
             });
 
         });
+    });
+
+    describe("clicking EditJob", function () {
+        beforeEach(function () {
+            this.modalSpy = stubModals();
+        });
+        itBehavesLike.aDialogLauncher("a.edit_job", chorus.dialogs.EditJob);
     });
 });

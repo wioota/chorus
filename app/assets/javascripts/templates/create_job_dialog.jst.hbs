@@ -1,28 +1,28 @@
 <form action="#">
-    <label class="required">{{t "create_job_dialog.name"}}</label>
+    <label class="required">{{t "job.dialog.name"}}</label>
     <input class='name' type='text'/>
 
     <legend class="subtitle">
-        <div class="text">{{t "create_job_dialog.schedule"}}</div>
+        <div class="text">{{t "job.dialog.schedule"}}</div>
         <hr/>
     </legend>
 
-    <label>{{t "create_job_dialog.schedule_explanation"}}</label>
+    <label>{{t "job.dialog.schedule_explanation"}}</label>
 
     <div class="options">
         <div class="on_demand row">
             <input type="radio" id="onDemand" name="jobType" value="on_demand" checked="checked"/>
-            <label for="onDemand">{{t "create_job_dialog.on_demand"}}</label>
+            <label for="onDemand">{{t "job.dialog.on_demand"}}</label>
         </div>
 
 
         <div class="on_schedule row">
             <input type="radio" id="onSchedule" name="jobType" value="on_schedule"/>
-            <label for="onSchedule">{{t "create_job_dialog.on_schedule"}}</label>
+            <label for="onSchedule">{{t "job.dialog.on_schedule"}}</label>
         </div>
 
         <fieldset class="interval_options hidden">
-            <label>{{t "create_job_dialog.run_every"}}</label>
+            <label>{{t "job.dialog.run_every"}}</label>
             <input class='interval_value' type='text' maxlength="3"/>
 
             <select class='interval_unit'>
@@ -33,7 +33,7 @@
             </select>
 
             <div class='next_run'>
-                <label class="">{{t "create_job_dialog.next_run_date"}}</label>
+                <label class="">{{t "job.dialog.next_run_date"}}</label>
 
                 <div>
                     <div class="start_date_widget">
@@ -51,14 +51,14 @@
                             {{/each}}
                         </select>
                         <select class="meridian">
-                            <option value="am">{{t "create_job_dialog.meridian.am"}}</option>
-                            <option value="pm">{{t "create_job_dialog.meridian.pm"}}</option>
+                            <option value="am">{{t "job.dialog.meridian.am"}}</option>
+                            <option value="pm">{{t "job.dialog.meridian.pm"}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="end_date_container">
                     <input type="checkbox" id="end_date_enabled" class="end_date_enabled"/>
-                    <label for="end_date_enabled">{{t "create_job_dialog.end_date_enabled"}}</label>
+                    <label for="end_date_enabled">{{t "job.dialog.end_date_enabled"}}</label>
                     <div class="end_date_widget" disabled="disabled">
                         <div class='end_date'></div>
                     </div>
@@ -67,5 +67,5 @@
         </fieldset>
     </div>
 
-    {{formControlsWithDisabledSubmit "create_job_dialog.submit"}}
+    {{formControlsWithDisabledSubmit submitTranslation}}
 </form>
