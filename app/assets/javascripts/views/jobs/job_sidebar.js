@@ -10,12 +10,12 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
 
     disableJob: function(e) {
         e && e.preventDefault();
-        this.model.save({enabled: false}, { wait: true });
+        this.model.disable();
     },
 
     enableJob: function(e) {
         e && e.preventDefault();
-        this.model.save( {enabled: true}, { wait: true} );
+        this.model.enable();
     },
 
     additionalContext: function () {

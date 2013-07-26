@@ -21,4 +21,24 @@ describe("chorus.models.Job", function () {
             });
         });
     });
+
+    describe("disable", function () {
+        beforeEach(function () {
+            spyOn(this.model, "save");
+        });
+        it("makes a request to disable the job", function () {
+            this.model.disable();
+            expect(this.model.save).toHaveBeenCalledWith({ enabled: false }, { wait: true });
+        });
+    });
+
+    describe("enable", function () {
+        beforeEach(function () {
+            spyOn(this.model, "save");
+        });
+        it("makes a request to enable the job", function () {
+            this.model.enable();
+            expect(this.model.save).toHaveBeenCalledWith({ enabled: true }, { wait: true });
+        });
+    });
 });

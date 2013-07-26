@@ -43,5 +43,13 @@ chorus.models.Job = chorus.models.Base.extend({
             minutes: minutes,
             meridiem: meridiem
         };
+    },
+
+    disable: function () {
+        this.save( {enabled: false}, { wait: true} );
+    },
+
+    enable: function () {
+        this.save( {enabled: true}, { wait: true} );
     }
 });

@@ -34,7 +34,7 @@ describe("chorus.pages.JobsIndexPage", function () {
             expect(this.page.subNav).toBeA(chorus.views.SubNav);
         });
     });
-    
+
     describe("#setup", function () {
         it("creates main content", function () {
             expect(this.page.mainContent).toBeA(chorus.views.MainContentList);
@@ -113,5 +113,56 @@ describe("chorus.pages.JobsIndexPage", function () {
             this.page.$("input.search").val("bar").trigger("keyup");
             expect("selectNone").toHaveBeenTriggeredOn(chorus.PageEvents);
         });
+    });
+
+    describe("the Sidebar", function () {
+        beforeEach(function () {
+            var jobs = [backboneFixtures.job()];
+            this.server.completeFetchFor(this.page.collection, jobs);
+            this.server.completeFetchFor(this.workspace);
+            this.page.render();
+
+            this.jobs = this.page.collection.models;
+        });
+
+        describe("multiselection menu", function () {
+            beforeEach(function () {
+                this.page.$('.select_all').prop('checked', true).trigger('change');
+                spyOn(this.jobs[0], 'disable');
+                spyOn(this.jobs[0], 'enable');
+                spyOn(this.jobs[0], 'destroy');
+            });
+
+            describe("clicking the 'disable' action", function () {
+                it("disables all selected jobs", function () {
+                    this.page.multiSelectSidebarMenu.$('.disable_jobs').click();
+                    expect(this.jobs[0].disable).toHaveBeenCalled();
+                });
+            });
+
+            describe("clicking then 'enable' action", function () {
+                it("enables all selected jobs", function () {
+                    this.page.multiSelectSidebarMenu.$('.enable_jobs').click();
+                    expect(this.jobs[0].enable).toHaveBeenCalled();
+                });
+            });
+
+            describe("clicking the 'delete' action", function () {
+                it("deletes all selected jobs", function () {
+                    this.page.multiSelectSidebarMenu.$('.delete_jobs').click();
+                    expect(this.jobs[0].destroy).toHaveBeenCalled();
+                });
+            });
+        });
+    });
+
+    describe("when the collection is loaded", function () {
+        beforeEach(function () {
+            var jobs = [backboneFixtures.job()];
+            this.server.completeFetchFor(this.page.collection, jobs);
+            this.server.completeFetchFor(this.workspace);
+        });
+// Requires tag support
+//        itBehavesLike.aPageWithMultiSelect();
     });
 });
