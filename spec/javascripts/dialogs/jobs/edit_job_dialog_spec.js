@@ -60,7 +60,6 @@ describe("chorus.dialogs.EditJob", function () {
                 expect(this.dialog.$(".interval_unit option[value=days]")).toContainTranslation("job.interval_unit.days");
                 expect(this.dialog.$(".interval_unit option[value=weeks]")).toContainTranslation("job.interval_unit.weeks");
                 expect(this.dialog.$(".interval_unit option[value=months]")).toContainTranslation("job.interval_unit.months");
-                expect(this.dialog.$(".interval_unit").val()).toBe("hours");
             });
 
             it("should show the start date controls", function () {
