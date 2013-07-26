@@ -64,7 +64,7 @@ describe("chorus.dialogs.ImportNow", function() {
                 });
 
                 it("should have a link to the dataset picker dialog", function() {
-                    expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_dataset");
+                    expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_destination");
                 });
 
                 context("when clicking the dataset picker link", function() {
@@ -127,10 +127,6 @@ describe("chorus.dialogs.ImportNow", function() {
                     it("should have an 'Import into an existing table' radio button", function() {
                         expect(this.dialog.$(".existing_table label")).toContainTranslation("import.existing_table");
                     });
-
-                    it("should have an import into existing table radio button", function() {
-                        expect(this.dialog.$(".existing_table label")).toContainTranslation("import.existing_table");
-                    });
                 });
 
                 describe('options', function() {
@@ -171,7 +167,7 @@ describe("chorus.dialogs.ImportNow", function() {
                 });
 
                 it("should have a link to the dataset picker dialog", function() {
-                    expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_dataset");
+                    expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_destination");
                 });
 
                 context("after clicking the dataset picker link", function() {
@@ -477,7 +473,7 @@ describe("chorus.dialogs.ImportNow", function() {
                         });
 
                         it("should have a link to the dataset picker dialog", function() {
-                            expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_dataset");
+                            expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_destination");
                         });
 
                         it("passes a collection of datasets in the selected schema", function() {

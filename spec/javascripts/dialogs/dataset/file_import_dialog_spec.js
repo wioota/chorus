@@ -231,7 +231,7 @@ describe("chorus.dialogs.FileImport", function() {
                     });
 
                     it("should have a link to the dataset picker dialog", function() {
-                        expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_dataset");
+                        expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_destination");
                     });
 
                     it("should launch the dataset picker dialog", function() {

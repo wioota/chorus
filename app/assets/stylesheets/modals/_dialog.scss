@@ -140,3 +140,14 @@ div.dialog {
   display: block;
   width: $default-dialog-width - 35px;
 }
+
+legend.subtitle {
+    padding: 10px 10px 10px 0px;
+    width: 100%;
+    @include font-normal-alpha;
+
+    .text {
+        float: left;
+        padding-right: 10px;
+    }
+}

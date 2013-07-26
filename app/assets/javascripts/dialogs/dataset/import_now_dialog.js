@@ -293,6 +293,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
     },
 
     destinationTableHasBeenPicked: function() {
-        return this.$("a.dataset_picked").text() !== t("dataset.import.select_dataset");
+        return this.$("a.dataset_picked").text() !== t("dataset.import.select_destination");
     }
 });
