@@ -41,4 +41,33 @@ describe("chorus.models.Job", function () {
             expect(this.model.save).toHaveBeenCalledWith({ enabled: true }, { wait: true });
         });
     });
+
+    describe("#toggleEnabled", function () {
+        beforeEach(function () {
+            spyOn(this.model, 'enable');
+            spyOn(this.model, 'disable');
+        });
+
+        context("when enabled", function () {
+            beforeEach(function () {
+                this.model.set("enabled", true);
+                this.model.toggleEnabled();
+            });
+
+            it("disables", function () {
+                expect(this.model.disable).toHaveBeenCalled();
+            });
+        });
+
+        context("when disabled", function () {
+            beforeEach(function () {
+                this.model.set("enabled", false);
+                this.model.toggleEnabled();
+            });
+
+            it("enables", function () {
+                expect(this.model.enable).toHaveBeenCalled();
+            });
+        });
+    });
 });

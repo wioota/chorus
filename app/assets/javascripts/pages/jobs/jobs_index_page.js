@@ -78,9 +78,9 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
         return {
             selectEvent: "job:checked",
             actions: [
-                '<a class="disable_jobs">{{t "job.actions.disable_job"}}</a>',
-                '<a class="enable_jobs">{{t "job.actions.enable_job"}}</a>',
-                '<a class="delete_jobs">{{t "job.actions.delete_job"}}</a>'
+                '<a class="disable_jobs">{{t "job.actions.disable"}}</a>',
+                '<a class="enable_jobs">{{t "job.actions.enable"}}</a>',
+                '<a class="delete_jobs">{{t "job.actions.delete"}}</a>'
             ],
             actionEvents: {
                 'click .disable_jobs': _.bind(function() {

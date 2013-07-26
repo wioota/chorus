@@ -34,7 +34,6 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
     setupMainContent: function () {
         this.workspace = this.job.workspace();
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "jobs"});
-        this.buttonView = new chorus.views.JobShowPageButtons({model: this.job});
 
         this.collection = this.job.tasks();
 
@@ -49,9 +48,11 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
             modelClass: "JobTask",
             contentHeader: new chorus.views.StaticTemplate("job_show_content_header", headerOptions),
             collection: this.collection,
-            contentDetailsOptions: {
-                buttonView: this.buttonView
-            }
+            contentDetails: this.contentDetails()
         });
+    },
+
+    contentDetails: function () {
+        return new chorus.views.JobContentDetails({model: this.job});
     }
 });

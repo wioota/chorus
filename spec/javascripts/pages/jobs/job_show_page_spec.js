@@ -27,9 +27,9 @@ describe("chorus.pages.JobsShowPage", function () {
             expect(header).toContainText(this.model.get('name'));
         });
 
-        it("creates the correct buttons", function() {
-            expect(this.page.mainContent.contentDetails.buttonView).toBeA(chorus.views.JobShowPageButtons);
-            expect(this.page.mainContent.contentDetails.buttonView.model.get("id")).toBe(this.model.get("id"));
+        it("creates the correct content details", function() {
+            expect(this.page.mainContent.contentDetails).toBeA(chorus.views.JobContentDetails);
+            expect(this.page.mainContent.contentDetails.model.get("id")).toBe(this.model.get("id"));
         });
 
         describe("breadcrumbs", function() {

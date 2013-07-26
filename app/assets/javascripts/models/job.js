@@ -45,6 +45,10 @@ chorus.models.Job = chorus.models.Base.extend({
         };
     },
 
+    toggleEnabled: function () {
+        this.get('enabled') ? this.disable() : this.enable();
+    },
+
     disable: function () {
         this.save( {enabled: false}, { wait: true} );
     },
