@@ -40,6 +40,7 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "JobTask",
+            contentHeader: new chorus.views.StaticTemplate("default_content_header", {title: this.job.get('name')}),
             collection: this.collection,
             contentDetailsOptions: {
                 buttonView: this.buttonView

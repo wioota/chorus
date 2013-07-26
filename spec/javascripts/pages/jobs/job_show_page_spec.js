@@ -22,6 +22,11 @@ describe("chorus.pages.JobsShowPage", function () {
             expect(this.page.mainContent).toBeA(chorus.views.MainContentList);
         });
 
+        it("displays the Job's name in the header", function () {
+            var header = this.page.mainContent.contentHeader.$("h1");
+            expect(header).toContainText(this.model.get('name'));
+        });
+
         it("creates the correct buttons", function() {
             expect(this.page.mainContent.contentDetails.buttonView).toBeA(chorus.views.JobShowPageButtons);
             expect(this.page.mainContent.contentDetails.buttonView.model.get("id")).toBe(this.model.get("id"));
