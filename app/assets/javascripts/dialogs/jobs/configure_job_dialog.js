@@ -87,7 +87,7 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
     buildStartDate: function () {
         var date = this.startDatePicker.getDate();
         var hourBase = parseInt(this.$('select.hour').val(), 10);
-        var hour = this.$('select.meridian').val() === "am" ? hourBase : hourBase + 12;
+        var hour = this.$('select.meridiem').val() === "am" ? hourBase : hourBase + 12;
         date.setHours(hour);
         date.setMinutes(parseInt(this.$('select.minute').val(), 10));
         return date;

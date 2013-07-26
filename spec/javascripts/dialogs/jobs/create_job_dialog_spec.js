@@ -10,7 +10,7 @@ describe("chorus.dialogs.CreateJob", function () {
             year: "3013",
             hour: '1',
             minute: '5',
-            meridian: 'am'
+            meridiem: 'am'
         };
         this.workspace = backboneFixtures.workspace();
 
@@ -141,7 +141,7 @@ describe("chorus.dialogs.CreateJob", function () {
                 var dialog = this.dialog;
                 var jobPlan = this.jobPlan;
                 _.each(_.keys(this.jobPlan), function (prop) {
-                    var selects = ['interval_unit', 'meridian', 'hour', 'minute'];
+                    var selects = ['interval_unit', 'meridiem', 'hour', 'minute'];
                     var element = (_.contains(selects, prop) ? 'select.' : 'input.');
                     dialog.$(element + prop).val(jobPlan[prop]).trigger("change").trigger("keyup");
                 });

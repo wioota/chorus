@@ -33,15 +33,15 @@ chorus.models.Job = chorus.models.Base.extend({
 
     nextRunTime: function () {
         var hoursBase = this.nextRunDate().getHours();
-        var meridian = hoursBase - 11 > 0 ? "pm" : "am";
-        var hours = meridian === "pm" ? hoursBase - 12 : hoursBase;
+        var meridiem = hoursBase - 11 > 0 ? "pm" : "am";
+        var hours = meridiem === "pm" ? hoursBase - 12 : hoursBase;
         var minutes = Math.floor(this.nextRunDate().getMinutes() / 5) * 5;
         hours = hours === 0 ? 12 : hours;
 
         return {
             hours: hours,
             minutes: minutes,
-            meridian: meridian
+            meridiem: meridiem
         };
     }
 });
