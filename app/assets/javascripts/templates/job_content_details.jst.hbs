@@ -1,6 +1,7 @@
 <div class="job action_bar {{actionBarClass}}">
     {{#if canUpdate}}
+        <button class="toggle_enabled button_action right">{{t enabledButtonLabel}}</button>
         <button class="create_task button_action">{{t "actions.create_task"}}</button>
-        <button class="toggle_enabled button_action">{{t enabledButtonLabel}}</button>
+        <button class="edit_schedule button_action">{{t "job.actions.edit_job"}}</button>
     {{/if}}
 </div>

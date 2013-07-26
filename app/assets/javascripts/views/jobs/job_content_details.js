@@ -3,8 +3,9 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
     constructorName: 'JobContentDetails',
 
     events: {
-        "click button.create_task": "openCreateJobTaskDialog",
-        "click button.toggle_enabled": "toggleEnabled"
+        "click button.create_task": "launchCreateJobTaskDialog",
+        "click button.toggle_enabled": "toggleEnabled",
+        "click button.edit_schedule": "launchEditDialog"
     },
 
     setup: function() {
@@ -13,9 +14,14 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
         this.workspace = this.model.workspace();
     },
 
-    openCreateJobTaskDialog: function (e) {
+    launchCreateJobTaskDialog: function (e) {
         e && e.preventDefault();
         new chorus.dialogs.CreateJobTask({job: this.model}).launchModal();
+    },
+
+    launchEditDialog: function (e) {
+        e && e.preventDefault();
+        new chorus.dialogs.EditJob({model: this.model}).launchModal();
     },
 
     toggleEnabled: function () {
