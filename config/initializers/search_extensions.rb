@@ -195,14 +195,6 @@ module Sunspot
     rescue Errno::ECONNREFUSED => e
       raise SearchExtensions::SolrUnreachable
     end
-
-    def prepare_with_rescue(model)
-      prepare_without_rescue(model)
-    rescue
-      nil
-    end
-
-    alias_method_chain :prepare, :rescue
   end
 
   module Rails
