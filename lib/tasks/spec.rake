@@ -26,7 +26,7 @@ unless Rails.env.production?
   task :all => [:spec, :api_docs]
 
   desc 'Run Capybara integration specs'
-  RSpec::Core::RakeTask.new('spec:integration') do |t|
+  RSpec::Core::RakeTask.new('spec:chorus_integration') do |t|
     t.pattern = 'spec/integration/**/*_spec.rb'
   end
   task :spec => [:data_source_host_check_stale]

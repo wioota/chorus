@@ -22,7 +22,7 @@ sleep 20
 set +e
 
 echo "Running integration tests"
-b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec:integration --trace 2>&1
+b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec:chorus_integration --trace 2>&1
 INTEGRATION_TESTS_RESULT=$?
 
 echo "Cleaning up solr process $solr_pid"
