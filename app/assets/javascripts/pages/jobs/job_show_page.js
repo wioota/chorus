@@ -38,9 +38,16 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
 
         this.collection = this.job.tasks();
 
+        var headerOptions = {
+            title: this.job.get('name'),
+            frequency: this.job.frequency() ,
+            nextRun: this.job.get("nextRun"),
+            lastRun: this.job.get("lastRun")
+        };
+
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "JobTask",
-            contentHeader: new chorus.views.StaticTemplate("default_content_header", {title: this.job.get('name')}),
+            contentHeader: new chorus.views.StaticTemplate("job_show_content_header", headerOptions),
             collection: this.collection,
             contentDetailsOptions: {
                 buttonView: this.buttonView

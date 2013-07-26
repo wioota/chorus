@@ -1,0 +1,21 @@
+<h1 title="{{title}}">{{title}}</h1>
+<div class="item_metadata">
+    {{#if frequency}}
+        <span class="frequency"><strong>{{frequency}}</strong></span>
+    {{/if}}
+    <span class="last_run">
+        <strong>{{t "job.last_run"}}:</strong>
+        {{#if lastRun}}
+            {{lastRun}}
+        {{else}}
+            -
+        {{/if}}
+    </span>
+
+    {{#if nextRun}}
+        <span class="next_run">
+            <strong>{{t "job.next_run"}}</strong>
+            {{nextRun}}
+        </span>
+    {{/if}}
+</div>

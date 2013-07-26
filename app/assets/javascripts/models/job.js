@@ -51,5 +51,18 @@ chorus.models.Job = chorus.models.Base.extend({
 
     enable: function () {
         this.save( {enabled: true}, { wait: true} );
+    },
+
+    frequency: function () {
+        if (this.runsOnDemand()) {
+            return t("job.frequency.on_demand");
+        } else {
+            return t("job.frequency.on_schedule",
+                {
+                    intervalValue: this.get('intervalValue'),
+                    intervalUnit: this.get('intervalUnit')
+                }
+            );
+        }
     }
 });
