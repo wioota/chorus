@@ -138,6 +138,10 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return this.showUrl() + "/workfiles";
     },
 
+    jobsUrl: function () {
+        return this.showUrl() + "/jobs";
+    },
+
     attrToLabel:{
         "name":"workspace.validation.name"
     },

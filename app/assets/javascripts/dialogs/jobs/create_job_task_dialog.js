@@ -24,6 +24,10 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
 
     postRender: function () {
         this.updateExistingTableLink();
+
+        _.defer(_.bind(function () {
+            chorus.styleSelect(this.$("select"));
+        }, this));
     },
 
     checkInput: function () {

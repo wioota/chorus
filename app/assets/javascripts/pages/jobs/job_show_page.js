@@ -26,7 +26,7 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
             {label: t("breadcrumbs.home"), url: "#/"},
             {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
             {label: this.workspace.loaded ? this.workspace.displayName() : "...", url: this.workspace.showUrl()},
-            {label: t("breadcrumbs.jobs")},
+            {label: t("breadcrumbs.jobs"), url: this.workspace.jobsUrl()},
             {label: this.job.get("name")}
         ];
     },

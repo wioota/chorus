@@ -130,6 +130,13 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
+    describe("#jobsUrl", function() {
+        it("links to the workfile index route", function() {
+            this.model.set({id: 5});
+            expect(this.model.jobsUrl()).toBe("#/workspaces/5/jobs");
+        });
+    });
+
     describe("#owner", function() {
         context('when owner data is not nested', function() {
             beforeEach(function() {

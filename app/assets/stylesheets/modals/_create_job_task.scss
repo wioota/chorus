@@ -62,4 +62,10 @@
             @include after-clearfix;
         }
     }
+
+    select, .ui-selectmenu-button .ui-button {
+        vertical-align: middle;
+        width: 200px;
+        margin-bottom: 5px;
+    }
 }
