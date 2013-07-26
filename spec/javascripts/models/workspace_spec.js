@@ -69,6 +69,16 @@ describe("chorus.models.Workspace", function() {
         });
     });
 
+    describe("#importSourceDatasets", function () {
+        it("should return only source datasets", function () {
+            var collection = this.model.importSourceDatasets();
+            expect(collection).toBeA(chorus.collections.WorkspaceDatasetSet);
+            expect(collection.attributes.workspaceId).toEqual(123);
+            expect(collection.attributes.type).toEqual("SOURCE_TABLE");
+            expect(collection.attributes.objectType).toEqual("TABLE");
+        });
+    });
+
     describe("#isPublic", function() {
         it("return true when public: true", function() {
             this.model.set({"public": true});

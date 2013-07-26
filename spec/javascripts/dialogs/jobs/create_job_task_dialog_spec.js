@@ -52,7 +52,6 @@ describe("chorus.dialogs.CreateJobTask", function () {
             expect(this.dialog.$('.import')).not.toHaveClass('hidden');
         });
 
-
         it('creates a JobTask model', function () {
             expect(this.dialog.model).toBeA(chorus.models.JobTask);
         });
@@ -79,11 +78,10 @@ describe("chorus.dialogs.CreateJobTask", function () {
                     expect(chorus.Modal.prototype.launchSubModal).toHaveBeenCalled();
                 });
 
-//                    it("uses the workspace sandbox tables", function () {
-//                        var collection = this.modalStub.lastModal().collection;
-//                        expect(collection).toEqual(this.job.workspace().sandboxTables({allImportDestinations: true}));
-//                        expect(collection.attributes.allImportDestinations).toBeTruthy();
-//                    });
+                it("uses the workspace source tables", function () {
+                    var collection = this.modalSpy.lastModal().collection;
+                    expect(collection).toEqual(this.job.workspace().importSourceDatasets());
+                });
 
                 context("after selecting a dataset", function () {
                     beforeEach(function () {
@@ -208,7 +206,6 @@ describe("chorus.dialogs.CreateJobTask", function () {
                 });
             });
         });
-
 
         describe("the Submit button", function () {
             function theSubmitButtonIs(status) {

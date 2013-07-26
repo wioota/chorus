@@ -200,6 +200,17 @@ describe Workspace do
             workspace.dataset_count(user).should == 4
           end
 
+          context "and a sandbox table is associated with the worldspace" do
+            before do
+              workspace.source_datasets << sandbox_table
+            end
+
+            it "shows all source tables / chorus views excluding the sandbox table when asking for source tables" do
+              workspace.datasets(user, {entity_subtype: 'SOURCE_TABLE', all_import_sources: true}).to_a.should =~ [source_table, chorus_view, chorus_view_from_source]
+              workspace.dataset_count(user, {entity_subtype: 'SOURCE_TABLE', all_import_sources: true}).should == 3
+            end
+          end
+
           context "and 'all import destinations' is passed" do
             it "shows all sandbox datasets" do
               stub(GpdbDataset).visible_to(account, schema, anything) {

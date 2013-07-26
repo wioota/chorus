@@ -78,6 +78,16 @@ chorus.models.Workspace = chorus.models.Base.extend({
         return this._sandboxTables;
     },
 
+    importSourceDatasets: function () {
+        this._importSourceDatasets = this._importSourceDatasets || new chorus.collections.WorkspaceDatasetSet([], _.extend({
+            workspaceId: this.id,
+            type: "SOURCE_TABLE",
+            objectType: "TABLE"
+        }, {allImportSources: true}));
+
+        return this._importSourceDatasets;
+    },
+
     datasets: function() {
         this._datasets = this._datasets || new chorus.collections.WorkspaceDatasetSet([], { workspaceId: this.id });
         return this._datasets;

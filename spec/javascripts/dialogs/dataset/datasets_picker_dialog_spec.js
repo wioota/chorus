@@ -32,7 +32,7 @@ describe("chorus.dialogs.DatasetsPicker", function() {
             });
 
             it("shows the correct title", function() {
-                expect(dialog.$("h1")).toContainTranslation("dataset.pick");
+                expect(dialog.$("h1")).toContainTranslation("dataset.pick_destination");
             });
 
             it("shows the correct search help", function() {

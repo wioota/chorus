@@ -1,5 +1,5 @@
 chorus.dialogs.DatasetsPicker = chorus.dialogs.PickItems.extend({
-    title: t("dataset.pick"),
+    title: t("dataset.pick_destination"),
     constructorName: "DatasetsPickerDialog",
     additionalClass: "with_sub_header pick_dataset_with_action",
     submitButtonTranslationKey: "actions.dataset_select",
@@ -16,6 +16,7 @@ chorus.dialogs.DatasetsPicker = chorus.dialogs.PickItems.extend({
 
     setup: function() {
         this._super("setup");
+        this.title = this.options.title || this.title;
         this.pickItemsList.templateName = "datasets_picker_list";
         this.pickItemsList.className = "datasets_picker_list";
         this.collection.sortAsc("objectName");

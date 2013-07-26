@@ -27,6 +27,9 @@ chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend
         if (this.attributes.allImportDestinations) {
             params.allImportDestinations = true;
         }
+        if (this.attributes.allImportSources) {
+            params.allImportSources = true;
+        }
 
         return params;
     },

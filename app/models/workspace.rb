@@ -116,9 +116,11 @@ class Workspace < ActiveRecord::Base
   def filtered_datasets(options = {})
     entity_subtype = options[:entity_subtype]
     entity_subtype = 'SANDBOX_TABLE' if options[:all_import_destinations]
+    entity_subtype = 'SOURCE_TABLE' if options[:all_import_sources]
     database_id = options[:database_id]
 
-    scoped_source_datasets = scope_to_database(source_datasets, database_id)
+    scoped_datasets = scope_to_database(source_datasets, database_id)
+    scoped_source_datasets = scope_to_database(source_datasets, database_id).where('schema_id != ?', sandbox_id)
     scoped_directly_associated_datasets = scope_to_database(directly_associated_datasets, database_id)
 
     datasets = []
@@ -129,7 +131,11 @@ class Workspace < ActiveRecord::Base
       when "SOURCE_TABLE", "NON_CHORUS_VIEW" then
         datasets << scoped_source_datasets
       else
-        datasets << scoped_source_datasets << scoped_directly_associated_datasets
+        datasets << scoped_datasets << scoped_directly_associated_datasets
+    end
+
+    if options[:all_import_sources]
+      datasets << chorus_views
     end
 
     datasets.map do |relation|

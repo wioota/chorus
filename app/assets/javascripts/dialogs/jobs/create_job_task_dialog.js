@@ -102,15 +102,16 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
         this.$('.import').toggleClass('hidden', (selectedAction !== 'import_source_data'));
     },
 
-    datasetsChosen: function (datasets, target) {
-        if (target === '.destination') {
+    datasetsChosen: function (datasets, source_or_destination) {
+        if (source_or_destination === 'destination') {
             this.destinationTableHasBeenPicked = true;
         }
-        if (target === '.source') {
+        if (source_or_destination === 'source') {
             this.sourceTableHasBeenPicked = true;
         }
 
-        this.changeSelectedDataset(datasets && datasets[0] && datasets[0].name(), target);
+        var selector = '.' + source_or_destination;
+        this.changeSelectedDataset(datasets && datasets[0] && datasets[0].name(), selector);
     },
 
     changeSelectedDataset: function (name, target) {
@@ -164,27 +165,27 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
 
     submit: $.noop,
 
-    launchDatasetPickerDialog: function (e, target) {
+    launchDatasetPickerDialog: function (e, source_or_destination) {
         e.preventDefault();
         if (this.saving) {
             return;
         }
 
-        var tables = this.workspace.sandboxTables({allImportDestinations: true});
-        var datasetDialog = new chorus.dialogs.DatasetsPicker({ collection: tables });
+        var tables = source_or_destination === "source" ? this.workspace.importSourceDatasets() : this.workspace.sandboxTables({allImportDestinations: true});
+        var datasetDialog = new chorus.dialogs.DatasetsPicker({ collection: tables, title: t("dataset.pick_" + source_or_destination) });
 
         this.listenTo(datasetDialog, "datasets:selected", function (datasets) {
-            return this.datasetsChosen(datasets, target);
+            return this.datasetsChosen(datasets, source_or_destination);
         });
 
         this.launchSubModal(datasetDialog);
     },
 
     launchSourceDatasetPickerDialog: function (e) {
-        this.launchDatasetPickerDialog(e, '.source');
+        this.launchDatasetPickerDialog(e, 'source');
     },
 
     launchDestinationDatasetPickerDialog: function (e) {
-        this.launchDatasetPickerDialog(e, '.destination');
+        this.launchDatasetPickerDialog(e, 'destination');
     }
 });
