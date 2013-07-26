@@ -28,24 +28,34 @@ describe("chorus.dialogs.EditJob", function () {
         expect(this.dialog.$('button.cancel').text()).toMatchTranslation("actions.cancel");
     });
 
-    it("prepopulates the dialog with the jobs fields", function () {
-        var nextRunDate = new Date(this.job.get("nextRun"));
-        nextRunDate.setMinutes(Math.floor(nextRunDate.getMinutes() / 5) * 5);
-        nextRunDate.setSeconds(0);
-        nextRunDate.setMilliseconds(0);
+    describe("prepopulating the dialog with the job's attributes", function () {
+        it("populates name", function () {
+            expect(this.dialog.$("input.name").val()).toBe(this.job.get("name"));
+        });
 
-        var endRunDate = new Date(this.job.get("endRun"));
-        endRunDate.setHours(0);
-        endRunDate.setMinutes(0);
-        endRunDate.setSeconds(0);
-        endRunDate.setMilliseconds(0);
+        it("populates intervalValue and itnervalUnit", function () {
+            expect(this.dialog.$("input.interval_value").val()).toBe(this.job.get("intervalValue").toString());
+            expect(this.dialog.$("select.interval_unit").val()).toBe(this.job.get("intervalUnit"));
+        });
 
-        expect(this.dialog.$("input.name").val()).toBe(this.job.get("name"));
-        expect(this.dialog.$("input.interval_value").val()).toBe(this.job.get("intervalValue").toString());
-        expect(this.dialog.$("select.interval_unit").val()).toBe(this.job.get("intervalUnit"));
+        it("populates next run date", function () {
+            var nextRunDate = new Date(this.job.get("nextRun"));
+            nextRunDate.setMinutes(Math.floor(nextRunDate.getMinutes() / 5) * 5);
+            nextRunDate.setSeconds(0);
+            nextRunDate.setMilliseconds(0);
 
-        expect(this.dialog.buildStartDate()).toEqual(nextRunDate);
-        expect(this.dialog.buildEndDate()).toEqual(endRunDate);
+            expect(this.dialog.buildStartDate()).toEqual(nextRunDate);
+        });
+
+        it("populates end date", function () {
+            var endRunDate = new Date(this.job.get("endRun"));
+            endRunDate.setHours(0);
+            endRunDate.setMinutes(0);
+            endRunDate.setSeconds(0);
+            endRunDate.setMilliseconds(0);
+
+            expect(this.dialog.buildEndDate()).toEqual(endRunDate);
+        });
     });
 
     context("editing a Job that runs on schedule with an end run time", function () {
