@@ -43,5 +43,5 @@ describe("chorus.views.JobContentDetails", function () {
         });
     });
 
-    itBehavesLike.aDialogLauncher('edit_schedule', chorus.dialog.EditJob);
+    itBehavesLike.aDialogLauncher('.edit_schedule', chorus.dialogs.EditJob);
 });
