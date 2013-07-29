@@ -49,24 +49,22 @@
         </div>
 
         <div class="options">
-            <fieldset class="titled-input-group">
-                <legend class="subtitle">
-                    <div class="text">{{t "create_job_task_dialog.options"}}</div>
-                    <hr/>
-                </legend>
+            <legend class="subtitle">
+                <div class="text">{{t "create_job_task_dialog.options"}}</div>
+                <hr/>
+            </legend>
 
-                <div class="row">
-                    <input type="checkbox" class="truncate" name="truncate" id="create_job_task_truncate"/>
-                    <label for="create_job_task_truncate">{{t "import.truncate"}}</label>
-                </div>
+            <div class="row">
+                <input type="checkbox" class="truncate" name="truncate" id="create_job_task_truncate"/>
+                <label for="create_job_task_truncate">{{t "import.truncate"}}</label>
+            </div>
 
-                <div class="row limit">
-                    <input type="checkbox" name="limit_num_rows" id="create_job_task_limit_rows_existing"/>
-                    <label for="create_job_task_limit_rows_existing">{{t "import.limit_rows"}}</label>
-                    <input class="row_limit" type="text" name="sampleCount" maxlength="10" disabled="disabled"
-                           value="500"/>
-                </div>
-            </fieldset>
+            <div class="row limit">
+                <input type="checkbox" name="limit_num_rows" id="create_job_task_limit_rows_existing"/>
+                <label for="create_job_task_limit_rows_existing">{{t "import.limit_rows"}}</label>
+                <input class="row_limit" type="text" name="sampleCount" maxlength="10" disabled="disabled"
+                       value="500"/>
+            </div>
         </div>
     </div>
 
