@@ -10,6 +10,7 @@ paths:
   - app/assets/javascripts/**/*.js
 
 exclude_paths:
+  - app/assets/javascripts/vendor/*.js
   - app/assets/javascripts/vendor/**/*.js
 
 # ------------ jshint options ------------
@@ -76,6 +77,7 @@ predef:             # Names of predefined global variables - comma-separated str
   - XMLSerializer
   - CSV
   - Slick
+  - moment
 browser:  true      # true if the standard browser globals should be predefined
 rhino:    false     # true if the Rhino environment globals should be predefined
 windows:  false     # true if Windows-specific globals should be predefined

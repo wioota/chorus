@@ -7,3 +7,4 @@ Handlebars.registerPartial("listItemText", window.JST["templates/list_item_text"
 Handlebars.registerPartial("formControls", window.JST["templates/components/form_controls"]);
 Handlebars.registerPartial("csvImportConsole", window.JST["templates/csv_import_console"]);
 Handlebars.registerPartial("closeWindowFormControls", window.JST["templates/components/close_window_form_controls"]);
+Handlebars.registerPartial("timeZoneSelector", window.JST["templates/time_zone_selector"]);

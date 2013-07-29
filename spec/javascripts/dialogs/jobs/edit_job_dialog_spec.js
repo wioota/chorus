@@ -39,22 +39,16 @@ describe("chorus.dialogs.EditJob", function () {
         });
 
         it("populates next run date", function () {
-            var nextRunDate = new Date(this.job.get("nextRun"));
-            nextRunDate.setMinutes(Math.floor(nextRunDate.getMinutes() / 5) * 5);
-            nextRunDate.setSeconds(0);
-            nextRunDate.setMilliseconds(0);
+            var nextRunDate = this.job.nextRunDate().startOf("minute");
+            nextRunDate.minute(Math.floor(nextRunDate.minute() / 5) * 5);
 
-            expect(this.dialog.buildStartDate()).toEqual(nextRunDate);
+            expect(this.dialog.buildStartDate().toDate()).toEqual(nextRunDate.toDate());
         });
 
         it("populates end date", function () {
-            var endRunDate = new Date(this.job.get("endRun"));
-            endRunDate.setHours(0);
-            endRunDate.setMinutes(0);
-            endRunDate.setSeconds(0);
-            endRunDate.setMilliseconds(0);
+            var endRunDate = this.job.endRunDate().startOf("day");
 
-            expect(this.dialog.buildEndDate()).toEqual(endRunDate);
+            expect(this.dialog.buildEndDate().toDate()).toEqual(endRunDate.toDate());
         });
     });
 
@@ -114,13 +108,13 @@ describe("chorus.dialogs.EditJob", function () {
 
                 it("posts with the correct values", function () {
                     var params = this.server.lastUpdate().params();
-                    var date = new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, this.jobPlan.hour, this.jobPlan.minute);
-                    var endDate = new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day);
+                    var date = moment(new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, this.jobPlan.hour, this.jobPlan.minute));
+                    var endDate = moment(new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day));
                     expect(params['job[name]']).toEqual(this.jobPlan.name);
                     expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
                     expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
-                    expect(params['job[next_run]']).toEqual(date.toUTCString());
-                    expect(params['job[end_run]']).toEqual(endDate.toUTCString());
+                    expect(params['job[next_run]']).toEqual(date.toISOString());
+                    expect(params['job[end_run]']).toEqual(endDate.toISOString());
                 });
 
                 context("when the save succeeds", function () {

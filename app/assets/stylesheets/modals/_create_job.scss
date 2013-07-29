@@ -51,6 +51,12 @@
         padding-top: 20px;
       }
     }
+
+    .time_zone {
+        select, .ui-selectmenu-button .ui-button {
+            width: 370px;
+        }
+    }
   }
 
   legend.subtitle {

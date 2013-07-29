@@ -52,8 +52,8 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
             return name.length > 0;
         } else {
             return name.length > 0 && this.getIntervalValue().length > 0 &&
-                this.startDatePicker.getDate().toString() !== "Invalid Date" &&
-                (!this.endDateEnabled() || this.endDatePicker.getDate().toString() !== "Invalid Date");
+                this.startDatePicker.getDate().isValid() &&
+                (!this.endDateEnabled() || this.endDatePicker.getDate().isValid());
         }
     },
 
@@ -67,8 +67,8 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
             name: this.$('input.name').val(),
             intervalUnit: this.getIntervalUnit(),
             intervalValue: this.getIntervalValue(),
-            nextRun: this.isOnDemand() ? "invalid" : this.buildStartDate().toUTCString(),
-            endRun: this.isOnDemand() || !this.endDateEnabled() ? "invalid" : this.buildEndDate().toUTCString()
+            nextRun: this.isOnDemand() ? "invalid" : this.buildStartDate().toISOString(),
+            endRun: this.isOnDemand() || !this.endDateEnabled() ? "invalid" : this.buildEndDate().toISOString()
         };
     },
 
@@ -86,10 +86,10 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
 
     buildStartDate: function () {
         var date = this.startDatePicker.getDate();
-        var hourBase = parseInt(this.$('select.hour').val(), 10);
+        var hourBase = parseInt(this.$('select.hour').val(), 10) % 12;
         var hour = this.$('select.meridiem').val() === "am" ? hourBase : hourBase + 12;
-        date.setHours(hour);
-        date.setMinutes(parseInt(this.$('select.minute').val(), 10));
+        date.hour(hour);
+        date.minute(this.$('select.minute').val());
         return date;
     },
 

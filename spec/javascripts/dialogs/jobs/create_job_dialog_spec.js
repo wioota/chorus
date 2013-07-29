@@ -10,7 +10,8 @@ describe("chorus.dialogs.CreateJob", function () {
             year: "3013",
             hour: '1',
             minute: '5',
-            meridiem: 'am'
+            meridiem: 'am',
+            time_zone: '(GMT-10:00) Hawaii'
         };
         this.workspace = backboneFixtures.workspace();
 
@@ -141,7 +142,7 @@ describe("chorus.dialogs.CreateJob", function () {
                 var dialog = this.dialog;
                 var jobPlan = this.jobPlan;
                 _.each(_.keys(this.jobPlan), function (prop) {
-                    var selects = ['interval_unit', 'meridiem', 'hour', 'minute'];
+                    var selects = ['interval_unit', 'meridiem', 'hour', 'minute', 'time_zone'];
                     var element = (_.contains(selects, prop) ? 'select.' : 'input.');
                     dialog.$(element + prop).val(jobPlan[prop]).trigger("change").trigger("keyup");
                 });
@@ -168,11 +169,11 @@ describe("chorus.dialogs.CreateJob", function () {
 
                     it("posts with the correct values", function() {
                         var params = this.server.lastCreate().params();
-                        var date = new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, this.jobPlan.hour, this.jobPlan.minute);
+                        var date = moment(new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, this.jobPlan.hour, this.jobPlan.minute));
                         expect(params['job[name]']).toEqual(this.jobPlan.name);
                         expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
                         expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
-                        expect(params['job[next_run]']).toEqual(date.toUTCString());
+                        expect(params['job[next_run]']).toEqual(date.toISOString());
                         expect(params['job[end_run]']).not.toExist();
                     });
 
@@ -220,13 +221,13 @@ describe("chorus.dialogs.CreateJob", function () {
 
                     it("posts with the correct values", function() {
                         var params = this.server.lastCreate().params();
-                        var date = new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, this.jobPlan.hour, this.jobPlan.minute);
-                        var endDate = new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day);
+                        var date = moment(new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, this.jobPlan.hour, this.jobPlan.minute));
+                        var endDate = moment(new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day));
                         expect(params['job[name]']).toEqual(this.jobPlan.name);
                         expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
                         expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
-                        expect(params['job[next_run]']).toEqual(date.toUTCString());
-                        expect(params['job[end_run]']).toEqual(endDate.toUTCString());
+                        expect(params['job[next_run]']).toEqual(date.toISOString());
+                        expect(params['job[end_run]']).toEqual(endDate.toISOString());
                     });
 
                     context("when the save succeeds", function () {

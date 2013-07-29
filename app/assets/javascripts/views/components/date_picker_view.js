@@ -2,19 +2,19 @@ chorus.views.DatePicker = chorus.views.Base.extend({
     templateName: 'date_picker',
 
     setup: function () {
-        this.date = this.options.date || new Date();
+        this.date = this.options.date || moment();
         this.selector = this.options.selector || "date";
     },
 
     postRender: function () {
         this.daySelector = this.$("." + this.selector + " input.day");
-        this.daySelector.val(this.date.getDate());
+        this.daySelector.val(this.date.date());
 
         this.monthSelector = this.$("." + this.selector + " input.month");
-        this.monthSelector.val(this.date.getMonth() + 1);
+        this.monthSelector.val(this.date.month() + 1);
 
         this.yearSelector = this.$("." + this.selector + " input.year");
-        this.yearSelector.val(this.date.getFullYear());
+        this.yearSelector.val(this.date.year());
 
 
         var dateMatchers = {
@@ -27,12 +27,10 @@ chorus.views.DatePicker = chorus.views.Base.extend({
     },
 
     getDate: function () {
-        var date = new Date(
-            parseInt(this.yearSelector.val(), 10),
-            parseInt(this.monthSelector.val(), 10) - 1,
-            parseInt(this.daySelector.val(), 10)
-        );
-        return date;
+        var year = this.yearSelector.val();
+        var month =  parseInt(this.monthSelector.val(), 10) - 1;
+        var day = this.daySelector.val();
+        return moment([year,month, day]);
     },
 
     disable: function () {
@@ -52,9 +50,9 @@ chorus.views.DatePicker = chorus.views.Base.extend({
     additionalContext: function() {
         return {
             date: {
-                month: this.date.getMonth() + 1,
-                day: this.date.getDate(),
-                year: this.date.getFullYear()
+                month: this.date.month() + 1,
+                day: this.date.date(),
+                year: this.date.year()
             },
             selector: this.selector
         };

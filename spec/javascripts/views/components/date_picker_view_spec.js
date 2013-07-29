@@ -27,7 +27,7 @@ describe("chours.views.DatePicker", function () {
             });
 
             it("returns the picked date", function () {
-                var date = this.view.getDate();
+                var date = this.view.getDate().toDate();
                 expect(date).toEqual(this.actualDate);
             });
         });
