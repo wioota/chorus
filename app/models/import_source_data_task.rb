@@ -11,8 +11,12 @@ class ImportSourceDataTask < JobTask
     task
   end
 
+  private
+
   def build_task_name
-    source_name = Dataset.find(source_id).name
-    self.name = 'Import ' + source_name
+    if source_id
+      source_name = Dataset.find(source_id).name
+      self.name = 'Import ' + source_name
+    end
   end
 end

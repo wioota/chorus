@@ -5,6 +5,7 @@ describe JobTasksController do
   let(:workspace) { workspaces(:public) }
   let(:job) { jobs(:default) }
   let(:user) { users(:owner) }
+  let(:dataset) { datasets(:table) }
 
   before do
     log_in user
@@ -23,7 +24,7 @@ describe JobTasksController do
       let(:planned_job_task) do
         {
           :action => 'import_source_data',
-          :source_id => '1',
+          :source_id => dataset.id,
           :destination_id => '2',
           :row_limit => '500',
           :truncate => false,
@@ -43,7 +44,7 @@ describe JobTasksController do
         let(:planned_job_task) do
           {
             :action => 'import_source_data',
-            :source_id => '1',
+            :source_id => dataset.id,
             :new_table_name => 'into_this_one',
             :row_limit => '500',
             :truncate => false,

@@ -10,12 +10,13 @@ describe JobTask do
   describe 'create #build_for_action!' do
     let(:workspace) { workspaces(:empty_workspace) }
     let(:user) { users(:owner) }
+    let(:dataset) { datasets(:table) }
     let(:job) { jobs(:default) }
 
     let(:planned_job_task) do
       {
         :action => 'import_source_data',
-        :source_id => '1',
+        :source_id => dataset.id,
         :destination_id => '2',
         :row_limit => '500',
         :truncate => false,

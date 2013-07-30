@@ -20,7 +20,7 @@ class JobTask < ActiveRecord::Base
     job_task_params = params[:job_task]
     job = Job.find(params[:job_id])
     job_task_params[:index] = job.job_tasks.count + 1
-    klass = @@actions[job_task_params[:action]].constantize
+    klass = @@actions.fetch(job_task_params[:action], 'JobTask').constantize
     klass.assemble!(job_task_params, job)
   end
 
