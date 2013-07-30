@@ -100,6 +100,7 @@ FixtureBuilder.configure do |fbuilder|
     @owner_creates_gpdb_data_source = Events::DataSourceCreated.by(owner).add(:data_source => owners_data_source)
 
     oracle_data_source = FactoryGirl.create(:oracle_data_source, name: 'oracle', owner: owner)
+    fbuilder.name(:oracle, oracle_data_source)
     oracle_schema = FactoryGirl.create(:oracle_schema, name: 'oracle', data_source: oracle_data_source)
     fbuilder.name(:oracle, oracle_schema)
     @note_on_oracle = FactoryGirl.create :note_on_data_source_event, :data_source => oracle_data_source, :body => 'note on oracle data source'
