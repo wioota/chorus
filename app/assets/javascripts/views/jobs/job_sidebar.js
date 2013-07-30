@@ -5,7 +5,8 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
     events: {
         "click .disable": "disableJob",
         "click .enable": "enableJob",
-        'click .edit_job': 'launchEditDialog'
+        'click .edit_job': 'launchEditDialog',
+        'click .delete_job': 'launchDeleteAlert'
     },
 
     disableJob: function(e) {
@@ -27,5 +28,10 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
     launchEditDialog: function (e) {
         e && e.preventDefault();
         new chorus.dialogs.EditJob({model: this.model}).launchModal();
+    },
+
+    launchDeleteAlert: function (e) {
+        e && e.preventDefault();
+        new chorus.alerts.JobDelete({model: this.model}).launchModal();
     }
 });

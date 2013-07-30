@@ -137,4 +137,22 @@ describe JobsController do
       end.to change(job, :enabled).from(false).to(true)
     end
   end
+
+  describe '#destroy' do
+    let(:job) { jobs(:default) }
+    let(:params) do
+      { workspace_id: workspace.id, id: job.id }
+    end
+
+    it "lets a workspace member soft delete an job" do
+      delete :destroy, params
+      response.should be_success
+      job.reload.deleted?.should be_true
+    end
+
+    it "uses authorization" do
+      mock(controller).authorize!(:can_edit_sub_objects, workspace)
+      delete :destroy, params
+    end
+  end
 end

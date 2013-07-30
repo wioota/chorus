@@ -35,6 +35,14 @@ class JobsController < ApplicationController
     present job, :status => :ok
   end
 
+  def destroy
+    authorize! :can_edit_sub_objects, workspace
+
+    Job.find(params[:id]).destroy
+
+    head :ok
+  end
+
   protected
 
   def workspace

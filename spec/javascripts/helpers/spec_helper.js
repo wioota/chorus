@@ -60,7 +60,7 @@
     jasmine.getEnv().addEqualityTester(backboneModelEqualityTester);
 
     beforeEach(function() {
-        chorus.fullName = this.getFullName();
+        chorus.currentSpec = this.getFullName();
         dealWithChromeBackgrounding();
         BackboneFixtures.jasmineSetup(chorus.models, chorus.collections, chorus.models.Base, chorus.collections.Base);
 

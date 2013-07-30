@@ -2,6 +2,7 @@ describe("chorus.views.JobSidebar", function () {
     beforeEach(function () {
         this.job = backboneFixtures.jobSet().at(0);
         this.view = new chorus.views.JobSidebar({model: this.job});
+        this.modalSpy = stubModals();
         this.view.render();
     });
 
@@ -54,9 +55,10 @@ describe("chorus.views.JobSidebar", function () {
     });
 
     describe("clicking EditJob", function () {
-        beforeEach(function () {
-            this.modalSpy = stubModals();
-        });
         itBehavesLike.aDialogLauncher("a.edit_job", chorus.dialogs.EditJob);
+    });
+
+    describe("clicking 'Delete Job'", function () {
+        itBehavesLike.aDialogLauncher("a.delete_job", chorus.alerts.JobDelete);
     });
 });
