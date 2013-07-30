@@ -61,4 +61,17 @@ resource 'Job' do
       status.should == 200
     end
   end
+
+  delete "/workspaces/:workspace_id/jobs/:id" do
+    parameter :workspace_id, "Workspace ID"
+    parameter :id, "Job ID"
+    required_parameters :id, :workspace_id
+
+    let(:workspace_id) { workspaces(:public).id }
+    let(:id) { workspaces(:public).jobs.first.id }
+
+    example_request "Delete a given job in a workspace" do
+      status.should == 200
+    end
+  end
 end
