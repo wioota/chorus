@@ -488,5 +488,27 @@ describe("chorus.collections.Base", function() {
             });
         });
     });
+
+    describe("#destroy", function () {
+        beforeEach(function () {
+            var model = backboneFixtures.job();
+            var model2 = backboneFixtures.job({id: "foo"});
+            this.collection.add([model, model2]);
+        });
+
+        it("deletes all of its models", function () {
+            this.collection.each(function (model) {
+                spyOn(model, 'destroy');
+            });
+
+            this.collection.destroy();
+
+            this.collection.each(function (model) {
+                expect(model.destroy).toHaveBeenCalled();
+            });
+
+
+        });
+    });
 });
 

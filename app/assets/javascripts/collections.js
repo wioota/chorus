@@ -80,6 +80,10 @@ chorus.collections = {
                 return false;
             },
 
+            destroy: function () {
+                this.invoke('destroy');
+            },
+
             fetchPage: function(page, options) {
                 if (options && options.per_page !== undefined) {
                     this.per_page = options.per_page;

@@ -90,7 +90,7 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
                     this.multiSelectSidebarMenu.selectedModels.invoke('enable');
                 }, this),
                 'click .delete_jobs': _.bind(function() {
-                    this.multiSelectSidebarMenu.selectedModels.invoke('destroy');
+                    new chorus.alerts.MultipleJobDelete({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
                 }, this)
             }
         };

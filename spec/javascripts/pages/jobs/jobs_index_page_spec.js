@@ -148,10 +148,11 @@ describe("chorus.pages.JobsIndexPage", function () {
             });
 
             describe("clicking the 'delete' action", function () {
-                it("deletes all selected jobs", function () {
-                    this.page.multiSelectSidebarMenu.$('.delete_jobs').click();
-                    expect(this.jobs[0].destroy).toHaveBeenCalled();
+                beforeEach(function () {
+                    this.modalSpy = stubModals();
                 });
+
+                itBehavesLike.aDialogLauncher("a.delete_jobs", chorus.alerts.MultipleJobDelete);
             });
         });
     });
