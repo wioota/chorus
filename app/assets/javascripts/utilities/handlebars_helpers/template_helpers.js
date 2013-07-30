@@ -61,6 +61,12 @@ chorus.handlebarsHelpers.template = {
         });
     },
 
+    timeZonesSelect: function () {
+        return Handlebars.helpers.renderTemplate('time_zone_selector', {
+            zones: chorus.models.Config.instance().get("timeZones")
+        });
+    },
+
     gpdbOrOracleDataSourceFields: function(context) {
         return Handlebars.helpers.renderTemplate("data_sources/gpdb_or_oracle_data_source_fields", context || {});
     }

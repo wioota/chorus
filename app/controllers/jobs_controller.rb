@@ -1,4 +1,5 @@
 class JobsController < ApplicationController
+  before_filter :apply_next_run_timezone, only: [:create, :update]
 
   def index
     authorize! :show, workspace
@@ -17,7 +18,6 @@ class JobsController < ApplicationController
   end
 
   def create
-
     authorize! :can_edit_sub_objects, workspace
 
     job = Job.create!(params[:job])
@@ -44,6 +44,10 @@ class JobsController < ApplicationController
   end
 
   protected
+
+  def apply_next_run_timezone
+    params[:job][:next_run] = ActiveSupport::TimeZone[params[:job][:time_zone]].parse(DateTime.parse(params[:job][:next_run]).asctime)
+  end
 
   def workspace
     @workspace ||= Workspace.find(params[:workspace_id])

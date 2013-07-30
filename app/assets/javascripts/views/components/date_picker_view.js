@@ -30,7 +30,7 @@ chorus.views.DatePicker = chorus.views.Base.extend({
         var year = this.yearSelector.val();
         var month =  parseInt(this.monthSelector.val(), 10) - 1;
         var day = this.daySelector.val();
-        return moment([year,month, day]);
+        return moment([year, month, day]);
     },
 
     disable: function () {

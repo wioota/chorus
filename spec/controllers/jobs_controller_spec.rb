@@ -22,10 +22,10 @@ describe JobsController do
       names.should == names.sort
     end
 
-    it "can sorts by next run" do
+    it "sorts by next run" do
       get :index, :workspace_id => workspace.id, :order => "next_run"
       timestamps = decoded_response.map { |job| job.next_run }
-      timestamps.should == timestamps.sort
+      timestamps.compact.should == timestamps.compact.sort
     end
 
     describe "pagination" do
@@ -79,8 +79,8 @@ describe JobsController do
     let(:planned_job) { FactoryGirl.attributes_for(:job) }
     let(:params) do
       {
-        :workspace_id => workspace.id,
-        :job => planned_job
+          :workspace_id => workspace.id,
+          :job => planned_job
       }
     end
 
@@ -103,7 +103,7 @@ describe JobsController do
     it "adds a created Job with a given Workspace" do
       expect do
         post :create, params
-      end.to change {workspace.reload.jobs.count}.by(1)
+      end.to change { workspace.reload.jobs.count }.by(1)
     end
 
     it 'renders the created job as JSON' do
@@ -117,11 +117,13 @@ describe JobsController do
     let(:job) { FactoryGirl.create(:job, workspace: workspace, enabled: false) }
     let(:params) do
       {
-          id: job.id,
-          workspace_id: workspace.id,
-          job: {
-            enabled: true
-          }
+        id: job.id,
+        workspace_id: workspace.id,
+        job: {
+            enabled: true,
+            next_run: "2013-07-30T14:00:00-00:00",
+            time_zone: 'Arizona'
+        }
       }
     end
 
@@ -135,6 +137,11 @@ describe JobsController do
         put :update, params
         job.reload
       end.to change(job, :enabled).from(false).to(true)
+    end
+
+    it "applies the passed-in time zone to the passed-in next_run without shifting time" do
+      put :update, params
+      job.reload.next_run.to_i.should == DateTime.parse("2013-07-30T14:00:00-07:00").to_i
     end
   end
 

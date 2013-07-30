@@ -33,6 +33,7 @@ chorus.dialogs.EditJob = chorus.dialogs.ConfigureJob.include(chorus.Mixins.Dialo
         this.$('select.hour').val(times.hours);
         this.$('select.minute').val(times.minutes);
         this.$('select.meridiem').val(times.meridiem);
+        this.$('select.time_zone').val(times.zone);
     },
 
     modelSaved: function () {

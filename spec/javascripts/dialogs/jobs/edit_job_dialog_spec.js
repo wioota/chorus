@@ -10,12 +10,18 @@ describe("chorus.dialogs.EditJob", function () {
             year: "3013",
             hour: '1',
             minute: '5',
-            meridiem: 'am'
+            meridiem: 'am',
+            time_zone: 'American Samoa'
         };
         this.job = backboneFixtures.job();
         this.workspace = this.job.get("workspace");
 
         spyOn(chorus.router, "navigate");
+
+        chorus.models.Config.instance().set("timeZones", [
+            ['Other Time Zone', 'Pacific'],
+            ['American Samoa is Fun!', 'American Samoa']
+        ]);
 
         this.dialog = new chorus.dialogs.EditJob({model: this.job, workspace: this.workspace});
         spyOn(this.dialog.endDatePicker, "enable");
@@ -41,15 +47,22 @@ describe("chorus.dialogs.EditJob", function () {
         it("populates next run date", function () {
             var nextRunDate = this.job.nextRunDate().startOf("minute");
             nextRunDate.minute(Math.floor(nextRunDate.minute() / 5) * 5);
-
-            expect(this.dialog.buildStartDate().toDate()).toEqual(nextRunDate.toDate());
+            expect(this.dialog.buildStartDate().format("YYYY-MM-DDTHH:mm")).toEqual(nextRunDate.format("YYYY-MM-DDTHH:mm"));
         });
 
         it("populates end date", function () {
             var endRunDate = this.job.endRunDate().startOf("day");
 
-            expect(this.dialog.buildEndDate().toDate()).toEqual(endRunDate.toDate());
+            expect(this.dialog.buildEndDate().format("YYYY-MM-DD")).toEqual(endRunDate.format("YYYY-MM-DD"));
         });
+
+        it("populates time zone", function () {
+            this.job.set("nextRun", "2013-07-29T08:00:00-11:00");
+            this.job.set("timeZone", "American Samoa");
+            this.dialog.render();
+            expect(this.dialog.$('select.time_zone').val()).toEqual("American Samoa");
+        });
+
     });
 
     context("editing a Job that runs on schedule with an end run time", function () {
@@ -82,7 +95,7 @@ describe("chorus.dialogs.EditJob", function () {
                 var dialog = this.dialog;
                 var jobPlan = this.jobPlan;
                 _.each(_.keys(this.jobPlan), function (prop) {
-                    var selects = ['interval_unit', 'meridiem', 'hour', 'minute'];
+                    var selects = ['interval_unit', 'meridiem', 'hour', 'minute', 'time_zone'];
                     var element = (_.contains(selects, prop) ? 'select.' : 'input.');
                     dialog.$(element + prop).val(jobPlan[prop]).trigger("change").trigger("keyup");
                 });
@@ -108,13 +121,14 @@ describe("chorus.dialogs.EditJob", function () {
 
                 it("posts with the correct values", function () {
                     var params = this.server.lastUpdate().params();
-                    var date = moment(new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, this.jobPlan.hour, this.jobPlan.minute));
+                    var date = moment.utc([this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, parseInt(this.jobPlan.hour, 10), parseInt(this.jobPlan.minute, 10)]);
                     var endDate = moment(new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day));
                     expect(params['job[name]']).toEqual(this.jobPlan.name);
                     expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
                     expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
-                    expect(params['job[next_run]']).toEqual(date.toISOString());
+                    expect(params['job[next_run]']).toEqual(date.format());
                     expect(params['job[end_run]']).toEqual(endDate.toISOString());
+                    expect(params['job[time_zone]']).toEqual(this.jobPlan.time_zone);
                 });
 
                 context("when the save succeeds", function () {

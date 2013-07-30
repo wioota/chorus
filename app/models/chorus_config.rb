@@ -38,6 +38,13 @@ class ChorusConfig
       "Pivotal HD"
     ]
   end
+
+  def time_zones
+    us_zones = ActiveSupport::TimeZone.us_zones
+    other_zones = ActiveSupport::TimeZone.all.reject { |z| us_zones.include?(z) }
+    us_zones.map { |z| [ z.to_s, z.name ] } + [ [nil, nil] ] + other_zones.map { |z| [ z.to_s, z.name ] }
+  end
+
   def gpfdist_configured?
     (self['gpfdist.url'] && self['gpfdist.write_port'] && self['gpfdist.read_port'] &&
         self['gpfdist.data_dir'] && self['gpfdist.ssl.enabled'] != nil)

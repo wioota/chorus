@@ -78,6 +78,7 @@ FactoryGirl.define do
     association :workspace
     next_run 2.days.from_now
     end_run 3.days.from_now
+    time_zone 'Alaska'
     interval_unit { %w( hours days weeks months ).sample }
     interval_value { rand(100)+1 }
   end
