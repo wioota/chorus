@@ -93,10 +93,6 @@ describe("chorus.dialogs.CreateJobTask", function () {
                         expect(this.dialog.datasetsChosen).toHaveBeenCalled();
                         expect(this.dialog.$(".source a.dataset_picked")).toContainText("myDatasetWithAReally...");
                     });
-
-                    it("stores the un-ellipsized dataset name on the dialog", function () {
-                        expect(this.dialog.selectedDatasetName).toBe("myDatasetWithAReallyReallyLongName");
-                    });
                 });
             });
         });
@@ -107,7 +103,7 @@ describe("chorus.dialogs.CreateJobTask", function () {
             });
 
             it("should have a text entry for new table name", function () {
-                expect(this.dialog.$(".new_table .name")).toBeDisabled();
+                expect(this.dialog.$("input.new_table_name")).toBeDisabled();
             });
         });
 
@@ -118,6 +114,211 @@ describe("chorus.dialogs.CreateJobTask", function () {
 
             it("has an 'Import into an existing table' radio button", function () {
                 expect(this.dialog.$(".destination label")).toContainTranslation("import.existing_table");
+            });
+
+            context("when 'Import into Existing Table' is selected", function () {
+                beforeEach(function () {
+                    this.dialog.$(".destination .new_table input:radio").prop("checked", false);
+                    this.dialog.$(".destination .choose_table input:radio").prop("checked", true).change();
+                });
+
+                it("should disable the submit button by default", function () {
+                    expect(this.dialog.$("button.submit")).toBeDisabled();
+                });
+
+                it("should enable the truncate option", function () {
+                    expect(this.dialog.$(".truncate")).toBeEnabled();
+                });
+
+                it("should enable the 'select destination table' link", function () {
+                    expect(this.dialog.$(".destination a.dataset_picked")).not.toHaveClass("hidden");
+                    expect(this.dialog.$(".destination span.dataset_picked")).toHaveClass("hidden");
+                });
+
+                it("should have a link to the dataset picker dialog", function () {
+                    expect(this.dialog.$(".destination a.dataset_picked")).toContainTranslation("dataset.import.select_destination");
+                });
+
+                context("after clicking the dataset picker link", function () {
+                    beforeEach(function () {
+                        this.modalStub = stubModals();
+                        spyOn(chorus.Modal.prototype, 'launchSubModal').andCallThrough();
+                        spyOn(this.dialog, "datasetsChosen").andCallThrough();
+                        this.dialog.$(".destination a.dataset_picked").click();
+                    });
+
+                    it("should launch the dataset picker dialog", function () {
+                        expect(chorus.Modal.prototype.launchSubModal).toHaveBeenCalled();
+                    });
+
+                    it("uses the workspace sandbox tables", function () {
+                        var collection = this.modalStub.lastModal().collection;
+                        expect(collection).toEqual(this.job.workspace().sandboxTables({allImportDestinations: true}));
+                        expect(collection.attributes.allImportDestinations).toBeTruthy();
+                    });
+
+                    context("after selecting a dataset", function () {
+                        beforeEach(function () {
+                            this.dataset = backboneFixtures.workspaceDataset.datasetTable({ objectName: "myDatasetWithAReallyReallyLongName" });
+                            var datasets = [this.dataset];
+                            chorus.modal.trigger("datasets:selected", datasets, '.destination');
+                        });
+
+                        it("should show the selected dataset in the link, ellipsized", function () {
+                            expect(this.dialog.datasetsChosen).toHaveBeenCalled();
+                            expect(this.dialog.$(".destination a.dataset_picked")).toContainText("myDatasetWithAReally...");
+                        });
+
+                        it("stores the dataset id on the dialog", function () {
+                            expect(this.dialog.selectedDestinationDatasetId).toBe(this.dataset.get("id"));
+                        });
+
+                        context("and then 'import into new table is checked", function () {
+                            beforeEach(function () {
+                                this.dialog.$(".destination input:radio").prop("checked", false);
+                                this.dialog.$(".new_table input:radio").prop("checked", true).change();
+                            });
+
+                            it("still shows the selected table name in the existing table section", function () {
+                                expect(this.dialog.$(".destination span.dataset_picked")).not.toHaveClass('hidden');
+                            });
+                        });
+                    });
+                });
+
+                describe("the Submit button", function () {
+                    function theSubmitButtonIs(status) {
+                        it("the submit button is " + status, function () {
+                            if (status === 'disabled') {
+                                expect(this.dialog.$("button.submit")).toBeDisabled();
+                            } else {
+                                expect(this.dialog.$("button.submit")).toBeEnabled();
+                            }
+                        });
+                    }
+
+                    beforeEach(function () {
+                        this.modalStub = stubModals();
+                        this.dialog.$(".destination .new_table input:radio").prop("checked", false);
+                        this.dialog.$(".destination .choose_table input:radio").prop("checked", true).change();
+                    });
+
+                    context("when nothing has been selected", function () {
+                        theSubmitButtonIs('disabled');
+                    });
+
+                    context("when only a source table has been selected", function () {
+                        beforeEach(function () {
+                            this.dialog.$(".source a.dataset_picked").click();
+                            var datasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "foo" })];
+                            chorus.modal.trigger("datasets:selected", datasets, '.source');
+                        });
+                        theSubmitButtonIs('disabled');
+                    });
+
+                    context("when only a destination table has been selected", function () {
+                        beforeEach(function () {
+                            this.dialog.$(".destination a.dataset_picked").click();
+                            var datasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "foo" })];
+                            chorus.modal.trigger("datasets:selected", datasets, '.destination');
+                        });
+                        theSubmitButtonIs('disabled');
+                    });
+
+                    context("when a source table has been selected and a new destination table is selected", function () {
+                        beforeEach(function () {
+                            this.dialog.$(".source a.dataset_picked").click();
+                            var sourceDatasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "foo" })];
+                            chorus.modal.trigger("datasets:selected", sourceDatasets, '.source');
+
+                            this.dialog.$(".destination .new_table input:radio").prop("checked", true).change();
+                            this.dialog.$(".destination .choose_table input:radio").prop("checked", false).change();
+
+                            this.dialog.$(".new_table input.new_table_name").val("good_table_name").trigger("keyup");
+                        });
+
+                        itBehavesLike.importIntoNewTableIsSelected();
+
+                        theSubmitButtonIs('enabled');
+                    });
+
+                    context("when a source and destination table have been selected", function () {
+                        beforeEach(function () {
+                            this.dialog.$(".source a.dataset_picked").click();
+                            this.sourceDatasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "foo" })];
+                            chorus.modal.trigger("datasets:selected", this.sourceDatasets, '.source');
+
+                            this.dialog.$(".destination a.dataset_picked").click();
+                            this.destinationDatasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "biz" })];
+                            chorus.modal.trigger("datasets:selected", this.destinationDatasets, '.destination');
+                        });
+
+                        context("when the limit checkbox is not selected", function () {
+                            theSubmitButtonIs('enabled');
+                        });
+
+                        context("when the limit checkbox is selected", function () {
+                            var limitField;
+
+                            beforeEach(function () {
+                                limitField = this.dialog.$('.limit input[type=text]');
+                                this.dialog.$('.limit input[type=checkbox]').prop('checked', true);
+                            });
+
+                            context("and the limit is valid", function () {
+                                beforeEach(function () {
+                                    limitField.val(500).trigger('keyup');
+                                });
+
+                                theSubmitButtonIs('enabled');
+
+                                context("when submitting the form", function () {
+                                    beforeEach(function () {
+                                        this.dialog.$("form").submit();
+                                    });
+
+                                    it("posts to the correct url", function () {
+                                        var url = this.server.lastCreateFor(this.dialog.model).url;
+                                        expect(url).toBe(this.dialog.model.url());
+                                    });
+
+                                    it("submits the correct fields", function () {
+                                        var params = this.server.lastCreateFor(this.dialog.model).params();
+                                        expect(params['job_task[action]']).toBe('import_source_data');
+                                        expect(params['job_task[source_id]']).toBe(this.sourceDatasets[0].get("id"));
+                                        expect(params['job_task[destination_id]']).toBe(this.destinationDatasets[0].get("id"));
+                                        expect(params['job_task[new_table_name]']).not.toExist();
+                                        expect(params['job_task[row_limit]']).toBe("500");
+                                        expect(params['job_task[truncate]']).toBe("false");
+                                    });
+
+                                    context("when the save succeeds", function () {
+                                        beforeEach(function () {
+                                            spyOn(this.dialog, "closeModal");
+                                            spyOn(chorus, "toast");
+                                            this.server.lastCreateFor(this.dialog.model).succeed();
+                                        });
+
+                                        it("closes the modal", function () {
+                                            expect(this.dialog.closeModal).toHaveBeenCalled();
+                                        });
+
+                                        it("should create a toast", function () {
+                                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message);
+                                        });
+                                    });
+                                });
+                            });
+
+                            context("and the limit is invalid", function () {
+                                beforeEach(function () {
+                                    limitField.val('-1ab').trigger('keyup');
+                                });
+                                theSubmitButtonIs('disabled');
+                            });
+                        });
+                    });
+                });
             });
         });
 
@@ -138,167 +339,4 @@ describe("chorus.dialogs.CreateJobTask", function () {
         });
     });
 
-    context("when 'Import into Existing Table' is selected", function () {
-        beforeEach(function () {
-            this.dialog.$(".destination .new_table input:radio").prop("checked", false);
-            this.dialog.$(".destination .choose_table input:radio").prop("checked", true).change();
-        });
-
-        it("should disable the submit button by default", function () {
-            expect(this.dialog.$("button.submit")).toBeDisabled();
-        });
-
-        it("should enable the truncate option", function () {
-            expect(this.dialog.$(".truncate")).toBeEnabled();
-        });
-
-        it("should enable the 'select destination table' link", function () {
-            expect(this.dialog.$(".destination a.dataset_picked")).not.toHaveClass("hidden");
-            expect(this.dialog.$(".destination span.dataset_picked")).toHaveClass("hidden");
-        });
-
-        it("should have a link to the dataset picker dialog", function () {
-            expect(this.dialog.$(".destination a.dataset_picked")).toContainTranslation("dataset.import.select_destination");
-        });
-
-        context("after clicking the dataset picker link", function () {
-            beforeEach(function () {
-                this.modalStub = stubModals();
-                spyOn(chorus.Modal.prototype, 'launchSubModal').andCallThrough();
-                spyOn(this.dialog, "datasetsChosen").andCallThrough();
-                this.dialog.$(".destination a.dataset_picked").click();
-            });
-
-            it("should launch the dataset picker dialog", function () {
-                expect(chorus.Modal.prototype.launchSubModal).toHaveBeenCalled();
-            });
-
-            it("uses the workspace sandbox tables", function () {
-                var collection = this.modalStub.lastModal().collection;
-                expect(collection).toEqual(this.job.workspace().sandboxTables({allImportDestinations: true}));
-                expect(collection.attributes.allImportDestinations).toBeTruthy();
-            });
-
-            context("after selecting a dataset", function () {
-                beforeEach(function () {
-                    var datasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "myDatasetWithAReallyReallyLongName" })];
-                    chorus.modal.trigger("datasets:selected", datasets, '.destination');
-                });
-
-                it("should show the selected dataset in the link, ellipsized", function () {
-                    expect(this.dialog.datasetsChosen).toHaveBeenCalled();
-                    expect(this.dialog.$(".destination a.dataset_picked")).toContainText("myDatasetWithAReally...");
-                });
-
-                it("stores the un-ellipsized dataset name on the dialog", function () {
-                    expect(this.dialog.selectedDatasetName).toBe("myDatasetWithAReallyReallyLongName");
-                });
-
-                context("and then 'import into new table is checked", function () {
-                    beforeEach(function () {
-                        this.dialog.$(".destination input:radio").prop("checked", false);
-                        this.dialog.$(".new_table input:radio").prop("checked", true).change();
-                    });
-
-                    it("still shows the selected table name in the existing table section", function () {
-                        expect(this.dialog.$(".destination span.dataset_picked")).not.toHaveClass('hidden');
-                    });
-                });
-            });
-        });
-
-        describe("the Submit button", function () {
-            function theSubmitButtonIs(status) {
-                it("the submit button is " + status, function () {
-                    if (status === 'disabled') {
-                        expect(this.dialog.$("button.submit")).toBeDisabled();
-                    } else {
-                        expect(this.dialog.$("button.submit")).toBeEnabled();
-                    }
-                });
-            }
-
-            beforeEach(function () {
-                this.modalStub = stubModals();
-                this.dialog.$(".destination .new_table input:radio").prop("checked", false);
-                this.dialog.$(".destination .choose_table input:radio").prop("checked", true).change();
-            });
-
-            context("when nothing has been selected", function () {
-                theSubmitButtonIs('disabled');
-            });
-
-            context("when only a source table has been selected", function () {
-                beforeEach(function () {
-                    this.dialog.$(".source a.dataset_picked").click();
-                    var datasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "foo" })];
-                    chorus.modal.trigger("datasets:selected", datasets, '.source');
-                });
-                theSubmitButtonIs('disabled');
-            });
-
-            context("when only a destination table has been selected", function () {
-                beforeEach(function () {
-                    this.dialog.$(".destination a.dataset_picked").click();
-                    var datasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "foo" })];
-                    chorus.modal.trigger("datasets:selected", datasets, '.destination');
-                });
-                theSubmitButtonIs('disabled');
-            });
-
-            context("when a source table has been selected and a new destination table is selected", function () {
-                beforeEach(function () {
-                    this.dialog.$(".source a.dataset_picked").click();
-                    var sourceDatasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "foo" })];
-                    chorus.modal.trigger("datasets:selected", sourceDatasets, '.source');
-
-                    this.dialog.$(".destination .new_table input:radio").prop("checked", true).change();
-                    this.dialog.$(".destination .choose_table input:radio").prop("checked", false).change();
-
-                    this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
-                });
-
-                itBehavesLike.importIntoNewTableIsSelected();
-
-                theSubmitButtonIs('enabled');
-            });
-
-            context("when a source and destination table have been selected", function () {
-                beforeEach(function () {
-                    this.dialog.$(".source a.dataset_picked").click();
-                    var sourceDatasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "foo" })];
-                    chorus.modal.trigger("datasets:selected", sourceDatasets, '.source');
-
-                    this.dialog.$(".destination a.dataset_picked").click();
-                    var destinationDatasets = [backboneFixtures.workspaceDataset.datasetTable({ objectName: "biz" })];
-                    chorus.modal.trigger("datasets:selected", destinationDatasets, '.destination');
-                });
-
-                context("when the limit checkbox is not selected", function () {
-                    theSubmitButtonIs('enabled');
-                });
-
-                context("when the limit checkbox is selected", function () {
-                    var limitField;
-
-                    beforeEach(function () {
-                        limitField = this.dialog.$('.limit input[type=text]');
-                        this.dialog.$('.limit input[type=checkbox]').prop('checked', true);
-                    });
-                    context("and the limit is valid", function () {
-                        beforeEach(function () {
-                            limitField.val(500).trigger('keyup');
-                        });
-                        theSubmitButtonIs('enabled');
-                    });
-                    context("and the limit is invalid", function () {
-                        beforeEach(function () {
-                            limitField.val('-1ab').trigger('keyup');
-                        });
-                        theSubmitButtonIs('disabled');
-                    });
-                });
-            });
-        });
-    });
 });

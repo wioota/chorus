@@ -88,4 +88,15 @@ FactoryGirl.define do
     job
     action { %w( import_source_data run_work_flow run_sql_file ).sample }
   end
+
+  factory :import_source_data_task do
+    sequence(:index) { |n| 100 + n }
+    job
+    action { 'import_source_data' }
+    source_id 1
+    destination_id 2
+    destination_name nil
+    truncate false
+    row_limit 500
+  end
 end

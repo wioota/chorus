@@ -2,6 +2,7 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
     constructorName: 'CreateJobTask',
     templateName: 'create_job_task_dialog',
     title: t('create_job_task_dialog.title'),
+    message: "create_job_task_dialog.toast",
 
     events: {
         "change select.action": "toggleTaskConfiguration",
@@ -12,14 +13,17 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
     },
 
     setup: function () {
-        this.workspace = this.options.job.workspace();
-        this.model = new chorus.models.JobTask({workspace: this.workspace, job: this.options.job});
+        this.job = this.options.job;
+        this.workspace = this.job.workspace();
+        this.model = new chorus.models.JobTask({workspace: {id: this.workspace.get("id")}, job: {id: this.options.job.get("id")}});
 
         this.disableFormUnlessValid({
             formSelector: "form",
             inputSelector: "input",
             checkInput: _.bind(this.checkInput, this)
         });
+
+        this.listenTo(this.model, "saved", this.modelSaved);
     },
 
     postRender: function () {
@@ -32,7 +36,7 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
 
     checkInput: function () {
         var importIntoExisting = this.$(".choose_table input:radio").prop("checked");
-        var newTableNameGiven = this.$('input.name').val().trim().length > 0;
+        var newTableNameGiven = this.$('input.new_table_name').val().trim().length > 0;
 
         var existingDestinationPicked = importIntoExisting && this.destinationTableHasBeenPicked;
         var newDestinationNamed = (!importIntoExisting && newTableNameGiven);
@@ -56,7 +60,7 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
     updateExistingTableLink: function () {
         var destinationIsNewTable = this.$(".new_table input:radio").prop("checked");
 
-        var $tableNameField = this.$(".new_table input.name");
+        var $tableNameField = this.$(".new_table input.new_table_name");
         $tableNameField.prop("disabled", !destinationIsNewTable);
 
         this.$(".truncate").prop("disabled", this.isNewTable());
@@ -86,6 +90,14 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
         return this.$("input[name=limit_num_rows]").prop("checked");
     },
 
+    truncateIsChecked: function () {
+        return this.$("input.truncate").prop("checked");
+    },
+
+    newTableName: function () {
+        return this.$('input.new_table_name').val();
+    },
+
     limitIsValid: function () {
         var limit = parseInt(this.$(".limit input[type=text]").val(), 10);
 
@@ -105,9 +117,11 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
     datasetsChosen: function (datasets, source_or_destination) {
         if (source_or_destination === 'destination') {
             this.destinationTableHasBeenPicked = true;
+            this.selectedDestinationDatasetId = datasets[0].get("id");
         }
         if (source_or_destination === 'source') {
             this.sourceTableHasBeenPicked = true;
+            this.selectedSourceDatasetId = datasets[0].get("id");
         }
 
         var selector = '.' + source_or_destination;
@@ -116,7 +130,6 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
 
     changeSelectedDataset: function (name, target) {
         if (name) {
-            this.selectedDatasetName = name;
             this.$(target + " a.dataset_picked").text(_.prune(name, 20));
             this.$(target + " span.dataset_picked").text(_.prune(name, 20));
             this.toggleSubmitDisabled();
@@ -124,46 +137,37 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
     },
 
     create: function () {
-//        this.$("button.submit").startLoading('actions.saving');
-//        this.model.unset("sampleCount", {silent: true});
-//        this.model.save(this.fieldValues(), {wait: true});
+        this.$("button.submit").startLoading('actions.saving');
+        this.model.save(this.fieldValues(), {wait: true});
+    },
+
+    modelSaved: function () {
+        chorus.toast(this.message);
+        this.model.trigger('invalidated');
+        this.job.trigger('invalidated');
+        this.closeModal();
     },
 
     fieldValues: function () {
+        var action = this.$("select.action").val();
         var updates = {};
 
-//        _.each(this.$("input:text, input[type=hidden]"), function(i) {
-//            var input = $(i);
-//            if(input.is(":enabled") && input.closest(".schedule_widget").length === 0) {
-//                updates[input.attr("name")] = input.val() && input.val().trim();
-//            }
-//        });
-//
-//        updates.newTable = this.isNewTable() + "";
-//        updates.schemaId = this.schema.id;
-//
-//        if(this.isNewTable()) {
-//            updates.toTable = this.$("input[name=toTable]").val();
-//        } else {
-//            updates.toTable = this.selectedDatasetName;
-//        }
-//
-//        var $truncateCheckbox = this.$(".truncate");
-//        if($truncateCheckbox.length) {
-//            updates.truncate = $truncateCheckbox.prop("checked") + "";
-//        }
-//
-//        var useLimitRows = this.$(".limit input:checkbox").prop("checked");
-//        if(!useLimitRows) {
-//            updates.sampleCount = '';
-//        } else {
-//            updates.sampleCount = this.$("input[name='sampleCount']").val();
-//        }
+        if(action === "import_source_data") {
+            updates.action = action;
+            updates.sourceId = this.selectedSourceDatasetId;
+            updates.destinationId = this.selectedDestinationDatasetId;
+
+            if (this.isNewTable()) {
+                updates.destinationName = this.newTableName();
+            } else {
+                updates.destinationId = this.selectedDestinationDatasetId;
+            }
+            updates.rowLimit = this.limitIsChecked() ? this.$("input.row_limit").val() : '';
+            updates.truncate = this.truncateIsChecked();
+        }
 
         return updates;
     },
-
-    submit: $.noop,
 
     launchDatasetPickerDialog: function (e, source_or_destination) {
         e.preventDefault();
