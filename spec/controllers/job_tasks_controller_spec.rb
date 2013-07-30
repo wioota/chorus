@@ -70,4 +70,25 @@ describe JobTasksController do
       end
     end
   end
+  describe "destroy" do
+    let(:task) { job_tasks(:job_task_isdt) }
+    let(:params) do
+      {
+        workspace_id: workspace.id,
+        job_id: job.id,
+        id: task.id
+      }
+    end
+
+    it "lets a workspace member soft delete an job task" do
+      delete :destroy, params
+      response.should be_success
+      task.reload.deleted?.should be_true
+    end
+
+    it "uses authorization" do
+      mock(controller).authorize!(:can_edit_sub_objects, workspace)
+      delete :destroy, params
+    end
+  end
 end

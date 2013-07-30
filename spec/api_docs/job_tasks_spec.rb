@@ -21,4 +21,18 @@ resource 'JobTask' do
       status.should == 201
     end
   end
+
+  delete "/workspaces/:workspace_id/jobs/:job_id/job_tasks/:id" do
+    parameter :name, "Name"
+    parameter :job_id, "Job ID"
+    parameter :id, "Job Task ID"
+
+    let(:workspace_id) { Workspace.first.id }
+    let(:job_id) { Job.first.id }
+    let(:id) { JobTask.first.id }
+
+    example_request "Delete a Job Task in a job in a workspace" do
+      status.should == 200
+    end
+  end
 end
