@@ -39,7 +39,6 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
 
         if(executionLocation.entityType === 'hdfs_data_source') {
             queryParams.hdfs_data_source_id = executionLocation.id;
-            queryParams["hdfs_entry_id[]"] = this.get("hdfsEntryIds");
             queryParams["hdfs_dataset_id[]"] = this.get("datasetIds");
         } else {
             queryParams.database_id = executionLocation.id;

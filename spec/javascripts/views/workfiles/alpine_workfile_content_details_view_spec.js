@@ -40,7 +40,7 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
         });
         context("when the execution location is an Hdfs Data Source", function() {
             beforeEach(function() {
-                this.model = backboneFixtures.workfile.alpineHdfs();
+                this.model = backboneFixtures.workfile.alpineHdfsDatasetFlow();
                 this.view = new chorus.views.AlpineWorkfileContentDetails({ model: this.model });
                 this.view.render();
             });

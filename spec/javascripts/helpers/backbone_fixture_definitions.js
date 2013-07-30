@@ -274,9 +274,6 @@ window.BackboneFixtureDefinitions = {
             alpine: {
                 model: 'AlpineWorkfile'
             },
-            alpineHdfs: {
-              model: 'AlpineWorkfile'
-            },
             alpineHdfsDatasetFlow: {
               model: 'AlpineWorkfile'
             },
