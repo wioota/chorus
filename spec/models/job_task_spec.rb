@@ -44,4 +44,8 @@ describe JobTask do
       JobTask.create_for_action!(params)
     end
   end
+
+  describe '#execute' do
+    it { should respond_to :execute }
+  end
 end

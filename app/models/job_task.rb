@@ -24,4 +24,6 @@ class JobTask < ActiveRecord::Base
     klass.assemble!(job_task_params, job)
   end
 
+  def execute; end
+
 end

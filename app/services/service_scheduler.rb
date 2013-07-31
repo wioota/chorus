@@ -32,6 +32,10 @@ class ServiceScheduler
       ImportScheduler.run
     end
 
+    every(1.minute, 'JobBoss.run') do
+      JobBoss.run
+    end
+
     end
 
   def job_named(job)

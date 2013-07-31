@@ -80,6 +80,17 @@ describe ServiceScheduler do
     end
   end
 
+  describe "JobBoss" do
+    it "runs every minute" do
+      job_scheduler.job_named('JobBoss.run').period.should == 1.minute
+    end
+
+    it "runs in the same thread" do
+      mock(JobBoss).run
+      job_scheduler.job_named('JobBoss.run').run(Time.current)
+    end
+  end
+
   describe "SeviceScheduler.run" do
     it "builds a ServiceScheduler and then runs it starts the clockwork" do
       built = false
