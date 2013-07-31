@@ -70,6 +70,7 @@ describe JobTasksController do
       end
     end
   end
+
   describe "destroy" do
     let(:task) { job_tasks(:job_task_isdt) }
     let(:params) do

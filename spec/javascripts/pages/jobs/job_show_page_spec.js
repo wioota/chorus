@@ -1,6 +1,7 @@
 describe("chorus.pages.JobsShowPage", function () {
     beforeEach(function () {
         this.model = backboneFixtures.job();
+        this.task = this.model.tasks().at(0);
         this.workspace = this.model.workspace();
         this.page = new chorus.pages.JobsShowPage(this.workspace.id, this.model.get('id'));
     });
@@ -30,6 +31,35 @@ describe("chorus.pages.JobsShowPage", function () {
         it("creates the correct content details", function() {
             expect(this.page.mainContent.contentDetails).toBeA(chorus.views.JobContentDetails);
             expect(this.page.mainContent.contentDetails.model.get("id")).toBe(this.model.get("id"));
+        });
+
+        describe("when the job_task:selected event is triggered on the list view", function () {
+            beforeEach(function() {
+                this.page.render();
+                chorus.PageEvents.trigger("job_task:selected", this.task);
+            });
+
+            it("sets the resource of the sidebar", function() {
+                expect(this.page.sidebar.model).toBe(this.task);
+            });
+
+            it('instantiates the sidebar view', function() {
+                expect(this.page.sidebar).toBeDefined();
+                expect(this.page.sidebar).toBeA(chorus.views.JobTaskSidebar);
+                expect(this.page.$("#sidebar .sidebar_content.primary")).not.toBeEmpty();
+            });
+
+            describe("when job_task:selected event is triggered and there is already a sidebar", function() {
+                beforeEach(function() {
+                    this.oldSidebar = this.page.sidebar;
+                    spyOn(this.page.sidebar, 'teardown');
+                    chorus.PageEvents.trigger("job_task:selected", this.task);
+                });
+
+                it("tears down the old sidebar", function() {
+                    expect(this.oldSidebar.teardown).toHaveBeenCalled();
+                });
+            });
         });
 
         describe("breadcrumbs", function() {

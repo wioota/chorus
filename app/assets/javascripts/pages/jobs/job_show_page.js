@@ -31,11 +31,20 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
         ];
     },
 
+    jobTaskSelected: function (task) {
+        if(this.sidebar) this.sidebar.teardown(true);
+
+        this.sidebar = new chorus.views.JobTaskSidebar({model: task});
+        this.renderSubview('sidebar');
+    },
+
     setupMainContent: function () {
         this.workspace = this.job.workspace();
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "jobs"});
 
         this.collection = this.job.tasks();
+
+        this.subscribePageEvent("job_task:selected", this.jobTaskSelected);
 
         var headerOptions = {
             title: this.job.get('name'),

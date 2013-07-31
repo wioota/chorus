@@ -5,7 +5,7 @@ class JobPresenter < Presenter
       :id => model.id,
       :workspace => present(model.workspace, options.merge(:succinct => options[:succinct] || options[:list_view])),
       :name => model.name,
-      :next_run => next_run,
+      :next_run => model.next_run,
       :end_run => model.end_run,
       :time_zone => model.time_zone,
       :last_run => model.last_run,
@@ -14,7 +14,7 @@ class JobPresenter < Presenter
       :state => model.enabled ? 'scheduled' : 'disabled'
     }
 
-    job_hash[:tasks] = model.job_tasks unless options[:list_view]
+    job_hash[:tasks] = model.job_tasks.map { |task| present(task) } unless options[:list_view]
 
     job_hash
   end

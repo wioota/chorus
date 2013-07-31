@@ -13,7 +13,7 @@ describe JobTaskPresenter, :type => :view do
 
   describe '#to_hash' do
     let(:hash) { presenter.to_hash }
-    let(:keys) { [:job, :action, :index, :name] }
+    let(:keys) { [:job, :action, :index, :name, :id, :workspace] }
 
     it "includes the right keys" do
       keys.each do |key|
