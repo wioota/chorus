@@ -23,6 +23,7 @@ chorus.dialogs.CreateImportSourceDataTask = chorus.dialogs.Base.include(chorus.M
         });
 
         this.listenTo(this.model, "saved", this.modelSaved);
+        this.listenTo(this.model, "saveFailed", this.saveFailed);
     },
 
     postRender: function () {

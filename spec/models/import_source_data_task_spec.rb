@@ -61,6 +61,13 @@ describe ImportSourceDataTask do
         task = ImportSourceDataTask.assemble!(planned_job_task, job)
         task.name.should == "Import " + source_dataset.name
       end
+
+      it 'cannot have the same destination_name as any existing dataset in the sandbox' do
+        additional_data["destination_name"] = job.workspace.sandbox.datasets.first.name
+        expect {
+          ImportSourceDataTask.assemble!(planned_job_task, job)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
     end
   end
 end
