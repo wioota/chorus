@@ -40,6 +40,7 @@ class Job < ActiveRecord::Base
   def run
     self.next_run = frequency.since(next_run)
     self.last_run = Time.current
+    self.disable! if next_run > end_run
     self.status = 'running'
     save!
     job_tasks.order("index ASC").each(&:execute)
@@ -47,6 +48,16 @@ class Job < ActiveRecord::Base
 
   def frequency
     interval_value.send(interval_unit) unless on_demand?
+  end
+
+  def enable!
+    self.enabled = true
+    save!
+  end
+
+  def disable!
+    self.enabled = false
+    save!
   end
 
   private

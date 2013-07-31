@@ -126,6 +126,23 @@ describe Job do
         job.status.should == 'running'
       end
 
+      context "if the end_run date is before the new next_run" do
+        let(:expiring_job) do
+          jobs(:default).tap do |job|
+            job.end_run = Time.current
+            job.enable!
+            job.save!
+          end
+        end
+
+        it 'disables the job' do
+          expect do
+            expiring_job.run
+          end.to change(expiring_job, :enabled).from(true).to(false)
+        end
+
+      end
+
       describe 'executing each task' do
         let(:task_order) { [] }
 
@@ -151,4 +168,5 @@ describe Job do
       end
     end
   end
+
 end
