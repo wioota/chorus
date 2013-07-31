@@ -19,8 +19,7 @@ describe JobTask do
         :source_id => dataset.id,
         :destination_id => '2',
         :row_limit => '500',
-        :truncate => false,
-        :index => 1500000
+        :truncate => false
       }
     end
 
@@ -36,6 +35,13 @@ describe JobTask do
       expect {
         JobTask.create_for_action!(params)
       }.to change(job.job_tasks, :count).by(1)
+    end
+
+    it "chooses a non-conflicting index" do
+      doomed_task = JobTask.create_for_action!(params)
+      JobTask.create_for_action!(params)
+      doomed_task.destroy
+      JobTask.create_for_action!(params)
     end
   end
 end

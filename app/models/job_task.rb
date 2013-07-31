@@ -19,7 +19,7 @@ class JobTask < ActiveRecord::Base
   def self.create_for_action!(params)
     job_task_params = params[:job_task]
     job = Job.find(params[:job_id])
-    job_task_params[:index] = job.job_tasks.count + 1
+    job_task_params[:index] = job.job_tasks.order(:index).last.index + 1
     klass = @@actions.fetch(job_task_params[:action], 'JobTask').constantize
     klass.assemble!(job_task_params, job)
   end
