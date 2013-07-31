@@ -38,15 +38,10 @@ describe HdfsDataSourcesController do
     let(:params) { attributes.merge :id => hdfs_data_source }
     let(:fake_data_source) { Object.new }
 
-    it "presents the updated hadoop data source" do
+    it "checks authorization and presents the updated hadoop data source" do
       mock(Hdfs::DataSourceRegistrar).update!(hdfs_data_source.id, attributes, @user) { fake_data_source }
       it_uses_authorization(:edit, hdfs_data_source)
       mock_present { |data_source| data_source.should == fake_data_source }
-      put :update, params
-    end
-
-    it "uses authentication" do
-      mock(subject).authorize! :edit, hdfs_data_source
       put :update, params
     end
 

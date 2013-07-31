@@ -1118,6 +1118,7 @@ describe ChorusInstaller do
 
     describe "detecting the installation OS" do
       before do
+        Java::JavaUtil::Properties.__persistent__ = true
         stub(System.get_properties).entry_set { ["os.name=TestOS", "os.version=1.2.3"] }
       end
 

@@ -34,9 +34,6 @@ describe WorkspaceSearchPresenter, :type => :view do
 
     it "puts the highlighted schema attributes on the schema" do
       dataset_hash = @hash[:this_workspace][:results].find { |entry| entry[:entity_type] == 'dataset' }
-
-      p dataset_hash
-
       dataset_hash[:schema][:highlighted_attributes][:name][0].should == "<em>searchquery</em>_schema"
       dataset_hash[:schema][:database][:highlighted_attributes][:name][0].should == "<em>searchquery</em>_database"
       dataset_hash.should have_key(:workspace)
