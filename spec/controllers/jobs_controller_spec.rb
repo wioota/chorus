@@ -111,6 +111,29 @@ describe JobsController do
       response.code.should == "201"
       decoded_response.should_not be_empty
     end
+
+    context "on demand" do
+      let(:params) {
+        {
+          :job => {
+            :workspace => {:id => workspace.id},
+            :name => "asd",
+            :interval_unit => "on_demand",
+            :interval_value => "0",
+            :next_run => "invalid",
+            :end_run => "invalid",
+            :time_zone => "Hawaii"
+          },
+          :workspace_id => workspace.id
+        }
+      }
+
+      it "creates an on demand job" do
+        expect do
+          post :create, params
+        end.to change(Job, :count).by(1)
+      end
+    end
   end
 
   describe '#update' do

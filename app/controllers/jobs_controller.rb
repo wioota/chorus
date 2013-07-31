@@ -46,7 +46,7 @@ class JobsController < ApplicationController
   protected
 
   def apply_next_run_timezone
-    if params[:job][:time_zone]
+    if params[:job][:interval_unit] != 'on_demand' && params[:job][:time_zone]
       params[:job][:next_run] = ActiveSupport::TimeZone[params[:job][:time_zone]].parse(DateTime.parse(params[:job][:next_run]).asctime)
     end
   end
