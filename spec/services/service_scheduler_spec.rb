@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'job_scheduler'
+require 'service_scheduler'
 
-describe JobScheduler do
-  let(:job_scheduler) { JobScheduler.new }
+describe ServiceScheduler do
+  let(:job_scheduler) { ServiceScheduler.new }
   describe "DataSourceStatusChecker.check_all" do
     it "runs every ChorusConfig.instance['instance_poll_interval_minutes'] minutes" do
       job_scheduler.job_named('DataSourceStatusChecker.check_all').period.should == ChorusConfig.instance['instance_poll_interval_minutes'].minutes
@@ -80,14 +80,14 @@ describe JobScheduler do
     end
   end
 
-  describe "JobScheduler.run" do
-    it "builds a JobScheduler and then runs it starts the clockwork" do
+  describe "SeviceScheduler.run" do
+    it "builds a ServiceScheduler and then runs it starts the clockwork" do
       built = false
-      any_instance_of(JobScheduler) do |js|
+      any_instance_of(ServiceScheduler) do |js|
         mock(js).run
         built = true
       end
-      JobScheduler.run
+      ServiceScheduler.run
       built.should be_true
     end
   end

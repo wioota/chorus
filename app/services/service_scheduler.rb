@@ -1,4 +1,4 @@
-class JobScheduler
+class ServiceScheduler
   include Clockwork
 
   def initialize
@@ -32,7 +32,7 @@ class JobScheduler
       ImportScheduler.run
     end
 
-  end
+    end
 
   def job_named(job)
     @@events.find { |event|
@@ -41,6 +41,6 @@ class JobScheduler
   end
 
   def self.run
-    JobScheduler.new.run
+    ServiceScheduler.new.run
   end
 end
