@@ -42,13 +42,6 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    unless page.has_selector?(".main_content")
-      puts "Could not find .main_content in #{example.full_description}"
-    end
-    unless page.has_no_selector?(".loading_section")
-      puts "Incorrectly found .main_content in #{example.full_description}"
-    end
-
     (0..10).each do |counter|
       break unless (page.evaluate_script("$.active != 0") rescue nil)
       sleep 1

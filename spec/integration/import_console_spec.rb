@@ -3,10 +3,6 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe "Import Console" do
   let(:user) {users(:admin)}
 
-  before do
-    login user
-  end
-
   let(:dataset) { datasets(:real_chorus_view) }
   let(:workspace) { dataset.workspace }
   let(:deleted_workspace) { FactoryGirl.create :workspace, :sandbox => workspace.sandbox, :owner => user, :name => "deleted workspace" }
@@ -17,12 +13,14 @@ describe "Import Console" do
   before do
     Import.delete_all # remove existing fixtures
 
-    FactoryGirl.create :import, :source_dataset => dataset, :workspace => workspace, :to_table => "forever_table", :user => user
-    FactoryGirl.create :import, :source_dataset => deleted_table, :workspace => workspace, :to_table => "import_of_deleted_table", :user => user
-    FactoryGirl.create :import, :source_dataset => other_table, :workspace => deleted_workspace, :to_table => "import_to_deleted_workspace", :user => user
+    FactoryGirl.create :import, :source => dataset, :workspace => workspace, :to_table => "forever_table", :user => user
+    FactoryGirl.create :import, :source => deleted_table, :workspace => workspace, :to_table => "import_of_deleted_table", :user => user
+    FactoryGirl.create :import, :source => other_table, :workspace => deleted_workspace, :to_table => "import_to_deleted_workspace", :user => user
     stub(deleted_table).cancel_imports
     deleted_table.destroy
     deleted_workspace.destroy
+
+    login user
   end
 
   it "shows a list of pending imports" do
