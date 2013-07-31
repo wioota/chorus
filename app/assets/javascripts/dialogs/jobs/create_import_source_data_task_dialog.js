@@ -1,11 +1,10 @@
-chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
-    constructorName: 'CreateJobTask',
-    templateName: 'create_job_task_dialog',
+chorus.dialogs.CreateImportSourceDataTask = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
+    constructorName: 'CreateImportSourceDataTask',
+    templateName: 'create_import_source_data_task_dialog',
     title: t('create_job_task_dialog.title'),
     message: "create_job_task_dialog.toast",
 
     events: {
-        "change select.action": "toggleTaskConfiguration",
         "change input:radio": "onExistingTableChosenAsDestination",
         "change input:checkbox": "onCheckboxClicked",
         "click .source a.dataset_picked": "launchSourceDatasetPickerDialog",
@@ -109,11 +108,6 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
         this.toggleSubmitDisabled();
     },
 
-    toggleTaskConfiguration: function (e) {
-        var selectedAction = this.$('select.action').val();
-        this.$('.import').toggleClass('hidden', (selectedAction !== 'import_source_data'));
-    },
-
     datasetsChosen: function (datasets, source_or_destination) {
         if (source_or_destination === 'destination') {
             this.destinationTableHasBeenPicked = true;
@@ -149,21 +143,18 @@ chorus.dialogs.CreateJobTask = chorus.dialogs.Base.include(chorus.Mixins.DialogF
     },
 
     fieldValues: function () {
-        var action = this.$("select.action").val();
-        var updates = {};
+        var updates = {
+            action: "import_source_data",
+            sourceId: this.selectedSourceDatasetId,
+            destinationId: this.selectedDestinationDatasetId,
+            rowLimit: this.limitIsChecked() ? this.$("input.row_limit").val() : '',
+            truncate: this.truncateIsChecked()
+        };
 
-        if(action === "import_source_data") {
-            updates.action = action;
-            updates.sourceId = this.selectedSourceDatasetId;
+        if (this.isNewTable()) {
+            updates.destinationName = this.newTableName();
+        } else {
             updates.destinationId = this.selectedDestinationDatasetId;
-
-            if (this.isNewTable()) {
-                updates.destinationName = this.newTableName();
-            } else {
-                updates.destinationId = this.selectedDestinationDatasetId;
-            }
-            updates.rowLimit = this.limitIsChecked() ? this.$("input.row_limit").val() : '';
-            updates.truncate = this.truncateIsChecked();
         }
 
         return updates;

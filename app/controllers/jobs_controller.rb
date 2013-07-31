@@ -46,7 +46,9 @@ class JobsController < ApplicationController
   protected
 
   def apply_next_run_timezone
-    params[:job][:next_run] = ActiveSupport::TimeZone[params[:job][:time_zone]].parse(DateTime.parse(params[:job][:next_run]).asctime)
+    if params[:job][:time_zone]
+      params[:job][:next_run] = ActiveSupport::TimeZone[params[:job][:time_zone]].parse(DateTime.parse(params[:job][:next_run]).asctime)
+    end
   end
 
   def workspace

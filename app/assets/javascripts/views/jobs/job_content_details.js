@@ -3,9 +3,18 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
     constructorName: 'JobContentDetails',
 
     events: {
-        "click button.create_task": "launchCreateJobTaskDialog",
         "click button.toggle_enabled": "toggleEnabled",
         "click button.edit_schedule": "launchEditDialog"
+    },
+
+    createActions: [
+        {className: 'import_source_data', text: t("job_task.action.import_source_data")}
+    ],
+
+    menuEvents: {
+        "a.import_source_data": function(e) {
+            this.launchCreateImportSourceDataTaskDialog(e);
+        }
     },
 
     setup: function() {
@@ -14,9 +23,17 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
         this.workspace = this.model.workspace();
     },
 
-    launchCreateJobTaskDialog: function (e) {
+    postRender: function () {
+        this.menu(this.$(".create_task"), {
+            content: this.$(".create_task_menu"),
+            orientation: "right",
+            contentEvents: this.menuEvents
+        });
+    },
+
+    launchCreateImportSourceDataTaskDialog: function (e) {
         e && e.preventDefault();
-        new chorus.dialogs.CreateJobTask({job: this.model}).launchModal();
+        new chorus.dialogs.CreateImportSourceDataTask({job: this.model}).launchModal();
     },
 
     launchEditDialog: function (e) {
@@ -33,7 +50,8 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
         return {
             canUpdate: this.canUpdate(),
             enabledButtonLabel: this.enabledButtonLabel(),
-            actionBarClass: this.actionBarClass()
+            actionBarClass: this.actionBarClass(),
+            createActions: this.createActions
         };
     },
 

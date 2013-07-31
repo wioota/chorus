@@ -1,0 +1,64 @@
+<form action="#">
+    <legend class="subtitle">
+        <div class="text">{{t "job_task.action.import_source_data"}}</div>
+        <hr/>
+        <label>{{t "create_job_task_dialog.import_source_data.description"}}</label>
+    </legend>
+
+    <div class="source">
+        <legend class="subtitle">
+            <div class="text">{{t "create_job_task_dialog.source_table"}}</div>
+            <hr/>
+        </legend>
+
+        <fieldset class="choose_table source row">
+            <a href="#" class="dataset_picked" name="existingTableName">
+                {{t "dataset.import.select_source"}}
+            </a>
+        </fieldset>
+    </div>
+
+    <div class="destination">
+        <legend class="subtitle">
+            <div class="text">{{t "create_job_task_dialog.destination_table"}}</div>
+            <hr/>
+        </legend>
+
+        <fieldset class="choose_table destination row">
+            <input type="radio" name="imports" id="create_job_task_existing_table" checked="checked"/>
+            <label class="main" for="create_job_task_existing_table">{{t "import.existing_table"}}</label>
+            <span class="dataset_picked" name="existingTableName">{{t "dataset.import.select_destination"}}</span>
+            <a href="#" class="dataset_picked hidden" name="existingTableName">
+                {{t "dataset.import.select_destination"}}
+            </a>
+        </fieldset>
+
+        <fieldset class="new_table row">
+            <input type="radio" name="imports" id="create_job_task_new_table"/>
+            <label class="main" for="create_job_task_new_table">{{t "import.new_table"}}</label>
+            <input type="text" class="new_table_name" name="toTable" maxlength="64"/>
+        </fieldset>
+
+    </div>
+
+    <div class="options">
+        <legend class="subtitle">
+            <div class="text">{{t "create_job_task_dialog.options"}}</div>
+            <hr/>
+        </legend>
+
+        <div class="row">
+            <input type="checkbox" class="truncate" name="truncate" id="create_job_task_truncate"/>
+            <label for="create_job_task_truncate">{{t "import.truncate"}}</label>
+        </div>
+
+        <div class="row limit">
+            <input type="checkbox" name="limit_num_rows" id="create_job_task_limit_rows_existing"/>
+            <label for="create_job_task_limit_rows_existing">{{t "import.limit_rows"}}</label>
+            <input class="row_limit" type="text" name="sampleCount" maxlength="10" disabled="disabled"
+                   value="500"/>
+        </div>
+    </div>
+
+    {{formControlsWithDisabledSubmit "create_job_task_dialog.submit"}}
+</form>

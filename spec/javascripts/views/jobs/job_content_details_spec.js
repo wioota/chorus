@@ -4,11 +4,28 @@ describe("chorus.views.JobContentDetails", function () {
         this.job = backboneFixtures.job();
         this.view = new chorus.views.JobContentDetails({model: this.job});
         this.modalSpy = stubModals();
+        this.qtipElement = stubQtip();
         this.view.render();
     });
 
     describe("clicking the 'Add Task' button", function () {
-        itBehavesLike.aDialogLauncher('button.create_task', chorus.dialogs.CreateJobTask);
+        beforeEach(function () {
+            this.view.$("button.create_task").click();
+        });
+
+        it("enables the 'Import Source Data'", function () {
+            expect(this.qtipElement.find(".import_source_data")).toExist();
+            expect(this.qtipElement.find(".import_source_data")).not.toHaveClass("disabled");
+        });
+
+        context("clicking on 'Add Import Source Data'", function () {
+            it("launches the CreateImportSourceDataTask dialog", function () {
+                expect(this.modalSpy).not.toHaveModal(chorus.dialogs.CreateImportSourceDataTask);
+                expect(this.qtipElement.find('.import_source_data')).toContainTranslation('job_task.action.import_source_data');
+                this.qtipElement.find('.import_source_data').click();
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateImportSourceDataTask);
+            });
+        });
     });
 
     describe("clicking the 'Enable' button", function () {
