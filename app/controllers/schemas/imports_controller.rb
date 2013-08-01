@@ -10,6 +10,8 @@ module Schemas
       import.source_dataset = Dataset.find(import_params[:dataset_id])
       import.save!
 
+      import.enqueue_import
+
       render :json => {}, :status => :created
     end
   end

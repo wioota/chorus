@@ -52,6 +52,6 @@ module ImportMixins
     validate :destination_dataset, :unless => :new_table
 
     belongs_to :destination_dataset, :class_name => 'Dataset'
-    before_validation :set_destination_dataset_id
+    before_validation :set_destination_dataset_id, :unless => :new_table
   end
 end

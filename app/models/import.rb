@@ -18,7 +18,6 @@ class Import < ActiveRecord::Base
   validates_numericality_of :sample_count, :only_integer => true, :less_than_or_equal_to => 2147483647, :allow_blank => true
 
   after_create :create_import_event
-  after_create :enqueue_import, :unless => :file_name
 
   alias_method :scoped_source, :source
 

@@ -27,7 +27,7 @@ describe GnipDataSourceImportsController do
 
       context "when the import is created successfully" do
         before do
-          mock(GnipImport).create!.with_any_args { true }
+          mock(GnipImport).create!.with_any_args { imports(:gnip) }
         end
 
         it "presents an empty array" do

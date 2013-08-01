@@ -16,6 +16,7 @@ module Workspaces
       import.user = current_user
 
       import.save!
+      import.enqueue_import
       render :json => {}, :status => :created
     end
   end

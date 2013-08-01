@@ -49,11 +49,6 @@ describe GnipImport do
       event.workspace.should == workspace
       event.destination_table.should == 'the_new_table'
     end
-
-    it "enqueues an import task" do
-      mock(QC.default_queue).enqueue_if_not_queued("ImportExecutor.run", numeric)
-      FactoryGirl.create(:gnip_import, :workspace => workspace, :destination_dataset => nil)
-    end
   end
 
   describe '#create_passed_event_and_notification' do

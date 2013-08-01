@@ -43,11 +43,10 @@ class Job < ActiveRecord::Base
     self.disable! if end_run && next_run > end_run
     self.status = 'running'
     save!
-    if execute_tasks
-      job_succeeded
-    else
-      job_failed
-    end
+    execute_tasks
+    job_succeeded
+  rescue JobTask::JobTaskFailure
+    job_failed
   end
 
   def frequency

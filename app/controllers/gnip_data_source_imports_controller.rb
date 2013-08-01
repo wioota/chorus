@@ -9,7 +9,8 @@ class GnipDataSourceImportsController < ApplicationController
     GnipImport.create!(:workspace => workspace,
                        :source => data_source,
                        :user => current_user,
-                       :to_table => params[:import][:to_table])
+                       :to_table => params[:import][:to_table]
+    ).enqueue_import
 
     present [], :status => :ok
   end

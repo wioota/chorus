@@ -4,7 +4,7 @@ describe ImportSourceDataTaskPresenter, :type => :view do
   let(:user) { users(:owner) }
   let(:job) { jobs(:default) }
   let(:workspace) { job.workspace }
-  let(:job_task) { job_tasks(:job_task_isdt) }
+  let(:job_task) { job_tasks(:isdt) }
   let(:presenter) { ImportSourceDataTaskPresenter.new(job_task, view) }
 
   before(:each) do

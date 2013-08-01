@@ -1,5 +1,13 @@
 require 'spec_helper'
 
+class FakeJobTask < JobTask
+  def execute
+    @@order << index
+  end
+end
+
+@@order = []
+
 describe Job do
   describe 'validations' do
     it { should validate_presence_of :name }
@@ -136,6 +144,7 @@ describe Job do
         end
 
         it 'disables the job' do
+          stub(expiring_job).execute_tasks { raise JobTask::JobTaskFailure }
           expect do
             expiring_job.run
           end.to change(expiring_job, :enabled).from(true).to(false)
@@ -144,26 +153,25 @@ describe Job do
       end
 
       describe 'executing each task' do
-        let(:task_order) { [] }
 
         let(:job) do
           job = FactoryGirl.create(:job)
         end
 
         let(:tasks) do
-          3.times.map { |i| FactoryGirl.create(:job_task, :index => i) }
+          3.times.map { |i| FakeJobTask.create({:index => i, :job => job, :action => 'import_source_data'}) }
         end
 
         before do
           tasks.reverse.each do |task|
             job.job_tasks << task
-            stub(task).execute { task_order << task.index }
           end
         end
 
         it 'is done in index order' do
           job.run
-          task_order.should == task_order.sort
+          @@order.length.should == 3
+          @@order.should == @@order.sort
         end
       end
     end
@@ -183,7 +191,7 @@ describe Job do
     describe 'failure' do
       let(:job) { jobs(:ready) }
 
-      before { stub(job).execute_tasks { false } }
+      before { stub(job).execute_tasks { raise JobTask::JobTaskFailure } }
 
       it "creates a JobFailed event" do
         expect do

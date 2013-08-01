@@ -16,6 +16,8 @@ class JobTask < ActiveRecord::Base
 
   serialize :additional_data, JsonHashSerializer
 
+  JobTaskFailure = Class.new(StandardError)
+
   def self.create_for_action!(params)
     job_task_params = params[:job_task]
     job = Job.find(params[:job_id])

@@ -388,7 +388,7 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :default, default_job_task
 
     job_task_isdt = FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_id => nil, :destination_name => 'import_from_task', :row_limit => 400, :truncate => false)
-    fbuilder.name :job_task_isdt, job_task_isdt
+    fbuilder.name :isdt, job_task_isdt
     FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_name => 'import_from_task2')
     FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_id => default_table.id)
 

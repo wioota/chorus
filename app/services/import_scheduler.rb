@@ -3,6 +3,7 @@ class ImportScheduler
     ImportSchedule.ready_to_run.each do |schedule|
       begin
         import = schedule.create_import
+        import.enqueue_import
         schedule.save! #update next_import_at
       rescue => e
         begin

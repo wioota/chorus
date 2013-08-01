@@ -94,8 +94,8 @@ FactoryGirl.define do
     sequence(:index) { |n| 100 + n }
     job
     action { 'import_source_data' }
-    source_id 1
-    destination_id 2
+    source_id Dataset.first.id
+    destination_id Dataset.last.id
     destination_name nil
     truncate false
     row_limit 500

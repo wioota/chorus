@@ -72,7 +72,7 @@ describe JobTasksController do
   end
 
   describe "destroy" do
-    let(:task) { job_tasks(:job_task_isdt) }
+    let(:task) { job_tasks(:isdt) }
     let(:params) do
       {
         workspace_id: workspace.id,

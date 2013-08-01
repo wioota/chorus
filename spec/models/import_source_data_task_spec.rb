@@ -70,4 +70,72 @@ describe ImportSourceDataTask do
       end
     end
   end
+
+  describe '#execute' do
+    let(:isdt) { job_tasks(:isdt) }
+
+    before do
+      any_instance_of(GreenplumConnection) { |gp| stub(gp).table_exists? { false } }
+    end
+
+    it "creates an Import Object" do
+      mock(ImportExecutor).run.with_any_args
+      stub(isdt).set_destination_id!
+      expect {
+        isdt.execute
+      }.to change(Import, :count).by(1)
+    end
+
+    it "Runs the import through the import executor" do
+      mock(ImportExecutor).run.with_any_args
+      stub(isdt).set_destination_id!
+      isdt.execute
+    end
+
+    describe 'when importing into a new table' do
+      context 'and the import completes successfully' do
+        let(:dataset) { datasets(:table) }
+        before do
+          isdt.destination_name = dataset.name
+        end
+
+        it 'changes the destination id to the newly created dataset id' do
+          stub(ImportExecutor).run {true}
+          stub(isdt.job.workspace.sandbox.datasets).find_by_name { dataset }
+          isdt.execute
+          isdt.destination_name.should be_nil
+          isdt.destination_id.should == dataset.id
+        end
+      end
+
+      context 'and the import fails' do
+        it 'keeps the destination_name and does not set the destination_id' do
+          stub(ImportExecutor).run { raise }
+          expect {
+            expect {
+              isdt.execute
+            }.to raise_error(JobTask::JobTaskFailure)
+          }.not_to change(isdt, :destination_name)
+        end
+      end
+    end
+
+    describe 'success' do
+      it 'returns true' do
+        mock(ImportExecutor).run.with_any_args
+        stub(isdt).set_destination_id!
+        isdt.execute.should be_true
+      end
+    end
+
+    describe 'failure' do
+      it 'raises JobTaskFailure error' do
+        stub(ImportExecutor).run { raise }
+        expect {
+          isdt.execute
+        }.to raise_error(JobTask::JobTaskFailure)
+      end
+    end
+
+  end
 end
