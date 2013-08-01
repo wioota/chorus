@@ -8,15 +8,15 @@ gem 'paperclip', '3.0.4'
 gem 'queue_classic', :github => "GreenplumChorus/queue_classic"
 gem 'clockwork',     :require => false
 gem 'allowy'
-gem 'sunspot_rails'
+gem 'sunspot_rails', '~> 2.0.0'
 gem 'jetpack', :github => "GreenplumChorus/jetpack", :require => false
 gem 'nokogiri'
 gem 'postgresql_cursor', :github => "GreenplumChorus/postgresql_cursor"
-gem 'sequel', :require => 'sequel/no_core_ext'
+gem 'sequel', '~> 3.46.0', :require => 'sequel/no_core_ext'
 gem 'attr_encrypted' #if you load attr_encrypted before sequel, it blows up saying 'sequel::model' is undefined
 gem 'tabcmd_gem', :github => "GreenplumChorus/tableau"
 gem 'chorusgnip', :github => 'GreenplumChorus/gnip'
-gem "logger-syslog", :github => 'scambra/logger-syslog'
+gem 'logger-syslog'
 gem 'newrelic_rpm'
 
 platform :jruby do
@@ -51,7 +51,7 @@ group :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
   gem 'journey'
   gem 'timecop'
   gem 'hashie'
-  gem 'vcr'
+  gem 'vcr', '~> 2.3.0'
   gem 'fakefs',              :require => false
   gem 'chunky_png'
   gem 'database_cleaner',    :require => false
@@ -72,13 +72,13 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
   gem 'faker'
   gem 'fakeweb'
   gem 'jshint_on_rails'
-  gem 'sunspot_solr', :github => 'taktsoft/sunspot' # https://github.com/sunspot/sunspot/pull/267
+  gem 'sunspot_solr', :github => 'taktsoft/sunspot', :ref => '78717a33894271d012682dbe8902458badb0ca63' # https://github.com/sunspot/sunspot/pull/267
   gem 'backbone_fixtures_rails', :github => "charleshansen/backbone_fixtures_rails"
 end
 
 group :development do
-  gem 'license_finder', :require => false
+  gem 'license_finder', '~> 0.8.1', :require => false
   gem 'mizuno', :github => "GreenplumChorus/mizuno", :branch => '0.6.4_changes'
   gem 'bullet'
-  gem 'vagrant'
+  gem 'vagrant', '~> 1.0.7'
 end
