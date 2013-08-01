@@ -51,7 +51,7 @@ describe Job do
 
   describe 'scheduling' do
     describe '.ready_to_run' do
-      let!(:job1) { jobs(:ready) }
+      let!(:job1) { job = jobs(:ready); job.update_attribute(:next_run, 55.seconds.ago); job }
       let!(:job2) { FactoryGirl.create(:job, :next_run => 30.seconds.ago, :enabled => true) }
       let!(:job3) { FactoryGirl.create(:job, :next_run => 1.day.from_now, :enabled => true) }
       let!(:job4) { FactoryGirl.create(:job, :next_run => 1.day.ago, :enabled => false) }

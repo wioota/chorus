@@ -43,7 +43,7 @@ end
 
 group :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
   gem 'rspec', :require => false
-  gem 'rr'
+  gem 'rr', :require => false
   gem 'fuubar'
   gem 'factory_girl'
   gem 'shoulda-matchers'

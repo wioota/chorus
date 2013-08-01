@@ -15,7 +15,7 @@ class Job < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:workspace_id, :deleted_at]
 
-  scope :ready_to_run, -> { where(enabled: true).where('next_run <= ?', Time.current) }
+  scope :ready_to_run, -> { where(enabled: true).where('next_run <= ?', Time.current).order(:next_run) }
 
   def self.order_by(column_name)
     if column_name.blank? || column_name == "name"

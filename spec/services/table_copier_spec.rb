@@ -135,7 +135,7 @@ describe TableCopier do
 
     it "cancels the CancelableQuery" do
       import.copier_class.should == TableCopier
-      mock(CancelableQuery).new(nil, import.handle, import.user) { |query| mock(query).cancel }
+      stub.proxy(CancelableQuery).new(nil, import.handle, import.user) { |query| mock(query).cancel }
 
       TableCopier.cancel(import)
     end

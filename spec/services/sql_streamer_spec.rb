@@ -108,7 +108,7 @@ describe SqlStreamer do
       }
 
       context "when you want to raise errors" do
-        let(:options) { {:rescue_connection_errors => false, :quiet_null => true } }
+        let(:options) { {:quiet_null => true, :rescue_connection_errors => false } }
         it "raises error" do
           expect {
             streamer.enum.next
@@ -117,7 +117,7 @@ describe SqlStreamer do
       end
 
       context "when errors should be rescued" do
-        let(:options) { {:rescue_connection_errors => true, :quiet_null => true } }
+        let(:options) { {:quiet_null => true, :rescue_connection_errors => true } }
 
         it "returns the error message" do
           enumerator = streamer.enum

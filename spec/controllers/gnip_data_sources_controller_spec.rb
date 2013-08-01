@@ -37,8 +37,8 @@ describe GnipDataSourcesController do
       let(:params) do
         {
             :name => "new_gnip_data_source",
-            :description => "some description",
             :stream_url => "http://www.example.com",
+            :description => "some description",
             :username => "gnip_username",
             :password => "gnip_password"
         }
