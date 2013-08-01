@@ -6,8 +6,7 @@ describe("chorus.views.JobTaskItem", function () {
     });
 
     it("links the task's name to its show page", function() {
-        expect(this.view.$("a.name")).toHaveText(this.model.get("name"));
-        expect(this.view.$("a.name")).toHaveHref(this.model.showUrl());
+        expect(this.view.$(".name")).toHaveText(this.model.get("name"));
     });
 
     it("includes the correct task icon", function() {
