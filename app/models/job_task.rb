@@ -20,10 +20,12 @@ class JobTask < ActiveRecord::Base
     job_task_params = params[:job_task]
     job = Job.find(params[:job_id])
     job_task_params[:index] = (job.job_tasks.order(:index).last.try(:index) || 0) + 1
-    klass = @@actions.fetch(job_task_params[:action], 'JobTask').constantize
+    klass = @@actions[job_task_params[:action]].constantize
     klass.assemble!(job_task_params, job)
   end
 
-  def execute; end
+  def execute
+    raise NotImplementedError
+  end
 
 end

@@ -326,7 +326,8 @@ describe EventsController do
         'credentialsInvalid' => Events::CredentialsInvalid,
         'datasetImportFailedWithModelErrors' => :import_failed_with_model_errors,
         'hdfsDatasetCreated' => Events::HdfsDatasetCreated,
-        'hdfsDatasetUpdated' => Events::HdfsDatasetUpdated
+        'hdfsDatasetUpdated' => Events::HdfsDatasetUpdated,
+        'jobSucceeded' => Events::JobSucceeded
     }
 
     FIXTURE_FILES.each do |file_name, event_class|

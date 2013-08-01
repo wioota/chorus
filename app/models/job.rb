@@ -40,10 +40,10 @@ class Job < ActiveRecord::Base
   def run
     self.next_run = frequency.since(next_run)
     self.last_run = Time.current
-    self.disable! if next_run > end_run
+    self.disable! if end_run && next_run > end_run
     self.status = 'running'
     save!
-    job_tasks.order("index ASC").each(&:execute)
+    job_succeeded if execute_tasks
   end
 
   def frequency
@@ -61,6 +61,14 @@ class Job < ActiveRecord::Base
   end
 
   private
+
+  def job_succeeded
+    Events::JobSucceeded.by(workspace.owner).add(:job => self, :workspace => workspace)
+  end
+
+  def execute_tasks
+    job_tasks.order("index ASC").each(&:execute)
+  end
 
   def on_demand?
     interval_unit == 'on_demand'

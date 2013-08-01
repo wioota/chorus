@@ -13,6 +13,10 @@ class ImportSourceDataTask < JobTask
     task
   end
 
+  def execute
+    true
+  end
+
   private
 
   def build_task_name

@@ -63,7 +63,8 @@ window.BackboneFixtureDefinitions = {
             workspaceUnarchived: {},
             workspaceImportCreated: {},
             workspaceImportFailed: {},
-            workspaceImportSuccess: {}
+            workspaceImportSuccess: {},
+            jobSucceeded: {}
         }
     },
 

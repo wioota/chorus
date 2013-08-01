@@ -372,6 +372,10 @@
 
         HdfsDatasetUpdated: {
             links: ["actor", "workspace", "dataset"]
+        },
+
+        JobSucceeded: {
+            links: ["actor", "job", "workspace"]
         }
     };
 

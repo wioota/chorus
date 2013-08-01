@@ -380,6 +380,8 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:job, :workspace => public_workspace)
     FactoryGirl.create(:job, :workspace => public_workspace)
 
+    Events::JobSucceeded.by(owner).add(:job => default_job, :workspace => default_job.workspace)
+
     default_job_task = FactoryGirl.create(:job_task, :job => default_job, :action => 'import_source_data')
     fbuilder.name :default, default_job_task
 

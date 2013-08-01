@@ -1992,6 +1992,28 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("job succeeded event", function () {
+        beforeEach(function () {
+            this.model = backboneFixtures.activity.jobSucceeded();
+            this.presenter = new chorus.presenters.Activity(this.model);
+            this.actor = this.model.actor();
+            this.workspace = this.model.workspace();
+            this.job = this.model.job();
+
+            this.translation_params = {
+                actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
+                workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name()),
+                jobLink: linkTo(this.job.showUrl(), this.job.name())
+            };
+        });
+
+        it("has the right header html", function () {
+            expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.JobSucceeded.default", this.translation_params
+            );
+        });
+    });
+
     context("dataset changed query event", function() {
         beforeEach(function() {
             this.model = backboneFixtures.activity.chorusViewChanged();

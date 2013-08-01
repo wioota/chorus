@@ -13,7 +13,8 @@
         "hdfsEntry" : "HdfsEntry",
         "member": "User",
         "sourceDataset": "WorkspaceDataset",
-        "schema": "Schema"
+        "schema": "Schema",
+        "job": "Job"
     };
 
     function makeAssociationMethod(associate, setupFunction) {
@@ -59,6 +60,7 @@
         workfile: makeAssociationMethod("workfile"),
         newUser: makeAssociationMethod("newUser"),
         member: makeAssociationMethod("member"),
+        job: makeAssociationMethod("job"),
 
         dataset: makeAssociationMethod("dataset", function(model) {
             model.set({workspace: this.get("workspace")}, {silent: true});
