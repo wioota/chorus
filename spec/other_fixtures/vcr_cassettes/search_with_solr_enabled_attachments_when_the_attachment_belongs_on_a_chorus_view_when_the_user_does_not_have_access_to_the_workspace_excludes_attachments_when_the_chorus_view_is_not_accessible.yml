@@ -17,7 +17,7 @@ http_interactions:
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
         >searchquery_chorus_view_private</field><field name=\"data_source_account_ids_im\"\
-        >1000002</field><field name=\"data_source_account_ids_im\">1000024</field><field\
+        >1000024</field><field name=\"data_source_account_ids_im\">1000002</field><field\
         \ name=\"found_in_workspace_id_im\">1000001</field><field name=\"found_in_workspace_id_im\"\
         >1000011</field><field name=\"found_in_workspace_id_im\">1000010</field><field\
         \ boost=\"1000000\" name=\"name_texts\">searchquery_chorus_view_private</field><field\
@@ -40,9 +40,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
     http_version: '1.1'
-  recorded_at: Thu, 01 Aug 2013 00:45:53 GMT
+  recorded_at: Thu, 01 Aug 2013 18:17:29 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -65,9 +65,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>13}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
     http_version: '1.1'
-  recorded_at: Thu, 01 Aug 2013 00:45:53 GMT
+  recorded_at: Thu, 01 Aug 2013 18:17:29 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -100,5 +100,5 @@ http_interactions:
         \ AND -member_ids_im:1000008 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
         \ AND -member_ids_im:1000008 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>0,'ngroups'=>0,'groups'=>[]}},'highlighting'=>{}}"
     http_version: '1.1'
-  recorded_at: Thu, 01 Aug 2013 00:45:53 GMT
+  recorded_at: Thu, 01 Aug 2013 18:17:29 GMT
 recorded_with: VCR 2.3.0

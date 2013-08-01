@@ -44,7 +44,7 @@ http_interactions:
       encoding: US-ASCII
       string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
     http_version: '1.1'
-  recorded_at: Thu, 01 Aug 2013 00:49:53 GMT
+  recorded_at: Thu, 01 Aug 2013 18:18:06 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -69,7 +69,7 @@ http_interactions:
       encoding: US-ASCII
       string: "{'responseHeader'=>{'status'=>0,'QTime'=>6}}"
     http_version: '1.1'
-  recorded_at: Thu, 01 Aug 2013 00:49:53 GMT
+  recorded_at: Thu, 01 Aug 2013 18:18:06 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/select?wt=ruby
@@ -92,7 +92,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>28,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>27,'params'=>{'facet'=>'true','group.ngroups'=>'true','group.limit'=>'3','qf'=>'first_name_texts\
         \ last_name_texts username_texts email_texts tag_names_texts name_texts description_texts\
         \ summary_texts file_name_texts version_comments_texts database_name_texts\
         \ table_description_texts schema_name_texts column_name_texts column_description_texts\
@@ -120,7 +120,7 @@ http_interactions:
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
         \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>32,'ngroups'=>31,'groups'=>[{'groupValue'=>'User\
         \ 1000006','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.4550209E7,'docs'=>[{'id'=>'User\
-        \ 1000006','first_name_texts'=>['searchquery'],'username_texts'=>['owner'],'first_name_stemmed_texts'=>['searchquery'],'email_texts'=>['searchquery@lindgren.name'],'username_stemmed_texts'=>['owner'],'last_name_stemmed_texts'=>['Daniel'],'last_name_texts'=>['Daniel'],'email_stemmed_texts'=>['searchquery@lindgren.name'],'score'=>1.4550209E7}]}},{'groupValue'=>'GpdbTable\
+        \ 1000006','first_name_texts'=>['searchquery'],'username_texts'=>['owner'],'first_name_stemmed_texts'=>['searchquery'],'email_texts'=>['searchquery@greenholt.com'],'username_stemmed_texts'=>['owner'],'last_name_stemmed_texts'=>['Hagenes'],'last_name_texts'=>['Hagenes'],'email_stemmed_texts'=>['searchquery@greenholt.com'],'score'=>1.4550209E7}]}},{'groupValue'=>'GpdbTable\
         \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.3302147E7,'docs'=>[{'id'=>'GpdbTable\
         \ 1000011','column_description_texts'=>['searchquery column description','searchquery\
         \ column description 2'],'table_description_stemmed_texts'=>['searchquery\
@@ -139,7 +139,7 @@ http_interactions:
         \ 1000000','name_texts'=>['searchquery'],'name_stemmed_texts'=>['searchquery'],'description_texts'=>['Just\
         \ for searchquery and greenplumsearch'],'description_stemmed_texts'=>['Just\
         \ for searchquery and greenplumsearch'],'score'=>5012191.0},{'id'=>'Events::NoteOnDataSource\
-        \ 1000045','body_stemmed_texts'=>['i love searchquery'],'body_texts'=>['i\
+        \ 1000046','body_stemmed_texts'=>['i love searchquery'],'body_texts'=>['i\
         \ love searchquery'],'score'=>13.214215}]}},{'groupValue'=>'Attachment 1000006','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>4385667.0,'docs'=>[{'id'=>'Attachment\
         \ 1000006','name_texts'=>['searchquery_workfile'],'name_stemmed_texts'=>['searchquery_workfile'],'score'=>4385667.0}]}},{'groupValue'=>'Attachment\
         \ 1000008','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>4385667.0,'docs'=>[{'id'=>'Attachment\
@@ -209,7 +209,7 @@ http_interactions:
         \ 1000000','name_texts'=>['default'],'name_stemmed_texts'=>['default'],'description_texts'=>['a\
         \ searchquery example gnip account'],'description_stemmed_texts'=>['a searchquery\
         \ example gnip account'],'score'=>4658.619}]}}]}},'facet_counts'=>{'facet_queries'=>{},'facet_fields'=>{'type_name_s'=>['Dataset',8,'Attachment',7,'Workfile',5,'Workspace',5,'DataSource',3,'HdfsEntry',2,'User',1]},'facet_dates'=>{},'facet_ranges'=>{}},'highlighting'=>{'User\
-        \ 1000006'=>{'first_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@@lindgren.name'],'first_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_texts'=>['@@@hl@@@searchquery@@@endhl@@@@lindgren.name']},'GpdbTable\
+        \ 1000006'=>{'first_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@@greenholt.com'],'first_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_texts'=>['@@@hl@@@searchquery@@@endhl@@@@greenholt.com']},'GpdbTable\
         \ 1000011'=>{'database_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_table'],'table_description_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
         \ table description'],'schema_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema'],'column_description_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
         \ column description','@@@hl@@@searchquery@@@endhl@@@ column description 2'],'table_description_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
@@ -222,7 +222,7 @@ http_interactions:
         \ to @@@hl@@@searchquery@@@endhl@@@']},'GpdbDataSource 1000000'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'description_stemmed_texts'=>['Just\
         \ for @@@hl@@@searchquery@@@endhl@@@ and greenplumsearch'],'description_texts'=>['Just\
         \ for @@@hl@@@searchquery@@@endhl@@@ and greenplumsearch'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@']},'Events::NoteOnDataSource\
-        \ 1000045'=>{'body_stemmed_texts'=>['i love @@@hl@@@searchquery@@@endhl@@@'],'body_texts'=>['i\
+        \ 1000046'=>{'body_stemmed_texts'=>['i love @@@hl@@@searchquery@@@endhl@@@'],'body_texts'=>['i\
         \ love @@@hl@@@searchquery@@@endhl@@@']},'Attachment 1000006'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_workfile'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_workfile']},'Attachment\
         \ 1000008'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_dataset'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_dataset']},'Attachment\
         \ 1000009'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_hadoop'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_hadoop']},'Attachment\
@@ -259,5 +259,5 @@ http_interactions:
         \ example gnip account'],'description_texts'=>['a @@@hl@@@searchquery@@@endhl@@@\
         \ example gnip account']}}}"
     http_version: '1.1'
-  recorded_at: Thu, 01 Aug 2013 00:49:53 GMT
+  recorded_at: Thu, 01 Aug 2013 18:18:06 GMT
 recorded_with: VCR 2.3.0
