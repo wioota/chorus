@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/GreenplumChorus/jetpack.git
-  revision: 529c16d730de7e15840f0b2826254faeaf67f53e
+  revision: 87f3ef39643936392c4a6d8edf90e563d4f0b518
   specs:
     jetpack (0.1.2)
 
@@ -49,7 +49,7 @@ GIT
 
 GIT
   remote: git://github.com/GreenplumChorus/tableau.git
-  revision: 0d0fab114b3975daee66204578f46ac164b2500b
+  revision: db963b175c31c1baca67f8218f427be49e253a3f
   specs:
     tabcmd_gem (0.0.1)
       highline
@@ -58,7 +58,7 @@ GIT
 
 GIT
   remote: git://github.com/charleshansen/backbone_fixtures_rails.git
-  revision: efce1d689106e4f7c63620e0d45661a6f80e1689
+  revision: 60827e4a9849d1efb4fe173f57afeec1d4f8c2e6
   specs:
     backbone_fixtures_rails (0.0.1)
       jasmine
@@ -182,13 +182,13 @@ GEM
       rspec (~> 2.0)
       rspec-instafail (~> 0.2.0)
       ruby-progressbar (~> 1.0)
-    handlebars_assets (0.4.4)
+    handlebars_assets (0.14.1)
       execjs (>= 1.2.9)
       sprockets (>= 2.0.3)
       tilt
-    hashie (2.0.3)
-    headless (0.3.1)
-    highline (1.6.18)
+    hashie (2.0.5)
+    headless (1.0.1)
+    highline (1.6.19)
     hike (1.2.3)
     hpricot (0.8.6)
     hpricot (0.8.6-java)

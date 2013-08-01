@@ -32,7 +32,7 @@
                         context[i].moreClass = (i >= max) ? "more" : "";
                     }
 
-                    ret = ret + block(context[i]);
+                    ret = ret + block.fn(context[i]);
                 }
                 ret += Handlebars.helpers.moreLink(context, max, more_key, less_key);
             } else {

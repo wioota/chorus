@@ -1,14 +1,9 @@
 describe('chorus.handlebarsHelpers.iteration', function() {
     describe("ifAll", function () {
-        beforeEach(function () {
-            this.ifAllSpy = jasmine.createSpy('ifAll');
-            this.ifAllSpy.inverse = jasmine.createSpy('ifAll.inverse');
-        });
-
         it("throws an exception if no arguments were passed", function () {
             var exceptionThrown;
             try {
-                Handlebars.helpers.ifAll(this.ifAllSpy, this.ifAllSpy.inverse);
+                Handlebars.helpers.ifAll([]);
             } catch (e) {
                 exceptionThrown = e;
             }
@@ -53,15 +48,10 @@ describe('chorus.handlebarsHelpers.iteration', function() {
     });
 
     describe("ifAny", function () {
-        beforeEach(function () {
-            this.ifAnySpy = jasmine.createSpy('ifAny');
-            this.ifAnySpy.inverse = jasmine.createSpy('ifAny.inverse');
-        });
-
         it("throws an exception if no arguments were passed", function () {
             var exceptionThrown;
             try {
-                Handlebars.helpers.ifAny(this.ifAnySpy, this.ifAnySpy.inverse);
+                Handlebars.helpers.ifAny([]);
             } catch (e) {
                 exceptionThrown = e;
             }

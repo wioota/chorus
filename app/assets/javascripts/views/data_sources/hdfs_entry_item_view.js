@@ -1,4 +1,4 @@
-chorus.views.HdfsEntryItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).extend({
+chorus.views.HdfsEntryItem = chorus.views.Base.include(chorus.Mixins.TagsContext).extend({
     constructorName: "HdfsEntryItemView",
     templateName: "hdfs_entry_item",
     tagName: "div",
@@ -18,7 +18,7 @@ chorus.views.HdfsEntryItem = chorus.views.Base.extend(chorus.Mixins.TagsContext)
         }
         var url = this.model.get("isBinary") ? undefined : this.model.showUrl();
 
-        return {
+        return _.extend(this.additionalContextForTags(), {
             iconUrl: isDir ?
                 "/images/data_sources/hadoop_directory_large.png" :
                 chorus.urlHelpers.fileIconUrl(_.last(this.model.get("name").split("."))),
@@ -26,8 +26,7 @@ chorus.views.HdfsEntryItem = chorus.views.Base.extend(chorus.Mixins.TagsContext)
             checkable: !isDir,
             checkboxPlaceholder: true,
             displayableFiletype: this.model.get('isBinary') === false,
-            tags: this.model.tags().models,
             fileInfo: message
-        };
+        });
     }
 });

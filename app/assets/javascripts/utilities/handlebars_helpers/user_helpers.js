@@ -2,7 +2,7 @@ chorus.handlebarsHelpers.user = {
     ifAdmin: function(block) {
         var user = chorus && chorus.session && chorus.session.user();
         if (user && user.get("admin")) {
-            return block(this);
+            return block.fn(this);
         } else {
             return block.inverse(this);
         }
@@ -11,7 +11,7 @@ chorus.handlebarsHelpers.user = {
     ifAdminOr: function(flag, block) {
         var user = chorus && chorus.session && chorus.session.user();
         if ((user && user.get("admin")) || flag) {
-            return block(this);
+            return block.fn(this);
         } else {
             return block.inverse(this);
         }
@@ -20,7 +20,7 @@ chorus.handlebarsHelpers.user = {
     ifCurrentUserNameIs: function(username, block) {
         var user = chorus && chorus.session && chorus.session.user();
         if (user && user.get("username") === username) {
-            return block(this);
+            return block.fn(this);
         } else if (block.inverse) {
             return block.inverse(this);
         }

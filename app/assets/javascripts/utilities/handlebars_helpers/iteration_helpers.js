@@ -25,7 +25,7 @@ chorus.handlebarsHelpers.iteration = {
         if (_.all(args, function(arg) {
             return !!arg;
         })) {
-            return block(this);
+            return block.fn(this);
         } else {
             return block.inverse(this);
         }
@@ -40,7 +40,7 @@ chorus.handlebarsHelpers.iteration = {
         if (_.any(args, function(arg) {
             return !!arg;
         })) {
-            return block(this);
+            return block.fn(this);
         } else {
             return block.inverse(this);
         }
@@ -52,7 +52,7 @@ chorus.handlebarsHelpers.iteration = {
         var results = "";
         var attachments = args[0].apply(this);
         _.each(attachments, function(attachment) {
-            results += block(attachment);
+            results += block.fn(attachment);
         });
         return results;
     }

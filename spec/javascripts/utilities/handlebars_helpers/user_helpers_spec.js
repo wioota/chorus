@@ -1,8 +1,10 @@
 describe('chorus.handlebarsHelpers.user', function() {
     describe("ifAdmin", function () {
         beforeEach(function () {
-            this.ifAdminSpy = jasmine.createSpy();
-            this.ifAdminSpy.inverse = jasmine.createSpy();
+            this.ifAdminSpy = {
+                fn: jasmine.createSpy(),
+                inverse: jasmine.createSpy()
+            };
         });
 
         describe("when the user is an admin", function () {
@@ -12,7 +14,7 @@ describe('chorus.handlebarsHelpers.user', function() {
 
             it("executes the block", function () {
                 Handlebars.helpers.ifAdmin(this.ifAdminSpy);
-                expect(this.ifAdminSpy).toHaveBeenCalled();
+                expect(this.ifAdminSpy.fn).toHaveBeenCalled();
                 expect(this.ifAdminSpy.inverse).not.toHaveBeenCalled();
             });
         });
@@ -25,7 +27,7 @@ describe('chorus.handlebarsHelpers.user', function() {
             it("does not execute the block", function () {
                 Handlebars.helpers.ifAdmin(this.ifAdminSpy);
                 expect(this.ifAdminSpy.inverse).toHaveBeenCalled();
-                expect(this.ifAdminSpy).not.toHaveBeenCalled();
+                expect(this.ifAdminSpy.fn).not.toHaveBeenCalled();
             });
         });
 
@@ -37,15 +39,17 @@ describe('chorus.handlebarsHelpers.user', function() {
             it("does not execute the block", function () {
                 Handlebars.helpers.ifAdmin(this.ifAdminSpy);
                 expect(this.ifAdminSpy.inverse).toHaveBeenCalled();
-                expect(this.ifAdminSpy).not.toHaveBeenCalled();
+                expect(this.ifAdminSpy.fn).not.toHaveBeenCalled();
             });
         });
     });
 
     describe("#ifAdminOr", function () {
         beforeEach(function () {
-            this.ifAdminOrSpy = jasmine.createSpy();
-            this.ifAdminOrSpy.inverse = jasmine.createSpy();
+            this.ifAdminOrSpy = {
+                fn: jasmine.createSpy(),
+                inverse: jasmine.createSpy()
+            };
         });
 
         context("when the user is an admin", function () {
@@ -55,7 +59,7 @@ describe('chorus.handlebarsHelpers.user', function() {
 
             it("executes the block", function () {
                 Handlebars.helpers.ifAdminOr(false, this.ifAdminOrSpy);
-                expect(this.ifAdminOrSpy).toHaveBeenCalled();
+                expect(this.ifAdminOrSpy.fn).toHaveBeenCalled();
                 expect(this.ifAdminOrSpy.inverse).not.toHaveBeenCalled();
             });
         });
@@ -67,13 +71,13 @@ describe('chorus.handlebarsHelpers.user', function() {
 
             it("executes the block when the flag is true", function () {
                 Handlebars.helpers.ifAdminOr(true, this.ifAdminOrSpy);
-                expect(this.ifAdminOrSpy).toHaveBeenCalled();
+                expect(this.ifAdminOrSpy.fn).toHaveBeenCalled();
                 expect(this.ifAdminOrSpy.inverse).not.toHaveBeenCalled();
             });
 
             it("executes the inverse block when the flag is false", function () {
                 Handlebars.helpers.ifAdminOr(false, this.ifAdminOrSpy);
-                expect(this.ifAdminOrSpy).not.toHaveBeenCalled();
+                expect(this.ifAdminOrSpy.fn).not.toHaveBeenCalled();
                 expect(this.ifAdminOrSpy.inverse).toHaveBeenCalled();
             });
         });
@@ -82,14 +86,16 @@ describe('chorus.handlebarsHelpers.user', function() {
     describe("ifCurrentUserNameIs", function () {
         beforeEach(function () {
             setLoggedInUser({ username:"benjamin" });
-            this.spy = jasmine.createSpy("ifCurrentUserNameIs");
-            this.spy.inverse = jasmine.createSpy("ifCurrentUserNameIs inverse");
+            this.spy = {
+                fn: jasmine.createSpy("ifCurrentUserNameIs"),
+                inverse: jasmine.createSpy("ifCurrentUserNameIs inverse")
+            };
         });
 
         describe("when the given username matches the current user's name'", function () {
             it("executes the block", function () {
                 Handlebars.helpers.ifCurrentUserNameIs("benjamin", this.spy);
-                expect(this.spy).toHaveBeenCalled();
+                expect(this.spy.fn).toHaveBeenCalled();
                 expect(this.spy.inverse).not.toHaveBeenCalled();
             });
         });
@@ -98,7 +104,7 @@ describe('chorus.handlebarsHelpers.user', function() {
             it("execute the inverse block", function () {
                 Handlebars.helpers.ifCurrentUserNameIs("noe valley", this.spy);
                 expect(this.spy.inverse).toHaveBeenCalled();
-                expect(this.spy).not.toHaveBeenCalled();
+                expect(this.spy.fn).not.toHaveBeenCalled();
             });
         });
 
@@ -110,7 +116,7 @@ describe('chorus.handlebarsHelpers.user', function() {
             it("executes the inverse block", function () {
                 Handlebars.helpers.ifCurrentUserNameIs("superman", this.spy);
                 expect(this.spy.inverse).toHaveBeenCalled();
-                expect(this.spy).not.toHaveBeenCalled();
+                expect(this.spy.fn).not.toHaveBeenCalled();
             });
         });
     });

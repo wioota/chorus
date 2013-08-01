@@ -1,4 +1,4 @@
-chorus.views.WorkspaceItem = chorus.views.Base.extend({
+chorus.views.WorkspaceItem = chorus.views.Base.include(chorus.Mixins.TagsContext).extend({
     constructorName: "WorkspaceItemView",
     templateName: "workspace_item",
     tagName: "div",
@@ -8,7 +8,7 @@ chorus.views.WorkspaceItem = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
-        return {
+        return _.extend(this.additionalContextForTags(), {
             iconUrl: this.model.defaultIconUrl(),
             url: this.model.showUrl(),
             ownerUrl: this.model.owner().showUrl(),
@@ -16,9 +16,8 @@ chorus.views.WorkspaceItem = chorus.views.Base.extend({
             archiverFullName: this.model.archiver().displayName(),
             ownerFullName: this.model.owner().displayName(),
             active: this.model.isActive(),
-            tags: this.model.tags().models,
             isWorkspace: true
-        };
+        });
     },
 
     summary: function() {

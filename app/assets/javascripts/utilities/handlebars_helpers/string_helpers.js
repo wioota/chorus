@@ -21,7 +21,7 @@ chorus.handlebarsHelpers.string = {
         } else if (tableData === false) {
             return "false";
         } else {
-            return "&nbsp;";
+            return new Handlebars.SafeString("&nbsp;");
         }
     },
 

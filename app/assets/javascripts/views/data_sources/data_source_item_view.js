@@ -1,14 +1,15 @@
-chorus.views.DataSourceItem = chorus.views.Base.extend({
+chorus.views.DataSourceItem = chorus.views.Base.include(
+        chorus.Mixins.TagsContext
+    ).extend({
     constructorName: "DataSourceItemView",
     templateName: "data_source_item",
 
     additionalContext: function() {
-        return {
+        return _.extend(this.additionalContextForTags(), {
             stateUrl: this.model.stateIconUrl(),
             url: this.model.showUrl(),
             providerUrl: this.model.providerIconUrl(),
-            stateText: this.model.stateText(),
-            tags: this.model.tags().models
-        };
+            stateText: this.model.stateText()
+        });
     }
 });

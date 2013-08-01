@@ -1,7 +1,6 @@
 chorus.handlebarsHelpers.tag = {
-    displayTagMatch: function(context) {
+    displayTagMatch: function(context, displayedTagName) {
         var highlighted = context["highlightedAttributes"];
-        var displayedTagName = this.name();
 
         if (highlighted && highlighted["tagNames"]) {
             _.each(highlighted["tagNames"], function(highlightedTagName) {
