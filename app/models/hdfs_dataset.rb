@@ -10,6 +10,8 @@ class HdfsDataset < Dataset
   belongs_to :workspace
   delegate :data_source, :connect_with, :connect_as, :to => :hdfs_data_source
 
+  after_create :make_created_event, :if => :current_user
+
   include_shared_search_fields :workspace, :workspace
 
   HdfsContentsError = Class.new(StandardError)
@@ -74,5 +76,21 @@ class HdfsDataset < Dataset
 
   def ensure_active_workspace
     self.errors[:dataset] << :ARCHIVED if workspace && workspace.archived?
+  end
+
+  def make_updated_event
+    Events::HdfsDatasetUpdated.by(current_user).add(
+        :workspace => workspace,
+        :dataset => self,
+        :hdfs_data_source => hdfs_data_source
+    )
+  end
+
+  def make_created_event
+    Events::HdfsDatasetCreated.by(current_user).add(
+        :workspace => workspace,
+        :dataset => self,
+        :hdfs_data_source => hdfs_data_source
+    )
   end
 end
