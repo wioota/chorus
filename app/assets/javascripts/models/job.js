@@ -11,10 +11,7 @@ chorus.models.Job = chorus.models.Base.extend({
     },
     
     tasks: function () {
-        if (!this._tasks && this.get("tasks")) {
-            this._tasks = new chorus.collections.JobTaskSet(this.get("tasks"), {parse: true});
-        }
-        return this._tasks;
+        return new chorus.collections.JobTaskSet(this.get("tasks"), {parse: true});
     },
 
     runsOnDemand: function () {

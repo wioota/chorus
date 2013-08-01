@@ -70,4 +70,13 @@ describe("chorus.models.Job", function () {
             });
         });
     });
+
+    describe("tasks", function () {
+        it("are not memoized", function () {
+            expect(this.model.tasks().models.length).toBeGreaterThan(0);
+            this.model.fetch();
+            this.server.completeFetchFor(this.model, {tasks: []});
+            expect(this.model.tasks().models).toEqual([]);
+        });
+    });
 });

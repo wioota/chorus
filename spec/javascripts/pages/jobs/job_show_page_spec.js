@@ -62,6 +62,19 @@ describe("chorus.pages.JobsShowPage", function () {
             });
         });
 
+        describe("when invalidated is triggered on the model", function () {
+            beforeEach(function () {
+                this.page.render();
+                spyOn(this.page.model, 'fetch');
+            });
+
+            it("refetches the model", function () {
+                this.page.model.trigger('invalidated');
+                expect(this.page.model.fetch).toHaveBeenCalled();
+            });
+
+        });
+
         describe("breadcrumbs", function() {
             it("renders home > Workspaces > {workspace name} > Jobs", function() {
                 expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");

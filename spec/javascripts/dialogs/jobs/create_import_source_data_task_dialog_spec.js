@@ -281,6 +281,7 @@ describe("chorus.dialogs.CreateImportSourceDataTask", function () {
                                     beforeEach(function () {
                                         spyOn(this.dialog, "closeModal");
                                         spyOn(chorus, "toast");
+                                        spyOn(this.dialog.job, 'trigger');
                                         this.server.lastCreateFor(this.dialog.model).succeed();
                                     });
 
@@ -290,6 +291,10 @@ describe("chorus.dialogs.CreateImportSourceDataTask", function () {
 
                                     it("should create a toast", function () {
                                         expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message);
+                                    });
+
+                                    it("invalidates the job", function () {
+                                        expect(this.dialog.job.trigger).toHaveBeenCalledWith('invalidated');
                                     });
                                 });
                             });

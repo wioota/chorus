@@ -16,9 +16,7 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
 
         this.mainContent = new chorus.views.LoadingSection();
         this.listenTo(this.model, "loaded", this.setupMainContent);
-        this.listenTo(this.model, "invalidated", function () {
-            this.model.fetch();
-        });
+        this.listenTo(this.model, "invalidated", function () { this.model.fetch(); });
     },
 
     crumbs: function() {
