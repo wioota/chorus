@@ -32,9 +32,9 @@ http_interactions:
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workspace)\
         \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:(Workfile)\
         \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>1,'ngroups'=>1,'groups'=>[{'groupValue'=>'Attachment\
-        \ 1000012','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>2.0783036E7,'docs'=>[{'id'=>'Attachment\
-        \ 1000012','name_texts'=>['attachmentsearch'],'name_stemmed_texts'=>['attachmentsearch'],'score'=>2.0783036E7}]}}]}},'highlighting'=>{'Attachment\
+        \ 1000012','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>2.0844458E7,'docs'=>[{'id'=>'Attachment\
+        \ 1000012','name_texts'=>['attachmentsearch'],'name_stemmed_texts'=>['attachmentsearch'],'score'=>2.0844458E7}]}}]}},'highlighting'=>{'Attachment\
         \ 1000012'=>{'name_texts'=>['@@@hl@@@attachmentsearch@@@endhl@@@'],'name_stemmed_texts'=>['@@@hl@@@attachmentsearch@@@endhl@@@']}}}"
     http_version: '1.1'
-  recorded_at: Sat, 20 Jul 2013 00:31:30 GMT
+  recorded_at: Thu, 01 Aug 2013 00:45:53 GMT
 recorded_with: VCR 2.3.0

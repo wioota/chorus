@@ -28,9 +28,9 @@ http_interactions:
         \ body_stemmed_texts','hl.simple.pre'=>'@@@hl@@@','wt'=>'ruby','hl'=>'on','rows'=>'50','defType'=>'edismax','fl'=>'*\
         \ score','hl.snippets'=>'100','start'=>'0','q'=>'searchquery','group.truncate'=>'true','group.field'=>'grouping_id_s','hl.simple.post'=>'@@@endhl@@@','group'=>'true','fq'=>['type:(User\
         \ OR Events\\\\:\\\\:Note OR Comment)','type_name_s:(User)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>1,'ngroups'=>1,'groups'=>[{'groupValue'=>'User\
-        \ 1000006','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.4509595E7,'docs'=>[{'id'=>'User\
-        \ 1000006','first_name_texts'=>['searchquery'],'username_texts'=>['owner'],'first_name_stemmed_texts'=>['searchquery'],'email_texts'=>['searchquery@dickinson.com'],'username_stemmed_texts'=>['owner'],'last_name_stemmed_texts'=>['Hahn'],'last_name_texts'=>['Hahn'],'email_stemmed_texts'=>['searchquery@dickinson.com'],'score'=>1.4509595E7}]}}]}},'highlighting'=>{'User\
-        \ 1000006'=>{'first_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'first_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_texts'=>['@@@hl@@@searchquery@@@endhl@@@@dickinson.com'],'email_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@@dickinson.com']}}}"
+        \ 1000006','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.4550209E7,'docs'=>[{'id'=>'User\
+        \ 1000006','first_name_texts'=>['searchquery'],'username_texts'=>['owner'],'first_name_stemmed_texts'=>['searchquery'],'email_texts'=>['searchquery@lindgren.name'],'username_stemmed_texts'=>['owner'],'last_name_stemmed_texts'=>['Daniel'],'last_name_texts'=>['Daniel'],'email_stemmed_texts'=>['searchquery@lindgren.name'],'score'=>1.4550209E7}]}}]}},'highlighting'=>{'User\
+        \ 1000006'=>{'first_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'first_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'email_texts'=>['@@@hl@@@searchquery@@@endhl@@@@lindgren.name'],'email_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@@lindgren.name']}}}"
     http_version: '1.1'
-  recorded_at: Sat, 20 Jul 2013 00:31:24 GMT
+  recorded_at: Thu, 01 Aug 2013 00:45:48 GMT
 recorded_with: VCR 2.3.0
