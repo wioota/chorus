@@ -173,10 +173,22 @@ describe Job do
 
       before { stub(job).execute_tasks { true } }
 
-      it "creates a JobSuccess event" do
+      it "creates a JobSucceeded event" do
         expect do
           job.run
         end.to change(Events::JobSucceeded, :count).by(1)
+      end
+    end
+
+    describe 'failure' do
+      let(:job) { jobs(:ready) }
+
+      before { stub(job).execute_tasks { false } }
+
+      it "creates a JobFailed event" do
+        expect do
+          job.run
+        end.to change(Events::JobFailed, :count).by(1)
       end
     end
   end

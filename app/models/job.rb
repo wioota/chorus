@@ -43,7 +43,11 @@ class Job < ActiveRecord::Base
     self.disable! if end_run && next_run > end_run
     self.status = 'running'
     save!
-    job_succeeded if execute_tasks
+    if execute_tasks
+      job_succeeded
+    else
+      job_failed
+    end
   end
 
   def frequency
@@ -64,6 +68,10 @@ class Job < ActiveRecord::Base
 
   def job_succeeded
     Events::JobSucceeded.by(workspace.owner).add(:job => self, :workspace => workspace)
+  end
+
+  def job_failed
+    Events::JobFailed.by(workspace.owner).add(:job => self, :workspace => workspace)
   end
 
   def execute_tasks

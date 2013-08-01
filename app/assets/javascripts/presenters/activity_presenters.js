@@ -376,6 +376,10 @@
 
         JobSucceeded: {
             links: ["actor", "job", "workspace"]
+        },
+
+        JobFailed: {
+            links: ["actor", "job", "workspace"]
         }
     };
 

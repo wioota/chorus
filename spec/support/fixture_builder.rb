@@ -381,15 +381,16 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:job, :workspace => public_workspace)
 
     Events::JobSucceeded.by(owner).add(:job => default_job, :workspace => default_job.workspace)
+    Events::JobFailed.by(owner).add(:job => default_job, :workspace => default_job.workspace)
 
-    default_job_task = FactoryGirl.create(:job_task, :job => default_job, :action => 'import_source_data')
+    default_job_task = FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_id => nil, :destination_name => 'import_from_task3', :row_limit => 400, :truncate => false)
+
     fbuilder.name :default, default_job_task
 
-    job_task_isdt = FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_id => nil, :destination_name => 'import_from_task', :row_limit => 400, :truncate => false);
+    job_task_isdt = FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_id => nil, :destination_name => 'import_from_task', :row_limit => 400, :truncate => false)
     fbuilder.name :job_task_isdt, job_task_isdt
-
-    FactoryGirl.create(:job_task, :job => default_job, :action => 'run_work_flow')
-    FactoryGirl.create(:job_task, :job => default_job, :action => 'run_sql_file')
+    FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_name => 'import_from_task2')
+    FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_id => default_table.id)
 
     #Imports
     dataset_import_created = FactoryGirl.create(:dataset_import_created_event,

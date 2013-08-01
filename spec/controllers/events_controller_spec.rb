@@ -327,7 +327,8 @@ describe EventsController do
         'datasetImportFailedWithModelErrors' => :import_failed_with_model_errors,
         'hdfsDatasetCreated' => Events::HdfsDatasetCreated,
         'hdfsDatasetUpdated' => Events::HdfsDatasetUpdated,
-        'jobSucceeded' => Events::JobSucceeded
+        'jobSucceeded' => Events::JobSucceeded,
+        'jobFailed' => Events::JobFailed
     }
 
     FIXTURE_FILES.each do |file_name, event_class|
