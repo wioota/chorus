@@ -45,17 +45,10 @@ class WorkfilesController < ApplicationController
     workspace = Workspace.find(params[:workspace_id])
     authorize! :show, workspace
 
-    workfiles = workspace.workfiles.order_by(params[:order]).includes(:latest_workfile_version)
-
-    if params.has_key?(:file_type)
-      workfiles = workfiles.with_file_type(params[:file_type])
-    end
-
-    workfiles = workfiles.includes(Workfile.eager_load_associations)
+    workfiles = workspace.filtered_workfiles(params)
 
     present paginate(workfiles), :presenter_options => {:workfile_as_latest_version => true, :list_view => true}
   end
-
 
   def destroy
     workfile = Workfile.find(params[:id])

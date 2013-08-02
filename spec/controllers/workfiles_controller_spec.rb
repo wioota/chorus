@@ -40,6 +40,14 @@ describe WorkfilesController do
       names.should == names.sort
     end
 
+    context "with a name pattern" do
+      it "filters by name pattern" do
+        get :index, :workspace_id => workspace.id, :name_pattern => workspace.workfiles.first.file_name[0..3]
+        response.code.should == "200"
+        decoded_response.length.should == 1
+      end
+    end
+
     context "with file types" do
       it "filters by file type: sql" do
         get :index, :workspace_id => workspace.id, :order => "file_name", :file_type => "sql"
@@ -51,6 +59,12 @@ describe WorkfilesController do
         get :index, :workspace_id => workspace.id, :order => "file_name", :file_type => "code"
         response.code.should == "200"
         decoded_response.length.should == 1
+      end
+
+      it 'filters by file type: work_flow' do
+        get :index, :workspace_id => workspace.id, :order => "file_name", :file_type => "work_flow"
+        response.code.should == "200"
+        decoded_response.length.should == 2
       end
     end
 
@@ -84,6 +98,10 @@ describe WorkfilesController do
 
     generate_fixture "workfileSet.json" do
       get :index, :workspace_id => workspace.id
+    end
+
+    generate_fixture "workFlowSet.json" do
+      get :index, :workspace_id => workspace.id, :file_type => 'alpine'
     end
   end
 

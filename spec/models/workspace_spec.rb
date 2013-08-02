@@ -4,6 +4,13 @@ require 'timecop'
 describe Workspace do
   before do
     stub(Alpine::API).delete_work_flow.with_any_args
+
+    [Import, ImportSchedule].each do |stuff|
+      any_instance_of(stuff) do |import|
+        stub(import).tables_have_consistent_schema { true }
+        stub(import).table_exists? { true }
+      end
+    end
   end
 
   it_behaves_like "a notable model" do
@@ -26,15 +33,6 @@ describe Workspace do
     it { should have_many(:owned_notes).class_name('Events::Base').conditions("events.action ILIKE 'Events::Note%'") }
     it { should have_many(:owned_events).class_name('Events::Base') }
     it { should have_many(:comments).through(:owned_events) }
-  end
-
-  before do
-    [Import, ImportSchedule].each do |stuff|
-      any_instance_of(stuff) do |import|
-        stub(import).tables_have_consistent_schema { true }
-        stub(import).table_exists? { true }
-      end
-    end
   end
 
   describe "create" do
@@ -364,14 +362,14 @@ describe Workspace do
   end
 
   describe "#image" do
+    it { should have_attached_file(:image) }
+
     it "should have a nil image instead of a default missing image" do
       workspace = workspaces(:public_with_no_collaborators)
       workspace.update_attributes!(:image => nil)
       workspace.image.url.should == ""
     end
   end
-
-  it { should have_attached_file(:image) }
 
   describe "permissions_for" do
     it "should have the correct permissions per user" do
@@ -750,6 +748,11 @@ describe Workspace do
       workspace.save!
       workspace.reload.has_dataset?(dataset).should be_false
     end
+  end
+
+  describe '#filtered_workfiles' do
+    it { should respond_to :filtered_workfiles }
+    it "is tested through the Workfiles controller"
   end
 
   it_should_behave_like "taggable models", [:workspaces, :public]

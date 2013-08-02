@@ -8,12 +8,16 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
     },
 
     createActions: [
-        {className: 'import_source_data', text: t("job_task.action.import_source_data")}
+        {className: 'import_source_data', text: t("job_task.action.import_source_data")},
+        {className: 'run_work_flow', text: t("job_task.action.run_work_flow")}
     ],
 
     menuEvents: {
         "a.import_source_data": function(e) {
             this.launchCreateImportSourceDataTaskDialog(e);
+        },
+        "a.run_work_flow": function(e) {
+            this.launchCreateFlowTaskDialog(e);
         }
     },
 
@@ -29,6 +33,11 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
             orientation: "right",
             contentEvents: this.menuEvents
         });
+    },
+
+    launchCreateFlowTaskDialog: function() {
+        var workFlows = new chorus.collections.WorkfileSet([], {fileType: 'work_flow', workspaceId: this.model.workspace().get("id")});
+        new chorus.dialogs.CreateWorkFlowTask({collection: workFlows}).launchModal();
     },
 
     launchCreateImportSourceDataTaskDialog: function (e) {
