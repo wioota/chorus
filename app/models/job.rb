@@ -65,6 +65,10 @@ class Job < ActiveRecord::Base
     save!
   end
 
+  def next_task_index
+    (job_tasks.order(:index).last.try(:index) || 0) + 1
+  end
+  
   private
 
   def job_succeeded

@@ -30,7 +30,7 @@ describe ImportSourceDataTask do
     end
   end
 
-  describe '#assemble!' do
+  describe '.assemble!' do
     context 'with a destination dataset' do
       let(:additional_data) do
         {
@@ -44,7 +44,6 @@ describe ImportSourceDataTask do
         {
           :action => 'import_source_data',
           :is_new_table => false,
-          :index => 1000,
         }.merge!(additional_data)
       end
 
@@ -73,7 +72,6 @@ describe ImportSourceDataTask do
         {
           :action => 'import_source_data',
           :is_new_table => false,
-          :index => 1000,
         }.merge!(additional_data)
       end
 

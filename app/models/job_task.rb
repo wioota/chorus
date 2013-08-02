@@ -3,12 +3,15 @@ class JobTask < ActiveRecord::Base
   ACTIONS = %w( import_source_data run_work_flow run_sql_file )
 
   @@actions = Hash[
-    'import_source_data' => 'ImportSourceDataTask'
+    'import_source_data' => 'ImportSourceDataTask',
+    'run_work_flow' => 'RunWorkFlowTask'
   ]
 
   attr_accessible :index, :action
 
   belongs_to :job
+
+  before_validation :set_index
 
   validates :index, :presence => true, :uniqueness => {:scope => [:job_id, :deleted_at]}
   validates :action, :presence => true, :inclusion => {:in => ACTIONS }
@@ -21,7 +24,6 @@ class JobTask < ActiveRecord::Base
   def self.create_for_action!(params)
     job_task_params = params[:job_task]
     job = Job.find(params[:job_id])
-    job_task_params[:index] = (job.job_tasks.order(:index).last.try(:index) || 0) + 1
     klass = @@actions[job_task_params[:action]].constantize
     klass.assemble!(job_task_params, job)
   end
@@ -30,4 +32,9 @@ class JobTask < ActiveRecord::Base
     raise NotImplementedError
   end
 
+  private
+
+  def set_index
+    self.index = index || job.next_task_index
+  end
 end
