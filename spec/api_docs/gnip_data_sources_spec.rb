@@ -72,7 +72,8 @@ resource "Gnip data sources" do
 
   post "/gnip_data_sources/:gnip_data_source_id/imports" do
     before do
-      stub(GnipImport).create!.with_any_args { true }
+      stub(GnipImport).create!.with_any_args { imports(:gnip) }
+      any_instance_of(GnipImport) { |gi| stub(gi).enqueue_import }
     end
 
     parameter :gnip_data_source_id, "gnip data source id"
