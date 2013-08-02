@@ -21,7 +21,7 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function () {
         return this.model ? {
-            enabled: this.model.get('state') !== 'disabled'
+            enabled: this.model.get('enabled')
         } : {};
     },
 

@@ -9,15 +9,31 @@ chorus.views.JobItem = chorus.views.Base.extend({
 
     additionalContext: function () {
         return {
-            iconUrl: "/images/jobs/job.png",
+            iconUrl: this.iconUrl(),
             url: this.model.showUrl(),
             frequency: this.model.frequency(),
-            stateKey: "job.state." + this.model.get("state"),
-            running: this.model.get("state") === "running"
+            stateKey: "job.state." + this.jobStateKey(),
+            running: this.isRunning()
         };
     },
 
     postRender: function() {
         this.$(".loading_spinner").startLoading(null, {color: '#959595'});
+    },
+
+    jobStateKey: function () {
+        if (this.isRunning()) {
+            return 'running';
+        }
+        return this.model.get('enabled') ? 'scheduled' : 'disabled';
+    },
+
+    isRunning: function () {
+        return this.model.get("status") === "running";
+    },
+
+    iconUrl: function () {
+        var icon = this.model.get('enabled') ? 'job.png' : 'job-disabled.png';
+        return "/images/jobs/" + icon;
     }
 });

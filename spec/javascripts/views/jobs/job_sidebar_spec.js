@@ -12,7 +12,7 @@ describe("chorus.views.JobSidebar", function () {
 
     context("when the job is enabled", function () {
         beforeEach(function () {
-            this.job.set("state", "scheduled");
+            this.job.set("enabled", true);
         });
 
         it("shows a disable link", function () {
@@ -34,7 +34,7 @@ describe("chorus.views.JobSidebar", function () {
 
     context("when the job is disabled", function () {
         beforeEach(function () {
-            this.job.set('state', 'disabled');
+            this.job.set('enabled', false);
         });
 
         it("shows an enable link", function () {

@@ -11,7 +11,8 @@ class JobPresenter < Presenter
       :last_run => model.last_run,
       :interval_unit => model.interval_unit,
       :interval_value => model.interval_value,
-      :state => model.enabled ? 'scheduled' : 'disabled'
+      :status => model.status,
+      :enabled => model.enabled
     }
 
     job_hash[:tasks] = model.job_tasks.map { |task| present(task) } unless options[:list_view]

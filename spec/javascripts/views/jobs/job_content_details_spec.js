@@ -46,14 +46,14 @@ describe("chorus.views.JobContentDetails", function () {
             it("toggles the button text", function () {
                 expect(this.view.$('button.toggle_enabled')).toContainTranslation('job.actions.enable');
                 this.view.$('button.toggle_enabled').click();
-                this.server.completeUpdateFor(this.view.model);
+                this.server.completeUpdateFor(this.view.model, _.extend({}, this.view.model.attributes, {enabled: true}));
                 expect(this.view.$('button.toggle_enabled')).toContainTranslation('job.actions.disable');
             });
 
             it("toggles the action bar styling", function () {
                 expect(this.view.$('.action_bar')).toHaveClass('action_bar_limited');
                 this.view.$('button.toggle_enabled').click();
-                this.server.completeUpdateFor(this.view.model);
+                this.server.completeUpdateFor(this.view.model, _.extend({}, this.view.model.attributes, {enabled: true}));
                 expect(this.view.$('.action_bar')).toHaveClass('action_bar_highlighted');
             });
 

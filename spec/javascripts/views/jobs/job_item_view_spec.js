@@ -13,8 +13,26 @@ describe("chorus.views.JobItem", function () {
         expect(this.view.$("a.name")).toHaveHref(this.model.showUrl());
     });
 
-    it("includes the correct job icon (non-image)", function() {
-        expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job.png");
+    context("when the job is disabled", function () {
+        beforeEach(function () {
+            this.model.set('enabled', false);
+            this.view.render();
+        });
+
+        it("includes the disabled job icon", function() {
+            expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job-disabled.png");
+        });
+    });
+
+    context("when the job is enabled", function () {
+        beforeEach(function () {
+            this.model.set('enabled', true);
+            this.view.render();
+        });
+
+        it("includes the enabled job icon", function() {
+            expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job.png");
+        });
     });
 
     describe("frequency", function () {
@@ -45,7 +63,7 @@ describe("chorus.views.JobItem", function () {
     });
 
     it("includes the job's state", function () {
-        expect(this.view.$(".state")).toContainTranslation("job.state." + this.model.get("state"));
+        expect(this.view.$(".state")).toContainTranslation("job.state." + this.view.jobStateKey());
     });
 
     context("when last_run is populated", function () {
