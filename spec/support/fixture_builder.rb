@@ -282,7 +282,7 @@ FixtureBuilder.configure do |fbuilder|
 
     #Alpine workfile
 
-    AlpineWorkfile.create!({:file_name => 'alpine_flow',
+    work_flow = AlpineWorkfile.create!({:file_name => 'alpine_flow',
                                      :workspace => public_workspace,
                                      :owner => owner,
                                      :execution_location => default_database,
@@ -389,6 +389,10 @@ FixtureBuilder.configure do |fbuilder|
 
     job_task_isdt = FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_id => nil, :destination_name => 'import_from_task', :row_limit => 400, :truncate => false)
     fbuilder.name :isdt, job_task_isdt
+
+    work_flow_task = FactoryGirl.create(:run_work_flow_task)
+    fbuilder.name :rwft, work_flow_task
+
     FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_name => 'import_from_task2')
     FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_id => default_table.id)
 

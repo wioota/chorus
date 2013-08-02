@@ -75,7 +75,7 @@ FactoryGirl.define do
 
   factory :job do
     name { Faker::Company.bs.titlecase }
-    association :workspace
+    workspace
     next_run 2.days.from_now
     end_run 3.days.from_now
     time_zone 'Alaska'
@@ -88,16 +88,19 @@ FactoryGirl.define do
     sequence(:index) { |n| n }
     job
     action { %w( import_source_data run_work_flow run_sql_file ).sample }
-  end
 
-  factory :import_source_data_task do
-    sequence(:index) { |n| 100 + n }
-    job
-    action { 'import_source_data' }
-    source_id { Dataset.first.id }
-    destination_id { Dataset.last.id }
-    destination_name nil
-    truncate false
-    row_limit 500
+    factory :import_source_data_task, class: ImportSourceDataTask do
+      action { 'import_source_data' }
+      source_id { Dataset.first.id }
+      destination_id { Dataset.last.id }
+      destination_name nil
+      truncate false
+      row_limit 500
+    end
+
+    factory :run_work_flow_task, class: RunWorkFlowTask do
+      action { 'import_source_data' }
+      work_flow_id { AlpineWorkfile.last.id }
+    end
   end
 end

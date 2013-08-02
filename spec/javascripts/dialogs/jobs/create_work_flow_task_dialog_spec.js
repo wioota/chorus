@@ -1,16 +1,17 @@
 describe("chorus.dialogs.CreateWorkFlowTask", function() {
+    beforeEach(function() {
+        this.job = backboneFixtures.job();
+        this.magicFileName = "magic";
+        this.workFlow = backboneFixtures.workfile.alpine();
+        this.workspace = this.workFlow.workspace();
+        this.workFlows = [this.workFlow, backboneFixtures.workfile.alpine({fileName: this.magicFileName})];
+
+        this.workFlowSet = new chorus.collections.WorkfileSet(this.workFlows, {fileType: 'work_flow', workspaceId: this.workspace.id});
+        this.dialog = new chorus.dialogs.CreateWorkFlowTask({job: this.job, collection: this.workFlowSet});
+        this.dialog.render();
+    });
+
     describe('#render', function() {
-        beforeEach(function() {
-            this.magicFileName = "magic";
-            this.workFlow = backboneFixtures.workfile.alpine();
-            this.workspace = this.workFlow.workspace();
-            this.workFlows = [this.workFlow, backboneFixtures.workfile.alpine({fileName: this.magicFileName})];
-
-            this.workFlowSet = new chorus.collections.WorkfileSet(this.workFlows, {fileType: 'work_flow', workspaceId: this.workspace.id});
-            this.dialog = new chorus.dialogs.CreateWorkFlowTask({collection: this.workFlowSet});
-            this.dialog.render();
-        });
-
         it("shows the correct title", function() {
             expect(this.dialog.$("h1")).toContainTranslation("create_job_task_dialog.title");
         });
@@ -35,12 +36,56 @@ describe("chorus.dialogs.CreateWorkFlowTask", function() {
             });
 
             describe("selecting an item", function() {
-                beforeEach(function() {
+                it("should mark the item selected", function() {
                     this.dialog.$("ul li:eq(0)").click();
+                    expect(this.dialog.$("ul li:eq(0)")).toHaveClass("selected");
                 });
 
-                it("should mark the item selected", function() {
-                    expect(this.dialog.$("ul li:eq(0)")).toHaveClass("selected");
+                it("enables the form", function () {
+                    var submitButton = this.dialog.$("button.submit");
+                    expect(submitButton).toBeDisabled();
+                    this.dialog.$("ul li:eq(0)").click();
+                    expect(submitButton).toBeEnabled();
+                });
+
+
+                context("when submitting the form", function () {
+                    beforeEach(function () {
+                        this.dialog.$("ul li:eq(0)").click();
+                        this.dialog.$("button.submit").click();
+                    });
+
+                    it("posts to the correct url", function () {
+                        var url = this.server.lastCreateFor(this.dialog.model).url;
+                        expect(url).toBe(this.dialog.model.url());
+                    });
+
+                    it("submits the correct fields", function () {
+                        var params = this.server.lastCreateFor(this.dialog.model).params();
+                        expect(params['job_task[action]']).toBe('run_work_flow');
+                        expect(params['job_task[work_flow_id]']).toBe(this.workFlow.get('id'));
+                    });
+
+                    context("when the save succeeds", function () {
+                        beforeEach(function () {
+                            spyOn(this.dialog, "closeModal");
+                            spyOn(chorus, "toast");
+                            spyOn(this.dialog.job, 'trigger');
+                            this.server.lastCreateFor(this.dialog.model).succeed();
+                        });
+
+                        it("closes the modal", function () {
+                            expect(this.dialog.closeModal).toHaveBeenCalled();
+                        });
+
+                        it("should create a toast", function () {
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message);
+                        });
+
+                        it("invalidates the job", function () {
+                            expect(this.dialog.job.trigger).toHaveBeenCalledWith('invalidated');
+                        });
+                    });
                 });
             });
 

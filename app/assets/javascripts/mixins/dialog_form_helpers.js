@@ -17,7 +17,7 @@ chorus.Mixins.DialogFormHelpers = {
         events["keyup " + options.inputSelector] = this.toggleSubmitDisabled;
         events["paste " + options.inputSelector] = this.toggleSubmitDisabled;
         events["submit " + options.formSelector] = "onFormSubmit";
-        this.events = _.extend(this.events || {}, events);
+        this.events = _.extend(events, this.events || {});
     },
 
     onFormSubmit: function(e) {

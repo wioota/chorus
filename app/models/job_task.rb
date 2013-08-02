@@ -35,6 +35,6 @@ class JobTask < ActiveRecord::Base
   private
 
   def set_index
-    self.index = index || job.next_task_index
+    self.index = index || job.next_task_index if job
   end
 end
