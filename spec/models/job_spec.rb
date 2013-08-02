@@ -129,9 +129,11 @@ describe Job do
         end
       end
 
-      it 'updates the status to "running"' do
-        job.run
-        job.status.should == 'running'
+      context "when the job finishes running" do
+        it 'updates the status to "idle"' do
+          job.run
+          job.status.should == 'idle'
+        end
       end
 
       context "if the end_run date is before the new next_run" do
@@ -144,12 +146,28 @@ describe Job do
         end
 
         it 'disables the job' do
-          stub(expiring_job).execute_tasks { raise JobTask::JobTaskFailure }
+          stub(expiring_job).execute_tasks { true }
           expect do
             expiring_job.run
           end.to change(expiring_job, :enabled).from(true).to(false)
         end
 
+      end
+
+      context "if there is no end_run" do
+        let(:forever_job) do
+          jobs(:default).tap do |job|
+            job.end_run = nil
+            job.enable!
+            job.save!
+          end
+        end
+        it 'does not disable the job' do
+          stub(forever_job).execute_tasks { true }
+          expect do
+            forever_job.run
+          end.to_not change(forever_job, :enabled)
+        end
       end
 
       describe 'executing each task' do

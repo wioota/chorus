@@ -40,13 +40,15 @@ class Job < ActiveRecord::Base
   def run
     self.next_run = frequency.since(next_run)
     self.last_run = Time.current
-    self.disable! if end_run && next_run > end_run
+    self.disable! if expiring?
     self.status = 'running'
     save!
     execute_tasks
     job_succeeded
   rescue JobTask::JobTaskFailure
     job_failed
+  ensure
+    idle!
   end
 
   def frequency
@@ -79,5 +81,14 @@ class Job < ActiveRecord::Base
 
   def on_demand?
     interval_unit == 'on_demand'
+  end
+
+  def expiring?
+    end_run && next_run > end_run
+  end
+
+  def idle!
+    self.status = 'idle'
+    save!
   end
 end
