@@ -3,4 +3,8 @@
   <% if Rails.env.integration? %>
     window.INTEGRATION_MODE = true;
   <% end %>
+
+  <% if Rails.env.test? || Rails.env.integration? %>
+    $.fx.off = true;
+  <% end %>
 <% end %>
