@@ -20,10 +20,10 @@ describe("chorus.views.JobContentDetails", function () {
 
         context("clicking on 'Add Import Source Data'", function () {
             it("launches the CreateImportSourceDataTask dialog", function () {
-                expect(this.modalSpy).not.toHaveModal(chorus.dialogs.CreateImportSourceDataTask);
+                expect(this.modalSpy).not.toHaveModal(chorus.dialogs.ConfigureImportSourceDataTask);
                 expect(this.qtipElement.find('.import_source_data')).toContainTranslation('job_task.action.import_source_data');
                 this.qtipElement.find('.import_source_data').click();
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateImportSourceDataTask);
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.ConfigureImportSourceDataTask);
             });
         });
     });

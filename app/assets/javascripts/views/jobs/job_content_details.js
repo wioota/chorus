@@ -33,7 +33,7 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
 
     launchCreateImportSourceDataTaskDialog: function (e) {
         e && e.preventDefault();
-        new chorus.dialogs.CreateImportSourceDataTask({job: this.model}).launchModal();
+        new chorus.dialogs.ConfigureImportSourceDataTask({job: this.model}).launchModal();
     },
 
     launchEditDialog: function (e) {

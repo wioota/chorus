@@ -4,6 +4,32 @@ describe ImportSourceDataTask do
   let(:job) { jobs(:default) }
   let(:source_dataset) { datasets(:table) }
 
+  describe '#truncate' do
+    let(:planned_job_task) do
+      {
+        :action => 'import_source_data',
+        :is_new_table => false,
+        :index => 1000,
+        "source_id" => source_dataset.id,
+        "destination_id" => '2',
+        "row_limit" => '500',
+        "truncate" => "false"
+      }
+    end
+
+    it "is coerced to a boolean" do
+      task = ImportSourceDataTask.assemble!(planned_job_task, job)
+      task.reload.truncate.should == false
+    end
+
+    it "raises an error if the value is anything other than 'true' or 'false'" do
+      planned_job_task["truncate"] = 'pajamas'
+      expect do
+        ImportSourceDataTask.assemble!(planned_job_task, job)
+      end.to raise_error(ArgumentError)
+    end
+  end
+
   describe '#assemble!' do
     context 'with a destination dataset' do
       let(:additional_data) do

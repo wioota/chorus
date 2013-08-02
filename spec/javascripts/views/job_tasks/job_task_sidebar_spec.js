@@ -14,4 +14,8 @@ describe("chorus.views.JobTaskSidebar", function () {
     describe("clicking 'Delete Job Task'", function () {
         itBehavesLike.aDialogLauncher("a.delete_job_task", chorus.alerts.JobTaskDelete);
     });
+
+    describe("clicking 'Edit Job Task'", function () {
+        itBehavesLike.aDialogLauncher("a.edit_job_task", chorus.dialogs.ConfigureImportSourceDataTask);
+    });
 });

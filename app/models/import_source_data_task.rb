@@ -1,6 +1,6 @@
 class ImportSourceDataTask < JobTask
 
-  has_additional_data :source_id, :destination_id, :destination_name, :truncate, :row_limit
+  has_additional_data :source_id, :destination_id, :destination_name, [:truncate, :boolean], :row_limit
 
   before_save :build_task_name
 
@@ -22,6 +22,14 @@ class ImportSourceDataTask < JobTask
     raise JobTaskFailure.new(e)
   end
 
+  def source_dataset
+    Dataset.find(source_id) if source_id
+  end
+
+  def destination_dataset_name
+    destination_name || Dataset.find(destination_id).name
+  end
+
   private
 
   def build_task_name
@@ -35,14 +43,6 @@ class ImportSourceDataTask < JobTask
     if new_table_import? && workspace.sandbox.datasets.find_by_name(destination_name)
       errors.add(:base, :table_exists, {:table_name => destination_name})
     end
-  end
-
-  def source_dataset
-    Dataset.find(source_id) if source_id
-  end
-
-  def destination_dataset_name
-    destination_name || Dataset.find(destination_id).name
   end
 
   def workspace

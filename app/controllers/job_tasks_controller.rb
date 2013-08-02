@@ -14,6 +14,15 @@ class JobTasksController < ApplicationController
     head :ok
   end
 
+  def update
+    authorize! :can_edit_sub_objects, workspace
+
+    job_task = JobTask.find(params[:id])
+    job_task.update_attributes(params[:job_task])
+
+    present job_task
+  end
+
   protected
 
   def workspace

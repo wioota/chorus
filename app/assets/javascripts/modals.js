@@ -141,7 +141,9 @@ chorus.Modal = chorus.views.Base.extend({
 
     beginReveal: function() {
         this.revealed();
-        this.$(this.focusSelector).focus();
+        if (this.focusSelector) {
+            this.$(this.focusSelector).focus();
+        }
     },
 
     saveFailed: function(model) {

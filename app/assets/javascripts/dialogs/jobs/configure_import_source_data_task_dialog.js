@@ -1,8 +1,11 @@
-chorus.dialogs.CreateImportSourceDataTask = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
-    constructorName: 'CreateImportSourceDataTask',
-    templateName: 'create_import_source_data_task_dialog',
-    title: t('create_job_task_dialog.title'),
+chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
+    constructorName: 'ConfigureImportSourceDataTask',
+    templateName: 'configure_import_source_data_task_dialog',
+    title: function () {
+        return this.model.isNew() ? t('create_job_task_dialog.add_title') : t('create_job_task_dialog.edit_title');
+    },
     message: "create_job_task_dialog.toast",
+    focusSelector: null,
 
     events: {
         "change input:radio": "onExistingTableChosenAsDestination",
@@ -12,9 +15,13 @@ chorus.dialogs.CreateImportSourceDataTask = chorus.dialogs.Base.include(chorus.M
     },
 
     setup: function () {
-        this.job = this.options.job;
+        this.job = this.options.job || this.model.job();
         this.workspace = this.job.workspace();
-        this.model = new chorus.models.JobTask({workspace: {id: this.workspace.get("id")}, job: {id: this.options.job.get("id")}});
+        if (this.model) {
+            this.sourceTableHasBeenPicked = true;
+        } else {
+            this.model = this.buildATask();
+        }
 
         this.disableFormUnlessValid({
             formSelector: "form",
@@ -34,6 +41,18 @@ chorus.dialogs.CreateImportSourceDataTask = chorus.dialogs.Base.include(chorus.M
         }, this));
     },
 
+    additionalContext: function () {
+        return {
+            isNew: this.model.isNew(),
+            useExistingTable: this.model.isNew() || this.model.get('destinationId'),
+            rowLimit: this.model.get('rowLimit') || 500,
+            sourceName: this.model.get('sourceName'),
+            destinationId: this.model.get('destinationId'),
+            destinationName: this.model.get('destinationName'),
+            truncate: this.model.get('truncate')
+        };
+    },
+
     checkInput: function () {
         var importIntoExisting = this.$(".choose_table input:radio").prop("checked");
         var newTableNameGiven = this.$('input.new_table_name').val().trim().length > 0;
@@ -46,6 +65,14 @@ chorus.dialogs.CreateImportSourceDataTask = chorus.dialogs.Base.include(chorus.M
 
         var validLimit = this.limitIsChecked() ? this.limitIsValid() : true;
         return sourcePicked && destinationPicked && validLimit;
+    },
+
+
+    buildATask: function () {
+        return new chorus.models.JobTask({
+            workspace: { id: this.workspace.get("id") },
+            job: { id: this.options.job.get("id") }
+        });
     },
 
     isNewTable: function () {
@@ -138,7 +165,6 @@ chorus.dialogs.CreateImportSourceDataTask = chorus.dialogs.Base.include(chorus.M
 
     modelSaved: function () {
         chorus.toast(this.message);
-        this.model.trigger('invalidated');
         this.job.trigger('invalidated');
         this.closeModal();
     },

@@ -16,7 +16,7 @@ chorus.dialogs.Base = chorus.Modal.extend({
 
         this.events["click .form_controls button.cancel"] = "closeModal";
 
-        header.html($("<h1/>").text(this.title));
+        header.html($("<h1/>").text(_.result(this, 'title')));
         content.html(this.template(this.context()));
         content.attr("data-template", this.className);
 

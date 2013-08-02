@@ -1,5 +1,4 @@
 require 'spec_helper'
-#require 'will_paginate/array'
 
 describe JobTasksController do
   let(:workspace) { workspaces(:public) }
@@ -12,6 +11,7 @@ describe JobTasksController do
   end
 
   describe '#create' do
+    let(:destination_dataset) { datasets(:other_table) }
     let(:params) do
       {
         :workspace_id => workspace.id,
@@ -25,7 +25,7 @@ describe JobTasksController do
         {
           :action => 'import_source_data',
           :source_id => dataset.id,
-          :destination_id => '2',
+          :destination_id => destination_dataset.id,
           :row_limit => '500',
           :truncate => false,
           :index => 150
@@ -45,7 +45,7 @@ describe JobTasksController do
           {
             :action => 'import_source_data',
             :source_id => dataset.id,
-            :new_table_name => 'into_this_one',
+            :destination_name => 'into_this_one',
             :row_limit => '500',
             :truncate => false,
             :index => '45'
@@ -67,6 +67,46 @@ describe JobTasksController do
       it "returns 201" do
         post :create, params
         response.code.should == "201"
+      end
+    end
+  end
+
+  describe '#update' do
+    let(:task) { job_tasks(:isdt) }
+    let(:params) do
+      {
+        :id => task.id,
+        :workspace_id => workspace.id,
+        :job_id => job.id,
+        :job_task => planned_job_task
+      }
+    end
+
+    context 'import_source_data' do
+      let(:planned_job_task) do
+        {
+          :action => 'import_source_data',
+          :source_id => dataset.id,
+          :destination_id => nil,
+          :destination_name => 'sandwich_table',
+          :row_limit => '500',
+          :truncate => false,
+          :index => 150
+        }
+      end
+
+      it 'changes a job task' do
+        expect do
+          put :update, params
+          task.reload
+        end.to change(task, :destination_name).to('sandwich_table')
+        decoded_response[:destination_name].should == 'sandwich_table'
+        response.code.should == "200"
+      end
+
+      it "uses authorization" do
+        mock(subject).authorize! :can_edit_sub_objects, workspace
+        put :update, params
       end
     end
   end
