@@ -8,6 +8,7 @@ export GPDB_HOST=chorus-gpdb-ci
 export HADOOP_HOST=chorus-gphd02
 export HAWQ_HOST=chorus-gphd20-2
 export ORACLE_HOST=chorus-oracle
+export SPEC_OPTS="--format d"
 
 if [[ -z "$JASMINE_PORT" ]]; then
   export JASMINE_PORT=8888
