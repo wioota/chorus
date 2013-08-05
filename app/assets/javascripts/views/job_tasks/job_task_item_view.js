@@ -10,7 +10,6 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
     additionalContext: function () {
         var action = this.model.get("action");
         return {
-            draggable: true,
             checkable: false,
             url: this.model.showUrl(),
             actionKey: "job_task.action." + action,

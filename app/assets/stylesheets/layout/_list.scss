@@ -31,16 +31,6 @@
             right: -$padding-x;
         }
 
-        .drag_handle {
-            position: absolute;
-            background-color: gray;
-            top: 0;
-            bottom: 0;
-            left: -$padding-x;
-            width: $padding-x;
-            cursor: move;
-        }
-
         .image {
             display: block;
             float: left;
