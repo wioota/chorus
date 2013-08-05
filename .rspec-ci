@@ -1,4 +1,3 @@
 --profile
 --no-color
---require spec/support/wrapping_progress_formatter.rb
---format WrappingProgressFormatter
+--format d

@@ -5,7 +5,6 @@ export GPDB_HOST=chorus-gpdb-ci
 export ORACLE_HOST=chorus-oracle
 export HAWQ_HOST=chorus-gphd20-2
 export HADOOP_HOST=chorus-gphd11
-export SPEC_OPTS="--format d"
 
 . script/ci/setup.sh
 
