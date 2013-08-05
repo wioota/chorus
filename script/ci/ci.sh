@@ -72,7 +72,7 @@ set +e
 if $run_ruby ; then
     echo "Running unit tests"
     ln -sf .rspec-ci .rspec
-    b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspec spec 2>&1
+    b/rake -f `bundle show ci_reporter`/stub.rake ci:setup:rspecdoc spec 2>&1
     RUBY_TESTS_RESULT=$?
     run_fixtures=false
 else
