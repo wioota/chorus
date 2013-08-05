@@ -337,7 +337,7 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
             this.dialog.render();
         });
 
-        it('creates a JobTask model', function () {
+        it('uses the task as its model', function () {
             expect(this.dialog.model).toEqual(this.task);
         });
 
@@ -367,6 +367,7 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
         context("when the destination table already exists", function () {
             beforeEach(function () {
                 this.task.set('destinationId', 12345);
+                this.dialog = new chorus.dialogs.ConfigureImportSourceDataTask({model: this.task});
                 this.dialog.render();
             });
 
@@ -378,11 +379,16 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
                 var existingTableRadio = this.dialog.$('.choose_table input[type="radio"]');
                 expect(existingTableRadio).toBeChecked();
             });
+
+            it("enables the submit button", function () {
+                expect(this.dialog.$('button.submit')).toBeEnabled();
+            });
         });
 
         context("when the destination table does not exist", function () {
             beforeEach(function () {
                 this.task.set('destinationId', null);
+                this.dialog = new chorus.dialogs.ConfigureImportSourceDataTask({model: this.task});
                 this.dialog.render();
             });
 
@@ -394,12 +400,15 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
                 var newTableRadio = this.dialog.$('.new_table input[type="radio"]');
                 expect(newTableRadio).toBeChecked();
             });
+
+            it("enables the submit button", function () {
+                expect(this.dialog.$('button.submit')).toBeEnabled();
+            });
         });
 
         it("has an 'Edit Task' title and an enabled 'Save' button", function () {
             expect(this.dialog.$('.dialog_header h1')).toContainTranslation("create_job_task_dialog.edit_title");
             expect(this.dialog.$('button.submit')).toContainTranslation('create_job_task_dialog.save');
-            expect(this.dialog.$('button.submit')).toBeEnabled();
         });
 
         context("when submitting the form", function () {

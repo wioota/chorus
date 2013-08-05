@@ -19,6 +19,9 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
         this.workspace = this.job.workspace();
         if (this.model) {
             this.sourceTableHasBeenPicked = true;
+            if (this.model.get('destinationId')) {
+                this.destinationTableHasBeenPicked = true;
+            }
         } else {
             this.model = this.buildATask();
         }
@@ -66,7 +69,6 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
         var validLimit = this.limitIsChecked() ? this.limitIsValid() : true;
         return sourcePicked && destinationPicked && validLimit;
     },
-
 
     buildATask: function () {
         return new chorus.models.JobTask({
