@@ -1,6 +1,6 @@
 chorus.dialogs.CreateWorkFlowTask = chorus.dialogs.PickItems.include(chorus.Mixins.DialogFormHelpers).extend({
     constructorName: 'CreateWorkFlowTask',
-    title: t('create_job_task_dialog.title'),
+    title: t('create_job_task_dialog.add_title'),
     searchPlaceholderKey: 'job_task.work_flow.search_placeholder',
     submitButtonTranslationKey: "create_job_task_dialog.submit",
     modelClass: "WorkFlow",
