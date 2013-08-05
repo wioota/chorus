@@ -16,12 +16,12 @@ describe ChorusInstaller do
   let(:installer) { described_class.new(options) }
   let(:options) do
     {
-        installer_home: '.',
-        version_detector: version_detector,
-        logger: logger,
-        old_release_cleaner: old_release_cleaner,
-        io: io,
-        executor: executor
+      installer_home: '.',
+      version_detector: version_detector,
+      logger: logger,
+      old_release_cleaner: old_release_cleaner,
+      io: io,
+      executor: executor
     }
   end
 
@@ -849,7 +849,7 @@ describe ChorusInstaller do
 
     context "when the data sources are invalid" do
       before do
-        mock(executor).rake("validations:data_source") {false}
+        mock(executor).rake("validations:data_source") { false }
         mock(executor).start_postgres
       end
 
@@ -860,7 +860,7 @@ describe ChorusInstaller do
 
     context "when the data sources are valid" do
       before do
-        mock(executor).rake("validations:data_source") {true}
+        mock(executor).rake("validations:data_source") { true }
         mock(executor).start_postgres
       end
 
@@ -1086,9 +1086,9 @@ describe ChorusInstaller do
     it "modifies the properties to be OS X specific" do
       mock(Properties).load_file(chorus_config_path) { {} }
       stub(Properties).dump_file(hash_including({
-                                                    'worker_threads' => 5,
-                                                    'webserver_threads' => 5,
-                                                    'database_threads' => 15}), chorus_config_path)
+                                                  'worker_threads' => 5,
+                                                  'webserver_threads' => 5,
+                                                  'database_threads' => 15}), chorus_config_path)
       installer.warn_and_change_osx_properties
     end
   end
@@ -1167,7 +1167,7 @@ describe ChorusInstaller do
             end
 
             it "does not explode" do
-              expect {installer.dump_environment}.not_to raise_error
+              expect { installer.dump_environment }.not_to raise_error
             end
           end
         end
@@ -1205,6 +1205,97 @@ describe ChorusInstaller do
       mock(installer).log("HI!")
       mock(installer).log("BYE!")
       installer.flush_logs
+    end
+  end
+
+  describe "#alpine_exists?" do
+    before do
+      stub_version
+    end
+
+    context "if alpine package exists" do
+      before do
+        FileUtils.mkdir_p(installer.alpine_source_path)
+        File.open("#{installer.alpine_source_path}/Alpine_Bundle_Rel2.9_single_linux_20130726-0601.zip", 'w') do |f|
+          f.puts "i am alpine"
+        end
+      end
+
+      it 'returns true' do
+        installer.alpine_exists?.should be_true
+      end
+    end
+
+    context "if alpine package does not exist" do
+      it 'returns false' do
+        installer.alpine_exists?.should be_false
+      end
+    end
+  end
+
+  describe "#configure_alpine" do
+    before do
+      installer.destination_path = '/usr/local/greenplum-chorus'
+      stub_version
+      FileUtils.mkdir_p(installer.alpine_source_path)
+      File.open("#{installer.alpine_source_path}/Alpine_Bundle_Rel2.9_single_linux_20130726-0601.zip", 'w') do |f|
+        f.puts "i am alpine"
+      end
+      FileUtils.mkdir_p("#{installer.alpine_destination_path}/apache-tomcat-7.0.30/conf/")
+      FileUtils.mkdir_p("#{installer.alpine_destination_path}/ALPINE_DATA_REPOSITORY/configuration/")
+
+      File.open("#{installer.alpine_destination_path}/apache-tomcat-7.0.30/conf/server.xml", 'w') do |f|
+        f.puts <<-XML
+<Connector port="8080" protocol="HTTP/1.1"
+connectionTimeout="20000"
+redirectPort="8443" />
+        XML
+      end
+
+      stub(installer).extract_alpine
+      stub(installer).set_properties
+      mock(executor).start_alpine
+    end
+
+    it "unzips alpine into the appropriate place" do
+      stub(installer).extract_alpine(File.join("vendor", "alpine", "Alpine_Bundle_Rel2.9_single_linux_20130726-0601.zip"))
+      installer.configure_alpine
+    end
+
+    it "sets properties in alpine's config to enable chorus mode" do
+      installer.configure_alpine
+
+      alpine_config = File.read("#{installer.alpine_destination_path}/ALPINE_DATA_REPOSITORY/configuration/alpine.config")
+      alpine_config.should == <<-CONFIG
+chorus.active = true
+chorus.port = 8080'
+      CONFIG
+    end
+
+    it "sets properties in alpine's tomcat config to set port" do
+      installer.configure_alpine
+
+      changed_xml = File.read("#{installer.alpine_destination_path}/apache-tomcat-7.0.30/conf/server.xml")
+      changed_xml.should == <<-XML
+<Connector port="9090" protocol="HTTP/1.1"
+connectionTimeout="20000"
+redirectPort="8443" />
+      XML
+    end
+  end
+
+  describe "#set_properties" do
+    before do
+      installer.destination_path = '/usr/local/greenplum-chorus'
+    end
+    let(:chorus_config_path) { File.join(installer.destination_path, 'shared', 'chorus.properties') }
+
+    it "changes the chorus_properties with some cool new props" do
+      mock(Properties).load_file(chorus_config_path) { {} }
+      stub(Properties).dump_file(hash_including({
+                                                  'sandwich' => 'board'
+                                                }), chorus_config_path)
+      installer.set_properties({'sandwich' => 'board'})
     end
   end
 

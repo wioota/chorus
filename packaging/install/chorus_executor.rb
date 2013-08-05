@@ -52,6 +52,10 @@ class ChorusExecutor
     previous_chorus_control "stop"
   end
 
+  def start_alpine
+    system("#{@destination_path}/alpine/startup_for_chorus.sh")
+  end
+
   private
 
   def release_path

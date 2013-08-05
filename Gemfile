@@ -24,6 +24,10 @@ platform :jruby do
   gem 'activerecord-jdbcpostgresql-adapter'
 end
 
+platform :mri do
+  gem 'pg'
+end
+
 group :assets do
   gem 'sass-rails'
   gem 'compass-rails'
@@ -61,7 +65,6 @@ end
 group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
   gem 'foreman', '>= 0.62',      :require => false
   gem 'rake',                    :require => false
-  gem 'ruby-debug',              :require => false
 
   gem 'jasmine', '~> 1.3.2'
   gem 'rspec_api_documentation', :github => "GreenplumChorus/rspec_api_documentation"
