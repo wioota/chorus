@@ -145,7 +145,8 @@ describe JobsController do
         job: {
             enabled: true,
             next_run: "2013-07-30T14:00:00-00:00",
-            time_zone: 'Arizona'
+            end_run: "invalid",
+            time_zone: 'Arizona',
         }
       }
     end
@@ -165,6 +166,26 @@ describe JobsController do
     it "applies the passed-in time zone to the passed-in next_run without shifting time" do
       put :update, params
       job.reload.next_run.to_i.should == DateTime.parse("2013-07-30T14:00:00-07:00").to_i
+    end
+
+    context "when an end-run is specified" do
+      let(:params) do
+        {
+          id: job.id,
+          workspace_id: workspace.id,
+          job: {
+            enabled: true,
+            next_run: "2013-07-30T11:00:00-00:00",
+            end_run: "2013-07-30T14:00:00-00:00",
+            time_zone: 'Arizona',
+          }
+        }
+      end
+
+      it "applies the passed-in time zone to the passed-in end_run without shifting time" do
+        put :update, params
+        job.reload.end_run.to_i.should == DateTime.parse("2013-07-30T14:00:00-07:00").to_i
+      end
     end
   end
 

@@ -17,6 +17,8 @@ class Job < ActiveRecord::Base
 
   scope :ready_to_run, -> { where(enabled: true).where('next_run <= ?', Time.current).order(:next_run) }
 
+  before_validation :disable_expiring
+
   def self.order_by(column_name)
     if column_name.blank? || column_name == "name"
       return order("lower(name), id")
@@ -71,6 +73,11 @@ class Job < ActiveRecord::Base
   
   private
 
+  def disable_expiring
+    self.enabled = false if expiring?
+    true
+  end
+
   def job_succeeded
     Events::JobSucceeded.by(workspace.owner).add(:job => self, :workspace => workspace)
   end
@@ -88,7 +95,7 @@ class Job < ActiveRecord::Base
   end
 
   def expiring?
-    end_run && next_run > end_run
+    end_run && next_run > end_run.to_date
   end
 
   def idle!

@@ -51,7 +51,7 @@ describe Job do
   describe '#create!' do
     let(:attrs) { FactoryGirl.attributes_for(:job) }
 
-    it "is disabled by default" do
+    it "saves a disabled Job by default" do
       job = Job.create! attrs
       job.should_not be_enabled
     end
@@ -59,17 +59,17 @@ describe Job do
 
   describe 'scheduling' do
     describe '.ready_to_run' do
-      let!(:job1) { job = jobs(:ready); job.update_attribute(:next_run, 55.seconds.ago); job }
-      let!(:job2) { FactoryGirl.create(:job, :next_run => 30.seconds.ago, :enabled => true) }
-      let!(:job3) { FactoryGirl.create(:job, :next_run => 1.day.from_now, :enabled => true) }
-      let!(:job4) { FactoryGirl.create(:job, :next_run => 1.day.ago, :enabled => false) }
+      let(:job1) { FactoryGirl.create(:job, :name => 'past_enabled', :next_run => 30.seconds.ago, :enabled => true) }
+      let(:job2) { FactoryGirl.create(:job, :name => 'future_enabled', :next_run => 1.day.from_now, :enabled => true) }
+      let(:job3) { FactoryGirl.create(:job, :name => 'past_disabled', :next_run => 1.day.ago, :enabled => false) }
 
-      it "returns only jobs that should have run by now" do
-        Job.ready_to_run.should == [job1, job2]
+      before do
+        Job.delete_all
+        [job1, job2, job3] # Initialize lets
       end
 
-      it "only returns jobs that are enabled" do
-        Job.ready_to_run.should == [job1, job2]
+      it "returns only enabled jobs that should have run by now" do
+        Job.ready_to_run.all.should == [job1]
       end
     end
 
@@ -139,9 +139,10 @@ describe Job do
       context "if the end_run date is before the new next_run" do
         let(:expiring_job) do
           jobs(:default).tap do |job|
-            job.end_run = Time.current
+            job.interval_unit = "weeks"
+            job.next_run = Time.current
+            job.end_run = 1.day.from_now.to_date
             job.enable!
-            job.save!
           end
         end
 
@@ -151,7 +152,6 @@ describe Job do
             expiring_job.run
           end.to change(expiring_job, :enabled).from(true).to(false)
         end
-
       end
 
       context "if there is no end_run" do
@@ -216,6 +216,20 @@ describe Job do
           job.run
         end.to change(Events::JobFailed, :count).by(1)
       end
+    end
+  end
+
+  describe 'on update' do
+    let(:impossible_job) do
+      jobs(:ready).tap do |job|
+        job.next_run = 1.hour.from_now
+        job.end_run = Time.current
+      end
+    end
+
+    it 'disables expiring jobs on update' do
+        impossible_job.save!
+        impossible_job.should_not be_enabled
     end
   end
 end

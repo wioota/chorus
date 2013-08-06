@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  before_filter :apply_next_run_timezone, only: [:create, :update]
+  before_filter :apply_timezone, only: [:create, :update]
 
   def index
     authorize! :show, workspace
@@ -45,14 +45,20 @@ class JobsController < ApplicationController
 
   protected
 
-  def apply_next_run_timezone
-    if params[:job][:interval_unit] != 'on_demand' && params[:job][:time_zone]
-      params[:job][:next_run] = ActiveSupport::TimeZone[params[:job][:time_zone]].parse(DateTime.parse(params[:job][:next_run]).asctime)
+  def apply_timezone
+    time_zone = params[:job][:time_zone]
+
+    if params[:job][:interval_unit] != 'on_demand' && time_zone
+      params[:job][:next_run] = ActiveSupport::TimeZone[time_zone].parse(DateTime.parse(params[:job][:next_run]).asctime)
+      params[:job][:end_run] = ActiveSupport::TimeZone[time_zone].parse(DateTime.parse(params[:job][:end_run]).asctime) if end_run_exists?
     end
+  end
+
+  def end_run_exists?
+    params[:job][:end_run] && params[:job][:end_run] != 'invalid'
   end
 
   def workspace
     @workspace ||= Workspace.find(params[:workspace_id])
   end
-
 end
