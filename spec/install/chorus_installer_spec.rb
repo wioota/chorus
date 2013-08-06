@@ -1268,7 +1268,7 @@ redirectPort="8443" />
       alpine_config = File.read("#{installer.alpine_destination_path}/ALPINE_DATA_REPOSITORY/configuration/alpine.config")
       alpine_config.should == <<-CONFIG
 chorus.active = true
-chorus.port = 8080'
+chorus.port = 8080
       CONFIG
     end
 
