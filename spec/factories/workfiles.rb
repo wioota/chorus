@@ -1,11 +1,12 @@
 require 'factory_girl'
 
 FactoryGirl.define do
-  factory :alpine_workfile do
+  factory :alpine_workfile, aliases: [:work_flow] do
     owner
     workspace
     description 'A nice description'
     file_name 'machine_learning.afm'
+    association :execution_location, :factory => :gpdb_database
   end
 
   factory :workfile do

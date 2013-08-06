@@ -2,7 +2,7 @@ chorus.dialogs.CreateWorkFlowTask = chorus.dialogs.PickItems.include(chorus.Mixi
     constructorName: 'CreateWorkFlowTask',
     title: t('create_job_task_dialog.add_title'),
     searchPlaceholderKey: 'job_task.work_flow.search_placeholder',
-    submitButtonTranslationKey: "create_job_task_dialog.submit",
+    submitButtonTranslationKey: "create_job_task_dialog.add",
     modelClass: "WorkFlow",
     pagination: true,
     multiSelection: false,

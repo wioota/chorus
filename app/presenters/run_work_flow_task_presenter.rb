@@ -7,7 +7,7 @@ class RunWorkFlowTaskPresenter < JobTaskPresenter
 
   def work_flow
     {
-        :work_flow => present(model.work_flow)
+        :work_flow => present(model.payload)
     }
   end
 end

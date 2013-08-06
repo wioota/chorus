@@ -116,7 +116,7 @@ class Workspace < ActiveRecord::Base
   def filtered_workfiles(params)
     filtered_workfiles = self.workfiles.order_by(params[:order]).includes(:latest_workfile_version)
     filtered_workfiles = filtered_workfiles.with_file_type(params[:file_type]) if params.has_key?(:file_type)
-    filtered_workfiles = filtered_workfiles.where("file_name LIKE ?", "%#{params[:name_pattern]}%") if params[:name_pattern]
+    filtered_workfiles = filtered_workfiles.where("workfiles.file_name LIKE ?", "%#{params[:name_pattern]}%") if params[:name_pattern]
     filtered_workfiles = filtered_workfiles.includes(Workfile.eager_load_associations)
     filtered_workfiles
   end

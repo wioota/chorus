@@ -13,7 +13,7 @@ describe("chorus.dialogs.CreateWorkFlowTask", function() {
 
     describe('#render', function() {
         it("shows the correct title", function() {
-            expect(this.dialog.$("h1")).toContainTranslation("create_job_task_dialog.title");
+            expect(this.dialog.$("h1")).toContainTranslation("create_job_task_dialog.add_title");
         });
 
         it("only fetches work flows", function() {
@@ -28,7 +28,7 @@ describe("chorus.dialogs.CreateWorkFlowTask", function() {
             });
 
             it("shows the correct button name", function() {
-                expect(this.dialog.$("button.submit")).toContainTranslation("create_job_task_dialog.submit");
+                expect(this.dialog.$("button.submit")).toContainTranslation("create_job_task_dialog.add");
             });
 
             it("doesn't have multiSelection", function() {

@@ -1,13 +1,5 @@
 require 'spec_helper'
 
-class FakeJobTask < JobTask
-  def execute
-    @@order << index
-  end
-end
-
-@@order = []
-
 describe Job do
   describe 'validations' do
     it { should validate_presence_of :name }
@@ -171,25 +163,23 @@ describe Job do
       end
 
       describe 'executing each task' do
+        class FakeJobTask < JobTask
+          Order = []
 
-        let(:job) do
-          job = FactoryGirl.create(:job)
-        end
-
-        let(:tasks) do
-          3.times.map { |i| FakeJobTask.create({:index => i, :job => job, :action => 'import_source_data'}) }
-        end
-
-        before do
-          tasks.reverse.each do |task|
-            job.job_tasks << task
+          def execute
+            Order << index
           end
+        end
+
+        let(:job) { job = FactoryGirl.create(:job) }
+        let!(:tasks) do
+          3.times.map { job.job_tasks.create!({:type => 'FakeJobTask'}) }
         end
 
         it 'is done in index order' do
           job.run
-          @@order.length.should == 3
-          @@order.should == @@order.sort
+          FakeJobTask::Order.length.should == 3
+          FakeJobTask::Order.should == FakeJobTask::Order.sort
         end
       end
     end

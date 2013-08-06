@@ -11,14 +11,17 @@ describe RunWorkFlowTask do
   end
 
   describe ".assemble!" do
-    it "should work" do
+    it "creates a new JobTask associated with the job" do
       expect {
-        RunWorkFlowTask.assemble!(task_plan, job)
-      }.to change(RunWorkFlowTask, :count).by(1)
+        expect {
+          JobTask.assemble!(task_plan, job)
+        }.to change(RunWorkFlowTask, :count).by(1)
+      }.to change(job.job_tasks, :count).by(1)
     end
 
-    it "should have a reference to the workflow" do
-      RunWorkFlowTask.assemble!(task_plan, job).work_flow.should == work_flow
+
+    it "should have a reference to the workflow as payload" do
+      JobTask.assemble!(task_plan, job).reload.payload.should == work_flow
     end
   end
 end

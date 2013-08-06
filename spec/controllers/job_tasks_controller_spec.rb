@@ -20,7 +20,7 @@ describe JobTasksController do
       }
     end
 
-    context 'import_source_data' do
+    context 'import tasks' do
       let(:planned_job_task) do
         {
           :action => 'import_source_data',
@@ -36,7 +36,7 @@ describe JobTasksController do
         it 'creates a job task' do
           expect do
             post :create, params
-          end.to change(JobTask, :count).by(1)
+          end.to change(ImportSourceDataTask, :count).by(1)
         end
       end
 
@@ -55,7 +55,7 @@ describe JobTasksController do
         it 'creates a job task' do
           expect do
             post :create, params
-          end.to change(JobTask, :count).by(1)
+          end.to change(ImportSourceDataTask, :count).by(1)
         end
       end
 
@@ -98,8 +98,7 @@ describe JobTasksController do
       it 'changes a job task' do
         expect do
           put :update, params
-          task.reload
-        end.to change(task, :destination_name).to('sandwich_table')
+        end.to change { task.payload.reload.destination_name }.to('sandwich_table')
         decoded_response[:destination_name].should == 'sandwich_table'
         response.code.should == "200"
       end

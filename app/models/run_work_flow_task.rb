@@ -1,18 +1,11 @@
 class RunWorkFlowTask < JobTask
-  has_additional_data :work_flow_id
-
-  def self.assemble!(params, job)
-    task = RunWorkFlowTask.new(params)
-    task.job = job
-    task.save!
-    task
-  end
+  belongs_to :payload, :class_name => 'AlpineWorkfile'
 
   def execute
     true
   end
 
-  def work_flow
-    AlpineWorkfile.find(work_flow_id)
+  def attach_payload(params)
+    self.payload = AlpineWorkfile.find params[:work_flow_id]
   end
 end

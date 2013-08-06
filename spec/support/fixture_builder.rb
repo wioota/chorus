@@ -383,18 +383,17 @@ FixtureBuilder.configure do |fbuilder|
     Events::JobSucceeded.by(owner).add(:job => default_job, :workspace => default_job.workspace)
     Events::JobFailed.by(owner).add(:job => default_job, :workspace => default_job.workspace)
 
-    default_job_task = FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_id => nil, :destination_name => 'import_from_task3', :row_limit => 400, :truncate => false)
-
+    default_job_task = FactoryGirl.create(:import_source_data_task, :job => default_job)
     fbuilder.name :default, default_job_task
 
-    job_task_isdt = FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_id => nil, :destination_name => 'import_from_task', :row_limit => 400, :truncate => false)
+    job_task_isdt = FactoryGirl.create(:import_source_data_task, :job => default_job)
     fbuilder.name :isdt, job_task_isdt
 
-    work_flow_task = FactoryGirl.create(:run_work_flow_task)
+    work_flow_task = FactoryGirl.create(:run_work_flow_task, :job => default_job)
     fbuilder.name :rwft, work_flow_task
 
-    FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_name => 'import_from_task2')
-    FactoryGirl.create(:import_source_data_task, :job => default_job, :action => 'import_source_data', :source_id => default_table.id, :destination_id => default_table.id)
+    FactoryGirl.create(:import_source_data_task, :job => default_job)
+    FactoryGirl.create(:import_source_data_task, :job => default_job)
 
     #Imports
     dataset_import_created = FactoryGirl.create(:dataset_import_created_event,
@@ -467,7 +466,7 @@ FixtureBuilder.configure do |fbuilder|
       @note_on_workfile = Events::NoteOnWorkfile.create!({:note_target => text_workfile, :body => "My awesome workfile"}, :as => :create)
       @note_on_gnip_data_source = Events::NoteOnGnipDataSource.create!({:note_target => gnip_data_source, :body => 'i am a comment with gnipsearch in me'}, :as => :create)
       @insight_on_gnip_data_source = Events::NoteOnGnipDataSource.create!({:note_target => gnip_data_source, :body => 'i am an insight with gnipinsight in me', :insight => true}, :as => :create)
-  
+
       Events::NoteOnDataset.create!({:note_target => default_table, :body => 'Note on dataset'}, :as => :create)
       Events::NoteOnWorkspaceDataset.create!({:note_target => default_table, :workspace => public_workspace, :body => 'Note on workspace dataset'}, :as => :create)
       @note_on_dataset = Events::NoteOnDataset.create!({:dataset => searchquery_table, :body => 'notesearch ftw'}, :as => :create)
@@ -476,10 +475,10 @@ FixtureBuilder.configure do |fbuilder|
       @note_on_chorus_view_private = Events::NoteOnWorkspaceDataset.create!({:dataset => searchquery_chorus_view_private, :workspace => searchquery_chorus_view_private.workspace, :body => 'workspacedatasetnotesearch'}, :as => :create)
       @note_on_search_workspace_dataset = Events::NoteOnWorkspaceDataset.create!({:dataset => searchquery_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch'}, :as => :create)
       @note_on_workspace_dataset = Events::NoteOnWorkspaceDataset.create!({:dataset => source_table, :workspace => public_workspace, :body => 'workspacedatasetnotesearch'}, :as => :create)
-  
+
       fbuilder.name :note_on_public_workspace, Events::NoteOnWorkspace.create!({:workspace => public_workspace, :body => 'notesearch forever'}, :as => :create)
     end
-    
+
     Events::FileImportSuccess.by(the_collaborator).create!(:dataset => default_table, :workspace => public_workspace)
 
     with_current_user(no_collaborators) do

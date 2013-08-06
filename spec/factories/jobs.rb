@@ -75,7 +75,7 @@ FactoryGirl.define do
 
   factory :job do
     name { Faker::Company.bs.titlecase }
-    workspace
+    association :workspace, :factory => :workspace_with_sandbox
     next_run 2.days.from_now
     end_run 3.days.from_now
     time_zone 'Alaska'
@@ -87,20 +87,31 @@ FactoryGirl.define do
     name { Faker::Company.bs.titlecase }
     sequence(:index) { |n| n }
     job
-    action { %w( import_source_data run_work_flow run_sql_file ).sample }
 
-    factory :import_source_data_task, class: ImportSourceDataTask do
-      action { 'import_source_data' }
-      source_id { Dataset.first.id }
-      destination_id { Dataset.last.id }
-      destination_name nil
-      truncate false
-      row_limit 500
+    factory :import_source_data_task, :class => ImportSourceDataTask do
+      association :payload, :factory => :existing_table_import_template
     end
 
-    factory :run_work_flow_task, class: RunWorkFlowTask do
-      action { 'import_source_data' }
-      work_flow_id { AlpineWorkfile.last.id }
+    factory :import_source_data_task_into_new_table, :class => ImportSourceDataTask do
+      association :payload, :factory => :new_table_import_template
+    end
+
+    factory :run_work_flow_task, :class => RunWorkFlowTask do
+      association :payload, :factory => :work_flow
+    end
+  end
+
+  factory :import_template do
+    association :source, :factory => :gpdb_table
+    row_limit 987
+
+    factory :new_table_import_template do
+      destination_name { Faker::Company.name }
+    end
+
+    factory :existing_table_import_template do
+      association :destination, :factory => :gpdb_table
+      truncate true
     end
   end
 end

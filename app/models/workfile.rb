@@ -74,12 +74,7 @@ class Workfile < ActiveRecord::Base
                         :owner,
                         :tags,
                         {:most_recent_comments => :author},
-                        {:most_recent_notes => :actor},
-                        {
-                            :execution_location => {
-                                :scoped_parent => :data_source
-                            }
-                        }
+                        {:most_recent_notes => :actor}
                     ]
                 },
                 :owner,
@@ -100,7 +95,7 @@ class Workfile < ActiveRecord::Base
 
   def self.order_by(column_name)
     if column_name.blank? || column_name == "file_name"
-      order("lower(file_name), id")
+      order("lower(workfiles.file_name), workfiles.id")
     else
       order("user_modified_at desc")
     end

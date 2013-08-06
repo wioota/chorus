@@ -10,86 +10,92 @@ describe ImportSourceDataTask do
         :action => 'import_source_data',
         :is_new_table => false,
         :index => 1000,
-        "source_id" => source_dataset.id,
-        "destination_id" => '2',
-        "row_limit" => '500',
-        "truncate" => "false"
+        :source_id => source_dataset.id,
+        :destination_id => '2',
+        :row_limit => '500',
+        :truncate => "false"
       }
     end
 
     it "is coerced to a boolean" do
-      task = ImportSourceDataTask.assemble!(planned_job_task, job)
-      task.reload.truncate.should == false
-    end
-
-    it "raises an error if the value is anything other than 'true' or 'false'" do
-      planned_job_task["truncate"] = 'pajamas'
-      expect do
-        ImportSourceDataTask.assemble!(planned_job_task, job)
-      end.to raise_error(ArgumentError)
+      task = JobTask.assemble!(planned_job_task, job)
+      task.reload.payload.truncate.should == false
     end
   end
 
   describe '.assemble!' do
     context 'with a destination dataset' do
-      let(:additional_data) do
+      let(:import_data) do
         {
-          "source_id" => source_dataset.id,
-          "destination_id" => '2',
-          "row_limit" => '500',
-          "truncate" => false
+          :source_id => source_dataset.id,
+          :destination_id => '2',
+          :row_limit => '500',
+          :truncate => false
         }
       end
       let(:planned_job_task) do
         {
           :action => 'import_source_data',
           :is_new_table => false,
-        }.merge!(additional_data)
+        }.merge!(import_data)
       end
 
-      it "should make an ImportSourceDataTask" do
-        task = ImportSourceDataTask.assemble!(planned_job_task, job)
-        task.additional_data.should == additional_data
-        task.id.should_not be_nil
+      it "should make an associated ImportSourceDataTask" do
+        expect {
+          expect {
+            JobTask.assemble!(planned_job_task, job)
+          }.to change(ImportSourceDataTask, :count).by(1)
+        }.to change(job.job_tasks.reload, :count).by(1)
+      end
+
+      it "should create an ImportTemplate as its payload" do
+        task = JobTask.assemble!(planned_job_task, job)
+        task.payload.source.should == source_dataset
+        task.payload.destination_id.should == import_data[:destination_id].to_i
+        task.payload.truncate.should == import_data[:truncate]
+        task.payload.row_limit.should == import_data[:row_limit].to_i
       end
 
       it 'should set the display name' do
-        task = ImportSourceDataTask.assemble!(planned_job_task, job)
-        task.name.should == "Import " + source_dataset.name
+        task = JobTask.assemble!(planned_job_task, job)
+        task.name.should == "Import from " + source_dataset.name
       end
     end
 
     context 'with a new destination table' do
-      let(:additional_data) do
+      let(:import_data) do
         {
-          "source_id" => source_dataset.id,
-          "destination_name" => 'FOO',
-          "row_limit" => '500',
-          "truncate" => false
+          :source_id => source_dataset.id,
+          :destination_name => 'FOO',
+          :row_limit => '500',
+          :truncate => false
         }
       end
       let(:planned_job_task) do
         {
           :action => 'import_source_data',
           :is_new_table => false,
-        }.merge!(additional_data)
+        }.merge!(import_data)
       end
 
       it "should make an ImportSourceDataTask" do
-        task = ImportSourceDataTask.assemble!(planned_job_task, job)
-        task.additional_data.should == additional_data
+        task = JobTask.assemble!(planned_job_task, job)
+        task.payload.source_id.should == import_data[:source_id]
+        task.payload.destination_name.should == import_data[:destination_name]
+        task.payload.truncate.should == import_data[:truncate]
+        task.payload.row_limit.should == import_data[:row_limit].to_i
         task.id.should_not be_nil
       end
 
       it 'should set the display name' do
-        task = ImportSourceDataTask.assemble!(planned_job_task, job)
-        task.name.should == "Import " + source_dataset.name
+        task = JobTask.assemble!(planned_job_task, job)
+        task.name.should == "Import from " + source_dataset.name
       end
 
       it 'cannot have the same destination_name as any existing dataset in the sandbox' do
-        additional_data["destination_name"] = job.workspace.sandbox.datasets.first.name
+        import_data[:destination_name] = job.workspace.sandbox.datasets.first.name
         expect {
-          ImportSourceDataTask.assemble!(planned_job_task, job)
+          JobTask.assemble!(planned_job_task, job)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -104,7 +110,7 @@ describe ImportSourceDataTask do
 
     it "creates an Import Object" do
       mock(ImportExecutor).run.with_any_args
-      stub(isdt).set_destination_id!
+      stub(isdt.payload).set_destination_id!
       expect {
         isdt.execute
       }.to change(Import, :count).by(1)
@@ -117,18 +123,24 @@ describe ImportSourceDataTask do
     end
 
     describe 'when importing into a new table' do
+      before do
+        any_instance_of(WorkspaceImport) do |import|
+          stub(import).table_does_not_exist { true }
+          stub(import).tables_have_consistent_schema { true }
+        end
+      end
+      let(:isdt) { FactoryGirl.create(:import_source_data_task_into_new_table) }
+
       context 'and the import completes successfully' do
         let(:dataset) { datasets(:table) }
-        before do
-          isdt.destination_name = dataset.name
-        end
 
         it 'changes the destination id to the newly created dataset id' do
           stub(ImportExecutor).run {true}
-          stub(isdt.job.workspace.sandbox.datasets).find_by_name { dataset }
+          stub(isdt.payload.workspace.sandbox.datasets).find_by_name { dataset }
+
           isdt.execute
-          isdt.destination_name.should be_nil
-          isdt.destination_id.should == dataset.id
+          isdt.payload.destination_name.should be_nil
+          isdt.payload.destination_id.should == dataset.id
         end
       end
 
@@ -139,7 +151,7 @@ describe ImportSourceDataTask do
             expect {
               isdt.execute
             }.to raise_error(JobTask::JobTaskFailure)
-          }.not_to change(isdt, :destination_name)
+          }.not_to change(isdt.payload, :destination_name)
         end
       end
     end

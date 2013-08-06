@@ -1,40 +1,42 @@
 class JobTask < ActiveRecord::Base
   include SoftDelete
-  ACTIONS = %w( import_source_data run_work_flow run_sql_file )
-
-  @@actions = Hash[
-    'import_source_data' => 'ImportSourceDataTask',
-    'run_work_flow' => 'RunWorkFlowTask'
-  ]
-
-  attr_accessible :index, :action
+  attr_accessible :index, :type, :job
 
   belongs_to :job
+  validates_presence_of :job_id
 
-  before_validation :set_index
-
-  validates :index, :presence => true, :uniqueness => {:scope => [:job_id, :deleted_at]}
-  validates :action, :presence => true, :inclusion => {:in => ACTIONS }
-  validates_presence_of :job
-
-  serialize :additional_data, JsonHashSerializer
+  before_create :provide_index
+  validates :type, :presence => true
 
   JobTaskFailure = Class.new(StandardError)
 
-  def self.create_for_action!(params)
-    job_task_params = params[:job_task]
-    job = Job.find(params[:job_id])
-    klass = @@actions[job_task_params[:action]].constantize
-    klass.assemble!(job_task_params, job)
+  def self.assemble!(params, job)
+    params.delete(:job)
+    params.delete(:workspace)
+    klass = "#{params[:action].camelize}Task".constantize
+    task = klass.new(params)
+    task.job = job
+    task.attach_payload params
+    task.save!
+    task
+  end
+
+  def action
+    type.gsub(/Task\z/, '').underscore
   end
 
   def execute
     raise NotImplementedError
   end
 
+  def update_attributes(params)
+    payload.update_attributes(params)
+    super
+  end
+
   private
 
-  def set_index
-    self.index = index || job.next_task_index if job
+  def provide_index
+    self.index = job.next_task_index
   end
 end

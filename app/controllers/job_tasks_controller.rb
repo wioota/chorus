@@ -2,8 +2,10 @@ class JobTasksController < ApplicationController
   def create
     authorize! :can_edit_sub_objects, workspace
 
-    job_task = JobTask.create_for_action!(params)
-    present job_task, :status => :created
+    job = Job.find(params[:job_id])
+    task = JobTask.assemble!(params[:job_task], job)
+
+    present task, :status => :created
   end
 
   def destroy

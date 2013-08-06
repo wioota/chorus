@@ -27,5 +27,4 @@ class JobPresenter < Presenter
       model.next_run.in_time_zone(ActiveSupport::TimeZone[model.time_zone])
     end
   end
-
 end

@@ -71,19 +71,6 @@ describe AlpineWorkfile do
         end
       end
     end
-
-    context "when renaming or creating a workflow" do
-      let(:params) { {:file_name => 'already_taken_flow'} }
-      let(:workfile) { FactoryGirl.build(:alpine_workfile) }
-
-      before { FactoryGirl.build(:workfile, :file_name => 'already_taken_flow') }
-
-      it "does not resolve name conflicts" do
-        expect do
-          workfile.update_from_params!(params)
-        end.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
   end
 
   describe "validations" do
