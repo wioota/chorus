@@ -210,16 +210,26 @@ describe Job do
   end
 
   describe 'on update' do
-    let(:impossible_job) do
-      jobs(:ready).tap do |job|
-        job.next_run = 1.hour.from_now
-        job.end_run = Time.current
+    context 'with an on demand job' do
+      let(:job) { jobs(:on_demand) }
+
+      it 'does not error' do
+        job.save!
       end
     end
 
-    it 'disables expiring jobs on update' do
+    context 'with a scheduled job' do
+      let(:impossible_job) do
+        jobs(:ready).tap do |job|
+          job.next_run = 1.hour.from_now
+          job.end_run = Time.current
+        end
+      end
+
+      it 'disables expiring jobs on update' do
         impossible_job.save!
         impossible_job.should_not be_enabled
+      end
     end
   end
 end

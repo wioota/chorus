@@ -95,7 +95,7 @@ class Job < ActiveRecord::Base
   end
 
   def expiring?
-    end_run && next_run > end_run.to_date
+    on_demand? ? false : (end_run && next_run > end_run.to_date)
   end
 
   def idle!
