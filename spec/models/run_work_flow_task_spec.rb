@@ -24,4 +24,11 @@ describe RunWorkFlowTask do
       JobTask.assemble!(task_plan, job).reload.payload.should == work_flow
     end
   end
+
+  describe "#build_task_name" do
+    let(:task) { job_tasks(:rwft) }
+    it "includes the file_name" do
+      task.build_task_name.should include(task.payload.file_name)
+    end
+  end
 end

@@ -172,6 +172,12 @@ describe ImportSourceDataTask do
         }.to raise_error(JobTask::JobTaskFailure)
       end
     end
+  end
 
+  describe "#build_task_name" do
+    let(:task) { job_tasks(:isdt) }
+    it "includes source dataset's name" do
+      task.build_task_name.should include(task.payload.source.name)
+    end
   end
 end

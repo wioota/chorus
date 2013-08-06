@@ -7,7 +7,7 @@ class JobTaskPresenter < Presenter
       :workspace => present(model.job.workspace, list_view: true),
       :action => model.action,
       :index => model.index,
-      :name => model.name
+      :name => model.build_task_name
     }
   end
 end

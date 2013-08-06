@@ -34,6 +34,10 @@ class JobTask < ActiveRecord::Base
     super
   end
 
+  def build_task_name
+    raise NotImplementedError
+  end
+
   private
 
   def provide_index

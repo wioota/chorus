@@ -1,7 +1,6 @@
 class ImportSourceDataTask < JobTask
   validate :destination_name_is_unique
 
-  before_save :build_task_name
   belongs_to :payload, :class_name => 'ImportTemplate', :autosave => true
   delegate :workspace, :to => :job
 
@@ -18,11 +17,11 @@ class ImportSourceDataTask < JobTask
     raise JobTaskFailure.new(e)
   end
 
-  private
-
   def build_task_name
     self.name = "Import from #{payload.source.name}"
   end
+
+  private
 
   def destination_name_is_unique
     if payload.new_table_import? && destination_already_exists?
