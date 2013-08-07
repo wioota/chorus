@@ -96,8 +96,6 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
         var $tableNameField = this.$(".new_table input.new_table_name");
         $tableNameField.prop("disabled", !destinationIsNewTable);
 
-        this.$(".truncate").prop("disabled", this.isNewTable());
-
         this.enableDestinationLink(!destinationIsNewTable);
         this.showErrors(this.model);
         this.toggleSubmitDisabled();

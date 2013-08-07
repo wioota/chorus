@@ -3,10 +3,6 @@ jasmine.sharedExamples.importIntoNewTableIsSelected = function () {
         expect(this.dialog.$(".destination a.dataset_picked")).toHaveClass('hidden');
         expect(this.dialog.$(".destination span.dataset_picked")).not.toHaveClass('hidden');
     });
-
-    it("should disable the truncate option", function () {
-        expect(this.dialog.$(".truncate")).toBeDisabled();
-    });
 };
 
 jasmine.sharedExamples.importIntoExistingTableIsSelected = function () {
