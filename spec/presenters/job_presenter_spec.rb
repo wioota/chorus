@@ -32,11 +32,14 @@ describe JobPresenter, :type => :view do
         end
       end
 
-      it "presents next run as iso8601 strings with timezone" do
+      it "presents next run and last_run as iso8601 strings with timezone" do
+        job.update_attribute(:last_run, 'Tue, 30 Jul 2013 12:27:27 UTC +00:00')
         job.update_attribute(:next_run, 'Wed, 31 Jul 2013 12:27:27 UTC +00:00')
         job.update_attribute(:time_zone, 'Alaska')
+        hash[:last_run].to_i.should == DateTime.parse('Tue, 30 Jul 2013 12:27:27 UTC +00:00').to_i
         hash[:next_run].to_i.should == DateTime.parse('Wed, 31 Jul 2013 12:27:27 UTC +00:00').to_i
 
+        hash[:last_run].iso8601.should == '2013-07-30T04:27:27-08:00'
         hash[:next_run].iso8601.should == '2013-07-31T04:27:27-08:00'
       end
 
