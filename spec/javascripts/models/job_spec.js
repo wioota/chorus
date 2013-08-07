@@ -79,4 +79,14 @@ describe("chorus.models.Job", function () {
             expect(this.model.tasks().models).toEqual([]);
         });
     });
+
+    describe("nextRunDate", function () {
+        beforeEach(function () {
+            this.model = new chorus.models.Job();
+        });
+
+        it("defaults to an hour from creation", function () {
+            expect(this.model.nextRunDate().format()).toEqual(moment().add(1, 'hour').format());
+        });
+    });
 });

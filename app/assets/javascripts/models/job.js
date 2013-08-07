@@ -20,12 +20,12 @@ chorus.models.Job = chorus.models.Base.extend({
 
     nextRunDate: function () {
         var startDate = this.get('nextRun');
-        return startDate ? moment(startDate).zone(startDate) : moment();
+        return startDate ? moment(startDate).zone(startDate) : moment().add(1, 'hour');
     },
 
     endRunDate: function () {
         var endDate = this.get('endRun');
-        return endDate ? moment(endDate).zone(endDate) : moment();
+        return endDate ? moment(endDate).zone(endDate) : moment().add(1, 'hour');
     },
 
     nextRunTime: function () {
@@ -33,7 +33,7 @@ chorus.models.Job = chorus.models.Base.extend({
         var meridiem = hoursBase - 11 > 0 ? "pm" : "am";
         var hours = meridiem === "pm" ? hoursBase - 12 : hoursBase;
         hours = hours === 0 ? 12 : hours;
-        var minutes = Math.floor(this.nextRunDate().minutes() / 5) * 5;
+        var minutes = this.nextRunDate().minutes();
         var zone = this.get('timeZone');
 
         return {
