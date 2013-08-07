@@ -116,12 +116,12 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
             hours: _.range(1,13).map(function (digit) {
                 return {value: digit};
             }),
-            minutes: _.compact(_.range(0,60).map(function (digit) {
-                if (digit % 5 === 0) return {
+            minutes: _.range(0,60).map(function (digit) {
+                return {
                     value: digit,
                     label: (digit - 9) > 0 ? digit : "0" + digit.toString()
                 };
-            })),
+            }),
             submitTranslation: this.submitTranslation
         };
     }
