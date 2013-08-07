@@ -23,9 +23,9 @@ describe("chorus.views.JobContentDetails", function () {
 
         context("clicking on 'Run Work Flow'", function () {
             it("launches the WorkFlowPicker dialog", function() {
-                expect(this.modalSpy).not.toHaveModal(chorus.dialogs.CreateWorkFlowTask);
+                expect(this.modalSpy).not.toHaveModal(chorus.dialogs.ConfigureWorkFlowTask);
                 this.qtipElement.find('.run_work_flow').click();
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateWorkFlowTask);
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.ConfigureWorkFlowTask);
             });
 
             it("launches the picker dialog with only work flows", function() {

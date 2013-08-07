@@ -1,20 +1,26 @@
-chorus.dialogs.CreateWorkFlowTask = chorus.dialogs.PickItems.include(chorus.Mixins.DialogFormHelpers).extend({
+chorus.dialogs.ConfigureWorkFlowTask = chorus.dialogs.PickItems.include(chorus.Mixins.DialogFormHelpers).extend({
     constructorName: 'CreateWorkFlowTask',
-    title: t('create_job_task_dialog.add_title'),
     searchPlaceholderKey: 'job_task.work_flow.search_placeholder',
-    submitButtonTranslationKey: "create_job_task_dialog.add",
     modelClass: "WorkFlow",
     pagination: true,
     multiSelection: false,
     message: 'create_job_task_dialog.toast',
-
+    title: function () {
+        return this.model.isNew() ? t('create_job_task_dialog.add_title') : t('create_job_task_dialog.edit_title');
+    },
+    submitButtonTranslationKey: function () {
+        return this.model.isNew() ? 'create_job_task_dialog.add' : 'create_job_task_dialog.save';
+    },
 
     setup: function() {
         this._super("setup");
 
-        this.job = this.options.job;
+        this.job = this.options.job || this.model.job();
         this.workspace = this.job.workspace();
-        this.model = new chorus.models.JobTask({workspace: {id: this.workspace.get("id")}, job: {id: this.options.job.get("id")}});
+
+        if (!this.model) {
+            this.model = this.model || new chorus.models.JobTask({workspace: {id: this.workspace.get("id")}, job: {id: this.job.get("id")}});
+        }
 
         this.collection = this.options.collection;
         this.pickItemsList.templateName = "workfile_picker_list";

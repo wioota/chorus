@@ -67,7 +67,7 @@ chorus.dialogs.PickItems = chorus.dialogs.Base.extend({
     additionalContext: function() {
         return {
             placeholderTranslation: this.searchPlaceholderKey || "pickitem.dialog.search.placeholder",
-            submitButtonTranslationKey: this.submitButtonTranslationKey || "pickitem.dialog.submit"
+            submitButtonTranslationKey: _.result(this, 'submitButtonTranslationKey') || "pickitem.dialog.submit"
         };
     },
 

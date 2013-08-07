@@ -17,6 +17,11 @@ class ImportSourceDataTask < JobTask
     raise JobTaskFailure.new(e)
   end
 
+  def update_attributes(params)
+    payload.update_attributes(params)
+    super
+  end
+
   def build_task_name
     self.name = "Import from #{payload.source.name}"
   end

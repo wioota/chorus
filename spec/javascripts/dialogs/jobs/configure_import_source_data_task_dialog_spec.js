@@ -409,7 +409,7 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
             });
         });
 
-        it("has an 'Edit Task' title and an enabled 'Save' button", function () {
+        it("has an 'Edit Task' title and a 'Save' button", function () {
             expect(this.dialog.$('.dialog_header h1')).toContainTranslation("create_job_task_dialog.edit_title");
             expect(this.dialog.$('button.submit')).toContainTranslation('create_job_task_dialog.save');
         });

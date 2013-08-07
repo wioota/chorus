@@ -20,5 +20,7 @@ chorus.models.JobTask = chorus.models.Base.extend({
                 this.requirePositiveInteger("rowLimit", newAttrs, 'import.validation.sampleCount.positive');
             }
         }
-    }
+    },
+
+    paramsToIgnore: ['workspace', 'job']
 });

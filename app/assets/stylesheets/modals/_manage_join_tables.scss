@@ -6,6 +6,16 @@
     }
 }
 
+.pick_dataset_with_action, .import_datasets_picker_list {
+    .list {
+        .text {
+            .main {
+                width: 350px;
+            }
+        }
+    }
+}
+
 .pick_dataset_with_action, .import_datasets_picker_list, .workfile_picker_list {
     .search {
         padding: 5px 10px;
@@ -38,9 +48,8 @@
 
             .text {
                 .main {
-                    width: 210px;
-                    @include ellipsis;
                     .name {
+                        @include ellipsis;
                         @include font-normal-alpha;
                     }
                 }

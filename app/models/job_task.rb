@@ -12,8 +12,6 @@ class JobTask < ActiveRecord::Base
   JobTaskFailure = Class.new(StandardError)
 
   def self.assemble!(params, job)
-    params.delete(:job)
-    params.delete(:workspace)
     klass = "#{params[:action].camelize}Task".constantize
     task = klass.new(params)
     task.job = job
@@ -28,11 +26,6 @@ class JobTask < ActiveRecord::Base
 
   def execute
     raise NotImplementedError
-  end
-
-  def update_attributes(params)
-    payload.update_attributes(params)
-    super
   end
 
   def build_task_name

@@ -12,4 +12,9 @@ class RunWorkFlowTask < JobTask
   def build_task_name
     self.name = "Run #{payload.file_name}"
   end
+
+  def update_attributes(params)
+    attach_payload(params) if params[:work_flow_id]
+    super
+  end
 end

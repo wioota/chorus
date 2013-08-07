@@ -108,6 +108,27 @@ describe JobTasksController do
         put :update, params
       end
     end
+
+    context "run work flow" do
+      let(:task) { job_tasks(:rwft) }
+      let(:desired_work_flow) { workfiles(:alpine_flow) }
+      let(:params) do
+        {
+            id: task.id,
+            job_id: task.job.id,
+            workspace_id: task.job.workspace.id,
+            job_task: {
+                work_flow_id: desired_work_flow.id
+            },
+        }
+      end
+
+      it "updates the task's name" do
+        expect do
+          put :update, params
+        end.to change { task.reload.payload.id }.to(desired_work_flow.id)
+      end
+    end
   end
 
   describe "destroy" do

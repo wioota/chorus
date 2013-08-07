@@ -74,9 +74,5 @@
         </div>
     </div>
 
-    {{#if isNew}}
-        {{formControlsWithDisabledSubmit "create_job_task_dialog.add"}}
-    {{else}}
-        {{formControlsWithDisabledSubmit "create_job_task_dialog.save"}}
-    {{/if}}
+    {{formControlsWithDisabledSubmit submitButtonTranslationKey}}
 </form>
