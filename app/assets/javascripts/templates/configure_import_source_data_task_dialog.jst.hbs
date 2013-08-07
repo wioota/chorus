@@ -50,7 +50,7 @@
         <fieldset class="new_table row">
             <input type="radio" name="imports" id="create_job_task_new_table" {{#unless useExistingTable}}checked="checked"{{/unless}}/>
             <label class="main" for="create_job_task_new_table">{{t "import.new_table"}}</label>
-            <input type="text" class="new_table_name" name="toTable" {{#unless destinationId}}value="{{destinationName}}"{{/unless}} maxlength="64"/>
+            <input type="text" class="new_table_name" name="destinationName" {{#unless destinationId}}value="{{destinationName}}"{{/unless}} maxlength="64"/>
         </fieldset>
 
     </div>
@@ -69,7 +69,7 @@
         <div class="row limit">
             <input type="checkbox" name="limit_num_rows" id="create_job_task_limit_rows_existing"/>
             <label for="create_job_task_limit_rows_existing">{{t "import.limit_rows"}}</label>
-            <input class="row_limit" type="text" name="sampleCount" maxlength="10" disabled="disabled"
+            <input class="row_limit" type="text" name="rowLimit" maxlength="10" disabled="disabled"
                    value="{{rowLimit}}"/>
         </div>
     </div>

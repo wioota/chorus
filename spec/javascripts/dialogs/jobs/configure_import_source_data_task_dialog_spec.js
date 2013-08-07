@@ -239,10 +239,6 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
                             chorus.modal.trigger("datasets:selected", this.destinationDatasets, '.destination');
                         });
 
-                        context("when the limit checkbox is not selected", function () {
-                            theSubmitButtonIs('enabled');
-                        });
-
                         context("when the limit checkbox is selected", function () {
                             var limitField;
 
@@ -255,8 +251,6 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
                                 beforeEach(function () {
                                     limitField.val(500).trigger('keyup');
                                 });
-
-                                theSubmitButtonIs('enabled');
 
                                 context("when submitting the form", function () {
                                     beforeEach(function () {
@@ -305,7 +299,16 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
                                 beforeEach(function () {
                                     limitField.val('-1ab').trigger('keyup');
                                 });
-                                theSubmitButtonIs('disabled');
+
+                                context("when submitting the form", function () {
+                                    beforeEach(function () {
+                                        this.dialog.$("form").submit();
+                                    });
+
+                                    it("has a validation error", function () {
+                                        expect(this.dialog.$('.row_limit')).toHaveClass('has_error');
+                                    });
+                                });
                             });
                         });
                     });

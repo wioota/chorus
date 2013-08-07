@@ -25,6 +25,7 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
         } else {
             this.model = this.buildATask();
         }
+        this.resource = this.model;
 
         this.disableFormUnlessValid({
             formSelector: "form",
@@ -33,7 +34,7 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
         });
 
         this.listenTo(this.model, "saved", this.modelSaved);
-        this.listenTo(this.model, "saveFailed", this.saveFailed);
+        this.listenTo(this.model, "saveFailed validationFailed", this.saveFailed);
     },
 
     postRender: function () {
@@ -66,8 +67,7 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
         var sourcePicked = this.sourceTableHasBeenPicked;
         var destinationPicked = existingDestinationPicked || newDestinationNamed;
 
-        var validLimit = this.limitIsChecked() ? this.limitIsValid() : true;
-        return sourcePicked && destinationPicked && validLimit;
+        return sourcePicked && destinationPicked;
     },
 
     buildATask: function () {
@@ -125,12 +125,6 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
 
     newTableName: function () {
         return this.$('input.new_table_name').val();
-    },
-
-    limitIsValid: function () {
-        var limit = parseInt(this.$(".limit input[type=text]").val(), 10);
-
-        return isNaN(limit) ? false : limit > 0;
     },
 
     onCheckboxClicked: function (e) {

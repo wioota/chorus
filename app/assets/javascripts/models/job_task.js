@@ -8,5 +8,17 @@ chorus.models.JobTask = chorus.models.Base.extend({
             this._job = new chorus.models.Job(this.get("job"));
         }
         return this._job;
+    },
+
+    declareValidations: function(newAttrs) {
+        if (newAttrs.action === "import_source_data") {
+            if (!newAttrs.destinationId) {
+                this.requirePattern("destinationName", chorus.ValidationRegexes.ChorusIdentifier64(), newAttrs, 'import.validation.toTable.required');
+            }
+
+            if (newAttrs.rowLimit) {
+                this.requirePositiveInteger("rowLimit", newAttrs, 'import.validation.sampleCount.positive');
+            }
+        }
     }
 });
