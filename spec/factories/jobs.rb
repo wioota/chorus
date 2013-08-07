@@ -88,7 +88,7 @@ FactoryGirl.define do
     sequence(:index) { |n| n }
     job
 
-    factory :import_source_data_task, :class => ImportSourceDataTask do
+    factory :import_source_data_task, :aliases => [:isdt], :class => ImportSourceDataTask do
       association :payload, :factory => :existing_table_import_template
     end
 

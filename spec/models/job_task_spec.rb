@@ -38,4 +38,18 @@ describe JobTask do
   describe '#execute' do
     it { should respond_to :execute }
   end
+
+  describe 'deleting' do
+    before do
+      @job = jobs(:default).tap { |job| job.job_tasks.destroy_all }
+      @task1 = FactoryGirl.create(:isdt, index: 1, job: @job)
+      @task2 = FactoryGirl.create(:isdt, index: 2, job: @job)
+      @task3 = FactoryGirl.create(:isdt, index: 3, job: @job)
+    end
+
+    it "compacts indices" do
+      @task2.destroy
+      @job.job_tasks.reload.map(&:index).should == [1,2]
+    end
+  end
 end

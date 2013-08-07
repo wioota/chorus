@@ -7,6 +7,7 @@ class JobTask < ActiveRecord::Base
 
   before_create :provide_index
   validates :type, :presence => true
+  after_destroy :compact_indices
 
   JobTaskFailure = Class.new(StandardError)
 
@@ -42,5 +43,9 @@ class JobTask < ActiveRecord::Base
 
   def provide_index
     self.index = job.next_task_index
+  end
+
+  def compact_indices
+    job.compact_indices
   end
 end

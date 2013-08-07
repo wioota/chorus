@@ -70,7 +70,13 @@ class Job < ActiveRecord::Base
   def next_task_index
     (job_tasks.order(:index).last.try(:index) || 0) + 1
   end
-  
+
+  def compact_indices
+    job_tasks.order(:index).each_with_index do |task, index|
+      task.update_attribute(:index, index + 1)
+    end
+  end
+
   private
 
   def disable_expiring
