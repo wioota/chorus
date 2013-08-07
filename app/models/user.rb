@@ -21,7 +21,6 @@ class User < ActiveRecord::Base
   has_many :owned_workspaces, :foreign_key => :owner_id, :class_name => 'Workspace'
   has_many :memberships, :dependent => :destroy
   has_many :workspaces, :through => :memberships
-  has_many :import_schedules, :dependent => :destroy
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities

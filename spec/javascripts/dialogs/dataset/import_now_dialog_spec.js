@@ -13,19 +13,6 @@ describe("chorus.dialogs.ImportNow", function() {
     context('importing into a workspace', function() {
         beforeEach(function() {
             this.dataset = backboneFixtures.workspaceDataset.datasetTable({workspace: {id: 123}});
-            this.importSchedules = backboneFixtures.datasetImportScheduleSet();
-            _.extend(this.importSchedules.attributes, {
-                datasetId: this.dataset.get('id'),
-                workspaceId: this.dataset.get("workspace").id
-            });
-            this.importSchedule = this.importSchedules.at(0);
-            this.importSchedule.set({
-                datasetId: this.dataset.get('id'),
-                workspaceId: this.dataset.get('workspace').id,
-                destinationDatasetId: 789
-            });
-            this.importSchedule.unset('sampleCount');
-
             this.dialog = new chorus.dialogs.ImportNow({
                 dataset: this.dataset
             });
@@ -35,57 +22,8 @@ describe("chorus.dialogs.ImportNow", function() {
             expect(this.dialog.model).toBeA(chorus.models.WorkspaceImport);
         });
 
-        context("with an existing import", function() {
-            beforeEach(function() {
-                this.importSchedule.set({
-                    destinationTable: "foo",
-                    objectName: "bar"
-                });
-                this.server.completeFetchFor(this.dataset.getImportSchedules(), this.importSchedules.models);
-                this.dialog.render();
-                this.dialog.$(".new_table input.name").val("good_table_name").trigger("keyup");
-                expect(this.dialog.$("button.submit")).toBeEnabled();
-            });
-
-            it("does a post when the form is submitted", function() {
-                this.dialog.$("button.submit").click();
-                expect(this.server.lastCreate().url).toContain('import');
-            });
-
-            context("when 'Import into Existing Table' is checked", function() {
-                beforeEach(function() {
-                    this.dialog.$(".new_table input:radio").prop("checked", false);
-                    this.dialog.$(".existing_table input:radio").prop("checked", true).change();
-                });
-
-                it("should enable the 'select destination table' link", function() {
-                    expect(this.dialog.$(".existing_table a.dataset_picked")).not.toHaveClass("hidden");
-                    expect(this.dialog.$(".existing_table span.dataset_picked")).toHaveClass("hidden");
-                });
-
-                it("should have a link to the dataset picker dialog", function() {
-                    expect(this.dialog.$(".existing_table a.dataset_picked")).toContainTranslation("dataset.import.select_destination");
-                });
-
-                context("when clicking the dataset picker link", function() {
-                    beforeEach(function() {
-                        this.modalStub = stubModals();
-                        this.dialog.$(".existing_table a.dataset_picked").click();
-                    });
-
-                    it("should set the pre-selected dataset if there is one", function() {
-                        expect(this.modalStub.lastModal().options.defaultSelection.attributes).toEqual(this.importSchedule.destination().attributes);
-                    });
-                });
-            });
-        });
-
         context("without an existing scheduled import", function() {
             beforeEach(function() {
-                this.importSchedule.set({
-                    toTable: null
-                });
-                this.server.completeFetchFor(this.dataset.getImportSchedules(), []);
                 this.dialog.render();
             });
 
@@ -99,10 +37,6 @@ describe("chorus.dialogs.ImportNow", function() {
 
                 it("should have the correct title", function() {
                     expect(this.dialog.title).toMatchTranslation("import.title");
-                });
-
-                it("should hide the schedule controls", function() {
-                    expect(this.dialog.$(".schedule_widget")).not.toExist();
                 });
 
                 it("should display the import destination", function() {

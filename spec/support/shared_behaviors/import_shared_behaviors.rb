@@ -66,25 +66,6 @@ shared_examples_for :import_succeeds do |trigger|
 
     it_behaves_like :import_generates_no_events_when_already_marked_as_passed_or_failed, trigger
 
-    context "when the import is a scheduled import" do
-      let(:import_schedule_id) { 1234 }
-
-      before do
-        import_created_event.reference_id = import_schedule_id
-        import_created_event.reference_type = ImportSchedule.name
-        import_created_event.save!
-        import.import_schedule_id = import_schedule_id
-        import.save!
-      end
-
-      it "still sets the dataset attribute of the DATASET_IMPORT_CREATED event" do
-        send(trigger)
-        event = import_created_event.reload
-        event.dataset.name.should == destination_table_name
-        event.dataset.schema.should == sandbox
-      end
-    end
-
     context "when dataset refresh fails" do
       before do
         any_instance_of(Schema) do |schema|

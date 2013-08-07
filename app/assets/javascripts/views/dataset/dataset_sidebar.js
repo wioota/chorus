@@ -9,7 +9,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         "click .actions .associate": "launchAssociateWithWorkspaceDialog",
         "click .dataset_preview": "launchDatasetPreviewDialog",
         "click .actions a.analyze": "launchAnalyzeAlert",
-        "click a.delete_schedule": "launchImportScheduleDeleteAlert",
         "click a.delete_dataset": "launchDatasetDeleteAlert",
         "click a.duplicate": "launchDuplicateChorusView",
         "click .edit_tags": "startEditingTags",
@@ -17,8 +16,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         "click a.new_note": "launchNotesNewDialog",
         "click a.create_database_view": "launchCreateDatabaseViewDialog",
         "click a.import_now": "launchImportNowDialog",
-        "click a.create_schedule": "launchImportSchedulerDialog",
-        "click a.edit_schedule": "launchImportSchedulerDialog",
         "click a.download": "launchDatasetDownloadDialog",
         "click a.edit_hdfs_dataset": "launchEditHdfsDatasetDialog"
     },
@@ -30,7 +27,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     setup: function() {
         this.subscribePageEvent("dataset:selected", this.setDataset);
         this.subscribePageEvent("column:selected", this.setColumn);
-        this.subscribePageEvent("importSchedule:changed", this.updateImportSchedule);
         this.subscribePageEvent("analyze:running", this.resetStatistics);
         this.subscribePageEvent("start:visualization", this.enterVisualizationMode);
         this.subscribePageEvent("cancel:visualization", this.endVisualizationMode);
@@ -85,11 +81,8 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     fetchImports: function(dataset) {
         if(dataset.canBeImportSourceOrDestination()) {
             this.imports = dataset.getImports();
-            this.importSchedules = dataset.getImportSchedules();
             this.listenTo(this.imports, "loaded", this.render);
-            this.listenTo(this.importSchedules, "loaded", this.render);
             this.imports.fetch();
-            this.importSchedules.fetch();
         }
     },
 
@@ -126,7 +119,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     },
 
     postRender: function() {
-        var $actionLinks = this.$("a.create_schedule, a.edit_schedule, a.import_now, a.download, a.delete");
+        var $actionLinks = this.$("a.import_now, a.download, a.delete");
         $actionLinks.data("dataset", this.resource);
         $actionLinks.data("workspace", this.resource && this.resource.workspace());
         this._super("postRender");
@@ -152,11 +145,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     launchAnalyzeAlert: function(e) {
         e && e.preventDefault();
         new chorus.alerts.Analyze({model: this.resource}).launchModal();
-    },
-
-    launchImportScheduleDeleteAlert: function(e) {
-        e && e.preventDefault();
-        new chorus.alerts.ImportScheduleDelete({model: this.resource.importSchedule()}).launchModal();
     },
 
     launchDatasetDeleteAlert: function(e) {
@@ -209,12 +197,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         dialog.launchModal();
     },
 
-    launchImportSchedulerDialog: function(e) {
-        e && e.preventDefault();
-        var dialog = new chorus.dialogs.ImportScheduler({dataset: this.resource, workspace: this.resource.workspace(), action: $(e.currentTarget).data("action")});
-        dialog.launchModal();
-    },
-
     launchDatasetDownloadDialog: function(e) {
         e && e.preventDefault();
         var dialog = new chorus.dialogs.DatasetDownload({pageModel: this.resource});
@@ -225,15 +207,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         e && e.preventDefault();
         var dialog = new chorus.dialogs.EditHdfsDataset({model: this.resource});
         dialog.launchModal();
-    },
-
-    updateImportSchedule: function(importSchedule) {
-        if(!this.resource) {
-            return;
-        }
-
-        this.resource.getImportSchedules().reset([importSchedule]);
-        this.render();
     },
 
     enterVisualizationMode: function() {

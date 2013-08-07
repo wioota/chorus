@@ -299,7 +299,7 @@ describe WorkspacesController do
         let(:workspace) { workspaces(:public) }
 
         before do
-          [Import, ImportSchedule].each do |stuff|
+          [Import].each do |stuff|
             any_instance_of(stuff) do |import|
               stub(import).tables_have_consistent_schema { true }
               stub(import).table_exists? { true }
@@ -329,7 +329,7 @@ describe WorkspacesController do
     let(:params) { {:id => workspace.id} }
 
     before do
-      [Import, ImportSchedule].each do |stuff|
+      [Import].each do |stuff|
         any_instance_of(stuff) do |import|
           stub(import).tables_have_consistent_schema { true }
           stub(import).table_exists? { true }

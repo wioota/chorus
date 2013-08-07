@@ -1,8 +1,5 @@
 function itHasNoImports(presenter) {
-    expect(presenter.isImportConfigLoaded()).toBeFalsy();
     expect(presenter.lastImport()).toBeFalsy();
-    expect(presenter.nextImport()).toBeFalsy();
-    expect(presenter.hasSchedule()).toBeFalsy();
     expect(presenter.hasImport()).toBeFalsy();
     expect(presenter.importInProgress()).toBeFalsy();
     expect(presenter.importFailed()).toBeFalsy();
@@ -25,7 +22,6 @@ function itBehavesLikeAGpdbDataset(presenter) {
     expect(presenter.realWorkspace()).toBeFalsy();
     expect(presenter.importsEnabled()).toBeFalsy();
     expect(presenter.isDeleteable()).toBeFalsy();
-    expect(presenter.canScheduleImports()).toBeTruthy();
     itBehavesLikeADataset(presenter);
     itHasNoImports(presenter);
 }
@@ -63,67 +59,6 @@ describe("chorus.presenters.DatasetSidebar", function() {
             itBehavesLikeAGpdbDataset(presenter);
             expect(presenter.deleteMsgKey()).toBeTruthy();
             expect(presenter.deleteTextKey()).toBeTruthy();
-        });
-
-        describe("#nextImport", function() {
-            context("No next import", function() {
-                beforeEach(function() {
-                    var schedule = backboneFixtures.datasetImportScheduleSet().last();
-                    schedule.set('nextImportAt', null);
-                    spyOn(resource, 'importSchedule').andReturn(schedule);
-                });
-
-                it("displays the tablename", function() {
-                    var workspace_dataset_model = presenter.nextImport();
-                    this.nextImportLink = presenter.nextImport().string;
-                    expect(this.nextImportLink).toMatchTranslation('import.no_next_import');
-
-                });
-            });
-
-            context("The destination dataset exists", function() {
-                beforeEach(function() {
-                    var schedule = backboneFixtures.datasetImportScheduleSet().last();
-                    schedule.set({
-                        toTable: "My New Table",
-                        workspaceId: 13,
-                        destinationDatasetId: 234,
-                        nextImportAt: "2013-09-07T06:00:00Z"
-                    });
-                    spyOn(resource, "importSchedule").andReturn(schedule);
-                });
-
-                it("displays the tablename", function() {
-                    var workspace_dataset_model = presenter.nextImport();
-                    this.nextImportLink = presenter.nextImport().string;
-                    expect(this.nextImportLink).toMatchTranslation('import.next_import', {
-                        nextTime: Handlebars.helpers.relativeTimestamp("2013-09-07T06:00:00Z"),
-                        tableRef: "<a href=\"#/workspaces/13/datasets/234\" title=\"My New Table\">My New Table</a>"
-                    });
-                });
-            });
-            context("The destination dataset does not yet exist", function() {
-                beforeEach(function() {
-                    var schedule = backboneFixtures.datasetImportScheduleSet().last();
-                    schedule.set({
-                        toTable: "My New Table",
-                        workspaceId: 13,
-                        nextImportAt: "2013-09-07T06:00:00Z"
-                    });
-                    spyOn(resource, "importSchedule").andReturn(
-                        schedule
-                    );
-                });
-
-                it("displays the tablename without the link", function() {
-                    var workspace_dataset_model = presenter.nextImport();
-                    this.nextImportLink = presenter.nextImport().string;
-                    expect(this.nextImportLink).toMatchTranslation('import.next_import', {
-                        nextTime: Handlebars.helpers.relativeTimestamp("2013-09-07T06:00:00Z"),
-                        tableRef: "My New Table"
-                    });
-                });
-            });
         });
 
         describe("#lastImport", function() {
@@ -396,11 +331,6 @@ describe("chorus.presenters.DatasetSidebar", function() {
         it("enables imports", function() {
             expect(this.presenter.importsEnabled()).toBeTruthy();
         });
-
-        it("cannot schedule imports", function() {
-            expect(this.presenter.canScheduleImports()).toBeFalsy();
-        });
-
     });
 
     context("with a chorus view", function() {

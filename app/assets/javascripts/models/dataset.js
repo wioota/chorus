@@ -75,11 +75,7 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     getImports: $.noop,
 
-    getImportSchedules: $.noop,
-
     lastImport: $.noop,
-
-    importSchedule: $.noop,
 
     hasImport: function() {
         return this.getImports() && !this.getImports().isEmpty();
@@ -89,8 +85,7 @@ chorus.models.Dataset = chorus.models.Base.include(
         return (this.schema() && this.isOracle()) ||
             this.workspace() && this.workspace().canUpdate() &&
             this.hasCredentials() &&
-            this.canBeImportSource() &&
-            this.isImportConfigLoaded();
+            this.canBeImportSource();
     },
 
     schema: function() {
@@ -131,10 +126,6 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     workspaceArchived: function() {
         return this.workspace() && !this.workspace().isActive();
-    },
-
-    isImportConfigLoaded: function() {
-        return this.getImportSchedules() && this.getImportSchedules().loaded;
     },
 
     invalidateWorkspacesAssociated: function() {
@@ -342,9 +333,7 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     humanType: function() {
       return t(['dataset.entitySubtypes',this.get("entitySubtype"),this.get("objectType")].join("."));
-    },
-
-    importFrequency: $.noop
+    }
 }, {
     metaTypeMap: {
         "TABLE": "table",

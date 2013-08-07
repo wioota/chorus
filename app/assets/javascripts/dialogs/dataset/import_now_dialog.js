@@ -1,11 +1,9 @@
 chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
     constructorName: "ImportNowDialog",
-    templateName: "import_scheduler",
+    templateName: "import_now",
 
     useLoadingSection: true,
     persistent: true,
-
-    showSchedule: false,
 
     events: {
         "change input:radio": "onDestinationChosen",
@@ -18,10 +16,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         "click .existing_table a.dataset_picked": "launchDatasetPickerDialog",
         "click a.select_schema": "launchSchemaPickerDialog",
         "click a.change_schema": "launchSchemaPickerDialog"
-    },
-
-    resourcesLoaded: function() {
-        this.schedule = this.schedule || this.dataset.importSchedule();
     },
 
     makeModel: function() {
@@ -44,13 +38,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
     },
 
     setup: function() {
-        this.importSchedules = this.dataset.getImportSchedules();
-
-        if(this.importSchedules) {
-            this.importSchedules.fetchIfNotLoaded();
-            this.requiredResources.push(this.importSchedules);
-        }
-
         this.customSetup();
 
         this.listenTo(this.model, "saved", this.modelSaved);
@@ -99,7 +86,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     postRender: function() {
         this.$(".truncate").prop("disabled", true);
-        this.schedule && this.setFieldValuesFromSchedule(this.schedule);
         this.updateExistingTableLink();
 
         if (!this.workspace && !this.importability.loaded) {
@@ -110,11 +96,9 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
     launchDatasetPickerDialog: function(e) {
         e.preventDefault();
         if(!this.saving) {
-            var destination = this.schedule && this.schedule.destination();
             var tables = this.workspace ? this.workspace.sandboxTables({allImportDestinations: true}) : this.schema.tables();
 
             var pickerOptions = {
-                defaultSelection: destination && destination.id && destination,
                 collection: tables
             };
 
@@ -155,28 +139,8 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         this.updateInputState();
     },
 
-    setFieldValuesFromSchedule: function(schedule) {
-        this.$("input[type='radio']").prop("checked", false);
-        var newTable = schedule.get("newTable") === true;
-        if(newTable) {
-            this.$(".new_table input.name").val(schedule.get("toTable"));
-            this.$("input[type='radio']#import_scheduler_new_table").prop("checked", true).change();
-        } else {
-            this.$("input[type='radio']#import_scheduler_existing_table").prop("checked", true).change();
-            this.changeSelectedDataset(schedule.get("toTable"));
-        }
-
-        this.$(".truncate").prop("checked", !!schedule.get("truncate"));
-
-        if(schedule.get("sampleCount") && schedule.get("sampleCount") !== '0') {
-            this.$("input[name='limit_num_rows']").prop("checked", true);
-            this.$("input[name='sampleCount']").prop("disabled", false);
-            this.$("input[name='sampleCount']").val(schedule.get("sampleCount"));
-        }
-    },
-
     isNewTable: function() {
-        return this.$('#import_scheduler_new_table').prop('checked');
+        return this.$('#import_now_new_table').prop('checked');
     },
 
     onDestinationChosen: function() {
@@ -213,7 +177,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
         return {
             allowSchemaSelection: !this.workspace,
             canonicalName: this.schema && this.schema.canonicalName(),
-            showSchedule: this.showSchedule,
             submitKey: this.submitKey
         };
     },
@@ -255,13 +218,6 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
 
     getNewModelAttrs: function() {
         var updates = {};
-
-        _.each(this.$("input:text, input[type=hidden]"), function(i) {
-            var input = $(i);
-            if(input.is(":enabled") && input.closest(".schedule_widget").length === 0) {
-                updates[input.attr("name")] = input.val() && input.val().trim();
-            }
-        });
 
         updates.newTable = this.isNewTable() + "";
         updates.schemaId = this.schema.id;

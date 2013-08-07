@@ -35,7 +35,7 @@ FixtureBuilder.configure do |fbuilder|
     extend RR::Adapters::RRMethods
     Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
 
-    [Import, ImportSchedule].each do |type|
+    [Import].each do |type|
       any_instance_of(type) do |object|
         stub(object).table_exists? {}
         stub(object).tables_have_consistent_schema {}
@@ -405,19 +405,10 @@ FixtureBuilder.configure do |fbuilder|
     schema_import = FactoryGirl.create(:schema_import, :user => owner, :to_table => "schema_import_table", :source => oracle_table, :schema => default_schema)
     fbuilder.name :oracle, schema_import
 
-    import_schedule = FactoryGirl.create(:import_schedule, :start_datetime => '2012-09-04 23:00:00-07', :end_date => '2012-12-04',
-                                         :frequency => 'weekly', :workspace => public_workspace,
-                                         :to_table => "new_table_for_import", :source_dataset_id => default_table.id, :truncate => 't',
-                                         :new_table => 't', :user_id => owner.id)
-    fbuilder.name :default, import_schedule
-
-    import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
-                  :import_schedule => import_schedule,
-                  :source => default_table)
+    import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import", :source => default_table)
     fbuilder.name :three, import
 
-    previous_import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import",
-                                         :import_schedule => import_schedule, :created_at => '2012-09-04 23:00:00-07',
+    previous_import = FactoryGirl.create(:import, :user => owner, :workspace => public_workspace, :to_table => "new_table_for_import", :created_at => '2012-09-04 23:00:00-07',
                                          :source => default_table)
     fbuilder.name :one, previous_import
 
@@ -505,8 +496,8 @@ FixtureBuilder.configure do |fbuilder|
     #Events
     Timecop.travel(-1.day)
 
-    import_schedule.errors.add(:base, :table_not_consistent, {:src_table_name => default_table.name, :dest_table_name => other_table.name})
-    @import_failed_with_model_errors = Events::WorkspaceImportFailed.by(owner).add(:workspace => public_workspace, :source_dataset => default_table, :destination_table => other_table.name, :error_objects => import_schedule.errors, :dataset => other_table)
+    import.errors.add(:base, :table_not_consistent, {:src_table_name => default_table.name, :dest_table_name => other_table.name})
+    @import_failed_with_model_errors = Events::WorkspaceImportFailed.by(owner).add(:workspace => public_workspace, :source_dataset => default_table, :destination_table => other_table.name, :error_objects => import.errors, :dataset => other_table)
 
     @schema_import_success = Events::SchemaImportSuccess.by(owner).add(:dataset => default_table, :source_dataset => oracle_table)
     @schema_import_failed = Events::SchemaImportFailed.by(owner).add(:dataset => default_table, :source_dataset => oracle_table, :destination_table => 'other_table', :error_message => "oh no's! everything is broken!", :schema_id => default_table.schema.id)

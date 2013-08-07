@@ -95,22 +95,6 @@ chorus.handlebarsHelpers.dataset = {
         }
         var key = keys.join(".");
         return t(key);
-    },
-
-    importFrequencyTag: function(frequency) {
-        if (!frequency) {
-            return '';
-        }
-        var result = '<span class="tag import_frequency">' +
-            '<span class="arrow_left"></span><span class="tag_name">' + Handlebars.Utils.escapeExpression(frequency) + '</span>' +
-            '</span>';
-        return new Handlebars.SafeString(result);
-    },
-
-    importFrequencyForModel: function(model) {
-        return model.importFrequency &&
-            model.importFrequency() &&
-            t("import.frequency." + model.importFrequency().toLowerCase());
     }
 };
 

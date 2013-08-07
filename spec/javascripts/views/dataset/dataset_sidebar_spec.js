@@ -21,10 +21,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$(".actions .import_now")).not.toExist();
             });
 
-            it("does not show create import schedule actions", function() {
-                expect(this.view.$(".actions a.create_schedule")).not.toExist();
-            });
-
             it("does not show analyze table", function() {
                 expect(this.view.$(".actions a.analyze")).not.toExist();
             });
@@ -458,10 +454,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 itDoesNotHaveACreateDatabaseViewLink();
             });
 
-            it("doesn't display any import links by default", function() {
-                expect(this.view.$("a.create_schedule, a.edit_schedule, a.import_now")).not.toExist();
-            });
-
             it("does not display a new workflow link by default", function () {
                 expect(this.view.$("a.new_work_flow")).not.toExist();
             });
@@ -547,7 +539,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("and the selected dataset can be the source of an import", function() {
                 function itHasActionLinks(linkClasses) {
-                    var possibleLinkClasses = ["import_now", "edit_schedule", "create_schedule"];
+                    var possibleLinkClasses = ["import_now"];
 
                     context("when the user has permission to update in the workspace", function() {
                         beforeEach(function() {
@@ -596,15 +588,13 @@ describe("chorus.views.DatasetSidebar", function() {
                 itShowsTheAppropriateDeleteLink(true, "table");
                 itDoesNotHaveACreateDatabaseViewLink();
 
-                it("fetches the imports and import schedules for the dataset", function() {
+                it("fetches the imports for the dataset", function() {
                     expect(this.dataset.getImports()).toHaveBeenFetched();
-                    expect(this.dataset.getImportSchedules()).toHaveBeenFetched();
                 });
 
                 context("when the dataset has no import information", function() {
                     beforeEach(function() {
                         this.server.completeFetchFor(this.view.resource.getImports(), []);
-                        this.server.completeFetchFor(this.view.resource.getImportSchedules(), []);
                     });
 
                     context("and the current user has update permissions on the workspace", function() {
@@ -618,22 +608,7 @@ describe("chorus.views.DatasetSidebar", function() {
                                 expect(this.view.$("a.import_now")).toExist();
                             });
 
-                            it("has a 'create import schedule' link with the 'create_schedule data-action", function() {
-                                var createScheduleLink = this.view.$("a.create_schedule");
-                                expect(createScheduleLink.text()).toMatchTranslation("actions.create_schedule");
-                                expect(createScheduleLink.data("action")).toBe("create_schedule");
-                            });
-
-                            it("should have the dataset attached as data-dataset", function() {
-                                expect(this.view.$("a.create_schedule").data("dataset")).toBe(this.dataset);
-                            });
-
-                            it("should have the workspace attached as data-workspace", function() {
-                                expect(this.view.$("a.create_schedule").data("workspace")).toBe(this.view.resource.workspace());
-                            });
-
                             itBehavesLike.aDialogLauncher("a.import_now", chorus.dialogs.ImportNow);
-                            itBehavesLike.aDialogLauncher("a.create_schedule", chorus.dialogs.ImportScheduler);
                         });
 
                         context("and the workspace does not have a sandbox", function() {
@@ -649,11 +624,6 @@ describe("chorus.views.DatasetSidebar", function() {
                                 expect(this.view.$("a.import_now")).not.toExist();
                                 expect(this.view.$("span.import_now")).toHaveClass('disabled');
                             });
-
-                            it("disables 'create import schedule' link", function() {
-                                expect(this.view.$("a.create_schedule")).not.toExist();
-                                expect(this.view.$("span.create_schedule")).toHaveClass('disabled');
-                            });
                         });
                     });
 
@@ -663,55 +633,10 @@ describe("chorus.views.DatasetSidebar", function() {
                             this.view.render();
                         });
 
-                        it("does not have a 'create import schedule' link", function() {
-                            expect(this.view.$("a.create_schedule")).not.toExist();
-                        });
-
                         it("does not have an 'import now' link", function() {
                             expect(this.view.$("a.import_now.dialog")).not.toExist();
                         });
                     });
-
-                    it("doesn't have an 'edit import schedule' link'", function() {
-                        expect(this.view.$("a.edit_schedule")).not.toExist();
-                    });
-                });
-
-                context("when the dataset has an import schedule", function() {
-                    beforeEach(function() {
-                        var importSchedules = backboneFixtures.datasetImportScheduleSet();
-
-                        this.importSchedule = importSchedules.last();
-                        this.importSchedule.set({
-                            endDate: "2013-06-02T00:00:00Z",
-                            frequency: "weekly",
-                            toTable: "our_destination",
-                            startDatetime: "2012-02-29T14:23:58Z",
-                            nextImportAt: Date.formatForApi(Date.today().add(1).year())
-                        });
-                        this.view.resource._workspace = backboneFixtures.workspace({ id: 6010, permission: ["update"] });
-                        this.server.completeFetchFor(this.dataset.getImportSchedules(), importSchedules.models);
-                    });
-
-                    it("shows the next import time", function() {
-                        expect(this.view.$(".next_import").text()).toContainTranslation("import.next_import", {
-                            nextTime: "in 1 year",
-                            tableRef: "our_destinat..."
-                        });
-                    });
-
-                    it("shows the 'delete_schedule' link", function() {
-                        expect(this.view.$("a.delete_schedule")).toExist();
-                    });
-
-                    it("has a 'edit import schedule' link with the 'eidt_schedule data-action", function() {
-                        expect(this.view.$("a.edit_schedule").data("action")).toBe("edit_schedule");
-                    });
-
-                    itHasActionLinks(["import_now", "edit_schedule"]);
-
-                    itBehavesLike.aDialogLauncher("a.edit_schedule", chorus.dialogs.ImportScheduler);
-                    itBehavesLike.aDialogLauncher("a.delete_schedule", chorus.alerts.ImportScheduleDelete);
                 });
 
                 context("when the dataset has a last import", function() {
@@ -727,10 +652,9 @@ describe("chorus.views.DatasetSidebar", function() {
                             sourceDataset: {id: this.dataset.id}
                         });
                         this.server.completeFetchFor(this.view.imports, [this.lastImport]);
-                        this.server.completeFetchFor(this.view.importSchedules, []);
                     });
 
-                    itHasActionLinks(["import_now", "create_schedule"]);
+                    itHasActionLinks(["import_now"]);
 
                     it("has an 'imported xx ago' description", function() {
                         var lastImport = this.view.imports.last();
@@ -759,7 +683,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 beforeEach(function() {
                     this.dataset = backboneFixtures.workspaceDataset.chorusView({ objectName: "annes_table", query: "select * from foos;" });
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
-                    this.server.completeFetchFor(this.dataset.getImportSchedules(), []);
                 });
 
                 context("current user has credentials on the dataset", function() {
@@ -1085,20 +1008,6 @@ describe("chorus.views.DatasetSidebar", function() {
                     expect(this.view.$(".column_statistics .nullFraction")).not.toExist();
                 });
             });
-        });
-    });
-
-    describe("when importSchedule:changed is triggered", function() {
-        beforeEach(function() {
-            this.view.resource = backboneFixtures.workspaceDataset.datasetTable();
-            this.newImportSchedule = backboneFixtures.datasetImportScheduleSet().at(0);
-            spyOn(this.view, 'render').andCallThrough();
-            chorus.PageEvents.trigger("importSchedule:changed", this.newImportSchedule);
-        });
-
-        it("updates the importConfiguration and renders", function() {
-            expect(this.view.resource.importSchedule()).toBe(this.newImportSchedule);
-            expect(this.view.render).toHaveBeenCalled();
         });
     });
 

@@ -9,11 +9,9 @@ class GpdbSchema < Schema
   end
 
   #these must happen before we nullify the sandbox_id on workspaces
-  before_destroy :destroy_import_schedules
   before_destroy :cancel_imports
 
   has_many :workspaces, :foreign_key => :sandbox_id, :dependent => :nullify
-  has_many :import_schedules, :through => :workspaces
   has_many :imports, class_name: 'SchemaImport', foreign_key: 'schema_id'
   has_many :imports_via_workspaces, :through => :workspaces, :source => :all_imports
 
@@ -85,12 +83,6 @@ class GpdbSchema < Schema
     end
     imports_via_workspaces.unfinished.each do |import|
       import.cancel(false, "Source/Destination of this import was deleted")
-    end
-  end
-
-  def destroy_import_schedules
-    import_schedules.each do |schedule|
-      schedule.destroy
     end
   end
 end

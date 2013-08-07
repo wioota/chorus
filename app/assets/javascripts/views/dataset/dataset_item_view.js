@@ -48,7 +48,6 @@ chorus.views.DatasetItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).e
             url: url,
             hasCredentials: this.model.hasCredentials(),
             iconUrl: this.model.iconUrl(),
-            humanizedImportFrequency: Handlebars.helpers.importFrequencyForModel(this.model),
             workspaces: this.model.workspacesAssociated(),
             viewable: viewable,
             isDataset: true

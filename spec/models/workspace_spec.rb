@@ -5,7 +5,7 @@ describe Workspace do
   before do
     stub(Alpine::API).delete_work_flow.with_any_args
 
-    [Import, ImportSchedule].each do |stuff|
+    [Import].each do |stuff|
       any_instance_of(stuff) do |import|
         stub(import).tables_have_consistent_schema { true }
         stub(import).table_exists? { true }
@@ -434,17 +434,6 @@ describe Workspace do
       }.to change { AssociatedDataset.where(:workspace_id => workspace.id).count }.to(0)
       AssociatedDataset.unscoped.where(:workspace_id => workspace.id).should_not be_empty
     end
-
-    it "soft deletes import schedules" do
-      [Import, ImportSchedule].each do |importable|
-        any_instance_of(importable) { |import| stub(import).valid? { true } }
-      end
-
-      import_schedule = FactoryGirl.create(:import_schedule, :workspace_id => workspace.id)
-      workspace.destroy
-      import_schedule.reload
-      import_schedule.deleted_at.should_not be_nil
-    end
   end
 
   describe "#reindex_workspace" do
@@ -651,31 +640,6 @@ describe Workspace do
 
       before do
         set_current_user(owner)
-      end
-
-      context 'its import schedules' do
-        let(:workspace) { workspaces(:public) }
-
-        it "are unscheduled after archiving" do
-          [Import, ImportSchedule].each do |stuff|
-            any_instance_of(stuff) do |import|
-              stub(import).valid? { true }
-            end
-          end
-
-          expect {
-            workspace.archiver = owner
-            workspace.archived = 'true'
-            workspace.save
-          }.to change(workspace.import_schedules, :count).by(-1)
-        end
-
-        it "are not unscheduled unless it is archived" do
-          expect {
-            workspace.name = 'notArchived'
-            workspace.save
-          }.to_not change(workspace.import_schedules, :count)
-        end
       end
 
       it "creates an event if the workspace name was changed" do

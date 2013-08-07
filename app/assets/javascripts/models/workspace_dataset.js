@@ -66,42 +66,10 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.include(
         return this._datasetImports;
     },
 
-    getImportSchedules: function() {
-        if (!this._datasetImportSchedules) {
-            this._datasetImportSchedules = new chorus.collections.DatasetImportScheduleSet([], {
-                datasetId: this.get("id"),
-                workspaceId: this.get("workspace").id
-            });
-            this.listenTo(this._datasetImportSchedules, "remove", this.importScheduleRemoved);
-        }
-        return this._datasetImportSchedules;
-    },
-
-    importScheduleRemoved: function() {
-        this.unset("frequency", {silent: true});
-        this.trigger('change');
-    },
-
-    importSchedule: function() {
-        return this.getImportSchedules().last();
-    },
-
     lastImport: function() {
         if(this.hasImport())
         {
             return this.getImports().first();
-        }
-    },
-
-    setImport: function(datasetImport) {
-        this._datasetImport = datasetImport;
-    },
-
-    importFrequency: function() {
-        if (this.importSchedule()) {
-            return this.importSchedule().get('frequency');
-        } else {
-            return this.get('frequency');
         }
     },
 

@@ -8,6 +8,9 @@ resource 'HdfsDataset' do
     end
   end
 
+  let(:workspace) { workspaces(:public) }
+  let(:workspace_id) { workspace.id }
+
   post "/hdfs_datasets" do
     parameter :data_source_id, "Hadoop DataSource ID"
     parameter :name, "Name"
@@ -16,7 +19,6 @@ resource 'HdfsDataset' do
     required_parameters :data_source_id, :name, :file_mask, :workspace_id
 
     let(:data_source_id) { HdfsDataSource.first.id }
-    let(:workspace_id) { Workspace.first.id }
     let(:name) { Faker::Name.name }
     let(:file_mask) { "/*" }
 

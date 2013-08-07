@@ -322,17 +322,6 @@ describe GpdbSchema do
       schema.destroy
       import.reload.success.should == false
     end
-
-    it "destroys import schedules from associated workspaces" do
-      schedule = import_schedules(:default)
-      schedule.source_dataset = datasets(:other_table)
-      schedule.save(:validate => false)
-      schema = schedule.workspace.sandbox
-      schedule.source_dataset.schema.should_not == schema
-
-      schema.destroy
-      ImportSchedule.find_by_id(schedule.id).should be_nil
-    end
   end
 
   describe "#class_for_type" do

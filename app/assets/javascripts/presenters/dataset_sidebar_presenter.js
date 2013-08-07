@@ -89,36 +89,6 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return this.resource && this.realWorkspace();
     },
 
-    isImportConfigLoaded: function() {
-        return this.resource && this.resource.isImportConfigLoaded();
-    },
-
-    hasSchedule: function() {
-        return this.resource && this.resource.importSchedule();
-    },
-
-    nextImport: function() {
-        if(!this.hasSchedule()) return "";
-
-        var importSchedule = this.resource.importSchedule();
-        var nextImportStartDate = importSchedule.get('nextImportAt');
-
-        if (!nextImportStartDate) {
-            return Handlebars.helpers.unsafeT("import.no_next_import");
-        }
-
-        var nextTableRef;
-        if (importSchedule.get('destinationDatasetId')) {
-            nextTableRef = this._linkToModel(importSchedule.destination());
-        } else {
-            nextTableRef = this.ellipsize(importSchedule.destination().name());
-        }
-
-        return Handlebars.helpers.unsafeT("import.next_import", {
-            nextTime: Handlebars.helpers.relativeTimestamp(nextImportStartDate),
-            tableRef: nextTableRef });
-    },
-
     inProgressText: function() {
         var destination = this.resource && this.resource.lastImport() && this.resource.lastImport().destination();
         var source = this.resource && this.resource.lastImport() && this.resource.lastImport().source();
@@ -252,10 +222,6 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
 
     canImport: function() {
         return this.resource && this.resource.isOracle();
-    },
-
-    canScheduleImports: function() {
-        return this.resource && this.resource.isGreenplum();
     },
 
     hasImport: function() {

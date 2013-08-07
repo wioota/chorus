@@ -145,26 +145,6 @@ describe("chorus.views.DatasetItem", function() {
         });
     });
 
-    context("when the model has an import schedule", function() {
-        beforeEach(function() {
-            this.dataset.set({ frequency: "WEEKLY"});
-        });
-
-        it("displays the correct import tag", function() {
-            expect(this.view.$(".tag .tag_name").text()).toContainTranslation("import.frequency.weekly");
-        });
-    });
-
-    context("when the model does not have an import schedule", function() {
-        beforeEach(function() {
-            this.dataset.unset("frequency");
-        });
-
-        it("does not display the import tag", function() {
-            expect(this.view.$(".tag")).not.toExist();
-        });
-    });
-
     context("when the dataset has tags", function () {
         beforeEach(function () {
             this.dataset.tags().reset([{name: "tag1"}, {name: "tag2"}]);
@@ -303,26 +283,6 @@ describe("chorus.views.DatasetItem", function() {
 
             it("does not display the most recent comment", function() {
                 expect(this.view.$(".comment")).not.toExist();
-            });
-        });
-
-        context("when the model has an import schedule", function() {
-            beforeEach(function() {
-                this.dataset.set({ frequency: "WEEKLY"});
-            });
-
-            it("displays the correct import tag", function() {
-                expect(this.view.$(".tag .tag_name").text()).toContainTranslation("import.frequency.weekly");
-            });
-        });
-
-        context("when the model does not have an import schedule", function() {
-            beforeEach(function() {
-                this.dataset.unset("frequency");
-            });
-
-            it("does not display the import tag", function() {
-                expect(this.view.$(".tag")).not.toExist();
             });
         });
 

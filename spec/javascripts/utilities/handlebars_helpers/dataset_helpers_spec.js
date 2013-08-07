@@ -237,15 +237,4 @@ describe('chorus.handlebarsHelpers.dataset', function() {
             });
         });
     });
-    describe("#importFrequencyForModel", function() {
-        it("returns a frequency string for a source dataset", function() {
-            var model = backboneFixtures.dataset();
-            var schedule = backboneFixtures.datasetImportScheduleSet().last();
-            schedule.set("sourceDatasetId", model.id);
-            spyOn(model, "importSchedule").andReturn(schedule);
-            spyOn(model, "importFrequency").andReturn("WEEKLY");
-            expect(Handlebars.helpers.importFrequencyForModel(model)).toMatchTranslation("import.frequency.weekly");
-        });
-    });
-
 });

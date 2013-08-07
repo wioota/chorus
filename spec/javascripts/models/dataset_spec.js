@@ -997,40 +997,18 @@ describe("chorus.models.Dataset", function() {
         });
 
         it("shouldn't export when it can't be import source", function() {
+            spyOn(dataset, 'canBeImportSource').andReturn(false);
             expect(dataset.canExport()).toBeFalsy();
         });
 
         it("exports when all are ok", function() {
             spyOn(dataset.workspace(), "canUpdate").andReturn(true);
-            spyOn(dataset, "isImportConfigLoaded").andReturn(true);
             expect(dataset.canExport()).toBeTruthy();
-        });
-
-        it("shouldn't export when import config is not loaded", function() {
-            expect(dataset.canExport()).toBeFalsy();
         });
 
         it("should export when data source is Oracle", function () {
             dataset = backboneFixtures.oracleDataset();
             expect(dataset.canExport()).toBeTruthy();
-        });
-    });
-
-    describe("#isImportConfigLoaded", function() {
-        it("fails if there is no config", function() {
-            expect(this.dataset.isImportConfigLoaded()).toBeFalsy();
-        });
-
-        it("fails if there is a config, but it isn't loaded", function() {
-            var importDataset = backboneFixtures.workspaceDataset.datasetTable();
-            expect(this.dataset.isImportConfigLoaded()).toBeFalsy();
-        });
-
-        it("succeeds if there's a loaded config", function() {
-            var importDataset = backboneFixtures.workspaceDataset.datasetTable();
-            importDataset.getImportSchedules().fetch();
-            this.server.completeFetchFor(importDataset.getImportSchedules());
-            expect(importDataset.isImportConfigLoaded()).toBeTruthy();
         });
     });
 

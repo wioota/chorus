@@ -16,7 +16,6 @@ chorus.views.DatasetShowContentHeader = chorus.views.ListHeaderView.extend({
 
     additionalContext: function() {
         return {
-            importFrequency: Handlebars.helpers.importFrequencyForModel(this.model),
             workspacesAssociated: this.model.workspacesAssociated(),
             tableauWorkbooks: this.model.tableauWorkbooks(),
             dataset: this.model.asWorkspaceDataset(),
@@ -28,9 +27,6 @@ chorus.views.DatasetShowContentHeader = chorus.views.ListHeaderView.extend({
 
     postRender: function() {
         this._super('postRender', arguments);
-        if (this.model.importFrequency && this.model.importFrequency()) {
-            $(this.el).addClass('has_import');
-        }
         this.menu(this.$('.found_in .open_other_menu'), {
             content: this.$('.found_in .other_menu'),
             classes: "found_in_other_workspaces_menu"

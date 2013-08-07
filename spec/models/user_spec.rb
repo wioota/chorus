@@ -319,20 +319,6 @@ describe User do
       }.to change(workspace.members, :count).by(-1)
     end
 
-    it "deletes associated import schedules" do
-      [Import, ImportSchedule].each do |type|
-        any_instance_of(type) do |o|
-          stub(o).table_exists? { false }
-        end
-      end
-
-      FactoryGirl.create(:import_schedule, :user => user, :workspace => workspaces(:public))
-
-      expect {
-        user.destroy
-      }.to change(ImportSchedule, :count).by(-1)
-    end
-
     it "deletes associated data source accounts" do
       user = users(:the_collaborator)
       user.data_source_accounts.count.should be > 0

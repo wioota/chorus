@@ -16,7 +16,6 @@ class Dataset < ActiveRecord::Base
   has_many :most_recent_comments, :through => :events, :source => :comments, :class_name => "Comment", :order => "id DESC", :limit => 1
   has_many :associated_datasets, :dependent => :destroy
   has_many :bound_workspaces, :through => :associated_datasets, :source => :workspace
-  has_many :import_schedules, :foreign_key => 'source_dataset_id', :dependent => :destroy
   has_many :imports, :as => :source
   has_many :tableau_workbook_publications, :dependent => :destroy
 
@@ -47,13 +46,14 @@ class Dataset < ActiveRecord::Base
   end
 
   def self.eager_load_associations
-    [:tags,
-     {:scoped_schema => :scoped_parent},
-     {:bound_workspaces => :tags},
-     :tableau_workbook_publications,
-     :most_recent_notes,
-     :most_recent_comments,
-     :import_schedules]
+    [
+      :tags,
+      {:scoped_schema => :scoped_parent},
+      {:bound_workspaces => :tags},
+      :tableau_workbook_publications,
+      :most_recent_notes,
+      :most_recent_comments
+    ]
   end
 
   def self.eager_load_succinct_associations

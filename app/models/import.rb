@@ -6,7 +6,6 @@ class Import < ActiveRecord::Base
 
   belongs_to :source, :polymorphic => true
   belongs_to :user
-  belongs_to :import_schedule
 
   validates :to_table, :presence => true
   validates :user, :presence => true
@@ -48,7 +47,6 @@ class Import < ActiveRecord::Base
     save(:validate => false)
     create_passed_event_and_notification
     update_import_created_event
-    import_schedule.update_attributes({:new_table => false}) if import_schedule
   end
 
   def runnable?

@@ -12,7 +12,6 @@ class Workspace < ActiveRecord::Base
 
   belongs_to :archiver, :class_name => 'User'
   belongs_to :owner, :class_name => 'User'
-  has_many :import_schedules, :dependent => :destroy
   has_many :jobs, :dependent => :destroy
   has_many :memberships, :inverse_of => :workspace
   has_many :members, :through => :memberships, :source => :user
@@ -45,8 +44,6 @@ class Workspace < ActiveRecord::Base
 
   before_save :update_has_added_sandbox
   after_create :add_owner_as_member
-
-  after_update :unschedule_imports, :if => :archived_at_changed?
 
   scope :active, where(:archived_at => nil)
 
@@ -296,10 +293,6 @@ class Workspace < ActiveRecord::Base
     (!account || account.invalid_credentials? ||
         ["CHORUS_VIEW", "SOURCE_TABLE"].include?(entity_subtype) ||
         !show_sandbox_datasets) && !options[:all_import_destinations]
-  end
-
-  def unschedule_imports
-    import_schedules.destroy_all if archived?
   end
 
   def owner_is_member

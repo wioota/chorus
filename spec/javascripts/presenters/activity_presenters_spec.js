@@ -1702,7 +1702,8 @@ describe("chorus.presenters.Activity", function() {
     context("import schedule updated event", function() {
         beforeEach(function () {
             this.datasetModel = backboneFixtures.dataset();
-            this.model = backboneFixtures.activity.importScheduleUpdated({dataset: this.datasetModel});            this.presenter = new chorus.presenters.Activity(this.model);
+            this.model = backboneFixtures.activity.importScheduleUpdated({dataset: this.datasetModel});
+            this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
             this.dataset = this.model.dataset();
@@ -1764,7 +1765,8 @@ describe("chorus.presenters.Activity", function() {
     context("import schedule deleted event", function() {
         beforeEach(function () {
             this.datasetModel = backboneFixtures.dataset();
-            this.model = backboneFixtures.activity.importScheduleDeleted({dataset: this.datasetModel});            this.presenter = new chorus.presenters.Activity(this.model);
+            this.model = backboneFixtures.activity.importScheduleDeleted({dataset: this.datasetModel});
+            this.presenter = new chorus.presenters.Activity(this.model);
             this.actor = this.model.actor();
             this.workspace = this.model.workspace();
             this.dataset = this.model.dataset();

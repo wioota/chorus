@@ -9,13 +9,8 @@ module Events
     end
 
     def self.find_for_import(import)
-      if import.import_schedule_id
-        reference_id = import.import_schedule_id
-        reference_type = ImportSchedule.name
-      else
-        reference_id = import.id
-        reference_type = Import.name
-      end
+      reference_id = import.id
+      reference_type = Import.name
 
       possible_events = filter_for_import_events(import)
 

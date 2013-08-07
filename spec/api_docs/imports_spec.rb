@@ -15,10 +15,6 @@ resource 'Imports' do
       stub(import).table_does_not_exist
       stub(import).tables_have_consistent_schema
     end
-    any_instance_of(ImportSchedule) do |import_schedule|
-      stub(import_schedule).table_exists?
-      stub(import_schedule).tables_have_consistent_schema
-    end
   end
 
   post '/schemas/:schema_id/imports' do
@@ -60,54 +56,6 @@ resource 'Imports' do
     end
   end
 
-  post '/workspaces/:workspace_id/datasets/:dataset_id/import_schedules' do
-    parameter :dataset_id, 'Id of the source dataset'
-    parameter :to_table, 'Table name of the destination table'
-    parameter :truncate, 'True/false: truncate into existing table (only if new_table is false)'
-    parameter :new_table, 'True/false: if true, import into new table. Otherwise, import into existing table.'
-    parameter :sample_count, 'Maximum number of rows to import'
-    parameter :start_datetime, 'Time of day and first date to import'
-    parameter :end_date, 'Date to end importing'
-    parameter :frequency, 'How often to import'
-
-    required_parameters :dataset_id, :to_table, :new_table
-
-    let(:to_table) { 'fancyTable' }
-    let(:truncate) { 'false' }
-    let(:new_table) { 'true' }
-    let(:sample_count) { '500' }
-    let(:start_datetime) { '2012-09-04 23:00:00-07' }
-    let(:end_date) { '2012-12-04' }
-    let(:frequency) { 'weekly' }
-
-    example_request 'create an import schedule for a dataset' do
-      status.should == 201
-    end
-  end
-
-  put '/workspaces/:workspace_id/datasets/:dataset_id/import_schedules/:id' do
-    parameter :dataset_id, 'Id of the source dataset'
-    parameter :id, 'id of the import schedule'
-    parameter :to_table, 'Table name of the destination table'
-    parameter :truncate, 'True/false: truncate into existing table (only if new_table is false)'
-    parameter :new_table, 'True/false: if true, import into new table. Otherwise, import into existing table.'
-    parameter :sample_count, 'Maximum number of rows to import'
-
-    required_parameters :dataset_id, :to_table, :new_table
-
-
-    let(:to_table) { 'fancyTable' }
-    let(:truncate) { 'false' }
-    let(:new_table) { 'true' }
-    let(:sample_count) { '500' }
-    let(:id) { import_schedules(:default).id }
-
-
-    example_request 'Update an import for a dataset' do
-      status.should == 200
-    end
-  end
-
   get '/workspaces/:workspace_id/datasets/:dataset_id/imports' do
     parameter :workspace_id, 'Id of the workspace that the dataset belongs to'
     parameter :dataset_id, 'Id of the dataset'
@@ -118,31 +66,6 @@ resource 'Imports' do
       status.should == 200
     end
   end
-
-  get '/workspaces/:workspace_id/datasets/:dataset_id/import_schedules' do
-    parameter :workspace_id, 'Id of the workspace that the dataset belongs to'
-    parameter :dataset_id, 'Id of the dataset'
-
-    required_parameters :dataset_id, :workspace_id
-
-    example_request 'Get the import schedule for a dataset' do
-      status.should == 200
-    end
-  end
-
-  delete '/workspaces/:workspace_id/datasets/:dataset_id/import_schedules/:id' do
-    parameter :workspace_id, 'Id of the workspace that the dataset belongs to'
-    parameter :dataset_id, 'Id of the dataset'
-    parameter :id, 'id of the import schedule'
-
-    required_parameters :dataset_id, :id, :workspace_id
-    let(:id) { import_schedules(:default).id }
-
-    example_request 'Delete the import schedule for a dataset' do
-      status.should == 200
-    end
-  end
-
 
   post '/workspaces/:workspace_id/csv' do
     parameter :workspace_id, 'ID of the workspace'

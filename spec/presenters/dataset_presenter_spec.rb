@@ -101,7 +101,6 @@ describe DatasetPresenter, :type => :view do
       end
 
       it 'renders defaults for other keys' do
-        hash[:frequency].should == ''
         hash[:tableau_workbooks].should == []
         hash[:associated_workspaces].should == []
         hash[:has_credentials].should == true
@@ -163,20 +162,9 @@ describe DatasetPresenter, :type => :view do
       let(:schema) { FactoryGirl.create :gpdb_schema }
       let(:schema2) { FactoryGirl.create :gpdb_schema }
       let(:association) { FactoryGirl.create(:associated_dataset, :dataset => dataset, :workspace => workspace) }
-      let(:import_schedule) { FactoryGirl.create(:import_schedule, :source_dataset => dataset, :workspace => workspace, :start_datetime => Time.current(), :end_date => '2012-12-12', :frequency => 'weekly', :workspace => workspace ) }
 
-      before do
-        [Import, ImportSchedule].each do |type|
-          any_instance_of(type) do |o|
-            stub(o).table_exists? { false }
-          end
-        end
-        import_schedule
-      end
-
-      it 'has the correct type and frequency' do
+      it 'has the correct type' do
         hash[:entity_subtype].should == 'SOURCE_TABLE'
-        hash[:frequency].should == import_schedule.frequency
       end
     end
 

@@ -26,12 +26,6 @@ class ServiceScheduler
       QC.enqueue_if_not_queued("Session.remove_expired_sessions")
     end
 
-    every(1.minute, 'ImportScheduler.run') do
-      # At present, we choose to enqueue the pending imports in this thread. If this becomes a bottleneck,
-      # we may choose to run this in a separate queued job.
-      ImportScheduler.run
-    end
-
     every(1.minute, 'JobBoss.run') do
       JobBoss.run
     end

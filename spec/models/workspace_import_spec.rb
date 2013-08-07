@@ -6,7 +6,6 @@ describe WorkspaceImport do
 
   describe 'associations' do
     it { should belong_to(:scoped_workspace) }
-    it { should belong_to :import_schedule }
   end
 
   describe 'creating' do

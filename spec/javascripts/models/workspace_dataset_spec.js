@@ -156,32 +156,6 @@ describe("chorus.models.WorkspaceDataset", function() {
         });
     });
 
-    describe("#getImportSchedules", function() {
-        it("returns the imports for this dataset", function() {
-            expect(this.dataset.getImportSchedules().attributes.datasetId).toBe(this.dataset.id);
-            expect(this.dataset.getImportSchedules().attributes.workspaceId).toBe(this.dataset.get("workspace").id);
-        });
-
-        it("memoizes", function() {
-            expect(this.dataset.getImportSchedules()).toBe(this.dataset.getImportSchedules());
-        });
-
-        describe("when removing the import", function() {
-            it("triggers change on the model", function() {
-                this.dataset.unset("frequency");
-                spyOnEvent(this.dataset, 'change');
-                this.dataset.getImportSchedules().trigger("remove");
-                expect("change").toHaveBeenTriggeredOn(this.dataset);
-            });
-
-            it("unsets frequency on the model", function() {
-                this.dataset.set("frequency", "weekly");
-                this.dataset.getImportSchedules().trigger("remove");
-                expect(this.dataset.get("frequency")).toBeFalsy();
-            });
-        });
-    });
-
     describe("#getImports", function() {
         it("returns the imports for this dataset", function() {
             expect(this.dataset.getImports().attributes.datasetId).toBe(this.dataset.id);
@@ -281,30 +255,6 @@ describe("chorus.models.WorkspaceDataset", function() {
             it("returns undefined", function() {
                 this.dataset.unset("importInfo");
                 expect(this.dataset.lastImportSource()).toBeUndefined();
-            });
-        });
-    });
-
-    describe("#importFrequency", function() {
-        beforeEach(function() {
-            this.dataset.set({frequency: 'WEEKLY'});
-        });
-
-        context("when the dataset's import is not loaded", function() {
-            it("returns the importFrequency", function() {
-                expect(this.dataset.importFrequency()).toBe('WEEKLY');
-            });
-        });
-
-        context("when dataset's import is loaded", function() {
-            beforeEach(function() {
-                this.dataset.getImportSchedules().fetch();
-                this.server.completeFetchFor(this.dataset.getImportSchedules(),
-                    [{frequency: "DAILY" }]);
-            });
-
-            it("returns the frequency of the import", function() {
-                expect(this.dataset.importFrequency()).toBe("DAILY");
             });
         });
     });

@@ -138,16 +138,6 @@ describe MembersController do
         }.should change(Membership, :count).by(-1)
       end
 
-      it "removes dependent import schedules" do
-        any_instance_of(ImportSchedule) do |i|
-          stub(i).valid? { true }
-        end
-        import_schedule
-        lambda {
-          post :create, parameters
-        }.should change(ImportSchedule, :count).by(-1)
-      end
-
       it "does not create any events" do
         expect {
           post :create, parameters

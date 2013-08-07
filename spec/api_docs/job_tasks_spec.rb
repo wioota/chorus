@@ -34,9 +34,9 @@ resource 'JobTask' do
     parameter :job_id, "Job ID"
     parameter :id, "Job Task ID"
 
-    let(:workspace_id) { Workspace.first.id }
-    let(:job_id) { Job.first.id }
-    let(:id) { JobTask.first.id }
+    let(:workspace_id) { jobs(:default).workspace.id }
+    let(:job_id) { jobs(:default).id }
+    let(:id) { jobs(:default).job_tasks.first.id }
 
     example_request "Delete a Job Task in a job in a workspace" do
       status.should == 200

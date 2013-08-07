@@ -69,17 +69,6 @@ describe ServiceScheduler do
     end
   end
 
-  describe "ImportScheduler" do
-    it "runs every minute" do
-      job_scheduler.job_named('ImportScheduler.run').period.should == 1.minute
-    end
-
-    it "runs the ImportScheduler in the same thread" do
-      mock(ImportScheduler).run
-      job_scheduler.job_named('ImportScheduler.run').run(Time.current)
-    end
-  end
-
   describe "JobBoss" do
     it "runs every minute" do
       job_scheduler.job_named('JobBoss.run').period.should == 1.minute

@@ -97,16 +97,6 @@ describe GpdbDataset do
       dataset.reload.deleted_at.should_not be_nil
     end
 
-    it "destroys dependent import_schedules" do
-      schedules = dataset.import_schedules
-      schedules.length.should > 0
-
-      dataset.destroy
-      schedules.each do |schedule|
-        ImportSchedule.find_by_id(schedule.id).should be_nil
-      end
-    end
-
     it "destroys dependent tableau_workbook_publications" do
       tableau_publication = tableau_workbook_publications(:default)
       dataset = tableau_publication.dataset

@@ -1,18 +1,6 @@
 require 'factory_girl'
 
 FactoryGirl.define do
-  factory :import_schedule do
-    start_datetime Time.current
-    end_date Time.current + 1.year
-    frequency 'monthly'
-    truncate false
-    new_table true
-    sample_count 1
-    association :workspace
-    association :user
-    sequence(:to_table) { |n| "factoried_import_schedule_table#{n}" }
-    association :source_dataset, factory: :gpdb_table
-  end
 
   factory :abstract_import, class: Import do
     created_at Time.current
@@ -34,10 +22,6 @@ FactoryGirl.define do
       association :schema, factory: :gpdb_schema
       association :source, factory: :gpdb_table
     end
-  end
-
-  factory :import_with_schedule, parent: :import do
-    association :import_schedule
   end
 
   factory :csv_file do

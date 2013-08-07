@@ -23,7 +23,6 @@ class DatasetPresenter < Presenter
     }.merge(succinct_hash).
         merge(workspace_hash).
         merge(credentials_hash).
-        merge(frequency).
         merge(tableau_workbooks_hash).
         merge(tags_hash)
   end
@@ -67,15 +66,6 @@ class DatasetPresenter < Presenter
       {:has_credentials => true}
     else
       {:has_credentials => model.accessible_to(current_user)}
-    end
-  end
-
-  def frequency
-    if !rendering_activities? && options[:workspace] && options[:workspace].id
-      import_schedule = model.import_schedules.to_a.select { |sched| sched.workspace_id == options[:workspace].id }.first
-      {:frequency => import_schedule ? import_schedule.frequency : ""}
-    else
-      {:frequency => ""}
     end
   end
 

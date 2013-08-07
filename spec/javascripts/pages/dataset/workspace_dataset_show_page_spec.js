@@ -178,39 +178,6 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                 });
             });
 
-            context("when the dataset has an import schedule", function() {
-                beforeEach(function() {
-                    var schedules = backboneFixtures.datasetImportScheduleSet();
-                    this.server.completeFetchFor(this.page.dataset.getImportSchedules(), schedules.models);
-                    expect(this.page.dataset.importSchedule().frequency()).toBe("WEEKLY");
-                    this.page.render();
-                });
-
-                it("shows the icon for import frequency", function() {
-                    expect(this.page.$(".tag.import_frequency")).toContainText("Weekly");
-                });
-
-                it("sets a has_import class on the content_header", function() {
-                    expect(this.page.$(".content_header .has_import")).toExist();
-                });
-            });
-
-            context("when the dataset does not have an import schedule", function() {
-                beforeEach(function() {
-                    this.page.dataset.unset("frequency");
-                    this.server.completeFetchFor(this.page.dataset.getImportSchedules(), []);
-                    this.page.render();
-                });
-
-                it("does not show the icon for import frequency", function() {
-                    expect(this.page.$(".tag.import_frequency")).not.toExist();
-                });
-
-                it("does not set a has_import class on the content_header", function() {
-                    expect(this.page.$(".content_header.has_import")).not.toExist();
-                });
-            });
-
             it("has a workspace id", function() {
                 expect(this.page.mainContent.contentHeader.options.workspaceId).toBe(100);
             });

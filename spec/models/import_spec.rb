@@ -211,12 +211,6 @@ describe Import, :greenplum_integration do
       import.touch(:started_at)
       Import.unfinished.should include(import)
     end
-
-    it "does not include finished imports" do
-      stub(import.import_schedule).table_exists?
-      import.update_status :passed
-      Import.unfinished.should_not include(import)
-    end
   end
 
   describe "cancel" do
