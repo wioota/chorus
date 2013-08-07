@@ -11,7 +11,7 @@ describe("chorus.views.JobTaskItem", function () {
 
     it("includes the correct task icon", function() {
         this.model.set('action', 'run_work_flow');
-        expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/icon/afm.png");
+        expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/afm-task.png");
 
         this.model.set('action', 'run_sql_file');
         expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/icon/sql.png");
