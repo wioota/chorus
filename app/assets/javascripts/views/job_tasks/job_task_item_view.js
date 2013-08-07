@@ -19,7 +19,7 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
 
     iconUrlForType: function (action) {
         var iconMap = {
-            run_work_flow: "/images/workfiles/icon/afm.png",
+            run_work_flow: "/images/jobs/afm-task.png",
             run_sql_file: "/images/workfiles/icon/sql.png",
             import_source_data: "/images/import_icon.png"
         };
