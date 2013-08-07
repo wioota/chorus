@@ -55,11 +55,6 @@ describe ImportSourceDataTask do
         task.payload.truncate.should == import_data[:truncate]
         task.payload.row_limit.should == import_data[:row_limit].to_i
       end
-
-      it 'should set the display name' do
-        task = JobTask.assemble!(planned_job_task, job)
-        task.name.should == "Import from " + source_dataset.name
-      end
     end
 
     context 'with a new destination table' do
@@ -85,11 +80,6 @@ describe ImportSourceDataTask do
         task.payload.truncate.should == import_data[:truncate]
         task.payload.row_limit.should == import_data[:row_limit].to_i
         task.id.should_not be_nil
-      end
-
-      it 'should set the display name' do
-        task = JobTask.assemble!(planned_job_task, job)
-        task.name.should == "Import from " + source_dataset.name
       end
 
       it 'cannot have the same destination_name as any existing dataset in the sandbox' do
