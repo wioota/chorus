@@ -14,7 +14,7 @@ class Job < ActiveRecord::Base
   validates_presence_of :interval_value
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:workspace_id, :deleted_at]
-  validate :next_run_not_in_past
+  validate :next_run_not_in_past, :if => Proc.new { |job| job.changed.include?('next_run') }
 
   scope :ready_to_run, -> { where(enabled: true).where('next_run <= ?', Time.current).order(:next_run) }
 
@@ -42,6 +42,7 @@ class Job < ActiveRecord::Base
 
   def run
     self.next_run = frequency.since(next_run)
+    ensure_next_run_is_in_the_future
     self.last_run = Time.current
     self.disable! if expiring?
     self.status = 'running'
@@ -59,6 +60,7 @@ class Job < ActiveRecord::Base
   end
 
   def enable!
+    ensure_next_run_is_in_the_future
     self.enabled = true
     save!
   end
@@ -80,13 +82,19 @@ class Job < ActiveRecord::Base
 
   private
 
+  def ensure_next_run_is_in_the_future
+    while next_run < Time.current
+      self.next_run = frequency.since(next_run)
+    end
+  end
+
   def disable_expiring
     self.enabled = false if expiring?
     true
   end
 
   def next_run_not_in_past
-    if next_run && next_run < 5.minutes.ago
+    if next_run && next_run < 1.minutes.ago
       errors.add(:job, :NEXT_RUN_IN_PAST)
     end
   end

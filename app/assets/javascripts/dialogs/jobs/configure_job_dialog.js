@@ -94,7 +94,7 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
 
     create: function () {
         this.$("button.submit").startLoading('actions.saving');
-        this.model.save(this.fieldValues(), {wait: true});
+        this.model.save(this.fieldValues(), {wait: true, unprocessableEntity: $.noop});
     },
 
     fieldValues: function () {

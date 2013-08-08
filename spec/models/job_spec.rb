@@ -146,12 +146,7 @@ describe Job do
 
       context "if the end_run date is before the new next_run" do
         let(:expiring_job) do
-          jobs(:default).tap do |job|
-            job.interval_unit = "weeks"
-            job.next_run = Time.current
-            job.end_run = 1.day.from_now.to_date
-            job.enable!
-          end
+          FactoryGirl.create(:job, :interval_unit => "weeks", :next_run => Time.current, :end_run => 1.day.from_now.to_date, enabled: true, workspace: workspaces(:public))
         end
 
         it 'disables the job' do
@@ -240,6 +235,21 @@ describe Job do
       it 'disables expiring jobs on update' do
         impossible_job.save!
         impossible_job.should_not be_enabled
+      end
+    end
+  end
+
+  describe '#enable!' do
+    Timecop.freeze do
+      let(:job) do
+        job = FactoryGirl.create(:job, :enabled => false, :interval_unit => "hours", :interval_value => 1)
+        job.update_attribute(:next_run, 55.minutes.ago)
+        job
+      end
+
+      it 'increments the next run to the next valid time' do
+        job.enable!
+        job.next_run.to_i.should == 5.minutes.from_now.to_i
       end
     end
   end
