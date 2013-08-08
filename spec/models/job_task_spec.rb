@@ -40,8 +40,10 @@ describe JobTask do
   end
 
   describe 'deleting' do
+    let(:workspace) { workspaces(:empty_workspace) }
+
     before do
-      @job = jobs(:default).tap { |job| job.job_tasks.destroy_all }
+      @job = FactoryGirl.create(:job, workspace: workspace)
       @task1 = FactoryGirl.create(:isdt, index: 1, job: @job)
       @task2 = FactoryGirl.create(:isdt, index: 2, job: @job)
       @task3 = FactoryGirl.create(:isdt, index: 3, job: @job)

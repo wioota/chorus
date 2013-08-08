@@ -187,9 +187,9 @@ describe Job do
           end
         end
 
-        let(:job) { job = FactoryGirl.create(:job) }
+        let(:job) { FactoryGirl.create(:job) }
         let!(:tasks) do
-          3.times.map { job.job_tasks.create!({:type => 'FakeJobTask'}) }
+          3.times.map { FactoryGirl.create(:job_task, job: job, type: 'FakeJobTask') }
         end
 
         it 'is done in index order' do
