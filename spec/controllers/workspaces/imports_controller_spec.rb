@@ -96,7 +96,7 @@ describe Workspaces::ImportsController do
       end
 
       context "when importing into an existing table" do
-        let(:dst_table_name) { active_workspace.sandbox.datasets.first.name }
+        let(:dst_table_name) { active_workspace.sandbox.tables.first.name }
 
         before do
           attributes[:new_table] = "false"
@@ -135,10 +135,6 @@ describe Workspaces::ImportsController do
           any_instance_of(Import) do |import|
             stub(import).table_exists? { true }
           end
-
-          #Ensure that the destination table exists
-          active_workspace.sandbox.datasets.first.should_not == nil
-          active_workspace.sandbox.tables.find_by_name(dst_table_name).should == active_workspace.sandbox.datasets.first
 
           post :create, attributes
           response.code.should == "422"
