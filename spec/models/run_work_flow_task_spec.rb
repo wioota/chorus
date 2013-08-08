@@ -31,4 +31,21 @@ describe RunWorkFlowTask do
       task.build_task_name.should include(task.payload.file_name)
     end
   end
+
+  describe "#execute" do
+    let(:task) { job_tasks(:rwft) }
+
+    it "tells alpine to run the workfile with the correct id" do
+      mock(Alpine::API).run_work_flow(task.payload)
+      task.execute
+    end
+
+    #it "blocks until alpine is finished with running the work flow" do
+    #
+    #end
+
+    #it "raises if there's an error" do
+    #
+    #end
+  end
 end

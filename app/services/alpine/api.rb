@@ -11,6 +11,10 @@ module Alpine
       new.create_work_flow(work_flow, body)
     end
 
+    def self.run_work_flow(work_flow)
+      new(user: work_flow.workspace.owner).run_work_flow(work_flow)
+    end
+
     # INSTANCE METHODS
 
     def initialize(options = nil)
@@ -27,6 +31,10 @@ module Alpine
       request_creation(body, work_flow) if config.work_flow_configured?
     end
 
+    def run_work_flow(work_flow)
+      request_run(work_flow) if config.work_flow_configured?
+    end
+
     private
 
     attr_reader :config, :user
@@ -41,12 +49,30 @@ module Alpine
       pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
     end
 
+    def request_run(work_flow)
+      request_base.post(run_path(work_flow), '')
+    rescue SocketError, Errno::ECONNREFUSED, TimeoutError => e
+      pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
+    end
+
     def delete_path(work_flow)
       "/alpinedatalabs/main/chorus.do?method=deleteWorkFlow&session_id=#{session_id}&workfile_id=#{work_flow.id}"
     end
 
     def create_path(work_flow)
       "/alpinedatalabs/main/chorus.do?method=importWorkFlow&session_id=#{session_id}&file_name=#{work_flow.file_name}&workfile_id=#{work_flow.id}"
+    end
+
+    def run_path(work_flow)
+      params = {
+        method: 'runWorkFlow',
+        session_id: session_id,
+        workfile_id: work_flow.id
+      }
+      params.merge!({database_id: work_flow.execution_location_id}) if work_flow.execution_location_type == 'GpdbDatabase'
+      params.merge!({hdfs_data_source_id: work_flow.execution_location_id}) if work_flow.execution_location_type == 'HdfsDataSource'
+
+      "/alpinedatalabs/main/chorus.do?#{params.to_query}"
     end
 
     def base_url

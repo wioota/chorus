@@ -80,6 +80,10 @@ describe Alpine::API do
       FakeWeb.register_uri(:post, full_request_url, :status => 200, :body => file_contents, :content_type => "text/xml")
       subject.create_work_flow(work_flow, file_contents)
       FakeWeb.last_request.should be_a(Net::HTTP::Post)
+
+      params = CGI::parse(URI(FakeWeb.last_request.path).query)
+      params['session_id'].should == mock_session_id
+      params['workfile_id'].should == work_flow.id
     end
 
     context 'when work_flow is disabled' do
@@ -93,6 +97,34 @@ describe Alpine::API do
         end
 
         subject.create_work_flow(work_flow, file_contents)
+      end
+    end
+  end
+
+  describe '#run_work_flow' do
+
+    before do
+      VCR.configure { |c| c.ignore_localhost = true }
+    end
+
+    it 'makes a POST request with the necessary params' do
+      subject.run_work_flow(work_flow)
+      FakeWeb.last_request.should be_a(Net::HTTP::Post)
+      params = CGI::parse(URI(FakeWeb.last_request.path).query)
+      params['session_id'][0].should == mock_session_id.to_s
+      params['workfile_id'][0].should == work_flow.id.to_s
+      params['database_id'][0].should == work_flow.execution_location.id.to_s
+      params['hdfs_data_source_id'][0].should be_nil
+    end
+
+    context "when the workflow's execution_lcoation is an HDFS" do
+      let(:work_flow) { workfiles(:alpine_hadoop_dataset_flow) }
+      it "replaces database_id with hdfs_data_source_id" do
+        subject.run_work_flow(work_flow)
+        params = CGI::parse(URI(FakeWeb.last_request.path).query)
+
+        params['database_id'][0].should be_nil
+        params['hdfs_data_source_id'][0].should == work_flow.execution_location.id.to_s
       end
     end
   end

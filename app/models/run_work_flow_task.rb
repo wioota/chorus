@@ -2,6 +2,7 @@ class RunWorkFlowTask < JobTask
   belongs_to :payload, :class_name => 'AlpineWorkfile'
 
   def execute
+    Alpine::API.run_work_flow payload
     true
   end
 
