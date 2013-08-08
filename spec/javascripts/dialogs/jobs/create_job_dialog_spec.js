@@ -133,6 +133,18 @@ describe("chorus.dialogs.CreateJob", function () {
                 expect(this.dialog.$(".end_date_widget")).toExist();
             });
 
+            describe("selected time zone", function () {
+                it("should be the first timezone that matches the browser's current offset according to jstz", function () {
+                    chorus.models.Config.instance().set("timeZones", backboneFixtures.config().get('timeZones'));
+                    spyOn(jstz, 'determine').andReturn({
+                        name: function () {
+                            return 'Asia/Kolkata';
+                        }
+                    });
+                    this.dialog.render();
+                    expect(this.dialog.$('select.time_zone').val()).toBe('Chennai');
+                });
+            });
         });
 
         context("with valid field values", function () {

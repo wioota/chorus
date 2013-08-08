@@ -63,12 +63,19 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
     },
 
     populateTime: function () {
-        var times = this.model.nextRunTime();
+        var runDate = this.model.nextRunDate();
 
-        this.$('select.hour').val(times.hours);
-        this.$('select.minute').val(times.minutes);
-        this.$('select.meridiem').val(times.meridiem);
-        this.$('select.time_zone').val(times.zone);
+        var hoursBase = runDate.hours();
+        var meridiem = hoursBase - 11 > 0 ? "pm" : "am";
+        var hours = meridiem === "pm" ? hoursBase - 12 : hoursBase;
+        hours = hours === 0 ? 12 : hours;
+        var minutes = runDate.minutes();
+        var zone = this.model.get('timeZone') || RailsTimeZone.to(jstz.determine().name());
+
+        this.$('select.hour').val(hours);
+        this.$('select.minute').val(minutes);
+        this.$('select.meridiem').val(meridiem);
+        this.$('select.time_zone').val(zone);
     },
 
     checkInput: function () {

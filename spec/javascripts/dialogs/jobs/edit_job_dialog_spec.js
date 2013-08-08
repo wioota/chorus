@@ -46,7 +46,7 @@ describe("chorus.dialogs.EditJob", function () {
 
         it("populates next run date", function () {
             var nextRunDate = this.job.nextRunDate().startOf("minute");
-            nextRunDate.minute(Math.floor(nextRunDate.minute() / 5) * 5);
+            nextRunDate.minute(nextRunDate.minute());
             expect(this.dialog.buildStartDate().format("YYYY-MM-DDTHH:mm")).toEqual(nextRunDate.format("YYYY-MM-DDTHH:mm"));
         });
 
