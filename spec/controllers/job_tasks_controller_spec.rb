@@ -129,6 +129,43 @@ describe JobTasksController do
         end.to change { task.reload.payload.id }.to(desired_work_flow.id)
       end
     end
+
+    describe "swapping indices" do
+      let(:job)   { FactoryGirl.create(:job, workspace: workspace) }
+      let!(:task1) { FactoryGirl.create(:import_source_data_task, job: job, index: 1) }
+      let!(:task2) { FactoryGirl.create(:import_source_data_task, job: job, index: 2) }
+      let!(:task3) { FactoryGirl.create(:import_source_data_task, job: job, index: 3) }
+      let(:params) do
+        {
+            id: task.id,
+            job_id: task.job.id,
+            workspace_id: task.job.workspace.id,
+            job_task: {
+                index: index
+            },
+        }
+      end
+
+      context "when going down" do
+        let(:task) { task1 }
+        let(:index) { 2 }
+        it "swaps with the next task" do
+          put :update, params
+          task1.reload.index.should == 2
+          task2.reload.index.should == 1
+        end
+      end
+
+      context "when going up" do
+        let(:task) { task3 }
+        let(:index) { 2 }
+        it "swaps with the next task" do
+          put :update, params
+          task2.reload.index.should == 3
+          task3.reload.index.should == 2
+        end
+      end
+    end
   end
 
   describe "destroy" do

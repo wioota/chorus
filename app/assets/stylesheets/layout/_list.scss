@@ -118,6 +118,16 @@
                 margin-right: 4px;
                 font-weight: bold;
             }
+
+            .arrows{
+                position: absolute;
+                right: 20px;
+                top: 15px;
+                .up_arrow, .down_arrow {
+                    cursor: pointer;
+                    display: inline-block;
+                }
+            }
         }
 
         .main_text {

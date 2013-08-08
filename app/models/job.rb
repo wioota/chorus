@@ -7,7 +7,7 @@ class Job < ActiveRecord::Base
   attr_accessible :enabled, :name, :next_run, :last_run, :interval_unit, :interval_value, :end_run, :time_zone, :status
 
   belongs_to :workspace
-  has_many :job_tasks
+  has_many :job_tasks, :order => :index
 
   validates :interval_unit, :presence => true, :inclusion => {:in => VALID_INTERVAL_UNITS }
   validates :status, :presence => true, :inclusion => {:in => STATUSES }
@@ -69,11 +69,11 @@ class Job < ActiveRecord::Base
   end
 
   def next_task_index
-    (job_tasks.order(:index).last.try(:index) || 0) + 1
+    (job_tasks.last.try(:index) || 0) + 1
   end
 
   def compact_indices
-    job_tasks.order(:index).each_with_index do |task, index|
+    job_tasks.each_with_index do |task, index|
       task.update_attribute(:index, index + 1)
     end
   end
@@ -100,7 +100,7 @@ class Job < ActiveRecord::Base
   end
 
   def execute_tasks
-    job_tasks.order("index ASC").each(&:execute)
+    job_tasks.each(&:execute)
   end
 
   def on_demand?

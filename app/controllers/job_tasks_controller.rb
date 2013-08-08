@@ -20,6 +20,13 @@ class JobTasksController < ApplicationController
     authorize! :can_edit_sub_objects, workspace
 
     job_task = JobTask.find(params[:id])
+
+    if params[:job_task][:index] && (job_task.index != params[:job_task][:index])
+      job = job_task.job
+      job_task_to_swap = job.job_tasks.find_by_index(params[:job_task][:index])
+      job_task_to_swap.update_attributes(:index => job_task.index) if job_task_to_swap
+    end
+
     job_task.update_attributes(params[:job_task])
 
     present job_task

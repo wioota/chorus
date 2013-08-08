@@ -1,6 +1,7 @@
 describe("chorus.views.JobTaskItem", function () {
     beforeEach(function() {
-        this.model = backboneFixtures.job().tasks().at(0);
+        this.collection = backboneFixtures.job().tasks();
+        this.model = this.collection.at(0);
         this.view = new chorus.views.JobTaskItem({ model: this.model });
         this.view.render();
     });
@@ -32,6 +33,72 @@ describe("chorus.views.JobTaskItem", function () {
         it("reloads the model", function() {
             this.model.trigger("invalidated");
             expect(this.model.fetch).toHaveBeenCalled();
+        });
+    });
+
+    describe("ordering arrows", function() {
+        it("has a down arrow as the first item in the list", function() {
+            this.model = this.collection.at(0);
+            this.view.model = this.model;
+            this.view.render();
+            expect(this.view.$('.down_arrow')).toExist();
+            expect(this.view.$('.up_arrow')).not.toExist();
+        });
+
+        it("has an up arrow as the last item in the list", function() {
+            this.model = this.collection.at(this.collection.length - 1);
+            this.view.model = this.model;
+            this.view.render();
+            expect(this.view.$('.down_arrow')).not.toExist();
+            expect(this.view.$('.up_arrow')).toExist();
+        });
+
+        context("when the item is in the middle of the collection", function() {
+            beforeEach(function() {
+                this.model = this.collection.at(1);
+                this.view = new chorus.views.JobTaskItem({ model: this.model });
+                this.view.render();
+            });
+
+            it("has both an up and down arrow as an", function() {
+                expect(this.view.$('.down_arrow')).toExist();
+                expect(this.view.$('.up_arrow')).toExist();
+            });
+
+            function itReordersTheList() {
+                it("makes a request to re-order the list ", function() {
+                    expect(this.server.lastUpdateFor(this.model)).toBeTruthy();
+                });
+
+                context("when the request finishes", function() {
+                    beforeEach(function() {
+                        chorus.page = {};
+                        chorus.page.model = this.model.job();
+                        spyOn(chorus.page.model, 'trigger');
+                        this.server.completeUpdateFor(this.model);
+                    });
+
+                    it("invalidates the job model", function() {
+                        expect(chorus.page.model.trigger).toHaveBeenCalledWith('invalidated');
+                    });
+                });
+            }
+
+            context("when the down arrow is clicked", function() {
+                beforeEach(function() {
+                    this.view.$('.down_arrow').click();
+                });
+
+                itReordersTheList();
+            });
+
+            context("when the up arrow is clicked", function() {
+                beforeEach(function() {
+                    this.view.$('.up_arrow').click();
+                });
+
+                itReordersTheList();
+            });
         });
     });
 });
