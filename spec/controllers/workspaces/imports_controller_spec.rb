@@ -136,6 +136,10 @@ describe Workspaces::ImportsController do
             stub(import).table_exists? { true }
           end
 
+          #Ensure that the destination table exists
+          active_workspace.sandbox.datasets.first.should_not == nil
+          active_workspace.sandbox.tables.find_by_name(dst_table_name).should == active_workspace.sandbox.datasets.first
+
           post :create, attributes
           response.code.should == "422"
           decoded_errors.fields.base.TABLE_NOT_CONSISTENT.should be_present
