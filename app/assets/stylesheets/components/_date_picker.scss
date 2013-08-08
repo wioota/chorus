@@ -18,27 +18,18 @@
   vertical-align: middle;
 }
 
-//.date {
-//  .label {
-//    width: 150px;
-//    @include font-menu;
-//    display: inline-block;
-//  }
-//
-//  input {
-//    width: 50px;
-//    display: inline-block;
-//  }
-//}
-//
-//.frequency {
-//  width: 100px;
-//}
-//
-//.hours, .ampm, .minutes {
-//  width: 65px;
-//}
-//
-//.schedule_widget {
-//  margin-left: 20px;
-//}
+.date-picker
+{
+    -webkit-transition:opacity .05s ease-in-out;
+    -moz-transition:opacity .05s ease-in-out;
+    -ms-transition:opacity .05s ease-in-out;
+    -o-transition:opacity .05s ease-in-out;
+    transition:opacity .05s ease-in-out;
+
+    .date-picker-table {
+        /* Prevent background color leak outs */
+        -webkit-background-clip: padding-box;
+        -moz-background-clip:    padding;
+        background-clip:         padding-box;
+    }
+}

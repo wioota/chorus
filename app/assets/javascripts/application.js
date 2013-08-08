@@ -22,6 +22,7 @@
 //= require vendor/code_mirror/codemirror-3.11.js
 //= require vendor/es5-shim
 //= require vendor/d3
+//= require vendor/datepicker_lang
 //= require_tree ./vendor
 //= require environment
 //= require bootstrap
