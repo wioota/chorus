@@ -24,6 +24,7 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
         });
 
         this.listenTo(this.model, "saved", this.modelSaved);
+        this.listenTo(this.model, 'saveFailed', this.saveFailed);
         this.toggleSubmitDisabled();
     },
 

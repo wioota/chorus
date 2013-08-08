@@ -374,9 +374,6 @@ FixtureBuilder.configure do |fbuilder|
     on_demand_job = FactoryGirl.create(:job, :workspace => public_workspace, :next_run => nil, :interval_unit => 'on_demand', :interval_value => 0)
     fbuilder.name :on_demand, on_demand_job
 
-    ready_job = FactoryGirl.create(:job, :next_run => 1.second.ago, :enabled => true)
-    fbuilder.name :ready, ready_job
-
     FactoryGirl.create(:job, :workspace => public_workspace)
     FactoryGirl.create(:job, :workspace => public_workspace)
 

@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Job do
+  let(:ready_job) { FactoryGirl.create(:job, :next_run => 1.second.ago) }
+
   describe 'validations' do
     it { should validate_presence_of :name }
     it { should validate_presence_of :interval_unit }
@@ -38,6 +40,14 @@ describe Job do
         new_job.should_not be_valid
       end
     end
+
+    describe "next_run validations" do
+      it "is invalid if the next_run is in the past" do
+        new_job = FactoryGirl.build(:job, :next_run => 1.hour.ago)
+        new_job.should_not be_valid
+        new_job.should have_error_on(:job)
+      end
+    end
   end
 
   describe '#create!' do
@@ -51,9 +61,17 @@ describe Job do
 
   describe 'scheduling' do
     describe '.ready_to_run' do
-      let(:job1) { FactoryGirl.create(:job, :name => 'past_enabled', :next_run => 30.seconds.ago, :enabled => true) }
+      let(:job1) do
+        temp = FactoryGirl.build(:job, :name => 'past_enabled', :next_run => 30.seconds.ago, :enabled => true)
+        temp.save!(:validate => false)
+        temp
+      end
       let(:job2) { FactoryGirl.create(:job, :name => 'future_enabled', :next_run => 1.day.from_now, :enabled => true) }
-      let(:job3) { FactoryGirl.create(:job, :name => 'past_disabled', :next_run => 1.day.ago, :enabled => false) }
+      let(:job3) do
+        temp = FactoryGirl.build(:job, :name => 'past_disabled', :next_run => 1.day.ago, :enabled => false)
+        temp.save!(:validate => false)
+        temp
+      end
 
       before do
         Job.delete_all
@@ -77,16 +95,14 @@ describe Job do
     end
 
     describe '#enqueue' do
-      let(:job) { jobs(:ready) }
-
       it 'puts itself into the worker queue if not already there' do
-        mock(QC.default_queue).enqueue_if_not_queued("Job.run", job.id)
-        job.enqueue
+        mock(QC.default_queue).enqueue_if_not_queued("Job.run", ready_job.id)
+        ready_job.enqueue
       end
 
       it "sets the job's status to waiting to run" do
-        job.enqueue
-        job.reload.status.should == 'enqueued'
+        ready_job.enqueue
+        ready_job.reload.status.should == 'enqueued'
       end
     end
   end
@@ -104,7 +120,7 @@ describe Job do
     end
 
     context "for scheduled jobs" do
-      let(:job) { jobs(:ready) }
+      let(:job) { ready_job }
 
       it 'updates the next run time' do
         og_next_run = job.next_run
@@ -185,7 +201,7 @@ describe Job do
     end
 
     describe 'success' do
-      let(:job) { jobs(:ready) }
+      let(:job) { ready_job }
 
       before { stub(job).execute_tasks { true } }
 
@@ -197,7 +213,7 @@ describe Job do
     end
 
     describe 'failure' do
-      let(:job) { jobs(:ready) }
+      let(:job) { ready_job }
 
       before { stub(job).execute_tasks { raise JobTask::JobTaskFailure } }
 
@@ -219,12 +235,7 @@ describe Job do
     end
 
     context 'with a scheduled job' do
-      let(:impossible_job) do
-        jobs(:ready).tap do |job|
-          job.next_run = 1.hour.from_now
-          job.end_run = Time.current
-        end
-      end
+      let(:impossible_job) { FactoryGirl.create(:job, :next_run => 1.hour.from_now, :end_run => Time.current) }
 
       it 'disables expiring jobs on update' do
         impossible_job.save!

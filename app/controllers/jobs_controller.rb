@@ -30,9 +30,9 @@ class JobsController < ApplicationController
     authorize! :can_edit_sub_objects, workspace
 
     job = workspace.jobs.find(params[:id])
-    job.update_attributes(params[:job])
+    job.update_attributes!(params[:job])
 
-    present job, :status => :ok
+    present job
   end
 
   def destroy

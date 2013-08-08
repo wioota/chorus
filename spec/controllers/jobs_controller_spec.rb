@@ -134,6 +134,27 @@ describe JobsController do
         end.to change(Job, :count).by(1)
       end
     end
+
+    context 'with an invalid next_run' do
+      let(:params) {
+        {
+            :job => {
+                :workspace => {:id => workspace.id},
+                :name => "asd",
+                :interval_unit => "hours",
+                :interval_value => "1",
+                :next_run => "2000-07-30T14:00:00-07:00",
+                :end_run => "invalid",
+                :time_zone => "Hawaii"
+            },
+            :workspace_id => workspace.id
+        }
+      }
+      it 'returns a 422' do
+        post :create, params
+        response.code.should == "422"
+      end
+    end
   end
 
   describe '#update' do
@@ -144,7 +165,7 @@ describe JobsController do
         workspace_id: workspace.id,
         job: {
             enabled: true,
-            next_run: "2013-07-30T14:00:00-00:00",
+            next_run: "2020-07-30T14:00:00-00:00",
             end_run: "invalid",
             time_zone: 'Arizona',
         }
@@ -165,7 +186,7 @@ describe JobsController do
 
     it "applies the passed-in time zone to the passed-in next_run without shifting time" do
       put :update, params
-      job.reload.next_run.to_i.should == DateTime.parse("2013-07-30T14:00:00-07:00").to_i
+      job.reload.next_run.to_i.should == DateTime.parse("2020-07-30T14:00:00-07:00").to_i
     end
 
     context "when an end-run is specified" do
@@ -175,8 +196,8 @@ describe JobsController do
           workspace_id: workspace.id,
           job: {
             enabled: true,
-            next_run: "2013-07-30T11:00:00-00:00",
-            end_run: "2013-07-30T14:00:00-00:00",
+            next_run: "2020-07-30T11:00:00-00:00",
+            end_run: "2020-07-30T14:00:00-00:00",
             time_zone: 'Arizona',
           }
         }
@@ -184,7 +205,27 @@ describe JobsController do
 
       it "applies the passed-in time zone to the passed-in end_run without shifting time" do
         put :update, params
-        job.reload.end_run.to_i.should == DateTime.parse("2013-07-30T14:00:00-07:00").to_i
+        job.reload.end_run.to_i.should == DateTime.parse("2020-07-30T14:00:00-07:00").to_i
+      end
+    end
+
+    context 'with an invalid next_run' do
+      let(:params) do
+        {
+            id: job.id,
+            workspace_id: workspace.id,
+            job: {
+                enabled: true,
+                next_run: "2000-07-30T14:00:00-00:00",
+                end_run: "invalid",
+                time_zone: 'Arizona',
+            }
+        }
+      end
+
+      it 'returns a 422' do
+        post :update, params
+        response.code.should == "422"
       end
     end
   end

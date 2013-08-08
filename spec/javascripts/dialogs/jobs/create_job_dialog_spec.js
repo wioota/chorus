@@ -208,6 +208,21 @@ describe("chorus.dialogs.CreateJob", function () {
                             expect(chorus.router.navigate).toHaveBeenCalledWith(this.dialog.model.showUrl());
                         });
                     });
+
+                    context('when the save fails', function () {
+                        beforeEach(function() {
+                            spyOn(this.dialog, "closeModal");
+                            this.server.lastCreate().fail();
+                        });
+
+                        it("does not close the dialog box", function() {
+                            expect(this.dialog.closeModal).not.toHaveBeenCalled();
+                        });
+
+                        it("removes the spinner from the button", function() {
+                            expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                        });
+                    });
                 });
             });
 
