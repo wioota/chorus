@@ -15,15 +15,10 @@ class WorkspacesController < ApplicationController
   end
 
   def create
-    workspace = current_user.owned_workspaces.build(params[:workspace])
-    Workspace.transaction do
-      workspace.save!
-      workspace.public ?
-          Events::PublicWorkspaceCreated.by(current_user).add(:workspace => workspace) :
-          Events::PrivateWorkspaceCreated.by(current_user).add(:workspace => workspace)
-    end
+    workspace = Workspace.create_for_user(current_user, params[:workspace])
     present workspace, :status => :created
   end
+
 
   def show
     workspace = Workspace.find(params[:id])

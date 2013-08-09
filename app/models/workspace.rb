@@ -188,6 +188,17 @@ class Workspace < ActiveRecord::Base
     end
   end
 
+  def self.create_for_user(user, params)
+    workspace = user.owned_workspaces.build(params)
+    Workspace.transaction do
+      workspace.save!
+      workspace.public ?
+          Events::PublicWorkspaceCreated.by(user).add(:workspace => workspace) :
+          Events::PrivateWorkspaceCreated.by(user).add(:workspace => workspace)
+    end
+    workspace
+  end
+
   def self.workspaces_for(user)
     if user.admin?
       scoped
