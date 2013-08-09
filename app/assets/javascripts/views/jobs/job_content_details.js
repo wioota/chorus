@@ -35,7 +35,8 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
         });
     },
 
-    launchCreateFlowTaskDialog: function() {
+    launchCreateFlowTaskDialog: function(e) {
+        e && e.preventDefault();
         var workFlows = new chorus.collections.WorkfileSet([], {fileType: 'work_flow', workspaceId: this.model.workspace().get("id")});
         new chorus.dialogs.ConfigureWorkFlowTask({job: this.model, collection: workFlows}).launchModal();
     },

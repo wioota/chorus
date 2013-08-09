@@ -1,7 +1,7 @@
 chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
     constructorName: "WorkspaceQuickstartView",
     templateName: "workspace_quickstart",
-    additionalClass: "workspace_show",
+    additionalClass: "workspace_show quickstart",
     useLoadingSection: true,
 
     events: {

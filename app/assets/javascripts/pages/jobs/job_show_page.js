@@ -51,12 +51,20 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
             lastRun: this.job.get("lastRun")
         };
 
-        this.mainContent = new chorus.views.MainContentList({
-            modelClass: "JobTask",
-            contentHeader: new chorus.views.StaticTemplate("job_show_content_header", headerOptions),
-            collection: this.collection,
-            contentDetails: this.contentDetails()
-        });
+        if (this.collection.length > 0) {
+            this.mainContent = new chorus.views.MainContentList({
+                modelClass: "JobTask",
+                contentHeader: new chorus.views.StaticTemplate("job_show_content_header", headerOptions),
+                collection: this.collection,
+                contentDetails: this.contentDetails()
+            });
+        } else {
+            this.mainContent = new chorus.views.MainContentView({
+                content: new chorus.views.JobQuickstart({model: this.job}),
+                contentHeader: new chorus.views.StaticTemplate("job_show_content_header", headerOptions),
+                contentDetails: this.contentDetails()
+            });
+        }
     },
 
     contentDetails: function () {

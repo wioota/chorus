@@ -10,7 +10,17 @@ describe("chorus.pages.JobsShowPage", function () {
         expect(this.page.constructorName).toBe("JobsShowPage");
     });
 
-    context("after the fetch completes", function () {
+    context("after the fetch completes with no tasks", function () {
+        beforeEach(function () {
+            this.server.completeFetchFor(this.model, backboneFixtures.job({tasks: []}));
+        });
+
+        it("creates quickstart content", function () {
+            expect(this.page.mainContent.content).toBeA(chorus.views.JobQuickstart);
+        });
+    });
+
+    context("after the fetch completes with tasks", function () {
         beforeEach(function() {
             this.server.completeFetchFor(this.model);
         });
