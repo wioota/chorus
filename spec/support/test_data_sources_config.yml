@@ -39,10 +39,12 @@ data_sources:
     - host: "chorus-gphd02"
       port: 8020
       username: "pivotal"
+      hdfs_version: "Greenplum HD 0.20"
 
     - host: "chorus-gphd11"
       port: 8020
       username: "hadoop"
+      hdfs_version: "Greenplum HD 1.1"
 
   oracle:
     - host: "chorus-oracle"

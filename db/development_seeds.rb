@@ -26,6 +26,6 @@ if gpdb_host || oracle_host || hadoop_host
   if hadoop_host && HdfsDataSource.where(:host => hadoop_host).count == 0
     hadoop_config = data_source_configs['hadoop'].find { |hash| hash['host'] == hadoop_host }
     puts "Creating HDFS connection #{hadoop_host}"
-    HdfsDataSource.create(hadoop_config.merge(:name => hadoop_host, :owner => chorus_admin), :without_protection => true)
+    HdfsDataSource.create!(hadoop_config.merge(:name => hadoop_host, :owner => chorus_admin), :without_protection => true)
   end
 end
