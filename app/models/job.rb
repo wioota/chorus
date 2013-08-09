@@ -41,7 +41,6 @@ class Job < ActiveRecord::Base
   end
 
   def run
-    self.next_run = frequency.since(next_run)
     ensure_next_run_is_in_the_future
     self.last_run = Time.current
     self.disable! if expiring?
@@ -83,9 +82,15 @@ class Job < ActiveRecord::Base
   private
 
   def ensure_next_run_is_in_the_future
-    while next_run < Time.current
-      self.next_run = frequency.since(next_run)
+    if next_run
+      while next_run < Time.current
+        increment_next_run
+      end
     end
+  end
+
+  def increment_next_run
+    self.next_run = frequency.since(next_run)
   end
 
   def disable_expiring

@@ -109,14 +109,17 @@ describe Job do
 
   describe '#run' do
     context "for on demand jobs" do
-      # todo
-      #it 'updates the next run time' do
-      #  og_next_run = job.next_run
-      #  Timecop.freeze do
-      #    job.run
-      #    job.next_run.to_i.should == job.frequency.since(og_next_run).to_i
-      #  end
-      #end
+      let(:job) do
+        jobs(:on_demand).tap do |job|
+          FactoryGirl.create(:run_work_flow_task, :job => job)
+          FactoryGirl.create(:import_source_data_task, :job => job)
+        end
+      end
+
+      it 'executes all tasks' do
+        job.job_tasks.each {|task| mock(task).execute }
+        job.run
+      end
     end
 
     context "for scheduled jobs" do
