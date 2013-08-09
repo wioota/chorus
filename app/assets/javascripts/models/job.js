@@ -51,5 +51,16 @@ chorus.models.Job = chorus.models.Base.extend({
                 }
             );
         }
+    },
+
+    run: function () {
+        var name = this.name();
+        function saveSucceeded(){ chorus.toast('job.running_toast', {jobName: name}); }
+        function saveFailed(){ chorus.toast('job.not_running_toast', {jobName: name}); }
+
+        this.save(
+            {running_as_demanded: true},
+            {success: saveSucceeded, error: saveFailed}
+        );
     }
 });

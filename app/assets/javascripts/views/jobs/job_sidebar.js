@@ -6,6 +6,7 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
         "click .disable": "disableJob",
         "click .enable": "enableJob",
         'click .edit_job': 'launchEditDialog',
+        'click .run_job': 'runJob',
         'click .delete_job': 'launchDeleteAlert'
     },
 
@@ -33,5 +34,10 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
     launchDeleteAlert: function (e) {
         e && e.preventDefault();
         new chorus.alerts.JobDelete({model: this.model}).launchModal();
+    },
+
+    runJob: function (e) {
+        e && e.preventDefault();
+        this.model.run();
     }
 });

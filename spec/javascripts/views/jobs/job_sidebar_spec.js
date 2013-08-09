@@ -54,6 +54,17 @@ describe("chorus.views.JobSidebar", function () {
         });
     });
 
+    describe("clicking 'Run Now'", function () {
+        beforeEach(function () {
+            spyOn(this.view.model, 'run');
+            this.view.$('a.run_job').click();
+        });
+
+        it("runs the job", function () {
+            expect(this.view.model.run).toHaveBeenCalled();
+        });
+    });
+
     describe("clicking EditJob", function () {
         itBehavesLike.aDialogLauncher("a.edit_job", chorus.dialogs.EditJob);
     });

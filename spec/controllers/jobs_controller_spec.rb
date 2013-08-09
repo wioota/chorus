@@ -228,6 +228,23 @@ describe JobsController do
         response.code.should == "422"
       end
     end
+
+    describe 'demanding an immediate run' do
+      let(:params) do
+        {
+            id: job.id,
+            workspace_id: workspace.id,
+            job: {
+              running_as_demanded: 'true'
+            }
+        }
+      end
+
+      it "enqueues the job" do
+        mock(QC.default_queue).enqueue_if_not_queued("Job.run", job.id)
+        post :update, params
+      end
+    end
   end
 
   describe '#destroy' do

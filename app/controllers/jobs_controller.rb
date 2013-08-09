@@ -30,7 +30,7 @@ class JobsController < ApplicationController
     authorize! :can_edit_sub_objects, workspace
 
     job = workspace.jobs.find(params[:id])
-    job.update_attributes!(params[:job])
+    params[:job]['running_as_demanded'] ? job.enqueue : job.update_attributes!(params[:job])
 
     present job
   end
