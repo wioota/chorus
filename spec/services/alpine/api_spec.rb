@@ -82,8 +82,8 @@ describe Alpine::API do
       FakeWeb.last_request.should be_a(Net::HTTP::Post)
 
       params = CGI::parse(URI(FakeWeb.last_request.path).query)
-      params['session_id'].should == mock_session_id
-      params['workfile_id'].should == work_flow.id
+      params['session_id'][0].should == mock_session_id
+      params['workfile_id'][0].should == work_flow.id.to_s
     end
 
     context 'when work_flow is disabled' do
