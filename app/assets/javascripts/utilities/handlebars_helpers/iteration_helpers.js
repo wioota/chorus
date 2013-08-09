@@ -3,13 +3,13 @@ chorus.handlebarsHelpers.iteration = {
     //
     // Iterate over an object, setting 'key' and 'value' for each property in
     // the object.
-    keyValue: function(obj, fn) {
+    keyValue: function(obj, block) {
         var buffer = "",
             key;
 
         for(key in obj) {
             if(obj.hasOwnProperty(key)) {
-                buffer += fn({key: key, value: obj[key]});
+                buffer += block.fn({key: key, value: obj[key]});
             }
         }
 

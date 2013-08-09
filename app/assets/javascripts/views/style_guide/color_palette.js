@@ -1,9 +1,8 @@
-(function () {
-    /*  Copy these directly from common.scss and use regex replace
-        (\$[^ \s]*)\s*: ([^\s]*);  ------------------>   "$1": "$2",
-    */
+chorus.views.ColorPaletteView = chorus.views.Base.extend({
+    constructorName: "StyleGuideColorPaletteView",
+    templateName: "style_guide_color_palette",
 
-    var backgroundColors = {
+    backgroundColors: {
         "$body-background-color": "#EAEFF6",
         "$body-glow-color ": "#C8DCED",
         "$shaded-background-color": "#E1E5E9",
@@ -31,9 +30,9 @@
         "$dataset-number-background-color": "#788DA5",
         "$ie-header-color": "#c7c7c7",
         "$tab-gradient-color ": "#D5E0EB"
-    };
+    },
 
-    var borderColors = {
+    borderColors: {
         "$border-color": "#D0D0D0",
         "$weak-header-border-color": "#bebfc9",
         "$subheader-border-color": "#D1D4D7",
@@ -46,9 +45,9 @@
         "$content-details-action-link-border-color": "#98B675",
         "$results-console-border-color": "#88A8D3",
         "$type-ahead-result-border-color": "#A5A6A8"
-    };
+    },
 
-    var textColors = {
+    textColors: {
         "$color-text1": "black",
         "$color-text2": "#5f5f5f",
         "$color-text3": "#7D7D7D",
@@ -60,18 +59,13 @@
         "$content-header-link-color": "$color-text4",
         "$content-details-action-link-color": "#4E7225",
         "$content-details-create-bar-link-color": "#608437"
-    };
+    },
 
-    chorus.views.ColorPaletteView = chorus.views.Base.extend({
-        constructorName: "StyleGuideColorPaletteView",
-        templateName:"style_guide_color_palette",
-
-        context:function () {
-            return {
-                backgroundColors: backgroundColors,
-                borderColors: borderColors,
-                textColors: textColors
-            };
-        }
-    });
-})();
+    context: function () {
+        return {
+            backgroundColors: this.backgroundColors,
+            borderColors: this.borderColors,
+            textColors: this.textColors
+        };
+    }
+});
