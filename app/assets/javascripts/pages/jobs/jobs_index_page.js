@@ -8,6 +8,7 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
         this.collection = new chorus.collections.JobSet([], {workspaceId: workspaceId});
         this.collection.sortAsc("name");
         this.collection.fetchAll();
+        this.onceLoaded(this.collection, this.pollForJobs);
 
         this.mainContent = new chorus.views.MainContentList(this.listConfig());
 
@@ -94,5 +95,17 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
                 }, this)
             }
         };
+    },
+
+    pollForJobs: function () {
+        this.collectionFetchPollerID && clearInterval(this.collectionFetchPollerID);
+
+        var fetchCollection = _.bind(function () { this.collection.fetchAll(); }, this);
+        this.collectionFetchPollerID = setInterval(fetchCollection, 15000);
+    },
+
+    teardown: function () {
+        clearInterval(this.collectionFetchPollerID);
+        return this._super('teardown');
     }
 });

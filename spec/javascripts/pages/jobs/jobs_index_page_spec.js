@@ -160,9 +160,29 @@ describe("chorus.pages.JobsIndexPage", function () {
     describe("when the collection is loaded", function () {
         beforeEach(function () {
             var jobs = [backboneFixtures.job()];
+            spyOn(this.page.collection, 'fetchAll');
+            jasmine.Clock.useMock();
             this.server.completeFetchFor(this.page.collection, jobs);
             this.server.completeFetchFor(this.workspace);
         });
+
+        describe("polling the collection", function () {
+            it("waits for an interval", function () {
+                expect(this.page.collection.fetchAll).not.toHaveBeenCalled();
+                jasmine.Clock.tick(30001);
+                expect(this.page.collection.fetchAll).toHaveBeenCalled();
+            });
+
+            it("ceases with teardown", function () {
+                this.page.teardown();
+                this.page.collection.fetchAll.reset();
+                jasmine.Clock.tick(300001);
+                expect(this.page.collection.fetchAll).not.toHaveBeenCalled();
+            });
+
+        });
+
+
 // Requires tag support
 //        itBehavesLike.aPageWithMultiSelect();
     });
