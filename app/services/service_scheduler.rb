@@ -30,7 +30,7 @@ class ServiceScheduler
       JobBoss.run
     end
 
-    end
+  end
 
   def job_named(job)
     @@events.find { |event|

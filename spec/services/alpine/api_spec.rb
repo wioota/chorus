@@ -8,11 +8,8 @@ describe Alpine::API do
   let(:mock_session_id) { 'fortytwo' }
   subject { Alpine::API.new config: config, user: user }
 
-  before do
-    fake_a_session
-  end
-
   describe '.delete_work_flow' do
+    before { fake_a_session }
     let(:work_flow) { workfiles('alpine_flow') }
 
     it 'delegates to a new API instance' do
@@ -31,6 +28,7 @@ describe Alpine::API do
       VCR.configure do |c|
         c.ignore_localhost = true
       end
+      fake_a_session
     end
 
     it 'makes a DELETE request with the necessary params' do
@@ -72,6 +70,8 @@ describe Alpine::API do
   end
 
   describe '#create_work_flow' do
+    before { fake_a_session }
+
     let(:full_request_url)  { "#{alpine_base_uri}/alpinedatalabs/main/chorus.do?method=importWorkFlow&session_id=#{mock_session_id}&file_name=#{work_flow.file_name}&workfile_id=#{work_flow.id}" }
     let(:file)              { test_file('workflow.afm', "text/xml") }
     let(:file_contents)     { file.read }
@@ -101,13 +101,29 @@ describe Alpine::API do
     end
   end
 
-  describe '#run_work_flow' do
+  describe '.run_work_flow_task' do
+    before { fake_a_session }
+    let(:task) { job_tasks(:rwft) }
 
+    it 'delegates to a new API instance' do
+      any_instance_of(Alpine::API) do |api|
+        mock(api).run_work_flow(task.payload, task: task)
+      end
+
+      Alpine::API.run_work_flow_task(task)
+    end
+  end
+
+  describe '#run_work_flow' do
     before do
       VCR.configure { |c| c.ignore_localhost = true }
+      any_instance_of(Session) do |session|
+        stub(session).session_id { mock_session_id }
+      end
     end
 
     it 'makes a POST request with the necessary params' do
+      FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 200)
       subject.run_work_flow(work_flow)
       FakeWeb.last_request.should be_a(Net::HTTP::Post)
       params = CGI::parse(URI(FakeWeb.last_request.path).query)
@@ -117,9 +133,33 @@ describe Alpine::API do
       params['hdfs_data_source_id'][0].should be_nil
     end
 
+    it 'raises exception if the request is not a 200' do
+      FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 500)
+      expect {
+        subject.run_work_flow(work_flow)
+      }.to raise_error
+    end
+
+    context "when called with a task" do
+      let(:task) { job_tasks(:rwft) }
+
+      it 'makes a POST request with job_task_id' do
+        FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 200)
+        subject.run_work_flow(task.payload, task: task)
+        FakeWeb.last_request.should be_a(Net::HTTP::Post)
+        params = CGI::parse(URI(FakeWeb.last_request.path).query)
+        params['session_id'][0].should == mock_session_id.to_s
+        params['workfile_id'][0].should == task.payload.id.to_s
+        params['database_id'][0].should == task.payload.execution_location.id.to_s
+        params['hdfs_data_source_id'][0].should be_nil
+        params['job_task_id'][0].should == task.id.to_s
+      end
+    end
+
     context "when the workflow's execution_lcoation is an HDFS" do
       let(:work_flow) { workfiles(:alpine_hadoop_dataset_flow) }
       it "replaces database_id with hdfs_data_source_id" do
+        FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 200)
         subject.run_work_flow(work_flow)
         params = CGI::parse(URI(FakeWeb.last_request.path).query)
 

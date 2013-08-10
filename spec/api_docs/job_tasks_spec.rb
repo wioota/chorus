@@ -53,7 +53,18 @@ resource 'JobTask' do
     let(:job_id) { jobs(:default).id }
     let(:id) { jobs(:default).job_tasks.first.id }
 
-    example_request "Update an existing task with" do
+    example_request "Update an existing task in a workspace" do
+      status.should == 200
+    end
+  end
+
+  put "/job_tasks/:id" do
+    parameter :id, "Task ID"
+    required_parameters :id
+
+    let(:id) { jobs(:default).job_tasks.first.id }
+
+    example_request "Update an existing task" do
       status.should == 200
     end
   end

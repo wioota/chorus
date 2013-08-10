@@ -33,19 +33,59 @@ describe RunWorkFlowTask do
   end
 
   describe "#execute" do
-    let(:task) { job_tasks(:rwft) }
-
-    it "tells alpine to run the workfile with the correct id" do
-      mock(Alpine::API).run_work_flow(task.payload)
-      task.execute
+    def wait_until
+      Timeout::timeout 10.seconds do
+        until yield
+          sleep 0.1
+        end
+      end
     end
 
-    #it "blocks until alpine is finished with running the work flow" do
-    #
-    #end
+    class FakeRunWorkFlowTask < RunWorkFlowTask
+      Executed = []
 
-    #it "raises if there's an error" do
-    #
-    #end
+      def execute
+        Executed << "start #{id}"
+        super
+        Executed << "end #{id}"
+      end
+    end
+
+    self.use_transactional_fixtures = false
+
+    before do
+      factory_task = FactoryGirl.create(:run_work_flow_task, job: job, type: 'FakeRunWorkFlowTask')
+      @task = JobTask.find(factory_task.id) # re-fetch to ensure it's of FakeRWFT class
+    end
+
+    after do
+      @task.destroy
+    end
+
+    it "blocks while alpine is running the work flow" do
+      stub(Alpine::API).run_work_flow_task(@task)
+      stub(RunWorkFlowTask).sleep_time { 0.1 }
+
+      Thread.abort_on_exception = true
+      t = Thread.new { @task.execute }
+
+      wait_until { FakeRunWorkFlowTask::Executed == ["start #{@task.id}"] }
+
+      @task.update_attribute(:status, 'finished')
+
+      wait_until { FakeRunWorkFlowTask::Executed == ["start #{@task.id}", "end #{@task.id}"] }
+      FakeRunWorkFlowTask::Executed.should == ["start #{@task.id}", "end #{@task.id}"]
+
+      t.join
+
+      @task.reload.status.should be_nil
+    end
+
+    it "does not change state to 'running' if we can't connect to alpine" do
+      stub(Alpine::API).run_work_flow_task(@task) { raise StandardError.new('oh no') }
+      expect {
+        @task.execute
+      }.to raise_error(JobTask::JobTaskFailure)
+    end
   end
 end

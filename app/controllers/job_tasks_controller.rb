@@ -17,9 +17,9 @@ class JobTasksController < ApplicationController
   end
 
   def update
-    authorize! :can_edit_sub_objects, workspace
-
     job_task = JobTask.find(params[:id])
+    workspace = job_task.job.workspace
+    authorize! :can_edit_sub_objects, workspace
 
     if params[:job_task][:index] && (job_task.index != params[:job_task][:index])
       job = job_task.job

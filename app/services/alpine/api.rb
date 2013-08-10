@@ -11,8 +11,14 @@ module Alpine
       new.create_work_flow(work_flow, body)
     end
 
+    def self.run_work_flow_task(task)
+      user = task.payload.workspace.owner
+      new(user: user).run_work_flow(task.payload, task: task)
+    end
+
     def self.run_work_flow(work_flow)
-      new(user: work_flow.workspace.owner).run_work_flow(work_flow)
+      user = work_flow.workspace.owner
+      new(user: user).run_work_flow(work_flow)
     end
 
     # INSTANCE METHODS
@@ -31,8 +37,13 @@ module Alpine
       request_creation(body, work_flow) if config.work_flow_configured?
     end
 
-    def run_work_flow(work_flow)
-      request_run(work_flow) if config.work_flow_configured?
+    def run_work_flow(work_flow, options = {})
+      unless Session.find_by_user_id(user.id)
+        session = Session.new
+        session.user = user
+        session.save!
+      end
+      request_run(work_flow, options) if config.work_flow_configured?
     end
 
     private
@@ -49,10 +60,12 @@ module Alpine
       pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
     end
 
-    def request_run(work_flow)
-      request_base.post(run_path(work_flow), '')
-    rescue SocketError, Errno::ECONNREFUSED, TimeoutError => e
+    def request_run(work_flow, options)
+      response = request_base.post(run_path(work_flow, options), '')
+      raise StandardError unless response.code == '200'
+    rescue StandardError => e
       pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
+      raise e
     end
 
     def delete_path(work_flow)
@@ -63,12 +76,13 @@ module Alpine
       "/alpinedatalabs/main/chorus.do?method=importWorkFlow&session_id=#{session_id}&file_name=#{work_flow.file_name}&workfile_id=#{work_flow.id}"
     end
 
-    def run_path(work_flow)
+    def run_path(work_flow, options)
       params = {
         method: 'runWorkFlow',
         session_id: session_id,
         workfile_id: work_flow.id
       }
+      params[:job_task_id] = options[:task].id if options[:task]
       params.merge!({database_id: work_flow.execution_location_id}) if work_flow.execution_location_type == 'GpdbDatabase'
       params.merge!({hdfs_data_source_id: work_flow.execution_location_id}) if work_flow.execution_location_type == 'HdfsDataSource'
 

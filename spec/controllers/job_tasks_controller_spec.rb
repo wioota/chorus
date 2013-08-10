@@ -82,6 +82,11 @@ describe JobTasksController do
       }
     end
 
+    it 'can be called with only a task_id' do
+      put :update, id: task.id, job_task: { status: 'finished' }
+      task.reload.status.should == 'finished'
+    end
+
     context 'import_source_data' do
       let(:planned_job_task) do
         {

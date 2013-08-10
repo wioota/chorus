@@ -16,7 +16,7 @@ class Job < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => [:workspace_id, :deleted_at]
   validate :next_run_not_in_past, :if => Proc.new { |job| job.changed.include?('next_run') }
 
-  scope :ready_to_run, -> { where(enabled: true).where('next_run <= ?', Time.current).order(:next_run) }
+  scope :ready_to_run, -> { where(enabled: true).where(status: 'idle').where('next_run <= ?', Time.current).order(:next_run) }
 
   before_validation :disable_expiring
 

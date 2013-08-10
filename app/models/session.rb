@@ -4,8 +4,9 @@ class Session < ActiveRecord::Base
 
   belongs_to :user
 
-  validates_presence_of :username, :password
-  validate :credentials_are_valid
+  validates_presence_of :username, :password, :on => :update, :if => Proc.new { |s| s.changed.include?('username') || s.changed.include?('password') }
+  validates_presence_of :username, :password, :on => :create, :unless => :user
+  validate :credentials_are_valid, :unless => :user
 
   before_create :generate_session_id
 
