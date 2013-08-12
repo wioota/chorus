@@ -13,7 +13,7 @@ chorus.views.JobItem = chorus.views.Base.extend({
             url: this.model.showUrl(),
             frequency: this.model.frequency(),
             stateKey: "job.state." + this.jobStateKey(),
-            running: this.isRunning()
+            running: this.model.isRunning()
         };
     },
 
@@ -22,14 +22,10 @@ chorus.views.JobItem = chorus.views.Base.extend({
     },
 
     jobStateKey: function () {
-        if (this.isRunning()) {
+        if (this.model.isRunning()) {
             return 'running';
         }
         return this.model.get('enabled') ? 'scheduled' : 'disabled';
-    },
-
-    isRunning: function () {
-        return this.model.get("status") === "running";
     },
 
     iconUrl: function () {

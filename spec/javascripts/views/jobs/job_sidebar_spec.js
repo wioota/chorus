@@ -56,12 +56,18 @@ describe("chorus.views.JobSidebar", function () {
 
     describe("clicking 'Run Now'", function () {
         beforeEach(function () {
-            spyOn(this.view.model, 'run');
+            spyOn(this.view.model, 'run').andCallThrough();
             this.view.$('a.run_job').click();
+            this.server.completeUpdateFor(this.view.model, {status: 'enqueued'});
         });
 
         it("runs the job", function () {
             expect(this.view.model.run).toHaveBeenCalled();
+        });
+
+        it("disables the 'Run Now' button", function () {
+            expect(this.view.$("a.run_job")).not.toExist();
+            expect(this.view.$("span.run_job")).toHaveClass('disabled');
         });
     });
 

@@ -62,5 +62,9 @@ chorus.models.Job = chorus.models.Base.extend({
             {running_as_demanded: true},
             {success: saveSucceeded, error: saveFailed}
         );
+    },
+
+    isRunning: function () {
+        return (this.get("status") === "running") || (this.get("status") === "enqueued");
     }
 });

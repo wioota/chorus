@@ -3,11 +3,11 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
     templateName:"job_sidebar",
 
     events: {
-        "click .disable": "disableJob",
-        "click .enable": "enableJob",
-        'click .edit_job': 'launchEditDialog',
-        'click .run_job': 'runJob',
-        'click .delete_job': 'launchDeleteAlert'
+        "click a.disable": "disableJob",
+        "click a.enable": "enableJob",
+        'click a.edit_job': 'launchEditDialog',
+        'click a.run_job': 'runJob',
+        'click a.delete_job': 'launchDeleteAlert'
     },
 
     disableJob: function(e) {
@@ -22,7 +22,8 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function () {
         return this.model ? {
-            enabled: this.model.get('enabled')
+            enabled: this.model.get('enabled'),
+            running: this.model.isRunning()
         } : {};
     },
 

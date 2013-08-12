@@ -66,37 +66,54 @@ describe("chorus.views.JobItem", function () {
         expect(this.view.$(".state")).toContainTranslation("job.state." + this.view.jobStateKey());
     });
 
-    context("when last_run is populated", function () {
-        it("includes when the job was last run", function () {
-            expect(this.view.$(".last_run")).toContainText('2011');
+    describe("#jobStateKey", function () {
+        it("returns 'scheduled' if the job is enabled and not running", function () {
+            this.model.set('enabled', 'true');
+            expect(this.view.jobStateKey()).toEqual('scheduled');
+        });
+
+        it("returns 'running' if the job is 'running' or 'enqueued'", function () {
+            this.model.set('status', 'enqueued');
+            expect(this.view.jobStateKey()).toEqual('running');
+
+            this.model.set('status', 'running');
+            expect(this.view.jobStateKey()).toEqual('running');
         });
     });
 
-    context("when last_run is empty", function () {
-        beforeEach(function () {
-            this.model.set('lastRun', null);
-            this.view.render();
+    describe("last run", function () {
+        context("when last_run is populated", function () {
+            it("includes when the job was last run", function () {
+                expect(this.view.$(".last_run")).toContainText('2011');
+            });
         });
 
-        it("shows a dash", function () {
-            expect(this.view.$(".last_run")).toContainText('-');
+        context("when last_run is empty", function () {
+            beforeEach(function () {
+                this.model.set('lastRun', null);
+                this.view.render();
+            });
+
+            it("shows a dash", function () {
+                expect(this.view.$(".last_run")).toContainText('-');
+            });
+        });
+
+        context("when last_run is empty", function () {
+            beforeEach(function () {
+                this.model.set('nextRun', null);
+                this.view.render();
+            });
+
+            it("shows a dash", function () {
+                expect(this.view.$(".next_run")).not.toExist();
+            });
         });
     });
 
     context("when next_run is populated", function () {
         it("includes when the job will be run next", function () {
             expect(this.view.$(".next_run")).toContainText('2050');
-        });
-    });
-
-    context("when last_run is empty", function () {
-        beforeEach(function () {
-            this.model.set('nextRun', null);
-            this.view.render();
-        });
-
-        it("shows a dash", function () {
-            expect(this.view.$(".next_run")).not.toExist();
         });
     });
 
