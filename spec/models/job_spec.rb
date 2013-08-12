@@ -48,6 +48,14 @@ describe Job do
         new_job.should have_error_on(:job)
       end
     end
+
+    describe 'end_run validations' do
+      it "prohibit jobs' end_run date from being scheduled in the past" do
+        impossible_job = FactoryGirl.build(:job, :end_run => 1.day.ago)
+        impossible_job.should_not be_valid
+        impossible_job.should have_error_on(:job).with_message(:END_RUN_IN_PAST)
+      end
+    end
   end
 
   describe '#create!' do

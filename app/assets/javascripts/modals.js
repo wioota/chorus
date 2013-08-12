@@ -17,6 +17,7 @@ chorus.Modal = chorus.views.Base.extend({
         $.facebox(this.el);
         this.previousModal = chorus.modal;
         this.restore();
+        this.showErrors();
     },
 
     launchSubModal: function(subModal) {

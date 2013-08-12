@@ -23,12 +23,13 @@ describe("chorus.views.JobSidebar", function () {
         context("when disable is clicked", function() {
             beforeEach(function() {
                 spyOn(this.job, "save");
-            });
-            it("makes a request to disable the job", function() {
                 this.view.$('.disable').click();
-                expect(this.job.save).toHaveBeenCalledWith({ enabled: false }, { wait: true });
             });
 
+            it("makes a request to disable the job", function() {
+                var calledArgs = this.job.save.mostRecentCall.args;
+                expect(calledArgs[0]).toEqual({ enabled: false });
+            });
         });
     });
 
@@ -44,13 +45,25 @@ describe("chorus.views.JobSidebar", function () {
 
         context("when enable is clicked", function() {
             beforeEach(function() {
-                spyOn(this.job, "save");
-            });
-            it("makes a request to enable the job", function() {
+                spyOn(this.job, "save").andCallThrough();
                 this.view.$('.enable').click();
-                expect(this.job.save).toHaveBeenCalledWith({ enabled: true }, { wait: true });
             });
 
+            it("makes a request to enable the job", function() {
+                var calledArgs = this.job.save.mostRecentCall.args;
+                expect(calledArgs[0]).toEqual({ enabled: true });
+            });
+
+            context("when the save fails with a validation error", function () {
+                beforeEach(function () {
+                    this.server.lastUpdateFor(this.job).failUnprocessableEntity();
+                });
+
+                it("launches the configuration dialog with the error shown", function () {
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditJob);
+                    expect(this.modalSpy.modals().length).toBe(1);
+                });
+            });
         });
     });
 

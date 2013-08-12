@@ -74,6 +74,18 @@ describe("chorus.views.JobContentDetails", function () {
             });
 
         });
+
+        context("when the save fails with a validation error", function () {
+            beforeEach(function () {
+                this.view.$('button.toggle_enabled').click();
+                this.server.lastUpdateFor(this.view.model).failUnprocessableEntity();
+            });
+
+            it("launches the configuration dialog with the error shown", function () {
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.EditJob);
+                expect(this.modalSpy.modals().length).toBe(1);
+            });
+        });
     });
 
     itBehavesLike.aDialogLauncher('.edit_schedule', chorus.dialogs.EditJob);

@@ -17,7 +17,7 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
 
     enableJob: function(e) {
         e && e.preventDefault();
-        this.model.enable();
+        this.model.enable({unprocessableEntity: _.bind(this.launchEditDialog, this)});
     },
 
     additionalContext: function () {

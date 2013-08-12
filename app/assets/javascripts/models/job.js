@@ -28,16 +28,16 @@ chorus.models.Job = chorus.models.Base.extend({
         return endDate ? moment(endDate).zone(endDate) : moment().add(1, 'hour');
     },
 
-    toggleEnabled: function () {
-        this.get('enabled') ? this.disable() : this.enable();
+    toggleEnabled: function (callbacks) {
+        this.get('enabled') ? this.disable(callbacks) : this.enable(callbacks);
     },
 
-    disable: function () {
-        this.save( {enabled: false}, { wait: true} );
+    disable: function (callbacks) {
+        this.save( {enabled: false}, _.extend({}, callbacks, { wait: true}) );
     },
 
-    enable: function () {
-        this.save( {enabled: true}, { wait: true} );
+    enable: function (callbacks) {
+        this.save( {enabled: true}, _.extend({}, callbacks, { wait: true}) );
     },
 
     frequency: function () {

@@ -53,7 +53,7 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
 
     toggleEnabled: function () {
         this.$("button.toggle_enabled").text(t("job.actions.saving")).prop("disabled", true);
-        this.model.toggleEnabled();
+        this.model.toggleEnabled({unprocessableEntity: _.bind(this.launchEditDialog, this)});
     },
 
     additionalContext: function() {

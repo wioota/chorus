@@ -15,10 +15,9 @@ class Job < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:workspace_id, :deleted_at]
   validate :next_run_not_in_past, :if => Proc.new { |job| job.changed.include?('next_run') }
+  validate :end_run_not_in_past, :if => :end_run
 
   scope :ready_to_run, -> { where(enabled: true).where(status: 'idle').where('next_run <= ?', Time.current).order(:next_run) }
-
-  before_validation :disable_expiring
 
   def self.order_by(column_name)
     if column_name.blank? || column_name == "name"
@@ -93,15 +92,12 @@ class Job < ActiveRecord::Base
     self.next_run = frequency.since(next_run)
   end
 
-  def disable_expiring
-    self.enabled = false if expiring?
-    true
+  def next_run_not_in_past
+    errors.add(:job, :NEXT_RUN_IN_PAST) if next_run < 1.minutes.ago
   end
 
-  def next_run_not_in_past
-    if next_run && next_run < 1.minutes.ago
-      errors.add(:job, :NEXT_RUN_IN_PAST)
-    end
+  def end_run_not_in_past
+    errors.add(:job, :END_RUN_IN_PAST) if end_run < 1.minutes.ago
   end
 
   def job_succeeded
