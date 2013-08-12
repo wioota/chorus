@@ -90,6 +90,7 @@ describe NotesController do
     end
 
     context "when adding a note with a work flow result attachment" do
+      let(:model) { workfiles(:alpine_flow) }
       let(:attributes) do
         {
             :entity_type => entity_type,

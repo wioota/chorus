@@ -79,6 +79,19 @@ resource "Workfiles" do
     end
   end
 
+  post "/workfiles/:workfile_id/results" do
+    parameter :workfile_id, "Id of workfile to add result"
+    parameter :result_id, "Id of workfile result on alpine"
+
+    required_parameters :workfile_id
+
+    let(:result_id) { "0.1274758" }
+
+    example_request "Add a workfile result to a workfile" do
+      status.should == 201
+    end
+  end
+
   delete "/workfiles/:id" do
     let(:id) { workfile.to_param }
     parameter :id, "Id of the workfile to delete"

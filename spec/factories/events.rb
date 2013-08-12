@@ -83,5 +83,9 @@ FactoryGirl.define do
       destination_table 'new_table_for_import'
       workspace
     end
+
+    factory :workfile_result, :class => Events::WorkfileResult do
+      association :workfile, :factory => :workfile
+    end
   end
 end

@@ -151,6 +151,12 @@ class Workfile < ActiveRecord::Base
     new_workfile
   end
 
+  def create_result_event(result_id)
+    event = Events::WorkfileResult.by(current_user).add(:workfile => self, :workspace => workspace)
+    event.notes_work_flow_results.create(:result_id => result_id) if result_id
+    event
+  end
+
   private
 
   def init_file_name

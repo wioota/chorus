@@ -296,6 +296,8 @@ FixtureBuilder.configure do |fbuilder|
                             :dataset_ids => HdfsDataset.limit(3).pluck(:id),
                            }, :without_protection => true)
 
+    Events::WorkfileResult.by(owner).add(:workfile => work_flow, :result_id => "1", :workspace => work_flow.workspace)
+
     #HDFS Entry
     @hdfs_file = FactoryGirl.create(:hdfs_entry, :path => '/foo/bar/baz.sql', :hdfs_data_source => hdfs_data_source)
     @directory = FactoryGirl.create(:hdfs_entry, :path => '/data/', :hdfs_data_source => hdfs_data_source, :is_directory => true)

@@ -105,6 +105,7 @@ Chorus::Application.routes.draw do
     resource :copy, :only => [:create], :controller => 'workfile_copy'
     resource :download, :only => [:show], :controller => 'workfile_download'
     resources :executions, :only => [:create, :destroy], :controller => 'workfile_executions'
+    resources :results, :only => [:create], :controller => 'workfile_results'
   end
 
   resources :workfile_versions, :only => [] do

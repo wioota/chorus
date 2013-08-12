@@ -52,6 +52,7 @@ window.BackboneFixtureDefinitions = {
             userCreated: {},
             viewCreated: {},
             workfileCreated: {},
+            workfileResult: {},
             workfileUpgradedVersion: {},
             workfileVersionDeleted: {},
             workFlowUpgradedVersion: {},

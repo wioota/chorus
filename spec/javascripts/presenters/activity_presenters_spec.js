@@ -2187,4 +2187,25 @@ describe("chorus.presenters.Activity", function() {
             );
         });
     });
+
+    context("workfile results", function () {
+        beforeEach(function() {
+            this.model = backboneFixtures.activity.workfileResult();
+            this.model.set({
+                attachments: [
+                    { entityType: "work_flow_result", id: "0.12345"}
+                ]
+            });
+            this.presenter = new chorus.presenters.Activity(this.model, {});
+            this.actor = this.model.actor();
+        });
+
+        it("has the right header html", function() {
+            expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.WorkfileResult.default", {
+                    workfileLink: linkTo(this.model.workfile().showUrl(), this.model.workfile().name())
+                }
+            );
+        });
+    });
 });

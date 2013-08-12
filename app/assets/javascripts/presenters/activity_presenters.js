@@ -380,6 +380,10 @@
 
         JobFailed: {
             links: ["actor", "job", "workspace"]
+        },
+
+        WorkfileResult: {
+            links: ["workfile"]
         }
     };
 

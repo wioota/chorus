@@ -179,6 +179,19 @@ describe EventPresenter, :type => :view do
       end
     end
 
+    context "Workfile Result event" do
+      let(:event) { FactoryGirl.create(:workfile_result) }
+      let(:note_work_flow_result) { NotesWorkFlowResult.new({:result_id => "0.1234321"}) }
+
+      it "contains the attachment" do
+        stub(event).notes_work_flow_results { [note_work_flow_result] }
+
+        hash = subject.to_hash
+        hash[:attachments][0][:entity_type].should == "work_flow_result"
+        hash[:attachments][0][:id].should == note_work_flow_result.result_id
+      end
+    end
+
     context "Event with comments" do
       let(:event) { events(:note_on_greenplum) }
 

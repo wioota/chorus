@@ -328,7 +328,8 @@ describe EventsController do
         'hdfsDatasetCreated' => Events::HdfsDatasetCreated,
         'hdfsDatasetUpdated' => Events::HdfsDatasetUpdated,
         'jobSucceeded' => Events::JobSucceeded,
-        'jobFailed' => Events::JobFailed
+        'jobFailed' => Events::JobFailed,
+        'workfileResult' => Events::WorkfileResult
     }
 
     FIXTURE_FILES.each do |file_name, event_class|
