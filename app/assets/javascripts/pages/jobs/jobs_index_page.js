@@ -7,7 +7,7 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
 
         this.collection = new chorus.collections.JobSet([], {workspaceId: workspaceId});
         this.collection.sortAsc("name");
-        this.collection.fetchAll();
+        this.collection.fetch();
         this.onceLoaded(this.collection, this.pollForJobs);
 
         this.mainContent = new chorus.views.MainContentList(this.listConfig());
@@ -17,7 +17,7 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
         this.mainContent.contentHeader.bind("choice:sort", function(choice) {
             var field = choice === "alpha" ? "name" : "nextRun";
             this.collection.sortAsc(field);
-            this.collection.fetchAll();
+            this.collection.fetch();
         }, this);
 
         this.subscribePageEvent("job:search", function() {
@@ -100,7 +100,7 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
     pollForJobs: function () {
         this.collectionFetchPollerID && clearInterval(this.collectionFetchPollerID);
 
-        var fetchCollection = _.bind(function () { this.collection.fetchAll(); }, this);
+        var fetchCollection = _.bind(function () { this.collection.fetch(); }, this);
         this.collectionFetchPollerID = setInterval(fetchCollection, 15000);
     },
 

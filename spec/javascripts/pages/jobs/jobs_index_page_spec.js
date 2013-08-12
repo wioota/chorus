@@ -4,6 +4,10 @@ describe("chorus.pages.JobsIndexPage", function () {
         this.page = new chorus.pages.JobsIndexPage(this.workspace.id);
     });
 
+    afterEach(function () {
+        this.page.teardown();
+    });
+
     it("should have the right constructor name", function () {
        expect(this.page.constructorName).toBe("JobsIndexPage");
     });
@@ -40,8 +44,8 @@ describe("chorus.pages.JobsIndexPage", function () {
             expect(this.page.mainContent).toBeA(chorus.views.MainContentList);
         });
 
-        it("fetches the entire collection", function() {
-            expect(this.page.collection).toHaveAllBeenFetched();
+        it("fetches the collection", function() {
+            expect(this.page.collection).toHaveBeenFetched();
         });
 
         it("defaults to alphabetical sorting ascending", function() {
@@ -93,7 +97,7 @@ describe("chorus.pages.JobsIndexPage", function () {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);
             this.collection = backboneFixtures.jobSet();
-            this.server.completeFetchAllFor(this.page.collection, [this.collection.at(0), this.collection.at(1)]);
+            this.server.completeFetchFor(this.page.collection, [this.collection.at(0), this.collection.at(1)]);
 
         });
 
@@ -160,7 +164,7 @@ describe("chorus.pages.JobsIndexPage", function () {
     describe("when the collection is loaded", function () {
         beforeEach(function () {
             var jobs = [backboneFixtures.job()];
-            spyOn(this.page.collection, 'fetchAll');
+            spyOn(this.page.collection, 'fetch');
             jasmine.Clock.useMock();
             this.server.completeFetchFor(this.page.collection, jobs);
             this.server.completeFetchFor(this.workspace);
@@ -168,22 +172,17 @@ describe("chorus.pages.JobsIndexPage", function () {
 
         describe("polling the collection", function () {
             it("waits for an interval", function () {
-                expect(this.page.collection.fetchAll).not.toHaveBeenCalled();
+                expect(this.page.collection.fetch).not.toHaveBeenCalled();
                 jasmine.Clock.tick(30001);
-                expect(this.page.collection.fetchAll).toHaveBeenCalled();
+                expect(this.page.collection.fetch).toHaveBeenCalled();
             });
 
             it("ceases with teardown", function () {
                 this.page.teardown();
-                this.page.collection.fetchAll.reset();
+                this.page.collection.fetch.reset();
                 jasmine.Clock.tick(300001);
-                expect(this.page.collection.fetchAll).not.toHaveBeenCalled();
+                expect(this.page.collection.fetch).not.toHaveBeenCalled();
             });
-
         });
-
-
-// Requires tag support
-//        itBehavesLike.aPageWithMultiSelect();
     });
 });
