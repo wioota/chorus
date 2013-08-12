@@ -381,7 +381,7 @@ describe("chorus.dialogs.ImportNow", function() {
                 });
 
                 it("enables the import target options", function() {
-                    expect(this.dialog.$("input")).toBeVisible();
+                    expect(this.dialog.$(".options")).not.toHaveClass('hidden');
                 });
 
                 it("shows the submit button when a table name is entered", function() {

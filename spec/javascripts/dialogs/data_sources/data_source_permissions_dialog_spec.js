@@ -626,7 +626,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
 
                 describe("cancelling the new account", function() {
                     beforeEach(function() {
-                        this.dialog.$("li.new a.cancel:visible").click();
+                        this.dialog.$("li.new a.cancel").click();
                     });
 
                     it("enables the 'add account' button", function() {
@@ -645,12 +645,12 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                 describe("saving the new account", function() {
                     context("with errors", function() {
                         beforeEach(function() {
-                            this.dialog.$('a.save:visible').click();
+                            this.dialog.$('a.save').click();
                         });
 
                         it("shows errors", function() {
-                            expect(this.dialog.$('input[name=dbUsername]:visible')).toHaveClass('has_error');
-                            expect(this.dialog.$('input[name=dbPassword]:visible')).toHaveClass('has_error');
+                            expect(this.dialog.$('input[name=dbUsername]')).toHaveClass('has_error');
+                            expect(this.dialog.$('input[name=dbPassword]')).toHaveClass('has_error');
                         });
                     });
 
@@ -666,7 +666,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                         });
                         context("clicking save", function() {
                             beforeEach(function() {
-                                this.dialog.$('a.save:visible').click();
+                                this.dialog.$('a.save').click();
                             });
 
                             it("saves the correct fields", function() {
@@ -709,7 +709,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
 
                         context("pressing enter", function() {
                             beforeEach(function() {
-                                this.dialog.$('a.save:visible').closest('form').submit();
+                                this.dialog.$('a.save').closest('form').submit();
                             });
 
                             it("saves the model", function() {

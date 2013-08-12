@@ -124,10 +124,10 @@ describe("chorus.dialogs.MemoNewDialog", function() {
     describe("show_options", function() {
         it("shows the options area and hides the options_text when clicked", function() {
             expect(this.dialog.$('.options_area')).toBeHidden();
-            expect(this.dialog.$('.options_text')).toBeVisible();
+            expect(this.dialog.$('.options_text')).not.toHaveClass('hidden');
             this.dialog.$("a.show_options").click();
             expect(this.dialog.$('.options_text')).toBeHidden();
-            expect(this.dialog.$('.options_area')).toBeVisible();
+            expect(this.dialog.$('.options_area')).not.toHaveClass('hidden');
         });
 
         it("renders the attachment links when the allowWorkspaceAttachments option is truthy", function() {
@@ -386,7 +386,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             });
 
             it("unhides the file_details area", function() {
-                expect(this.dialog.$('.file_details')).toBeVisible();
+                expect(this.dialog.$('.file_details')).not.toHaveClass('hidden');
             });
 
             it("displays the chosen filenames", function() {
@@ -435,8 +435,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                     it("shows upload_finished and hides the progress bar", function() {
                         var fileRow = this.dialog.$('.file_details:eq(0)');
-                        expect(fileRow.find('.progress_bar span')).not.toBeVisible();
-                        expect(fileRow.find('.upload_finished')).toBeVisible();
+                        expect(fileRow.find('.progress_bar')).toHaveClass('hidden');
+                        expect(fileRow.find('.upload_finished')).not.toHaveClass('hidden');
                     });
                 });
             });
@@ -479,18 +479,18 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         });
                         it("shows the progress bar for desktopfiles", function() {
                             this.dialog.$(".file_details.desktopfile").each(function() {
-                                expect($(this).find('.progress_bar')).toBeVisible();
-                                expect($(this).find('.progress_text')).not.toBeVisible();
-                                expect($(this).find('.remove')).not.toBeVisible();
-                                expect($(this).find('.upload_finished')).not.toBeVisible();
+                                expect($(this).find('.progress_bar')).not.toHaveClass('hidden');
+                                expect($(this).find('.progress_text')).toHaveClass('hidden');
+                                expect($(this).find('.remove')).toHaveClass('hidden');
+                                expect($(this).find('.upload_finished')).toHaveClass('hidden');
                             });
                         });
 
                         it("shows the upload_finished for workfiles", function() {
                             this.dialog.$(".file_details.workfile").each(function() {
-                                expect($(this).find('.progress_bar')).not.toBeVisible();
-                                expect($(this).find('.remove')).not.toBeVisible();
-                                expect($(this).find('.upload_finished')).toBeVisible();
+                                expect($(this).find('.progress_bar')).toHaveClass('hidden');
+                                expect($(this).find('.remove')).toHaveClass('hidden');
+                                expect($(this).find('.upload_finished')).not.toHaveClass('hidden');
                             });
                         });
                     });
@@ -504,10 +504,10 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                         });
                         it("shows the progress text for desktopfiles", function() {
                             this.dialog.$(".file_details.desktopfile").each(function() {
-                                expect($(this).find('.progress_text')).toBeVisible();
-                                expect($(this).find('.progress_bar')).not.toBeVisible();
-                                expect($(this).find('.remove')).not.toBeVisible();
-                                expect($(this).find('.upload_finished')).not.toBeVisible();
+                                expect($(this).find('.progress_text')).not.toHaveClass('hidden');
+                                expect($(this).find('.progress_bar')).toHaveClass('hidden');
+                                expect($(this).find('.remove')).toHaveClass('hidden');
+                                expect($(this).find('.upload_finished')).toHaveClass('hidden');
                             });
                         });
                     });
@@ -581,9 +581,9 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 
                         it("displays the remove button and hides progress bar", function() {
                             this.dialog.$(".file_details").each(function() {
-                                expect($(this).find('.progress_bar')).not.toBeVisible();
-                                expect($(this).find('.upload_finished')).not.toBeVisible();
-                                expect($(this).find('.remove')).toBeVisible();
+                                expect($(this).find('.progress_bar')).toHaveClass('hidden');
+                                expect($(this).find('.upload_finished')).toHaveClass('hidden');
+                                expect($(this).find('.remove')).not.toHaveClass('hidden');
                             });
                         });
 
@@ -796,8 +796,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             });
 
             it("cancel should be replaced by cancel upload button", function() {
-                expect(this.dialog.$('.form_controls .cancel')).not.toBeVisible();
-                expect(this.dialog.$('.form_controls .cancel_upload')).toBeVisible();
+                expect(this.dialog.$('.form_controls .cancel')).toHaveClass('hidden');
+                expect(this.dialog.$('.form_controls .cancel_upload')).not.toHaveClass('hidden');
             });
 
             context("when the upload has failed", function() {
@@ -806,8 +806,8 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 });
 
                 it("should hide the cancel upload button again", function() {
-                    expect(this.dialog.$('.form_controls .cancel')).toBeVisible();
-                    expect(this.dialog.$('.form_controls .cancel_upload')).not.toBeVisible();
+                    expect(this.dialog.$('.form_controls .cancel')).not.toHaveClass('hidden');
+                    expect(this.dialog.$('.form_controls .cancel_upload')).toHaveClass('hidden');
                 });
 
             });
