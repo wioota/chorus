@@ -1,11 +1,8 @@
 describe("chorus.pages.JobsIndexPage", function () {
     beforeEach(function () {
+        this.clock = this.useFakeTimers();
         this.workspace = backboneFixtures.workspace();
         this.page = new chorus.pages.JobsIndexPage(this.workspace.id);
-    });
-
-    afterEach(function () {
-        this.page.teardown();
     });
 
     it("should have the right constructor name", function () {
@@ -165,7 +162,6 @@ describe("chorus.pages.JobsIndexPage", function () {
         beforeEach(function () {
             var jobs = [backboneFixtures.job()];
             spyOn(this.page.collection, 'fetch');
-            jasmine.Clock.useMock();
             this.server.completeFetchFor(this.page.collection, jobs);
             this.server.completeFetchFor(this.workspace);
         });
@@ -173,14 +169,14 @@ describe("chorus.pages.JobsIndexPage", function () {
         describe("polling the collection", function () {
             it("waits for an interval", function () {
                 expect(this.page.collection.fetch).not.toHaveBeenCalled();
-                jasmine.Clock.tick(30001);
+                this.clock.tick(30001);
                 expect(this.page.collection.fetch).toHaveBeenCalled();
             });
 
             it("ceases with teardown", function () {
                 this.page.teardown();
                 this.page.collection.fetch.reset();
-                jasmine.Clock.tick(300001);
+                this.clock.tick(300001);
                 expect(this.page.collection.fetch).not.toHaveBeenCalled();
             });
         });

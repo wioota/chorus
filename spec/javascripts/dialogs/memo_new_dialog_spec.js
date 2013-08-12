@@ -177,7 +177,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 });
 
                 it("displays the appropriate file icons", function() {
-                    var fileIcons = this.dialog.$(".file_details:visible img.icon");
+                    var fileIcons = this.dialog.$(".file_details img.icon");
                     expect(fileIcons.eq(0).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("sql", "icon"));
                     expect(fileIcons.eq(1).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("cpp", "icon"));
                     expect(fileIcons.eq(2).attr("src")).toBe(chorus.urlHelpers.fileIconUrl("plain", "icon"));
@@ -284,7 +284,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 });
 
                 it("displays the appropriate icons", function() {
-                    var datasetIcons = this.dialog.$(".dataset_details:visible img.icon");
+                    var datasetIcons = this.dialog.$(".dataset_details img.icon");
                     expect(datasetIcons.eq(0).attr("src")).toBe(this.datasets[0].iconUrl({size: 'icon'}));
                 });
 
