@@ -22,29 +22,29 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>6,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
         \ summary_texts tag_names_texts body_texts name_stemmed_texts summary_stemmed_texts\
         \ tag_names_stemmed_texts body_stemmed_texts','hl.simple.pre'=>'@@@hl@@@','wt'=>'ruby','hl'=>'on','rows'=>'50','defType'=>'edismax','fl'=>'*\
         \ score','hl.snippets'=>'100','start'=>'0','q'=>'searchquery','group.truncate'=>'true','group.field'=>'grouping_id_s','hl.simple.post'=>'@@@endhl@@@','group'=>'true','fq'=>['type:(Workspace\
         \ OR Events\\\\:\\\\:Note OR Comment)','type_name_s:(Workspace)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>6,'ngroups'=>6,'groups'=>[{'groupValue'=>'Workspace\
-        \ 1000008','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>9258.997,'docs'=>[{'id'=>'Workspace\
-        \ 1000008','name_texts'=>['Public'],'name_stemmed_texts'=>['Public'],'summary_stemmed_texts'=>['searchquery'],'summary_texts'=>['searchquery'],'score'=>9258.997}]}},{'groupValue'=>'Workspace\
-        \ 1000009','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>9258.997,'docs'=>[{'id'=>'Workspace\
-        \ 1000009','name_texts'=>['Private'],'name_stemmed_texts'=>['Private'],'summary_stemmed_texts'=>['searchquery'],'summary_texts'=>['searchquery'],'score'=>9258.997}]}},{'groupValue'=>'Workspace\
-        \ 1000010','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>9258.997,'docs'=>[{'id'=>'Workspace\
+        \ 1000008','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>9516.878,'docs'=>[{'id'=>'Workspace\
+        \ 1000008','name_texts'=>['Public'],'name_stemmed_texts'=>['Public'],'summary_stemmed_texts'=>['searchquery'],'summary_texts'=>['searchquery'],'score'=>9516.878}]}},{'groupValue'=>'Workspace\
+        \ 1000009','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>9516.878,'docs'=>[{'id'=>'Workspace\
+        \ 1000009','name_texts'=>['Private'],'name_stemmed_texts'=>['Private'],'summary_stemmed_texts'=>['searchquery'],'summary_texts'=>['searchquery'],'score'=>9516.878}]}},{'groupValue'=>'Workspace\
+        \ 1000010','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>9516.878,'docs'=>[{'id'=>'Workspace\
         \ 1000010','name_texts'=>['Search Public'],'name_stemmed_texts'=>['Search\
-        \ Public'],'summary_stemmed_texts'=>['searchquery'],'summary_texts'=>['searchquery'],'score'=>9258.997}]}},{'groupValue'=>'Workspace\
-        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>9258.997,'docs'=>[{'id'=>'Workspace\
+        \ Public'],'summary_stemmed_texts'=>['searchquery'],'summary_texts'=>['searchquery'],'score'=>9516.878}]}},{'groupValue'=>'Workspace\
+        \ 1000011','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>9516.878,'docs'=>[{'id'=>'Workspace\
         \ 1000011','name_texts'=>['Search Private'],'name_stemmed_texts'=>['Search\
-        \ Private'],'summary_stemmed_texts'=>['searchquery'],'summary_texts'=>['searchquery'],'score'=>9258.997}]}},{'groupValue'=>'Workspace\
-        \ 1000005','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>6944.248,'docs'=>[{'id'=>'Workspace\
+        \ Private'],'summary_stemmed_texts'=>['searchquery'],'summary_texts'=>['searchquery'],'score'=>9516.878}]}},{'groupValue'=>'Workspace\
+        \ 1000005','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7137.658,'docs'=>[{'id'=>'Workspace\
         \ 1000005','name_texts'=>['Public with no collaborators except collaborator'],'name_stemmed_texts'=>['Public\
         \ with no collaborators except collaborator'],'summary_stemmed_texts'=>['searchquery\
-        \ can see I guess'],'summary_texts'=>['searchquery can see I guess'],'score'=>6944.248}]}},{'groupValue'=>'Workspace\
-        \ 1000006','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>6944.248,'docs'=>[{'id'=>'Workspace\
+        \ can see I guess'],'summary_texts'=>['searchquery can see I guess'],'score'=>7137.658}]}},{'groupValue'=>'Workspace\
+        \ 1000006','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7137.658,'docs'=>[{'id'=>'Workspace\
         \ 1000006','name_texts'=>['Private with no collaborators'],'name_stemmed_texts'=>['Private\
         \ with no collaborators'],'summary_stemmed_texts'=>['Not for searchquery,\
-        \ ha ha'],'summary_texts'=>['Not for searchquery, ha ha'],'score'=>6944.248}]}}]}},'highlighting'=>{'Workspace\
+        \ ha ha'],'summary_texts'=>['Not for searchquery, ha ha'],'score'=>7137.658}]}}]}},'highlighting'=>{'Workspace\
         \ 1000008'=>{'summary_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'summary_texts'=>['@@@hl@@@searchquery@@@endhl@@@']},'Workspace\
         \ 1000009'=>{'summary_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'summary_texts'=>['@@@hl@@@searchquery@@@endhl@@@']},'Workspace\
         \ 1000010'=>{'summary_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@'],'summary_texts'=>['@@@hl@@@searchquery@@@endhl@@@']},'Workspace\
@@ -54,5 +54,5 @@ http_interactions:
         \ I guess']},'Workspace 1000006'=>{'summary_stemmed_texts'=>['Not for @@@hl@@@searchquery@@@endhl@@@,\
         \ ha ha'],'summary_texts'=>['Not for @@@hl@@@searchquery@@@endhl@@@, ha ha']}}}"
     http_version: '1.1'
-  recorded_at: Thu, 01 Aug 2013 18:17:30 GMT
+  recorded_at: Mon, 12 Aug 2013 20:52:44 GMT
 recorded_with: VCR 2.3.0
