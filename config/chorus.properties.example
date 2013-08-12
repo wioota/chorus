@@ -143,4 +143,4 @@ oracle.enabled = true
 
 #Work Flow
 work_flow.enabled = true
-work_flow.url = localhost
+work_flow.url = http://localhost:8070
