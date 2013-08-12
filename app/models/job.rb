@@ -25,7 +25,7 @@ class Job < ActiveRecord::Base
     end
 
     if %w(next_run).include?(column_name)
-      order("#{column_name} desc")
+      order("#{column_name} asc")
     end
   end
 
