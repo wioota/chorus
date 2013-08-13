@@ -846,17 +846,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_a_workspace');
             });
 
-            context('when the dataset is an oracle dataset', function() {
-                beforeEach(function() {
-                    this.dataset = backboneFixtures.oracleDataset();
-                    chorus.PageEvents.trigger("dataset:selected", this.dataset);
-                });
-
-                it('doesnt show the associate link', function() {
-                    expect(this.view.$('.actions .associate')).not.toExist();
-                });
-            });
-
             itBehavesLike.aDialogLauncher("a.new_note", chorus.dialogs.NotesNew);
         });
 

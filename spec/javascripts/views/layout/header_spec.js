@@ -170,7 +170,7 @@ describe("chorus.views.Header", function() {
             });
 
             it("does not hide the typeahead view if you type again", function() {
-                stubSetTimeout();
+                this.useFakeTimers();
                 this.view.$(".search input:text").val("other_query").trigger("textchange");
                 expect($(this.view.typeAheadView.el)).not.toHaveClass("hidden");
             });

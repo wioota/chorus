@@ -1,7 +1,7 @@
 describe("chorus.Mixins.clEditor", function() {
     var controls = ["bold", "italic", "bullets", "numbers", "link", "unlink"];
     beforeEach(function() {
-        stubSetTimeout();
+        this.useFakeTimers();
         this.editorContainer = $("<div class='container'><div class='toolbar'></div><textarea name='summary'></textarea></div>");
         $('#jasmine_content').append(this.editorContainer);
 

@@ -489,12 +489,6 @@
         });
     };
 
-    window.stubSetTimeout = function() {
-        spyOn(window, 'setTimeout').andCallFake(function(func) {
-            func();
-        });
-    };
-
     window.stubDefer = function() {
         spyOn(_, 'defer').andCallFake(function(func) {
             func();

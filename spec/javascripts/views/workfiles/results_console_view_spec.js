@@ -226,186 +226,6 @@ describe("chorus.views.ResultsConsoleView", function() {
                 });
             }
 
-            function itShowsExecutionResults() {
-
-                it("renders a data grid with the given task", function() {
-                    expect(this.view.dataGrid).toBeA(chorus.views.DataGrid);
-                    expect(this.view.dataGrid.model).toBe(this.task);
-                    expect($(this.view.el)).toContain(this.view.dataGrid.el);
-                });
-
-                it("displays the result table", function() {
-                    expect(this.view.$('.result_table')).not.toHaveClass("hidden");
-                });
-
-                it("renders only one data table", function() {
-                    expect(this.view.$(".result_table .data_grid").length).toBe(1);
-                });
-
-                it("shows the control section", function() {
-                    expect(this.view.$(".controls")).not.toHaveClass("hidden");
-                });
-
-                context("when another execution completed event occurs", function() {
-                    beforeEach(function() {
-                        chorus.PageEvents.trigger("file:executionSucceeded", backboneFixtures.workfileExecutionResults());
-                    });
-
-                    it("still renders only one data table", function() {
-                        expect(this.view.$(".result_table .data_grid").length).toBe(1);
-                    });
-                });
-
-                it("changes the state of the result table to 'minimized'", function() {
-                    expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
-                    expect(this.view.$('.result_table')).toHaveClass("minimized");
-                    expect(this.view.$('.result_table')).not.toHaveClass("maximized");
-                });
-
-                it("renders the maximize link", function() {
-                    expect(this.view.$("a.maximize")).not.toHaveClass("hidden");
-                    expect(this.view.$("a.minimize")).toHaveClass("hidden");
-                });
-
-                it("shows the bottom gutter (with the expander button)", function() {
-                    expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
-                });
-
-                specify("the expander button arrow points up", function() {
-                    expect(this.view.$(".arrow")).toHaveClass("up");
-                    expect(this.view.$(".arrow")).not.toHaveClass("down");
-                });
-
-                describe("clicking the maximize link", function() {
-                    beforeEach(function() {
-                        spyOn(this.view.dataGrid, 'resizeGridToResultsConsole');
-                        spyOn(this.view, "getDesiredDataGridHeight").andReturn(777);
-                        spyOn(this.view, "recalculateScrolling");
-                        this.view.$("a.maximize").click();
-                    });
-
-                    it("hides the maximize link and shows the minimize link", function() {
-                        expect(this.view.$("a.maximize")).toHaveClass("hidden");
-                        expect(this.view.$("a.minimize")).not.toHaveClass("hidden");
-                    });
-
-                    it("changes the state of the result table to 'minimized'", function() {
-                        expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
-                        expect(this.view.$('.result_table')).not.toHaveClass("minimized");
-                        expect(this.view.$('.result_table')).toHaveClass("maximized");
-                    });
-
-                    it("recalculates scrolling", function() {
-                        expect(this.view.recalculateScrolling).toHaveBeenCalled();
-                    });
-
-                    it("the expander button arrow points up", function() {
-                        expect(this.view.$(".arrow")).toHaveClass("up");
-                        expect(this.view.$(".arrow")).not.toHaveClass("down");
-                    });
-
-                    it("sets .data_grid height to use the full viewport", function() {
-                        expect(this.view.$(".data_grid").css("height")).toBe("777px");
-                    });
-
-                    it("resizes the data grid", function() {
-                        expect(this.view.dataGrid.resizeGridToResultsConsole).toHaveBeenCalled();
-                    });
-
-                    itCanExpandAndCollapseTheResults("maximized", "minimized");
-
-                    describe("clicking the minimize link", function() {
-                        beforeEach(function() {
-                            this.view.dataGrid.resizeGridToResultsConsole.reset();
-                            this.view.recalculateScrolling.reset();
-                            this.view.$("a.minimize").click();
-                        });
-
-                        it("hides the minimize link and shows the maximize link", function() {
-                            expect(this.view.$("a.minimize")).toHaveClass("hidden");
-                            expect(this.view.$("a.maximize")).not.toHaveClass("hidden");
-                        });
-
-                        it("changes the state of the result table to 'minimized'", function() {
-                            expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
-                            expect(this.view.$('.result_table')).toHaveClass("minimized");
-                            expect(this.view.$('.result_table')).not.toHaveClass("maximized");
-                        });
-
-                        it("recalculates scrolling", function() {
-                            expect(this.view.recalculateScrolling).toHaveBeenCalled();
-                        });
-
-                        it("the expander button arrow points up", function() {
-                            expect(this.view.$(".arrow")).toHaveClass("up");
-                            expect(this.view.$(".arrow")).not.toHaveClass("down");
-                        });
-
-                        it("does not keep the maxmized height", function() {
-                            expect(this.view.$(".data_grid").css("height")).not.toBe("777px");
-                        });
-
-                        it("resizes the data grid", function() {
-                            expect(this.view.dataGrid.resizeGridToResultsConsole).toHaveBeenCalled();
-                        });
-                    });
-                });
-
-                describe("getDesiredDataGridHeight", function() {
-                    beforeEach(function() {
-                        this.arbitrarySpacing = 2; // to eliminate alleged spurious y-scrollbar
-                        this.availableHeight = 300 - this.arbitrarySpacing;
-                        spyOn(this.view.boundingContainer, 'getAvailableHeight').andReturn(this.availableHeight + this.arbitrarySpacing);
-                    });
-
-                    it("doesn't expand past the available height of its bounding container", function () {
-                        expect(this.view.getDesiredDataGridHeight()).toBe(this.availableHeight);
-                    });
-                });
-
-                describe("clicking the download link", function() {
-                    context("with the show download dialog option", function() {
-                        beforeEach(function() {
-                            spyOn($, "fileDownload");
-                            this.view.showDownloadDialog = true;
-                            this.view.dataset = backboneFixtures.dataset();
-                            this.view.$("a.download_csv").click();
-                        });
-
-                        itBehavesLike.aDialogLauncher("a.download_csv", chorus.dialogs.DatasetDownload);
-
-                        it("should not have called $.fileDownload", function() {
-                            expect($.fileDownload).not.toHaveBeenCalled();
-                        });
-                    });
-
-                    context("without the show download dialog option", function() {
-                        beforeEach(function() {
-                            spyOn($, "fileDownload");
-                            this.view.showDownloadDialog = false;
-                            this.view.$("a.download_csv").click();
-                        });
-
-                        it("starts the file download", function() {
-                            var content = new chorus.utilities.CsvWriter(
-                                _.pluck(this.view.resource.getColumns(), "name"),
-                                _.pluck(this.view.resource.getColumns(), "uniqueName"),
-                                this.view.resource.getRows()
-                            ).toCsv();
-                            expect($.fileDownload).toHaveBeenCalledWith("/download_data",
-                                {
-                                    data: {
-                                        content: content,
-                                        filename: this.view.resource.name()+'.csv',
-                                        mime_type: "text/csv"
-                                    },
-                                    httpMethod: "post"
-                                });
-                        });
-                    });
-                });
-            }
-
             beforeEach(function() {
                 this.clock = this.useFakeTimers();
                 spyOn(window, "clearInterval");
@@ -482,6 +302,180 @@ describe("chorus.views.ResultsConsoleView", function() {
                         chorus.PageEvents.trigger("file:executionSucceeded", this.task);
                     });
 
+                    it("renders a data grid with the given task", function() {
+                        expect(this.view.dataGrid).toBeA(chorus.views.DataGrid);
+                        expect(this.view.dataGrid.model).toBe(this.task);
+                        expect($(this.view.el)).toContain(this.view.dataGrid.el);
+                    });
+
+                    it("displays the result table with one data table", function() {
+                        expect(this.view.$('.result_table')).not.toHaveClass("hidden");
+                        expect(this.view.$(".result_table .data_grid").length).toBe(1);
+                    });
+
+                    it("shows the control section", function() {
+                        expect(this.view.$(".controls")).not.toHaveClass("hidden");
+                    });
+
+                    context("when another execution completed event occurs", function() {
+                        beforeEach(function() {
+                            chorus.PageEvents.trigger("file:executionSucceeded", backboneFixtures.workfileExecutionResults());
+                        });
+
+                        it("still renders only one data table", function() {
+                            expect(this.view.$(".result_table .data_grid").length).toBe(1);
+                        });
+                    });
+
+                    it("changes the state of the result table to 'minimized'", function() {
+                        expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
+                        expect(this.view.$('.result_table')).toHaveClass("minimized");
+                        expect(this.view.$('.result_table')).not.toHaveClass("maximized");
+                    });
+
+                    it("renders the maximize link", function() {
+                        expect(this.view.$("a.maximize")).not.toHaveClass("hidden");
+                        expect(this.view.$("a.minimize")).toHaveClass("hidden");
+                    });
+
+                    it("shows the bottom gutter (with the expander button)", function() {
+                        expect(this.view.$(".bottom_gutter")).not.toHaveClass("hidden");
+                    });
+
+                    specify("the expander button arrow points up", function() {
+                        expect(this.view.$(".arrow")).toHaveClass("up");
+                        expect(this.view.$(".arrow")).not.toHaveClass("down");
+                    });
+
+                    describe("clicking the maximize link", function() {
+                        beforeEach(function() {
+                            spyOn(this.view.dataGrid, 'resizeGridToResultsConsole');
+                            spyOn(this.view, "getDesiredDataGridHeight").andReturn(777);
+                            spyOn(this.view, "recalculateScrolling");
+                            this.view.$("a.maximize").click();
+                        });
+
+                        it("hides the maximize link and shows the minimize link", function() {
+                            expect(this.view.$("a.maximize")).toHaveClass("hidden");
+                            expect(this.view.$("a.minimize")).not.toHaveClass("hidden");
+                        });
+
+                        it("changes the state of the result table to 'minimized'", function() {
+                            expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
+                            expect(this.view.$('.result_table')).not.toHaveClass("minimized");
+                            expect(this.view.$('.result_table')).toHaveClass("maximized");
+                        });
+
+                        it("recalculates scrolling", function() {
+                            expect(this.view.recalculateScrolling).toHaveBeenCalled();
+                        });
+
+                        it("the expander button arrow points up", function() {
+                            expect(this.view.$(".arrow")).toHaveClass("up");
+                            expect(this.view.$(".arrow")).not.toHaveClass("down");
+                        });
+
+                        it("sets .data_grid height to use the full viewport", function() {
+                            expect(this.view.$(".data_grid").css("height")).toBe("777px");
+                        });
+
+                        it("resizes the data grid", function() {
+                            expect(this.view.dataGrid.resizeGridToResultsConsole).toHaveBeenCalled();
+                        });
+
+                        itCanExpandAndCollapseTheResults("maximized", "minimized");
+
+                        describe("clicking the minimize link", function() {
+                            beforeEach(function() {
+                                this.view.dataGrid.resizeGridToResultsConsole.reset();
+                                this.view.recalculateScrolling.reset();
+                                this.view.$("a.minimize").click();
+                            });
+
+                            it("hides the minimize link and shows the maximize link", function() {
+                                expect(this.view.$("a.minimize")).toHaveClass("hidden");
+                                expect(this.view.$("a.maximize")).not.toHaveClass("hidden");
+                            });
+
+                            it("changes the state of the result table to 'minimized'", function() {
+                                expect(this.view.$('.result_table')).not.toHaveClass("collapsed");
+                                expect(this.view.$('.result_table')).toHaveClass("minimized");
+                                expect(this.view.$('.result_table')).not.toHaveClass("maximized");
+                            });
+
+                            it("recalculates scrolling", function() {
+                                expect(this.view.recalculateScrolling).toHaveBeenCalled();
+                            });
+
+                            it("the expander button arrow points up", function() {
+                                expect(this.view.$(".arrow")).toHaveClass("up");
+                                expect(this.view.$(".arrow")).not.toHaveClass("down");
+                            });
+
+                            it("does not keep the maxmized height", function() {
+                                expect(this.view.$(".data_grid").css("height")).not.toBe("777px");
+                            });
+
+                            it("resizes the data grid", function() {
+                                expect(this.view.dataGrid.resizeGridToResultsConsole).toHaveBeenCalled();
+                            });
+                        });
+                    });
+
+                    describe("getDesiredDataGridHeight", function() {
+                        beforeEach(function() {
+                            this.arbitrarySpacing = 2; // to eliminate alleged spurious y-scrollbar
+                            this.availableHeight = 300 - this.arbitrarySpacing;
+                            spyOn(this.view.boundingContainer, 'getAvailableHeight').andReturn(this.availableHeight + this.arbitrarySpacing);
+                        });
+
+                        it("doesn't expand past the available height of its bounding container", function () {
+                            expect(this.view.getDesiredDataGridHeight()).toBe(this.availableHeight);
+                        });
+                    });
+
+                    describe("clicking the download link", function() {
+                        context("with the show download dialog option", function() {
+                            beforeEach(function() {
+                                spyOn($, "fileDownload");
+                                this.view.showDownloadDialog = true;
+                                this.view.dataset = backboneFixtures.dataset();
+                                this.view.$("a.download_csv").click();
+                            });
+
+                            itBehavesLike.aDialogLauncher("a.download_csv", chorus.dialogs.DatasetDownload);
+
+                            it("should not have called $.fileDownload", function() {
+                                expect($.fileDownload).not.toHaveBeenCalled();
+                            });
+                        });
+
+                        context("without the show download dialog option", function() {
+                            beforeEach(function() {
+                                spyOn($, "fileDownload");
+                                this.view.showDownloadDialog = false;
+                                this.view.$("a.download_csv").click();
+                            });
+
+                            it("starts the file download", function() {
+                                var content = new chorus.utilities.CsvWriter(
+                                    _.pluck(this.view.resource.getColumns(), "name"),
+                                    _.pluck(this.view.resource.getColumns(), "uniqueName"),
+                                    this.view.resource.getRows()
+                                ).toCsv();
+                                expect($.fileDownload).toHaveBeenCalledWith("/download_data",
+                                    {
+                                        data: {
+                                            content: content,
+                                            filename: this.view.resource.name()+'.csv',
+                                            mime_type: "text/csv"
+                                        },
+                                        httpMethod: "post"
+                                    });
+                            });
+                        });
+                    });
+
                     it("has a link to display the execution message", function() {
                         expect(this.view.$(".execution .view_details").text()).toMatchTranslation("actions.view_details");
                     });
@@ -533,7 +527,6 @@ describe("chorus.views.ResultsConsoleView", function() {
                     });
 
                     itRemovesExecutionUI(true);
-                    itShowsExecutionResults();
                 });
 
                 context("when the spinner has been started", function() {
@@ -544,7 +537,6 @@ describe("chorus.views.ResultsConsoleView", function() {
                     });
 
                     itRemovesExecutionUI(false);
-                    itShowsExecutionResults();
                 });
 
                 context("and there was an execution error", function() {

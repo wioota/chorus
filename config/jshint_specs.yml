@@ -109,7 +109,6 @@ predef:             # Names of predefined global variables - comma-separated str
   - Slick
   - stubView
   - stubDelay
-  - stubSetTimeout
   - stubDefer
   - stubHotkeys
   - unstubHotkeys
