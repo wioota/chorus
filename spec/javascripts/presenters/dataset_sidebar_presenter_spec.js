@@ -331,6 +331,10 @@ describe("chorus.presenters.DatasetSidebar", function() {
         it("enables imports", function() {
             expect(this.presenter.importsEnabled()).toBeTruthy();
         });
+
+        it("is associable", function () {
+            expect(this.presenter.canAssociate()).toBeTruthy();
+        });
     });
 
     context("with a chorus view", function() {

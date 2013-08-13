@@ -434,6 +434,40 @@ describe WorkfilesController do
           post :create, params
         end
       end
+
+      context "and a oracle dataset has been chosen" do
+        let(:dataset) { datasets(:oracle_table) }
+        let(:dataset_ids) { [dataset.id.to_s] }
+        let(:oracle_data_source) { dataset.data_source }
+        let(:params) do
+          {
+              :workfile => {
+                  :workspace => {
+                      :id => workspace.id
+                  },
+                  :entity_subtype => "alpine",
+                  :file_name => 'reticulated-splines',
+                  :dataset_ids => dataset_ids
+              },
+              :workspace_id => workspace.id
+          }
+        end
+
+        before do
+          workspace.associate_datasets(user, [dataset])
+        end
+
+        it 'creates an AlpineWorkfile' do
+          mock_present do |model|
+            model.should be_a AlpineWorkfile
+            model.file_name.should == 'reticulated-splines'
+            model.execution_location.should == oracle_data_source
+            model.additional_data['dataset_ids'].should =~ dataset_ids
+            model.workspace.should == workspace
+          end
+          post :create, params
+        end
+      end
     end
 
   end

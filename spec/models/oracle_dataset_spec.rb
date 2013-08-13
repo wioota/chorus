@@ -81,8 +81,8 @@ describe OracleDataset do
   end
 
   describe 'associable?' do
-    it 'is false' do
-      dataset.should_not be_associable
+    it 'is true' do
+      dataset.should be_associable
     end
   end
 end

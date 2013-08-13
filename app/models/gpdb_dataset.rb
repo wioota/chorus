@@ -22,10 +22,6 @@ class GpdbDataset < RelationalDataset
     refresh(*args)
   end
 
-  def source_dataset_for(workspace)
-    schema_id != workspace.sandbox_id
-  end
-
   def database_name
     schema.database.name
   end
@@ -47,16 +43,6 @@ class GpdbDataset < RelationalDataset
 
   def column_type
     "GpdbDatasetColumn"
-  end
-
-  def associable?
-    true
-  end
-
-  def in_workspace?(workspace)
-    self.bound_workspaces.include?(workspace) || workspace.sandbox.datasets.include?(self)
-  rescue NoMethodError
-    false
   end
 
   def execution_location

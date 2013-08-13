@@ -1,4 +1,6 @@
 class OracleDataset < RelationalDataset
+  delegate :data_source, :to => :schema
+
   def database_name
    ''
   end
@@ -39,11 +41,7 @@ class OracleDataset < RelationalDataset
     end
   end
 
-  def associable?
-    false
-  end
-
-  def in_workspace?(workspace)
-    false
+  def execution_location
+    data_source
   end
 end
