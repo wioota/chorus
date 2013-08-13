@@ -1,9 +1,6 @@
 describe("chorus.views.NotificationList", function() {
     beforeEach(function() {
         this.collection = backboneFixtures.notificationSet();
-        var brokenNotification = new chorus.models.Notification();
-        brokenNotification.set({ action: "IMPORT_SUCCESS" });
-        this.collection.add(brokenNotification);
         this.collection.comparator = function(notification) {
             notification.get("id");
         };
@@ -14,7 +11,6 @@ describe("chorus.views.NotificationList", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.collection.loaded = true;
-            spyOn(chorus, 'log');
             spyOn(chorus.views.Activity.prototype, 'initialize').andCallThrough();
             this.view.render();
         });
@@ -47,15 +43,15 @@ describe("chorus.views.NotificationList", function() {
             var viewOptions = chorus.views.Activity.prototype.initialize.mostRecentCall.args[0];
             expect(viewOptions.isReadOnly).toBeTruthy();
         });
-
-        it("skips broken notifications", function() {
-            expect(chorus.log).toHaveBeenCalled();
-            expect(chorus.log.mostRecentCall.args[3]).toBe(this.collection.at(4));
-        });
     });
 
     describe("error handling bad notifications", function() {
         beforeEach(function() {
+            spyOn(chorus, 'log');
+            var brokenNotification = new chorus.models.Notification();
+            brokenNotification.set({ action: "IMPORT_SUCCESS" });
+            this.collection.add(brokenNotification);
+            this.collection.sort();
             this.collection.loaded = true;
             spyOn(chorus.views.Activity.prototype, 'initialize').andCallThrough();
         });
@@ -72,6 +68,11 @@ describe("chorus.views.NotificationList", function() {
             chorus.isDevMode.andReturn(false);
             this.view.render();
             expect(chorus.toast).not.toHaveBeenCalled();
+        });
+
+        it("logs stuff about the broken notification", function() {
+            expect(chorus.log).toHaveBeenCalled();
+            expect(chorus.log.mostRecentCall.args[3]).toBe(this.collection.at(4));
         });
     });
 
@@ -116,21 +117,16 @@ describe("chorus.views.NotificationList", function() {
 
                     context("when the fetch completes", function() {
                         beforeEach(function() {
-                            var newNotifications = this.collection.map(function(model) {
-                                var newModel = model.clone();
-                                newModel.cid = _.uniqueId('rr');
-                                newModel.id += _.uniqueId('xx');
-                                newModel.set("id", newModel.id);
-                                return newModel;
-                            });
+                            this.newModel = backboneFixtures.notificationSet().at(3);
+                            this.newModel.set('id', _.uniqueId('xx'));
+                            this.newModel.set('cid', _.uniqueId('rr'));
 
                             spyOn(chorus.collections.NotificationSet.prototype, "markAllRead").andCallThrough();
-                            this.server.completeFetchFor(this.collection, newNotifications,
-                                {page:2}, {page: "2", total: "9999999"});
+                            this.server.completeFetchFor(this.collection, [this.newModel], {page:2}, {page: "2", total: "9999999"});
                         });
 
                         it("renders the new notifications", function() {
-                            expect(this.view.$("li.activity").length).toBe(8);
+                            expect(this.view.$("li.activity").length).toBe(5);
                         });
 
                         it("marks all notification read again", function() {
@@ -145,7 +141,8 @@ describe("chorus.views.NotificationList", function() {
 
                             it("marks everything read again", function() {
                                 expect(this.server.lastFetch().params().page).toBe("3");
-                                this.server.completeFetchFor(this.collection, this.collection, {page:3}, {page: "3", total: "9999999"});
+
+                                this.server.completeFetchFor(this.collection, [], {page:3}, {page: "3", total: "9999999"});
                                 expect(chorus.collections.NotificationSet.prototype.markAllRead).toHaveBeenCalled();
                             });
                         });
