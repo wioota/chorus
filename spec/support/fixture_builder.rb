@@ -393,6 +393,8 @@ FixtureBuilder.configure do |fbuilder|
 
     FactoryGirl.create(:import_source_data_task, :job => default_job)
     FactoryGirl.create(:import_source_data_task, :job => default_job)
+    FactoryGirl.create(:job_result, :job => default_job)
+    FactoryGirl.create(:job_result, :job => default_job)
 
     #Imports
     dataset_import_created = FactoryGirl.create(:dataset_import_created_event,

@@ -1,6 +1,6 @@
 class JobResultsController < ApplicationController
   def show
-    job_result = FactoryGirl.create(:job_result)
-    present job_result
+    job = Job.find(params[:job_id])
+    present job.job_results.first
   end
 end

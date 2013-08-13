@@ -1,5 +1,6 @@
 describe("chorus.views.JobItem", function () {
     beforeEach(function() {
+        this.modalSpy = stubModals();
         var jobSet = backboneFixtures.jobSet();
         this.model = jobSet.at(0);
         this.model.set('lastRun', '2011-11-08T18:06:51Z');
@@ -86,6 +87,8 @@ describe("chorus.views.JobItem", function () {
             it("includes when the job was last run", function () {
                 expect(this.view.$(".last_run")).toContainText('2011');
             });
+
+            itBehavesLike.aDialogLauncher('a.last_run_date', chorus.dialogs.JobResultDetail);
         });
 
         context("when last_run is empty", function () {

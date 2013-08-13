@@ -2,6 +2,10 @@ chorus.views.JobItem = chorus.views.Base.extend({
     constructorName: "JobItemView",
     templateName:"job_item",
 
+    events: {
+        'click a.last_run_date': 'launchLastRunJobResultDetails'
+    },
+
     setup: function() {
         this._super("setup", arguments);
         this.listenTo(this.model, "invalidated", function() { this.model.fetch(); });
@@ -31,5 +35,11 @@ chorus.views.JobItem = chorus.views.Base.extend({
     iconUrl: function () {
         var icon = this.model.get('enabled') ? 'job.png' : 'job-disabled.png';
         return "/images/jobs/" + icon;
+    },
+
+    launchLastRunJobResultDetails: function (e) {
+        e && e.preventDefault();
+        new chorus.dialogs.JobResultDetail({job: this.model}).launchModal();
+
     }
 });

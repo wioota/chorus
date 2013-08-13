@@ -19,7 +19,7 @@
         <span class="last_run">
             <strong>{{t "job.last_run"}}:</strong>
             {{#if lastRun}}
-                {{lastRun}}
+                <a class='last_run_date' href='#'>{{lastRun}}</a>
             {{else}}
                 -
             {{/if}}

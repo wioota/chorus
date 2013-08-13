@@ -150,6 +150,8 @@ window.BackboneFixtureDefinitions = {
 
     jobSet: {},
 
+    jobResult: {},
+
     dataSourceAccount: { unique: ["id"] },
 
     dataSourceAccountSet: {},
