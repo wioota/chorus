@@ -26,10 +26,10 @@ var fs = require("fs");
 var args = phantom.args;
 var port = args[0];
 var filter = args[1];
-var url = 'http://localhost:' + port
+var url = 'http://localhost:' + port + '?phantom=1'
 
 if (filter) {
-    url += '?spec=' + encodeURIComponent(filter);
+    url += '&spec=' + encodeURIComponent(filter);
 }
 
 if (!parseInt(port) || args.length > 2) {

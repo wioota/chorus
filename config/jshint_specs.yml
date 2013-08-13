@@ -12,6 +12,7 @@ paths:
 exclude_paths:
   - spec/javascripts/vendor/*.js
   - spec/javascripts/vendor/**/*.js
+  - spec/javascripts/support/jasmine-boot/**/*.js
   - spec/javascripts/helpers/sinon*.js
   - spec/javascripts/helpers/jquery.color.js
   - spec/run-phantom-jasmine.js
