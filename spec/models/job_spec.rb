@@ -126,7 +126,7 @@ describe Job do
       end
 
       it 'executes all tasks' do
-        job.job_tasks.each {|task| mock(task).execute { FactoryGirl.create(:job_task_result) } }
+        job.job_tasks.each {|task| mock(task).execute { FactoryGirl.build(:job_task_result) } }
         job.run
       end
     end
@@ -191,7 +191,7 @@ describe Job do
 
           def execute
             Order << index
-            FactoryGirl.create(:job_task_result)
+            FactoryGirl.build(:job_task_result)
           end
         end
 
@@ -214,7 +214,7 @@ describe Job do
         3.times.map { FactoryGirl.create(:run_work_flow_task, job: job) }
       end
 
-      before { any_instance_of(RunWorkFlowTask) { |jt| stub(jt).execute { FactoryGirl.create(:job_task_result) } } }
+      before { any_instance_of(RunWorkFlowTask) { |task| stub(task).execute { FactoryGirl.build(:job_task_result) } } }
 
       it "creates a JobSucceeded event" do
         expect do
@@ -237,7 +237,7 @@ describe Job do
         3.times.map { FactoryGirl.create(:run_work_flow_task, job: job) }
       end
 
-      before { any_instance_of(RunWorkFlowTask) { |jt| stub(jt).execute { FactoryGirl.create(:failed_job_task_result) } } }
+      before { any_instance_of(RunWorkFlowTask) { |build| stub(build).execute { FactoryGirl.build(:failed_job_task_result) } } }
 
       it "creates a JobFailed event" do
         expect do

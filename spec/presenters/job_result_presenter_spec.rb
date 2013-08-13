@@ -14,7 +14,7 @@ describe JobResultPresenter, :type => :view do
 
   describe '#to_hash' do
     let(:hash) { presenter.to_hash }
-    let(:keys) { [:succeeded, :started_at, :finished_at, :id] }
+    let(:keys) { [:succeeded, :started_at, :finished_at, :id, :duration] }
 
     it "includes the right keys" do
       keys.each do |key|

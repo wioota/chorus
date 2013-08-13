@@ -13,7 +13,7 @@ describe JobResultsController do
 
       it "presents the most recent job result" do
         get :show, params
-        decoded_response[:id].should == job.job_results.first.id
+        decoded_response[:id].should == job.job_results.last.id
         decoded_response[:finished_at].should_not be_nil
       end
 
