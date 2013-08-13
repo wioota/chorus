@@ -10,6 +10,10 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
     },
 
     resourcesLoaded: function() {
+        this.collection.reset(this.collection.reject(function (workspace) {
+            return ( ( (workspace.get('showSandboxDatasets') && workspace.sandbox() && this.model.schema().get('id') === workspace.sandbox().get('id'))));
+        }, this));
+
         if (this.model.has("workspace")) {
             this.collection.remove(this.collection.get(this.model.workspace().id));
         }

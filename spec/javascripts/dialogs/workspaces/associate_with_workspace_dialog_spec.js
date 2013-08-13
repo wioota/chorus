@@ -6,7 +6,8 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                     associatedWorkspaces: [
                         {id: "123"},
                         {id: "645"}
-                    ]
+                    ],
+                    schema: { id: 2000002 }
                 });
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
@@ -24,7 +25,9 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
 
         context("when the model is a source table/view with no workspaces", function() {
             beforeEach(function() {
-                this.model = backboneFixtures.workspaceDataset.datasetTable();
+                this.model = backboneFixtures.workspaceDataset.datasetTable({
+                    schema: { id: 2000002 }
+                });
                 this.model.unset("associatedWorkspaces");
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
@@ -41,9 +44,13 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 expect(this.dialog.$('li:eq(2) .name')).toContainText("yes_im_the_current_one");
             });
         });
+
         context("when the model is a sandbox table/view or a chorus view (in a workspace)", function() {
             beforeEach(function() {
-                this.model = backboneFixtures.workspaceDataset.datasetTable({workspace: {id: "645"}});
+                this.model = backboneFixtures.workspaceDataset.datasetTable({
+                    schema: { id: 2000002 },
+                    workspace: {id: "645"}}
+                );
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [
                     backboneFixtures.workspace({ name: "im_not_the_current_one'" }),
@@ -58,12 +65,40 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 expect(this.dialog.$('li:eq(1) .name')).toContainText("me_neither");
             });
         });
+
+        context("when the model is a dataset found through the dataSource browser", function () {
+            beforeEach(function() {
+                this.model = backboneFixtures.dataset({
+                    schema: { id: 2000002 }
+                });
+                this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
+
+                var targetWorkspace = backboneFixtures.workspace({
+                    name: "my_sandbox_is_your_schema"
+                });
+                targetWorkspace.set('show_sandbox_datasets', true);
+                targetWorkspace.set('sandbox_info', this.model.schema().attributes);
+
+                this.server.completeFetchFor(chorus.session.user().workspaces(), [
+                    backboneFixtures.workspace({ name: "im_not_your_schemas_workspace'" }),
+                    backboneFixtures.workspace({ name: "me_neither" })
+                ]);
+            });
+
+            it("it shows all workspaces except for those using the model's schema as their sandbox, and who show sandbox datasets", function() {
+                expect(this.dialog.$("li").length).toBe(2);
+                expect(this.dialog.$('li:eq(0) .name')).toContainText("im_not_your_schemas_workspace");
+                expect(this.dialog.$('li:eq(1) .name')).toContainText("me_neither");
+            });
+        });
     });
 
     describe("clicking Associate Dataset", function() {
         context("for a dataset that is not a chorus_view", function() {
             beforeEach(function() {
-                this.model = backboneFixtures.dataset();
+                this.model = backboneFixtures.dataset({
+                    schema: { id: 2000002 }
+                });
                 this.workspace = backboneFixtures.workspace({ name: "im_not_the_current_one" });
 
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
