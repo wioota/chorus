@@ -99,6 +99,13 @@ FactoryGirl.define do
     end
   end
 
+  factory :job_result do
+    started_at { 10.minutes.ago }
+    finished_at { Time.current }
+    succeeded true
+    job
+  end
+
   factory :job_task_result do
     started_at { 1.minute.ago }
     finished_at { Time.current }

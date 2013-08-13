@@ -97,6 +97,10 @@ Chorus::Application.routes.draw do
     end
   end
 
+  resources :jobs do
+    resources :job_results, :only => [:show]
+  end
+
   resources :job_tasks, :only => [:update]
 
   resources :workfiles, :only => [:show, :destroy, :update] do
