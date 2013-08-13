@@ -8,6 +8,7 @@ class Job < ActiveRecord::Base
 
   belongs_to :workspace
   has_many :job_tasks, :order => :index
+  has_many :job_results, :order => :finished_at
 
   validates :interval_unit, :presence => true, :inclusion => {:in => VALID_INTERVAL_UNITS }
   validates :status, :presence => true, :inclusion => {:in => STATUSES }
@@ -40,11 +41,8 @@ class Job < ActiveRecord::Base
   end
 
   def run
-    ensure_next_run_is_in_the_future
-    self.last_run = Time.current
-    self.disable! if expiring?
-    self.status = 'running'
-    save!
+    prepare_to_run!
+    initialize_results
     execute_tasks
     job_succeeded
   rescue JobTask::JobTaskFailure
@@ -80,6 +78,19 @@ class Job < ActiveRecord::Base
 
   private
 
+  def initialize_results
+    @tasks_results = []
+    @result = job_results.create(:started_at => last_run)
+  end
+
+  def prepare_to_run!
+    ensure_next_run_is_in_the_future
+    self.last_run = Time.current
+    self.disable! if expiring?
+    self.status = 'running'
+    save!
+  end
+
   def ensure_next_run_is_in_the_future
     if next_run
       while next_run < Time.current
@@ -101,15 +112,22 @@ class Job < ActiveRecord::Base
   end
 
   def job_succeeded
+    @result.update_attributes(:succeeded => true, :finished_at => Time.current, :job_task_results => @tasks_results)
     Events::JobSucceeded.by(workspace.owner).add(:job => self, :workspace => workspace)
   end
 
   def job_failed
+    @result.update_attributes(:succeeded => false, :finished_at => Time.current, :job_task_results => @tasks_results)
     Events::JobFailed.by(workspace.owner).add(:job => self, :workspace => workspace)
   end
 
   def execute_tasks
-    job_tasks.each(&:execute)
+    job_tasks.each do |task|
+      task_result = task.execute
+      @tasks_results << task_result
+
+      raise JobTask::JobTaskFailure.new if task_result.status == JobTaskResult::FAILURE
+    end
   end
 
   def on_demand?

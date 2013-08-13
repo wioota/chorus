@@ -138,28 +138,28 @@ describe ImportSourceDataTask do
         it 'keeps the destination_name and does not set the destination_id' do
           stub(ImportExecutor).run { raise }
           expect {
-            expect {
-              isdt.execute
-            }.to raise_error(JobTask::JobTaskFailure)
+            isdt.execute
           }.not_to change(isdt.payload, :destination_name)
         end
       end
     end
 
     describe 'success' do
-      it 'returns true' do
+      it 'returns a successful JobTaskResult' do
         mock(ImportExecutor).run.with_any_args
         stub(isdt).set_destination_id!
-        isdt.execute.should be_true
+        result = isdt.execute
+        result.status.should == JobTaskResult::SUCCESS
+        result.name.should == isdt.name
       end
     end
 
     describe 'failure' do
-      it 'raises JobTaskFailure error' do
+      it 'returns a failed JobTaskResult' do
         stub(ImportExecutor).run { raise }
-        expect {
-          isdt.execute
-        }.to raise_error(JobTask::JobTaskFailure)
+        result = isdt.execute
+        result.status.should == JobTaskResult::FAILURE
+        result.name.should == isdt.name
       end
     end
   end

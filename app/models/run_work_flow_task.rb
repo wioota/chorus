@@ -3,14 +3,13 @@ class RunWorkFlowTask < JobTask
   belongs_to :payload, :class_name => 'AlpineWorkfile'
 
   def execute
+    result = JobTaskResult.create(:started_at => Time.current, :name => name)
     Alpine::API.run_work_flow_task(self)
     update_attribute(:status, 'running')
-    wait_until {
-      reload.status == 'finished'
-    }
-    true
+    wait_until { reload.status == 'finished' }
+    result.finish JobTaskResult::SUCCESS
   rescue
-    raise JobTask::JobTaskFailure
+    result.finish JobTaskResult::FAILURE
   ensure
     idle!
   end

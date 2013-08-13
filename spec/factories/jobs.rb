@@ -98,4 +98,15 @@ FactoryGirl.define do
       truncate true
     end
   end
+
+  factory :job_task_result do
+    started_at { 1.minute.ago }
+    finished_at { Time.current }
+    status JobTaskResult::SUCCESS
+    name { Faker::Company.name }
+
+    factory :failed_job_task_result do
+      status JobTaskResult::FAILURE
+    end
+  end
 end

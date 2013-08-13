@@ -10,6 +10,7 @@ describe Job do
     it { should ensure_inclusion_of(:interval_unit).in_array(Job::VALID_INTERVAL_UNITS) }
     it { should ensure_inclusion_of(:status).in_array(Job::STATUSES) }
     it { should have_many :job_tasks }
+    it { should have_many :job_results }
 
     describe "name uniqueness validation" do
       let(:workspace) { workspaces(:public) }
@@ -125,7 +126,7 @@ describe Job do
       end
 
       it 'executes all tasks' do
-        job.job_tasks.each {|task| mock(task).execute }
+        job.job_tasks.each {|task| mock(task).execute { FactoryGirl.create(:job_task_result) } }
         job.run
       end
     end
@@ -190,6 +191,7 @@ describe Job do
 
           def execute
             Order << index
+            FactoryGirl.create(:job_task_result)
           end
         end
 
@@ -208,25 +210,47 @@ describe Job do
 
     describe 'success' do
       let(:job) { ready_job }
+      let!(:tasks) do
+        3.times.map { FactoryGirl.create(:run_work_flow_task, job: job) }
+      end
 
-      before { stub(job).execute_tasks { true } }
+      before { any_instance_of(RunWorkFlowTask) { |jt| stub(jt).execute { FactoryGirl.create(:job_task_result) } } }
 
       it "creates a JobSucceeded event" do
         expect do
           job.run
         end.to change(Events::JobSucceeded, :count).by(1)
       end
+
+      it "creates a JobResult" do
+        expect {
+          expect {
+            job.run
+          }.to change(JobResult, :count).by(1)
+        }.to change(JobTaskResult, :count).by(tasks.count)
+      end
     end
 
     describe 'failure' do
       let(:job) { ready_job }
+      let!(:tasks) do
+        3.times.map { FactoryGirl.create(:run_work_flow_task, job: job) }
+      end
 
-      before { stub(job).execute_tasks { raise JobTask::JobTaskFailure } }
+      before { any_instance_of(RunWorkFlowTask) { |jt| stub(jt).execute { FactoryGirl.create(:failed_job_task_result) } } }
 
       it "creates a JobFailed event" do
         expect do
           job.run
         end.to change(Events::JobFailed, :count).by(1)
+      end
+
+      it "creates a JobResult" do
+        expect {
+          expect {
+            job.run
+          }.to change(JobResult, :count).by(1)
+        }.to change(JobTaskResult, :count).by(1)
       end
     end
   end
