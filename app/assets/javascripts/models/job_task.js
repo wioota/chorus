@@ -10,6 +10,10 @@ chorus.models.JobTask = chorus.models.Base.extend({
         return this._job;
     },
 
+    initialize: function () {
+        this.set('workspace', this.job().workspace());
+    },
+
     declareValidations: function(newAttrs) {
         if (newAttrs.action === "import_source_data") {
             if (!newAttrs.destinationId) {

@@ -1,5 +1,4 @@
 class WorkfilePresenter < Presenter
-
   def to_hash
     recent_comments = Array.wrap(recent_comment)
 

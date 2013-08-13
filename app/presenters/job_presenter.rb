@@ -12,12 +12,16 @@ class JobPresenter < Presenter
       :interval_unit => model.interval_unit,
       :interval_value => model.interval_value,
       :status => model.status,
-      :enabled => model.enabled
+      :enabled => model.enabled,
+      :is_deleted => model.deleted?
     }
 
-    job_hash[:tasks] = model.job_tasks.map { |task| present(task) } unless options[:list_view]
-
+    job_hash.merge!(tasks) unless options[:list_view] || options[:succinct]
     job_hash
+  end
+
+  def tasks
+    {:tasks => model.job_tasks.map { |task| present(task) }}
   end
 
   private
