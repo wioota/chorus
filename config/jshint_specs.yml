@@ -14,6 +14,7 @@ exclude_paths:
   - spec/javascripts/vendor/**/*.js
   - spec/javascripts/helpers/sinon*.js
   - spec/javascripts/helpers/jquery.color.js
+  - spec/run-phantom-jasmine.js
 
 # ------------ jshint options ------------
 # visit http://jshint.com/ for complete documentation

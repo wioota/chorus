@@ -1,5 +1,7 @@
 describe("chorus.views.WorkspaceShowSidebar", function() {
     beforeEach(function() {
+        stubDelay();
+        stubClEditor();
         this.modalSpy = stubModals();
         this.model = backboneFixtures.workspace({
             name: "A Cool Workspace",

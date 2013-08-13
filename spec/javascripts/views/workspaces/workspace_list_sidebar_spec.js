@@ -1,5 +1,6 @@
 describe("chorus.views.WorkspaceListSidebar", function() {
     beforeEach(function() {
+        stubClEditor();
         this.modalSpy = stubModals();
         this.view = new chorus.views.WorkspaceListSidebar();
     });

@@ -1,5 +1,6 @@
 describe("chorus.views.WorkfileSidebar", function() {
     beforeEach(function(){
+        stubClEditor();
         this.workfile = backboneFixtures.workfile.sql();
         this.modalSpy = stubModals();
     });
@@ -15,16 +16,6 @@ describe("chorus.views.WorkfileSidebar", function() {
         describe("setup", function() {
             it("fetches the ActivitySet for the workfile", function() {
                 expect(this.workfile.activities()).toHaveBeenFetched();
-            });
-
-            xcontext("when the data tab resizes", function() {
-                beforeEach(function() {
-                    //TODO
-                });
-
-                it("calls recalculate scrolling", function() {
-                    expect(this.view.recalculateScrolling).toHaveBeenCalled();
-                });
             });
         });
 

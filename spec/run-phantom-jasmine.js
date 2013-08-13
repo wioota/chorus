@@ -92,6 +92,11 @@ page.onResourceReceived = function() {
 
                             console.log("F");
                         }
+
+                        var total = this.numPassed + this.numFailed;
+                        if (total !== 0 && (total % 140) == 0) {
+                            console.log("\n");
+                        }
                     },
 
                     reportRunnerResults: function() {
