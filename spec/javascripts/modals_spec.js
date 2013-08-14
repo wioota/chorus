@@ -4,7 +4,6 @@ describe("chorus.Modal", function() {
         spyOn(chorus.Modal.prototype, "resize").andCallThrough();
         spyOn(chorus.Modal.prototype, "recalculateScrolling").andCallThrough();
         stubModals();
-        stubDefer();
     });
 
     describe("intialization", function() {

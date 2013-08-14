@@ -83,10 +83,9 @@ describe("chorus.dialogs.EditWorkspace", function() {
 
         beforeEach(function() {
             dialog = this.dialog;
-            stubDefer();
             disableSpy = jasmine.createSpy("disable");
             spyOn(this.dialog, "makeEditor").andCallThrough();
-            spyOn($.fn, "cleditor").andReturn([
+            $.fn.cleditor.andReturn([
                 {
                     disable: disableSpy
                 }

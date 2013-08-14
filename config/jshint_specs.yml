@@ -111,13 +111,14 @@ predef:             # Names of predefined global variables - comma-separated str
   - Slick
   - stubView
   - stubDelay
-  - stubDefer
+  - unstubDelay
   - stubHotkeys
   - unstubHotkeys
   - qtipElements
   - stubQtip
   - stubSelectMenu
   - stubClEditor
+  - unstubClEditor
   - stubFileUpload
   - stubKeyboardMetaKey
   - cleditor

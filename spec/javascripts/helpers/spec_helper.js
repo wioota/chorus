@@ -62,6 +62,8 @@
     beforeEach(function() {
         chorus.currentSpec = this.getFullName();
         dealWithChromeBackgrounding();
+        stubDelay();
+        stubClEditor();
         BackboneFixtures.jasmineSetup(chorus.models, chorus.collections, chorus.models.Base, chorus.collections.Base);
 
         // loadTemplatesOnce does asynchronous ajax requests in a waitsFor
@@ -489,10 +491,8 @@
         });
     };
 
-    window.stubDefer = function() {
-        spyOn(_, 'defer').andCallFake(function(func) {
-            func();
-        });
+    window.unstubDelay = function () {
+        _.delay.andCallThrough();
     };
 
     window.stubHotkeys = function() {
@@ -553,6 +553,10 @@
 
     window.stubClEditor = function() {
         spyOn($.fn, "cleditor").andReturn([0]);
+    };
+
+    window.unstubClEditor = function () {
+        $.fn.cleditor.andCallThrough();
     };
 
     window.enterTag = function(view, tagName) {

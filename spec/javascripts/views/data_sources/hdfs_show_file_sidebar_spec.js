@@ -1,6 +1,5 @@
 describe("chorus.views.HdfsShowFileSidebar", function() {
     beforeEach(function() {
-        stubClEditor();
         spyOn(chorus.views.ImportDataGrid.prototype, 'initializeDataGrid');
 
         var yesterday = new Date().addDays(-1).toString("yyyy-MM-ddTHH:mm:ssZ");

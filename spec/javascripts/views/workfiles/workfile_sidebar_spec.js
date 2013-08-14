@@ -1,6 +1,5 @@
 describe("chorus.views.WorkfileSidebar", function() {
     beforeEach(function(){
-        stubClEditor();
         this.workfile = backboneFixtures.workfile.sql();
         this.modalSpy = stubModals();
     });
@@ -311,7 +310,6 @@ describe("chorus.views.WorkfileSidebar", function() {
 
     context("when showSchemaTabs is true", function() {
         beforeEach(function() {
-            stubDefer();
             this.view = new chorus.views.WorkfileSidebar({ model: this.workfile, showSchemaTabs: true});
         });
 
@@ -322,7 +320,6 @@ describe("chorus.views.WorkfileSidebar", function() {
 
     context("when showSchemaTabs is false", function() {
         beforeEach(function() {
-            stubDefer();
             this.view = new chorus.views.WorkfileSidebar({ model: this.workfile});
         });
 

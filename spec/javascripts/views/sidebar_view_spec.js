@@ -1,6 +1,5 @@
 describe("chorus.views.Sidebar", function() {
     beforeEach(function() {
-        stubDefer();
         chorus.page = new chorus.pages.Base();
         this.page = chorus.page;
         $('#jasmine_content').append(this.page.el);

@@ -1,7 +1,6 @@
 describe("chorus.dialogs.VerifyChorusView", function() {
     beforeEach(function() {
         stubModals();
-        stubDefer();
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
         this.chorusView = backboneFixtures.workspaceDataset.chorusView({ query: "select name, quantity from shipments;" });
         this.dialog = new chorus.dialogs.VerifyChorusView({ model: this.chorusView });

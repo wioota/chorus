@@ -26,7 +26,7 @@ var fs = require("fs");
 var args = phantom.args;
 var port = args[0];
 var filter = args[1];
-var url = 'http://localhost:' + port + '?phantom=1'
+var url = 'http://localhost:' + port + '?phantom=1&profile=1'
 
 if (filter) {
     url += '&spec=' + encodeURIComponent(filter);
@@ -89,8 +89,7 @@ page.onResourceReceived = function() {
                                 return expectation.message;
                             });
                             this.failures.push({ name: name, messages: messages });
-
-                            console.log("F");
+                            console.log("\nFAILED", chorus.currentSpec, "\n");
                         }
 
                         var total = this.numPassed + this.numFailed;
@@ -116,6 +115,7 @@ page.onResourceReceived = function() {
                         console.log("\nTests failed:  " + this.numFailed);
                         console.log("\nTotal tests:   " + totalTests);
                         console.log("\nRuntime (ms):  " + totalTime);
+                        console.log("\nRuntime (min): " + ((totalTime / 1000) / 60).toFixed(3));
                         console.log("\n\n");
 
                         window.phantomComplete = true;

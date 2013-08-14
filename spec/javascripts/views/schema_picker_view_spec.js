@@ -132,7 +132,6 @@ describe("chorus.views.SchemaPicker", function() {
         }
 
         beforeEach(function() {
-            stubDefer();
             spyOn(chorus, 'styleSelect');
         });
 

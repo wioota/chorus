@@ -1,6 +1,5 @@
 describe("chorus.views.HdfsEntrySidebar", function() {
     beforeEach(function() {
-        stubClEditor();
         spyOn(chorus.views.ImportDataGrid.prototype, 'initializeDataGrid');
         this.view = new chorus.views.HdfsEntrySidebar({hdfsDataSourceId: 123});
     });

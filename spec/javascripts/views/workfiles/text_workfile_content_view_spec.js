@@ -14,8 +14,6 @@ describe("chorus.views.TextWorkfileContentView", function() {
             spyOn(window.TextRange.prototype, 'select');
         }
         spyOn(CodeMirror, "fromTextArea").andCallThrough();
-
-        stubDefer();
     });
 
     describe("hotkey options", function() {

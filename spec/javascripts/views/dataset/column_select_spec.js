@@ -1,6 +1,5 @@
 describe("chorus.views.ColumnSelect", function () {
     beforeEach(function () {
-        stubDefer();
         this.selectMenuStub = stubSelectMenu();
         this.dataset = backboneFixtures.dataset();
         this.columns = this.dataset.columns().reset([

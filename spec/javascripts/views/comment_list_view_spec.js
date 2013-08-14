@@ -1,6 +1,5 @@
 describe("chorus.views.CommentList", function() {
     beforeEach(function() {
-        stubDefer();
         this.comment1 = backboneFixtures.comment({
             body : "Yes we can",
             author : {

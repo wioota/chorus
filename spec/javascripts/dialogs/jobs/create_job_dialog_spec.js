@@ -1,6 +1,5 @@
 describe("chorus.dialogs.CreateJob", function () {
     beforeEach(function () {
-        stubDefer();
         this.jobPlan = {
             name: 'Apples',
             interval_value: '2',

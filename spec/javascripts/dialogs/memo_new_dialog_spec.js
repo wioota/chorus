@@ -1,5 +1,6 @@
 describe("chorus.dialogs.MemoNewDialog", function() {
     beforeEach(function() {
+        unstubClEditor();
         loadConfig();
         this.model = new chorus.models.Note({
             entityType: 'workfile',
@@ -19,7 +20,6 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         spyOn(this.dialog, "launchSubModal");
         spyOn(this.dialog, "makeEditor").andCallThrough();
         this.qtip = stubQtip();
-        stubDefer();
         this.dialog.render();
     });
 

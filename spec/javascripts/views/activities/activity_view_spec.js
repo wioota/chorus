@@ -69,8 +69,6 @@ describe("chorus.views.Activity", function() {
     }
 
     beforeEach(function () {
-        stubDefer();
-        stubClEditor();
         this.modalSpy = stubModals();
         this.model = backboneFixtures.activity.dataSourceCreated();
         this.view = new chorus.views.Activity({ model:this.model });

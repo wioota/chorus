@@ -1,7 +1,6 @@
 describe("chorus.dialogs.VisualizationNotesNew", function() {
     describe("when in workspace context ( in Data tab )", function() {
         beforeEach(function() {
-            stubDelay();
             spyOn(chorus.dialogs.MemoNew.prototype, "modelSaved").andCallThrough();
 
             this.dialog = new chorus.dialogs.VisualizationNotesNew({

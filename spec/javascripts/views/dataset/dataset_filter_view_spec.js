@@ -14,7 +14,6 @@ describe("chorus.views.DatasetFilter", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            stubDefer();
             this.selectMenuStub = stubSelectMenu();
             spyOn(chorus, "styleSelect").andCallThrough();
             spyOn(chorus, 'datePicker').andCallThrough();

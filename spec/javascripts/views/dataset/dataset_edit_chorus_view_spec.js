@@ -16,8 +16,6 @@ describe("chorus.views.DatasetEditChorusView", function() {
             this.codeMirrorOptions = opts;
             return originalFromTextArea(textarea, opts);
         }, this));
-
-        stubDefer();
     });
 
     context("#setup", function() {

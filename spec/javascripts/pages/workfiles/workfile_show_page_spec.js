@@ -6,7 +6,6 @@ describe("chorus.pages.WorkfileShowPage", function() {
         this.workfileId = 5;
         this.workspace = backboneFixtures.workspace({id: this.workspaceId});
         this.model = backboneFixtures.workfile.sql({id: this.workfileId, workspace: {id: this.workspaceId}});
-        stubDefer();
     });
 
     describe("#setup", function() {

@@ -8,7 +8,6 @@ describe("chorus.views.TagBox", function() {
         this.model.fetch();
         this.view = new chorus.views.TagBox({model: this.model});
         spyOn(this.model, "updateTags");
-        stubDefer(); // don't defer auto-suggest server requests from textext to avoid test pollution
     });
 
     describe("when the model has loaded", function() {

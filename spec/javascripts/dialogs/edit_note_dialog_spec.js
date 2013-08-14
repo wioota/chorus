@@ -1,5 +1,6 @@
 describe("chorus.dialogs.EditNote", function() {
     beforeEach(function() {
+        unstubClEditor();
         this.text = "Hi i'm a friendly text";
         this.note = backboneFixtures.activity.noteOnGreenplumDataSource({
             body: this.text
@@ -9,7 +10,6 @@ describe("chorus.dialogs.EditNote", function() {
         $('#jasmine_content').append(this.dialog.el);
 
         spyOn(this.dialog, "makeEditor").andCallThrough();
-        stubDefer();
 
         this.dialog.render();
     });

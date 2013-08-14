@@ -1,6 +1,5 @@
 describe("chorus.dialogs.InsightsNewDialog", function() {
     beforeEach(function() {
-        stubDelay();
         this.dialog = new chorus.dialogs.InsightsNew({ allowWorkspaceAttachments: true, workspaceId: 22 });
 
         $('#jasmine_content').append(this.dialog.el);

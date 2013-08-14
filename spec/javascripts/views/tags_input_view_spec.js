@@ -20,8 +20,6 @@ describe("chorus.views.TagsInput", function() {
 
         view.render();
         input = view.$("input");
-
-        stubDefer(); // don't defer auto-suggest server requests from textext to avoid test pollution
     });
 
     context("with no tags", function() {

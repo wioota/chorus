@@ -227,6 +227,7 @@ describe("chorus.views.ResultsConsoleView", function() {
             }
 
             beforeEach(function() {
+                unstubDelay();
                 this.clock = this.useFakeTimers();
                 spyOn(window, "clearInterval");
                 spyOn(this.view, "closeError").andCallThrough();

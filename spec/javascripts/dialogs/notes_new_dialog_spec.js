@@ -1,6 +1,5 @@
 describe("chorus.dialogs.NotesNewDialog", function() {
     beforeEach(function() {
-        stubDelay();
         this.dialog = new chorus.dialogs.NotesNew({
             entityType: "data_source",
             entityId: 1,

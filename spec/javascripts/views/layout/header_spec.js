@@ -501,7 +501,6 @@ describe("chorus.views.Header", function() {
 
         context("after fetches completes", function() {
             beforeEach(function() {
-                stubDefer();
                 this.server.completeFetchAllFor(this.view.users, this.users.models);
             });
 

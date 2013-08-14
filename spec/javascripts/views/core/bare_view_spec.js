@@ -11,7 +11,6 @@ describe("chorus.views.Bare", function() {
             this.view.subfoo = new chorus.views.Bare();
             this.view.subfoo.templateName = "plain_text";
             this.view.render();
-            stubDefer();
 
             spyOn($.fn, "jScrollPane").andCallThrough();
             spyOn($.fn, "hide").andCallThrough();
@@ -26,7 +25,7 @@ describe("chorus.views.Bare", function() {
             });
 
             it("defers the setup", function() {
-                expect(_.defer).toHaveBeenCalled();
+                expect(_.delay).toHaveBeenCalled();
             });
 
             it("calls jScrollPane", function() {

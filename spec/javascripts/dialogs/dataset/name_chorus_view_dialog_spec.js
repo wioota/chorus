@@ -1,7 +1,6 @@
 describe("chorus.dialogs.NameChorusView", function() {
     beforeEach(function() {
         stubModals();
-        stubDefer();
         this.chorusView = backboneFixtures.workspaceDataset.chorusView({ query: "select name, quantity from shipments;" });
         this.dialog = new chorus.dialogs.NameChorusView({ model: this.chorusView });
         this.dialog.launchModal();

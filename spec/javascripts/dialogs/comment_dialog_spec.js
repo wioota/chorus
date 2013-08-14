@@ -6,7 +6,6 @@ describe("chorus.dialogs.CommentDialog", function () {
             entityTitle:'note',
             pageModel:new chorus.models.Workfile()
         });
-        stubDefer();
         spyOn(this.dialog, 'makeEditor');
     });
 

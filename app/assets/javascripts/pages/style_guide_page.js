@@ -883,8 +883,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
     },
 
     initialize: function() {
-        _.defer(_.bind(this.render, this));
-
         this.buildModels();
         this.buildCollections();
         this.views = this.buildViews();
@@ -893,6 +891,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
         this.colorPalette = { "Color Palette": new chorus.views.ColorPaletteView() };
         this.fontStyles = { "Font Styles": new chorus.views.StyleGuideFonts() };
         this.components = { "Components": new chorus.views.Components() };
+
+        _.defer(_.bind(this.render, this));
     },
 
     renderViews: function(views, tabId, parentClass) {
@@ -936,5 +936,4 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
     enableScrolling: function() {
         $("body").css("overflow", "visible");
     }
-})
-;
+});

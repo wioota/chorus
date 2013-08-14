@@ -1,7 +1,6 @@
 describe("chorus.dialogs.DataSourcesNew", function() {
     beforeEach(function() {
         loadConfig();
-        stubDefer();
         this.selectMenuStub = stubSelectMenu();
         spyOn(chorus, 'styleSelect').andCallThrough();
         spyOn(chorus.dialogs.DataSourcesNew.prototype, "createDataSource").andCallThrough();

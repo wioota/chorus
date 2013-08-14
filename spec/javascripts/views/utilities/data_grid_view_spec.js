@@ -44,7 +44,6 @@ describe("chorus.views.DataGrid", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            stubDefer();
             this.view.render();
         });
 

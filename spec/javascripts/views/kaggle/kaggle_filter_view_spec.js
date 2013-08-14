@@ -14,7 +14,6 @@ describe("chorus.views.KaggleFilter", function () {
 
     describe("#render", function() {
         beforeEach(function () {
-            stubDefer();
             this.selectMenuStub = stubSelectMenu();
             spyOn(chorus, "styleSelect").andCallThrough();
             this.model.set({'input': { value: "QSAR"}});

@@ -7,7 +7,6 @@ describe("chorus.views.DataTab", function () {
         spyOn(chorus.views.DataTabDatasetList.prototype, "rebuildDatasetViews").andCallThrough();
         this.view = new chorus.views.DataTab({schema:this.schema});
 
-        stubDefer();
         this.modalSpy = stubModals();
         this.schemaMenuQtip = stubQtip(".context a");
     });

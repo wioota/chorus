@@ -49,7 +49,6 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
         });
         this.server.completeFetchFor(this.dataset);
         this.qtip = stubQtip();
-        stubDefer();
         spyOn(this.dialog.dataGrid, "setDestinationColumns").andCallThrough();
         this.server.completeFetchFor(this.dialog.columnSet, this.columns);
     });

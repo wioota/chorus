@@ -169,8 +169,6 @@ describe("chorus.dialogs.Visualization", function() {
     beforeEach(function() {
         this.qtip = stubQtip();
         this.modalSpy = stubModals();
-        stubDefer();
-        stubClEditor();
 
         spyOn(chorus.views.ResultsConsole.prototype, "initializeDataGrid");
         spyOn(chorus.Modal.prototype, "closeModal");

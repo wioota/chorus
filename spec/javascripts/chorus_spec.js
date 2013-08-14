@@ -257,7 +257,6 @@ describe("chorus global", function() {
 
     describe("#datePicker(element)", function() {
         beforeEach(function() {
-            stubDefer();
             spyOn(datePickerController, 'createDatePicker');
             this.input1 = $("<input></input");
             this.input2 = $("<input></input");
@@ -558,7 +557,7 @@ describe("chorus global", function() {
 
     describe("#requireLogin", function() {
         beforeEach(function() {
-            stubDefer();
+
             this.chorus.initialize();
             Backbone.history.fragment = "/foo";
             setLoggedInUser({id: "1", username: "iAmNumberOne"}, this.chorus);

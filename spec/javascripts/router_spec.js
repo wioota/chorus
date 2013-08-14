@@ -1,13 +1,11 @@
 describe("chorus.router", function() {
     describe("generateRouteCallback", function() {
         beforeEach(function() {
-            stubDefer();
             this.chorus = new window.Chorus();
             this.backboneSpy = spyOn(Backbone.history, "start");
             this.chorus.initialize();
             spyOn(this.chorus, "scrollToTop");
             spyOn(chorus.PageEvents, "off");
-
         });
 
         it("generates a new cachebuster value when navigating", function() {

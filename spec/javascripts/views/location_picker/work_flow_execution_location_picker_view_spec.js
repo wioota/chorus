@@ -136,7 +136,6 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
         }
 
         beforeEach(function() {
-            stubDefer();
             spyOn(chorus, 'styleSelect');
         });
 

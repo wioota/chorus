@@ -19,6 +19,7 @@ describe("chorus.views.CodeEditorView", function() {
     });
 
     it("defers call to CodeMirror", function() {
+        unstubDelay();
         this.view.render();
         expect(CodeMirror.fromTextArea).not.toHaveBeenCalled();
         this.clock.tick(1000);
@@ -27,7 +28,6 @@ describe("chorus.views.CodeEditorView", function() {
 
     describe("#postRender", function() {
         it("only sets up draggable once", function() {
-            stubDefer();
             this.view.render();
             this.view.postRender();
             expect($.fn.droppable.callCount).toEqual(1);
@@ -36,7 +36,6 @@ describe("chorus.views.CodeEditorView", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            stubDefer();
             this.view.render();
         });
 
@@ -61,7 +60,6 @@ describe("chorus.views.CodeEditorView", function() {
 
     describe("dragging a dataset, column, or function", function() {
         beforeEach(function() {
-            stubDefer();
             this.view.render();
             this.drag = {draggable: $('<div data-fullname="test"></div>')};
             this.view.editor.replaceSelection("this is the first line\n\nthis is the third line");
@@ -116,7 +114,6 @@ describe("chorus.views.CodeEditorView", function() {
 
     describe("dropping a dataset, column, or function", function() {
         beforeEach(function() {
-            stubDefer();
             this.view.render();
             this.drag = {draggable: $('<div data-fullname="+++"></div>')};
             this.view.editor.replaceSelection("this is the first line\n\nthis is the third line");
@@ -149,7 +146,6 @@ describe("chorus.views.CodeEditorView", function() {
 
     describe("delegation", function() {
         beforeEach(function() {
-            stubDefer();
             this.view.render();
         });
 

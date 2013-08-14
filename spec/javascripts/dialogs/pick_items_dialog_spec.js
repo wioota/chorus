@@ -1,6 +1,5 @@
 describe("chorus.dialogs.PickItems", function() {
     beforeEach(function() {
-        stubDefer();
         spyOn(chorus.views.PickItemsList.prototype, "itemClicked").andCallThrough();
         spyOn(chorus.dialogs.PickItems.prototype, "submit").andCallThrough();
         spyOn(chorus.dialogs.PickItems.prototype, "selectionFinished").andCallThrough();

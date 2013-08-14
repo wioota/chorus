@@ -1,6 +1,5 @@
 describe("chorus.views.Login", function() {
     beforeEach(function() {
-        stubDefer();
         spyOn($.fn, 'focus');
         this.view = new chorus.views.Login({model: chorus.session});
         this.view.render();
