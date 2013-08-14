@@ -81,8 +81,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     importsEnabled: function() {
-        return !!(this.hasWorkspace() && this.resource.workspace().sandbox() && !this.resource.isHdfsDataset()) ||
-            (this.resource && this.resource.isOracle());
+        return !!(this.hasWorkspace() && this.resource.workspace().sandbox() && !this.resource.isHdfsDataset());
     },
 
     hasWorkspace: function() {

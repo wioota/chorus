@@ -283,17 +283,6 @@ describe("chorus.views.DatasetSidebar", function() {
             });
         });
 
-        context("when an oracle dataset is selected", function() {
-            beforeEach(function() {
-                this.oracleDataset = backboneFixtures.oracleDataset({id: 12});
-                chorus.PageEvents.trigger("dataset:selected", this.oracleDataset);
-            });
-
-            it("displays an import dataset link", function() {
-                expect(this.view.$("a.import_now").text()).toMatchTranslation("actions.import_now");
-            });
-        });
-
         it("displays a download link", function() {
             expect(this.view.$("a.download")).toHaveData("dataset", this.dataset);
             expect(this.view.$("a.download").text()).toMatchTranslation("actions.download");

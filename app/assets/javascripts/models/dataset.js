@@ -82,8 +82,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     canExport:function () {
-        return (this.schema() && this.isOracle()) ||
-            this.workspace() && this.workspace().canUpdate() &&
+        return this.workspace() && this.workspace().canUpdate() &&
             this.hasCredentials() &&
             this.canBeImportSource();
     },

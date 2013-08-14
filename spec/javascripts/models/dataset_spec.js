@@ -1005,11 +1005,6 @@ describe("chorus.models.Dataset", function() {
             spyOn(dataset.workspace(), "canUpdate").andReturn(true);
             expect(dataset.canExport()).toBeTruthy();
         });
-
-        it("should export when data source is Oracle", function () {
-            dataset = backboneFixtures.oracleDataset();
-            expect(dataset.canExport()).toBeTruthy();
-        });
     });
 
     describe("#workspaceArchived", function() {

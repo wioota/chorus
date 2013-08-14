@@ -328,8 +328,8 @@ describe("chorus.presenters.DatasetSidebar", function() {
             this.presenter = new chorus.presenters.DatasetSidebar(resource);
         });
 
-        it("enables imports", function() {
-            expect(this.presenter.importsEnabled()).toBeTruthy();
+        it("cannot export", function() {
+            expect(this.presenter.canExport()).toBeFalsy();
         });
 
         it("is associable", function () {
