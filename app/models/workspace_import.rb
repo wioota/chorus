@@ -44,10 +44,10 @@ class WorkspaceImport < Import
   end
 
   def copier_class
-    if source.database != schema.database
-      CrossDatabaseTableCopier
+    if source.is_a?(OracleDataset)
+      OracleTableCopier
     else
-      TableCopier
+      source.database != schema.database ? CrossDatabaseTableCopier : TableCopier
     end
   end
 

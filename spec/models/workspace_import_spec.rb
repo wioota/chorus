@@ -149,6 +149,14 @@ describe WorkspaceImport do
         import.copier_class.should == TableCopier
       end
     end
+
+    context "when the source is an oracle talbe" do
+      let(:source_dataset) { datasets(:oracle_table) }
+
+      it "should be an OracleTableCopier" do
+        import.copier_class.should == OracleTableCopier
+      end
+    end
   end
 
   describe "associating dataset to workspace" do

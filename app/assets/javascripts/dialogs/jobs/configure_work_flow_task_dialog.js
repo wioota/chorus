@@ -19,7 +19,7 @@ chorus.dialogs.ConfigureWorkFlowTask = chorus.dialogs.PickItems.include(chorus.M
         this.workspace = this.job.workspace();
 
         if (!this.model) {
-            this.model = this.model || new chorus.models.JobTask({workspace: {id: this.workspace.get("id")}, job: {id: this.job.get("id")}});
+            this.model = this.model || new chorus.models.JobTask({job: {id: this.job.get("id"), workspace: {id: this.workspace.get("id")}}});
         }
 
         this.collection = this.options.collection;

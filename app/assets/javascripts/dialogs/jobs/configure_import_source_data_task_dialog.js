@@ -76,8 +76,7 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
 
     buildATask: function () {
         return new chorus.models.JobTask({
-            workspace: { id: this.workspace.get("id") },
-            job: { id: this.options.job.get("id") }
+            job: { id: this.options.job.get("id"), workspace: { id: this.workspace.get("id") } }
         });
     },
 
