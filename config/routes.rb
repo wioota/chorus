@@ -97,7 +97,7 @@ Chorus::Application.routes.draw do
     end
   end
 
-  resources :jobs do
+  resources :jobs, :only => [] do
     resources :job_results, :only => [:show]
   end
 

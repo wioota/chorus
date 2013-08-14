@@ -72,4 +72,17 @@ resource 'Job' do
       status.should == 200
     end
   end
+
+  get "/jobs/:job_id/job_results/:id" do
+    parameter :job_id, "Job ID"
+    parameter :id, "Job Result ID"
+    required_parameters :id, :job_id
+
+    let(:id) { 'latest' }
+    let(:job_id) { jobs(:default).id }
+
+    example_request "Display the latest Job Result for a Job" do
+      status.should == 200
+    end
+  end
 end
