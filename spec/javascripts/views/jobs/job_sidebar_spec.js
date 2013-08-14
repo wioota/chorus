@@ -91,4 +91,23 @@ describe("chorus.views.JobSidebar", function () {
     describe("clicking 'Delete Job'", function () {
         itBehavesLike.aDialogLauncher("a.delete_job", chorus.alerts.JobDelete);
     });
+
+    describe("activities", function() {
+        it("fetches the activities for the job", function() {
+            expect(this.job.activities()).toHaveBeenFetched();
+        });
+
+        context("when the activity fetch completes", function() {
+            beforeEach(function() {
+                var activityOne = backboneFixtures.activity.jobSucceeded();
+                var activityTwo = backboneFixtures.activity.jobFailed();
+                this.server.completeFetchFor(this.job.activities(), [activityOne, activityTwo]);
+            });
+
+            it("renders an activity list inside the tabbed area", function() {
+                expect(this.view.tabs.activity).toBeA(chorus.views.ActivityList);
+                expect(this.view.$(".tabbed_area .activity_list")[0]).toBe(this.view.tabs.activity.el);
+            });
+        });
+    });
 });

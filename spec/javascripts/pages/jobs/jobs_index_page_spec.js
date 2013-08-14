@@ -1,5 +1,6 @@
 describe("chorus.pages.JobsIndexPage", function () {
     beforeEach(function () {
+        this.model = backboneFixtures.job();
         this.clock = this.useFakeTimers();
         this.workspace = backboneFixtures.workspace();
         this.page = new chorus.pages.JobsIndexPage(this.workspace.id);
@@ -65,10 +66,6 @@ describe("chorus.pages.JobsIndexPage", function () {
             this.server.completeFetchFor(this.workspace);
             this.page.render();
             chorus.PageEvents.trigger("job:selected", this.model);
-        });
-
-        it("sets the model of the page", function() {
-            expect(this.page.model).toBe(this.model);
         });
 
         it('instantiates the sidebar view', function() {

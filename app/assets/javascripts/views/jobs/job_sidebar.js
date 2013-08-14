@@ -1,6 +1,10 @@
 chorus.views.JobSidebar = chorus.views.Sidebar.extend({
     constructorName: "JobSidebar",
-    templateName:"job_sidebar",
+    templateName: "job_sidebar",
+
+    subviews:{
+        '.tab_control': 'tabs'
+    },
 
     events: {
         "click a.disable": "disableJob",
@@ -8,6 +12,25 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
         'click a.edit_job': 'launchEditDialog',
         'click a.run_job': 'runJob',
         'click a.delete_job': 'launchDeleteAlert'
+    },
+
+    setup: function() {
+        this.tabs = new chorus.views.TabControl(['activity']);
+        this.registerSubView(this.tabs);
+        this.createActivitiesTab();
+    },
+
+    createActivitiesTab: function() {
+        var activities = this.model.activities();
+        activities.fetch();
+
+        this.tabs.activity = new chorus.views.ActivityList({
+            collection: activities,
+            additionalClass: "sidebar",
+            displayStyle: ['without_workspace'],
+            type: this.model.constructorName
+        });
+        this.tabs.registerSubView(this.tabs.activity);
     },
 
     disableJob: function(e) {

@@ -9,6 +9,8 @@ class Job < ActiveRecord::Base
   belongs_to :workspace
   has_many :job_tasks, :order => :index
   has_many :job_results, :order => :finished_at
+  has_many :activities, :as => :entity
+  has_many :events, :through => :activities
 
   validates :interval_unit, :presence => true, :inclusion => {:in => VALID_INTERVAL_UNITS }
   validates :status, :presence => true, :inclusion => {:in => STATUSES }

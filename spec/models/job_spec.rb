@@ -11,6 +11,7 @@ describe Job do
     it { should ensure_inclusion_of(:status).in_array(Job::STATUSES) }
     it { should have_many :job_tasks }
     it { should have_many :job_results }
+    it { should have_many :events }
 
     describe "name uniqueness validation" do
       let(:workspace) { workspaces(:public) }
