@@ -88,7 +88,7 @@ describe RunWorkFlowTask do
 
         FakeRunWorkFlowTask::Executed.should == ["start #{@task.id}", "end #{@task.id}"]
 
-        thread.join
+        thread.kill
 
         @task.reload.status.should be_nil
       end

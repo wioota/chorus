@@ -238,10 +238,10 @@ describe GreenplumConnection, :greenplum_integration do
 
     after do
       connection.fetch "SELECT pg_terminate_backend(procpid) FROM (SELECT procpid from pg_stat_activity where current_query like '%kill_me%' and current_query not like '%procpid%') AS PROCPIDS"
-      thread.join
+      thread.kill
     end
 
-    it "finds and kills executing queries that match the given sql" do
+    xit "finds and kills executing queries that match the given sql" do
       thread
       timeout(3) do
         until connection.running?("kill_me") do
