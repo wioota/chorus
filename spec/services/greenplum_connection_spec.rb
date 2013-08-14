@@ -241,9 +241,9 @@ describe GreenplumConnection, :greenplum_integration do
       thread.kill
     end
 
-    xit "finds and kills executing queries that match the given sql" do
+    it "finds and kills executing queries that match the given sql" do
       thread
-      timeout(3) do
+      timeout(10) do
         until connection.running?("kill_me") do
           sleep 0.1
         end
