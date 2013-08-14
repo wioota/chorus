@@ -11,6 +11,6 @@ class JobResultPresenter < Presenter
   end
 
   def task_results
-    {:task_results => model.job_task_results.map { |result| present(result) }}
+    {:job_task_results => model.job_task_results.map { |result| present(result) }}
   end
 end

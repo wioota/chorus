@@ -11,7 +11,7 @@ describe RunWorkFlowTaskPresenter, :type => :view do
 
   describe '#to_hash' do
     let(:hash) { presenter.to_hash }
-    let(:keys) { [:id, :workspace, :job, :action, :index, :name, :work_flow] }
+    let(:keys) { [:id, :job, :action, :index, :name, :work_flow] }
 
     it "includes the right keys" do
       keys.each do |key|

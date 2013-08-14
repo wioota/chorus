@@ -13,7 +13,7 @@ describe ImportSourceDataTaskPresenter, :type => :view do
 
   describe '#to_hash' do
     let(:hash) { presenter.to_hash }
-    let(:keys) { [:id, :workspace, :job, :action, :index, :name, :source_id, :destination_id, :source_name, :destination_name, :row_limit, :truncate] }
+    let(:keys) { [:id, :job, :action, :index, :name, :source_id, :destination_id, :source_name, :destination_name, :row_limit, :truncate] }
 
     it "includes the right keys" do
       keys.each do |key|
