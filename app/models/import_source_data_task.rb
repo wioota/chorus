@@ -9,13 +9,13 @@ class ImportSourceDataTask < JobTask
   end
 
   def execute
-    result = JobTaskResult.create(:started_at => Time.current, :name => name)
+    result = JobTaskResult.create(:started_at => Time.current, :name => build_task_name)
     import = payload.create_import
     ImportExecutor.run import.id
     payload.set_destination_id! if payload.new_table_import?
-    result.finish JobTaskResult::SUCCESS
+    result.finish :status => JobTaskResult::SUCCESS
   rescue StandardError => e
-    result.finish JobTaskResult::FAILURE
+    result.finish :status => JobTaskResult::FAILURE, :message => e.message
   end
 
   def update_attributes(params)

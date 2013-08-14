@@ -10,19 +10,23 @@ describe JobTaskResult do
 
     it "sets finished_at to now" do
       Timecop.freeze {
-        result.finish(JobTaskResult::SUCCESS)
+        result.finish(:status => JobTaskResult::SUCCESS)
         result.finished_at.should == Time.current
       }
     end
 
     it "sets the status" do
-      result.finish(JobTaskResult::SUCCESS)
+      result.finish(:status => JobTaskResult::SUCCESS)
       result.status.should == JobTaskResult::SUCCESS
     end
 
     it "returns the JobTaskResult" do
-      result.finish(JobTaskResult::SUCCESS).should == result
+      result.finish(:status => JobTaskResult::SUCCESS).should == result
+    end
+
+    it "sets the message" do
+      result.finish(:status => JobTaskResult::FAILURE, :message => 'omg!')
+      result.message.should == 'omg!'
     end
   end
 end
-

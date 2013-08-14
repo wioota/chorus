@@ -62,7 +62,7 @@ module Alpine
 
     def request_run(work_flow, options)
       response = request_base.post(run_path(work_flow, options), '')
-      raise StandardError unless response.code == '200'
+      raise StandardError.new(response.body) unless response.code == '200'
     rescue StandardError => e
       pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
       raise e

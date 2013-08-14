@@ -39,6 +39,7 @@ describe RunWorkFlowTask do
       result = task.execute
       result.name.should == task.name
       result.status.should == JobTaskResult::FAILURE
+      result.message.should == 'oh no'
     end
 
     context "blocking" do

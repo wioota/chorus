@@ -714,11 +714,6 @@ describe Workspace do
     end
   end
 
-  describe '#filtered_workfiles' do
-    it { should respond_to :filtered_workfiles }
-    it "is tested through the Workfiles controller"
-  end
-
   it_should_behave_like "taggable models", [:workspaces, :public]
 
   it_behaves_like 'a soft deletable model' do

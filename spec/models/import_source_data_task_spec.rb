@@ -156,10 +156,11 @@ describe ImportSourceDataTask do
 
     describe 'failure' do
       it 'returns a failed JobTaskResult' do
-        stub(ImportExecutor).run { raise }
+        stub(ImportExecutor).run { raise StandardError.new 'some msg' }
         result = isdt.execute
         result.status.should == JobTaskResult::FAILURE
         result.name.should == isdt.name
+        result.message.should == 'some msg'
       end
     end
   end

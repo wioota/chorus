@@ -17,6 +17,11 @@ describe JobResultsController do
         decoded_response[:finished_at].should_not be_nil
       end
 
+      it "presents its job task results" do
+        get :show, params
+        decoded_response[:job_task_results].count.should == job.job_results.last.job_task_results.count
+      end
+
       generate_fixture "jobResult.json" do
         get :show, params
       end

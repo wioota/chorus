@@ -1,4 +1,26 @@
 <div>
-    <div class="started_at">{{startedAt}}</div>
-    <div class="finished_at">{{finishedAt}}</div>
+    <div class="line">
+        <div class="col cols-8 started_at"><strong>Started At: </strong>{{startedAt}}</div>
+        <div class="col cols-ext finished_at"><strong>Finished At: </strong>{{finishedAt}}</div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+            <th>Name</th>
+            <th>Started At</th>
+            <th>Finished At</th>
+            <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        {{#each jobTaskResults}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{startedAt}}</td>
+            <td>{{finishedAt}}</td>
+            <td>{{status}}{{#if message}} - {{message}}{{/if}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
 </div>

@@ -166,10 +166,10 @@ describe Alpine::API do
     end
 
     it 'raises exception if the request is not a 200' do
-      FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 500)
+      FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 500, :body => 'oh no')
       expect {
         subject.run_work_flow(work_flow)
-      }.to raise_error
+      }.to raise_error(StandardError, 'oh no')
     end
 
     context "when called with a task" do
