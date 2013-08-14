@@ -38,7 +38,7 @@ module Alpine
     end
 
     def run_work_flow(work_flow, options = {})
-      unless Session.find_by_user_id(user.id)
+      unless Session.not_expired.where(user_id: user.id).present?
         session = Session.new
         session.user = user
         session.save!
@@ -98,7 +98,7 @@ module Alpine
     end
 
     def session_id
-      Session.find_by_user_id(user.id).session_id
+      Session.not_expired.where(user_id: user.id).first.session_id
     end
   end
 end

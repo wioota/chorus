@@ -122,6 +122,38 @@ describe Alpine::API do
       end
     end
 
+    describe 'when there are existing unexpired sessions' do
+      before do
+        session = Session.new
+        session.user = user
+        session.save!
+        FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 200)
+      end
+
+      it 'does not create a session' do
+        expect {
+          subject.run_work_flow(work_flow)
+        }.not_to change(Session, :count)
+      end
+    end
+
+    describe 'when there are existing sessions that are only expired' do
+      before do
+        session = Session.new
+        session.user = user
+        session.save!
+        session.update_attribute(:updated_at, 1.year.ago)
+        FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 200)
+      end
+
+      it 'creates a new session' do
+        expect {
+          subject.run_work_flow(work_flow)
+        }.to change(Session, :count).by(1)
+        Session.last.user_id.should == user.id
+      end
+    end
+
     it 'makes a POST request with the necessary params' do
       FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 200)
       subject.run_work_flow(work_flow)
