@@ -425,7 +425,7 @@ describe ChorusConfig do
       end
 
       it "has the alpine title" do
-        config.branding_title.should == "Alpine Ensemble"
+        config.branding_title.should == "Alpine Chorus"
       end
 
       it "has the alpine favicon" do
