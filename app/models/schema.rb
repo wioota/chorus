@@ -119,11 +119,13 @@ class Schema < ActiveRecord::Base
     Dataset.where(:id => found_datasets).order("name ASC, id")
   rescue DataSourceConnection::Error
     touch(:refreshed_at)
-    Dataset.where(:id => found_datasets).order("name ASC, id")
+    datasets.not_stale
   end
 
   def dataset_count(account, options={})
     connect_with(account).datasets_count options
+  rescue DataSourceConnection::Error
+    datasets.not_stale.count
   end
 
   private

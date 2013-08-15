@@ -236,8 +236,8 @@ describe Schema do
     context "when the DataSourceConnection has a problem" do
       let(:found_datasets) { raise DataSourceConnection::Error }
 
-      it "should return an empty array" do
-        schema.refresh_datasets(account).should == []
+      it "returns the previously-fetched datasets" do
+        schema.refresh_datasets(account).should =~ Dataset.where(schema_id: schema.id)
       end
 
       it "should still mark the schema as refreshed" do
@@ -255,13 +255,27 @@ describe Schema do
     let(:schema) { schemas(:default) }
 
     before do
-      connection = Object.new
       stub(schema).connect_with(account) { connection }
-      stub(connection).datasets_count(options) { 3 }
     end
 
-    it "returns the number of total entries" do
-      schema.dataset_count(account, options).should == 3
+    context "when the connection finds datasets" do
+      before do
+        stub(connection).datasets_count(options) { 3 }
+      end
+
+      it "returns the number of total entries" do
+        schema.dataset_count(account, options).should == 3
+      end
+    end
+
+    context "when the connection is untenable" do
+      before do
+        stub(connection).datasets_count(options) { raise DataSourceConnection::Error }
+      end
+
+      it "returns a count of previously-fetched datasets" do
+        schema.dataset_count(account, options).should == Dataset.where(schema_id: schema.id).count
+      end
     end
   end
 
