@@ -1,5 +1,6 @@
 describe("chorus.pages.JobsShowPage", function () {
     beforeEach(function () {
+        this.modalSpy = stubModals();
         this.model = backboneFixtures.job();
         this.task = this.model.tasks().at(0);
         this.workspace = this.model.workspace();
@@ -36,6 +37,16 @@ describe("chorus.pages.JobsShowPage", function () {
         it("displays the Job's name in the header", function () {
             var header = this.page.mainContent.contentHeader.$("h1");
             expect(header).toContainText(this.model.get('name'));
+        });
+
+        context("when the job has a last run", function () {
+            itBehavesLike.aDialogLauncher("a.last_run_date", chorus.dialogs.JobResultDetail);
+
+            context("when the last run was a success", function () {
+                it("should include (show details) in the link", function () {
+                    expect(this.page.$('a.last_run_date')).toContainTranslation('job.show_details');
+                });
+            });
         });
 
         it("creates the correct content details", function() {

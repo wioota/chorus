@@ -31,8 +31,6 @@
             // if you get 'unresponsive script' warnings in Firefox, you can override the dom.max_script_time variable
             jasmine.getEnv().updateInterval = 12000;
         });
-
-        $('.jasmine_reporter .title').after('<span class="product_version">Greenplum Chorus 2.2</span>');
     });
 
     var regexEqualityTester = function(a, b) {

@@ -13,6 +13,7 @@ class JobPresenter < Presenter
       :interval_value => model.interval_value,
       :status => model.status,
       :enabled => model.enabled,
+      :last_run_failed => model.job_results.present? && !model.job_results.last.succeeded,
       :is_deleted => model.deleted?
     }
 

@@ -402,6 +402,8 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:job_task_result, :job_result => b_result)
     FactoryGirl.create(:job_task_result, :job_result => b_result)
 
+    default_job.update_attribute(:last_run, b_result.started_at)
+
     #Imports
     dataset_import_created = FactoryGirl.create(:dataset_import_created_event,
                                                 :workspace => public_workspace, :dataset => nil,

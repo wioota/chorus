@@ -16,14 +16,6 @@
         {{#if frequency}}
             <span class="frequency"><strong>{{frequency}}</strong></span>
         {{/if}}
-        <span class="last_run">
-            <strong>{{t "job.last_run"}}:</strong>
-            {{#if lastRun}}
-                <a class='last_run_date' href='#'>{{lastRun}}</a>
-            {{else}}
-                -
-            {{/if}}
-        </span>
 
         {{#if nextRun}}
             <span class="next_run">
@@ -31,6 +23,16 @@
                 {{nextRun}}
             </span>
         {{/if}}
+
+        <span class="last_run">
+            <strong>{{t "job.last_run"}}:</strong>
+            {{#if lastRun}}
+                <a class='last_run_date' href='#'>{{lastRun}} {{t lastRunLinkKey}}</a>
+            {{else}}
+                -
+            {{/if}}
+        </span>
+
         <span class="state">
             {{#if running}}
                 <span class='loading_spinner'></span>

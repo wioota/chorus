@@ -1,6 +1,10 @@
 chorus.pages.JobsShowPage = chorus.pages.Base.extend({
     constructorName: 'JobsShowPage',
 
+    events: {
+        'click a.last_run_date': 'launchLastRunJobResultDetails'
+    },
+
     makeModel: function (workspaceId, jobId) {
         this.job = this.model = new chorus.models.Job({id: jobId, workspace: {id: workspaceId}});
         this.loadWorkspace(workspaceId, {fetch: false});
@@ -48,7 +52,8 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
             title: this.job.get('name'),
             frequency: this.job.frequency() ,
             nextRun: this.job.get("nextRun"),
-            lastRun: this.job.get("lastRun")
+            lastRun: this.job.get("lastRun"),
+            lastRunLinkKey: this.job.lastRunLinkKey()
         };
 
         if (this.collection.length > 0) {
@@ -69,5 +74,10 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
 
     contentDetails: function () {
         return new chorus.views.JobContentDetails({model: this.job});
+    },
+
+    launchLastRunJobResultDetails: function (e) {
+        e && e.preventDefault();
+        new chorus.dialogs.JobResultDetail({job: this.model}).launchModal();
     }
 });

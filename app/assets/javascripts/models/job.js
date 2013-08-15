@@ -67,5 +67,9 @@ chorus.models.Job = chorus.models.Base.extend({
 
     isRunning: function () {
         return (this.get("status") === "running") || (this.get("status") === "enqueued");
+    },
+
+    lastRunLinkKey: function () {
+        return this.get('lastRunFailed') ? "job.show_errors" : "job.show_details";
     }
 });

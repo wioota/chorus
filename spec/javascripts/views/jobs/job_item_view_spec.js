@@ -89,6 +89,23 @@ describe("chorus.views.JobItem", function () {
             });
 
             itBehavesLike.aDialogLauncher('a.last_run_date', chorus.dialogs.JobResultDetail);
+            
+            context("when the last run was a failure", function () {
+                beforeEach(function () {
+                    this.model.set('lastRunFailed', true);
+                    this.view.render();
+                });
+
+                it("has (show errors)", function () {
+                    expect(this.view.$('.last_run')).toContainTranslation('job.show_errors');
+                });
+            });
+
+            context("when the last run was a success", function () {
+                it("has (show details)", function () {
+                    expect(this.view.$('.last_run')).toContainTranslation('job.show_details');
+                });
+            });
         });
 
         context("when last_run is empty", function () {
@@ -102,7 +119,7 @@ describe("chorus.views.JobItem", function () {
             });
         });
 
-        context("when last_run is empty", function () {
+        context("when next_run is empty", function () {
             beforeEach(function () {
                 this.model.set('nextRun', null);
                 this.view.render();
