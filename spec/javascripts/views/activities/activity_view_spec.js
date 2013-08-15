@@ -106,7 +106,7 @@ describe("chorus.views.Activity", function() {
             });
         });
 
-        context("when the activity's action is workfile upgrade versionwith a commit message", function () {
+        context("when the activity's action is workfile upgrade version with a commit message", function () {
             beforeEach(function () {
                 this.model = backboneFixtures.activity.workfileUpgradedVersion();
                 this.view = new chorus.views.Activity({ model:this.model });
@@ -126,7 +126,6 @@ describe("chorus.views.Activity", function() {
             beforeEach(function () {
                 this.model = backboneFixtures.activity.fileImportFailed();
                 this.view = new chorus.views.Activity({ model:this.model });
-                expect(this.view.context().hasError()).toBeTruthy();
                 this.view.render();
             });
 
@@ -466,5 +465,15 @@ describe("chorus.views.Activity", function() {
         });
 
         itBehavesLike.aDialogLauncher(".update_credentials", chorus.dialogs.DataSourceAccount);
+    });
+
+    context("when the activity is a job success or failure", function () {
+        beforeEach(function () {
+            this.model = backboneFixtures.activity.jobSucceeded();
+            this.view = new chorus.views.Activity({ model: this.model });
+            this.view.render();
+        });
+
+        itBehavesLike.aDialogLauncher("a.JobResult", chorus.dialogs.JobResultDetail);
     });
 });

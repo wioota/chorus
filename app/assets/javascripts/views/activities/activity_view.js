@@ -43,8 +43,15 @@ chorus.views.Activity = chorus.views.Base.extend({
         }
     },
 
+    preRender: function () {
+        this.presenter = new chorus.presenters.Activity(this.model, this.options);
+        this.events = _.extend(this.events, this.presenter.dialogEvents());
+        this.delegateEvents();
+        this._super('preRender');
+    },
+
     context: function() {
-        return new chorus.presenters.Activity(this.model, this.options);
+        return this.presenter;
     },
 
     setupSubviews: function() {

@@ -379,8 +379,8 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:job, :workspace => public_workspace)
     FactoryGirl.create(:job, :workspace => public_workspace)
 
-    Events::JobSucceeded.by(owner).add(:job => default_job, :workspace => default_job.workspace)
-    Events::JobFailed.by(owner).add(:job => default_job, :workspace => default_job.workspace)
+    Events::JobSucceeded.by(owner).add(:job => default_job, :workspace => default_job.workspace, :job_result => FactoryGirl.create(:job_result, :job => default_job))
+    Events::JobFailed.by(owner).add(:job => default_job, :workspace => default_job.workspace, :job_result => FactoryGirl.create(:job_result, :job => default_job, :succeeded => false))
 
     default_job_task = FactoryGirl.create(:import_source_data_task, :job => default_job)
     fbuilder.name :default, default_job_task

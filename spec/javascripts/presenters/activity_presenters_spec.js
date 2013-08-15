@@ -2005,7 +2005,8 @@ describe("chorus.presenters.Activity", function() {
             this.translation_params = {
                 actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
                 workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name()),
-                jobLink: linkTo(this.job.showUrl(), this.job.name())
+                jobLink: linkTo(this.job.showUrl(), this.job.name()),
+                jobResultDialog: linkTo('#', t('job.show_details'), {'class': 'JobResult'})
             };
         });
 
@@ -2027,7 +2028,8 @@ describe("chorus.presenters.Activity", function() {
             this.translation_params = {
                 actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
                 workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name()),
-                jobLink: linkTo(this.job.showUrl(), this.job.name())
+                jobLink: linkTo(this.job.showUrl(), this.job.name()),
+                jobResultDialog: linkTo('#', t('job.show_errors'), {'class': 'JobResult'})
             };
         });
 

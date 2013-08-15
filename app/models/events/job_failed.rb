@@ -1,6 +1,6 @@
 module Events
   class JobFailed < Base
-    has_targets :job, :workspace
+    has_targets :job, :workspace, :job_result
     has_activities :actor, :job, :workspace
 
     after_create :notify_workspace_members

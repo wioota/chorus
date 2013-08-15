@@ -106,6 +106,24 @@
                 promoterLink: this.model.promoterLink(),
                 relativeTimestamp: this.model.promotionTimestamp()
             });
+        },
+
+        dialogEvents: function () {
+            var events = {};
+            var model = this.model;
+
+            var action = model.get("action");
+            var options = headerDefinitions[action];
+            _.each(options.dialogs, function (dialog) {
+                var associatedModel = model[dialog.name]();
+
+                events["click a." + associatedModel.constructorName] = function (e) {
+                    e && e.preventDefault();
+                    (new dialog.dialogClass({model: associatedModel})).launchModal();
+                };
+            });
+
+            return events;
         }
     });
 
@@ -375,11 +393,13 @@
         },
 
         JobSucceeded: {
-            links: ["actor", "job", "workspace"]
+            links: ["actor", "job", "workspace"],
+            dialogs: [{name: "jobResult", dialogClass: chorus.dialogs.JobResultDetail, linkTranslation: 'job.show_details'}]
         },
 
         JobFailed: {
-            links: ["actor", "job", "workspace"]
+            links: ["actor", "job", "workspace"],
+            dialogs: [{name: "jobResult", dialogClass: chorus.dialogs.JobResultDetail, linkTranslation: 'job.show_errors'}]
         },
 
         WorkfileResult: {
@@ -406,6 +426,11 @@
 
             _.each(options.computed, function(name) {
                 params[name] = presenterHelpers[name](self);
+            });
+
+            _.each(options.dialogs, function (dialog) {
+                var associatedModel = model[dialog.name]();
+                params[dialog.name + "Dialog"] = presenterHelpers.dialogLink(associatedModel, dialog.linkTranslation);
             });
 
             return params;
@@ -595,6 +620,10 @@
 
         modelLink: function(model) {
             return Handlebars.helpers.linkTo(model.showUrl(), model.name());
+        },
+
+        dialogLink: function (model, linkTranslation) {
+            return Handlebars.helpers.linkTo('#', t(linkTranslation), { 'class': model.constructorName });
         },
 
         workspaceOldName: function(self) {
