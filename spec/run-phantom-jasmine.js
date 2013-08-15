@@ -71,13 +71,24 @@ page.onResourceReceived = function() {
                         this.startTime = (new Date()).getTime();
                     },
 
+                    reportSpecStarting: function (spec) {
+                        this.specStartTime = (new Date()).getTime();
+                    },
+
                     reportSpecResults: function(spec) {
                         var results = spec.results();
                         if (results.skipped) {
                             this.numSkipped++;
                         } else if (results.passed()) {
                             this.numPassed++;
-                            console.log(".");
+                            var timeTaken = (new Date()).getTime() - this.specStartTime;
+                            if (timeTaken > 300) {
+                                console.log("O");
+                            } else if (timeTaken > 50) {
+                                console.log("-");
+                            } else {
+                                console.log(".");
+                            }
                         } else {
                             this.numFailed++;
 
