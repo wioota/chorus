@@ -32,7 +32,7 @@ describe("chorus.views.JobIndexPageButtons", function () {
             });
 
             describe("the 'Create' button", function () {
-                itBehavesLike.aDialogLauncher('button.create_job', chorus.dialogs.CreateJob);
+                itBehavesLike.aDialogLauncher('button.create_job', chorus.dialogs.ConfigureJob);
             });
         });
     });

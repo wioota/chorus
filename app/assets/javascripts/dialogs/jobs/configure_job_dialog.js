@@ -1,8 +1,14 @@
 chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
-    templateName: 'create_job_dialog',
-    title: t('job.dialog.title'),
-    message: 'job.dialog.toast',
-    submitTranslation: "job.dialog.submit",
+    templateName: 'configure_job_dialog',
+    title: function () {
+        return this.model.isNew() ? t('job.dialog.title') : t('job.dialog.edit.title');
+    },
+    message: function () {
+        return this.model.isNew() ? 'job.dialog.toast' : 'job.dialog.edit.toast';
+    },
+    submitTranslation: function () {
+        return this.model.isNew() ? "job.dialog.submit" : "job.dialog.edit.submit";
+    },
 
     subviews: {
         ".start_date": "startDatePicker",
@@ -12,6 +18,21 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
     events: {
         "change input:radio": 'toggleScheduleOptions',
         "change .end_date_enabled": 'toggleEndRunDateWidget'
+    },
+
+    makeModel: function () {
+        this.creating = !this.model;
+        this.model = this.model || new chorus.models.Job({ workspace: {id: this.options.workspace.id}, intervalUnit: 'on_demand' });
+    },
+
+    modelSaved: function () {
+        chorus.toast(this.message());
+        this.model.trigger('invalidated');
+        this.closeModal();
+
+        if (this.creating) {
+            chorus.router.navigate(this.model.showUrl());
+        }
     },
 
     setup: function () {
@@ -29,10 +50,10 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
     },
 
     setupDatePickers: function () {
-        this.startDatePicker = new chorus.views.DatePicker({selector: 'start_date'});
+        this.startDatePicker = new chorus.views.DatePicker({date: this.model.nextRunDate(), selector: 'start_date'});
         this.registerSubView(this.startDatePicker);
 
-        this.endDatePicker = new chorus.views.DatePicker({selector: 'end_date'});
+        this.endDatePicker = new chorus.views.DatePicker({date: this.model.endRunDate(),selector: 'end_date'});
         this.registerSubView(this.endDatePicker);
     },
 
@@ -44,39 +65,9 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
         this.$('.end_date').prop("disabled", "disabled");
         this.endDatePicker.disable();
 
-        if (!this.model.isNew()) {
-            this.prePopulateFields();
-        }
-        this.populateTime();
-    },
-
-    prePopulateFields: function () {
-        this.$('input.name').val(this.model.get('name'));
-        this.$('input.end_date_enabled').prop("checked", this.model.get("endRun")).trigger("change");
-
-        if (!this.model.runsOnDemand()) {
-            this.$('input:radio#onDemand').prop("checked", false);
-            this.$('input:radio#onSchedule').prop("checked", true).trigger("change");
-
-            this.$('input.interval_value').val(this.model.get('intervalValue'));
-            this.$('select.interval_unit').val(this.model.get('intervalUnit'));
-        }
-    },
-
-    populateTime: function () {
-        var runDate = this.model.nextRunDate();
-
-        var hoursBase = runDate.hours();
-        var meridiem = hoursBase - 11 > 0 ? "pm" : "am";
-        var hours = meridiem === "pm" ? hoursBase - 12 : hoursBase;
-        hours = hours === 0 ? 12 : hours;
-        var minutes = runDate.minutes();
-        var zone = this.model.get('timeZone') || RailsTimeZone.to(jstz.determine().name());
-
-        this.$('select.hour').val(hours);
-        this.$('select.minute').val(minutes);
-        this.$('select.meridiem').val(meridiem);
-        this.$('select.time_zone').val(zone);
+        this.populateSelectors();
+        this.toggleEndRunDateWidget();
+        this.toggleSubmitDisabled();
     },
 
     checkInput: function () {
@@ -146,6 +137,25 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
         return this.$(".end_date_enabled").prop("checked");
     },
 
+    populateSelectors: function () {
+        var runDate = this.model.nextRunDate();
+
+        var hoursBase = runDate.hours();
+        var meridiem = hoursBase - 11 > 0 ? "pm" : "am";
+        var hours = meridiem === "pm" ? hoursBase - 12 : hoursBase;
+        hours = hours === 0 ? 12 : hours;
+        var minutes = runDate.minutes();
+        var zone = this.model.get('timeZone') || RailsTimeZone.to(jstz.determine().name());
+
+        this.$('select.interval_unit').val(this.model.get('intervalUnit'));
+
+        this.$('select.hour').val(hours);
+        this.$('select.minute').val(minutes);
+        this.$('select.meridiem').val(meridiem);
+        this.$('select.time_zone').val(zone);
+    },
+
+
     additionalContext: function () {
         return {
             hours: _.range(1,13).map(function (digit) {
@@ -157,8 +167,8 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
                     label: digit > 9 ? digit : "0" + digit.toString()
                 };
             }),
-            submitTranslation: this.submitTranslation
+            submitTranslation: this.submitTranslation(),
+            runsOnDemand: this.model.runsOnDemand()
         };
     }
-
 });

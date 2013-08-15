@@ -48,7 +48,7 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
 
     launchEditDialog: function (e) {
         e && e.preventDefault();
-        new chorus.dialogs.EditJob({model: this.model}).launchModal();
+        new chorus.dialogs.ConfigureJob({model: this.model}).launchModal();
     },
 
     toggleEnabled: function () {

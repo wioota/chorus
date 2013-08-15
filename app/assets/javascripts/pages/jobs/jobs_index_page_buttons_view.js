@@ -16,7 +16,7 @@ chorus.views.JobIndexPageButtons = chorus.views.Base.extend({
     },
 
     launchCreateJobDialog: function () {
-        var dialog = new chorus.dialogs.CreateJob({ workspace: {id: this.model.id} });
+        var dialog = new chorus.dialogs.ConfigureJob({ workspace: {id: this.model.id} });
         dialog.launchModal();
     },
 

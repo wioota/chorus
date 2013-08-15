@@ -60,7 +60,7 @@ describe("chorus.views.JobSidebar", function () {
                 });
 
                 it("launches the configuration dialog with the error shown", function () {
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.EditJob);
+                    expect(this.modalSpy).toHaveModal(chorus.dialogs.ConfigureJob);
                     expect(this.modalSpy.modals().length).toBe(1);
                 });
             });
@@ -84,8 +84,8 @@ describe("chorus.views.JobSidebar", function () {
         });
     });
 
-    describe("clicking EditJob", function () {
-        itBehavesLike.aDialogLauncher("a.edit_job", chorus.dialogs.EditJob);
+    describe("clicking ConfigureJob", function () {
+        itBehavesLike.aDialogLauncher("a.edit_job", chorus.dialogs.ConfigureJob);
     });
 
     describe("clicking 'Delete Job'", function () {

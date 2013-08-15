@@ -52,7 +52,7 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
 
     launchEditDialog: function (e) {
         e && e.preventDefault();
-        new chorus.dialogs.EditJob({model: this.model}).launchModal();
+        new chorus.dialogs.ConfigureJob({model: this.model}).launchModal();
     },
 
     launchDeleteAlert: function (e) {

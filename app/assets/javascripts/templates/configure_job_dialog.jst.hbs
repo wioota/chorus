@@ -1,6 +1,6 @@
 <form action="#">
     <label class="required">{{t "job.dialog.name"}}</label>
-    <input class='name' type='text'/>
+    <input class='name' type='text' value="{{name}}" />
 
     <legend class="subtitle">
         <div class="text">{{t "job.dialog.schedule"}}</div>
@@ -11,19 +11,19 @@
 
     <div class="options">
         <div class="on_demand row">
-            <input type="radio" id="onDemand" name="jobType" value="on_demand" checked="checked"/>
+            <input type="radio" id="onDemand" name="jobType" value="on_demand" {{#if runsOnDemand}}checked="checked"{{/if}}/>
             <label for="onDemand">{{t "job.dialog.on_demand"}}</label>
         </div>
 
 
         <div class="on_schedule row">
-            <input type="radio" id="onSchedule" name="jobType" value="on_schedule"/>
+            <input type="radio" id="onSchedule" name="jobType" value="on_schedule" {{#unless runsOnDemand}}checked="checked"{{/unless}}/>
             <label for="onSchedule">{{t "job.dialog.on_schedule"}}</label>
         </div>
 
-        <fieldset class="interval_options hidden">
+        <fieldset class="interval_options {{#if runsOnDemand}}hidden{{/if}}">
             <label>{{t "job.dialog.run_every"}}</label>
-            <input class='interval_value' type='text' maxlength="3"/>
+            <input class='interval_value' type='text' maxlength="3" value="{{intervalValue}}"/>
 
             <select class='interval_unit'>
                 <option value="hours">{{t "job.interval_unit.hours"}}</option>
@@ -60,7 +60,7 @@
                     {{timeZonesSelect}}
                 </div>
                 <div class="end_date_container">
-                    <input type="checkbox" id="end_date_enabled" class="end_date_enabled"/>
+                    <input type="checkbox" id="end_date_enabled" class="end_date_enabled" {{#if endRun}}checked='checked'{{/if}}/>
                     <label for="end_date_enabled">{{t "job.dialog.end_date_enabled"}}</label>
                     <div class="end_date_widget" disabled="disabled">
                         <div class='end_date'></div>
