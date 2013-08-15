@@ -171,4 +171,26 @@ describe ImportSourceDataTask do
       task.build_task_name.should include(task.payload.source.name)
     end
   end
+
+  describe 'update_attributes' do
+    context 'when changing from "new table import" to "existing table import"' do
+      let(:task) { FactoryGirl.create(:import_source_data_task_into_new_table)}
+
+      it 'should nullify the payloads destination name' do
+        task.update_attributes(:destination_id => source_dataset.id)
+        task.payload.destination_name.should be_nil
+        task.payload.destination_id.should == source_dataset.id
+      end
+    end
+
+    context 'when changing from "existing table import" to "new table import"' do
+      let(:task) { job_tasks(:isdt) }
+
+      it 'should nullify the payloads destination id' do
+        task.update_attributes(:destination_name => 'Foobar')
+        task.payload.destination_name.should == 'Foobar'
+        task.payload.destination_id.should be_nil
+      end
+    end
+  end
 end

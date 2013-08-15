@@ -6,6 +6,9 @@ class ImportTemplate < ActiveRecord::Base
 
   delegate :workspace, :to => :import_source_data_task
 
+  before_save :update_destination_name, :if => Proc.new { |job| job.changed.include?('destination_id') }
+  before_save :update_destination_id, :if => Proc.new { |job| job.changed.include?('destination_name') }
+
   def new_table_import?
     !destination_id
   end
@@ -29,5 +32,15 @@ class ImportTemplate < ActiveRecord::Base
     import.source_dataset = source
     import.save!
     import
+  end
+
+  private
+
+  def update_destination_name
+    self.destination_name = nil if destination
+  end
+
+  def update_destination_id
+    self.destination_id = nil if destination_name
   end
 end
