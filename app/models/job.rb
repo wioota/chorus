@@ -106,11 +106,11 @@ class Job < ActiveRecord::Base
   end
 
   def next_run_not_in_past
-    errors.add(:job, :NEXT_RUN_IN_PAST) if next_run < 1.minutes.ago
+    errors.add(:job, :NEXT_RUN_IN_PAST) if (!on_demand? && next_run < 1.minutes.ago)
   end
 
   def end_run_not_in_past
-    errors.add(:job, :END_RUN_IN_PAST) if end_run < 1.minutes.ago
+    errors.add(:job, :END_RUN_IN_PAST) if (!on_demand? && end_run < 1.minutes.ago)
   end
 
   def job_succeeded

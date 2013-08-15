@@ -272,6 +272,15 @@ describe Job do
         impossible_job.save!
         impossible_job.should_not be_enabled
       end
+
+      context 'when switching to on demand' do
+        let(:job) { FactoryGirl.create(:job, :next_run => 1.hour.from_now, :end_run => 15.days.from_now) }
+
+        it 'should not error on next run/end run validations' do
+          job.update_attributes!(:next_run => 'invalid', :interval_unit => 'on_demand')
+          job.interval_unit.should == 'on_demand'
+        end
+      end
     end
   end
 
