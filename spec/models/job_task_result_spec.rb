@@ -15,13 +15,14 @@ describe JobTaskResult do
       }
     end
 
-    it "sets the status" do
-      result.finish(:status => JobTaskResult::SUCCESS)
+    it "sets the status and payload_result_id" do
+      result.finish(:status => JobTaskResult::SUCCESS, :payload_result_id => '1234')
       result.status.should == JobTaskResult::SUCCESS
+      result.payload_result_id.should == '1234'
     end
 
     it "returns the JobTaskResult" do
-      result.finish(:status => JobTaskResult::SUCCESS).should == result
+      result.finish(:status => JobTaskResult::SUCCESS, :payload_result_id => '1234').should == result
     end
 
     it "sets the message" do

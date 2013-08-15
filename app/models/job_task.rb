@@ -1,6 +1,6 @@
 class JobTask < ActiveRecord::Base
   include SoftDelete
-  attr_accessible :index, :type, :job, :status
+  attr_accessible :index, :type, :job, :status, :payload_result_id
 
   belongs_to :job
   validates_presence_of :job_id

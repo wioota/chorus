@@ -83,7 +83,7 @@ describe RunWorkFlowTask do
 
         sleep 2
 
-        @task.update_attributes!(:status => 'finished')
+        @task.update_attributes!(:status => 'finished', :payload_result_id => '1234')
 
         wait_until { FakeRunWorkFlowTask::Executed == ["start #{@task.id}", "end #{@task.id}"] }
 
@@ -92,6 +92,7 @@ describe RunWorkFlowTask do
         thread.kill
 
         @task.reload.status.should be_nil
+        @task.reload.payload_result_id.should == '1234'
       end
     end
   end

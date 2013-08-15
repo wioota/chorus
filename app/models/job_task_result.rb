@@ -1,5 +1,5 @@
 class JobTaskResult < ActiveRecord::Base
-  attr_accessible :job_result_id, :name, :started_at, :finished_at, :status, :message
+  attr_accessible :job_result_id, :name, :started_at, :finished_at, :status, :message, :payload_result_id
   belongs_to :job_result
 
   SUCCESS = 'success'; FAILURE = 'failure'

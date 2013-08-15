@@ -111,9 +111,14 @@ FactoryGirl.define do
     finished_at { Time.current }
     status JobTaskResult::SUCCESS
     name { Faker::Company.name }
+    payload_result_id { nil }
 
     factory :failed_job_task_result do
       status JobTaskResult::FAILURE
+    end
+
+    factory :run_work_flow_task_result do
+      payload_result_id { '1234' }
     end
   end
 end
