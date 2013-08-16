@@ -18,7 +18,10 @@ class JobPresenter < Presenter
       :is_deleted => model.deleted?
     }
 
-    job_hash.merge!(tasks) unless options[:list_view] || options[:succinct]
+    unless options[:list_view] || options[:succinct]
+      job_hash.merge!(tasks)
+      job_hash[:owner] = present model.owner
+    end
     job_hash
   end
 

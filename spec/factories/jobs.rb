@@ -66,6 +66,7 @@ FactoryGirl.define do
     interval_unit { %w( hours days weeks months ).sample }
     interval_value { rand(100)+1 }
     notifies false
+    owner
   end
 
   factory :job_task do

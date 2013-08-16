@@ -40,6 +40,11 @@ describe("chorus.pages.JobsShowPage", function () {
             expect(header).toContainText(this.model.get('name'));
         });
 
+        it("displays the job creator in the header", function () {
+            expect(this.page.mainContent.contentHeader.$('.owner')).toContainText(this.model.owner().displayName());
+            expect(this.page.mainContent.contentHeader.$('.owner a').attr('href')).toEqual(this.model.owner().showUrl());
+        });
+
         context("when the job has a last run", function () {
             itBehavesLike.aDialogLauncher("a.last_run_date", chorus.dialogs.JobResultDetail);
 

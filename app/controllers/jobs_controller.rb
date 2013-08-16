@@ -20,7 +20,10 @@ class JobsController < ApplicationController
   def create
     authorize! :can_edit_sub_objects, workspace
 
-    job = Job.create!(params[:job])
+    job = Job.new(params[:job])
+    job.owner = current_user
+    job.save!
+
     workspace.jobs << job
 
     present job, :status => :created

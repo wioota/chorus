@@ -20,6 +20,7 @@ describe JobPresenter, :type => :view do
       it "includes the right keys" do
         keys.each { |key| hash.should have_key(key) }
         hash.should_not have_key(:tasks)
+        hash.should_not have_key(:owner)
       end
     end
 
@@ -27,7 +28,7 @@ describe JobPresenter, :type => :view do
       let(:hash) { presenter.to_hash }
 
       it "includes the right keys" do
-        (keys + [:tasks]).each do |key|
+        (keys + [:tasks, :owner]).each do |key|
           hash.should have_key(key)
         end
       end

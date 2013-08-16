@@ -12,6 +12,7 @@ describe Job do
     it { should have_many :job_tasks }
     it { should have_many :job_results }
     it { should have_many :events }
+    it { should belong_to :owner }
 
     describe "name uniqueness validation" do
       let(:workspace) { workspaces(:public) }
@@ -61,11 +62,8 @@ describe Job do
   end
 
   describe '#create!' do
-    let(:attrs) { FactoryGirl.attributes_for(:job) }
-
-    it "saves a disabled Job by default" do
-      job = Job.create! attrs
-      job.should_not be_enabled
+    it "makes a disabled Job by default" do
+      FactoryGirl.create(:job).should_not be_enabled
     end
   end
 

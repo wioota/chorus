@@ -7,6 +7,8 @@ class Job < ActiveRecord::Base
   attr_accessible :enabled, :name, :next_run, :last_run, :interval_unit, :interval_value, :end_run, :time_zone, :status, :notifies
 
   belongs_to :workspace
+  belongs_to :owner, :class_name => 'User'
+
   has_many :job_tasks, :order => :index
   has_many :job_results, :order => :finished_at
   has_many :activities, :as => :entity
@@ -16,6 +18,7 @@ class Job < ActiveRecord::Base
   validates :status, :presence => true, :inclusion => {:in => STATUSES }
   validates_presence_of :interval_value
   validates_presence_of :name
+  validates_presence_of :owner
   validates_uniqueness_of :name, :scope => [:workspace_id, :deleted_at]
   validate :next_run_not_in_past, :if => Proc.new { |job| job.changed.include?('next_run') }
   validate :end_run_not_in_past, :if => :end_run

@@ -55,7 +55,9 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
             frequency: this.job.frequency() ,
             nextRun: this.job.get("nextRun"),
             lastRun: this.job.get("lastRun"),
-            lastRunLinkKey: this.job.lastRunLinkKey()
+            lastRunLinkKey: this.job.lastRunLinkKey(),
+            ownerName: this.job.owner().displayName(),
+            ownerUrl: this.job.owner().showUrl()
         };
 
         if (this.collection.length > 0) {

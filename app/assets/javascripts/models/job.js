@@ -71,5 +71,12 @@ chorus.models.Job = chorus.models.Base.extend({
 
     lastRunLinkKey: function () {
         return this.get('lastRunFailed') ? "job.show_errors" : "job.show_details";
+    },
+
+    owner: function() {
+        if (!this._owner) {
+            this._owner = new chorus.models.User(this.get("owner"));
+        }
+        return this._owner;
     }
 });

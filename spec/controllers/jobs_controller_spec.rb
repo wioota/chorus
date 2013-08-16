@@ -100,6 +100,11 @@ describe JobsController do
       end.to change(Job, :count).by(1)
     end
 
+    it "sets the owner to the creating user" do
+      post :create, params
+      Job.last.owner.should == user
+    end
+
     it "adds a created Job with a given Workspace" do
       expect do
         post :create, params
