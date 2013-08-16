@@ -48,7 +48,7 @@ class Job < ActiveRecord::Base
   def run
     prepare_to_run!
     initialize_results
-    execute_tasks
+    perform_tasks
     job_succeeded
   rescue JobTask::JobTaskFailure
     job_failed
@@ -128,9 +128,9 @@ class Job < ActiveRecord::Base
     Events::JobFailed.by(owner).add(:job => self, :workspace => workspace, :job_result => @result)
   end
 
-  def execute_tasks
+  def perform_tasks
     job_tasks.each do |task|
-      task_result = task.execute
+      task_result = task.perform
       @tasks_results << task_result
 
       raise JobTask::JobTaskFailure.new if task_result.status == JobTaskResult::FAILURE

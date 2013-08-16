@@ -2,7 +2,7 @@ class RunWorkFlowTask < JobTask
 
   belongs_to :payload, :class_name => 'AlpineWorkfile'
 
-  def execute
+  def perform
     result = JobTaskResult.create(:started_at => Time.current, :name => build_task_name)
     Alpine::API.run_work_flow_task(self)
     update_attribute(:status, 'running')

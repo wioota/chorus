@@ -91,7 +91,7 @@ describe ImportSourceDataTask do
     end
   end
 
-  describe '#execute' do
+  describe '#perform' do
     let(:isdt) { job_tasks(:isdt) }
 
     before do
@@ -102,14 +102,14 @@ describe ImportSourceDataTask do
       mock(ImportExecutor).run.with_any_args
       stub(isdt.payload).set_destination_id!
       expect {
-        isdt.execute
+        isdt.perform
       }.to change(Import, :count).by(1)
     end
 
     it "Runs the import through the import executor" do
       mock(ImportExecutor).run.with_any_args
       stub(isdt).set_destination_id!
-      isdt.execute
+      isdt.perform
     end
 
     describe 'when importing into a new table' do
@@ -128,7 +128,7 @@ describe ImportSourceDataTask do
           stub(ImportExecutor).run {true}
           stub(isdt.payload.workspace.sandbox.datasets).find_by_name { dataset }
 
-          isdt.execute
+          isdt.perform
           isdt.payload.destination_name.should be_nil
           isdt.payload.destination_id.should == dataset.id
         end
@@ -138,7 +138,7 @@ describe ImportSourceDataTask do
         it 'keeps the destination_name and does not set the destination_id' do
           stub(ImportExecutor).run { raise }
           expect {
-            isdt.execute
+            isdt.perform
           }.not_to change(isdt.payload, :destination_name)
         end
       end
@@ -148,7 +148,7 @@ describe ImportSourceDataTask do
       it 'returns a successful JobTaskResult' do
         mock(ImportExecutor).run.with_any_args
         stub(isdt).set_destination_id!
-        result = isdt.execute
+        result = isdt.perform
         result.status.should == JobTaskResult::SUCCESS
         result.name.should == isdt.name
       end
@@ -157,7 +157,7 @@ describe ImportSourceDataTask do
     describe 'failure' do
       it 'returns a failed JobTaskResult' do
         stub(ImportExecutor).run { raise StandardError.new 'some msg' }
-        result = isdt.execute
+        result = isdt.perform
         result.status.should == JobTaskResult::FAILURE
         result.name.should == isdt.name
         result.message.should == 'some msg'

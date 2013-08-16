@@ -35,8 +35,8 @@ describe JobTask do
     end
   end
 
-  describe '#execute' do
-    it { should respond_to :execute }
+  describe '#perform' do
+    it { should respond_to :perform }
   end
 
   describe 'deleting' do

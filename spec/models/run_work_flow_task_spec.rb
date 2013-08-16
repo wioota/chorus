@@ -31,12 +31,12 @@ describe RunWorkFlowTask do
     end
   end
 
-  describe "#execute" do
+  describe "#perform" do
     let(:task) { job_tasks(:rwft) }
 
     it "returns a failure JobTaskResult if it fails to connect to Alpine" do
       stub(Alpine::API).run_work_flow_task(task) { raise StandardError.new('oh no') }
-      result = task.execute
+      result = task.perform
       result.name.should == task.name
       result.status.should == JobTaskResult::FAILURE
       result.message.should == 'oh no'
@@ -52,12 +52,12 @@ describe RunWorkFlowTask do
       end
 
       class FakeRunWorkFlowTask < RunWorkFlowTask
-        Executed = []
+        Performed = []
 
-        def execute
-          Executed << "start #{id}"
+        def perform
+          Performed << "start #{id}"
           super
-          Executed << "end #{id}"
+          Performed << "end #{id}"
         end
       end
 
@@ -77,17 +77,17 @@ describe RunWorkFlowTask do
         stub(FakeRunWorkFlowTask).sleep_time { 0.1 }
 
         Thread.abort_on_exception = true
-        thread = Thread.new { @task.execute }
+        thread = Thread.new { @task.perform }
 
-        wait_until { FakeRunWorkFlowTask::Executed == ["start #{@task.id}"] }
+        wait_until { FakeRunWorkFlowTask::Performed == ["start #{@task.id}"] }
 
         sleep 2
 
         @task.update_attributes!(:status => 'finished', :payload_result_id => '1234')
 
-        wait_until { FakeRunWorkFlowTask::Executed == ["start #{@task.id}", "end #{@task.id}"] }
+        wait_until { FakeRunWorkFlowTask::Performed == ["start #{@task.id}", "end #{@task.id}"] }
 
-        FakeRunWorkFlowTask::Executed.should == ["start #{@task.id}", "end #{@task.id}"]
+        FakeRunWorkFlowTask::Performed.should == ["start #{@task.id}", "end #{@task.id}"]
 
         thread.kill
 

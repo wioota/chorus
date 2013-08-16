@@ -8,7 +8,7 @@ class ImportSourceDataTask < JobTask
     self.build_payload(params)
   end
 
-  def execute
+  def perform
     result = JobTaskResult.create(:started_at => Time.current, :name => build_task_name)
     import = payload.create_import
     ImportExecutor.run import.id

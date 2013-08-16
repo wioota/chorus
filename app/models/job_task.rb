@@ -24,7 +24,7 @@ class JobTask < ActiveRecord::Base
     type.gsub(/Task\z/, '').underscore
   end
 
-  def execute
+  def perform
     raise NotImplementedError
   end
 

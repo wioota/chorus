@@ -188,7 +188,7 @@ describe Job do
         class FakeJobTask < JobTask
           Order = []
 
-          def execute
+          def perform
             Order << index
             FactoryGirl.build(:job_task_result)
           end
