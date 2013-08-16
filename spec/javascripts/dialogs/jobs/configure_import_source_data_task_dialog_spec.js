@@ -263,7 +263,7 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
                                         expect(params['job_task[action]']).toBe('import_source_data');
                                         expect(params['job_task[source_id]']).toBe(this.sourceDatasets[0].get("id"));
                                         expect(params['job_task[destination_id]']).toBe(this.destinationDatasets[0].get("id"));
-                                        expect(params['job_task[new_table_name]']).not.toExist();
+                                        expect(params['job_task[new_table_name]']).toBeUndefined();
                                         expect(params['job_task[row_limit]']).toBe("500");
                                         expect(params['job_task[truncate]']).toBe("false");
                                     });

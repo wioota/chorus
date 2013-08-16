@@ -107,7 +107,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                 dbUsername: 'some_db_username',
                 dataSourceId: this.dataSource.id
             });
-            this.dataSource.set({ owner: {id: account.user().get("id")} });
+            this.dataSource.set({ owner: {id: account.user().get("id"), firstName: "rabold", lastName: "glorp"} });
             this.dataSource.accounts().reset(account);
 
             this.dialog = new chorus.dialogs.DataSourcePermissions({ dataSource: this.dataSource });

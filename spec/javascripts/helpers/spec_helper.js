@@ -89,6 +89,10 @@
             clearRenderedDOM();
 
             this.addMatchers({
+                toExist: function() {
+                    return this.actual.size() > 0;
+                },
+
                 toBeA: function(klass) {
                      if (klass.prototype && klass.prototype.constructorName) {
                         this.message = function () {

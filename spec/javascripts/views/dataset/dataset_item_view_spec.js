@@ -208,7 +208,7 @@ describe("chorus.views.DatasetItem", function() {
 
         it('attaches the data source model to the data source and database breadcrumbs', function() {
             expect(this.view.$(".data_source").data("data_source")).toEqual(this.dataset.dataSource().attributes);
-            expect(this.view.$(".database").data("data_source")).not.toExist();
+            expect(this.view.$(".database").data("data_source")).toBeUndefined();
         });
 
         context("when the user has credentials to view the dataset", function() {

@@ -188,7 +188,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                         expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
                         expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
                         expect(params['job[next_run]']).toEqual(date.format());
-                        expect(params['job[end_run]']).not.toExist();
+                        expect(params['job[end_run]']).toEqual('invalid');
                     });
 
                     context("when the save succeeds", function () {
