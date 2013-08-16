@@ -396,9 +396,9 @@ FixtureBuilder.configure do |fbuilder|
     a_result = FactoryGirl.create(:job_result, :job => default_job)
     b_result = FactoryGirl.create(:job_result, :job => default_job)
 
-    FactoryGirl.create(:job_task_result, :job_result => a_result)
+    FactoryGirl.create(:run_work_flow_task_result, :job_result => a_result)
 
-    FactoryGirl.create(:job_task_result, :job_result => b_result)
+    FactoryGirl.create(:run_work_flow_task_result, :job_result => b_result)
     FactoryGirl.create(:job_task_result, :job_result => b_result)
     FactoryGirl.create(:job_task_result, :job_result => b_result)
 

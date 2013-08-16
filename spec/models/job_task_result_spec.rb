@@ -15,9 +15,10 @@ describe JobTaskResult do
       }
     end
 
-    it "sets the status and payload_result_id" do
-      result.finish(:status => JobTaskResult::SUCCESS, :payload_result_id => '1234')
+    it "mass assigns attributes" do
+      result.finish(:status => JobTaskResult::SUCCESS, :payload_id => 3, :payload_result_id => '1234')
       result.status.should == JobTaskResult::SUCCESS
+      result.payload_id.should == 3
       result.payload_result_id.should == '1234'
     end
 

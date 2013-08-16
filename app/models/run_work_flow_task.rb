@@ -7,7 +7,7 @@ class RunWorkFlowTask < JobTask
     Alpine::API.run_work_flow_task(self)
     update_attribute(:status, 'running')
     wait_until { reload.status == 'finished' }
-    result.finish :status => JobTaskResult::SUCCESS, :payload_result_id => payload_result_id
+    result.finish :status => JobTaskResult::SUCCESS, :payload_id => payload.id, :payload_result_id => payload_result_id
   rescue StandardError => e
     result.finish :status => JobTaskResult::FAILURE, :message => e.message
   ensure

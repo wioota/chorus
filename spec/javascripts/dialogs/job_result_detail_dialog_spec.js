@@ -29,6 +29,12 @@ describe("chorus.dialogs.JobResultDetail", function () {
                 expect(this.dialog.$('tbody tr').eq(0)).toContainText(this.dialog.model.get('jobTaskResults')[0].finishedAt);
                 expect(this.dialog.$('tbody tr').eq(1)).toContainText(this.dialog.model.get('jobTaskResults')[1].finishedAt);
             });
+
+            context("when a job task has a payload result id", function () {
+                it("shows a link to the payload result", function () {
+                    expect(this.dialog.$('.workflow_result')).toExist();
+                });
+            });
         });
     });
 

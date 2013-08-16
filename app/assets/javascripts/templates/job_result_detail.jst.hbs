@@ -18,7 +18,13 @@
             <td>{{name}}</td>
             <td>{{startedAt}}</td>
             <td>{{finishedAt}}</td>
-            <td>{{status}}{{#if message}} - {{message}}{{/if}}</td>
+            <td>
+                {{#if payloadResultId}}
+                    {{workflowResultLink this}}
+                {{else}}
+                    {{status}}
+                    {{#if message}} - {{message}}{{/if}}</td>
+                {{/if}}
         </tr>
         {{/each}}
         </tbody>
