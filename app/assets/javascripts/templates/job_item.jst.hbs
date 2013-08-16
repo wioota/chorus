@@ -20,14 +20,14 @@
         {{#if nextRun}}
             <span class="next_run">
                 <strong>{{t "job.next_run"}}</strong>
-                {{nextRun}}
+                {{displayTimestamp nextRun}}
             </span>
         {{/if}}
 
         <span class="last_run">
             <strong>{{t "job.last_run"}}:</strong>
             {{#if lastRun}}
-                <a class='last_run_date' href='#'>{{lastRun}} {{t lastRunLinkKey}}</a>
+                <a class='last_run_date' href='#'>{{displayTimestamp lastRun}} {{t lastRunLinkKey}}</a>
             {{else}}
                 -
             {{/if}}

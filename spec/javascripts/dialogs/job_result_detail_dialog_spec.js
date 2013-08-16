@@ -21,13 +21,13 @@ describe("chorus.dialogs.JobResultDetail", function () {
             });
 
             it("displays the started and finished times", function () {
-                expect(this.dialog.$('.started_at')).toContainText(this.dialog.model.get('startedAt'));
-                expect(this.dialog.$('.finished_at')).toContainText(this.dialog.model.get('finishedAt'));
+                expect(this.dialog.$('.started_at')).toContainText(Handlebars.helpers.displayTimestamp(this.dialog.model.get('startedAt')));
+                expect(this.dialog.$('.finished_at')).toContainText(Handlebars.helpers.displayTimestamp(this.dialog.model.get('finishedAt')));
             });
 
             it("displays each job task result", function () {
-                expect(this.dialog.$('tbody tr').eq(0)).toContainText(this.dialog.model.get('jobTaskResults')[0].finishedAt);
-                expect(this.dialog.$('tbody tr').eq(1)).toContainText(this.dialog.model.get('jobTaskResults')[1].finishedAt);
+                expect(this.dialog.$('tbody tr').eq(0)).toContainText(Handlebars.helpers.displayTimestamp(this.dialog.model.get('jobTaskResults')[0].finishedAt));
+                expect(this.dialog.$('tbody tr').eq(1)).toContainText(Handlebars.helpers.displayTimestamp(this.dialog.model.get('jobTaskResults')[1].finishedAt));
             });
 
             context("when a job task has a payload result id", function () {
@@ -52,13 +52,13 @@ describe("chorus.dialogs.JobResultDetail", function () {
         });
 
         it("displays the started and finished times", function () {
-            expect(this.dialog.$('.started_at')).toContainText(this.dialog.model.get('startedAt'));
-            expect(this.dialog.$('.finished_at')).toContainText(this.dialog.model.get('finishedAt'));
+            expect(this.dialog.$('.started_at')).toContainText(Handlebars.helpers.displayTimestamp(this.dialog.model.get('startedAt')));
+            expect(this.dialog.$('.finished_at')).toContainText(Handlebars.helpers.displayTimestamp(this.dialog.model.get('finishedAt')));
         });
 
         it("displays each job task result", function () {
-            expect(this.dialog.$('tbody tr').eq(0)).toContainText(this.dialog.model.get('jobTaskResults')[0].finishedAt);
-            expect(this.dialog.$('tbody tr').eq(1)).toContainText(this.dialog.model.get('jobTaskResults')[1].finishedAt);
+            expect(this.dialog.$('tbody tr').eq(0)).toContainText(Handlebars.helpers.displayTimestamp(this.dialog.model.get('jobTaskResults')[0].finishedAt));
+            expect(this.dialog.$('tbody tr').eq(1)).toContainText(Handlebars.helpers.displayTimestamp(this.dialog.model.get('jobTaskResults')[1].finishedAt));
         });
     });
 });

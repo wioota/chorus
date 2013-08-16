@@ -9,7 +9,7 @@
         {{/if}}
 
         {{#if showUpdatedTime}}
-          <div class="updated">{{t "workfiles.updated_by"}} <a class="updated_by" href="{{modifierUrl}}">{{updatedBy}}</a> on <span class="updated_on">{{displayTimestamp userModifiedAt}}</span></div>
+          <div class="updated">{{t "workfiles.updated_by"}} <a class="updated_by" href="{{modifierUrl}}">{{updatedBy}}</a> on <span class="updated_on">{{displayAbbreviatedTimestamp userModifiedAt}}</span></div>
         {{/if}}
     </div>
     <div class="actions">
