@@ -4,7 +4,7 @@ class Job < ActiveRecord::Base
   STATUSES = %w(enqueued running idle)
   VALID_INTERVAL_UNITS = %w(hours days weeks months on_demand)
 
-  attr_accessible :enabled, :name, :next_run, :last_run, :interval_unit, :interval_value, :end_run, :time_zone, :status
+  attr_accessible :enabled, :name, :next_run, :last_run, :interval_unit, :interval_value, :end_run, :time_zone, :status, :notifies
 
   belongs_to :workspace
   has_many :job_tasks, :order => :index

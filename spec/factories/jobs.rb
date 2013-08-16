@@ -65,6 +65,7 @@ FactoryGirl.define do
     time_zone 'Alaska'
     interval_unit { %w( hours days weeks months ).sample }
     interval_value { rand(100)+1 }
+    notifies false
   end
 
   factory :job_task do

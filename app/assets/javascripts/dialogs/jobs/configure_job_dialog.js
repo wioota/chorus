@@ -95,7 +95,8 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
             intervalValue: this.getIntervalValue(),
             nextRun: this.isOnDemand() ? "invalid" : this.buildStartDate().forceZone(0).format(),
             endRun: this.isOnDemand() || !this.endDateEnabled() ? "invalid" : this.buildEndDate().toISOString(),
-            timeZone: this.$('select.time_zone').val()
+            timeZone: this.$('select.time_zone').val(),
+            notifies: this.$('.notify').prop('checked')
         };
     },
 

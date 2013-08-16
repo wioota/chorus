@@ -70,5 +70,13 @@
         </fieldset>
     </div>
 
+    <legend class="subtitle">
+        <div class="text">Notification</div>
+        <hr/>
+    </legend>
+
+    <input type="checkbox" id="notify_on_completion" class="notify row" {{#if notifies}}checked='checked'{{/if}}/>
+    <label for="notify_on_completion">Notify <strong>{{workspace.name}}</strong> members when this Job completes?</label>
+
     {{formControlsWithDisabledSubmit submitTranslation}}
 </form>

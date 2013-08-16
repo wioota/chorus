@@ -39,6 +39,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
 
         context("with valid field values", function () {
             beforeEach(function () {
+                this.dialog.$('.notify').prop('checked', false);
                 this.dialog.$('input.name').val(this.jobPlan.name).trigger("keyup");
             });
 
@@ -61,6 +62,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                     expect(params['job[name]']).toEqual(this.jobPlan.name);
                     expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
                     expect(params['job[interval_value]']).toEqual("0");
+                    expect(params['job[notifies]']).toEqual("false");
                 });
 
                 context("when the save fails", function () {
@@ -482,5 +484,14 @@ describe("chorus.dialogs.ConfigureJob", function () {
             });
         });
     });
+    });
+
+    it("permits indication that the Job should notify on success", function () {
+        this.dialog.$('input.name').val(this.jobPlan.name).trigger("keyup");
+        this.dialog.$('.notify').prop('checked', true);
+
+        this.dialog.$("form").submit();
+        var params = this.server.lastCreate().params();
+        expect(params['job[notifies]']).toEqual("true");
     });
 });
