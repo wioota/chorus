@@ -2,6 +2,8 @@ describe("chorus.views.TagsInput", function() {
     var view, tags, input;
 
     beforeEach(function() {
+        this.clock = this.useFakeTimers();
+
         tags = new chorus.collections.TaggingSet([
             {name: 'alpha'},
             {name: 'beta'},
@@ -207,9 +209,7 @@ describe("chorus.views.TagsInput", function() {
             var event = $.Event('keyup');
             event.keyCode = 115; // s
             input.trigger(event);
-            waitsFor(_.bind(function() {
-                return this.server.requests.length > 0;
-            }, this));
+            this.clock.tick(1000);
         });
 
         it("should escape malicious tags", function() {
@@ -228,9 +228,7 @@ describe("chorus.views.TagsInput", function() {
             var event = $.Event('keyup');
             event.keyCode = 115; // s
             input.trigger(event);
-            waitsFor(_.bind(function() {
-                return this.server.requests.length > 0;
-            }, this));
+            this.clock.tick(1000);
         });
 
         it("escapes malicious tags", function() {
@@ -289,15 +287,6 @@ describe("chorus.views.TagsInput", function() {
             this.input.trigger(up);
         });
 
-        afterEach(function() {
-            waitsFor(_.bind(function() {
-                return this.server.requests.length > 0;
-            }, this));
-            runs(_.bind(function() {
-                this.server.lastFetch().succeed();
-            }, this));
-        });
-
         it("behaves like enter key press", function() {
             expect(this.enterKeyPressSpy).toHaveBeenCalled();
         });
@@ -326,12 +315,9 @@ describe("chorus.views.TagsInput", function() {
             var event = $.Event('keyup');
             event.keyCode = 115; // s
             input.trigger(event);
-            waitsFor(_.bind(function() {
-                return this.server.requests.length > 0;
-            }, this));
-            runs(_.bind(function() {
-                this.server.lastFetch().succeed(suggestions.response, suggestions.pagination);
-            }, this));
+            this.clock.tick(1000);
+            expect(this.server.requests.length).toBeGreaterThan(0);
+            this.server.lastFetch().succeed(suggestions.response, suggestions.pagination);
         });
 
         it("does not select anything by default", function() {
