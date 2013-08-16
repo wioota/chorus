@@ -82,6 +82,22 @@ describe("chorus.views.JobSidebar", function () {
             expect(this.view.$("a.run_job")).not.toExist();
             expect(this.view.$("span.run_job")).toHaveClass('disabled');
         });
+
+        it("enables the 'Stop' button", function () {
+            expect(this.view.$("a.stop_job")).toExist();
+            expect(this.view.$("span.stop_job")).not.toHaveClass('disabled');
+        });
+
+        describe("clicking the 'Stop' button", function () {
+            beforeEach(function () {
+                spyOn(this.view.model, 'stop');
+                this.view.$('a.stop_job').click();
+            });
+
+            it("stops the job", function () {
+                expect(this.view.model.stop).toHaveBeenCalled();
+            });
+        });
     });
 
     describe("clicking ConfigureJob", function () {

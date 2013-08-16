@@ -65,6 +65,17 @@ chorus.models.Job = chorus.models.Base.extend({
         );
     },
 
+    stop: function () {
+        var name = this.name();
+        function saveSucceeded(){ chorus.toast('job.stopping_toast', {jobName: name}); }
+        function saveFailed(){ chorus.toast('job.not_stopping_toast', {jobName: name}); }
+
+        this.save(
+            {kill: true},
+            {success: saveSucceeded, error: saveFailed}
+        );
+    },
+
     isRunning: function () {
         return (this.get("status") === "running") || (this.get("status") === "enqueued");
     },

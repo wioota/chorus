@@ -11,6 +11,7 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
         "click a.enable": "enableJob",
         'click a.edit_job': 'launchEditDialog',
         'click a.run_job': 'runJob',
+        'click a.stop_job': 'stopJob',
         'click a.delete_job': 'launchDeleteAlert'
     },
 
@@ -63,5 +64,10 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
     runJob: function (e) {
         e && e.preventDefault();
         this.model.run();
+    },
+
+    stopJob: function (e) {
+        e && e.preventDefault();
+        this.model.stop();
     }
 });

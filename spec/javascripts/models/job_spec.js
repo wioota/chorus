@@ -122,4 +122,37 @@ describe("chorus.models.Job", function () {
             });
         });
     });
+
+    describe("run", function () {
+        beforeEach(function () {
+            spyOn(chorus, 'toast');
+            this.model.stop();
+        });
+
+        it("saves", function () {
+            var postUrl = this.server.lastUpdateFor(this.model).url;
+            expect(postUrl).toContain("/workspaces/" + this.model.workspace().id + "/jobs/" + this.model.id);
+        });
+
+
+        it("passes the 'kill' parameter", function () {
+            var params = this.server.lastUpdateFor(this.model).params();
+            expect(params['job[kill]']).toEqual('true');
+        });
+
+        it("does not toast without success", function () {
+            expect(chorus.toast).not.toHaveBeenCalled();
+        });
+
+        context("when the save succeeds", function () {
+            beforeEach(function () {
+                this.server.lastUpdate().succeed();
+            });
+
+            it("flashes a toast message", function () {
+                expect(chorus.toast).toHaveBeenCalledWith('job.stopping_toast', {jobName: this.model.name()});
+            });
+        });
+    });
+
 });
