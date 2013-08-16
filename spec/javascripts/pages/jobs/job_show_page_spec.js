@@ -1,5 +1,6 @@
 describe("chorus.pages.JobsShowPage", function () {
     beforeEach(function () {
+        this.clock = this.useFakeTimers();
         this.modalSpy = stubModals();
         this.model = backboneFixtures.job();
         this.task = this.model.tasks().at(0);
@@ -110,6 +111,25 @@ describe("chorus.pages.JobsShowPage", function () {
                 expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toMatchTranslation("breadcrumbs.jobs");
 
                 expect(this.page.$(".breadcrumb:eq(4)").text().trim()).toBe(this.model.get("name"));
+            });
+        });
+
+        describe("polling", function () {
+            beforeEach(function () {
+                spyOn(this.page.model, 'fetch');
+            });
+
+            it("waits for an interval", function () {
+                expect(this.page.model.fetch).not.toHaveBeenCalled();
+                this.clock.tick(30001);
+                expect(this.page.model.fetch).toHaveBeenCalled();
+            });
+
+            it("ceases with teardown", function () {
+                this.page.teardown();
+                this.page.model.fetch.reset();
+                this.clock.tick(300001);
+                expect(this.page.model.fetch).not.toHaveBeenCalled();
             });
         });
     });

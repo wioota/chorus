@@ -4,7 +4,8 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
 
     events: {
         "click button.toggle_enabled": "toggleEnabled",
-        "click button.edit_schedule": "launchEditDialog"
+        "click button.edit_schedule": "launchEditDialog",
+        "click button.run_job": "runJob"
     },
 
     createActions: [
@@ -56,12 +57,18 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
         this.model.toggleEnabled({unprocessableEntity: _.bind(this.launchEditDialog, this)});
     },
 
+    runJob: function () {
+        this.$('button.run_job').prop('disabled', true);
+        this.model.run();
+    },
+
     additionalContext: function() {
         return {
             canUpdate: this.canUpdate(),
             enabledButtonLabel: this.enabledButtonLabel(),
             actionBarClass: this.actionBarClass(),
-            createActions: this.createActions
+            createActions: this.createActions,
+            running: this.model.isRunning()
         };
     },
 

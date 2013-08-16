@@ -88,5 +88,39 @@ describe("chorus.views.JobContentDetails", function () {
         });
     });
 
+    describe("the Run Job button", function () {
+
+        describe("when the job is not running", function () {
+            it("is enabled", function () {
+                expect(this.view.$('.run_job')).toBeEnabled();
+            });
+
+            describe("clicking the button", function () {
+                beforeEach(function () {
+                    spyOn(this.job, 'run');
+                    this.view.$('.run_job').click();
+                });
+
+                it("tells the server to run the job", function () {
+                    expect(this.job.run).toHaveBeenCalled();
+                });
+
+                it("disables the button", function () {
+                    expect(this.view.$('.run_job')).toBeDisabled();
+                });
+            });
+        });
+
+        describe("when the job is running", function () {
+            beforeEach(function () {
+                this.job.set('status', 'running');
+            });
+
+            it("is disabled", function () {
+                expect(this.view.$('.run_job')).toBeDisabled();
+            });
+        });
+    });
+
     itBehavesLike.aDialogLauncher('.edit_schedule', chorus.dialogs.ConfigureJob);
 });

@@ -18,6 +18,8 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
         this.requiredResources.add(this.job);
         this.breadcrumbs.requiredResources.add(this.job);
 
+        this.onceLoaded(this.model, this.pollForJob);
+
         this.mainContent = new chorus.views.LoadingSection();
         this.listenTo(this.model, "loaded", this.setupMainContent);
         this.listenTo(this.model, "invalidated", function () { this.model.fetch(); });
@@ -79,5 +81,17 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
     launchLastRunJobResultDetails: function (e) {
         e && e.preventDefault();
         new chorus.dialogs.JobResultDetail({job: this.model}).launchModal();
+    },
+
+    pollForJob: function () {
+        this.pollerID && clearInterval(this.pollerID);
+
+        var fetchModel = _.bind(function () { this.model.fetch(); }, this);
+        this.pollerID = setInterval(fetchModel, 15000);
+    },
+
+    teardown: function () {
+        clearInterval(this.pollerID);
+        return this._super('teardown');
     }
 });
