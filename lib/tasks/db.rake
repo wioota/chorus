@@ -4,7 +4,7 @@ namespace :db do
   end
 
   task :seed_development => :environment do
-    load 'db/development_seeds.rb'
+    load Rails.root.join('db', 'development_seeds.rb')
   end
 
   def create_database_tasks(database_name)

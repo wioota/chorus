@@ -1,4 +1,4 @@
-load('db/seeds.rb')
+load Rails.root.join('db', 'seeds.rb')
 
 gpdb_host = ENV['GPDB_HOST']
 oracle_host = ENV['ORACLE_HOST']
