@@ -39,21 +39,14 @@ describe("chorus.collections.NotificationSet", function() {
         });
 
         it("has an activity model for each model in the notification set", function() {
-            expect(this.activities.models.length).toBe(4);
-            expect(this.activities.models[0].get("id")).toBe(this.collection.models[0].get("id"));
-            expect(this.activities.models[1].get("id")).toBe(this.collection.models[1].get("id"));
-            expect(this.activities.models[2].get("id")).toBe(this.collection.models[2].get("id"));
-            expect(this.activities.models[3].get("id")).toBe(this.collection.models[3].get("id"));
+            expect(this.activities.models.length).toBe(this.collection.length);
+            this.activities.each(function (model, index) {
+                expect(model.get('id')).toBe(this.collection.at(index).get('id'));
+            }, this);
 
             expect(this.activities.models[0].get("action")).toBe("NOTE");
-            expect(this.activities.models[1].get("action")).toBe("NOTE");
-            expect(this.activities.models[2].get("action")).toBe("NOTE");
-            expect(this.activities.models[3].get("action")).toBe("NOTE");
 
             expect(this.activities.models[0].get("actionType")).toBe("NoteOnDataSource");
-            expect(this.activities.models[1].get("actionType")).toBe("NoteOnDataSource");
-            expect(this.activities.models[2].get("actionType")).toBe("NoteOnDataSource");
-            expect(this.activities.models[3].get("actionType")).toBe("NoteOnDataSource");
         });
     });
 
@@ -105,12 +98,9 @@ describe("chorus.collections.NotificationSet", function() {
 
         it("calls the correct API", function() {
             expect(this.server.lastUpdate().url).toBe("/notifications/read");
-            expect(this.server.lastUpdate().params()["notification_ids[]"]).toEqual([
-                this.collection.models[0].get("id").toString(),
-                this.collection.models[1].get("id").toString(),
-                this.collection.models[2].get("id").toString(),
-                this.collection.models[3].get("id").toString()
-            ]);
+            expect(this.server.lastUpdate().params()["notification_ids[]"]).toEqual(this.collection.map(function (model) {
+                return model.get('id').toString();
+            }));
         });
 
         describe("when the call succeeds", function() {

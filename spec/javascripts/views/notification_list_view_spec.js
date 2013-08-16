@@ -16,7 +16,7 @@ describe("chorus.views.NotificationList", function() {
         });
 
         it("renders an li for each notification in the collection", function() {
-            expect(this.view.$("li.activity").length).toBe(4);
+            expect(this.view.$("li.activity").length).toBe(backboneFixtures.notificationSet().length);
         });
 
         it("does not render the links section in the handlebars template", function() {
@@ -27,9 +27,9 @@ describe("chorus.views.NotificationList", function() {
         it("highlights the unread notifications", function() {
             this.collection.each(function(model, i) {
                 if (model.get("unread")) {
-                    expect(this.view.$("li:eq("+i+")")).toHaveClass("unread");
+                    expect(this.view.$("li.activity:eq("+i+")")).toHaveClass("unread");
                 } else {
-                    expect(this.view.$("li:eq("+i+")")).not.toHaveClass("unread");
+                    expect(this.view.$("li.activity:eq("+i+")")).not.toHaveClass("unread");
                 }
             }, this);
         });
@@ -72,7 +72,7 @@ describe("chorus.views.NotificationList", function() {
 
         it("logs stuff about the broken notification", function() {
             expect(chorus.log).toHaveBeenCalled();
-            expect(chorus.log.mostRecentCall.args[3]).toBe(this.collection.at(4));
+            expect(chorus.log.mostRecentCall.args[3]).toBe(this.collection.at(this.collection.length-1));
         });
     });
 
@@ -126,7 +126,7 @@ describe("chorus.views.NotificationList", function() {
                         });
 
                         it("renders the new notifications", function() {
-                            expect(this.view.$("li.activity").length).toBe(5);
+                            expect(this.view.$("li.activity").length).toBe(backboneFixtures.notificationSet().length + 1);
                         });
 
                         it("marks all notification read again", function() {
@@ -166,7 +166,7 @@ describe("chorus.views.NotificationList", function() {
     describe("#show", function() {
         beforeEach(function() {
             this.view.render();
-            expect(this.view.activities.length).toBe(4);
+            expect(this.view.activities.length).toBe(backboneFixtures.notificationSet().length);
             _.each(this.view.activities, function(activity) {
                 spyOn(activity, "show");
             });
