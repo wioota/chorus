@@ -12,6 +12,17 @@ chorus.handlebarsHelpers.time = {
     displayTimestamp: function (timestamp) {
         var date = moment(timestamp);
         return (timestamp && date.isValid()) ? date.format('MMMM Do YYYY, h:mm a') : "";
+    },
+
+    displayDuration: function (finished, started) {
+        var f = moment(finished);
+        var s = moment(started);
+        var duration = "";
+        if (finished && f.isValid() && started && s.isValid()) {
+            var d = moment.duration(f-s);
+            duration = _.pad(d.hours(), 2, '0') + ":" + _.pad(d.minutes(), 2, '0') + ":" + _.pad(d.seconds(), 2, '0');
+        }
+        return duration;
     }
 };
 

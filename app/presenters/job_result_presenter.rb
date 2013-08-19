@@ -1,6 +1,6 @@
 class JobResultPresenter < Presenter
   def to_hash
-    hash =[:duration, :succeeded, :started_at, :finished_at, :id].inject({}) do |hash, key|
+    hash =[:succeeded, :started_at, :finished_at, :id].inject({}) do |hash, key|
       hash[key] = model.send(key)
       hash
     end

@@ -41,4 +41,18 @@ describe('chorus.handlebarsHelpers.time', function() {
             expect(Handlebars.helpers.displayTimestamp()).toBe("");
         });
     });
+
+    describe("displayDuration", function () {
+        it("renders the duration", function () {
+            expect(Handlebars.helpers.displayDuration("2011-01-23T15:42:02Z", "2011-01-23T14:40:00Z")).toBe('01:02:02');
+        });
+
+        it("tolerates bogus timestamps", function () {
+            expect(Handlebars.helpers.displayDuration("invalid", "2011-01-23T15:42:02Z")).toBe("");
+        });
+
+        it("tolerates undefined", function () {
+            expect(Handlebars.helpers.displayDuration()).toBe("");
+        });
+    });
 });

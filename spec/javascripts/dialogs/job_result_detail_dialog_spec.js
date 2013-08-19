@@ -25,6 +25,10 @@ describe("chorus.dialogs.JobResultDetail", function () {
                 expect(this.dialog.$('.finished_at')).toContainText(Handlebars.helpers.displayTimestamp(this.dialog.model.get('finishedAt')));
             });
 
+            it("displays the duration", function () {
+                expect(this.dialog.$('.duration')).toContainText(Handlebars.helpers.displayDuration(this.dialog.model.get('finishedAt'), this.dialog.model.get('startedAt')));
+            });
+
             it("displays each job task result", function () {
                 expect(this.dialog.$('tbody tr').eq(0)).toContainText(Handlebars.helpers.displayTimestamp(this.dialog.model.get('jobTaskResults')[0].finishedAt));
                 expect(this.dialog.$('tbody tr').eq(1)).toContainText(Handlebars.helpers.displayTimestamp(this.dialog.model.get('jobTaskResults')[1].finishedAt));

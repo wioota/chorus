@@ -5,8 +5,4 @@ class JobResult < ActiveRecord::Base
   validates_inclusion_of :succeeded, :in => [true, false]
   belongs_to :job
   has_many :job_task_results
-
-  def duration
-    finished_at - started_at
-  end
 end
