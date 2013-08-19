@@ -12,13 +12,8 @@ module Alpine
     end
 
     def self.run_work_flow_task(task)
-      user = task.payload.workspace.owner
+      user = task.job.owner
       new(user: user).run_work_flow(task.payload, task: task)
-    end
-
-    def self.run_work_flow(work_flow)
-      user = work_flow.workspace.owner
-      new(user: user).run_work_flow(work_flow)
     end
 
     # INSTANCE METHODS
@@ -90,7 +85,7 @@ module Alpine
     end
 
     def base_url
-      URI(config['work_flow.url'])
+      URI(config.work_flow_url)
     end
 
     def request_base

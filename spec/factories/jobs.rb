@@ -67,6 +67,10 @@ FactoryGirl.define do
     interval_value { rand(100)+1 }
     notifies false
     owner
+
+    after(:create) do |job|
+      job.owner = job.workspace.owner
+    end
   end
 
   factory :job_task do

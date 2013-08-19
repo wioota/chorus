@@ -5,6 +5,7 @@ class ImportTemplate < ActiveRecord::Base
   has_one :import_source_data_task, :foreign_key => :payload_id
 
   delegate :workspace, :to => :import_source_data_task
+  delegate :job, :to => :import_source_data_task
 
   before_save :update_destination_name, :if => Proc.new { |job| job.changed.include?('destination_id') }
   before_save :update_destination_id, :if => Proc.new { |job| job.changed.include?('destination_name') }
@@ -21,7 +22,7 @@ class ImportTemplate < ActiveRecord::Base
 
   def create_import
     import_params = {
-        :user => workspace.owner,
+        :user => job.owner,
         :to_table => destination_name || destination.name,
         :truncate => truncate,
         :sample_count => row_limit,

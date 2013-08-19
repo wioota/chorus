@@ -136,6 +136,10 @@ class ChorusConfig
     self['alpine.branded.enabled'] ? "alpine-favicon.ico" : "favicon.ico"
   end
 
+  def work_flow_url
+    self['work_flow.url']
+  end
+
   private
 
   def set_root_dir(root_dir)

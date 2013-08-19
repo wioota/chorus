@@ -8,6 +8,11 @@ describe Alpine::API do
   let(:mock_session_id) { 'fortytwo' }
   subject { Alpine::API.new config: config, user: user }
 
+  before do
+    stub(ChorusConfig.instance).work_flow_configured? { true }
+    stub(config).work_flow_url { alpine_base_uri }
+  end
+
   describe '.delete_work_flow' do
     before { fake_a_session }
     let(:work_flow) { workfiles('alpine_flow') }
@@ -206,8 +211,6 @@ def fake_a_session
   user.password = 'anything'
   user.save
   stub.proxy(config).[](anything)
-  stub(config).work_flow_configured? { true }
-  stub(config).[]('work_flow.url') { alpine_base_uri }
 
   Session.create!(:username => user.username, :password => 'anything')
 

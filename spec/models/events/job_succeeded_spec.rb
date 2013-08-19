@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Events::JobSucceeded do
   let(:job) { jobs(:default) }
   let(:workspace) { job.workspace }
-  let(:owner) { workspace.owner }
+  let(:owner) { job.owner }
   let(:member) { users(:the_collaborator) }
   let(:non_member) { users(:no_collaborators) }
   let(:event) { Events::JobSucceeded.by(owner).add(:job => job, :workspace => workspace) }

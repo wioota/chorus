@@ -119,13 +119,13 @@ class Job < ActiveRecord::Base
   def job_succeeded
     @result.update_attributes(:succeeded => true, :finished_at => Time.current)
     @result.job_task_results << @tasks_results
-    Events::JobSucceeded.by(workspace.owner).add(:job => self, :workspace => workspace, :job_result => @result)
+    Events::JobSucceeded.by(owner).add(:job => self, :workspace => workspace, :job_result => @result)
   end
 
   def job_failed
     @result.update_attributes(:succeeded => false, :finished_at => Time.current)
     @result.job_task_results << @tasks_results
-    Events::JobFailed.by(workspace.owner).add(:job => self, :workspace => workspace, :job_result => @result)
+    Events::JobFailed.by(owner).add(:job => self, :workspace => workspace, :job_result => @result)
   end
 
   def execute_tasks

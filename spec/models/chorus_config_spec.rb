@@ -209,6 +209,17 @@ describe ChorusConfig do
         end
       end
     end
+
+    describe "work_flow_url" do
+      before do
+        config.config = {'work_flow' => work_flow_config}
+      end
+
+      it "returns the value of work_flow.url" do
+        config.work_flow_url.should == 'localhost'
+      end
+
+    end
   end
 
   describe "oracle configuration" do
