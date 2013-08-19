@@ -445,4 +445,29 @@ describe ChorusConfig do
     end
   end
 
+  describe "mail settings" do
+    let(:mail_config) do
+      {
+        'host' => 'localhost',
+        'port' => 587,
+        'user_name' => 'mailer',
+        'password' => 'pwer',
+        'authentication' => 'login',
+        'from_name' => 'Chorus',
+        'from_address' => 'chorus@example.com'
+      }
+    end
+
+    before do
+      config.config = {'mail' => mail_config}
+    end
+
+    describe "mail_configuration" do
+      it "returns the mail configuration" do
+        config.mail_configuration.should == mail_config
+      end
+    end
+
+  end
+
 end

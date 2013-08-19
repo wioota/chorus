@@ -140,6 +140,10 @@ class ChorusConfig
     self['work_flow.url']
   end
 
+  def mail_configuration
+    self['mail']
+  end
+
   private
 
   def set_root_dir(root_dir)

@@ -144,3 +144,14 @@ oracle.enabled = true
 #Work Flow
 work_flow.enabled = true
 work_flow.url = http://localhost:8070
+
+#Mail
+mail.host=localhost
+mail.port=587
+mail.user_name=USER_NAME
+mail.password=PASSWORD
+mail.authentication=login
+mail.enable_starttls_auto=false
+#mail.openssl_verify_mode=none
+mail.from_name=Chorus
+mail.from_address=noreply@example.com
