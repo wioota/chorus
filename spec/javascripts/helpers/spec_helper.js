@@ -42,16 +42,16 @@
 
     var backboneModelEqualityTester = function(a, b) {
         if(a instanceof Backbone.Model && b instanceof Backbone.Model) {
-            if(a.constructor !== b.constructor) {
+            if (a.constructor !== b.constructor) {
                 return false;
             }
 
-            if (a.cid === b.cid) {
-                return true;
+            if (!_.isUndefined(a.cid) && !_.isUndefined(b.cid)) {
+                return (a.cid === b.cid);
             }
 
-            if (!(_.isUndefined(a.id) && _.isUndefined(b.id))) {
-                return a.id === b.id;
+            if (!_.isUndefined(a.id) && !_.isUndefined(b.id)) {
+                return (a.id === b.id);
             }
         }
     };
