@@ -72,20 +72,6 @@
             chorus.models.Config.instance().clear();
             window.qtipElements = {};
 
-            this.renderDOM = function(content) {
-                return $('#jasmine_content').html(content);
-            };
-
-            this.showInJasmine = function(el) {
-                var $j = $("#jasmine_content");
-                var originalRight = $j.css("right");
-
-                $j.css("right", 0).append(el);
-                this.after(function() {
-                    $j.css("right", originalRight);
-                });
-            };
-
             clearRenderedDOM();
 
             this.addMatchers({
