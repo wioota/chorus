@@ -5,6 +5,7 @@ gem 'rails', '3.2.14'
 gem 'will_paginate'
 gem 'net-ldap',      :require => false
 gem 'paperclip', '3.0.4'
+gem 'cocaine', '0.2.1' # cocaine is a paperclip dependency but new versions of cocaine cause trouble. remove this line after upgrading paperclip.
 gem 'queue_classic', :github => "GreenplumChorus/queue_classic"
 gem 'clockwork',     :require => false
 gem 'allowy'
