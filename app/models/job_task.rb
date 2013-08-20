@@ -2,6 +2,10 @@ class JobTask < ActiveRecord::Base
   include SoftDelete
   attr_accessible :index, :type, :job, :status, :payload_result_id
 
+  RUNNING = 'running'
+  FINISHED = 'finished'
+  CANCELED = 'canceled'
+
   belongs_to :job
   validates_presence_of :job_id
 
@@ -40,5 +44,9 @@ class JobTask < ActiveRecord::Base
 
   def compact_indices
     job.compact_indices
+  end
+
+  def idle!
+    update_attribute(:status, nil)
   end
 end

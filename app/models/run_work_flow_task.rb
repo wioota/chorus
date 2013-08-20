@@ -5,8 +5,8 @@ class RunWorkFlowTask < JobTask
   def perform
     result = JobTaskResult.create(:started_at => Time.current, :name => build_task_name)
     Alpine::API.run_work_flow_task(self)
-    update_attribute(:status, 'running')
-    wait_until { reload.status == 'finished' }
+    update_attribute(:status, JobTask::RUNNING)
+    wait_until { finished? }
     result.finish :status => JobTaskResult::SUCCESS, :payload_id => payload.id, :payload_result_id => payload_result_id
   rescue StandardError => e
     result.finish :status => JobTaskResult::FAILURE, :message => e.message
@@ -19,7 +19,7 @@ class RunWorkFlowTask < JobTask
   end
 
   def build_task_name
-    self.name = "Run #{payload.file_name}"
+    "Run #{payload.file_name}"
   end
 
   def update_attributes(params)
@@ -31,7 +31,15 @@ class RunWorkFlowTask < JobTask
     60
   end
 
+  def kill
+    #Need a way to reference the current work flow running
+  end
+
   private
+
+  def finished?
+    reload.status == JobTask::FINISHED
+  end
 
   def wait_until
     Timeout::timeout (60*60*12).seconds do
@@ -39,10 +47,5 @@ class RunWorkFlowTask < JobTask
         sleep self.class.sleep_time
       end
     end
-  end
-
-  def idle!
-    self.status = nil
-    save!
   end
 end

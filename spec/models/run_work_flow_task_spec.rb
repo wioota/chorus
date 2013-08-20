@@ -37,20 +37,12 @@ describe RunWorkFlowTask do
     it "returns a failure JobTaskResult if it fails to connect to Alpine" do
       stub(Alpine::API).run_work_flow_task(task) { raise StandardError.new('oh no') }
       result = task.perform
-      result.name.should == task.name
+      result.name.should == task.build_task_name
       result.status.should == JobTaskResult::FAILURE
       result.message.should == 'oh no'
     end
 
     context "blocking" do
-      def wait_until
-        Timeout::timeout 10.seconds do
-          until yield
-            sleep 0.1
-          end
-        end
-      end
-
       class FakeRunWorkFlowTask < RunWorkFlowTask
         Performed = []
 

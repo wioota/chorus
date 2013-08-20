@@ -74,7 +74,6 @@ FactoryGirl.define do
   end
 
   factory :job_task do
-    name { Faker::Company.bs.titlecase }
     sequence(:index) { |n| n }
     job
 
@@ -116,7 +115,7 @@ FactoryGirl.define do
     started_at { 1.minute.ago }
     finished_at { Time.current }
     status JobTaskResult::SUCCESS
-    name { Faker::Company.name }
+    name { "Import from #{Faker::Company.name}" }
     payload_result_id { nil }
     payload_id { nil }
 

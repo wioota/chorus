@@ -15,9 +15,13 @@ class ImportTemplate < ActiveRecord::Base
   end
 
   def set_destination_id!
-    self.destination_id = workspace.sandbox.datasets.find_by_name(destination_name).id
+    self.destination_id = import_created_table.id
     self.destination_name = nil
     save!
+  end
+
+  def import_created_table
+    workspace.sandbox.datasets.find_by_name(destination_name)
   end
 
   def create_import

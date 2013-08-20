@@ -124,8 +124,8 @@ describe Job do
         end
       end
 
-      it 'executes all tasks' do
-        job.job_tasks.each {|task| mock(task).execute { FactoryGirl.build(:job_task_result) } }
+      it 'performs all tasks' do
+        job.job_tasks.each {|task| mock(task).perform { FactoryGirl.build(:job_task_result) } }
         job.run
       end
     end
@@ -161,7 +161,7 @@ describe Job do
         end
 
         it 'disables the job' do
-          stub(expiring_job).execute_tasks { true }
+          stub(expiring_job).perform_tasks { true }
           expect do
             expiring_job.run
           end.to change(expiring_job, :enabled).from(true).to(false)
@@ -177,7 +177,7 @@ describe Job do
           end
         end
         it 'does not disable the job' do
-          stub(forever_job).execute_tasks { true }
+          stub(forever_job).perform_tasks { true }
           expect do
             forever_job.run
           end.to_not change(forever_job, :enabled)
@@ -213,7 +213,7 @@ describe Job do
         3.times.map { FactoryGirl.create(:run_work_flow_task, job: job) }
       end
 
-      before { any_instance_of(RunWorkFlowTask) { |task| stub(task).execute { FactoryGirl.build(:job_task_result) } } }
+      before { any_instance_of(RunWorkFlowTask) { |task| stub(task).perform { FactoryGirl.build(:job_task_result) } } }
 
       it "creates a JobSucceeded event" do
         expect do
@@ -236,7 +236,7 @@ describe Job do
         3.times.map { FactoryGirl.create(:run_work_flow_task, job: job) }
       end
 
-      before { any_instance_of(RunWorkFlowTask) { |build| stub(build).execute { FactoryGirl.build(:failed_job_task_result) } } }
+      before { any_instance_of(RunWorkFlowTask) { |build| stub(build).perform { FactoryGirl.build(:failed_job_task_result) } } }
 
       it "creates a JobFailed event" do
         expect do
@@ -294,6 +294,20 @@ describe Job do
         job.enable!
         job.next_run.to_i.should == 5.minutes.from_now.to_i
       end
+    end
+  end
+
+  describe '#kill' do
+    let(:job) { ready_job }
+    let!(:tasks) do
+      3.times.map do
+        FactoryGirl.create(:run_work_flow_task, job: job)
+      end
+    end
+
+    it 'kills all tasks' do
+      job.job_tasks.each {|task| mock(task).kill { true } }
+      job.kill
     end
   end
 end

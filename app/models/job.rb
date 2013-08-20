@@ -81,6 +81,10 @@ class Job < ActiveRecord::Base
     end
   end
 
+  def kill
+    job_tasks.map(&:kill)
+  end
+
   private
 
   def initialize_results

@@ -2,6 +2,7 @@ class ImportSourceDataTask < JobTask
   validate :destination_name_is_unique
 
   belongs_to :payload, :class_name => 'ImportTemplate', :autosave => true
+  belongs_to :current_import, :class_name => 'Import', :foreign_key => :killable_id
   delegate :workspace, :to => :job
 
   def attach_payload(params)
@@ -9,13 +10,23 @@ class ImportSourceDataTask < JobTask
   end
 
   def perform
-    result = JobTaskResult.create(:started_at => Time.current, :name => build_task_name)
-    import = payload.create_import
-    ImportExecutor.run import.id
-    payload.set_destination_id! if payload.new_table_import?
+    result = JobTaskResult.new(:started_at => Time.current, :name => build_task_name)
+    raise StandardError.new('Canceled by User') if canceled?
+
+    import_data
+
     result.finish :status => JobTaskResult::SUCCESS
   rescue StandardError => e
     result.finish :status => JobTaskResult::FAILURE, :message => e.message
+  ensure
+    idle!
+  end
+
+  def import_data
+    import = payload.create_import
+    self.update_attribute(:killable_id, import.id)
+    ImportExecutor.run import.id
+    payload.set_destination_id! if payload.new_table_import?
   end
 
   def update_attributes(params)
@@ -24,10 +35,19 @@ class ImportSourceDataTask < JobTask
   end
 
   def build_task_name
-    self.name = "Import from #{payload.source.name}"
+    "Import from #{payload.source.name}"
+  end
+
+  def kill
+    current_import.mark_as_canceled!("Canceled by User") if current_import
+    update_attribute(:status, JobTask::CANCELED)
   end
 
   private
+
+  def canceled?
+    reload.status == JobTask::CANCELED
+  end
 
   def destination_name_is_unique
     if payload.new_table_import? && destination_already_exists?

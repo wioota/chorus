@@ -56,7 +56,7 @@ describe ImportExecutor do
 
       it "skips the import" do
         any_instance_of ImportExecutor do |executor|
-          mock(executor).run.with_any_args.times(0)
+          dont_allow(executor).run.with_any_args
         end
         ImportExecutor.run(import.id)
       end

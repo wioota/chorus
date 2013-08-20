@@ -250,6 +250,21 @@ describe JobsController do
         post :update, params
       end
     end
+
+    describe 'demanding an immediate stop' do
+      let(:params) do
+        {
+            id: job.id,
+            workspace_id: workspace.id,
+            job: {kill: 'true'}
+        }
+      end
+
+      it "kills the job" do
+        any_instance_of(Job) { |job| mock(job).kill }
+        post :update, params
+      end
+    end
   end
 
   describe '#destroy' do

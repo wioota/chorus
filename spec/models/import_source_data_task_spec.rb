@@ -126,7 +126,9 @@ describe ImportSourceDataTask do
 
         it 'changes the destination id to the newly created dataset id' do
           stub(ImportExecutor).run {true}
-          stub(isdt.payload.workspace.sandbox.datasets).find_by_name { dataset }
+          any_instance_of(ImportTemplate) do |payload|
+            stub(payload).import_created_table { dataset }
+          end
 
           isdt.perform
           isdt.payload.destination_name.should be_nil
@@ -150,7 +152,7 @@ describe ImportSourceDataTask do
         stub(isdt).set_destination_id!
         result = isdt.perform
         result.status.should == JobTaskResult::SUCCESS
-        result.name.should == isdt.name
+        result.name.should == isdt.build_task_name
       end
     end
 
@@ -159,8 +161,25 @@ describe ImportSourceDataTask do
         stub(ImportExecutor).run { raise StandardError.new 'some msg' }
         result = isdt.perform
         result.status.should == JobTaskResult::FAILURE
-        result.name.should == isdt.name
+        result.name.should == isdt.build_task_name
         result.message.should == 'some msg'
+      end
+    end
+
+    describe 'after having been cancelled' do
+      context "before an import is created" do
+        before do
+          stub(ImportExecutor).run.with_any_args
+        end
+
+        it "returns a failed JobTaskResult" do
+          isdt.kill
+
+          result = isdt.perform
+          result.status.should == JobTaskResult::FAILURE
+          result.name.should == isdt.build_task_name
+          result.message.should == 'Canceled by User'
+        end
       end
     end
   end
@@ -190,6 +209,34 @@ describe ImportSourceDataTask do
         task.update_attributes(:destination_name => 'Foobar')
         task.payload.destination_name.should == 'Foobar'
         task.payload.destination_id.should be_nil
+      end
+    end
+  end
+
+  describe 'kill' do
+    let(:task) { job_tasks(:isdt) }
+    let(:import) { imports(:three) }
+
+    context "when an import is running" do
+      before do
+        any_instance_of(ImportTemplate) do |payload|
+          stub(payload).create_import { import }
+        end
+
+        stub(ImportExecutor).run do
+          Thread.current[:import_started] = true
+          sleep 1000
+        end
+      end
+
+      it 'cancels a current import' do
+        any_instance_of(Import) { |import| mock(import).mark_as_canceled!("Canceled by User") }
+        thread = Thread.new { task.perform }
+
+        wait_until { thread[:import_started] }
+
+        task.kill
+        thread.kill
       end
     end
   end

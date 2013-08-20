@@ -190,13 +190,5 @@ describe CancelableQuery do
       query = "select current_query from pg_stat_activity;"
       conn.fetch(query).find { |row| row[:current_query].include? check_id }
     end
-
-    def wait_until
-      Timeout::timeout 5.seconds do
-        until yield
-          sleep 0.1
-        end
-      end
-    end
   end
 end
