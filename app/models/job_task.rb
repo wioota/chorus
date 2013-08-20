@@ -1,6 +1,6 @@
 class JobTask < ActiveRecord::Base
   include SoftDelete
-  attr_accessible :index, :type, :job, :status, :payload_result_id
+  attr_accessible :index, :type, :job, :status, :payload_result_id, :killable_id
 
   RUNNING = 'running'
   FINISHED = 'finished'

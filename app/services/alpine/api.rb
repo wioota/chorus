@@ -16,6 +16,11 @@ module Alpine
       new(user: user).run_work_flow(task.payload, task: task)
     end
 
+    def self.stop_work_flow_task(task)
+      user = task.job.owner
+      new(user: user).stop_work_flow(task.killable_id)
+    end
+
     # INSTANCE METHODS
 
     def initialize(options = nil)
@@ -33,17 +38,26 @@ module Alpine
     end
 
     def run_work_flow(work_flow, options = {})
-      unless Session.not_expired.where(user_id: user.id).present?
-        session = Session.new
-        session.user = user
-        session.save!
-      end
+      ensure_session
       request_run(work_flow, options) if config.work_flow_configured?
+    end
+
+    def stop_work_flow(process_id)
+      ensure_session
+      request_stop(process_id) if config.work_flow_configured?
     end
 
     private
 
     attr_reader :config, :user
+
+    def ensure_session
+      unless Session.not_expired.where(user_id: user.id).present?
+        session = Session.new
+        session.user = user
+        session.save!
+      end
+    end
 
     def request_creation(body, work_flow)
       request_base.post(create_path(work_flow), body, {"Content-Type" => "application/xml"})
@@ -55,9 +69,16 @@ module Alpine
       pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
     end
 
+    def request_stop(process_id)
+      request_base.post(stop_path(process_id), '')
+    rescue StandardError => e
+      pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
+    end
+
     def request_run(work_flow, options)
       response = request_base.post(run_path(work_flow, options), '')
       raise StandardError.new(response.body) unless response.code == '200'
+      JSON.parse(response.body)['process_id']
     rescue StandardError => e
       pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
       raise e
@@ -81,6 +102,15 @@ module Alpine
       params.merge!({database_id: work_flow.execution_location_id}) if work_flow.execution_location_type == 'GpdbDatabase'
       params.merge!({hdfs_data_source_id: work_flow.execution_location_id}) if work_flow.execution_location_type == 'HdfsDataSource'
 
+      "/alpinedatalabs/main/chorus.do?#{params.to_query}"
+    end
+
+    def stop_path(process_id)
+      params = {
+        method: 'stopWorkFlow',
+        session_id: session_id,
+        process_id: process_id
+      }
       "/alpinedatalabs/main/chorus.do?#{params.to_query}"
     end
 

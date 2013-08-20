@@ -132,7 +132,7 @@ describe Alpine::API do
         session = Session.new
         session.user = user
         session.save!
-        FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 200)
+        register_run_success_post
       end
 
       it 'does not create a session' do
@@ -148,7 +148,7 @@ describe Alpine::API do
         session.user = user
         session.save!
         session.update_attribute(:updated_at, 1.year.ago)
-        FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 200)
+        register_run_success_post
       end
 
       it 'creates a new session' do
@@ -160,7 +160,7 @@ describe Alpine::API do
     end
 
     it 'makes a POST request with the necessary params' do
-      FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 200)
+      register_run_success_post
       subject.run_work_flow(work_flow)
       FakeWeb.last_request.should be_a(Net::HTTP::Post)
       params = CGI::parse(URI(FakeWeb.last_request.path).query)
@@ -177,11 +177,16 @@ describe Alpine::API do
       }.to raise_error(StandardError, 'oh no')
     end
 
+    it "returns the process_id from alpine on success" do
+      register_run_success_post('marzipan')
+      subject.run_work_flow(work_flow).should == "marzipan"
+    end
+
     context "when called with a task" do
       let(:task) { job_tasks(:rwft) }
 
       it 'makes a POST request with job_task_id' do
-        FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 200)
+        register_run_success_post
         subject.run_work_flow(task.payload, task: task)
         FakeWeb.last_request.should be_a(Net::HTTP::Post)
         params = CGI::parse(URI(FakeWeb.last_request.path).query)
@@ -196,13 +201,79 @@ describe Alpine::API do
     context "when the workflow's execution_lcoation is an HDFS" do
       let(:work_flow) { workfiles(:alpine_hadoop_dataset_flow) }
       it "replaces database_id with hdfs_data_source_id" do
-        FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 200)
+        register_run_success_post
         subject.run_work_flow(work_flow)
         params = CGI::parse(URI(FakeWeb.last_request.path).query)
 
         params['database_id'][0].should be_nil
         params['hdfs_data_source_id'][0].should == work_flow.execution_location.id.to_s
       end
+    end
+  end
+
+  describe '.stop_work_flow_task' do
+    before { fake_a_session }
+    let(:task) { job_tasks(:rwft) }
+
+    it 'delegates to a new API instance' do
+      any_instance_of(Alpine::API) do |api|
+        mock(api).stop_work_flow(task.killable_id)
+      end
+
+      Alpine::API.stop_work_flow_task(task)
+    end
+  end
+
+  describe '#stop_work_flow' do
+    before do
+      VCR.configure { |c| c.ignore_localhost = true }
+      any_instance_of(Session) do |session|
+        stub(session).session_id { mock_session_id }
+      end
+    end
+
+
+    describe 'when there are existing unexpired sessions' do
+      before do
+        session = Session.new
+        session.user = user
+        session.save!
+        FakeWeb.register_uri(:post, %r|method=stopWorkFlow|, :status => 200)
+      end
+
+      it 'does not create a session' do
+        expect {
+          subject.stop_work_flow(work_flow)
+        }.not_to change(Session, :count)
+      end
+    end
+
+    describe 'when there are existing sessions that are only expired' do
+      before do
+        session = Session.new
+        session.user = user
+        session.save!
+        session.update_attribute(:updated_at, 1.year.ago)
+        FakeWeb.register_uri(:post, %r|method=stopWorkFlow|, :status => 200)
+      end
+
+      it 'creates a new session' do
+        expect {
+          subject.stop_work_flow(work_flow)
+        }.to change(Session, :count).by(1)
+        Session.last.user_id.should == user.id
+      end
+    end
+
+    it 'makes a POST request with the necessary params' do
+      FakeWeb.register_uri(:post, %r|method=stopWorkFlow|, :status => 200)
+
+      subject.stop_work_flow('killbill')
+
+      FakeWeb.last_request.should be_a(Net::HTTP::Post)
+      params = CGI::parse(URI(FakeWeb.last_request.path).query)
+      params['session_id'][0].should == mock_session_id.to_s
+      params['process_id'][0].should == 'killbill'
     end
   end
 end
@@ -217,4 +288,8 @@ def fake_a_session
   any_instance_of(Session) do |session|
     stub(session).session_id { mock_session_id }
   end
+end
+
+def register_run_success_post(process_id = "beverlyhills90210")
+  FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 200, :body => %|{"process_id": "#{process_id}"}|)
 end
