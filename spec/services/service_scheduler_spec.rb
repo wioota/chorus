@@ -1,6 +1,28 @@
 require 'spec_helper'
 require 'service_scheduler'
 
+class ServiceScheduler
+  def job_named(job)
+    @@manager.events.find { |event|
+      event.job == job
+    }
+  end
+end
+
+module Clockwork
+  def self.config
+    @@manager.config
+  end
+
+  class Manager
+    attr_reader :events, :config
+  end
+
+  class Event
+    attr_reader :period
+  end
+end
+
 describe ServiceScheduler do
   let(:job_scheduler) { ServiceScheduler.new }
   describe "DataSourceStatusChecker.check_all" do
@@ -107,11 +129,5 @@ describe QC do
   it "adds timestamps to clockwork logs" do
     mock(Clockwork.config[:logger]).info("#{timestamp.to_s}: hello")
     Clockwork.log("hello")
-  end
-end
-
-module Clockwork
-  class Event
-    attr_reader :period
   end
 end

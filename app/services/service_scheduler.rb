@@ -32,12 +32,6 @@ class ServiceScheduler
 
   end
 
-  def job_named(job)
-    @@events.find { |event|
-      event.job == job
-    }
-  end
-
   def self.run
     ServiceScheduler.new.run
   end
