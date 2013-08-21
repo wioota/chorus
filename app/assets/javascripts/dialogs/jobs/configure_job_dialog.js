@@ -96,7 +96,8 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
             nextRun: this.isOnDemand() ? "invalid" : this.buildStartDate().forceZone(0).format(),
             endRun: this.isOnDemand() || !this.endDateEnabled() ? "invalid" : this.buildEndDate().toISOString(),
             timeZone: this.$('select.time_zone').val(),
-            notifies: this.$('.notify').prop('checked')
+            successNotify: this.$('[name=success_notify]:checked').val(),
+            failureNotify: this.$('[name=failure_notify]:checked').val()
         };
     },
 
@@ -169,7 +170,14 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
                 };
             }),
             submitTranslation: this.submitTranslation(),
-            runsOnDemand: this.model.runsOnDemand()
+            runsOnDemand: this.model.runsOnDemand(),
+            successNotifyEverybody: this.model.get('successNotify') === 'everybody',
+            successNotifySelected: this.model.get('successNotify') === 'selected',
+            successNotifyNobody: this.model.get('successNotify') === 'nobody'  || !this.model.get('successNotify'),
+            failureNotifyEverybody: this.model.get('failureNotify') === 'everybody',
+            failureNotifySelected: this.model.get('failureNotify') === 'selected',
+            failureNotifyNobody: this.model.get('failureNotify') === 'nobody' || !this.model.get('failureNotify')
+
         };
     }
 });

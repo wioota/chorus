@@ -39,7 +39,6 @@ describe("chorus.dialogs.ConfigureJob", function () {
 
         context("with valid field values", function () {
             beforeEach(function () {
-                this.dialog.$('.notify').prop('checked', false);
                 this.dialog.$('input.name').val(this.jobPlan.name).trigger("keyup");
             });
 
@@ -62,7 +61,6 @@ describe("chorus.dialogs.ConfigureJob", function () {
                     expect(params['job[name]']).toEqual(this.jobPlan.name);
                     expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
                     expect(params['job[interval_value]']).toEqual("0");
-                    expect(params['job[notifies]']).toEqual("false");
                 });
 
                 context("when the save fails", function () {
@@ -339,7 +337,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
 
     });
 
-        context("editing a Job that runs on schedule with an end run time", function () {
+    context("editing a Job that runs on schedule with an end run time", function () {
         describe("selecting 'on schedule'", function () {
 
             it("should show schedule options", function () {
@@ -486,12 +484,35 @@ describe("chorus.dialogs.ConfigureJob", function () {
     });
     });
 
-    it("permits indication that the Job should notify on success", function () {
-        this.dialog.$('input.name').val(this.jobPlan.name).trigger("keyup");
-        this.dialog.$('.notify').prop('checked', true);
+    describe("notifications", function () {
+        it("initially selects 'nobody' for success and failure", function () {
+            expect(this.dialog.$('[name="success_notify"]:checked').val()).toEqual('nobody');
+            expect(this.dialog.$('[name="failure_notify"]:checked').val()).toEqual('nobody');
+        });
 
-        this.dialog.$("form").submit();
-        var params = this.server.lastCreate().params();
-        expect(params['job[notifies]']).toEqual("true");
+        it("on submit, sends the values of the notification options to the server", function () {
+            this.dialog.$('input.name').val(this.jobPlan.name).trigger("keyup");
+            this.dialog.$("form").submit();
+
+            var params = this.server.lastCreate().params();
+            expect(params['job[success_notify]']).toEqual("nobody");
+            expect(params['job[failure_notify]']).toEqual("nobody");
+        });
+
+        describe("when opened with a model that already has success/failure set", function () {
+            beforeEach(function () {
+                this.job = backboneFixtures.job();
+                this.job.set('successNotify', 'everybody');
+                this.job.set('failureNotify', 'selected');
+                this.dialog = new chorus.dialogs.ConfigureJob({model: this.job});
+                this.dialog.render();
+            });
+
+            it("checks the correct radio buttons", function () {
+                expect(this.dialog.$('[name="success_notify"]:checked').val()).toEqual('everybody');
+                expect(this.dialog.$('[name="failure_notify"]:checked').val()).toEqual('selected');
+            });
+        });
     });
+
 });

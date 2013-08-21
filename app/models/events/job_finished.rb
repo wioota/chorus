@@ -11,9 +11,5 @@ module Events
         Mailer.notify(user, self)
       end
     end
-
-    def should_notify?
-      job.notifies?
-    end
   end
 end

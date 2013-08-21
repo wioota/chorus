@@ -9,7 +9,7 @@ class Job < ActiveRecord::Base
   STATUSES = [ENQUEUED, RUNNING, IDLE, STOPPING]
   VALID_INTERVAL_UNITS = %w(hours days weeks months on_demand)
 
-  attr_accessible :enabled, :name, :next_run, :last_run, :interval_unit, :interval_value, :end_run, :time_zone, :status, :notifies
+  attr_accessible :enabled, :name, :next_run, :last_run, :interval_unit, :interval_value, :end_run, :time_zone, :status, :success_notify, :failure_notify
 
   belongs_to :workspace
   belongs_to :owner, :class_name => 'User'

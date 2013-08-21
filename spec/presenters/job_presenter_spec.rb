@@ -11,7 +11,11 @@ describe JobPresenter, :type => :view do
 
   describe "#to_hash" do
     let(:hash) { presenter.to_hash }
-    let(:keys) { [:workspace, :name, :last_run, :next_run, :interval_unit, :interval_value, :enabled, :status, :id, :end_run, :time_zone, :is_deleted, :last_run_failed, :notifies] }
+    let(:keys) { [
+        :workspace, :name, :last_run, :next_run, :interval_unit, :interval_value,
+        :enabled, :status, :id, :end_run, :time_zone, :is_deleted, :last_run_failed,
+        :success_notify, :failure_notify
+    ] }
 
     describe "list_view" do
       let(:options) { {list_view: true} }

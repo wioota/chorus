@@ -9,9 +9,9 @@ describe Events::JobSucceeded do
   let(:job_result) { job_results(:default) }
   let(:event) { Events::JobSucceeded.by(owner).add(:job => job, :workspace => workspace, :job_result => job_result) }
 
-  describe "jobs where notifies is set" do
+  context "when success_nofity is set" do
     before do
-      job.update_attribute(:notifies, true)
+      job.update_attribute(:success_notify, 'everybody')
     end
 
     it "on creation, notifies all members of its workspace" do
@@ -30,9 +30,9 @@ describe Events::JobSucceeded do
     end
   end
 
-  describe "jobs where notifies is not set" do
+  context "when success_notify is not set" do
     before do
-      job.notifies.should be_false
+      job.success_notify.should == 'nobody'
     end
 
     it "on creation, notifies no one" do

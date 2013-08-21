@@ -14,7 +14,8 @@ class JobPresenter < Presenter
       :status => model.status,
       :enabled => model.enabled,
       :last_run_failed => model.job_results.present? && !model.job_results.last.succeeded,
-      :notifies => model.notifies?,
+      :success_notify => model.success_notify,
+      :failure_notify => model.failure_notify,
       :is_deleted => model.deleted?
     }
 

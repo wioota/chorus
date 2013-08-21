@@ -65,8 +65,9 @@ FactoryGirl.define do
     time_zone 'Alaska'
     interval_unit { %w( hours days weeks months ).sample }
     interval_value { rand(100)+1 }
-    notifies false
     owner
+    success_notify 'nobody'
+    failure_notify 'nobody'
 
     after(:create) do |job|
       job.owner = job.workspace.owner

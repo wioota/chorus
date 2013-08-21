@@ -9,9 +9,9 @@ describe Events::JobFailed do
   let(:job_result) { FactoryGirl.create(:job_result, :job => job, :succeeded => false) }
   let(:event) { Events::JobFailed.by(owner).add(:job => job, :workspace => workspace, :job_result => job_result) }
 
-  describe "jobs where notifies is set" do
+  context "when failure_notify is set" do
     before do
-      job.update_attribute(:notifies, true)
+      job.update_attribute(:failure_notify, 'everybody')
     end
 
     it "on creation, notifies all members of its workspace" do
@@ -30,9 +30,9 @@ describe Events::JobFailed do
     end
   end
 
-  describe "jobs where notifies is not set" do
+  context "when failure_notify is not set" do
     before do
-      job.notifies.should be_false
+      job.failure_notify.should == 'nobody'
     end
 
     it "on creation, notifies no one" do

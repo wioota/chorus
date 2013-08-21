@@ -75,8 +75,37 @@
         <hr/>
     </legend>
 
-    <input type="checkbox" id="notify_on_completion" class="notify row" {{#if notifies}}checked='checked'{{/if}}/>
-    <label for="notify_on_completion">Notify <strong>{{workspace.name}}</strong> members when this Job completes?</label>
+    <p>
+        Notify on success:
+        <label>
+            <input type="radio" name="success_notify" value="nobody" class="notify row"
+                   {{#if successNotifyNobody}}checked='checked'{{/if}}/> Nobody
+        </label>
+        <label>
+            <input type="radio" name="success_notify" value="everybody" class="notify row"
+                   {{#if successNotifyEverybody}}checked='checked'{{/if}}/> Entire workspace
+        </label>
+        <label>
+            <input type="radio" id="success_notify_selected" name="success_notify" value="selected" class="notify row"
+                   {{#if successNotifySelected}}checked='checked'{{/if}}/> Selected people
+        </label>
+    </p>
+
+    <p>
+        Notify on failure:
+        <label>
+            <input type="radio" id="failure_notify_nobody" name="failure_notify" value="nobody" class="notify row"
+                   {{#if failureNotifyNobody}}checked='checked'{{/if}}/> Nobody
+        </label>
+        <label>
+            <input type="radio" id="failure_notify_everybody" name="failure_notify" value="everybody" class="notify row"
+                   {{#if failureNotifyEverybody}}checked='checked'{{/if}}/> Entire workspace
+        </label>
+        <label>
+            <input type="radio" id="failure_notify_selected" name="failure_notify" value="selected" class="notify row"
+                   {{#if failureNotifySelected}}checked='checked'{{/if}}/> Selected people
+        </label>
+    </p>
 
     {{formControlsWithDisabledSubmit submitTranslation}}
 </form>
