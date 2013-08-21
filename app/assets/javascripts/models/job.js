@@ -71,7 +71,7 @@ chorus.models.Job = chorus.models.Base.extend({
         function saveFailed(){ chorus.toast('job.not_stopping_toast', {jobName: name}); }
 
         this.save(
-            {kill: true},
+            {kill: true, status: 'stopping'},
             {success: saveSucceeded, error: saveFailed}
         );
     },
@@ -79,6 +79,15 @@ chorus.models.Job = chorus.models.Base.extend({
     isRunning: function () {
         return (this.get("status") === "running") || (this.get("status") === "enqueued");
     },
+
+    isStopping: function () {
+        return this.get('status') === 'stopping';
+    },
+
+    ableToRun: function () {
+        return !(this.isStopping() || this.isRunning());
+    },
+
 
     lastRunLinkKey: function () {
         return this.get('lastRunFailed') ? "job.show_errors" : "job.show_details";

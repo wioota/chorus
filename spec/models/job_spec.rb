@@ -309,5 +309,12 @@ describe Job do
       job.job_tasks.each {|task| mock(task).kill { true } }
       job.kill
     end
+
+    it "sets the job's status to 'stopping'" do
+      job.update_attribute(:status, 'running')
+      expect do
+        job.kill
+      end.to change(job.reload, :status).from('running').to('stopping')
+    end
   end
 end

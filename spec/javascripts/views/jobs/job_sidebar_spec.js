@@ -90,12 +90,19 @@ describe("chorus.views.JobSidebar", function () {
 
         describe("clicking the 'Stop' button", function () {
             beforeEach(function () {
-                spyOn(this.view.model, 'stop');
+                spyOn(this.view.model, 'stop').andCallThrough();
                 this.view.$('a.stop_job').click();
             });
 
             it("stops the job", function () {
                 expect(this.view.model.stop).toHaveBeenCalled();
+            });
+
+            it("disables the run and stop buttons", function () {
+                expect(this.view.$("a.run_job")).not.toExist();
+                expect(this.view.$("span.run_job")).toHaveClass('disabled');
+                expect(this.view.$("a.stop_job")).not.toExist();
+                expect(this.view.$("span.stop_job")).toHaveClass('disabled');
             });
         });
     });

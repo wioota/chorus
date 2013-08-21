@@ -47,7 +47,8 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
     additionalContext: function () {
         return this.model ? {
             enabled: this.model.get('enabled'),
-            running: this.model.isRunning()
+            running: this.model.isRunning(),
+            ableToRun: this.model.ableToRun()
         } : {};
     },
 

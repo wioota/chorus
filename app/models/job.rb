@@ -1,7 +1,7 @@
 class Job < ActiveRecord::Base
   include SoftDelete
 
-  STATUSES = %w(enqueued running idle)
+  STATUSES = %w(enqueued running idle stopping)
   VALID_INTERVAL_UNITS = %w(hours days weeks months on_demand)
 
   attr_accessible :enabled, :name, :next_run, :last_run, :interval_unit, :interval_value, :end_run, :time_zone, :status, :notifies
@@ -83,6 +83,7 @@ class Job < ActiveRecord::Base
 
   def kill
     job_tasks.map(&:kill)
+    update_attribute(:status, 'stopping')
   end
 
   private
@@ -133,6 +134,8 @@ class Job < ActiveRecord::Base
   end
 
   def perform_tasks
+    job_tasks.each(&:idle!)
+
     job_tasks.each do |task|
       task_result = task.perform
       @tasks_results << task_result

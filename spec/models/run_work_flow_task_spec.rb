@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'java'
 
 describe RunWorkFlowTask do
   let(:work_flow) { AlpineWorkfile.first }
@@ -32,9 +33,7 @@ describe RunWorkFlowTask do
   end
 
   describe "#perform" do
-    let(:task) do
-      job_tasks(:rwft).tap { |task| stub(task.class).sleep_time { 0.1 } }
-    end
+    let(:task) { job_tasks(:rwft) }
 
     it "returns a failure JobTaskResult if it fails to connect to Alpine" do
       stub(Alpine::API).run_work_flow_task(task) { raise StandardError.new('oh no') }
@@ -43,6 +42,36 @@ describe RunWorkFlowTask do
       result.status.should == JobTaskResult::FAILURE
       result.message.should == 'oh no'
     end
+
+    it "returns a JobTaskResult failure when the running task is killed" do
+      @worker_task = job_tasks(:rwft).tap { |task| stub(task.class).sleep_time { 0.1 } }
+      stub(Alpine::API).run_work_flow_task { 'kill_bill' }
+      stub(Alpine::API).stop_work_flow_task
+      stub(@worker_task).killed? { true }
+
+      result = @worker_task.perform
+
+      result.status.should == JobTaskResult::FAILURE
+      result.message.should == 'Canceled by User'
+    end
+
+    #it "returns a JobTaskResult failure when the running task is killed" do
+    #  # If threads really worked in test, this would be a great test.
+    #  TheMap = java.util.concurrent.ConcurrentHashMap.new(16, 0.75, 1)
+    #  @worker_task = job_tasks(:rwft).tap { |task| stub(task.class).sleep_time { 0.1 } }
+    #  stub(Alpine::API).run_work_flow_task { 'kill_bill' }
+    #  stub(Alpine::API).stop_work_flow_task
+    #
+    #  perform_thread = Thread.new { @worker_task.perform }
+    #
+    #  @server_task = RunWorkFlowTask.find(@worker_task.id)
+    #  wait_until { @server_task.reload.killable_id }
+    #  @server_task.kill
+    #
+    #  result = perform_thread.value
+    #  result.status.should == JobTaskResult::FAILURE
+    #  result.message.should == 'Canceled by User'
+    #end
 
     context "blocking" do
       class FakeRunWorkFlowTask < RunWorkFlowTask

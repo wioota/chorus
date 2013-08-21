@@ -123,7 +123,7 @@ describe("chorus.models.Job", function () {
         });
     });
 
-    describe("run", function () {
+    describe("stop", function () {
         beforeEach(function () {
             spyOn(chorus, 'toast');
             this.model.stop();
@@ -134,6 +134,9 @@ describe("chorus.models.Job", function () {
             expect(postUrl).toContain("/workspaces/" + this.model.workspace().id + "/jobs/" + this.model.id);
         });
 
+        it("sets the jobs status to 'stopping'", function () {
+            expect(this.model.get('status')).toBe('stopping');
+        });
 
         it("passes the 'kill' parameter", function () {
             var params = this.server.lastUpdateFor(this.model).params();

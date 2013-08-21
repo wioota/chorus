@@ -6,12 +6,15 @@
     <ul>
         <li><a class="edit_job dialog" href="#">{{t "job.actions.edit_job"}}</a></li>
 
-        {{#if running}}
+        {{#if ableToRun}}
+            <li><a class="run_job dialog">{{t "job.actions.run_job"}}</a></li>
+        {{else}}
             <li><span class="disabled run_job dialog">{{t "job.actions.run_job"}}</span></li>
+        {{/if}}
+        {{#if running}}
             <li><a class="stop_job dialog">{{t "job.actions.stop_job"}}</a></li>
         {{else}}
-            <li><a class="run_job dialog" href="#">{{t "job.actions.run_job"}}</a></li>
-            <li><span class="stop_job disabled dialog">{{t "job.actions.stop_job"}}</span></li>
+            <li><span class="disabled stop_job dialog">{{t "job.actions.stop_job"}}</span></li>
         {{/if}}
 
         {{#if enabled}}

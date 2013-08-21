@@ -29,6 +29,8 @@ chorus.views.JobItem = chorus.views.Base.extend({
     jobStateKey: function () {
         if (this.model.isRunning()) {
             return 'running';
+        } else if (this.model.isStopping()) {
+            return 'stopping';
         }
         return this.model.get('enabled') ? 'scheduled' : 'disabled';
     },

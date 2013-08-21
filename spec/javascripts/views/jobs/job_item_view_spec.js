@@ -73,6 +73,11 @@ describe("chorus.views.JobItem", function () {
             expect(this.view.jobStateKey()).toEqual('scheduled');
         });
 
+        it("returns stopping if the status is stopping", function () {
+            this.model.set('status', 'stopping');
+            expect(this.view.jobStateKey()).toEqual('stopping');
+        });
+
         it("returns 'running' if the job is 'running' or 'enqueued'", function () {
             this.model.set('status', 'enqueued');
             expect(this.view.jobStateKey()).toEqual('running');
