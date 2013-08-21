@@ -111,7 +111,7 @@ FactoryGirl.define do
     job
   end
 
-  factory :job_task_result do
+  factory :job_task_result, :class => ImportSourceDataTaskResult do
     started_at { 1.minute.ago }
     finished_at { Time.current }
     status JobTaskResult::SUCCESS
@@ -123,7 +123,7 @@ FactoryGirl.define do
       status JobTaskResult::FAILURE
     end
 
-    factory :run_work_flow_task_result do
+    factory :run_work_flow_task_result, :class => RunWorkFlowTaskResult do
       payload_result_id { '1234' }
       payload_id { 7 }
     end

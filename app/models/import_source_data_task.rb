@@ -10,7 +10,7 @@ class ImportSourceDataTask < JobTask
   end
 
   def perform
-    result = JobTaskResult.new(:started_at => Time.current, :name => build_task_name)
+    result = ImportSourceDataTaskResult.new(:started_at => Time.current, :name => build_task_name)
     raise StandardError.new('Canceled by User') if canceled?
 
     import_data

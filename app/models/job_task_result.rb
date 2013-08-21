@@ -11,4 +11,8 @@ class JobTaskResult < ActiveRecord::Base
     self.assign_attributes options
     self
   end
+
+  def self.presenter_class
+    JobTaskResultPresenter
+  end
 end

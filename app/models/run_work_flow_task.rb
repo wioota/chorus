@@ -3,7 +3,7 @@ class RunWorkFlowTask < JobTask
   belongs_to :payload, :class_name => 'AlpineWorkfile'
 
   def perform
-    result = JobTaskResult.create(:started_at => Time.current, :name => build_task_name)
+    result = RunWorkFlowTaskResult.create(:started_at => Time.current, :name => build_task_name)
 
     run_workflow
 
