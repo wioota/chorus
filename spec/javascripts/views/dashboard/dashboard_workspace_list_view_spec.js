@@ -100,7 +100,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                     this.qtipElement = stubQtip();
                     spyOn(chorus.views.ActivityList.prototype, 'initialize').andCallThrough();
                     this.view.render();
-                    this.qtipCall = $.fn.qtip.calls[0];
+                    this.qtipCall = $.fn.qtip.nthCall(0);
                     this.view.$('.comment .count').mouseover();
                 });
 
@@ -112,7 +112,7 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                 it("renders an activity list view for each workspace", function() {
                     var $target = this.qtipCall.args[0].content;
                     expect(chorus.views.ActivityList.prototype.initialize).toHaveBeenCalled();
-                    var activityList = chorus.views.ActivityList.prototype.initialize.calls[0].object;
+                    var activityList = chorus.views.ActivityList.prototype.initialize.nthCall(0).object;
                     expect($target[0]).toBe(activityList.el);
                     expect(activityList.collection).toBe(this.workspace1.comments());
                 });

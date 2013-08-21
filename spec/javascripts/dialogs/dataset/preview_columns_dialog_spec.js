@@ -34,7 +34,7 @@ describe("chorus.dialogs.PreviewColumns", function() {
             expect(search).toExist();
 
             expect(chorus.search).toHaveBeenCalled();
-            var searchOptions = chorus.search.mostRecentCall.args[0];
+            var searchOptions = chorus.search.lastCall().args[0];
             expect(searchOptions.input).toBe(".search");
             expect(searchOptions.list).toBe("ul.list");
             expect(searchOptions.selector).toBe(".name, .comment");

@@ -78,6 +78,10 @@ describe("chorus.Modal", function() {
             });
 
             describe("#resize", function() {
+                function cssCalls () {
+                    return _.pluck($.fn.css.calls.all(), 'args');
+                }
+
                 // Stubbing out actual window sizing because it is affected by browser 'zoom' setting' and the actual css function
                 // will return invailid results if not 'zoomed' to actual size.
                 beforeEach(function() {
@@ -92,8 +96,7 @@ describe("chorus.Modal", function() {
 
                 it("sets the dialog.top to 30", function() {
                     this.modal.resize();
-                    var lastCall = $.fn.css.argsForCall;
-                    expect(lastCall).toContain(["top", "30px"]);
+                    expect(cssCalls()).toContain(["top", "30px"]);
                 });
 
 
@@ -101,22 +104,20 @@ describe("chorus.Modal", function() {
                     this.modal.resize();
                     var windowHeight = $(window).height() - 60 + "px";
 
-                    var lastCall = $.fn.css.mostRecentCall;
+                    var lastCall = $.fn.css.lastCall();
                     expect(lastCall.args).toEqual(["max-height", windowHeight]);
                     expect(lastCall.object.selector).toBe("#facebox .popup");
                 });
 
                 it("has a max-height smaller than the window's height by twice the dialog's distance from the top of the window", function() {
                     this.modal.resize(0, 100);
-
-                    var lastCall = $.fn.css.argsForCall;
-                    expect(lastCall).toContain(["max-height", "40px"]);
+                    expect(cssCalls()).toContain(["max-height", "40px"]);
 
                     this.modal.resize(0, 1000);
-                    expect(lastCall).toContain(["max-height", "940px"]);
+                    expect(cssCalls()).toContain(["max-height", "940px"]);
 
                     this.modal.resize(0, 500);
-                    expect(lastCall).toContain(["max-height", "440px"]);
+                    expect(cssCalls()).toContain(["max-height", "440px"]);
                 });
             });
 
@@ -127,7 +128,7 @@ describe("chorus.Modal", function() {
                 });
 
                 it("re-centers the modal", function() {
-                    var lastCall = $.fn.css.mostRecentCall;
+                    var lastCall = $.fn.css.lastCall();
                     expect(lastCall.args).toEqual(["left", jasmine.any(Number)]);
                     expect(lastCall.object.selector).toBe("#facebox");
                 });

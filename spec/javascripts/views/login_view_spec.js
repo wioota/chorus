@@ -24,7 +24,7 @@ describe("chorus.views.Login", function() {
 
     it("focuses the username field by default", function() {
         expect($.fn.focus).toHaveBeenCalled();
-        expect($.fn.focus.mostRecentCall.object).toBe("input[name='username']");
+        expect($.fn.focus.lastCall().object).toBe("input[name='username']");
     });
 
     describe("when the version string is returned", function() {

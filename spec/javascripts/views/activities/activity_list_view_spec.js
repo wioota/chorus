@@ -172,7 +172,7 @@ describe("chorus.views.ActivityList", function() {
                     });
 
                     it("only re-renders the page once", function() {
-                        expect(this.view.postRender.callCount).toBe(1);
+                        expect(this.view.postRender.calls.count()).toBe(1);
                     });
                 });
             }

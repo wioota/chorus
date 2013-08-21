@@ -185,7 +185,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                     });
 
                     it("triggers the column:selected page event once for each li", function() {
-                        expect(this.selectSpy.callCount).toBe(this.page.mainContent.content.$("li.selected").length);
+                        expect(this.selectSpy.calls.count()).toBe(this.page.mainContent.content.$("li.selected").length);
                     });
 
                     describe("clicking select none", function() {
@@ -200,7 +200,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                         });
 
                         it("triggers column:deselected once for each li", function() {
-                            expect(this.deselectSpy.callCount).toBe(this.page.mainContent.content.$("li").length);
+                            expect(this.deselectSpy.calls.count()).toBe(this.page.mainContent.content.$("li").length);
                         });
                     });
                 });

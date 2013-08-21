@@ -9,8 +9,8 @@ describe("chorus.views.visualizations.Heatmap", function() {
         bottomY = chorus.svgHelpers.bottomY;
 
     beforeEach(function() {
-        this.addMatchers(chorus.svgHelpers.matchers);
-        this.addMatchers({
+        window.addCompatibilityShimmedMatchers(chorus.svgHelpers.matchers);
+        window.addCompatibilityShimmedMatchers({
             toBeDarkerThan: function(el) {
                 var fill1 = $.color.extract($(this.actual), "fill"),
                     fill2 = $.color.extract($(el), "fill");

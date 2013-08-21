@@ -73,7 +73,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 this.dialog.render();
                 this.dialog.importDataGrid.initializeDataGrid.reset();
                 this.dialog.$("input.delimiter[value='" + separator + "']").click();
-                var call = _.last(this.dialog.importDataGrid.initializeDataGrid.calls);
+                var call = this.dialog.importDataGrid.initializeDataGrid.lastCall();
                 expect(call.args[0].length).toEqual(5);
             });
         };
@@ -129,7 +129,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
             it("focuses the text field", function() {
                 expect($.fn.focus).toHaveBeenCalled();
-                expect($.fn.focus.mostRecentCall.object).toBe("input:text");
+                expect($.fn.focus.lastCall().object).toBe("input:text");
             });
 
             describe("entering 'z' as a separator", function() {
@@ -159,7 +159,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 });
 
                 it("creates a grid with the right number of z-delimited columns", function() {
-                    var call = _.last(this.dialog.importDataGrid.initializeDataGrid.calls);
+                    var call = this.dialog.importDataGrid.initializeDataGrid.lastCall();
                     expect(call.args[0].length).toEqual(5);
                 });
             });
@@ -193,14 +193,14 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
     describe("the data grid", function() {
         it("converts the column names into db friendly format", function() {
-            var call = _.last(this.dialog.importDataGrid.initializeDataGrid.calls);
+            var call = this.dialog.importDataGrid.initializeDataGrid.lastCall();
             expect(_.pluck(call.args[0], "name")).toEqual([
                 "col1", "col2", "col3", "col_4", "col_5"
             ]);
         });
 
         it("initializes the data grid with the correct rows", function() {
-            var call = _.last(this.dialog.importDataGrid.initializeDataGrid.calls);
+            var call = this.dialog.importDataGrid.initializeDataGrid.lastCall();
             expect(call.args[1]).toEqual([
                 ["val1.1", "val1.2", "val1.3", "val1.4", "val1.5"],
                 ["val2.1", "val2.2", "val2.3", "val2.4", "val2.5"],
@@ -254,7 +254,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 this.dialog.$("#hasHeader").prop("checked", false).change();
                 this.dialog.$("#hasHeader").prop("checked", true).change();
 
-                var call = _.last(this.dialog.importDataGrid.initializeDataGrid.calls);
+                var call = this.dialog.importDataGrid.initializeDataGrid.lastCall();
                 expect(call.args[2]).toEqual(columnNames);
             });
 
@@ -267,7 +267,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
                 this.dialog.$("#hasHeader").prop("checked", true).change();
                 this.dialog.$("#hasHeader").prop("checked", false).change();
 
-                var call = _.last(this.dialog.importDataGrid.initializeDataGrid.calls);
+                var call = this.dialog.importDataGrid.initializeDataGrid.lastCall();
                 expect(call.args[2]).toEqual(columnNames);
             });
 
@@ -292,7 +292,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
                 it("has the correct header row", function() {
                     var columnNames = chorus.utilities.CsvParser.normalizeColumnName(this.csvOptions.contents[0]);
-                    var call = _.last(this.dialog.importDataGrid.initializeDataGrid.calls);
+                    var call = this.dialog.importDataGrid.initializeDataGrid.lastCall();
                     expect(call.args[2]).toEqual([columnNames]);
                 });
             });

@@ -69,7 +69,6 @@ describe("chorus.alerts.Base", function() {
             delete chorus.modal;
             spyOn($, "facebox");
             spyOn(this.alert, "render");
-            spyOn(this.alert, "el");
             this.alert.launchModal();
         });
 
@@ -106,7 +105,7 @@ describe("chorus.alerts.Base", function() {
             this.alert.render();
             $(document).trigger('reveal.facebox');
             expect($.fn.focus).toHaveBeenCalled();
-            expect($.fn.focus.mostRecentCall.object).toBe("button.cancel");
+            expect($.fn.focus.lastCall().object).toBe("button.cancel");
         });
     });
 });

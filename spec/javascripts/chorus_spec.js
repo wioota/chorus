@@ -277,7 +277,7 @@ describe("chorus global", function() {
         it("calls datePickerController with the right unique ids and format strings", function() {
             expect(datePickerController.createDatePicker).toHaveBeenCalled();
 
-            var datePickerParams = datePickerController.createDatePicker.mostRecentCall.args[0];
+            var datePickerParams = datePickerController.createDatePicker.lastCall().args[0];
             expect(datePickerParams.formElements[this.id1]).toBe("%d");
             expect(datePickerParams.formElements[this.id2]).toBe("%m");
             expect(datePickerParams.formElements[this.id3]).toBe("%Y");
@@ -465,11 +465,11 @@ describe("chorus global", function() {
 
             beforeEach(function() {
                 onFilterSpy = jasmine.createSpy("onFilter").andCallFake(function() {
-                    expect(afterFilterSpy.callCount).toBe(0);
+                    expect(afterFilterSpy.calls.count()).toBe(0);
                 });
 
                 afterFilterSpy = jasmine.createSpy("afterFilter").andCallFake(function() {
-                    expect(onFilterSpy.callCount).toBe(2);
+                    expect(onFilterSpy.calls.count()).toBe(2);
                 });
 
                 chorus.search({
@@ -486,13 +486,13 @@ describe("chorus global", function() {
                 });
 
                 it("calls the 'onFilter' callback on each item that was filtered out", function() {
-                    expect(onFilterSpy.callCount).toBe(2);
-                    expect(onFilterSpy.calls[0].args[0]).toBe(this.list.find("li").eq(0));
-                    expect(onFilterSpy.calls[1].args[0]).toBe(this.list.find("li").eq(1));
+                    expect(onFilterSpy.calls.count()).toBe(2);
+                    expect(onFilterSpy.nthCall(0).args[0]).toBe(this.list.find("li").eq(0));
+                    expect(onFilterSpy.nthCall(1).args[0]).toBe(this.list.find("li").eq(1));
                 });
 
                 it("calls the 'afterFilter' callback once, after filtering the items", function() {
-                    expect(afterFilterSpy.callCount).toBe(1);
+                    expect(afterFilterSpy.calls.count()).toBe(1);
                 });
             });
         });

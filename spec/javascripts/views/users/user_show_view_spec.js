@@ -21,7 +21,7 @@ describe("chorus.views.UserShow", function() {
 
         context("before render is called", function(){
             it("does not call .fetch on workspaces", function(){
-                expect(this.model.workspaces().fetch.calls.length).toBe(0);
+                expect(this.model.workspaces().fetch.calls.count()).toBe(0);
             });
         });
 
@@ -104,7 +104,7 @@ describe("chorus.views.UserShow", function() {
                     this.view.render();
                 });
                 it("fetches the user's workspaces exactly once", function() {
-                    expect(this.model.workspaces().fetch.calls.length).toBe(1);
+                    expect(this.model.workspaces().fetch.calls.count()).toBe(1);
                 });
             });
 

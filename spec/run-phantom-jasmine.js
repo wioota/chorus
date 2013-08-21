@@ -81,27 +81,37 @@ page.onResourceReceived = function() {
                         console.log(msg);
                     }
                 }
-                
+
                 var reporter = {
                     failures: [],
 
+                    numPending: 0,
                     numPassed: 0,
                     numFailed: 0,
                     numSkipped: 0,
 
-                    reportRunnerStarting: function() {
+                    jasmineStarted: function() {
                         this.startTime = (new Date()).getTime();
                     },
 
-                    reportSpecStarting: function (spec) {
+                    specStarted: function (spec) {
                         this.specStartTime = (new Date()).getTime();
                     },
 
-                    reportSpecResults: function(spec) {
-                        var results = spec.results();
-                        if (results.skipped) {
+                    specDone: function(result) {
+                        if (result.status == 'disabled') {
                             this.numSkipped++;
-                        } else if (results.passed()) {
+                        } else if (result.status == 'failed') {
+                            this.numFailed++;
+
+                            var name = result.fullName;
+
+                            var messages = _.map(result.failedExpectations, function(expectation) {
+                                return expectation.message;
+                            });
+                            this.failures.push({ name: name, messages: messages });
+                            console.log("\nFAILED", chorus.currentSpec, "\n");
+                        } else if (result.status == 'passed') {
                             this.numPassed++;
                             var timeTaken = (new Date()).getTime() - this.specStartTime;
                             if (timeTaken > 500) {
@@ -115,18 +125,8 @@ page.onResourceReceived = function() {
                             } else {
                                 colorlog(".", 'green');
                             }
-                        } else {
-                            this.numFailed++;
-
-                            var name = spec.getFullName();
-                            var failedExpectations = _.filter(spec.results().getItems(), function(item) {
-                                return (item.type == 'expect') && item.passed && !item.passed()
-                            });
-                            var messages = _.map(failedExpectations, function(expectation) {
-                                return expectation.message;
-                            });
-                            this.failures.push({ name: name, messages: messages });
-                            console.log("\nFAILED", chorus.currentSpec, "\n");
+                        } else if (result.status == 'pending') {
+                            this.numPending++;
                         }
 
                         var total = this.numPassed + this.numFailed;
@@ -135,9 +135,9 @@ page.onResourceReceived = function() {
                         }
                     },
 
-                    reportRunnerResults: function() {
+                    jasmineDone: function() {
                         var totalTime = (new Date()).getTime() - this.startTime;
-                        var totalTests = (this.numPassed + this.numSkipped + this.numFailed);
+                        var totalTests = (this.numPassed + this.numSkipped + this.numFailed + this.numPending);
 
                         _.each(this.failures, function(failure, i) {
                             console.log("\n\n" + (i+1) + ") " + failure.name);
@@ -148,6 +148,7 @@ page.onResourceReceived = function() {
 
                         console.log("\n");
                         console.log("\nTests passed:  " + this.numPassed);
+                        console.log("\nTests pending:  " + this.numPending);
                         console.log("\nTests skipped: " + this.numSkipped);
                         console.log("\nTests failed:  " + this.numFailed);
                         console.log("\nTotal tests:   " + totalTests);
@@ -167,6 +168,11 @@ page.onResourceReceived = function() {
                 };
 
                 window.jasmine.getEnv().addReporter(reporter);
+
+//                window.jasmine.getEnv().specFilter = function(spec) {
+//                    var id = spec.id.match(/(\d+)/)[0];
+//                    return id > 1000;
+//                };
 
                 return true;
             }

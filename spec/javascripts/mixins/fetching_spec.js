@@ -191,7 +191,7 @@ describe("chorus.Mixins.Fetching", function() {
                 this.resource.fetchIfNotLoaded({per_page: 10});
             });
             it("should pass options to fetch", function() {
-                expect(this.resource.fetch.mostRecentCall.args[0].per_page).toBe(10);
+                expect(this.resource.fetch.lastCall().args[0].per_page).toBe(10);
             });
         });
     });
@@ -426,7 +426,7 @@ describe("chorus.Mixins.Fetching", function() {
 
                 it("triggers the 'fetchFailed' event on the resource", function() {
                     expect(this.fetchFailedSpy).toHaveBeenCalled();
-                    expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.resource);
+                    expect(this.fetchFailedSpy.lastCall().args[0]).toBe(this.resource);
                 });
 
                 it('doesnt set loaded on the model', function() {
@@ -505,7 +505,7 @@ describe("chorus.Mixins.Fetching", function() {
 
                 it("triggers the 'fetchFailed' event on the resource", function() {
                     expect(this.fetchFailedSpy).toHaveBeenCalled();
-                    expect(this.fetchFailedSpy.mostRecentCall.args[0]).toBe(this.resource);
+                    expect(this.fetchFailedSpy.lastCall().args[0]).toBe(this.resource);
                 });
 
                 it('doesnt set loaded on the model', function() {

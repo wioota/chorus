@@ -126,7 +126,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         });
 
         it("constructs the breadcrumb links correctly", function () {
-            var options = this.page.menu.mostRecentCall.args[1];
+            var options = this.page.menu.lastCall().args[1];
 
             var $content = $(options.content);
 

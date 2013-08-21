@@ -76,7 +76,9 @@ window.Chorus = function chorus$Global() {
 
         if (window.jasmine) {
             var spec = window.jasmine.getEnv().currentSpec;
-            spec && spec.after(function() {$(target).off("click.chorus_modal"); });
+            if (spec) {
+                window.afterSpecFunctions.push(function() {$(target).off("click.chorus_modal"); });
+            }
         }
     };
 

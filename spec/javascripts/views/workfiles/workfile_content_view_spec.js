@@ -79,8 +79,9 @@ describe("chorus.views.WorkfileContent", function() {
         context("when the given workfile is nothing special", function() {
             beforeEach(function() {
                 this.model = backboneFixtures.workfile.binary();
+                var buildFor = chorus.views.WorkfileContent.buildFor;
                 spyOn(chorus.views, "WorkfileContent");
-                chorus.views.WorkfileContent.buildFor = chorus.views.WorkfileContent.originalValue.buildFor;
+                chorus.views.WorkfileContent.buildFor = buildFor;
                 chorus.views.WorkfileContent.buildFor(this.model);
             });
 

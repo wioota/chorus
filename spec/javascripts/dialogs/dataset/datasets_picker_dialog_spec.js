@@ -70,7 +70,7 @@ describe("chorus.dialogs.DatasetsPicker", function() {
             it("shows the preview columns submodal with the appropriate dataset when you click the link", function() {
                 dialog.$("ul li:eq(0) a.preview_columns").click();
                 expect(chorus.dialogs.PreviewColumns.prototype.render).toHaveBeenCalled();
-                var previewColumnsDialog = chorus.dialogs.PreviewColumns.prototype.render.mostRecentCall.object;
+                var previewColumnsDialog = chorus.dialogs.PreviewColumns.prototype.render.lastCall().object;
                 expect(previewColumnsDialog.title).toBe(dialog.title);
                 expect(previewColumnsDialog.model.get("id")).toEqual(datasetModels[0].get("id"));
             });

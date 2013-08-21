@@ -611,7 +611,7 @@ describe("chorus.dialogs.EditWorkspace", function() {
                         });
 
                         it("does not provide ownerId in the API call", function() {
-                            expect(this.dialog.pageModel.save.calls[1].args.hasOwnProperty("ownerId")).toBeFalsy();
+                            expect(this.dialog.pageModel.save.nthCall(1).args.hasOwnProperty("ownerId")).toBeFalsy();
                         });
                     });
                 });

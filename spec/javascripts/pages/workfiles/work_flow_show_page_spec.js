@@ -1,4 +1,13 @@
 describe("chorus.pages.WorkFlowShowPage", function() {
+    function pollFor (conditionFunc, done) {
+        var interval = jasmine.getEnv().clock.setInterval(function () {
+            if (conditionFunc()) {
+                clearInterval(interval);
+                done();
+            }
+        }, 100);
+    }
+
     beforeEach(function() {
         this.page = new chorus.pages.WorkFlowShowPage('4');
         setLoggedInUser();
@@ -27,19 +36,16 @@ describe("chorus.pages.WorkFlowShowPage", function() {
         });
 
         context("when receiving a 'go_to_workfile' message", function() {
+            beforeEach(function (done) {
+                this.routerSpy = spyOn(chorus.router, 'navigate');
+                window.postMessage({action: 'go_to_workfile'}, '*');
+                pollFor(_.bind(function () {
+                    return (this.routerSpy.calls.count() > 0);
+                }, this), done);
+            });
+
             it("routes to the workflow show page", function() {
-                var routerSpy;
-                runs(function() {
-                    routerSpy = spyOn(chorus.router, 'navigate');
-                    expect(routerSpy).not.toHaveBeenCalled();
-                    window.postMessage({action: 'go_to_workfile'}, '*');
-                });
-                waitsFor(function() {
-                    return routerSpy.callCount > 0;
-                });
-                runs(function() {
-                    expect(routerSpy).toHaveBeenCalledWith(this.workfile.showUrl());
-                });
+                expect(this.routerSpy).toHaveBeenCalledWith(this.workfile.showUrl());
             });
         });
 
@@ -143,23 +149,18 @@ describe("chorus.pages.WorkFlowShowPage", function() {
             });
 
             context("receiving a 'allow_close' message", function() {
-                beforeEach(function() {
+                beforeEach(function(done) {
                     this.page.intendedHref = "#/a_url";
+                    this.routerSpy = spyOn(chorus.router, 'navigate');
+                    window.postMessage({action: 'allow_close'}, '*');
+
+                    pollFor(_.bind(function () {
+                        return (this.routerSpy.calls.count() > 0);
+                    }, this), done);
                 });
 
                 it("navigates to the stored intended href", function() {
-                    var routerSpy;
-                    runs(function() {
-                        routerSpy = spyOn(chorus.router, 'navigate');
-                        expect(routerSpy).not.toHaveBeenCalled();
-                        window.postMessage({action: 'allow_close'}, '*');
-                    });
-                    waitsFor(function() {
-                        return routerSpy.callCount > 0;
-                    });
-                    runs(function() {
-                        expect(routerSpy).toHaveBeenCalledWith("#/a_url");
-                    });
+                    expect(this.routerSpy).toHaveBeenCalledWith("#/a_url");
                 });
             });
         });
@@ -199,14 +200,20 @@ describe("chorus.pages.WorkFlowShowPage", function() {
                 expect(this.page.launchDataSourceAccountDialog).toHaveBeenCalled();
             });
 
-            it("routes to the login page when receiving an 'unauthorized' message", function() {
-                runs(function() {
+            context("when receiving an 'unauthorized' message", function () {
+                beforeEach(function (done) {
                     spyOn(chorus, 'requireLogin');
                     expect(chorus.requireLogin).not.toHaveBeenCalled();
                     window.postMessage({action: 'unauthorized'}, '*');
+
+                    // times out if requireLogin never called
+                    pollFor(function () {
+                        return (chorus.requireLogin.calls.count() > 0 );
+                    }, done);
                 });
-                waitsFor(function() {
-                    return chorus.requireLogin.callCount > 0; // times out if requireLogin never called
+
+                it("routes to the login page", function() {
+                    expect(chorus.requireLogin.calls.count()).toBeGreaterThan(0);
                 });
             });
         });

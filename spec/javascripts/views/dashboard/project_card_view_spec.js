@@ -22,7 +22,7 @@ describe("chorus.views.ProjectCard", function () {
         });
 
         it("qtipifies info_icons", function () {
-            var qtipCall = $.fn.qtip.calls[1];
+            var qtipCall = $.fn.qtip.lastCall();
             expect(qtipCall.object.selector).toBe(".info_icon .icon");
         });
     });

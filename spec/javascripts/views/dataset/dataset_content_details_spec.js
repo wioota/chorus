@@ -50,7 +50,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
             expect(searchInput).toExist();
             expect(chorus.search).toHaveBeenCalled();
-            var searchOptions = chorus.search.mostRecentCall.args[0];
+            var searchOptions = chorus.search.lastCall().args[0];
 
             expect(searchOptions.input).toBe(searchInput);
             expect(searchOptions.list).toBe(this.$columnList);
@@ -437,7 +437,7 @@ describe("chorus.views.DatasetContentDetails", function() {
 
                     expect(searchInput).toExist();
                     expect(chorus.search).toHaveBeenCalled();
-                    var searchOptions = chorus.search.mostRecentCall.args[0];
+                    var searchOptions = chorus.search.lastCall().args[0];
 
                     expect(searchOptions.input).toBe(searchInput);
                     expect(searchOptions.list).toBe(this.$columnList);
@@ -833,7 +833,7 @@ describe("chorus.views.DatasetContentDetails", function() {
                 this.view.showVisualizationConfig(this.type);
 
                 expect(renderSpy).toHaveBeenCalled();
-                this.configView = renderSpy.mostRecentCall.object;
+                this.configView = renderSpy.lastCall().object;
             });
 
             it("tears down the old chartConfig, but keeps the container", function() {
@@ -865,7 +865,7 @@ describe("chorus.views.DatasetContentDetails", function() {
             it("only binds scroll handling once", function() {
                 this.view.render();
                 $(window).trigger("scroll");
-                expect(this.view.scrollHandler.callCount).toBe(1);
+                expect(this.view.scrollHandler.calls.count()).toBe(1);
             });
         });
     });

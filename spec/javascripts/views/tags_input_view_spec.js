@@ -112,7 +112,7 @@ describe("chorus.views.TagsInput", function() {
             });
 
             it("adds the tag to the tagset", function() {
-                expect(this.addedSpy.callCount).toBe(2);
+                expect(this.addedSpy.calls.count()).toBe(2);
             });
 
             it("sets the focus on the tag input", function() {
@@ -183,7 +183,7 @@ describe("chorus.views.TagsInput", function() {
         it("does not allow adding the same tag with no space", function() {
             enterTag(view, "sigma");
             expect(this.addedSpy).toHaveBeenCalled();
-            expect(this.addedSpy.callCount).toBe(1);
+            expect(this.addedSpy.calls.count()).toBe(1);
         });
     });
 
@@ -254,7 +254,7 @@ describe("chorus.views.TagsInput", function() {
                 });
 
                 it("adds a tag with the text entered by the user (without '(Create new)')", function(){
-                    expect(this.addedSpy.mostRecentCall.args[0].get("name")).toEqual("s");
+                    expect(this.addedSpy.lastCall().args[0].get("name")).toEqual("s");
                 });
             });
         });

@@ -1,7 +1,7 @@
 jasmine.sharedExamples.aDialogWithSomethingToFocusOn = function() {
     describe("on reveal", function() {
         beforeEach(function() {
-            if(!$.facebox.isSpy) { stubModals(); }
+            if(!jasmine.isSpy($.facebox)) { stubModals(); }
             spyOn($.fn, 'focus');
             this.dialog.launchModal();
             $(document).trigger('reveal.facebox');
@@ -9,7 +9,7 @@ jasmine.sharedExamples.aDialogWithSomethingToFocusOn = function() {
 
         it("focuses on the assigned focusSelector", function() {
             expect($.fn.focus).toHaveBeenCalled();
-            expect($.fn.focus.mostRecentCall.object.selector).toBe(this.dialog.focusSelector);
+            expect($.fn.focus.lastCall().object.selector).toBe(this.dialog.focusSelector);
         });
     });
 };

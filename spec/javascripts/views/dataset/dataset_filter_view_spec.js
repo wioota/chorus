@@ -36,7 +36,7 @@ describe("chorus.views.DatasetFilter", function() {
         it("creates a datepicker widget associated with the year, month and day input fields", function() {
             expect(chorus.datePicker).toHaveBeenCalled();
 
-            var datePickerOptions = chorus.datePicker.mostRecentCall.args[0];
+            var datePickerOptions = chorus.datePicker.lastCall().args[0];
             expect(datePickerOptions["%Y"]).toBe(this.view.$(".filter.date input[name='year']"));
             expect(datePickerOptions["%m"]).toBe(this.view.$(".filter.date input[name='month']"));
             expect(datePickerOptions["%d"]).toBe(this.view.$(".filter.date input[name='day']"));
@@ -166,7 +166,7 @@ describe("chorus.views.DatasetFilter", function() {
                     this.view.validateInput();
 
                     expect(this.view.markInputAsInvalid).toHaveBeenCalled();
-                    var args = this.view.markInputAsInvalid.mostRecentCall.args;
+                    var args = this.view.markInputAsInvalid.lastCall().args;
 
                     expect(args[0]).toBe(this.view.$(".filter.default input"));
                     expect(args[1]).toMatchTranslation("dataset.filter.number_required");
@@ -215,7 +215,7 @@ describe("chorus.views.DatasetFilter", function() {
                     this.view.validateInput();
 
                     expect(this.view.markInputAsInvalid).toHaveBeenCalled();
-                    var args = this.view.markInputAsInvalid.mostRecentCall.args;
+                    var args = this.view.markInputAsInvalid.lastCall().args;
                     expect(args[0]).toBe(this.view.$(".filter.date input[name='month']"));
                     expect(args[1]).toBe("bad month");
                 });

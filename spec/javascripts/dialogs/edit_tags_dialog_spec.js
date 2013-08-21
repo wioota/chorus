@@ -44,7 +44,7 @@ describe("chorus.dialogs.EditTags", function() {
             expect(setTimeout).toHaveBeenCalledWith(jasmine.any(Function), 0);
 
             spyOn(this.dialog.tagsInput, "focusInput");
-            _(setTimeout.calls).chain().select(function (item) { return item.args[1] === 0; }).each(function (call) {
+            _(setTimeout.calls.all()).chain().select(function (item) { return item.args[1] === 0; }).each(function (call) {
                 call.args[0]();
             });
             expect(this.dialog.tagsInput.focusInput).toHaveBeenCalled();
@@ -93,7 +93,7 @@ describe("chorus.dialogs.EditTags", function() {
             it('saves the tags', function() {
                 enterTag(this.dialog, "foo");
                 expect(this.collection.updateTags).toHaveBeenCalled();
-                expect(this.collection.updateTags.mostRecentCall.args[0].add.name()).toBe("foo");
+                expect(this.collection.updateTags.lastCall().args[0].add.name()).toBe("foo");
             });
 
             it('triggers change:tags on each model in the collection', function() {
@@ -111,7 +111,7 @@ describe("chorus.dialogs.EditTags", function() {
 
                 it('saves the tags', function() {
                     expect(this.collection.updateTags).toHaveBeenCalled();
-                    expect(this.collection.updateTags.mostRecentCall.args[0].add.name()).toBe("foo");
+                    expect(this.collection.updateTags.lastCall().args[0].add.name()).toBe("foo");
                 });
 
                 it('adds the tag to all the models', function(){
@@ -155,7 +155,7 @@ describe("chorus.dialogs.EditTags", function() {
 
             it('saves the tags', function(){
                 expect(this.collection.updateTags).toHaveBeenCalled();
-                expect(this.collection.updateTags.mostRecentCall.args[0].remove.name()).toBe("tag1");
+                expect(this.collection.updateTags.lastCall().args[0].remove.name()).toBe("tag1");
             });
         });
     });

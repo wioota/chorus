@@ -145,7 +145,7 @@ describe("chorus.views.DataSourceIndex", function() {
 
                 it("triggers a data_source:selected event to update the sidebar", function() {
                     expect(this.selectedSpy).toHaveBeenCalled();
-                    var selectedDataSource = _.last(this.selectedSpy.calls).args[0];
+                    var selectedDataSource = this.selectedSpy.lastCall().args[0];
                     expect(selectedDataSource).toBe(this.newDataSource);
                 });
 
@@ -158,7 +158,7 @@ describe("chorus.views.DataSourceIndex", function() {
                 this.view.$("li input:checkbox").eq(0).click().change();
                 expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("data_source:checked", jasmine.any(Object));
 
-                var lastCall = _(chorus.PageEvents.trigger.calls).chain().filter(function (call) {
+                var lastCall = _(chorus.PageEvents.trigger.calls.all()).chain().filter(function (call) {
                     return call.args[0] === "data_source:checked";
                 }).last().value();
                 expect(lastCall.args[1].length).toBe(1);

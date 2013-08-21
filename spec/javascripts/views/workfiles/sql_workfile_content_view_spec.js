@@ -53,13 +53,13 @@ describe("chorus.views.SqlWorkfileContentView", function() {
 
         it("correctly binds the R hotkey to runInDefault", function() {
             chorus.triggerHotKey('r');
-            expect(chorus.PageEvents.trigger.calls[0].args[0]).toBe("file:runCurrent");
+            expect(chorus.PageEvents.trigger.nthCall(0).args[0]).toBe("file:runCurrent");
             expect(this.view.runInDefault).toHaveBeenCalled();
         });
 
         it("correctly binds the E hotkey to runSelected", function() {
             chorus.triggerHotKey('e');
-            expect(chorus.PageEvents.trigger.calls[0].args[0]).toBe("file:runSelected");
+            expect(chorus.PageEvents.trigger.nthCall(0).args[0]).toBe("file:runSelected");
             expect(this.view.runSelected).toHaveBeenCalled();
         });
     });

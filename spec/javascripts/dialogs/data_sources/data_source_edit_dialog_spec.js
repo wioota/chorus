@@ -276,12 +276,13 @@ describe("chorus.dialogs.DataSourceEdit", function() {
             spyOn(this.dialog.model, "save").andCallThrough();
             this.dialog.$("button[type=submit]").submit();
 
-            expect(this.dialog.model.save.argsForCall[0][0].name).toBe("test1");
-            expect(this.dialog.model.save.argsForCall[0][0].port).toBe("8555");
-            expect(this.dialog.model.save.argsForCall[0][0].host).toBe("testhost");
-            expect(this.dialog.model.save.argsForCall[0][0].description).toBe("data source");
-            expect(this.dialog.model.save.argsForCall[0][0].dbName).toBe("not_postgres");
-            expect(this.dialog.model.save.argsForCall[0][0].ssl).toBe(true);
+            var saveParams = this.dialog.model.save.lastCall().args[0];
+            expect(saveParams.name).toBe("test1");
+            expect(saveParams.port).toBe("8555");
+            expect(saveParams.host).toBe("testhost");
+            expect(saveParams.description).toBe("data source");
+            expect(saveParams.dbName).toBe("not_postgres");
+            expect(saveParams.ssl).toBe(true);
         });
 
         it("changes the text on the upload button to 'saving'", function() {

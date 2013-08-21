@@ -194,7 +194,7 @@ describe("chorus.views.Base", function() {
             });
 
             it("serializes the attributes of the model", function() {
-                expect(this.view.context()).toEqual({ bar: "foo", resource: this.model, view: this.view });
+                expect(this.view.context()).toEqual({ bar: "foo", resource: this.model, view: this.view, loaded: undefined });
             });
 
             describe("loaded:true", function() {
@@ -236,7 +236,7 @@ describe("chorus.views.Base", function() {
                 it("calls #additionalContext, passing the default context (including the server errors)", function() {
                     this.model.serverErrors = {fields: {a: {BLANK: {}}}};
                     this.view.context();
-                    var contextPassed = this.view.additionalContext.mostRecentCall.args[0];
+                    var contextPassed = this.view.additionalContext.lastCall().args[0];
                     expect(contextPassed.serverErrors).toBe(this.model.serverErrors);
                 });
             });
@@ -251,7 +251,7 @@ describe("chorus.views.Base", function() {
 
                     spyOn(this.view, "postRender").andCallThrough();
                     spyOn(this.view, "preRender").andCallFake(function() {
-                        self.postRenderCallCountWhenPreRenderCalled = self.view.postRender.callCount;
+                        self.postRenderCallCountWhenPreRenderCalled = self.view.postRender.calls.count();
                     });
 
                     this.view.render();
@@ -259,7 +259,7 @@ describe("chorus.views.Base", function() {
 
                 it("is called before postRender", function() {
                     expect(this.postRenderCallCountWhenPreRenderCalled).toBe(0);
-                    expect(this.view.postRender.callCount).toBe(1);
+                    expect(this.view.postRender.calls.count()).toBe(1);
                 });
             });
 
@@ -519,7 +519,7 @@ describe("chorus.views.Base", function() {
             });
 
             it("does not call the hook again", function() {
-                expect(this.view.teardown.callCount).toBe(1);
+                expect(this.view.teardown.calls.count()).toBe(1);
             });
         });
 
@@ -533,7 +533,7 @@ describe("chorus.views.Base", function() {
             });
 
             it("calls $.fn.remove on its element", function() {
-                expect($.fn.remove.mostRecentCall.object.get(0)).toEqual(this.view.el);
+                expect($.fn.remove.lastCall().object.get(0)).toEqual(this.view.el);
             });
 
             it("removes its backbone event bindings", function() {
@@ -575,7 +575,7 @@ describe("chorus.views.Base", function() {
             });
 
             it("does not re-render", function() {
-                expect(this.view.render.callCount).toBe(1);
+                expect(this.view.render.calls.count()).toBe(1);
             });
 
             it("adds tooltips to the has_error fields", function() {

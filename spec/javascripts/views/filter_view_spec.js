@@ -55,7 +55,7 @@ describe("chorus.views.Filter", function() {
         });
 
         it("gives long comparators enough room", function() {
-            expect(chorus.styleSelect.mostRecentCall.args[1].menuWidth).toBe(240);
+            expect(chorus.styleSelect.lastCall().args[1].menuWidth).toBe(240);
         });
 
         it("displays remove button", function() {

@@ -37,11 +37,11 @@ describe("chorus.dialogs.VerifyChorusView", function() {
 
         it("opens a NameChorusView sub-modal", function() {
             expect(this.dialog.launchSubModal).toHaveBeenCalled();
-            expect(this.dialog.launchSubModal.mostRecentCall.args[0]).toBeA(chorus.dialogs.NameChorusView);
+            expect(this.dialog.launchSubModal.lastCall().args[0]).toBeA(chorus.dialogs.NameChorusView);
         });
 
         it("copies SQL from editor to model before launching submodal", function() {
-            var namingDialog = this.dialog.launchSubModal.mostRecentCall.args[0];
+            var namingDialog = this.dialog.launchSubModal.lastCall().args[0];
             expect(namingDialog.model.get("query")).toBe("newquery");
         });
     });

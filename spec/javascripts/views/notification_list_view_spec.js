@@ -35,12 +35,12 @@ describe("chorus.views.NotificationList", function() {
         });
 
         it("passes the 'isNotification' option to the activity views", function() {
-            var viewOptions = chorus.views.Activity.prototype.initialize.mostRecentCall.args[0];
+            var viewOptions = chorus.views.Activity.prototype.initialize.lastCall().args[0];
             expect(viewOptions.isNotification).toBeTruthy();
         });
 
         it("passes the 'isReadOnly' option to the activity views", function() {
-            var viewOptions = chorus.views.Activity.prototype.initialize.mostRecentCall.args[0];
+            var viewOptions = chorus.views.Activity.prototype.initialize.lastCall().args[0];
             expect(viewOptions.isReadOnly).toBeTruthy();
         });
     });
@@ -72,7 +72,7 @@ describe("chorus.views.NotificationList", function() {
 
         it("logs stuff about the broken notification", function() {
             expect(chorus.log).toHaveBeenCalled();
-            expect(chorus.log.mostRecentCall.args[3]).toBe(this.collection.at(this.collection.length-1));
+            expect(chorus.log.lastCall().args[3]).toBe(this.collection.at(this.collection.length-1));
         });
     });
 

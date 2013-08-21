@@ -266,7 +266,7 @@ describe("chorus.collections.Base", function() {
             });
 
             it("triggers the reset event once", function() {
-                expect(this.resetListener.callCount).toBe(1);
+                expect(this.resetListener.calls.count()).toBe(1);
             });
 
             it("triggers the reset event after all models are in the collection", function() {
@@ -274,11 +274,11 @@ describe("chorus.collections.Base", function() {
             });
 
             it("triggers the loaded event once", function() {
-                expect(this.loadedListener.callCount).toBe(1);
+                expect(this.loadedListener.calls.count()).toBe(1);
             });
 
             it("triggers serverResponded once", function() {
-                expect(this.serverRespondedSpy.callCount).toBe(1);
+                expect(this.serverRespondedSpy.calls.count()).toBe(1);
             });
 
             it("triggers the loaded event after all models are in the collection", function() {
@@ -328,7 +328,7 @@ describe("chorus.collections.Base", function() {
         it("passes options through to fetch", function() {
             spyOn(this.collection, "fetch");
             this.collection.fetchPage(2, { foo: "bar" });
-            var options = this.collection.fetch.mostRecentCall.args[0];
+            var options = this.collection.fetch.lastCall().args[0];
             expect(options.foo).toBe("bar");
         });
 
@@ -347,7 +347,7 @@ describe("chorus.collections.Base", function() {
             it("does not pass the 'per_page' option through to Backbone.Collection#fetch", function() {
                 spyOn(this.collection, "fetch");
                 this.collection.fetchPage(2, { per_page: 13 });
-                var options = this.collection.fetch.mostRecentCall.args[0];
+                var options = this.collection.fetch.lastCall().args[0];
                 expect(options.per_page).toBeUndefined();
             });
 

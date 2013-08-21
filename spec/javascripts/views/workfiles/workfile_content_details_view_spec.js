@@ -128,7 +128,7 @@ describe("chorus.views.WorkfileContentDetails", function() {
             this.view.render();
             this.view.render();
             $(window).trigger("scroll");
-            expect(this.view.scrollHandler.callCount).toBe(1);
+            expect(this.view.scrollHandler.calls.count()).toBe(1);
         });
     });
 

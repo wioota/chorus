@@ -265,7 +265,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
             });
 
             it("passes the right table or view to the 'preview columns' sub-dialog", function () {
-                var previewColumnsDialog = chorus.dialogs.PreviewColumns.prototype.render.mostRecentCall.object;
+                var previewColumnsDialog = chorus.dialogs.PreviewColumns.prototype.render.lastCall().object;
                 expect(previewColumnsDialog.model).toBeA(chorus.models.Dataset);
                 expect(previewColumnsDialog.model.get("id")).toBe(this.dataset2.get("id"));
             });
@@ -285,7 +285,7 @@ describe("chorus.dialogs.ManageJoinTables", function () {
             });
 
             it("passes the right chorus view, schema and destination object to the JoinConfiguration dialog", function () {
-                var joinConfigurationDialog = chorus.dialogs.JoinConfiguration.prototype.render.mostRecentCall.object;
+                var joinConfigurationDialog = chorus.dialogs.JoinConfiguration.prototype.render.lastCall().object;
 
                 expect(joinConfigurationDialog.model).toBe(this.chorusView);
 

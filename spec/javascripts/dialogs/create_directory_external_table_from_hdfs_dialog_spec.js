@@ -274,7 +274,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
         beforeEach(function() {
             spyOn($.fn, 'qtip');
             this.dialog.render();
-            this.qtipCall = $.fn.qtip.calls[0];
+            this.qtipCall = $.fn.qtip.lastCall();
         });
 
         it("makes a tooltip for each help", function() {

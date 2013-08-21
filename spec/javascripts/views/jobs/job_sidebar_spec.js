@@ -42,7 +42,7 @@ describe("chorus.views.JobSidebar", function () {
             });
 
             it("makes a request to disable the job", function() {
-                var calledArgs = this.job.save.mostRecentCall.args;
+                var calledArgs = this.job.save.lastCall().args;
                 expect(calledArgs[0]).toEqual({ enabled: false });
             });
         });
@@ -65,7 +65,7 @@ describe("chorus.views.JobSidebar", function () {
             });
 
             it("makes a request to enable the job", function() {
-                var calledArgs = this.job.save.mostRecentCall.args;
+                var calledArgs = this.job.save.lastCall().args;
                 expect(calledArgs[0]).toEqual({ enabled: true });
             });
 

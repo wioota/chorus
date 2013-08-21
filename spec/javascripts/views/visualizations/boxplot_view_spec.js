@@ -32,7 +32,7 @@ describe("chorus.views.visualizations.BoxPlot", function() {
             this.maxWhiskers = this.boxes.find("line.whisker.max");
             this.whiskers = this.boxes.find("line.whisker");
             this.midlines = this.boxes.find("line.midline");
-            this.addMatchers(chorus.svgHelpers.matchers);
+            window.addCompatibilityShimmedMatchers(chorus.svgHelpers.matchers);
         });
 
         describe("re-rendering", function() {

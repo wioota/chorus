@@ -1,7 +1,7 @@
 jasmine.MAX_PRETTY_PRINT_DEPTH = 5;
 
-jasmine.Spec.prototype.useFakeTimers = function() {
+chorus.useFakeTimers = function() {
     var clock = sinon.useFakeTimers.apply(sinon, arguments);
-    this.after(function() {clock.restore();});
+    window.afterSpecFunctions.push(function() {clock.restore();});
     return clock;
 };

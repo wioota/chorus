@@ -54,7 +54,7 @@ describe("chorus.views.Header", function() {
             });
 
             it("calls render after read and unread notifications are complete", function() {
-                expect(this.view.render.callCount).toEqual(1);
+                expect(this.view.render.calls.count()).toEqual(1);
             });
 
             it("shows all of the unread notifications in the notification popup", function() {
@@ -204,7 +204,7 @@ describe("chorus.views.Header", function() {
                 it("includes the query", function() {
                     this.view.$(".search form").trigger("submit");
                     expect(chorus.router.navigate).toHaveBeenCalled();
-                    var url = chorus.router.navigate.mostRecentCall.args[0];
+                    var url = chorus.router.navigate.lastCall().args[0];
                     expect(url).toMatch(/test_query%2Fwith%2Fslashes/);
                 });
 
@@ -216,7 +216,7 @@ describe("chorus.views.Header", function() {
 
                     it("navigates to the workspace search page", function() {
                         expect(chorus.router.navigate).toHaveBeenCalled();
-                        var url = chorus.router.navigate.mostRecentCall.args[0];
+                        var url = chorus.router.navigate.lastCall().args[0];
                         expect(url).toMatchUrl("#/workspaces/11/search/test_query%252Fwith%252Fslashes");
                     });
                 });
@@ -229,7 +229,7 @@ describe("chorus.views.Header", function() {
 
                     it("navigates to the global search page", function() {
                         expect(chorus.router.navigate).toHaveBeenCalled();
-                        var url = chorus.router.navigate.mostRecentCall.args[0];
+                        var url = chorus.router.navigate.lastCall().args[0];
                         expect(url).toMatchUrl("#/search/test_query%252Fwith%252Fslashes");
                     });
                 });

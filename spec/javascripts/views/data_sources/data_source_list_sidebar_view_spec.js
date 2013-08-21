@@ -169,6 +169,7 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
             context('when the user has set up an account for the data source', function() {
                 beforeEach(function() {
                     var account = backboneFixtures.dataSourceAccount();
+                    this.realAccountForCurrentUser = this.dataSource.accountForCurrentUser;
                     spyOn(this.dataSource, 'accountForCurrentUser').andReturn(account);
                     this.view.render();
                 });
@@ -197,7 +198,7 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
 
                 describe("when the user removes their credentials", function() {
                     beforeEach(function() {
-                        this.dataSource.accountForCurrentUser = this.dataSource.accountForCurrentUser.originalValue;
+                        this.dataSource.accountForCurrentUser = this.realAccountForCurrentUser;
                         this.dataSource.accountForCurrentUser().trigger("destroy");
                         this.view.render();
                     });
@@ -253,11 +254,11 @@ jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = functi
     });
 
     it("populates the ActivityList with the activities", function() {
-        expect(chorus.views.ActivityList.mostRecentCall.args[0].collection).toBe(this.dataSource.activities());
+        expect(chorus.views.ActivityList.lastCall().args[0].collection).toBe(this.dataSource.activities());
     });
 
     it("sets the ActivityList displayStyle to without_object", function() {
-        expect(chorus.views.ActivityList.mostRecentCall.args[0].displayStyle).toBe('without_object');
+        expect(chorus.views.ActivityList.lastCall().args[0].displayStyle).toBe('without_object');
     });
 
     context('when user is an owner of the data source', function() {

@@ -13,7 +13,7 @@ describe("chorus.Mixins.Events", function() {
                 this.source.trigger("increment", 'bar');
                 this.source.trigger("increment", 'baz');
 
-                expect(this.callback.callCount).toBe(1);
+                expect(this.callback.calls.count()).toBe(1);
             });
         }
 
@@ -28,11 +28,11 @@ describe("chorus.Mixins.Events", function() {
             describe("unbinding", function() {
                 it("unbinds after the first call", function() {
                     this.source.trigger("increment", 'baz');
-                    expect(this.callback.callCount).toBe(1);
+                    expect(this.callback.calls.count()).toBe(1);
 
                     this.source.trigger("increment", 'baz');
                     this.source.trigger("increment", 'baz');
-                    expect(this.callback.callCount).toBe(1);
+                    expect(this.callback.calls.count()).toBe(1);
                 });
             });
         }
@@ -89,11 +89,11 @@ describe("chorus.Mixins.Events", function() {
             it("calls each function one time in the correct context", function() {
                 this.source.trigger('increment', 'foo');
                 this.source.trigger('increment', 'bar');
-                expect(this.callback.callCount).toBe(2);
-                expect(this.callback.calls[0].args[0]).toBe('foo');
-                expect(this.callback.calls[0].object).toBe(this.context1);
-                expect(this.callback.calls[1].args[0]).toBe('foo');
-                expect(this.callback.calls[1].object).toBe(this.context2);
+                expect(this.callback.calls.count()).toBe(2);
+                expect(this.callback.nthCall(0).args[0]).toBe('foo');
+                expect(this.callback.nthCall(0).object).toBe(this.context1);
+                expect(this.callback.nthCall(1).args[0]).toBe('foo');
+                expect(this.callback.nthCall(1).object).toBe(this.context2);
             });
         });
     });

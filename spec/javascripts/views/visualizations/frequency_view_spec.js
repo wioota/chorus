@@ -12,7 +12,7 @@ describe("chorus.views.visualizations.FrequencyView", function() {
         this.server.lastCreate().succeed(backboneFixtures.frequencyTaskJson({response: {"bins": 3, "y_axis": "fruits"}}).response);
 
         this.view = new chorus.views.visualizations.Frequency({ model: this.task });
-        this.addMatchers(chorus.svgHelpers.matchers);
+        window.addCompatibilityShimmedMatchers(chorus.svgHelpers.matchers);
     });
 
     describe("changing model", function() {

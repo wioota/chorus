@@ -147,14 +147,14 @@ describe("chorus.models.Note", function() {
 
             describe("when all saves succeed", function() {
                 beforeEach(function() {
-                    this.submitObject1.promise.done.mostRecentCall.args[0]();
-                    this.submitObject2.promise.done.mostRecentCall.args[0]();
+                    this.submitObject1.promise.done.lastCall().args[0]();
+                    this.submitObject2.promise.done.lastCall().args[0]();
                 });
 
                 it("triggers fileUploadSuccess", function() {
                     expect(this.fileUploadSuccessSpy).toHaveBeenCalled();
                     expect(this.fileUploadFailedSpy).not.toHaveBeenCalled();
-                    expect(this.fileUploadSuccessSpy.callCount).toBe(1);
+                    expect(this.fileUploadSuccessSpy.calls.count()).toBe(1);
                 });
 
                 it("triggers fileUploadDone", function() {
@@ -164,13 +164,13 @@ describe("chorus.models.Note", function() {
 
             describe("when some of the saves have api failure", function() {
                 beforeEach(function() {
-                    this.submitObject1.promise.fail.mostRecentCall.args[0]({responseText: errorResponse});
-                    this.submitObject2.promise.fail.mostRecentCall.args[0]({responseText: errorResponse});
+                    this.submitObject1.promise.fail.lastCall().args[0]({responseText: errorResponse});
+                    this.submitObject2.promise.fail.lastCall().args[0]({responseText: errorResponse});
                 });
                 it("triggers fileUploadFailed", function() {
                     expect(this.fileUploadSuccessSpy).not.toHaveBeenCalled();
                     expect(this.fileUploadFailedSpy).toHaveBeenCalled();
-                    expect(this.fileUploadFailedSpy.callCount).toBe(1);
+                    expect(this.fileUploadFailedSpy.calls.count()).toBe(1);
                 });
 
                 it("triggers fileUploadDone", function() {
@@ -192,22 +192,22 @@ describe("chorus.models.Note", function() {
 
             describe("when some of the saves have failed", function() {
                 beforeEach(function() {
-                    this.submitObject1.promise.done.mostRecentCall.args[0]();
-                    this.submitObject2.promise.fail.mostRecentCall.args[0]({responseText: errorResponse});
+                    this.submitObject1.promise.done.lastCall().args[0]();
+                    this.submitObject2.promise.fail.lastCall().args[0]({responseText: errorResponse});
                 });
 
                 it("triggers fileUploadFailed", function() {
                     expect(this.fileUploadSuccessSpy).not.toHaveBeenCalled();
                     expect(this.fileUploadFailedSpy).toHaveBeenCalled();
-                    expect(this.fileUploadFailedSpy.callCount).toBe(1);
+                    expect(this.fileUploadFailedSpy.calls.count()).toBe(1);
 
                 });
             });
 
             describe("when the file upload is cancelled", function() {
                 beforeEach(function() {
-                    this.submitObject1.promise.done.mostRecentCall.args[0]();
-                    this.submitObject2.promise.fail.mostRecentCall.args[0]({}, 'abort');
+                    this.submitObject1.promise.done.lastCall().args[0]();
+                    this.submitObject2.promise.fail.lastCall().args[0]({}, 'abort');
                 });
 
                 it("sets serverErrors on the model", function() {
@@ -217,8 +217,8 @@ describe("chorus.models.Note", function() {
 
             describe("when both uploads are cancelled", function() {
                 beforeEach(function() {
-                    this.submitObject1.promise.fail.mostRecentCall.args[0]({}, 'abort');
-                    this.submitObject2.promise.fail.mostRecentCall.args[0]({}, 'abort');
+                    this.submitObject1.promise.fail.lastCall().args[0]({}, 'abort');
+                    this.submitObject2.promise.fail.lastCall().args[0]({}, 'abort');
                 });
 
                 it("only has the cancel message once", function() {

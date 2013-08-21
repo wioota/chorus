@@ -25,7 +25,7 @@ describe("chorus.views.visualizations.Axes", function() {
     });
 
     beforeEach(function() {
-        this.addMatchers(chorus.svgHelpers.matchers);
+        window.addCompatibilityShimmedMatchers(chorus.svgHelpers.matchers);
     });
 
     describe("XAxis", function() {
@@ -170,7 +170,7 @@ describe("chorus.views.visualizations.Axes", function() {
         }
 
         beforeEach(function() {
-            this.addMatchers({
+            window.addCompatibilityShimmedMatchers({
                 toBeUniformlyHorizontallySpaced: function() {
                     var elements = this.actual;
                     var standardDistance = centerX(elements[1]) - centerX(elements[0]);

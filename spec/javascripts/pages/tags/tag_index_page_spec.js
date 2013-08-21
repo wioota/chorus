@@ -58,9 +58,9 @@ describe("chorus.pages.TagIndexPage", function() {
         });
 
         it("renders the page", function() {
-            var renderCallCount = this.page.render.calls.length;
+            var renderCallCount = this.page.render.calls.count();
             this.page.mainContent.collection.models[0].destroy();
-            expect(this.page.render.calls.length).toBe(renderCallCount + 1);
+            expect(this.page.render.calls.count()).toBe(renderCallCount + 1);
         });
     });
 });

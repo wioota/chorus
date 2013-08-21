@@ -30,7 +30,7 @@ describe("chorus.views.CodeEditorView", function() {
         it("only sets up draggable once", function() {
             this.view.render();
             this.view.postRender();
-            expect($.fn.droppable.callCount).toEqual(1);
+            expect($.fn.droppable.calls.count()).toEqual(1);
         });
     });
 
@@ -45,7 +45,7 @@ describe("chorus.views.CodeEditorView", function() {
             });
 
             it("only creates CodeMirror once", function() {
-                expect(CodeMirror.fromTextArea.callCount).toBe(1);
+                expect(CodeMirror.fromTextArea.calls.count()).toBe(1);
             });
         });
 
@@ -54,7 +54,7 @@ describe("chorus.views.CodeEditorView", function() {
         });
 
         it("prepares the editor for drag/drop events", function() {
-            expect($($.fn.droppable.calls[0].object)[0]).toBe(this.view.$(".CodeMirror")[0]);
+            expect($($.fn.droppable.nthCall(0).object)[0]).toBe(this.view.$(".CodeMirror")[0]);
         });
     });
 
@@ -77,7 +77,7 @@ describe("chorus.views.CodeEditorView", function() {
 
             it("computes the insertion point's pixel position based on the character position where text will be inserted", function() {
                 this.view.repositionInsertionPoint(this.mouseMoveEvent);
-                var pixelPositionParameters = this.view.editor.charCoords.calls[0].args[0];
+                var pixelPositionParameters = this.view.editor.charCoords.nthCall(0).args[0];
                 expect(pixelPositionParameters).toBe(this.characterPosition);
             });
 

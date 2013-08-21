@@ -400,7 +400,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             });
 
             it("creates dependent commentFileUpload object for each upload", function() {
-                expect(this.dialog.model.addFileUpload.callCount).toBe(this.fileList.length);
+                expect(this.dialog.model.addFileUpload.calls.count()).toBe(this.fileList.length);
             });
 
             it("attaches the rendered file_details element to the file data element", function() {

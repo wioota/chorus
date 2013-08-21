@@ -119,7 +119,7 @@ describe("chorus.Mixins.Taggable", function() {
             this.model.updateTags({add: this.tag});
 
             expect(chorus.models.TaggingsUpdater).toHaveBeenCalled();
-            var initializerArg = chorus.models.TaggingsUpdater.mostRecentCall.args[0];
+            var initializerArg = chorus.models.TaggingsUpdater.lastCall().args[0];
 
             expect(initializerArg.collection.length).toEqual(1);
             expect(initializerArg.collection.at(0)).toEqual(this.model);
@@ -130,7 +130,7 @@ describe("chorus.Mixins.Taggable", function() {
             this.model.updateTags({remove: this.tag});
 
             expect(chorus.models.TaggingsUpdater).toHaveBeenCalled();
-            var initializerArg = chorus.models.TaggingsUpdater.mostRecentCall.args[0];
+            var initializerArg = chorus.models.TaggingsUpdater.lastCall().args[0];
 
             expect(initializerArg.collection.length).toEqual(1);
             expect(initializerArg.collection.at(0)).toEqual(this.model);

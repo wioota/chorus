@@ -154,7 +154,7 @@ describe("chorus.models.Base", function() {
 
                 it("triggers a saveFailed event", function() {
                     expect(this.saveFailedSpy).toHaveBeenCalled();
-                    var args = this.saveFailedSpy.mostRecentCall.args;
+                    var args = this.saveFailedSpy.lastCall().args;
                     expect(args[0]).toBe(this.model);
                 });
 
@@ -320,7 +320,7 @@ describe("chorus.models.Base", function() {
             this.model.save(attrs, { silent: true });
 
             expect(this.model.beforeSave).toHaveBeenCalled();
-            var beforeSaveArgs = this.model.beforeSave.calls[0].args;
+            var beforeSaveArgs = this.model.beforeSave.nthCall(0).args;
             expect(beforeSaveArgs[0]).toEqual(attrs);
 
             // the options hash gets mutated later in #save

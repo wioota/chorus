@@ -43,7 +43,7 @@ describe("chorus.dialogs.EditNote", function() {
     it("makes a cl editor with toolbar", function() {
         expect(this.dialog.$('.toolbar')).toExist();
         expect(this.dialog.makeEditor).toHaveBeenCalled();
-        var editorArgs = this.dialog.makeEditor.mostRecentCall.args;
+        var editorArgs = this.dialog.makeEditor.lastCall().args;
 
         expect(editorArgs[0]).toBe(this.dialog.el);
         expect(editorArgs[1]).toBe(".toolbar");

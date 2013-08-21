@@ -55,7 +55,7 @@ describe("chorus.views.TagBox", function() {
 
             it('saves the tags', function() {
                 expect(this.model.updateTags).toHaveBeenCalled();
-                expect(this.model.updateTags.mostRecentCall.args[0].add.name()).toBe(tagName);
+                expect(this.model.updateTags.lastCall().args[0].add.name()).toBe(tagName);
             });
         });
             
@@ -63,7 +63,7 @@ describe("chorus.views.TagBox", function() {
             it('saves the tags', function() {
                 this.view.$('.text-remove:first').click();
                 expect(this.model.updateTags).toHaveBeenCalled();
-                expect(this.model.updateTags.mostRecentCall.args[0].remove.name()).toBe('alpha');
+                expect(this.model.updateTags.lastCall().args[0].remove.name()).toBe('alpha');
             });
         });
 

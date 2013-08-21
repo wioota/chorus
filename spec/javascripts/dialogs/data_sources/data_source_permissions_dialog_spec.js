@@ -5,7 +5,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
     function itLaunchesTheConfirmChangeOwnerDialog(options) {
         beforeEach(function() {
             expect(this.dialog.launchSubModal).toHaveBeenCalled();
-            this.submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
+            this.submodal = this.dialog.launchSubModal.lastCall().args[0];
         });
 
         it("launches the change owner confirmation dialog", function() {
@@ -20,7 +20,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
         describe("confirming the new owner", function() {
             beforeEach(function() {
                 expect(this.dialog.launchSubModal).toHaveBeenCalled();
-                var submodal = this.dialog.launchSubModal.mostRecentCall.args[0];
+                var submodal = this.dialog.launchSubModal.lastCall().args[0];
                 spyOn(this.dialog.ownership, 'save').andCallThrough();
                 submodal.trigger("confirmChangeOwner", this.newOwner);
             });
@@ -239,12 +239,12 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
 
                 it("launches the Remove Shared Account dialog", function() {
                     expect(this.dialog.launchSubModal).toHaveBeenCalled();
-                    expect(this.dialog.launchSubModal.calls[0].args[0] instanceof chorus.alerts.RemoveSharedAccount).toBeTruthy();
+                    expect(this.dialog.launchSubModal.nthCall(0).args[0] instanceof chorus.alerts.RemoveSharedAccount).toBeTruthy();
                 });
 
                 context("when the alert is confirmed", function() {
                     beforeEach(function() {
-                        this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
+                        this.dialog.launchSubModal.nthCall(0).args[0].confirmAlert();
                     });
 
                     it("destroys the sharing", function() {
@@ -274,7 +274,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                         context("if the user replaces the sharing", function() {
                             beforeEach(function() {
                                 this.dialog.$("a.add_shared_account").click();
-                                this.dialog.launchSubModal.calls[1].args[0].confirmAlert();
+                                this.dialog.launchSubModal.nthCall(1).args[0].confirmAlert();
                             });
 
                             it("sends a create to the server", function() {
@@ -778,12 +778,12 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
 
             it("launches the Add Shared Account dialog", function() {
                 expect(this.dialog.launchSubModal).toHaveBeenCalled();
-                expect(this.dialog.launchSubModal.calls[0].args[0] instanceof chorus.alerts.AddSharedAccount).toBeTruthy();
+                expect(this.dialog.launchSubModal.nthCall(0).args[0] instanceof chorus.alerts.AddSharedAccount).toBeTruthy();
             });
 
             context("when the alert is confirmed", function() {
                 beforeEach(function() {
-                    this.dialog.launchSubModal.calls[0].args[0].confirmAlert();
+                    this.dialog.launchSubModal.nthCall(0).args[0].confirmAlert();
                 });
 
                 it("asks the server to add sharing", function() {

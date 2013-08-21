@@ -59,7 +59,6 @@ describe("chorus.views.Dialog", function() {
 
             spyOn($, "facebox");
             spyOn(this.dialog, "render");
-            spyOn(this.dialog, "el");
             this.dialog.launchModal();
         });
 

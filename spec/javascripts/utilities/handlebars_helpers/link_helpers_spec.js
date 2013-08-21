@@ -40,7 +40,7 @@ describe('chorus.handlebarsHelpers.link', function() {
             });
 
             it("yields to the block for each element", function () {
-                expect(this.yieldSpy.fn.callCount).toBe(3);
+                expect(this.yieldSpy.fn.calls.count()).toBe(3);
             });
 
             it("calls moreLink", function () {
@@ -49,9 +49,9 @@ describe('chorus.handlebarsHelpers.link', function() {
             });
 
             it("sets the 'more' context attribute when yielding for each element with an index greater than max", function () {
-                expect(this.yieldSpy.fn.calls[0].args[0].moreClass).toBe("");
-                expect(this.yieldSpy.fn.calls[1].args[0].moreClass).toBe("");
-                expect(this.yieldSpy.fn.calls[2].args[0].moreClass).toBe("more");
+                expect(this.yieldSpy.fn.nthCall(0).args[0].moreClass).toBe("");
+                expect(this.yieldSpy.fn.nthCall(1).args[0].moreClass).toBe("");
+                expect(this.yieldSpy.fn.nthCall(2).args[0].moreClass).toBe("more");
             });
         });
 
@@ -68,9 +68,9 @@ describe('chorus.handlebarsHelpers.link', function() {
             });
 
             it("sets the 'more' context attribute when yielding for each element with an index less than length - max", function () {
-                expect(this.yieldSpy.fn.calls[0].args[0].moreClass).toBe("more");
-                expect(this.yieldSpy.fn.calls[1].args[0].moreClass).toBe("");
-                expect(this.yieldSpy.fn.calls[2].args[0].moreClass).toBe("");
+                expect(this.yieldSpy.fn.nthCall(0).args[0].moreClass).toBe("more");
+                expect(this.yieldSpy.fn.nthCall(1).args[0].moreClass).toBe("");
+                expect(this.yieldSpy.fn.nthCall(2).args[0].moreClass).toBe("");
             });
         });
 
@@ -86,7 +86,7 @@ describe('chorus.handlebarsHelpers.link', function() {
             });
 
             it("yields to the block for each element", function () {
-                expect(this.yieldSpy.fn.callCount).toBe(2);
+                expect(this.yieldSpy.fn.calls.count()).toBe(2);
             });
 
             it("calls moreLink", function () {
@@ -95,8 +95,8 @@ describe('chorus.handlebarsHelpers.link', function() {
             });
 
             it("does not set the 'more' context attribute when yielding for any element", function () {
-                expect(this.yieldSpy.fn.calls[0].args[0].moreClass).toBe("");
-                expect(this.yieldSpy.fn.calls[1].args[0].moreClass).toBe("");
+                expect(this.yieldSpy.fn.nthCall(0).args[0].moreClass).toBe("");
+                expect(this.yieldSpy.fn.nthCall(1).args[0].moreClass).toBe("");
             });
         });
     });

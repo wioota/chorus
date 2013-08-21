@@ -682,7 +682,7 @@ describe("chorus.views.ResultsConsoleView", function() {
 
             it("calls executionFailed", function() {
                 expect(this.view.executionFailed).toHaveBeenCalled();
-                expect(this.view.executionFailed.mostRecentCall.args[0]).toBe(this.executionModel);
+                expect(this.view.executionFailed.lastCall().args[0]).toBe(this.executionModel);
             });
         });
 

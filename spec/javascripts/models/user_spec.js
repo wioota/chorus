@@ -85,7 +85,7 @@ describe("chorus.models.User", function() {
                 var spy = jasmine.createSpy("changeHandler");
                 this.user.bind("change", spy);
                 this.workspaces.trigger("reset");
-                expect(spy.calls.length).toBe(1);
+                expect(spy.calls.count()).toBe(1);
             });
         });
 

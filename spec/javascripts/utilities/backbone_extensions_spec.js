@@ -121,14 +121,14 @@ describe("backbone_extensions", function() {
         describe("when the child calls super parent", function() {
             it("the parent should get called", function() {
                 expect(child.testFunction()).toEqual('parent');
-                expect(parentClass.prototype.testFunction.callCount).toEqual(1);
-                expect(grandParentClass.prototype.testFunction.callCount).toEqual(0);
+                expect(parentClass.prototype.testFunction.calls.count()).toEqual(1);
+                expect(grandParentClass.prototype.testFunction.calls.count()).toEqual(0);
             });
 
             it("works if the method is called more than once", function() {
                 expect(child.testFunction()).toEqual('parent');
                 expect(child.testFunction()).toEqual('parent');
-                expect(parentClass.prototype.testFunction.callCount).toEqual(2);
+                expect(parentClass.prototype.testFunction.calls.count()).toEqual(2);
             });
 
             describe("when it calls through to the grandParent", function() {
@@ -141,8 +141,8 @@ describe("backbone_extensions", function() {
 
                 it("the grandParent should get called", function() {
                     expect(child.testFunction()).toEqual('grandParent');
-                    expect(parentClass.prototype.testFunction.callCount).toEqual(1);
-                    expect(grandParentClass.prototype.testFunction.callCount).toEqual(1);
+                    expect(parentClass.prototype.testFunction.calls.count()).toEqual(1);
+                    expect(grandParentClass.prototype.testFunction.calls.count()).toEqual(1);
                 });
 
                 it("passes arguments", function() {
@@ -159,7 +159,7 @@ describe("backbone_extensions", function() {
 
                 it("calls through to the grandParent", function() {
                     expect(child.testFunction()).toEqual('grandParent');
-                    expect(grandParentClass.prototype.testFunction.callCount).toEqual(1);
+                    expect(grandParentClass.prototype.testFunction.calls.count()).toEqual(1);
                 });
             });
         });
@@ -181,8 +181,8 @@ describe("backbone_extensions", function() {
 
             it("calls the overridden method only once", function() {
                 this.friend.greet("Barbara", "morning");
-                expect(Friend.prototype.greet.callCount).toBe(1);
-                expect(Mammal.prototype.greet.callCount).toBe(1);
+                expect(Friend.prototype.greet.calls.count()).toBe(1);
+                expect(Mammal.prototype.greet.calls.count()).toBe(1);
             });
 
             it("can be called multiple times with the same results", function() {
@@ -255,7 +255,7 @@ describe("backbone_extensions", function() {
 
                 it("does not call the object's own method more than once", function() {
                     this.friend.greet("Barbara", "morning");
-                    expect(Mammal.prototype.greet.callCount).toBe(1);
+                    expect(Mammal.prototype.greet.calls.count()).toBe(1);
                 });
             });
         });
@@ -283,7 +283,7 @@ describe("backbone_extensions", function() {
 
                 it("does not call the object's own method more than once", function() {
                     this.friend.greet("Barbara", "morning");
-                    expect(Dog.prototype.greet.callCount).toBe(1);
+                    expect(Dog.prototype.greet.calls.count()).toBe(1);
                 });
             });
         });
@@ -316,16 +316,16 @@ describe("backbone_extensions", function() {
         it("does not unbind both events when unbind is called with a context", function() {
             this.model.unbind('fake', this.callback, this.context2);
             this.model.trigger('fake');
-            expect(this.callback.callCount).toBe(1);
-            expect(this.callback.mostRecentCall.object).toBe(this.context1);
+            expect(this.callback.calls.count()).toBe(1);
+            expect(this.callback.lastCall().object).toBe(this.context1);
         });
 
         it("unbinds all events that match a given event, callback, and context", function() {
             this.model.bind("fake", this.callback, this.context2);
             this.model.unbind('fake', this.callback, this.context2);
             this.model.trigger('fake');
-            expect(this.callback.callCount).toBe(1);
-            expect(this.callback.mostRecentCall.object).toBe(this.context1);
+            expect(this.callback.calls.count()).toBe(1);
+            expect(this.callback.lastCall().object).toBe(this.context1);
         });
 
         it("unbinds all events that match a given event and callback when no context is passed", function() {

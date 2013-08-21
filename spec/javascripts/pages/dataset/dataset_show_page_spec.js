@@ -170,7 +170,7 @@ describe("chorus.pages.DatasetShowPage", function () {
 
                 expect(searchInput).toExist();
                 expect(chorus.search).toHaveBeenCalled();
-                var searchOptions = chorus.search.mostRecentCall.args[0];
+                var searchOptions = chorus.search.lastCall().args[0];
 
                 expect(searchOptions.input).toBe(searchInput);
                 expect(searchOptions.list).toBe(columnList);

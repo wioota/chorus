@@ -44,7 +44,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
     describe("_linkToModel", function() {
         it("returns a link to a model", function() {
             var model = new chorus.models.User({ id: 5, firstName: "Tom", lastName: "Wood" });
-            expect(chorus.presenters.DatasetSidebar.prototype._linkToModel(model)).toEqual({ string: '<a href="#/users/5" title="Tom Wood">Tom Wood</a>'});
+            expect(chorus.presenters.DatasetSidebar.prototype._linkToModel(model).toString()).toEqual('<a href="#/users/5" title="Tom Wood">Tom Wood</a>');
         });
     });
 

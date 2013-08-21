@@ -23,7 +23,7 @@ describe("chorus.views.TextWorkfileContentView", function() {
         });
 
         it("correctly sets the extraKeys on the CodeMirror options", function() {
-            var opts = CodeMirror.fromTextArea.mostRecentCall.args[1];
+            var opts = CodeMirror.fromTextArea.lastCall().args[1];
             expect(opts.extraKeys[_.str.capitalize(chorus.hotKeyMeta) + "-A"]).toBeDefined();
             expect(opts.extraKeys[_.str.capitalize(chorus.hotKeyMeta) + "-B"]).toBeDefined();
         });

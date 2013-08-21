@@ -69,7 +69,8 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
   gem 'foreman', '>= 0.62',      :require => false
   gem 'rake',                    :require => false
 
-  gem 'jasmine', '~> 1.3.2'
+  gem 'jasmine', :github => 'pivotal/jasmine-gem'
+  gem 'jasmine-core', :github => 'pivotal/jasmine'
   gem 'rspec_api_documentation', :github => "GreenplumChorus/rspec_api_documentation"
   gem 'sunspot_matchers'
   gem 'fixture_builder'

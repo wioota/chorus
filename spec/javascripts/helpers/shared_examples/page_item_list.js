@@ -35,7 +35,7 @@ jasmine.sharedExamples.PageItemList = function() {
                 this.view.liViews[0].itemView.render.reset();
                 this.collection.at(0).trigger('change:tags');
                 expect(this.view.liViews[0].itemView.render).toHaveBeenCalled();
-                expect(this.view.entityViewType.prototype.render.callCount).toEqual(1);
+                expect(this.view.entityViewType.prototype.render.calls.count()).toEqual(1);
             });
         });
     });
@@ -45,7 +45,7 @@ jasmine.sharedExamples.PageItemList = function() {
         expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("checked", jasmine.any(chorus.collections[this.collection.constructorName]));
         expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(entityChecked, jasmine.any(chorus.collections[this.collection.constructorName]));
 
-        var lastCall = _(chorus.PageEvents.trigger.calls).chain().filter(function (call) {
+        var lastCall = _(chorus.PageEvents.trigger.calls.all()).chain().filter(function (call) {
             return call.args[0] === "checked" || call.args[0] === entityChecked;
         }).last().value();
         expect(lastCall.args[1].pluck("id")).toEqual(_.pluck(expectedModels, "id"));

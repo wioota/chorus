@@ -447,21 +447,21 @@ describe("chorus.dialogs.FileImport", function() {
                         it("launches the import new table dialog", function() {
                             expect(chorus.dialogs.NewTableImportCSV.prototype.setup).toHaveBeenCalled();
 
-                            var dialogArgs = chorus.dialogs.NewTableImportCSV.prototype.setup.mostRecentCall.args[0];
+                            var dialogArgs = chorus.dialogs.NewTableImportCSV.prototype.setup.lastCall().args[0];
                             expect(dialogArgs.model.get("contents").length).toBe(2);
 
                             expect(this.modalSpy).toHaveModal(chorus.dialogs.NewTableImportCSV);
                         });
 
                         it("re-enables input file and the radio button after cancelling the 'import new table' dialog", function () {
-                            var importCsvDialog = chorus.dialogs.NewTableImportCSV.prototype.setup.mostRecentCall.object;
+                            var importCsvDialog = chorus.dialogs.NewTableImportCSV.prototype.setup.lastCall().object;
                             importCsvDialog.closeModal();
                             expect(this.dialog.$(".file-wrapper a")).not.toHaveClass("hidden");
                             expect(this.dialog.$(".import_controls input[type=radio]")).not.toBeDisabled();
                         });
 
                         it("closes itself when the 'import new table' dialog closes", function() {
-                            var importCsvDialog = chorus.dialogs.NewTableImportCSV.prototype.setup.mostRecentCall.object;
+                            var importCsvDialog = chorus.dialogs.NewTableImportCSV.prototype.setup.lastCall().object;
                             importCsvDialog.closeModal();
                             chorus.PageEvents.trigger("csv_import:started");
                             expect(this.dialog.modalClosed).toHaveBeenCalled();

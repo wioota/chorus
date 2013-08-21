@@ -226,7 +226,7 @@ describe("chorus.views.Bare", function() {
             this.view.subscribePageEvent("testevent", this.callbackSpy);
             this.view.subscribePageEvent("testevent", this.callbackSpy);
             chorus.PageEvents.trigger("testevent");
-            expect(this.callbackSpy.callCount).toBe(1);
+            expect(this.callbackSpy.calls.count()).toBe(1);
         });
     });
 
@@ -333,7 +333,7 @@ describe("chorus.views.Bare", function() {
                 this.model.trigger('loaded');
                 expect(this.callback).toHaveBeenCalled();
                 this.model.trigger('loaded');
-                expect(this.callback.callCount).toBe(1);
+                expect(this.callback.calls.count()).toBe(1);
             });
         });
     });
@@ -361,11 +361,11 @@ describe("chorus.views.Bare", function() {
                     '.test_link': this.eventSpy
                 }
             });
-            this.qtipArgs = $.fn.qtip.mostRecentCall.args[0];
+            this.qtipArgs = $.fn.qtip.lastCall().args[0];
         });
 
         it("calls qtip on the given element", function() {
-            expect($.fn.qtip.mostRecentCall.object.get(0)).toEqual(this.element.get(0));
+            expect($.fn.qtip.lastCall().object.get(0)).toEqual(this.element.get(0));
         });
 
         it("passes down the given content", function() {
@@ -413,7 +413,7 @@ describe("chorus.views.Bare", function() {
             });
 
             it("calls $.fn.remove on the menu element", function() {
-                expect($.fn.remove.mostRecentCall.object.get(0)).toEqual(this.element.get(0));
+                expect($.fn.remove.lastCall().object.get(0)).toEqual(this.element.get(0));
             });
         });
     });

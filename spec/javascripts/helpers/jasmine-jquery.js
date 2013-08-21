@@ -488,7 +488,8 @@
         }
 
         var bindMatcher = function (methodName) {
-            var builtInMatcher = jasmine.Matchers.prototype[methodName]
+            // THIS PART HAS BEEN CHANGED
+            var builtInMatcher = jasmine.matchers[methodName]
 
             jasmine.JQuery.matchersClass[methodName] = function () {
                 if (this.actual
@@ -504,8 +505,9 @@
                     return result
                 }
 
+                // THIS PART HAS BEEN CHANGED TOO
                 if (builtInMatcher) {
-                    return builtInMatcher.apply(this, arguments)
+                    return builtInMatcher(jasmine.matchersUtil, null).compare.call(null, this.actual, arguments[0]).pass;
                 }
 
                 return false
@@ -518,6 +520,8 @@
     }()
 
     beforeEach(function () {
+        // THIS IS ANOTHER CHANGE
+        this.addMatchers = window.addCompatibilityShimmedMatchers;
         this.addMatchers(jasmine.JQuery.matchersClass)
         this.addMatchers({
             toHaveBeenTriggeredOn: function (selector) {

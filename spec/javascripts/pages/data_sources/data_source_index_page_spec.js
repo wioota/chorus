@@ -14,10 +14,10 @@ describe("chorus.pages.DataSourceIndexPage", function() {
 
         it("handleFetchErrorsFor the data sources", function() {
             var page = new chorus.pages.DataSourceIndexPage();
-            expect(page.handleFetchErrorsFor.calls.length).toEqual(3);
-            expect(page.handleFetchErrorsFor.calls[0].args[0].constructor).toBe(chorus.collections.DataSourceSet);
-            expect(page.handleFetchErrorsFor.calls[1].args[0].constructor).toBe(chorus.collections.HdfsDataSourceSet);
-            expect(page.handleFetchErrorsFor.calls[2].args[0].constructor).toBe(chorus.collections.GnipDataSourceSet);
+            expect(page.handleFetchErrorsFor.calls.count()).toEqual(3);
+            expect(page.handleFetchErrorsFor.nthCall(0).args[0].constructor).toBe(chorus.collections.DataSourceSet);
+            expect(page.handleFetchErrorsFor.nthCall(1).args[0].constructor).toBe(chorus.collections.HdfsDataSourceSet);
+            expect(page.handleFetchErrorsFor.nthCall(2).args[0].constructor).toBe(chorus.collections.GnipDataSourceSet);
         });
 
         afterEach(function() {

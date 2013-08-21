@@ -13,11 +13,11 @@ describe("chorus.models.SqlExecutionAndDownloadTask", function() {
             spyOn($, 'fileDownload');
             this.model.save();
             expect($.fileDownload).toHaveBeenCalled();
-            expect($.fileDownload.mostRecentCall.args[0]).toBe('/workfiles/1/executions');
-            expect($.fileDownload.mostRecentCall.args[1].data['schema_id']).toBe('5');
-            expect($.fileDownload.mostRecentCall.args[1].data['sql']).toBe('select 2');
-            expect($.fileDownload.mostRecentCall.args[1].data['num_of_rows']).toBe('6');
-            expect($.fileDownload.mostRecentCall.args[1].data['file_name']).toBe('a_workfile');
+            expect($.fileDownload.lastCall().args[0]).toBe('/workfiles/1/executions');
+            expect($.fileDownload.lastCall().args[1].data['schema_id']).toBe('5');
+            expect($.fileDownload.lastCall().args[1].data['sql']).toBe('select 2');
+            expect($.fileDownload.lastCall().args[1].data['num_of_rows']).toBe('6');
+            expect($.fileDownload.lastCall().args[1].data['file_name']).toBe('a_workfile');
         });
     });
 
