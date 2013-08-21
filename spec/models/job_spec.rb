@@ -100,6 +100,25 @@ describe Job do
         mock(Job).find(job.id) { job }
         Job.run job.id
       end
+
+      context "when the Job was stopped before being picked from the queue" do
+        let(:stopped_job) { FactoryGirl.create(:job, :status => Job::STOPPING) }
+
+        before do
+          stub(Job).find(stopped_job.id) { stopped_job }
+        end
+
+        it "does not run any tasks" do
+          dont_allow(stopped_job).perform_tasks
+          Job.run stopped_job.id
+        end
+
+        it "sets idles" do
+          Job.run stopped_job.id
+          stopped_job.status.should == Job::IDLE
+        end
+
+      end
     end
 
     describe '#enqueue' do
@@ -110,7 +129,7 @@ describe Job do
 
       it "sets the job's status to waiting to run" do
         ready_job.enqueue
-        ready_job.reload.status.should == 'enqueued'
+        ready_job.reload.status.should == Job::ENQUEUED
       end
     end
   end
@@ -151,7 +170,7 @@ describe Job do
       context "when the job finishes running" do
         it 'updates the status to "idle"' do
           job.run
-          job.status.should == 'idle'
+          job.status.should == Job::IDLE
         end
       end
 
@@ -311,10 +330,10 @@ describe Job do
     end
 
     it "sets the job's status to 'stopping'" do
-      job.update_attribute(:status, 'running')
+      job.update_attribute(:status, Job::RUNNING)
       expect do
         job.kill
-      end.to change(job.reload, :status).from('running').to('stopping')
+      end.to change(job.reload, :status).from(Job::RUNNING).to(Job::STOPPING)
     end
   end
 end

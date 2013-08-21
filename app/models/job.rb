@@ -1,7 +1,12 @@
 class Job < ActiveRecord::Base
   include SoftDelete
 
-  STATUSES = %w(enqueued running idle stopping)
+  ENQUEUED = 'enqueued'
+  RUNNING = 'running'
+  IDLE = 'idle'
+  STOPPING = 'stopping'
+
+  STATUSES = [ENQUEUED, RUNNING, IDLE, STOPPING]
   VALID_INTERVAL_UNITS = %w(hours days weeks months on_demand)
 
   attr_accessible :enabled, :name, :next_run, :last_run, :interval_unit, :interval_value, :end_run, :time_zone, :status, :notifies
@@ -23,7 +28,7 @@ class Job < ActiveRecord::Base
   validate :next_run_not_in_past, :if => Proc.new { |job| job.changed.include?('next_run') }
   validate :end_run_not_in_past, :if => :end_run
 
-  scope :ready_to_run, -> { where(enabled: true).where(status: 'idle').where('next_run <= ?', Time.current).order(:next_run) }
+  scope :ready_to_run, -> { where(enabled: true).where(status: IDLE).where('next_run <= ?', Time.current).order(:next_run) }
 
   def self.order_by(column_name)
     if column_name.blank? || column_name == "name"
@@ -41,15 +46,16 @@ class Job < ActiveRecord::Base
 
   def enqueue
     QC.default_queue.enqueue_if_not_queued("Job.run", id)
-    self.status = 'enqueued'
-    save!
+    update_attributes!(:status => ENQUEUED)
   end
 
   def run
-    prepare_to_run!
-    initialize_results
-    perform_tasks
-    job_succeeded
+    unless stopping?
+      prepare_to_run!
+      initialize_results
+      perform_tasks
+      job_succeeded
+    end
   rescue JobTask::JobTaskFailure
     job_failed
   ensure
@@ -83,7 +89,7 @@ class Job < ActiveRecord::Base
 
   def kill
     job_tasks.map(&:kill)
-    update_attribute(:status, 'stopping')
+    update_attribute(:status, STOPPING)
   end
 
   private
@@ -97,7 +103,7 @@ class Job < ActiveRecord::Base
     ensure_next_run_is_in_the_future
     self.last_run = Time.current
     self.disable! if expiring?
-    self.status = 'running'
+    self.status = RUNNING
     save!
   end
 
@@ -152,8 +158,11 @@ class Job < ActiveRecord::Base
     on_demand? ? false : (end_run && next_run > end_run.to_date)
   end
 
+  def stopping?
+    status == STOPPING
+  end
+
   def idle!
-    self.status = 'idle'
-    save!
+    update_attributes!(:status => IDLE)
   end
 end

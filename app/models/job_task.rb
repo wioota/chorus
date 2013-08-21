@@ -47,6 +47,6 @@ class JobTask < ActiveRecord::Base
   end
 
   def idle!
-    update_attribute(:status, nil)
+    update_attributes!(:status => nil)
   end
 end
