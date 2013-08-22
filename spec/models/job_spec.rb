@@ -336,4 +336,43 @@ describe Job do
       end.to change(job.reload, :status).from(Job::RUNNING).to(Job::STOPPING)
     end
   end
+
+  describe 'recipients' do
+    let(:job) { ready_job }
+
+    it "differentiate based on completion conditions" do
+      user_one, user_two = 2.times.map { FactoryGirl.create(:user) }
+
+      job.notify_on :success, user_one
+      job.notify_on :failure, user_one
+      job.notify_on :failure, user_two
+
+      job.reload.success_recipients.should =~ [user_one]
+      job.reload.failure_recipients.should =~ [user_one, user_two]
+    end
+
+    it "makes one record per user, per condition" do
+      user_once = FactoryGirl.create(:user)
+      user_twice = FactoryGirl.create(:user)
+
+      expect do
+        job.notify_on :success, user_once
+        job.notify_on :success, user_once
+
+        job.notify_on :success, user_twice
+        job.notify_on :failure, user_twice
+      end.to change(JobSubscription, :count).by(3)
+    end
+
+    it "is reversible" do
+      user_one = FactoryGirl.create(:user)
+
+      job.notify_on :success, user_one
+      job.notify_on :failure, user_one
+
+      expect do
+        job.dont_notify_on :success, user_one
+      end.to change(JobSubscription, :count).by(-1)
+    end
+  end
 end

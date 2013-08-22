@@ -16,15 +16,18 @@ describe JobPresenter, :type => :view do
         :enabled, :status, :id, :end_run, :time_zone, :is_deleted, :last_run_failed,
         :success_notify, :failure_notify
     ] }
+    let(:expensive_keys) {[
+        :tasks, :owner,  :success_recipients, :failure_recipients
+    ]}
 
     describe "list_view" do
       let(:options) { {list_view: true} }
       let(:hash) { presenter.to_hash }
 
+
       it "includes the right keys" do
         keys.each { |key| hash.should have_key(key) }
-        hash.should_not have_key(:tasks)
-        hash.should_not have_key(:owner)
+        expensive_keys.each {|key| hash.should_not have_key(key)}
       end
     end
 
@@ -32,9 +35,7 @@ describe JobPresenter, :type => :view do
       let(:hash) { presenter.to_hash }
 
       it "includes the right keys" do
-        (keys + [:tasks, :owner]).each do |key|
-          hash.should have_key(key)
-        end
+        (keys + expensive_keys).each { |key| hash.should have_key(key) }
       end
 
       it "presents next run and last_run as iso8601 strings with timezone" do

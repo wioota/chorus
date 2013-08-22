@@ -18,6 +18,9 @@ class Job < ActiveRecord::Base
   has_many :job_results, :order => :finished_at
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
+  has_many :job_subscriptions
+  has_many :success_recipients, :through => :job_subscriptions, :source => :user, :conditions => ['job_subscriptions.condition = ?', 'success']
+  has_many :failure_recipients, :through => :job_subscriptions, :source => :user, :conditions => ['job_subscriptions.condition = ?', 'failure']
 
   validates :interval_unit, :presence => true, :inclusion => {:in => VALID_INTERVAL_UNITS }
   validates :status, :presence => true, :inclusion => {:in => STATUSES }
@@ -90,6 +93,18 @@ class Job < ActiveRecord::Base
   def kill
     job_tasks.map(&:kill)
     update_attribute(:status, STOPPING)
+  end
+
+  def notify_on(condition, user)
+    subscription = job_subscriptions.find_or_create_by_user_id_and_condition(user.id, condition)
+    subscription.update_attributes!(:condition => condition, :user => user)
+    reload
+  end
+
+  def dont_notify_on(condition, user)
+    subscription = job_subscriptions.find_by_user_id_and_condition(user.id, condition)
+    subscription.delete
+    reload
   end
 
   private

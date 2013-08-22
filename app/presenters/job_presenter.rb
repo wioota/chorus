@@ -22,6 +22,7 @@ class JobPresenter < Presenter
     unless options[:list_view] || options[:succinct]
       job_hash.merge!(tasks)
       job_hash[:owner] = present model.owner
+      job_hash.merge!(recipients)
     end
     job_hash
   end
@@ -31,6 +32,13 @@ class JobPresenter < Presenter
   end
 
   private
+
+  def recipients
+    {
+        :success_recipients => model.success_recipients.map { |user| present(user) },
+        :failure_recipients => model.failure_recipients.map { |user| present(user) }
+    }
+  end
 
   def in_time_zone(key)
     if model.send(key)
