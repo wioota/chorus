@@ -74,6 +74,7 @@ describe Workfile do
     end
 
     it "enforces uniqueness only among non-deleted workfiles" do
+      stub(Alpine::API).delete_work_flow
       existing_workfile.destroy
       new_workfile = FactoryGirl.build(:workfile, :file_name => existing_workfile.file_name, :workspace => workspace)
       new_workfile.should be_valid

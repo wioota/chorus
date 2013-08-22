@@ -136,12 +136,20 @@ class ChorusConfig
     self['alpine.branded.enabled'] ? "alpine-favicon.ico" : "favicon.ico"
   end
 
+  def branding_logo
+    self['alpine.branded.enabled'] ? "alpine-logo.png" : "headertitle.png"
+  end
+
   def work_flow_url
     self['work_flow.url']
   end
 
   def mail_configuration
     self['mail']
+  end
+
+  def smtp_configuration
+    self['smtp']
   end
 
   private

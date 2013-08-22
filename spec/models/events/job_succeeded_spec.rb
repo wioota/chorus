@@ -6,7 +6,8 @@ describe Events::JobSucceeded do
   let(:owner) { job.owner }
   let(:member) { users(:the_collaborator) }
   let(:non_member) { users(:no_collaborators) }
-  let(:event) { Events::JobSucceeded.by(owner).add(:job => job, :workspace => workspace) }
+  let(:job_result) { job_results(:default) }
+  let(:event) { Events::JobSucceeded.by(owner).add(:job => job, :workspace => workspace, :job_result => job_result) }
 
   describe "jobs where notifies is set" do
     before do
@@ -22,6 +23,11 @@ describe Events::JobSucceeded do
 
       member.notifications.last.event.should == event
     end
+
+    it "emails those it notifies" do
+      event
+      ActionMailer::Base.deliveries.map(&:to).flatten.should =~ workspace.members.map(&:email)
+    end
   end
 
   describe "jobs where notifies is not set" do
@@ -33,6 +39,12 @@ describe Events::JobSucceeded do
       expect {
         event
       }.not_to change(Notification, :count)
+    end
+  end
+
+  describe 'header' do
+    it "has good copy" do
+      event.header.should == "Job #{job.name} succeeded in workspace #{workspace.name}."
     end
   end
 end

@@ -42,7 +42,7 @@ describe WorkfilesController do
 
     context "with a name pattern" do
       it "filters by name pattern" do
-        get :index, :workspace_id => workspace.id, :name_pattern => workspace.workfiles.first.file_name[0..3]
+        get :index, :workspace_id => workspace.id, :name_pattern => "hadoop_dataset_fl"
         response.code.should == "200"
         decoded_response.length.should == 1
       end

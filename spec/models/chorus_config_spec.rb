@@ -446,20 +446,31 @@ describe ChorusConfig do
   end
 
   describe "mail settings" do
-    let(:mail_config) do
+    let(:smtp_config) do
       {
         'host' => 'localhost',
         'port' => 587,
         'user_name' => 'mailer',
         'password' => 'pwer',
-        'authentication' => 'login',
-        'from_name' => 'Chorus',
-        'from_address' => 'chorus@example.com'
+        'authentication' => 'login'
+      }
+    end
+
+    let(:mail_config) do
+      {
+        'name' => 'Chorus',
+        'reply_to' => 'chorus@example.com'
       }
     end
 
     before do
-      config.config = {'mail' => mail_config}
+      config.config = { 'smtp' => smtp_config, 'mail' => mail_config }
+    end
+
+    describe "smtp_configuration" do
+      it "returns the smtp configuration" do
+        config.smtp_configuration.should == smtp_config
+      end
     end
 
     describe "mail_configuration" do

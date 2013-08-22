@@ -18,6 +18,7 @@ class ChorusConfigPresenter < Presenter
         :work_flow_configured => model.work_flow_configured?,
         :work_flow_url => model.work_flow_url,
         :alpine_branded => model['alpine.branded.enabled'],
+        :branding_logo => model.branding_logo,
         :hdfs_versions => model.hdfs_versions,
         :time_zones => model.time_zones
     }

@@ -87,5 +87,10 @@ describe ChorusConfigPresenter, :type => :view do
       stub(config).hdfs_versions { %w(An array of versions) }
       hash[:hdfs_versions].should == %w(An array of versions)
     end
+
+    it "includes the branding logo" do
+      stub(config).branding_logo { '/foo/bar.jpg' }
+      hash[:branding_logo].should == '/foo/bar.jpg'
+    end
   end
 end

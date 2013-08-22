@@ -379,9 +379,6 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:job, :workspace => public_workspace)
     FactoryGirl.create(:job, :workspace => public_workspace)
 
-    Events::JobSucceeded.by(owner).add(:job => default_job, :workspace => default_job.workspace, :job_result => FactoryGirl.create(:job_result, :job => default_job))
-    Events::JobFailed.by(owner).add(:job => default_job, :workspace => default_job.workspace, :job_result => FactoryGirl.create(:job_result, :job => default_job, :succeeded => false))
-
     default_job_task = FactoryGirl.create(:import_source_data_task, :job => default_job)
     fbuilder.name :default, default_job_task
 
@@ -395,6 +392,7 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:import_source_data_task, :job => default_job)
     a_result = FactoryGirl.create(:job_result, :job => default_job)
     b_result = FactoryGirl.create(:job_result, :job => default_job)
+    fbuilder.name :default, b_result
 
     FactoryGirl.create(:run_work_flow_task_result, :job_result => a_result)
 
@@ -403,6 +401,9 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:job_task_result, :job_result => b_result)
 
     default_job.update_attribute(:last_run, b_result.started_at)
+
+    Events::JobSucceeded.by(owner).add(:job => default_job, :workspace => default_job.workspace, :job_result => b_result)
+    Events::JobFailed.by(owner).add(:job => default_job, :workspace => default_job.workspace, :job_result => FactoryGirl.create(:job_result, :job => default_job, :succeeded => false))
 
     #Imports
     dataset_import_created = FactoryGirl.create(:dataset_import_created_event,

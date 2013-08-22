@@ -146,12 +146,13 @@ work_flow.enabled = true
 work_flow.url = http://localhost:8070
 
 #Mail
-mail.host=localhost
-mail.port=587
-mail.user_name=USER_NAME
-mail.password=PASSWORD
-mail.authentication=login
-mail.enable_starttls_auto=false
-#mail.openssl_verify_mode=none
-mail.from_name=Chorus
-mail.from_address=noreply@example.com
+smtp.host=localhost
+smtp.port=587
+smtp.user_name=USER_NAME
+smtp.password=PASSWORD
+smtp.authentication=login
+smtp.enable_starttls_auto=false
+#smtp.openssl_verify_mode=none
+
+mail.from = FROM NAME <noreply@chorus.com>
+mail.reply_to = REPLY NAME <noreply@chorus.com>

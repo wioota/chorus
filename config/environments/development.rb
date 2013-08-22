@@ -35,4 +35,7 @@ Chorus::Application.configure do
   # Only turn it on if you really need concurrent requests
   #config.allow_concurrency = true
   #config.threadsafe!
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
 end
