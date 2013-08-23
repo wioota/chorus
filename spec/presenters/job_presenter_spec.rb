@@ -14,10 +14,10 @@ describe JobPresenter, :type => :view do
     let(:keys) { [
         :workspace, :name, :last_run, :next_run, :interval_unit, :interval_value,
         :enabled, :status, :id, :end_run, :time_zone, :is_deleted, :last_run_failed,
-        :success_notify, :failure_notify
+        :success_notify, :failure_notify, :success_recipients, :failure_recipients
     ] }
     let(:expensive_keys) {[
-        :tasks, :owner,  :success_recipients, :failure_recipients
+        :tasks, :owner
     ]}
 
     describe "list_view" do

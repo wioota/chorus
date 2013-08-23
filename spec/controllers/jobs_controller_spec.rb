@@ -105,6 +105,20 @@ describe JobsController do
       Job.last.owner.should == user
     end
 
+    describe "notification recipients" do
+      let(:success_recipient) { FactoryGirl.create(:user).tap {|user| workspace.members << user} }
+      let(:failure_recipient) { FactoryGirl.create(:user).tap {|user| workspace.members << user} }
+
+      it "sets success and failure notification recipientship for all ids" do
+        planned_job[:success_recipients] = [success_recipient.id]
+        planned_job[:failure_recipients] = [failure_recipient.id]
+        post :create, params
+        job = Job.last
+        job.success_recipients.should == [success_recipient]
+        job.failure_recipients.should == [failure_recipient]
+      end
+    end
+
     it "adds a created Job with a given Workspace" do
       expect do
         post :create, params
@@ -125,8 +139,8 @@ describe JobsController do
             :name => "asd",
             :interval_unit => "on_demand",
             :interval_value => "0",
-            :next_run => "invalid",
-            :end_run => "invalid",
+            :next_run => "false",
+            :end_run => "false",
             :time_zone => "Hawaii"
           },
           :workspace_id => workspace.id
@@ -149,7 +163,7 @@ describe JobsController do
                 :interval_unit => "hours",
                 :interval_value => "1",
                 :next_run => "2000-07-30T14:00:00-07:00",
-                :end_run => "invalid",
+                :end_run => "false",
                 :time_zone => "Hawaii"
             },
             :workspace_id => workspace.id
@@ -164,16 +178,20 @@ describe JobsController do
 
   describe '#update' do
     let(:job) { FactoryGirl.create(:job, workspace: workspace, enabled: false) }
+    let(:planned_changes) do
+      {
+          enabled: true,
+          next_run: "2020-07-30T14:00:00-00:00",
+          end_run: "false",
+          time_zone: 'Arizona',
+      }
+    end
+
     let(:params) do
       {
         id: job.id,
         workspace_id: workspace.id,
-        job: {
-            enabled: true,
-            next_run: "2020-07-30T14:00:00-00:00",
-            end_run: "invalid",
-            time_zone: 'Arizona',
-        }
+        job: planned_changes
       }
     end
 
@@ -192,6 +210,27 @@ describe JobsController do
     it "applies the passed-in time zone to the passed-in next_run without shifting time" do
       put :update, params
       job.reload.next_run.to_i.should == DateTime.parse("2020-07-30T14:00:00-07:00").to_i
+    end
+
+    describe "notification recipients" do
+      let(:success_recipient) { FactoryGirl.create(:user).tap {|user| workspace.members << user} }
+      let(:failure_recipient) { FactoryGirl.create(:user).tap {|user| workspace.members << user} }
+      let(:planned_changes) do
+        {
+            :success_recipients => [success_recipient.id],
+            :failure_recipients => []
+        }
+      end
+      before do
+        job.notify_on :failure, workspace.members.first
+      end
+
+      it "re-sets success and failure notification recipientship, clearing old recipients" do
+        post :update, params
+
+        job.success_recipients.should == [success_recipient]
+        job.failure_recipients.should == []
+      end
     end
 
     context "when an end-run is specified" do
@@ -222,7 +261,7 @@ describe JobsController do
             job: {
                 enabled: true,
                 next_run: "2000-07-30T14:00:00-00:00",
-                end_run: "invalid",
+                end_run: "false",
                 time_zone: 'Arizona',
             }
         }

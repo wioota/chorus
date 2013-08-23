@@ -46,12 +46,12 @@
                 return false;
             }
 
-            if (!_.isUndefined(a.cid) && !_.isUndefined(b.cid)) {
-                return (a.cid === b.cid);
-            }
-
             if (!_.isUndefined(a.id) && !_.isUndefined(b.id)) {
                 return (a.id === b.id);
+            }
+
+            if (!_.isUndefined(a.cid) && !_.isUndefined(b.cid)) {
+                return (a.cid === b.cid);
             }
         }
     };

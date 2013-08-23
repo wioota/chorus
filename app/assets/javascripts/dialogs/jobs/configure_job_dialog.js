@@ -17,10 +17,18 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
 
     events: {
         "change input:radio": 'toggleScheduleOptions',
-        "change .end_date_enabled": 'toggleEndRunDateWidget'
+        "change .end_date_enabled": 'toggleEndRunDateWidget',
+        "change input:radio[name='success_notify']": 'toggleSuccessRecipientsLink',
+        "change input:radio[name='failure_notify']": 'toggleFailureRecipientsLink',
+        "click a.select_success_recipients": 'launchSuccessRecipientSelectionDialog',
+        "click a.select_failure_recipients": 'launchFailureRecipientSelectionDialog'
     },
 
     makeModel: function () {
+        if (this.model) {
+            this.originalModel = this.model;
+            this.model = this.model.clone();
+        }
         this.creating = !this.model;
         this.model = this.model || new chorus.models.Job({ workspace: {id: this.options.workspace.id}, intervalUnit: 'on_demand' });
     },
@@ -44,8 +52,8 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
             checkInput: _.bind(this.checkInput, this)
         });
 
-        this.listenTo(this.model, "saved", this.modelSaved);
-        this.listenTo(this.model, 'saveFailed', this.saveFailed);
+        this.listenTo(this.getModel(), "saved", this.modelSaved);
+        this.listenTo(this.getModel(), 'saveFailed', this.saveFailed);
         this.toggleSubmitDisabled();
     },
 
@@ -85,7 +93,11 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
 
     create: function () {
         this.$("button.submit").startLoading('actions.saving');
-        this.model.save(this.fieldValues(), {wait: true, unprocessableEntity: $.noop});
+        this.getModel().save(this.fieldValues(), {wait: true, unprocessableEntity: $.noop});
+    },
+
+    getModel: function () {
+        return this.originalModel || this.model;
     },
 
     fieldValues: function () {
@@ -93,8 +105,8 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
             name: this.$('input.name').val(),
             intervalUnit: this.getIntervalUnit(),
             intervalValue: this.getIntervalValue(),
-            nextRun: this.isOnDemand() ? "invalid" : this.buildStartDate().forceZone(0).format(),
-            endRun: this.isOnDemand() || !this.endDateEnabled() ? "invalid" : this.buildEndDate().toISOString(),
+            nextRun: this.isOnDemand() ? false : this.buildStartDate().forceZone(0).format(),
+            endRun: this.isOnDemand() || !this.endDateEnabled() ? false : this.buildEndDate().toISOString(),
             timeZone: this.$('select.time_zone').val(),
             successNotify: this.$('[name=success_notify]:checked').val(),
             failureNotify: this.$('[name=failure_notify]:checked').val()
@@ -157,8 +169,48 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
         this.$('select.time_zone').val(zone);
     },
 
+    toggleSuccessRecipientsLink: function (e) {
+        var selectedSelected = $(e.target).val() === 'selected';
+        this.$('a.select_success_recipients').toggleClass('hidden', !selectedSelected);
+        this.$('span.select_success_recipients').toggleClass('hidden', selectedSelected);
+    },
+
+    toggleFailureRecipientsLink: function (e) {
+        var selectedSelected = $(e.target).val() === 'selected';
+        this.$('a.select_failure_recipients').toggleClass('hidden', !selectedSelected);
+        this.$('span.select_failure_recipients').toggleClass('hidden', selectedSelected);
+    },
+
+    launchSuccessRecipientSelectionDialog: function (e) {
+        e && e.preventDefault();
+        this.preserveFieldValues();
+        new chorus.dialogs.PickJobRecipients({model: this.model, condition: 'success'}).launchModal();
+    },
+
+    launchFailureRecipientSelectionDialog: function (e) {
+        e && e.preventDefault();
+        this.preserveFieldValues();
+        new chorus.dialogs.PickJobRecipients({model: this.model, condition: 'failure'}).launchModal();
+    },
+
+    preserveFieldValues: function () {
+        this.model.set(this.fieldValues());
+    },
 
     additionalContext: function () {
+        var notifyOptions = _.map(['success', 'failure'], function (condition) {
+            var notifyOption = this.model.get(condition + 'Notify');
+            var notifyRecipients = this.model.get(condition + 'Recipients');
+            return {
+                labelKey: 'job.dialog.edit.notify.label.' + condition,
+                condition: condition,
+                notifyEverybody: notifyOption === 'everybody',
+                notifySelected: notifyOption === 'selected',
+                notifyNobody: !notifyOption || notifyOption === 'nobody',
+                recipientCount: notifyRecipients ? notifyRecipients.length : 0
+            };
+        }, this);
+
         return {
             hours: _.range(1,13).map(function (digit) {
                 return {value: digit};
@@ -171,13 +223,7 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
             }),
             submitTranslation: this.submitTranslation(),
             runsOnDemand: this.model.runsOnDemand(),
-            successNotifyEverybody: this.model.get('successNotify') === 'everybody',
-            successNotifySelected: this.model.get('successNotify') === 'selected',
-            successNotifyNobody: this.model.get('successNotify') === 'nobody'  || !this.model.get('successNotify'),
-            failureNotifyEverybody: this.model.get('failureNotify') === 'everybody',
-            failureNotifySelected: this.model.get('failureNotify') === 'selected',
-            failureNotifyNobody: this.model.get('failureNotify') === 'nobody' || !this.model.get('failureNotify')
-
+            notifyOptions: notifyOptions
         };
     }
 });

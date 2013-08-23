@@ -4,7 +4,7 @@ class JobsController < ApplicationController
   def index
     authorize! :show, workspace
 
-    jobs = workspace.jobs.order_by(params[:order])
+    jobs = workspace.jobs.order_by(params[:order]).includes(Job.eager_load_associations)
 
     present paginate(jobs), :presenter_options => {:list_view => true}
   end
@@ -21,10 +21,15 @@ class JobsController < ApplicationController
     authorize! :can_edit_sub_objects, workspace
 
     job = Job.new(params[:job])
-    job.owner = current_user
-    job.save!
 
-    workspace.jobs << job
+    Job.transaction do
+      job.owner = current_user
+      job.save!
+
+      job.subscribe_recipients(params[:job]) if (params[:job][:success_recipients] || params[:job][:failure_recipients])
+
+      workspace.jobs << job
+    end
 
     present job, :status => :created
   end
@@ -33,12 +38,16 @@ class JobsController < ApplicationController
     authorize! :can_edit_sub_objects, workspace
 
     job = workspace.jobs.find(params[:id])
+
     if params[:job]['running_as_demanded']
       job.enqueue
     elsif params[:job]['kill']
       job.kill
     else
-      job.update_attributes!(params[:job])
+      Job.transaction do
+        job.update_attributes!(params[:job])
+        job.subscribe_recipients(params[:job]) if (params[:job][:success_recipients] || params[:job][:failure_recipients])
+      end
     end
 
     present job
@@ -64,7 +73,7 @@ class JobsController < ApplicationController
   end
 
   def end_run_exists?
-    params[:job][:end_run] && params[:job][:end_run] != 'invalid'
+    params[:job][:end_run] && params[:job][:end_run] != 'false'
   end
 
   def workspace

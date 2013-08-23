@@ -18,11 +18,11 @@ class JobPresenter < Presenter
       :failure_notify => model.failure_notify,
       :is_deleted => model.deleted?
     }
+    job_hash.merge!(recipients)
 
     unless options[:list_view] || options[:succinct]
       job_hash.merge!(tasks)
       job_hash[:owner] = present model.owner
-      job_hash.merge!(recipients)
     end
     job_hash
   end
@@ -35,8 +35,8 @@ class JobPresenter < Presenter
 
   def recipients
     {
-        :success_recipients => model.success_recipients.map { |user| present(user) },
-        :failure_recipients => model.failure_recipients.map { |user| present(user) }
+        :success_recipients => model.success_recipients.map { |user| user.id },
+        :failure_recipients => model.failure_recipients.map { |user| user.id }
     }
   end
 

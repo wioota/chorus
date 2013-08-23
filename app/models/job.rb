@@ -33,6 +33,13 @@ class Job < ActiveRecord::Base
 
   scope :ready_to_run, -> { where(enabled: true).where(status: IDLE).where('next_run <= ?', Time.current).order(:next_run) }
 
+  def self.eager_load_associations
+    [
+        :success_recipients,
+        :failure_recipients
+    ]
+  end
+
   def self.order_by(column_name)
     if column_name.blank? || column_name == "name"
       return order("lower(name), id")
@@ -105,6 +112,12 @@ class Job < ActiveRecord::Base
     subscription = job_subscriptions.find_by_user_id_and_condition(user.id, condition)
     subscription.delete
     reload
+  end
+
+  def subscribe_recipients(options)
+    job_subscriptions.destroy_all
+    options[:success_recipients].each { |id| notify_on(:success, User.find(id)) } if options[:success_recipients]
+    options[:failure_recipients].each { |id| notify_on(:failure, User.find(id)) } if options[:failure_recipients]
   end
 
   private

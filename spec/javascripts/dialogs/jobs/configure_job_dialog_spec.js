@@ -1,5 +1,7 @@
 describe("chorus.dialogs.ConfigureJob", function () {
     beforeEach(function () {
+        this.modalSpy = stubModals();
+
         this.jobPlan = {
             name: 'Apples',
             interval_value: '2',
@@ -186,7 +188,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                         expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
                         expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
                         expect(params['job[next_run]']).toEqual(date.format());
-                        expect(params['job[end_run]']).toEqual('invalid');
+                        expect(params['job[end_run]']).toEqual('false');
                     });
 
                     context("when the save succeeds", function () {
@@ -291,7 +293,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
         });
     });
 
-    context("when constructed with an old Job", function () {
+    describe("editing an existing Job", function () {
         beforeEach(function () {
             this.job = backboneFixtures.job();
             this.workspace = this.job.get("workspace");
@@ -329,8 +331,8 @@ describe("chorus.dialogs.ConfigureJob", function () {
         });
 
         it("populates time zone", function () {
-            this.job.set("nextRun", "2013-07-29T08:00:00-11:00");
-            this.job.set("timeZone", "American Samoa");
+            this.dialog.model.set("nextRun", "2013-07-29T08:00:00-11:00");
+            this.dialog.model.set("timeZone", "American Samoa");
             this.dialog.render();
             expect(this.dialog.$('select.time_zone').val()).toEqual("American Samoa");
         });
@@ -460,8 +462,8 @@ describe("chorus.dialogs.ConfigureJob", function () {
                     expect(params['job[name]']).toEqual(this.job.get("name"));
                     expect(params['job[interval_unit]']).toEqual("on_demand");
                     expect(params['job[interval_value]']).toEqual("0");
-                    expect(params['job[next_run]']).toBe("invalid");
-                    expect(params['job[end_run]']).toBe("invalid");
+                    expect(params['job[next_run]']).toBe('false');
+                    expect(params['job[end_run]']).toBe('false');
                 });
 
                 context("when the save succeeds", function () {
@@ -484,10 +486,20 @@ describe("chorus.dialogs.ConfigureJob", function () {
     });
     });
 
+
+
     describe("notifications", function () {
-        it("initially selects 'nobody' for success and failure", function () {
+        it("initially selects 'nobody' for success and failure and has no links", function () {
             expect(this.dialog.$('[name="success_notify"]:checked').val()).toEqual('nobody');
             expect(this.dialog.$('[name="failure_notify"]:checked').val()).toEqual('nobody');
+
+            expect(this.dialog.$("span.select_success_recipients")).not.toHaveClass('hidden');
+            expect(this.dialog.$("span.select_failure_recipients")).not.toHaveClass('hidden');
+            expect(this.dialog.$("a.select_success_recipients")).toHaveClass('hidden');
+            expect(this.dialog.$("a.select_failure_recipients")).toHaveClass('hidden');
+
+            expect(this.dialog.$("span.select_failure_recipients").text()).toMatchTranslation('job.dialog.edit.notify.recipients_not_selected');
+            expect(this.dialog.$("span.select_success_recipients").text()).toMatchTranslation('job.dialog.edit.notify.recipients_not_selected');
         });
 
         it("on submit, sends the values of the notification options to the server", function () {
@@ -504,6 +516,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                 this.job = backboneFixtures.job();
                 this.job.set('successNotify', 'everybody');
                 this.job.set('failureNotify', 'selected');
+
                 this.dialog = new chorus.dialogs.ConfigureJob({model: this.job});
                 this.dialog.render();
             });
@@ -513,6 +526,40 @@ describe("chorus.dialogs.ConfigureJob", function () {
                 expect(this.dialog.$('[name="failure_notify"]:checked').val()).toEqual('selected');
             });
         });
-    });
 
+        context("when 'select recipients' is checked", function () {
+            beforeEach(function () {
+                this.dialog.$("input:radio[name='success_notify']").val('selected').trigger('change');
+                this.dialog.$("input:radio[name='failure_notify']").val('selected').trigger('change');
+            });
+
+            it("activates the link", function () {
+                expect(this.dialog.$("span.select_success_recipients")).toHaveClass('hidden');
+                expect(this.dialog.$("span.select_failure_recipients")).toHaveClass('hidden');
+                expect(this.dialog.$("a.select_success_recipients")).not.toHaveClass('hidden');
+                expect(this.dialog.$("a.select_failure_recipients")).not.toHaveClass('hidden');
+            });
+
+            it("displays a link with a count of chosen recipients", function () {
+                this.dialog.model.set('successRecipients', [backboneFixtures.user().get('id'), backboneFixtures.user().get('id')]);
+                this.dialog.render();
+                expect(this.dialog.$("a.select_success_recipients").text()).toMatchTranslation('job.dialog.edit.notify.recipients_selected', {count: 2});
+                expect(this.dialog.$("a.select_failure_recipients").text()).toMatchTranslation('job.dialog.edit.notify.recipients_selected', {count: 0});
+            });
+
+            it("keeps the old form values when rerendering after new recipients are selected", function () {
+                this.dialog.$('input.name').val(this.jobPlan.name);
+
+                this.dialog.$('a.select_success_recipients').click();
+                var picker = _.last(this.modalSpy.modals());
+                spyOn(picker.shuttle, 'getSelectedIDs').andReturn(['1','2','3']);
+                picker.$('button.submit').click();
+
+                expect(this.dialog.$('input.name').val()).toEqual(this.jobPlan.name);
+            });
+
+            itBehavesLike.aDialogLauncher('a.select_success_recipients', chorus.dialogs.PickJobRecipients);
+            itBehavesLike.aDialogLauncher('a.select_failure_recipients', chorus.dialogs.PickJobRecipients);
+        });
+    });
 });

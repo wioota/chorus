@@ -70,4 +70,21 @@
     }
   }
 
+  .notify {
+      margin-bottom: 15px;
+
+      input {
+          margin-right: 3px;
+      }
+
+      label {
+          margin-right: 10px;
+      }
+
+      .title {
+          margin-bottom: 5px;
+          @include font-normal-alpha;
+      }
+  }
+
 }

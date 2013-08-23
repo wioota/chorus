@@ -71,41 +71,30 @@
     </div>
 
     <legend class="subtitle">
-        <div class="text">Notification</div>
+        <div class="text">{{t 'job.dialog.edit.notify.subtitle'}}</div>
         <hr/>
     </legend>
 
-    <p>
-        Notify on success:
-        <label>
-            <input type="radio" name="success_notify" value="nobody" class="notify row"
-                   {{#if successNotifyNobody}}checked='checked'{{/if}}/> Nobody
-        </label>
-        <label>
-            <input type="radio" name="success_notify" value="everybody" class="notify row"
-                   {{#if successNotifyEverybody}}checked='checked'{{/if}}/> Entire workspace
-        </label>
-        <label>
-            <input type="radio" id="success_notify_selected" name="success_notify" value="selected" class="notify row"
-                   {{#if successNotifySelected}}checked='checked'{{/if}}/> Selected people
-        </label>
-    </p>
+    {{#each notifyOptions}}
+        <div class='notify options'>
+            <div class='title'>{{t labelKey}}</div>
+            <label>
+                <input type="radio" name="{{condition}}_notify" value="nobody" class="row"
+                       {{#if notifyNobody}}checked='checked'{{/if}}/> {{t 'job.dialog.edit.notify.nobody'}}
+            </label>
+            <label>
+                <input type="radio" name="{{condition}}_notify" value="everybody" class="row"
+                       {{#if notifyEverybody}}checked='checked'{{/if}}/> {{t 'job.dialog.edit.notify.entire_workspace'}}
+            </label>
+            <label>
+                <input type="radio" id="{{condition}}_notify_selected" name="{{condition}}_notify" value="selected" class="row"
+                       {{#if notifySelected}}checked='checked'{{/if}}/>
 
-    <p>
-        Notify on failure:
-        <label>
-            <input type="radio" id="failure_notify_nobody" name="failure_notify" value="nobody" class="notify row"
-                   {{#if failureNotifyNobody}}checked='checked'{{/if}}/> Nobody
-        </label>
-        <label>
-            <input type="radio" id="failure_notify_everybody" name="failure_notify" value="everybody" class="notify row"
-                   {{#if failureNotifyEverybody}}checked='checked'{{/if}}/> Entire workspace
-        </label>
-        <label>
-            <input type="radio" id="failure_notify_selected" name="failure_notify" value="selected" class="notify row"
-                   {{#if failureNotifySelected}}checked='checked'{{/if}}/> Selected people
-        </label>
-    </p>
+                <a class='select_{{condition}}_recipients {{#unless notifySelected}}hidden{{/unless}}' href='#'>{{t 'job.dialog.edit.notify.recipients_selected' count=recipientCount}}</a>
+                <span class='select_{{condition}}_recipients {{#if notifySelected}}hidden{{/if}}'>{{t 'job.dialog.edit.notify.recipients_not_selected'}}</span>
+            </label>
+        </div>
+    {{/each}}
 
     {{formControlsWithDisabledSubmit submitTranslation}}
 </form>
