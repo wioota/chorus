@@ -154,5 +154,6 @@ smtp.authentication=login
 smtp.enable_starttls_auto=false
 #smtp.openssl_verify_mode=none
 
+mail.enabled = false
 mail.from = FROM NAME <noreply@chorus.com>
 mail.reply_to = REPLY NAME <noreply@chorus.com>

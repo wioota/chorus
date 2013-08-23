@@ -66,9 +66,13 @@ Chorus::Application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = ChorusConfig.instance["ssl.enabled"]
 
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = ChorusConfig.instance.smtp_configuration
-  ActionMailer::Base.default ChorusConfig.instance.mail_configuration
+  if ChorusConfig.instance["mail.enabled"]
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = ChorusConfig.instance.smtp_configuration
+    ActionMailer::Base.default ChorusConfig.instance.mail_configuration
+  else
+    config.action_mailer.perform_deliveries = false
+  end
 
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
