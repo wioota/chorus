@@ -594,7 +594,7 @@
 
     })();
 
-    if (window.location.search.indexOf("profile=") !== -1) {
+    if ((window.location.search.indexOf("profile=") !== -1) && jasmine.ProfileReporter) {
         jasmine.getEnv().addReporter(new jasmine.ProfileReporter());
     }
 })();
