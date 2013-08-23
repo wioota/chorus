@@ -7,7 +7,8 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
     events: {
         "change select.data_sources": "showFieldset",
         "click a.close_errors": "clearServerErrors",
-        "submit form": "createDataSource"
+        "submit form": "createDataSource",
+        "change input[name=high_availability]": 'toggleHighAvailability'
     },
 
     postRender: function() {
@@ -47,6 +48,19 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         this.clearErrors();
     },
 
+    toggleHighAvailability: function (e) {
+        e && e.preventDefault();
+
+        if (this.$('input[name=high_availability]').prop('checked')) {
+            this.$('input[name=port]').val('');
+            this.$('[name=port]').prop('disabled', true).removeClass('required');
+            this.$('label[name=host]').text(t('data_sources.dialog.name_service'));
+        } else {
+            this.$('[name=port]').prop('disabled', false).addClass('required');
+            this.$('label[name=host]').text(t('data_sources.dialog.hadoop_host'));
+        }
+    },
+
     createDataSource: function (e) {
         e && e.preventDefault();
 
@@ -84,6 +98,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         updates["isHawq"] = this.$("select.data_sources option:selected").attr("hawq");
 
         updates.shared = inputSource.find("input[name=shared]").prop("checked") ? "true" : "false";
+        updates.highAvailability = inputSource.find("input[name=high_availability]").prop("checked") ? "true" : "false";
         return updates;
     },
 

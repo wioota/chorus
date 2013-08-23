@@ -24,7 +24,7 @@ describe("chorus.models.HdfsDataSource", function() {
         expect(this.model.isHadoop()).toBeTruthy();
     });
 
-    _.each(["name", "host", "username", "groupList", "port"], function(attr) {
+    _.each(["name", "host", "username", "groupList"], function(attr) {
         it("requires " + attr, function() {
             this.attrs[attr] = "";
             expect(this.model.performValidation(this.attrs)).toBeFalsy();
@@ -51,6 +51,18 @@ describe("chorus.models.HdfsDataSource", function() {
         expect(this.model.errors.jobTrackerPort).toMatchTranslation("validation.required_pattern", {fieldName: "jobTrackerPort"});
         this.attrs.jobTrackerPort = "4321";
         expect(this.model.performValidation(this.attrs)).toBeTruthy();
+    });
+
+    it("requires a Name Node port only when High Availability is false", function () {
+        this.attrs.host = 'a_host';
+        this.attrs.highAvailability = 'false';
+        this.attrs.port = '';
+        this.model.performValidation(this.attrs);
+        expect(this.model.errors.port).toBeTruthy();
+
+        this.attrs.highAvailability = 'true';
+        this.model.performValidation(this.attrs);
+        expect(this.model.errors.port).toBeFalsy();
     });
 
     describe("#sharedAccountDetails", function() {

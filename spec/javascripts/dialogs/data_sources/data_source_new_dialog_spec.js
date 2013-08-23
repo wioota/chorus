@@ -174,7 +174,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
             });
         });
 
-        describe("selecting the 'HDFS cluster' option", function() {
+        describe("cluster", function() {
             beforeEach(function() {
                 this.dialog.$("select.data_sources").val("register_existing_hdfs").change();
             });
@@ -190,16 +190,17 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
             describe("filling out the form", function() {
                 beforeEach(function() {
-                    var form = this.dialog.$(".register_existing_hdfs");
-                    form.find("input[name=name]").val("DataSource_Name");
-                    form.find("textarea[name=description]").val("DataSource Description");
-                    form.find("input[name=host]").val("foo.bar");
-                    form.find("input[name=port]").val("1234");
-                    form.find("input.username").val("user");
-                    form.find("input.group_list").val("hadoop");
-                    form.find("select[name=hdfsVersion]").val("Cloudera CDH4");
+                    this.form = this.dialog.$(".register_existing_hdfs");
+                    this.form.find("input[name=name]").val("DataSource_Name");
+                    this.form.find("textarea[name=description]").val("DataSource Description");
+                    this.form.find("input[name=host]").val("foo.bar");
+                    this.form.find("input[name=port]").val("1234");
+                    this.form.find("input.username").val("user");
+                    this.form.find("input.group_list").val("hadoop");
+                    this.form.find("select[name=hdfsVersion]").val("Cloudera CDH4");
+                    this.form.find("input[name=high_availability]").prop('checked', false);
 
-                    form.find("input[name=name]").trigger("change");
+                    this.form.find("input[name=name]").trigger("change");
                 });
 
                 it("labels 'host' correctly ", function() {
@@ -215,11 +216,33 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                     expect(values.username).toBe("user");
                     expect(values.groupList).toBe("hadoop");
                     expect(values.hdfsVersion).toBe("Cloudera CDH4");
+                    expect(values.highAvailability).toBe('false');
                 });
 
                 it("#fieldValues includes 'shared'", function() {
                     var values = this.dialog.fieldValues();
                     expect(values.shared).toBe("true");
+                });
+
+                describe("enabling High Availability", function () {
+                    beforeEach(function () {
+                        this.form.find("input[name=high_availability]").prop('checked', true).trigger('change');
+                    });
+
+                    it("disables the name nome port field", function () {
+                        expect(this.form.find("input[name=port]")).toBeDisabled();
+                        expect(this.form.find("label[name=port]")).not.toHaveClass('required');
+                        expect(this.form.find("input[name=port]").val()).toBe('');
+                    });
+
+                    it("#fieldValues returns the values", function() {
+                        var values = this.dialog.fieldValues();
+                        expect(values.highAvailability).toBe('true');
+                    });
+
+                    it("labels 'host' correctly ", function() {
+                        expect(this.dialog.$(".register_existing_hdfs label[name=host]").text()).toMatchTranslation("data_sources.dialog.name_service");
+                    });
                 });
             });
         });

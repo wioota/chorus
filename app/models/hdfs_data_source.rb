@@ -4,13 +4,14 @@ class HdfsDataSource < ActiveRecord::Base
   include SoftDelete
   include CommonDataSourceBehavior
 
-  attr_accessible :name, :host, :port, :description, :username, :group_list, :job_tracker_host, :job_tracker_port, :hdfs_version
+  attr_accessible :name, :host, :port, :description, :username, :group_list, :job_tracker_host, :job_tracker_port, :hdfs_version, :high_availability
   belongs_to :owner, :class_name => 'User'
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   has_many :hdfs_entries
   has_many :workfiles_as_execution_location, :class_name => 'Workfile', :as => :execution_location, :dependent => :nullify
-  validates_presence_of :name, :host, :port
+  validates_presence_of :name, :host
+  validates_presence_of :port, :unless => :high_availability?
   validates_inclusion_of :hdfs_version, :in => ChorusConfig.instance.hdfs_versions
   validates_length_of :name, :maximum => 64
 
