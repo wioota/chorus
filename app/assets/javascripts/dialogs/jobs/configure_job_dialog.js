@@ -119,7 +119,9 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
             endRun: this.isOnDemand() || !this.endDateEnabled() ? false : this.buildEndDate().toISOString(),
             timeZone: this.$('select.time_zone').val(),
             successNotify: this.$('[name=success_notify]:checked').val(),
-            failureNotify: this.$('[name=failure_notify]:checked').val()
+            failureNotify: this.$('[name=failure_notify]:checked').val(),
+            successRecipients: this.model.get('successRecipients'),
+            failureRecipients: this.model.get('failureRecipients')
         };
     },
 

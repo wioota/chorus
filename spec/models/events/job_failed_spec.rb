@@ -1,46 +1,17 @@
 require 'spec_helper'
+require_relative 'job_finished_shared_behaviors'
 
 describe Events::JobFailed do
   let(:job) { jobs(:default) }
   let(:workspace) { job.workspace }
   let(:owner) { job.owner }
   let(:member) { users(:the_collaborator) }
+  let!(:other_member) { user = FactoryGirl.create(:user); workspace.members << user; user }
   let(:non_member) { users(:no_collaborators) }
   let(:job_result) { FactoryGirl.create(:job_result, :job => job, :succeeded => false) }
   let(:event) { Events::JobFailed.by(owner).add(:job => job, :workspace => workspace, :job_result => job_result) }
 
-  context "when failure_notify is set" do
-    before do
-      job.update_attribute(:failure_notify, 'everybody')
-    end
-
-    it "on creation, notifies all members of its workspace" do
-      expect {
-        expect {
-          event
-        }.to change(member.notifications, :count).by(1)
-      }.not_to change(non_member.notifications, :count)
-
-      member.notifications.last.event.should == event
-    end
-
-    it "emails those it notifies" do
-      event
-      ActionMailer::Base.deliveries.map(&:to).reduce(&:+).should =~ workspace.members.map(&:email)
-    end
-  end
-
-  context "when failure_notify is not set" do
-    before do
-      job.failure_notify.should == 'nobody'
-    end
-
-    it "on creation, notifies no one" do
-      expect {
-        event
-      }.not_to change(Notification, :count)
-    end
-  end
+  it_behaves_like 'a job finished event', 'failure', :failure_notify
 
   describe 'header' do
     it "has good copy" do

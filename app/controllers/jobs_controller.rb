@@ -26,9 +26,9 @@ class JobsController < ApplicationController
       job.owner = current_user
       job.save!
 
-      job.subscribe_recipients(params[:job]) if (params[:job][:success_recipients] || params[:job][:failure_recipients])
-
       workspace.jobs << job
+
+      job.subscribe_recipients(params[:job]) if (params[:job][:success_recipients] || params[:job][:failure_recipients])
     end
 
     present job, :status => :created

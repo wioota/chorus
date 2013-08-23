@@ -32,4 +32,5 @@ Chorus::Application.configure do
 
   # Mailer config
   config.action_mailer.delivery_method = :test
+  ActionMailer::Base.default from: 'Test Mailer <testmailer@example.com>', reply_to: 'Test Replyto <test_replyto@example.com>'
 end

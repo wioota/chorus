@@ -486,8 +486,6 @@ describe("chorus.dialogs.ConfigureJob", function () {
     });
     });
 
-
-
     describe("notifications", function () {
         it("initially selects 'nobody' for success and failure and has no links", function () {
             expect(this.dialog.$('[name="success_notify"]:checked').val()).toEqual('nobody');
@@ -575,6 +573,22 @@ describe("chorus.dialogs.ConfigureJob", function () {
                 selectRecipientsForCondition.call(this, 'success', ['1','2','3']);
 
                 expect(this.dialog.$('input.name').val()).toEqual(this.jobPlan.name);
+            });
+
+            describe("submitting the form", function () {
+                beforeEach(function () {
+                    this.dialog.$('input.name').val('Hello, Job!').trigger('keyup');
+                    this.dialog.$("input:radio[name='success_notify']").val('selected').trigger('change');
+                    selectRecipientsForCondition.call(this, 'success', ['3', '4']);
+                    selectRecipientsForCondition.call(this, 'failure', ['2', '3', '4']);
+                    this.dialog.$("form").submit();
+                });
+
+                it("posts the success/failure recipients", function() {
+                    var params = this.server.lastCreate().params();
+                    expect(params['job[success_recipients][]']).toEqual(['3', '4']);
+                    expect(params['job[failure_recipients][]']).toEqual(['2', '3', '4']);
+                });
             });
 
             itBehavesLike.aDialogLauncher('a.select_success_recipients', chorus.dialogs.PickJobRecipients);

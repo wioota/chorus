@@ -4,8 +4,12 @@ module Events
       "Job #{job.name} succeeded in workspace #{workspace.name}."
     end
 
-    def should_notify?
-      job.success_notify != 'nobody'
+    def notify_option
+      job.success_notify
+    end
+
+    def user_selected_recipients
+      job.success_recipients
     end
   end
 end

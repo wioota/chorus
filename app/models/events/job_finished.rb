@@ -6,9 +6,23 @@ module Events
     after_create :notify_workspace_members, :if => :should_notify?
 
     def notify_workspace_members
-      workspace.members.each do |user|
+      selected_recipients.each do |user|
         Notification.create!(:recipient_id => user.id, :event_id => self.id)
         Mailer.notify(user, self)
+      end
+    end
+
+    def should_notify?
+      notify_option != 'nobody'
+    end
+
+    def selected_recipients
+      if notify_option == 'everybody'
+        workspace.members
+      elsif notify_option == 'selected'
+        user_selected_recipients
+      else
+        []
       end
     end
   end

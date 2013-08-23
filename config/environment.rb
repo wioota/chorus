@@ -9,5 +9,4 @@ Chorus::Application.configure do
   config.active_record.mass_assignment_sanitizer = :logger
 
   config.action_mailer.default_url_options = { host: ChorusConfig.instance.public_url, port: ChorusConfig.instance.server_port }
-  ActionMailer::Base.default ChorusConfig.instance.mail_configuration
 end

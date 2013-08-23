@@ -116,8 +116,8 @@ class Job < ActiveRecord::Base
 
   def subscribe_recipients(options)
     job_subscriptions.destroy_all
-    options[:success_recipients].each { |id| notify_on(:success, User.find(id)) } if options[:success_recipients]
-    options[:failure_recipients].each { |id| notify_on(:failure, User.find(id)) } if options[:failure_recipients]
+    options[:success_recipients].each { |id| notify_on(:success, workspace.members.find(id)) } if options[:success_recipients]
+    options[:failure_recipients].each { |id| notify_on(:failure, workspace.members.find(id)) } if options[:failure_recipients]
   end
 
   private
