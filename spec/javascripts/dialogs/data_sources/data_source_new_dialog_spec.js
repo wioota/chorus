@@ -443,6 +443,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                 hadoopSection.find("input[name=groupList]").val(" hadoop ").change();
                 hadoopSection.find("input[name=jobTrackerHost]").val("foooo.baaaar");
                 hadoopSection.find("input[name=jobTrackerPort]").val("4321");
+                hadoopSection.find("input[name=high_availability]").prop('checked', false);
+
 
                 spyOn(chorus.models.HdfsDataSource.prototype, "save").andCallThrough();
                 this.dialog.$("button.submit").click();
@@ -459,6 +461,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                 expect(params['hdfs_data_source[group_list]']).toBe("hadoop");
                 expect(params['hdfs_data_source[job_tracker_host]']).toBe("foooo.baaaar");
                 expect(params['hdfs_data_source[job_tracker_port]']).toBe("4321");
+                expect(params['hdfs_data_source[high_availability]']).toBe("false");
             });
         });
 
