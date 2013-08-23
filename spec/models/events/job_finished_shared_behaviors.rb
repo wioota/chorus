@@ -12,7 +12,7 @@ shared_examples 'a job finished event' do |condition, notify_attribute|
           expect {
             event
           }.to change(member.notifications, :count).by(1)
-        }.to change(other_member.notifications, :count).by(1)
+        }.to change(no_emails_member.notifications, :count).by(1)
       }.not_to change(non_member.notifications, :count)
 
       member.notifications.last.event.should == event
@@ -20,7 +20,7 @@ shared_examples 'a job finished event' do |condition, notify_attribute|
 
     it "emails those it notifies" do
       event
-      ActionMailer::Base.deliveries.map(&:to).reduce(&:+).should =~ workspace.members.map(&:email)
+      ActionMailer::Base.deliveries.map(&:to).reduce(&:+).should =~ workspace.members.where(:subscribed_to_emails => true).map(&:email)
     end
   end
 
@@ -36,7 +36,7 @@ shared_examples 'a job finished event' do |condition, notify_attribute|
           expect {
             event
           }.to change(member.notifications, :count).by(1)
-        }.not_to change(other_member.notifications, :count).by(1)
+        }.not_to change(no_emails_member.notifications, :count).by(1)
       }.not_to change(non_member.notifications, :count)
 
       member.notifications.last.event.should == event

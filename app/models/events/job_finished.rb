@@ -8,7 +8,7 @@ module Events
     def notify_workspace_members
       selected_recipients.each do |user|
         Notification.create!(:recipient_id => user.id, :event_id => self.id)
-        Mailer.notify(user, self)
+        Mailer.notify(user, self) if user.subscribed_to_emails?
       end
     end
 

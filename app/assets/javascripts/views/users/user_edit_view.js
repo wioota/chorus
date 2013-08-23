@@ -40,9 +40,10 @@
             });
 
             updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
+            updates.subscribed_to_emails = this.$("input#subscribed-to-emails-checkbox").prop("checked") || false;
             updates.notes = this.$("textarea").val().trim();
 
-            this.model.save(updates);
+            this.model.save(updates, {wait: true});
         },
 
         goBack:function () {

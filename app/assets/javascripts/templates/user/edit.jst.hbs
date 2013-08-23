@@ -24,9 +24,8 @@
 
             {{#ifAdmin}}
                <span class="right admin">
-                   <label class="placeholder"></label>
                    <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}} checked="true" {{/if}}>
-                   <label for="admin-checkbox">{{t "users.make_admin"}}</label>
+                   <label class='checkbox-label' for="admin-checkbox">{{t "users.make_admin"}}</label>
                </span>
             {{/ifAdmin}}
         </div>
@@ -56,6 +55,11 @@
                    <textarea rows="4" cols="1" name="notes" maxlength="4096">{{notes}}</textarea>
                </span>
         </div>
+
+        <span>
+            <input type="checkbox" name="subscribed_to_emails" id="subscribed-to-emails-checkbox" {{#if subscribedToEmails}} checked="true" {{/if}}>
+            <label class='checkbox-label' for="subscribed-to-emails-checkbox">{{t "users.subscribed_to_emails"}}</label>
+        </span>
 
         <div class="row form_controls">
                <span class="left">

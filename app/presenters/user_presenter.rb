@@ -17,6 +17,7 @@ class UserPresenter < Presenter
           :dept => model.dept,
           :notes => model.notes,
           :admin => model.admin?,
+          :subscribed_to_emails => model.subscribed_to_emails?,
           :tags => present(model.tags)
       )
     end

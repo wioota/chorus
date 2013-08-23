@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
 
   DEFAULT_SORT_ORDER = VALID_SORT_ORDERS[:first_name]
 
-  attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes
+  attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes, :subscribed_to_emails
   attr_accessor :password
 
   has_many :gnip_data_sources, :foreign_key => :owner_id

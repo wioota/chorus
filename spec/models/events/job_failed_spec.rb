@@ -6,7 +6,7 @@ describe Events::JobFailed do
   let(:workspace) { job.workspace }
   let(:owner) { job.owner }
   let(:member) { users(:the_collaborator) }
-  let!(:other_member) { user = FactoryGirl.create(:user); workspace.members << user; user }
+  let!(:no_emails_member) { user = FactoryGirl.create(:user, subscribed_to_emails: false); workspace.members << user; user }
   let(:non_member) { users(:no_collaborators) }
   let(:job_result) { FactoryGirl.create(:job_result, :job => job, :succeeded => false) }
   let(:event) { Events::JobFailed.by(owner).add(:job => job, :workspace => workspace, :job_result => job_result) }

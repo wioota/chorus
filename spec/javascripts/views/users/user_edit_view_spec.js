@@ -41,6 +41,7 @@ describe("chorus.views.userEdit", function() {
                     expect(this.view.$("textarea[name=notes]").text()).toBe(this.user.get('notes'));
                     expect(this.view.$("input[name=dept]").val()).toBe(this.user.get('dept'));
                     expect(this.view.$("input[name=admin]").prop("checked")).toBe(this.user.get("admin"));
+                    expect(this.view.$("input[name=subscribed_to_emails]").prop("checked")).toBe(this.user.get("subscribedToEmails"));
                 });
 
                 it("limits the length of the notes field", function() {
@@ -53,38 +54,22 @@ describe("chorus.views.userEdit", function() {
                         this.view.$("input[name=email]").val("frankie_knuckles@nyclol.com");
                         this.view.$("input[name=dept]").val("awesomeness dept");
                         this.view.$("textarea[name=notes]").text("Here are some notes\n more than one line");
+                        this.view.$("input[name=admin]").prop("checked", false);
+                        this.view.$("input[name=subscribed_to_emails]").prop("checked", false);
                         this.view.$("form").submit();
                     });
 
                     context("saving the user with valid data", function() {
-                        beforeEach(function() {
-                            spyOn(this.user, "save").andCallThrough();
-                        });
-
-                        it("modify the user with the form attributes", function() {
-                            expect(this.user.attributes["firstName"]).toBe("Frankie");
-                            expect(this.user.attributes["lastName"]).toBe(this.user.get("lastName"));
-                            expect(this.user.attributes["username"]).toBe(this.user.get("username"));
-                            expect(this.user.attributes["email"]).toBe("frankie_knuckles@nyclol.com");
-                            expect(this.user.attributes["dept"]).toBe("awesomeness dept");
-                            expect(this.user.attributes["admin"]).toBe(this.user.get("admin"));
-                            expect(this.user.attributes["notes"]).toBe("Here are some notes\n more than one line");
-                        });
-
-                        context("when the user form has admin unchecked", function() {
-                            beforeEach(function() {
-                                this.view.$("input[name=admin]").prop("checked", false);
-                            });
-
-                            it("sets the user attribute 'admin' to false", function() {
-                                this.view.$("form").submit();
-                                expect(this.user.attributes["admin"]).toBe(false);
-                            });
-                        });
-
-                        it("saves the user", function() {
-                            this.view.$("form").submit();
-                            expect(this.user.save).toHaveBeenCalled();
+                        it("saves the form attributes to the server", function() {
+                            var params = this.server.lastUpdateFor(this.user).params();
+                            expect(params['user[first_name]']).toBe("Frankie");
+                            expect(params['user[last_name]']).toBe(this.user.get("lastName"));
+                            expect(params['user[username]']).toBe(this.user.get("username"));
+                            expect(params['user[email]']).toBe("frankie_knuckles@nyclol.com");
+                            expect(params['user[dept]']).toBe("awesomeness dept");
+                            expect(params['user[notes]']).toBe("Here are some notes\n more than one line");
+                            expect(params['user[admin]']).toEqual('false');
+                            expect(params['user[subscribed_to_emails]']).toEqual('false');
                         });
 
                         context("when user creation is successful", function() {
@@ -137,7 +122,8 @@ describe("chorus.views.userEdit", function() {
                         });
 
                         it("trims the whitespace before submission", function() {
-                            expect(this.user.attributes["firstName"]).toBe("spaces");
+                            var params = this.server.lastUpdateFor(this.user).params();
+                            expect(params['user[first_name]']).toBe("spaces");
                         });
                     });
 
