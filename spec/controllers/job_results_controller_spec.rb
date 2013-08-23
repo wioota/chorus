@@ -3,9 +3,9 @@ require 'spec_helper'
 describe JobResultsController do
   before do
     log_in users(:owner)
-
   end
-  let(:job) { jobs(:default) }
+
+  let(:job) { jobs(:with_recent_results) }
 
   describe '#show' do
     context "when requesting only the latest result" do

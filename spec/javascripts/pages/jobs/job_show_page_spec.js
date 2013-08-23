@@ -48,7 +48,25 @@ describe("chorus.pages.JobsShowPage", function () {
         context("when the job has a last run", function () {
             itBehavesLike.aDialogLauncher("a.last_run_date", chorus.dialogs.JobResultDetail);
 
+            context("when the last run was a failure", function () {
+                beforeEach(function () {
+                    this.model.set("lastRunFailed", true);
+                    this.page = new chorus.pages.JobsShowPage(this.workspace.id, this.model.get('id'));
+                    this.server.completeFetchFor(this.model);
+                });
+
+                it("should include (show errors) in the link", function () {
+                    expect(this.page.$('a.last_run_date')).toContainTranslation('job.show_errors');
+                });
+            });
+
             context("when the last run was a success", function () {
+                beforeEach(function () {
+                    this.model.set("lastRunFailed", false);
+                    this.page = new chorus.pages.JobsShowPage(this.workspace.id, this.model.get('id'));
+                    this.server.completeFetchFor(this.model);
+                });
+
                 it("should include (show details) in the link", function () {
                     expect(this.page.$('a.last_run_date')).toContainTranslation('job.show_details');
                 });
@@ -62,7 +80,6 @@ describe("chorus.pages.JobsShowPage", function () {
 
         describe("when the job_task:selected event is triggered on the list view", function () {
             beforeEach(function() {
-                this.page.render();
                 chorus.PageEvents.trigger("job_task:selected", this.task);
             });
 

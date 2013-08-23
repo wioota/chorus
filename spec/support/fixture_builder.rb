@@ -402,6 +402,12 @@ FixtureBuilder.configure do |fbuilder|
 
     default_job.update_attribute(:last_run, b_result.started_at)
 
+    @with_recent_results = FactoryGirl.create(:job, :workspace => public_workspace)
+    recent_result = FactoryGirl.create(:job_result, :job => @with_recent_results)
+    FactoryGirl.create(:run_work_flow_task_result, :job_result => recent_result)
+    FactoryGirl.create(:job_task_result, :job_result => recent_result)
+    FactoryGirl.create(:job_task_result, :job_result => recent_result)
+
     Events::JobSucceeded.by(owner).add(:job => default_job, :workspace => default_job.workspace, :job_result => b_result)
     Events::JobFailed.by(owner).add(:job => default_job, :workspace => default_job.workspace, :job_result => FactoryGirl.create(:job_result, :job => default_job, :succeeded => false))
 
