@@ -10,6 +10,18 @@ describe("chorus.views.JobSidebar", function () {
         expect(this.view.$(".name")).toContainText(this.job.get("name"));
     });
 
+    context("when the job runs only on Demand", function () {
+        beforeEach(function () {
+            this.job.set('intervalUnit', 'on_demand');
+            this.view.render();
+        });
+
+        it("hides 'enable'/'disable' actions", function () {
+            expect(this.view.$('.disable')).not.toExist();
+            expect(this.view.$('.enable')).not.toExist();
+        });
+    });
+
     context("when the job is enabled", function () {
         beforeEach(function () {
             this.job.set("enabled", true);

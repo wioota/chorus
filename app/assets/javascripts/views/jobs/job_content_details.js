@@ -68,7 +68,8 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
             enabledButtonLabel: this.enabledButtonLabel(),
             actionBarClass: this.actionBarClass(),
             createActions: this.createActions,
-            running: this.model.isRunning()
+            running: this.model.isRunning(),
+            runsOnDemand: this.model.runsOnDemand()
         };
     },
 
@@ -81,6 +82,6 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
     },
 
     actionBarClass: function () {
-        return this.model.get("enabled") ? 'action_bar_highlighted' : 'action_bar_limited';
+        return (this.model.get("enabled") || this.model.runsOnDemand()) ? 'action_bar_highlighted' : 'action_bar_limited';
     }
 });

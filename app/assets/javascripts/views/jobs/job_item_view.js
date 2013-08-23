@@ -31,12 +31,14 @@ chorus.views.JobItem = chorus.views.Base.extend({
             return 'running';
         } else if (this.model.isStopping()) {
             return 'stopping';
+        } else if (this.model.runsOnDemand()) {
+            return 'on_demand';
         }
         return this.model.get('enabled') ? 'scheduled' : 'disabled';
     },
 
     iconUrl: function () {
-        var icon = this.model.get('enabled') ? 'job.png' : 'job-disabled.png';
+        var icon = (this.model.get('enabled') || this.model.runsOnDemand()) ? 'job.png' : 'job-disabled.png';
         return "/images/jobs/" + icon;
     },
 

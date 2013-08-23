@@ -123,4 +123,19 @@ describe("chorus.views.JobContentDetails", function () {
     });
 
     itBehavesLike.aDialogLauncher('.edit_schedule', chorus.dialogs.ConfigureJob);
+
+    context("when the job runs only on Demand", function () {
+        beforeEach(function () {
+            this.job.set("intervalUnit", 'on_demand');
+            this.view.render();
+        });
+
+        it("does not have an enable/disable button", function () {
+            expect(this.view.$('button.toggle_enabled')).not.toExist();
+        });
+
+        it("has an enabled status bar", function () {
+            expect(this.view.$('.action_bar')).toHaveClass('action_bar_highlighted');
+        });
+    });
 });

@@ -14,17 +14,6 @@ describe("chorus.views.JobItem", function () {
         expect(this.view.$("a.name")).toHaveHref(this.model.showUrl());
     });
 
-    context("when the job is disabled", function () {
-        beforeEach(function () {
-            this.model.set('enabled', false);
-            this.view.render();
-        });
-
-        it("includes the disabled job icon", function() {
-            expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job-disabled.png");
-        });
-    });
-
     context("when the job is enabled", function () {
         beforeEach(function () {
             this.model.set('enabled', true);
@@ -45,6 +34,23 @@ describe("chorus.views.JobItem", function () {
             it("displays the 'on demand' text", function () {
                 expect(this.view.$(".frequency")).toContainTranslation("job.frequency.on_demand");
             });
+
+            it("returns 'On Demand' if the job is 'idle'", function () {
+                this.model.set('status', 'idle');
+                expect(this.view.jobStateKey()).toEqual('on_demand');
+            });
+
+            it("returns 'running' if the job is 'running' or 'enqueued'", function () {
+                this.model.set('status', 'enqueued');
+                expect(this.view.jobStateKey()).toEqual('running');
+
+                this.model.set('status', 'running');
+                expect(this.view.jobStateKey()).toEqual('running');
+            });
+
+            it("includes the enabled job icon", function() {
+                expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job.png");
+            });
         });
 
         context("when the Job is run on a schedule", function () {
@@ -59,6 +65,17 @@ describe("chorus.views.JobItem", function () {
             it("displays the schedule text", function () {
                 var $frequency = this.view.$(".frequency");
                 expect($frequency).toContainTranslation("job.frequency.on_schedule", {intervalValue: three, intervalUnit: days});
+            });
+
+            context("when the job is disabled", function () {
+                beforeEach(function () {
+                    this.model.set('enabled', false);
+                    this.view.render();
+                });
+
+                it("includes the disabled job icon", function() {
+                    expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job-disabled.png");
+                });
             });
         });
     });
