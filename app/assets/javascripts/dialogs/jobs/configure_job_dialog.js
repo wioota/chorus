@@ -79,16 +79,22 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
     },
 
     checkInput: function () {
-        var name = this.$('input.name').val();
-        if (!name) return false;
+        var fieldValues = this.fieldValues();
+        if (!fieldValues.name || fieldValues.name.length === 0) { return false; }
 
-        if (this.isOnDemand()) {
-            return name.length > 0;
-        } else {
-            return name.length > 0 && this.getIntervalValue().length > 0 &&
-                this.startDatePicker.getDate().isValid() &&
-                (!this.endDateEnabled() || this.endDatePicker.getDate().isValid());
+        if (fieldValues.successNotify === 'selected' && (this.model.get('successRecipients') || []).length === 0) {
+            return false;
         }
+
+        if (fieldValues.failureNotify === 'selected' && (this.model.get('failureRecipients') || []).length === 0) {
+            return false;
+        }
+
+        if (this.isOnDemand()) { return true; }
+
+        return fieldValues.intervalValue.length > 0 &&
+            this.startDatePicker.getDate().isValid() &&
+            (!this.endDateEnabled() || this.endDatePicker.getDate().isValid());
     },
 
     create: function () {
@@ -101,6 +107,10 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
     },
 
     fieldValues: function () {
+        if (this.$('input.name').length === 0) {
+            return {};
+        }
+
         return {
             name: this.$('input.name').val(),
             intervalUnit: this.getIntervalUnit(),

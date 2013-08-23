@@ -528,6 +528,13 @@ describe("chorus.dialogs.ConfigureJob", function () {
         });
 
         context("when 'select recipients' is checked", function () {
+            function selectRecipientsForCondition (condition, recipientIds) {
+                this.dialog.$('a.select_' + condition + '_recipients').click();
+                var picker = _.last(this.modalSpy.modals());
+                spyOn(picker.shuttle, 'getSelectedIDs').andReturn(recipientIds);
+                picker.$('button.submit').click();
+            }
+
             beforeEach(function () {
                 this.dialog.$("input:radio[name='success_notify']").val('selected').trigger('change');
                 this.dialog.$("input:radio[name='failure_notify']").val('selected').trigger('change');
@@ -540,6 +547,21 @@ describe("chorus.dialogs.ConfigureJob", function () {
                 expect(this.dialog.$("a.select_failure_recipients")).not.toHaveClass('hidden');
             });
 
+            describe("validation", function () {
+                beforeEach(function () {
+                    this.dialog.$('input.name').val('Hello, Job!').trigger('keyup');
+                });
+
+                it("disables the 'create' button until recipients are selected", function () {
+                    expect(this.dialog.$('button.submit')).toBeDisabled();
+
+                    selectRecipientsForCondition.call(this, 'success', ['1','2','3']);
+                    selectRecipientsForCondition.call(this, 'failure', ['1','2','3']);
+
+                    expect(this.dialog.$('button.submit')).toBeEnabled();
+                });
+            });
+
             it("displays a link with a count of chosen recipients", function () {
                 this.dialog.model.set('successRecipients', [backboneFixtures.user().get('id'), backboneFixtures.user().get('id')]);
                 this.dialog.render();
@@ -550,10 +572,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
             it("keeps the old form values when rerendering after new recipients are selected", function () {
                 this.dialog.$('input.name').val(this.jobPlan.name);
 
-                this.dialog.$('a.select_success_recipients').click();
-                var picker = _.last(this.modalSpy.modals());
-                spyOn(picker.shuttle, 'getSelectedIDs').andReturn(['1','2','3']);
-                picker.$('button.submit').click();
+                selectRecipientsForCondition.call(this, 'success', ['1','2','3']);
 
                 expect(this.dialog.$('input.name').val()).toEqual(this.jobPlan.name);
             });
