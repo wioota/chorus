@@ -3,7 +3,7 @@ describe("chorus.views.JobSidebar", function () {
         this.job = backboneFixtures.jobSet().reject(function (job) {
             return job.get('intervalUnit') === 'on_demand';
         })[0];
-        
+
         this.view = new chorus.views.JobSidebar({model: this.job});
         this.modalSpy = stubModals();
         this.view.render();

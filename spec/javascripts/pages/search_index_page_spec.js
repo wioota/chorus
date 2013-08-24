@@ -1,4 +1,19 @@
 describe("chorus.pages.SearchIndexPage", function() {
+    function smallSearchResult () {
+        var searchResult = backboneFixtures.searchResult();
+        var attributeKeys = _.keys(searchResult.attributes);
+        _.each(attributeKeys, function (attribute) {
+            if (attribute === 'completeJson') { return; }
+
+            var truncatedLength = (attribute === 'datasets') ? 3 : 2;
+
+            var value = searchResult.get(attribute);
+            value.numFound = Math.min(value.results.length, truncatedLength);
+            value.results = value.results.splice(0, truncatedLength);
+        });
+        return searchResult;
+    }
+
     beforeEach(function() {
         this.query = "50/50";
         this.modalSpy = stubModals();
@@ -36,7 +51,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("when the search result fetch completes", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, backboneFixtures.searchResult());
+                this.server.completeFetchFor(this.page.search, smallSearchResult());
             });
 
             it("doesn't display the list content details", function() {
@@ -45,7 +60,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
             it("has breadcrumbs", function() {
                 expect(this.page.$(".breadcrumbs li:eq(0)")).toContainTranslation('breadcrumbs.home');
-                expect((this.page.$(".breadcrumbs li:eq(0) a")).attr("href")).toBe("#/");
+                expect(this.page.$(".breadcrumbs li:eq(0) a").attr("href")).toBe("#/");
 
                 expect(this.page.$(".breadcrumbs li:eq(1) .slug")).toContainTranslation('breadcrumbs.search_results');
             });
@@ -114,7 +129,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
                 describe("clicking on a workfile search result", function() {
                     beforeEach(function() {
-                        this.searchedWorkfile = this.workfileLIs.eq(2);
+                        this.searchedWorkfile = this.workfileLIs.eq(1);
                         this.searchedWorkfile.trigger("click");
                     });
 
@@ -135,7 +150,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("sets the workfile as the selectedItem on the search result", function() {
-                        expect(this.page.search.selectedItem).toBe(this.page.search.workfiles().at(2));
+                        expect(this.page.search.selectedItem).toBe(this.page.search.workfiles().at(1));
                     });
                 });
             });
@@ -214,7 +229,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
 
                 it("shows a list of search results", function() {
-                    expect(this.dataSourceLIs.length).toBe(3);
+                    expect(this.dataSourceLIs.length).toBeGreaterThan(0);
                 });
 
                 describe('clicking on a data source search result', function() {
@@ -314,7 +329,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
 
                 it("shows a list of search results", function() {
-                    expect(this.attachmentLis.length).toBe(7);
+                    expect(this.attachmentLis.length).toBeGreaterThan(0);
                 });
 
                 describe("clicking on a search result", function() {
@@ -348,7 +363,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("when the search result is fetched", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, backboneFixtures.searchResult());
+                this.server.completeFetchFor(this.page.search, smallSearchResult());
             });
 
             it("selects the 'all of chorus' option in the 'search in' menu", function() {
@@ -387,7 +402,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("when the search result is fetched", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, backboneFixtures.searchResult());
+                this.server.completeFetchFor(this.page.search, smallSearchResult());
             });
 
             it("selects the 'my workspaces' option in the 'search in' menu", function() {
@@ -415,7 +430,7 @@ describe("chorus.pages.SearchIndexPage", function() {
 
         describe("when the search result is fetched", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.search, backboneFixtures.searchResult());
+                this.server.completeFetchFor(this.page.search, smallSearchResult());
             });
 
             it("selects the 'my workspaces' option in the 'search in' menu", function() {
@@ -435,7 +450,7 @@ describe("chorus.pages.SearchIndexPage", function() {
     describe("multiple selection", function() {
         beforeEach(function() {
             this.page = new chorus.pages.SearchIndexPage(this.query);
-            this.server.completeFetchFor(this.page.search, backboneFixtures.searchResult());
+            this.server.completeFetchFor(this.page.search, smallSearchResult());
         });
 
         it("does not display the multiple selection menu until items have been selected", function() {
