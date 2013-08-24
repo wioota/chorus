@@ -2,7 +2,9 @@ describe("chorus.views.JobItem", function () {
     beforeEach(function() {
         this.modalSpy = stubModals();
         var jobSet = backboneFixtures.jobSet();
-        this.model = jobSet.at(0);
+        this.model = jobSet.reject(function (job) {
+            return job.get('intervalUnit') === 'on_demand';
+        })[0];
         this.model.set('lastRun', '2011-11-08T18:06:51Z');
         this.model.set('nextRun', '2050-11-08T18:06:51Z');
         this.view = new chorus.views.JobItem({ model: this.model });
@@ -124,6 +126,11 @@ describe("chorus.views.JobItem", function () {
             });
 
             context("when the last run was a success", function () {
+                beforeEach(function () {
+                    this.model.set('lastRunFailed', false);
+                    this.view.render();
+                });
+
                 it("has (show details)", function () {
                     expect(this.view.$('.last_run')).toContainTranslation('job.show_details');
                 });
