@@ -23,9 +23,17 @@
 
 var fs = require("fs");
 
-var args = phantom.args;
+var args = Array.prototype.slice.call(phantom.args, 0);
 var port = args[0];
+
+var color = true;
+if (args[1] === 'nocolor') {
+    color = false;
+    args.splice(1, 1);
+}
+
 var filter = args[1];
+
 var url = 'http://localhost:' + port + '?phantom=1&profile=1'
 
 if (filter) {
@@ -58,8 +66,22 @@ page.onResourceReceived = function() {
     // pushed onto the array multiple times -- it looks like the
     // function was queued up several times, depending on the server.
     if (!attachedDoneCallback) {
+        if (color) {
+            page.evaluate(function(){
+                window.colorizeJasmine = true;
+            });
+        }
+
         attachedDoneCallback = page.evaluate(function() {
             if (window.jasmine) {
+                function colorlog (msg, color) {
+                    if (window.colorizeJasmine) {
+                        console.log(colorize(msg, color))
+                    } else {
+                        console.log(msg);
+                    }
+                }
+                
                 var reporter = {
                     failures: [],
 
@@ -82,12 +104,16 @@ page.onResourceReceived = function() {
                         } else if (results.passed()) {
                             this.numPassed++;
                             var timeTaken = (new Date()).getTime() - this.specStartTime;
-                            if (timeTaken > 300) {
-                                console.log("O");
+                            if (timeTaken > 500) {
+                                colorlog("O", 'red');
+                            } else if (timeTaken > 250) {
+                                colorlog("O", 'yellow');
+                            } else if (timeTaken > 125) {
+                                colorlog("-", 'yellow');
                             } else if (timeTaken > 50) {
-                                console.log("-");
+                                colorlog("-", 'green');
                             } else {
-                                console.log(".");
+                                colorlog(".", 'green');
                             }
                         } else {
                             this.numFailed++;
