@@ -1,11 +1,22 @@
 describe("chorus.views.SearchResults", function() {
     var makeSearchResults = function() {
-        var results = backboneFixtures.searchResult();
-        results.set({
+        var result = backboneFixtures.searchResult();
+        var attributeKeys = _.keys(result.attributes);
+        _.each(attributeKeys, function (attribute) {
+            if (attribute === 'completeJson') { return; }
+            if (attribute === 'dataSources') { return; }
+            if (attribute === 'dataSets') { return; }
+
+            var value = result.get(attribute);
+            value.numFound = Math.min(value.results.length, 2);
+            value.results = value.results.splice(0, 2);
+        });
+
+        result.set({
             entityType: "all",
             workspaceId: '10001'
         });
-        return results;
+        return result;
     };
 
     context("when there are no search results", function() {
