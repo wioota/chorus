@@ -225,6 +225,23 @@ describe HdfsDataSource do
     end
   end
 
+  describe "supports arbitrary connection parameters as key value/pairs" do
+    let(:ha_hdfs) { FactoryGirl.create(:hdfs_data_source, :high_availability => true, :connection_parameters => {"a.key" => "a.value"}) }
+
+    it "has 1 additional connection parameter" do
+      ha_hdfs.connection_parameters.count.should == 1
+      ha_hdfs.connection_parameters.should == {"a.key" => "a.value"}
+    end
+
+    it "serializes and deserializes connection parameters" do
+      ha_hdfs.connection_parameters.count.should == 1
+      ha_hdfs.update_attributes!( { :connection_parameters => {:key_1 => 'value_1', :key_2 => 'value_2'} })
+      ha_hdfs.reload
+      params = ha_hdfs.connection_parameters
+      params.should == {"key_1" => "value_1", "key_2" => "value_2"}
+    end
+  end
+
   it_should_behave_like "taggable models", [:hdfs_data_sources, :hadoop]
 
   it_behaves_like 'a soft deletable model' do

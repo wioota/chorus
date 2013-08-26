@@ -4,7 +4,7 @@ class HdfsDataSource < ActiveRecord::Base
   include SoftDelete
   include CommonDataSourceBehavior
 
-  attr_accessible :name, :host, :port, :description, :username, :group_list, :job_tracker_host, :job_tracker_port, :hdfs_version, :high_availability
+  attr_accessible :name, :host, :port, :description, :username, :group_list, :job_tracker_host, :job_tracker_port, :hdfs_version, :high_availability, :connection_parameters
   belongs_to :owner, :class_name => 'User'
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
@@ -16,6 +16,8 @@ class HdfsDataSource < ActiveRecord::Base
   validates_length_of :name, :maximum => 64
 
   validates_with DataSourceNameValidator
+
+  serialize :connection_parameters, JsonHashSerializer
 
   after_create :create_root_entry
   after_destroy :enqueue_destroy_entries

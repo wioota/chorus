@@ -57,6 +57,7 @@ FactoryGirl.define do
     sequence(:job_tracker_host) { |n| "job-tracker-host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
     sequence(:job_tracker_port) { |n| 10000+n }
     hdfs_version "Pivotal HD"
+    high_availability { false }
     owner
   end
 

@@ -31,6 +31,21 @@ describe HdfsDataSourcesController do
         post :create
       end
     end
+
+    context "for a high availability data source" do
+      let(:params) { FactoryGirl.attributes_for(:hdfs_data_source, :high_availability => true, :connection_parameters => {"a.key" => "a.value"}) }
+
+      before do
+        stub(Hdfs::DataSourceRegistrar).verify_data_source_accessibility.with_any_args { true }
+        stub(Hdfs::QueryService).version_of.with_any_args { "Cloudera CDH4" }
+      end
+
+      it "renders the new data source" do
+        post :create, params
+        decoded_response.high_availability.should == true
+        decoded_response.connection_parameters.should == {"a.key" => "a.value"}
+      end
+    end
   end
 
   describe "#update" do

@@ -30,6 +30,8 @@ describe HdfsDataSourcePresenter, :type => :view do
       hash.should have_key(:job_tracker_host)
       hash.should have_key(:job_tracker_port)
       hash.should have_key(:hdfs_version)
+      hash.should have_key(:high_availability)
+      hash.should have_key(:connection_parameters)
       hash[:entity_type].should == 'hdfs_data_source'
     end
 
