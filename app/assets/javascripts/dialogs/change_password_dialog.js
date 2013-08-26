@@ -7,7 +7,7 @@ chorus.dialogs.ChangePassword = chorus.dialogs.Base.extend({
     persistent:true,
 
     save:function (e) {
-        e.preventDefault();
+        e && e.preventDefault();
 
         this.listenTo(this.model, "saved", this.saved);
         this.model.save({

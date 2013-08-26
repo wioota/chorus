@@ -174,9 +174,33 @@ describe("chorus.dialogs.DataSourcesNew", function() {
             });
         });
 
-        describe("cluster", function() {
+        describe("selecting the 'HDFS cluster' option", function() {
             beforeEach(function() {
+                this.modalSpy = stubModals();
                 this.dialog.$("select.data_sources").val("register_existing_hdfs").change();
+            });
+
+            itBehavesLike.aDialogLauncher('a.connection_parameters', chorus.dialogs.HdfsConnectionParameters);
+
+            describe("the connection parameters link", function () {
+                beforeEach(function () {
+                    this.dialog.model.set('connectionParameters', [
+                        {key: 'dfs.data.dir', value: '/foo/bar'},
+                        {key: 'mapred.queue.names', value: 'thingie, zippity, original'},
+                        {key: 'mapred.acls.enabled', value: 'true'}
+                    ]);
+                    this.dialog.render();
+                });
+
+                it("show a count of configured parameters", function () {
+                    expect(this.dialog.$('a.connection_parameters')).toContainTranslation('data_sources.dialog.connection_parameters', {count: 3});
+                });
+
+                it("updates the count when the model's connectionParameters are updated'", function () {
+                    this.dialog.model.set('connectionParameters', []);
+                    expect(this.dialog.$('a.connection_parameters')).toContainTranslation('data_sources.dialog.connection_parameters', {count: 0});
+                });
+
             });
 
             it("un-collapses the 'register a hadoop file system' form", function() {
@@ -444,6 +468,12 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                 hadoopSection.find("input[name=jobTrackerHost]").val("foooo.baaaar");
                 hadoopSection.find("input[name=jobTrackerPort]").val("4321");
                 hadoopSection.find("input[name=high_availability]").prop('checked', false);
+                this.someConnectionParams = [
+                    {key: 'dfs.data.dir', value: '/foo/bar'},
+                    {key: 'mapred.queue.names', value: 'thingie, zippity, original'},
+                    {key: 'mapred.acls.enabled', value: 'true'}
+                ];
+                this.dialog.model.set('connectionParameters', this.someConnectionParams);
 
 
                 spyOn(chorus.models.HdfsDataSource.prototype, "save").andCallThrough();
@@ -462,6 +492,10 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                 expect(params['hdfs_data_source[job_tracker_host]']).toBe("foooo.baaaar");
                 expect(params['hdfs_data_source[job_tracker_port]']).toBe("4321");
                 expect(params['hdfs_data_source[high_availability]']).toBe("false");
+                expect(params['hdfs_data_source[connection_parameters][0][key]']).toEqual(this.someConnectionParams[0].key);
+                expect(params['hdfs_data_source[connection_parameters][0][value]']).toEqual(this.someConnectionParams[0].value);
+                expect(params['hdfs_data_source[connection_parameters][1][key]']).toEqual(this.someConnectionParams[1].key);
+                expect(params['hdfs_data_source[connection_parameters][1][value]']).toEqual(this.someConnectionParams[1].value);
             });
         });
 

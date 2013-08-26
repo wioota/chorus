@@ -74,6 +74,10 @@
         <label for="use_high_availability">{{t "data_sources.dialog.use_high_availability"}}</label>
 
         {{hdfsDataSourceFields}}
+
+        <div class="connection_parameters_container">
+            <a class="connection_parameters">{{t "data_sources.dialog.connection_parameters" parameterCount}}</a>
+        </div>
     </div>
 
     {{#if gnipConfigured}}

@@ -8,7 +8,8 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         "change select.data_sources": "showFieldset",
         "click a.close_errors": "clearServerErrors",
         "submit form": "createDataSource",
-        "change input[name=high_availability]": 'toggleHighAvailability'
+        "change input[name=high_availability]": 'toggleHighAvailability',
+        "click a.connection_parameters": "launchConnectionParametersDialog"
     },
 
     postRender: function() {
@@ -26,6 +27,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
 
     makeModel: function () {
         this.model = this.model || new chorus.models.GpdbDataSource();
+        this.listenTo(this.model, 'change', this.rewriteLink);
     },
 
     additionalContext: function() {
@@ -33,7 +35,8 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         return {
             gnipConfigured:  config.get('gnipConfigured'),
             oracleConfigured:  config.get('oracleConfigured'),
-            defaultGpdbFields: {dbName: "postgres"}
+            defaultGpdbFields: {dbName: "postgres"},
+            parameterCount: {count: this.model.numberOfConnectionParameters()}
         };
     },
 
@@ -46,6 +49,10 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         }
         this.$("button.submit").prop("disabled", className === 'select_one');
         this.clearErrors();
+    },
+
+    rewriteLink: function () {
+        this.$('a.connection_parameters').text(t('data_sources.dialog.connection_parameters', {count: this.model.numberOfConnectionParameters()}));
     },
 
     toggleHighAvailability: function (e) {
@@ -61,16 +68,22 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         }
     },
 
+    launchConnectionParametersDialog: function (e) {
+        e && e.preventDefault();
+
+        new chorus.dialogs.HdfsConnectionParameters({model: this.model}).launchModal();
+    },
+
     createDataSource: function (e) {
         e && e.preventDefault();
 
+        var values = this.fieldValues();
         this.resource = this.model = new (this.dataSourceClass())();
         this.listenTo(this.model, "saved", this.saveSuccess);
         this.listenTo(this.model, "saveFailed", this.saveFailed);
         this.listenTo(this.model, "validationFailed", this.saveFailed);
 
         this.$("button.submit").startLoading("data_sources.new_dialog.saving");
-        var values = this.fieldValues();
         this.model.save(values);
     },
 
@@ -99,6 +112,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
 
         updates.shared = inputSource.find("input[name=shared]").prop("checked") ? "true" : "false";
         updates.highAvailability = inputSource.find("input[name=high_availability]").prop("checked") ? "true" : "false";
+        updates.connectionParameters = this.model.get('connectionParameters');
         return updates;
     },
 
