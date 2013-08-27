@@ -73,11 +73,6 @@ chorus.models.DataSource = chorus.models.AbstractDataSource.extend({
         return this.accountForOwner() && this.accountForOwner().get("dbUsername");
     },
 
-    numberOfConnectionParameters: function () {
-        var connectionParams = this.get('connectionParameters');
-        return connectionParams ? connectionParams.length : 0;
-    },
-
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);
         this.requirePattern("name", chorus.ValidationRegexes.MaxLength64(), newAttrs);

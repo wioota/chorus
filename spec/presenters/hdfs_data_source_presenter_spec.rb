@@ -35,6 +35,10 @@ describe HdfsDataSourcePresenter, :type => :view do
       hash[:entity_type].should == 'hdfs_data_source'
     end
 
+    it "presents an empty array when there are no additional connection parameters" do
+      hash[:connection_parameters].should == []
+    end
+
     it "should use ownerPresenter Hash method for owner" do
       owner = hash[:owner]
       owner.to_hash.should == (UserPresenter.new(user, view).presentation_hash)

@@ -4,7 +4,9 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
     templateName: "data_source_edit",
     title: t("data_sources.edit_dialog.title"),
     events: {
-        "submit form": "save"
+        "submit form": "save",
+        "click a.connection_parameters": "launchConnectionParametersDialog",
+        "change input[name=high_availability]": 'toggleHighAvailability'
     },
 
     formFields: ["name", "host", "port", "size", "dbName", "username", "groupList", "streamUrl", "password", "jobTrackerHost", "jobTrackerPort", "hdfsVersion"],
@@ -12,6 +14,7 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
     makeModel: function() {
         this.sourceModel = this.model;
         this.model = this.model.clone();
+        this.listenTo(this.model, 'change', this.rewriteLink);
     },
 
     setup: function() {
@@ -30,11 +33,35 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
         }, this));
     },
 
+    launchConnectionParametersDialog: function (e) {
+        e && e.preventDefault();
+
+        new chorus.dialogs.HdfsConnectionParameters({model: this.model}).launchModal();
+    },
+
+    rewriteLink: function () {
+        this.$('a.connection_parameters').text(t('data_sources.dialog.connection_parameters', {count: this.model.numberOfConnectionParameters()}));
+    },
+
+    toggleHighAvailability: function (e) {
+        e && e.preventDefault();
+
+        if (this.$('input[name=high_availability]').prop('checked')) {
+            this.$('input[name=port]').val('');
+            this.$('[name=port]').prop('disabled', true).removeClass('required');
+            this.$('label[name=host]').text(t('data_sources.dialog.name_service'));
+        } else {
+            this.$('[name=port]').prop('disabled', false).addClass('required');
+            this.$('label[name=host]').text(t('data_sources.dialog.hadoop_host'));
+        }
+    },
+
     additionalContext: function() {
         return {
             gpdbOrOracleDataSource: this.model.get("entityType") === "gpdb_data_source" || this.model.get("entityType") === "oracle_data_source",
             hdfsDataSource: this.model.constructorName === "HdfsDataSource",
-            gnipDataSource: this.model.constructorName === "GnipDataSource"
+            gnipDataSource: this.model.constructorName === "GnipDataSource",
+            parameterCount: {count: this.model.numberOfConnectionParameters()}
         };
     },
 
@@ -50,6 +77,8 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
                 attrs[name] = input.val().trim();
             }
         }, this);
+
+        attrs.highAvailability = this.$("input[name=high_availability]").prop("checked") ? "true" : "false";
 
         this.$("button.submit").startLoading("data_sources.edit_dialog.saving");
         this.$("button.cancel").prop("disabled", true);

@@ -33,7 +33,7 @@ describe HdfsDataSourcesController do
     end
 
     context "for a high availability data source" do
-      let(:params) { FactoryGirl.attributes_for(:hdfs_data_source, :high_availability => true, :connection_parameters => {"a.key" => "a.value"}) }
+      let(:params) { FactoryGirl.attributes_for(:hdfs_data_source, :high_availability => true, :connection_parameters => {"0" => {"a.key" => "a.value"} }) }
 
       before do
         stub(Hdfs::DataSourceRegistrar).verify_data_source_accessibility.with_any_args { true }
@@ -43,7 +43,7 @@ describe HdfsDataSourcesController do
       it "renders the new data source" do
         post :create, params
         decoded_response.high_availability.should == true
-        decoded_response.connection_parameters.should == {"a.key" => "a.value"}
+        decoded_response.connection_parameters.should == [{"a.key" => "a.value"}]
       end
     end
   end

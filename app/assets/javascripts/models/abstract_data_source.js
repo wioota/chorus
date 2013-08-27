@@ -76,5 +76,10 @@ chorus.models.AbstractDataSource = chorus.models.Base.extend({
 
     usage: function() {
         return false;
+    },
+
+    numberOfConnectionParameters: function () {
+        var connectionParams = this.get('connectionParameters');
+        return connectionParams ? connectionParams.length : 0;
     }
 });

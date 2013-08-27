@@ -17,7 +17,7 @@ class HdfsDataSource < ActiveRecord::Base
 
   validates_with DataSourceNameValidator
 
-  serialize :connection_parameters, JsonHashSerializer
+  serialize :connection_parameters, JsonArraySerializer
 
   after_create :create_root_entry
   after_destroy :enqueue_destroy_entries
@@ -62,7 +62,7 @@ class HdfsDataSource < ActiveRecord::Base
   end
 
   def hdfs_pairs
-    connection_parameters.values.map { |hsh| com.emc.greenplum.hadoop.plugins.HdfsPair.new(hsh["key"], hsh["value"]) }
+    connection_parameters.map { |hsh| com.emc.greenplum.hadoop.plugins.HdfsPair.new(hsh["key"], hsh["value"]) }
   end
 
   private

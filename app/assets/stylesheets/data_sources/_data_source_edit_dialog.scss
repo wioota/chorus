@@ -1,7 +1,8 @@
 .data_source_edit {
-    $host-width : 320px;
-    $account_width : 212px;
-    $input-spacing : 16px;
+    $hostname-width : 375px;
+    $account_width : 240px;
+    $input-spacing : 12px;
+    $fieldset-width : $default-dialog-width - 2 * $dialog-padding;
 
     input[type=text][disabled=disabled] {
         border: 0;
@@ -9,38 +10,43 @@
     }
 
     label {
-        margin-top: 15px;
-        margin-bottom: $padding-y;
-        display: inline-block;
+        margin-top: $padding-y;
+    }
+
+    label, input {
+      display: inline-block;
     }
 
     label[name=host], input[name=host],
     label[name=jobTrackerHost], input[name=jobTrackerHost] {
-        width: $host-width;
-        display: inline-block;
+        width: $hostname-width;
     }
 
     input[name=database] {
-        width: $host-width;
+        width: $hostname-width;
     }
 
     .username, .group_list, .gnip_username, .gnip_password
     {
-        display: inline-block;
         width: $account_width;
     }
 
     .group_list, .gnip_password {
+        width: $fieldset-width - $account_width - $dialog-padding - 2px;
         margin-left: $input-spacing;
     }
 
-    .port, .job_tracker_port {
-        width: $default-dialog-width - $host-width - 40px;
-        margin-left: 4px;
-        display: inline-block;
+    label[name=port], input[name=port],
+    label[name=jobTrackerPort], input[name=jobTrackerPort] {
+        width: $fieldset-width - $hostname-width - $dialog-padding - 2px;
+        margin-left: $input-spacing;
     }
 
     select, .ui-selectmenu-button .ui-button {
         width: 300px;
+    }
+
+    .connection_parameters_container {
+      padding-top: 5px;
     }
 }
