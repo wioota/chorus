@@ -448,11 +448,11 @@ describe ChorusConfig do
   describe "mail settings" do
     let(:smtp_config) do
       {
-        'host' => 'localhost',
-        'port' => 587,
-        'user_name' => 'mailer',
-        'password' => 'pwer',
-        'authentication' => 'login'
+        :address => 'localhost',
+        :port => 587,
+        :user_name => 'mailer',
+        :password => 'pwer',
+        :authentication => 'login'
       }
     end
 
