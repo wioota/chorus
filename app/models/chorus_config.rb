@@ -149,7 +149,7 @@ class ChorusConfig
   end
 
   def smtp_configuration
-    self['smtp']
+    self['smtp'].symbolize_keys
   end
 
   private

@@ -146,12 +146,14 @@ work_flow.enabled = true
 work_flow.url = http://localhost:8070
 
 #Mail
-smtp.host=localhost
+smtp.address=localhost
 smtp.port=587
 smtp.user_name=USER_NAME
 smtp.password=PASSWORD
 smtp.authentication=login
 smtp.enable_starttls_auto=false
+#smtp.ssl=false
+#smtp.tls=false
 #smtp.openssl_verify_mode=none
 
 mail.enabled = false
