@@ -74,7 +74,7 @@ class HdfsEntry < ActiveRecord::Base
   end
 
   def self.list(path, hdfs_data_source)
-    hdfs_query = Hdfs::QueryService.new(hdfs_data_source.host, hdfs_data_source.port, hdfs_data_source.username, hdfs_data_source.version)
+    hdfs_query = Hdfs::QueryService.for_data_source(hdfs_data_source)
     current_entries = hdfs_query.list(path).map do |result|
       hdfs_entry = hdfs_data_source.hdfs_entries.find_or_initialize_by_path(result["path"])
       hdfs_entry.stale_at = nil if hdfs_entry.stale?
@@ -104,7 +104,7 @@ class HdfsEntry < ActiveRecord::Base
   end
 
   def contents
-    hdfs_query = Hdfs::QueryService.new(hdfs_data_source.host, hdfs_data_source.port, hdfs_data_source.username, hdfs_data_source.version)
+    hdfs_query = Hdfs::QueryService.for_data_source(hdfs_data_source)
     hdfs_query.show(path)
   rescue StandardError => e
     raise HdfsContentsError.new(e)

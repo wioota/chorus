@@ -1,6 +1,6 @@
 require 'timeout'
 
-require Rails.root.join('vendor/hadoop/hdfs-query-service-0.0.6.jar')
+require Rails.root.join('vendor/hadoop/hdfs-query-service-0.0.7.jar')
 
 module Hdfs
   include Chorus
@@ -14,23 +14,29 @@ module Hdfs
 
   class QueryService
     def self.version_of(data_source)
-      new(data_source.host, data_source.port, data_source.username, data_source.version).version
+      self.for_data_source(data_source).version
     end
 
     def self.accessible?(data_source)
-      hdfs = JavaHdfs.new(data_source.host, data_source.port.to_s, data_source.username, data_source.version)
+      hdfs = JavaHdfs.new(data_source.host, data_source.port.to_s, data_source.username, data_source.version, data_source.high_availability?, data_source.hdfs_pairs )
       hdfs.list("/").present?
     end
 
-    def initialize(host, port, username, version = nil)
+    def self.for_data_source(data_source)
+      new(data_source.host, data_source.port, data_source.username, data_source.version, data_source.high_availability?, data_source.hdfs_pairs)
+    end
+
+    def initialize(host, port, username, version = nil, high_availability = false, connection_parameters = [])
       @host = host
       @port = port.to_s
       @username = username
       @version = version
+      @high_availability = high_availability
+      @connection_parameters = connection_parameters
     end
 
     def version
-      version = JavaHdfs.new(@host, @port, @username, @version).version
+      version = JavaHdfs.new(@host, @port, @username, @version, @high_availability, @connection_parameters).version
       unless version
         Chorus.log_error "Within JavaHdfs connection, failed to establish connection to #{@host}:#{@port}"
         raise ApiValidationError.new(:connection, :generic, {:message => "Unable to determine HDFS server version or unable to reach server at #{@host}:#{@port}. Check connection parameters."})
@@ -39,7 +45,7 @@ module Hdfs
     end
 
     def list(path)
-      list = JavaHdfs.new(@host, @port, @username, @version).list(path)
+      list = JavaHdfs.new(@host, @port, @username, @version, @high_availability, @connection_parameters).list(path)
       raise DirectoryNotFoundError, "Directory does not exist: #{path}" unless list
       list.map do |object|
         {
@@ -53,7 +59,7 @@ module Hdfs
     end
 
     def show(path)
-      contents = JavaHdfs.new(@host, @port, @username, @version).content(path, PREVIEW_LINE_COUNT)
+      contents = JavaHdfs.new(@host, @port, @username, @version, @high_availability, @connection_parameters).content(path, PREVIEW_LINE_COUNT)
       raise FileNotFoundError, "File not found on HDFS: #{path}" unless contents
       contents
     end

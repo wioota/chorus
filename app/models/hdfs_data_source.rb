@@ -61,6 +61,10 @@ class HdfsDataSource < ActiveRecord::Base
     !!(job_tracker_host && job_tracker_port)
   end
 
+  def hdfs_pairs
+    connection_parameters.values.map { |hsh| com.emc.greenplum.hadoop.plugins.HdfsPair.new(hsh["key"], hsh["value"]) }
+  end
+
   private
 
   def enqueue_destroy_entries

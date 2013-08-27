@@ -3,9 +3,19 @@ require 'java'
 
 describe Hdfs::QueryService, :hdfs_integration do
   let(:hdfs_params) { HdfsIntegration.data_source_config }
-  before do
-    devnull = java.io.PrintStream.new(java.io.File.new("/dev/null"))
+  before :all do
+    # silence the HDFS log output from failed version connections
+    @java_stdout = java.lang.System.out
+    @java_stderr = java.lang.System.err
+    devnull = java.io.PrintStream.new(java.io.FileOutputStream.new("/dev/null"))
     com.emc.greenplum.hadoop.Hdfs.logger_stream = devnull
+    java.lang.System.setOut(devnull)
+    java.lang.System.setErr(devnull)
+  end
+
+  after :all do
+    java.lang.System.setOut(@java_stdout)
+    java.lang.System.setErr(@java_stderr)
   end
 
   describe "data_source_version" do
@@ -65,7 +75,7 @@ describe Hdfs::QueryService, :hdfs_integration do
   end
 
   describe "#list" do
-    let(:service) { Hdfs::QueryService.new(hdfs_params["host"], hdfs_params["port"], hdfs_params["username"], "0.20.1gp") }
+    let(:service) { Hdfs::QueryService.new(hdfs_params["host"], hdfs_params["port"], hdfs_params["username"], "0.20.1gp", false, []) }
 
     context "listing root with sub content" do
       it "returns list of content for root directory" do
@@ -88,7 +98,7 @@ describe Hdfs::QueryService, :hdfs_integration do
     end
 
     context "connection is invalid" do
-      let(:service) { Hdfs::QueryService.new("bagbage", "8020", "pivotal", "0.20.1gp") }
+      let(:service) { Hdfs::QueryService.new("bagbage", "8020", "pivotal", "0.20.1gp", false, []) }
 
       it "raises an exception" do
         expect { service.list("/") }.to raise_error(Hdfs::DirectoryNotFoundError)
@@ -97,7 +107,7 @@ describe Hdfs::QueryService, :hdfs_integration do
   end
 
   describe "#show" do
-    let(:service) { Hdfs::QueryService.new(hdfs_params["host"], hdfs_params["port"], hdfs_params["username"], "0.20.1gp") }
+    let(:service) { Hdfs::QueryService.new(hdfs_params["host"], hdfs_params["port"], hdfs_params["username"], "0.20.1gp", false, []) }
     before do
       any_instance_of(com.emc.greenplum.hadoop.Hdfs) do |java_hdfs|
         stub(java_hdfs).content(is_a(String), 200) { file_content }

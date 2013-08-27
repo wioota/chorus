@@ -40,7 +40,7 @@ class HdfsDataset < Dataset
   end
 
   def contents
-    hdfs_query = Hdfs::QueryService.new(hdfs_data_source.host, hdfs_data_source.port, hdfs_data_source.username, hdfs_data_source.version)
+    hdfs_query = Hdfs::QueryService.for_data_source(hdfs_data_source)
     hdfs_query.show(file_mask)
   rescue StandardError => e
     raise HdfsContentsError.new(e)

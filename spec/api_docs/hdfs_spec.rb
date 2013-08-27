@@ -13,7 +13,7 @@ resource "Hdfs" do
     stub(Hdfs::QueryService).accessible?(anything) { true }
 
     service = Object.new
-    stub(Hdfs::QueryService).new(data_source.host, data_source.port, data_source.username, data_source.version) { service }
+    stub(Hdfs::QueryService).for_data_source(data_source) { service }
     stub(service).show('/test.txt') { ["This is such a nice file.", "It's my favourite file.", "I could read this file all day.'"] }
     stub(HdfsEntry).list('/', data_source) { [dir_entry, file_entry] }
     stub(HdfsEntry).list('/files/', data_source) { [file_entry] }
