@@ -1,7 +1,15 @@
 chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
-        chorus.Mixins.HdfsViews
-    ).extend({
+    chorus.Mixins.HdfsViews
+).extend({
     helpId: "instances",
+    constructorName: 'HdfsEntryIndex',
+
+    failurePageOptions: function() {
+        return {
+            title: t('invalid_route.hdfs_entry_index.title'),
+            text: t('invalid_route.hdfs_entry_index.content')
+        };
+    },
 
     setupMultiSelectSidebar: function() {
         var actions = [

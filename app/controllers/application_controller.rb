@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'DataSourceConnection::DriverNotConfigured', :with => :render_driver_not_configured
   rescue_from 'GreenplumConnection::ObjectNotFound', :with => :render_missing_database_object
   rescue_from 'DataSourceConnection::QueryError', :with => :render_query_error
+  rescue_from 'HdfsDataset::HdfsContentsError', :with => :render_hdfs_query_error
   rescue_from 'GreenplumConnection::SqlPermissionDenied', :with => :render_resource_forbidden
   rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
   rescue_from 'ModelNotCreated', :with => :render_model_error
@@ -76,6 +77,10 @@ class ApplicationController < ActionController::Base
 
   def render_missing_database_object(e)
     present_errors({:record => :MISSING_DB_OBJECT}, :status => :unprocessable_entity)
+  end
+
+  def render_hdfs_query_error(e)
+    present_errors({:record => :HDFS_QUERY_ERROR, :message => e.message}, :status => :not_found)
   end
 
   def render_resource_forbidden(e)

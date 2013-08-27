@@ -66,6 +66,17 @@ describe ApplicationController do
       decoded_errors.message.should == 'oops'
     end
 
+    it "returns error 404 when a Hdfs Connection error occurs" do
+      error = HdfsDataset::HdfsContentsError.new(StandardError.new('oops'))
+      stub(controller).index { raise error }
+
+      get :index
+
+      response.should be_not_found
+      decoded_errors.record.should == "HDFS_QUERY_ERROR"
+      decoded_errors.message.should == 'oops'
+    end
+
     it "returns error 422 when a data source driver error occurs" do
       error = DataSourceConnection::DriverNotConfigured.new('Oracle')
       stub(controller).index { raise error }
