@@ -52,6 +52,12 @@ function start () {
     $bin/start-webserver.sh;
     EXIT_STATUS=`expr $EXIT_STATUS + $?`;
   fi
+  if should_handle alpine; then
+    if [ "$ALPINE_HOME" != "" ]; then
+        $bin/start-alpine.sh;
+        EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+    fi
+  fi
   popd > /dev/null
   if (($EXIT_STATUS > 0)); then
     exit_control $EXIT_STATUS;
@@ -80,6 +86,12 @@ function stop () {
   if should_handle postgres;   then
     $bin/stop-postgres.sh;
     EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+  fi
+  if should_handle alpine;   then
+    if [ "$ALPINE_HOME" != "" ]; then
+        $bin/stop-alpine.sh;
+        EXIT_STATUS=`expr $EXIT_STATUS + $?`;
+    fi
   fi
   popd > /dev/null
   if (($EXIT_STATUS > 0)); then

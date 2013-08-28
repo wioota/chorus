@@ -12,6 +12,10 @@ if [ -e $CHORUS_HOME/current ]; then
     CHORUS_HOME=$CHORUS_HOME/current
 fi
 
+if [ "$ALPINE_HOME" = "" ] && [ -e $CHORUS_HOME/../alpine ]; then
+    ALPINE_HOME="$CHORUS_HOME"/../alpine
+fi
+
 if [ "$RAILS_ENV" = "" ]; then
     if [ -f $CHORUS_HOME/.development ]; then
         RAILS_ENV=development
