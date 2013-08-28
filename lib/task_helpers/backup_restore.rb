@@ -8,6 +8,7 @@ module BackupRestore
   BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
   DATABASE_DATA_FILENAME = "database.gz"
   ASSET_FILENAME = "assets_storage_path"
+  ALPINE_BACKUP = "alpine_data_repository"
   MODELS_WITH_ASSETS = %w{csv_files attachments note_attachments users workfile_versions workspaces}
 
   def self.backup(backup_dir, rolling_days = nil)
@@ -84,6 +85,7 @@ module BackupRestore
         Dir.chdir(temp_dir) do
           dump_database
           compress_assets
+          backup_alpine if ENV['ALPINE_HOME'].present?
           package_backup
         end
       end
@@ -112,6 +114,12 @@ module BackupRestore
         capture_output "tar czf #{asset_file} #{asset_string}",
                        :error => "Compressing assets failed."
       end
+    end
+
+    def backup_alpine
+      alpine_data_dir = Pathname.new(ENV['ALPINE_HOME']).join('ALPINE_DATA_REPOSITORY')
+      capture_output "tar czf #{ALPINE_BACKUP}.gz #{alpine_data_dir}",
+                     :error => "Compressing alpine data directory failed."
     end
 
     def delete_old_backups
@@ -176,6 +184,7 @@ module BackupRestore
 
             restore_assets
             restore_database
+            restore_alpine
           end
         end
         true
@@ -232,6 +241,16 @@ PROMPT
       log "Restoring database..."
       capture_output "DYLD_LIBRARY_PATH=$CHORUS_HOME/postgres/lib LD_LIBRARY_PATH=$CHORUS_HOME/postgres/lib exec $CHORUS_HOME/postgres/bin/dropdb -p #{database_port} -U #{postgres_username} #{database_name}", :error => "Existing database could not be dropped."
       capture_output "gunzip -c #{DATABASE_DATA_FILENAME} | #{ENV['CHORUS_HOME']}/postgres/bin/pg_restore -C -p #{database_port} -U #{postgres_username} -d postgres", :error => "Could not restore database."
+    end
+
+    def restore_alpine
+      alpine_file = temp_dir.join(ALPINE_BACKUP + '.gz')
+      if File.exists? alpine_file
+        log "Restoring alpine"
+        Dir.chdir ENV['ALPINE_HOME'] do
+          capture_output "tar xf #{alpine_file}", :error => 'Restoring Alpine data failed.'
+        end
+      end
     end
 
     def compare_versions(backup_version, current_version)

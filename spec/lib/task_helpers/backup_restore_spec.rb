@@ -26,14 +26,18 @@ describe 'BackupRestore' do
 
         around do |example|
           # create fake install
-          make_tmp_path("rspec_backup_install") do |chorus_path|
-            @chorus_path = chorus_path
-            populate_fake_chorus_install(chorus_path, :assets => assets)
+          make_tmp_path("rspec_backup_install") do |tmp_path|
+            @chorus_path = tmp_path.join('chorus')
+            FileUtils.mkdir_p @chorus_path
+            @alpine_path = tmp_path.join('alpine')
+            FileUtils.mkdir_p @alpine_path
 
-            FileUtils.mkdir_p chorus_path.join(backup_path)
+            populate_fake_chorus_install(@chorus_path, :alpine_path => @alpine_path, :assets => assets)
 
-            with_rails_root chorus_path do
-              Dir.chdir chorus_path do
+            FileUtils.mkdir_p @chorus_path.join(backup_path)
+
+            with_rails_root @chorus_path, @alpine_path do
+              Dir.chdir @chorus_path do
                 example.call
               end
             end
@@ -56,6 +60,13 @@ describe 'BackupRestore' do
 
         context "with the database dump disabled for speed" do
           let(:stub_database_dump) { true }
+
+          context "with an Alpine install" do
+            it "includes a zipped ALPINE_DATA_REPOSITORY in the backup" do
+              run_backup
+              system("tar xfO #{@expected_backup_file} alpine_data_repository.gz | gunzip > /dev/null").should be_true
+            end
+          end
 
           it "creates the backup directory if it does not exist" do
             backup_dir = @chorus_path.join backup_path
@@ -210,10 +221,11 @@ describe 'BackupRestore' do
       around do |example|
         make_tmp_path("rspec_backup_restore") do |tmp_path|
           @tmp_path = tmp_path
+          @alpine_path = tmp_path.join('alpine')
 
           # create a directory to restore to
           Dir.mkdir restore_path
-          populate_fake_chorus_install(restore_path, :version => current_version_string, :assets => assets)
+          populate_fake_chorus_install(restore_path, :alpine_path => @alpine_path, :version => current_version_string, :assets => assets)
           FileUtils.rm_f restore_path.join("config/chorus.properties")
 
           # create a fake backup in another directory
@@ -226,11 +238,17 @@ describe 'BackupRestore' do
             FileUtils.rm "sample_asset"
             files = "version_build database.sql.gz"
             files += " assets_storage_path.tgz" unless no_assets_storage_path
+
+            Dir.mkdir "ALPINE_DATA_REPOSITORY"
+            FileUtils.touch "ALPINE_DATA_REPOSITORY/big_data"
+            system "tar czf alpine_data_repository.gz ALPINE_DATA_REPOSITORY > /dev/null"
+            files += " alpine_data_repository.gz"
+
             system "tar cf #{backup_tar} #{files}"
           end
 
           Dir.chdir restore_path do
-            with_rails_root restore_path do
+            with_rails_root restore_path, @alpine_path do
               example.call
             end
           end
@@ -312,6 +330,13 @@ describe 'BackupRestore' do
         end
       end
 
+      context "when the backup includes Alpine data to restore" do
+        it "restores the alpine data" do
+          BackupRestore.restore backup_tar, true
+          @alpine_path.join('ALPINE_DATA_REPOSITORY', 'big_data').should exist
+        end
+      end
+
       def current_directory_should_be(dir)
         current_dir = Dir.pwd
         Dir.chdir(dir) do
@@ -322,14 +347,21 @@ describe 'BackupRestore' do
   end
 end
 
-def with_rails_root(root)
+def with_rails_root(chorus_path, alpine_path)
   original_chorus_home = ENV['CHORUS_HOME']
-  ENV['CHORUS_HOME'] = root.to_s
+  ENV['CHORUS_HOME'] = chorus_path.to_s
+
+  if alpine_path
+    original_alpine_home = ENV['ALPINE_HOME']
+    ENV['ALPINE_HOME'] = alpine_path.to_s
+  end
+
   original_rails_root = Rails.root
-  Rails.application.config.root = Pathname.new root
+  Rails.application.config.root = Pathname.new chorus_path
   yield
 ensure
   ENV['CHORUS_HOME'] = original_chorus_home
+  ENV['ALPINE_HOME'] = original_alpine_home if alpine_path
   Rails.application.config.root = original_rails_root
 end
 
@@ -372,7 +404,7 @@ def populate_fake_chorus_install(install_path, options = {})
 
   # create a fake asset in original
   if assets
-    with_rails_root(install_path) do
+    with_rails_root(install_path, nil) do
       FileUtils.mkdir_p asset_path
 
       assets.each do |asset|
@@ -380,6 +412,11 @@ def populate_fake_chorus_install(install_path, options = {})
         FileUtils.touch asset_path.join(asset)
       end
     end
+  end
+
+  if options[:alpine_path]
+    FileUtils.mkdir_p options[:alpine_path].join('ALPINE_DATA_REPOSITORY')
+    FileUtils.touch options[:alpine_path].join('ALPINE_DATA_REPOSITORY', 'amazing_data')
   end
 
   Dir.chdir install_path do
