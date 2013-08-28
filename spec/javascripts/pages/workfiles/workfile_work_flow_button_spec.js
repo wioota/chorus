@@ -7,7 +7,7 @@ describe("workfile work flow button", function () {
 
     context("with workflows disabled", function () {
         beforeEach(function () {
-            chorus.models.Config.instance().set("workFlowConfigured", false);
+            chorus.models.Config.instance().set("workflowConfigured", false);
             this.view = new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
             spyOn(this.workspace, 'canUpdate').andReturn(true);
             this.server.completeFetchFor(this.workspace);
@@ -21,7 +21,7 @@ describe("workfile work flow button", function () {
 
     context("with workflows enabled", function () {
         beforeEach(function () {
-            chorus.models.Config.instance().set("workFlowConfigured", true);
+            chorus.models.Config.instance().set("workflowConfigured", true);
             this.view = new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
             this.modalSpy = stubModals();
             spyOn(this.workspace, 'canUpdate').andReturn(true);

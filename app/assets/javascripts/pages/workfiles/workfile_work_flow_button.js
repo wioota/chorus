@@ -1,7 +1,7 @@
 chorus.plugins.push({
     WorkfileIndexPageButtons: {
         init: function(instance) {
-            if(chorus.models.Config.instance().get("workFlowConfigured")) {
+            if(chorus.models.Config.instance().get("workflowConfigured")) {
                 instance.createActions = _.clone(instance.createActions);
                 instance.createActions.push(
                     {className: 'create_work_flow', text: t("work_flows.actions.create_work_flow")}

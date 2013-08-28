@@ -9,8 +9,8 @@ describe Alpine::API do
   subject { Alpine::API.new config: config, user: user }
 
   before do
-    stub(ChorusConfig.instance).work_flow_configured? { true }
-    stub(config).work_flow_url { alpine_base_uri }
+    stub(ChorusConfig.instance).workflow_configured? { true }
+    stub(config).workflow_url { alpine_base_uri }
   end
 
   describe '.delete_work_flow' do
@@ -61,7 +61,7 @@ describe Alpine::API do
 
     context 'when work_flow is disabled' do
       before do
-        stub(config).work_flow_configured? { false }
+        stub(config).workflow_configured? { false }
       end
 
       it 'does not make an http request' do
@@ -93,7 +93,7 @@ describe Alpine::API do
 
     context 'when work_flow is disabled' do
       before do
-        stub(config).work_flow_configured? { false }
+        stub(config).workflow_configured? { false }
       end
 
       it 'does not make an http request' do

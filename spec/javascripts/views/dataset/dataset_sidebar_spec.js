@@ -752,7 +752,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("when work_flows are enabled", function () {
                 beforeEach(function () {
-                    chorus.models.Config.instance().set("workFlowConfigured", true);
+                    chorus.models.Config.instance().set("workflowConfigured", true);
                     this.view = new chorus.views.DatasetSidebar();
                     this.dataset = backboneFixtures.workspaceDataset.sourceTable();
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
@@ -811,7 +811,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("when workflows are enabled", function () {
                 beforeEach(function () {
-                    chorus.models.Config.instance().set("workFlowConfigured", true);
+                    chorus.models.Config.instance().set("workflowConfigured", true);
                     this.view = new chorus.views.DatasetSidebar();
                     this.view.render();
                     this.dataset = backboneFixtures.dataset({id: "XYZ"});

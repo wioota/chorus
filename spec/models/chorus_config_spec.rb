@@ -166,26 +166,26 @@ describe ChorusConfig do
   end
 
   describe "Work flow integration" do
-    let(:work_flow_config) do
+    let(:workflow_config) do
       {
         'enabled' => true,
         'url' => 'localhost'
       }
     end
 
-    describe "work_flow_configured?" do
+    describe "workflow_configured?" do
       before do
-        config.config = {'work_flow' => work_flow_config}
+        config.config = {'work_flow' => workflow_config}
       end
 
       context "when enabled is true and url is provided" do
         it "is true" do
-          config.work_flow_configured?.should be_true
+          config.workflow_configured?.should be_true
         end
       end
 
       context "when url is provided and enabled is false" do
-        let(:work_flow_config) do
+        let(:workflow_config) do
           {
               'url' => 'localhost',
               'enabled' => false
@@ -193,30 +193,30 @@ describe ChorusConfig do
         end
 
         it "is false" do
-          config.work_flow_configured?.should be_false
+          config.workflow_configured?.should be_false
         end
       end
 
       context "when enabled is true but url is not provided" do
-        let(:work_flow_config) do
+        let(:workflow_config) do
           {
               'enabled' => true
           }
         end
 
         it "is false" do
-          config.work_flow_configured?.should be_false
+          config.workflow_configured?.should be_false
         end
       end
     end
 
-    describe "work_flow_url" do
+    describe "workflow_url" do
       before do
-        config.config = {'work_flow' => work_flow_config}
+        config.config = {'work_flow' => workflow_config}
       end
 
       it "returns the value of work_flow.url" do
-        config.work_flow_url.should == 'localhost'
+        config.workflow_url.should == 'localhost'
       end
 
     end

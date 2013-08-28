@@ -9,8 +9,8 @@ describe("chorus.models.AlpineWorkfile", function() {
         });
 
         chorus.models.Config.instance().set({
-            workFlowConfigured: true,
-            workFlowUrl: "test.com"
+            workflowConfigured: true,
+            workflowUrl: "test.com"
         });
         chorus.session.set("sessionId", "hex");
     });

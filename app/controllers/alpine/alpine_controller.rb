@@ -7,7 +7,7 @@ module Alpine
     private
 
     def check_work_flow_enabled
-      head :not_found unless ChorusConfig.instance.work_flow_configured?
+      head :not_found unless ChorusConfig.instance.workflow_configured?
     end
 
     def enforce_localhost_only

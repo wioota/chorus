@@ -14,7 +14,7 @@ describe Alpine::CredentialsController do
 
     context 'when alpine is enabled' do
       before do
-        stub(ChorusConfig.instance).work_flow_configured? { true }
+        stub(ChorusConfig.instance).workflow_configured? { true }
       end
 
       it 'returns the username and password for the user for the data source' do
@@ -66,7 +66,7 @@ describe Alpine::CredentialsController do
 
     context 'when alpine is disabled' do
       before do
-        stub(ChorusConfig.instance).work_flow_configured? { false }
+        stub(ChorusConfig.instance).workflow_configured? { false }
       end
 
       it 'returns not found' do

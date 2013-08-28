@@ -5,7 +5,7 @@ describe "data source credentials" do
   let(:data_source) { data_sources(:owners) }
 
   before do
-    stub(ChorusConfig.instance).work_flow_configured? { true }
+    stub(ChorusConfig.instance).workflow_configured? { true }
     post "/sessions", :session => { :username => user.username, :password => FixtureBuilder.password }
   end
 

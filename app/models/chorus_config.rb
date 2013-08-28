@@ -58,8 +58,8 @@ class ChorusConfig
     !!self['gnip.enabled']
   end
 
-  def work_flow_configured?
-    !!(self['work_flow.url'].present? && self['work_flow.enabled'].present?)
+  def workflow_configured?
+    !!(workflow_url.present? && workflow_enabled.present?)
   end
 
   def syslog_configured?
@@ -117,7 +117,7 @@ class ChorusConfig
   end
 
   def server_port
-    if(self['ssl.enabled'] == true)
+    if self['ssl.enabled']
       return self['ssl_server_port']
     end
 
@@ -140,8 +140,12 @@ class ChorusConfig
     self['alpine.branded.enabled'] ? "alpine-logo.png" : "headertitle.png"
   end
 
-  def work_flow_url
-    self['work_flow.url']
+  def workflow_url
+    self['work_flow.url'] || self['workflow.url']
+  end
+
+  def workflow_enabled
+    self['work_flow.enabled'] || self['workflow.enabled']
   end
 
   def mail_configuration

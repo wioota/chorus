@@ -36,8 +36,8 @@ describe ConfigurationsController do
       stub(ChorusConfig.instance).[]('work_flow.enabled') { true }
       get :show
       response.code.should == "200"
-      decoded_response.work_flow_configured.should be_true
-      decoded_response.work_flow_url.should == 'http://test.example.com:8080'
+      decoded_response.workflow_configured.should be_true
+      decoded_response.workflow_url.should == 'http://test.example.com:8080'
     end
 
     it "includes the gnip_configured? value" do

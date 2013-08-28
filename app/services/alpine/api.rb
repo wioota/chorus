@@ -30,21 +30,21 @@ module Alpine
     end
 
     def delete_work_flow(work_flow)
-      request_deletion(work_flow) if config.work_flow_configured?
+      request_deletion(work_flow) if config.workflow_configured?
     end
 
     def create_work_flow(work_flow, body)
-      request_creation(body, work_flow) if config.work_flow_configured?
+      request_creation(body, work_flow) if config.workflow_configured?
     end
 
     def run_work_flow(work_flow, options = {})
       ensure_session
-      request_run(work_flow, options) if config.work_flow_configured?
+      request_run(work_flow, options) if config.workflow_configured?
     end
 
     def stop_work_flow(process_id)
       ensure_session
-      request_stop(process_id) if config.work_flow_configured?
+      request_stop(process_id) if config.workflow_configured?
     end
 
     private
@@ -115,7 +115,7 @@ module Alpine
     end
 
     def base_url
-      URI(config.work_flow_url)
+      URI(config.workflow_url)
     end
 
     def request_base

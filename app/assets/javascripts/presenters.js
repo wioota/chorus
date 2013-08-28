@@ -5,7 +5,7 @@ chorus.presenters.Base = function(model, options) {
     this.setup && this.setup();
 
     this.workFlowsEnabled = function() {
-        return chorus.models.Config.instance().get("workFlowConfigured");
+        return chorus.models.Config.instance().get("workflowConfigured");
     };
 };
 
