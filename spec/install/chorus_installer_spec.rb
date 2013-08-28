@@ -1254,7 +1254,6 @@ redirectPort="8443" />
 
       stub(installer).extract_alpine
       stub(installer).set_properties
-      mock(executor).start_alpine
     end
 
     it "unzips alpine into the appropriate place" do

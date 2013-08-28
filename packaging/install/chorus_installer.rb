@@ -564,10 +564,6 @@ class ChorusInstaller
     server_xml = File.read(server_xml_filename)
     server_xml.gsub!('port="8080"', 'port="9090"')
     File.open(server_xml_filename, 'w').write(server_xml)
-
-    log "Starting alpine..." do
-      @executor.start_alpine
-    end
   end
 
   def extract_alpine(alpine_installer)
