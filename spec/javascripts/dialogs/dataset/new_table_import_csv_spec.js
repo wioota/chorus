@@ -353,6 +353,10 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             expect(this.$tableNameInput).toHaveClass("has_error");
         });
 
+        it("does not show anything in the dialog error bar", function () {
+            expect(this.dialog.$(".errors")).toHaveClass("hidden");
+        });
+
         describe("performValidation", function() {
             it("does not validate", function() {
                 expect(this.dialog.performValidation()).toBe(false);

@@ -160,7 +160,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
             }
         }, this);
 
-        if(!allValid) {
+        if(!allValid && invalidCount > 0) {
             this.showDialogError(t("dataset.import.invalid_columns", {numInvalid: invalidCount, numTotal: names.length}));
         }
 
