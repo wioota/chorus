@@ -8,7 +8,7 @@ HAWQ_HOST=chorus-gphd20-2
 . script/ci/setup.sh
 
 if [[ $ALPINE_ZIP ]]; then
-    (mkdir -p vendor/alpine; cd vendor/alpine; wget $ALPINE_ZIP)
+    (mkdir -p vendor/alpine; cd vendor/alpine; wget --quiet $ALPINE_ZIP)
 fi
 
 rm -fr .bundle
