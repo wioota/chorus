@@ -9,12 +9,12 @@ class WorkspacePresenter < Presenter
       :summary => sanitize(model.summary),
       :archived_at => model.archived_at,
       :permission => model.permissions_for(current_user),
+      :owner => present(model.owner),
       :public => model.public
     }
 
     unless succinct?
       results.merge!(
-        :owner => present(model.owner),
         :archiver => present(model.archiver),
         :image => present(model.image),
         :has_added_member => model.has_added_member,

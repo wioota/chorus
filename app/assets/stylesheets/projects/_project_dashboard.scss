@@ -1,0 +1,16 @@
+.project_list {
+    .project {
+        display: inline-block;
+        width: 450px;
+        padding: 10px;
+        border: 1px solid black;
+    }
+
+    .name {
+        font-size: 24px;
+    }
+
+    .ownerlabel {
+        font-weight: bold;
+    }
+}

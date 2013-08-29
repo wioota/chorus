@@ -4,7 +4,8 @@ chorus.views.Dashboard = chorus.views.Base.extend({
     subviews: {
         '.dashboard_main': "dashboardMain",
         '.data_source_list': "dataSourceList",
-        '.workspace_list': "workspaceList"
+        '.workspace_list': "workspaceList",
+        '.project_list': "projectList"
     },
 
     setup: function() {
@@ -13,6 +14,12 @@ chorus.views.Dashboard = chorus.views.Base.extend({
             contentHeader:chorus.views.StaticTemplate("default_content_header", {title:t("header.my_workspaces")}),
             contentDetails:new chorus.views.StaticTemplate("dashboard/workspace_list_content_details"),
             content:new chorus.views.DashboardWorkspaceList({ collection: this.collection })
+        });
+
+        this.projectList = new chorus.views.MainContentView({
+            collection: this.collection,
+            contentHeader:chorus.views.StaticTemplate("default_content_header", {title:t("header.current_projects")}),
+            content:new chorus.views.DashboardProjectList({ collection: this.collection })
         });
 
         this.dataSourceList = new chorus.views.MainContentView({

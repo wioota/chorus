@@ -64,6 +64,12 @@ describe("chorus.views.Dashboard", function(){
             });
         });
 
+        describe("the project list", function() {
+            it("renders the project list with the right title", function() {
+                expect(this.view.$(".project_list .content_header h1").text()).toMatchTranslation("header.current_projects");
+            });
+        });
+
         describe('the data source list', function() {
             it('renders the data source list with the right title', function() {
                 expect(this.view.$(".main_content.data_source_list .content_header h1").text()).toMatchTranslation("header.browse_data");

@@ -1,0 +1,19 @@
+{{#each models}}
+    <div class="project" data-id="{{id}}">
+        <div class="text">
+            <div class="main">
+                <div>
+                    <a class="name" href="{{showUrl}}">
+                        <span title="{{name}}">{{name}}</span>
+                    </a>
+                </div>
+                <div>
+                    <span class="ownerlabel">{{t "workspace.owner"}}:</span>
+                    <a class="owner" href="{{ownerShowUrl}}">
+                        <span title="{{ownerName}}">{{ownerName}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/each}}

@@ -141,7 +141,8 @@ describe WorkspacePresenter, :type => :view do
           :summary,
           :archived_at,
           :permission,
-          :public
+          :public,
+          :owner
         ]
       end
     end
