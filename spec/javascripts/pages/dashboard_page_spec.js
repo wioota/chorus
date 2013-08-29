@@ -97,10 +97,6 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.server.lastFetchFor(new chorus.collections.UserSet([], {page:1, per_page:1}))).toBeTruthy();
         });
 
-        it("passes the collection through to the workspaceSet view", function() {
-            expect(this.page.mainContent.workspaceList.collection).toBe(this.page.workspaceSet);
-        });
-
         it("fetches active workspaces for the current user, including recent comments", function() {
             expect(this.page.workspaceSet.attributes.showLatestComments).toBeTruthy();
         });
@@ -115,10 +111,6 @@ describe("chorus.pages.DashboardPage", function() {
 
         it("passes succinct to workspaceSet", function() {
             expect(this.page.workspaceSet.attributes.succinct).toBe(true);
-        });
-
-        it("passes the userId to workspaceSet", function() {
-            expect(this.page.workspaceSet.attributes.userId).toBe(chorus.session.user().id);
         });
 
         it("fetches only the data sources where the user has permissions succinctly", function() {

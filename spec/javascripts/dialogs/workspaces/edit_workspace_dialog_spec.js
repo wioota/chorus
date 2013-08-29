@@ -11,6 +11,7 @@ describe("chorus.dialogs.EditWorkspace", function() {
             },
             archivedAt: null,
             archiver: null,
+            isProject: false,
             sandboxInfo: {
                 name: "analytics",
                 database: { name: "Analytics", dataSource: { name: "Gillette" } }
@@ -154,6 +155,12 @@ describe("chorus.dialogs.EditWorkspace", function() {
                 it("does not show the checkbox and label for showing sandbox datasets", function() {
                     expect(this.dialog.$(".show_sandbox_datasets")).not.toExist();
                 });
+            });
+        });
+
+        describe("project visibility", function () {
+            it("sets checked status from the value on the model", function () {
+                expect(this.dialog.$('input[name=make_project]').prop('checked')).toBe(this.workspace.get("isProject"));
             });
         });
 
@@ -468,6 +475,7 @@ describe("chorus.dialogs.EditWorkspace", function() {
                         this.dialog.$("textarea[name=summary]").val("my modified summary");
                         this.dialog.$("select.owner").val('13');
                         this.dialog.$(".show_sandbox_datasets").prop('checked', false);
+                        this.dialog.$("input[name=make_project]").prop('checked', true);
                         this.dialog.$('form').submit();
                     });
 
@@ -485,6 +493,10 @@ describe("chorus.dialogs.EditWorkspace", function() {
                         expect(this.server.lastUpdateFor(this.dialog.pageModel).params()).toEqual(
                             jasmine.objectContaining({"workspace[summary]": "my modified summary"})
                         );
+                    });
+
+                    it("sets the isProject value on the workspace", function () {
+                        expect(this.server.lastUpdateFor(this.dialog.pageModel).params()["workspace[is_project]"]).toBe('true');
                     });
 
                     it("sets the owner id on the workspace", function() {

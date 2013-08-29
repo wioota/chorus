@@ -200,6 +200,14 @@ describe WorkspacesController do
         response.should be_success
       end
 
+      it "can set the is_project attribute" do
+        put :update, params.merge(:workspace => workspace_params.merge(:is_project => "true"))
+
+        workspace.reload
+        workspace.is_project.should == true
+        response.should be_success
+      end
+
       context "changing a public workspace" do
         let(:workspace) {public_workspace}
 

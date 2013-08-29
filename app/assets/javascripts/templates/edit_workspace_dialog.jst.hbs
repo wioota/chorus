@@ -2,12 +2,18 @@
     <div class="pbs pts"><label class="required">{{t "workspace.settings.name"}}</label></div>
 
     <input type="text" name="name" maxlength="256" value="{{name}}" tabindex="1"/>
-    <input type="checkbox" id="public_checkbox" name="public"
-        {{#if public}}
-            checked="checked"
-        {{/if}}
-    />
-    <label for="public_checkbox">{{t "workspace.settings.publicly_available"}}</label>
+    <label>
+        <input type="checkbox" id="public_checkbox" name="public"
+            {{#if public}}
+                checked="checked"
+            {{/if}}
+        />
+        {{t "workspace.settings.publicly_available"}}
+    </label>
+    <label>
+        <input type="checkbox" name="make_project" {{#if isProject}}checked{{/if}} />
+        {{t "workspaces.make_project"}}
+    </label>
 
     <div class="pbs pts">
         <div class="toolbar"></div>
@@ -16,7 +22,7 @@
 
     <textarea name="summary" rows="2" tabindex="2">{{summary}}</textarea>
 
-    <div class="pbs pts"><label>Workspace Image</label></div>
+    <div class="pbs pts"><label>{{t 'workspace.settings.image.label'}}</label></div>
 
     <div class="image_container">
         <div class="line">
@@ -35,7 +41,7 @@
 
     <div class="pbs pts"><label>{{t "workspace.settings.sandbox.location"}}</label></div>
 
-    {{#if sandboxLocation }}
+    {{#if sandboxLocation}}
         <div class="sandboxLocation plm pbs pts">{{sandboxLocation}}</div>
         <div class="plm">
             <input id="workspace_show_sandbox_datasets" class="show_sandbox_datasets" type="checkbox"

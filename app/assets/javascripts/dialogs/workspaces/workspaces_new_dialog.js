@@ -22,8 +22,9 @@ chorus.dialogs.WorkspacesNew = chorus.dialogs.Base.include(
         e.preventDefault();
 
         this.resource.set({
-            name:this.$("input[name=name]").val().trim(),
-            "public": !!this.$("input[name=public]").is(":checked")
+            name: this.$("input[name=name]").val().trim(),
+            "public": !!this.$("input[name=public]").prop('checked'),
+            isProject: this.$('input[name=make_project]').prop('checked')
         });
 
         this.$("button.submit").startLoading("actions.creating");

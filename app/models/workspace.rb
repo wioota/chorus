@@ -4,7 +4,7 @@ class Workspace < ActiveRecord::Base
   include Notable
 
   attr_accessor :archived
-  attr_accessible :name, :public, :summary, :member_ids, :has_added_member, :owner_id, :archiver, :archived, :has_changed_settings, :show_sandbox_datasets
+  attr_accessible :name, :public, :summary, :member_ids, :has_added_member, :owner_id, :archiver, :archived, :has_changed_settings, :show_sandbox_datasets, :is_project
 
   has_attached_file :image, :path => ":rails_root/system/:class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",
@@ -249,7 +249,7 @@ class Workspace < ActiveRecord::Base
   end
 
   def member?(user)
-    members.include?(user)
+    user.memberships.find_by_workspace_id(id).present?
   end
 
   def archived=(value)

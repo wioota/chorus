@@ -9,8 +9,10 @@ class WorkspacePresenter < Presenter
       :summary => sanitize(model.summary),
       :archived_at => model.archived_at,
       :permission => model.permissions_for(current_user),
+      :is_member => model.member?(current_user),
       :owner => present(model.owner),
-      :public => model.public
+      :public => model.public,
+      :is_project => model.is_project
     }
 
     unless succinct?

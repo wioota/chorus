@@ -1,6 +1,7 @@
 describe("chorus.views.Dashboard", function(){
     beforeEach(function(){
-        var workspaceSet = new chorus.collections.WorkspaceSet();
+        chorus.session = backboneFixtures.session();
+        var workspaceSet = backboneFixtures.workspaceSet();
         var dataSourceSet = new chorus.collections.DataSourceSet();
         this.view = new chorus.views.Dashboard({ collection: workspaceSet, dataSourceSet: dataSourceSet });
         this.activities = new chorus.collections.ActivitySet([]);
@@ -25,6 +26,40 @@ describe("chorus.views.Dashboard", function(){
             this.server.reset();
             chorus.PageEvents.trigger("comment:deleted");
             expect(this.activities).not.toHaveBeenFetched();
+        });
+
+        context("with some member and some public workspaces", function () {
+            beforeEach(function () {
+                var workspaceSet = backboneFixtures.workspaceSet();
+                var dataSourceSet = new chorus.collections.DataSourceSet();
+                this.view = new chorus.views.Dashboard({ collection: workspaceSet, dataSourceSet: dataSourceSet });
+            });
+
+            it("creates a collection of workspaces the current user is a member of", function () {
+                expect(this.view.memberWorkspaces.attributes.userId).toBe(chorus.session.user().id);
+                var memberWorkspaceIds = _.map(this.view.collection.where({isMember: true}), function (model) {
+                    return model.get('id');
+                });
+                expect(this.view.memberWorkspaces.pluck('id')).toEqual(memberWorkspaceIds);
+            });
+        });
+
+
+        context("with some project and some not-project workspaces", function () {
+            beforeEach(function () {
+                this.workspaceSet = backboneFixtures.workspaceSet();
+                this.workspaceSet.each(function (model) {
+                    model.set('isProject', false);
+                });
+                this.workspaceSet.at(0).set('isProject', true);
+                this.workspaceSet.at(2).set('isProject', true);
+                var dataSourceSet = new chorus.collections.DataSourceSet();
+                this.view = new chorus.views.Dashboard({ collection: this.workspaceSet, dataSourceSet: dataSourceSet });
+            });
+
+            it("creates a collection of workspaces the current user is a member of", function () {
+                expect(this.view.projectList.collection.pluck('id')).toEqual([this.workspaceSet.at(0).get('id'), this.workspaceSet.at(2).get('id')]);
+            });
         });
     });
 

@@ -1,11 +1,6 @@
 $image-width : 230px;
 
 .edit_workspace_dialog.dialog {
-    input[name=name] {
-        width: 400px;
-        display: inline;
-    }
-
     .edit_photo {
         width: $image-width;
         margin-right: $padding-x;
