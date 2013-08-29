@@ -150,12 +150,11 @@ https://github.com/jherdman/javascript-relative-time-helpers
 
 -----------------------------------------------------------------
 
-jGrowl 1.2.5
-Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
-and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+Messenger
+Copyright (c) 2013 HubSpot, Inc.
 
-Written by Stan Lemon <stosh1985@gmail.com>
-Last updated: 2009.12.15
+Licensed under the MIT license:
+http://www.opensource.org/licenses/MIT
 
 -----------------------------------------------------------------
 

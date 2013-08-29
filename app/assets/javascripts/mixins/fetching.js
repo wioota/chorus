@@ -114,7 +114,7 @@
                 options.unprocessableEntity ? options.unprocessableEntity() : this.trigger("unprocessableEntity");
             } else if (status === 500) {
                 var toastOpts = {};
-                if(window.INTEGRATION_MODE) { toastOpts.sticky = true; }
+                if(window.INTEGRATION_MODE) { toastOpts.hideAfter = 0; }
                 chorus.toast("server_error", {toastOpts: toastOpts});
             }
             if (!options.silent) {

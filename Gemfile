@@ -20,6 +20,7 @@ gem 'chorusgnip', :github => 'GreenplumChorus/gnip'
 gem 'logger-syslog'
 gem 'newrelic_rpm'
 gem 'premailer-rails'
+gem 'messengerjs-rails'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false

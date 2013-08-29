@@ -24,6 +24,8 @@
 //= require vendor/d3
 //= require vendor/datepicker_lang
 //= require_tree ./vendor
+//= require messenger
+//= require messenger-theme-future
 //= require environment
 //= require bootstrap
 //= require chorus

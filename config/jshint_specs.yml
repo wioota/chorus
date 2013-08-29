@@ -75,6 +75,7 @@ predef:             # Names of predefined global variables - comma-separated str
   - URI
   - d3
   - CodeMirror
+  - Messenger
   - datePickerController
   - FMCOpenHelp
   - chorus

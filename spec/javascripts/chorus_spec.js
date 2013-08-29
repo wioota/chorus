@@ -174,22 +174,22 @@ describe("chorus global", function() {
 
     describe("#toast", function() {
         beforeEach(function() {
-            spyOn($, 'jGrowl');
+            spyOn(Messenger(), 'post');
         });
 
         it("accepts a translation string", function() {
             chorus.toast("test.mouse");
-            expect($.jGrowl).toHaveBeenCalledWith(t("test.mouse"), {life: 5000, sticky: false});
+            expect(Messenger().post).toHaveBeenCalledWith({message: t("test.mouse")});
         });
 
         it("accepts a translation string with arguments", function() {
             chorus.toast("test.with_param", {param: "Dennis"});
-            expect($.jGrowl).toHaveBeenCalledWith("Dennis says hi", {life: 5000, sticky: false});
+            expect(Messenger().post).toHaveBeenCalledWith({message: "Dennis says hi"});
         });
 
         it("accepts toastOpts in the options hash", function() {
-            chorus.toast("test.with_param", { param: "Nobody", toastOpts: {sticky: true, foo: "bar"}});
-            expect($.jGrowl).toHaveBeenCalledWith("Nobody says hi", {life: 5000, sticky: true, foo: "bar"});
+            chorus.toast("test.with_param", { param: "Nobody", toastOpts: {hideAfter: 0, foo: "bar"}});
+            expect(Messenger().post).toHaveBeenCalledWith({message: "Nobody says hi", hideAfter: 0, foo: "bar"});
         });
     });
 

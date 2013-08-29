@@ -82,6 +82,9 @@ $content-header-link-color: $color-text4;
 $content-details-action-link-color: #4E7225;
 $content-details-create-bar-link-color: #608437;
 
+// Notification colors
+$notification-error-dark: #d43a0b;
+$notification-error-light: #ffd6d6;
 
 $dotted-list-item-border: 1px dotted $subheader-border-color;
 
@@ -94,10 +97,7 @@ $data-grid-column-header-z-index: 2;
 $data-grid-body-z-index: 20;
 $data-grid-head-z-index: $data-grid-body-z-index + 1;
 
-// qTip2 assigns z-index values starting from 15000, but we want them to flow under the header.
-// It seems that when you navigate between pages, qTip's z-index resets to 15000, so this would work wrong if a single page
-// rendered 1000 qTip tooltips.  That will probably never be the case.
-$header-z-index: 16000;
+$header-z-index: 9999;
 $menu-z-index: $header-z-index + 1;
 
 $dialog-overlay-z-index: $menu-z-index + 1;

@@ -96,9 +96,9 @@ window.Chorus = function chorus$Global() {
 
     self.toast = function(message, options) {
         options = options || {};
-        var defaultOpts = {sticky: false, life: 5000};
-        var toastOpts = _.extend(defaultOpts, options.toastOpts);
-        $.jGrowl(t(message, options), toastOpts);
+
+        var toastOpts = _.extend({message: t(message, options)}, options.toastOpts);
+        Messenger().post(toastOpts);
     };
 
     self.afterNavigate = function(func) {

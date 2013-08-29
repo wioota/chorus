@@ -63,6 +63,7 @@ predef:             # Names of predefined global variables - comma-separated str
   - _
   - I18n
   - t
+  - Messenger
   - BrowserDetect
   - CFInstall
   - Handlebars

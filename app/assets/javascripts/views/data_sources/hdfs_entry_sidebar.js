@@ -65,7 +65,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
         this.listenTo(this.resource, "unprocessableEntity", function() {
             var record = this.resource.serverErrors.record;
-            chorus.toast("record_error." + record);
+            chorus.toast("record_error." + record, {toastOpts: {type: 'error'}});
         });
 
         this.render();

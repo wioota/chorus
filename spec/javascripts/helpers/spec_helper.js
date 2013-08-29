@@ -339,7 +339,6 @@
             });
 
             $.fx.off = true;
-            spyOn($.fn, 'jGrowl');
             spyOn(window.history, "back");
             spyOn(chorus, 'isDevMode').andReturn(false);
 
