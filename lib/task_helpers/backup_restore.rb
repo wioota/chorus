@@ -117,9 +117,10 @@ module BackupRestore
     end
 
     def backup_alpine
-      alpine_data_dir = Pathname.new(ENV['ALPINE_HOME']).join('ALPINE_DATA_REPOSITORY')
-      capture_output "tar czf #{ALPINE_BACKUP}.gz #{alpine_data_dir}",
-                     :error => "Compressing alpine data directory failed."
+      log "Backing up Alpine"
+      Dir.chdir ENV['ALPINE_HOME'] do
+        capture_output "tar czf #{temp_dir.join(ALPINE_BACKUP + ".gz")} ALPINE_DATA_REPOSITORY", :error => "Compressing alpine data directory failed."
+      end
     end
 
     def delete_old_backups
@@ -246,7 +247,7 @@ PROMPT
     def restore_alpine
       alpine_file = temp_dir.join(ALPINE_BACKUP + '.gz')
       if File.exists? alpine_file
-        log "Restoring alpine"
+        log "Restoring Alpine"
         Dir.chdir ENV['ALPINE_HOME'] do
           capture_output "tar xf #{alpine_file}", :error => 'Restoring Alpine data failed.'
         end

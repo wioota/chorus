@@ -13,7 +13,7 @@ if [ -e $CHORUS_HOME/current ]; then
 fi
 
 if [ "$ALPINE_HOME" = "" ] && [ -e `dirname $CHORUS_HOME`/alpine ]; then
-    ALPINE_HOME=`dirname $CHORUS_HOME`/alpine
+    export ALPINE_HOME=`dirname $CHORUS_HOME`/alpine
 fi
 
 if [ "$RAILS_ENV" = "" ]; then
