@@ -556,7 +556,7 @@ class ChorusInstaller
     extract_alpine(alpine_installer)
 
     log "Configuring alpine"
-    set_properties({"work_flow.enabled" => true, "work_flow.url" => "http://localhost:9090"})
+    set_properties({"workflow.enabled" => true, "workflow.url" => "http://localhost:9090", "alpine.branded.enabled" => true})
     set_alpine_properties
 
     log "Setting tomcat port"
