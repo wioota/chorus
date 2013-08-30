@@ -201,13 +201,13 @@ describe Workspaces::ImportsController do
     let(:start_time) { "2012-08-23 23:00:00.0" }
 
     let(:create_source_table) do
-      gpdb1.exec_query("delete from #{source_table_name};")
+      gpdb1.execute("delete from #{source_table_name};")
     end
 
     def setup_data
-      gpdb1.exec_query("insert into #{source_table_name}(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
-      gpdb1.exec_query("insert into #{source_table_name}(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
-      gpdb2.exec_query("drop table if exists #{destination_table_fullname};")
+      gpdb1.execute("insert into #{source_table_name}(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
+      gpdb1.execute("insert into #{source_table_name}(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
+      gpdb2.execute("drop table if exists #{destination_table_fullname};")
     end
 
     before do
@@ -229,7 +229,7 @@ describe Workspaces::ImportsController do
     end
 
     after do
-      gpdb2.exec_query("drop table if exists #{destination_table_fullname};")
+      gpdb2.execute("drop table if exists #{destination_table_fullname};")
       gpdb1.try(:disconnect!)
       gpdb2.try(:disconnect!)
       # We call src_schema from the test, although it is only called from run outside of tests, so we need to clean up
@@ -238,7 +238,7 @@ describe Workspaces::ImportsController do
     end
 
     def check_destination_table
-      gpdb2.exec_query("SELECT * FROM #{destination_table_fullname}").length.should == 2
+      gpdb2.execute("SELECT * FROM #{destination_table_fullname}").length.should == 2
     end
   end
 end

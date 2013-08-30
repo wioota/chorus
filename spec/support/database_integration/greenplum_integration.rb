@@ -31,7 +31,7 @@ module GreenplumIntegration
     return false
   end
 
-  def self.exec_sql_line(sql)
+  def self.exec_sql_line_with_results(sql)
     conn = ActiveRecord::Base.postgresql_connection(
         :host => hostname,
         :port => port,
@@ -40,6 +40,17 @@ module GreenplumIntegration
         :password => password,
         :adapter => "jdbcpostgresql")
     conn.exec_query(sql)
+  end
+
+  def self.exec_sql_line(sql)
+    conn = ActiveRecord::Base.postgresql_connection(
+      :host => hostname,
+      :port => port,
+      :database => self.database_name,
+      :username => username,
+      :password => password,
+      :adapter => "jdbcpostgresql")
+    conn.execute(sql)
   end
 
   def self.drop_test_db

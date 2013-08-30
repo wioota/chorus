@@ -84,24 +84,24 @@ describe GpdbDatasetColumn do
 
   describe "#number_or_time?" do
     it "is true if it is a numeric column" do
-      described_class.new(:data_type => "integer").should be_number_or_time
-      described_class.new(:data_type => "numeric").should be_number_or_time
-      described_class.new(:data_type => "double precision").should be_number_or_time
+      described_class.new(:name => 'col', :data_type => "integer").should be_number_or_time
+      described_class.new(:name => 'col', :data_type => "numeric").should be_number_or_time
+      described_class.new(:name => 'col', :data_type => "double precision").should be_number_or_time
     end
 
     it "is true if it is a time column" do
-      described_class.new(:data_type => "date").should be_number_or_time
-      described_class.new(:data_type => "time with time zone").should be_number_or_time
-      described_class.new(:data_type => "timestamp with time zone").should be_number_or_time
+      described_class.new(:name => 'col', :data_type => "date").should be_number_or_time
+      described_class.new(:name => 'col', :data_type => "time with time zone").should be_number_or_time
+      described_class.new(:name => 'col', :data_type => "timestamp with time zone").should be_number_or_time
     end
 
     it "is false otherwise" do
-      described_class.new(:data_type => "text").should_not be_number_or_time
+      described_class.new(:name => 'col', :data_type => "text").should_not be_number_or_time
     end
   end
 
   describe "#simplified_type" do
-    subject { described_class.new(:data_type => type_string) }
+    subject { described_class.new(:name => 'col', :data_type => type_string) }
 
     def self.it_simplifies_type(type, simplified_type)
       context "with a '#{type}' column" do
@@ -112,7 +112,7 @@ describe GpdbDatasetColumn do
 
     it_simplifies_type("complex", nil)
     it_simplifies_type("numeric", :decimal)
-    it_simplifies_type("integer[]", :string)
+    it_simplifies_type("integer[]", :integer)
     it_simplifies_type("bigint", :integer)
     it_simplifies_type("bit(5)", :string)
     it_simplifies_type("bit varying(10)", :string)

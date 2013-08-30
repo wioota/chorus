@@ -77,7 +77,7 @@ describe Schemas::ImportsController do
       post :create, params.merge(:new_table => "true", :to_table => "some_new_table")
       response.code.should eq("201")
 
-      results = GreenplumIntegration.exec_sql_line("select * from \"#{schema.name}\".some_new_table;")
+      results = GreenplumIntegration.exec_sql_line_with_results("select * from \"#{schema.name}\".some_new_table;")
 
       results.first["BIN_DOUBLE"].to_f.should eq(2.3)
       results.first["CHARACTER"].should eq('c')
@@ -92,7 +92,7 @@ describe Schemas::ImportsController do
       post :create, params.merge(:new_table => "false", :to_table => "existing_table")
       response.code.should eq("201")
 
-      results = GreenplumIntegration.exec_sql_line("select * from \"#{schema.name}\".existing_table order by \"BIN_DOUBLE\";")
+      results = GreenplumIntegration.exec_sql_line_with_results("select * from \"#{schema.name}\".existing_table order by \"BIN_DOUBLE\";")
       results.second["BIN_DOUBLE"].to_f.should eq(2.4)
       results.second["CHARACTER"].should eq('d')
       results.second["CHAR_BLOB"].should eq('some other long text and other stuff')
