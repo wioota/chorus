@@ -40,6 +40,33 @@
     };
     jasmine.getEnv().addEqualityTester(regexEqualityTester);
 
+    if (window.location.search.indexOf('phantom=') === -1) {
+        jasmine.HighlightingReporter = function() {
+            this.started = false;
+            this.finished = false;
+            this.suites_ = [];
+            this.results_ = {};
+            this.reportRunnerResults = function() {
+                $('body').append('<style>.stackTrace .relevant { color: red; }</style>');
+
+                _.each($('.stackTrace'), function (el) {
+                    var $el = $(el);
+                    var spannedHtml = $el.html().split("\n").map(function (text) {
+                        if (text.match(/application|__spec__|assets/)) {
+                            return "<span class='relevant'>" + text + "</span>";
+                        } else {
+                            return text;
+                        }
+                    }).join("\n");
+                    $el.html(spannedHtml);
+                });
+            };
+        };
+
+        jasmine.getEnv().addReporter(new jasmine.HighlightingReporter());
+    }
+
+
     var backboneModelEqualityTester = function(a, b) {
         if(a instanceof Backbone.Model && b instanceof Backbone.Model) {
             if (a.constructor !== b.constructor) {
