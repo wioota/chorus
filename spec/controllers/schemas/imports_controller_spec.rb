@@ -92,11 +92,11 @@ describe Schemas::ImportsController do
       post :create, params.merge(:new_table => "false", :to_table => "existing_table")
       response.code.should eq("201")
 
-      results = GreenplumIntegration.exec_sql_line_with_results("select * from \"#{schema.name}\".existing_table order by \"BIN_DOUBLE\";")
-      results.second["BIN_DOUBLE"].to_f.should eq(2.4)
-      results.second["CHARACTER"].should eq('d')
-      results.second["CHAR_BLOB"].should eq('some other long text and other stuff')
-      results.second["DAY"].should eq('2011-12-24 00:00:00')
+      results = GreenplumIntegration.exec_sql_line_with_results("select * from \"#{schema.name}\".existing_table order by \"BIN_DOUBLE\";").to_a
+      results[1]["BIN_DOUBLE"].to_f.should eq(2.4)
+      results[1]["CHARACTER"].should eq('d')
+      results[1]["CHAR_BLOB"].should eq('some other long text and other stuff')
+      results[1]["DAY"].should eq('2011-12-24 00:00:00')
     end
 
 
