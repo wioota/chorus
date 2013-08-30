@@ -1,6 +1,6 @@
 chorus.handlebarsHelpers.template = {
     renderTemplate: function(templateName, context) {
-        return new Handlebars.SafeString(window.JST["templates/" + templateName](context));
+        return new Handlebars.SafeString(window.HandlebarsTemplates[templateName](context));
     },
 
     formControls:function(submitText, cancelText) {
