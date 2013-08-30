@@ -61,7 +61,7 @@ module GreenplumIntegration
         :username => username,
         :password => password,
         :adapter => "jdbcpostgresql")
-    conn.exec_query("DROP DATABASE IF EXISTS \"#{GreenplumIntegration.database_name}\"")
+    conn.execute("DROP DATABASE IF EXISTS \"#{GreenplumIntegration.database_name}\"")
   end
 
   def self.setup_gpdb
