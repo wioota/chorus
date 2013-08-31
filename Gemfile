@@ -84,7 +84,7 @@ end
 
 group :development do
   gem 'license_finder', '~> 0.8.1', :require => false
-  gem 'mizuno', :github => "GreenplumChorus/mizuno", :branch => '0.6.4_changes'
+  gem 'mizuno'
   gem 'bullet'
   gem 'vagrant', '~> 1.0.7'
 end
