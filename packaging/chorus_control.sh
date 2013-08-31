@@ -224,7 +224,11 @@ function usage () {
   echo "  $script backup  [-d dir] [-r days] backup Chorus data"
   echo "  $script restore [file]             restore Chorus data"
   echo
-  echo "The following services are available: postgres, workers, scheduler, solr, webserver."
+  if [ "$ALPINE_HOME" != "" ]; then
+    echo "The following services are available: postgres, workers, scheduler, solr, webserver, alpine."
+  else
+    echo "The following services are available: postgres, workers, scheduler, solr, webserver."
+  fi
   echo "If no services are specified on the command line, $script manages all services."
   echo
   echo Examples:
