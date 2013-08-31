@@ -1,9 +1,9 @@
 describe("chorus.views.Dashboard", function(){
     beforeEach(function(){
         chorus.session = backboneFixtures.session();
-        var workspaceSet = backboneFixtures.workspaceSet();
+        this.workspaceSet = backboneFixtures.workspaceSet();
         var dataSourceSet = new chorus.collections.DataSourceSet();
-        this.view = new chorus.views.Dashboard({ collection: workspaceSet, dataSourceSet: dataSourceSet });
+        this.view = new chorus.views.Dashboard({ collection: this.workspaceSet, dataSourceSet: dataSourceSet });
         this.activities = new chorus.collections.ActivitySet([]);
     });
 
@@ -18,21 +18,21 @@ describe("chorus.views.Dashboard", function(){
 
         it("doesnt re-fetch the activity list if a comment is added", function() {
             this.server.reset();
-            chorus.PageEvents.trigger("comment:added");
+            chorus.PageEvents.trigger("comment:added", backboneFixtures.comment());
             expect(this.activities).not.toHaveBeenFetched();
         });
 
         it("doesnt re-fetch the activity list if a comment is deleted", function() {
             this.server.reset();
-            chorus.PageEvents.trigger("comment:deleted");
+            chorus.PageEvents.trigger("comment:deleted", backboneFixtures.comment());
             expect(this.activities).not.toHaveBeenFetched();
         });
 
         context("with some member and some public workspaces", function () {
             beforeEach(function () {
-                var workspaceSet = backboneFixtures.workspaceSet();
+                this.workspaceSet = backboneFixtures.workspaceSet();
                 var dataSourceSet = new chorus.collections.DataSourceSet();
-                this.view = new chorus.views.Dashboard({ collection: workspaceSet, dataSourceSet: dataSourceSet });
+                this.view = new chorus.views.Dashboard({ collection: this.workspaceSet, dataSourceSet: dataSourceSet });
             });
 
             it("creates a collection of workspaces the current user is a member of", function () {
@@ -59,6 +59,16 @@ describe("chorus.views.Dashboard", function(){
 
             it("creates a collection of workspaces the current user is a member of", function () {
                 expect(this.view.projectList.collection.pluck('id')).toEqual([this.workspaceSet.at(0).get('id'), this.workspaceSet.at(2).get('id')]);
+            });
+        });
+
+        context("if the workspace collection finishes fetching after the view has loaded", function () {
+            it("pushes updates down to the derived collections", function () {
+                spyOn(this.view.memberWorkspaces, 'reset');
+                spyOn(this.view.projectWorkspaces, 'reset');
+                this.workspaceSet.trigger('loaded');
+                expect(this.view.memberWorkspaces.reset).toHaveBeenCalled();
+                expect(this.view.projectWorkspaces.reset).toHaveBeenCalled();
             });
         });
     });

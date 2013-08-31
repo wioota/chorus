@@ -9,14 +9,12 @@ chorus.views.Dashboard = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.memberWorkspaces = new chorus.collections.WorkspaceSet(this.collection.where({isMember: true}));
+        this.memberWorkspaces = new chorus.collections.WorkspaceSet();
         this.memberWorkspaces.attributes = _.extend({}, this.collection.attributes);
         this.memberWorkspaces.attributes.userId = chorus.session.user().id;
-        this.memberWorkspaces.loaded = true;
 
-        this.projectWorkspaces = new chorus.collections.WorkspaceSet(this.collection.where({isProject: true}));
+        this.projectWorkspaces = new chorus.collections.WorkspaceSet();
         this.projectWorkspaces.attributes = _.extend({}, this.collection.attributes);
-        this.projectWorkspaces.loaded = true;
 
         this.workspaceList = new chorus.views.MainContentView({
             collection: this.memberWorkspaces,
@@ -51,6 +49,18 @@ chorus.views.Dashboard = chorus.views.Base.extend({
                 insightsTitle: t("dashboard.title.insights")
             })
         });
+
+        if (this.collection.loaded) {
+            this.collectionUpdated();
+        }
+        this.listenTo(this.collection, 'loaded', this.collectionUpdated);
+    },
+
+    collectionUpdated: function () {
+        this.memberWorkspaces.loaded = true;
+        this.projectWorkspaces.loaded = true;
+        this.memberWorkspaces.reset(this.collection.where({isMember: true}));
+        this.projectWorkspaces.reset(this.collection.where({isProject: true}));
     }
 });
 
