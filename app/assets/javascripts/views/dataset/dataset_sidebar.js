@@ -17,7 +17,8 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         "click a.create_database_view": "launchCreateDatabaseViewDialog",
         "click a.import_now": "launchImportNowDialog",
         "click a.download": "launchDatasetDownloadDialog",
-        "click a.edit_hdfs_dataset": "launchEditHdfsDatasetDialog"
+        "click a.edit_hdfs_dataset": "launchEditHdfsDatasetDialog",
+        "click a.create_external_table": "launchCreateExternalTableFromHdfsDialog"
     },
 
     subviews: {
@@ -208,6 +209,28 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         var dialog = new chorus.dialogs.EditHdfsDataset({model: this.resource});
         dialog.launchModal();
     },
+
+    launchCreateExternalTableFromHdfsDialog: function (e) {
+        e && e.preventDefault();
+
+        this.resource.loaded = false;
+        this.resource.fetch();
+        this.onceLoaded(this.resource, function () {
+            var dialogOptions = {
+                model: new chorus.models.HdfsExternalTable({
+                    hdfsDatasetId: this.resource.get('id'),
+                    hdfsDataSourceId: this.resource.dataSource().get('id')
+                }),
+                csvOptions: {
+                    tableName: this.resource.name(),
+                    contents: this.resource.content()
+                }
+            };
+
+            new chorus.dialogs.CreateExternalTableFromHdfs(dialogOptions).launchModal();
+        });
+    },
+
 
     enterVisualizationMode: function() {
         $(this.el).addClass("visualizing");

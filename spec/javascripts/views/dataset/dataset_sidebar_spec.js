@@ -308,6 +308,27 @@ describe("chorus.views.DatasetSidebar", function() {
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 });
 
+                describe("creating an external table", function () {
+                    it("fetches the dataset's contents before popping up the dialog", function () {
+                        this.view.$('a.create_external_table').click();
+
+                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs);
+                        this.server.completeFetchFor(this.view.resource);
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs);
+
+                        expect(chorus.modal.options.csvOptions.tableName).toBe(this.view.resource.name());
+                    });
+
+                    it("provides the dialog with an external table model", function () {
+                        this.view.$('a.create_external_table').click();
+                        this.server.completeFetchFor(this.view.resource);
+
+                        expect(chorus.modal.model.get('hdfsDatasetId')).toEqual(this.view.resource.get('id'));
+                        expect(chorus.modal.model.get('hdfsDataSourceId')).toEqual(this.view.resource.dataSource().get('id'));
+                    });
+
+                });
+
                 itBehavesLike.aDialogLauncher("a.edit_hdfs_dataset", chorus.dialogs.EditHdfsDataset);
 
                 itBehavesLike.aDialogLauncher("a.delete_dataset", chorus.alerts.DatasetDelete);

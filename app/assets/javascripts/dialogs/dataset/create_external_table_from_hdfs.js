@@ -12,7 +12,6 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
 
     setup: function() {
         this.options.csvOptions = this.options.csvOptions || {};
-
         this.options.csvOptions.hasHeader = false;
 
         this._super("setup", arguments);

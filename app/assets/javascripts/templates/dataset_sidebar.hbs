@@ -41,6 +41,10 @@
             {{#if realWorkspace}}
                 {{#unless workspaceArchived}}
                     <li><a class="new_note dialog" href="#">{{t "actions.add_note"}}</a></li>
+                    {{#if isHdfsDataset}}
+                        <li><a class="create_external_table">{{t "hdfs.create_external_table"}}</a></li>
+                    {{/if}}
+
                     {{#if isChorusView}}
                         {{#unless noValidCredentials}}
                             <li><a class="create_database_view dialog" href="#">{{t "actions.create_database_view"}}</a></li>

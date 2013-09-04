@@ -80,15 +80,13 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
 
         this.resource.fetch();
 
-        this.listenTo(this.resource, "loaded", this.launchCreateExternTableDialog);
+        this.onceLoaded(this.resource, this.launchCreateExternTableDialog);
     },
 
     launchCreateExternTableDialog: function() {
-        this.stopListening(this.resource, 'loaded', this.launchCreateExternTableDialog);
-        var hdfsDataSource = new chorus.models.HdfsDataSource({id: this.options.hdfsDataSourceId});
         var externalTable = new chorus.models.HdfsExternalTable({
             path: this.resource.get('path'),
-            hdfsDataSourceId: hdfsDataSource.get('id'),
+            hdfsDataSourceId: this.options.hdfsDataSourceId,
             hdfs_entry_id: this.resource.get('id')
         });
 

@@ -320,6 +320,7 @@ describe EventsController do
         'hdfsFileExtTableCreated' => Events::HdfsFileExtTableCreated,
         'hdfsDirectoryExtTableCreated' => Events::HdfsDirectoryExtTableCreated,
         'hdfsPatternExtTableCreated' => Events::HdfsPatternExtTableCreated,
+        'hdfsDatasetExtTableCreated' => Events::HdfsDatasetExtTableCreated,
         'schemaImportCreated' => Events::SchemaImportCreated,
         'schemaImportSuccess' => Events::SchemaImportSuccess,
         'schemaImportFailed' => Events::SchemaImportFailed,

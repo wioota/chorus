@@ -251,6 +251,10 @@
                 attrs: ['filePattern']
         },
 
+        HdfsDatasetExtTableCreated: {
+            links: [ "actor", "hdfsDataset", "dataset"]
+        },
+
         NOTE: {
             links: [ "actor", "noteObject", "workspace" ],
                 computed: [ "noteObjectType" ]

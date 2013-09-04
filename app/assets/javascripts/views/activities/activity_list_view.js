@@ -81,7 +81,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
                 this.registerSubView(view);
                 ul.append(view.render().el);
             } catch (err) {
-                chorus.log("error", err, "processing activity", model);
+                chorus.log(err.message, err, "processing activity", model);
                 if (chorus.isDevMode()) {
                     var action, id;
                     try {action = model.get("action");  id = model.id;} catch(err2) {}

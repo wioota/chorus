@@ -122,6 +122,41 @@ describe ExternalTablesController do
       end
     end
 
+    context "when creating from an HDFS dataset" do
+      let(:hdfs_dataset) { datasets(:hadoop) }
+
+      before do
+        parameters.merge!(:hdfs_dataset_id => hdfs_dataset.id)
+        parameters.delete(:hdfs_entry_id)
+      end
+
+      it "initializes and calls into ExternalTable correctly" do
+        mock_external_table_build_success do |ext_table_params|
+          ext_table_params[:column_names].should == %w{field1 field2}
+          ext_table_params[:column_types].should == %w{text text}
+          ext_table_params[:database].should be_a(GreenplumConnection)
+          ext_table_params[:delimiter].should == ','
+          ext_table_params[:location_url].should == hdfs_data_source.url.chomp('/') + hdfs_dataset.file_mask
+          ext_table_params[:name].should == 'tablefromhdfs'
+          ext_table_params[:file_pattern].should be_nil
+        end
+
+        post :create, parameters
+      end
+
+      it 'creates an HdfsDatasetExtTableCreated event for the dataset' do
+        mock_external_table_build_success
+
+        expect {
+          post :create, parameters
+        }.to change(Events::HdfsDatasetExtTableCreated, :count).by(1)
+        e = Events::Base.last
+        e.workspace.should    == workspace
+        e.dataset.name.should == 'tablefromhdfs'
+        e.hdfs_dataset.should   == hdfs_dataset
+      end
+    end
+
     describe "creating an external table form a file" do
       it "initializes and calls into ExternalTable correctly" do
         mock_external_table_build_success do |ext_table_params|

@@ -39,6 +39,10 @@ class HdfsDataset < Dataset
     [workspace_id]
   end
 
+  def url
+    hdfs_data_source.url.chomp('/') + file_mask
+  end
+
   def contents
     hdfs_query = Hdfs::QueryService.for_data_source(hdfs_data_source)
     hdfs_query.show(file_mask)

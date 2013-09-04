@@ -6,7 +6,10 @@ class ExternalTablesController < ApplicationController
   def create
     workspace = Workspace.find(params[:workspace_id])
     table_params = params[:hdfs_external_table]
-    hdfs_entry = HdfsEntry.find(table_params[:hdfs_entry_id])
+
+    hdfs_entry = HdfsEntry.find(table_params[:hdfs_entry_id]) if table_params[:hdfs_entry_id]
+    hdfs_dataset = Dataset.find(table_params[:hdfs_dataset_id]) if table_params[:hdfs_dataset_id]
+    entry_or_dataset = hdfs_entry || hdfs_dataset
 
     unless workspace.sandbox
       present_validation_error(:EMPTY_SANDBOX)
@@ -30,13 +33,13 @@ class ExternalTablesController < ApplicationController
       :database => database,
       :delimiter => table_params[:delimiter],
       :file_pattern => file_pattern,
-      :location_url => hdfs_entry.url,
+      :location_url => entry_or_dataset.url,
       :name => table_params[:table_name]
     )
     if e.save
       workspace.sandbox.refresh_datasets(account)
       dataset = workspace.sandbox.reload.datasets.find_by_name!(table_params[:table_name])
-      create_event(dataset, workspace, hdfs_entry, table_params)
+      create_event(dataset, workspace, entry_or_dataset, table_params)
       render :json => {}, :status => :ok
     else
       raise ApiValidationError.new(e.errors)
@@ -50,14 +53,18 @@ class ExternalTablesController < ApplicationController
                    :status => :unprocessable_entity)
   end
 
-  def create_event(dataset, workspace, hdfs_entry, table_params)
-    event_params = {:workspace => workspace, :dataset => dataset, :hdfs_entry => hdfs_entry }
+  def create_event(dataset, workspace, entry_or_dataset, table_params)
+    event_params = {:workspace => workspace, :dataset => dataset, :hdfs_entry => entry_or_dataset }
+
+    if entry_or_dataset.is_a?(HdfsDataset)
+      return Events::HdfsDatasetExtTableCreated.by(current_user).add(event_params.merge hdfs_dataset: entry_or_dataset)
+    end
 
     case table_params[:path_type]
       when "directory" then
         Events::HdfsDirectoryExtTableCreated.by(current_user).add(event_params)
       when "pattern" then
-        Events::HdfsPatternExtTableCreated.by(current_user).add(event_params.merge :file_pattern => table_params[:file_pattern])
+        Events::HdfsPatternExtTableCreated.by(current_user).add(event_params.merge file_pattern: table_params[:file_pattern])
       else
         Events::HdfsFileExtTableCreated.by(current_user).add(event_params)
     end

@@ -306,6 +306,15 @@ describe("chorus.models.Activity", function() {
                 expect(hdfsEntry.get("id")).toBe(1234);
             });
         });
+
+        describe("#hdfsDataset", function () {
+            it("returns hdfs dataset with the right data", function() {
+                activity = backboneFixtures.activity.hdfsDatasetExtTableCreated();
+
+                var hdfsDataset = activity.hdfsDataset();
+                expect(hdfsDataset).toBeA(chorus.models.HdfsDataset);
+            });
+        });
     });
 
     describe("#isUserGenerated", function() {

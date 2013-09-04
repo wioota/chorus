@@ -6,6 +6,7 @@
         "gnipDataSource": "GnipDataSource",
         "newOwner": "User",
         "hdfsDataSource": "HdfsDataSource",
+        "hdfsDataset": "HdfsDataset",
         "workfile": "Workfile",
         "workspace": "Workspace",
         "newUser" : "User",
@@ -82,6 +83,11 @@
                 hdfsDataSource: hdfsEntry.hdfsDataSource
             });
         }),
+
+        hdfsDataset: makeAssociationMethod("hdfsDataset", function (model) {
+            model.set({workspace: this.get("workspace")}, {silent: true});
+        }),
+
 
         noteObject: function() {
             var model;
