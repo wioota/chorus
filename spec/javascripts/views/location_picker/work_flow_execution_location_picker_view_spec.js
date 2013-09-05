@@ -32,16 +32,6 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
             });
         }
 
-        function itShouldResetSelect(type, changeArgument) {
-            it("should reset " + type + " select", function() {
-                expect(this.view.$('.' + type + ' select option:selected').val()).toBeFalsy();
-                expect(this.view.$('.' + type + ' select option').length).toBe(1);
-                expect('clearErrors').toHaveBeenTriggeredOn(this.view);
-            });
-
-            itTriggersTheChangeEvent(changeArgument);
-        }
-
         function itHidesSection(type) {
             it("should hide the " + type + " section", function() {
                 expect(this.view.$('.' + type)).toHaveClass("hidden");
@@ -92,15 +82,6 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
                 });
 
                 itShowsUnavailable(type);
-            });
-        }
-
-        function itShowsCreateFields(type) {
-            it("shows the fields to create a new " + type, function() {
-                expect(this.view.$(".create_container")).not.toHaveClass("hidden");
-                expect(this.view.$('.' + type + ' .unavailable')).toHaveClass("hidden");
-                expect(this.view.$('.' + type + ' .loading_text')).toHaveClass("hidden");
-                expect(this.view.$('.' + type + ' .select_container')).toHaveClass("hidden");
             });
         }
 

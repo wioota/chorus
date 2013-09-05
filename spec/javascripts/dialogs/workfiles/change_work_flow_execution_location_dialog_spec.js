@@ -33,8 +33,8 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
 
         context("pre-populating", function() {
             it("passes the database and the gpdb data source to the picker", function() {
-                expect(this.dialog.executionLocationPicker.options.database.attributes).toEqual(this.executionLocation.attributes);
-                expect(this.dialog.executionLocationPicker.options.dataSource.attributes).toEqual(this.executionLocation.dataSource().attributes);
+                expect(this.dialog.executionLocationList.getSelectedDatabases()[0].id).toEqual(this.executionLocation.get('id'));
+                expect(this.dialog.executionLocationList.getSelectedDataSources()[0].id).toEqual(this.executionLocation.dataSource().get('id'));
             });
         });
 
@@ -42,7 +42,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
             beforeEach(function() {
                 this.model.set("hdfs_data_source_id", "not_empty");
                 spyOn(this.model, "save").andCallThrough();
-                spyOn(this.dialog.executionLocationPicker, "ready").andReturn(true);
+                spyOn(this.dialog.executionLocationList, "ready").andReturn(true);
                 spyOn(this.dialog, "closeModal");
                 this.dialog.$("button.submit").click();
             });
@@ -96,8 +96,8 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
         context("pre-populating", function() {
 
             it("only passes the data source to the picker", function() {
-                expect(this.dialog.executionLocationPicker.options.database).toBeUndefined();
-                expect(this.dialog.executionLocationPicker.options.dataSource.attributes).toEqual(this.executionLocation.attributes);
+                expect(this.dialog.executionLocationList.options.database).toBeUndefined();
+                expect(this.dialog.executionLocationList.options.dataSource.attributes).toEqual(this.executionLocation.attributes);
             });
         });
 
@@ -105,7 +105,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
             beforeEach(function() {
                 this.model.set("database_id", "NOT_EMPTY");
                 spyOn(this.model, "save").andCallThrough();
-                spyOn(this.dialog.executionLocationPicker, "ready").andReturn(true);
+                spyOn(this.dialog.executionLocationList, "ready").andReturn(true);
                 spyOn(this.dialog, "closeModal");
                 this.dialog.$("button.submit").click();
             });
@@ -150,8 +150,8 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
 
     context("when the picker is not ready", function () {
         beforeEach(function () {
-            spyOn(this.dialog.executionLocationPicker, "ready").andReturn(false);
-            this.dialog.executionLocationPicker.trigger("change");
+            spyOn(this.dialog.executionLocationList, "ready").andReturn(false);
+            this.dialog.executionLocationList.trigger("change");
         });
 
         it("disables the save button", function () {
@@ -162,8 +162,8 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
     context("when the picker is ready", function () {
         beforeEach(function () {
             spyOn(chorus.PageEvents, "trigger").andCallThrough();
-            spyOn(this.dialog.executionLocationPicker, "ready").andReturn(true);
-            this.dialog.executionLocationPicker.trigger("change");
+            spyOn(this.dialog.executionLocationList, "ready").andReturn(true);
+            this.dialog.executionLocationList.trigger("change");
         });
 
         it("enables the save button", function () {
@@ -175,7 +175,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
         beforeEach(function() {
             var modelWithError = backboneFixtures.database();
             modelWithError.serverErrors = { fields: { a: { BLANK: {} } } };
-            this.dialog.executionLocationPicker.trigger("error", modelWithError);
+            this.dialog.executionLocationList.trigger("error", modelWithError);
         });
 
         it("shows the error", function() {
@@ -184,7 +184,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
 
         context("and then the picker triggers clearErrors", function(){
             it("clears the errors", function() {
-                this.dialog.executionLocationPicker.trigger("clearErrors");
+                this.dialog.executionLocationList.trigger("clearErrors");
                 expect(this.dialog.$('.errors')).toBeEmpty();
             });
         });

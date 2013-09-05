@@ -2,9 +2,10 @@ chorus.dialogs.ChangeWorkFlowExecutionLocation = chorus.dialogs.Base.extend({
     templateName:"change_work_flow_execution_location",
     title: t("work_flows.change_execution_location.title"),
     constructorName: "ChangeWorkFlowExecutionLocation",
+    additionalClass: 'dialog_wide',
 
     subviews: {
-        ".location_picker": "executionLocationPicker"
+        ".location_picker": "executionLocationList"
     },
 
     events: {
@@ -29,18 +30,18 @@ chorus.dialogs.ChangeWorkFlowExecutionLocation = chorus.dialogs.Base.extend({
             };
         }
 
-        this.executionLocationPicker = new chorus.views.WorkFlowExecutionLocationPicker(options);
+        this.executionLocationList = new chorus.views.WorkFlowExecutionLocationPickerList(options);
 
-        this.listenTo(this.executionLocationPicker, "change", this.enableOrDisableSubmitButton);
-        this.listenTo(this.executionLocationPicker, "error", this.showErrors);
-        this.listenTo(this.executionLocationPicker, "clearErrors", this.clearErrors);
+        this.listenTo(this.executionLocationList, "change", this.enableOrDisableSubmitButton);
+        this.listenTo(this.executionLocationList, "error", this.showErrors);
+        this.listenTo(this.executionLocationList, "clearErrors", this.clearErrors);
     },
 
     getWorkFlowParams: function() {
         var workFlowParams = {};
-        var selectedDataSource = this.executionLocationPicker.getSelectedDataSource();
-        if(selectedDataSource.get('entityType') === 'gpdb_data_source') {
-            workFlowParams['database_id'] = this.executionLocationPicker.getSelectedDatabase().id;
+        var selectedDataSource = this.executionLocationList.getSelectedDataSources()[0];
+        if (selectedDataSource.get('entityType') === 'gpdb_data_source') {
+            workFlowParams['database_id'] = this.executionLocationList.getSelectedDatabases()[0].id;
         } else {
             workFlowParams['hdfs_data_source_id'] = selectedDataSource.get('id');
         }
@@ -67,6 +68,6 @@ chorus.dialogs.ChangeWorkFlowExecutionLocation = chorus.dialogs.Base.extend({
     },
 
     enableOrDisableSubmitButton: function() {
-        this.$("button.submit").prop("disabled", !this.executionLocationPicker.ready());
+        this.$("button.submit").prop("disabled", !this.executionLocationList.ready());
     }
 });

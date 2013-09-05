@@ -3,6 +3,21 @@
         font-size: 13px;
     }
 
+    $select_width: 375px;
+
+    .half-width {
+        width: $select_width;
+        display: inline-block;
+
+        select {
+            width: $select_width;
+        }
+    }
+
+    .data_source {
+        margin-right: 25px;
+    }
+
     .data_source .header_container {
         margin-top: 0;
     }

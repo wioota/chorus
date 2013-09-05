@@ -18,14 +18,15 @@ describe("chorus.dialogs.WorkFlowNew", function() {
        expect(this.dialog.$el).toContainTranslation("work_flows.new_dialog.info");
     });
 
-    it("creates a location picker picker with the schema section hidden", function(){
+    it("creates a location picker with the schema section hidden", function(){
        expect(this.dialog.$('.schema')).not.toExist();
     });
 
     context("when the workspace has a sandbox", function() {
-        it("sets the default data source and database", function() {
+        it("sets the default data source and database for the picker list", function() {
             expect(this.sandboxDatabase).toBeTruthy();
-            expect(this.dialog.executionLocationPicker.getSelectedDatabase()).toEqual(this.sandboxDatabase);
+            expect(this.dialog.executionLocationList.options.database).toEqual(this.sandboxDatabase);
+            expect(this.dialog.executionLocationList.options.dataSource).toEqual(this.sandboxDatabase.dataSource());
         });
     });
 
@@ -38,16 +39,16 @@ describe("chorus.dialogs.WorkFlowNew", function() {
         });
 
         it("does not set a default data source or database", function() {
-            expect(this.dialog.executionLocationPicker.getSelectedDataSource()).toBeFalsy();
-            expect(this.dialog.executionLocationPicker.getSelectedDatabase()).toBeFalsy();
+            expect(this.dialog.executionLocationList.options.database).toBeFalsy();
+            expect(this.dialog.executionLocationList.options.dataSource).toBeFalsy();
         });
     });
 
     describe("submitting", function() {
         beforeEach(function() {
-            spyOn(this.dialog.executionLocationPicker, "ready").andReturn(true);
-            this.dialog.executionLocationPicker.trigger('change');
-            spyOn(this.dialog.executionLocationPicker, 'getSelectedDataSource');
+            spyOn(this.dialog.executionLocationList, "ready").andReturn(true);
+            this.dialog.executionLocationList.trigger('change');
+            spyOn(this.dialog.executionLocationList, 'getSelectedDataSources');
         });
 
         describe("with valid form values", function() {
@@ -59,14 +60,15 @@ describe("chorus.dialogs.WorkFlowNew", function() {
                 expect(this.dialog.$("form button.submit")).not.toBeDisabled();
             });
 
-            context("when selecting gpdb data source", function() {
+            describe("selecting a gpdb data source", function() {
                 beforeEach(function() {
-                    this.dialog.executionLocationPicker.getSelectedDataSource.andReturn(this.sandboxDatabase.dataSource());
+                    this.dialog.executionLocationList.getSelectedDataSources.andReturn([this.sandboxDatabase.dataSource()]);
                 });
 
                 it("submits the form with the right parameters", function() {
                     this.dialog.$("form").submit();
-                    expect(this.server.lastCreate().params()["workfile[entity_subtype]"]).toEqual('alpine');
+                    var params = this.server.lastCreate().params();
+                    expect(params["workfile[entity_subtype]"]).toEqual('alpine');
                     expect(parseInt(this.server.lastCreate().params()["workfile[database_id]"], 10)).toEqual(this.sandboxDatabase.id);
                 });
 
@@ -108,7 +110,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
                 beforeEach(function() {
                     this.hdfsDataSource = backboneFixtures.hdfsDataSource();
                     this.hdfsDataSource.id = '123Garbage';
-                    this.dialog.executionLocationPicker.getSelectedDataSource.andReturn(this.hdfsDataSource);
+                    this.dialog.executionLocationList.getSelectedDataSources.andReturn([this.hdfsDataSource]);
                 });
 
                 it("submits the form with the right parameters", function() {
@@ -121,8 +123,8 @@ describe("chorus.dialogs.WorkFlowNew", function() {
 
         describe("when the location picker is not ready", function() {
             it("disables the form", function() {
-                this.dialog.executionLocationPicker.ready.andReturn(false);
-                this.dialog.executionLocationPicker.trigger('change');
+                this.dialog.executionLocationList.ready.andReturn(false);
+                this.dialog.executionLocationList.trigger('change');
 
                 expect(this.dialog.$("form button.submit")).toBeDisabled();
             });
