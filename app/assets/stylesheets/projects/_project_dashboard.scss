@@ -1,16 +1,25 @@
 .project_list {
-    .project {
+    .card {
         display: inline-block;
         width: 450px;
         padding: 10px;
         border: 1px solid black;
-    }
 
-    .name {
-        font-size: 24px;
-    }
+        .name {
+            font-size: 24px;
+        }
 
-    .ownerlabel {
-        font-weight: bold;
+        .name_row {
+            display: inline;
+        }
+
+        .ownerlabel {
+            font-weight: bold;
+        }
+
+        .info_icon {
+          display: inline;
+          float: right;
+        }
     }
 }
