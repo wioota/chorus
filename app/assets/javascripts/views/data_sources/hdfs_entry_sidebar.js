@@ -11,7 +11,6 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         'click .directory_external_table': "openDirectoryExternalTable",
         "click .edit_tags": "startEditingTags",
         "click .add_note": "launchNotesNewDialog",
-        "click .new_work_flow": "launchWorkFlowNewDialog",
         "click .associate_with_workspace": "launchAssociateWithWorkspaceDialog"
     },
 
@@ -122,14 +121,6 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     startEditingTags: function(e) {
         e.preventDefault();
         new chorus.dialogs.EditTags({collection: new chorus.collections.Base([this.resource])}).launchModal();
-    },
-
-    launchWorkFlowNewDialog: function(e) {
-        e && e.preventDefault();
-        var dialog = new chorus.dialogs.HdfsWorkFlowWorkspacePicker({
-            hdfsEntries: new chorus.collections.HdfsEntrySet([this.resource])
-        });
-        dialog.launchModal();
     },
 
     launchAssociateWithWorkspaceDialog: function(e) {
