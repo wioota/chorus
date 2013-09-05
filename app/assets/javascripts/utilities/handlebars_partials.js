@@ -8,3 +8,4 @@ Handlebars.registerPartial("formControls", window.HandlebarsTemplates["component
 Handlebars.registerPartial("csvImportConsole", window.HandlebarsTemplates["csv_import_console"]);
 Handlebars.registerPartial("closeWindowFormControls", window.HandlebarsTemplates["components/close_window_form_controls"]);
 Handlebars.registerPartial("timeZoneSelector", window.HandlebarsTemplates["time_zone_selector"]);
+Handlebars.registerPartial("activity", window.HandlebarsTemplates["activity"]);

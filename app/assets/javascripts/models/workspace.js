@@ -61,6 +61,10 @@ chorus.models.Workspace = chorus.models.Base.extend({
         }
     },
 
+    latestInsight: function () {
+        return this.get('latestInsight') && new chorus.models.Activity(this.get('latestInsight'));
+    },
+
     datasetsInDatabase: function(database) {
         return new chorus.collections.WorkspaceDatasetSet([], {
             workspaceId: this.id,

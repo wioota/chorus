@@ -53,7 +53,8 @@ class WorkspacePresenter < Presenter
     {
       :number_of_insights => recent_insights.size,
       :number_of_comments => recent_notes.size + recent_comments.size - recent_insights.size,
-      :latest_comment_list => present(latest_5)
+      :latest_comment_list => present(latest_5),
+      :latest_insight => present(recent_insights.order("updated_at desc").first)
     }
   end
 end

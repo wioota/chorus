@@ -30,9 +30,9 @@ chorus.models = {
                 return uri.toString();
             },
 
-            activities: function() {
+            activities: function(opts) {
                 if (!this._activities) {
-                    this._activities = new chorus.collections.ActivitySet([], { entity: this } );
+                    this._activities = new chorus.collections.ActivitySet([], _.extend({entity: this}, opts));
                     this.bind("invalidated", this._activities.fetch, this._activities);
                 }
                 return this._activities;

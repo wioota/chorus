@@ -19,13 +19,8 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         if(!this.collection) {
             this.collection = this.model.activities();
         }
-        this.insightsCount = this.collection.clone();
-        this.insightsCount.attributes.entity = this.collection.attributes.entity;
-        this.insightsCount.attributes.insights = true;
-        this.insightsCount.fetchPage(1, {per_page: 0});
-        this.listenTo(this.insightsCount, "loaded", this.render);
 
-        this.requiredResources.add(this.insightsCount);
+        this.countInsights();
 
         this.allTitle = this.options.allTitle;
         this.insightsTitle = this.options.insightsTitle;
@@ -50,6 +45,16 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         this.insightsCount.fetchPage(1, {per_page: 0});
     },
 
+    countInsights: function () {
+        this.insightsCount = this.collection.clone();
+        this.insightsCount.attributes.entity = this.collection.attributes.entity;
+        this.insightsCount.attributes.insights = true;
+        this.updateInsightCount();
+        this.listenTo(this.insightsCount, "loaded", this.render);
+
+        this.requiredResources.add(this.insightsCount);
+    },
+
     reloadCollection: function() {
         this.collection.loaded = false;
         this.collection.reset();
@@ -57,15 +62,16 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         this.render();
     },
 
+
     onAllClicked: function(e) {
-        e.preventDefault();
+        e && e.preventDefault();
 
         this.collection.attributes.insights = false;
         this.reloadCollection();
     },
 
     onInsightsClicked: function(e) {
-        e.preventDefault();
+        e && e.preventDefault();
 
         this.collection.attributes.insights = true;
         this.reloadCollection();

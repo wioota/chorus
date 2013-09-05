@@ -581,4 +581,14 @@ describe("chorus global", function() {
             expect(this.chorus.router.navigate).toHaveBeenCalledWith("/login");
         });
     });
+
+    describe("#pageParams", function () {
+        context("when there are none", function () {
+            it("returns an empty object", function () {
+                window.location.hash='workspaces/14/quickstart';
+                expect(chorus.pageParams()).toEqual({});
+            });
+        });
+
+    });
 });

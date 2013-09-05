@@ -7,10 +7,19 @@ chorus.views.DashboardProjectList = chorus.views.Base.extend({
     },
 
     collectionModelContext: function(model) {
+        var numberOfInsightsOrNot;
+
+        if (model.get('numberOfInsights') > 1) {
+            numberOfInsightsOrNot = model.get('numberOfInsights') - 1;
+        }
+
         return {
             showUrl: model.showUrl(),
             ownerName: model.owner().displayName(),
-            ownerShowUrl: model.owner().showUrl()
+            ownerShowUrl: model.owner().showUrl(),
+            latestInsight: model.latestInsight() && new chorus.presenters.Activity(model.latestInsight()),
+            hiddenInsightCount: numberOfInsightsOrNot,
+            allInsightsRoute: model.showUrl()+'?filter=insights'
         };
     }
 });

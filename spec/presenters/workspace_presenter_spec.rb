@@ -90,6 +90,7 @@ describe WorkspacePresenter, :type => :view do
         hash.should have_key(:number_of_insights)
         hash.should have_key(:number_of_comments)
         hash.should have_key(:latest_comment_list)
+        hash.should have_key(:latest_insight)
       end
 
       context "with recent comments and insights" do

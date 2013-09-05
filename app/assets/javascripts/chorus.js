@@ -313,6 +313,15 @@ window.Chorus = function chorus$Global() {
     self.scrollToTop = function() {
         window.scroll(0, 0);
     };
+
+    self.pageParams = function () {
+        if (window.location.hash.search("\\?") === -1) { return {}; }
+
+        var path = window.location.hash.substring(window.location.hash.search("\\?")+1);
+        var decoded = decodeURI(path).replace(/"/g, '\\"').replace(/&/g, '","').replace(new RegExp('=', 'g'), '":"');
+//
+        return JSON.parse('{"' + decoded + '"}');
+    };
 };
 
 window.chorus = window.chorus || new window.Chorus();

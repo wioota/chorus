@@ -20,5 +20,21 @@
             </a>
         </div>
 
+        <div class='insight'>
+        <hr />
+            {{#if latestInsight}}
+                <div class='date'></div>
+
+                <div class='activity'>
+                    {{>activity latestInsight}}
+                </div>
+
+                {{#if hiddenInsightCount}}
+                    <a href="{{allInsightsRoute}}" class='all_insights'>{{t 'project_card.insight.all_insights' count=hiddenInsightCount}}</a>
+                {{/if}}
+            {{else}}
+                    <div class='activity spacer'/>
+            {{/if}}
+        </div>
     </div>
 {{/each}}

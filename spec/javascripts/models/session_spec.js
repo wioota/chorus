@@ -16,7 +16,6 @@ describe("chorus.models.Session", function() {
             Backbone.history.fragment = "foo";
             this.model = new models.Session();
             spyOnEvent(this.model, "needsLogin");
-            spyOn(chorus.router, "navigate").andCallThrough();
         });
 
         context("when the model has errors", function() {
