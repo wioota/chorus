@@ -5,7 +5,7 @@ FactoryGirl.define do
     owner
     workspace
     description "Using two datasources to #{Faker::Company.bs.downcase}."
-    file_name Faker::Company.name
+    file_name Faker::Lorem.word
 
     after(:create) do |workfile, evaluator|
       database = FactoryGirl.create(:gpdb_database)
