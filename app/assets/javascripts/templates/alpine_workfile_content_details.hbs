@@ -1,13 +1,13 @@
 <ul class="list_horizontal">
     <li>
         {{#if canOpen}}
-        <button class="button button_action open_file" {{#unless executionLocation}}disabled="disabled"{{/unless}}>{{t "work_flows.show.open"}}</button>
+        <button class="button button_action open_file" {{#unless executionLocations}}disabled="disabled"{{/unless}}>{{t "work_flows.show.open"}}</button>
         {{else}}
         <button class="invisible button_action"></button>
         {{/if}}
     </li>
     <li>
-        {{#if executionLocation}}
+        {{#if executionLocations}}
             {{#if executionLocationIsHdfs}}
                 <span class="execution_location">{{t "work_flows.show.hdfs_execution_location" dataSourceName=dataSourceName}}</span>
             {{else}}

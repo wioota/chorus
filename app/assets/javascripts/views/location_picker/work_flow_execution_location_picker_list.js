@@ -28,5 +28,20 @@ chorus.views.WorkFlowExecutionLocationPickerList = chorus.views.Base.extend({
 
     getSelectedDatabases: function () {
         return [this.pickers[0].getSelectedDatabase()];
+    },
+
+    getSelectedLocations: function () {
+        return _.map(this.pickers, function (picker) {
+            return picker.isHdfs() ? picker.getSelectedDataSource() : picker.getSelectedDatabase();
+        });
+    },
+
+    getSelectedLocationParams: function () {
+        return _.map(this.getSelectedLocations(), function (dataSource) {
+            return {
+                id: dataSource.id,
+                entity_type: dataSource.get('entityType')
+            };
+        });
     }
 });

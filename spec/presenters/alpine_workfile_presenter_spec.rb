@@ -21,18 +21,20 @@ describe AlpineWorkfilePresenter, :type => :view do
       end
     end
 
-    it "presents execution database" do
-      workfile.execution_location = gpdb_databases(:alternate)
-      workfile.execution_location.should be_a(GpdbDatabase)
-      hash[:execution_location].should == Presenter.present(workfile.execution_location, view, :succinct => true)
-    end
+    describe "execution locations" do
+      context "when presenting for a 'show' view" do
+        it "presents execution location" do
+          hash[:execution_locations].should == workfile.execution_locations.map { |loc| Presenter.present(loc, view, :succinct => true) }
+        end
+      end
 
-    context "when presenting for a list_view" do
-      let(:options) { {:list_view => true} }
-      let(:workfile) { workfiles("alpine_flow") }
+      context "when presenting for a list_view" do
+        let(:options) { {:list_view => true} }
+        let(:workfile) { workfiles("alpine_flow") }
 
-      it "does not show the execution location, because that becomes an N+1 query and we don't need the data" do
-        hash.should_not have_key(:execution_location)
+        it "does not present the execution location" do
+          hash.should_not have_key(:execution_locations)
+        end
       end
     end
   end

@@ -285,16 +285,16 @@ FixtureBuilder.configure do |fbuilder|
     work_flow = AlpineWorkfile.create!({:file_name => 'alpine_flow',
                                      :workspace => public_workspace,
                                      :owner => owner,
-                                     :execution_location => default_database,
                                      :dataset_ids => %w(1 2 3),
                                     }, :without_protection => true)
+    work_flow.workfile_execution_locations.create(execution_location: default_database)
 
-    AlpineWorkfile.create!({:file_name => 'alpine_hadoop_dataset_flow',
+    hadoop_work_flow = AlpineWorkfile.create!({:file_name => 'alpine_hadoop_dataset_flow',
                             :workspace => public_workspace,
                             :owner => owner,
-                            :execution_location => hdfs_data_source,
                             :dataset_ids => HdfsDataset.limit(3).pluck(:id),
                            }, :without_protection => true)
+    hadoop_work_flow.workfile_execution_locations.create(execution_location: hdfs_data_source)
 
     Events::WorkfileResult.by(owner).add(:workfile => work_flow, :result_id => "1", :workspace => work_flow.workspace)
 

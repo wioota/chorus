@@ -25,16 +25,16 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
 
     context("a gpdb database", function() {
         beforeEach(function() {
-            this.executionLocation = backboneFixtures.database({id: 321});
-            this.model.set('executionLocation', this.executionLocation.attributes);
+            this.executionLocations = [backboneFixtures.database({id: 321})];
+            this.model.set('executionLocations', this.executionLocations);
             this.dialog = new chorus.dialogs.ChangeWorkFlowExecutionLocation({ model: this.model });
             this.dialog.render();
         });
 
         context("pre-populating", function() {
             it("passes the database and the gpdb data source to the picker", function() {
-                expect(this.dialog.executionLocationList.getSelectedDatabases()[0].id).toEqual(this.executionLocation.get('id'));
-                expect(this.dialog.executionLocationList.getSelectedDataSources()[0].id).toEqual(this.executionLocation.dataSource().get('id'));
+                expect(this.dialog.executionLocationList.getSelectedDatabases()[0].id).toEqual(this.executionLocations[0].get('id'));
+                expect(this.dialog.executionLocationList.getSelectedDataSources()[0].id).toEqual(this.executionLocations[0].dataSource().get('id'));
             });
         });
 
@@ -53,13 +53,13 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
             });
 
             it("saves the model", function(){
-                expect(this.server.lastUpdate().params()["workfile[database_id]"]).toEqual(this.executionLocation.id.toString());
-                expect(this.server.lastUpdate().params()["workfile[hdfs_data_source_id]"]).toBeUndefined();
+                expect(this.server.lastUpdate().params()["workfile[execution_locations][0][id]"]).toEqual(this.executionLocations[0].id.toString());
+                expect(this.server.lastUpdate().params()["workfile[execution_locations][0][entity_type]"]).toEqual('gpdb_database');
             });
 
             context("when save succeeds", function(){
                 beforeEach(function() {
-                    this.server.completeUpdateFor(this.model, _.extend(this.model.attributes, {executionLocation: this.executionLocation.attributes}));
+                    this.server.completeUpdateFor(this.model, _.extend(this.model.attributes, {executionLocation: this.executionLocations[0].attributes}));
                 });
 
                 it("dismisses the dialog", function(){
@@ -87,8 +87,8 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
 
     context("an hdfs data source", function() {
         beforeEach(function() {
-            this.executionLocation = backboneFixtures.hdfsDataSource({id: 123});
-            this.model.set('executionLocation', this.executionLocation.attributes);
+            this.executionLocations = [backboneFixtures.hdfsDataSource({id: 123})];
+            this.model.set('executionLocations', this.executionLocations);
             this.dialog = new chorus.dialogs.ChangeWorkFlowExecutionLocation({ model: this.model });
             this.dialog.render();
         });
@@ -97,7 +97,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
 
             it("only passes the data source to the picker", function() {
                 expect(this.dialog.executionLocationList.options.database).toBeUndefined();
-                expect(this.dialog.executionLocationList.options.dataSource.attributes).toEqual(this.executionLocation.attributes);
+                expect(this.dialog.executionLocationList.options.dataSource.attributes).toEqual(this.executionLocations[0].attributes);
             });
         });
 
@@ -116,13 +116,13 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
             });
 
             it("saves the model", function(){
-                expect(this.server.lastUpdate().params()["workfile[hdfs_data_source_id]"]).toEqual(this.executionLocation.id.toString());
-                expect(this.server.lastUpdate().params()["workfile[database_id]"]).toBeUndefined();
+                expect(this.server.lastUpdate().params()["workfile[execution_locations][0][id]"]).toEqual(this.executionLocations[0].id.toString());
+                expect(this.server.lastUpdate().params()["workfile[execution_locations][0][entity_type]"]).toEqual('hdfs_data_source');
             });
 
             context("when save succeeds", function(){
                 beforeEach(function() {
-                    this.server.completeUpdateFor(this.model, _.extend(this.model.attributes, {executionLocation: this.executionLocation.attributes}));
+                    this.server.completeUpdateFor(this.model, _.extend(this.model.attributes, {executionLocation: this.executionLocations[0].attributes}));
                 });
 
                 it("dismisses the dialog", function(){
@@ -145,6 +145,18 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
                     expect(this.dialog.closeModal).not.toHaveBeenCalled();
                 });
             });
+        });
+    });
+
+    context("when the model has no executionLocation", function () {
+        beforeEach(function () {
+            this.model = backboneFixtures.workfile.alpine({executionLocations: []});
+            this.dialog = new chorus.dialogs.ChangeWorkFlowExecutionLocation({ model: this.model });
+            this.dialog.render();
+        });
+
+        it("renders an unselected picker", function () {
+            expect(this.dialog.executionLocationList.ready()).toBeFalsy();
         });
     });
 

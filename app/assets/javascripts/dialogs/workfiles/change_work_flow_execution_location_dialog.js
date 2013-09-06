@@ -18,16 +18,18 @@ chorus.dialogs.ChangeWorkFlowExecutionLocation = chorus.dialogs.Base.extend({
         this.listenTo(this.model, "saveFailed", this.saveFailed);
 
         var options;
-        var executionLocation = this.model.executionLocation();
-        if (executionLocation.get('entityType') === 'hdfs_data_source') {
-            options = {
-                dataSource: executionLocation
-            };
-        } else {
-            options = {
-                database: executionLocation,
-                dataSource: executionLocation.dataSource()
-            };
+        var executionLocation = this.model.executionLocations()[0];
+        if (executionLocation) {
+            if (executionLocation.get('entityType') === 'hdfs_data_source') {
+                options = {
+                    dataSource: executionLocation
+                };
+            } else {
+                options = {
+                    database: executionLocation,
+                    dataSource: executionLocation.dataSource()
+                };
+            }
         }
 
         this.executionLocationList = new chorus.views.WorkFlowExecutionLocationPickerList(options);
@@ -37,24 +39,12 @@ chorus.dialogs.ChangeWorkFlowExecutionLocation = chorus.dialogs.Base.extend({
         this.listenTo(this.executionLocationList, "clearErrors", this.clearErrors);
     },
 
-    getWorkFlowParams: function() {
-        var workFlowParams = {};
-        var selectedDataSource = this.executionLocationList.getSelectedDataSources()[0];
-        if (selectedDataSource.get('entityType') === 'gpdb_data_source') {
-            workFlowParams['database_id'] = this.executionLocationList.getSelectedDatabases()[0].id;
-        } else {
-            workFlowParams['hdfs_data_source_id'] = selectedDataSource.get('id');
-        }
-        return workFlowParams;
-    },
-
     save: function(e) {
         e.preventDefault();
 
-        var params = this.getWorkFlowParams();
         this.model.unset("database_id");
         this.model.unset("hdfs_data_source_id");
-        this.model.save(params);
+        this.model.save({execution_locations: this.executionLocationList.getSelectedLocationParams()});
         this.$("button.submit").startLoading("actions.saving");
         this.$("button.cancel").prop("disabled", true);
     },

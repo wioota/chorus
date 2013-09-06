@@ -24,15 +24,9 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.WorkFlowNewBase.extend({
     },
 
     resourceAttributes: function () {
-        var workFlowParams = {
+        return {
+            executionLocations: this.executionLocationList.getSelectedLocationParams(),
             fileName: this.getFileName()
         };
-        var selectedDataSource = this.executionLocationList.getSelectedDataSources()[0];
-        if (selectedDataSource.get('entityType') === 'gpdb_data_source') {
-            workFlowParams['database_id'] = this.executionLocationList.getSelectedDatabases()[0].id;
-        } else {
-            workFlowParams['hdfs_data_source_id'] = selectedDataSource.get('id');
-        }
-        return workFlowParams;
     }
 });

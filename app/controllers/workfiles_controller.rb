@@ -4,12 +4,14 @@ class WorkfilesController < ApplicationController
   wrap_parameters :workfile
   include DataSourceAuth
 
+  before_filter :execution_locations_to_array
+
   def show
     workfile = Workfile.find(params[:id])
     authorize! :show, workfile.workspace
 
     if params[:connect].present?
-      authorize_data_source_access workfile
+      authorize_data_sources_access workfile
       workfile.attempt_data_source_connection
     end
 
@@ -56,5 +58,11 @@ class WorkfilesController < ApplicationController
 
     workfile.destroy
     render :json => {}
+  end
+
+  private
+
+  def execution_locations_to_array
+    params[:workfile][:execution_locations] = params[:workfile][:execution_locations].values if params[:workfile][:execution_locations]
   end
 end

@@ -1,34 +1,42 @@
+require 'set'
+
 class AlpineWorkfile < Workfile
   TooManyDataBases = Class.new(StandardError)
 
   has_additional_data :dataset_ids
+  has_many :workfile_execution_locations, foreign_key: :workfile_id
 
   before_validation { self.content_type ='work_flow' }
-  before_validation :determine_execution_location
-  validates_presence_of :execution_location
+  after_create :determine_execution_location
   validates_with AlpineWorkfileValidator
   validate :ensure_active_workspace, :on => :create
 
   after_destroy :notify_alpine_of_deletion
+
+  def execution_locations
+    workfile_execution_locations.map(&:execution_location)
+  end
 
   def entity_subtype
     'alpine'
   end
 
   def attempt_data_source_connection
-    data_source.attempt_connection(current_user)
+    data_sources.each do |ds|
+      ds.attempt_connection(current_user)
+    end
   end
 
-  def data_source
-    execution_location.data_source
+  def data_sources
+    execution_locations.map(&:data_source)
   end
 
   def update_from_params!(params)
-    update_execution_location(params)
+    update_execution_location(params) if params[:execution_locations].present?
     update_file_name(params)
-
     Workfile.transaction do
-      notify_alpine_of_upload(scoop_file_from(params)) if (save! && !params[:file_name])
+      save!
+      notify_alpine_of_upload(scoop_file_from(params)) if !params[:file_name]
     end
   rescue Net::ProtocolError, SocketError, Errno::ECONNREFUSED, TimeoutError => e
     raise ApiValidationError.new(:base, :alpine_connection_error)
@@ -63,17 +71,27 @@ class AlpineWorkfile < Workfile
   end
 
   def update_execution_location(params)
-    self.execution_location = GpdbDatabase.find(params[:database_id]) unless params[:database_id].to_s == ""
-    self.execution_location = HdfsDataSource.find(params[:hdfs_data_source_id]) unless params[:hdfs_data_source_id].to_s == ""
+    workfile_execution_locations.destroy_all
 
-    if execution_location_id_changed? || execution_location_type_changed?
-      self.dataset_ids = nil
+    params[:execution_locations].each do |location|
+      source = if location[:entity_type] == 'gpdb_database'
+        GpdbDatabase.find location[:id]
+      else
+        HdfsDataSource.find location[:id]
+      end
+
+      workfile_execution_locations.build(:execution_location => source)
     end
   end
 
   def determine_execution_location
-    # Validations will ensure that all datasets/entries have the same execution location
-    self.execution_location = datasets.first.execution_location unless datasets.empty?
+    unless datasets.empty?
+      sources = datasets.map(&:execution_location)
+
+      sources.uniq.each do |source|
+        workfile_execution_locations.create!(:execution_location => source)
+      end
+    end
   end
 
   def notify_alpine_of_deletion

@@ -28,7 +28,7 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
     },
 
     iframeUrl: function() {
-        var executionLocation = this.get('executionLocation');
+        var executionLocation = this.get('executionLocations')[0];
         var uri = this.alpineUrlBase();
         var queryParams = {
             file_name: this.get("fileName"),
@@ -79,7 +79,9 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
         return "#/work_flows/" + this.id;
     },
 
-    executionLocation: function() {
-        return new chorus.models.DynamicExecutionLocation(this.get('executionLocation'));
+    executionLocations: function () {
+        return _.map(this.get('executionLocations'), function (executionLocation) {
+            return new chorus.models.DynamicExecutionLocation(executionLocation);
+        }, this);
     }
 });

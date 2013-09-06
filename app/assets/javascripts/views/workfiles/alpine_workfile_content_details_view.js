@@ -19,7 +19,7 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
             canOpen: this.model.canOpen(),
             canUpdate: this.canUpdate()
         };
-        var executionLocation = this.model.executionLocation();
+        var executionLocation = this.model.executionLocations()[0];
 
         if (executionLocation) {
             if (executionLocation.get("entityType") === "gpdb_database") {

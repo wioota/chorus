@@ -30,7 +30,7 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
 
         context("when the execution location is a Greenplum database", function() {
             it("shows the data source name and database name", function() {
-                var database = this.model.executionLocation();
+                var database = this.model.executionLocations()[0];
                 var dataSource = database.dataSource();
                 expect(this.view.$('.execution_location')).toContainTranslation("work_flows.show.gpdb_execution_location", {
                     dataSourceName: dataSource.get("name"),
@@ -46,7 +46,7 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
             });
 
             it("shows the hdfs data source name", function() {
-                var hdfsDataSource = this.model.executionLocation();
+                var hdfsDataSource = this.model.executionLocations()[0];
                 expect(this.view.$('.execution_location')).toContainTranslation("work_flows.show.hdfs_execution_location", {
                     dataSourceName: hdfsDataSource.get("name")
                 });
@@ -55,7 +55,7 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
 
         context("when the execution location is null", function() {
             beforeEach(function() {
-                this.model.set('executionLocation', null);
+                this.model.set('executionLocations', null);
             });
 
             it("displays 'none' for the database", function() {

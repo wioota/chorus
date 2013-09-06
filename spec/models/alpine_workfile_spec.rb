@@ -3,13 +3,18 @@ require "spec_helper"
 describe AlpineWorkfile do
   let(:workspace) { workspaces(:public) }
   let(:user) { workspace.owner }
+  let(:valid_params) do
+    {
+        :workspace => workspace,
+        :entity_subtype => "alpine",
+        :file_name => "sfgj",
+        :owner => user
+    }
+  end
   let(:params) do
-    {:workspace => workspace, :entity_subtype => "alpine",
-     :file_name => "sfgj", :dataset_ids => [datasets(:table).id], :owner => user}
+    valid_params.merge(:dataset_ids => [datasets(:table).id])
   end
   let(:model) { Workfile.build_for(params).tap { |file| file.save } }
-
-  it { should belong_to :execution_location }
 
   describe 'update from params' do
     context "when uploading an AFM" do
@@ -74,8 +79,6 @@ describe AlpineWorkfile do
   end
 
   describe "validations" do
-    it { should validate_presence_of :execution_location }
-
     context "with an archived workspace" do
       let(:workspace) { workspaces(:archived) }
 
@@ -139,28 +142,20 @@ describe AlpineWorkfile do
       context "in a DB" do
         let(:datasetA) { datasets(:table) }
         let(:datasetB) { datasets(:other_table) }
-        let(:params) { {dataset_ids: [datasetA.id, datasetB.id], workspace: workspace} }
+        let(:params) { valid_params.merge({:dataset_ids => [datasetA.id, datasetB.id]}) }
 
         it 'sets the execution location to the GpdbDatabase where the datasets live' do
-          AlpineWorkfile.create(params).execution_location.should == datasetA.database
+          model.execution_locations.should =~ [datasetA.database]
         end
 
         it 'assigns the datasets' do
-          AlpineWorkfile.create(params).datasets.should =~ [datasetA, datasetB]
-        end
-
-        context "and the datasets are from multiple databases" do
-          let(:datasetB) { FactoryGirl.create(:gpdb_table) }
-
-          it "assigns too_many_databases error" do
-            AlpineWorkfile.create(params).errors_on(:datasets).should include(:too_many_databases)
-          end
+          model.datasets.should =~ [datasetA, datasetB]
         end
 
         context "and at least one of the datasets is a chorus view" do
           let(:datasetB) { datasets(:chorus_view) }
 
-          it "assigns too_many_databases error" do
+          it "assigns chorus_view_selected" do
             AlpineWorkfile.create(params).errors_on(:datasets).should include(:chorus_view_selected)
           end
         end
@@ -169,41 +164,51 @@ describe AlpineWorkfile do
       context "in a Hadoop Filesystem" do
         let(:datasetA) { datasets(:hadoop) }
         let(:datasetB) { FactoryGirl.create(:hdfs_dataset, :hdfs_data_source => datasetA.hdfs_data_source) }
-        let(:params) { {dataset_ids: [datasetA.id, datasetB.id], workspace: workspace} }
+        let(:params) { valid_params.merge({:dataset_ids => [datasetA.id, datasetB.id]}) }
 
         it 'sets the execution location to the HdfsDatSource where the datasets live' do
-          AlpineWorkfile.create(params).execution_location.should == datasetA.hdfs_data_source
+          model.execution_locations.should =~ [datasetA.hdfs_data_source]
         end
+      end
 
-        context "and the datasets are from multiple Hdfs Data Sources" do
-          let(:datasetB) { FactoryGirl.create(:hdfs_dataset) }
+      context "with multiple datasources" do
+        let(:datasetA) { datasets(:hadoop) }
+        let(:datasetB) { FactoryGirl.create(:hdfs_dataset) }
+        let(:params) { valid_params.merge({:dataset_ids => [datasetA.id, datasetB.id]}) }
 
-          it "assigns too_many_datasources error" do
-            AlpineWorkfile.create(params).errors_on(:datasets).should include(:too_many_databases)
-          end
+        it 'has multiple execution locations' do
+          model.execution_locations.should =~ [datasetA.hdfs_data_source, datasetB.hdfs_data_source]
         end
       end
     end
   end
 
-  describe "#attempt_data_source_connection" do
+  describe "#execution_locations" do
+    let(:database) { gpdb_databases(:default) }
+    let(:hdfs) { hdfs_data_sources(:hadoop) }
+    let(:params) { valid_params }
+
     before do
-      set_current_user(user)
+      WorkfileExecutionLocation.create!(workfile: model, execution_location: database)
+      WorkfileExecutionLocation.create!(workfile: model, execution_location: hdfs)
     end
 
-    it "tries to connect using the data source" do
-      mock(model.data_source).attempt_connection(user)
-      model.attempt_data_source_connection
+    it "returns an array of gpdb database and hdfs data sources" do
+      model.reload.execution_locations.should =~ [database, hdfs]
     end
   end
 
-  describe "#data_source" do
+  describe "#attempt_data_source_connection" do
     let(:database) { gpdb_databases(:default) }
-    let(:workfile) { AlpineWorkfile.create(workspace: workspace) }
 
-    it "returns the database's data source" do
-      workfile.execution_location = database
-      workfile.data_source.should == database.data_source
+    before do
+      set_current_user(user)
+      mock(database).attempt_connection(user)
+      stub(model).data_sources { [database] }
+    end
+
+    it "tries to connect using the data source" do
+      model.attempt_data_source_connection
     end
   end
 

@@ -49,13 +49,12 @@ describe HdfsDataSource do
     end
 
     it "removes itself from the execution location field of any workfiles it owns" do
-      workfiles = subject.workfiles_as_execution_location.all
+      workfiles = subject.workfile_execution_locations.all
       workfiles.length.should > 0
 
-      subject.destroy
-      workfiles.each do |workfile|
-        workfile.reload.execution_location_id.should be_nil
-      end
+      expect {
+        subject.destroy
+      }.to change { WorkfileExecutionLocation.where(execution_location_id: subject.id, execution_location_type: subject.class.name).count }.from(workfiles.length).to(0)
     end
   end
 

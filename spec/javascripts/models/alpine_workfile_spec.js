@@ -47,14 +47,14 @@ describe("chorus.models.AlpineWorkfile", function() {
 
             expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
             expect(url).toContainQueryParams({
-                database_id: this.model.get('executionLocation').id,
+                database_id: this.model.get('executionLocations')[0].id,
                 file_name: "hello.afm",
                 workfile_id: "23",
                 session_id: "hex",
                 method: "chorusEntry",
                 "dataset_id[]": ["3", "4", "5" ]
             });
-            expect(url).not.toContainQueryParams({hdfs_data_source_id: this.model.get('executionLocation').id});
+            expect(url).not.toContainQueryParams({hdfs_data_source_id: this.model.get('executionLocations')[0].id});
         });
     });
 
@@ -75,14 +75,14 @@ describe("chorus.models.AlpineWorkfile", function() {
 
                 expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
                 expect(url).toContainQueryParams({
-                    hdfs_data_source_id: this.model.get('executionLocation').id,
+                    hdfs_data_source_id: this.model.get('executionLocations')[0].id,
                     file_name: "hello.afm",
                     workfile_id: "23",
                     session_id: "hex",
                     method: "chorusEntry",
                     "hdfs_dataset_id[]": [4,5,6]
                 });
-                expect(url).not.toContainQueryParams({database_id: this.model.get('executionLocation').id});
+                expect(url).not.toContainQueryParams({database_id: this.model.get('executionLocations')[0].id});
             });
         });
     });
@@ -131,11 +131,11 @@ describe("chorus.models.AlpineWorkfile", function() {
         });
     });
 
-    describe("executionLocation", function() {
-       it("returns a dynamic execution location", function() {
+    describe("executionLocations", function() {
+       it("creates models for each execution location", function() {
            spyOn(chorus.models, 'DynamicExecutionLocation').andCallThrough();
-           expect(this.model.executionLocation()).toBeA(chorus.models.Database);
-           expect(chorus.models.DynamicExecutionLocation).toHaveBeenCalledWith(this.model.get('executionLocation'));
+           expect(this.model.executionLocations()[0]).toBeA(chorus.models.Database);
+           expect(chorus.models.DynamicExecutionLocation).toHaveBeenCalledWith(this.model.get('executionLocations')[0]);
        });
     });
 });

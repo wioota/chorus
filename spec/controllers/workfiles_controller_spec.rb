@@ -152,18 +152,17 @@ describe WorkfilesController do
         let(:alpine_workfile) { workfiles("alpine_flow") }
 
         before do
-          alpine_workfile.execution_location = gpdb_databases(:default)
-          alpine_workfile.save
+          alpine_workfile.execution_locations.first.should == gpdb_databases(:default)
         end
 
         describe "connecting to the data source" do
           before do
-            alpine_workfile.data_source.accounts.create(:owner => user)
+            alpine_workfile.data_sources.first.accounts.create(:owner => user)
           end
 
-          it "validates the database credentials" do
+          it "validates the datasource connections" do
             mock(controller).authorize!(:show, alpine_workfile.workspace)
-            mock(controller).authorize!(:show_contents, alpine_workfile.data_source)
+            mock(controller).authorize!(:show_contents, alpine_workfile.data_sources.first)
             any_instance_of(AlpineWorkfile) do |workfile|
               mock(workfile).attempt_data_source_connection
             end
@@ -186,7 +185,7 @@ describe WorkfilesController do
 
           context "when the user has wrong credentials" do
             before do
-              alpine_workfile.data_source.accounts.create(:owner => user).invalid_credentials!
+              alpine_workfile.data_sources.first.accounts.create(:owner => user).invalid_credentials!
             end
 
             it "responds with 403, missing credentials" do
@@ -335,18 +334,24 @@ describe WorkfilesController do
           {
               :workspace_id => workspace.to_param,
               :workfile => {
-                  :entity_subtype => 'alpine',
                   :file_name => 'something',
-                  :database_id => database.to_param
+                  :entity_subtype => 'alpine',
+                  :execution_locations => {
+                    "0" => {
+                        :id => database.to_param,
+                        :entity_type => 'gpdb_database'
+                    }
+                  }
               }
           }
         end
 
         it 'creates an AlpineWorkfile' do
           mock_present do |model|
+            model.reload
             model.should be_a AlpineWorkfile
             model.file_name.should == 'something'
-            model.execution_location.should == database
+            model.execution_locations.should =~ [database]
             model.workspace.should == workspace
           end
           post :create, params
@@ -361,16 +366,22 @@ describe WorkfilesController do
             :workfile => {
               :entity_subtype => 'alpine',
               :file_name => 'something',
-              :hdfs_data_source_id => hdfs_data_source.id
+              :execution_locations => {
+                  "0" => {
+                      :id => hdfs_data_source.id,
+                      :entity_type => 'hdfs_data_source'
+                  }
+              }
             }
           }
         end
 
         it 'creates an AlpineWorkfile' do
           mock_present do |model|
+            model.reload
             model.should be_a AlpineWorkfile
             model.file_name.should == 'something'
-            model.execution_location.should == hdfs_data_source
+            model.execution_locations.should =~ [hdfs_data_source]
             model.workspace.should == workspace
           end
           post :create, params
@@ -394,7 +405,7 @@ describe WorkfilesController do
           mock_present do |model|
             model.should be_a AlpineWorkfile
             model.file_name.should == 'something'
-            model.execution_location.should == datasets(:table).database
+            model.execution_locations.should =~ [datasets(:table).database]
             model.additional_data['dataset_ids'].should =~ dataset_ids
             model.workspace.should == workspace
           end
@@ -427,7 +438,7 @@ describe WorkfilesController do
           mock_present do |model|
             model.should be_a AlpineWorkfile
             model.file_name.should == 'analytical-derivations'
-            model.execution_location.should == hdfs_data_source
+            model.execution_locations.should =~ [hdfs_data_source]
             model.additional_data['dataset_ids'].should =~ dataset_ids
             model.workspace.should == workspace
           end
@@ -461,7 +472,7 @@ describe WorkfilesController do
           mock_present do |model|
             model.should be_a AlpineWorkfile
             model.file_name.should == 'reticulated-splines'
-            model.execution_location.should == oracle_data_source
+            model.execution_locations.should =~ [oracle_data_source]
             model.additional_data['dataset_ids'].should =~ dataset_ids
             model.workspace.should == workspace
           end
@@ -602,7 +613,12 @@ describe WorkfilesController do
             :workfile => {
               :entity_subtype => 'alpine',
               :file_name => 'something',
-              :database_id => database.to_param
+              :execution_locations => {
+                "0" => {
+                    :entity_type => 'gpdb_database',
+                    :id => database.id
+                }
+              }
             }
           }
         end
@@ -611,26 +627,10 @@ describe WorkfilesController do
           mock_present do |model|
             model.should be_a AlpineWorkfile
             model.file_name.should == 'something'
-            model.execution_location.should == database
+            model.execution_locations.should == [database]
             model.workspace.should == workspace
           end
           put :update, params
-        end
-
-        context "and it had datasets previously selected" do
-          before do
-            workfile.dataset_ids = [datasets(:table).id]
-            workfile.save!
-          end
-
-          it "removes the previous datasets" do
-            mock_present do |model|
-              model.should be_a AlpineWorkfile
-              model.execution_location.should == database
-              model.dataset_ids.should be_nil
-            end
-            put :update, params
-          end
         end
       end
 
@@ -643,7 +643,12 @@ describe WorkfilesController do
             :workfile => {
               :entity_subtype => 'alpine',
               :file_name => 'something',
-              :hdfs_data_source_id => hdfs_data_source.id
+              :execution_locations => {
+                  "0" => {
+                      :entity_type => 'hdfs_data_source',
+                      :id => hdfs_data_source.id
+                  }
+              }
             }
           }
         end
@@ -652,51 +657,10 @@ describe WorkfilesController do
           mock_present do |model|
             model.should be_a AlpineWorkfile
             model.file_name.should == 'something'
-            model.execution_location.should == hdfs_data_source
+            model.execution_locations.should == [hdfs_data_source]
             model.workspace.should == workspace
           end
           put :update, params
-        end
-
-        context "and it had datasets previously selected" do
-          let(:dataset) { datasets(:table) }
-
-          before do
-            workfile.dataset_ids = [dataset.id]
-            workfile.save!
-          end
-
-          it "removes the previous datasets" do
-            mock_present do |model|
-              model.should be_a AlpineWorkfile
-              model.execution_location.should == hdfs_data_source
-              model.dataset_ids.should be_nil
-            end
-            put :update, params
-          end
-
-          context "and the execution location is not actually changing" do
-            let(:params) do
-              {
-                :id => workfile.to_param,
-                :workspace_id => workspace.to_param,
-                :workfile => {
-                  :entity_subtype => 'alpine',
-                  :file_name => 'something',
-                  :database_id => dataset.database.to_param
-                }
-              }
-            end
-
-            it "does not remove the previous datasets" do
-              mock_present do |model|
-                model.should be_a AlpineWorkfile
-                model.execution_location.should == dataset.database
-                model.dataset_ids.should == [dataset.id]
-              end
-              put :update, params
-            end
-          end
         end
       end
     end

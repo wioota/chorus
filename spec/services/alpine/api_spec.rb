@@ -166,7 +166,7 @@ describe Alpine::API do
       params = CGI::parse(URI(FakeWeb.last_request.path).query)
       params['session_id'][0].should == mock_session_id.to_s
       params['workfile_id'][0].should == work_flow.id.to_s
-      params['database_id'][0].should == work_flow.execution_location.id.to_s
+      params['database_id'][0].should == work_flow.execution_locations.first.id.to_s
       params['hdfs_data_source_id'][0].should be_nil
     end
 
@@ -192,7 +192,7 @@ describe Alpine::API do
         params = CGI::parse(URI(FakeWeb.last_request.path).query)
         params['session_id'][0].should == mock_session_id.to_s
         params['workfile_id'][0].should == task.payload.id.to_s
-        params['database_id'][0].should == task.payload.execution_location.id.to_s
+        params['database_id'][0].should == task.payload.execution_locations.first.id.to_s
         params['hdfs_data_source_id'][0].should be_nil
         params['job_task_id'][0].should == task.id.to_s
       end
@@ -206,7 +206,7 @@ describe Alpine::API do
         params = CGI::parse(URI(FakeWeb.last_request.path).query)
 
         params['database_id'][0].should be_nil
-        params['hdfs_data_source_id'][0].should == work_flow.execution_location.id.to_s
+        params['hdfs_data_source_id'][0].should == work_flow.execution_locations.first.id.to_s
       end
     end
   end

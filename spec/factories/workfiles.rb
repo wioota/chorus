@@ -6,7 +6,11 @@ FactoryGirl.define do
     workspace
     description 'A nice description'
     file_name 'machine_learning.afm'
-    association :execution_location, :factory => :gpdb_database
+
+    after(:create) do |workfile, evaluator|
+      database = FactoryGirl.create(:gpdb_database)
+      workfile.workfile_execution_locations.create(execution_location: database)
+    end
   end
 
   factory :workfile do

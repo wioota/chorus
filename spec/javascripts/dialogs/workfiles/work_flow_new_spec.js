@@ -48,7 +48,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
         beforeEach(function() {
             spyOn(this.dialog.executionLocationList, "ready").andReturn(true);
             this.dialog.executionLocationList.trigger('change');
-            spyOn(this.dialog.executionLocationList, 'getSelectedDataSources');
+            spyOn(this.dialog.executionLocationList, 'getSelectedLocations');
         });
 
         describe("with valid form values", function() {
@@ -62,14 +62,15 @@ describe("chorus.dialogs.WorkFlowNew", function() {
 
             describe("selecting a gpdb data source", function() {
                 beforeEach(function() {
-                    this.dialog.executionLocationList.getSelectedDataSources.andReturn([this.sandboxDatabase.dataSource()]);
+                    this.dialog.executionLocationList.getSelectedLocations.andReturn([this.sandboxDatabase]);
                 });
 
                 it("submits the form with the right parameters", function() {
                     this.dialog.$("form").submit();
                     var params = this.server.lastCreate().params();
                     expect(params["workfile[entity_subtype]"]).toEqual('alpine');
-                    expect(parseInt(this.server.lastCreate().params()["workfile[database_id]"], 10)).toEqual(this.sandboxDatabase.id);
+                    expect(this.server.lastCreate().params()["workfile[execution_locations][0][id]"]).toEqual(this.sandboxDatabase.id.toString());
+                    expect(this.server.lastCreate().params()["workfile[execution_locations][0][entity_type]"]).toEqual('gpdb_database');
                 });
 
                 describe("when the workfile creation succeeds", function() {
@@ -108,15 +109,15 @@ describe("chorus.dialogs.WorkFlowNew", function() {
 
             context("when selecting hdfs data source", function() {
                 beforeEach(function() {
-                    this.hdfsDataSource = backboneFixtures.hdfsDataSource();
-                    this.hdfsDataSource.id = '123Garbage';
-                    this.dialog.executionLocationList.getSelectedDataSources.andReturn([this.hdfsDataSource]);
+                    this.hdfsDataSource = backboneFixtures.hdfsDataSource({id: '123Garbage'});
+                    this.dialog.executionLocationList.getSelectedLocations.andReturn([this.hdfsDataSource]);
                 });
 
                 it("submits the form with the right parameters", function() {
                     this.dialog.$('form').submit();
                     expect(this.server.lastCreate().params()["workfile[entity_subtype]"]).toEqual('alpine');
-                    expect(this.server.lastCreate().params()["workfile[hdfs_data_source_id]"]).toEqual(this.hdfsDataSource.get('id'));
+                    expect(this.server.lastCreate().params()["workfile[execution_locations][0][id]"]).toEqual(this.hdfsDataSource.get('id'));
+                    expect(this.server.lastCreate().params()["workfile[execution_locations][0][entity_type]"]).toEqual('hdfs_data_source');
                 });
             });
         });

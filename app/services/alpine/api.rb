@@ -99,8 +99,10 @@ module Alpine
         workfile_id: work_flow.id
       }
       params[:job_task_id] = options[:task].id if options[:task]
-      params.merge!({database_id: work_flow.execution_location_id}) if work_flow.execution_location_type == 'GpdbDatabase'
-      params.merge!({hdfs_data_source_id: work_flow.execution_location_id}) if work_flow.execution_location_type == 'HdfsDataSource'
+
+      execution_location = work_flow.execution_locations.first
+      params.merge!({database_id: execution_location.id}) if execution_location.is_a?(GpdbDatabase)
+      params.merge!({hdfs_data_source_id: execution_location.id}) if execution_location.is_a?(HdfsDataSource)
 
       "/alpinedatalabs/main/chorus.do?#{params.to_query}"
     end
