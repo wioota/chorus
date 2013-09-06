@@ -50,14 +50,14 @@ describe("chorus.models.AlpineWorkfile", function() {
 
             expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
             expect(url).toContainQueryParams({
-                database_id: 'this_is_a_gpdb_database_id',
+                "database_id[]": 'this_is_a_gpdb_database_id',
                 file_name: "hello.afm",
                 workfile_id: "23",
                 session_id: "hex",
                 method: "chorusEntry",
                 "dataset_id[]": ["3", "4", "5" ]
             });
-            expect(url).not.toContainQueryParams({hdfs_data_source_id: 'this_is_a_hadoop_id'});
+            expect(url).not.toContainQueryParams({"hdfs_data_source_id[]": 'this_is_a_hadoop_id'});
         });
     });
 
@@ -81,14 +81,14 @@ describe("chorus.models.AlpineWorkfile", function() {
 
                 expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
                 expect(url).toContainQueryParams({
-                    hdfs_data_source_id: 'this_is_a_hadoop_id',
+                    "hdfs_data_source_id[]": 'this_is_a_hadoop_id',
                     file_name: "hello.afm",
                     workfile_id: "23",
                     session_id: "hex",
                     method: "chorusEntry",
                     "hdfs_dataset_id[]": [4,5,6]
                 });
-                expect(url).not.toContainQueryParams({database_id: 'this_is_a_gpdb_database_id'});
+                expect(url).not.toContainQueryParams({"database_id[]": 'this_is_a_gpdb_database_id'});
             });
         });
     });
@@ -108,8 +108,8 @@ describe("chorus.models.AlpineWorkfile", function() {
 
             expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
             expect(url).toContainQueryParams({
-                hdfs_data_source_id: 'this_is_a_hadoop_id',
-                database_id: this.model.get('executionLocations')[1].id,
+                "hdfs_data_source_id[]": 'this_is_a_hadoop_id',
+                "database_id[]": this.model.get('executionLocations')[1].id,
                 file_name: this.model.get('fileName'),
                 workfile_id: this.model.id,
                 session_id: "hex",
@@ -134,8 +134,8 @@ describe("chorus.models.AlpineWorkfile", function() {
 
                 expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
                 expect(url).toContainQueryParams({
-                    database_id: 'this_is_a_gpdb_database_id',
-                    hdfs_data_source_id: 'this_is_a_hadoop_id',
+                    "database_id[]": 'this_is_a_gpdb_database_id',
+                    "hdfs_data_source_id[]": 'this_is_a_hadoop_id',
                     file_name: this.model.get('fileName'),
                     workfile_id: this.model.id,
                     session_id: "hex",

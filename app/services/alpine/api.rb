@@ -100,9 +100,15 @@ module Alpine
       }
       params[:job_task_id] = options[:task].id if options[:task]
 
-      execution_location = work_flow.execution_locations.first
-      params.merge!({database_id: execution_location.id}) if execution_location.is_a?(GpdbDatabase)
-      params.merge!({hdfs_data_source_id: execution_location.id}) if execution_location.is_a?(HdfsDataSource)
+      categorized_locations = work_flow.execution_locations.reduce({:hdfs_data_source_id => [], :database_id => []}) do |obj, source|
+        case source
+          when HdfsDataSource then obj[:hdfs_data_source_id] << source.id
+          when GpdbDatabase then obj[:database_id] << source.id
+          else #ignore
+        end
+        obj
+      end
+      params.merge!(categorized_locations)
 
       "/alpinedatalabs/main/chorus.do?#{params.to_query}"
     end

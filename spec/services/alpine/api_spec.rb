@@ -2,10 +2,13 @@ require 'spec_helper'
 
 describe Alpine::API do
   let(:alpine_base_uri) { 'http://localhost:8090' }
-  let(:work_flow) { workfiles('alpine_flow') }
+  let(:work_flow) { workfiles('multiple_data_source_workflow') }
   let(:config) { ChorusConfig.instance }
   let(:user) { users(:admin) }
   let(:mock_session_id) { 'fortytwo' }
+  let(:database_ids) { work_flow.execution_locations.select { |source| source.is_a? GpdbDatabase }.map(&:id).map(&:to_s) }
+  let(:hadoop_ids) { work_flow.execution_locations.select { |source| source.is_a? HdfsDataSource }.map(&:id).map(&:to_s) }
+
   subject { Alpine::API.new config: config, user: user }
 
   before do
@@ -166,8 +169,8 @@ describe Alpine::API do
       params = CGI::parse(URI(FakeWeb.last_request.path).query)
       params['session_id'][0].should == mock_session_id.to_s
       params['workfile_id'][0].should == work_flow.id.to_s
-      params['database_id'][0].should == work_flow.execution_locations.first.id.to_s
-      params['hdfs_data_source_id'][0].should be_nil
+      params['database_id[]'].should =~ database_ids
+      params['hdfs_data_source_id[]'].should =~ hadoop_ids
     end
 
     it 'raises exception if the request is not a 200' do
@@ -184,6 +187,7 @@ describe Alpine::API do
 
     context "when called with a task" do
       let(:task) { job_tasks(:rwft) }
+      let(:work_flow) { task.payload }
 
       it 'makes a POST request with job_task_id' do
         register_run_success_post
@@ -192,21 +196,9 @@ describe Alpine::API do
         params = CGI::parse(URI(FakeWeb.last_request.path).query)
         params['session_id'][0].should == mock_session_id.to_s
         params['workfile_id'][0].should == task.payload.id.to_s
-        params['database_id'][0].should == task.payload.execution_locations.first.id.to_s
-        params['hdfs_data_source_id'][0].should be_nil
         params['job_task_id'][0].should == task.id.to_s
-      end
-    end
-
-    context "when the workflow's execution_lcoation is an HDFS" do
-      let(:work_flow) { workfiles(:alpine_hadoop_dataset_flow) }
-      it "replaces database_id with hdfs_data_source_id" do
-        register_run_success_post
-        subject.run_work_flow(work_flow)
-        params = CGI::parse(URI(FakeWeb.last_request.path).query)
-
-        params['database_id'][0].should be_nil
-        params['hdfs_data_source_id'][0].should == work_flow.execution_locations.first.id.to_s
+        params['database_id[]'].should =~ database_ids
+        params['hdfs_data_source_id[]'].should =~ hadoop_ids
       end
     end
   end

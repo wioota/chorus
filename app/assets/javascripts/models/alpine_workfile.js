@@ -48,12 +48,12 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
         });
 
         if (hadoops.length > 0) {
-            queryParams.hdfs_data_source_id = hadoops;
+            queryParams["hdfs_data_source_id[]"] = hadoops;
             if(this.get("hdfsDatasetIds")) queryParams["hdfs_dataset_id[]"] = this.get("hdfsDatasetIds");
         }
 
         if (databases.length > 0) {
-            queryParams.database_id = databases;
+            queryParams["database_id[]"] = databases;
             if (this.get("datasetIds")) queryParams["dataset_id[]"] = this.get("datasetIds");
         }
 
