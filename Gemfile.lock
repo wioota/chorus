@@ -201,7 +201,6 @@ GEM
       thor (>= 0.14, < 2.0)
     jruby-openssl (0.8.8)
       bouncy-castle-java (>= 1.5.0147)
-    jshint_on_rails (1.0.3)
     json (1.7.7)
     json (1.7.7-java)
     license_finder (0.8.2)
@@ -403,7 +402,6 @@ DEPENDENCIES
   journey
   jquery-rails (= 2.1.4)
   jruby-openssl
-  jshint_on_rails
   license_finder (~> 0.8.1)
   logger-syslog
   messengerjs-rails

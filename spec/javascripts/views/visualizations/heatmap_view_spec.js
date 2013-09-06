@@ -5,23 +5,12 @@ describe("chorus.views.visualizations.Heatmap", function() {
 
     var leftX   = chorus.svgHelpers.leftX,
         rightX  = chorus.svgHelpers.rightX,
-        width   = chorus.svgHelpers.width,
-        height  = chorus.svgHelpers.height,
-        centerX = chorus.svgHelpers.centerX,
         topY    = chorus.svgHelpers.topY,
-        bottomY = chorus.svgHelpers.bottomY,
-        centerY = chorus.svgHelpers.centerY;
+        bottomY = chorus.svgHelpers.bottomY;
 
     beforeEach(function() {
         this.addMatchers(chorus.svgHelpers.matchers);
         this.addMatchers({
-            toAllBeEqual: function() {
-                var firstValue = this.actual[0];
-                return _.all(this.actual, function(element) {
-                    return _.isEqual(element, firstValue);
-                });
-            },
-
             toBeDarkerThan: function(el) {
                 var fill1 = $.color.extract($(this.actual), "fill"),
                     fill2 = $.color.extract($(el), "fill");
@@ -104,7 +93,6 @@ describe("chorus.views.visualizations.Heatmap", function() {
                 }, this);
 
                 _.each(rows, function(row, i) {
-                    var bin = this.bins.eq(i);
                     var x = row.x,
                         y = row.y;
 

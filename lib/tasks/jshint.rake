@@ -1,39 +1,24 @@
-unless Rails.env.production?
-  Rake::Task["jshint"].clear
-  desc "Run JSHint check on selected Javascript files"
-  task :jshint do
-    include_paths = JSHint::Utils.paths_from_command_line('paths')
+JSHINT_RAKE_TASK_COMPATIBILITY_MESSAGE = <<EOT
+This rake task is included only for compatibility with old git pre-commit hooks that might be floating around.
+Please run script/lint_all.sh or script/lint_changed.sh directly instead.
+EOT
 
-    lint = JSHint::Lint.new paths: include_paths, config_path: 'config/jshint.yml'
-    lint.run
+task :jshint do
+  puts JSHINT_RAKE_TASK_COMPATIBILITY_MESSAGE
+  sh("script/lint_all.sh")
+end
+task :lint => :jshint
+task :hint => :jshint
+task :jslint => :jshint
+
+namespace :jshint do
+  task :all do
+    puts JSHINT_RAKE_TASK_COMPATIBILITY_MESSAGE
+    sh("script/lint_all.sh")
   end
 
-  namespace :jshint do
-    desc "Run JSHint check on selected Javascript spec files"
-    task :specs do
-      include_paths = JSHint::Utils.paths_from_command_line('paths')
-
-      lint = JSHint::Lint.new paths: include_paths, config_path: 'config/jshint_specs.yml'
-      lint.run
-    end
-
-    task :all => ['jshint', 'jshint:specs']
-
-    task :changed do
-      files = `git diff --cached --name-only --diff-filter=ACM`.split("\n")
-      javascript = files.select { |file| file.ends_with?('.js') }
-      production_js = javascript.select { |file| file.starts_with?('app/assets') }.join(',')
-      spec_js = javascript.select { |file| file.starts_with?('spec') }.join(',')
-
-      unless spec_js.empty?
-        ENV['paths'] = spec_js
-        Rake::Task['jshint:specs'].invoke
-      end
-
-      unless production_js.empty?
-        ENV['paths'] = production_js
-        Rake::Task['jshint'].invoke
-      end
-    end
+  task :changed do
+    puts JSHINT_RAKE_TASK_COMPATIBILITY_MESSAGE
+    sh("script/lint_changed.sh")
   end
 end

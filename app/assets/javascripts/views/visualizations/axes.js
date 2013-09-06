@@ -107,7 +107,7 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
 
         this.rotateTickLabelsIfNeeded();
 
-        var testAxisLabel = this.el.append("svg:text")
+        this.el.append("svg:text")
             .text(this.axisLabel)
             .attr("class", "axis_label");
 
@@ -154,7 +154,6 @@ chorus.views.visualizations.XAxis = chorus.views.visualizations.Axis.extend({
     },
 
     render: function() {
-        var scale = this.scale();
         var tickScale = this.tickScale();
 
         var self = this;
@@ -283,7 +282,6 @@ chorus.views.visualizations.YAxis = chorus.views.visualizations.Axis.extend({
         var self = this;
         this.el = this.container.append("svg:g").attr("class", "yaxis");
 
-        var scale = this.scale();
         var tickScale = this.tickScale();
 
         // draw axis label

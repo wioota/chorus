@@ -9,7 +9,6 @@ chorus.views.SearchDataset = chorus.views.SearchItemBase.extend({
             iconUrl: this.model.iconUrl()
         });
 
-        var workspaces;
         if (this.model.get("workspaces")) {
             context.workspaces = this.model.get("workspaces");
         } else if (this.model.get("workspace")) {

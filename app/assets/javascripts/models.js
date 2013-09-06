@@ -73,7 +73,6 @@ chorus.models = {
                 options || (options = {});
                 options.wait = true;
                 var error = options.error;
-                var model = this;
                 options.error = function(model, xhr) {
                     model.handleRequestFailure("destroyFailed", xhr);
                     if (error) error(model);

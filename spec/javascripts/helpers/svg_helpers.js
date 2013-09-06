@@ -47,12 +47,8 @@
 
     var leftX = chorus.svgHelpers.leftX,
         rightX = chorus.svgHelpers.rightX,
-        centerX = chorus.svgHelpers.centerX,
         topY = chorus.svgHelpers.topY,
-        bottomY = chorus.svgHelpers.bottomY,
-        centerY = chorus.svgHelpers.centerY,
-        height = chorus.svgHelpers.height,
-        width = chorus.svgHelpers.width;
+        bottomY = chorus.svgHelpers.bottomY;
 
     chorus.svgHelpers.matchers = {
         toBeVertical: function() {

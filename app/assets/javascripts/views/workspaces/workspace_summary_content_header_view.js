@@ -23,13 +23,13 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
     resourcesLoaded : function() {
         this.truncatedSummary = new chorus.views.TruncatedText({model:this.model, attribute:"summary", attributeIsHtmlSafe: true, extraLine: true});
         this.activityListHeader = new chorus.views.ActivityListHeader({
-              model: this.model,
-              allTitle: this.model.get("name"),
-              insightsTitle: this.model.get("name"),
-              tagBox: new chorus.views.TagBox({
-                  model: this.model,
-                  workspaceIdForTagLink: this.model.id
-              })
+            model: this.model,
+            allTitle: this.model.get("name"),
+            insightsTitle: this.model.get("name"),
+            tagBox: new chorus.views.TagBox({
+                model: this.model,
+                workspaceIdForTagLink: this.model.id
+            })
         });
     },
 

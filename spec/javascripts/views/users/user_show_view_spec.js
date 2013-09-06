@@ -38,7 +38,6 @@ describe("chorus.views.UserShow", function() {
 
             it("renders a profile image for the user", function() {
                 var image = this.view.$(".edit_photo img");
-                var username = this.model.get("username");
                 expect(image.attr('src').indexOf(this.model.fetchImageUrl())).toBe(0);
             });
 

@@ -26,7 +26,7 @@ describe("chorus.views.DataTab", function () {
             });
 
             context("when the schema fetches complete", function () {
-                var datasets, schemas;
+                var schemas;
                 beforeEach(function () {
                     schemas = new chorus.collections.SchemaSet([
                         backboneFixtures.schema({name:"Schema 1"}),

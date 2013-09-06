@@ -167,7 +167,6 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
     });
 
     it("has directions", function() {
-        var sandbox = chorus.page.workspace.sandbox();
         expect(this.dialog.$('.directions')).toContainTranslation("dataset.import.table.new.directions", {
             tablename_input_field: ''
         });

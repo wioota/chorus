@@ -2,7 +2,6 @@ chorus.models.SchemaFunction = chorus.models.Base.extend({
     constructorName: "SchemaFunction",
 
     toText: function() {
-        var argNames = this.get('argNames');
         var functionArguments = this.getFunctionArguments();
 
         var schemaName = this.safePGName(this.get("schemaName"));

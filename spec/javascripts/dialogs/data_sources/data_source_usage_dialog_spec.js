@@ -59,7 +59,6 @@ describe("chorus.dialogs.DataSourceUsage", function() {
                 var zipped = _.zip(this.dialog.$("li"), this.workspaces);
                 _.each(zipped, function(z) {
                     var el = $(z[0]);
-                    var workspace = z[1];
                     expect(el.find('.size_text')).toContainText("95 MB");
                 });
             });
@@ -94,7 +93,6 @@ describe("chorus.dialogs.DataSourceUsage", function() {
                     var zipped = _.zip(this.dialog.$("li"), this.workspaces);
                     _.each(zipped, function(z) {
                         var el = $(z[0]);
-                        var workspace = z[1];
                         expect(el.find(".used").width()).toBeLessThan(3);
                     });
                 });

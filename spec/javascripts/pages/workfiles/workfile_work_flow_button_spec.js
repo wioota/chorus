@@ -47,8 +47,8 @@ describe("workfile work flow button", function () {
         });
 
         it("does not apply the plugin multiple times", function () {
-            var view1 = new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
-            var view2 = new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
+            new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
+            new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
             this.view = new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
             this.view.render();
             this.view.$("button.new_workfile").click();

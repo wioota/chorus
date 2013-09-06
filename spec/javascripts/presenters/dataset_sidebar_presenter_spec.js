@@ -274,7 +274,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
     });
 
     context("with a workspace dataset", function() {
-        var presenter, sidebar, resource;
+        var presenter, resource;
         beforeEach(function() {
             resource = backboneFixtures.workspaceDataset.datasetTable();
             resource.workspace()._sandbox = new chorus.models.Sandbox({ id: 123 });

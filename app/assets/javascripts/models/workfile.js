@@ -1,6 +1,4 @@
 (function() {
-    var imageRegex = /^image\//;
-    var textRegex = /^text\//;
     var extensionRegex = /\.([^\.]+)$/;
     var IMAGE = 'image';
     var SQL = 'sql';
@@ -22,8 +20,6 @@
         },
 
         urlTemplate: function(options) {
-            var method = options && options.method;
-
             if(this.isNew()) {
                 return "workspaces/{{workspace.id}}/workfiles";
             }

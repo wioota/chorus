@@ -130,8 +130,6 @@ describe("chorus.views.CommentList", function() {
                 setLoggedInUser({id: this.comment1.get("author").id});
                 this.view.render();
 
-                var commentId = this.view.$(".delete_link").data("commentId");
-
                 // put view in page for correct alert click handling
                 this.page = new chorus.pages.Base();
                 chorus.bindModalLaunchingClicks(this.page);

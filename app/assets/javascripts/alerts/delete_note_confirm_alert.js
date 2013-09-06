@@ -4,8 +4,6 @@ chorus.alerts.DeleteNoteConfirmAlert = chorus.alerts.ModelDelete.extend({
     makeModel: function() {
         this._super("makeModel", arguments);
 
-        var entityId = this.options.entityId;
-        var entityType = this.options.entityType;
         var commentId = this.options.commentId;
 
         if (commentId) {

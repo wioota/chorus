@@ -106,8 +106,6 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
 
         var $content = $("<ul class='hdfs_link_menu'/>");
 
-        var $li = $("<li/>");
-
         var pathSegments = this.hdfsEntry.pathSegments();
         var maxLength = 20;
 

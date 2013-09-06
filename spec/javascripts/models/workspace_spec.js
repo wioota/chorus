@@ -1,5 +1,4 @@
 describe("chorus.models.Workspace", function() {
-    var models = chorus.models;
     beforeEach(function() {
         this.model = backboneFixtures.workspace({
             id: 123,

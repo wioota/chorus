@@ -8,10 +8,10 @@ chorus.views.WorkfileHeader = chorus.views.Base.extend({
     },
 
     setup: function() {
-       this.tagBox = new chorus.views.TagBox({
-           model: this.model,
-           workspaceIdForTagLink: this.model.workspace().id
-       });
+        this.tagBox = new chorus.views.TagBox({
+            model: this.model,
+            workspaceIdForTagLink: this.model.workspace().id
+        });
     },
 
     additionalContext: function() {

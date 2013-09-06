@@ -205,7 +205,7 @@ describe("chorus.views.DatasetFilter", function() {
                 });
 
                 it("adds a qtip with invalid input", function() {
-                    var qtipElement = stubQtip();
+                    stubQtip();
 
                     this.view.map.performValidation.andCallFake(function() {
                         this.errors = { month: "bad month" };

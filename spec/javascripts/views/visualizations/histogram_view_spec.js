@@ -67,7 +67,7 @@ describe("chorus.views.visualizations.Histogram", function() {
         it("starts the bars on/near the x axis", function() {
             var $bars = this.view.$("g.bar").find("rect");
             var bottomY = parseFloat($(this.view.$("line.xaxis")).attr("y1"));
-            var bottoms = _.map($bars, function(bar) {
+            _.each($bars, function(bar) {
                 expect(parseFloat($(bar).attr("y"))+parseFloat($(bar).attr("height"))).toBeCloseTo(bottomY);
             });
         });
@@ -77,7 +77,6 @@ describe("chorus.views.visualizations.Histogram", function() {
             expect($(gridRect[0]).attr("class")).toBe("bar");
             expect($(gridRect[gridRect.length-1]).attr("class")).toBe("grid");
         });
-
     });
 });
 

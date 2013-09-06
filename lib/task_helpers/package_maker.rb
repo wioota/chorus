@@ -31,8 +31,7 @@ module PackageMaker
     config/database.yml.example
     config/deploy.yml
     config/jetpack.yml
-    config/jshint.yml
-    config/jshint_specs.yml
+    config/jshint.json
     config/license_finder.yml
     lib/libraries
   }

@@ -5,34 +5,10 @@ describe("chorus.views.Activity", function() {
         });
     }
 
-    function itRendersEditLink() {
-        it("displays an edit link", function () {
-            var editLink = this.view.$(".activity_content .edit_link");
-            expect(editLink.text()).toMatchTranslation("actions.edit");
-            expect(editLink).toHaveClass("dialog");
-            expect(editLink).toHaveData("dialog", "EditNote");
-            expect(editLink).toHaveData("activity", this.view.model);
-        });
-    }
-
     function itDoesNotDisplayEditLink() {
         it("does not display an edit link", function () {
             expect(this.view.$(".activity_content .edit_link")).not.toExist();
         });
-    }
-
-    function itShouldRenderVersionDetails(options) {
-        options || (options = {});
-
-        it("contains the version's name", function () {
-            expect(this.view.$(".activity_header")).toContainText(this.presenter.versionName);
-        });
-
-        if (options.checkLink) {
-            it("contains the version's url", function () {
-                expect(this.view.$('.activity_header a[href="' + this.presenter.versionUrl + '"]')).toExist();
-            });
-        }
     }
 
     function itShouldNotRenderAPromoteLink() {

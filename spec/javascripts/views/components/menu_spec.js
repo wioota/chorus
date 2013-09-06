@@ -1,6 +1,5 @@
 describe("chorus.views.Menu", function() {
-    var menuContainer, launchElement, models, menu,
-        onSelectSpy, onChangeSpy, onSelectSpies;
+    var menuContainer, launchElement, models, menu, onChangeSpy, onSelectSpies;
 
     beforeEach(function() {
         launchElement = $("<a/>");

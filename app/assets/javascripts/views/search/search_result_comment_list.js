@@ -18,14 +18,12 @@ chorus.views.SearchResultCommentList = chorus.views.Base.extend({
 
     showMoreComments: function(e) {
         e && e.preventDefault();
-        var $li = $(e.target).closest("li");
         this.$(".has_more_comments").addClass("hidden");
         this.$(".more_comments").removeClass("hidden");
     },
 
     showFewerComments: function(e) {
         e && e.preventDefault();
-        var $li = $(e.target).closest("li");
         this.$(".has_more_comments").removeClass("hidden");
         this.$(".more_comments").addClass("hidden");
     },

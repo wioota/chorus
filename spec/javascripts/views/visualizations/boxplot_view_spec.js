@@ -2,11 +2,9 @@ describe("chorus.views.visualizations.BoxPlot", function() {
     var leftX = chorus.svgHelpers.leftX,
         rightX = chorus.svgHelpers.rightX,
         width = chorus.svgHelpers.width,
-        height = chorus.svgHelpers.height,
         centerX = chorus.svgHelpers.centerX,
         topY = chorus.svgHelpers.topY,
-        bottomY = chorus.svgHelpers.bottomY,
-        centerY = chorus.svgHelpers.centerY;
+        bottomY = chorus.svgHelpers.bottomY;
 
     beforeEach(function() {
         this.task = backboneFixtures.boxplotTask({

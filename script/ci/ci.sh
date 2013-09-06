@@ -57,7 +57,7 @@ fi
 # start jasmine
 if $run_jasmine ; then
     rm -fr tmp/cache
-    b/rake jshint:all
+    script/lint_all.sh
     echo "Running jasmine on port $JASMINE_PORT"
     b/rake jasmine > $WORKSPACE/jasmine.log 2>&1 &
     jasmine_pid=$!

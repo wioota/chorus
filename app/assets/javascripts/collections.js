@@ -101,7 +101,6 @@ chorus.collections = {
 
             fetchAll: (function(params) {
                 var fetchPage = function(page) {
-                    var self = this;
                     this.fetch({
                         url: this.url({ page: page, per_page: 1000 }),
                         silent: true,

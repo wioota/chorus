@@ -1,19 +1,4 @@
 describe("chorus.models.Dataset", function() {
-    var objectWithEncodingIssues = {
-        schema: {
-            name: "b/a/r",
-            id: 3,
-            database: {
-                name: "%foo%",
-                id: 2,
-                dataSource: {
-                    id: 1
-                }
-            }
-        },
-        objectName: "a space"
-    };
-
     beforeEach(function() {
         this.dataset = backboneFixtures.dataset({
             id: 45,

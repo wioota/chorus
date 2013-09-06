@@ -318,8 +318,8 @@ window.Chorus = function chorus$Global() {
         if (window.location.hash.search("\\?") === -1) { return {}; }
 
         var path = window.location.hash.substring(window.location.hash.search("\\?")+1);
-        var decoded = decodeURI(path).replace(/"/g, '\\"').replace(/&/g, '","').replace(new RegExp('=', 'g'), '":"');
-//
+        var decoded = decodeURI(path).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"');
+
         return JSON.parse('{"' + decoded + '"}');
     };
 };
