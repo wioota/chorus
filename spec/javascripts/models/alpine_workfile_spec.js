@@ -41,20 +41,23 @@ describe("chorus.models.AlpineWorkfile", function() {
     });
 
     context('when the execution location is a gpdb database', function() {
+        beforeEach(function () {
+            this.model.set('executionLocations', [{ id: 'this_is_a_gpdb_database_id', entityType: 'gpdb_database' }]);
+        });
 
         it("has the right iframeUrl", function() {
             var url = this.model.iframeUrl();
 
             expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
             expect(url).toContainQueryParams({
-                database_id: this.model.get('executionLocations')[0].id,
+                database_id: 'this_is_a_gpdb_database_id',
                 file_name: "hello.afm",
                 workfile_id: "23",
                 session_id: "hex",
                 method: "chorusEntry",
                 "dataset_id[]": ["3", "4", "5" ]
             });
-            expect(url).not.toContainQueryParams({hdfs_data_source_id: this.model.get('executionLocations')[0].id});
+            expect(url).not.toContainQueryParams({hdfs_data_source_id: 'this_is_a_hadoop_id'});
         });
     });
 
@@ -66,7 +69,10 @@ describe("chorus.models.AlpineWorkfile", function() {
                     fileName: "hello.afm",
                     id: "23",
                     workspace: {id: "32"},
-                    datasetIds: [4,5,6]
+                    hdfsDatasetIds: [4,5,6],
+                    executionLocations: [
+                        { id: 'this_is_a_hadoop_id', entityType: 'hdfs_data_source' }
+                    ]
                 });
             });
 
@@ -75,14 +81,68 @@ describe("chorus.models.AlpineWorkfile", function() {
 
                 expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
                 expect(url).toContainQueryParams({
-                    hdfs_data_source_id: this.model.get('executionLocations')[0].id,
+                    hdfs_data_source_id: 'this_is_a_hadoop_id',
                     file_name: "hello.afm",
                     workfile_id: "23",
                     session_id: "hex",
                     method: "chorusEntry",
                     "hdfs_dataset_id[]": [4,5,6]
                 });
-                expect(url).not.toContainQueryParams({database_id: this.model.get('executionLocations')[0].id});
+                expect(url).not.toContainQueryParams({database_id: 'this_is_a_gpdb_database_id'});
+            });
+        });
+    });
+
+    context("when there are multiple datasources", function () {
+        beforeEach(function () {
+            this.model = backboneFixtures.workfile.alpineMultiDataSourceFlow({
+                executionLocations: [
+                { id: 'this_is_a_hadoop_id', entityType: 'hdfs_data_source' },
+                { id: 'this_is_a_gpdb_database_id', entityType: 'gpdb_database' }
+            ]
+            });
+        });
+
+        it("has the right iframeUrl", function() {
+            var url = this.model.iframeUrl();
+
+            expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
+            expect(url).toContainQueryParams({
+                hdfs_data_source_id: 'this_is_a_hadoop_id',
+                database_id: this.model.get('executionLocations')[1].id,
+                file_name: this.model.get('fileName'),
+                workfile_id: this.model.id,
+                session_id: "hex",
+                method: "chorusEntry"
+            });
+        });
+
+        context("with datasets", function () {
+            beforeEach(function () {
+                this.model = backboneFixtures.workfile.alpineMultiDataSourceFlow({
+                    datasetIds: ['1'],
+                    hdfsDatasetIds: ['10', '11'],
+                    executionLocations: [
+                        { id: 'this_is_a_hadoop_id', entityType: 'hdfs_data_source' },
+                        { id: 'this_is_a_gpdb_database_id', entityType: 'gpdb_database' }
+                    ]
+                });
+            });
+
+            it("has the right iframe url", function () {
+                var url = this.model.iframeUrl();
+
+                expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
+                expect(url).toContainQueryParams({
+                    database_id: 'this_is_a_gpdb_database_id',
+                    hdfs_data_source_id: 'this_is_a_hadoop_id',
+                    file_name: this.model.get('fileName'),
+                    workfile_id: this.model.id,
+                    session_id: "hex",
+                    method: "chorusEntry",
+                    "dataset_id[]": [1],
+                    "hdfs_dataset_id[]": [10,11]
+                });
             });
         });
     });

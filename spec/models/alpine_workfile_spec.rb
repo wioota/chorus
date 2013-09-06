@@ -236,4 +236,14 @@ describe AlpineWorkfile do
       event.workspace.should == model.workspace
     end
   end
+
+  describe "#categorized_dataset_ids" do
+    let(:workfile) { workfiles(:multiple_dataset_workflow) }
+    let(:table) { datasets(:table) }
+    let(:hdfs_set) { datasets(:hadoop) }
+
+    it "presents dataset ids categorized by type" do
+      workfile.categorized_dataset_ids.should == {:dataset_ids => [table.id], :hdfs_dataset_ids => [hdfs_set.id]}
+    end
+  end
 end

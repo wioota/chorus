@@ -34,7 +34,17 @@ describe AlpineWorkfilePresenter, :type => :view do
 
         it "does not present the execution location" do
           hash.should_not have_key(:execution_locations)
+          hash.should_not have_key(:dataset_ids)
+          hash.should_not have_key(:hdfs_dataset_ids)
         end
+      end
+    end
+
+    describe 'datasets' do
+      let(:workfile) { workfiles(:multiple_dataset_workflow) }
+      it "presents separated by type" do
+        hash.should have_key(:dataset_ids)
+        hash.should have_key(:hdfs_dataset_ids)
       end
     end
   end

@@ -22,7 +22,6 @@ class WorkfilePresenter < Presenter
         :owner => present(model.owner, :succinct => true),
       })
     end
-    workfile.merge!(model.additional_data)
     workfile
   end
 

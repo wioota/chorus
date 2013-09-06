@@ -28,7 +28,7 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
     },
 
     iframeUrl: function() {
-        var executionLocation = this.get('executionLocations')[0];
+        var executionLocations = this.get('executionLocations');
         var uri = this.alpineUrlBase();
         var queryParams = {
             file_name: this.get("fileName"),
@@ -37,13 +37,26 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
             method: "chorusEntry"
         };
 
-        if(executionLocation.entityType === 'hdfs_data_source') {
-            queryParams.hdfs_data_source_id = executionLocation.id;
-            queryParams["hdfs_dataset_id[]"] = this.get("datasetIds");
-        } else {
-            queryParams.database_id = executionLocation.id;
-            queryParams["dataset_id[]"] = this.get("datasetIds");
+        var databases = [];
+        var hadoops = [];
+        _.each(executionLocations, function (location) {
+            if(location.entityType === 'hdfs_data_source') {
+                hadoops.push(location.id);
+            } else {
+                databases.push(location.id);
+            }
+        });
+
+        if (hadoops.length > 0) {
+            queryParams.hdfs_data_source_id = hadoops;
+            if(this.get("hdfsDatasetIds")) queryParams["hdfs_dataset_id[]"] = this.get("hdfsDatasetIds");
         }
+
+        if (databases.length > 0) {
+            queryParams.database_id = databases;
+            if (this.get("datasetIds")) queryParams["dataset_id[]"] = this.get("datasetIds");
+        }
+
         uri.addQuery(queryParams);
 
         return uri.toString();

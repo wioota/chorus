@@ -151,17 +151,5 @@ describe WorkfilePresenter, :type => :view do
         end
       end
     end
-
-    context "for a model with additional_data" do
-      class WorkfileWithAdditionalData < Workfile
-        has_additional_data :test
-      end
-
-      let(:workfile) { WorkfileWithAdditionalData.new(:file_name => 'fn', :test => 'test_value') }
-
-      it "includes the additional_data values" do
-        hash['test'].should == 'test_value'
-      end
-    end
   end
 end

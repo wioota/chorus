@@ -296,6 +296,9 @@ FixtureBuilder.configure do |fbuilder|
                            }, :without_protection => true)
     hadoop_work_flow.workfile_execution_locations.create(execution_location: hdfs_data_source)
 
+    FactoryGirl.create(:work_flow, :file_name => 'multiple_data_source_workflow')
+    FactoryGirl.create(:work_flow, :file_name => 'multiple_dataset_workflow', :dataset_ids => [default_table.id, hadoop_dadoop.id])
+
     Events::WorkfileResult.by(owner).add(:workfile => work_flow, :result_id => "1", :workspace => work_flow.workspace)
 
     #HDFS Entry

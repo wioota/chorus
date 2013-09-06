@@ -4,12 +4,14 @@ FactoryGirl.define do
   factory :alpine_workfile, aliases: [:work_flow] do
     owner
     workspace
-    description 'A nice description'
-    file_name 'machine_learning.afm'
+    description "Using two datasources to #{Faker::Company.bs.downcase}."
+    file_name Faker::Company.bs
 
     after(:create) do |workfile, evaluator|
       database = FactoryGirl.create(:gpdb_database)
+      hadoop = FactoryGirl.create(:hdfs_data_source)
       workfile.workfile_execution_locations.create(execution_location: database)
+      workfile.workfile_execution_locations.create(execution_location: hadoop)
     end
   end
 

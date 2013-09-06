@@ -46,6 +46,17 @@ class AlpineWorkfile < Workfile
     @datasets ||= Dataset.where(:id => dataset_ids)
   end
 
+  def categorized_dataset_ids
+    datasets.reduce({:hdfs_dataset_ids => [], :dataset_ids => []}) do |obj, dataset|
+      case dataset
+        when HdfsDataset then obj[:hdfs_dataset_ids] << dataset.id
+        when GpdbDataset then obj[:dataset_ids] << dataset.id
+        else #ignore
+      end
+      obj
+    end
+  end
+
   def create_new_version(user, params)
     Events::WorkFlowUpgradedVersion.by(user).add(
       :workfile => self,
@@ -74,10 +85,10 @@ class AlpineWorkfile < Workfile
     workfile_execution_locations.destroy_all
 
     params[:execution_locations].each do |location|
-      source = if location[:entity_type] == 'gpdb_database'
-        GpdbDatabase.find location[:id]
-      else
-        HdfsDataSource.find location[:id]
+      source = case location[:entity_type]
+        when 'gpdb_database'    then GpdbDatabase.find location[:id]
+        when 'hdfs_data_source' then HdfsDataSource.find location[:id]
+        else #ignore
       end
 
       workfile_execution_locations.build(:execution_location => source)
