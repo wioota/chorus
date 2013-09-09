@@ -19,17 +19,14 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
             canOpen: this.model.canOpen(),
             canUpdate: this.canUpdate()
         };
-        var executionLocation = this.model.executionLocations()[0];
-
-        if (executionLocation) {
+        ctx.locationNames = _.map(this.model.executionLocations(), function (executionLocation) {
             if (executionLocation.get("entityType") === "gpdb_database") {
-                ctx.dataSourceName = executionLocation.dataSource().get("name");
-                ctx.databaseName = executionLocation.get("name");
+                return executionLocation.dataSource().get("name") + '.' + executionLocation.get("name");
             } else {
-                ctx.executionLocationIsHdfs = true;
-                ctx.dataSourceName = executionLocation.get("name");
+                return executionLocation.get("name");
             }
-        }
+        }).join(', ');
+
         return ctx;
     },
 

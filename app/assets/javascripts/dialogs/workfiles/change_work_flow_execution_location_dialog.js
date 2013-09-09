@@ -17,22 +17,18 @@ chorus.dialogs.ChangeWorkFlowExecutionLocation = chorus.dialogs.Base.extend({
         this.listenTo(this.model, "saved", this.saved);
         this.listenTo(this.model, "saveFailed", this.saveFailed);
 
-        var options;
-        var executionLocation = this.model.executionLocations()[0];
-        if (executionLocation) {
-            if (executionLocation.get('entityType') === 'hdfs_data_source') {
-                options = {
-                    dataSource: executionLocation
-                };
+        var options = _.map(this.model.executionLocations(), function (location) {
+            if (location.get('entityType') === 'hdfs_data_source') {
+                return { dataSource: location };
             } else {
-                options = {
-                    database: executionLocation,
-                    dataSource: executionLocation.dataSource()
+                return {
+                    database: location,
+                    dataSource: location.dataSource()
                 };
             }
-        }
+        });
 
-        this.executionLocationList = new chorus.views.WorkFlowExecutionLocationPickerList(options);
+        this.executionLocationList = new chorus.views.WorkFlowExecutionLocationPickerList({pickerOptionSet: options});
 
         this.listenTo(this.executionLocationList, "change", this.enableOrDisableSubmitButton);
         this.listenTo(this.executionLocationList, "error", this.showErrors);
@@ -59,5 +55,9 @@ chorus.dialogs.ChangeWorkFlowExecutionLocation = chorus.dialogs.Base.extend({
 
     enableOrDisableSubmitButton: function() {
         this.$("button.submit").prop("disabled", !this.executionLocationList.ready());
+    },
+
+    postRender: function () {
+        this.enableOrDisableSubmitButton();
     }
 });

@@ -7,14 +7,10 @@
         {{/if}}
     </li>
     <li>
-        {{#if executionLocations}}
-            {{#if executionLocationIsHdfs}}
-                <span class="execution_location">{{t "work_flows.show.hdfs_execution_location" dataSourceName=dataSourceName}}</span>
-            {{else}}
-                <span class="execution_location">{{t "work_flows.show.gpdb_execution_location" dataSourceName=dataSourceName databaseName=databaseName}}</span>
-            {{/if}}
+        {{#if locationNames}}
+            <span class="execution_locations">{{t "work_flows.show.execution_locations" locationNames=locationNames}}</span>
         {{else}}
-        <span class="execution_location">{{t "work_flows.show.no_execution_location"}}</span>
+            <span class="execution_location">{{t "work_flows.show.no_execution_location"}}</span>
         {{/if}}
     </li>
     {{#if canUpdate}}<li>

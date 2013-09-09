@@ -1,9 +1,20 @@
+.remove_source {
+    margin: 0px 0px 0px 12px;
+    position: absolute;
+    right: 50px;
+    bottom: 7px;
+}
+
 .schema_picker, .database_picker, .location_picker {
     a {
         font-size: 13px;
     }
 
     $select_width: 375px;
+
+    .execution_location_picker {
+        position: relative;
+    }
 
     .half-width {
         width: $select_width;
@@ -16,10 +27,6 @@
 
     .data_source {
         margin-right: 25px;
-    }
-
-    .data_source .header_container {
-        margin-top: 0;
     }
 
     .header_container {

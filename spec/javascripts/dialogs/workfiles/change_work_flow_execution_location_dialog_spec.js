@@ -33,8 +33,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
 
         context("pre-populating", function() {
             it("passes the database and the gpdb data source to the picker", function() {
-                expect(this.dialog.executionLocationList.getSelectedDatabases()[0].id).toEqual(this.executionLocations[0].get('id'));
-                expect(this.dialog.executionLocationList.getSelectedDataSources()[0].id).toEqual(this.executionLocations[0].dataSource().get('id'));
+                expect(this.dialog.executionLocationList.getSelectedLocations()[0].id).toEqual(this.executionLocations[0].get('id'));
             });
         });
 
@@ -94,10 +93,9 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
         });
 
         context("pre-populating", function() {
-
             it("only passes the data source to the picker", function() {
-                expect(this.dialog.executionLocationList.options.database).toBeUndefined();
-                expect(this.dialog.executionLocationList.options.dataSource.attributes).toEqual(this.executionLocations[0].attributes);
+                expect(this.dialog.executionLocationList.options.pickerOptionSet[0].database).toBeUndefined();
+                expect(this.dialog.executionLocationList.options.pickerOptionSet[0].dataSource.attributes).toEqual(this.executionLocations[0].attributes);
             });
         });
 
@@ -157,6 +155,18 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
 
         it("renders an unselected picker", function () {
             expect(this.dialog.executionLocationList.ready()).toBeFalsy();
+        });
+    });
+
+    context("when the model has multiple execution locations", function () {
+        beforeEach(function () {
+            this.model = backboneFixtures.workfile.alpineMultiDataSourceFlow();
+            this.dialog = new chorus.dialogs.ChangeWorkFlowExecutionLocation({ model: this.model });
+            this.dialog.render();
+        });
+
+        it("shows all the selections on load", function () {
+            expect(this.dialog.$('.execution_location_picker').length).toEqual(2);
         });
     });
 

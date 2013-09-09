@@ -2,9 +2,23 @@ chorus.views.WorkFlowExecutionLocationPicker = chorus.views.LocationPicker.BaseV
     constructorName: 'WorkFlowExecutionLocationPicker',
     templateName: "execution_location_picker",
 
+    events: {
+        'click a.remove_source': 'remove'
+    },
+
     subviews: {
         ".data_source": "dataSourceView",
         ".database": "databaseView"
+    },
+
+    remove: function (e) {
+        e && e.preventDefault();
+        this.trigger('remove', this);
+        this.teardown();
+    },
+
+    additionalContext: function () {
+        return this.options;
     },
 
     buildSelectorViews: function() {

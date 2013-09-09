@@ -28,28 +28,20 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
             expect(chorus.router.navigate).toHaveBeenCalledWith(this.model.workFlowShowUrl());
         });
 
-        context("when the execution location is a Greenplum database", function() {
-            it("shows the data source name and database name", function() {
-                var database = this.model.executionLocations()[0];
-                var dataSource = database.dataSource();
-                expect(this.view.$('.execution_location')).toContainTranslation("work_flows.show.gpdb_execution_location", {
-                    dataSourceName: dataSource.get("name"),
-                    databaseName: database.get("name")
-                });
-            });
-        });
-        context("when the execution location is an Hdfs Data Source", function() {
+        context("when the execution location has multiple data sources", function() {
             beforeEach(function() {
-                this.model = backboneFixtures.workfile.alpineHdfsDatasetFlow();
+                this.model = backboneFixtures.workfile.alpineMultiDataSourceFlow();
                 this.view = new chorus.views.AlpineWorkfileContentDetails({ model: this.model });
                 this.view.render();
             });
 
             it("shows the hdfs data source name", function() {
-                var hdfsDataSource = this.model.executionLocations()[0];
-                expect(this.view.$('.execution_location')).toContainTranslation("work_flows.show.hdfs_execution_location", {
-                    dataSourceName: hdfsDataSource.get("name")
-                });
+                var database = this.model.executionLocations()[0];
+                var dataSource = database.dataSource();
+                var hdfsDataSource = this.model.executionLocations()[1];
+
+                expect(this.view.$('.execution_locations')).toContainText(dataSource.get("name") + '.' + database.get("name"));
+                expect(this.view.$('.execution_locations')).toContainText(hdfsDataSource.get("name"));
             });
         });
 

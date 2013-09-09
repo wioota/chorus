@@ -4,7 +4,7 @@ class AlpineWorkfile < Workfile
   TooManyDataBases = Class.new(StandardError)
 
   has_additional_data :dataset_ids
-  has_many :workfile_execution_locations, foreign_key: :workfile_id
+  has_many :workfile_execution_locations, foreign_key: :workfile_id, dependent: :destroy
 
   before_validation { self.content_type ='work_flow' }
   after_create :determine_execution_location
