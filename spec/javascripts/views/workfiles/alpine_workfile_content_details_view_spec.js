@@ -35,10 +35,15 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
                 this.view.render();
             });
 
-            it("shows the hdfs data source name", function() {
-                var database = this.model.executionLocations()[0];
+            it("shows all data source names", function() {
+                var hdfsDataSource = _.find(this.model.executionLocations(), function (location) {
+                    return location.attributes.entityType === 'hdfs_data_source';
+                });
+                var database = _.find(this.model.executionLocations(), function (location) {
+                    return location.attributes.entityType === 'gpdb_database';
+                });
+
                 var dataSource = database.dataSource();
-                var hdfsDataSource = this.model.executionLocations()[1];
 
                 expect(this.view.$('.execution_locations')).toContainText(dataSource.get("name") + '.' + database.get("name"));
                 expect(this.view.$('.execution_locations')).toContainText(hdfsDataSource.get("name"));
