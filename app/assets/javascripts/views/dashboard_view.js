@@ -18,20 +18,20 @@ chorus.views.Dashboard = chorus.views.Base.extend({
 
         this.workspaceList = new chorus.views.MainContentView({
             collection: this.memberWorkspaces,
-            contentHeader:chorus.views.StaticTemplate("default_content_header", {title:t("header.my_workspaces")}),
+            contentHeader: new chorus.views.StaticTemplate("default_content_header", {title:t("header.my_workspaces")}),
             contentDetails:new chorus.views.StaticTemplate("dashboard/workspace_list_content_details"),
             content:new chorus.views.DashboardWorkspaceList({ collection: this.memberWorkspaces })
         });
 
         this.projectList = new chorus.views.MainContentView({
             collection: this.projectWorkspaces,
-            contentHeader:chorus.views.StaticTemplate("default_content_header", {title:t("header.current_projects")}),
+            contentHeader: new chorus.views.StaticTemplate("default_content_header", {title:t("header.current_projects")}),
             content: new chorus.views.DashboardProjectList({ collection: this.projectWorkspaces })
         });
 
         this.dataSourceList = new chorus.views.MainContentView({
             collection: this.options.dataSourceSet,
-            contentHeader: chorus.views.StaticTemplate("default_content_header", {title:t("header.browse_data")}),
+            contentHeader: new chorus.views.StaticTemplate("default_content_header", {title:t("header.browse_data")}),
             contentDetails: new chorus.views.StaticTemplate("dashboard/data_source_list_content_details"),
             content: new chorus.views.DashboardDataSourceList({ collection: this.options.dataSourceSet })
         });
