@@ -136,7 +136,8 @@ describe("chorus.presenters.visualizations", function() {
                     { yLabel: [155.4, 197.2], xLabel: [1.8, 3.6], value: 40757, y: 4, x: 2 },
                     { yLabel: [30, 71.8], xLabel: [3.6, 5.4], value: 39631, y: 1, x: 3 },
                     { yLabel: [71.8, 113.6], xLabel: [3.6, 5.4], value: 40174, y: 2, x: 3 }
-                ]});
+                ]
+            });
 
             this.presenter = new chorus.presenters.visualizations.Heatmap(this.model);
             this.data = this.presenter.present();

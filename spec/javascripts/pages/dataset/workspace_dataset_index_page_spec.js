@@ -22,7 +22,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
         });
 
         it("fetches the workspace members", function () {
-           expect(this.workspace.members()).toHaveBeenFetched();
+            expect(this.workspace.members()).toHaveBeenFetched();
         });
 
         it("sets the workspace id, for prioritizing search", function() {
@@ -89,7 +89,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 });
 
                 it("has a 'no results' message", function() {
-                   expect(this.page.$(".browse_more")).toContainTranslation("dataset.browse_more_workspace", {linkText: "browse your data sources"});
+                    expect(this.page.$(".browse_more")).toContainTranslation("dataset.browse_more_workspace", {linkText: "browse your data sources"});
                 });
             });
 

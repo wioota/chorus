@@ -43,7 +43,7 @@
         },
 
         done: function(e, data) {
-          this.options.done(e, data);
+            this.options.done(e, data);
         },
 
         always: function() {

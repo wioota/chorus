@@ -3,7 +3,8 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
         this.workspace = backboneFixtures.workspace({
             id: '100',
             "sandboxInfo": {
-                id: 6, name: "schema",
+                id: 6,
+                name: "schema",
                 database: { id: 4, name: "db", dataSource: { id: 5, name: "dataSource" } }
             }
         });
@@ -48,7 +49,7 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
         });
 
         it("sets the workspace to pass into contentDetails", function() {
-           expect(this.page.contentDetailsOptions.workspace).toBe(this.page.workspace);
+            expect(this.page.contentDetailsOptions.workspace).toBe(this.page.workspace);
         });
 
         it("marks the workspace as a required resource", function() {

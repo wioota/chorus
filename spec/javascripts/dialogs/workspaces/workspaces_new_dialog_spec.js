@@ -36,7 +36,7 @@ describe("chorus.dialogs.WorkspacesNew", function() {
         });
 
         it("is not public by default", function() {
-           expect(this.dialog.$('input[name=public]')).not.toBeChecked();
+            expect(this.dialog.$('input[name=public]')).not.toBeChecked();
         });
 
         it('is project by default', function () {

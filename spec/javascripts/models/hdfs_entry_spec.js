@@ -1,16 +1,16 @@
 describe("chorus.models.HdfsEntry", function() {
     it("it has the right entity type", function() {
-       expect(new chorus.models.HdfsEntry().entityType).toBe("hdfs_file");
+        expect(new chorus.models.HdfsEntry().entityType).toBe("hdfs_file");
     });
 
     describe("showUrl", function() {
         context("when entry is a directory", function() {
             beforeEach(function() {
                 this.model = new chorus.models.HdfsEntry({
-                   id: 10012,
-                   hdfsDataSource: {
-                       id: 42
-                   },
+                    id: 10012,
+                    hdfsDataSource: {
+                        id: 42
+                    },
                     path: "/data/a%pct",
                     name: "%foo%",
                     isDir: true
@@ -48,15 +48,15 @@ describe("chorus.models.HdfsEntry", function() {
     describe("#parent", function() {
         it("returns the entry's parent directory", function() {
             this.model = new chorus.models.HdfsEntry({
-               id: 10012,
-               hdfsDataSource: {
-                   id: 10000
-               },
-               path: "/imports/july/21",
-               name: "injuries.csv",
-               ancestors: [{id: 2, name: "parent"}, {id: 3, name: "grandparent"}]
+                id: 10012,
+                hdfsDataSource: {
+                    id: 10000
+                },
+                path: "/imports/july/21",
+                name: "injuries.csv",
+                ancestors: [{id: 2, name: "parent"}, {id: 3, name: "grandparent"}]
 
-           });
+            });
 
             var parent = this.model.parent();
             expect(parent.get("name")).toBe("parent");
@@ -64,17 +64,17 @@ describe("chorus.models.HdfsEntry", function() {
     });
 
     describe("#content", function() {
-       it("returns the contents", function() {
-           var model = backboneFixtures.hdfsFile({ contents: ["first line", "second line"] });
-           expect(model.content()).toBe("first line\nsecond line");
-       });
+        it("returns the contents", function() {
+            var model = backboneFixtures.hdfsFile({ contents: ["first line", "second line"] });
+            expect(model.content()).toBe("first line\nsecond line");
+        });
 
-       context("when the entry is a directory", function() {
-          it("returns the empty string", function() {
-              var model = backboneFixtures.hdfsDir();
-              expect(model.content()).toBe("");
-          });
-       });
+        context("when the entry is a directory", function() {
+            it("returns the empty string", function() {
+                var model = backboneFixtures.hdfsDir();
+                expect(model.content()).toBe("");
+            });
+        });
     });
 
     describe("pathSegments", function() {
@@ -115,12 +115,12 @@ describe("chorus.models.HdfsEntry", function() {
     describe('getHdfsDataSource', function() {
         beforeEach(function() {
             this.model = new chorus.models.HdfsEntry({
-               hdfsDataSource: {
-                   id: 3,
-                   name: "obscene"
-               },
-               path: "/"
-           });
+                hdfsDataSource: {
+                    id: 3,
+                    name: "obscene"
+                },
+                path: "/"
+            });
 
             this.hdfsDataSource = this.model.getHdfsDataSource();
         });
@@ -143,12 +143,12 @@ describe("chorus.models.HdfsEntry", function() {
         context("path is not root", function() {
             it("returns the path including the filename", function() {
                 var model = new chorus.models.HdfsEntry({
-                   hdfsDataSource: {
-                       id: 3
-                   },
+                    hdfsDataSource: {
+                        id: 3
+                    },
                     path: "/",
                     name: "file.sql"
-               });
+                });
 
                 expect(model.getFullAbsolutePath()).toEqual("/file.sql");
             });

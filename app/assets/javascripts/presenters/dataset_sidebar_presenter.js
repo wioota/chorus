@@ -1,7 +1,7 @@
 chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     setup: function() {
         _.each(this.options, function(value, key) {
-           this[key] = value;
+            this[key] = value;
         }, this);
     },
 
@@ -69,7 +69,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     currentUserCanCreateWorkFlow: function () {
-      return this.workFlowsEnabled() &&
+        return this.workFlowsEnabled() &&
           !this.isChorusView() &&
           this.hasWorkspace() &&
           this.resource.workspace().currentUserCanCreateWorkFlows() &&
@@ -77,7 +77,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     currentUserCanDuplicateChorusViews: function() {
-      return this.resource.workspace().currentUserCanDuplicateChorusViews();
+        return this.resource.workspace().currentUserCanDuplicateChorusViews();
     },
 
     importsEnabled: function() {

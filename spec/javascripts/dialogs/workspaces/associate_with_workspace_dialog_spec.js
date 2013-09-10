@@ -49,7 +49,8 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
             beforeEach(function() {
                 this.model = backboneFixtures.workspaceDataset.datasetTable({
                     schema: { id: 2000002 },
-                    workspace: {id: "645"}}
+                    workspace: {id: "645"}
+                }
                 );
                 this.dialog = new chorus.dialogs.AssociateWithWorkspace({ model: this.model });
                 this.server.completeFetchFor(chorus.session.user().workspaces(), [

@@ -241,7 +241,7 @@ describe("chorus.views.Header", function() {
                     });
                    
                     it("should not search", function() {
-                       expect(chorus.router.navigate).not.toHaveBeenCalled();
+                        expect(chorus.router.navigate).not.toHaveBeenCalled();
                     });
                 });
             });

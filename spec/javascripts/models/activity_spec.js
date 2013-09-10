@@ -106,7 +106,8 @@ describe("chorus.models.Activity", function() {
         describe("#workspace", function() {
             it("returns a Workspace with the right data", function() {
                 activity = backboneFixtures.activity.sourceTableCreated({
-                    dataset: { id: 9 }, workspace: {id: 10}
+                    dataset: { id: 9 },
+                    workspace: {id: 10}
                 });
 
                 var workspace = activity.workspace();
@@ -143,7 +144,8 @@ describe("chorus.models.Activity", function() {
 
             beforeEach(function() {
                 activity = backboneFixtures.activity.sourceTableCreated({
-                    dataset: { id: 9 }, workspace: {id: 10}
+                    dataset: { id: 9 },
+                    workspace: {id: 10}
                 });
 
                 dataset = activity.dataset();
@@ -161,7 +163,8 @@ describe("chorus.models.Activity", function() {
             context("when the dataset is an HDFS Dataset", function () {
                 beforeEach(function () {
                     activity = backboneFixtures.activity.sourceTableCreated({
-                        dataset: { id: 9, entitySubtype: "HDFS" }, workspace: {id: 10}
+                        dataset: { id: 9, entitySubtype: "HDFS" },
+                        workspace: {id: 10}
                     });
 
                     dataset = activity.dataset();
@@ -544,7 +547,7 @@ describe("chorus.models.Activity", function() {
     describe("#author", function() {
         context("when author information is present", function() {
             beforeEach(function() {
-               this.model = backboneFixtures.comment();
+                this.model = backboneFixtures.comment();
             });
             it("creates a user", function() {
                 expect(this.model.author()).toBeA(chorus.models.User);

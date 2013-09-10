@@ -20,10 +20,10 @@ describe('chorus.models.WorkFlowResult', function() {
     });
 
     it("has its own page", function() {
-       expect(this.model.hasOwnPage()).toBeTruthy();
+        expect(this.model.hasOwnPage()).toBeTruthy();
     });
 
     it("opens its show url as an external page", function() {
-       expect(this.model.useExternalLink()).toBeTruthy();
+        expect(this.model.useExternalLink()).toBeTruthy();
     });
 });

@@ -106,7 +106,8 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
                     this.server.completeFetchFor(this.view.databaseView.collection, [
                         backboneFixtures.database({name: "Zoo"}),
                         backboneFixtures.database({name: "Aardvark"}),
-                        backboneFixtures.database({name: "bear"})]);
+                        backboneFixtures.database({name: "bear"})
+                    ]);
                 }
 
                 var className = _.str.underscored(type);

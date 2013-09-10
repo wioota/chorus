@@ -19,7 +19,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         });
 
         it("adds a reference to the parent to the preview SQL link's data", function() {
-           expect(this.view.$("a.preview").data("parent")).toBe(this.view);
+            expect(this.view.$("a.preview").data("parent")).toBe(this.view);
         });
 
         it("gives a reference to the aggregateColumnSet to the chorus view", function() {

@@ -4,7 +4,7 @@ describe("chorus.models.ChorusViewPreviewTask", function() {
     });
 
     it("has the right task url", function() {
-       expect(this.model.url()).toBe("/datasets/preview_sql");
+        expect(this.model.url()).toBe("/datasets/preview_sql");
     });
 
     context("when the task has an 'objectName'", function() {

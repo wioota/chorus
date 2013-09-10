@@ -7,9 +7,9 @@ describe("chorus.dialogs.RenameTag", function() {
     });
 
     describe("#render", function() {
-       it("has the tag's name in the text field", function() {
-          expect(this.input).toHaveValue("testTag");
-       });
+        it("has the tag's name in the text field", function() {
+            expect(this.input).toHaveValue("testTag");
+        });
     });
 
     describe("submitting a new tag name", function() {

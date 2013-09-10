@@ -94,14 +94,14 @@ describe("chorus.Mixins.clEditor", function() {
                 });
             });
 
-            describe("#onClickToolbarItalic", function() {
+        describe("#onClickToolbarItalic", function() {
                 it("should click the corresponding cleditorButton", function() {
                     spyOnEvent(".cleditorButton[title='Italic']", "click");
                     $('a.italic').click();
                     expect("click").toHaveBeenTriggeredOn(".cleditorButton[title='Italic']");
                 });
             });
-            describe("#onClickToolbarBullets", function() {
+        describe("#onClickToolbarBullets", function() {
                 it("should click the corresponding cleditorButton", function() {
                     spyOnEvent(".cleditorButton[title='Bullets']", "click");
                     $('a.bullets').click();
@@ -109,7 +109,7 @@ describe("chorus.Mixins.clEditor", function() {
                 });
             });
 
-            describe("#onClickToolbarNumbers", function() {
+        describe("#onClickToolbarNumbers", function() {
                 it("should click the corresponding cleditorButton", function() {
                     spyOnEvent(".cleditorButton[title='Numbering']", "click");
                     $('a.numbers').click();
@@ -117,7 +117,7 @@ describe("chorus.Mixins.clEditor", function() {
                 });
             });
 
-            describe("#onClickToolbarLink", function() {
+        describe("#onClickToolbarLink", function() {
                 it("should click the corresponding cleditorButton", function() {
                     spyOnEvent(".cleditorButton[title='Insert Hyperlink']", "click");
                     $('a.link').click();
@@ -125,7 +125,7 @@ describe("chorus.Mixins.clEditor", function() {
                 });
             });
 
-            describe("#onClickToolbarUnlink", function() {
+        describe("#onClickToolbarUnlink", function() {
                 it("should click the corresponding cleditorButton", function() {
                     spyOnEvent(".cleditorButton[title='Remove Hyperlink']", "click");
                     $('a.unlink').click();

@@ -17,8 +17,8 @@ chorus.views.TagListSidebar = chorus.views.Sidebar.extend({
     },
 
     setTag: function(tag) {
-      this.tag = tag;
-      this.render();
+        this.tag = tag;
+        this.render();
     },
 
     additionalContext: function() {

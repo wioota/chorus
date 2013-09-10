@@ -9,7 +9,8 @@ describe("chorus.views.DataSourceItem", function() {
     describe("when the model is a data source", function() {
         beforeEach(function() {
             this.model = backboneFixtures.gpdbDataSource(_.extend(this.sharedAttributes, {
-                online: true}));
+                online: true
+            }));
             this.view = new chorus.views.DataSourceItem({model: this.model});
             this.view.render();
         });

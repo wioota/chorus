@@ -31,11 +31,11 @@ describe("chorus.alerts.Error", function() {
             });
 
             it("should have the correct title", function() {
-               expect(this.alert.title).toBe("There was an error!");
+                expect(this.alert.title).toBe("There was an error!");
             });
 
             it("should have the correct body", function() {
-               expect(this.alert.body).toBe("Something failed");
+                expect(this.alert.body).toBe("Something failed");
             });
         });
     });

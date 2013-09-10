@@ -7,11 +7,11 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
 
     context("when 'showHdfsDataSources' is true", function() {
         beforeEach(function() {
-           this.databasePicker = jasmine.createSpyObj('DatabaseView', ['hide', 'isHidden']);
-           this.view = new chorus.views.LocationPicker.DataSourceView({
-               showHdfsDataSources: true,
-               childPicker: this.databasePicker
-           });
+            this.databasePicker = jasmine.createSpyObj('DatabaseView', ['hide', 'isHidden']);
+            this.view = new chorus.views.LocationPicker.DataSourceView({
+                showHdfsDataSources: true,
+                childPicker: this.databasePicker
+            });
         });
 
         it("should fetch both hdfs and gpdb data sources", function() {
@@ -39,10 +39,10 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
 
     context("when 'showHdfsDataSources' is false", function() {
         beforeEach(function() {
-           this.view = new chorus.views.LocationPicker.DataSourceView({
-               showHdfsDataSources: false
-           });
-           this.server.completeFetchAllFor(this.view.gpdbDataSources, [this.gpdbDataSource]);
+            this.view = new chorus.views.LocationPicker.DataSourceView({
+                showHdfsDataSources: false
+            });
+            this.server.completeFetchAllFor(this.view.gpdbDataSources, [this.gpdbDataSource]);
         });
 
         it("should fetch only gpdb data sources", function() {
@@ -61,8 +61,8 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
         beforeEach(function() {
             var childPicker = new chorus.views.LocationPicker.DatabaseView();
             this.view = new chorus.views.LocationPicker.DataSourceView({
-               showHdfsDataSources: false,
-               childPicker: childPicker
+                showHdfsDataSources: false,
+                childPicker: childPicker
             });
             this.view.setSelection(this.gpdbDataSource);
             this.server.completeFetchAllFor(this.view.gpdbDataSources, [this.gpdbDataSource]);

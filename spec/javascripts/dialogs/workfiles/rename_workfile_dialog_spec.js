@@ -38,7 +38,7 @@ describe("chorus.dialogs.RenameWorkfile", function() {
     });
 
     it("should have an input field containing the current file name", function(){
-       expect(this.dialog.$('input').val()).toBe("originalName");
+        expect(this.dialog.$('input').val()).toBe("originalName");
     });
 
     context("with invalid form values", function() {
@@ -108,11 +108,11 @@ describe("chorus.dialogs.RenameWorkfile", function() {
             });
 
             it("retains the original file name", function() {
-               expect(this.dialog.model.name()).toBe("originalName");
+                expect(this.dialog.model.name()).toBe("originalName");
             });
 
             it("keeps the invalid name in the input", function() {
-               expect(this.dialog.$("input").val()).toBe("newName.sql");
+                expect(this.dialog.$("input").val()).toBe("newName.sql");
             });
         });
     });

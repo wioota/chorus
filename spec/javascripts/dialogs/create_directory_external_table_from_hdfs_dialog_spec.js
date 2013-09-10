@@ -4,7 +4,8 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
         this.collection = new chorus.collections.CsvHdfsFileSet([
             backboneFixtures.hdfsFile().attributes,
             backboneFixtures.hdfsFile().attributes,
-            backboneFixtures.hdfsFile().attributes], {hdfsDataSource: {id: "234"}});
+            backboneFixtures.hdfsFile().attributes
+        ], {hdfsDataSource: {id: "234"}});
 
         this.csvOptions = {
             contents: [

@@ -337,7 +337,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 });
 
                 it("should display the correct error message", function() {
-                   expect(this.dialog.$(".errors")).toContainTranslation("field_error.ALPINE_CONNECTION_ERROR");
+                    expect(this.dialog.$(".errors")).toContainTranslation("field_error.ALPINE_CONNECTION_ERROR");
                 });
             });
         });

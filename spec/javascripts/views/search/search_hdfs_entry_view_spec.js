@@ -95,7 +95,7 @@ describe("chorus.views.SearchHdfsEntry", function() {
             this.view.render();
         });
 
-         it('should render the data source location', function() {
+        it('should render the data source location', function() {
             var $inst = this.view.$(".data_source a");
 
             expect($inst.text()).toBe(this.model.getHdfsDataSource().name());

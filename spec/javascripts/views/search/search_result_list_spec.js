@@ -24,8 +24,8 @@ describe("chorus.views.SearchResultList", function() {
         });
 
         it("passes the workspace id for tag links as an option to the item views", function() {
-             expect(this.view.list.options.listItemOptions.workspaceIdForTagLink).toBe(123);
-        });
+                expect(this.view.list.options.listItemOptions.workspaceIdForTagLink).toBe(123);
+            });
 
         it("uses multiListMode (so that selecting all items of a single type doesn't select all items on the page)", function() {
             expect(this.view.list.multiListMode).toBeTruthy();

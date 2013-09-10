@@ -22,7 +22,7 @@ describe("chorus.views.ListContentDetails", function() {
             });
 
             it("contains a div to hold the buttons", function(){
-               expect(this.view.$("div.button_holder")).toExist();
+                expect(this.view.$("div.button_holder")).toExist();
             });
         });
 

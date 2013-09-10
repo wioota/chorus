@@ -20,11 +20,11 @@ describe("chorus.views.KaggleUserSidebar", function () {
         });
 
         it("does not show the user information sidebar", function() {
-           expect(this.view.$('.tab_control')).toBeEmpty();
+            expect(this.view.$('.tab_control')).toBeEmpty();
         });
 
         it("does not show the 'Compose message' link", function() {
-           expect(this.view.$('.actions .sendMessage')).not.toExist();
+            expect(this.view.$('.actions .sendMessage')).not.toExist();
         });
     });
 

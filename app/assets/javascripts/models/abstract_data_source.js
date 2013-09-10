@@ -8,7 +8,7 @@ chorus.models.AbstractDataSource = chorus.models.Base.extend({
     },
 
     iconUrl: function () {
-      return this.providerIconUrl();
+        return this.providerIconUrl();
     },
 
     eventType: function() {

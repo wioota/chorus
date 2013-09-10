@@ -23,8 +23,8 @@ describe("chorus.dialogs.PickJobRecipients", function () {
 
     describe("render", function () {
         beforeEach(function () {
-           spyOn(this.dialog, 'preRender').andCallThrough();
-           this.dialog.render();
+            spyOn(this.dialog, 'preRender').andCallThrough();
+            this.dialog.render();
         });
 
         it("renders when the member fetch completes", function() {

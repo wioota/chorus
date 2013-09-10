@@ -32,6 +32,6 @@ $.ajax({
     async:false,
     dataType:'text'
 }).done(function (data, status) {
-        I18n.translations = {};
-        I18n.translations[chorus.locale] = chorus.translation.parseProperties(data);
+    I18n.translations = {};
+    I18n.translations[chorus.locale] = chorus.translation.parseProperties(data);
 });

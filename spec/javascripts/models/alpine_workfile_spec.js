@@ -97,9 +97,9 @@ describe("chorus.models.AlpineWorkfile", function() {
         beforeEach(function () {
             this.model = backboneFixtures.workfile.alpineMultiDataSourceFlow({
                 executionLocations: [
-                { id: 'this_is_a_hadoop_id', entityType: 'hdfs_data_source' },
-                { id: 'this_is_a_gpdb_database_id', entityType: 'gpdb_database' }
-            ]
+                    { id: 'this_is_a_hadoop_id', entityType: 'hdfs_data_source' },
+                    { id: 'this_is_a_gpdb_database_id', entityType: 'gpdb_database' }
+                ]
             });
         });
 
@@ -170,9 +170,9 @@ describe("chorus.models.AlpineWorkfile", function() {
     });
 
     describe("workFlowShowUrl", function(){
-       it("corresponds to the workflow show page's url", function(){
-          expect(this.model.workFlowShowUrl()).toBe("#/work_flows/"+this.model.id);
-       });
+        it("corresponds to the workflow show page's url", function(){
+            expect(this.model.workFlowShowUrl()).toBe("#/work_flows/"+this.model.id);
+        });
     });
 
     describe("dataSourceRequireingCredentials", function () {
@@ -192,10 +192,10 @@ describe("chorus.models.AlpineWorkfile", function() {
     });
 
     describe("executionLocations", function() {
-       it("creates models for each execution location", function() {
-           spyOn(chorus.models, 'DynamicExecutionLocation').andCallThrough();
-           expect(this.model.executionLocations()[0]).toBeA(chorus.models.Database);
-           expect(chorus.models.DynamicExecutionLocation).toHaveBeenCalledWith(this.model.get('executionLocations')[0]);
-       });
+        it("creates models for each execution location", function() {
+            spyOn(chorus.models, 'DynamicExecutionLocation').andCallThrough();
+            expect(this.model.executionLocations()[0]).toBeA(chorus.models.Database);
+            expect(chorus.models.DynamicExecutionLocation).toHaveBeenCalledWith(this.model.get('executionLocations')[0]);
+        });
     });
 });

@@ -166,20 +166,20 @@
             }
 
             switch(this.entityType()) {
-                case "user":
-                    return this.users();
-                case "workspace":
-                    return this.workspaces();
-                case "workfile":
-                    return this.workfiles();
-                case "dataset":
-                    return this.datasets();
-                case "data_source":
-                    return this.dataSources();
-                case "hdfs_entry":
-                    return this.hdfs_entries();
-                case "attachment":
-                    return this.attachments();
+            case "user":
+                return this.users();
+            case "workspace":
+                return this.workspaces();
+            case "workfile":
+                return this.workfiles();
+            case "dataset":
+                return this.datasets();
+            case "data_source":
+                return this.dataSources();
+            case "hdfs_entry":
+                return this.hdfs_entries();
+            case "attachment":
+                return this.attachments();
             }
         },
 

@@ -67,7 +67,7 @@ describe("chorus.models.Workfile", function() {
 
         context("when the workfile's workspace has not been fetched", function() {
             beforeEach(function() {
-               delete this.model.attributes.workspace;
+                delete this.model.attributes.workspace;
             });
 
             it("returns undefined", function() {

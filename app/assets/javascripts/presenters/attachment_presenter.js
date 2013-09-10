@@ -13,6 +13,6 @@ chorus.presenters.Attachment = chorus.presenters.Base.extend({
     },
 
     useExternalLink: function() {
-      return this.model.useExternalLink();
+        return this.model.useExternalLink();
     }
 });

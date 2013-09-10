@@ -211,7 +211,7 @@ describe("chorus.views.WorkfileSidebar", function() {
             });
 
             it("hides the rename workfile link", function() {
-               expect(this.view.$(".actions .rename")).not.toExist();
+                expect(this.view.$(".actions .rename")).not.toExist();
             });
         });
 

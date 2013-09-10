@@ -760,15 +760,15 @@ describe("chorus.models.Base", function() {
 
     describe("#shortName", function() {
         beforeEach(function() {
-           this.model.set({name: "SomeName"});
+            this.model.set({name: "SomeName"});
         });
 
         it("returns the name if the name is already short enough", function() {
-           expect(this.model.shortName(20)).toBe("SomeName");
+            expect(this.model.shortName(20)).toBe("SomeName");
         });
 
         it("ellipsizes long names", function() {
-           expect(this.model.shortName(3)).toBe("Som...");
+            expect(this.model.shortName(3)).toBe("Som...");
         });
     });
 
@@ -1016,50 +1016,50 @@ describe("chorus.models.Base", function() {
     });
 
     describe("#set", function() {
-      context("when we pass a model to the constructor of an model", function () {
-        it("creates a new model with the attributes of the parameter", function() {
-          var parameterModel = backboneFixtures.user({ firstName: "Santa", lastName: "Claus" });
-          this.model = new chorus.models.Base(parameterModel);
+        context("when we pass a model to the constructor of an model", function () {
+            it("creates a new model with the attributes of the parameter", function() {
+                var parameterModel = backboneFixtures.user({ firstName: "Santa", lastName: "Claus" });
+                this.model = new chorus.models.Base(parameterModel);
 
-          expect(this.model.get("firstName")).toBe(parameterModel.get("firstName"));
+                expect(this.model.get("firstName")).toBe(parameterModel.get("firstName"));
+            });
+
+            it ("does not create the functions of a parameter model on the new model", function () {
+                var parameterModel = backboneFixtures.user({ firstName: "Santa", lastName: "Claus" });
+                this.model = new chorus.models.Base(parameterModel);
+
+                expect(this.model.workspaces).toBeUndefined();
+            });
         });
 
-        it ("does not create the functions of a parameter model on the new model", function () {
-          var parameterModel = backboneFixtures.user({ firstName: "Santa", lastName: "Claus" });
-          this.model = new chorus.models.Base(parameterModel);
+        context("when the attributes has completeJson set to true", function() {
+            it("sets the model as loaded", function() {
+                var model = new chorus.models.Base();
+                model.set({completeJson: true});
+                expect(model.loaded).toBeTruthy();
+            });
 
-          expect(this.model.workspaces).toBeUndefined();
+            it("sets the status code to no content if not already set", function() {
+                var model = new chorus.models.Base();
+                model.set({completeJson: true});
+                expect(model.statusCode).toBe(204);
+            });
+
+            it("leaves the status code alone if already set", function() {
+                var model = new chorus.models.Base();
+                model.statusCode = 123;
+                model.set({completeJson: true});
+                expect(model.statusCode).toBe(123);
+            });
         });
-      });
 
-       context("when the attributes has completeJson set to true", function() {
-           it("sets the model as loaded", function() {
-               var model = new chorus.models.Base();
-               model.set({completeJson: true});
-               expect(model.loaded).toBeTruthy();
-           });
-
-           it("sets the status code to no content if not already set", function() {
-               var model = new chorus.models.Base();
-               model.set({completeJson: true});
-               expect(model.statusCode).toBe(204);
-           });
-
-           it("leaves the status code alone if already set", function() {
-               var model = new chorus.models.Base();
-               model.statusCode = 123;
-               model.set({completeJson: true});
-               expect(model.statusCode).toBe(123);
-           });
-       });
-
-       context("when the attributes do not have completeJson set to true", function() {
-           it("does not set the model as loaded", function() {
-               this.model = new chorus.models.Base();
-               this.model.set({});
-               expect(this.model.loaded).not.toBeTruthy();
-           });
-       });
+        context("when the attributes do not have completeJson set to true", function() {
+            it("does not set the model as loaded", function() {
+                this.model = new chorus.models.Base();
+                this.model.set({});
+                expect(this.model.loaded).not.toBeTruthy();
+            });
+        });
     });
 
     describe("#shouldTriggerImmediately", function() {
@@ -1075,7 +1075,7 @@ describe("chorus.models.Base", function() {
         });
         it("returns false for any other arguments", function() {
             _.each(["change", "reset", "saveFailed", "validationFailed"], function(eventName) {
-               expect(this.model.shouldTriggerImmediately(eventName)).toBeFalsy();
+                expect(this.model.shouldTriggerImmediately(eventName)).toBeFalsy();
             }, this);
         });
 

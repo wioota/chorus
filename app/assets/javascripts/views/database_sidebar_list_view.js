@@ -124,7 +124,8 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
         new chorus.dialogs.DataSourceAccount({
             dataSource: this.schema.dataSource(),
             title: t("data_sources.sidebar.add_credentials"),
-            reload: true }
+            reload: true
+        }
         ).launchModal();
     }
 });

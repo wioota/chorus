@@ -57,7 +57,7 @@ describe("chorus.dialogs.WorkfileNewVersion", function() {
             });
 
             it("invalidates the page model", function() {
-              expect(this.invalidatedSpy).toHaveBeenCalled();
+                expect(this.invalidatedSpy).toHaveBeenCalled();
             });
 
             it("sets the versionNum and versionFileId to the page model", function() {

@@ -80,7 +80,8 @@ describe("chorus.views.SearchWorkfile", function() {
                     versionComments: [
                         "this is a <em>cool</em> version",
                         "this is a <em>cooler</em> version"
-                    ]}
+                    ]
+                }
             });
             this.view.render();
         });

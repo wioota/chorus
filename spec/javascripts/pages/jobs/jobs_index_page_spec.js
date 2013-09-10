@@ -7,7 +7,7 @@ describe("chorus.pages.JobsIndexPage", function () {
     });
 
     it("should have the right constructor name", function () {
-       expect(this.page.constructorName).toBe("JobsIndexPage");
+        expect(this.page.constructorName).toBe("JobsIndexPage");
     });
 
     describe("breadcrumbs", function() {

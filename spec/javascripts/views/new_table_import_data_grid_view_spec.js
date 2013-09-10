@@ -84,9 +84,9 @@ describe("chorus.views.NewTableImportDataGrid", function() {
     });
 
     describe("#getColumnTypes", function(){
-       it("returns an array of the column types extracted from the DOM", function(){
-           expect(this.view.getColumnTypes()).toEqual(["text","text","text","text","text"]);
-       });
+        it("returns an array of the column types extracted from the DOM", function(){
+            expect(this.view.getColumnTypes()).toEqual(["text","text","text","text","text"]);
+        });
     });
 
     describe("#markColumnNameInputAsInvalid", function() {

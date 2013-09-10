@@ -17,7 +17,7 @@ chorus.Mixins.SQLResults = {
     getColumns: function() {
         var columns = this.get("columns");
         _.each(columns, function(column, index) {
-           column["uniqueName"] = column["name"] + "_" + index;
+            column["uniqueName"] = column["name"] + "_" + index;
         });
         return columns;
     },

@@ -53,24 +53,24 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
     listConfig: function () {
         return {
             modelClass: "Job",
-                collection: this.collection,
+            collection: this.collection,
             contentDetailsOptions: {
-            multiSelect: true,
+                multiSelect: true,
                 buttonView: this.buttonView
-        },
+            },
             linkMenus: {
                 sort: {
                     title: t("job.header.menu.sort.title"),
-                        options: [
+                    options: [
                         {data: "alpha", text: t("job.header.menu.sort.alphabetically")},
                         {data: "date", text: t("job.header.menu.sort.by_date")}
                     ],
-                        event: "sort"
+                    event: "sort"
                 }
             },
             search: {
                 placeholder: t("job.search_placeholder"),
-                    eventName: "job:search"
+                eventName: "job:search"
             }
         };
     },

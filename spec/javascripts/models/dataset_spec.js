@@ -896,11 +896,11 @@ describe("chorus.models.Dataset", function() {
     });
 
     describe("#deriveTableauWorkbook", function() {
-       it("Creates a TableauWorkbook from the dataset", function() {
-          var workbook = this.dataset.deriveTableauWorkbook();
-           expect(workbook).toBeA(chorus.models.TableauWorkbook);
-           expect(workbook.get('dataset')).toEqual(this.dataset);
-       });
+        it("Creates a TableauWorkbook from the dataset", function() {
+            var workbook = this.dataset.deriveTableauWorkbook();
+            expect(workbook).toBeA(chorus.models.TableauWorkbook);
+            expect(workbook.get('dataset')).toEqual(this.dataset);
+        });
     });
 
     describe("#asDataset", function() {

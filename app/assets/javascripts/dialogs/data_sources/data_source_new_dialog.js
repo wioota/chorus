@@ -16,7 +16,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         _.defer(_.bind(function() {
             chorus.styleSelect(this.$("select.data_sources"), { format: function(text, option) {
                 var aliasedName = $(option).val();
-                    return '<span class='+ aliasedName +'></span>' + text;
+                return '<span class='+ aliasedName +'></span>' + text;
             } });
             chorus.styleSelect(this.$("select.hdfs_version"), { format: function(text, option) {
                 var aliasedName = $(option).attr("name");

@@ -177,7 +177,7 @@ window.Chorus = function chorus$Global() {
 
             options && options.disableBeforeToday && _.each(formElementParams, function(v, k) {
                 datePickerController.setDisabledDates(k, {
-                  "00000101" : new Date($.now() - (1000  * 60 * 60 * 24)).toString("yyyyMMdd")
+                    "00000101" : new Date($.now() - (1000  * 60 * 60 * 24)).toString("yyyyMMdd")
                 });
             });
         });

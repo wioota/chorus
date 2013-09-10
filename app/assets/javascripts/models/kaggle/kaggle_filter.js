@@ -3,17 +3,17 @@ chorus.models.KaggleFilter = chorus.models.Filter.extend({
 
     getFilterMap: function() {
         switch (this.has("column") && this.get("column").get("name")) {
-            case "Favorite Technique":
-            case "Location":
-            case "Favorite Software":
-                return new chorus.models.KaggleFilterMaps.String();
-            case "Rank":
-            case "Number of Entered Competitions":
-                return new chorus.models.KaggleFilterMaps.Numeric();
-            case "Past Competition Types":
-                return new chorus.models.KaggleFilterMaps.CompetitionType();
-            default:
-                return new chorus.models.KaggleFilterMaps.Other();
+        case "Favorite Technique":
+        case "Location":
+        case "Favorite Software":
+            return new chorus.models.KaggleFilterMaps.String();
+        case "Rank":
+        case "Number of Entered Competitions":
+            return new chorus.models.KaggleFilterMaps.Numeric();
+        case "Past Competition Types":
+            return new chorus.models.KaggleFilterMaps.CompetitionType();
+        default:
+            return new chorus.models.KaggleFilterMaps.Other();
         }
     },
 

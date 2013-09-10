@@ -132,28 +132,28 @@ chorus.views.LocationPicker.SelectorView = chorus.views.Base.extend({
         this.rebuildEmptySelect();
 
         switch(state) {
-            case this.STATES.LOADING:
-                section.find(".loading_text").removeClass("hidden");
-                break;
-            case this.STATES.SELECT:
-                section.find(".select_container").removeClass("hidden");
-                this.populateSelect(this.selection);
-                break;
-            case this.STATES.CREATE_NEW:
-                section.find(".create_container").removeClass("hidden");
-                section.find(".create_container").addClass("show_cancel_link");
-                section.find("a.new").addClass("hidden");
-                break;
-            case this.STATES.CREATE_NESTED:
-                section.find(".create_container").removeClass("hidden");
-                section.find("a.new").addClass("hidden");
-                break;
-            case this.STATES.UNAVAILABLE:
-                section.find(".unavailable").removeClass("hidden");
-                break;
-            case this.STATES.HIDDEN:
-                section.addClass("hidden");
-                break;
+        case this.STATES.LOADING:
+            section.find(".loading_text").removeClass("hidden");
+            break;
+        case this.STATES.SELECT:
+            section.find(".select_container").removeClass("hidden");
+            this.populateSelect(this.selection);
+            break;
+        case this.STATES.CREATE_NEW:
+            section.find(".create_container").removeClass("hidden");
+            section.find(".create_container").addClass("show_cancel_link");
+            section.find("a.new").addClass("hidden");
+            break;
+        case this.STATES.CREATE_NESTED:
+            section.find(".create_container").removeClass("hidden");
+            section.find("a.new").addClass("hidden");
+            break;
+        case this.STATES.UNAVAILABLE:
+            section.find(".unavailable").removeClass("hidden");
+            break;
+        case this.STATES.HIDDEN:
+            section.addClass("hidden");
+            break;
         }
     },
 

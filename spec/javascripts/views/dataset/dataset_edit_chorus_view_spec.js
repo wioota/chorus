@@ -113,7 +113,7 @@ describe("chorus.views.DatasetEditChorusView", function() {
         });
 
         it("clears the errors", function() {
-           expect(this.view.model.serverErrors).toBeUndefined();
+            expect(this.view.model.serverErrors).toBeUndefined();
         });
     });
 });

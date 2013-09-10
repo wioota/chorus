@@ -55,142 +55,142 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             itBehavesLike.aDialogLauncher("a.associate_with_workspace", chorus.dialogs.AssociateHdfsDatasetFromEntry);
 
             context("when the model is a directory", function() {
-            beforeEach(function() {
-                this.hdfsEntry = backboneFixtures.hdfsDir();
-                chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
-            });
-
-            itHasTheRightDefaultBehavior(false);
-
-            it("does not have a link to add a note", function() {
-                expect(this.view.$("a.dialog.add_note")).not.toExist();
-                expect(this.view.$("a.edit_tags")).not.toExist();
-            });
-
-            it("has a link to create an external table", function() {
-                expect(this.view.$("a.directory_external_table")).toExist();
-                expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs_data_source.create_directory_external_table");
-            });
-
-            itBehavesLike.aDialogLauncher("a.directory_external_table", chorus.dialogs.HdfsDataSourceWorkspacePicker);
-
-            it("calls the base implementation for postRender", function() {
-                spyOn(chorus.views.Sidebar.prototype, "postRender");
-                this.view.render();
-                expect(chorus.views.Sidebar.prototype.postRender).toHaveBeenCalled();
-            });
-        });
-
-        context("when the model is a non-binary file", function() {
-            beforeEach(function() {
-                // set up page to catch launch dialog click
-                var page = new chorus.pages.Base();
-                $(page.el).append(this.view.el);
-                chorus.bindModalLaunchingClicks(page);
-
-                this.hdfsEntry = new chorus.models.HdfsEntry({
-                    id: 55,
-                    hdfsDataSource: {
-                        id: 123
-                    },
-                    path: "/foo",
-                    name: "my_file.sql",
-                    isBinary: false
-               });
-
-                chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
-            });
-
-            itHasTheRightDefaultBehavior(true);
-            itBehavesLike.aDialogLauncher("a.add_note", chorus.dialogs.NotesNew);
-            itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
-
-            context("when the file is at root", function() {
                 beforeEach(function() {
-                    this.view = new chorus.views.HdfsEntrySidebar({rootPath: "/", hdfsDataSourceId: 123});
+                    this.hdfsEntry = backboneFixtures.hdfsDir();
+                    chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
+                });
+
+                itHasTheRightDefaultBehavior(false);
+
+                it("does not have a link to add a note", function() {
+                    expect(this.view.$("a.dialog.add_note")).not.toExist();
+                    expect(this.view.$("a.edit_tags")).not.toExist();
+                });
+
+                it("has a link to create an external table", function() {
+                    expect(this.view.$("a.directory_external_table")).toExist();
+                    expect(this.view.$("a.directory_external_table").text()).toMatchTranslation("hdfs_data_source.create_directory_external_table");
+                });
+
+                itBehavesLike.aDialogLauncher("a.directory_external_table", chorus.dialogs.HdfsDataSourceWorkspacePicker);
+
+                it("calls the base implementation for postRender", function() {
+                    spyOn(chorus.views.Sidebar.prototype, "postRender");
+                    this.view.render();
+                    expect(chorus.views.Sidebar.prototype.postRender).toHaveBeenCalled();
+                });
+            });
+
+            context("when the model is a non-binary file", function() {
+                beforeEach(function() {
+                // set up page to catch launch dialog click
+                    var page = new chorus.pages.Base();
+                    $(page.el).append(this.view.el);
+                    chorus.bindModalLaunchingClicks(page);
 
                     this.hdfsEntry = new chorus.models.HdfsEntry({
+                        id: 55,
                         hdfsDataSource: {
-                            id: '123'
+                            id: 123
                         },
-                        id: '55',
-                        path: '/',
-                        name: 'my_file.sql',
+                        path: "/foo",
+                        name: "my_file.sql",
                         isBinary: false
                     });
 
                     chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
                 });
 
-                it("launches the dialog with right HdfsFile", function() {
-                    this.view.$('a.external_table').click();
-                    this.server.completeFetchFor(this.hdfsEntry);
+                itHasTheRightDefaultBehavior(true);
+                itBehavesLike.aDialogLauncher("a.add_note", chorus.dialogs.NotesNew);
+                itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
 
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs);
-                    expect(chorus.modal.model.get("path")).toBe("/");
-                });
+                context("when the file is at root", function() {
+                    beforeEach(function() {
+                        this.view = new chorus.views.HdfsEntrySidebar({rootPath: "/", hdfsDataSourceId: 123});
 
-                context("when the entry fetch fails", function() {
-                    it("show the user an error", function() {
-                        spyOn(chorus, 'toast');
+                        this.hdfsEntry = new chorus.models.HdfsEntry({
+                            hdfsDataSource: {
+                                id: '123'
+                            },
+                            id: '55',
+                            path: '/',
+                            name: 'my_file.sql',
+                            isBinary: false
+                        });
+
+                        chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
+                    });
+
+                    it("launches the dialog with right HdfsFile", function() {
                         this.view.$('a.external_table').click();
-                        this.server.lastFetchFor(this.hdfsEntry).failUnprocessableEntity(backboneFixtures.hdfsContentsErrorJson().errors);
+                        this.server.completeFetchFor(this.hdfsEntry);
 
-                        expect(chorus.toast).toHaveBeenCalledWith("record_error.HDFS_CONTENTS_UNAVAILABLE", {toastOpts: {type: 'error'}});
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs);
+                        expect(chorus.modal.model.get("path")).toBe("/");
+                    });
+
+                    context("when the entry fetch fails", function() {
+                        it("show the user an error", function() {
+                            spyOn(chorus, 'toast');
+                            this.view.$('a.external_table').click();
+                            this.server.lastFetchFor(this.hdfsEntry).failUnprocessableEntity(backboneFixtures.hdfsContentsErrorJson().errors);
+
+                            expect(chorus.toast).toHaveBeenCalledWith("record_error.HDFS_CONTENTS_UNAVAILABLE", {toastOpts: {type: 'error'}});
+                        });
+                    });
+                });
+
+                context("when file is in subdirectory", function() {
+                    beforeEach(function() {
+                        this.hdfsEntry = new chorus.models.HdfsEntry({
+                            hdfsDataSource: {
+                                id: '123'
+                            },
+                            id: '55',
+                            path: '/foo',
+                            name: 'my_file.sql',
+                            isBinary: false
+                        });
+                        chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
+                    });
+
+                    it("launches the dialog with right HdfsFile", function() {
+                        this.view.$('a.external_table').click();
+                        this.server.completeFetchFor(this.hdfsEntry);
+
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs);
+                        expect(chorus.modal.model.get("path")).toBe("/foo");
+                        expect(chorus.modal.model.get("hdfs_entry_id")).toBe(55);
                     });
                 });
             });
 
-            context("when file is in subdirectory", function() {
+            context("when the model is a binary file", function() {
                 beforeEach(function() {
+                // set up page to catch launch dialog click
+                    var page = new chorus.pages.Base();
+                    $(page.el).append(this.view.el);
+                    chorus.bindModalLaunchingClicks(page);
+
                     this.hdfsEntry = new chorus.models.HdfsEntry({
                         hdfsDataSource: {
-                            id: '123'
+                            id: 111
                         },
-                        id: '55',
-                        path: '/foo',
-                        name: 'my_file.sql',
-                        isBinary: false
+                        path: "/",
+                        name: "my_file.exe",
+                        isBinary: true
                     });
+
                     chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
                 });
 
-                it("launches the dialog with right HdfsFile", function() {
-                    this.view.$('a.external_table').click();
-                    this.server.completeFetchFor(this.hdfsEntry);
-
-                    expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateExternalTableFromHdfs);
-                    expect(chorus.modal.model.get("path")).toBe("/foo");
-                    expect(chorus.modal.model.get("hdfs_entry_id")).toBe(55);
-                });
-            });
-        });
-
-        context("when the model is a binary file", function() {
-            beforeEach(function() {
-                // set up page to catch launch dialog click
-                var page = new chorus.pages.Base();
-                $(page.el).append(this.view.el);
-                chorus.bindModalLaunchingClicks(page);
-
-                this.hdfsEntry = new chorus.models.HdfsEntry({
-                    hdfsDataSource: {
-                        id: 111
-                    },
-                    path: "/",
-                    name: "my_file.exe",
-                    isBinary: true
+                it("does not have a create external table link", function() {
+                    expect(this.view.$("a.external_table")).not.toExist();
                 });
 
-                chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
+                itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
             });
-
-            it("does not have a create external table link", function() {
-                expect(this.view.$("a.external_table")).not.toExist();
-            });
-
-            itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
-        });
         });
         
         context("when there is no model", function() {

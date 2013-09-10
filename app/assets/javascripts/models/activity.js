@@ -93,37 +93,37 @@
             var model;
 
             switch (this.get("actionType")) {
-                case "NoteOnHdfsDataSource":
-                    model = new chorus.models.HdfsDataSource();
-                    model.set(this.get("hdfsDataSource"));
-                    break;
-                case "NoteOnDataSource":
-                    model = new chorus.models.DynamicDataSource(this.get("dataSource"));
-                    break;
-                case "NoteOnGnipDataSource":
-                    model = new chorus.models.GnipDataSource();
-                    model.set(this.get("gnipDataSource"));
-                    break;
-                case "NoteOnHdfsFile":
-                    model = new chorus.models.HdfsEntry();
-                    model.set(this.get("hdfsFile"));
-                    break;
-                case "NoteOnWorkspace":
-                    model = new chorus.models.Workspace();
-                    model.set(this.get("workspace"));
-                    break;
-                case "NoteOnDataset":
-                    model = new chorus.models.DynamicDataset(this.get("dataset"));
-                    break;
-                case "NoteOnWorkspaceDataset":
-                    model = new chorus.models.WorkspaceDataset();
-                    model.set(this.get("dataset"));
-                    model.setWorkspace(this.get("workspace"));
-                    break;
-                case "NoteOnWorkfile":
-                    model = new chorus.models.Workfile();
-                    model.set(this.get("workfile"));
-                    break;
+            case "NoteOnHdfsDataSource":
+                model = new chorus.models.HdfsDataSource();
+                model.set(this.get("hdfsDataSource"));
+                break;
+            case "NoteOnDataSource":
+                model = new chorus.models.DynamicDataSource(this.get("dataSource"));
+                break;
+            case "NoteOnGnipDataSource":
+                model = new chorus.models.GnipDataSource();
+                model.set(this.get("gnipDataSource"));
+                break;
+            case "NoteOnHdfsFile":
+                model = new chorus.models.HdfsEntry();
+                model.set(this.get("hdfsFile"));
+                break;
+            case "NoteOnWorkspace":
+                model = new chorus.models.Workspace();
+                model.set(this.get("workspace"));
+                break;
+            case "NoteOnDataset":
+                model = new chorus.models.DynamicDataset(this.get("dataset"));
+                break;
+            case "NoteOnWorkspaceDataset":
+                model = new chorus.models.WorkspaceDataset();
+                model.set(this.get("dataset"));
+                model.setWorkspace(this.get("workspace"));
+                break;
+            case "NoteOnWorkfile":
+                model = new chorus.models.Workfile();
+                model.set(this.get("workfile"));
+                break;
             }
             return model;
         },
@@ -193,18 +193,18 @@
                 this._attachments = _.map(this.get("attachments"), function(attachment) {
                     var klass;
                     switch (attachment.entityType) {
-                        case 'workfile':
-                            klass = chorus.models.DynamicWorkfile;
-                            break;
-                        case 'dataset':
-                            klass = chorus.models.WorkspaceDataset;
-                            break;
-                        case 'work_flow_result':
-                            klass = chorus.models.WorkFlowResult;
-                            break;
-                        default:
-                            klass = chorus.models.Attachment;
-                            break;
+                    case 'workfile':
+                        klass = chorus.models.DynamicWorkfile;
+                        break;
+                    case 'dataset':
+                        klass = chorus.models.WorkspaceDataset;
+                        break;
+                    case 'work_flow_result':
+                        klass = chorus.models.WorkFlowResult;
+                        break;
+                    default:
+                        klass = chorus.models.Attachment;
+                        break;
                     }
                     return new klass(attachment);
                 });

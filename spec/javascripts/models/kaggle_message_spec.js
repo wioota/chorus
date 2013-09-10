@@ -29,7 +29,7 @@ describe("chorus.models.KaggleMessage", function() {
 
     describe("validations", function() {
         it("can be valid", function() {
-           expect(this.model.performValidation(this.attrs)).toBeTruthy();
+            expect(this.model.performValidation(this.attrs)).toBeTruthy();
         });
 
         it("requires from address", function () {

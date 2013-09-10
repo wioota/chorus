@@ -14,8 +14,8 @@ describe("chorus.dialogs.SandboxNew", function() {
     });
 
     it("shows the checkbox for displaying sandbox datasets by default", function(){
-       expect(this.dialog.$el).toContainTranslation("actions.sandbox.show_sandbox_datasets_by_default");
-       expect(this.dialog.$("input[type='checkbox']")).toBeChecked();
+        expect(this.dialog.$el).toContainTranslation("actions.sandbox.show_sandbox_datasets_by_default");
+        expect(this.dialog.$("input[type='checkbox']")).toBeChecked();
     });
 
     context("when the SchemaPicker triggers an error", function() {

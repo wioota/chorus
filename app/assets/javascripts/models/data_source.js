@@ -18,7 +18,7 @@ chorus.models.DataSource = chorus.models.AbstractDataSource.extend({
     },
 
     isOracle: function() {
-      return this.get('entityType') === 'oracle_data_source';
+        return this.get('entityType') === 'oracle_data_source';
     },
 
     accounts: function() {

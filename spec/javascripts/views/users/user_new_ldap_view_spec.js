@@ -154,9 +154,9 @@ describe("chorus.views.UserNewLdap", function() {
                 context("when user creation fails on the server", function() {
                     beforeEach(function() {
                                 this.view.model.serverErrors = {fields: {a: {BLANK: {}}}};
-                        this.view.$("form").submit();
-                        this.view.model.trigger("saveFailed");
-                    });
+                                this.view.$("form").submit();
+                                this.view.model.trigger("saveFailed");
+                            });
 
                     it("doesn't redirect", function() {
                         expect(this.view.$("form")).toExist();
@@ -165,17 +165,17 @@ describe("chorus.views.UserNewLdap", function() {
                     it("retains the data already entered", function() {
                         expect(this.view.$("input[name=firstName]").val()).toBe("Frankie");
                         expect(this.view.$("input[name=lastName]").val()).toBe("Knuckles");
-                                expect(this.view.$("input[name=username]").val()).toBe("frankie2002");
-                                expect(this.view.$("input[name=email]").val()).toBe("frankie_knuckles@nyclol.com");
-                                expect(this.view.$("input[name=dept]").val()).toBe("awesomeness dept");
+                        expect(this.view.$("input[name=username]").val()).toBe("frankie2002");
+                        expect(this.view.$("input[name=email]").val()).toBe("frankie_knuckles@nyclol.com");
+                        expect(this.view.$("input[name=dept]").val()).toBe("awesomeness dept");
                         expect(this.view.$("input[name=admin]")).toBeChecked();
                     });
 
                     describe("check another user name", function() {
                         beforeEach(function() {
                                     this.view.$("input[name=username]").val("max");
-                            this.view.$("a.check_username").click();
-                        });
+                                    this.view.$("a.check_username").click();
+                                });
 
                         it("clears the existing error", function() {
                             expect(this.view.$(".errors")).toBeEmpty();

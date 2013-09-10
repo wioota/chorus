@@ -5,7 +5,7 @@ describe("ImportGnipStream", function () {
     });
 
     it("uses a GnipStream model", function() {
-       expect(this.dialog.resource).toBeA(chorus.models.GnipStream);
+        expect(this.dialog.resource).toBeA(chorus.models.GnipStream);
     });
 
     it("set the gnip_data_source_id in the model", function() {
@@ -21,8 +21,8 @@ describe("ImportGnipStream", function () {
         });
 
         it("has 'import into a sandbox' fieldset legend", function() {
-           expect(this.dialog.$("fieldset legend")).toContainTranslation("gnip.import_stream.import_into_sandbox");
-           expect(this.dialog.$("fieldset legend a.select_workspace")).toContainTranslation("gnip.import_stream.select_workspace");
+            expect(this.dialog.$("fieldset legend")).toContainTranslation("gnip.import_stream.import_into_sandbox");
+            expect(this.dialog.$("fieldset legend a.select_workspace")).toContainTranslation("gnip.import_stream.select_workspace");
         });
 
         it("disable the button if workspace and new table is still empty", function () {

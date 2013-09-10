@@ -51,7 +51,7 @@ describe("chorus.models.KaggleFilterMaps", function() {
         });
 
         it("should allow blank values", function() {
-           expect(this.kaggleFilterMap.performValidation({ value: "" })).toBeTruthy();
+            expect(this.kaggleFilterMap.performValidation({ value: "" })).toBeTruthy();
         });
     });
 

@@ -187,7 +187,8 @@ chorus.dialogs.FileImport = chorus.dialogs.Base.extend({
             var csvId = data.result.response.id;
             workingCsvImport.set({
                 csvId:csvId,
-                contents:contents});
+                contents:contents
+            });
 
             var csvParser = new chorus.utilities.CsvParser(contents, this.csvOptions);
             if ((csvParser.getColumnOrientedData().length === 0) && !csvParser.serverErrors) {

@@ -11,7 +11,7 @@ chorus.views.ListContentDetails = chorus.views.Base.include(
     },
 
     subviews: {
-      "div.button_holder" : "buttonView"
+        "div.button_holder" : "buttonView"
     },
 
     setup: function(){

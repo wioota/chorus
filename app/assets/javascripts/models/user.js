@@ -93,7 +93,7 @@ chorus.models.User = chorus.models.Base.extend({
     },
 
     maxImageSize:function () {
-      return chorus.models.Config.instance().get("fileSizesMbUserIcon");
+        return chorus.models.Config.instance().get("fileSizesMbUserIcon");
     },
 
     attrToLabel:{

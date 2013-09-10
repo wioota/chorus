@@ -370,7 +370,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             });
 
             it("validates the file size", function() {
-               expect(this.dialog.validateFileSize).toHaveBeenCalled();
+                expect(this.dialog.validateFileSize).toHaveBeenCalled();
             });
 
             it("has a dataType of 'json'", function() {

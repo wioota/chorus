@@ -309,181 +309,181 @@ describe("chorus.dialogs.ConfigureJob", function () {
         });
 
         describe("prepopulating the dialog with the job's attributes", function () {
-        it("populates name", function () {
-            expect(this.dialog.$("input.name").val()).toBe(this.job.get("name"));
-        });
-
-        it("populates intervalValue and itnervalUnit", function () {
-            expect(this.dialog.$("input.interval_value").val()).toBe(this.job.get("intervalValue").toString());
-            expect(this.dialog.$("select.interval_unit").val()).toBe(this.job.get("intervalUnit"));
-        });
-
-        it("populates next run date", function () {
-            var nextRunDate = this.job.nextRunDate().startOf("minute");
-            nextRunDate.minute(nextRunDate.minute());
-            expect(this.dialog.buildStartDate().format("YYYY-MM-DDTHH:mm")).toEqual(nextRunDate.format("YYYY-MM-DDTHH:mm"));
-        });
-
-        it("populates end date", function () {
-            var endRunDate = this.job.endRunDate().startOf("day");
-
-            expect(this.dialog.buildEndDate().format("YYYY-MM-DD")).toEqual(endRunDate.format("YYYY-MM-DD"));
-        });
-
-        it("populates time zone", function () {
-            this.dialog.model.set("nextRun", "2013-07-29T08:00:00-11:00");
-            this.dialog.model.set("timeZone", "American Samoa");
-            this.dialog.render();
-            expect(this.dialog.$('select.time_zone').val()).toEqual("American Samoa");
-        });
-
-    });
-
-    context("editing a Job that runs on schedule with an end run time", function () {
-        describe("selecting 'on schedule'", function () {
-
-            it("should show schedule options", function () {
-                expect(this.dialog.$('.interval_options')).not.toHaveClass('hidden');
+            it("populates name", function () {
+                expect(this.dialog.$("input.name").val()).toBe(this.job.get("name"));
             });
 
-            it("should have a select with hours, days, weeks, months as options", function () {
-                expect(this.dialog.$(".interval_unit option[value=hours]")).toContainTranslation("job.interval_unit.hours");
-                expect(this.dialog.$(".interval_unit option[value=days]")).toContainTranslation("job.interval_unit.days");
-                expect(this.dialog.$(".interval_unit option[value=weeks]")).toContainTranslation("job.interval_unit.weeks");
-                expect(this.dialog.$(".interval_unit option[value=months]")).toContainTranslation("job.interval_unit.months");
+            it("populates intervalValue and itnervalUnit", function () {
+                expect(this.dialog.$("input.interval_value").val()).toBe(this.job.get("intervalValue").toString());
+                expect(this.dialog.$("select.interval_unit").val()).toBe(this.job.get("intervalUnit"));
             });
 
-            it("should show the start date controls", function () {
-                expect(this.dialog.$(".start_date_widget")).toExist();
+            it("populates next run date", function () {
+                var nextRunDate = this.job.nextRunDate().startOf("minute");
+                nextRunDate.minute(nextRunDate.minute());
+                expect(this.dialog.buildStartDate().format("YYYY-MM-DDTHH:mm")).toEqual(nextRunDate.format("YYYY-MM-DDTHH:mm"));
             });
 
-            it("should show the end date controls", function () {
-                expect(this.dialog.$(".end_date_widget")).toExist();
+            it("populates end date", function () {
+                var endRunDate = this.job.endRunDate().startOf("day");
+
+                expect(this.dialog.buildEndDate().format("YYYY-MM-DD")).toEqual(endRunDate.format("YYYY-MM-DD"));
             });
+
+            it("populates time zone", function () {
+                this.dialog.model.set("nextRun", "2013-07-29T08:00:00-11:00");
+                this.dialog.model.set("timeZone", "American Samoa");
+                this.dialog.render();
+                expect(this.dialog.$('select.time_zone').val()).toEqual("American Samoa");
+            });
+
         });
 
-        context("with valid field values", function () {
-            beforeEach(function () {
-                this.dialog.$('input:radio#onSchedule').prop("checked", true).trigger("change");
-                this.dialog.$('input:radio#onDemand').prop("checked", false).trigger("change");
-                var dialog = this.dialog;
-                var jobPlan = this.jobPlan;
-                _.each(_.keys(this.jobPlan), function (prop) {
-                    var selects = ['interval_unit', 'meridiem', 'hour', 'minute', 'time_zone'];
-                    var element = (_.contains(selects, prop) ? 'select.' : 'input.');
-                    dialog.$(element + prop).val(jobPlan[prop]).trigger("change").trigger("keyup");
+        context("editing a Job that runs on schedule with an end run time", function () {
+            describe("selecting 'on schedule'", function () {
+
+                it("should show schedule options", function () {
+                    expect(this.dialog.$('.interval_options')).not.toHaveClass('hidden');
+                });
+
+                it("should have a select with hours, days, weeks, months as options", function () {
+                    expect(this.dialog.$(".interval_unit option[value=hours]")).toContainTranslation("job.interval_unit.hours");
+                    expect(this.dialog.$(".interval_unit option[value=days]")).toContainTranslation("job.interval_unit.days");
+                    expect(this.dialog.$(".interval_unit option[value=weeks]")).toContainTranslation("job.interval_unit.weeks");
+                    expect(this.dialog.$(".interval_unit option[value=months]")).toContainTranslation("job.interval_unit.months");
+                });
+
+                it("should show the start date controls", function () {
+                    expect(this.dialog.$(".start_date_widget")).toExist();
+                });
+
+                it("should show the end date controls", function () {
+                    expect(this.dialog.$(".end_date_widget")).toExist();
                 });
             });
 
-            it("should enable the submit button", function () {
-                expect(this.dialog.$('button.submit')).toBeEnabled();
-            });
-
-            it("should enable the end date widget", function () {
-                expect(this.dialog.endDatePicker.enable).toHaveBeenCalled();
-            });
-
-            describe("submitting the form", function () {
+            context("with valid field values", function () {
                 beforeEach(function () {
-                    this.dialog.$("form").submit();
+                    this.dialog.$('input:radio#onSchedule').prop("checked", true).trigger("change");
+                    this.dialog.$('input:radio#onDemand').prop("checked", false).trigger("change");
+                    var dialog = this.dialog;
+                    var jobPlan = this.jobPlan;
+                    _.each(_.keys(this.jobPlan), function (prop) {
+                        var selects = ['interval_unit', 'meridiem', 'hour', 'minute', 'time_zone'];
+                        var element = (_.contains(selects, prop) ? 'select.' : 'input.');
+                        dialog.$(element + prop).val(jobPlan[prop]).trigger("change").trigger("keyup");
+                    });
                 });
 
-                it("posts the form elements to the API", function () {
-                    var postUrl = this.server.lastUpdateFor(this.dialog.model).url;
-                    expect(postUrl).toContain("/workspaces/" + this.workspace.id + "/jobs/" + this.job.id);
+                it("should enable the submit button", function () {
+                    expect(this.dialog.$('button.submit')).toBeEnabled();
                 });
 
-                it("posts with the correct values", function () {
-                    var params = this.server.lastUpdate().params();
-                    var date = moment.utc([this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, parseInt(this.jobPlan.hour, 10), parseInt(this.jobPlan.minute, 10)]);
-                    var endDate = moment(new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day));
-                    expect(params['job[name]']).toEqual(this.jobPlan.name);
-                    expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
-                    expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
-                    expect(params['job[next_run]']).toEqual(date.format());
-                    expect(params['job[end_run]']).toEqual(endDate.toISOString());
-                    expect(params['job[time_zone]']).toEqual(this.jobPlan.time_zone);
+                it("should enable the end date widget", function () {
+                    expect(this.dialog.endDatePicker.enable).toHaveBeenCalled();
                 });
 
-                context("when the save succeeds", function () {
+                describe("submitting the form", function () {
                     beforeEach(function () {
-                        spyOn(this.dialog, "closeModal");
-                        spyOn(chorus, "toast");
-                        this.server.lastUpdate().succeed();
+                        this.dialog.$("form").submit();
                     });
 
-                    it("it should close the modal", function () {
-                        expect(this.dialog.closeModal).toHaveBeenCalled();
+                    it("posts the form elements to the API", function () {
+                        var postUrl = this.server.lastUpdateFor(this.dialog.model).url;
+                        expect(postUrl).toContain("/workspaces/" + this.workspace.id + "/jobs/" + this.job.id);
                     });
 
-                    it("should create a toast", function () {
-                        expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                    it("posts with the correct values", function () {
+                        var params = this.server.lastUpdate().params();
+                        var date = moment.utc([this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, parseInt(this.jobPlan.hour, 10), parseInt(this.jobPlan.minute, 10)]);
+                        var endDate = moment(new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day));
+                        expect(params['job[name]']).toEqual(this.jobPlan.name);
+                        expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
+                        expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
+                        expect(params['job[next_run]']).toEqual(date.format());
+                        expect(params['job[end_run]']).toEqual(endDate.toISOString());
+                        expect(params['job[time_zone]']).toEqual(this.jobPlan.time_zone);
+                    });
+
+                    context("when the save succeeds", function () {
+                        beforeEach(function () {
+                            spyOn(this.dialog, "closeModal");
+                            spyOn(chorus, "toast");
+                            this.server.lastUpdate().succeed();
+                        });
+
+                        it("it should close the modal", function () {
+                            expect(this.dialog.closeModal).toHaveBeenCalled();
+                        });
+
+                        it("should create a toast", function () {
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                        });
                     });
                 });
             });
-        });
 
-        context("with invalid field values", function () {
-            beforeEach(function () {
-                this.dialog.$('input.interval_value').val('').trigger("keyup");
-            });
-
-            it("leaves the form disabled", function () {
-                expect(this.dialog.$('button.submit')).toBeDisabled();
-            });
-        });
-
-        context("when switching it to onDemand", function () {
-            beforeEach(function () {
-                this.dialog.$('input:radio#onSchedule').prop("checked", false).trigger("change");
-                this.dialog.$('input:radio#onDemand').prop("checked", true).trigger("change");
-            });
-
-            it("should enable the submit button", function () {
-                expect(this.dialog.$('button.submit')).toBeEnabled();
-            });
-
-            it("should hide the interval options", function () {
-                expect(this.dialog.$(".interval_options")).toHaveClass("hidden");
-            });
-
-            describe("submitting the form", function () {
+            context("with invalid field values", function () {
                 beforeEach(function () {
-                    this.dialog.$("form").submit();
+                    this.dialog.$('input.interval_value').val('').trigger("keyup");
                 });
 
-                it("posts the form elements to the API", function () {
-                    var postUrl = this.server.lastUpdateFor(this.dialog.model).url;
-                    expect(postUrl).toContain("/workspaces/" + this.workspace.id + "/jobs/" + this.job.id);
+                it("leaves the form disabled", function () {
+                    expect(this.dialog.$('button.submit')).toBeDisabled();
+                });
+            });
+
+            context("when switching it to onDemand", function () {
+                beforeEach(function () {
+                    this.dialog.$('input:radio#onSchedule').prop("checked", false).trigger("change");
+                    this.dialog.$('input:radio#onDemand').prop("checked", true).trigger("change");
                 });
 
-                it("posts with the correct values", function () {
-                    var params = this.server.lastUpdate().params();
-                    expect(params['job[name]']).toEqual(this.job.get("name"));
-                    expect(params['job[interval_unit]']).toEqual("on_demand");
-                    expect(params['job[interval_value]']).toEqual("0");
-                    expect(params['job[next_run]']).toBe('false');
-                    expect(params['job[end_run]']).toBe('false');
+                it("should enable the submit button", function () {
+                    expect(this.dialog.$('button.submit')).toBeEnabled();
                 });
 
-                context("when the save succeeds", function () {
+                it("should hide the interval options", function () {
+                    expect(this.dialog.$(".interval_options")).toHaveClass("hidden");
+                });
+
+                describe("submitting the form", function () {
                     beforeEach(function () {
-                        spyOn(this.dialog, "closeModal");
-                        spyOn(chorus, "toast");
-                        this.server.lastUpdate().succeed();
+                        this.dialog.$("form").submit();
                     });
 
-                    it("it should close the modal", function () {
-                        expect(this.dialog.closeModal).toHaveBeenCalled();
+                    it("posts the form elements to the API", function () {
+                        var postUrl = this.server.lastUpdateFor(this.dialog.model).url;
+                        expect(postUrl).toContain("/workspaces/" + this.workspace.id + "/jobs/" + this.job.id);
                     });
 
-                    it("should create a toast", function () {
-                        expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                    it("posts with the correct values", function () {
+                        var params = this.server.lastUpdate().params();
+                        expect(params['job[name]']).toEqual(this.job.get("name"));
+                        expect(params['job[interval_unit]']).toEqual("on_demand");
+                        expect(params['job[interval_value]']).toEqual("0");
+                        expect(params['job[next_run]']).toBe('false');
+                        expect(params['job[end_run]']).toBe('false');
+                    });
+
+                    context("when the save succeeds", function () {
+                        beforeEach(function () {
+                            spyOn(this.dialog, "closeModal");
+                            spyOn(chorus, "toast");
+                            this.server.lastUpdate().succeed();
+                        });
+
+                        it("it should close the modal", function () {
+                            expect(this.dialog.closeModal).toHaveBeenCalled();
+                        });
+
+                        it("should create a toast", function () {
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                        });
                     });
                 });
             });
         });
-    });
     });
 
     describe("notifications", function () {

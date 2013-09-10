@@ -17,7 +17,7 @@ describe("chorus.collections.TaggingSet", function() {
     describe('#add', function() {
         context("when called with a tag that already exists", function(){
             beforeEach(function(){
-               this.collection.add({name: "foo"});
+                this.collection.add({name: "foo"});
             });
 
             it("does not add a new tag", function(){

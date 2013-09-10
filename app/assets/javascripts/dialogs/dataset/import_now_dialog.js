@@ -60,7 +60,8 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
                 } else {
                     this.closeModal();
                     new chorus.alerts.DatasetNotImportable({
-                        datasetImportability: this.importability}).launchModal();
+                        datasetImportability: this.importability
+                    }).launchModal();
                 }
             }, this)
         });

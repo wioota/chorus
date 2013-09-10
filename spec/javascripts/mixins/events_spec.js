@@ -100,7 +100,7 @@ describe("chorus.Mixins.Events", function() {
 
     describe("shouldTriggerImmediately", function() {
         beforeEach(function() {
-           this.source = {};
+            this.source = {};
             _.extend(this.source, Backbone.Events, chorus.Mixins.Events);
         });
 

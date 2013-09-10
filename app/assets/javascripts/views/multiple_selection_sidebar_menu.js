@@ -40,7 +40,7 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.extend({
         return {
             selectedModels: this.selectedModels,
             actions: this.actions.map(function(action) {
-               return Handlebars.compile(action)();
+                return Handlebars.compile(action)();
             })
         };
     },

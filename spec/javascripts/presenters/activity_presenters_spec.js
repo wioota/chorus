@@ -1692,7 +1692,7 @@ describe("chorus.presenters.Activity", function() {
                             datasetType: t("dataset.entitySubtypes.table"),
                             destObjectOrName: linkTo(this.dataset.showUrl(), this.dataset.name()),
                             workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name())
-                    }
+                        }
                     );
                 });
             });

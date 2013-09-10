@@ -59,20 +59,20 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
         });
 
         it("start the spinner on the button", function() {
-           expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
+            expect(this.dialog.$("button.submit").isLoading()).toBeTruthy();
         });
 
         describe("when the save succeeds", function() {
-           beforeEach(function() {
-               spyOn(chorus.Modal.prototype, "closeModal");
-               spyOn(chorus, "toast");
-               this.originalWorkbooksCount = this.dataset.tableauWorkbooks().length;
-               this.server.lastCreateFor(this.model).succeed();
-           });
+            beforeEach(function() {
+                spyOn(chorus.Modal.prototype, "closeModal");
+                spyOn(chorus, "toast");
+                this.originalWorkbooksCount = this.dataset.tableauWorkbooks().length;
+                this.server.lastCreateFor(this.model).succeed();
+            });
 
-           it("closes the modal", function() {
-               expect(this.dialog.closeModal).toHaveBeenCalled();
-           });
+            it("closes the modal", function() {
+                expect(this.dialog.closeModal).toHaveBeenCalled();
+            });
 
             it("toasts", function() {
                 expect(chorus.toast).toHaveBeenCalledWith(
@@ -95,7 +95,7 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
             });
 
             it("stops the spinner", function() {
-               expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
             });
         });
 

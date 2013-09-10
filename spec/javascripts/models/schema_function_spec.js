@@ -6,7 +6,8 @@ describe("chorus.models.SchemaFunction", function() {
             returnType: "void",
             language: "sql",
             argNames: ["elephant", ""],
-            argTypes: ["Int", "Bool"]});
+            argTypes: ["Int", "Bool"]
+        });
     });
     describe("#toText", function() {
         context("with lowercase names", function() {

@@ -9,7 +9,8 @@ describe("chorus.utilities.CsvWriter", function() {
             var uniqueNames = ["col1_0", "col2_1", "col3_2"];
             var rows = [
                 {col1_0: "row 11", col2_1: "row 12", col3_2: "row 13"},
-                {col1_0: "row 21", col2_1: "row 22", col3_2: "row 23"}];
+                {col1_0: "row 21", col2_1: "row 22", col3_2: "row 23"}
+            ];
             this.csvWriter = new chorus.utilities.CsvWriter(columnNames, uniqueNames, rows, this.options);
         });
 

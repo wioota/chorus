@@ -115,10 +115,10 @@ describe("chorus.dialogs.DataSourceAccount", function() {
     });
 
     describe("#showSavedToast", function(){
-       it("broadcasts a toast with the right translation", function(){
-          spyOn(chorus, "toast");
-          this.dialog.showSavedToast();
-          expect(chorus.toast).toHaveBeenCalledWith("data_sources.account.updated.toast", {dataSourceName: this.dataSource.name()});
-       });
+        it("broadcasts a toast with the right translation", function(){
+            spyOn(chorus, "toast");
+            this.dialog.showSavedToast();
+            expect(chorus.toast).toHaveBeenCalledWith("data_sources.account.updated.toast", {dataSourceName: this.dataSource.name()});
+        });
     });
 });

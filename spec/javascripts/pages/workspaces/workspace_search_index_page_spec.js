@@ -15,7 +15,7 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
     });
 
     it("has no required resources", function() {
-       expect(this.page.requiredResources.length).toBe(0);
+        expect(this.page.requiredResources.length).toBe(0);
     });
 
     describe("when the workspace and search are fetched", function() {

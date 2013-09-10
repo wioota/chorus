@@ -368,14 +368,14 @@ describe("chorus.views.Activity", function() {
 
             context("when adding a comment", function() {
                 beforeEach(function() {
-                   this.newComment = new chorus.models.Comment({
-                       id: 12345,
-                       author:{
-                           id:10102
-                       },
-                       text:'I love you all',
-                       eventId: this.model.id
-                   });
+                    this.newComment = new chorus.models.Comment({
+                        id: 12345,
+                        author:{
+                            id:10102
+                        },
+                        text:'I love you all',
+                        eventId: this.model.id
+                    });
 
                     expect(this.view.$(".comments ul .morelinks a")).not.toExist();
                     expect(this.view.$(".comments li").length).toBe(2);

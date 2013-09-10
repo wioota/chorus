@@ -10,10 +10,10 @@ chorus.views.TagBox = chorus.views.Base.extend({
         this.listenTo(this.tagsInput, "tag:click", this.navigateToTagShowPage);
     },
 
-   navigateToTagShowPage: function(tag) {
+    navigateToTagShowPage: function(tag) {
        // this ensures url fragment has an initial slash in browser address bar
-       var url = tag.showUrl(this.options.workspaceIdForTagLink).replace("#","#/");
-       chorus.router.navigate(url);
+        var url = tag.showUrl(this.options.workspaceIdForTagLink).replace("#","#/");
+        chorus.router.navigate(url);
     },
 
     resourcesLoaded: function() {

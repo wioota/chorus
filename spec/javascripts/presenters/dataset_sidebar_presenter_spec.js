@@ -364,15 +364,15 @@ describe("chorus.presenters.DatasetSidebar", function() {
         });
 
         it("does not allow importing at all", function () {
-           expect(this.presenter.importsEnabled()).toBeFalsy();
+            expect(this.presenter.importsEnabled()).toBeFalsy();
         });
 
         it("does not allow exporting at all", function () {
-           expect(this.presenter.canExport()).toBeFalsy();
+            expect(this.presenter.canExport()).toBeFalsy();
         });
 
         it("is deletable", function () {
-           expect(this.presenter.isDeleteable()).toBeTruthy();
+            expect(this.presenter.isDeleteable()).toBeTruthy();
         });
     });
 });

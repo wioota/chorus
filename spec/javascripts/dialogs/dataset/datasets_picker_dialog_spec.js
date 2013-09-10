@@ -5,9 +5,9 @@ describe("chorus.dialogs.DatasetsPicker", function() {
         datasets = new chorus.collections.WorkspaceDatasetSet([], {workspaceId: "33", type: "SANDBOX_TABLE", objectType: "TABLE" });
         dialog = new chorus.dialogs.DatasetsPicker({ collection: datasets });
         datasetModels = [
-                            backboneFixtures.workspaceDataset.datasetTable({ objectName: "A", id: "REAL_ID" }),
-                            backboneFixtures.workspaceDataset.datasetTable({ objectName: "B", id: "AGENT_SMITH" })
-                        ];
+            backboneFixtures.workspaceDataset.datasetTable({ objectName: "A", id: "REAL_ID" }),
+            backboneFixtures.workspaceDataset.datasetTable({ objectName: "B", id: "AGENT_SMITH" })
+        ];
     });
 
     describe("#render", function() {

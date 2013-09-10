@@ -39,11 +39,11 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     isOracle: function() {
-      return this.dataSource().isOracle();
+        return this.dataSource().isOracle();
     },
 
     isGreenplum: function() {
-      return this.dataSource().isGreenplum();
+        return this.dataSource().isGreenplum();
     },
 
     isExternal: function() {
@@ -325,13 +325,13 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     deriveTableauWorkbook: function() {
         return new chorus.models.TableauWorkbook({
-           dataset: this,
-           name: this.get('objectName')
+            dataset: this,
+            name: this.get('objectName')
         });
     },
 
     humanType: function() {
-      return t(['dataset.entitySubtypes',this.get("entitySubtype"),this.get("objectType")].join("."));
+        return t(['dataset.entitySubtypes',this.get("entitySubtype"),this.get("objectType")].join("."));
     }
 }, {
     metaTypeMap: {

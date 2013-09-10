@@ -55,10 +55,10 @@ chorus.dialogs.ConfigureWorkFlowTask = chorus.dialogs.PickItems.include(chorus.M
     },
 
     fieldValues: function () {
-      return {
-          workFlowId: this.selectedWorkFlowId,
-          action: "run_work_flow"
-      };
+        return {
+            workFlowId: this.selectedWorkFlowId,
+            action: "run_work_flow"
+        };
     },
 
     submit: function () {

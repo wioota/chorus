@@ -15,11 +15,11 @@ describe("chorus.dialogs.WorkFlowNew", function() {
     });
 
     it("shows some instructional text", function () {
-       expect(this.dialog.$el).toContainTranslation("work_flows.new_dialog.info");
+        expect(this.dialog.$el).toContainTranslation("work_flows.new_dialog.info");
     });
 
     it("creates a location picker with the schema section hidden", function(){
-       expect(this.dialog.$('.schema')).not.toExist();
+        expect(this.dialog.$('.schema')).not.toExist();
     });
 
     context("when the workspace has a sandbox", function() {

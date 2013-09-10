@@ -24,11 +24,11 @@ describe("chorus.alerts.ExecutionMessage", function() {
             this.alert = new chorus.alerts.ExecutionMessage({ model: this.task });
             this.alert.render();
         });
-            it("has the correct title", function () {
+        it("has the correct title", function () {
                 expect(this.alert.title).toMatchTranslation("dataset.execution.message.title");
             });
 
-        });
+    });
 
     it("has no secondary text", function() {
         expect(this.alert.text).toBeFalsy();

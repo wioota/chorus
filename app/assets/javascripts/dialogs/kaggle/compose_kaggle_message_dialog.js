@@ -73,20 +73,20 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
     },
 
     combineNames: function(recipients){
-       var maxChars = this.maxRecipientCharacters;
-       var short = "";
-       var moreCount = 0;
-       var recipientNames = _.reduce(recipients, function(result, recipient) {
-           var fullNamesList = result + recipient.get("fullName") + ", ";
-           if(fullNamesList.length <= maxChars + 2) {
-               short = fullNamesList;
-           }
+        var maxChars = this.maxRecipientCharacters;
+        var short = "";
+        var moreCount = 0;
+        var recipientNames = _.reduce(recipients, function(result, recipient) {
+            var fullNamesList = result + recipient.get("fullName") + ", ";
+            if(fullNamesList.length <= maxChars + 2) {
+                short = fullNamesList;
+            }
            else {
-               moreCount += 1;
-           }
-           return fullNamesList;
-       }, "");
-       return ( { short: short.substring(0, short.length - 2),
+                moreCount += 1;
+            }
+            return fullNamesList;
+        }, "");
+        return ( { short: short.substring(0, short.length - 2),
            full: recipientNames.substring(0, recipientNames.length - 2),
            moreCount: moreCount } );
     },

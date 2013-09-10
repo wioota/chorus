@@ -46,7 +46,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             owner: {firstName: "The", lastName: "Past"},
             "public": false,
             archiver: {firstName: "Mr", lastName: "Archiver"},
-            archivedAt: "1985-07-21T06:21:02Z"});
+            archivedAt: "1985-07-21T06:21:02Z"
+        });
         this.models.archivedWorkspace.loaded = true;
 
         this.models.dataSourceAccount = new chorus.models.DataSourceAccount();
@@ -154,7 +155,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                         id: 1,
                         username: "chorusadmin",
                         firstName: "Mr",
-                        lastName: "Comment"},
+                        lastName: "Comment"
+                    },
                     body: "Comments are fun",
                     complete_json: true,
                     timestamp: "2013-03-25T17:49:58Z"
@@ -181,7 +183,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                         id: 1,
                         username: "chorusadmin",
                         firstName: "Chorus",
-                        lastName: "Admin"},
+                        lastName: "Admin"
+                    },
                     body: "I always get the last comment, and I like writing really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things really really long things ",
                     complete_json: true,
                     timestamp: "2013-03-25T17:49:58Z"
@@ -388,7 +391,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 csvLines.push(randCommaSeparatedLineOfLength(numColumns));
             });
 
-           return new chorus.models.CSVImport({
+            return new chorus.models.CSVImport({
                 workspaceId: '90210',
                 contents: csvLines
             });
@@ -509,7 +512,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "List Page (loading)": new chorus.views.MainContentList({
                 modelClass: "Dataset",
-                collection: this.collections.loadingCollection}),
+                collection: this.collections.loadingCollection
+            }),
 
             "User List": new chorus.views.MainContentList({
                 modelClass: "User",
@@ -758,7 +762,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             }),
 
             "New Table Import from CSV ": new chorus.dialogs.NewTableImportCSV({
-                model: this.models.csvImport, csvOptions: {tableName: 'foobar', contents: this.models.csvImport.get("contents")}
+                model: this.models.csvImport,
+                csvOptions: {tableName: 'foobar', contents: this.models.csvImport.get("contents")}
             }),
 
             "Workspace Data source Account": new chorus.dialogs.WorkspaceDataSourceAccount({model: this.models.dataSourceAccount, pageModel: this.models.workspace}),

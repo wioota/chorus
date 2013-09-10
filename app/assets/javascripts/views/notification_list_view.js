@@ -36,7 +36,7 @@ chorus.views.NotificationList = chorus.views.Base.extend({
         var $list = this.$("ul");
 
         _.each(this.activities, function(activityView) {
-           activityView.teardown();
+            activityView.teardown();
         });
         this.activities = [];
         this.collection.each(function(model) {

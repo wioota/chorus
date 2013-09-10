@@ -155,10 +155,10 @@ describe('chorus.models.DataSource', function() {
         });
 
         context("when the data source is Oracle", function() {
-           it('returns null', function() {
-              this.model = backboneFixtures.oracleDataSource();
-              expect(this.model.usage()).toBeNull();
-           });
+            it('returns null', function() {
+                this.model = backboneFixtures.oracleDataSource();
+                expect(this.model.usage()).toBeNull();
+            });
         });
     });
 

@@ -29,7 +29,7 @@ describe("chorus.dialogs.EditTags", function() {
 
     describe("clicking the close button", function(){
         beforeEach(function(){
-           this.dialog.$(".cancel").click();
+            this.dialog.$(".cancel").click();
         });
 
         it("closes the dialog", function(){
@@ -45,7 +45,7 @@ describe("chorus.dialogs.EditTags", function() {
 
             spyOn(this.dialog.tagsInput, "focusInput");
             _(setTimeout.calls).chain().select(function (item) { return item.args[1] === 0; }).each(function (call) {
-               call.args[0]();
+                call.args[0]();
             });
             expect(this.dialog.tagsInput.focusInput).toHaveBeenCalled();
 
@@ -105,9 +105,9 @@ describe("chorus.dialogs.EditTags", function() {
             });
 
             context('when the tag is already on some of the models', function() {
-               beforeEach(function(){
-                   enterTag(this.dialog, "foo");
-               });
+                beforeEach(function(){
+                    enterTag(this.dialog, "foo");
+                });
 
                 it('saves the tags', function() {
                     expect(this.collection.updateTags).toHaveBeenCalled();

@@ -10,7 +10,7 @@
     "undef":    true,      // true if variables must be declared before used
     "unused":   "vars",    // true if variables must be used if they are declared
     "white":    false,     // true if strict whitespace rules apply (see also 'indent' option)
-    "indent":   false,     // Number of spaces that should be used for indentation
+    "indent":   4,     // Number of spaces that should be used for indentation
     "trailing": true,      // true if a trailing whitespace at the end of the line is an error
     "latedef":  true,      // true if variable must be defined before it was used
     "debug":    false,     // true if debugger statements should be allowed (set to false, before going into production)

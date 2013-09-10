@@ -37,7 +37,7 @@ chorus.views.WorkspaceDatasetIndexPageButtons = chorus.views.Base.extend({
             contentEvents: this.menuEvents
         });
         if (!this.model.sandbox() || !this.canUpdate()) {
-          this.$(".import_file").closest("li").addClass("hidden");
+            this.$(".import_file").closest("li").addClass("hidden");
         }
     },
 

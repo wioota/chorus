@@ -62,9 +62,9 @@ describe("chorus.models.GnipDataSource", function() {
     });
 
     describe("#stateText", function() {
-       it("returns online", function() {
+        it("returns online", function() {
             expect(this.model.stateText()).toEqual("Online");
-       });
+        });
     });
 
     describe("#stateIconUrl", function() {

@@ -31,7 +31,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                 });
 
                 it("does not navigate again", function() {
-                   expect(chorus.router.navigate).not.toHaveBeenCalled();
+                    expect(chorus.router.navigate).not.toHaveBeenCalled();
                 });
 
                 describe("when the columnSet fetch completes", function() {

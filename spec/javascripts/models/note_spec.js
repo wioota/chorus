@@ -109,7 +109,8 @@ describe("chorus.models.Note", function() {
                         contents_file_size: {
                             LESS_THAN: {
                                 message: "file_size_exceeded",
-                                count: "5242880 Bytes"}
+                                count: "5242880 Bytes"
+                            }
                         }
                     }
                 }

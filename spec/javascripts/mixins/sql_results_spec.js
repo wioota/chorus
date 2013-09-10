@@ -50,8 +50,8 @@ describe("chorus.Mixins.SQLResults", function() {
             var firstSet = _.map(this.host.getColumns(), function(column) {
                 return _.clone(column);
             });
-           var secondSet = this.host.getColumns();
-           expect(firstSet).toEqual(secondSet);
+            var secondSet = this.host.getColumns();
+            expect(firstSet).toEqual(secondSet);
         });
     });
 

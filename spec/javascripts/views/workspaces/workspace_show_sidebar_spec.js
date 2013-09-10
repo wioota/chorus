@@ -189,12 +189,12 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
             });
 
             it("does not have the 'add a sandbox' link", function() {
-               expect(this.view.$('a.new_sandbox')).not.toExist();
+                expect(this.view.$('a.new_sandbox')).not.toExist();
             });
 
             it("does not have 'add a note' or 'ad an insight' link", function() {
-               expect(this.view.$('a.new_note')).not.toExist();
-               expect(this.view.$('a.new_insight')).not.toExist();
+                expect(this.view.$('a.new_note')).not.toExist();
+                expect(this.view.$('a.new_insight')).not.toExist();
             });
 
             context("when kaggle is configured", function() {

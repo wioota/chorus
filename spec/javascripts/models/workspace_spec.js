@@ -349,7 +349,8 @@ describe("chorus.models.Workspace", function() {
             beforeEach(function() {
                 this.model = backboneFixtures.workspace({
                     sandboxInfo: {
-                        id: 6, name: "schema",
+                        id: 6,
+                        name: "schema",
                         database: { id: 4, name: "db", dataSource: { id: 5, name: "dataSource" } }
                     }
                 });

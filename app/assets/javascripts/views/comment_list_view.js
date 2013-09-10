@@ -30,7 +30,7 @@ chorus.views.CommentList = chorus.views.Base.extend({
     postRender: function() {
         var $lis = this.$("li .comment_content .body");
         _.each(this.commentViews, function(commentView) {
-           commentView.teardown();
+            commentView.teardown();
         });
         this.commentViews = [];
         this.collection.each(function(comment, index) {

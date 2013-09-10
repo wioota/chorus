@@ -77,7 +77,7 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
             });
 
             it("stops the loading spinner", function() {
-               expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
             });
         });
     });

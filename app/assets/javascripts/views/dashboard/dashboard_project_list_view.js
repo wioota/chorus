@@ -3,7 +3,7 @@ chorus.views.DashboardProjectList = chorus.views.Base.extend({
     templateName: "dashboard/project_list",
 
     postRender: function () {
-      $('.icon-info-sign').qtip(); //Restyles title text
+        $('.icon-info-sign').qtip(); //Restyles title text
     },
 
     collectionModelContext: function(model) {

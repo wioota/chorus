@@ -67,7 +67,7 @@ describe("chorus.dialogs.CreateHdfsDataset", function() {
 
         context("submitting the form", function() {
             beforeEach(function() {
-               this.dialog.$("form").submit();
+                this.dialog.$("form").submit();
             });
 
             it("posts with the correct values", function() {

@@ -2,7 +2,8 @@ describe("chorus.views.Filter", function() {
     beforeEach(function() {
         this.collection = new chorus.collections.DatabaseColumnSet([
             new chorus.models.DatabaseColumn({name: "mycolumn1"}),
-            new chorus.models.DatabaseColumn({name: "mycolumn2"})]);
+            new chorus.models.DatabaseColumn({name: "mycolumn2"})
+        ]);
         this.model = new chorus.models.DatasetFilter();
         this.view = new chorus.views.Filter({model: this.model, collection: this.collection});
     });

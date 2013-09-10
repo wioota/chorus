@@ -74,7 +74,7 @@ describe("chorus global", function() {
 
         describe("plugins", function() {
             beforeEach(function() {
-               this.model = new chorus.models.User();
+                this.model = new chorus.models.User();
                 this.plugin1Spy = jasmine.createSpy("plugin1");
                 this.plugin2Spy = jasmine.createSpy("plugin2");
                 this.otherPluginSpy = jasmine.createSpy("otherPlugin");
@@ -151,25 +151,25 @@ describe("chorus global", function() {
     });
 
     describe("unregisterView", function() {
-       beforeEach(function() {
-           this.chorus.initialize();
-           this.view1 = new chorus.views.Base();
-           this.view2 = new chorus.views.Base();
-           this.view3 = new chorus.views.Base();
-           this.chorus.viewsToTearDown.push(this.view1);
-           this.chorus.viewsToTearDown.push(this.view2);
-           expect(this.chorus.viewsToTearDown).toEqual([this.view1, this.view2]);
-       });
+        beforeEach(function() {
+            this.chorus.initialize();
+            this.view1 = new chorus.views.Base();
+            this.view2 = new chorus.views.Base();
+            this.view3 = new chorus.views.Base();
+            this.chorus.viewsToTearDown.push(this.view1);
+            this.chorus.viewsToTearDown.push(this.view2);
+            expect(this.chorus.viewsToTearDown).toEqual([this.view1, this.view2]);
+        });
 
-       it("removes the view from viewsToTearDown if applicable", function() {
-           this.chorus.unregisterView(this.view1);
-           expect(this.chorus.viewsToTearDown).toEqual([this.view2]);
-       });
+        it("removes the view from viewsToTearDown if applicable", function() {
+            this.chorus.unregisterView(this.view1);
+            expect(this.chorus.viewsToTearDown).toEqual([this.view2]);
+        });
 
-       it("does nothing if the view is not in viewsToTearDown", function() {
-           this.chorus.unregisterView(this.view3);
-           expect(this.chorus.viewsToTearDown).toEqual([this.view1, this.view2]);
-       });
+        it("does nothing if the view is not in viewsToTearDown", function() {
+            this.chorus.unregisterView(this.view3);
+            expect(this.chorus.viewsToTearDown).toEqual([this.view1, this.view2]);
+        });
     });
 
     describe("#toast", function() {

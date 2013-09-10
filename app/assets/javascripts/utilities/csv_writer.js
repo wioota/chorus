@@ -10,7 +10,7 @@ chorus.utilities.CsvWriter = function(columnNames, uniqueNames, rows, options) {
 
         _.each(rows, function(row) {
             var orderedRow = _.map(uniqueNames, function(name){
-               return '"' + row[name] + '"';
+                return '"' + row[name] + '"';
             });
             csvData += orderedRow.join(this.delimiter) + "\n";
         }, this);

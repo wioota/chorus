@@ -249,13 +249,13 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
             });
 
             it("marks the inputs invalid", function() {
-               expect(this.dialog.$("input[name=replyTo]")).toHaveClass("has_error");
-               expect(this.dialog.$("input[name=subject]")).toHaveClass("has_error");
-               expect(this.dialog.$("textarea[name=htmlBody]")).toHaveClass("has_error");
+                expect(this.dialog.$("input[name=replyTo]")).toHaveClass("has_error");
+                expect(this.dialog.$("input[name=subject]")).toHaveClass("has_error");
+                expect(this.dialog.$("textarea[name=htmlBody]")).toHaveClass("has_error");
             });
 
             it("stops the loading spinner", function() {
-               expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
+                expect(this.dialog.$("button.submit").isLoading()).toBeFalsy();
             });
         });
     });

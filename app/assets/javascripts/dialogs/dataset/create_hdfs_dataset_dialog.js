@@ -34,8 +34,8 @@ chorus.dialogs.CreateHdfsDataset = chorus.dialogs.HdfsDatasetAttributes.extend({
     },
 
     postRender: function() {
-       this.$(".loading_spinner").startLoading();
-       chorus.styleSelect(this.$(".data_source select"));
+        this.$(".loading_spinner").startLoading();
+        chorus.styleSelect(this.$(".data_source select"));
     },
 
     dataSourcesLoaded: function() {

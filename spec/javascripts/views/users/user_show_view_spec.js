@@ -14,7 +14,7 @@ describe("chorus.views.UserShow", function() {
             workspaces.add(new chorus.models.Workspace({id: 1, name: "ws1"}));
             workspaces.add(new chorus.models.Workspace({id: 2, name: "ws2"}));
             this.model.workspaces = function(){
-              return workspaces;
+                return workspaces;
             };
             this.view = new chorus.views.UserShow({model: this.model});
         });
@@ -62,12 +62,12 @@ describe("chorus.views.UserShow", function() {
             });
 
             it("renders all of the workspaces", function(){
-              expect(this.view.$(".workspaces li").length).toBe(2);
+                expect(this.view.$(".workspaces li").length).toBe(2);
             });
 
             it("renders the workspaces' names'", function(){
-              expect(this.view.$(".workspaces li").eq(0).text()).toBe('ws1');
-              expect(this.view.$(".workspaces li").eq(1).text()).toBe('ws2');
+                expect(this.view.$(".workspaces li").eq(0).text()).toBe('ws1');
+                expect(this.view.$(".workspaces li").eq(1).text()).toBe('ws2');
             });
 
             it("sets title attributes on the workspace names", function() {
@@ -76,8 +76,8 @@ describe("chorus.views.UserShow", function() {
             });
 
             it("renders the workspaces with the correct hrefs", function() {
-              expect(this.view.$(".workspaces li a").eq(0).attr('href')).toBe('#/workspaces/1');
-              expect(this.view.$(".workspaces li a").eq(1).attr('href')).toBe('#/workspaces/2');
+                expect(this.view.$(".workspaces li a").eq(0).attr('href')).toBe('#/workspaces/1');
+                expect(this.view.$(".workspaces li a").eq(1).attr('href')).toBe('#/workspaces/2');
             });
 
             it("renders the workspaces images", function() {
@@ -87,15 +87,15 @@ describe("chorus.views.UserShow", function() {
 
 
             context("When the user is not the administrator", function() {
-                       beforeEach(function() {
-                           this.model.set({admin: false}, {silent : true});
-                           this.view.render();
-                       });
+                        beforeEach(function() {
+                            this.model.set({admin: false}, {silent : true});
+                            this.view.render();
+                        });
             
-                it("does not render administrator", function() {
-                    expect(this.view.$(".administrator")).not.toExist();
-                });
-            });
+                        it("does not render administrator", function() {
+                            expect(this.view.$(".administrator")).not.toExist();
+                        });
+                    });
 
             context("when the view changes and re-renders several times before workspaces is fetched", function(){
                 beforeEach(function(){

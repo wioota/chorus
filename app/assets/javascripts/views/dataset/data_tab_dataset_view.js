@@ -55,7 +55,7 @@ chorus.views.DataTabDataset = chorus.views.Base.extend({
     buildColumnList: function() {
         return new chorus.views.DataTabDatasetColumnList({
             el: this.$(".column_list"),
-                dataset: this.model
+            dataset: this.model
         });
     }
 });

@@ -3,7 +3,8 @@ describe("chorus.views.SqlWorkfileContentDetails", function() {
         this.model = backboneFixtures.workfile.sql({ fileName: 'test.sql', versionInfo: { content: "select * from foo" } });
         this.model.workspace().set({
             sandboxInfo: {
-                id: 4, name: "schema",
+                id: 4,
+                name: "schema",
                 database: { id: 3, name: "db", dataSource: { id: 2, name: "data source" } }
             }
         });

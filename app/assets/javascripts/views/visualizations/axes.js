@@ -375,7 +375,7 @@ chorus.views.visualizations.Axes = function(options) {
             timeType: options.timeType,
             paddingX: options.paddingX,
             paddingY: options.paddingY
-    });
+        });
 
     this.yAxis = new chorus.views.visualizations.YAxis({
         el: options.el,

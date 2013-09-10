@@ -248,15 +248,15 @@ describe("chorus.views.TagsInput", function() {
                 expect($(view.el).html()).toContainTranslation("tags.create_new");
             });
 
-           context("when the user selects the suggestion", function(){
-               beforeEach(function() {
+            context("when the user selects the suggestion", function(){
+                beforeEach(function() {
                     view.$("div.text-suggestion").eq(0).click();
-               });
+                });
 
-              it("adds a tag with the text entered by the user (without '(Create new)')", function(){
-                  expect(this.addedSpy.mostRecentCall.args[0].get("name")).toEqual("s");
-              });
-           });
+                it("adds a tag with the text entered by the user (without '(Create new)')", function(){
+                    expect(this.addedSpy.mostRecentCall.args[0].get("name")).toEqual("s");
+                });
+            });
         });
 
         context("when the text entered is an existing tag", function(){

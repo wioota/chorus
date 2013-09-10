@@ -26,7 +26,8 @@ chorus.pages.WorkspaceTagShowPage = chorus.pages.TagShowPage.extend({
 
     parseSearchParams: function(searchParams) {
         return _.extend(this._super("parseSearchParams", [ searchParams ]), {
-            workspaceId: this.workspaceId });
+            workspaceId: this.workspaceId
+        });
     },
 
     setup: function() {

@@ -24,7 +24,7 @@ describe("chorus.models.DataPreviewTask", function() {
     });
 
     it("has the right url", function() {
-       expect(this.model.url()).toBe("/datasets/1234/previews");
+        expect(this.model.url()).toBe("/datasets/1234/previews");
     });
 
     it("has the right url when cancelling", function() {

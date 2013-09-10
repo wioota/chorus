@@ -44,11 +44,13 @@ describe("chorus.views.WorkfileVersionList", function() {
 
     it("displays the author and date for each item", function() {
         expect(this.view.$("li:eq(0) .version_details")).toContainTranslation("workfile.version_saved_by", {
-            authorName: "Bob Doe", formattedDate: "November 29, 2012"
+            authorName: "Bob Doe",
+            formattedDate: "November 29, 2012"
         });
 
         expect(this.view.$("li:eq(1) .version_details")).toContainTranslation("workfile.version_saved_by", {
-            authorName: "Rob Doe", formattedDate: "November 29, 2011"
+            authorName: "Rob Doe",
+            formattedDate: "November 29, 2011"
         });
     });
 

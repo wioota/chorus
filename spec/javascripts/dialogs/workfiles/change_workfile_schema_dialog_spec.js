@@ -42,7 +42,7 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
             });
 
             it("should show a 403 error message", function() {
-               expect(this.dialog.$(".errors")).toContainTranslation("schema_picker.change_workfile_schema.invalid_credentials");
+                expect(this.dialog.$(".errors")).toContainTranslation("schema_picker.change_workfile_schema.invalid_credentials");
             });
         });
     });

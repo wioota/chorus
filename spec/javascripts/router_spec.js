@@ -79,7 +79,7 @@ describe("chorus.router", function() {
                 });
 
                 it("navigates to login", function() {
-                   expect(this.chorus.router.navigate).toHaveBeenCalledWith('login');
+                    expect(this.chorus.router.navigate).toHaveBeenCalledWith('login');
                 });
             });
         });
@@ -151,8 +151,8 @@ describe("chorus.router", function() {
 
             describe("and the target fragment is not the current fragment", function() {
                 it("calls Backbone's navigate with {trigger: true} when pageOptions is undefined", function () {
-                   this.chorus.router.navigate("/bar");
-                   expect(Backbone.history.navigate).toHaveBeenCalledWith("/bar", {trigger: true});
+                    this.chorus.router.navigate("/bar");
+                    expect(Backbone.history.navigate).toHaveBeenCalledWith("/bar", {trigger: true});
                 });
 
                 it("calls Backbone's navigate with the given trigger value when pageOptions is defined", function () {

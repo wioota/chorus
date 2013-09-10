@@ -8,7 +8,7 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
     });
 
     it("fetches the workspace members", function(){
-       expect(this.model.workspace().members()).toHaveBeenFetched();
+        expect(this.model.workspace().members()).toHaveBeenFetched();
     });
 
     it("re-renders the page when the members are fetched", function () {
@@ -61,7 +61,7 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
 
         context("when the current user cannot open the workfile", function(){
             it("does not show the open file button", function(){
-               this.model.canOpen.andReturn(false);
+                this.model.canOpen.andReturn(false);
                 this.view.render();
                 expect(this.view.$(".open_file")).not.toExist();
             });

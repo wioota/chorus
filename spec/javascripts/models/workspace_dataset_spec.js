@@ -25,14 +25,14 @@ describe("chorus.models.WorkspaceDataset", function() {
     describe("show url", function() {
 
         it("has the right showUrl", function() {
-          expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/1011');
+            expect(this.dataset.showUrl()).toMatchUrl('#/workspaces/44/datasets/1011');
         });
 
         context("when the dataset is a chorus view", function() {
 
-          it("has the right showUrl", function() {
-            expect(this.chorusView.showUrl()).toMatchUrl("#/workspaces/44/chorus_views/1011");
-          });
+            it("has the right showUrl", function() {
+                expect(this.chorusView.showUrl()).toMatchUrl("#/workspaces/44/chorus_views/1011");
+            });
         });
     });
 
@@ -181,7 +181,7 @@ describe("chorus.models.WorkspaceDataset", function() {
 
     describe("#lastImport", function() {
         it("is falsy when there are no imports", function() {
-           expect(this.dataset.lastImport()).toBeFalsy();
+            expect(this.dataset.lastImport()).toBeFalsy();
         });
 
         it("returns the first import if there are more than one", function() {
@@ -211,7 +211,7 @@ describe("chorus.models.WorkspaceDataset", function() {
         });
 
         it('sets the sourceObjectType to dataset', function() {
-           expect(this.chorusView.get("sourceObjectType")).toBe("dataset");
+            expect(this.chorusView.get("sourceObjectType")).toBe("dataset");
         });
 
 

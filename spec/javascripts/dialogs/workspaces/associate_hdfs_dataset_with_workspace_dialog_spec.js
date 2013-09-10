@@ -24,7 +24,7 @@ describe("chorus.dialogs.HdfsDatasetWorkspacePicker", function() {
     });
 
     it("has the correct selectedEvent", function() {
-       expect(this.dialog.selectedEvent).toBe("workspace:selected");
+        expect(this.dialog.selectedEvent).toBe("workspace:selected");
     });
 
     it("should only show active workspaces", function () {

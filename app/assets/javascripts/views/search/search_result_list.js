@@ -46,8 +46,8 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
     },
 
     title: function() {
-         return t("search.type." + this.entityType);
-    },
+            return t("search.type." + this.entityType);
+        },
 
     moreRecordsThanShown: function () {
         var localModels = this.collection.models;

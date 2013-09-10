@@ -1,5 +1,5 @@
 chorus.Mixins.ServerErrors = {
-   serverErrorMessages: function() {
+    serverErrorMessages: function() {
         var output = [];
         var fullKey;
         if (!this.serverErrors) { return output; }

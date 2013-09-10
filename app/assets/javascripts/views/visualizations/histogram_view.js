@@ -60,7 +60,7 @@ chorus.views.visualizations.Histogram = chorus.views.Base.extend({
         svg.select(".xaxis").remove();
         svg.select(".yaxis").remove();
         this.axes.render();
-   }
+    }
 
 });
 

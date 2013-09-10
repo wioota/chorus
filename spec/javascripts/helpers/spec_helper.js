@@ -107,20 +107,20 @@
                 },
 
                 toBeA: function(klass) {
-                     if (klass.prototype && klass.prototype.constructorName) {
-                        this.message = function () {
-                            return [
-                                "Expected a '" + this.actual.constructorName + "' to be an instance of '" + klass.prototype.constructorName +"'.",
-                                "Expected a '" + this.actual.constructorName + "' to be an instance of something other than '" + klass.prototype.constructorName +"'!"
-                            ];
-                        };
-                    }
-                    if (_.isFunction(klass)) {
-                        return this.actual instanceof klass;
-                    } else {
-                        return (typeof this.actual === klass);
-                    }
-                },
+                        if (klass.prototype && klass.prototype.constructorName) {
+                            this.message = function () {
+                                return [
+                                    "Expected a '" + this.actual.constructorName + "' to be an instance of '" + klass.prototype.constructorName +"'.",
+                                    "Expected a '" + this.actual.constructorName + "' to be an instance of something other than '" + klass.prototype.constructorName +"'!"
+                                ];
+                            };
+                        }
+                        if (_.isFunction(klass)) {
+                            return this.actual instanceof klass;
+                        } else {
+                            return (typeof this.actual === klass);
+                        }
+                    },
 
                 toBeEnabled: function() {
                     return this.actual.is(':not(:disabled)');
@@ -610,7 +610,7 @@
         var origHistory = chorus.startHistory;
         chorus.requireLogin = $.noop;
         chorus.startHistory = function () {
-          Backbone.history.options = {root: '/'};
+            Backbone.history.options = {root: '/'};
         };
 
         chorus.initialize();

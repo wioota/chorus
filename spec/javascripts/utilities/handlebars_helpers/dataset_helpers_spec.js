@@ -100,7 +100,8 @@ describe('chorus.handlebarsHelpers.dataset', function() {
                                     }
                                 }
                             }
-                        ]}
+                        ]
+                    }
                 });
                 this.model = searchResult.datasets().at(0);
                 this.result = Handlebars.helpers.datasetLocation(this.model).toString();

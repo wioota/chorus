@@ -20,7 +20,8 @@ describe("textext extensions", function() {
                 result: [
                     {text: 'bar <span class=\'create_new\'>(' + t("tags.create_new") + ')</span>', name: 'bar'},
                     {text: 'foo', name: 'foo'}
-                ]});
+                ]
+            });
         });
 
         it("puts the escaped value in the text field", function() {
@@ -46,11 +47,11 @@ describe("textext extensions", function() {
         });
 
         context("when the query tag is empty", function(){
-           it("does not suggest (Create new)", function(){
-               this.textext.ajax().onComplete({response: [{name: 'bar'}]}, '');
-               expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object),
+            it("does not suggest (Create new)", function(){
+                this.textext.ajax().onComplete({response: [{name: 'bar'}]}, '');
+                expect(this.suggestionSpy).toHaveBeenCalledWith(jasmine.any(Object),
                    {result: [{text: 'bar', name: 'bar'}]});
-           });
+            });
         });
 
         context("when the query tag is not in the autocomplete response", function() {

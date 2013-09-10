@@ -15,7 +15,7 @@ chorus.alerts.ExecutionMessage = chorus.alerts.Base.extend({
     },
 
     setup: function() {
-       this.title = this.getTitle();
+        this.title = this.getTitle();
     },
 
     getTitle:function () {

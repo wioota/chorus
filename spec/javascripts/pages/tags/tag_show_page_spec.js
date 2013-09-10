@@ -35,7 +35,7 @@ describe("chorus.pages.TagShowPage", function() {
             });
 
             it('marks Other Files as unavailable', function() {
-               expect(page.$('.popup_filter li[data-type=attachment] span')).toHaveClass("unavailable");
+                expect(page.$('.popup_filter li[data-type=attachment] span')).toHaveClass("unavailable");
             });
         });
 

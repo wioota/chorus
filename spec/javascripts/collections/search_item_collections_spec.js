@@ -61,7 +61,8 @@ describe("chorus.collections.Search", function() {
                         backboneFixtures.gpdbDataSourceJson({ response: { name: "dataSource122", id: '122' } }).response,
                         backboneFixtures.gpdbDataSourceJson({ response: { name: "dataSource123", id: '123' } }).response
                     ]
-                }}));
+                }
+            }));
 
             expect(this.collection.pagination.records).toBe(51);
             expect(this.collection.length).toBe(3);

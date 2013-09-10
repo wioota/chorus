@@ -121,7 +121,8 @@ describe("chorus.views.SchemaPicker", function() {
                     this.server.completeFetchFor(this.view.databaseView.collection, [
                         backboneFixtures.database({name: "Zoo"}),
                         backboneFixtures.database({name: "Aardvark"}),
-                        backboneFixtures.database({name: "bear"})]);
+                        backboneFixtures.database({name: "bear"})
+                    ]);
                 }
 
                 var className = _.str.underscored(type);
@@ -678,7 +679,8 @@ describe("chorus.views.SchemaPicker", function() {
                         this.server.completeFetchFor(this.view.databaseView.collection, [
                             backboneFixtures.database(),
                             this.database.attributes,
-                            backboneFixtures.database()]);
+                            backboneFixtures.database()
+                        ]);
                     });
 
                     itShowsSelect("database");
@@ -721,7 +723,7 @@ describe("chorus.views.SchemaPicker", function() {
                         itDisplaysDefaultOptionFor("schema");
 
                         it("is not ready", function(){
-                          expect(this.view.ready()).toBeFalsy();
+                            expect(this.view.ready()).toBeFalsy();
                         });
 
                         it("triggers an error event", function() {

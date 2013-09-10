@@ -36,16 +36,16 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
 
     handleKeyEvent: function(event) {
         switch (event.keyCode) {
-            case 40:
-                this.downArrow();
-                break;
-            case 38:
-                this.upArrow();
-                break;
-            case 13:
-                this.enterKey();
-                if (this.$("li.selected").length > 0) { event.preventDefault(); }
-                break;
+        case 40:
+            this.downArrow();
+            break;
+        case 38:
+            this.upArrow();
+            break;
+        case 13:
+            this.enterKey();
+            if (this.$("li.selected").length > 0) { event.preventDefault(); }
+            break;
         }
     },
 

@@ -58,7 +58,7 @@ describe("chorus.views.SearchWorkspace", function() {
     });
 
     it("shows tags", function() {
-       expect(this.view.$('.item_tag_list')).toContainText('tag');
+        expect(this.view.$('.item_tag_list')).toContainText('tag');
     });
 
     context("the description does not contain the search string", function() {

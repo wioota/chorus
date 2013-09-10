@@ -255,12 +255,12 @@ chorus.views.DatasetContentDetails = chorus.views.Base.include(
     },
 
     displayPublishDialog: function() {
-      this.dialog && this.dialog.teardown();
-      this.dialog = new chorus.dialogs.PublishToTableau({
-          model: this.dataset.deriveTableauWorkbook(),
-          dataset: this.dataset
-      });
-      this.dialog.launchModal();
+        this.dialog && this.dialog.teardown();
+        this.dialog = new chorus.dialogs.PublishToTableau({
+            model: this.dataset.deriveTableauWorkbook(),
+            dataset: this.dataset
+        });
+        this.dialog.launchModal();
     },
 
     teardown: function() {

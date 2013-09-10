@@ -65,12 +65,12 @@
 
         columnNamesOfType: function(type) {
             switch (type) {
-                case "numeric":
-                    return this.numericColumnNames();
-                case "time":
-                    return this.datetimeColumnNames();
-                default:
-                    return this.allColumnNames();
+            case "numeric":
+                return this.numericColumnNames();
+            case "time":
+                return this.datetimeColumnNames();
+            default:
+                return this.allColumnNames();
             }
         },
 

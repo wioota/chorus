@@ -278,7 +278,7 @@ describe("chorus.collections.Base", function() {
             });
 
             it("triggers serverResponded once", function() {
-               expect(this.serverRespondedSpy.callCount).toBe(1);
+                expect(this.serverRespondedSpy.callCount).toBe(1);
             });
 
             it("triggers the loaded event after all models are in the collection", function() {

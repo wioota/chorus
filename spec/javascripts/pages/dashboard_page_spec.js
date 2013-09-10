@@ -19,16 +19,16 @@ describe("chorus.pages.DashboardPage", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.server.completeFetchAllFor(this.page.dataSourceSet, [
-                                         backboneFixtures.gpdbDataSource(),
-                                         backboneFixtures.oracleDataSource()
+                backboneFixtures.gpdbDataSource(),
+                backboneFixtures.oracleDataSource()
             ]);
             this.server.completeFetchAllFor(this.page.hdfsDataSourceSet, [
-                                         backboneFixtures.hdfsDataSource(),
-                                         backboneFixtures.hdfsDataSource()
+                backboneFixtures.hdfsDataSource(),
+                backboneFixtures.hdfsDataSource()
             ]);
             this.server.completeFetchAllFor(this.page.gnipDataSourceSet, [
-                                         backboneFixtures.gnipDataSource(),
-                                         backboneFixtures.gnipDataSource()
+                backboneFixtures.gnipDataSource(),
+                backboneFixtures.gnipDataSource()
             ]);
 
             this.page.render();

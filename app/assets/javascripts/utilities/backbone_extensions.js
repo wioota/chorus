@@ -126,7 +126,8 @@ Backbone.History.prototype.loadUrl = function(fragmentOverride) {
 
 // super function, taken from here:
 // -- https://gist.github.com/1542120
-;(function(Backbone) {
+;
+(function(Backbone) {
 
     // Find the next object up the prototype chain that has a
     // different implementation of the method.

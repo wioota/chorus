@@ -59,7 +59,8 @@ describe("chorus.views.JobItem", function () {
             var three, days;
 
             beforeEach(function () {
-                three = 3; days = 'days';
+                three = 3;
+                days = 'days';
                 this.model.set('intervalValue', three);
                 this.model.set('intervalUnit', days);
             });

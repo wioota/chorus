@@ -134,11 +134,11 @@ chorus.views.Filter = chorus.views.Base.extend({
     },
 
     fieldValues: function() {
-       return { value: this.$(".filter.default input").val() };
+        return { value: this.$(".filter.default input").val() };
     },
 
     fieldSelectValues: function() {
-       return { value: this.$(".filter.select_type select").val() };
+        return { value: this.$(".filter.select_type select").val() };
     },
 
     filtersForComparator: function(comparator) {

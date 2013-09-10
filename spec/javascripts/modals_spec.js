@@ -93,7 +93,7 @@ describe("chorus.Modal", function() {
                 it("sets the dialog.top to 30", function() {
                     this.modal.resize();
                     var lastCall = $.fn.css.argsForCall;
-                      expect(lastCall).toContain(["top", "30px"]);
+                    expect(lastCall).toContain(["top", "30px"]);
                 });
 
 
@@ -294,7 +294,7 @@ describe("chorus.Modal", function() {
         });
 
         it("should call #closeModal", function(){
-           expect(this.modal.closeModal).toHaveBeenCalled();
+            expect(this.modal.closeModal).toHaveBeenCalled();
         });
     });
 });

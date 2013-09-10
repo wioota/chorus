@@ -285,8 +285,8 @@ describe("chorus.dialogs.EditWorkspace", function() {
             itDisablesArchivingAndUnarchiving();
 
             it("does not allow the user to change the setting for showing sandbox datasets", function() {
-                  expect(this.dialog.$(".show_sandbox_datasets")).toBeDisabled();
-            });
+                    expect(this.dialog.$(".show_sandbox_datasets")).toBeDisabled();
+                });
         });
 
         context("when the user is not a member of the workspace", function() {

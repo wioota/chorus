@@ -513,11 +513,11 @@ describe("chorus.Mixins.Fetching", function() {
                 });
 
                 it("does not trigger 'serverResponded'", function() {
-                   expect(this.serverRespondedSpy).not.toHaveBeenCalled();
+                    expect(this.serverRespondedSpy).not.toHaveBeenCalled();
                 });
 
                 it("sets the statusCode on the resource", function() {
-                   expect(this.resource.statusCode).toBe(422);
+                    expect(this.resource.statusCode).toBe(422);
                 });
             });
 
