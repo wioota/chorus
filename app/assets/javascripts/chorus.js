@@ -36,6 +36,8 @@ window.Chorus = function chorus$Global() {
         self.bindGlobalCallbacks();
         self.bindModalLaunchingClicks();
 
+        self.debug = self.pageParams().debug;
+
         self.startHistory();
         self.updateCachebuster();
 

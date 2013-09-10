@@ -154,6 +154,13 @@ chorus.views.Bare = Backbone.View.include(
         render: function render() {
             this.preRender();
 
+            if(chorus.debug) {
+                if (!window.indentation) { window.indentation = 1; }
+                if (window.indentation === 1) { chorus.log(''); }
+                chorus.log(_.repeat('_', window.indentation), 'Rendering ' + this.constructorName);
+            }
+
+            window.indentation += 1;
             var evaluatedContext = {};
             if (!this.displayLoadingSection()) {
                 if (!this.requiredResources.allResponded()) {
@@ -171,6 +178,7 @@ chorus.views.Bare = Backbone.View.include(
             this.postRender($(this.el));
             this.renderHelps();
             chorus.PageEvents.trigger("content:changed");
+            if (chorus.debug) { window.indentation -= 1; }
             return this;
         },
 

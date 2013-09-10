@@ -25,6 +25,7 @@
             ["forbidden", "Forbidden"],
             ["invalidRoute", "InvalidRoute"],
             ["unprocessableEntity", "UnprocessableEntity"],
+            ["?*query", "Dashboard"],
             ["", "Dashboard"],
             ["login", "Login"],
             ["search/:query", "SearchIndex"],

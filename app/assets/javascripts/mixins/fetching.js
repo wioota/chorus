@@ -43,6 +43,8 @@
 
         makeSuccessFunction: function(options, success) {
             return function(resource, data, fetchOptions) {
+                if (chorus.debug) { chorus.log("<<+", resource.constructorName); }
+
                 resource.statusCode = 200;
                 if (!options.silent) {
                     resource.trigger('loaded');
