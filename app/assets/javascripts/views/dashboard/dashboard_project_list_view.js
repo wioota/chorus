@@ -4,7 +4,15 @@ chorus.views.DashboardProjectList = chorus.views.Base.extend({
 
     setup: function () {
         this.projectCards = [];
-        this.onceLoaded(this.collection, this.buildCards);
+    },
+
+    preRender: function () {
+        _.invoke(this.projectCards, 'teardown');
+        this.projectCards = this.collection.map(function (workspace) {
+            var card = new chorus.views.ProjectCard({model: workspace});
+            this.registerSubView(card);
+            return card;
+        }, this);
     },
 
     postRender: function () {
@@ -13,14 +21,5 @@ chorus.views.DashboardProjectList = chorus.views.Base.extend({
         }, this);
 
         $('.icon-info-sign').qtip(); //Restyles title text
-    },
-
-    buildCards: function () {
-        _.invoke(this.projectCards, 'teardown');
-        this.projectCards = this.collection.map(function (workspace) {
-            var card = new chorus.views.ProjectCard({model: workspace});
-            this.registerSubView(card);
-            return card;
-        }, this);
     }
 });
