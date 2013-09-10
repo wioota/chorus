@@ -4,10 +4,10 @@ describe("chorus.views.DashboardProjectList", function() {
 
         this.workspace2 = backboneFixtures.workspace({ name: "Camels", owner: { firstName: 'Andre', lastName: 'The Giant' }, latestCommentList: [], numberOfInsights: 1});
         delete this.workspace2.attributes.summary;
-        spyOn(this.workspace2, 'latestInsight').andReturn(backboneFixtures.activity.sandboxAdded());
+        spyOn(this.workspace2, 'latestInsight').andReturn(backboneFixtures.activity.insightOnGreenplumDataSource());
 
         this.workspace3 = backboneFixtures.workspace({numberOfInsights: 3});
-        spyOn(this.workspace3, 'latestInsight').andReturn(backboneFixtures.activity.sandboxAdded());
+        spyOn(this.workspace3, 'latestInsight').andReturn(backboneFixtures.activity.insightOnGreenplumDataSource());
 
         this.collection = new chorus.collections.WorkspaceSet([this.workspace1, this.workspace2, this.workspace3]);
         this.collection.loaded = true;
@@ -50,19 +50,25 @@ describe("chorus.views.DashboardProjectList", function() {
                 var presenter = new chorus.presenters.Activity(this.workspace2.latestInsight());
                 var insightHtml = presenter.headerHtml().string;
 
-                expect(this.view.$('.insight')).toExist();
-                expect(this.view.$('.insight .activity .activity_header')).toContainHtml(insightHtml);
+                expect(this.view.$('.dashboard_project_card:eq(2) .activity .activity_header')).toContainHtml(insightHtml);
             });
 
             it("does not show an insight if there are no insights", function () {
-                expect(this.view.$('.insight .activity_item').length).toBe(this.collection.length - 1);
+                expect(this.view.$('.insight_zone .activity_item').length).toBe(this.collection.length - 1);
             });
 
             it("shows a link to all insights if there are more", function () {
-                expect(this.view.$('.insight').eq(0).find('a.all_insights')).not.toExist();
+                expect(this.view.$('.dashboard_project_card:eq(0) a.all_insights')).not.toExist();
 
-                expect(this.view.$('.insight').eq(2).find('a.all_insights').text()).toMatchTranslation('project_card.insight.all_insights', {count: 2});
-                expect(this.view.$('.insight').eq(2).find('a.all_insights').attr('href')).toBe(this.workspace3.showUrl()+'?filter=insights');
+                expect(this.view.$('.dashboard_project_card:eq(2) a.all_insights').text()).toContainTranslation('project_card.insight.all_insights', {count: 2});
+                expect(this.view.$('.dashboard_project_card:eq(2) a.all_insights').attr('href')).toBe(this.workspace3.showUrl()+'?filter=insights');
+            });
+
+            describe("an activity with comments", function () {
+                it("displays the comment, with no 'read more'", function () {
+                    expect(this.view.$('.truncated_text')).toContainText(this.workspace2.latestInsight().get('body'));
+                    expect(this.view.$('.truncated_text .more')).not.toExist();
+                });
             });
         });
     });

@@ -26,7 +26,7 @@ chorus.views.Dashboard = chorus.views.Base.extend({
         this.projectList = new chorus.views.MainContentView({
             collection: this.projectWorkspaces,
             contentHeader:chorus.views.StaticTemplate("default_content_header", {title:t("header.current_projects")}),
-            content:new chorus.views.DashboardProjectList({ collection: this.projectWorkspaces })
+            content: new chorus.views.DashboardProjectList({ collection: this.projectWorkspaces })
         });
 
         this.dataSourceList = new chorus.views.MainContentView({
@@ -60,7 +60,9 @@ chorus.views.Dashboard = chorus.views.Base.extend({
         this.memberWorkspaces.loaded = true;
         this.projectWorkspaces.loaded = true;
         this.memberWorkspaces.reset(this.collection.where({isMember: true}));
+        this.memberWorkspaces.trigger('loaded');
         this.projectWorkspaces.reset(this.collection.where({isProject: true}));
+        this.projectWorkspaces.trigger('loaded');
     }
 });
 

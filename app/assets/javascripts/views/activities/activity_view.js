@@ -59,10 +59,10 @@ chorus.views.Activity = chorus.views.Base.extend({
 
         if(!this.htmlContent) {
             if(this.model.isUserGenerated()) {
-                this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: 'body', attributeIsHtmlSafe: true});
+                this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: 'body', attributeIsHtmlSafe: true, unexpandable: this.options.unexpandable});
             }
             if(this.model.hasCommitMessage()) {
-                this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: 'commitMessage', attributeIsHtmlSafe: true});
+                this.htmlContent = new chorus.views.TruncatedText({model: this.model, attribute: 'commitMessage', attributeIsHtmlSafe: true, unexpandable: this.options.unexpandable});
             }
         }
         this.failureContent = this.failureContent || new chorus.views.ErrorDetails({model: this.model});

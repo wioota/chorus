@@ -80,8 +80,9 @@ $system-action-color: #7C7D7D;
         padding: $activity-gutter;
         position: relative;
         overflow: visible;
+    }
 
-        .insight_ribbon {
+    .insight_ribbon {
             padding: 0;
             position: absolute;
             left: -15px;
@@ -114,7 +115,6 @@ $system-action-color: #7C7D7D;
                 display: inline-block;
             }
         }
-    }
 }
 
 .comment_list {

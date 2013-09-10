@@ -13,7 +13,8 @@ chorus.views.TruncatedText = chorus.views.Base.extend({
             value = new Handlebars.SafeString(value);
         }
         return {
-            text: value
+            text: value,
+            unexpandable: this.options.unexpandable
         };
     },
 
