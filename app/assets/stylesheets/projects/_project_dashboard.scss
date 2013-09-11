@@ -1,5 +1,6 @@
 .project_list {
     .dashboard_project_card {
+        position: relative;
         vertical-align: top;
         display: inline-block;
         width: 450px;
@@ -51,6 +52,10 @@
 
         .name {
             font-size: 24px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            display: block;
         }
 
         .name_row {
@@ -63,7 +68,9 @@
 
         .info_icon {
           display: inline;
-          float: right;
+          position: absolute;
+          top: 8px;
+          right: 12px;
         }
     }
 }
