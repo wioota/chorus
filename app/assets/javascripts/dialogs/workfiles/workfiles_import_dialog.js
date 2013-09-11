@@ -7,7 +7,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
     persistent: true,
 
     subviews: {
-        ".location_picker": "executionLocationPicker"
+        ".location_picker": "executionLocationPickerList"
     },
 
     events: {
@@ -37,26 +37,33 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
     },
 
     buildLocationPicker: function () {
-        this.executionLocationPicker = new chorus.views.WorkFlowExecutionLocationPicker();
-        this.listenTo(this.executionLocationPicker, "change", this.executionLocationChanged);
-        this.listenTo(this.executionLocationPicker, "error", this.showErrors);
-        this.listenTo(this.executionLocationPicker, "clearErrors", this.clearErrors);
+        this.executionLocationPickerList = new chorus.views.WorkFlowExecutionLocationPickerList();
+        this.listenTo(this.executionLocationPickerList, "change", this.executionLocationChanged);
+        this.listenTo(this.executionLocationPickerList, "error", this.showErrors);
+        this.listenTo(this.executionLocationPickerList, "clearErrors", this.clearErrors);
     },
 
     enableOrDisableSubmitButton: function () {
-        this.$("button.submit").prop("disabled", !this.executionLocationPicker.ready());
+        this.$("button.submit").prop("disabled", !this.executionLocationPickerList.ready());
     },
 
     setPickedValues: function () {
-        var selectedDataSource = this.executionLocationPicker.getSelectedDataSource();
-        if (selectedDataSource) {
-            if(selectedDataSource.get('entityType') === 'gpdb_data_source') {
-                var selectedDatabase = this.executionLocationPicker.getSelectedDatabase();
-                selectedDatabase && this.$('input#database_id').val(selectedDatabase.get('id'));
-            } else {
-                this.$('input#hdfs_data_source_id').val(selectedDataSource.get('id'));
-            }
+        this.$('.execution_locations').empty();
+        var selectedLocations = this.executionLocationPickerList.getSelectedLocations();
+
+        var dialog = this;
+        function buildHiddenField(index, name, location) {
+            var hiddenField = $('<input type="hidden">');
+            hiddenField.attr('name', 'workfile[execution_locations][' + index + '][' + _.underscored(name) + ']');
+            hiddenField.attr('value', location.get(name));
+            dialog.$('.execution_locations').append(hiddenField);
         }
+
+        _.each(selectedLocations, function (location, ix) {
+            _.each(['entityType', 'id'], function (name) {
+                buildHiddenField(ix, name, location);
+            });
+        });
     },
 
     executionLocationChanged: function () {
@@ -65,9 +72,8 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
     },
 
     upload: function(e) {
-        if (e) {
-            e.preventDefault();
-        }
+        e && e.preventDefault();
+
         if (this.uploadObj) {
             this.request = this.uploadObj.submit();
             this.$("button.submit").startLoading("workfiles.import_dialog.uploading");
@@ -128,11 +134,15 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             }
 
             function acceptFile() {
+                self.$el.removeClass('dialog_wide');
+                self.centerHorizontally();
                 self.$(".comment").removeClass("hidden");
                 self.$("button.submit").prop("disabled", false);
             }
 
             function acceptAlpineFile() {
+                self.$el.addClass('dialog_wide');
+                self.centerHorizontally();
                 self.$('.work_flow_detail').removeClass("hidden");
                 self.$('input#entity_subtype').val('alpine');
             }

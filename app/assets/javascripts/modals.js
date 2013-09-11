@@ -50,9 +50,13 @@ chorus.Modal = chorus.views.Base.extend({
         return result;
     },
 
+    centerHorizontally: function () {
+        $('#facebox').css('left', $(window).width() / 2 - ($('#facebox .popup').width() / 2));
+    },
+
     postRender: function() {
         this._super("postRender");
-        $('#facebox').css('left', $(window).width() / 2 - ($('#facebox .popup').width() / 2));
+        this.centerHorizontally();
     },
 
     makeModel:function (options) {

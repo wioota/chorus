@@ -4,6 +4,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         this.model = backboneFixtures.workfile.sql({ workspace: { id: 4 } });
         var workfileSet = new chorus.collections.WorkfileSet([this.model], { workspaceId: 4 });
         this.dialog = new chorus.dialogs.WorkfilesImport({ workspaceId: 4, pageModel: this.model, pageCollection: workfileSet });
+        spyOn(this.dialog, 'centerHorizontally');
     });
 
     it("does not re-render when the model changes", function() {
@@ -280,6 +281,11 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 expect(this.fakeUpload.wasSubmitted).toBeTruthy();
             });
         });
+
+        it("shrinks and centers the modal", function () {
+            expect(this.dialog.centerHorizontally).toHaveBeenCalled();
+            expect(this.dialog.$el).not.toHaveClass('dialog_wide');
+        });
     });
 
     context("when a .afm file has been chosen", function () {
@@ -289,19 +295,17 @@ describe("chorus.dialogs.WorkfilesImport", function() {
             this.fakeUpload.add([ "foo.afm" ]);
         });
 
-        it("shows an execution_location_picker", function () {
-            var executionLocationPicker = this.dialog.$(".execution_location_picker");
-            expect(executionLocationPicker).toExist();
+        it("shows an execution_location_picker_list", function () {
+            expect(this.dialog.$(".execution_location_picker_list")).toExist();
         });
 
         it("should only enable the submit button when the execution location picker is ready", function () {
-            this.dialog.executionLocationPicker.trigger('change');
+            this.dialog.executionLocationPickerList.trigger('change');
             expect(this.dialog.$("button.submit")).toBeDisabled();
 
-            spyOn(this.dialog.executionLocationPicker, 'ready').andReturn(true);
-            spyOn(this.dialog.executionLocationPicker, 'getSelectedDataSource');
+            spyOn(this.dialog.executionLocationPickerList, 'ready').andReturn(true);
 
-            this.dialog.executionLocationPicker.trigger('change');
+            this.dialog.executionLocationPickerList.trigger('change');
             expect(this.dialog.$("button.submit")).toBeEnabled();
         });
 
@@ -313,19 +317,25 @@ describe("chorus.dialogs.WorkfilesImport", function() {
             beforeEach(function () {
                 this.hdfs = backboneFixtures.hdfsDataSource();
 
-                var hdfsDataSources = this.dialog.executionLocationPicker.dataSourceView.hdfsDataSources;
+                var hdfsDataSources = this.dialog.executionLocationPickerList.pickers[0].dataSourceView.hdfsDataSources;
                 this.server.completeFetchAllFor(hdfsDataSources, [this.hdfs]);
 
-                var dataSources = this.dialog.executionLocationPicker.dataSourceView.gpdbDataSources;
+                var dataSources = this.dialog.executionLocationPickerList.pickers[0].dataSourceView.gpdbDataSources;
                 this.server.completeFetchAllFor(dataSources, []);
-
             });
 
             it("sets values on the form", function () {
-                expect(this.dialog.$('input#hdfs_data_source_id')).not.toHaveValue(this.hdfs.id);
+                expect(this.dialog.$('form .execution_locations input').length).toEqual(0);
 
                 this.dialog.$(".data_source select").prop("selectedIndex", 1).change();
-                expect(this.dialog.$('input#hdfs_data_source_id')).toHaveValue(this.hdfs.id);
+
+                var execution_location_fields = {};
+                _.each(this.dialog.$('form .execution_locations input'), function (field) {
+                    execution_location_fields[$(field).attr('name')] = $(field).attr('value');
+                });
+
+                expect(execution_location_fields['workfile[execution_locations][0][entity_type]']).toEqual('hdfs_data_source');
+                expect(execution_location_fields['workfile[execution_locations][0][id]']).toEqual(this.hdfs.id);
             });
         });
 
@@ -340,6 +350,11 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                     expect(this.dialog.$(".errors")).toContainTranslation("field_error.ALPINE_CONNECTION_ERROR");
                 });
             });
+        });
+
+        it("widens and centers the modal", function () {
+            expect(this.dialog.centerHorizontally).toHaveBeenCalled();
+            expect(this.dialog.$el).toHaveClass('dialog_wide');
         });
     });
 });
