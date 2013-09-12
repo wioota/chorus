@@ -43,8 +43,8 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         this.listenTo(this.executionLocationPickerList, "clearErrors", this.clearErrors);
     },
 
-    enableOrDisableSubmitButton: function () {
-        this.$("button.submit").prop("disabled", !this.executionLocationPickerList.ready());
+    toggleSubmitButton: function () {
+        this.$("button.submit").prop("disabled", this.isAlpine() && !this.executionLocationPickerList.ready());
     },
 
     setPickedValues: function () {
@@ -68,7 +68,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
 
     executionLocationChanged: function () {
         this.setPickedValues();
-        this.enableOrDisableSubmitButton();
+        this.toggleSubmitButton();
     },
 
     upload: function(e) {
@@ -101,6 +101,10 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         }
     },
 
+    isAlpine: function () {
+        return this.uploadExtension && this.uploadExtension.toLowerCase() === 'afm';
+    },
+    
     postRender: function() {
         var self = this;
 
@@ -133,17 +137,21 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
                 self.$('img.file_icon').removeClass('hidden');
             }
 
-            function acceptFile() {
-                self.$el.removeClass('dialog_wide');
+            function recomposeForFileType(showingAlpine) {
                 self.centerHorizontally();
-                self.$(".comment").removeClass("hidden");
-                self.$("button.submit").prop("disabled", false);
+                self.$el.toggleClass('dialog_wide', showingAlpine);
+                self.$('.work_flow_detail').toggleClass("hidden", !showingAlpine);
+                self.$(".comment").toggleClass("hidden", showingAlpine);
+                self.toggleSubmitButton();
+            }
+
+            function acceptFile() {
+                recomposeForFileType(false);
+                self.$('input#entity_subtype').val('');
             }
 
             function acceptAlpineFile() {
-                self.$el.addClass('dialog_wide');
-                self.centerHorizontally();
-                self.$('.work_flow_detail').removeClass("hidden");
+                recomposeForFileType(true);
                 self.$('input#entity_subtype').val('alpine');
             }
 
@@ -156,7 +164,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
                 prepareFileIcon();
                 self.$('.file_name').text(filename).attr('title', filename);
 
-                if (self.uploadExtension.toLowerCase() === 'afm') {
+                if (self.isAlpine()) {
                     acceptAlpineFile();
                 } else {
                     acceptFile();
@@ -207,7 +215,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         this.$("button.submit").stopLoading();
         this.$("button.submit").prop("disabled", true);
         this.$("button.choose").prop("disabled", false);
-        this.$("input").addClass("hidden");
+        this.$(".comment").addClass("hidden");
         this.resource.trigger("saveFailed");
     },
 

@@ -21,11 +21,11 @@ describe("chorus.views.DashboardProjectList", function() {
         });
 
         it("displays the name of the workspace as a link", function() {
-            expect(this.view.$(".name span").eq(0).text()).toBe("Broccoli");
-            expect(this.view.$(".name").eq(0).attr('href')).toBe(this.workspace1.showUrl());
+            expect(this.view.$(".project_name span").eq(0).text()).toBe("Broccoli");
+            expect(this.view.$(".project_name").eq(0).attr('href')).toBe(this.workspace1.showUrl());
 
-            expect(this.view.$(".name span").eq(1).text()).toBe("Camels");
-            expect(this.view.$(".name").eq(1).attr('href')).toBe(this.workspace2.showUrl());
+            expect(this.view.$(".project_name span").eq(1).text()).toBe("Camels");
+            expect(this.view.$(".project_name").eq(1).attr('href')).toBe(this.workspace2.showUrl());
         });
 
         it("displays the name of the owners as a link", function() {
