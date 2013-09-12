@@ -6,6 +6,7 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
 
     subviews: {
         ".truncated_summary": "truncatedSummary",
+        ".project_status": "projectStatus",
         ".activity_list_header": "activityListHeader"
     },
 
@@ -31,6 +32,7 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
                 workspaceIdForTagLink: this.model.id
             })
         });
+        this.projectStatus = new chorus.views.ProjectStatus({model:this.model});
     },
 
     postRender: function() {

@@ -12,7 +12,9 @@ class WorkspacePresenter < Presenter
       :is_member => model.member?(current_user),
       :owner => present(model.owner),
       :public => model.public,
-      :is_project => model.is_project
+      :is_project => model.is_project,
+      :project_status => model.project_status,
+      :project_status_reason => model.project_status_reason
     }
 
     unless succinct?

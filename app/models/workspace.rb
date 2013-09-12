@@ -3,8 +3,10 @@ class Workspace < ActiveRecord::Base
   include TaggableBehavior
   include Notable
 
+  PROJECT_STATUSES = [:on_track, :needs_attention, :at_risk]
+
   attr_accessor :archived
-  attr_accessible :name, :public, :summary, :member_ids, :has_added_member, :owner_id, :archiver, :archived, :has_changed_settings, :show_sandbox_datasets, :is_project
+  attr_accessible :name, :public, :summary, :member_ids, :has_added_member, :owner_id, :archiver, :archived, :has_changed_settings, :show_sandbox_datasets, :is_project, :project_status, :project_status_reason
 
   has_attached_file :image, :path => ":rails_root/system/:class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",

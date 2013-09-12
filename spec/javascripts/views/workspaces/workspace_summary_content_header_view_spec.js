@@ -24,6 +24,11 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
             expect(this.view.$(".activity_list_header")).not.toBeEmpty();
         });
 
+        it("fills the project status subview", function(){
+            expect(this.view.$(".project_status")).toContainTranslation('workspace.project.status.label');
+            expect(this.view.$(".project_status")).toContainTranslation('workspace.project.status.on_track');
+        });
+
         it("has a truncated text view with the workspace's summary", function() {
             expect(this.view.$(this.view.truncatedSummary.el)).toExist();
             expect(this.view.truncatedSummary.el).not.toBeEmpty();

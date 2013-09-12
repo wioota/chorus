@@ -1,0 +1,9 @@
+<form class="edit_project_status">
+    <select name="projectStatus">
+        {{#each options}}
+            <option value='{{value}}' {{#if selected}}selected{{/if}}>{{t nameKey}}</option>
+        {{/each}}
+    </select>
+
+    {{formControls "workspace.project.update_status"}}
+</form>

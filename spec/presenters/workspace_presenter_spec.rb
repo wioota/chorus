@@ -36,6 +36,8 @@ describe WorkspacePresenter, :type => :view do
       hash.should have_key(:show_sandbox_datasets)
       hash.should have_key(:is_project)
       hash.should have_key(:is_member)
+      hash.should have_key(:project_status)
+      hash.should have_key(:project_status_reason)
       hash.should_not have_key(:number_of_insights)
       hash.should_not have_key(:number_of_comments)
       hash.should_not have_key(:latest_comment_list)
@@ -147,7 +149,9 @@ describe WorkspacePresenter, :type => :view do
           :public,
           :owner,
           :is_project,
-          :is_member
+          :is_member,
+          :project_status,
+          :project_status_reason
         ]
       end
     end
