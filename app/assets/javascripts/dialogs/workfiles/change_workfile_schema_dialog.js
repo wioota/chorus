@@ -58,8 +58,8 @@ chorus.dialogs.ChangeWorkfileSchema = chorus.dialogs.Base.extend({
     showErrors: function() {
         this._super("showErrors", arguments);
         var schemaPicker = this.schemaPicker;
-        var isForbidden = schemaPicker.schemaView.collection.statusCode === 403 ||
-            schemaPicker.databaseView.collection.statusCode === 403;
+        var isForbidden = (schemaPicker.schemaView.collection && schemaPicker.schemaView.collection.statusCode === 403) ||
+            (schemaPicker.databaseView.collection && schemaPicker.databaseView.collection.statusCode === 403);
         if(isForbidden) {
             this.showDialogError(t("schema_picker.change_workfile_schema.invalid_credentials"));
         }
