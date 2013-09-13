@@ -16,6 +16,12 @@ describe ExternalTablesController do
   describe "#create" do
     def mock_external_table_build_success
       mock(ExternalTable).build(anything) do |e|
+        e[:column_names].should == %w{field1 field2}
+        e[:column_types].should == %w{text text}
+        e[:connection].should be_a(GreenplumConnection)
+        e[:delimiter].should == ','
+        e[:name].should == 'tablefromhdfs'
+
         yield e if block_given?
         mock(Object.new).save { true }
       end
@@ -60,13 +66,9 @@ describe ExternalTablesController do
 
       it "initializes and calls into ExternalTable correctly" do
         mock_external_table_build_success do |ext_table_params|
-          ext_table_params[:column_names].should == %w{field1 field2}
-          ext_table_params[:column_types].should == %w{text text}
-          ext_table_params[:database].should be_a(GreenplumConnection)
-          ext_table_params[:delimiter].should == ','
-          ext_table_params[:location_url].should == hdfs_entry.url
+          ext_table_params[:sandbox_data_source].should == workspace.sandbox.data_source
+          ext_table_params[:entry_or_dataset].should == hdfs_entry
           ext_table_params[:file_pattern].should == "*"
-          ext_table_params[:name].should == 'tablefromhdfs'
         end
 
         post :create, parameters
@@ -95,13 +97,9 @@ describe ExternalTablesController do
 
       it "initializes and calls into ExternalTable correctly" do
         mock_external_table_build_success do |ext_table_params|
-          ext_table_params[:column_names].should == %w{field1 field2}
-          ext_table_params[:column_types].should == %w{text text}
-          ext_table_params[:database].should be_a(GreenplumConnection)
-          ext_table_params[:delimiter].should == ','
-          ext_table_params[:location_url].should == hdfs_entry.url
+          ext_table_params[:sandbox_data_source].should == workspace.sandbox.data_source
+          ext_table_params[:entry_or_dataset].should == hdfs_entry
           ext_table_params[:file_pattern].should == "*.csv"
-          ext_table_params[:name].should == 'tablefromhdfs'
         end
 
         post :create, parameters
@@ -132,12 +130,8 @@ describe ExternalTablesController do
 
       it "initializes and calls into ExternalTable correctly" do
         mock_external_table_build_success do |ext_table_params|
-          ext_table_params[:column_names].should == %w{field1 field2}
-          ext_table_params[:column_types].should == %w{text text}
-          ext_table_params[:database].should be_a(GreenplumConnection)
-          ext_table_params[:delimiter].should == ','
-          ext_table_params[:location_url].should == hdfs_data_source.url.chomp('/') + hdfs_dataset.file_mask
-          ext_table_params[:name].should == 'tablefromhdfs'
+          ext_table_params[:sandbox_data_source].should == workspace.sandbox.data_source
+          ext_table_params[:entry_or_dataset].should == hdfs_dataset
           ext_table_params[:file_pattern].should be_nil
         end
 
@@ -160,12 +154,8 @@ describe ExternalTablesController do
     describe "creating an external table form a file" do
       it "initializes and calls into ExternalTable correctly" do
         mock_external_table_build_success do |ext_table_params|
-          ext_table_params[:column_names].should == %w{field1 field2}
-          ext_table_params[:column_types].should == %w{text text}
-          ext_table_params[:database].should be_a(GreenplumConnection)
-          ext_table_params[:delimiter].should == ','
-          ext_table_params[:location_url].should == hdfs_entry.url
-          ext_table_params[:name].should == 'tablefromhdfs'
+          ext_table_params[:sandbox_data_source].should == workspace.sandbox.data_source
+          ext_table_params[:entry_or_dataset].should == hdfs_entry
           ext_table_params[:file_pattern].should be_nil
         end
 

@@ -27,10 +27,6 @@ class HdfsDataSource < ActiveRecord::Base
     where('job_tracker_host IS NOT NULL and job_tracker_port IS NOT NULL')
   end
 
-  def url
-    "gphdfs://#{host}:#{port}/"
-  end
-
   def self.refresh(id)
     find(id).refresh
   end

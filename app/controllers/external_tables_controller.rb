@@ -17,7 +17,7 @@ class ExternalTablesController < ApplicationController
     end
 
     account = authorized_account(workspace.sandbox)
-    database = workspace.sandbox.connect_with(account)
+    connection = workspace.sandbox.connect_with(account)
 
     file_pattern =
         case table_params[:path_type]
@@ -30,10 +30,11 @@ class ExternalTablesController < ApplicationController
     e = ExternalTable.build(
       :column_names => table_params[:column_names],
       :column_types => table_params[:types],
-      :database => database,
+      :connection => connection,
       :delimiter => table_params[:delimiter],
       :file_pattern => file_pattern,
-      :location_url => entry_or_dataset.url,
+      :sandbox_data_source => workspace.sandbox.data_source,
+      :entry_or_dataset => entry_or_dataset,
       :name => table_params[:table_name]
     )
     if e.save

@@ -122,10 +122,6 @@ class HdfsEntry < ActiveRecord::Base
     File.dirname(path)
   end
 
-  def url
-    hdfs_data_source.url.chomp('/') + path
-  end
-
   def entity_type_name
     'hdfs_file'
   end

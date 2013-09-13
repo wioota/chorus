@@ -425,14 +425,6 @@ describe HdfsEntry do
     end
   end
 
-  describe "#url" do
-    let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
-    let(:entry) { hdfs_data_source.hdfs_entries.build(:path => "/file.txt") }
-    it "returns a url" do
-      entry.url.should == "gphdfs://hadoop.example.com:1111/file.txt"
-    end
-  end
-
   describe "destroy_entries" do
     it "destroys entries for given data source id" do
       data_source = hdfs_data_sources(:hadoop)

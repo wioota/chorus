@@ -39,8 +39,8 @@ class HdfsDataset < Dataset
     [workspace_id]
   end
 
-  def url
-    hdfs_data_source.url.chomp('/') + file_mask
+  def path
+    file_mask
   end
 
   def contents

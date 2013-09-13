@@ -94,7 +94,7 @@ class DataSource < ActiveRecord::Base
 
   def is_hawq_data_source?(account)
     connection = connect_with(account)
-    connection.is_hawq? if :is_hawq
+    connection.is_hawq? if is_hawq
   end
 
   def connect_with(account, options = {})

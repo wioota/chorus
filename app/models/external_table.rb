@@ -8,32 +8,32 @@ class ExternalTable
     new(options)
   end
 
-  attr_accessor :column_names, :column_types, :name, :location_url,
+  attr_accessor :column_names, :column_types, :name, :entry_or_dataset,
                 :delimiter, :file_pattern
 
-  validates_presence_of :column_names, :column_types, :name, :location_url
+  validates_presence_of :column_names, :column_types, :name, :entry_or_dataset
 
   validate :delimiter_not_blank
 
   def initialize(options = {})
-    @database = options[:database]
+    @connection = options[:connection]
+    @sandbox_data_source = options[:sandbox_data_source]
     @column_names = options[:column_names]
     @column_types = options[:column_types]
     @name = options[:name]
-    @location_url = options[:location_url]
+    @entry_or_dataset = options[:entry_or_dataset]
     @file_pattern = options[:file_pattern]
     @delimiter = options[:delimiter]
   end
 
   def save
     return false unless valid?
-    @database.create_external_table(
-        {
-            :table_name => name,
-            :columns => map_columns,
-            :location_url => location_url + file_pattern_string,
-            :delimiter => delimiter
-        })
+    @connection.create_external_table(
+      :table_name => name,
+      :columns => map_columns,
+      :location_url => location_url,
+      :delimiter => delimiter
+    )
     true
   rescue GreenplumConnection::DatabaseError => e
     errors.add(:name, :TAKEN)
@@ -54,5 +54,19 @@ class ExternalTable
     if delimiter.nil? || delimiter.length != 1
       errors.add(:delimiter, :EMPTY)
     end
+  end
+
+  def location_url
+    ext_source = entry_or_dataset.hdfs_data_source
+
+    url = if @sandbox_data_source.is_hawq?
+      "pxf://#{ext_source.host}:50070"
+    else
+      "gphdfs://#{ext_source.host}:#{ext_source.port}"
+    end
+
+    url += "#{entry_or_dataset.path}#{file_pattern_string}"
+    url += '?Fragmenter=HdfsDataFragmenter&Accessor=TextFileAccessor&Resolver=TextResolver' if @sandbox_data_source.is_hawq?
+    url
   end
 end
