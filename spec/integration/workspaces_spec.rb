@@ -33,7 +33,7 @@ describe "Workspaces" do
 
     context "with more than 24 members" do
       before do
-        members = 25.times.map { FactoryGirl.create(:user, username: "uSeR#{rand(99999)}") }
+        members = 25.times.map { |n| FactoryGirl.create(:user, username: "uSeR#{n}") }
         workspace.members << members
         workspace.save
       end
