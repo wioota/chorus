@@ -12,7 +12,11 @@ describe "CSV Uploads", :greenplum_integration do
     login(users(:admin))
     visit("#/workspaces/#{workspace.id}/datasets")
     click_button "Add Data"
+
+    # Wait for qtip to be visible before clicking on its menu items
+    page.should have_css('.qtip', visible: true)
     click_link "Import File"
+
     csv_file = File.join(File.dirname(__FILE__), '../fixtures/test.csv')
     within_modal do
       attach_file("csv[contents]", csv_file)
