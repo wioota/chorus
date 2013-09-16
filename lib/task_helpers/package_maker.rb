@@ -68,10 +68,6 @@ module PackageMaker
     system("GZIP='--fast' #{rails_root}/packaging/makeself/makeself.sh --follow --nox11 --nowait #{install_root} greenplum-chorus-#{version_name}.sh 'Chorus #{Chorus::VERSION::STRING} installer' ./chorus_installation/bin/ruby ../install.rb") || exit(1)
   end
 
-  def clean_workspace
-    run "rm -r .bundle"
-  end
-
   def head_sha
     `git rev-parse HEAD`.strip[0..8]
   end

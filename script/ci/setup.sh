@@ -18,4 +18,4 @@ rm -f postgres && ln -s /usr/pgsql-9.2 postgres
 mkdir -p $WORKSPACE/lib/libraries
 cp ~/ojdbc6.jar $WORKSPACE/lib/libraries/ojdbc6.jar
 
-b/rake development:generate_database_yml development:generate_secret_token development:generate_secret_key db:drop db:create db:migrate --trace > "$WORKSPACE/bundle.log"
+b/rake development:generate_database_yml development:generate_secret_token development:generate_secret_key package:prepare_hdfs_jar db:drop db:create db:migrate --trace > "$WORKSPACE/bundle.log"

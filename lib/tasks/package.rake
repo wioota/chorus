@@ -21,14 +21,10 @@ namespace :package do
     PackageMaker.make_installer
   end
 
-  task :cleanup do
-    PackageMaker.clean_workspace
+  task :prepare_hdfs_jar do
+    system("git submodule update --init")
+    system("cd chorushdfs; mvn clean verify")
+    FileUtils.rm("vendor/hadoop/hdfs-query-service-*.jar", :force => true)
+    FileUtils.mv("chorushdfs/hdfs-query-service/target/hdfs-query-service-0.0.8.jar", "vendor/hadoop", :force => true)
   end
 end
-
-packaging_tasks = Rake.application.top_level_tasks.select { |task| task.to_s.match(/^package:/) }
-
-last_packaging_task = packaging_tasks.last
-Rake::Task[last_packaging_task].enhance do
-  Rake::Task[:'package:cleanup'].invoke
-end if last_packaging_task

@@ -89,3 +89,6 @@ ojdbc*.jar
 # Ignore integration screenshots
 screenshot*.png
 screenshot*.html
+
+# Ignore built hadoop jars
+/vendor/hadoop/hdfs-query-service*.jar
