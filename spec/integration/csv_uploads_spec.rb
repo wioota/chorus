@@ -17,7 +17,7 @@ describe "CSV Uploads", :greenplum_integration do
     page.should have_css('.qtip', visible: true)
     click_link "Import File"
 
-    csv_file = File.join(File.dirname(__FILE__), '../fixtures/test.csv')
+    csv_file = File.expand_path(File.join(File.dirname(__FILE__), '../fixtures/test.csv'))
     within_modal do
       attach_file("csv[contents]", csv_file)
       click_button "Upload File"
