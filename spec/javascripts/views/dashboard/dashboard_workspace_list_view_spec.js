@@ -87,26 +87,6 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                 });
             });
 
-            context("when there are no insights or comments", function() {
-                it("displays no insights or comments when 0", function() {
-                    this.workspace1.set({numberOfComments: 0, numberOfInsights: 0});
-                    this.view.render();
-                    expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
-                        "dashboard.workspaces.no_recent_comments_or_insights");
-                });
-
-                it("displays no insights or comments when null", function() {
-                    this.workspace1.set({numberOfComments: null, numberOfInsights: null});
-                    this.view.render();
-                    expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
-                        "dashboard.workspaces.no_recent_comments_or_insights");
-                });
-
-                it("doesn't display the badge", function() {
-                    expect(this.view.$("li:first-child .badge")).not.toExist();
-                });
-            });
-
             it("displays the relative time of the most recent comment", function() {
                 expect(this.view.$("li:first-child .comment .recent .date").text().trim()).toBe("2 days ago");
             });
@@ -150,6 +130,32 @@ describe("chorus.views.DashboardWorkspaceList", function() {
                     });
                     expect(timestamps).toEqual(_.clone(timestamps).sort().reverse());
                 });
+            });
+        });
+
+        context("when there are no insights or comments", function() {
+            beforeEach(function () {
+                this.workspace1.comments().reset([]);
+            });
+
+            it("displays no insights or comments when 0", function() {
+                this.workspace1.set({numberOfComments: 0, numberOfInsights: 0});
+                this.view.render();
+                expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
+                    "dashboard.workspaces.no_recent_comments_or_insights"
+                );
+
+                expect(this.view.$("li:first-child .badge")).not.toExist();
+            });
+
+            it("displays no insights or comments when null", function() {
+                this.workspace1.set({numberOfComments: null, numberOfInsights: null});
+                this.view.render();
+                expect(this.view.$("li:first-child .comment .count").text().trim()).toContainTranslation(
+                    "dashboard.workspaces.no_recent_comments_or_insights"
+                );
+
+                expect(this.view.$("li:first-child .badge")).not.toExist();
             });
         });
     });

@@ -473,6 +473,7 @@ FixtureBuilder.configure do |fbuilder|
       @note_on_hdfs_data_source = Events::NoteOnHdfsDataSource.create!({:note_target => hdfs_data_source, :body => 'hadoop-idy-doop'}, :as => :create)
       @note_on_hdfs_file = Events::NoteOnHdfsFile.create!({:note_target => @hdfs_file, :body => 'hhhhhhaaaadooooopppp'}, :as => :create)
       @note_on_workspace = Events::NoteOnWorkspace.create!({:note_target => public_workspace, :body => 'Come see my awesome workspace!'}, :as => :create)
+      @insight_on_workspace = Events::NoteOnWorkspace.create!({:note_target => public_workspace, :body => 'This workspace is definitely awesome!', :insight => true}, :as => :create)
       @note_on_workfile = Events::NoteOnWorkfile.create!({:note_target => text_workfile, :body => "My awesome workfile"}, :as => :create)
       @note_on_gnip_data_source = Events::NoteOnGnipDataSource.create!({:note_target => gnip_data_source, :body => 'i am a comment with gnipsearch in me'}, :as => :create)
       @insight_on_gnip_data_source = Events::NoteOnGnipDataSource.create!({:note_target => gnip_data_source, :body => 'i am an insight with gnipinsight in me', :insight => true}, :as => :create)

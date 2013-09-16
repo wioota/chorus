@@ -1,11 +1,15 @@
 describe("chorus.views.DashboardProjectList", function() {
     beforeEach(function() {
+        // Has a summary, but no insights
         this.workspace1 = backboneFixtures.workspace({ name: "Broccoli", owner: { firstName: 'Green', lastName: 'Giant' }, latestCommentList: [], summary: 'We are making sails!' });
+        delete this.workspace1.attributes.latestInsight;
 
+        // One insight, no summary
         this.workspace2 = backboneFixtures.workspace({ name: "Camels", owner: { firstName: 'Andre', lastName: 'The Giant' }, latestCommentList: [], numberOfInsights: 1});
         delete this.workspace2.attributes.summary;
         spyOn(this.workspace2, 'latestInsight').andReturn(backboneFixtures.activity.insightOnGreenplumDataSource());
 
+        // Three insights and a summary
         this.workspace3 = backboneFixtures.workspace({numberOfInsights: 3});
         spyOn(this.workspace3, 'latestInsight').andReturn(backboneFixtures.activity.insightOnGreenplumDataSource());
 

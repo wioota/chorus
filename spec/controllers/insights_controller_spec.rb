@@ -74,6 +74,38 @@ describe InsightsController do
     end
   end
 
+  describe '#destroy' do
+    before { log_in user }
+    let(:user) { users(:the_collaborator) }
+    let!(:note) { Events::NoteOnWorkspace.last.tap(&:promote_to_insight) }
+
+    context "when the note is demotable by the current user" do
+      before do
+        any_instance_of(Events::NoteOnWorkspace) { |note| stub(note).demotable_by(user) { true } }
+      end
+
+      it "toggles the insight field on the given note" do
+        expect {
+          post :destroy, {id: note.id}
+          response.code.should == "200"
+        }.to change { note.reload.insight? }.from(true).to(false)
+      end
+    end
+
+    context "when the note is NOT demotable by the current user" do
+      before do
+        any_instance_of(Events::NoteOnWorkspace) { |note| stub(note).demotable_by(user) { false } }
+      end
+
+      it "refuses to toggle the insight field on the given note" do
+        expect {
+          post :destroy, {id: note.id}
+          response.code.should == "403"
+        }.not_to change { note.reload.insight? }.from(true)
+      end
+    end
+  end
+
   describe "#publish (POST to /publish)" do
     before do
       log_in user
@@ -99,7 +131,7 @@ describe InsightsController do
       post :publish, post_params
     end
 
-    it "marks the NOTE as an published" do
+    it "marks the NOTE as published" do
       post :publish, post_params
       note.reload.should be_published
     end

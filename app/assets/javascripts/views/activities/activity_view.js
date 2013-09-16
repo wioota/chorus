@@ -5,6 +5,7 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     events: {
         'click a.promote': 'promote',
+        'click a.demote': 'demote',
         'click a.publish': 'publish',
         'click a.unpublish': 'unpublish',
         'click a.update_credentials': 'launchUpdateCredentialsDialog',
@@ -75,6 +76,11 @@ chorus.views.Activity = chorus.views.Base.extend({
                 chorus.PageEvents.trigger('insight:promoted', this.model);
             }, this)
         });
+    },
+
+    demote: function(e) {
+        e.preventDefault();
+        this.model.demoteFromInsight();
     },
 
     publish: function(e) {

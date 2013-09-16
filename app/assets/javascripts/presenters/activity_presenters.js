@@ -35,6 +35,11 @@
             return this.model.canBePromotedToInsight();
         },
 
+        currentUserCanDemoteFromInsight: function() {
+            var user = chorus.session.user();
+            return this.model.canBeDemotedBy(user);
+        },
+
         isInsight: function() {
             return this.model.isInsight();
         },

@@ -153,6 +153,12 @@
             insight.save({ validateBody: false });
         },
 
+
+        demoteFromInsight: function() {
+            this.set({isInsight: false});
+            new chorus.models.Insight({id: this.id, action: 'destroy'}).destroy();
+        },
+
         publish: function() {
             var insight = new chorus.models.Insight({
                 noteId: this.get("id"),
@@ -218,6 +224,10 @@
 
         canBePromotedToInsight: function() {
             return this.isNote() && !this.isInsight();
+        },
+
+        canBeDemotedBy: function(user) {
+            return this.isInsight() && (user.id === this.promoter().id || user.isAdmin() || user.id === this.workspace().owner().id);
         },
 
         isInsight: function() {

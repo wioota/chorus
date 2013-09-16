@@ -11,6 +11,8 @@ chorus.models.Insight = chorus.models.Note.extend({
             return "insights";
         } else if (action === "publish" || action === "unpublish") {
             return "insights/" + action;
+        } else if (action === "destroy") {
+            return "insights/{{id}}";
         } else {
             return "notes/{{id}}";
         }

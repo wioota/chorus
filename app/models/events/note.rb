@@ -63,6 +63,11 @@ module Events
       save!
     end
 
+    def demote_from_insight
+      self.insight = false
+      save!
+    end
+
     def set_insight_published(published)
       self.published = published
       save!
@@ -70,6 +75,13 @@ module Events
 
     def note_target=(model)
       self.target1 = model
+    end
+
+    def demotable_by(user)
+      return true if user.admin?
+      return true if user == promoted_by
+      return true if workspace && user == workspace.owner
+      return false
     end
 
     private

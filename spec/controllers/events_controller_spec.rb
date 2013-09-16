@@ -286,6 +286,7 @@ describe EventsController do
         'insightOnGreenplumDataSource' => :insight_on_greenplum,
         'noteOnGnipDataSourceCreated' => :note_on_gnip_data_source,
         'insightOnGnipDataSourceCreated' => :insight_on_gnip_data_source,
+        'insightOnWorkspace' => :insight_on_workspace,
         'noteOnGreenplumDataSource' => :note_on_greenplum,
         'noteOnOracleDataSource' => :note_on_oracle,
         'noteOnHdfsDataSourceCreated' => Events::NoteOnHdfsDataSource,

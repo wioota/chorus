@@ -30,6 +30,7 @@ window.BackboneFixtureDefinitions = {
             importScheduleDeleted: {},
             importScheduleUpdated: {},
             insightOnGreenplumDataSource: {},
+            insightOnWorkspace: {},
             membersAdded: {},
             noteOnDatasetCreated: {},
             noteOnGreenplumDataSource: {},

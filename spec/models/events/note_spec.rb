@@ -288,6 +288,71 @@ describe Events::Note do
     end
   end
 
+  describe "#demote_from_insight" do
+    let(:demoter) { users(:default) }
+    let(:promoter) { users(:owner) }
+    let(:creator) { event.actor }
+    let(:event) do
+      Events::NoteOnWorkspace.last.tap do |note|
+        set_current_user(promoter)
+        note.promote_to_insight
+        set_current_user(demoter)
+      end
+    end
+
+    subject { event.demote_from_insight }
+
+    it { should be_true }
+
+    it "saves the note" do
+      expect {
+        event.demote_from_insight
+      }.to change(event, :updated_at)
+    end
+
+    describe "it saves a note after demoting it from an insight" do
+      subject do
+        event.demote_from_insight
+        event.reload
+      end
+
+      it { should_not be_insight }
+      its(:promoted_by) { should == promoter }
+      its(:actor) { should == creator }
+    end
+  end
+
+  describe "demotable_by" do
+    let(:promoter)        { insight.promoted_by }
+    let(:actor)           { insight.actor }
+    let(:workspace_owner) { insight.workspace.owner }
+    let(:admin)           { users(:admin) }
+    let(:rando)           { FactoryGirl.create(:user) }
+    let(:insight) do
+      Events::NoteOnWorkspace.last.tap do |note|
+        set_current_user(users(:the_collaborator))
+        note.promote_to_insight
+      end
+    end
+
+    it "returns true if the given user is the insight's promoter, workspace owner or admin" do
+      insight.demotable_by(promoter).should == true
+      insight.demotable_by(workspace_owner).should == true
+      insight.demotable_by(admin).should == true
+      insight.demotable_by(rando).should == false
+    end
+
+    context "when there is no workspace" do
+      let(:insight) { events(:insight_on_greenplum) }
+
+      it "returns true if the given user is the promoter or an admin" do
+        insight.demotable_by(promoter).should == true
+        insight.demotable_by(admin).should == true
+        insight.demotable_by(rando).should == false
+      end
+    end
+  end
+
   describe "#build_for(model, params)" do
     let(:user) { users(:owner) }
     before do

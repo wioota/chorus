@@ -16,16 +16,16 @@
                 </a>
             </div>
 
-            {{#if latestComment}}
                 <div class="comment">
-                    <div class="count">
+                    <div class="count {{#if latestComment}}nonzero{{/if}}">
                         {{insightCountString}}
                     </div>
+                {{#if latestComment}}
                     <div class="recent">
                         {{t "dashboard.workspaces.most_recent"}} <span class="date">{{relativeTimestamp latestComment.timestamp}}</span> by <span class="author">{{latestComment.author}}</span>
                     </div>
+                {{/if}}
                 </div>
-            {{/if}}
         </div>
         <span class="spacer_right"/>
     </li>

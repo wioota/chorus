@@ -132,7 +132,7 @@ Chorus::Application.routes.draw do
     resource :download, :only => [:show], :controller => 'attachment_downloads'
   end
 
-  resources :insights, :only => [:index, :create] do
+  resources :insights, :only => [:index, :create, :destroy] do
     collection do
       post :publish
       post :unpublish

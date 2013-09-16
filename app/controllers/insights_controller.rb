@@ -10,6 +10,16 @@ class InsightsController < ApplicationController
     present note, :status => :created
   end
 
+  def destroy
+    note = Events::Note.visible_to(current_user).find params[:id]
+    if note.demotable_by(current_user)
+      note.demote_from_insight
+      present note
+    else
+      head :forbidden
+    end
+  end
+
   def publish
     note_id = params[:insight][:note_id] || params[:note][:note_id]
     note = Events::Note.visible_to(current_user).find(note_id)

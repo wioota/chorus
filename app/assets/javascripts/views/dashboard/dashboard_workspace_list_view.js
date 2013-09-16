@@ -7,6 +7,7 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
 
     setup: function() {
         this.subscribePageEvent("insight:promoted", this.fetchWorkspaces);
+        this.subscribePageEvent("insight:demoted", this.fetchWorkspaces);
         this.subscribePageEvent("note:deleted", this.fetchWorkspaces);
         this.subscribePageEvent("comment:added", this.fetchWorkspaces);
         this.subscribePageEvent("comment:deleted", this.fetchWorkspaces);
@@ -96,7 +97,7 @@ chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
 
             var li = this.$("li[data-id=" + workspace.get("id") + "]");
             this.lis.push(li);
-            li.find(".comment .count").qtip({
+            li.find(".comment .count.nonzero").qtip({
                 content: el,
                 show: {
                     event: 'mouseover',

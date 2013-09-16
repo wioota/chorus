@@ -47,7 +47,9 @@ div[data-page="Dashboard"] {
                     .count {
                         font-size: 13px;
                         font-weight: normal;
-                        color: $link-color;
+                        &.nonzero {
+                            color: $link-color;
+                        }
                     }
 
                     .date {

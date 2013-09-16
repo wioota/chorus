@@ -443,6 +443,61 @@ describe("chorus.models.Activity", function() {
         });
     });
 
+    describe("#demoteFromInsight", function() {
+        beforeEach(function() {
+            this.model = backboneFixtures.activity.insightOnGreenplumDataSource();
+            this.model.collection = new chorus.collections.ActivitySet([]);
+            spyOn(this.model.collection, 'fetch');
+            this.model.demoteFromInsight();
+        });
+
+        it("posts to the comment insight url with the correct parameters", function() {
+            expect(this.server.lastDestroy().url).toBe("/insights/" + this.model.id);
+        });
+
+        it("unsets 'isinsight' on the activity", function() {
+            this.server.lastDestroy().succeed();
+            expect(this.model.get('isInsight')).toBeFalsy();
+        });
+    });
+
+    describe("#canBeDemotedBy", function () {
+        context("for a workspace insight", function () {
+            beforeEach(function () {
+                this.model = backboneFixtures.activity.insightOnWorkspace();
+            });
+
+            it("returns true for the promoter, workspace owner, or admin", function () {
+                expect(this.model.canBeDemotedBy(this.model.promoter())).toBeTruthy();
+                expect(this.model.canBeDemotedBy(this.model.workspace().owner())).toBeTruthy();
+                expect(this.model.canBeDemotedBy(backboneFixtures.user({admin: true}))).toBeTruthy();
+                expect(this.model.canBeDemotedBy(backboneFixtures.user())).toBeFalsy();
+            });
+        });
+
+        context("for an insight without a workspace", function () {
+            beforeEach(function () {
+                this.model = backboneFixtures.activity.insightOnGreenplumDataSource();
+            });
+
+            it("returns true for the promoter or admin", function () {
+                expect(this.model.canBeDemotedBy(this.model.promoter())).toBeTruthy();
+                expect(this.model.canBeDemotedBy(backboneFixtures.user({admin: true}))).toBeTruthy();
+                expect(this.model.canBeDemotedBy(backboneFixtures.user())).toBeFalsy();
+            });
+        });
+
+        context("for a non-insight", function () {
+            beforeEach(function () {
+                this.model = backboneFixtures.activity.noteOnGreenplumDataSource();
+            });
+
+            it("returns false", function () {
+                expect(this.model.canBeDemotedBy(backboneFixtures.user({admin: true}))).toBeFalsy();
+                expect(this.model.canBeDemotedBy(backboneFixtures.user())).toBeFalsy();
+            });
+        });
+    });
     describe("#publish", function() {
         it("posts to the comment insight url with the publish action", function() {
             this.model.publish();

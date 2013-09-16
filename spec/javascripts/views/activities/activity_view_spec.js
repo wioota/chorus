@@ -12,14 +12,14 @@ describe("chorus.views.Activity", function() {
     }
 
     function itShouldNotRenderAPromoteLink() {
-        it("does *not* have a link to promote the activity to a comment", function () {
+        it("does *not* have a link to promote the activity to an insight", function () {
             this.view.render();
             expect(this.view.$(".links a.promote")).not.toExist();
         });
     }
 
     function itShouldRenderAPromoteLink() {
-        it("does have a link to promote the activity to a comment", function () {
+        it("has a link to promote the activity to an insight", function () {
             this.view.render();
             expect(this.view.$(".links a.promote")).toExist();
         });
@@ -33,7 +33,6 @@ describe("chorus.views.Activity", function() {
 
             context("when the promotion completes", function() {
                 beforeEach(function() {
-                    this.view.$("a.promote").click();
                     this.server.lastCreate().succeed();
                 });
 
@@ -41,6 +40,20 @@ describe("chorus.views.Activity", function() {
                     expect(this.model).toHaveBeenFetched();
                 });
             });
+        });
+    }
+
+    function itShouldNotRenderADemoteLink() {
+        it("does *not* have a link to demote the activity to a comment", function () {
+            this.view.render();
+            expect(this.view.$(".links a.demote")).not.toExist();
+        });
+    }
+
+    function itShouldRenderADemoteLink() {
+        it("does have a link to demote the activity to a comment", function () {
+            this.view.render();
+            expect(this.view.$(".links a.demote")).toExist();
         });
     }
 
@@ -227,6 +240,7 @@ describe("chorus.views.Activity", function() {
             });
 
             itShouldRenderAPromoteLink();
+            itShouldNotRenderADemoteLink();
 
             context("when the note is already an insight", function () {
                 beforeEach(function () {
@@ -235,6 +249,49 @@ describe("chorus.views.Activity", function() {
                 });
 
                 itShouldNotRenderAPromoteLink();
+
+                context("if the current user is the insight promoter", function () {
+                    beforeEach(function () {
+                        spyOn(chorus.session, 'user').andReturn(this.view.model.promoter());
+                    });
+                    itShouldRenderADemoteLink();
+                });
+
+                context("if the current user is an admin", function () {
+                    beforeEach(function () {
+                        spyOn(chorus.session, 'user').andReturn(backboneFixtures.user({admin: true}));
+                    });
+                    itShouldRenderADemoteLink();
+                });
+
+                context("when there is a workspace", function () {
+                    beforeEach(function () {
+                        this.model = this.presenter.model = backboneFixtures.activity.insightOnWorkspace();
+                        this.view = new chorus.views.Activity({ model:this.model });
+                    });
+
+                    context("if the current user is the workspace owner", function () {
+                        beforeEach(function () {
+                            spyOn(chorus.session, 'user').andReturn(this.view.model.workspace().owner());
+                        });
+                        itShouldRenderADemoteLink();
+                    });
+
+                    context("if the current user is not the workspace owner", function () {
+                        beforeEach(function () {
+                            spyOn(chorus.session, 'user').andReturn(backboneFixtures.user());
+                        });
+                        itShouldNotRenderADemoteLink();
+                    });
+                });
+
+                context("if the current use is not an admin, the insight promoter or the workspace owner", function () {
+                    beforeEach(function () {
+                        spyOn(chorus.session, 'user').andReturn(backboneFixtures.user({id: 'somebody_else'}));
+                    });
+
+                    itShouldNotRenderADemoteLink();
+                });
 
                 it("displays the note's promotion details if it is an insight", function () {
                     this.view.render();
