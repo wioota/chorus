@@ -8,8 +8,8 @@
         <h1 title="{{name}}">{{name}}</h1>
         <ul>
             {{#if active}}
-                <li><a class="new_note dialog" href="#">{{t "actions.add_note"}}</a></li>
-                <li><a class="new_insight dialog" href="#">{{t "actions.add_insight"}}</a></li>
+                <li><a class="new_note" href="#">{{t "actions.add_note"}}</a></li>
+                <li><a class="new_insight" href="#">{{t "actions.add_insight"}}</a></li>
             {{/if}}
             <li><a href="#" class="edit_workspace">
                 {{#ifAny workspaceAdmin canUpdate}}
@@ -21,9 +21,9 @@
 
             {{#if workspaceAdmin}}
                 {{#if active}}
-                    <li><a class="edit_workspace_members dialog" href="#">{{t "workspace.edit_members"}}</a></li>
+                    <li><a class="edit_workspace_members" href="#">{{t "workspace.edit_members"}}</a></li>
                     {{#unless hasSandbox}}
-                        <li><a class="new_sandbox dialog" href="#">{{t "sandbox.create_a_sandbox"}}</a></li>
+                        <li><a class="new_sandbox" href="#">{{t "sandbox.create_a_sandbox"}}</a></li>
                     {{/unless}}
                 {{/if}}
             {{/if}}

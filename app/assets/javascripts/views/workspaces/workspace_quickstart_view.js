@@ -76,7 +76,7 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
 
     launchImportWorkfilesDialog: function(e) {
         e && e.preventDefault();
-        var dialog = new chorus.dialogs.WorkfilesImport({model: this.model, workspaceId: this.model.id});
+        var dialog = new chorus.dialogs.WorkfilesImport({workspaceId: this.model.id});
         dialog.launchModal();
     }
 });

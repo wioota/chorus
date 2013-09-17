@@ -148,8 +148,14 @@ describe("chorus.views.WorkspaceQuickstart", function() {
             expect(this.view.$(".add_workfiles")).not.toExist();
         });
 
-        itBehavesLike.aDialogLauncher("a.import_workfiles", chorus.dialogs.WorkfilesImport);
+        it("lets the dialog create a new workfile", function () {
+            this.view.$('a.import_workfiles').click();
+            var workfileDialog = this.modalSpy.modals()[0];
+            expect(workfileDialog.model).toBeA(chorus.models.Workfile);
+            expect(workfileDialog.model.isNew()).toBeTruthy();
+        });
 
+        itBehavesLike.aDialogLauncher("a.import_workfiles", chorus.dialogs.WorkfilesImport);
     });
 
     describe("the 'Edit Workspace Settings' section", function() {
@@ -168,10 +174,6 @@ describe("chorus.views.WorkspaceQuickstart", function() {
 
         it("has a description", function() {
             expect(this.view.$(".edit_workspace_settings .text")).toContainTranslation("workspace.quickstart.edit_workspace_settings.text");
-        });
-
-        it("launches the right dialog", function() {
-            expect(this.view.$(link)).toHaveClass("dialog");
         });
 
         itBehavesLike.aDialogLauncher("a.edit_workspace", chorus.dialogs.EditWorkspace);
