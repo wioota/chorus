@@ -183,6 +183,13 @@ FactoryGirl.define do
     workspace
   end
 
+  factory :milestone do
+    sequence(:name) { |n| "Milestone #{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    status "planned"
+    target_date Date.today
+    workspace
+  end
+
   factory :associated_dataset do
     association :dataset, :factory => :gpdb_table
     workspace

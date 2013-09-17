@@ -372,6 +372,13 @@ FixtureBuilder.configure do |fbuilder|
       FactoryGirl.create(:chorus_workfile, :file_name => "code.cpp", :owner => owner, :workspace => public_workspace, :versions_attributes => [{:contents => file}])
     end
 
+    ##Milestones
+    default_milestone = FactoryGirl.create(:milestone, :workspace => public_workspace, target_date: Date.today + 2)
+    fbuilder.name :default, default_milestone
+
+    FactoryGirl.create(:milestone, :workspace => public_workspace, target_date: Date.today + 25)
+    FactoryGirl.create(:milestone, :workspace => public_workspace, target_date: Date.today + 12)
+
     ##Jobs
     default_job = FactoryGirl.create(:job, :workspace => public_workspace)
     fbuilder.name :default, default_job

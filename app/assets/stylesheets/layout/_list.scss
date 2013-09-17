@@ -114,6 +114,15 @@
             }
         }
 
+        .milestone_item {
+            .state {
+              color: $color-text4;
+              position: absolute;
+              right: 20px;
+              top: 20px;
+            }
+        }
+
         .job_task_item {
             .index {
                 float: left;

@@ -10,7 +10,7 @@ describe("chorus.views.SubNav", function() {
         });
 
         it("renders the subnav tabs", function() {
-            expect(this.view.$("li").length).toBe(4);
+            expect(this.view.$("li").length).toBe(5);
         });
 
         it("selects the correct tab", function() {

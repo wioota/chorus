@@ -82,6 +82,7 @@ Chorus::Application.routes.draw do
     resources :jobs, :only => [:index, :create, :show, :update, :destroy] do
       resources :job_tasks, :only => [:create, :update, :destroy]
     end
+    resources :milestones, :only => [:index, :create, :update]
     resource :quickstart, :only => [:destroy], :controller => 'workspace_quickstart'
     resources :imports, :only => [:create], :controller => 'workspaces/imports'
 
