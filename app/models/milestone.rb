@@ -1,5 +1,5 @@
 class Milestone < ActiveRecord::Base
-  STATUSES = [:planned, :achieved]
+  STATUSES = ['planned', 'achieved']
 
   belongs_to :workspace
   attr_accessible :name, :status, :target_date
