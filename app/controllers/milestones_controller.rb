@@ -9,14 +9,6 @@ class MilestonesController < ApplicationController
     present paginate(milestones), :presenter_options => {:list_view => true}
   end
 
-  def create
-
-  end
-
-  def update
-
-  end
-
   protected
 
   def workspace
