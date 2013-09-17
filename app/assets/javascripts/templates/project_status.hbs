@@ -1,1 +1,13 @@
-<a class="edit_project_status" href="#">{{t 'workspace.project.status.label'}} {{t projectStatusKey}}</a>
+<div>
+    {{t 'workspace.project.status.label'}} <a class="edit_project_status" href="#">{{t projectStatusKey}}</a>
+    {{#if statusReason}}
+        <i class='icon-comment-alt status-reason' title="{{statusReason}}"></i>
+    {{/if}}
+</div>
+<div>
+    {{t 'workspace.project.progress.label'}}
+    <div class='progress_container'>
+        <div class="progress" style="width: {{milestoneProgress}}%;"></div>
+    </div>
+    <a class='ratio' href="#">{{milestoneCompletedCount}} / {{milestoneCount}}</a>
+</div>

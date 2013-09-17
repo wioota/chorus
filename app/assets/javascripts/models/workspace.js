@@ -194,5 +194,12 @@ chorus.models.Workspace = chorus.models.Base.extend({
 
     maxImageSize:function () {
         return chorus.models.Config.instance().get("fileSizesMbWorkspaceIcon");
+    },
+
+    milestoneProgress: function () {
+        var completed = this.get('milestoneCompletedCount');
+        var total = this.get('milestoneCount');
+
+        return total > 0 ? (completed / total * 100) : 0;
     }
 });

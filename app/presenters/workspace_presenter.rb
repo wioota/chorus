@@ -14,7 +14,9 @@ class WorkspacePresenter < Presenter
       :public => model.public,
       :is_project => model.is_project,
       :project_status => model.project_status,
-      :project_status_reason => model.project_status_reason
+      :project_status_reason => model.project_status_reason,
+      :milestone_count => 76,
+      :milestone_completed_count => 32
     }
 
     unless succinct?

@@ -538,4 +538,28 @@ describe("chorus.models.Workspace", function() {
             });
         });
     });
+
+    describe("#milestoneProgress", function () {
+        it("returns the milestone progress (as %)", function () {
+            this.model.set('milestoneCount', 200);
+            this.model.set('milestoneCompletedCount', 152);
+            expect(this.model.milestoneProgress()).toEqual(76);
+        });
+
+        context("when there are no milestones", function () {
+            it("returns 0", function () {
+                this.model.set('milestoneCount', 0);
+                this.model.set('milestoneCompletedCount', 0);
+                expect(this.model.milestoneProgress()).toEqual(0);
+            });
+        });
+
+        context("when there are no completed milestones", function () {
+            it("retuns 0", function () {
+                this.model.set('milestoneCount', 10);
+                this.model.set('milestoneCompletedCount', 0);
+                expect(this.model.milestoneProgress()).toEqual(0);
+            });
+        });
+    });
 });

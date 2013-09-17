@@ -18,26 +18,15 @@ describe WorkspacePresenter, :type => :view do
     let(:hash) { presenter.to_hash }
 
     it "includes the right keys" do
-      hash.should have_key(:id)
-      hash.should have_key(:name)
-      hash.should have_key(:summary)
-      hash.should have_key(:archiver)
-      hash.should have_key(:owner)
-      hash.should have_key(:archived_at)
-      hash.should have_key(:public)
-      hash.should have_key(:image)
-      hash.should have_key(:permission)
-      hash.should have_key(:has_added_member)
-      hash.should have_key(:has_added_workfile)
-      hash.should have_key(:has_added_sandbox)
-      hash.should have_key(:has_changed_settings)
-      hash.should have_key(:sandbox_info)
-      hash.should have_key(:tags)
-      hash.should have_key(:show_sandbox_datasets)
-      hash.should have_key(:is_project)
-      hash.should have_key(:is_member)
-      hash.should have_key(:project_status)
-      hash.should have_key(:project_status_reason)
+      keys = [
+          :id, :name, :summary, :archiver, :owner, :archived_at, :public, :image,
+          :permission, :has_added_member, :has_added_workfile, :has_added_sandbox,
+          :has_changed_settings, :sandbox_info, :tags, :show_sandbox_datasets,
+          :is_project, :is_member, :project_status, :project_status_reason,
+          :milestone_count, :milestone_completed_count
+      ]
+
+      keys.each { |key| hash.should have_key(key) }
       hash.should_not have_key(:number_of_insights)
       hash.should_not have_key(:number_of_comments)
       hash.should_not have_key(:latest_comment_list)
@@ -139,19 +128,19 @@ describe WorkspacePresenter, :type => :view do
 
       it "should only present enough for the dashboard list" do
         presenter.presentation_hash.keys.sort.should =~ [
-          :id,
-          :name,
-          :entity_type,
-          :is_deleted,
-          :summary,
-          :archived_at,
-          :permission,
-          :public,
-          :owner,
-          :is_project,
-          :is_member,
-          :project_status,
-          :project_status_reason
+            :id,
+            :name,
+            :entity_type,
+            :is_deleted,
+            :summary,
+            :archived_at,
+            :permission,
+            :public,
+            :owner,
+            :is_project,
+            :is_member,
+            :project_status,
+            :project_status_reason
         ]
       end
     end
@@ -163,7 +152,7 @@ describe WorkspacePresenter, :type => :view do
     end
 
     context "when succinct is true" do
-      let(:options) { { :succinct => true } }
+      let(:options) { {:succinct => true} }
 
       it "is false" do
         presenter.presentation_hash[:complete_json].should be_false

@@ -20,6 +20,24 @@ chorus.views.DashboardProjectList = chorus.views.Base.extend({
             this.$el.append(view.render().el);
         }, this);
 
-        $('.icon-info-sign').qtip(); //Restyles title text
+        this.styleTooltip();
+    },
+
+    styleTooltip: function () {
+        // reassign the offset function so that when qtip calls it, qtip correctly positions the tooltips
+        // with regard to the fixed-height header.
+        var viewport = $(window);
+        viewport.offset = function () {
+            return { left: 0, top: $("#header").height() };
+        };
+
+        $('.icon-info-sign').qtip({
+            position: {
+                viewport: viewport,
+                my: "bottom right",
+                at: "top left"
+            },
+            style: { classes: "tooltip-white" }
+        });
     }
 });
