@@ -2,7 +2,8 @@ require 'spec_helper'
 
 resource "Notes" do
   let(:user) { users(:owner) }
-  let(:note) { Events::NoteOnDataSource.last }
+  let(:note) { Events::NoteOnDataSource.where(insight: false).last }
+  let(:insightful_note) { Events::NoteOnDataSource.where(insight: true).last }
   let(:workspace) { workspaces(:public) }
   let(:note_on_workspace) { Events::NoteOnWorkspace.first }
 
@@ -20,6 +21,18 @@ resource "Notes" do
 
     example_request "Promote a note to insight" do
       status.should == 201
+    end
+  end
+
+  delete "/insights/:id" do
+    parameter :id, "Insights id"
+
+    required_parameters :id
+
+    let(:id) { insightful_note.id }
+
+    example_request "Demote an insight" do
+      status.should == 200
     end
   end
 
