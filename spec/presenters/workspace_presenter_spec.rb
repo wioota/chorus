@@ -140,7 +140,9 @@ describe WorkspacePresenter, :type => :view do
             :is_project,
             :is_member,
             :project_status,
-            :project_status_reason
+            :project_status_reason,
+            :milestone_count,
+            :milestone_completed_count
         ]
       end
     end
