@@ -11,18 +11,5 @@
     .project_status {
         margin-right: 10px;
         float: right;
-
-        .progress_container {
-            display: inline-block;
-            width: 120px;
-            height: 10px;
-            border: 1px solid $color-text1;
-
-            .progress {
-                height: 100%;
-                background-color: $chart-fill-color;
-            }
-        }
-
     }
 }

@@ -26,10 +26,7 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
 
     launchEditProjectStatusDialog: function(e) {
         e && e.preventDefault();
-        var dialog = new chorus.dialogs.EditProjectStatus({
-            model: this.model
-        });
-        dialog.launchModal();
+        new chorus.dialogs.EditProjectStatus({ model: this.model }).launchModal();
     },
 
 

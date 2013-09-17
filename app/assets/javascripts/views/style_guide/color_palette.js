@@ -58,7 +58,8 @@ chorus.views.ColorPaletteView = chorus.views.Base.extend({
         "$link-color": "#2c95dd",
         "$content-header-link-color": "$color-text4",
         "$content-details-action-link-color": "#4E7225",
-        "$content-details-create-bar-link-color": "#608437"
+        "$content-details-create-bar-link-color": "#608437",
+        "$needs-attention-color": "#E44E12"
     },
 
     context: function () {

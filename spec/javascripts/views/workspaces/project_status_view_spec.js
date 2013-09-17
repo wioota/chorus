@@ -9,10 +9,16 @@ describe("chorus.views.ProjectStatusView", function() {
 
     itBehavesLike.aDialogLauncher("a.edit_project_status", chorus.dialogs.EditProjectStatus);
 
-    describe("project status reason", function () {
-        it("displays in tooltip", function () {
-            var tooltip = this.view.$('.status-reason').attr('oldtitle');
-            expect(tooltip).toEqual(this.model.get('projectStatusReason'));
+    describe("project status", function () {
+        describe("reason", function () {
+            it("displays in tooltip", function () {
+                var tooltip = this.view.$('.status-reason').attr('oldtitle');
+                expect(tooltip).toEqual(this.model.get('projectStatusReason'));
+            });
+        });
+
+        it("is set as a class on the edit link, so it can be colored", function () {
+            expect(this.view.$('a.edit_project_status')).toHaveClass(this.model.get('projectStatus'));
         });
     });
 
