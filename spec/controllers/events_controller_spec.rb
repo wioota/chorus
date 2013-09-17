@@ -309,6 +309,7 @@ describe EventsController do
         'chorusViewCreatedFromDataset' => Events::ChorusViewCreated.from_dataset,
         'chorusViewChanged' => Events::ChorusViewChanged,
         'workspaceChangeName' => Events::WorkspaceChangeName,
+        'projectStatusChanged' => Events::ProjectStatusChanged,
         'tableauWorkbookPublished' => Events::TableauWorkbookPublished,
         'tableauWorkfileCreated' => Events::TableauWorkfileCreated,
         'gnipStreamImportCreated' => Events::GnipStreamImportCreated,

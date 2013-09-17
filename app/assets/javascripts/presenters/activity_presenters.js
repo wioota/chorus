@@ -376,7 +376,13 @@
 
         WorkspaceChangeName: {
             links: ["actor", "workspace"],
-            computed: ["workspaceOldName"]
+            attrs: ["workspaceOldName"]
+        },
+
+        ProjectStatusChanged: {
+            links: ["actor", "workspace"],
+            attrs: ["reason"],
+            computed: ["status"]
         },
 
         TableauWorkbookPublished: {
@@ -635,8 +641,8 @@
             return Handlebars.helpers.linkTo('#', t(linkTranslation), { 'class': model.constructorName });
         },
 
-        workspaceOldName: function(self) {
-            return self.model.get("workspaceOldName");
+        status: function(self) {
+            return t('workspace.project.status.' + self.model.get("status"));
         }
     };
 })();

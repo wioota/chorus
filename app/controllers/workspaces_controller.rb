@@ -70,6 +70,10 @@ class WorkspacesController < ApplicationController
           Events::WorkspaceToShowSandboxDatasets.by(current_user).add(:workspace => workspace) :
           Events::WorkspaceToNoLongerShowSandboxDatasets.by(current_user).add(:workspace => workspace)
     end
+
+    if workspace.project_status_changed? || workspace.project_status_reason_changed?
+      Events::ProjectStatusChanged.by(current_user).add(:workspace => workspace)
+    end
   end
 end
 

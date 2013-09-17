@@ -1330,6 +1330,28 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("project status changed", function() {
+        beforeEach(function() {
+            this.model = backboneFixtures.activity.projectStatusChanged();
+            this.presenter = new chorus.presenters.Activity(this.model);
+            this.actor = this.model.actor();
+            this.workspace = this.model.workspace();
+        });
+
+        itHasTheActorIcon();
+
+        it("has the right header html", function() {
+            expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                "activity.header.ProjectStatusChanged.default", {
+                    actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
+                    workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name()),
+                    reason: this.model.get("reason"),
+                    status: t('workspace.project.status.' + this.model.get("status"))
+                }
+            );
+        });
+    });
+
     context("members added event", function() {
         beforeEach(function() {
             this.model = backboneFixtures.activity.membersAdded({

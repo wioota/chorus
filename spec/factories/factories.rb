@@ -167,6 +167,9 @@ FactoryGirl.define do
   factory :workspace do
     sequence(:name) { |n| "workspace#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     owner
+    project_status 'on_track'
+    project_status_reason { Faker::Company.catch_phrase }
+
     public true
 
     after(:create) do |workspace|

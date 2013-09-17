@@ -243,6 +243,42 @@ describe WorkspacesController do
         end
       end
 
+      context "changing project status or reason" do
+        before { workspace.update_column(:project_status, 'at_risk') }
+        let(:message) { 'Been working hard!' }
+
+        context "changing project status and reason" do
+          it "generates an event" do
+            expect_to_add_event(Events::ProjectStatusChanged, owner) do
+              put :update, params.merge(:workspace => workspace_params.merge(
+                  :project_status => "on_track", :project_status_reason => message)
+              )
+            end
+          end
+        end
+
+        context "changing only project status" do
+          it "generates an event" do
+            expect_to_add_event(Events::ProjectStatusChanged, owner) do
+              put :update, params.merge(:workspace => workspace_params.merge(
+                  :project_status => "on_track")
+              )
+            end
+          end
+        end
+
+        context "changing only project reason" do
+          let(:message) { 'Been working hard but cannot get anything done!' }
+
+          it "generates an event" do
+            expect_to_add_event(Events::ProjectStatusChanged, owner) do
+              put :update, params.merge(:workspace => workspace_params.merge(
+                  :project_status_reason => message)
+              )
+            end
+          end
+        end
+      end
       describe "changing the show_sandbox_datasets attribute" do
         context "from true to false" do
           before do
@@ -368,9 +404,9 @@ describe WorkspacesController do
     end
   end
 
-  def expect_to_add_event(event_class, owner)
+  def expect_to_add_event(event_class, actor)
     expect {
       yield
-    }.to change(event_class.by(owner), :count).by(1)
+    }.to change(event_class.by(actor), :count).by(1)
   end
 end

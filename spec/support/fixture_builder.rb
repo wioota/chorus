@@ -536,6 +536,7 @@ FixtureBuilder.configure do |fbuilder|
     Events::WorkspaceArchived.by(admin).add(:workspace => public_workspace)
     Events::WorkspaceUnarchived.by(admin).add(:workspace => public_workspace)
     Events::WorkspaceChangeName.by(admin).add(:workspace => public_workspace, :workspace_old_name => 'old_name')
+    Events::ProjectStatusChanged.by(owner).add(:workspace => FactoryGirl.create(:workspace, owner: owner))
     Events::HdfsDatasetExtTableCreated.by(owner).add(:workspace => public_workspace, :dataset => default_table, :hdfs_dataset => HdfsDataset.last)
     Events::HdfsFileExtTableCreated.by(owner).add(:workspace => public_workspace, :dataset => default_table, :hdfs_entry => @hdfs_file)
     Events::HdfsDirectoryExtTableCreated.by(owner).add(:workspace => public_workspace, :dataset => default_table, :hdfs_entry => @directory)

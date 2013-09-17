@@ -59,6 +59,7 @@ window.BackboneFixtureDefinitions = {
             workfileVersionDeleted: {},
             workFlowUpgradedVersion: {},
             workspaceChangeName: {},
+            projectStatusChanged: {},
             workspaceDeleted: {},
             workspaceMakePublic: {},
             workspaceMakePrivate: {},
