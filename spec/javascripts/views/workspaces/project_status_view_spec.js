@@ -4,6 +4,7 @@ describe("chorus.views.ProjectStatusView", function() {
         this.model = backboneFixtures.workspace({ id : 4 });
         this.model.fetch();
         this.view = new chorus.views.ProjectStatus({ model : this.model });
+        spyOn($.fn, 'qtip');
         this.view.render();
     });
 
@@ -12,8 +13,13 @@ describe("chorus.views.ProjectStatusView", function() {
     describe("project status", function () {
         describe("reason", function () {
             it("displays in tooltip", function () {
-                var tooltip = this.view.$('.status-reason').attr('oldtitle');
+                var tooltipSelector = ".status-reason";
+
+                var tooltip = this.view.$(tooltipSelector).attr('oldtitle');
                 expect(tooltip).toEqual(this.model.get('projectStatusReason'));
+
+                var qtipCall = $.fn.qtip.calls[0];
+                expect(qtipCall.object.selector).toBe(tooltipSelector);
             });
         });
 

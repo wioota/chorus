@@ -20,7 +20,6 @@ describe("chorus.views.DashboardProjectList", function() {
 
     describe("#render", function() {
         beforeEach(function() {
-            spyOn($.fn, 'qtip');
             this.view.render();
         });
 
@@ -38,11 +37,6 @@ describe("chorus.views.DashboardProjectList", function() {
 
             expect(this.view.$(".owner span").eq(1).text()).toBe("Andre The Giant");
             expect(this.view.$(".owner").eq(1).attr('href')).toBe(this.workspace2.owner().showUrl());
-        });
-
-        it("qtipifies info_icons", function () {
-            var qtipCall = $.fn.qtip.calls[0];
-            expect(qtipCall.object.selector).toBe(".icon-info-sign");
         });
 
         it("shows info icons only for projects with summaries", function () {

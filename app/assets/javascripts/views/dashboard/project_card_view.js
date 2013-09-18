@@ -3,20 +3,24 @@ chorus.views.ProjectCard = chorus.views.Base.extend({
     templateName: 'dashboard/project_card',
 
     subviews: {
-        '.activity': 'insightView'
+        '.activity': 'insightView',
+        '.status': 'statusView'
     },
 
     setup: function () {
-        if (this.model.latestInsight()){
+        this.statusView = new chorus.views.ProjectStatus({model: this.model});
+
+        if (this.model.latestInsight()) {
             this.insightView = new chorus.views.Activity({
                 model: this.model.latestInsight(),
-    //            displayStyle: this.options.displayStyle,
                 isNotification: false,
                 isReadOnly: true,
                 unexpandable: true
             });
         }
     },
+
+    postRender: function () { this.styleTooltip(); },
 
     additionalContext: function () {
         var numberOfInsightsOrNot;
@@ -31,7 +35,25 @@ chorus.views.ProjectCard = chorus.views.Base.extend({
             ownerShowUrl: this.model.owner().showUrl(),
             latestInsight: this.model.latestInsight() && new chorus.presenters.Activity(this.model.latestInsight()),
             hiddenInsightCount: numberOfInsightsOrNot,
-            allInsightsRoute: this.model.showUrl()+'?filter=insights'
+            allInsightsRoute: this.model.showUrl() + '?filter=insights'
         };
+    },
+
+    styleTooltip: function () {
+        // reassign the offset function so that when qtip calls it, qtip correctly positions the tooltips
+        // with regard to the fixed-height header.
+        var viewport = $(window);
+        viewport.offset = function () {
+            return { left: 0, top: $("#header").height() };
+        };
+
+        this.$('.info_icon .icon').qtip({
+            position: {
+                viewport: viewport,
+                my: "bottom left",
+                at: "top center"
+            },
+            style: { classes: "tooltip-white" }
+        });
     }
 });

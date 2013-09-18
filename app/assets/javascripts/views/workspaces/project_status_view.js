@@ -6,15 +6,7 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
         "click .edit_project_status": 'launchEditProjectStatusDialog'
     },
 
-    postRender: function () {
-        var viewport = $(window);
-        var top = $("#header").height();
-        viewport.offset = function() {
-            return { left: 0, top: top };
-        };
-
-        this.styleTooltip();
-    },
+    postRender: function () { this.styleTooltip(); },
 
     additionalContext: function () {
         return {
@@ -38,7 +30,7 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
             return { left: 0, top: $("#header").height() };
         };
 
-        $('.status-reason').qtip({
+        this.$('.status-reason').qtip({
             position: {
                 viewport: viewport,
                 my: "bottom right",

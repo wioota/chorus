@@ -4,7 +4,7 @@
         vertical-align: top;
         display: inline-block;
         width: 450px;
-        height: 235px;
+        height: 260px;
         padding: 10px;
         margin: 5px 5px 5px 5px;
         box-shadow: 2px 2px 7px 2px $subheader-border-color-dark;
@@ -65,10 +65,17 @@
         }
 
         .info_icon {
-          display: inline;
-          position: absolute;
-          top: 8px;
-          right: 12px;
+            display: inline;
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 15px;
+        }
+
+        .project_status > div {
+            font-weight: bold;
+            display: inline;
+            &.milestones { float: right; }
         }
     }
 }
