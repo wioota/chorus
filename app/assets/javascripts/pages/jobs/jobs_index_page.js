@@ -3,7 +3,7 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
 
     setup: function (workspaceId) {
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "jobs"});
-        this.buttonView = new chorus.views.JobIndexPageButtons({model: this.workspace});
+        this.buttonView = new chorus.views.JobsIndexPageButtons({model: this.workspace});
 
         this.collection = new chorus.collections.JobSet([], {workspaceId: workspaceId});
         this.collection.sortAsc("name");

@@ -1,9 +1,9 @@
-describe("chorus.views.JobIndexPageButtons", function () {
+describe("chorus.views.JobsIndexPageButtons", function () {
     beforeEach(function () {
         this.modalSpy = stubModals();
         this.workspace = backboneFixtures.workspace();
         this.workspace.loaded = false;
-        this.view = new chorus.views.JobIndexPageButtons({model: this.workspace});
+        this.view = new chorus.views.JobsIndexPageButtons({model: this.workspace});
     });
 
     context("before the workspace is fetched", function() {

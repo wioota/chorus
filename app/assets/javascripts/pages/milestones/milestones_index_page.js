@@ -3,6 +3,7 @@ chorus.pages.MilestonesIndexPage = chorus.pages.Base.extend({
 
     setup: function (workspaceId) {
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "milestones"});
+        this.buttonView = new chorus.views.MilestonesIndexPageButtons({model: this.workspace});
 
         this.collection = new chorus.collections.MilestoneSet([], {workspaceId: workspaceId});
         this.collection.fetch();
@@ -10,6 +11,7 @@ chorus.pages.MilestonesIndexPage = chorus.pages.Base.extend({
         this.mainContent = new chorus.views.MainContentList(this.listConfig());
 
         this.subscribePageEvent("milestone:selected", this.milestoneSelected);
+        this.listenTo(this.collection, "invalidated", function () { this.collection.fetch(); });
 
         this.requiredResources.add(this.workspace);
         this.breadcrumbs.requiredResources.add(this.workspace);

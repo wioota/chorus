@@ -27,4 +27,30 @@ describe MilestonesController do
       get :index, :workspace_id => workspace.id
     end
   end
+
+  describe '#create' do
+    let(:params) {
+      {
+        :workspace_id => workspace.id,
+        :milestone => {
+          :name => 'cool milestone',
+          :target_date => '2020-07-30T14:00:00-07:00'
+        }
+      }
+    }
+
+    it 'creates a new milestone from the params' do
+      expect {
+        post :create, params
+      }.to change(Milestone, :count).by(1)
+
+      Milestone.last.name.should == 'cool milestone'
+    end
+
+    it 'renders the created job as JSON' do
+      post :create, params
+      response.code.should == '201'
+      decoded_response.should_not be_empty
+    end
+  end
 end

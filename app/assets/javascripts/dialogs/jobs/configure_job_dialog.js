@@ -1,4 +1,5 @@
 chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
+    constructorName: 'ConfigureJobDialog',
     templateName: 'configure_job_dialog',
     title: function () {
         return this.model.isNew() ? t('job.dialog.title') : t('job.dialog.edit.title');
@@ -59,10 +60,7 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
 
     setupDatePickers: function () {
         this.startDatePicker = new chorus.views.DatePicker({date: this.model.nextRunDate(), selector: 'start_date'});
-        this.registerSubView(this.startDatePicker);
-
         this.endDatePicker = new chorus.views.DatePicker({date: this.model.endRunDate(),selector: 'end_date'});
-        this.registerSubView(this.endDatePicker);
     },
 
     postRender: function () {

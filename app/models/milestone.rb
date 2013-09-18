@@ -10,8 +10,16 @@ class Milestone < ActiveRecord::Base
   after_save :update_counter_cache
   after_destroy :update_counter_cache
 
+  before_validation :set_status_planned, :on => :create
+
+  private
+
   def update_counter_cache
     workspace.update_column(:milestones_count, workspace.milestones.count)
     workspace.update_column(:milestones_achieved_count, workspace.milestones.where(status: 'achieved').count)
+  end
+
+  def set_status_planned
+    self.status = 'planned'
   end
 end

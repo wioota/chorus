@@ -51,7 +51,7 @@ describe("chorus.pages.JobsIndexPage", function () {
         });
 
         it("creates the correct buttons", function() {
-            expect(this.page.mainContent.contentDetails.buttonView).toBeA(chorus.views.JobIndexPageButtons);
+            expect(this.page.mainContent.contentDetails.buttonView).toBeA(chorus.views.JobsIndexPageButtons);
             expect(this.page.mainContent.contentDetails.buttonView.model.get("id")).toBe(this.workspace.get("id"));
         });
 

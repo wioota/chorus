@@ -59,6 +59,21 @@ describe("chorus.pages.MilestonesIndexPage", function () {
             it("renders a sidebar with the selected milestone name", function () {
                 expect(this.page.$('#sidebar')).toContainText(this.milestones.at(0).get('name'));
             });
+
+            describe("when invalidated is triggered on the model", function () {
+                it("refetches the model", function () {
+                    this.page.collection.trigger('invalidated');
+                    expect(this.page.collection.fetch).toHaveBeenCalled();
+                });
+            });
+
+            describe("actions", function () {
+                beforeEach(function () {
+                    this.modalSpy = stubModals();
+                });
+
+                itBehavesLike.aDialogLauncher('button.create_milestone', chorus.dialogs.ConfigureMilestone);
+            });
         });
     });
 });

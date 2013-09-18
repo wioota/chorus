@@ -1,9 +1,9 @@
-chorus.views.JobsIndexPageButtons = chorus.views.Base.extend({
-    constructorName: "JobIndexPageButtons",
-    templateName: "jobs_index_page_buttons",
+chorus.views.MilestonesIndexPageButtons = chorus.views.Base.extend({
+    constructorName: "MilestoneIndexPageButtons",
+    templateName: "milestones_index_page_buttons",
 
     events: {
-        'click button.create_job': 'launchCreateJobDialog'
+        'click button.create_milestone': 'launchCreateMilestoneDialog'
     },
 
     setup: function() {
@@ -15,8 +15,8 @@ chorus.views.JobsIndexPageButtons = chorus.views.Base.extend({
         return this.model.loaded && this.model.canUpdate() && this.model.isActive();
     },
 
-    launchCreateJobDialog: function () {
-        var dialog = new chorus.dialogs.ConfigureJob({ workspace: {id: this.model.id} });
+    launchCreateMilestoneDialog: function () {
+        var dialog = new chorus.dialogs.ConfigureMilestone({ workspace: {id: this.model.id} });
         dialog.launchModal();
     },
 
