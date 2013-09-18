@@ -5,6 +5,14 @@
         &.at_risk           { color: $alert-background-color; }
         font-weight: bold;
     }
+
+    i {
+        font-size: 18px;
+        position: relative;
+        left: 0px;
+        bottom: 3px;
+    }
+
     .progress_container {
         display: inline-block;
         width: 120px;

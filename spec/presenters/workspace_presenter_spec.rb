@@ -9,7 +9,6 @@ describe WorkspacePresenter, :type => :view do
 
   before(:each) do
     set_current_user(user)
-
   end
 
   let(:options) { {} }
@@ -66,6 +65,18 @@ describe WorkspacePresenter, :type => :view do
       it 'includes the tags' do
         hash[:tags].count.should be > 0
         hash[:tags].should == Presenter.present(workspace.tags, @view)
+      end
+    end
+
+    context "when the workspace has a status change event" do
+      let(:workspace) { workspaces(:public) }
+
+      it "includes the status change event" do
+        presented_status_change = hash[:latest_status_change_activity]
+        pa presented_status_change[:workspace]
+        presented_status_change[:workspace][:id].should == workspace.id
+        presented_status_change[:status].should == workspace.project_status
+        presented_status_change[:reason].should == workspace.project_status_reason
       end
     end
 

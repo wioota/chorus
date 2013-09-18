@@ -202,7 +202,7 @@ FixtureBuilder.configure do |fbuilder|
     @public_with_no_collaborators = no_collaborators_public_workspace
     workspaces << no_collaborators_private_workspace = no_collaborators.owned_workspaces.create!(:name => "Private with no collaborators", :summary => "Not for searchquery, ha ha", :public => false)
     workspaces << no_collaborators_archived_workspace = no_collaborators.owned_workspaces.create!({:name => "Archived", :sandbox => other_schema, :archived_at => '2010-01-01', :archiver => no_collaborators, :public => true}, :without_protection => true)
-    workspaces << public_workspace = owner.owned_workspaces.create!({:name => "Public", :summary => "searchquery", :sandbox => default_schema, :public => true}, :without_protection => true)
+    workspaces << public_workspace = owner.owned_workspaces.create!({:name => "Public", :summary => "searchquery", :sandbox => default_schema, :public => true, :project_status_reason => 'Everything is Fine'}, :without_protection => true)
     workspaces << private_workspace = owner.owned_workspaces.create!(:name => "Private", :summary => "searchquery", :public => false)
     workspaces << search_public_workspace = owner.owned_workspaces.create!({:name => "Search Public", :summary => "searchquery", :sandbox => searchquery_schema, :public => true}, :without_protection => true)
     workspaces << search_private_workspace = owner.owned_workspaces.create!({:name => "Search Private", :summary => "searchquery", :sandbox => searchquery_schema, :public => false}, :without_protection => true)
@@ -227,11 +227,12 @@ FixtureBuilder.configure do |fbuilder|
     public_workspace.source_datasets << source_view
 
     @owner_creates_public_workspace = Events::PublicWorkspaceCreated.by(owner).add(:workspace => public_workspace, :actor => owner)
-    @owner_creates_private_workspace = Events::PrivateWorkspaceCreated.by(owner).add(:workspace => private_workspace, :actor => owner)
+    @owner_creates_private_workspace = Events::PrivateWorkspaceCreated.by(owner).add(:workspace => private_workspace)
 
-    Events::WorkspaceMakePublic.by(owner).add(:workspace => public_workspace, :actor => owner)
-    Events::WorkspaceMakePrivate.by(owner).add(:workspace => private_workspace, :actor => owner)
-    Events::WorkspaceDeleted.by(owner).add(:workspace => public_workspace, :actor => owner)
+    Events::WorkspaceMakePublic.by(owner).add(:workspace => public_workspace)
+    Events::WorkspaceMakePrivate.by(owner).add(:workspace => private_workspace)
+    Events::WorkspaceDeleted.by(owner).add(:workspace => public_workspace)
+    Events::ProjectStatusChanged.by(owner).add(:workspace => public_workspace)
 
     # HDFS Datasets need a workspace association
     attrs = FactoryGirl.attributes_for(:hdfs_dataset, :name => "hadoop", :hdfs_data_source => hdfs_data_source, :workspace => public_workspace)

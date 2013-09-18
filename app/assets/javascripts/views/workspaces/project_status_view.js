@@ -6,6 +6,13 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
         "click .edit_project_status": 'launchEditProjectStatusDialog'
     },
 
+    setup: function () {
+        if (this.model.get('latestStatusChangeActivity')) {
+            var activity = new chorus.models.Activity(this.model.get('latestStatusChangeActivity'));
+            this.statusChangeActivityView = new chorus.views.Activity({model: activity, isReadOnly: true});
+        }
+    },
+
     postRender: function () { this.styleTooltip(); },
 
     additionalContext: function () {
@@ -30,13 +37,19 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
             return { left: 0, top: $("#header").height() };
         };
 
-        this.$('.status-reason').qtip({
+        var tooltipOptions = {
             position: {
                 viewport: viewport,
                 my: "bottom right",
-                at: "top left"
+                at: "top center"
             },
             style: { classes: "tooltip-white" }
-        });
+        };
+
+        if (this.statusChangeActivityView) {
+            _.extend(tooltipOptions, {content: $(this.statusChangeActivityView.render().el)});
+        }
+
+        this.$('.status_reason').qtip(tooltipOptions);
     }
 });

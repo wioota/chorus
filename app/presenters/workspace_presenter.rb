@@ -15,8 +15,8 @@ class WorkspacePresenter < Presenter
       :is_project => model.is_project,
       :project_status => model.project_status,
       :project_status_reason => model.project_status_reason,
-      :milestone_count => 30,
-      :milestone_completed_count => 6
+      :milestone_count => 40,
+      :milestone_completed_count => rand(30)+10
     }
 
     unless succinct?
@@ -34,6 +34,7 @@ class WorkspacePresenter < Presenter
     end
 
     results.merge!(latest_comments_hash)
+    results.merge!(status_change_activity_hash) if latest_status_change_activity
     results
   end
 
@@ -60,5 +61,17 @@ class WorkspacePresenter < Presenter
       :latest_comment_list => present(latest_5),
       :latest_insight => present(recent_insights.order("updated_at desc").first)
     }
+  end
+
+  def status_change_activity_hash
+    activity = latest_status_change_activity
+    activity.workspace = nil
+    {
+        :latest_status_change_activity => present(activity).merge({workspace: {id: model.id, name: model.name}})
+    }
+  end
+
+  def latest_status_change_activity
+    @activity ||= Events::ProjectStatusChanged.where(workspace_id: model.id).last
   end
 end
