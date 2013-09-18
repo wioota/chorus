@@ -19,7 +19,8 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
         return {
             projectStatusKey: 'workspace.project.status.' + this.model.get('projectStatus'),
             statusReason: this.model.get('projectStatusReason'),
-            milestoneProgress: this.model.milestoneProgress()
+            milestoneProgress: this.model.milestoneProgress(),
+            milestonesUrl: this.model.milestonesUrl()
         };
     },
 

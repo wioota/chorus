@@ -15,8 +15,8 @@ class WorkspacePresenter < Presenter
       :is_project => model.is_project,
       :project_status => model.project_status,
       :project_status_reason => model.project_status_reason,
-      :milestone_count => 40,
-      :milestone_completed_count => rand(30)+10
+      :milestone_count => model.milestones_count,
+      :milestone_completed_count => model.milestones_achieved_count
     }
 
     unless succinct?

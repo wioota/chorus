@@ -562,4 +562,11 @@ describe("chorus.models.Workspace", function() {
             });
         });
     });
+
+    describe("#milestonesUrl", function() {
+        it("links to the milestones index route", function() {
+            this.model.set({id: 5});
+            expect(this.model.milestonesUrl()).toBe("#/workspaces/5/milestones");
+        });
+    });
 });

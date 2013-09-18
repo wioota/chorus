@@ -714,6 +714,26 @@ describe Workspace do
     end
   end
 
+  describe "milestones" do
+    let(:workspace) { workspaces(:public) }
+
+    describe "#milestones_count" do
+      it "counts the total number of milestones" do
+        workspace.milestones_count.should == 3
+      end
+    end
+
+    describe "#milestones_achieved_count" do
+      before do
+        workspace.milestones.first.update_attributes(:status => 'achieved')
+      end
+
+      it "counts the milestones in achieved state" do
+        workspace.reload.milestones_achieved_count.should == 1
+      end
+    end
+  end
+
   it_should_behave_like "taggable models", [:workspaces, :public]
 
   it_behaves_like 'a soft deletable model' do

@@ -201,5 +201,9 @@ chorus.models.Workspace = chorus.models.Base.extend({
         var total = this.get('milestoneCount');
 
         return total > 0 ? (completed / total * 100) : 0;
+    },
+
+    milestonesUrl: function () {
+        return this.showUrl() + "/milestones";
     }
 });

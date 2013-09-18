@@ -41,5 +41,9 @@ describe("chorus.views.ProjectStatusView", function() {
 
             expect(this.view.$('.ratio')).toContainText(completed + ' / ' + total);
         });
+
+        it("links the ratio to the milestones list", function () {
+            expect(this.view.$('.ratio').attr('href')).toEqual(this.model.milestonesUrl());
+        });
     });
 });

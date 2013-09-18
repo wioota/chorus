@@ -1,7 +1,7 @@
 <div>
     {{t 'workspace.project.status.label'}} <a class="edit_project_status {{projectStatus}}" href="#">{{t projectStatusKey}}</a>
-    {{#if statusReason}}
-        <i class='icon-comment-alt status_reason' title="{{statusReason}}"></i>
+    {{#if latestStatusChangeActivity}}
+        <i class='icon-comment-alt status_reason'></i>
     {{/if}}
 </div>
 <div class="milestones">
@@ -9,5 +9,5 @@
     <div class='progress_container'>
         <div class="progress {{projectStatus}}" style="width: {{milestoneProgress}}%;"></div>
     </div>
-    <a class='ratio' href="#">{{milestoneCompletedCount}} / {{milestoneCount}}</a>
+    <a class='ratio' href="{{milestonesUrl}}">{{milestoneCompletedCount}} / {{milestoneCount}}</a>
 </div>
