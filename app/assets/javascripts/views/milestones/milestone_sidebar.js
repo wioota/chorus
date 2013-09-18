@@ -7,7 +7,7 @@ chorus.views.MilestoneSidebar = chorus.views.Sidebar.extend({
     },
 
     events: {
-        'click a.edit_milestone': 'launchEditDialog'
+        'click a.delete_milestone': 'launchDeleteAlert'
     },
 
     setup: function() {
@@ -17,6 +17,11 @@ chorus.views.MilestoneSidebar = chorus.views.Sidebar.extend({
         return this.model ? {
 
         } : {};
+    },
+
+    launchDeleteAlert: function (e) {
+        e && e.preventDefault();
+        new chorus.alerts.MilestoneDelete({model: this.model}).launchModal();
     },
 
     launchEditDialog: function (e) {

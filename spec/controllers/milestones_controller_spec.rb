@@ -53,4 +53,23 @@ describe MilestonesController do
       decoded_response.should_not be_empty
     end
   end
+
+  describe '#destroy' do
+    let(:milestone) { milestones(:default) }
+    let(:params) do
+      { workspace_id: workspace.id, id: milestone.id }
+    end
+
+    it "lets a workspace member soft delete a milestone" do
+      expect {
+        delete :destroy, params
+      }.to change(Milestone, :count).by(-1)
+      response.should be_success
+    end
+
+    it "uses authorization" do
+      mock(controller).authorize!(:can_edit_sub_objects, workspace)
+      delete :destroy, params
+    end
+  end
 end

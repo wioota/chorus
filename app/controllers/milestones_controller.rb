@@ -15,6 +15,14 @@ class MilestonesController < ApplicationController
     present milestone, :status => :created
   end
 
+  def destroy
+    authorize! :can_edit_sub_objects, workspace
+
+    Milestone.find(params[:id]).destroy
+
+    head :ok
+  end
+
   protected
 
   def workspace
