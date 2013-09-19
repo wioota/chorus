@@ -1,10 +1,6 @@
-chorus.dialogs.EditProjectStatus = chorus.dialogs.Base.include(
-        chorus.Mixins.DialogFormHelpers
-    ).extend({
+chorus.dialogs.EditProjectStatus = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
         constructorName: "ProjectStatus",
-
         templateName: "edit_project_status",
-
         title: "Edit Project Status",
 
         events: {
@@ -16,6 +12,20 @@ chorus.dialogs.EditProjectStatus = chorus.dialogs.Base.include(
             this.listenTo(this.resource, "saved", this.statusSaved);
             this.listenTo(this.resource, "saveFailed", this.saveFailed);
             $(document).one('reveal.facebox', _.bind(this.setupSelects, this));
+
+            this.disableFormUnlessValid({
+                formSelector: "form",
+                inputSelector: "input",
+                checkInput: _.bind(this.checkInput, this)
+            });
+        },
+
+        postRender: function () {
+            this.toggleSubmitDisabled();
+        },
+
+        checkInput: function () {
+            return this.$('input[name=reason]').val().length > 0;
         },
 
         setupSelects: function () {
@@ -23,17 +33,16 @@ chorus.dialogs.EditProjectStatus = chorus.dialogs.Base.include(
         },
 
         updateStatus: function (e) {
-            e.preventDefault();
+            e && e.preventDefault();
 
             this.$("button.submit").startLoading("actions.creating");
             this.resource.save({
-                projectStatus: this.$("select[name='projectStatus']").val()
+                projectStatus: this.$("select[name='projectStatus']").val(),
+                projectStatusReason: this.$("input[name='reason']").val()
             }, {wait: true});
         },
 
-        statusSaved: function () {
-            this.closeModal();
-        },
+        statusSaved: function () { this.closeModal(); },
 
         statuses: ['on_track', 'at_risk', 'needs_attention'],
 

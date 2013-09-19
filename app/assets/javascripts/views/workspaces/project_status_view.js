@@ -39,12 +39,24 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
         };
 
         var tooltipOptions = {
+            hide: {
+                delay: 500,
+                fixed: true,
+                event: 'mouseout'
+            },
             position: {
                 viewport: viewport,
                 my: "bottom right",
                 at: "top center"
             },
-            style: { classes: "tooltip-white" }
+            style: {
+                classes: "tooltip-white",
+                tip: {
+                    width: 15,
+                    height: 20
+                }
+
+            }
         };
 
         if (this.statusChangeActivityView) {

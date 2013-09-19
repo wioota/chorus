@@ -16,9 +16,11 @@ describe("chorus.dialogs.EditProjectStatus", function() {
 
         context("submitting the form with valid data", function() {
             beforeEach(function() {
+                this.reason = 'Because I said so!';
                 spyOnEvent($(document), "close.facebox");
                 spyOn(this.dialog.model, "save").andCallThrough();
                 this.dialog.$("select[name='projectStatus']").val('needs_attention');
+                this.dialog.$('input[name=reason]').val(this.reason).keyup();
                 this.dialog.$('.submit').click();
             });
 
@@ -27,8 +29,21 @@ describe("chorus.dialogs.EditProjectStatus", function() {
             });
 
             it("updates the project status", function() {
-                expect(this.server.lastUpdateFor(this.dialog.model).params()['workspace[project_status]']).toEqual('needs_attention');
+                var params = this.server.lastUpdateFor(this.dialog.model).params();
+                expect(params['workspace[project_status]']).toEqual('needs_attention');
+            });
+
+            it("updates the project status reason", function() {
+                var params = this.server.lastUpdateFor(this.dialog.model).params();
+                expect(params['workspace[project_status_reason]']).toEqual(this.reason);
             });
         });
+
+        it("disables the form until a status change reason is supplied", function () {
+            expect(this.dialog.$('button.submit')).toBeDisabled();
+            this.dialog.$('input[name=reason]').val('Because I said so!').keyup();
+            expect(this.dialog.$('button.submit')).not.toBeDisabled();
+        });
+
     });
 });

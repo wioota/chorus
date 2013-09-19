@@ -16,10 +16,6 @@ chorus.dialogs.ConfigureMilestone = chorus.dialogs.Base.include(chorus.Mixins.Di
         ".target_date": "targetDatePicker"
     },
 
-    events: {
-
-    },
-
     getModel: function () {
         return this.originalModel || this.model;
     },
@@ -72,12 +68,7 @@ chorus.dialogs.ConfigureMilestone = chorus.dialogs.Base.include(chorus.Mixins.Di
         this.listenTo(this.getModel(), 'saveFailed', this.saveFailed);
     },
 
-    postRender: function () {
-    },
-
     additionalContext: function () {
-        return {
-            submitTranslation: this.submitTranslation()
-        };
+        return { submitTranslation: this.submitTranslation() };
     }
 });
