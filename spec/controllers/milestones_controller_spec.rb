@@ -72,4 +72,31 @@ describe MilestonesController do
       delete :destroy, params
     end
   end
+
+  describe '#update' do
+    let(:milestone) { milestones(:default) }
+    let(:params) do
+      {
+        workspace_id: workspace.id,
+        id: milestone.id,
+        milestone: {
+          state: 'achieved',
+          name: 'some new name'
+        }
+      }
+    end
+
+    it 'updates the milestone' do
+      expect {
+        put :update, params
+        milestone.reload
+      }.to change(milestone, :state).from('planned').to('achieved')
+      response.should be_success
+    end
+
+    it 'uses authorization' do
+      mock(subject).authorize! :can_edit_sub_objects, workspace
+      put :update, params
+    end
+  end
 end

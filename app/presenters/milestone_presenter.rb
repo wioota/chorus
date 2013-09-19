@@ -6,7 +6,7 @@ class MilestonePresenter < Presenter
       :workspace => present(model.workspace, options.merge(:succinct => options[:succinct] || options[:list_view])),
       :name => model.name,
       :target_date => model.target_date,
-      :status => model.status
+      :state => model.state
     }
   end
 

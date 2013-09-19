@@ -188,7 +188,7 @@ FactoryGirl.define do
 
   factory :milestone do
     sequence(:name) { |n| "Milestone #{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
-    status "planned"
+    state "planned"
     target_date Date.today
     workspace
   end

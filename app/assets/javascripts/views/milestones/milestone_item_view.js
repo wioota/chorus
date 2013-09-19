@@ -12,7 +12,7 @@ chorus.views.MilestoneItem = chorus.views.Base.extend({
 
     additionalContext: function () {
         return {
-            statusKey: 'workspace.project.milestones.statuses.' + this.model.get('status')
+            stateKey: 'workspace.project.milestones.states.' + this.model.get('state')
         };
     },
 

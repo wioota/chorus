@@ -32,6 +32,21 @@ resource 'Milestone' do
     end
   end
 
+  put "/workspaces/:workspace_id/milestones/:id" do
+    parameter :workspace_id, "Workspace ID"
+    parameter :id, "Milestone id"
+    parameter :name, "Milestone name"
+    parameter :target_date, "Target date"
+    parameter :state, "Milestone state"
+    required_parameters :workspace_id, :id
+
+    let(:id) { milestone.id }
+
+    example_request "Update a milestone" do
+      status.should == 200
+    end
+  end
+
   delete "/workspaces/:workspace_id/milestones/:id" do
     parameter :workspace_id, "Workspace ID"
     parameter :id, "Milestone id"

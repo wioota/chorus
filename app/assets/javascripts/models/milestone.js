@@ -8,5 +8,13 @@ chorus.models.Milestone = chorus.models.Base.extend({
             this._workspace = new chorus.models.Workspace(this.get("workspace"));
         }
         return this._workspace;
+    },
+
+    toggleState: function () {
+        if (this.get('state') === 'planned') {
+            this.save( {state: 'achieved'}, {wait: true} );
+        } else {
+            this.save( {state: 'planned'}, {wait: true} );
+        }
     }
 });

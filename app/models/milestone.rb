@@ -1,25 +1,25 @@
 class Milestone < ActiveRecord::Base
-  STATUSES = ['planned', 'achieved']
+  STATES = ['planned', 'achieved']
 
   belongs_to :workspace
-  attr_accessible :name, :status, :target_date
+  attr_accessible :name, :state, :target_date
 
-  validates_presence_of :name, :status, :target_date, :workspace
-  validates_inclusion_of :status, :in => STATUSES
+  validates_presence_of :name, :state, :target_date, :workspace
+  validates_inclusion_of :state, :in => STATES
 
   after_save :update_counter_cache
   after_destroy :update_counter_cache
 
-  before_validation :set_status_planned, :on => :create
+  before_validation :set_state_planned, :on => :create
 
   private
 
   def update_counter_cache
     workspace.update_column(:milestones_count, workspace.milestones.count)
-    workspace.update_column(:milestones_achieved_count, workspace.milestones.where(status: 'achieved').count)
+    workspace.update_column(:milestones_achieved_count, workspace.milestones.where(state: 'achieved').count)
   end
 
-  def set_status_planned
-    self.status = 'planned'
+  def set_state_planned
+    self.state = 'planned'
   end
 end

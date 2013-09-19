@@ -23,6 +23,15 @@ class MilestonesController < ApplicationController
     head :ok
   end
 
+  def update
+    authorize! :can_edit_sub_objects, workspace
+
+    milestone = workspace.milestones.find(params[:id])
+    milestone.update_attributes!(params[:milestone])
+
+    head :ok
+  end
+
   protected
 
   def workspace
