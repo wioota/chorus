@@ -76,7 +76,7 @@ GREENPLUM_IP
 /config/secret.key
 
 # Ignore .vagrant
-.vagrant
+.vagrant*
 /chorus_appliance/*.tar.gz
 
 # Ignore load-test data

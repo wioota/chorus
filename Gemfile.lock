@@ -100,7 +100,6 @@ GEM
     allowy (0.4.0)
       activesupport (>= 3.2)
       i18n
-    archive-tar-minitar (0.5.2)
     arel (3.0.2)
     attr_encrypted (1.2.1)
       encryptor (>= 1.1.1)
@@ -213,7 +212,6 @@ GEM
       jdbc-sqlite3
       sequel
       thor
-    log4r (1.1.10)
     logger-syslog (1.7.1)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -229,9 +227,6 @@ GEM
     multi_json (1.7.9)
     mustache (0.99.4)
     net-ldap (0.3.1)
-    net-scp (1.0.4)
-      net-ssh (>= 1.99.1)
-    net-ssh (2.2.2)
     newrelic_rpm (3.6.6.147)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
@@ -348,15 +343,6 @@ GEM
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
     uniform_notifier (1.2.0)
-    vagrant (1.0.7)
-      archive-tar-minitar (= 0.5.2)
-      childprocess (~> 0.3.1)
-      erubis (~> 2.7.0)
-      i18n (~> 0.6.0)
-      json (>= 1.5.1, < 1.8.0)
-      log4r (~> 1.1.9)
-      net-scp (~> 1.0.4)
-      net-ssh (~> 2.2.2)
     vcr (2.3.0)
     webmock (1.13.0)
       addressable (>= 2.2.7)
@@ -432,7 +418,6 @@ DEPENDENCIES
   timecop
   turbo-sprockets-rails3
   uglifier
-  vagrant (~> 1.0.7)
   vcr (~> 2.3.0)
   will_paginate
   yui-compressor
