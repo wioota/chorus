@@ -725,7 +725,7 @@ describe Workspace do
 
     describe "#milestones_achieved_count" do
       before do
-        workspace.milestones.first.update_attributes(:status => 'achieved')
+        workspace.milestones.first.update_attributes(:state => 'achieved')
       end
 
       it "counts the milestones in achieved state" do
