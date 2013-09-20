@@ -1,16 +1,28 @@
 describe("chorus.views.DashboardProjectList", function() {
     beforeEach(function() {
-        // Has a summary, but no insights
-        this.workspace1 = backboneFixtures.workspace({ name: "Broccoli", owner: { firstName: 'Green', lastName: 'Giant' }, latestCommentList: [], summary: 'We are making sails!' });
+        // Has a summary, but no insights, and user is a member
+        this.workspace1 = backboneFixtures.workspace({
+            name: "Broccoli",
+            owner: { firstName: 'Green', lastName: 'Giant' },
+            latestCommentList: [],
+            summary: 'We are making sails!',
+            isMember: true
+        });
         delete this.workspace1.attributes.latestInsight;
 
-        // One insight, no summary
-        this.workspace2 = backboneFixtures.workspace({ name: "Camels", owner: { firstName: 'Andre', lastName: 'The Giant' }, latestCommentList: [], numberOfInsights: 1});
+        // One insight, no summary, and the user is not a member
+        this.workspace2 = backboneFixtures.workspace({
+            name: "Camels",
+            owner: { firstName: 'Andre', lastName: 'The Giant' },
+            latestCommentList: [],
+            numberOfInsights: 1,
+            isMember: false
+        });
         delete this.workspace2.attributes.summary;
         spyOn(this.workspace2, 'latestInsight').andReturn(backboneFixtures.activity.insightOnGreenplumDataSource());
 
-        // Three insights and a summary
-        this.workspace3 = backboneFixtures.workspace({numberOfInsights: 3});
+        // Three insights and a summary, and user is a member
+        this.workspace3 = backboneFixtures.workspace({numberOfInsights: 3, isMember: true});
         spyOn(this.workspace3, 'latestInsight').andReturn(backboneFixtures.activity.insightOnGreenplumDataSource());
 
         this.collection = new chorus.collections.WorkspaceSet([this.workspace1, this.workspace2, this.workspace3]);
@@ -66,6 +78,38 @@ describe("chorus.views.DashboardProjectList", function() {
                 it("displays the comment, with no 'read more'", function () {
                     expect(this.view.$('.truncated_text')).toContainText(this.workspace2.latestInsight().get('body'));
                     expect(this.view.$('.truncated_text .more')).not.toExist();
+                });
+            });
+        });
+
+        describe("filtering", function () {
+            context("when filter:members_only is triggered on the collection", function () {
+                beforeEach(function () {
+                    this.collection.trigger('filter:members_only');
+                    this.renderedProjects = _.map(this.view.projectCards, function (view) {
+                        return view.model;
+                    });
+                });
+
+                it("renders only cards for workspaces that the current user is a member of", function () {
+                    expect(this.renderedProjects).toContain(this.workspace1);
+                    expect(this.renderedProjects).not.toContain(this.workspace2);
+                    expect(this.renderedProjects).toContain(this.workspace3);
+                });
+
+                context("and then filter:all is triggered on the collection", function () {
+                    beforeEach(function () {
+                        this.collection.trigger('filter:all');
+                        this.renderedProjects = _.map(this.view.projectCards, function (view) {
+                            return view.model;
+                        });
+                    });
+
+                    it("renders cards for all workspaces in the collection", function () {
+                        expect(this.renderedProjects).toContain(this.workspace1);
+                        expect(this.renderedProjects).toContain(this.workspace2);
+                        expect(this.renderedProjects).toContain(this.workspace3);
+                    });
                 });
             });
         });

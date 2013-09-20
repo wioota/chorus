@@ -44,7 +44,6 @@ describe("chorus.views.Dashboard", function(){
             });
         });
 
-
         context("with some project and some not-project workspaces", function () {
             beforeEach(function () {
                 this.workspaceSet = backboneFixtures.workspaceSet();
@@ -112,6 +111,10 @@ describe("chorus.views.Dashboard", function(){
         describe("the project list", function() {
             it("renders the project list with the right title", function() {
                 expect(this.view.$(".project_list .content_header h1").text()).toMatchTranslation("header.current_projects");
+            });
+
+            it("has a ProjectListHeader view", function () {
+                expect(this.view.projectList.contentHeader).toBeA(chorus.views.ProjectListHeader);
             });
         });
 

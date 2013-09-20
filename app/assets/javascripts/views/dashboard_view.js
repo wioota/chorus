@@ -25,7 +25,7 @@ chorus.views.Dashboard = chorus.views.Base.extend({
 
         this.projectList = new chorus.views.MainContentView({
             collection: this.projectWorkspaces,
-            contentHeader: new chorus.views.StaticTemplate("default_content_header", {title:t("header.current_projects")}),
+            contentHeader: new chorus.views.ProjectListHeader({collection: this.projectWorkspaces}),
             content: new chorus.views.DashboardProjectList({ collection: this.projectWorkspaces })
         });
 

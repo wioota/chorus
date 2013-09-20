@@ -19,40 +19,6 @@ $system-action-color: #7C7D7D;
     display: block;
 }
 
-.activity_list_header {
-    .menus {
-        float: right;
-        margin-right: 10px;
-
-        a {
-            &.active {
-                color: black;
-                border-bottom: none;
-            }
-        }
-
-        .separator {
-            padding: 0 5px;
-            position: relative;
-            top: 2px;
-            color: $link-color;
-        }
-
-        .badge {
-            display: inline-block;
-        }
-    }
-
-    .title {
-        img {
-            float: left;
-        }
-        h1 {
-            padding-left: 5px;
-        }
-    }
-}
-
 .notification_list, .activity_list {
     a[href=''], a:not([href]) {
         color: $color-text3;

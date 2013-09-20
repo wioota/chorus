@@ -135,7 +135,7 @@ describe("chorus.views.ActivityListHeader", function() {
                             expect(this.collection).toHaveBeenFetched();
                         });
 
-                        it("displays the 'All Insights' option as active", function() {
+                        it("displays the 'Insights' option as active", function() {
                             expect(this.view.$(".menus .insights")).toHaveClass("active");
                             expect(this.view.$(".menus .all")).not.toHaveClass("active");
                         });
