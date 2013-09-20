@@ -52,7 +52,7 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
                 at: "top center"
             },
             style: {
-                classes: "tooltip-white",
+                classes: "tooltip-white tooltip",
                 tip: {
                     width: 15,
                     height: 20

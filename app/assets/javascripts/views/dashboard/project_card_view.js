@@ -46,12 +46,23 @@ chorus.views.ProjectCard = chorus.views.Base.extend({
         };
 
         this.$('.info_icon .icon').qtip({
+            hide: {
+                delay: 500,
+                fixed: true,
+                event: 'mouseout'
+            },
             position: {
                 viewport: viewport,
                 my: "bottom left",
                 at: "top center"
             },
-            style: { classes: "tooltip-white" }
+            style: {
+                classes: "tooltip-white tooltip",
+                tip: {
+                    width: 15,
+                    height: 20
+                }
+            }
         });
     }
 });
