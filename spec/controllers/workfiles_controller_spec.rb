@@ -52,19 +52,19 @@ describe WorkfilesController do
       it "filters by file type: sql" do
         get :index, :workspace_id => workspace.id, :order => "file_name", :file_type => "sql"
         response.code.should == "200"
-        decoded_response.length.should == 3
+        decoded_response.map(&:file_type).uniq.should == ['sql']
       end
 
       it "filters by file type: code" do
         get :index, :workspace_id => workspace.id, :order => "file_name", :file_type => "code"
         response.code.should == "200"
-        decoded_response.length.should == 1
+        decoded_response.map(&:file_type).uniq.should == ['code']
       end
 
       it 'filters by file type: work_flow' do
         get :index, :workspace_id => workspace.id, :order => "file_name", :file_type => "work_flow"
         response.code.should == "200"
-        decoded_response.length.should == 2
+        decoded_response.map(&:file_type).uniq.should == ['work_flow']
       end
     end
 
