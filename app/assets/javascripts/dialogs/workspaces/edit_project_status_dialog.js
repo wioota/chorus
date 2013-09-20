@@ -44,7 +44,7 @@ chorus.dialogs.EditProjectStatus = chorus.dialogs.Base.include(chorus.Mixins.Dia
 
         statusSaved: function () { this.closeModal(); },
 
-        statuses: ['on_track', 'at_risk', 'needs_attention'],
+        statuses: ['on_track', 'needs_attention', 'at_risk'],
 
         additionalContext: function () {
             return {
