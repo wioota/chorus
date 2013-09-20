@@ -4,7 +4,8 @@ describe("chorus.pages.ErrorPage", function() {
         this.page = new chorus.pages.Error();
         this.page.pageOptions = {
             title: "this is the title",
-            text: "this is the page body"
+            text: "this is the page body",
+            message: 'ahh real monsters!!!'
         };
         this.page.render();
     });
@@ -15,6 +16,10 @@ describe("chorus.pages.ErrorPage", function() {
 
     it("has the translations for the textbox content", function() {
         expect(this.page.$('.content')).toContainText(this.page.pageOptions.text);
+    });
+
+    it("displays the message", function () {
+        expect(this.page.$('.content')).toContainText(this.page.pageOptions.message);
     });
 
     it("has the translations for the button", function() {

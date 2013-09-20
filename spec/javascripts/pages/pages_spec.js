@@ -84,7 +84,7 @@ describe("chorus.pages.Base", function() {
                 beforeEach(function() {
                     this.page = new chorus.pages.Bare();
                     chorus.pageOptions = {};
-                    this.model.serverErrors = { record: "DATA_SOURCE_OVERLOADED" };
+                    this.model.serverErrors = { record: "DATA_SOURCE_OVERLOADED", message: "an informative message" };
                     this.page.handleFetchErrorsFor(this.model);
                 });
 
@@ -92,6 +92,7 @@ describe("chorus.pages.Base", function() {
                     this.model.trigger("unprocessableEntity");
                     expect(chorus.pageOptions.title).toMatchTranslation("record_error.DATA_SOURCE_OVERLOADED_title");
                     expect(chorus.pageOptions.text).toMatchTranslation("record_error.DATA_SOURCE_OVERLOADED");
+                    expect(chorus.pageOptions.message).toBe("an informative message");
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith('/unprocessableEntity');
                 });
             });

@@ -3,7 +3,8 @@ class GreenplumConnection < DataSourceConnection
     def error_type
       return @error_type if @error_type
       case error_code
-        when /28.../ then :INVALID_PASSWORD
+        when /28P../ then :INVALID_PASSWORD
+        when /28.../ then :AUTHORIZATION_FAILED
         when '3D000' then :DATABASE_MISSING
         when '53300' then :TOO_MANY_CONNECTIONS
         when /42.../ then :INVALID_STATEMENT

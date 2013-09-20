@@ -29,7 +29,8 @@ chorus.pages.Bare = chorus.views.Bare.extend({
                 var title = I18n.lookup(code + "_title");
                 chorus.pageOptions = {
                     title: title ? title : t(undefinedErrorTitle),
-                    text: t(code, errors)
+                    text: t(code, errors),
+                    message: errors.message
                 };
             } else {
                 chorus.pageOptions = {
