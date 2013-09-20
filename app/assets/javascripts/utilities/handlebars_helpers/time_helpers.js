@@ -1,11 +1,11 @@
 chorus.handlebarsHelpers.time = {
     displayAbbreviatedTimestamp: function(timestamp) {
-        var date = Date.parseFromApi(timestamp);
+        var date = chorus.parseDateFromApi(timestamp);
         return date ? date.toString("MMMM d") : "";
     },
 
     relativeTimestamp: function(timestamp) {
-        var date = Date.parseFromApi(timestamp);
+        var date = chorus.parseDateFromApi(timestamp);
         return date ? date.toRelativeTime(60000) : "";
     },
 

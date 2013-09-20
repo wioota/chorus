@@ -11,7 +11,7 @@ chorus.views.WorkfileVersionList = chorus.views.Base.extend({
         var author = workfileVersion.modifier();
 
         var versionInfo = workfileVersion.get("versionInfo");
-        var date = Date.parseFromApi(versionInfo && versionInfo.updatedAt);
+        var date = chorus.parseDateFromApi(versionInfo && versionInfo.updatedAt);
         var formattedDate = date && date.toString("MMMM dd, yyyy");
         var workspace = workfileVersion.workspace();
         return {

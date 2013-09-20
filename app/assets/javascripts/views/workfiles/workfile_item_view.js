@@ -40,7 +40,7 @@ chorus.views.WorkfileItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).
 
         var lastComment = this.model.lastComment();
         if (lastComment) {
-            var date = Date.parseFromApi(lastComment.get("commentCreatedStamp"));
+            var date = chorus.parseDateFromApi(lastComment.get("commentCreatedStamp"));
 
             ctx.lastComment = {
                 body:lastComment.get("body"),

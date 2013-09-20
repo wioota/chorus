@@ -56,7 +56,7 @@ chorus.views.DatasetItem = chorus.views.Base.extend(chorus.Mixins.TagsContext).e
         _.extend(ctx, this.additionalContextForTags());
 
         if (recentComment) {
-            var date = Date.parseFromApi(recentComment.get("commentCreatedStamp"));
+            var date = chorus.parseDateFromApi(recentComment.get("commentCreatedStamp"));
             ctx.lastComment = {
                 body: recentComment.get("body"),
                 creator: recentComment.author(),

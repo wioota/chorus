@@ -15,7 +15,7 @@ describe('chorus.handlebarsHelpers.time', function() {
 
     describe("relativeTimestamp", function () {
         it("renders the relative timestamp", function () {
-            var tm = Date.formatForApi((50).hours().ago());
+            var tm = chorus.dateFormatForApi((50).hours().ago());
             expect(Handlebars.helpers.relativeTimestamp(tm)).toBe("2 days ago");
         });
 
