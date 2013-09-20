@@ -6,7 +6,8 @@ module Events
     has_activities :actor, :workspace
     has_additional_data :status, :reason
 
-    before_save :adopt_status_and_reason
+    before_validation :adopt_status_and_reason
+    validates_presence_of :status, :reason
 
     private
 

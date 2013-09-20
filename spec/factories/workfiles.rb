@@ -8,8 +8,9 @@ FactoryGirl.define do
     file_name Faker::Lorem.word
 
     after(:create) do |workfile, evaluator|
-      database = FactoryGirl.create(:gpdb_database)
-      hadoop = FactoryGirl.create(:hdfs_data_source)
+      gpdb = FactoryGirl.create(:gpdb_data_source, owner: workfile.owner)
+      database = FactoryGirl.create(:gpdb_database, data_source: gpdb)
+      hadoop = FactoryGirl.create(:hdfs_data_source, owner: workfile.owner)
       workfile.workfile_execution_locations.create(execution_location: database)
       workfile.workfile_execution_locations.create(execution_location: hadoop)
     end

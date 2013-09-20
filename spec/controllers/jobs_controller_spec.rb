@@ -76,7 +76,8 @@ describe JobsController do
   end
 
   describe '#create' do
-    let(:planned_job) { FactoryGirl.attributes_for(:job) }
+    let(:planned_job) { FactoryGirl.attributes_for(:job, :workspace => workspace) }
+
     let(:params) do
       {
           :workspace_id => workspace.id,

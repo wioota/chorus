@@ -165,16 +165,20 @@ describe("chorus.pages.SearchIndexPage", function() {
                 });
 
                 describe("clicking on a workspace search result", function() {
+                    var selectedIndex;
+
                     beforeEach(function() {
-                        this.workspaceLIs.eq(1).trigger("click");
+                        selectedIndex = 1;
+                        this.workspaceLIs.eq(selectedIndex).trigger("click");
                     });
 
                     it("selects that workspace", function() {
-                        expect(this.workspaceLIs.eq(1)).toHaveClass("selected");
+                        expect(this.workspaceLIs.eq(selectedIndex)).toHaveClass("selected");
                     });
 
                     it("shows that workspace in the sidebar", function() {
-                        expect(this.page.sidebar.$(".info .name")).toHaveText("Private");
+                        var workspaceAtSelectedIndex = this.page.mainContent.content.workspaceList.collection.at(selectedIndex);
+                        expect(this.page.sidebar.$(".info .name")).toHaveText(workspaceAtSelectedIndex.get('name'));
                     });
 
                     it("show the 'add a note' link in the sidebar", function() {

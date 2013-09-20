@@ -3,10 +3,24 @@ require_relative 'helpers'
 
 describe Events::ProjectStatusChanged do
   extend EventHelpers
-  let(:workspace) { FactoryGirl.create(:workspace) }
+  let(:workspace) { FactoryGirl.create(:project) }
   let(:actor) { users(:default) }
 
   subject { Events::ProjectStatusChanged.by(actor).add(:workspace => workspace) }
+
+  it 'validates the presence of reason' do
+    workspace = FactoryGirl.create(:workspace, :project_status_reason => nil)
+    expect {
+      Events::ProjectStatusChanged.by(actor).add(:workspace => workspace)
+    }.to raise_error(ActiveRecord::RecordInvalid)
+  end
+
+  it 'validates the presence of reason' do
+    workspace = FactoryGirl.create(:workspace, :project_status => nil)
+    expect {
+      Events::ProjectStatusChanged.by(actor).add(:workspace => workspace)
+    }.to raise_error(ActiveRecord::RecordInvalid)
+  end
 
   its(:targets) { should == { :workspace => workspace } }
 

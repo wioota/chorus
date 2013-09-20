@@ -116,7 +116,7 @@ describe JobTasksController do
 
     context "run work flow" do
       let(:task) { job_tasks(:rwft) }
-      let(:desired_work_flow) { workfiles(:alpine_flow) }
+      let(:desired_work_flow) { FactoryGirl.create(:work_flow, :workspace => workspaces(:public), :owner => users(:owner)) }
       let(:params) do
         {
             id: task.id,

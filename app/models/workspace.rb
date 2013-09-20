@@ -295,6 +295,10 @@ class Workspace < ActiveRecord::Base
     end
   end
 
+  def project_target_date
+    milestones.order(:target_date).last.target_date if milestones.any?
+  end
+
   private
 
   def reindex_sandbox

@@ -31,8 +31,6 @@ chorus.views.ProjectCard = chorus.views.Base.extend({
 
         return {
             showUrl: this.model.showUrl(),
-            ownerName: this.model.owner().displayName(),
-            ownerShowUrl: this.model.owner().showUrl(),
             latestInsight: this.model.latestInsight() && new chorus.presenters.Activity(this.model.latestInsight()),
             hiddenInsightCount: numberOfInsightsOrNot,
             allInsightsRoute: this.model.showUrl() + '?filter=insights'

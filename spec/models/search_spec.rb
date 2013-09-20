@@ -390,9 +390,7 @@ describe Search do
 
     describe "datasets" do
       it "includes the highlighted attributes" do
-        dataset = datasets(:searchquery_table)
         create_and_record_search do |search|
-          dataset.solr_index!
           dataset = search.datasets.find { |dataset| dataset.name == 'searchquery_table' }
           dataset.highlighted_attributes[:name][0].should == "<em>searchquery</em>_table"
           dataset.highlighted_attributes[:database_name][0].should == "<em>searchquery</em>_database"

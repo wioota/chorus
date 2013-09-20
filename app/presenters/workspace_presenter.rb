@@ -16,7 +16,8 @@ class WorkspacePresenter < Presenter
       :project_status => model.project_status,
       :project_status_reason => model.project_status_reason,
       :milestone_count => model.milestones_count,
-      :milestone_completed_count => model.milestones_achieved_count
+      :milestone_completed_count => model.milestones_achieved_count,
+      :project_target_date => model.project_target_date.try(:strftime, "%Y-%m-%dT%H:%M:%SZ")
     }
 
     unless succinct?

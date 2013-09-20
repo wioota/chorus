@@ -162,6 +162,10 @@ describe WorkspacesController do
     generate_fixture "workspace.json" do
       get :show, :id => workspace.to_param, :show_latest_comments => 'true'
     end
+
+    generate_fixture "project.json" do
+      get :show, :id => workspaces(:project).to_param, :show_latest_comments => 'true'
+    end
   end
 
   #Add contexts for the different params and workspaces
@@ -256,29 +260,8 @@ describe WorkspacesController do
             end
           end
         end
-
-        context "changing only project status" do
-          it "generates an event" do
-            expect_to_add_event(Events::ProjectStatusChanged, owner) do
-              put :update, params.merge(:workspace => workspace_params.merge(
-                  :project_status => "on_track")
-              )
-            end
-          end
-        end
-
-        context "changing only project reason" do
-          let(:message) { 'Been working hard but cannot get anything done!' }
-
-          it "generates an event" do
-            expect_to_add_event(Events::ProjectStatusChanged, owner) do
-              put :update, params.merge(:workspace => workspace_params.merge(
-                  :project_status_reason => message)
-              )
-            end
-          end
-        end
       end
+
       describe "changing the show_sandbox_datasets attribute" do
         context "from true to false" do
           before do

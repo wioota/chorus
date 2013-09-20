@@ -69,11 +69,10 @@ describe WorkspacePresenter, :type => :view do
     end
 
     context "when the workspace has a status change event" do
-      let(:workspace) { workspaces(:public) }
+      let(:workspace) { workspaces(:project) }
 
       it "includes the status change event" do
         presented_status_change = hash[:latest_status_change_activity]
-        pa presented_status_change[:workspace]
         presented_status_change[:workspace][:id].should == workspace.id
         presented_status_change[:status].should == workspace.project_status
         presented_status_change[:reason].should == workspace.project_status_reason
@@ -153,8 +152,17 @@ describe WorkspacePresenter, :type => :view do
             :project_status,
             :project_status_reason,
             :milestone_count,
-            :milestone_completed_count
+            :milestone_completed_count,
+            :project_target_date
         ]
+      end
+
+      describe 'project target date' do
+        let(:workspace) { workspaces(:project) }
+
+        it "displays in ISO8601 format" do
+          hash[:project_target_date].should == workspace.project_target_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+        end
       end
     end
   end

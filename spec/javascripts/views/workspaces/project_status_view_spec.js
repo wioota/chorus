@@ -1,7 +1,7 @@
 describe("chorus.views.ProjectStatusView", function() {
     beforeEach(function() {
         this.modalSpy = stubModals();
-        this.model = backboneFixtures.workspace({ id : 4 });
+        this.model = backboneFixtures.project({ id : 4 });
         this.model.fetch();
         this.view = new chorus.views.ProjectStatus({ model : this.model });
         this.qtip = stubQtip();
@@ -44,6 +44,30 @@ describe("chorus.views.ProjectStatusView", function() {
 
         it("links the ratio to the milestones list", function () {
             expect(this.view.$('.ratio').attr('href')).toEqual(this.model.milestonesUrl());
+        });
+    });
+
+    describe("target date", function () {
+        context("when the project has milestones", function () {
+            beforeEach(function () {
+                this.time = new Date(this.model.get('projectTargetDate')).addDays(-1).getTime();
+                this.useFakeTimers(this.time);
+                this.view.render();
+            });
+
+            it("is shown", function () {
+                expect(this.view.$('.target_date')).toContainText("Target: in 1 day");
+            });
+        });
+
+        context("when the project has no milestones", function () {
+            beforeEach(function () {
+                this.model.set('projectTargetDate', null);
+            });
+
+            it("displays filler copy", function () {
+                expect(this.view.$('.target_date')).toContainTranslation('workspace.project.target.none_set');
+            });
         });
     });
 });

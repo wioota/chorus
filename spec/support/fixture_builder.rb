@@ -103,7 +103,7 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name(:oracle, oracle_data_source)
     oracle_schema = FactoryGirl.create(:oracle_schema, name: 'oracle', data_source: oracle_data_source)
     fbuilder.name(:oracle, oracle_schema)
-    @note_on_oracle = FactoryGirl.create :note_on_data_source_event, :data_source => oracle_data_source, :body => 'note on oracle data source'
+    @note_on_oracle = FactoryGirl.create(:note_on_data_source_event, :data_source => oracle_data_source, :body => 'note on oracle data source', actor: owner)
 
     FactoryGirl.create(:data_source_account, :owner => the_collaborator, :data_source => oracle_data_source)
 
@@ -170,17 +170,22 @@ FixtureBuilder.configure do |fbuilder|
     plurals = FactoryGirl.create(:gpdb_table, :name => "plurals", :schema => shared_search_schema)
 
     type_ahead_user = FactoryGirl.create :user, :first_name => 'typeahead', :username => 'typeahead'
+    FactoryGirl.create :user, :first_name => 'typeahead_too', :username => 'typeahead_too' # the normal 'typeahead' user doesn't seem to be indexed or queryable. HERE BE DRAGONS
+
     FactoryGirl.create(:gpdb_table, :name => "typeahead_gpdb_table", :schema => searchquery_schema)
     @typeahead_chorus_view = FactoryGirl.create(:chorus_view, :name => "typeahead_chorus_view", :query => "select 1", :schema => searchquery_schema, :workspace => typeahead_public_workspace)
-    typeahead_workfile = FactoryGirl.create :chorus_workfile, :file_name => 'typeahead' #, :owner => type_ahead_user
+    typeahead_workfile = FactoryGirl.create(:chorus_workfile, :file_name => 'typeahead', :owner => owner, :workspace => typeahead_public_workspace)
     File.open(Rails.root.join('spec', 'fixtures', 'workfile.sql')) do |file|
       FactoryGirl.create(:workfile_version, :workfile => typeahead_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
     end
-    @typeahead = FactoryGirl.create(:hdfs_entry, :path => '/testdir/typeahead') #, :owner => type_ahead_user)
-    typeahead_data_source = FactoryGirl.create :gpdb_data_source, :name => 'typeahead_gpdb_data_source'
-    [:workspace, :hdfs_data_source, :oracle_data_source].each do |model|
-      fbuilder.name :typeahead, FactoryGirl.create(model, :name => 'typeahead_' + model.to_s)
-    end
+
+    typeahead_data_source = FactoryGirl.create(:gpdb_data_source, :name => 'typeahead_gpdb_data_source', :owner => owner)
+    typeahead_hdfs_data_source = FactoryGirl.create(:hdfs_data_source, :name => 'typeahead_hdfs_data_source', :owner => owner)
+    fbuilder.name :typeahead, typeahead_hdfs_data_source
+    fbuilder.name :typeahead, FactoryGirl.create(:oracle_data_source, :name => 'typeahead_oracle_data_source', :owner => owner)
+
+    fbuilder.name :typeahead, FactoryGirl.create(:hdfs_entry, :path => '/testdir/typeahead', :hdfs_data_source => typeahead_hdfs_data_source)
+    fbuilder.name :typeahead, FactoryGirl.create(:workspace, :name => 'typeahead_workspace', owner: owner)
 
     with_current_user(owner) do
       note_on_greenplum_typeahead = Events::NoteOnDataSource.create!({:note_target => typeahead_data_source, :body => 'i exist only for my attachments'}, :as => :create)
@@ -198,11 +203,12 @@ FixtureBuilder.configure do |fbuilder|
 
     #Workspaces
     workspaces = []
+    workspaces << @project = FactoryGirl.create(:project, :name => "Workspace that is an important project", :owner => owner)
     workspaces << no_collaborators_public_workspace = no_collaborators.owned_workspaces.create!(:name => "Public with no collaborators except collaborator", :summary => 'searchquery can see I guess', :public => true)
     @public_with_no_collaborators = no_collaborators_public_workspace
     workspaces << no_collaborators_private_workspace = no_collaborators.owned_workspaces.create!(:name => "Private with no collaborators", :summary => "Not for searchquery, ha ha", :public => false)
     workspaces << no_collaborators_archived_workspace = no_collaborators.owned_workspaces.create!({:name => "Archived", :sandbox => other_schema, :archived_at => '2010-01-01', :archiver => no_collaborators, :public => true}, :without_protection => true)
-    workspaces << public_workspace = owner.owned_workspaces.create!({:name => "Public", :summary => "searchquery", :sandbox => default_schema, :public => true, :project_status_reason => 'Everything is Fine'}, :without_protection => true)
+    workspaces << public_workspace = owner.owned_workspaces.create!({:name => "Public", :summary => "searchquery", :sandbox => default_schema, :public => true}, :without_protection => true)
     workspaces << private_workspace = owner.owned_workspaces.create!(:name => "Private", :summary => "searchquery", :public => false)
     workspaces << search_public_workspace = owner.owned_workspaces.create!({:name => "Search Public", :summary => "searchquery", :sandbox => searchquery_schema, :public => true}, :without_protection => true)
     workspaces << search_private_workspace = owner.owned_workspaces.create!({:name => "Search Private", :summary => "searchquery", :sandbox => searchquery_schema, :public => false}, :without_protection => true)
@@ -232,7 +238,6 @@ FixtureBuilder.configure do |fbuilder|
     Events::WorkspaceMakePublic.by(owner).add(:workspace => public_workspace)
     Events::WorkspaceMakePrivate.by(owner).add(:workspace => private_workspace)
     Events::WorkspaceDeleted.by(owner).add(:workspace => public_workspace)
-    Events::ProjectStatusChanged.by(owner).add(:workspace => public_workspace)
 
     # HDFS Datasets need a workspace association
     attrs = FactoryGirl.attributes_for(:hdfs_dataset, :name => "hadoop", :hdfs_data_source => hdfs_data_source, :workspace => public_workspace)
@@ -297,8 +302,8 @@ FixtureBuilder.configure do |fbuilder|
                            }, :without_protection => true)
     hadoop_work_flow.workfile_execution_locations.create(execution_location: hdfs_data_source)
 
-    FactoryGirl.create(:work_flow, :file_name => 'multiple_data_source_workflow')
-    FactoryGirl.create(:work_flow, :file_name => 'multiple_dataset_workflow', :dataset_ids => [default_table.id, hadoop_dadoop.id])
+    FactoryGirl.create(:work_flow, :file_name => 'multiple_data_source_workflow', :workspace => public_workspace, :owner => owner)
+    FactoryGirl.create(:work_flow, :file_name => 'multiple_dataset_workflow', :dataset_ids => [default_table.id, hadoop_dadoop.id], :workspace => public_workspace, :owner => owner)
 
     Events::WorkfileResult.by(owner).add(:workfile => work_flow, :result_id => "1", :workspace => work_flow.workspace)
 
@@ -324,8 +329,9 @@ FixtureBuilder.configure do |fbuilder|
       tagged_workfile.tag_list = ["alpha", "beta"]
       tagged_workfile.save!
 
-      @draft_default = FactoryGirl.create(:workfile_draft, :owner => owner)
-      FactoryGirl.create(:workfile_version, :workfile => @draft_default.workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
+      drafted_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "DraftedWorkfile", :owner => owner, :workspace => public_workspace)
+      @draft_default = FactoryGirl.create(:workfile_draft, :workfile => drafted_workfile, :owner => owner)
+      FactoryGirl.create(:workfile_version, :workfile => drafted_workfile, :version_num => "1", :owner => owner, :modifier => owner, :contents => file)
 
       archived_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "archived", :owner => no_collaborators, :workspace => no_collaborators_archived_workspace, :versions_attributes => [{:contents => file}])
 
@@ -390,17 +396,20 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:job, :workspace => public_workspace)
     FactoryGirl.create(:job, :workspace => public_workspace)
 
-    default_job_task = FactoryGirl.create(:import_source_data_task, :job => default_job)
+    import_table_destination = FactoryGirl.create(:gpdb_table, schema: default_schema)
+    import_template = FactoryGirl.create(:existing_table_import_template, :source => default_table, :destination => import_table_destination)
+
+    default_job_task = FactoryGirl.create(:import_source_data_task, :job => default_job, payload: import_template)
     fbuilder.name :default, default_job_task
 
-    job_task_isdt = FactoryGirl.create(:import_source_data_task, :job => default_job)
+    job_task_isdt = FactoryGirl.create(:import_source_data_task, :job => default_job, payload: import_template)
     fbuilder.name :isdt, job_task_isdt
 
-    work_flow_task = FactoryGirl.create(:run_work_flow_task, :job => default_job)
+    work_flow_task = FactoryGirl.create(:run_work_flow_task, :job => default_job, :payload => work_flow)
     fbuilder.name :rwft, work_flow_task
 
-    FactoryGirl.create(:import_source_data_task, :job => default_job)
-    FactoryGirl.create(:import_source_data_task, :job => default_job)
+    FactoryGirl.create(:import_source_data_task, :job => default_job, payload: import_template)
+    FactoryGirl.create(:import_source_data_task, :job => default_job, payload: import_template)
     a_result = FactoryGirl.create(:job_result, :job => default_job)
     b_result = FactoryGirl.create(:job_result, :job => default_job)
     fbuilder.name :default, b_result
@@ -422,10 +431,23 @@ FixtureBuilder.configure do |fbuilder|
     Events::JobSucceeded.by(owner).add(:job => default_job, :workspace => default_job.workspace, :job_result => b_result)
     Events::JobFailed.by(owner).add(:job => default_job, :workspace => default_job.workspace, :job_result => FactoryGirl.create(:job_result, :job => default_job, :succeeded => false))
 
+    #CSV File
+    csv_file = CsvFile.new({:user => the_collaborator, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :has_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
+    csv_file.save!(:validate => false)
+
+    csv_file_owner = CsvFile.new({:user => owner, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :has_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
+    csv_file_owner.save!(:validate => false)
+    fbuilder.name :default, csv_file_owner
+
+
+    unimported_csv_file = CsvFile.new({:user => owner, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :has_header => true, :to_table => 'table_will_not_be_imported', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
+    unimported_csv_file.save!(:validate => false)
+    fbuilder.name :unimported, unimported_csv_file
+
     #Imports
     dataset_import_created = FactoryGirl.create(:dataset_import_created_event,
                                                 :workspace => public_workspace, :dataset => nil,
-                                                :source_dataset => default_table, :destination_table => 'new_table_for_import'
+                                                :source_dataset => default_table, :destination_table => 'new_table_for_import', :actor => owner
     )
     fbuilder.name :dataset_import_created, dataset_import_created
 
@@ -444,30 +466,20 @@ FixtureBuilder.configure do |fbuilder|
                                          :source => default_table)
     fbuilder.name :now, import_now
 
-    csv_import_table = FactoryGirl.create(:gpdb_table, :name => "csv_import_table")
+    other_schema = FactoryGirl.create(:gpdb_schema, database: default_database)
+    csv_import_table = FactoryGirl.create(:gpdb_table, :name => "csv_import_table", schema: other_schema)
+
     public_workspace.source_datasets << csv_import_table
 
     csv_import = FactoryGirl.create(:csv_import, :user => owner, :workspace => public_workspace, :to_table => "csv_import_table",
                                     :destination_dataset => csv_import_table,
                                     :created_at => '2012-09-03 23:04:00-07',
+                                    :csv_file => csv_file,
                                     :file_name => "import.csv")
     fbuilder.name :csv, csv_import
 
     fbuilder.name :gnip, FactoryGirl.create(:gnip_import, :user => owner, :workspace => public_workspace, :to_table => "gnip_import_table",
                                     :source => gnip_data_source)
-
-    #CSV File
-    csv_file = CsvFile.new({:user => the_collaborator, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :has_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
-    csv_file.save!(:validate => false)
-
-    csv_file_owner = CsvFile.new({:user => owner, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :has_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
-    csv_file_owner.save!(:validate => false)
-    fbuilder.name :default, csv_file_owner
-
-
-    unimported_csv_file = CsvFile.new({:user => owner, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :has_header => true, :to_table => 'table_will_not_be_imported', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
-    unimported_csv_file.save!(:validate => false)
-    fbuilder.name :unimported, unimported_csv_file
 
     #Notes
     with_current_user(owner) do
@@ -537,7 +549,6 @@ FixtureBuilder.configure do |fbuilder|
     Events::WorkspaceArchived.by(admin).add(:workspace => public_workspace)
     Events::WorkspaceUnarchived.by(admin).add(:workspace => public_workspace)
     Events::WorkspaceChangeName.by(admin).add(:workspace => public_workspace, :workspace_old_name => 'old_name')
-    Events::ProjectStatusChanged.by(owner).add(:workspace => FactoryGirl.create(:workspace, owner: owner))
     Events::HdfsDatasetExtTableCreated.by(owner).add(:workspace => public_workspace, :dataset => default_table, :hdfs_dataset => HdfsDataset.last)
     Events::HdfsFileExtTableCreated.by(owner).add(:workspace => public_workspace, :dataset => default_table, :hdfs_entry => @hdfs_file)
     Events::HdfsDirectoryExtTableCreated.by(owner).add(:workspace => public_workspace, :dataset => default_table, :hdfs_entry => @directory)
@@ -595,7 +606,7 @@ FixtureBuilder.configure do |fbuilder|
       fbuilder.name :real, real_workspace
 
       @executable_chorus_view = FactoryGirl.create(:chorus_view, :name => "CHORUS_VIEW", :schema => test_schema, :query => "select * from test_schema.base_table1;", :workspace => public_workspace)
-      @gpdb_workspace = FactoryGirl.create(:workspace, :owner => owner, :sandbox => test_schema)
+      @gpdb_workspace = FactoryGirl.create(:workspace, :name => "Workspace with a real GPDB sandbox", :owner => owner, :sandbox => test_schema)
       @convert_chorus_view = FactoryGirl.create(:chorus_view, :name => "convert_to_database", :schema => test_schema, :query => "select * from test_schema.base_table1;", :workspace => @gpdb_workspace)
 
       test_schema2 = test_database.schemas.find_by_name('test_schema2')
@@ -637,6 +648,11 @@ FixtureBuilder.configure do |fbuilder|
     bad_workfiles = ChorusWorkfile.select { |x| x.versions.empty? && x.class.name != "LinkedTableauWorkfile" }
     if !bad_workfiles.empty?
       raise "OH NO!  A workfile has no versions!  Be more careful in the future." + bad_workfiles.map(&:file_name).inspect
+    end
+
+    bad_users = User.select { |u| u.username.starts_with?('user') }
+    if !bad_users.empty?
+      raise "OH NO!  A user was created with an autogenerated name. All users created in fixtures should be named! Perhaps a factory ran amok?"
     end
 
     Sunspot.session = Sunspot.session.original_session if Sunspot.session.is_a? SunspotMatchers::SunspotSessionSpy

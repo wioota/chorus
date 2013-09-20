@@ -734,6 +734,25 @@ describe Workspace do
     end
   end
 
+  describe 'project_target_date' do
+    context "when the workspace has milestones" do
+      let(:furthest_milestone) { workspace.milestones.order(:target_date).last }
+      let(:workspace) { workspaces(:project) }
+
+      it "is the target date of the furthest milestone" do
+        workspace.project_target_date.iso8601.should == furthest_milestone.target_date.iso8601
+      end
+    end
+
+    context "when the workspace has no milestones" do
+      let(:workspace) { workspaces(:public).tap {|ws| ws.milestones.destroy_all } }
+
+      it "returns nil" do
+        workspace.project_target_date.should be_nil
+      end
+    end
+  end
+
   it_should_behave_like "taggable models", [:workspaces, :public]
 
   it_behaves_like 'a soft deletable model' do

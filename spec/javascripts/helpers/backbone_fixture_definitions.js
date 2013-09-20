@@ -321,6 +321,10 @@ window.BackboneFixtureDefinitions = {
     workfileVersion: { unique: ['id']},
 
     workspace: { unique: [ "id" ] },
+    project: {
+        unique: [ "id" ],
+        model: 'Workspace'
+    },
 
     workspaceDataset: {
         unique: ["id"],

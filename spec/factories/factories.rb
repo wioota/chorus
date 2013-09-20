@@ -168,7 +168,6 @@ FactoryGirl.define do
     sequence(:name) { |n| "workspace#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     owner
     project_status 'on_track'
-    project_status_reason { Faker::Company.catch_phrase }
 
     public true
 
@@ -179,6 +178,15 @@ FactoryGirl.define do
     factory :workspace_with_sandbox do
       association :sandbox, factory: :gpdb_schema
     end
+
+    factory :project do
+      project_status_reason { Faker::Company.catch_phrase }
+
+      after(:create) do |project|
+        Events::ProjectStatusChanged.by(project.owner).add(:workspace => project)
+        5.times { project.milestones.create(FactoryGirl.attributes_for(:milestone)) }
+      end
+    end
   end
 
   factory :membership do
@@ -188,8 +196,8 @@ FactoryGirl.define do
 
   factory :milestone do
     sequence(:name) { |n| "Milestone #{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
-    state "planned"
-    target_date Date.today
+    state { ["planned", "achieved"].sample }
+    target_date { Date.today + rand(100) }
     workspace
   end
 
