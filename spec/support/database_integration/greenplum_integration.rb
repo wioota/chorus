@@ -10,70 +10,58 @@ module GreenplumIntegration
     drop_and_create_gpdb_databases.sql.erb
     create_test_schemas.sql.erb
     create_private_test_schema.sql.erb
-    create_test_schemas.sql.erb
     drop_public_schema.sql.erb
   }]
   VERSIONS_FILE = (File.join(File.dirname(__FILE__), '../../..', 'tmp/data_source_integration_file_versions')).to_s
 
-  def self.execute_sql(sql_file, database = greenplum_config['db_name'])
-    puts "Executing SQL file: #{sql_file} on host: #{hostname}"
+  def self.execute_sql_file(sql_file, database = greenplum_config['db_name'])
+    puts "Executing SQL file: #{sql_file} into #{database} on host: #{hostname}"
     sql_erb = ERB.new(File.read(File.expand_path("../#{sql_file}.erb", __FILE__)))
 
     sql = sql_erb.result(binding)
+    execute_sql(sql, database)
+  end
 
+  def self.execute_sql(sql, database = nil, &blk)
+    database = database_name unless database
     database_string = "jdbc:postgresql://#{hostname}:#{port}/#{database}"
-    Sequel.connect(database_string, :user => username, :password => password) do |database_connection|
-      database_connection.run(sql)
+    options = {:user => username, :password => password}
+    options[:jdbc_properties] = {
+        sslmode: 'require'
+    } if ssl
+    if block_given?
+      return Sequel.connect(database_string, options, &blk)
+    else
+      Sequel.connect(database_string, options) do |database_connection|
+        database_connection.run(sql)
+      end
+      return true
     end
-    return true
   rescue Exception => e
     puts e.message
     return false
   end
 
   def self.exec_sql_line_with_results(sql)
-    conn = ActiveRecord::Base.postgresql_connection(
-        :host => hostname,
-        :port => port,
-        :database => self.database_name,
-        :username => username,
-        :password => password,
-        :adapter => "jdbcpostgresql")
-    conn.exec_query(sql)
-  end
-
-  def self.exec_sql_line(sql)
-    conn = ActiveRecord::Base.postgresql_connection(
-      :host => hostname,
-      :port => port,
-      :database => self.database_name,
-      :username => username,
-      :password => password,
-      :adapter => "jdbcpostgresql")
-    conn.execute(sql)
+    execute_sql(sql) do |database_connection|
+      database_connection.fetch(sql).all
+    end
   end
 
   def self.drop_test_db
-    conn = ActiveRecord::Base.postgresql_connection(
-        :host => hostname,
-        :port => port,
-        :database => "postgres",
-        :username => username,
-        :password => password,
-        :adapter => "jdbcpostgresql")
-    conn.execute("DROP DATABASE IF EXISTS \"#{GreenplumIntegration.database_name}\"")
+    execute_sql("DROP DATABASE IF EXISTS \"#{GreenplumIntegration.database_name}\"")
   end
 
   def self.setup_gpdb
     if gpdb_changed?
       puts "  Importing into #{GreenplumIntegration.database_name}"
       drop_test_db
-      execute_sql("create_users.sql")
-      success = execute_sql("drop_and_create_gpdb_databases.sql")
-      success &&= execute_sql("create_test_schemas.sql", database_name)
-      success &&= execute_sql("create_private_test_schema.sql", "#{database_name}_priv")
-      success &&= execute_sql("create_test_schemas.sql", "#{database_name}_wo_pub")
-      success &&= execute_sql("drop_public_schema.sql", "#{database_name}_wo_pub")
+      execute_sql_file("create_users.sql")
+      success = execute_sql_file("drop_and_create_gpdb_databases.sql")
+      success &&= execute_sql_file("create_test_schemas.sql", database_name)
+      success &&= execute_sql_file("create_private_test_schema.sql", "#{database_name}_priv")
+      success &&= execute_sql_file("create_test_schemas.sql", "#{database_name}_wo_pub")
+      success &&= execute_sql_file("drop_public_schema.sql", "#{database_name}_wo_pub")
       raise "Unable to add test data to #{GreenplumIntegration.hostname}" unless success
       record_changes
     end
@@ -176,6 +164,10 @@ module GreenplumIntegration
 
   def self.port
     greenplum_config['port']
+  end
+
+  def self.ssl
+    greenplum_config['ssl']
   end
 
   private

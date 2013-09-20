@@ -156,20 +156,6 @@ describe Workspaces::ImportsController do
     let(:destination_table_name) { "dst_candy" }
     let(:destination_table_fullname) { "\"test_schema\".\"dst_candy\"" }
     let(:workspace) { workspaces(:public).tap { |ws| ws.owner = user; ws.members << user; ws.sandbox = schema; ws.save! } }
-    let(:sandbox) { workspace.sandbox }
-
-    let(:gpdb_params) do
-      {
-        :host => data_source_account.data_source.host,
-        :port => data_source_account.data_source.port,
-        :database => database.name,
-        :username => data_source_account.db_username,
-        :password => data_source_account.db_password,
-        :adapter => "jdbcpostgresql"}
-    end
-
-    let(:gpdb1) { ActiveRecord::Base.postgresql_connection(gpdb_params) }
-    let(:gpdb2) { ActiveRecord::Base.postgresql_connection(gpdb_params) }
 
     let(:table_def) { '"id" numeric(4,0),
                    "name" character varying(255),
@@ -198,47 +184,31 @@ describe Workspaces::ImportsController do
       }
     end
 
-    let(:start_time) { "2012-08-23 23:00:00.0" }
-
-    let(:create_source_table) do
-      gpdb1.execute("delete from #{source_table_name};")
-    end
-
-    def setup_data
-      gpdb1.execute("insert into #{source_table_name}(id, name, id2, id3) values (1, 'marsbar', 3, 5);")
-      gpdb1.execute("insert into #{source_table_name}(id, name, id2, id3) values (2, 'kitkat', 4, 6);")
-      gpdb2.execute("drop table if exists #{destination_table_fullname};")
-    end
-
     before do
       log_in user
-      create_source_table
+      GreenplumIntegration.execute_sql("delete from #{source_table_name}")
 
       stub(CrossDatabaseTableCopier).gpfdist_url { Socket.gethostname }
       stub(CrossDatabaseTableCopier).grace_period_seconds { 1 }
-      setup_data
+
+      GreenplumIntegration.execute_sql("insert into #{source_table_name}(id, name, id2, id3) values (1, 'marsbar', 3, 5)")
+      GreenplumIntegration.execute_sql("insert into #{source_table_name}(id, name, id2, id3) values (2, 'kitkat', 4, 6)")
+      GreenplumIntegration.execute_sql("drop table if exists #{destination_table_fullname}")
+
       # synchronously run all queued import jobs
       mock(QC.default_queue).enqueue_if_not_queued("ImportExecutor.run", anything) do |method, import_id|
         ImportExecutor.run import_id
       end
     end
 
+    after do
+      GreenplumIntegration.execute_sql("drop table if exists #{destination_table_fullname}")
+    end
+
     it "copies data" do
       post :create, import_attributes
-      check_destination_table
-    end
 
-    after do
-      gpdb2.execute("drop table if exists #{destination_table_fullname};")
-      gpdb1.try(:disconnect!)
-      gpdb2.try(:disconnect!)
-      # We call src_schema from the test, although it is only called from run outside of tests, so we need to clean up
-      #gp_pipe.src_conn.try(:disconnect!)
-      #gp_pipe.dst_conn.try(:disconnect!)
-    end
-
-    def check_destination_table
-      gpdb2.execute("SELECT * FROM #{destination_table_fullname}").length.should == 2
+      GreenplumIntegration.exec_sql_line_with_results("SELECT * FROM #{destination_table_fullname}").length.should == 2
     end
   end
 end

@@ -5,7 +5,7 @@ class DataSource < ActiveRecord::Base
   include CommonDataSourceBehavior
 
   attr_accessor :db_username, :db_password
-  attr_accessible :name, :description, :host, :port, :db_name, :db_username, :db_password, :is_hawq, :as => [:default, :create]
+  attr_accessible :name, :description, :host, :port, :ssl, :db_name, :db_username, :db_password, :is_hawq, :as => [:default, :create]
   attr_accessible :shared, :as => :create
 
   # Must happen before accounts are destroyed

@@ -58,7 +58,8 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            gpdbOrOracleDataSource: this.model.get("entityType") === "gpdb_data_source" || this.model.get("entityType") === "oracle_data_source",
+            gpdbDataSource: this.model.isGreenplum(),
+            gpdbOrOracleDataSource: this.model.isGreenplum() || this.model.isOracle(),
             hdfsDataSource: this.model.constructorName === "HdfsDataSource",
             gnipDataSource: this.model.constructorName === "GnipDataSource",
             parameterCount: {count: this.model.numberOfConnectionParameters()}
@@ -78,7 +79,8 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
             }
         }, this);
 
-        attrs.highAvailability = this.$("input[name=high_availability]").prop("checked") ? "true" : "false";
+        attrs.highAvailability = !!this.$("input[name=high_availability]").prop("checked");
+        attrs.ssl = !!this.$("input[name=ssl]").prop("checked");
 
         this.$("button.submit").startLoading("data_sources.edit_dialog.saving");
         this.$("button.cancel").prop("disabled", true);

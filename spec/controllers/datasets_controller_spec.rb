@@ -148,12 +148,12 @@ describe DatasetsController do
         log_in user
 
         # Make sure creation order doesn't affect sorting
-        GreenplumIntegration.exec_sql_line('CREATE TABLE test_schema."1first" ()')
+        GreenplumIntegration.execute_sql('CREATE TABLE test_schema."1first" ()')
       end
 
       after do
         # Clean up table created for tests
-        GreenplumIntegration.exec_sql_line('DROP TABLE test_schema."1first"')
+        GreenplumIntegration.execute_sql('DROP TABLE test_schema."1first"')
       end
 
       it "presents a sorted list of datasets" do

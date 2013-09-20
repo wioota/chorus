@@ -88,10 +88,17 @@ class GreenplumConnection < DataSourceConnection
   end
 
   def db_options
-    super.merge({
-        :user => @account.db_username,
-        :password => @account.db_password
-    })
+    options = {
+      :user => @account.db_username,
+      :password => @account.db_password
+    }
+    options.merge!({
+      :jdbc_properties => {
+         :sslmode => 'require'
+      }
+    }) if @data_source.ssl
+
+    super.merge(options)
   end
 
   def support_multiple_result_sets?

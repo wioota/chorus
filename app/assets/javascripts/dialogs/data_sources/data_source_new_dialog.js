@@ -110,8 +110,9 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         });
         updates["isHawq"] = this.$("select.data_sources option:selected").attr("hawq");
 
-        updates.shared = inputSource.find("input[name=shared]").prop("checked") ? "true" : "false";
-        updates.highAvailability = inputSource.find("input[name=high_availability]").prop("checked") ? "true" : "false";
+        updates.ssl = !!inputSource.find("input[name=ssl]").prop("checked");
+        updates.shared = !!inputSource.find("input[name=shared]").prop("checked");
+        updates.highAvailability = !!inputSource.find("input[name=high_availability]").prop("checked");
         updates.connectionParameters = this.model.get('connectionParameters');
         return updates;
     },

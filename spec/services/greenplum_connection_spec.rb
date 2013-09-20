@@ -1548,6 +1548,28 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
+  describe "ssl" do
+    context "when the data source is ssl" do
+      before do
+        data_source.update_attribute(:ssl, true)
+      end
+
+      it "sends the ssl option to Sequel" do
+        db_options[:jdbc_properties][:sslmode].should == 'require'
+      end
+    end
+
+    context "when the data source is not ssl" do
+      before do
+        data_source.update_attribute(:ssl, false)
+      end
+
+      it "does not send the ssl option to Sequel" do
+        db_options[:jdbc_properties].should be_nil
+      end
+    end
+  end
+
   context "for a HAWQ datasource" do
     let(:database) { data_source.refresh_databases.find { |d| d.name == "gpadmin" } }
     let(:dataset) { database.datasets.find_by_name("metadata_test_fixture") }

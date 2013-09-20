@@ -14,6 +14,7 @@ class DataSourcePresenter < Presenter
       hash.merge!({
           :host => model.host,
           :port => model.port,
+          :ssl => model.ssl,
           :online => model.state == "online",
           :db_name => model.db_name,
           :description => model.description,

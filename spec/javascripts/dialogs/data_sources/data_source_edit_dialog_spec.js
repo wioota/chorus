@@ -19,7 +19,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
     describe("#render", function() {
         describe('when editing a greenplum data source', function() {
             beforeEach(function() {
-                this.dialog.model.set({ entityType: "gpdb_data_source"});
+                this.dialog.model.set({ entityType: "gpdb_data_source", ssl: true });
                 this.dialog.render();
             });
 
@@ -47,6 +47,11 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                 expect(this.dialog.$("input[name='dbName']").val()).toBe("postgres");
                 expect(this.dialog.$("label[name='dbName']").text()).toMatchTranslation("data_sources.dialog.database_name");
                 expect(this.dialog.$("input[name='dbName']").prop("disabled")).toBeFalsy();
+            });
+
+            it("has a 'ssl' field that is pre-populated", function () {
+                expect(this.dialog.$("input[name='ssl']").prop('checked')).toBe(this.dialog.model.get('ssl'));
+                expect(this.dialog.$("input[name='ssl']").prop("disabled")).toBeFalsy();
             });
         });
 
@@ -242,7 +247,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
 
     describe("saving", function() {
         beforeEach(function() {
-            this.dialog.model.set({ entity_type: "gpdb_data_source"});
+            this.dialog.model.set({ entity_type: "gpdb_data_source", ssl: true });
             this.dialog.render();
 
             spyOn(this.dialog, "closeModal");
@@ -276,6 +281,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
             expect(this.dialog.model.save.argsForCall[0][0].host).toBe("testhost");
             expect(this.dialog.model.save.argsForCall[0][0].description).toBe("data source");
             expect(this.dialog.model.save.argsForCall[0][0].dbName).toBe("not_postgres");
+            expect(this.dialog.model.save.argsForCall[0][0].ssl).toBe(true);
         });
 
         it("changes the text on the upload button to 'saving'", function() {
@@ -316,7 +322,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                 expect(this.dialog.model.get("jobTrackerHost")).toBe("whatever");
                 expect(this.dialog.model.get("jobTrackerPort")).toBe("3333");
                 expect(this.dialog.model.get("hdfsVersion")).toBe("Greenplum HD 1.1");
-                expect(this.dialog.model.get("highAvailability")).toBe("true");
+                expect(this.dialog.model.get("highAvailability")).toBe(true);
             });
         });
 

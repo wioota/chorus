@@ -77,12 +77,12 @@ describe Schemas::ImportsController do
       post :create, params.merge(:new_table => "true", :to_table => "some_new_table")
       response.code.should eq("201")
 
-      results = GreenplumIntegration.exec_sql_line_with_results("select * from \"#{schema.name}\".some_new_table;")
+      results = GreenplumIntegration.exec_sql_line_with_results("select * from \"#{schema.name}\".some_new_table")
 
-      results.first["BIN_DOUBLE"].to_f.should eq(2.3)
-      results.first["CHARACTER"].should eq('c')
-      results.first["CHAR_BLOB"].should eq('some long text and stuff')
-      results.first["DAY"].should eq('2011-12-23 00:00:00')
+      results.first[:BIN_DOUBLE].to_f.should eq(2.3)
+      results.first[:CHARACTER].should eq('c')
+      results.first[:CHAR_BLOB].should eq('some long text and stuff')
+      results.first[:DAY].to_date.should == Date.parse('2011-12-23')
     end
 
     it "can perform an import into an existing table" do
@@ -92,11 +92,11 @@ describe Schemas::ImportsController do
       post :create, params.merge(:new_table => "false", :to_table => "existing_table")
       response.code.should eq("201")
 
-      results = GreenplumIntegration.exec_sql_line_with_results("select * from \"#{schema.name}\".existing_table order by \"BIN_DOUBLE\";").to_a
-      results[1]["BIN_DOUBLE"].to_f.should eq(2.4)
-      results[1]["CHARACTER"].should eq('d')
-      results[1]["CHAR_BLOB"].should eq('some other long text and other stuff')
-      results[1]["DAY"].should eq('2011-12-24 00:00:00')
+      results = GreenplumIntegration.exec_sql_line_with_results("select * from \"#{schema.name}\".existing_table order by \"BIN_DOUBLE\"")
+      results[1][:BIN_DOUBLE].to_f.should eq(2.4)
+      results[1][:CHARACTER].should eq('d')
+      results[1][:CHAR_BLOB].should eq('some other long text and other stuff')
+      results[1][:DAY].to_date.should == Date.parse('2011-12-24')
     end
 
 
@@ -123,7 +123,7 @@ describe Schemas::ImportsController do
       );
       SQL
 
-      GreenplumIntegration.exec_sql_line(create_table_sql)
+      GreenplumIntegration.execute_sql(create_table_sql)
       schema.refresh_datasets(GreenplumIntegration.real_account)
     end
 
@@ -150,12 +150,12 @@ describe Schemas::ImportsController do
       );
       SQL2
 
-      GreenplumIntegration.exec_sql_line(insert_values_sql)
+      GreenplumIntegration.execute_sql(insert_values_sql)
     end
 
     def clean_up_tables
-      GreenplumIntegration.exec_sql_line("DROP TABLE IF EXISTS #{schema.name}.some_new_table;")
-      GreenplumIntegration.exec_sql_line("DROP TABLE IF EXISTS #{schema.name}.existing_table;")
+      GreenplumIntegration.execute_sql("DROP TABLE IF EXISTS #{schema.name}.some_new_table;")
+      GreenplumIntegration.execute_sql("DROP TABLE IF EXISTS #{schema.name}.existing_table;")
     end
   end
 end

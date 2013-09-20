@@ -82,6 +82,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                     this.dialog.$(".register_existing_greenplum input[name=dbUsername]").val("user");
                     this.dialog.$(".register_existing_greenplum input[name=dbPassword]").val("my_password");
                     this.dialog.$(".register_existing_greenplum input[name=dbName]").val("foo");
+                    this.dialog.$(".register_existing_greenplum input[name=ssl]").prop('checked', true);
 
                     this.dialog.$(".register_existing_greenplum input[name=name]").trigger("change");
                 });
@@ -96,6 +97,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                     expect(values.dbPassword).toBe("my_password");
                     expect(values.dbName).toBe("foo");
                     expect(values.isHawq).toBeFalsy();
+                    expect(values.ssl).toBeTruthy();
                 });
             });
 
@@ -240,12 +242,12 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                     expect(values.username).toBe("user");
                     expect(values.groupList).toBe("hadoop");
                     expect(values.hdfsVersion).toBe("Cloudera CDH4");
-                    expect(values.highAvailability).toBe('false');
+                    expect(values.highAvailability).toBe(false);
                 });
 
                 it("#fieldValues includes 'shared'", function() {
                     var values = this.dialog.fieldValues();
-                    expect(values.shared).toBe("true");
+                    expect(values.shared).toBe(true);
                 });
 
                 describe("enabling High Availability", function () {
@@ -261,7 +263,7 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
                     it("#fieldValues returns the values", function() {
                         var values = this.dialog.fieldValues();
-                        expect(values.highAvailability).toBe('true');
+                        expect(values.highAvailability).toBe(true);
                     });
 
                     it("labels 'host' correctly ", function() {
