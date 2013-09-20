@@ -1411,11 +1411,19 @@ describe GreenplumConnection, :greenplum_integration do
           end
         end
 
-        context "when the error code is 28xxx" do
-          let(:error_code) { '28abc' }
+        context "when the error code is 28Pxx" do
+          let(:error_code) { '28Pbc' }
 
           it "returns :INVALID_PASSWORD" do
             error.error_type.should == :INVALID_PASSWORD
+          end
+        end
+
+        context "when the error code is 28000" do
+          let(:error_code) { '28000' }
+
+          it "returns :AUTHORIZATION_FAILED" do
+            error.error_type.should == :AUTHORIZATION_FAILED
           end
         end
 
