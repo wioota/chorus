@@ -8,6 +8,14 @@
 
     .label { font-weight: bold; }
 
+    .facts > a {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        max-width: 170px;
+        display: inline-block;
+    }
+
   i {
         font-size: 18px;
         position: relative;
