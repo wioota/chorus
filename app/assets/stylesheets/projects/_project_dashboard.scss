@@ -1,9 +1,24 @@
 .project_list {
     .dashboard_project_card {
+        @media (max-width: 1040px) {
+            width: 95%;
+        }
+
+        @media (min-width: 1041px) and (max-width: 1470px) {
+            width: 47%;
+        }
+
+        @media (min-width: 1471px) and (max-width: 1950px) {
+            width: 31%;
+        }
+
+        @media (min-width: 1951px) {
+            width: 23%;
+        }
+
         position: relative;
         vertical-align: top;
         display: inline-block;
-        width: 450px;
         height: 275px;
         padding: 10px;
         margin: 5px 5px 5px 5px;
