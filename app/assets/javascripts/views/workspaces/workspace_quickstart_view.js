@@ -23,15 +23,29 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.subscribePageEvent("modal:closed", this.dismissQuickStart);
+        this.subscribePageEvent("modal:closed", this.refreshQuickStart);
     },
 
-    dismissQuickStart: function() {
-        this.model.fetch();
+    modalClasses: function () {
+        return {
+            edit_workspace: chorus.dialogs.EditWorkspace,
+            new_sandbox: chorus.dialogs.SandboxNew,
+            edit_members: chorus.dialogs.WorkspaceEditMembers,
+            import_workfile: chorus.dialogs.WorkfilesImport
+        };
+    },
+
+    refreshQuickStart: function(modal) {
+        var closedModalWasInteresting = _.any(_.values(this.modalClasses()), function (ctor) {
+            return modal instanceof ctor;
+        });
+
+        if (closedModalWasInteresting) {
+            this.model.fetch();
+        }
     },
 
     render: function() {
-
         if (this.model.get("hasAddedMember") === true &&
             this.model.get("hasAddedSandbox") === true &&
             this.model.get("hasAddedWorkfile") === true &&
@@ -53,10 +67,14 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
         chorus.router.navigate($(e.currentTarget).attr("href"));
     },
 
+    makeModal: function (key, options) {
+        return new (this.modalClasses()[key])(options);
+    },
+
     launchEditWorkspaceDialog: function (e) {
         e && e.preventDefault();
 
-        this.editWorkspaceDialog = new chorus.dialogs.EditWorkspace({model: this.model});
+        this.editWorkspaceDialog = this.makeModal('edit_workspace', {model: this.model});
         this.onceLoaded(this.model.members(), function () {
             this.editWorkspaceDialog.launchModal();
         });
@@ -64,19 +82,19 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
 
     launchSandboxNewDialog: function(e) {
         e && e.preventDefault();
-        var dialog = new chorus.dialogs.SandboxNew({workspaceId: this.model.id, noReload: true});
+        var dialog = this.makeModal('new_sandbox', {workspaceId: this.model.id, noReload: true});
         dialog.launchModal();
     },
 
     launchWorkspaceEditMembersDialog: function(e) {
         e && e.preventDefault();
-        var dialog = new chorus.dialogs.WorkspaceEditMembers({pageModel: this.model});
+        var dialog = this.makeModal('edit_members', {pageModel: this.model});
         dialog.launchModal();
     },
 
     launchImportWorkfilesDialog: function(e) {
         e && e.preventDefault();
-        var dialog = new chorus.dialogs.WorkfilesImport({workspaceId: this.model.id});
+        var dialog = this.makeModal('import_workfile', {workspaceId: this.model.id});
         dialog.launchModal();
     }
 });

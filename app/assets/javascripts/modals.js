@@ -85,7 +85,7 @@ chorus.Modal = chorus.views.Base.extend({
             this.close();
             $("#facebox").remove();
             $.facebox.settings.inited = false;
-            chorus.PageEvents.trigger("modal:closed");
+            chorus.PageEvents.trigger("modal:closed", this);
 
             delete chorus.modal;
             this.ignoreFacebox();
