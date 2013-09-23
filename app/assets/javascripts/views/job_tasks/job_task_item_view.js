@@ -7,12 +7,6 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
         "click .up_arrow"  : "moveJobTaskUp"
     },
 
-    setup: function() {
-        this._super("setup", arguments);
-        this.listenTo(this.model, "invalidated", function() { this.model.fetch(); });
-        this.listenTo(this.model, "saved", function() { chorus.page.model.trigger("invalidated"); });
-    },
-
     additionalContext: function () {
         var action = this.model.get("action");
         var collection = this.model.collection;
@@ -35,11 +29,6 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
         return iconMap[action];
     },
 
-    moveJobTaskDown: function() {
-        this.model.save({index: this.model.get("index") + 1}, {wait: true});
-    },
-
-    moveJobTaskUp: function() {
-        this.model.save({index: this.model.get("index") - 1}, {wait: true});
-    }
+    moveJobTaskDown: function() { chorus.page.model.moveTaskDown(this.model); },
+    moveJobTaskUp:   function() { chorus.page.model.moveTaskUp(this.model); }
 });

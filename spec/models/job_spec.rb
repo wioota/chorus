@@ -375,4 +375,39 @@ describe Job do
       end.to change(JobSubscription, :count).by(-1)
     end
   end
+
+  describe 'reorder tasks' do
+    let(:job) { ready_job }
+    let!(:tasks) do
+      3.times.map { FactoryGirl.create(:run_work_flow_task, job: job) }
+    end
+
+    it "assigns tasks indices in the order of the provided IDs" do
+      desired_order = [tasks[1].id, tasks[0].id, tasks[2].id]
+
+      expect do
+        job.reorder_tasks desired_order
+      end.to change { job.job_tasks.reload.map(&:id) }.to(desired_order)
+    end
+
+    context "when a task has been added" do
+      it "safely assigns tasks indices" do
+        desired_order = [tasks[1].id, tasks[0].id, tasks[2].id]
+        new_task = FactoryGirl.create(:run_work_flow_task, job: job)
+
+        expect do
+          job.reorder_tasks desired_order
+        end.to change { job.job_tasks.reload.map(&:id) }.to(desired_order + [new_task.id])
+      end
+    end
+
+    context "when a task has been removed" do
+      it "safely assigns task indices" do
+        desired_order = [tasks[1].id, tasks[0].id, tasks[2].id]
+        job.job_tasks.first.destroy
+        job.reorder_tasks desired_order
+        job.job_tasks.reload.map(&:id).should == [tasks[1].id,tasks[2].id]
+      end
+    end
+  end
 end

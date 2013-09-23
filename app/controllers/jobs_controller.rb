@@ -43,6 +43,8 @@ class JobsController < ApplicationController
       job.enqueue
     elsif params[:job]['kill']
       job.kill
+    elsif params[:job]['task_id_order']
+      job.reorder_tasks params[:job]['task_id_order'].map(&:to_i)
     else
       Job.transaction do
         job.update_attributes!(params[:job])

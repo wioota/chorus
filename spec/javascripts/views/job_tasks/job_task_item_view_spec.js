@@ -1,9 +1,15 @@
 describe("chorus.views.JobTaskItem", function () {
     beforeEach(function() {
-        this.collection = backboneFixtures.job().tasks();
+        this.job = backboneFixtures.job();
+        this.collection = this.job.tasks();
         this.model = this.collection.at(0);
         this.view = new chorus.views.JobTaskItem({ model: this.model });
         this.view.render();
+        chorus.page = {model: this.job};
+    });
+
+    afterEach(function () {
+        delete chorus.page;
     });
 
     it("links the task's name to its show page", function() {
@@ -23,17 +29,6 @@ describe("chorus.views.JobTaskItem", function () {
 
     it("links the task's name to its show page", function() {
         expect(this.view.$(".action")).toContainTranslation("job_task.action." + this.model.get("action"));
-    });
-
-    describe("when the model received an 'invalidated' trigger", function() {
-        beforeEach(function() {
-            spyOn(this.model, "fetch");
-        });
-
-        it("reloads the model", function() {
-            this.model.trigger("invalidated");
-            expect(this.model.fetch).toHaveBeenCalled();
-        });
     });
 
     describe("ordering arrows", function() {
@@ -67,26 +62,16 @@ describe("chorus.views.JobTaskItem", function () {
 
             function itReordersTheList() {
                 it("makes a request to re-order the list ", function() {
-                    expect(this.server.lastUpdateFor(this.model)).toBeTruthy();
-                });
-
-                context("when the request finishes", function() {
-                    beforeEach(function() {
-                        chorus.page = {};
-                        chorus.page.model = this.model.job();
-                        spyOn(chorus.page.model, 'trigger');
-                        this.server.completeUpdateFor(this.model);
-                    });
-
-                    it("invalidates the job model", function() {
-                        expect(chorus.page.model.trigger).toHaveBeenCalledWith('invalidated');
-                    });
+                    var params = this.server.lastUpdateFor(this.job).params();
+                    expect(params['job[task_id_order][]']).toEqual(this.ids);
                 });
             }
 
             context("when the down arrow is clicked", function() {
                 beforeEach(function() {
                     this.view.$('.down_arrow').click();
+                    this.ids = this.collection.chain().pluck('id').invoke('toString').value();
+                    chorus.arrayHelpers.swap(this.ids, 1, 2);
                 });
 
                 itReordersTheList();
@@ -95,6 +80,9 @@ describe("chorus.views.JobTaskItem", function () {
             context("when the up arrow is clicked", function() {
                 beforeEach(function() {
                     this.view.$('.up_arrow').click();
+                    this.ids = this.collection.chain().pluck('id').invoke('toString').value();
+
+                    chorus.arrayHelpers.swap(this.ids, 1, 0);
                 });
 
                 itReordersTheList();

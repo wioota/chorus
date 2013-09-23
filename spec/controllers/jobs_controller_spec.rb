@@ -305,6 +305,22 @@ describe JobsController do
         post :update, params
       end
     end
+
+    describe 'requesting a reorder' do
+      let(:ids) { %w(1 2 3) }
+      let(:params) do
+        {
+            id: job.id,
+            workspace_id: workspace.id,
+            job: {task_id_order: ids}
+        }
+      end
+
+      it "passes the desired id order to the job" do
+        any_instance_of(Job) { |job| mock(job).reorder_tasks(ids.map(&:to_i)) }
+        post :update, params
+      end
+    end
   end
 
   describe '#destroy' do

@@ -2,6 +2,7 @@ chorus.models.JobTask = chorus.models.Base.extend({
     constructorName: 'JobTask',
     urlTemplate: "workspaces/{{workspace.id}}/jobs/{{job.id}}/job_tasks/{{id}}",
     showUrlTemplate: "workspaces/{{workspace.id}}/jobs/{{job.id}}/tasks/{{id}}",
+    paramsToIgnore: ['workspace', 'job'],
 
     job: function () {
         if (!this._job && this.get("job")) {
@@ -24,7 +25,5 @@ chorus.models.JobTask = chorus.models.Base.extend({
                 this.requirePositiveInteger("rowLimit", newAttrs, 'import.validation.sampleCount.positive');
             }
         }
-    },
-
-    paramsToIgnore: ['workspace', 'job']
+    }
 });

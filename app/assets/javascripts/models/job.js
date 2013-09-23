@@ -10,9 +10,27 @@ chorus.models.Job = chorus.models.Base.extend({
         }
         return this._workspace;
     },
-    
+
     tasks: function () {
-        return new chorus.collections.JobTaskSet(this.get("tasks"), {parse: true});
+        if (!this._tasks) {
+            this._tasks = new chorus.collections.JobTaskSet(this.get("tasks") || [], {parse: true});
+            this.on('loaded saved', function () {
+                this._tasks.reset(this.get("tasks"), {parse: true});
+            });
+        }
+
+        return this._tasks;
+    },
+
+    moveTaskUp:   function (task) { this.moveTask(task, -1); },
+    moveTaskDown: function (task) { this.moveTask(task, +1); },
+
+    moveTask: function (task, direction) {
+        var desired_id_order = this._tasks.chain().pluck('id').invoke('toString').value();
+        var thisIndex = this._tasks.indexOf(task);
+
+        chorus.arrayHelpers.swap(desired_id_order, thisIndex, thisIndex + direction);
+        this.save({task_id_order: desired_id_order}, {wait: true});
     },
 
     runsOnDemand: function () {
@@ -87,7 +105,6 @@ chorus.models.Job = chorus.models.Base.extend({
     ableToRun: function () {
         return !(this.isStopping() || this.isRunning());
     },
-
 
     lastRunLinkKey: function () {
         return this.get('lastRunFailed') ? "job.show_errors" : "job.show_details";

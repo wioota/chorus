@@ -5,7 +5,11 @@ describe("chorus.pages.JobsShowPage", function () {
         this.model = backboneFixtures.job();
         this.task = this.model.tasks().at(0);
         this.workspace = this.model.workspace();
-        this.page = new chorus.pages.JobsShowPage(this.workspace.id, this.model.get('id'));
+        chorus.page = this.page = new chorus.pages.JobsShowPage(this.workspace.id, this.model.get('id'));
+    });
+
+    afterEach(function () {
+        delete chorus.page;
     });
 
     it("should have the right constructor name", function () {
@@ -106,19 +110,6 @@ describe("chorus.pages.JobsShowPage", function () {
             });
         });
 
-        describe("when invalidated is triggered on the model", function () {
-            beforeEach(function () {
-                this.page.render();
-                spyOn(this.page.model, 'fetch');
-            });
-
-            it("refetches the model", function () {
-                this.page.model.trigger('invalidated');
-                expect(this.page.model.fetch).toHaveBeenCalled();
-            });
-
-        });
-
         describe("breadcrumbs", function() {
             it("renders home > Workspaces > {workspace name} > Jobs", function() {
                 expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
@@ -152,6 +143,22 @@ describe("chorus.pages.JobsShowPage", function () {
                 this.page.model.fetch.reset();
                 this.clock.tick(300001);
                 expect(this.page.model.fetch).not.toHaveBeenCalled();
+            });
+        });
+
+        describe("when the job tasks are reordered", function () {
+            beforeEach(function () {
+                spyOn(this.page.mainContent.content, 'render');
+                this.page.$('.arrows:eq(0) .down_arrow').click();
+
+                var responseModel = this.model.clone();
+                responseModel.attributes.tasks[0].name = 'Shenanigans';
+                responseModel.attributes.tasks = [responseModel.attributes.tasks[0]];
+                this.server.lastUpdateFor(this.model).succeed(responseModel);
+            });
+
+            it("respects the response content", function () {
+                expect(this.page.$el).toContainText('Shenanigans');
             });
         });
     });

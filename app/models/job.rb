@@ -97,6 +97,17 @@ class Job < ActiveRecord::Base
     end
   end
 
+  def reorder_tasks(ids)
+    index = 1
+    ids.each do |id|
+      task = job_tasks.all.find { |task| task.id == id }
+      if task
+        task.update_attribute(:index, index)
+        index += 1
+      end
+    end
+  end
+
   def kill
     job_tasks.map(&:kill)
     update_attribute(:status, STOPPING)
