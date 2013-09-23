@@ -7,7 +7,8 @@ class Workspace < ActiveRecord::Base
 
   attr_accessor :archived
   attr_accessible :name, :public, :summary, :member_ids, :has_added_member, :owner_id, :archiver, :archived,
-                  :has_changed_settings, :show_sandbox_datasets, :is_project, :project_status, :project_status_reason
+                  :has_changed_settings, :show_sandbox_datasets, :is_project, :project_status, :project_status_reason,
+                  :project_target_date
 
   has_attached_file :image, :path => ":rails_root/system/:class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",
@@ -293,10 +294,6 @@ class Workspace < ActiveRecord::Base
         create_event_for_dataset(user, dataset) if association.valid?
       end
     end
-  end
-
-  def project_target_date
-    milestones.order(:target_date).last.target_date if milestones.any?
   end
 
   private

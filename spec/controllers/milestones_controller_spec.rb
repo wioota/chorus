@@ -60,7 +60,7 @@ describe MilestonesController do
       { workspace_id: workspace.id, id: milestone.id }
     end
 
-    it "lets a workspace member soft delete a milestone" do
+    it "lets a workspace member delete a milestone" do
       expect {
         delete :destroy, params
       }.to change(Milestone, :count).by(-1)
