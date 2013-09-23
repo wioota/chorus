@@ -168,6 +168,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "workspace#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     owner
     project_status 'on_track'
+    is_project false
 
     public true
 
@@ -181,6 +182,7 @@ FactoryGirl.define do
 
     factory :project do
       project_status_reason { Faker::Company.catch_phrase }
+      is_project true
 
       after(:create) do |project|
         Events::ProjectStatusChanged.by(project.owner).add(:workspace => project)
