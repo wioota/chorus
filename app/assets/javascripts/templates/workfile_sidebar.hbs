@@ -14,6 +14,13 @@
     </div>
     <div class="actions">
         <ul>
+            {{#if isAlpine}}
+                {{#if canRun}}
+                    <li><a class="run_now" href="#">{{t 'work_flows.actions.run_now'}}</a></li>
+                {{else}}
+                    <li><span class="disabled run_now">{{t 'work_flows.actions.run_now'}}</span></li>
+                {{/if}}
+            {{/if}}
             {{#if showAddNoteLink}}
                 <li><a class="new_note dialog" href="#">{{t "actions.add_note"}}</a></li>
             {{/if}}

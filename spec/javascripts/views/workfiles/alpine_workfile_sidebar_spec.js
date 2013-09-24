@@ -16,4 +16,26 @@ describe('chorus.views.AlpineWorkfileSidebar', function(){
     it('does not render the update time', function(){
         expect(this.view.$('.info .updated')).not.toExist();
     });
+
+    describe("run now", function () {
+        it('shows the run now link', function () {
+            expect(this.view.$('a.run_now')).toContainTranslation('work_flows.actions.run_now');
+        });
+
+        context('clicking run now', function () {
+            beforeEach(function () {
+                spyOn(this.view.model, 'run').andCallThrough();
+                this.view.$('a.run_now').click();
+                this.server.completeUpdateFor(this.view.model, {status: 'running'});
+            });
+
+            it('disables the run now link', function () {
+                expect(this.view.$('span.run_now')).toHaveClass('disabled');
+            });
+
+            it('runs the workfile', function () {
+                expect(this.view.model.run).toHaveBeenCalled();
+            });
+        });
+    });
 });

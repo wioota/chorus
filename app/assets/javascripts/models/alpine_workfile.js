@@ -96,5 +96,9 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
         return _.map(this.get('executionLocations'), function (executionLocation) {
             return new chorus.models.DynamicExecutionLocation(executionLocation);
         }, this);
+    },
+
+    run: function () {
+        this.save({run_now: true});
     }
 });

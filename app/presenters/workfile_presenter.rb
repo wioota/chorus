@@ -14,7 +14,8 @@ class WorkfilePresenter < Presenter
       :tags => present(model.tags, options),
       :entity_type => model.entity_type_name,
       :entity_subtype => model.entity_subtype,
-      :user_modified_at => model.user_modified_at
+      :user_modified_at => model.user_modified_at,
+      :status => model.status
     }
 
     unless rendering_activities?

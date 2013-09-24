@@ -19,7 +19,8 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
         "click .rename": 'launchRenameDialog',
         "click .delete": 'launchWorkfileDeleteDialog',
         "click .copy": 'launchCopyWorkfileDialog',
-        "click .new_note": 'launchNotesNewDialog'
+        "click .new_note": 'launchNotesNewDialog',
+        "click .run_now": 'runWorkflow'
     },
 
     setup:function () {
@@ -92,7 +93,9 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
             showDownloadLink: this.options.showDownloadLink,
             showEditLinks: workspaceActive && this.options.showEditingLinks && this.model.workspace().canUpdate(),
             showUpdatedTime: this.options.showUpdatedTime,
-            showVersions: this.options.showVersions
+            showVersions: this.options.showVersions,
+            isAlpine: this.model.isAlpine(),
+            canRun: this.model.get('status') !== 'running'
         };
 
         if (this.model) {
@@ -183,6 +186,11 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
             allowWorkspaceAttachments: true
         });
         dialog.launchModal();
+    },
+
+    runWorkflow: function (e) {
+        e && e.preventDefault();
+        this.model.isAlpine() && this.model.run();
     }
 },
 {

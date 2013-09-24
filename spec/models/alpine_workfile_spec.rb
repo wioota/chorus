@@ -246,4 +246,22 @@ describe AlpineWorkfile do
       workfile.categorized_dataset_ids.should == {:dataset_ids => [table.id], :hdfs_dataset_ids => [hdfs_set.id]}
     end
   end
+
+  describe "#run_now" do
+    let(:workflow) { FactoryGirl.create(:work_flow) }
+    before do
+      mock(Alpine::API).run_work_flow(workflow, user)
+    end
+
+    it "sets the status to 'running'" do
+      expect {
+        workflow.run_now(user)
+      }.to change(workflow, :status).from('idle').to('running')
+    end
+
+    it "uses the api to run the work flow" do
+      workflow.run_now(user)
+    end
+
+  end
 end

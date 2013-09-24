@@ -16,6 +16,10 @@ module Alpine
       new(user: user).run_work_flow(task.payload, task: task)
     end
 
+    def self.run_work_flow(work_flow, user)
+      new(user: user).run_work_flow(work_flow)
+    end
+
     def self.stop_work_flow_task(task)
       user = task.job.owner
       new(user: user).stop_work_flow(task.killable_id)

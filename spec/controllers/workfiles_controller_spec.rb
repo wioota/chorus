@@ -664,6 +664,23 @@ describe WorkfilesController do
           put :update, params
         end
       end
+
+      context "when directed to 'run now'" do
+        let(:params) do
+          {
+            :id => workfile.to_param,
+            :workspace_id => workspace.to_param,
+            :workfile => {
+              :run_now => 'true'
+            }
+          }
+        end
+
+        it 'runs the workflow' do
+          mock(Alpine::API).run_work_flow.with_any_args
+          put :update, params
+        end
+      end
     end
   end
 

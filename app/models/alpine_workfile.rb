@@ -36,7 +36,7 @@ class AlpineWorkfile < Workfile
     update_file_name(params)
     Workfile.transaction do
       save!
-      notify_alpine_of_upload(scoop_file_from(params)) if !params[:file_name]
+      notify_alpine_of_upload(scoop_file_from(params)) if (!params[:file_name] && params[:versions_attributes].present?)
     end
   rescue Net::ProtocolError, SocketError, Errno::ECONNREFUSED, TimeoutError => e
     raise ApiValidationError.new(:base, :alpine_connection_error)
@@ -63,6 +63,11 @@ class AlpineWorkfile < Workfile
       :workspace => workspace,
       :commit_message => params[:commit_message]
     )
+  end
+
+  def run_now(user)
+    update_attribute(:status, 'running')
+    Alpine::API.run_work_flow(self, user)
   end
 
   private

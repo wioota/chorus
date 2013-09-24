@@ -25,6 +25,7 @@ describe WorkfilePresenter, :type => :view do
       hash.should have_key(:comment_count)
       hash.should have_key(:tags)
       hash.should have_key(:user_modified_at)
+      hash.should have_key(:status)
     end
 
     it "uses the workspace presenter to serialize the workspace" do

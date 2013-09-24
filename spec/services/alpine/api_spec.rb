@@ -122,6 +122,16 @@ describe Alpine::API do
     end
   end
 
+  describe'.run_work_flow' do
+    it 'delegates to a new API instance' do
+      any_instance_of(Alpine::API) do |api|
+        mock(api).run_work_flow(work_flow)
+      end
+
+      Alpine::API.run_work_flow(work_flow, user)
+    end
+  end
+
   describe '#run_work_flow' do
     before do
       VCR.configure { |c| c.ignore_localhost = true }

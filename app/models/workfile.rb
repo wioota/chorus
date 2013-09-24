@@ -9,6 +9,7 @@ class Workfile < ActiveRecord::Base
 
   attr_accessible :description, :file_name, :as => [:default, :create]
   attr_accessible :owner, :workspace, :as => :create
+  attr_accessible :status
   attr_accessor :resolve_name_conflicts
 
   serialize :additional_data, JsonHashSerializer
@@ -128,6 +129,9 @@ class Workfile < ActiveRecord::Base
   end
 
   def attempt_data_source_connection
+  end
+
+  def run_now(user)
   end
 
   def copy(user, workspace, new_file_name = nil)
