@@ -161,5 +161,20 @@ describe("chorus.pages.JobsShowPage", function () {
                 expect(this.page.$el).toContainText('Shenanigans');
             });
         });
+
+        describe("when the job is edited", function () {
+            beforeEach(function () {
+                this.newJobName = "An amazing job with a unique name";
+                this.page.$('.edit_schedule').click();
+                var modal = this.modalSpy.modals()[0];
+                modal.$('.name').val(this.newJobName);
+                modal.$('form').submit();
+                this.server.lastUpdateFor(this.model).succeed();
+            });
+
+            it("rerenders the page's content header", function () {
+                expect(this.page.$el).toContainText(this.newJobName);
+            });
+        });
     });
 });

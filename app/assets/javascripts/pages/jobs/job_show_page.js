@@ -50,27 +50,17 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
 
         this.subscribePageEvent("job_task:selected", this.jobTaskSelected);
 
-        var headerOptions = {
-            title: this.job.get('name'),
-            frequency: this.job.frequency() ,
-            nextRun: this.job.get("nextRun"),
-            lastRun: this.job.get("lastRun"),
-            lastRunLinkKey: this.job.lastRunLinkKey(),
-            ownerName: this.job.owner().displayName(),
-            ownerUrl: this.job.owner().showUrl()
-        };
-
         if (this.collection.length > 0) {
             this.mainContent = new chorus.views.MainContentList({
                 modelClass: "JobTask",
-                contentHeader: new chorus.views.StaticTemplate("job_show_content_header", headerOptions),
+                contentHeader: new chorus.views.JobShowContentHeader({model: this.job}),
                 collection: this.collection,
                 contentDetails: this.contentDetails()
             });
         } else {
             this.mainContent = new chorus.views.MainContentView({
                 content: new chorus.views.JobQuickstart({model: this.job}),
-                contentHeader: new chorus.views.StaticTemplate("job_show_content_header", headerOptions),
+                contentHeader: new chorus.views.JobShowContentHeader({model: this.job}),
                 contentDetails: this.contentDetails()
             });
         }

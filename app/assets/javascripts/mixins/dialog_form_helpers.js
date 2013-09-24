@@ -1,7 +1,6 @@
 chorus.Mixins.DialogFormHelpers = {
     disableFormUnlessValid: function(options) {
         var events = {};
-        this.formCheckFn;
         if (options.checkInput) {
             this.formCheckFn = options.checkInput;
         } else {
