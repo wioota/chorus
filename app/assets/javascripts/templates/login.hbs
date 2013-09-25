@@ -1,10 +1,7 @@
 <div class="card">
     {{> errorDiv }}
-    {{#unless alpineBranded}}
-        <img class="logo" src="images/uap-badge.png"/>
-    {{/unless}}
     <form class="login" action="/auth/login/" method="post">
-    <img class="logo {{#if alpineBranded}}alpine{{/if}}" src="{{#if alpineBranded}}images/alpine-logo.png{{else}}images/login-logo.png{{/if}}"/>
+        <img class="logo {{#if alpineBranded}}alpine{{/if}}" src="{{#if alpineBranded}}images/alpine-logo.png{{else}}images/login-logo.png{{/if}}"/>
         <div class="content">
             <label for="username">{{t "login.username"}}</label>
             <input type="text" name="username" id="username" maxlength="256" autocomplete="off"/>
@@ -18,24 +15,9 @@
     </form>
 </div>
 <footer>
-    <div class="logos">
-        {{#unless alpineBranded}}
-            <img class="greenplum" src="/images/greenplum-logo.png">
-            <img class="emc" src="/images/emc-logo.png">
-        {{/unless}}
-    </div>
     <div class="legal {{#if alpineBranded}}alpine{{/if}}">
         <p>
             {{t "login.version"}} <span class="version"></span>|<span class="copyright">{{#if alpineBranded}}{{{t "login.alpine_copyright"}}}{{else}}{{{t "login.copyright"}}}{{/if}}</span>
         </p>
-        {{#unless alpineBranded}}
-            <p>
-                {{t "login.legal1"}}
-            </p>
-            <p>
-                {{t "login.legal2"}}
-            </p>
-        {{/unless}}
     </div>
-<div class="version"></div>
 </footer>
