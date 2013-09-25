@@ -46,7 +46,7 @@ describe RunWorkFlowTask do
     it "returns a JobTaskResult failure when the running task is killed" do
       @worker_task = job_tasks(:rwft).tap { |task| stub(task.class).sleep_time { 0.1 } }
       stub(Alpine::API).run_work_flow_task { 'kill_bill' }
-      stub(Alpine::API).stop_work_flow_task
+      stub(Alpine::API).stop_work_flow
       stub(@worker_task).killed? { true }
 
       result = @worker_task.perform
@@ -128,7 +128,7 @@ describe RunWorkFlowTask do
 
     it "uses a process_id to request a stop through the Alpine API" do
       stub(Alpine::API).run_work_flow_task(task) { process_id }
-      mock(Alpine::API).stop_work_flow_task(task)
+      mock(Alpine::API).stop_work_flow(task)
       thread = Thread.new { task.perform }
 
       wait_until { task.reload.killable_id }
@@ -139,7 +139,7 @@ describe RunWorkFlowTask do
     it "clears out the killable_id" do
       foo = 'someKillableId'
       task.update_attribute(:killable_id, foo)
-      mock(Alpine::API).stop_work_flow_task(task)
+      mock(Alpine::API).stop_work_flow(task)
 
       expect do
         task.kill
@@ -148,7 +148,7 @@ describe RunWorkFlowTask do
 
     it "does not call Alpine if it does not have a killable_id" do
       task.update_attribute(:killable_id, nil)
-      dont_allow(Alpine::API).stop_work_flow_task(task)
+      dont_allow(Alpine::API).stop_work_flow(task)
       task.kill
     end
   end

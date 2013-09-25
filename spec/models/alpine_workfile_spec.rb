@@ -251,19 +251,82 @@ describe AlpineWorkfile do
 
   describe "#run_now" do
     let(:workflow) { FactoryGirl.create(:work_flow) }
-    before do
-      mock(Alpine::API).run_work_flow(workflow, user)
-    end
+    let(:process_id) { 'but_soft_what_light_from_yonder_window_breaks' }
 
-    it "sets the status to 'running'" do
-      expect {
-        workflow.run_now(user)
-      }.to change(workflow, :status).from('idle').to('running')
+    before do
+      any_instance_of(Alpine::API) {|api| stub(api).request_run.with_any_args { process_id } }
     end
 
     it "uses the api to run the work flow" do
+      mock(Alpine::API).run_work_flow(workflow, user) { process_id }
       workflow.run_now(user)
     end
 
+    context "when the Alpine API returns a process ID" do
+      it "sets the status to 'running'" do
+        expect {
+          workflow.run_now(user)
+        }.to change(workflow, :status).from('idle').to('running')
+      end
+
+      it 'saves the Alpine process ID as killable_id' do
+        expect {
+          workflow.run_now(user)
+        }.to change(workflow, :killable_id).to(process_id)
+      end
+    end
+
+    context "when the Alpine API returns an empty process ID" do
+      let(:process_id) { '' }
+
+      it "leaves the status as 'idle'" do
+        expect {
+          workflow.run_now(user)
+        }.not_to change(workflow, :status).from('idle')
+      end
+
+      it 'does not reassign a killable_id' do
+        expect {
+          workflow.run_now(user)
+        }.not_to change(workflow, :killable_id).from(nil)
+      end
+    end
+  end
+
+  describe '#stop_now' do
+    let(:process_id) { 'a_most_ingenious_paradox' }
+    let(:workflow) { FactoryGirl.create(:work_flow, status: 'running', killable_id: process_id) }
+
+    it "notifies alpine" do
+      success_response = OpenStruct.new({code: '200'})
+      mock(Alpine::API).stop_work_flow(workflow, user) { success_response }
+      workflow.stop_now(user)
+    end
+
+    context "when Alpine responds with success" do
+      before do
+        success_response = OpenStruct.new({code: '200'})
+        mock(Alpine::API).stop_work_flow(workflow, user) { success_response }
+      end
+
+      it "sets the status to 'idle'" do
+        expect {
+          workflow.stop_now(user)
+        }.to change(workflow, :status).from('running').to('idle')
+      end
+    end
+
+    context "when Alpine responds with success" do
+      before do
+        success_response = OpenStruct.new({code: '200'})
+        mock(Alpine::API).stop_work_flow(workflow, user) { success_response }
+      end
+
+      it "sets the status to 'idle'" do
+        expect {
+          workflow.stop_now(user)
+        }.to change(workflow, :status).from('running').to('idle')
+      end
+    end
   end
 end

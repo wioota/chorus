@@ -204,4 +204,20 @@ describe("chorus.models.AlpineWorkfile", function() {
             expect(chorus.models.DynamicExecutionLocation).toHaveBeenCalledWith(this.model.get('executionLocations')[0]);
         });
     });
+
+    describe("run & stop", function () {
+        it("does not submit opposing actions simultaneously", function () {
+            this.model.run();
+            expect(this.server.lastUpdateFor(this.model).params()['workfile[run_now]']).toBeTruthy();
+            expect(this.server.lastUpdateFor(this.model).params()['workfile[stop_now]']).toBeFalsy();
+
+            this.model.stop();
+            expect(this.server.lastUpdateFor(this.model).params()['workfile[stop_now]']).toBeTruthy();
+            expect(this.server.lastUpdateFor(this.model).params()['workfile[run_now]']).toBeFalsy();
+
+            this.model.run();
+            expect(this.server.lastUpdateFor(this.model).params()['workfile[run_now]']).toBeTruthy();
+            expect(this.server.lastUpdateFor(this.model).params()['workfile[stop_now]']).toBeFalsy();
+        });
+    });
 });

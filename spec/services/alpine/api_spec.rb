@@ -216,7 +216,7 @@ describe Alpine::API do
     end
   end
 
-  describe '.stop_work_flow_task' do
+  describe '.stop_work_flow' do
     before { fake_a_session }
     let(:task) { job_tasks(:rwft) }
 
@@ -225,7 +225,7 @@ describe Alpine::API do
         mock(api).stop_work_flow(task.killable_id)
       end
 
-      Alpine::API.stop_work_flow_task(task)
+      Alpine::API.stop_work_flow(task)
     end
   end
 

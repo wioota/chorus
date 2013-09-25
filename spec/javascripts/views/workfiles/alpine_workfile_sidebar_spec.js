@@ -20,6 +20,13 @@ describe('chorus.views.AlpineWorkfileSidebar', function(){
     describe("run now", function () {
         it('shows the run now link', function () {
             expect(this.view.$('a.run_now')).toContainTranslation('work_flows.actions.run_now');
+            expect(this.view.$('span.run_now')).not.toExist();
+        });
+
+        it('shows a disabled stop link', function () {
+            expect(this.view.$('span.stop')).toContainTranslation('work_flows.actions.stop');
+            expect(this.view.$('span.stop')).toHaveClass('disabled');
+            expect(this.view.$('a.stop')).not.toExist();
         });
 
         context('clicking run now', function () {
@@ -31,11 +38,40 @@ describe('chorus.views.AlpineWorkfileSidebar', function(){
 
             it('disables the run now link', function () {
                 expect(this.view.$('span.run_now')).toHaveClass('disabled');
+                expect(this.view.$('a.run_now')).not.toExist();
+            });
+
+            it("enables the 'stop' link", function () {
+                expect(this.view.$('a.stop')).toContainTranslation('work_flows.actions.stop');
+                expect(this.view.$('span.stop')).not.toExist();
             });
 
             it('runs the workfile', function () {
                 expect(this.view.model.run).toHaveBeenCalled();
             });
+
+            context('clicking stop now', function () {
+                beforeEach(function () {
+                    spyOn(this.view.model, 'stop').andCallThrough();
+                    this.view.$('a.stop').click();
+                    this.server.completeUpdateFor(this.view.model, {status: 'idle'});
+                });
+
+                it('stops the workfile', function () {
+                    expect(this.view.model.stop).toHaveBeenCalled();
+                });
+
+                it('reenables the run now link', function () {
+                    expect(this.view.$('a.run_now')).toExist();
+                    expect(this.view.$('span.run_now')).not.toExist();
+                });
+
+                it("disables the 'stop' link", function () {
+                    expect(this.view.$('a.stop')).not.toExist();
+                    expect(this.view.$('span.stop')).toHaveClass('disabled');
+                });
+            });
+
         });
     });
 });

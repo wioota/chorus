@@ -15,12 +15,13 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
 
     events: {
         "click a.version_list": 'displayVersionList',
-        "click .edit_tags": 'startEditingTags',
-        "click .rename": 'launchRenameDialog',
-        "click .delete": 'launchWorkfileDeleteDialog',
-        "click .copy": 'launchCopyWorkfileDialog',
-        "click .new_note": 'launchNotesNewDialog',
-        "click .run_now": 'runWorkflow'
+        "click a.edit_tags": 'startEditingTags',
+        "click a.rename": 'launchRenameDialog',
+        "click a.delete": 'launchWorkfileDeleteDialog',
+        "click a.copy": 'launchCopyWorkfileDialog',
+        "click a.new_note": 'launchNotesNewDialog',
+        "click a.run_now": 'runWorkflow',
+        "click a.stop" : 'stopWorkflow'
     },
 
     setup:function () {
@@ -95,7 +96,7 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
             showUpdatedTime: this.options.showUpdatedTime,
             showVersions: this.options.showVersions,
             isAlpine: this.model.isAlpine(),
-            canRun: this.model.get('status') !== 'running'
+            isRunning: this.model.get('status') === 'running'
         };
 
         if (this.model) {
@@ -191,6 +192,11 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
     runWorkflow: function (e) {
         e && e.preventDefault();
         this.model.isAlpine() && this.model.run();
+    },
+
+    stopWorkflow: function (e) {
+        e && e.preventDefault();
+        this.model.isAlpine() && this.model.stop();
     }
 },
 {

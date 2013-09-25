@@ -15,11 +15,14 @@
     <div class="actions">
         <ul>
             {{#if isAlpine}}
-                {{#if canRun}}
+                {{#unless isRunning}}
                     <li><a class="run_now" href="#">{{t 'work_flows.actions.run_now'}}</a></li>
+                    <li><span class="stop disabled" href="#">{{t 'work_flows.actions.stop'}}</span></li>
                 {{else}}
                     <li><span class="disabled run_now">{{t 'work_flows.actions.run_now'}}</span></li>
-                {{/if}}
+                    <li><a class="stop" href="#">{{t 'work_flows.actions.stop'}}</a></li>
+                {{/unless}}
+
             {{/if}}
             {{#if showAddNoteLink}}
                 <li><a class="new_note dialog" href="#">{{t "actions.add_note"}}</a></li>

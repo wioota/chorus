@@ -36,7 +36,7 @@ class RunWorkFlowTask < JobTask
 
   def kill
     if killable_id
-      Alpine::API.stop_work_flow_task(self)
+      Alpine::API.stop_work_flow(self)
       update_attribute(:killable_id, nil)
     end
   end

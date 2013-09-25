@@ -40,6 +40,8 @@ class WorkfilesController < ApplicationController
 
     if params[:workfile][:run_now]
       workfile.run_now(current_user)
+    elsif params[:workfile][:stop_now]
+      workfile.stop_now(current_user)
     else
       workfile.assign_attributes(params[:workfile])
       workfile.update_from_params!(params[:workfile])

@@ -645,7 +645,6 @@ describe WorkfilesController do
       let(:params) do
         {
             :entity_subtype => 'alpine',
-            :workspace_id => workspace.to_param,
             :file_name => 'something',
             :database_id => gpdb_databases(:alternate).to_param,
             :id => workfile.to_param
@@ -663,7 +662,6 @@ describe WorkfilesController do
         let(:params) do
           {
             :id => workfile.to_param,
-            :workspace_id => workspace.to_param,
             :workfile => {
               :entity_subtype => 'alpine',
               :file_name => 'something',
@@ -693,7 +691,6 @@ describe WorkfilesController do
         let(:params) do
           {
             :id => workfile.to_param,
-            :workspace_id => workspace.to_param,
             :workfile => {
               :entity_subtype => 'alpine',
               :file_name => 'something',
@@ -722,7 +719,6 @@ describe WorkfilesController do
         let(:params) do
           {
             :id => workfile.to_param,
-            :workspace_id => workspace.to_param,
             :workfile => {
               :run_now => 'true'
             }
@@ -730,7 +726,20 @@ describe WorkfilesController do
         end
 
         it 'runs the workflow' do
-          mock(Alpine::API).run_work_flow.with_any_args
+          process_id = 'fakeprocessid'
+          mock(Alpine::API).run_work_flow.with_any_args { process_id }
+          put :update, params
+        end
+      end
+
+      context "when directed to 'stop now'" do
+        let(:params) do
+          {:id => workfile.to_param, :workfile => {:stop_now => 'true'}}
+        end
+
+        it 'stops the workflow' do
+          success_response = OpenStruct.new({code: '200'})
+          mock(Alpine::API).stop_work_flow.with_any_args { success_response }
           put :update, params
         end
       end

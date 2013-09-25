@@ -3,7 +3,7 @@ require 'set'
 class AlpineWorkfile < Workfile
   TooManyDataBases = Class.new(StandardError)
 
-  has_additional_data :dataset_ids
+  has_additional_data :dataset_ids, :killable_id
   has_many :workfile_execution_locations, foreign_key: :workfile_id, dependent: :destroy
 
   before_validation { self.content_type ='work_flow' }
@@ -67,8 +67,15 @@ class AlpineWorkfile < Workfile
   end
 
   def run_now(user)
-    update_attribute(:status, 'running')
-    Alpine::API.run_work_flow(self, user)
+    process_id = Alpine::API.run_work_flow(self, user)
+    update_attributes(status: 'running', killable_id: process_id) unless process_id.empty?
+    process_id
+  end
+
+  def stop_now(user)
+    response = Alpine::API.stop_work_flow(self, user)
+    update_attribute(:status, 'idle') if response.code == '200'
+    response
   end
 
   private

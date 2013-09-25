@@ -20,9 +20,8 @@ module Alpine
       new(user: user).run_work_flow(work_flow)
     end
 
-    def self.stop_work_flow_task(task)
-      user = task.job.owner
-      new(user: user).stop_work_flow(task.killable_id)
+    def self.stop_work_flow(killer, user=killer.job.owner)
+      new(user: user).stop_work_flow(killer.killable_id)
     end
 
     # INSTANCE METHODS
@@ -76,7 +75,7 @@ module Alpine
     def request_stop(process_id)
       request_base.post(stop_path(process_id), '')
     rescue StandardError => e
-      pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
+      pa "$$$ Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
     end
 
     def request_run(work_flow, options)

@@ -107,6 +107,12 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
     },
 
     run: function () {
+        delete this.attributes.stop_now;
         this.save({run_now: true});
+    },
+
+    stop: function () {
+        delete this.attributes.run_now;
+        this.save({stop_now: true});
     }
 });
