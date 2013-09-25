@@ -124,9 +124,11 @@ describe("chorus.models.AlpineWorkfile", function() {
                 this.model = backboneFixtures.workfile.alpineMultiDataSourceFlow({
                     datasetIds: ['1'],
                     hdfsDatasetIds: ['10', '11'],
+                    oracleDatasetIds: ['1521'],
                     executionLocations: [
                         { id: 'this_is_a_hadoop_id', entityType: 'hdfs_data_source' },
-                        { id: 'this_is_a_gpdb_database_id', entityType: 'gpdb_database' }
+                        { id: 'this_is_a_gpdb_database_id', entityType: 'gpdb_database' },
+                        { id: 'this_is_an_oracle_data_source_id', entityType: 'oracle_data_source' }
                     ]
                 });
             });
@@ -138,12 +140,14 @@ describe("chorus.models.AlpineWorkfile", function() {
                 expect(url).toContainQueryParams({
                     "database_id[]": 'this_is_a_gpdb_database_id',
                     "hdfs_data_source_id[]": 'this_is_a_hadoop_id',
+                    "oracle_data_source_id[]": 'this_is_an_oracle_data_source_id',
                     file_name: this.model.get('fileName'),
                     workfile_id: this.model.id,
                     session_id: "hex",
                     method: "chorusEntry",
                     "dataset_id[]": [1],
-                    "hdfs_dataset_id[]": [10,11]
+                    "hdfs_dataset_id[]": [10,11],
+                    "oracle_dataset_id[]": [1521]
                 });
             });
         });

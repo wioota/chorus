@@ -309,7 +309,7 @@ FixtureBuilder.configure do |fbuilder|
     oracle_work_flow.workfile_execution_locations.create!(execution_location: oracle_data_source)
 
     FactoryGirl.create(:work_flow_with_all_data_sources, :file_name => 'multiple_data_source_workflow', :workspace => public_workspace, :owner => owner)
-    FactoryGirl.create(:work_flow, :file_name => 'multiple_dataset_workflow', :dataset_ids => [default_table.id, hadoop_dadoop.id], :workspace => public_workspace, :owner => owner)
+    FactoryGirl.create(:work_flow, :file_name => 'multiple_dataset_workflow', :dataset_ids => [default_table.id, hadoop_dadoop.id, oracle_table.id], :workspace => public_workspace, :owner => owner)
 
     Events::WorkfileResult.by(owner).add(:workfile => work_flow, :result_id => "1", :workspace => work_flow.workspace)
 

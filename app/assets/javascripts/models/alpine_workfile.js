@@ -62,6 +62,7 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
 
         if (oracles.length > 0) {
             queryParams["oracle_data_source_id[]"] = oracles;
+            if (this.get("oracleDatasetIds")) queryParams["oracle_dataset_id[]"] = this.get("oracleDatasetIds");
         }
 
         uri.addQuery(queryParams);
