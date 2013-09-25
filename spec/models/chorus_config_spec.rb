@@ -421,11 +421,11 @@ describe ChorusConfig do
         config.config = {'alpine' => {'branded' => {'enabled' => false}}}
       end
 
-      it "has the greenplum title" do
-        config.branding_title.should == "Greenplum Chorus"
+      it "has the pivotal title" do
+        config.branding_title.should == "Pivotal Chorus"
       end
 
-      it "has the greenplum favicon" do
+      it "has the pivotal favicon" do
         config.branding_favicon.should == "favicon.ico"
       end
     end

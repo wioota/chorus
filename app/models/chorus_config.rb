@@ -129,7 +129,7 @@ class ChorusConfig
   end
 
   def branding_title
-    self['alpine.branded.enabled'] ? "Alpine Chorus" : "Greenplum Chorus"
+    self['alpine.branded.enabled'] ? "Alpine Chorus" : "Pivotal Chorus"
   end
 
   def branding_favicon
