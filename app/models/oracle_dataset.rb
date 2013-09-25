@@ -10,7 +10,7 @@ class OracleDataset < RelationalDataset
   end
 
   def found_in_workspace_id
-    []
+    bound_workspace_ids
   end
 
   def column_type
