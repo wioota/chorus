@@ -9,7 +9,8 @@ describe("chorus.views.Login", function() {
         expect(this.view.$("form.login")).toExist();
     });
 
-    it("does not autocomplete password inputs", function(){
+    it("does not autocomplete inputs", function(){
+        expect(this.view.$("input[name=username]")).toHaveAttr("autocomplete", "off");
         expect(this.view.$("input[type=password]")).toHaveAttr("autocomplete", "off");
     });
 

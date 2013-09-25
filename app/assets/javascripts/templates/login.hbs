@@ -7,7 +7,7 @@
     <img class="logo {{#if alpineBranded}}alpine{{/if}}" src="{{#if alpineBranded}}images/alpine-logo.png{{else}}images/login-logo.png{{/if}}"/>
         <div class="content">
             <label for="username">{{t "login.username"}}</label>
-            <input type="text" name="username" id="username" maxlength="256"/>
+            <input type="text" name="username" id="username" maxlength="256" autocomplete="off"/>
 
             <label for="password">{{t "login.password"}}</label>
             <input type="password" name="password" id="password" maxlength="256" autocomplete="off"/>
