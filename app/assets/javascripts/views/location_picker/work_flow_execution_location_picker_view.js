@@ -25,6 +25,7 @@ chorus.views.WorkFlowExecutionLocationPicker = chorus.views.LocationPicker.BaseV
         this.databaseView = new chorus.views.LocationPicker.DatabaseView();
 
         this.dataSourceView = new chorus.views.LocationPicker.DataSourceView({
+            showOracleDataSources: true,
             showHdfsDataSources: true,
             childPicker: this.databaseView
         });
@@ -49,13 +50,17 @@ chorus.views.WorkFlowExecutionLocationPicker = chorus.views.LocationPicker.BaseV
     getSelectedDatabase: function() {
         return this.databaseView.selection;
     },
-
-    ready: function() {
-        return this._super('ready') || this.isHdfs();
+    
+    getSelectedLocation: function () {
+        return this.isSingleLevelSource() ? this.getSelectedDataSource() : this.getSelectedDatabase();
     },
 
-    isHdfs: function() {
+    ready: function() {
+        return this._super('ready') || this.isSingleLevelSource();
+    },
+
+    isSingleLevelSource: function() {
         var selectedDataSource = this.getSelectedDataSource();
-        return selectedDataSource && selectedDataSource.get("entityType") === "hdfs_data_source";
+        return selectedDataSource && (selectedDataSource.get("entityType") === "hdfs_data_source" || selectedDataSource.get("entityType") === "oracle_data_source");
     }
 });

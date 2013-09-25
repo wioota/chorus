@@ -3,6 +3,7 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
     beforeEach(function() {
         this.gpdbDataSource = backboneFixtures.gpdbDataSource();
         this.hdfsDataSource = backboneFixtures.hdfsDataSource();
+        this.oracleDataSource = backboneFixtures.oracleDataSource();
     });
 
     context("when 'showHdfsDataSources' is true", function() {
@@ -28,7 +29,7 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
                 this.server.completeFetchAllFor(this.view.hdfsDataSources, [this.hdfsDataSource]);
                 this.view.render();
                 this.databasePicker.hide.reset();
-                this.view.$('select').prop('selectedIndex', 2).change();
+                this.view.$('select').val(this.hdfsDataSource.get('id')).change();
             });
 
             it("hides the database selector", function() {
@@ -37,6 +38,34 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
         });
     });
 
+    context("when 'showOracleDataSources' is true", function() {
+        beforeEach(function() {
+            this.databasePicker = jasmine.createSpyObj('DatabaseView', ['hide', 'isHidden']);
+            this.view = new chorus.views.LocationPicker.DataSourceView({
+                showOracleDataSources: true,
+                childPicker: this.databasePicker
+            });
+        });
+
+        it("should fetch both oracle and gpdb data sources", function() {
+            expect(this.server.requests.length).toBe(1);
+            expect(this.server.requests[0].params()['entity_type']).toBeUndefined();
+        });
+
+        context("selecting an oracle data source", function() {
+            beforeEach(function() {
+                this.server.completeFetchAllFor(this.view.databaseDataSources, [this.gpdbDataSource, this.oracleDataSource]);
+                this.view.render();
+                this.databasePicker.hide.reset();
+                this.view.$('select').val(this.oracleDataSource.get('id')).change();
+            });
+
+            it("hides the database selector", function() {
+                expect(this.databasePicker.hide).toHaveBeenCalled();
+            });
+        });
+    });
+    
     context("when 'showHdfsDataSources' is false", function() {
         beforeEach(function() {
             this.view = new chorus.views.LocationPicker.DataSourceView({

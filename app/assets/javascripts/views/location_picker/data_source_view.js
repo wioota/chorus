@@ -21,25 +21,35 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         this.collection.comparator = function(dataSource) {
             return dataSource.name();
         };
-        this.collectGpdbDataSources();
+        if (this.options.showOracleDataSources) {
+            this.collectDatabaseDataSources();
+        } else {
+            this.collectGpdbDataSources();
+        }
         this.loading();
     },
 
     collectHdfsDataSources: function() {
         this.hdfsDataSources = new chorus.collections.HdfsDataSourceSet();
         this.hdfsDataSources.attributes.jobTracker = true;
-        this.dataSourceCollections.push(this.hdfsDataSources);
-        this.onceLoaded(this.hdfsDataSources, this.resourcesLoaded);
-        this.listenTo(this.hdfsDataSources, "fetchFailed", this.fetchFailed);
-        this.hdfsDataSources.fetchAll();
+        this.addDataSourceCollection(this.hdfsDataSources);
     },
 
     collectGpdbDataSources: function() {
         this.gpdbDataSources = new chorus.collections.GpdbDataSourceSet();
-        this.dataSourceCollections.push(this.gpdbDataSources);
-        this.onceLoaded(this.gpdbDataSources, this.resourcesLoaded);
-        this.listenTo(this.gpdbDataSources, "fetchFailed", this.fetchFailed);
-        this.gpdbDataSources.fetchAll();
+        this.addDataSourceCollection(this.gpdbDataSources);
+    },
+    
+    collectDatabaseDataSources: function () {
+        this.databaseDataSources = new chorus.collections.DataSourceSet();
+        this.addDataSourceCollection(this.databaseDataSources);
+    },
+    
+    addDataSourceCollection: function (dataSourceCollection) {
+        this.dataSourceCollections.push(dataSourceCollection);
+        this.onceLoaded(dataSourceCollection, this.resourcesLoaded);
+        this.listenTo(dataSourceCollection, "fetchFailed", this.fetchFailed);
+        dataSourceCollection.fetchAll();
     },
 
     dataSourceSelected: function() {
@@ -47,15 +57,19 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         var selectedDataSource = this.getSelectedDataSource();
         this.setSelection(selectedDataSource);
         this.trigger('change');
-        if(!selectedDataSource || selectedDataSource.entityType === "hdfs_data_source") {
+        if(!selectedDataSource || this.isSingleLevelSource(selectedDataSource)) {
             this.childPicker.hide();
         }
     },
 
     onSelection: function() {
-        if(this.selection && this.selection.entityType !== "hdfs_data_source") {
+        if (this.selection && !this.isSingleLevelSource(this.selection)) {
             this.childPicker.parentSelected(this.selection);
         }
+    },
+
+    isSingleLevelSource: function (dataSource) {
+        return dataSource.entityType === "hdfs_data_source" || dataSource.entityType === "oracle_data_source";
     },
 
     getSelectedDataSource: function() {
@@ -94,8 +108,7 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
     },
 
     modelIsSelected: function(defaultValue, model) {
-        var modelIsSelected = defaultValue && model.get("id") === defaultValue.id && model.get("entityType") === defaultValue.entityType;
-        return modelIsSelected;
+        return (defaultValue && model.get("id") === defaultValue.id && model.get("entityType") === defaultValue.entityType);
     },
 
     ready: function() {

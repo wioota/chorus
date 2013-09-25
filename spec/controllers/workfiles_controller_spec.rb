@@ -389,6 +389,59 @@ describe WorkfilesController do
         end
       end
 
+      context "and an oracle data source has been chosen" do
+        let(:oracle_data_source) { data_sources(:oracle) }
+        let(:params) do
+          {
+              :workspace_id => workspace.to_param,
+              :workfile => {
+                  :entity_subtype => 'alpine',
+                  :file_name => 'something',
+                  :execution_locations => {
+                      "0" => {
+                          :id => oracle_data_source.id,
+                          :entity_type => 'oracle_data_source'
+                      }
+                  }
+              }
+          }
+        end
+
+        it 'creates an AlpineWorkfile' do
+          mock_present do |model|
+            model.reload
+            model.should be_a AlpineWorkfile
+            model.file_name.should == 'something'
+            model.execution_locations.should =~ [oracle_data_source]
+            model.workspace.should == workspace
+          end
+          post :create, params
+        end
+      end
+
+      context "and an invalid data source has been chosen" do
+        let(:params) do
+          {
+              :workspace_id => workspace.to_param,
+              :workfile => {
+                  :entity_subtype => 'alpine',
+                  :file_name => 'something',
+                  :execution_locations => {
+                      "0" => {
+                          :id => 12345,
+                          :entity_type => 'sandwich'
+                      }
+                  }
+              }
+          }
+        end
+
+        it 'raises an error' do
+          post :create, params
+          response.should be_unprocessable
+        end
+      end
+
       context "and a list of datasets have been chosen" do
         let(:dataset_ids) { [datasets(:table).id, datasets(:other_table).id].map(&:to_s) }
         let(:params) do

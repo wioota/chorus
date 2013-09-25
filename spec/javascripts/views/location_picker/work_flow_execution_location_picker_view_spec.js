@@ -68,11 +68,11 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
             context("when the response is empty for " + type, function() {
                 beforeEach(function() {
                     if(type === 'dataSource') {
-                        var gpdbDataSources = this.view.getPickerSubview(type).gpdbDataSources;
+                        var databaseDataSources = this.view.getPickerSubview(type).databaseDataSources;
                         var hdfsDataSources = this.view.getPickerSubview(type).hdfsDataSources;
-                        expect(gpdbDataSources).not.toBeFalsy();
+                        expect(databaseDataSources).not.toBeFalsy();
                         expect(hdfsDataSources).not.toBeFalsy();
-                        this.server.completeFetchAllFor(gpdbDataSources, []);
+                        this.server.completeFetchAllFor(databaseDataSources, []);
                         this.server.completeFetchAllFor(hdfsDataSources, []);
                     } else {
                         var collection = this.view.getPickerSubview(type).collection;
@@ -89,7 +89,7 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
             it("sorts the select options alphabetically for " + type, function() {
 
                 if(type === "dataSource") {
-                    this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, [
+                    this.server.completeFetchAllFor(this.view.dataSourceView.databaseDataSources, [
                         backboneFixtures.gpdbDataSource({name: "bear"})
                     ]);
                     this.server.completeFetchAllFor(this.view.dataSourceView.hdfsDataSources, [
@@ -133,7 +133,7 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
 
             it("fetches the list of data sources", function() {
                 var requestUrls = _(this.server.requests).pluck('url').sort();
-                expect(requestUrls[0]).toMatch("/data_sources/");
+                expect(requestUrls[0]).toMatch("/data_sources");
                 expect(requestUrls[1]).toMatch("/hdfs_data_sources");
             });
 
@@ -146,7 +146,7 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
             context('when the data source list fetches complete', function() {
                 beforeEach(function() {
                     this.firstGdpbDataSource = backboneFixtures.gpdbDataSource({ name: "alphabeticalA", shared: true, id: 1 });
-                    this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, [
+                    this.server.completeFetchAllFor(this.view.dataSourceView.databaseDataSources, [
                         this.firstGdpbDataSource,
                         backboneFixtures.gpdbDataSource({ name: "alphabeticalC", shared: true, id: 2 }),
                         backboneFixtures.gpdbDataSource({ name: "alphabeticalD", shared: false, id: 3 })
@@ -277,7 +277,7 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
 
             context('when the data source list fetch completes without any data sources', function() {
                 beforeEach(function() {
-                    this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, []);
+                    this.server.completeFetchAllFor(this.view.dataSourceView.databaseDataSources, []);
                     this.server.completeFetchAllFor(this.view.dataSourceView.hdfsDataSources, []);
                 });
 
@@ -288,12 +288,12 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
             context('when one of the data source list fetches fails', function() {
                 beforeEach(function() {
                     spyOnEvent(this.view, 'error');
-                    this.server.lastFetchAllFor(this.view.dataSourceView.gpdbDataSources).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+                    this.server.lastFetchAllFor(this.view.dataSourceView.databaseDataSources).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                     this.server.completeFetchAllFor(this.view.dataSourceView.hdfsDataSources, []);
                 });
 
                 it("triggers error with the message", function() {
-                    expect("error").toHaveBeenTriggeredOn(this.view, [this.view.dataSourceView.gpdbDataSources]);
+                    expect("error").toHaveBeenTriggeredOn(this.view, [this.view.dataSourceView.databaseDataSources]);
                 });
             });
 
@@ -376,6 +376,17 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
                 beforeEach(function() {
                     this.hdfsDataSource = backboneFixtures.hdfsDataSource({name: "Zoo"});
                     this.view.dataSourceView.setSelection(this.hdfsDataSource);
+                });
+
+                it("returns true", function() {
+                    expect(this.view.ready()).toBeTruthy();
+                });
+            });
+
+            context("when choosing an oracle data source as execution location", function() {
+                beforeEach(function() {
+                    this.oracleDataSource = backboneFixtures.oracleDataSource({name: "Zoo"});
+                    this.view.dataSourceView.setSelection(this.oracleDataSource);
                 });
 
                 it("returns true", function() {

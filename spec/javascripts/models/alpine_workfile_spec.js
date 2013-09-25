@@ -98,6 +98,7 @@ describe("chorus.models.AlpineWorkfile", function() {
             this.model = backboneFixtures.workfile.alpineMultiDataSourceFlow({
                 executionLocations: [
                     { id: 'this_is_a_hadoop_id', entityType: 'hdfs_data_source' },
+                    { id: 'this_is_an_oracle_id', entityType: 'oracle_data_source' },
                     { id: 'this_is_a_gpdb_database_id', entityType: 'gpdb_database' }
                 ]
             });
@@ -109,7 +110,8 @@ describe("chorus.models.AlpineWorkfile", function() {
             expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
             expect(url).toContainQueryParams({
                 "hdfs_data_source_id[]": 'this_is_a_hadoop_id',
-                "database_id[]": this.model.get('executionLocations')[1].id,
+                "oracle_data_source_id[]": 'this_is_an_oracle_id',
+                "database_id[]": 'this_is_a_gpdb_database_id',
                 file_name: this.model.get('fileName'),
                 workfile_id: this.model.id,
                 session_id: "hex",

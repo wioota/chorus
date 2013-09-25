@@ -7,12 +7,16 @@ FactoryGirl.define do
     description "Using two datasources to #{Faker::Company.bs.downcase}."
     file_name Faker::Lorem.word
 
-    after(:create) do |workfile, evaluator|
-      gpdb = FactoryGirl.create(:gpdb_data_source, owner: workfile.owner)
-      database = FactoryGirl.create(:gpdb_database, data_source: gpdb)
-      hadoop = FactoryGirl.create(:hdfs_data_source, owner: workfile.owner)
-      workfile.workfile_execution_locations.create(execution_location: database)
-      workfile.workfile_execution_locations.create(execution_location: hadoop)
+    factory :work_flow_with_all_data_sources do
+      after(:create) do |workfile, evaluator|
+        gpdb = FactoryGirl.create(:gpdb_data_source, owner: workfile.owner)
+        oracle = FactoryGirl.create(:oracle_data_source, owner: workfile.owner)
+        database = FactoryGirl.create(:gpdb_database, data_source: gpdb)
+        hadoop = FactoryGirl.create(:hdfs_data_source, owner: workfile.owner)
+        workfile.workfile_execution_locations.create(execution_location: database)
+        workfile.workfile_execution_locations.create(execution_location: hadoop)
+        workfile.workfile_execution_locations.create(execution_location: oracle)
+      end
     end
   end
 

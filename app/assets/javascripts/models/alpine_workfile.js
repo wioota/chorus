@@ -39,11 +39,14 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
 
         var databases = [];
         var hadoops = [];
+        var oracles = [];
         _.each(executionLocations, function (location) {
             if(location.entityType === 'hdfs_data_source') {
                 hadoops.push(location.id);
-            } else {
+            } else if (location.entityType === 'gpdb_database') {
                 databases.push(location.id);
+            } else if (location.entityType === 'oracle_data_source') {
+                oracles.push(location.id);
             }
         });
 
@@ -55,6 +58,10 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
         if (databases.length > 0) {
             queryParams["database_id[]"] = databases;
             if (this.get("datasetIds")) queryParams["dataset_id[]"] = this.get("datasetIds");
+        }
+
+        if (oracles.length > 0) {
+            queryParams["oracle_data_source_id[]"] = oracles;
         }
 
         uri.addQuery(queryParams);

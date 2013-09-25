@@ -166,7 +166,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
         });
 
         it("shows all the selections on load", function () {
-            expect(this.dialog.$('.execution_location_picker').length).toEqual(2);
+            expect(this.dialog.$('.execution_location_picker').length).toEqual(this.model.get('executionLocations').length);
         });
     });
 

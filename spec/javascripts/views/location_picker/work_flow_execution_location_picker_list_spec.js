@@ -32,7 +32,7 @@ describe("chorus.views.WorkFlowExecutionLocationPickerList", function () {
         context("once the fetches complete", function () {
             beforeEach(function () {
                 this.server.completeFetchFor(this.view.pickers[0].dataSourceView.hdfsDataSources, [backboneFixtures.hdfsDataSource()]);
-                this.server.completeFetchFor(this.view.pickers[0].dataSourceView.gpdbDataSources, [backboneFixtures.gpdbDataSource()]);
+                this.server.completeFetchFor(this.view.pickers[0].dataSourceView.databaseDataSources, [backboneFixtures.gpdbDataSource()]);
 
                 this.view.pickers[0].dataSourceView.setSelection(backboneFixtures.gpdbDataSource());
                 this.view.$('select[name="data_source"]').children('option').eq(1).prop('selected', true);

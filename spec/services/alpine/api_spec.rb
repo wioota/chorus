@@ -8,6 +8,7 @@ describe Alpine::API do
   let(:mock_session_id) { 'fortytwo' }
   let(:database_ids) { work_flow.execution_locations.select { |source| source.is_a? GpdbDatabase }.map(&:id).map(&:to_s) }
   let(:hadoop_ids) { work_flow.execution_locations.select { |source| source.is_a? HdfsDataSource }.map(&:id).map(&:to_s) }
+  let(:oracle_ids) { work_flow.execution_locations.select { |source| source.is_a? OracleDataSource }.map(&:id).map(&:to_s) }
 
   subject { Alpine::API.new config: config, user: user }
 
@@ -181,6 +182,7 @@ describe Alpine::API do
       params['workfile_id'][0].should == work_flow.id.to_s
       params['database_id[]'].should =~ database_ids
       params['hdfs_data_source_id[]'].should =~ hadoop_ids
+      params['oracle_data_source_id[]'].should =~ oracle_ids
     end
 
     it 'raises exception if the request is not a 200' do
@@ -209,6 +211,7 @@ describe Alpine::API do
         params['job_task_id'][0].should == task.id.to_s
         params['database_id[]'].should =~ database_ids
         params['hdfs_data_source_id[]'].should =~ hadoop_ids
+        params['oracle_data_source_id[]'].should =~ oracle_ids
       end
     end
   end

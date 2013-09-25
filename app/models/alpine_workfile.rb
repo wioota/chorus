@@ -91,10 +91,14 @@ class AlpineWorkfile < Workfile
 
     params[:execution_locations].each do |location|
       source = case location[:entity_type]
-        when 'gpdb_database'    then GpdbDatabase.find location[:id]
-        when 'hdfs_data_source' then HdfsDataSource.find location[:id]
-        else #ignore
-      end
+                 when 'gpdb_database' then
+                   GpdbDatabase.find location[:id]
+                 when 'hdfs_data_source' then
+                   HdfsDataSource.find location[:id]
+                 when 'oracle_data_source' then
+                   OracleDataSource.find location[:id]
+                 else #nil
+               end
 
       workfile_execution_locations.build(:execution_location => source)
     end

@@ -111,7 +111,7 @@ FixtureBuilder.configure do |fbuilder|
     oracle_table = FactoryGirl.create(:oracle_table, name: 'oracle_table', schema: oracle_schema)
     FactoryGirl.create(:oracle_table, name: 'other_oracle_table', schema: oracle_schema)
     FactoryGirl.create(:oracle_view, name: 'oracle_view', schema: oracle_schema)
-
+ 
     hdfs_data_source = HdfsDataSource.create!({:name => "searchquery_hadoop", :description => "searchquery for the hadoop data source", :host => "hadoop.example.com", :port => "1111", :owner => admin, :hdfs_version => "Pivotal HD"}, :without_protection => true)
     fbuilder.name :hadoop, hdfs_data_source
     Events::HdfsDataSourceCreated.by(admin).add(:hdfs_data_source => hdfs_data_source)
@@ -300,9 +300,15 @@ FixtureBuilder.configure do |fbuilder|
                             :owner => owner,
                             :dataset_ids => HdfsDataset.limit(3).pluck(:id),
                            }, :without_protection => true)
-    hadoop_work_flow.workfile_execution_locations.create(execution_location: hdfs_data_source)
+    hadoop_work_flow.workfile_execution_locations.create!(execution_location: hdfs_data_source)
 
-    FactoryGirl.create(:work_flow, :file_name => 'multiple_data_source_workflow', :workspace => public_workspace, :owner => owner)
+    oracle_work_flow = AlpineWorkfile.create!({:file_name => 'alpine_oracle_flow',
+                                               :workspace => public_workspace,
+                                               :owner => owner,
+                                              }, :without_protection => true)
+    oracle_work_flow.workfile_execution_locations.create!(execution_location: oracle_data_source)
+
+    FactoryGirl.create(:work_flow_with_all_data_sources, :file_name => 'multiple_data_source_workflow', :workspace => public_workspace, :owner => owner)
     FactoryGirl.create(:work_flow, :file_name => 'multiple_dataset_workflow', :dataset_ids => [default_table.id, hadoop_dadoop.id], :workspace => public_workspace, :owner => owner)
 
     Events::WorkfileResult.by(owner).add(:workfile => work_flow, :result_id => "1", :workspace => work_flow.workspace)

@@ -104,10 +104,11 @@ module Alpine
       }
       params[:job_task_id] = options[:task].id if options[:task]
 
-      categorized_locations = work_flow.execution_locations.reduce({:hdfs_data_source_id => [], :database_id => []}) do |obj, source|
+      categorized_locations = work_flow.execution_locations.reduce({:hdfs_data_source_id => [], :database_id => [], :oracle_data_source_id => []}) do |obj, source|
         case source
           when HdfsDataSource then obj[:hdfs_data_source_id] << source.id
           when GpdbDatabase then obj[:database_id] << source.id
+          when OracleDataSource then obj[:oracle_data_source_id] << source.id
           else #ignore
         end
         obj

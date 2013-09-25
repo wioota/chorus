@@ -320,7 +320,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                 var hdfsDataSources = this.dialog.executionLocationPickerList.pickers[0].dataSourceView.hdfsDataSources;
                 this.server.completeFetchAllFor(hdfsDataSources, [this.hdfs]);
 
-                var dataSources = this.dialog.executionLocationPickerList.pickers[0].dataSourceView.gpdbDataSources;
+                var dataSources = this.dialog.executionLocationPickerList.pickers[0].dataSourceView.databaseDataSources;
                 this.server.completeFetchAllFor(dataSources, []);
             });
 

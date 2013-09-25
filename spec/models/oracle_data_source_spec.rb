@@ -28,6 +28,16 @@ describe OracleDataSource do
       data_source.destroy
       import.reload.success.should == false
     end
+
+    it "removes itself from the execution location field of any workfiles it owns" do
+      workfiles = data_source.workfile_execution_locations.all
+      workfiles.length.should > 0
+
+      expect {
+        data_source.destroy
+      }.to change { WorkfileExecutionLocation.where(execution_location_id: data_source.id, execution_location_type: data_source.class.base_class.name).count }.from(workfiles.length).to(0)
+    end
+
   end
 
   describe "owner_account" do
