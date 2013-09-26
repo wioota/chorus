@@ -39,9 +39,9 @@ class JobsController < ApplicationController
 
     job = workspace.jobs.find(params[:id])
 
-    if params[:job]['running_as_demanded']
+    if params[:job][:job_action] == 'run'
       job.enqueue
-    elsif params[:job]['kill']
+    elsif params[:job][:job_action] == 'kill'
       job.kill
     elsif params[:job]['task_id_order']
       job.reorder_tasks params[:job]['task_id_order'].map(&:to_i)

@@ -280,7 +280,7 @@ describe JobsController do
             id: job.id,
             workspace_id: workspace.id,
             job: {
-              running_as_demanded: 'true'
+              job_action: "run"
             }
         }
       end
@@ -296,7 +296,9 @@ describe JobsController do
         {
             id: job.id,
             workspace_id: workspace.id,
-            job: {kill: 'true'}
+            job: {
+              job_action: "kill"
+            }
         }
       end
 

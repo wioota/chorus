@@ -102,9 +102,9 @@ describe("chorus.models.Job", function () {
         });
 
 
-        it("passes the 'running_as_demanded' parameter", function () {
+        it("passes the 'job_action: run' parameter", function () {
             var params = this.server.lastUpdateFor(this.model).params();
-            expect(params['job[running_as_demanded]']).toEqual('true');
+            expect(params['job[job_action]']).toEqual('run');
         });
 
         it("does not toast without success", function () {
@@ -138,9 +138,9 @@ describe("chorus.models.Job", function () {
             expect(this.model.get('status')).toBe('stopping');
         });
 
-        it("passes the 'kill' parameter", function () {
+        it("passes the 'job_action: kill' parameter", function () {
             var params = this.server.lastUpdateFor(this.model).params();
-            expect(params['job[kill]']).toEqual('true');
+            expect(params['job[job_action]']).toEqual('kill');
         });
 
         it("does not toast without success", function () {
@@ -157,5 +157,4 @@ describe("chorus.models.Job", function () {
             });
         });
     });
-
 });

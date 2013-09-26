@@ -236,8 +236,8 @@ describe WorkfilesController do
     context "creating a new sql file" do
       let(:params) do
         {
-            :workspace_id => workspace.to_param,
-            :workfile => {:file_name => "new_file.sql"}
+          :workspace_id => workspace.to_param,
+          :workfile => {:file_name => "new_file.sql"}
         }
       end
 
@@ -333,17 +333,17 @@ describe WorkfilesController do
         let(:database) { gpdb_databases(:default) }
         let(:params) do
           {
-              :workspace_id => workspace.to_param,
-              :workfile => {
-                  :file_name => 'something',
-                  :entity_subtype => 'alpine',
-                  :execution_locations => {
-                    "0" => {
-                        :id => database.to_param,
-                        :entity_type => 'gpdb_database'
-                    }
-                  }
+            :workspace_id => workspace.to_param,
+            :workfile => {
+              :file_name => 'something',
+              :entity_subtype => 'alpine',
+              :execution_locations => {
+                "0" => {
+                  :id => database.to_param,
+                  :entity_type => 'gpdb_database'
+                }
               }
+            }
           }
         end
 
@@ -368,10 +368,10 @@ describe WorkfilesController do
               :entity_subtype => 'alpine',
               :file_name => 'something',
               :execution_locations => {
-                  "0" => {
-                      :id => hdfs_data_source.id,
-                      :entity_type => 'hdfs_data_source'
-                  }
+                "0" => {
+                  :id => hdfs_data_source.id,
+                  :entity_type => 'hdfs_data_source'
+                }
               }
             }
           }
@@ -393,17 +393,17 @@ describe WorkfilesController do
         let(:oracle_data_source) { data_sources(:oracle) }
         let(:params) do
           {
-              :workspace_id => workspace.to_param,
-              :workfile => {
-                  :entity_subtype => 'alpine',
-                  :file_name => 'something',
-                  :execution_locations => {
-                      "0" => {
-                          :id => oracle_data_source.id,
-                          :entity_type => 'oracle_data_source'
-                      }
-                  }
+            :workspace_id => workspace.to_param,
+            :workfile => {
+              :entity_subtype => 'alpine',
+              :file_name => 'something',
+              :execution_locations => {
+                "0" => {
+                  :id => oracle_data_source.id,
+                  :entity_type => 'oracle_data_source'
+                }
               }
+            }
           }
         end
 
@@ -422,17 +422,17 @@ describe WorkfilesController do
       context "and an invalid data source has been chosen" do
         let(:params) do
           {
-              :workspace_id => workspace.to_param,
-              :workfile => {
-                  :entity_subtype => 'alpine',
-                  :file_name => 'something',
-                  :execution_locations => {
-                      "0" => {
-                          :id => 12345,
-                          :entity_type => 'sandwich'
-                      }
-                  }
+            :workspace_id => workspace.to_param,
+            :workfile => {
+              :entity_subtype => 'alpine',
+              :file_name => 'something',
+              :execution_locations => {
+                "0" => {
+                  :id => 12345,
+                  :entity_type => 'sandwich'
+                }
               }
+            }
           }
         end
 
@@ -476,15 +476,15 @@ describe WorkfilesController do
 
         let(:params) do
           {
-              :workfile => {
-                  :workspace => {
-                      :id => workspace_id
-                  },
-                  :entity_subtype => "alpine",
-                  :file_name => 'analytical-derivations',
-                  :dataset_ids => dataset_ids
+            :workfile => {
+              :workspace => {
+                :id => workspace_id
               },
-              :workspace_id => workspace_id
+              :entity_subtype => "alpine",
+              :file_name => 'analytical-derivations',
+              :dataset_ids => dataset_ids
+            },
+            :workspace_id => workspace_id
           }
         end
 
@@ -506,15 +506,15 @@ describe WorkfilesController do
         let(:oracle_data_source) { dataset.data_source }
         let(:params) do
           {
-              :workfile => {
-                  :workspace => {
-                      :id => workspace.id
-                  },
-                  :entity_subtype => "alpine",
-                  :file_name => 'reticulated-splines',
-                  :dataset_ids => dataset_ids
+            :workfile => {
+              :workspace => {
+                :id => workspace.id
               },
-              :workspace_id => workspace.id
+              :entity_subtype => "alpine",
+              :file_name => 'reticulated-splines',
+              :dataset_ids => dataset_ids
+            },
+            :workspace_id => workspace.id
           }
         end
 
@@ -541,10 +541,10 @@ describe WorkfilesController do
     let(:schema) { schemas(:public) }
     let(:options) do
       {
-          :id => public_workfile.to_param,
-          :workfile => {
-              :execution_schema => { :id => schema.to_param }
-          }
+        :id => public_workfile.to_param,
+        :workfile => {
+          :execution_schema => {:id => schema.to_param}
+        }
       }
     end
 
@@ -565,10 +565,10 @@ describe WorkfilesController do
       let(:workfile) { public_workfile }
       let(:options) do
         {
-            :id => workfile.to_param,
-            :workfile => {
-                :file_name => new_name
-            }
+          :id => workfile.to_param,
+          :workfile => {
+            :file_name => new_name
+          }
         }
       end
 
@@ -613,7 +613,7 @@ describe WorkfilesController do
     context "when no execution schema has been set" do
       let(:options) do
         {
-            :id => public_workfile.to_param
+          :id => public_workfile.to_param
         }
       end
 
@@ -628,8 +628,8 @@ describe WorkfilesController do
       let(:schema) { schemas(:other_schema) }
       let(:options) do
         {
-            :id => private_workfile.to_param,
-            :execution_schema_id => schema.to_param
+          :id => private_workfile.to_param,
+          :execution_schema_id => schema.to_param
         }
       end
 
@@ -644,10 +644,10 @@ describe WorkfilesController do
       let(:workfile) { workfiles(:'alpine_flow') }
       let(:params) do
         {
-            :entity_subtype => 'alpine',
-            :file_name => 'something',
-            :database_id => gpdb_databases(:alternate).to_param,
-            :id => workfile.to_param
+          :entity_subtype => 'alpine',
+          :file_name => 'something',
+          :database_id => gpdb_databases(:alternate).to_param,
+          :id => workfile.to_param
         }
       end
 
@@ -667,8 +667,8 @@ describe WorkfilesController do
               :file_name => 'something',
               :execution_locations => {
                 "0" => {
-                    :entity_type => 'gpdb_database',
-                    :id => database.id
+                  :entity_type => 'gpdb_database',
+                  :id => database.id
                 }
               }
             }
@@ -695,10 +695,10 @@ describe WorkfilesController do
               :entity_subtype => 'alpine',
               :file_name => 'something',
               :execution_locations => {
-                  "0" => {
-                      :entity_type => 'hdfs_data_source',
-                      :id => hdfs_data_source.id
-                  }
+                "0" => {
+                  :entity_type => 'hdfs_data_source',
+                  :id => hdfs_data_source.id
+                }
               }
             }
           }
@@ -720,7 +720,7 @@ describe WorkfilesController do
           {
             :id => workfile.to_param,
             :workfile => {
-              :run_now => 'true'
+              :action => 'run'
             }
           }
         end
@@ -734,7 +734,12 @@ describe WorkfilesController do
 
       context "when directed to 'stop now'" do
         let(:params) do
-          {:id => workfile.to_param, :workfile => {:stop_now => 'true'}}
+          {
+            :id => workfile.to_param,
+            :workfile => {
+              :action => 'stop'
+            }
+          }
         end
 
         it 'stops the workflow' do

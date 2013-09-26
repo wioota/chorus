@@ -78,7 +78,7 @@ chorus.models.Job = chorus.models.Base.extend({
         function saveFailed(){ chorus.toast('job.not_running_toast', {jobName: name, toastOpts: {type: 'error'}}); }
 
         this.save(
-            {running_as_demanded: true},
+            {job_action: "run"},
             {success: saveSucceeded, error: saveFailed}
         );
     },
@@ -89,7 +89,7 @@ chorus.models.Job = chorus.models.Base.extend({
         function saveFailed(){ chorus.toast('job.not_stopping_toast', {jobName: name, toastOpts: {type: 'error'}}); }
 
         this.save(
-            {kill: true, status: 'stopping'},
+            {job_action: "kill", status: 'stopping'},
             {success: saveSucceeded, error: saveFailed}
         );
     },

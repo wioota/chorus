@@ -38,9 +38,9 @@ class WorkfilesController < ApplicationController
       params[:workfile][:execution_schema] = schema
     end
 
-    if params[:workfile][:run_now]
+    if params[:workfile][:action] == "run"
       workfile.run_now(current_user)
-    elsif params[:workfile][:stop_now]
+    elsif params[:workfile][:action] == "stop"
       workfile.stop_now(current_user)
     else
       workfile.assign_attributes(params[:workfile])
