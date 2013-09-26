@@ -328,6 +328,24 @@ describe WorkspaceDatasetsController do
         delete :destroy, :id => source_table.to_param, :workspace_id => workspace.to_param
       end
     end
+
+    describe "destroy_multiple" do
+      it "deletes multiple associations" do
+        delete :destroy_multiple, :workspace_id => workspace.to_param, :dataset_ids => [other_table.to_param, source_table.to_param]
+        response.code.should == "200"
+
+        workspace.source_datasets.should_not include(other_table)
+        workspace.source_datasets.should_not include(source_table)
+      end
+
+      it "preserves existing associations" do
+        delete :destroy_multiple, :workspace_id => workspace.to_param, :dataset_ids => [other_table.to_param]
+        response.code.should == "200"
+
+        workspace.source_datasets.should_not include(other_table)
+        workspace.source_datasets.should include(source_table)
+      end
+    end
   end
 
   context "with real greenplum", :greenplum_integration do

@@ -48,10 +48,17 @@ class WorkspaceDatasetsController < ApplicationController
     render json: json, status: :unprocessable_entity
   end
 
+  def destroy_multiple
+    authorize! :can_edit_sub_objects, workspace
+    associations = AssociatedDataset.where(:workspace_id => params[:workspace_id], :dataset_id => params[:dataset_ids])
+    associations.destroy_all
+    render :json => {}
+  end
+
   def destroy
     authorize! :can_edit_sub_objects, workspace
-    dataset = AssociatedDataset.find_by_dataset_id_and_workspace_id(params[:id], params[:workspace_id])
-    dataset.destroy
+    associations = AssociatedDataset.where(:workspace_id => params[:workspace_id], :dataset_id => [params[:id]])
+    associations.destroy_all
     render :json => {}
   end
 

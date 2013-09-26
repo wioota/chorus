@@ -14,6 +14,11 @@ describe("chorus.models.BulkSaver", function() {
             expect(this.server.lastCreate().url).toHaveUrlPath("/the/collections/url");
         });
 
+        it("sends additional data", function() {
+            saver.save({fooBarKey: 'foobarvalue'});
+            expect(this.server.lastCreate().url).toHaveUrlPath("/the/collections/url");
+        });
+
         it("triggers saved on the collection", function() {
             spyOnEvent(collection, "saved");
             saver.save();

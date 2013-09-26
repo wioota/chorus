@@ -147,9 +147,11 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
     context("after the workspace and collection have loaded", function() {
         beforeEach(function() {
+            this.sandboxTable = backboneFixtures.workspaceDataset.datasetTable();
+            this.gpdbTable = backboneFixtures.workspaceDataset.sourceTable();
             this.datasets = [
-                backboneFixtures.workspaceDataset.datasetTable(),
-                backboneFixtures.workspaceDataset.datasetTable()
+                this.sandboxTable,
+                this.gpdbTable
             ];
             this.server.lastFetchFor(this.page.collection).succeed(this.datasets);
             this.account = this.workspace.sandbox().dataSource().accountForCurrentUser();
@@ -253,6 +255,35 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                     });
 
                     itBehavesLike.aDialogLauncher(".multiple_selection a.edit_tags", chorus.dialogs.EditTags);
+                });
+
+                context("when a greenplum dataset is selected", function() {
+                    beforeEach(function() {
+                        var selections = this.page.collection.clone();
+                        selections.reset([this.gpdbTable]);
+                        chorus.PageEvents.trigger("dataset:checked", selections);
+                    });
+
+                    it("displays the disassociate workspace link", function () {
+                        expect(this.page.$(".multiple_selection a.disassociate_dataset")).toContainTranslation("actions.delete_association");
+                    });
+
+                    context("when the disassociate link is clicked", function () {
+                        itBehavesLike.aDialogLauncher(".multiple_selection a.disassociate_dataset", chorus.alerts.DatasetDisassociateMultiple);
+                    });
+                });
+
+                context("a group of datasets are selected that do not include a greenplum dataset", function() {
+                    beforeEach(function() {
+                        var selections = this.page.collection.clone();
+                        selections.reset([this.sandboxTable]);
+                        chorus.PageEvents.trigger("dataset:checked", selections);
+                    });
+
+                    it("displays the disassociate workspace link", function () {
+                        expect(this.page.$(".multiple_selection a.disassociate_dataset")).not.toExist();
+                    });
+
                 });
             });
         });
@@ -443,20 +474,6 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
             it("has no buttons", function() {
                 expect(this.page.$("button")).not.toExist();
-            });
-        });
-
-        context("after the workspace members have loaded", function () {
-            beforeEach(function () {
-                spyOn(this.page.multiSelectSidebarMenu, 'setActions');
-                this.server.completeFetchFor(this.workspace);
-            });
-            it('resets the multi-selection sidebar actions', function(){
-                var members = this.page.workspace.members();
-                this.server.completeFetchFor(members, {});
-                expect(this.page.multiSelectSidebarMenu.setActions).toHaveBeenCalledWith([
-                    '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
-                ]);
             });
         });
     });

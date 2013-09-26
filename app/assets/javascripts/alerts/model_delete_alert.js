@@ -31,7 +31,9 @@ chorus.alerts.ModelDelete = chorus.alerts.Confirm.extend({
     modelDeleted: function() {
         this.closeModal();
         chorus.toast(this.deleteMessage, this.deleteMessageParams());
-        chorus.PageEvents.trigger(this.model.entityType + ":deleted", this.model);
+        if(this.model.entityType) {
+            chorus.PageEvents.trigger(this.model.entityType + ":deleted", this.model);
+        }
         if (this.redirectUrl) {
             chorus.router.navigate(this.redirectUrl);
         }

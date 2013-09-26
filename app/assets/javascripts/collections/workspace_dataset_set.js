@@ -17,6 +17,11 @@ chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend
         new chorus.models.BulkSaver({collection: this}).save({datasetIds: ids});
     },
 
+    destroy: function() {
+        var ids = _.pluck(this.models, 'id');
+        new chorus.models.BulkDestroyer({collection: this}).destroy({datasetIds: ids});
+    },
+
     urlParams: function(options) {
         var params = {
             namePattern: this.attributes.namePattern,

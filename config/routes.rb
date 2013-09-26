@@ -87,6 +87,9 @@ Chorus::Application.routes.draw do
     resources :imports, :only => [:create], :controller => 'workspaces/imports'
 
     resources :datasets, :only => [:index, :create, :show, :destroy], :controller => 'workspace_datasets' do
+      collection do
+        delete :index, action: :destroy_multiple
+      end
       resources :imports, :only => [:index], :controller => 'dataset_imports'
       resources :tableau_workbooks, :only => :create
     end

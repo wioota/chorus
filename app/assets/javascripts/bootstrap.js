@@ -15,7 +15,7 @@
         messageDefaults: {
             hideAfter: 3,
             showCloseButton: true,
-            hideOnNavigate: true
+            hideOnNavigate: false
         }
     };
 

@@ -104,7 +104,9 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             this.account.fetchIfNotLoaded();
         }
         this.mainContent.contentDetails.render();
-        this.onceLoaded(this.workspace.members(), this.setSidebarActions);
+        this.onceLoaded(this.workspace.members(), _.bind(function () {
+            this.multiSelectSidebarMenu.render();
+        }, this));
     },
 
     checkAccount: function() {
@@ -128,6 +130,11 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         if (chorus.models.Config.instance().get("workflowConfigured") && this.workspace.currentUserCanCreateWorkFlows()) {
             actions.push('<a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a>');
         }
+
+        var selectedModels = this.multiSelectSidebarMenu.selectedModels;
+        if (selectedModels.all(function(model) { return model.get("entitySubtype") === "SOURCE_TABLE"; })) {
+            actions.push('<a class="disassociate_dataset">{{t "actions.delete_association"}}</a>');
+        }
         return actions;
     },
 
@@ -138,6 +145,10 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             }, this),
             'click .new_work_flow': _.bind(function () {
                 new chorus.dialogs.WorkFlowNewForDatasetList({workspace: this.workspace, collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+            }, this),
+            'click .disassociate_dataset': _.bind(function () {
+                // Send the delete confirm dialog a WorkspaceDatasetSet that is a list of selected workspaces (this.multiSelectSidebarMenu.selectedModels)
+                new chorus.alerts.DatasetDisassociateMultiple({pageModel: this.multiSelectSidebarMenu.selectedModels}).launchModal();
             }, this)
         };
     },
@@ -145,12 +156,8 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
     buildSidebar: function () {
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "dataset:checked",
-            actions: this.sidebarMultiselectActions(),
+            actions: _.bind(this.sidebarMultiselectActions, this),
             actionEvents: this.sidebarMultiselectActionEvents()
         });
-    },
-
-    setSidebarActions: function () {
-        this.multiSelectSidebarMenu.setActions(this.sidebarMultiselectActions());
     }
 });
