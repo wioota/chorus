@@ -334,12 +334,10 @@ describe("chorus.pages.Base", function() {
     describe("help", function() {
         beforeEach(function() {
             this.page = new chorus.pages.Base();
-            this.page.render();
         });
 
-        it("has the correct link", function() {
-            expect(this.page.$("#help a")).toHaveAttr('href', 'http://www.greenplum.com/products/chorus/user-help');
-            expect(this.page.$("#help a")).toHaveAttr('target', '_blank');
+        it("renders the help view", function() {
+            expect(this.page.helpLink).toBeA(chorus.views.HelpLink);
         });
     });
 

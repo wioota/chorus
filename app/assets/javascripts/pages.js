@@ -59,6 +59,7 @@ chorus.pages.Base = chorus.pages.Bare.extend({
     subviews: {
         "#header": "header",
         "#main_content": "mainContent",
+        "#help": "helpLink",
         "#breadcrumbs": "breadcrumbs",
         "#sidebar .multiple_selection": "multiSelectSidebarMenu",
         "#sidebar .sidebar_content.primary": "sidebar",
@@ -85,6 +86,7 @@ chorus.pages.Base = chorus.pages.Bare.extend({
 
     //Instantiate and attached the header and breadcrumb views for the page.
     _initializeHeaderAndBreadcrumbs: function() {
+        this.helpLink = new chorus.views.HelpLink();
         this.header = this.header || new chorus.views.Header();
         if (this.workspaceId) {
             this.header.workspaceId = this.workspaceId;
