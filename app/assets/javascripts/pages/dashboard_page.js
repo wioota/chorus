@@ -90,7 +90,9 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
 
     postRender:function () {
         this._super('postRender');
-        this.$(".pill").insertAfter(this.$("#breadcrumbs"));
+        this.$("#help").insertAfter(this.$("#breadcrumbs"));
+        this.$("#user_count").insertAfter(this.$("#breadcrumbs"));
         this.$("#sidebar_wrapper").remove();
+        this.showUserCount();
     }
 });
