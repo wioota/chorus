@@ -1,14 +1,14 @@
 .project_list {
     .dashboard_project_card {
-        @media (max-width: 1309px) {
+        @media (max-width: 1430px) {
             width: 47%;
         }
 
-        @media (min-width: 1310px) and (max-width: 1641px) {
+        @media (min-width: 1431px) and (max-width: 1950px) {
             width: 31%;
         }
 
-        @media (min-width: 1642px) {
+        @media (min-width: 1951px) {
             width: 23%;
         }
 
