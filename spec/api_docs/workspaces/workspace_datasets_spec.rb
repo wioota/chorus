@@ -75,6 +75,21 @@ resource "Workspaces" do
     end
   end
 
+  delete "/workspaces/:workspace_id/datasets" do
+    parameter :workspace_id, "Id of the workspace from which the datasets will be disassociated from"
+    parameter :'dataset_ids[]', "Dataset Id to disassociate from the workspace, can be specified multiple times"
+
+    required_parameters :workspace_id, :'dataset_ids[]'
+
+    let(:source_table) { datasets(:source_table) }
+    let(:other_table) { datasets(:other_table) }
+
+    example "Disassociate a list of non-sandbox datasets with the workspace" do
+      do_request(:dataset_ids => [source_table.to_param, other_table.to_param])
+      status.should == 200
+    end
+  end
+
   delete "/workspaces/:workspace_id/datasets/:id" do
     parameter :workspace_id, "Id of a workspace"
     parameter :id, "Id of a dataset to be disassociated with the workspace"
