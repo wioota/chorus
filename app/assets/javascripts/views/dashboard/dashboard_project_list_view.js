@@ -1,7 +1,7 @@
 chorus.views.DashboardProjectList = chorus.views.Base.extend({
     constructorName: "DashboardProjectListView",
     templateName: "dashboard/project_list",
-    noFilter: true,
+    noFilter: false,
 
     setup: function () {
         this.projectCards = [];

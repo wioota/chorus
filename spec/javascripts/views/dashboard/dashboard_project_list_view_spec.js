@@ -32,6 +32,7 @@ describe("chorus.views.DashboardProjectList", function() {
 
     describe("#render", function() {
         beforeEach(function() {
+            this.view.noFilter = true;
             this.view.render();
         });
 

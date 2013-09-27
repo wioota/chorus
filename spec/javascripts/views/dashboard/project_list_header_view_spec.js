@@ -11,10 +11,19 @@ describe("chorus.views.ProjectListHeader", function(){
             expect(this.view.$(".menus .all")).toContainTranslation('workspace.project.filter.all');
         });
 
+        it("defaults to my projects", function () {
+            expect(this.view.$(".menus .members_only")).toHaveClass('active');
+            expect(this.view.$(".menus .all")).not.toHaveClass('active');
+        });
+
         describe("clicking on 'My Projects'", function() {
             beforeEach(function() {
                 spyOn(this.collection, 'trigger');
                 this.view.$(".menus .members_only").click();
+            });
+
+            it("sets the title to 'My Projects'", function () {
+                expect(this.view.$(".title")).toContainTranslation('header.my_projects');
             });
 
             it("triggers fitler on the collection", function() {
@@ -31,6 +40,10 @@ describe("chorus.views.ProjectListHeader", function(){
             beforeEach(function() {
                 spyOn(this.collection, 'trigger');
                 this.view.$(".menus .all").click();
+            });
+
+            it("sets the title to 'All Projects'", function () {
+                expect(this.view.$(".title")).toContainTranslation('header.all_projects');
             });
 
             it("triggers fitler on the collection", function() {

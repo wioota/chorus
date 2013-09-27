@@ -110,7 +110,7 @@ describe("chorus.views.Dashboard", function(){
 
         describe("the project list", function() {
             it("renders the project list with the right title", function() {
-                expect(this.view.$(".project_list .content_header h1").text()).toMatchTranslation("header.current_projects");
+                expect(this.view.$(".project_list .content_header h1").text()).toMatchTranslation("header.my_projects");
             });
 
             it("has a ProjectListHeader view", function () {
