@@ -509,14 +509,6 @@
         _.delay.andCallThrough();
     };
 
-    window.stubHotkeys = function() {
-        spyOn(chorus.views.Bare.prototype, "bindHotkeys");
-    };
-
-    window.unstubHotkeys = function() {
-        chorus.views.Bare.prototype.bindHotkeys = chorus.views.Bare.prototype.bindHotkeys.originalValue;
-    };
-
     window.qtipElements = {};
     window.stubQtip = function(selector) {
         selector || (selector = "*");

@@ -92,8 +92,6 @@
         "stubView": false,
         "stubDelay": false,
         "unstubDelay": false,
-        "stubHotkeys": false,
-        "unstubHotkeys": false,
         "qtipElements": false,
         "stubQtip": false,
         "stubSelectMenu": false,
