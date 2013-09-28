@@ -173,10 +173,6 @@ describe("chorus global", function() {
     });
 
     describe("#toast", function() {
-        beforeEach(function() {
-            spyOn(Messenger(), 'post');
-        });
-
         it("accepts a translation string", function() {
             chorus.toast("test.mouse");
             expect(Messenger().post).toHaveBeenCalledWith({message: t("test.mouse")});

@@ -98,6 +98,7 @@
             delete chorus.page;
             chorus.models.Config.instance().clear();
             window.qtipElements = {};
+            window.stubToasts();
 
             clearRenderedDOM();
 
@@ -455,6 +456,10 @@
             options = options.attributes;
         }
         target.session = backboneFixtures.session({user: options});
+    };
+
+    window.stubToasts = function () {
+        spyOn(Messenger(), 'post');
     };
 
     window.stubView = function(html, options) {
