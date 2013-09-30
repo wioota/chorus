@@ -17,9 +17,7 @@ module CommonDataSourceBehavior
     update_state_and_version
 
     touch(:last_checked_at)
-    if online?
-      touch(:last_online_at)
-    end
+    touch(:last_online_at) if online?
     save!
   end
 

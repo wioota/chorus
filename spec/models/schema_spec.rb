@@ -196,9 +196,8 @@ describe Schema do
       end
 
       it "does not update stale_at time" do
-        Timecop.freeze(1.year.ago) do
-          dataset.mark_stale!
-        end
+        Timecop.freeze(1.year.ago) { dataset.mark_stale! }
+
         schema.refresh_datasets(account, :mark_stale => true)
 
         dataset.reload.stale_at.should be_within(5.seconds).of(1.year.ago)

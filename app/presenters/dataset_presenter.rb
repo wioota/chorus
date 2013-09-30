@@ -10,12 +10,12 @@ class DatasetPresenter < Presenter
         :object_name => model.name,
         :schema => schema_hash,
         :entity_type => model.entity_type_name,
-        :entity_subtype => subtype
+        :entity_subtype => subtype,
+        :stale => model.stale?
     }.merge(associated_workspaces_hash)
   end
 
   def complete_hash
-    recent_comments = Array.wrap(recent_comment)
     {
         :recent_comments => present(recent_comments, :as_comment => true),
         :comment_count => recent_comments.empty? ? 0 : model.comments.count + model.notes.count,
@@ -33,8 +33,8 @@ class DatasetPresenter < Presenter
 
   private
 
-  def recent_comment
-    [model.most_recent_notes.last, model.most_recent_comments.last].compact.sort_by(&:created_at).last
+  def recent_comments
+    Array.wrap [model.most_recent_notes.last, model.most_recent_comments.last].compact.sort_by(&:created_at).last
   end
 
   def tags_hash

@@ -89,8 +89,6 @@ class GpdbDatabase < ActiveRecord::Base
   private
 
   def mark_schemas_as_stale
-    if stale? && stale_at_changed?
-      schemas.find_each(&:mark_stale!)
-    end
+    schemas.find_each(&:mark_stale!) if stale? && stale_at_changed?
   end
 end

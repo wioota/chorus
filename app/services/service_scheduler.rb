@@ -26,9 +26,7 @@ class ServiceScheduler
       QC.enqueue_if_not_queued("Session.remove_expired_sessions")
     end
 
-    every(1.minute, 'JobBoss.run') do
-      JobBoss.run
-    end
+    every(1.minute, 'JobBoss.run') { JobBoss.run }
 
   end
 

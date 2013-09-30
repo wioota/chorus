@@ -168,7 +168,7 @@ class Workspace < ActiveRecord::Base
     unlimited_options = options.dup
     unlimited_options.delete(:limit)
     with_filtered_datasets(user, unlimited_options) do |datasets, new_options, account, skip_sandbox|
-      count = datasets.map(&:count).reduce(0, :+)
+      count = datasets.map(&:count).reduce(&:+)
       begin
         count += sandbox.dataset_count(account, new_options) unless skip_sandbox
       rescue DataSourceConnection::InvalidCredentials

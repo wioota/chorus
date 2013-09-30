@@ -107,9 +107,7 @@ class Schema < ActiveRecord::Base
       #You might want to use a datasets.reject here.  Don't.
       #This will instantiate all the datasets at once and may use more memory than your JVM has available
       datasets.not_stale.find_each do |dataset|
-        unless dataset.is_a?(ChorusView) || found_datasets.include?(dataset.id)
-          dataset.mark_stale!
-        end
+        dataset.mark_stale! unless dataset.is_a?(ChorusView) || found_datasets.include?(dataset.id)
       end
     end
 
