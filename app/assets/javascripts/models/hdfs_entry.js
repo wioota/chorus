@@ -50,5 +50,13 @@ chorus.models.HdfsEntry = chorus.models.Base.extend({
     iconUrl: function() {
         var name = this.get("name") || "";
         return chorus.urlHelpers.fileIconUrl(_.last(name.split(".")));
+    },
+
+    statistics: function () {
+        if (!this._statistics) {
+            this._statistics = new chorus.models.HdfsEntryStatistics({entryId: this.id, hdfsDataSourceId: this.get("hdfsDataSource").id});
+        }
+
+        return this._statistics;
     }
 });

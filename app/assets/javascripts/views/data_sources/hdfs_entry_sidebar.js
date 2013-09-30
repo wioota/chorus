@@ -17,7 +17,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     setup: function() {
         this.subscribePageEvent("hdfs_entry:selected", this.setEntry);
         this.subscribePageEvent("csv_import:started", this.refreshActivities);
-        this.tabs = new chorus.views.TabControl(["activity"]);
+        this.tabs = new chorus.views.TabControl(["activity", "statistics"]);
     },
 
     refreshActivities: function() {
@@ -39,27 +39,13 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         this.resource && this.stopListening(this.resource, "unprocessableEntity");
         this.resource = entry;
         if (entry) {
-            entry.entityId = this.resource.id;
-
-            if (this.tabs.activity ) {
-                delete this.tabs.activity ;
-            }
-
             if (!entry.get("isDir")) {
-                var activities = entry.activities();
-                activities.fetch();
-
-                this.listenTo(activities, "changed", this.render);
-                this.listenTo(activities, "reset", this.render);
-
-                this.tabs.activity = new chorus.views.ActivityList({
-                    collection: activities,
-                    additionalClass: "sidebar",
-                    type: t("hdfs." + (entry.get("isDir") ? "directory" : "file"))
-                });
+                this.createActivitiesTab(entry);
+                this.createStatisticsTab(entry);
             }
         } else {
             delete this.tabs.activity;
+            delete this.tabs.statistics;
         }
 
         this.listenTo(this.resource, "unprocessableEntity", function() {
@@ -68,6 +54,32 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         });
 
         this.render();
+    },
+
+    createStatisticsTab: function (entry) {
+        this.tabs.statistics = new chorus.views.HdfsEntryStatistics({model: entry});
+    },
+
+    createActivitiesTab: function (entry) {
+        entry.entityId = this.resource.id;
+
+        if (this.tabs.activity ) {
+            delete this.tabs.activity ;
+        }
+
+        if (!entry.get("isDir")) {
+            var activities = entry.activities();
+            activities.fetch();
+
+            this.listenTo(activities, "changed", this.render);
+            this.listenTo(activities, "reset", this.render);
+
+            this.tabs.activity = new chorus.views.ActivityList({
+                collection: activities,
+                additionalClass: "sidebar",
+                type: t("hdfs." + (entry.get("isDir") ? "directory" : "file"))
+            });
+        }
     },
 
     additionalContext: function() {

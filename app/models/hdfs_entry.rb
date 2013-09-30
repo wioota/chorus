@@ -103,6 +103,16 @@ class HdfsEntry < ActiveRecord::Base
     HdfsEntry.list(path.chomp('/') + '/', hdfs_data_source)
   end
 
+  def self.statistics(path, hdfs_data_source)
+    query_service = Hdfs::QueryService.for_data_source(hdfs_data_source)
+    stats = query_service.details(path)
+    HdfsEntryStatistics.new stats
+  end
+
+  def statistics
+    HdfsEntry.statistics(path.chomp('/'), hdfs_data_source)
+  end
+
   def contents
     hdfs_query = Hdfs::QueryService.for_data_source(hdfs_data_source)
     hdfs_query.show(path)

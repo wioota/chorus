@@ -58,6 +58,12 @@ module Hdfs
       end
     end
 
+    def details(path)
+      stats = JavaHdfs.new(@host, @port, @username, @version, @high_availability, @connection_parameters).details(path)
+      raise FileNotFoundError, "File not found on HDFS: #{path}" unless stats
+      stats
+    end
+
     def show(path)
       contents = JavaHdfs.new(@host, @port, @username, @version, @high_availability, @connection_parameters).content(path, PREVIEW_LINE_COUNT)
       raise FileNotFoundError, "File not found on HDFS: #{path}" unless contents

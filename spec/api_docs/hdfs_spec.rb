@@ -18,6 +18,7 @@ resource "Hdfs" do
     stub(HdfsEntry).list('/', data_source) { [dir_entry, file_entry] }
     stub(HdfsEntry).list('/files/', data_source) { [file_entry] }
     stub(HdfsEntry).list('/test.txt', data_source) { [file_entry] }
+    stub(HdfsEntry).statistics { HdfsEntryStatistics.new({}) }
   end
 
   post "/hdfs_data_sources" do
@@ -103,6 +104,17 @@ resource "Hdfs" do
     let(:id) { dir_entry.id }
 
     example_request "Get a list of files for a subdirectory of a specific HDFS data source"  do
+      status.should == 200
+    end
+  end
+
+  get "/hdfs_data_sources/:hdfs_data_source_id/files/:file_id/statistics" do
+    parameter :hdfs_data_source_id, "HDFS data source id"
+    parameter :file_id, "HDFS file_id"
+
+    let(:file_id) { file_entry.id }
+
+    example_request "Get file details for an HDFS file"  do
       status.should == 200
     end
   end

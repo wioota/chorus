@@ -143,6 +143,8 @@ window.BackboneFixtureDefinitions = {
 
     hdfsDir: {  unique: ["id"], model: "HdfsEntry" },
 
+    hdfsEntryStatistics: {},
+
     histogramTask: {},
 
     image: {},

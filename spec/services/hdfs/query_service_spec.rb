@@ -106,6 +106,29 @@ describe Hdfs::QueryService, :hdfs_integration do
     end
   end
 
+  describe "#details" do
+    let(:service) { Hdfs::QueryService.new(hdfs_params["host"], hdfs_params["port"], hdfs_params["username"], "0.20.1gp", false, []) }
+
+    it "fetches details" do
+      hdfs_entry_details = service.details("/")
+      hdfs_entry_details.owner.should_not be_nil
+    end
+
+    context "non existing file" do
+      it "should return an error" do
+        expect { service.details("/non_existing/no_where") }.to raise_error(Hdfs::FileNotFoundError)
+      end
+    end
+
+    context "connection is invalid" do
+      let(:service) { Hdfs::QueryService.new("bagbage", "8020", "pivotal", "0.20.1gp", false, []) }
+
+      it "raises an exception" do
+        expect { service.details("/") }.to raise_error(Hdfs::FileNotFoundError)
+      end
+    end
+  end
+
   describe "#show" do
     let(:service) { Hdfs::QueryService.new(hdfs_params["host"], hdfs_params["port"], hdfs_params["username"], "0.20.1gp", false, []) }
     before do

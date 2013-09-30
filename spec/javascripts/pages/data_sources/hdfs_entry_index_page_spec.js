@@ -94,7 +94,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
 
         describe("when an entry is selected", function() {
             beforeEach(function() {
-                this.entry = new chorus.models.HdfsEntry({});
+                this.entry = new backboneFixtures.hdfsFile();
 
                 expect(this.page.model).toEqual(this.page.collection.at(0));
                 chorus.PageEvents.trigger("hdfs_entry:selected", this.entry);

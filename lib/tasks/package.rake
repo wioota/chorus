@@ -22,7 +22,7 @@ namespace :package do
   end
 
   task :prepare_hdfs_jar do
-    system("git submodule update --init")
+    #system("git submodule update --init")
     system("cd chorushdfs; ./install_jars.sh; mvn -Dmaven.test.skip=true clean package")
     FileUtils.rm("vendor/hadoop/hdfs-query-service-*.jar", :force => true)
     FileUtils.mv("chorushdfs/hdfs-query-service/target/hdfs-query-service-0.0.8.jar", "vendor/hadoop", :force => true)

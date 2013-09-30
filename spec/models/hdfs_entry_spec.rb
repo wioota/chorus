@@ -403,6 +403,34 @@ describe HdfsEntry do
     end
   end
 
+  describe "#statistics" do
+    let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
+    let(:entry) { hdfs_entries(:hdfs_file) }
+    let(:details) {
+      OpenStruct.new(
+        'owner' => 'the_boss',
+        'group' => 'the_group',
+        'modified_at' => '',
+        'accessed_at' => '',
+        'size' => 1234098,
+        'block_size' => 128,
+        'permissions' => 'rw-r--r--'
+      )
+    }
+    let(:statistics) { entry.statistics }
+
+    before do
+      any_instance_of(Hdfs::QueryService) do |h|
+        stub(h).details { details }
+      end
+    end
+
+    it "retrieve the file statistics" do
+      statistics.should be_a HdfsEntryStatistics
+      statistics.owner.should == 'the_boss'
+    end
+  end
+
   describe "#highlighted_attributes" do
     it "includes path in the highlighted attributes" do
       hdfs_entry = HdfsEntry.new({:path => "/foo.txt"}, :without_protection => true)
