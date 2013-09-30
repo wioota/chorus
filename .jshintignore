@@ -1,4 +1,4 @@
-app/assets/javascripts/vendor
+app/assets/javascripts/vendor/*
 spec/javascripts/phantom
 spec/javascripts/support/jasmine-boot/boot.js
 spec/javascripts/helpers/sinon.js
