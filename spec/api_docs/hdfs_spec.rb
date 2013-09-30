@@ -6,6 +6,18 @@ resource "Hdfs" do
   let!(:dir_entry) { HdfsEntry.create!({:path => '/files', :modified_at => Time.current.to_s, :is_directory => "true", :content_count => "3", :hdfs_data_source => data_source}, :without_protection => true) }
   let!(:file_entry) { HdfsEntry.create!({:path => '/test.txt', :modified_at => Time.current.to_s, :size => "1234kB", :hdfs_data_source => data_source}, :without_protection => true ) }
   let(:hdfs_data_source_id) { data_source.to_param }
+  let(:stats) {
+    OpenStruct.new(
+        'owner' => 'the_boss',
+        'group' => 'the_group',
+        'modified_at' => Time.parse('2012-06-06 23:02:42'),
+        'accessed_at' => Time.parse('2012-06-06 23:02:42'),
+        'size' => 1234098,
+        'block_size' => 128,
+        'permissions' => 'rw-r--r--',
+        'replication' => 3
+    )
+  }
 
   before do
     log_in owner
@@ -18,7 +30,7 @@ resource "Hdfs" do
     stub(HdfsEntry).list('/', data_source) { [dir_entry, file_entry] }
     stub(HdfsEntry).list('/files/', data_source) { [file_entry] }
     stub(HdfsEntry).list('/test.txt', data_source) { [file_entry] }
-    stub(HdfsEntry).statistics { HdfsEntryStatistics.new({}) }
+    stub(HdfsEntry).statistics { HdfsEntryStatistics.new(stats) }
   end
 
   post "/hdfs_data_sources" do
