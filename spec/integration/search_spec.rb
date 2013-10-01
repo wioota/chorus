@@ -15,6 +15,11 @@ describe "Search" do
     fill_in 'search_text', :with => 'searchquery'
     find('.chorus_search_container>input').native.send_keys(:return)
     current_route.should == "search/searchquery"
+    stub(HdfsEntry).statistics.with_any_args {
+      HdfsEntryStatistics.new(
+          OpenStruct.new(FactoryGirl.attributes_for(:hdfs_entry_statistics))
+      )
+    }
   end
 
   describe "global search" do
