@@ -39,6 +39,10 @@ stylesheets:
 helpers:
   - helpers/backbone_fixture_definitions.js
   - helpers/shared_examples/_init.js
+  - helpers/jasmine-jquery.js
+  - helpers/sinon.js
+  - helpers/sinon_extensions.js
+  - helpers/spec_helper.js
   - helpers/**/*.js
   - phantom/*.js
 
