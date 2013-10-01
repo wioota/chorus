@@ -1,5 +1,5 @@
 export JRUBY_OPTS="--client -J-Xmx512m -J-Xms512m -J-Xmn128m -Xcext.enabled=true"
-export PATH="$HOME/phantomjs/bin:$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/phantomjs/bin:$HOME/node/bin:$HOME/.rbenv/bin:$PATH"
 
 
 if [[ -z "$POSTGRES_HOME" ]]; then
