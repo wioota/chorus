@@ -19,9 +19,10 @@ shared_examples_for 'something that can go stale' do
   end
 
   describe '#mark_stale!' do
-    it 'does not validate on save!' do
-      mock(bread).save!(:validate => false)
+    it 'does not validate' do
+      stub(bread).valid? { false }
       bread.mark_stale!
+      bread.should be_stale
     end
 
     it 'sets stale_at to current time' do
