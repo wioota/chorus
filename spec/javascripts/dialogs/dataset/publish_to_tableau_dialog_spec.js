@@ -34,28 +34,23 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
 
     it("unchecking the create workfile checkbox", function() {
         this.dialog.$("input[name='create_work_file']").attr('checked', false);
-        this.dialog.$("button.submit").click();
+        this.dialog.$("form").submit();
         expect(this.dialog.$("input[name='create_work_file']")).not.toBeChecked();
     });
 
-    describe("when publish is clicked", function () {
+    describe("when the form is submitted", function () {
         beforeEach(function () {
             this.dialog.$("input[name='name']").val("foo");
             this.dialog.$("input[name='tableau_username']").val("fooname");
             this.dialog.$("input[name='tableau_password']").val("foopass");
-            this.dialog.$("button.submit").click();
-        });
-
-        it("sets the name on the workbook", function () {
-            expect(this.model.name()).toBe("foo");
-        });
-
-        it("sets the create_work_file on the workbook", function () {
-            expect(this.model.get('createWorkFile')).toBe(true);
+            this.dialog.$("form").submit();
         });
 
         it("saves the workbook", function() {
-            expect(this.server.lastCreateFor(this.model)).toBeDefined();
+            var req = this.server.lastCreateFor(this.model);
+            expect(req).toBeDefined();
+            expect(req.params()['tableau_workbook[name]']).toBe("foo");
+            expect(req.params()['tableau_workbook[create_work_file]']).toEqual('true');
         });
 
         it("start the spinner on the button", function() {

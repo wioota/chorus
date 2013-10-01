@@ -1,21 +1,21 @@
-chorus.dialogs.PublishToTableau = chorus.dialogs.Base.extend({
+chorus.dialogs.PublishToTableau = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
     constructorName: "PublishTableau",
 
     templateName:"publish_to_tableau_dialog",
     title: 'Publish to Tableau',
-
-    events:{
-        "click button.submit": "publishToTableau"
-    },
 
     setup: function() {
         this.dataset = this.options.dataset;
         this.listenTo(this.model, "saved", this.saveSuccess);
         this.listenTo(this.model, "saveFailed", this.saveFailed);
         this.listenTo(this.model, "validationFailed", this.saveFailed);
+        this.disableFormUnlessValid({
+            inputSelector: "input",
+            formSelector: "form"
+        });
     },
 
-    publishToTableau: function() {
+    create: function(e) {
         var attrs = {};
 
         _.each(["name", "tableau_username", "tableau_password"], function(name) {
@@ -25,10 +25,9 @@ chorus.dialogs.PublishToTableau = chorus.dialogs.Base.extend({
             }
         }, this);
         attrs['createWorkFile'] = this.$("input[name='create_work_file']").is(':checked');
-        this.model.set(attrs, {silent: true});
         this.$("button.submit").startLoading('actions.publishing');
         this.$("button.cancel").prop("disabled", true);
-        this.model.save();
+        this.model.save(attrs, {wait: true});
     },
 
     saveSuccess: function() {

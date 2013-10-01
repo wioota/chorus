@@ -2,7 +2,7 @@ class LinkedTableauWorkfile < Workfile
 
   attr_accessible :tableau_workbook_publication, :as => :create
 
-  has_one :tableau_workbook_publication
+  has_one :tableau_workbook_publication, :dependent => :destroy
   delegate :workbook_url, :to => :tableau_workbook_publication, :allow_nil => true
   delegate :name, :to => :tableau_workbook_publication, :prefix => :workbook, :allow_nil => true
 

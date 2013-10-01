@@ -4,6 +4,8 @@ describe LinkedTableauWorkfile do
   let(:model) { workfiles(:tableau) }
   let(:tableau_publication) { model.tableau_workbook_publication }
 
+  it { should have_one(:tableau_workbook_publication).dependent(:destroy) }
+
   it "should have the url to the tableau workbook" do
     model.workbook_url.should == tableau_publication.workbook_url
   end
