@@ -255,28 +255,4 @@ describe("chorus.views.WorkfileContentDetails", function() {
             });
         });
     });
-
-    describe("#formatTime", function() {
-        beforeEach(function() {
-            this.view = new chorus.views.WorkfileContentDetails(this.model);
-        });
-
-        it("should format the time in the AM", function() {
-            var date = new Date(1325876400 * 1000);
-            expect(this.view.formatTime(date)).toBe("11:00 AM");
-        });
-
-        it("should format the time in the PM", function() {
-            var date = new Date(1325908800 * 1000);
-            expect(this.view.formatTime(date)).toBe("8:00 PM");
-        });
-
-        it("should format the time if it is Noon/Midnight", function() {
-            var date = new Date(1325880000 * 1000);
-            expect(this.view.formatTime(date)).toBe("12:00 PM");
-
-            date = new Date(1325836800 * 1000);
-            expect(this.view.formatTime(date)).toBe("12:00 AM");
-        });
-    });
 });

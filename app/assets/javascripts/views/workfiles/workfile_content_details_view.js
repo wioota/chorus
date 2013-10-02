@@ -17,7 +17,7 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.include(
     updateAutosaveText: function(args) {
         var text = args ? args : "workfile.content_details.auto_save";
 
-        var time = this.formatTime(new Date());
+        var time = moment(new Date()).format("hh:mm A");
         this.$("span.auto_save").removeClass("hidden");
         this.$("span.auto_save").text(t(text, {time:time}));
     },
@@ -70,25 +70,6 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.include(
 
     createNewVersion: function() {
         chorus.PageEvents.trigger("file:createNewVersion");
-    },
-
-
-    formatTime: function(time) {
-        var hours = time.getHours();
-        var minutes = time.getMinutes();
-
-        var suffix = "AM";
-        if (hours >= 12) {
-            suffix = "PM";
-            hours = hours - 12;
-        }
-        if (hours === 0) {
-            hours = 12;
-        }
-        if (minutes < 10) {
-            minutes = "0" + minutes;
-        }
-        return hours + ":" + minutes + " " + suffix;
     }
 },
 {

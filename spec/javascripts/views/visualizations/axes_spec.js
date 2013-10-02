@@ -136,7 +136,7 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
 
                 it("should be centered in the chart", function() {
-                    expect(centerX(this.axisLabel)).toBeWithinDeltaOf(centerX(this.axisLine), 2);
+                    expect(centerX(this.axisLabel)).toBeWithinDeltaOf(centerX(this.axisLine), 5);
                 });
 
                 it("is below the tick labels", function() {
@@ -253,11 +253,11 @@ describe("chorus.views.visualizations.Axes", function() {
                 itDisplaysOrdinalLabelsCorrectly();
 
                 it("centers each label on its corresponding tick mark", function() {
-                    expect(leftX(this.ticks[0])).toBeWithinDeltaOf(centerX(this.labels[0]), 2);
-                    expect(leftX(this.ticks[1])).toBeWithinDeltaOf(centerX(this.labels[1]), 2);
-                    expect(leftX(this.ticks[2])).toBeWithinDeltaOf(centerX(this.labels[2]), 2);
-                    expect(leftX(this.ticks[3])).toBeWithinDeltaOf(centerX(this.labels[3]), 2);
-                    expect(leftX(this.ticks[4])).toBeWithinDeltaOf(centerX(this.labels[4]), 2);
+                    expect(leftX(this.ticks[0])).toBeWithinDeltaOf(centerX(this.labels[0]), 5);
+                    expect(leftX(this.ticks[1])).toBeWithinDeltaOf(centerX(this.labels[1]), 5);
+                    expect(leftX(this.ticks[2])).toBeWithinDeltaOf(centerX(this.labels[2]), 5);
+                    expect(leftX(this.ticks[3])).toBeWithinDeltaOf(centerX(this.labels[3]), 5);
+                    expect(leftX(this.ticks[4])).toBeWithinDeltaOf(centerX(this.labels[4]), 5);
                 });
             });
 
@@ -435,7 +435,7 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
 
                 it("should be centered along the axis", function() {
-                    expect(centerY(this.axisLabel)).toBeWithinDeltaOf(centerY(this.axisLine), 2);
+                    expect(centerY(this.axisLabel)).toBeWithinDeltaOf(centerY(this.axisLine), 5);
                 });
 
                 it("is to the left of the tick labels", function() {
@@ -508,11 +508,11 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
 
                 it("centers each label on its corresponding tick mark", function() {
-                    expect(centerY(this.labels[0])).toBeWithinDeltaOf(topY(this.ticks[0]), 2);
-                    expect(centerY(this.labels[1])).toBeWithinDeltaOf(topY(this.ticks[1]), 2);
-                    expect(centerY(this.labels[2])).toBeWithinDeltaOf(topY(this.ticks[2]), 2);
-                    expect(centerY(this.labels[3])).toBeWithinDeltaOf(topY(this.ticks[3]), 2);
-                    expect(centerY(this.labels[4])).toBeWithinDeltaOf(topY(this.ticks[4]), 2);
+                    expect(centerY(this.labels[0])).toBeWithinDeltaOf(topY(this.ticks[0]), 5);
+                    expect(centerY(this.labels[1])).toBeWithinDeltaOf(topY(this.ticks[1]), 5);
+                    expect(centerY(this.labels[2])).toBeWithinDeltaOf(topY(this.ticks[2]), 5);
+                    expect(centerY(this.labels[3])).toBeWithinDeltaOf(topY(this.ticks[3]), 5);
+                    expect(centerY(this.labels[4])).toBeWithinDeltaOf(topY(this.ticks[4]), 5);
                 });
             });
 
@@ -595,16 +595,16 @@ describe("chorus.views.visualizations.Axes", function() {
             it("does not interfere with other elements in the svg container", function() {
                 this.$el.empty();
 
-                this.otherTick = $("<line class='tick'></line")
+                this.otherTick = $("<line class='tick'></line>")
                     .attr("x1", 101)
                     .attr("x2", 102)
                     .attr("y1", 103)
                     .attr("y2", 104);
-                this.otherLabel = $("<text class='label'></text")
+                this.otherLabel = $("<text class='label'></text>")
                     .attr("x", 201)
                     .attr("y", 203)
                     .text("other labels need to stay");
-                this.otherAxisLine = $("<line class='axis'></line")
+                this.otherAxisLine = $("<line class='axis'></line>")
                     .attr("x1", 301)
                     .attr("x2", 302)
                     .attr("y1", 303)
@@ -745,7 +745,7 @@ describe("chorus.views.visualizations.Axes", function() {
                 el: this.el,
                 ticks: true,
                 xLabels: this.xLabelValues,
-                yLabels: this.xLabelValues,
+                yLabels: this.yLabelValues,
                 paddingX: this.paddingX,
                 paddingY: this.paddingY
             });
@@ -762,8 +762,8 @@ describe("chorus.views.visualizations.Axes", function() {
 
         describe("axis positioning", function() {
             it("positions the x and y axes so that they meet at the origin", function() {
-                expect(leftX(this.xAxisLine)).toBeWithinDeltaOf(leftX(this.yAxisLine), 3);
-                expect(bottomY(this.yAxisLine)).toBeWithinDeltaOf(bottomY(this.xAxisLine), 3);
+                expect(leftX(this.xAxisLine)).toBeWithinDeltaOf(leftX(this.yAxisLine), 5);
+                expect(bottomY(this.yAxisLine)).toBeWithinDeltaOf(bottomY(this.xAxisLine), 5);
             });
 
             it("keeps labels inside the padding", function() {
