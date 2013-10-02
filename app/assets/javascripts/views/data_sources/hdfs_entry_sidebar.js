@@ -18,6 +18,9 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         this.subscribePageEvent("hdfs_entry:selected", this.setEntry);
         this.subscribePageEvent("csv_import:started", this.refreshActivities);
         this.tabs = new chorus.views.TabControl(["activity", "statistics"]);
+        if (this.resource) {
+            this.setEntry(this.resource);
+        }
     },
 
     refreshActivities: function() {

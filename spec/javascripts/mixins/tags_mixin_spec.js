@@ -88,32 +88,17 @@ describe("chorus.Mixins.Taggable", function() {
         });
     });
 
-    context("when the model has not been loaded", function() {
+    context("when the model gets new tags from the server", function() {
         describe("#tags", function() {
             beforeEach(function() {
-                this.model.set('tags', [
-                    {name: 'foo'}
-                ]);
+                this.model.tags();
+                expect(this.model.tags().length).toEqual(0);
+                this.model.set({tags: [{name: 'foo'}]});
+                this.model.trigger('loaded');
             });
 
-            it("returns an empty TaggingSet", function() {
-                var tags = this.model.tags();
-                expect(tags).toBeA(chorus.collections.TaggingSet);
-                expect(tags.length).toEqual(0);
-            });
-
-            context("when the model is loaded after tags has been used", function() {
-                beforeEach(function() {
-                    this.model.tags();
-                    this.model.set('tags', [
-                        {name: 'bar'}, {name: 'baz'}
-                    ]);
-                    this.model.loaded = true;
-                });
-
-                it("uses the newly loaded tags", function() {
-                    expect(this.model.tags().length).toEqual(2);
-                });
+            it("uses the newly loaded tags", function() {
+                expect(this.model.tags().length).toEqual(1);
             });
         });
     });

@@ -59,8 +59,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
         });
 
         this.sidebar = new chorus.views.HdfsEntrySidebar({
-            hdfsDataSourceId: this.hdfsDataSourceId,
-            hdfsDataSource: this.dataSource
+            hdfsDataSourceId: this.hdfsDataSourceId
         });
 
         this.listenTo(this.dataSource, 'loaded', this.setupMultiSelectSidebar);

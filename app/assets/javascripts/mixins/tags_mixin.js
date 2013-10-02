@@ -5,12 +5,12 @@ chorus.Mixins.Taggable = {
     },
 
     tags: function() {
-        if(!this.loaded) {
-            return new chorus.collections.TaggingSet([], {entity: this});
-        }
-
         if(!this._tags) {
-            this._tags = new chorus.collections.TaggingSet(this.get('tags'), {entity: this});
+            this._tags = new chorus.collections.TaggingSet(this.get('tags') || [], {entity: this});
+            this.on('loaded saved', function () {
+                this._tags.reset(this.get("tags") || [], {parse: true});
+            });
+
             this.listenTo(this._tags, "all", function() {
                 this.trigger("change:tags");
             });

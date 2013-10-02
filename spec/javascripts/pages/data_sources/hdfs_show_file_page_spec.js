@@ -8,7 +8,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             ancestors: [{id: 10, name: "path"}, {id: 11, name: "my"}, {id: 12, name: "MyDataSource"}],
             contents: ["first line", "second line"]
         });
-        this.page = new chorus.pages.HdfsShowFilePage("1234", "789");
+        this.page = new chorus.pages.HdfsShowFilePage(1234, 789);
     });
 
     it("has a helpId", function() {
@@ -17,7 +17,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
     it('constructs an HDFS file model with the right data source id', function() {
         expect(this.page.model).toBeA(chorus.models.HdfsEntry);
-        expect(this.page.model.get("hdfsDataSource").id).toBe("1234");
+        expect(this.page.model.get("hdfsDataSource").id).toBe(1234);
     });
 
     context("when the file and the hdfs data source have loaded", function() {
@@ -46,8 +46,9 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         });
 
         it("has the correct sidebar", function() {
-            expect(this.page.sidebar).toBeA(chorus.views.HdfsShowFileSidebar);
-            expect(this.page.sidebar.options.hdfsDataSource.id).toBe(this.hdfsDataSource.id);
+            expect(this.page.sidebar).toBeA(chorus.views.HdfsEntrySidebar);
+            expect(this.page.sidebar.options.hdfsDataSourceId).toBe(this.hdfsDataSource.id);
+            expect(this.page.sidebar.$('.name')).toContainText(this.file.name());
         });
 
         it("has a header file", function() {
@@ -66,7 +67,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
     context("when the fetch completes with errors", function() {
         beforeEach(function() {
             spyOn(Backbone.history, 'loadUrl');
-            this.page = new chorus.pages.HdfsShowFilePage("1234", "789");
+            this.page = new chorus.pages.HdfsShowFilePage(1234, 789);
             this.server.completeFetchFor(this.page.hdfsDataSource, this.hdfsDataSource);
             this.server.lastFetchFor(this.page.model).failUnprocessableEntity({
                 record: "HDFS_CONTENTS_UNAVAILABLE"

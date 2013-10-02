@@ -1,14 +1,14 @@
 describe("chorus.pages.HdfsEntryIndexPage", function() {
     beforeEach(function() {
-        this.hdfsDataSource = backboneFixtures.hdfsDataSource({id: "1234", name: "Data Source Name"});
+        this.hdfsDataSource = backboneFixtures.hdfsDataSource({id: 1234, name: "Data Source Name"});
         this.hdfsEntry = backboneFixtures.hdfsDir({
             hdfsDataSource: this.hdfsDataSource.attributes,
-            id: "4",
+            id: 4,
             name: "myDir",
             path: "/foo"
         });
         spyOn(chorus.pages.HdfsEntryIndexPage.prototype, 'setupMultiSelectSidebar').andCallThrough();
-        this.page = new chorus.pages.HdfsEntryIndexPage("1234", "4");
+        this.page = new chorus.pages.HdfsEntryIndexPage(1234, 4);
     });
 
     it("has a helpId", function() {
@@ -89,7 +89,7 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
             var sidebar = this.page.sidebar;
             expect($(this.page.el).find(sidebar.el)).toExist();
             expect(sidebar).toBeA(chorus.views.HdfsEntrySidebar);
-            expect(sidebar.options.hdfsDataSource.id.toString()).toBe(this.hdfsDataSource.id);
+            expect(sidebar.options.hdfsDataSourceId).toBe(this.hdfsDataSource.id);
         });
 
         describe("when an entry is selected", function() {
