@@ -21,9 +21,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         "click a.create_external_table": "launchCreateExternalTableFromHdfsDialog"
     },
 
-    subviews: {
-        '.tab_control': 'tabs'
-    },
+    subviews: { '.tab_control': 'tabs' },
 
     setup: function() {
         this.subscribePageEvent("dataset:selected", this.setDataset);
@@ -36,9 +34,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     },
 
     render: function() {
-        if(!this.disabled) {
-            this._super("render", arguments);
-        }
+        if(!this.disabled) { this._super("render", arguments); }
     },
 
     setColumn: function(column) {
@@ -73,10 +69,14 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
         });
         this.tabs.registerSubView(this.tabs.statistics);
 
-        var statistics = dataset.statistics();
-        statistics.fetchIfNotLoaded();
-        this.listenTo(statistics, "loaded", this.render);
-        this.listenTo(statistics, "fetchFailed", this.statisticsFetchFailed);
+        function fetchFailed() {
+            if (this.tabs.statistics.statistics.statusCode === 403) {
+                this.resource.invalidCredentials = true;
+            }
+            this.render();
+        }
+
+        this.listenTo(this.tabs.statistics.statistics, 'fetchFailed', fetchFailed);
     },
 
     fetchImports: function(dataset) {
@@ -85,13 +85,6 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
             this.listenTo(this.imports, "loaded", this.render);
             this.imports.fetch();
         }
-    },
-
-    statisticsFetchFailed: function() {
-        if(this.resource.statistics().statusCode === 403) {
-            this.resource.invalidCredentials = true;
-        }
-        this.render();
     },
 
     setDataset: function(dataset) {
@@ -112,7 +105,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
     },
 
     resetStatistics: function() {
-        this.resource.statistics().fetch();
+        if (!this.resource.get('stale')) { this.resource.statistics().fetch(); }
     },
 
     additionalContext: function() {

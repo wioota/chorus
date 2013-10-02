@@ -65,21 +65,21 @@ describe("chorus.views.DatasetSidebar", function() {
         });
 
         describe("statistics", function() {
-            context("when the statistics have not yet loaded", function() {
-                it("displays the selected dataset type", function() {
-                    expect(this.view.$(".details").text().trim()).toBe('Source Table');
+            context("when the dataset is stale", function () {
+                beforeEach(function () {
+                    this.dataset.set('stale', true);
+                    this.server.reset();
+                });
+
+                it("do not fetch", function () {
+                    chorus.PageEvents.trigger("dataset:selected", this.dataset);
+                    expect(this.dataset.statistics()).not.toHaveBeenFetched();
                 });
             });
 
-            context("when the statistics finish loading", function() {
-                beforeEach(function() {
-                    spyOn(this.view, 'postRender');
-                    this.dataset.statistics().fetch();
-                    this.server.completeFetchFor(this.dataset.statistics());
-                });
-
-                it("rerenders the sidebar to show the statistics", function() {
-                    expect(this.view.postRender).toHaveBeenCalled();
+            context("when the statistics have not yet loaded", function() {
+                it("displays the selected dataset type", function() {
+                    expect(this.view.$(".details").text().trim()).toBe('Source Table');
                 });
             });
 
@@ -139,6 +139,16 @@ describe("chorus.views.DatasetSidebar", function() {
                     this.server.reset();
                     chorus.PageEvents.trigger("analyze:running");
                     expect(this.server.lastFetchFor(this.view.resource.statistics())).toBeDefined();
+                });
+                context("and the dataset is stale", function () {
+                    beforeEach(function () {
+                        this.dataset.set('stale', true);
+                    });
+                    it("does not refetch statistics", function () {
+                        this.server.reset();
+                        chorus.PageEvents.trigger("analyze:running");
+                        expect(this.dataset.statistics()).not.toHaveBeenFetched();
+                    });
                 });
             });
         });

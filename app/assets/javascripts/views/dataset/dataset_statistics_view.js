@@ -5,9 +5,11 @@ chorus.views.DatasetStatistics = chorus.views.Base.extend({
         this.column = options.column;
 
         this.statistics = this.model.statistics();
-        this.statistics.fetchIfNotLoaded();
-        this.listenTo(this.statistics, "loaded", this.render);
-        this.listenTo(this.model, "invalidated", function() { this.statistics.fetch(); });
+        if (!this.model.get('stale')) {
+            this.statistics.fetchIfNotLoaded();
+            this.listenTo(this.statistics, "loaded", this.render);
+            this.listenTo(this.model, "invalidated", function () { this.statistics.fetch(); });
+        }
     },
 
     context: function() {

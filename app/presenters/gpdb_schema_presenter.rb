@@ -6,7 +6,8 @@ class GpdbSchemaPresenter < Presenter
         :dataset_count => model.active_tables_and_views_count,
         :refreshed_at => model.refreshed_at,
         :entity_type => model.entity_type_name,
-        :is_deleted => model.deleted?
+        :is_deleted => model.deleted?,
+        :stale => model.stale?
     }
     unless succinct?
       hash.merge!({
