@@ -100,7 +100,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     launchCreateExternTableDialog: function() {
         var externalTable = new chorus.models.HdfsExternalTable({
             path: this.resource.get('path'),
-            hdfsDataSourceId: this.options.hdfsDataSourceId,
+            hdfsDataSourceId: this.resource.get('hdfsDataSource').id,
             hdfs_entry_id: this.resource.get('id')
         });
 
@@ -141,7 +141,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     launchAssociateWithWorkspaceDialog: function(e) {
         e && e.preventDefault();
         var hdfsDataset = new chorus.models.HdfsDataset({
-            hdfsDataSource: new chorus.models.HdfsDataSource({id: this.options.hdfsDataSourceId})
+            hdfsDataSource: new chorus.models.HdfsDataSource({id: this.resource.get('hdfsDataSource').id})
         });
         var dialog = new chorus.dialogs.AssociateHdfsDatasetFromEntry({entry: this.resource, model: hdfsDataset});
 

@@ -89,7 +89,6 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
             var sidebar = this.page.sidebar;
             expect($(this.page.el).find(sidebar.el)).toExist();
             expect(sidebar).toBeA(chorus.views.HdfsEntrySidebar);
-            expect(sidebar.options.hdfsDataSourceId).toBe(this.hdfsDataSource.id);
         });
 
         describe("when an entry is selected", function() {

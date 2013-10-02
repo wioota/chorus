@@ -21,7 +21,6 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
         });
 
         this.sidebar = new chorus.views.HdfsEntrySidebar({
-            hdfsDataSourceId: this.hdfsDataSource.id,
             model: this.model
         });
 
