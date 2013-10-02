@@ -15,6 +15,14 @@ describe("chorus.Mixins.Urls", function() {
             });
         });
 
+        context("when model is stale", function() {
+            beforeEach(function() { this.object.set('stale', true); });
+
+            it("is empty", function() {
+                expect(this.object.showUrl()).toBeNull();
+            });
+        });
+
         it("is present", function() {
             expect(this.object.showUrl()).not.toBeNull();
         });

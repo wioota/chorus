@@ -1,4 +1,5 @@
 class Schema < ActiveRecord::Base
+  include Stale
   include SoftDelete
 
   attr_accessible :name, :type
@@ -6,10 +7,11 @@ class Schema < ActiveRecord::Base
   has_many :datasets, :foreign_key => :schema_id
   delegate :accessible_to, :to => :parent
 
+  before_save :mark_datasets_as_stale
   before_destroy :destroy_datasets
 
   def active_tables_and_views
-    datasets.where(:stale_at => nil)
+    datasets.not_stale
   end
 
   validates :name,
@@ -36,11 +38,8 @@ class Schema < ActiveRecord::Base
 
     found_schemas
   ensure
-    if options[:mark_stale]
-      (schema_parent.schemas.not_stale - found_schemas).each do |schema|
-        schema.mark_stale!
-      end
-    end
+    stale_schemas = schema_parent.schemas.not_stale - found_schemas
+    stale_schemas.each(&:mark_stale!) if options[:mark_stale]
   end
 
   def self.visible_to(*args)
@@ -80,8 +79,6 @@ class Schema < ActiveRecord::Base
     ##This means no datasets.detect, datasets.select, datasets.reject, ...
 
     found_datasets = []
-    mark_stale = options.delete(:mark_stale)
-    force_index = options.delete(:force_index)
     datasets_in_data_source = connect_with(account).datasets(options)
 
     datasets_in_data_source.each do |attrs|
@@ -92,7 +89,7 @@ class Schema < ActiveRecord::Base
         dataset.skip_search_index = true if options[:skip_dataset_solr_index]
         if dataset.changed?
           dataset.save!
-        elsif force_index
+        elsif options[:force_index]
           dataset.index
         end
         found_datasets << dataset.id
@@ -102,7 +99,7 @@ class Schema < ActiveRecord::Base
 
     touch(:refreshed_at)
 
-    if mark_stale
+    if options[:mark_stale]
       raise "You should not use mark_stale and limit at the same time" if options[:limit]
       #You might want to use a datasets.reject here.  Don't.
       #This will instantiate all the datasets at once and may use more memory than your JVM has available
@@ -130,5 +127,9 @@ class Schema < ActiveRecord::Base
 
   def destroy_datasets
     datasets.find_each(&:destroy)
+  end
+
+  def mark_datasets_as_stale
+    datasets.find_each(&:mark_stale!) if stale? && stale_at_changed?
   end
 end

@@ -10,9 +10,9 @@ module Stale
   end
 
   def mark_stale!
-      unless stale?
-        self.stale_at = Time.now.utc
-        save!(:validate => false)
-      end
+    unless stale?
+      self.stale_at = Time.now.utc
+      save!(:validate => false)
+    end
   end
 end

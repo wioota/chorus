@@ -60,9 +60,7 @@ class GpdbDatabase < ActiveRecord::Base
   end
 
   def self.destroy_databases(data_source_id)
-    GpdbDatabase.where(:data_source_id => data_source_id).find_each do |database|
-      database.destroy
-    end
+    GpdbDatabase.where(:data_source_id => data_source_id).find_each(&:destroy)
   end
 
   def create_schema(name, current_user)

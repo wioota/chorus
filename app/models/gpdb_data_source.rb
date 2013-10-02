@@ -55,9 +55,7 @@ class GpdbDataSource < DataSource
   rescue GreenplumConnection::QueryError => e
     Chorus.log_error "Could not refresh database: #{e.message} on #{e.backtrace[0]}"
   ensure
-    if options[:mark_stale]
-      (databases.not_stale - found_databases).each(&:mark_stale!)
-    end
+    (databases.not_stale - found_databases).each(&:mark_stale!) if options[:mark_stale]
   end
 
   def refresh_schemas(options={})

@@ -1,6 +1,4 @@
 class OracleSchema < Schema
-  include Stale
-
   attr_accessible :data_source
   alias_attribute :data_source, :parent
 

@@ -4,6 +4,14 @@ describe Schema do
   let(:user) { users(:owner) }
   let(:schema) { schemas(:public) }
 
+  describe "#mark_schemas_as_stale before_save" do
+    it "if the schema has become stale, datasets will also be marked as stale" do
+      schema.datasets.first.should_not be_stale
+      schema.mark_stale!
+      schema.datasets.first.reload.should be_stale
+    end
+  end
+
   describe ".find_and_verify_in_source" do
     let(:parent) { schema.parent }
     let(:connection) { Object.new }

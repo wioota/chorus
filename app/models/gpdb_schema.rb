@@ -1,6 +1,4 @@
 class GpdbSchema < Schema
-  include Stale
-
   attr_accessible :database
   alias_attribute :database, :parent
 

@@ -2,7 +2,7 @@ chorus.Mixins.Urls = {
 
     //Build the link url for a model based on the urlTemplate method on that model.
     showUrl: function() {
-        if (this.isDeleted()) return null;
+        if (this.isDeleted() || this.get('stale')) return null;
 
         if (!this.showUrlTemplate) {
             throw "No showUrlTemplate defined";
