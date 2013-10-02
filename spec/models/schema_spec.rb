@@ -5,6 +5,8 @@ describe Schema do
   let(:schema) { schemas(:public) }
 
   describe "#mark_schemas_as_stale before_save" do
+    let(:schema) { Dataset.first.schema }
+
     it "if the schema has become stale, datasets will also be marked as stale" do
       schema.datasets.first.should_not be_stale
       schema.mark_stale!
