@@ -3,7 +3,7 @@
         <div title="{{objectName}}" class="name">{{objectName}}</div>
         <div class="details">{{typeString}}</div>
     </div>
-    
+
     <div class="last_import low_light">
         {{#if importFailed}}
             <div class="icon">
@@ -77,18 +77,42 @@
             {{/unless}}
 
             {{#if currentUserCanCreateWorkFlow}}
-                <li><a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a></li>
+                <li>
+                    {{#if stale}}
+                        <span class="new_work_flow disabled">{{t "sidebar.new_work_flow"}}</span>
+                    {{else}}
+                        <a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a>
+                    {{/if}}
+                </li>
             {{/if}}
 
             {{#unless isHdfsDataset}}
                 {{#unless noValidCredentials}}
                     {{#if listMode}}
-                        <li><a class="dataset_preview" href="#">{{t "actions.dataset_preview"}}</a></li>
+                        <li>
+                        {{#if stale}}
+                            <span class="dataset_preview disabled" href="#">{{t "actions.dataset_preview"}}</span>
+                        {{else}}
+                            <a class="dataset_preview" href="#">{{t "actions.dataset_preview"}}</a>
+                        {{/if}}
+                        </li>
                     {{/if}}
 
-                    <li><a class="download dialog" href="#">{{t "actions.download"}}</a></li>
+                    <li>
+                        {{#if stale}}
+                            <span class="download disabled" href="#">{{t "actions.download"}}</span>
+                        {{else}}
+                            <a class="download dialog" href="#">{{t "actions.download"}}</a>
+                        {{/if}}
+                    </li>
                     {{#if canAnalyze}}
-                       <li><a class="analyze" href="#">{{t "dataset.actions.analyze"}}</a></li>
+                       <li>
+                           {{#if stale}}
+                               <span class="analyze disabled" href="#">{{t "dataset.actions.analyze"}}</span>
+                           {{else}}
+                               <a class="analyze" href="#">{{t "dataset.actions.analyze"}}</a>
+                           {{/if}}
+                       </li>
                     {{/if}}
                 {{/unless}}
             {{/unless}}

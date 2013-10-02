@@ -325,4 +325,15 @@ describe("chorus.views.DatasetItem", function() {
             itBehavesLike.ItPresentsModelWithTags();
         });
     });
+
+    context("when the dataset is stale", function () {
+        beforeEach(function () {
+            this.dataset.set('stale', true);
+        });
+
+        it("displays a span with an invalid icon", function () {
+            expect(this.view.$('span.image img.stale_dataset_icon')).toExist();
+            expect(this.view.$('a.image')).not.toExist();
+        });
+    });
 });

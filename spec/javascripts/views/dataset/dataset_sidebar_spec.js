@@ -400,9 +400,10 @@ describe("chorus.views.DatasetSidebar", function() {
 
         context("by a workspace data tab", function() {
             beforeEach(function() {
-                this.view.resource._workspace = backboneFixtures.workspace();
+                this.view = new chorus.views.DatasetSidebar({workspace: this.dataset.workspace(), listMode: true});
                 this.view.render();
                 chorus.page = this.view;
+                chorus.PageEvents.trigger("dataset:selected", this.dataset);
                 $("#jasmine_content").append(this.view.$el);
             });
 
@@ -772,6 +773,31 @@ describe("chorus.views.DatasetSidebar", function() {
                     itShowsTheAppropriateDeleteLink(true, type);
                     itDoesNotHaveACreateDatabaseViewLink();
                     itDoesNotShowTheDuplicateChorusViewLink();
+
+                    context("when the selected dataset is stale", function () {
+                        beforeEach(function () {
+                            chorus.models.Config.instance().set('workflowConfigured', true);
+                            this.dataset.set('stale', true);
+                            chorus.PageEvents.trigger("dataset:selected", this.dataset);
+                        });
+
+                        it("disables inappropriate action links", function () {
+                            var badActions = ['dataset_preview', 'download', 'import_now', 'new_work_flow'];
+                            var goodActions = ['delete_dataset', 'new_note', 'edit_tags', 'associate'];
+
+                            if ( this.view.resource.canAnalyze() ) { badActions.push(['analyze']); }
+
+                            _.each(badActions, function (actionName) {
+                                expect(this.view.$('.actions a.' + actionName)).not.toExist();
+                                expect(this.view.$('.actions span.' + actionName)).toExist();
+                            }, this);
+
+                            _.each(goodActions, function (actionName) {
+                                expect(this.view.$('.actions span.' + actionName)).not.toExist();
+                                expect(this.view.$('.actions a.' + actionName)).toExist();
+                            }, this);
+                        });
+                    });
                 });
             });
 
