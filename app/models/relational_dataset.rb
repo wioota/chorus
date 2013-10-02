@@ -1,4 +1,7 @@
 class RelationalDataset < Dataset
+
+  validates_uniqueness_of :name, :scope => [:schema_id, :type, :deleted_at]
+
   def source_dataset_for(workspace)
     schema_id != workspace.sandbox_id
   end

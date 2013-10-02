@@ -5,6 +5,7 @@ class HdfsDataset < Dataset
   attr_accessible :file_mask
   validates_presence_of :file_mask, :workspace
   validate :ensure_active_workspace, :if => Proc.new { |f| f.changed? }
+  validates_uniqueness_of :name, :scope => [:workspace_id, :type, :deleted_at]
 
   belongs_to :hdfs_data_source
   belongs_to :workspace

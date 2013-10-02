@@ -10,6 +10,33 @@ describe HdfsDataset do
     it { should belong_to(:workspace) }
     it { should validate_presence_of(:workspace) }
 
+    describe 'name uniqueness' do
+
+      let(:attrs) do
+        { :name => dataset.name, :file_mask => '/whatever' }
+      end
+      let(:other_ws) { workspaces(:private) }
+
+      context 'in the same workspace' do
+        it 'does not create a dataset' do
+          expect {
+            expect {
+              HdfsDataset.assemble!(attrs, dataset.hdfs_data_source, dataset.workspace)
+            }.to raise_error(ActiveRecord::RecordInvalid)
+          }.to_not change(HdfsDataset, :count)
+        end
+      end
+
+      context 'in different workspaces' do
+        it 'creates a dataset' do
+          expect {
+            HdfsDataset.assemble!(attrs, dataset.hdfs_data_source, other_ws)
+          }.to change(HdfsDataset, :count).by(1)
+        end
+      end
+
+    end
+
     describe 'can only be created in an active workspace' do
       let(:dataset) { FactoryGirl.build(:hdfs_dataset) }
 

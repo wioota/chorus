@@ -8,7 +8,6 @@ class Dataset < ActiveRecord::Base
 
   validates_presence_of :scoped_schema, :if => :needs_schema?
   validates_presence_of :name
-  validates_uniqueness_of :name, :scope => [:schema_id, :type, :deleted_at]
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
