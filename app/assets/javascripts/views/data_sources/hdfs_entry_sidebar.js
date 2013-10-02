@@ -92,9 +92,7 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     createExternalTable: function(e) {
         e && e.preventDefault();
 
-        this.resource.fetch();
-
-        this.onceLoaded(this.resource, this.launchCreateExternTableDialog);
+        this.resource.fetch().success(_.bind(this.launchCreateExternTableDialog, this));
     },
 
     launchCreateExternTableDialog: function() {
