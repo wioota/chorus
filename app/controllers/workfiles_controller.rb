@@ -74,7 +74,7 @@ class WorkfilesController < ApplicationController
     # which means arrays look like this:  {"0" => {"stuff" => "things"}, "1" => {"stuff" => "things"}}
     # This before_filter turns those params into regular arrays so that the rest of the code can treat them uniformly.
     [:execution_locations, :versions_attributes].each do |key|
-      params[:workfile][key] = params[:workfile][key].values if params[:workfile][key] && params[:workfile][key]["0"]      
+      params[:workfile][key] = params[:workfile][key].values if params[:workfile][key] && params[:workfile][key].is_a?(Hash)
     end
   end
 end

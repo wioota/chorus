@@ -288,7 +288,7 @@ describe WorkfilesController do
             :workfile => {
               :description => description,
               :entity_subtype => 'alpine',
-              :versions_attributes => [{:contents => file}],
+              :versions_attributes => {"0" => {:contents => file}},
               :hdfs_data_source_id => hdfs.id,
               :database_id => ""
             }
