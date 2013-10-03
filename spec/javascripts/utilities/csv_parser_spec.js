@@ -187,7 +187,7 @@ describe("chorus.utilities.CsvParser", function() {
         context("datatypes", function() {
             beforeEach(function() {
                 this.contents = [
-                    'col1,empty,col2,someText,col3,someFloat,col4',
+                    'col1,empty,col2,someText,col3,someDouble,col4',
                     'foo,  ,2,abc,3, ,1/2/3',
                     'bar, ,2.1, ,sna,1,456'
                 ];
@@ -195,10 +195,10 @@ describe("chorus.utilities.CsvParser", function() {
                 this.expectedColumns = [
                     {name: 'col1', values: ['foo', 'bar'], type: 'text'},
                     {name: 'empty', values: ['  ', ' '], type: 'text'},
-                    {name: 'col2', values: ['2', '2.1'], type: 'float'},
+                    {name: 'col2', values: ['2', '2.1'], type: 'double_precision'},
                     {name: 'someText', values: ['abc', ' '], type: 'text'},
                     {name: 'col3', values: ['3', 'sna'], type: 'text'},
-                    {name: 'someFloat', values: [' ', '1'], type: 'float'},
+                    {name: 'someDouble', values: [' ', '1'], type: 'double_precision'},
                     {name: 'col4', values: ['1/2/3', '456'], type: 'text'}
                 ];
             });
@@ -208,7 +208,7 @@ describe("chorus.utilities.CsvParser", function() {
 
         context("when types are specified", function() {
             beforeEach(function() {
-                this.options.types = ['integer', 'text', 'float'];
+                this.options.types = ['integer', 'text', 'double precision'];
                 this.contents = [
                     "col1,col2,col3",
                     "row1val1,row1val2,row1val3",
@@ -218,7 +218,7 @@ describe("chorus.utilities.CsvParser", function() {
                 this.expectedColumns = [
                     {name: 'col1', values: ['row1val1', 'row2val1'], type: 'integer'},
                     {name: 'col2', values: ['row1val2', 'row2val2'], type: 'text'},
-                    {name: 'col3', values: ['row1val3', 'row2val3'], type: 'float'}
+                    {name: 'col3', values: ['row1val3', 'row2val3'], type: 'double precision'}
                 ];
             });
 
@@ -253,7 +253,7 @@ describe("chorus.utilities.CsvParser", function() {
 
                 this.expectedColumns = [
                     {name: 'column_1', values: ['foo', 'bar'], type: 'text'},
-                    {name: 'column_2', values: ['2', '2.1'], type: 'float'},
+                    {name: 'column_2', values: ['2', '2.1'], type: 'double_precision'},
                     {name: 'column_3', values: ['3', 'sna'], type: 'text'},
                     {name: 'column_4', values: ['1/2/3', '456'], type: 'text'}
                 ];

@@ -69,7 +69,7 @@ chorus.utilities.CsvParser = function(contents, options) {
                     allEmpty = allEmpty && isEmpty;
                     containsSomeText = containsSomeText || isText;
                 }, this);
-                return allEmpty || containsSomeText ? 'text' : 'float';
+                return allEmpty || containsSomeText ? 'text' : 'double_precision';
             }, this);
         }
 

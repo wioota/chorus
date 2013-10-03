@@ -72,8 +72,8 @@ describe("chorus.views.NewTableImportDataGrid", function() {
         });
 
         it("changes the type of the column", function() {
-            expect(this.$type.find(".chosen")).toHaveText("float");
-            expect(this.$type).toHaveClass("float");
+            expect(this.$type.find(".chosen")).toHaveText("double precision");
+            expect(this.$type).toHaveClass("double_precision");
         });
     });
 

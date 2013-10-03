@@ -20,15 +20,10 @@ chorus.views.NewTableImportDataGrid = chorus.views.ImportDataGrid.extend({
 
     setupDataTypeMenus: function(columns) {
         this.linkMenus = _.map(columns, function(item) {
+            var types = ["integer", "double precision", "text", "date", "time", "timestamp"];
+
             return new chorus.views.LinkMenu({
-                options: [
-                    {data: "integer", text: "integer"},
-                    {data: "float", text: "float"},
-                    {data: "text", text: "text"},
-                    {data: "date", text: "date"},
-                    {data: "time", text: "time"},
-                    {data: "timestamp", text: "timestamp"}
-                ],
+                options: _.map(types, function(type){ return {data: _.underscored(type), text: type}; }),
                 title: '',
                 event: "setType",
                 chosen: item.type

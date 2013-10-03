@@ -123,27 +123,16 @@ $cell-width: 150px;
             right: 0;
           }
 
-          li {
-            padding: 0;
-          }
 
-          .popup img {
-            display:none;
-          }
+          .popup img { display: none; }
 
+          li { padding: 0; }
           .popup_filter {
             right: 14px;
             width: 100px;
-            min-width: 100px;
-            max-width: 100px;
+            padding: 9px 13px 9px 0px;
 
-            li {
-              padding: 0;
-            }
-
-            .pointer {
-              left: 47px;
-            }
+            .pointer { left: 47px; }
           }
         }
 
@@ -154,7 +143,7 @@ $cell-width: 150px;
             @include triangle(down, white, 8px, 8px);
         }
 
-        &.integer, &.float {
+        &.integer, &.double_precision {
           background: url(/images/datatypes/label_sm_datatype_dkblue2.png) repeat;
         }
 
