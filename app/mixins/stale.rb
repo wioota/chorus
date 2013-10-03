@@ -15,4 +15,11 @@ module Stale
       save!(:validate => false)
     end
   end
+
+  def mark_fresh!
+    if stale?
+      self.stale_at = nil
+      save!(:validate => false)
+    end
+  end
 end

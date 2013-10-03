@@ -229,6 +229,15 @@ describe WorkspaceDatasetsController do
           generate_fixture "workspaceDataset/sourceTable.json" do
             get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
           end
+
+          context "when the dataset is stale" do
+            let(:dataset) { source_table.tap(&:mark_stale!) }
+
+            it "goes unstale if verifiable in source" do
+              get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+              decoded_response[:stale].should be_false
+            end
+          end
         end
 
         context "when the dataset is a source view" do

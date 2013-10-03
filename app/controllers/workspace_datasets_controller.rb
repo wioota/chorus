@@ -31,6 +31,7 @@ class WorkspaceDatasetsController < ApplicationController
     authorize_data_source_access(dataset)
 
     if dataset.verify_in_source(current_user)
+      dataset.mark_fresh!
       present dataset, {:presenter_options => {:workspace => workspace, :with_content => true}}
     else
       render_dataset_with_error(dataset)
