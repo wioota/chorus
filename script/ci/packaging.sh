@@ -12,7 +12,7 @@ if [[ $ALPINE_ZIP ]]; then
 fi
 
 if [[ $PIVOTALLABEL ]]; then
-    sed -i .og "s/alpine\.branded\.enabled\=true/alpine\.branded\.enabled\=false/" config/chorus.defaults.properties
+    sed -i "s/alpine\.branded\.enabled\=true/alpine\.branded\.enabled\=false/" config/chorus.defaults.properties
 fi
 
 rm -fr .bundle
