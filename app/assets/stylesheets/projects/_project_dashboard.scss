@@ -1,3 +1,5 @@
+@import "compass/utilities/general/clearfix";
+
 .project_list {
     .dashboard_project_card {
         @media (max-width: 1430px) {
@@ -30,12 +32,12 @@
         }
 
         .insight_zone {
+            margin-top: 10px;
             background-color: white;
             height: 170px;
         }
 
         .activity {
-            margin-top: 48px;
             border-top: 1px dotted black;
             .activity_item {
                 margin-top: 10px;
@@ -67,18 +69,16 @@
             display: block;
         }
 
-        .name_row {
-            display: inline;
-        }
-
-
-
         .info_icon {
             display: inline;
             position: absolute;
             top: 8px;
             right: 12px;
             font-size: 15px;
+        }
+
+        .project_status {
+            @include pie-clearfix;
         }
 
         .project_status > div {

@@ -12,8 +12,9 @@
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
-        max-width: 165px;
+        max-width: 160px;
         display: inline-block;
+        vertical-align: bottom;
     }
 
   i {
