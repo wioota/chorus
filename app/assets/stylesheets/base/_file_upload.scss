@@ -1,3 +1,5 @@
+@import "compass/css3/transform";
+
 .file-wrapper {
     cursor: pointer;
     overflow: hidden;
@@ -7,10 +9,12 @@
 
     // this is a class so it is easy to remove in integration tests to avoid selenium errors
     .file-input {
-        -moz-transform: translate(-500px, 0pt) scale(5);
-        width: 200px;
-        height: 200px;
-        border-width: 0 0 200px 200px;
+        // in firefox, the file input stops a cursor from appearing (but clicking the button will still open the file input)
+        -moz-transform: translate(-500px, 0pt);
+
+        // in IE, the file input will show a cursor - making it bigger means the cursor will be hidden
+        @include transform(scale(5));
+
         position: absolute;
         top: 0px;
         right: 0px;
