@@ -4,6 +4,8 @@ class WorkfilesController < ApplicationController
   wrap_parameters :workfile
   include DataSourceAuth
 
+  before_filter :convert_form_encoded_arrays, :only => [:create, :update]
+
   def show
     workfile = Workfile.find(params[:id])
     authorize! :show, workfile.workspace
@@ -63,5 +65,16 @@ class WorkfilesController < ApplicationController
 
     workfile.destroy
     render :json => {}
+  end
+
+  private
+
+  def convert_form_encoded_arrays
+    # Sometimes (usually in areas that upload files via real form submission) the javascript app needs to send things in a form-encoded way,
+    # which means arrays look like this:  {"0" => {"stuff" => "things"}, "1" => {"stuff" => "things"}}
+    # This before_filter turns those params into regular arrays so that the rest of the code can treat them uniformly.
+    [:execution_locations, :versions_attributes].each do |key|
+      params[:workfile][key] = params[:workfile][key].values if params[:workfile][key] && params[:workfile][key]["0"]      
+    end
   end
 end
