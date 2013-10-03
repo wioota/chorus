@@ -26,4 +26,13 @@ module HawqIntegration
   def self.find_hawq_data_source(name)
     config['data_sources']['hawq'].find { |hash| hash["host"] == name }
   end
+
+  def self.make_fixture
+    database_string = "jdbc:postgresql://#{hawq_config['host']}:#{hawq_config['port']}/gpadmin"
+    options = {:user => hawq_config['account']['db_username'], :password => hawq_config['account']['db_password']}
+    Sequel.connect(database_string, options) do |database_connection|
+      sql = File.read(File.expand_path("../create_hawq_table.sql", __FILE__))
+      database_connection.run(sql)
+    end
+  end
 end
