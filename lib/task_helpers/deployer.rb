@@ -6,7 +6,7 @@ class Deployer
     @config = config
   end
 
-  def deploy(package_file="greenplum-chorus-#{PackageMaker.version_name}.sh")
+  def deploy(package_file="chorus-#{PackageMaker.version_name}.sh")
     upload(package_file)
   end
 

@@ -8,7 +8,7 @@ if [[ $install_processes -le 1 ]]; then
         server=stage
     fi
 
-    for file in greenplum-chorus-*.sh
+    for file in chorus-*.sh
     do
       echo "Deploying $file"
       chmod +x $file
