@@ -13,7 +13,7 @@ resource 'Tags' do
     parameter :add, 'Tag name (100 characters or less)'
     required_parameters :taggables
 
-    let(:taggables) { { "0" => {entity_id: workfile.to_param, entity_type: Workfile} } }
+    let(:taggables) { [{entity_id: workfile.to_param, entity_type: Workfile}] }
     let(:add) { 'alpha' }
 
     example_request 'Adding a tag to multiple entities' do
@@ -30,7 +30,7 @@ resource 'Tags' do
       workfile.tag_list = ['alpha']
     end
 
-    let(:taggables) { { "0" => {entity_id: workfile.to_param, entity_type: Workfile} } }
+    let(:taggables) { [{entity_id: workfile.to_param, entity_type: Workfile}] }
     let(:remove) { 'alpha' }
 
     example_request 'Removing a tag from multiple entities' do

@@ -8,7 +8,7 @@ describe TaggingsController do
   end
 
   describe 'create' do
-    let(:taggables) { { '0' => { :entity_id => entity.id, :entity_type => entity.class.name.underscore } } }
+    let(:taggables) { [{:entity_id => entity.id, :entity_type => entity.class.name.underscore}] }
 
     describe 'adding tags' do
       let(:entity) { workfiles(:public) }
@@ -111,9 +111,10 @@ describe TaggingsController do
       let(:first_entity) { workfiles(:public) }
       let(:second_entity) { datasets(:table) }
       let(:tag_name) { 'alpha' }
-      let(:taggables) { {
-          "0" => {:entity_id => first_entity.id, :entity_type => first_entity.class.name.underscore},
-          "1" => {:entity_id => second_entity.id, :entity_type => second_entity.class.name.underscore}} }
+      let(:taggables) { [
+          {:entity_id => first_entity.id, :entity_type => first_entity.class.name.underscore},
+          {:entity_id => second_entity.id, :entity_type => second_entity.class.name.underscore}
+      ] }
       let(:params) { { :taggables => taggables, :add => tag_name} }
 
       it 'adds the tag to each entity' do

@@ -86,12 +86,12 @@ class AlpineWorkfile < Workfile
   end
 
   def scoop_file_name(params)
-    full_name = params[:versions_attributes]["0"][:contents].original_filename
+    full_name = params[:versions_attributes][0][:contents].original_filename
     full_name.gsub('.afm', '')
   end
 
   def scoop_file_from(params)
-    params[:versions_attributes]['0'][:contents].read
+    params[:versions_attributes][0][:contents].read
   end
 
   def update_execution_location(params)

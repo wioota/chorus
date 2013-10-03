@@ -103,8 +103,8 @@ describe("chorus.models.Job", function () {
 
 
         it("passes the 'job_action: run' parameter", function () {
-            var params = this.server.lastUpdateFor(this.model).params();
-            expect(params['job[job_action]']).toEqual('run');
+            var json = this.server.lastUpdateFor(this.model).json();
+            expect(json['job']['job_action']).toEqual('run');
         });
 
         it("does not toast without success", function () {
@@ -139,8 +139,8 @@ describe("chorus.models.Job", function () {
         });
 
         it("passes the 'job_action: kill' parameter", function () {
-            var params = this.server.lastUpdateFor(this.model).params();
-            expect(params['job[job_action]']).toEqual('kill');
+            var json = this.server.lastUpdateFor(this.model).json();
+            expect(json['job']['job_action']).toEqual('kill');
         });
 
         it("does not toast without success", function () {

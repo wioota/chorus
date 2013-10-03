@@ -48,8 +48,8 @@ describe("chorus.views.JobContentDetails", function () {
         it("posts to the API with the right parameters", function () {
             this.view.$('button.toggle_enabled').click();
 
-            var params = this.server.lastUpdate().params();
-            expect(params['job[enabled]']).toBe("true");
+            var json = this.server.lastUpdate().json();
+            expect(json['job']['enabled']).toBe(true);
         });
 
         it("shows the enabling/disabling text", function () {

@@ -483,32 +483,15 @@ describe("chorus.dialogs.EditWorkspace", function() {
                         expect(this.dialog.pageModel.save).toHaveBeenCalled();
                     });
 
-                    it("sets the name on the workspace", function() {
-                        expect(this.server.lastUpdateFor(this.dialog.pageModel).params()).toEqual(
-                            jasmine.objectContaining({"workspace[name]": "my modified name"})
-                        );
-                    });
-
-                    it("sets the summary on the workspace", function() {
-                        expect(this.server.lastUpdateFor(this.dialog.pageModel).params()).toEqual(
-                            jasmine.objectContaining({"workspace[summary]": "my modified summary"})
-                        );
-                    });
-
-                    it("sets the isProject value on the workspace", function () {
-                        expect(this.server.lastUpdateFor(this.dialog.pageModel).params()["workspace[is_project]"]).toBe('true');
-                    });
-
-                    it("sets the owner id on the workspace", function() {
-                        expect(this.server.lastUpdateFor(this.dialog.pageModel).params()).toEqual(
-                            jasmine.objectContaining({"workspace[owner_id]": "13"})
-                        );
-                    });
-
-                    it("sets the showSandboxDatasets flag on the workspace", function() {
-                        expect(this.server.lastUpdateFor(this.dialog.pageModel).params()).toEqual(
-                            jasmine.objectContaining({"workspace[show_sandbox_datasets]": "false"})
-                        );
+                    it("sets values on the workspace", function() {
+                        expect(this.server.lastUpdateFor(this.dialog.pageModel).json()['workspace']).toEqual(jasmine.objectContaining({
+                            name: "my modified name",
+                            summary: "my modified summary",
+                            owner_id: '13',
+                            is_project: true,
+                            show_sandbox_datasets: false,
+                            has_changed_settings: true
+                        }));
                     });
 
                     it("does not close the dialog before the server responds", function() {
@@ -519,12 +502,6 @@ describe("chorus.dialogs.EditWorkspace", function() {
                         expect(this.dialog.$("button.submit")).toHaveSpinner();
                     });
 
-                    it("always sends the has_changed_settings on save", function() {
-                        expect(this.server.lastUpdateFor(this.dialog.pageModel).params()).toEqual(
-                            jasmine.objectContaining({"workspace[has_changed_settings]": "true"})
-                        );
-                    });
-
                     context("when the public checkbox is checked", function() {
                         beforeEach(function() {
                             this.dialog.$("input[name=public]").prop("checked", true);
@@ -532,7 +509,7 @@ describe("chorus.dialogs.EditWorkspace", function() {
                         });
 
                         it("sets the public model attribute to true", function() {
-                            expect(this.dialog.pageModel.get("public")).toBe(true);
+                            expect(this.server.lastUpdateFor(this.dialog.pageModel).json()['workspace']['public']).toEqual(true);
                         });
                     });
 
@@ -543,9 +520,7 @@ describe("chorus.dialogs.EditWorkspace", function() {
                         });
 
                         it("sets the public model attribute to false", function() {
-                            expect(this.server.lastUpdateFor(this.dialog.pageModel).params()).toEqual(
-                                jasmine.objectContaining({"workspace[public]": "false"})
-                            );
+                            expect(this.server.lastUpdateFor(this.dialog.pageModel).json()['workspace']['public']).toEqual(false);
                         });
                     });
 
@@ -556,15 +531,11 @@ describe("chorus.dialogs.EditWorkspace", function() {
                         });
 
                         it("sets the active model attribute to true", function() {
-                            expect(this.server.lastUpdateFor(this.dialog.pageModel).params()).toEqual(
-                                jasmine.objectContaining({"workspace[active]": "true"})
-                            );
+                            expect(this.server.lastUpdateFor(this.dialog.pageModel).json()['workspace']['active']).toEqual(true);
                         });
 
                         it("sets the archived model attribute to false", function() {
-                            expect(this.server.lastUpdateFor(this.dialog.pageModel).params()).toEqual(
-                                jasmine.objectContaining({"workspace[archived]": "false"})
-                            );
+                            expect(this.server.lastUpdateFor(this.dialog.pageModel).json()['workspace']['archived']).toEqual(false);
                         });
                     });
 
@@ -576,15 +547,11 @@ describe("chorus.dialogs.EditWorkspace", function() {
                         });
 
                         it("sets the active model attribute to false", function() {
-                            expect(this.server.lastUpdateFor(this.dialog.pageModel).params()).toEqual(
-                                jasmine.objectContaining({"workspace[active]": "false"})
-                            );
+                            expect(this.server.lastUpdateFor(this.dialog.pageModel).json()['workspace']['active']).toEqual(false);
                         });
 
                         it("sets the archived model attribute to true", function() {
-                            expect(this.server.lastUpdateFor(this.dialog.pageModel).params()).toEqual(
-                                jasmine.objectContaining({"workspace[archived]": "true"})
-                            );
+                            expect(this.server.lastUpdateFor(this.dialog.pageModel).json()['workspace']['archived']).toEqual(true);
                         });
                     });
 

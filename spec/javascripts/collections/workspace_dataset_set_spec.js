@@ -58,9 +58,8 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
             this.collection.add(backboneFixtures.workspaceDataset.datasetTable({id: 5678, objectName: 'first'}));
             this.collection.save();
 
-            var bodyParams = decodeURIComponent(this.server.lastCreateFor(this.collection).requestBody).split("&");
-            expect(bodyParams).toContain("dataset_ids[]=5678");
-            expect(bodyParams).toContain("dataset_ids[]=1234");
+            var json = this.server.lastCreateFor(this.collection).json();
+            expect(json['dataset_ids']).toEqual([5678, 1234]);
         });
     });
 

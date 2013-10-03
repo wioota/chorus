@@ -49,8 +49,8 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
         it("saves the workbook", function() {
             var req = this.server.lastCreateFor(this.model);
             expect(req).toBeDefined();
-            expect(req.params()['tableau_workbook[name]']).toBe("foo");
-            expect(req.params()['tableau_workbook[create_work_file]']).toEqual('true');
+            expect(req.json()['tableau_workbook']['name']).toBe("foo");
+            expect(req.json()['tableau_workbook']['create_work_file']).toEqual(true);
         });
 
         it("start the spinner on the button", function() {

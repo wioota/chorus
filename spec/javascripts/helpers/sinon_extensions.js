@@ -244,6 +244,10 @@ _.extend(sinon.FakeXMLHttpRequest.prototype, {
         return uri.search(true);
     },
 
+    json: function () {
+        return JSON.parse(this.requestBody);
+    },
+
     error: function(message) {
         return this.respond(
             404,

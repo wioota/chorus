@@ -3,8 +3,6 @@ require 'hdfs_data_source_access'
 
 class HdfsDataSourcesController < ApplicationController
 
-  before_filter :connection_parameters_to_array, :only => [:create, :update]
-
   def create
     data_source = Hdfs::DataSourceRegistrar.create!(params[:hdfs_data_source], current_user)
     QC.enqueue_if_not_queued("HdfsDataSource.refresh", data_source.id)
@@ -36,11 +34,5 @@ class HdfsDataSourcesController < ApplicationController
     authorize! :edit, hdfs_data_source
     hdfs_data_source.destroy
     head :ok
-  end
-
-  private
-
-  def connection_parameters_to_array
-    params[:hdfs_data_source][:connection_parameters] = params[:hdfs_data_source][:connection_parameters].try(:values) || []
   end
 end

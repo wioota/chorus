@@ -21,11 +21,11 @@ describe("chorus.models.TaggingsUpdater", function() {
         });
 
         it("posts the added tag to the taggings for all objects", function() {
-            var params = this.server.lastCreate().params();
-            expect(params["taggables[0][entity_id]"]).toEqual('123');
-            expect(params["taggables[1][entity_id]"]).toEqual('456');
-            expect(params["add"]).toEqual('foo');
-            expect(params["remove"]).toEqual();
+            var json = this.server.lastCreate().json();
+            expect(json["taggables"][0]["entity_id"]).toEqual(123);
+            expect(json["taggables"][1]["entity_id"]).toEqual(456);
+            expect(json["add"]).toEqual('foo');
+            expect(json["remove"]).toBeUndefined();
         });
 
         context("when the update succeeds", function() {
@@ -92,11 +92,11 @@ describe("chorus.models.TaggingsUpdater", function() {
         });
 
         it("posts the remove tag options to taggings for all objects", function() {
-            var params = this.server.lastCreate().params();
-            expect(params["taggables[0][entity_id]"]).toEqual('123');
-            expect(params["taggables[1][entity_id]"]).toEqual('456');
-            expect(params["remove"]).toEqual('foo');
-            expect(params["add"]).toEqual();
+            var json = this.server.lastCreate().json();
+            expect(json["taggables"][0]["entity_id"]).toEqual(123);
+            expect(json["taggables"][1]["entity_id"]).toEqual(456);
+            expect(json["remove"]).toEqual('foo');
+            expect(json["add"]).toBeUndefined();
         });
     });
 });

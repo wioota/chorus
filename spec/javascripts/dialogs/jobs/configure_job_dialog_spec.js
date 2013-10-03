@@ -59,10 +59,10 @@ describe("chorus.dialogs.ConfigureJob", function () {
                 });
 
                 it("posts with the correct values", function() {
-                    var params = this.server.lastCreate().params();
-                    expect(params['job[name]']).toEqual(this.jobPlan.name);
-                    expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
-                    expect(params['job[interval_value]']).toEqual("0");
+                    var json = this.server.lastCreate().json()['job'];
+                    expect(json['name']).toEqual(this.jobPlan.name);
+                    expect(json['interval_unit']).toEqual(this.jobPlan.interval_unit);
+                    expect(json['interval_value']).toEqual("0");
                 });
 
                 context("when the save fails", function () {
@@ -182,13 +182,13 @@ describe("chorus.dialogs.ConfigureJob", function () {
                     });
 
                     it("posts with the correct values", function() {
-                        var params = this.server.lastCreate().params();
+                        var json = this.server.lastCreate().json()['job'];
                         var date = moment.utc([this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, parseInt(this.jobPlan.hour, 10), parseInt(this.jobPlan.minute, 10)]);
-                        expect(params['job[name]']).toEqual(this.jobPlan.name);
-                        expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
-                        expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
-                        expect(params['job[next_run]']).toEqual(date.format());
-                        expect(params['job[end_run]']).toEqual('false');
+                        expect(json['name']).toEqual(this.jobPlan.name);
+                        expect(json['interval_unit']).toEqual(this.jobPlan.interval_unit);
+                        expect(json['interval_value']).toEqual(this.jobPlan.interval_value);
+                        expect(json['next_run']).toEqual(date.format());
+                        expect(json['end_run']).toEqual(false);
                     });
 
                     context("when the save succeeds", function () {
@@ -249,14 +249,14 @@ describe("chorus.dialogs.ConfigureJob", function () {
                     });
 
                     it("posts with the correct values", function() {
-                        var params = this.server.lastCreate().params();
+                        var json = this.server.lastCreate().json()['job'];
                         var date = moment.utc([this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, parseInt(this.jobPlan.hour, 10), parseInt(this.jobPlan.minute, 10)]);
                         var endDate = moment(new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day));
-                        expect(params['job[name]']).toEqual(this.jobPlan.name);
-                        expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
-                        expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
-                        expect(params['job[next_run]']).toEqual(date.format());
-                        expect(params['job[end_run]']).toEqual(endDate.toISOString());
+                        expect(json['name']).toEqual(this.jobPlan.name);
+                        expect(json['interval_unit']).toEqual(this.jobPlan.interval_unit);
+                        expect(json['interval_value']).toEqual(this.jobPlan.interval_value);
+                        expect(json['next_run']).toEqual(date.format());
+                        expect(json['end_run']).toEqual(endDate.toISOString());
                     });
 
                     context("when the save succeeds", function () {
@@ -394,15 +394,15 @@ describe("chorus.dialogs.ConfigureJob", function () {
                     });
 
                     it("posts with the correct values", function () {
-                        var params = this.server.lastUpdate().params();
+                        var json = this.server.lastUpdate().json()['job'];
                         var date = moment.utc([this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day, parseInt(this.jobPlan.hour, 10), parseInt(this.jobPlan.minute, 10)]);
                         var endDate = moment(new Date(this.jobPlan.year, parseInt(this.jobPlan.month, 10) - 1, this.jobPlan.day));
-                        expect(params['job[name]']).toEqual(this.jobPlan.name);
-                        expect(params['job[interval_unit]']).toEqual(this.jobPlan.interval_unit);
-                        expect(params['job[interval_value]']).toEqual(this.jobPlan.interval_value);
-                        expect(params['job[next_run]']).toEqual(date.format());
-                        expect(params['job[end_run]']).toEqual(endDate.toISOString());
-                        expect(params['job[time_zone]']).toEqual(this.jobPlan.time_zone);
+                        expect(json['name']).toEqual(this.jobPlan.name);
+                        expect(json['interval_unit']).toEqual(this.jobPlan.interval_unit);
+                        expect(json['interval_value']).toEqual(this.jobPlan.interval_value);
+                        expect(json['next_run']).toEqual(date.format());
+                        expect(json['end_run']).toEqual(endDate.toISOString());
+                        expect(json['time_zone']).toEqual(this.jobPlan.time_zone);
                     });
 
                     context("when the save succeeds", function () {
@@ -458,12 +458,12 @@ describe("chorus.dialogs.ConfigureJob", function () {
                     });
 
                     it("posts with the correct values", function () {
-                        var params = this.server.lastUpdate().params();
-                        expect(params['job[name]']).toEqual(this.job.get("name"));
-                        expect(params['job[interval_unit]']).toEqual("on_demand");
-                        expect(params['job[interval_value]']).toEqual("0");
-                        expect(params['job[next_run]']).toBe('false');
-                        expect(params['job[end_run]']).toBe('false');
+                        var json = this.server.lastUpdate().json()['job'];
+                        expect(json['name']).toEqual(this.job.get("name"));
+                        expect(json['interval_unit']).toEqual("on_demand");
+                        expect(json['interval_value']).toEqual("0");
+                        expect(json['next_run']).toBe(false);
+                        expect(json['end_run']).toBe(false);
                     });
 
                     context("when the save succeeds", function () {
@@ -504,9 +504,9 @@ describe("chorus.dialogs.ConfigureJob", function () {
             this.dialog.$('input.name').val(this.jobPlan.name).trigger("keyup");
             this.dialog.$("form").submit();
 
-            var params = this.server.lastCreate().params();
-            expect(params['job[success_notify]']).toEqual("nobody");
-            expect(params['job[failure_notify]']).toEqual("nobody");
+            var json = this.server.lastCreate().json()['job'];
+            expect(json['success_notify']).toEqual("nobody");
+            expect(json['failure_notify']).toEqual("nobody");
         });
 
         describe("when opened with a model that already has success/failure set", function () {
@@ -585,9 +585,9 @@ describe("chorus.dialogs.ConfigureJob", function () {
                 });
 
                 it("posts the success/failure recipients", function() {
-                    var params = this.server.lastCreate().params();
-                    expect(params['job[success_recipients][]']).toEqual(['3', '4']);
-                    expect(params['job[failure_recipients][]']).toEqual(['2', '3', '4']);
+                    var json = this.server.lastCreate().json()['job'];
+                    expect(json['success_recipients']).toEqual([3, 4]);
+                    expect(json['failure_recipients']).toEqual([2, 3, 4]);
                 });
             });
 

@@ -434,7 +434,7 @@ describe("chorus.models.Activity", function() {
 
         it("posts to the comment insight url with the correct parameters", function() {
             expect(this.server.lastCreate().url).toBe("/insights");
-            expect(this.server.lastCreate().params()['note[note_id]']).toBe(this.model.id);
+            expect(this.server.lastCreate().json()['note']['note_id']).toBe(this.model.id);
         });
 
         it("calls the success function", function() {

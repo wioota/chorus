@@ -31,8 +31,8 @@ describe("chorus.dialogs.WorkFlowNewForDatasetList", function() {
 
             it("submits the form", function() {
                 this.dialog.$("form").submit();
-                expect(this.server.lastCreate().params()["workfile[entity_subtype]"]).toEqual('alpine');
-                expect(this.server.lastCreate().params()["workfile[dataset_ids][]"]).toEqual(['1', '2']);
+                expect(this.server.lastCreate().json()["workfile"]["entity_subtype"]).toEqual('alpine');
+                expect(this.server.lastCreate().json()["workfile"]["dataset_ids"]).toEqual([1, 2]);
             });
         });
 

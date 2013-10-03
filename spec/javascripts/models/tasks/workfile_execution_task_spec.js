@@ -17,10 +17,10 @@ describe("chorus.models.WorkfileExecutionTask", function() {
 
     it("posts the correct data on save", function() {
         this.model.save();
-        var params = this.server.lastCreate().params();
-        expect(params['check_id']).toEqual(this.model.get("checkId"));
-        expect(params['sql']).toEqual('show tables');
-        expect(_.keys(params).length).toEqual(2);
+        var json = this.server.lastCreate().json();
+        expect(json['check_id']).toEqual(this.model.get("checkId"));
+        expect(json['sql']).toEqual('show tables');
+        expect(_.keys(json).length).toEqual(2);
     });
 
     it("mixes in SQLResults", function() {

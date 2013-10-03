@@ -20,7 +20,7 @@ chorus.models.BulkDestroyer = chorus.models.Base.extend({
         // backbone will not take any additional data for a 'destroy' call unless
         // it is forced into the options.data property, so we'll send along
         // our options in the 'data' property
-        return this._super('destroy', [{data: this.underscoreKeys(options)}]);
+        return this._super('destroy', [{data: this.underscoreKeys(options), processData: true, contentType: 'application/json'}]);
     },
 
     handleRequestFailure: function() {

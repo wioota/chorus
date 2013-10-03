@@ -102,7 +102,7 @@ describe("chorus.dialogs.EditNote", function() {
             var note = this.note.toNote();
             expect(note).toHaveBeenUpdated();
             var update = this.server.lastUpdateFor(note);
-            expect(update.params()["note[body]"]).toBe("Agile, meet big data. Let's pair.");
+            expect(update.json()["note"]["body"]).toBe("Agile, meet big data. Let's pair.");
         });
 
         describe("when the save completes successfully", function() {

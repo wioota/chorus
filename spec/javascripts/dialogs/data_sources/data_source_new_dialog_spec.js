@@ -483,21 +483,23 @@ describe("chorus.dialogs.DataSourcesNew", function() {
             });
 
             it("creates a hadoop data source model with the right data and saves it", function() {
-                var params = this.server.lastCreate().params();
+                var json = this.server.lastCreate().json()['hdfs_data_source'];
 
-                expect(params['hdfs_data_source[name]']).toBe("DataSource_Name");
-                expect(params['hdfs_data_source[description]']).toBe("DataSource Description");
-                expect(params['hdfs_data_source[host]']).toBe("foo.bar");
-                expect(params['hdfs_data_source[port]']).toBe("1234");
-                expect(params['hdfs_data_source[username]']).toBe("user");
-                expect(params['hdfs_data_source[group_list]']).toBe("hadoop");
-                expect(params['hdfs_data_source[job_tracker_host]']).toBe("foooo.baaaar");
-                expect(params['hdfs_data_source[job_tracker_port]']).toBe("4321");
-                expect(params['hdfs_data_source[high_availability]']).toBe("false");
-                expect(params['hdfs_data_source[connection_parameters][0][key]']).toEqual(this.someConnectionParams[0].key);
-                expect(params['hdfs_data_source[connection_parameters][0][value]']).toEqual(this.someConnectionParams[0].value);
-                expect(params['hdfs_data_source[connection_parameters][1][key]']).toEqual(this.someConnectionParams[1].key);
-                expect(params['hdfs_data_source[connection_parameters][1][value]']).toEqual(this.someConnectionParams[1].value);
+                expect(json['name']).toBe("DataSource_Name");
+                expect(json['description']).toBe("DataSource Description");
+                expect(json['host']).toBe("foo.bar");
+                expect(json['port']).toBe("1234");
+                expect(json['username']).toBe("user");
+                expect(json['group_list']).toBe("hadoop");
+                expect(json['job_tracker_host']).toBe("foooo.baaaar");
+                expect(json['job_tracker_port']).toBe("4321");
+                expect(json['high_availability']).toBe(false);
+                
+                var connection_parameters = json['connection_parameters'];
+                expect(connection_parameters[0]['key']).toEqual(this.someConnectionParams[0].key);
+                expect(connection_parameters[0]['value']).toEqual(this.someConnectionParams[0].value);
+                expect(connection_parameters[1]['key']).toEqual(this.someConnectionParams[1].key);
+                expect(connection_parameters[1]['value']).toEqual(this.someConnectionParams[1].value);
             });
         });
 
@@ -518,12 +520,12 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
             it("sends the right params", function() {
                 this.dialog.$("button.submit").click();
-                var params = this.server.lastCreate().params();
+                var json = this.server.lastCreate().json()['data_source'];
 
-                expect(params['data_source[entity_type]']).toBe('gpdb_data_source');
-                expect(params["data_source[name]"]).toBe("DataSource_Name");
-                expect(params["data_source[description]"]).toBe("DataSource Description");
-                expect(params["data_source[db_name]"]).toBe("foo");
+                expect(json['entity_type']).toBe('gpdb_data_source');
+                expect(json['name']).toBe("DataSource_Name");
+                expect(json['description']).toBe("DataSource Description");
+                expect(json['db_name']).toBe("foo");
             });
 
             testUpload();
@@ -546,11 +548,11 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
             it("sends the right params", function() {
                 this.dialog.$("button.submit").click();
-                var params = this.server.lastCreate().params();
-                expect(params['data_source[entity_type]']).toBe('gpdb_data_source');
-                expect(params["data_source[name]"]).toBe("DataSource_Name");
-                expect(params["data_source[description]"]).toBe("DataSource Description");
-                expect(params["data_source[db_name]"]).toBe("foo");
+                var json = this.server.lastCreate().json()['data_source'];
+                expect(json['entity_type']).toBe('gpdb_data_source');
+                expect(json["name"]).toBe("DataSource_Name");
+                expect(json["description"]).toBe("DataSource Description");
+                expect(json["db_name"]).toBe("foo");
             });
 
             context("when the data source is not actually a hawq data source", function() {
@@ -586,13 +588,13 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
             it('sends the right params', function() {
                 this.dialog.$("button.submit").click();
-                var params = this.server.lastCreate().params();
+                var json = this.server.lastCreate().json()['data_source'];
 
-                expect(params['data_source[entity_type]']).toBe('oracle_data_source');
-                expect(params["data_source[db_password]"]).toBe("my_password");
-                expect(params["data_source[name]"]).toBe("DataSource_Name");
-                expect(params["data_source[description]"]).toBe("DataSource Description");
-                expect(params["data_source[db_name]"]).toBe("foo");
+                expect(json['entity_type']).toBe('oracle_data_source');
+                expect(json["db_password"]).toBe("my_password");
+                expect(json["name"]).toBe("DataSource_Name");
+                expect(json["description"]).toBe("DataSource Description");
+                expect(json["db_name"]).toBe("foo");
             });
 
             testUpload();
@@ -612,13 +614,13 @@ describe("chorus.dialogs.DataSourcesNew", function() {
 
             it("sends the right params", function() {
                 this.dialog.$("button.submit").click();
-                var params = this.server.lastCreate().params();
+                var json = this.server.lastCreate().json()["gnip_data_source"];
 
-                expect(params["gnip_data_source[name]"]).toBe("Gnip Name");
-                expect(params["gnip_data_source[description]"]).toBe("Gnip Description");
-                expect(params["gnip_data_source[stream_url]"]).toBe("gnip.com");
-                expect(params["gnip_data_source[username]"]).toBe("gnip_user");
-                expect(params["gnip_data_source[password]"]).toBe("my_password");
+                expect(json["name"]).toBe("Gnip Name");
+                expect(json["description"]).toBe("Gnip Description");
+                expect(json["stream_url"]).toBe("gnip.com");
+                expect(json["username"]).toBe("gnip_user");
+                expect(json["password"]).toBe("my_password");
             });
 
             testUpload();

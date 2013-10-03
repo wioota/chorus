@@ -3,7 +3,7 @@ class TaggingsController < ApplicationController
   wrap_parameters :tagging, :exclude => []
 
   def create
-    taggables = params[:tagging][:taggables].values
+    taggables = params[:tagging][:taggables]
     taggables.each do |taggable|
       model = ModelMap.model_from_params(taggable[:entity_type], taggable[:entity_id])
       authorize! :show, model

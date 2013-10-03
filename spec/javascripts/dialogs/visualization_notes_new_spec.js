@@ -61,7 +61,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
 
             it("saves the visualization chart as an attachment to the note", function() {
                 expect(this.server.lastCreate().url).toEqual("/notes/2/attachments");
-                expect(this.server.lastCreate().params()).toEqual({ file_name : 'hello-frequency.png', svg_data : '<svg/>' });
+                expect(this.server.lastCreate().json()).toEqual({ file_name : 'hello-frequency.png', svg_data : '<svg/>' });
             });
 
             describe("after the v11n attachment has been saved", function() {

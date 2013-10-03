@@ -167,9 +167,9 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
                     var request = this.server.lastCreate();
 
                     expect(request.url).toMatchUrl("/workspaces/" + workspaceId + "/external_tables");
-                    expect(request.params()["fake_model[table_name]"]).toBe("hi");
-                    expect(request.params()["fake_model[delimiter]"]).toBe(",");
-                    expect(request.params()["fake_model[hdfs_entry_id]"]).toBe("234");
+                    expect(request.json()["fake_model"]["table_name"]).toBe("hi");
+                    expect(request.json()["fake_model"]["delimiter"]).toBe(",");
+                    expect(request.json()["fake_model"]["hdfs_entry_id"]).toBe("234");
                 });
 
                 context("when the post to import responds with success", function() {

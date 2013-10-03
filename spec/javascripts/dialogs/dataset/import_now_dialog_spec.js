@@ -147,7 +147,7 @@ describe("chorus.dialogs.ImportNow", function() {
                             });
 
                             it("sends the correct dataset name", function() {
-                                expect(this.server.lastCreate().params()["dataset_import[to_table]"]).toBe("myDatasetWithAReallyReallyLongName");
+                                expect(this.server.lastCreate().json()["dataset_import"]["to_table"]).toBe("myDatasetWithAReallyReallyLongName");
                             });
                         });
 
@@ -175,8 +175,8 @@ describe("chorus.dialogs.ImportNow", function() {
 
                     it("should save the model", function() {
                         expect(this.server.lastCreateFor(this.dialog.model)).toBeDefined();
-                        expect(this.server.lastCreateFor(this.dialog.model).params()["dataset_import[truncate]"]).toBe("true");
-                        expect(this.server.lastCreateFor(this.dialog.model).params()["dataset_import[new_table]"]).toBe("false");
+                        expect(this.server.lastCreateFor(this.dialog.model).json()['dataset_import']['truncate']).toBe('true');
+                        expect(this.server.lastCreateFor(this.dialog.model).json()['dataset_import']['new_table']).toBe('false');
                     });
                 });
             });
@@ -225,9 +225,9 @@ describe("chorus.dialogs.ImportNow", function() {
 
                         it("saves the model", function() {
                             expect(this.server.lastCreateFor(this.dialog.model)).toBeDefined();
-                            expect(this.server.lastCreateFor(this.dialog.model).params()["dataset_import[truncate]"]).toBe("false");
-                            expect(this.server.lastCreateFor(this.dialog.model).params()["dataset_import[new_table]"]).toBe("true");
-                            expect(this.server.lastCreateFor(this.dialog.model).params()["dataset_import[to_table]"]).toBe("good_table_name");
+                            expect(this.server.lastCreateFor(this.dialog.model).json()['dataset_import']['truncate']).toBe("false");
+                            expect(this.server.lastCreateFor(this.dialog.model).json()['dataset_import']['new_table']).toBe("true");
+                            expect(this.server.lastCreateFor(this.dialog.model).json()['dataset_import']['to_table']).toBe("good_table_name");
                         });
 
                         it("should put the submit button in the loading state", function() {

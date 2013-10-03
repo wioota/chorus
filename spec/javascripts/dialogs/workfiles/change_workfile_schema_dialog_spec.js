@@ -89,9 +89,8 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
             });
 
             it("updates the execution schema", function() {
-                var lastUpdate = this.server.lastUpdateFor(this.model);
-                var updatedExecutionSchemaId = URI.decode(lastUpdate.requestBody).match(/execution_schema\]\[id\]=(\d+)/)[1];
-                expect(updatedExecutionSchemaId).toEqual("321");
+                var json = this.server.lastUpdateFor(this.model).json();
+                expect(json['workfile']['execution_schema']['id']).toEqual(321);
             });
 
             it("triggers workfile:changed", function() {

@@ -62,8 +62,8 @@ describe("chorus.views.JobTaskItem", function () {
 
             function itReordersTheList() {
                 it("makes a request to re-order the list ", function() {
-                    var params = this.server.lastUpdateFor(this.job).params();
-                    expect(params['job[task_id_order][]']).toEqual(this.ids);
+                    var json = this.server.lastUpdateFor(this.job).json();
+                    expect(json['job']['task_id_order']).toEqual(this.ids);
                 });
             }
 

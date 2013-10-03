@@ -74,9 +74,10 @@ describe("chorus.dialogs.SandboxNew", function() {
 
             it("creates the sandbox", function() {
                 expect(this.server.lastCreate().url).toBe('/workspaces/45/sandbox');
-                expect(this.server.lastCreate().params()['sandbox[schema_id]']).toBe('6');
-                expect(this.server.lastCreate().params()['sandbox[database_id]']).toBe('5');
-                expect(this.server.lastCreate().params()['sandbox[data_source_id]']).toBe('4');
+                var json = this.server.lastCreate().json()['sandbox'];
+                expect(json['schema_id']).toBe('6');
+                expect(json['database_id']).toBe('5');
+                expect(json['data_source_id']).toBe('4');
             });
 
             it("doesn't yet display a toast", function() {
@@ -93,7 +94,7 @@ describe("chorus.dialogs.SandboxNew", function() {
 
             it("saves the workspace with the new sandbox id", function() {
                 expect(this.server.lastCreate().url).toBe("/workspaces/45/sandbox");
-                expect(this.server.lastCreate().params()["sandbox[schema_id]"]).toBe('6');
+                expect(this.server.lastCreate().json()["sandbox"]["schema_id"]).toBe('6');
             });
 
             describe("when save fails", function() {
@@ -157,10 +158,11 @@ describe("chorus.dialogs.SandboxNew", function() {
 
             it("saves the workspace with the new sandbox name", function() {
                 expect(this.server.lastCreate().url).toBe('/workspaces/45/sandbox');
-                expect(this.server.lastCreate().params()['sandbox[schema_name]']).toBe('new_schema');
-                expect(this.server.lastCreate().params()['sandbox[schema_id]']).toBeUndefined();
-                expect(this.server.lastCreate().params()['sandbox[database_id]']).toBe('5');
-                expect(this.server.lastCreate().params()['sandbox[data_source_id]']).toBe('4');
+                var json = this.server.lastCreate().json()['sandbox'];
+                expect(json['schema_name']).toBe('new_schema');
+                expect(json['schema_id']).toBeUndefined();
+                expect(json['database_id']).toBe('5');
+                expect(json['data_source_id']).toBe('4');
             });
         });
 
@@ -184,11 +186,12 @@ describe("chorus.dialogs.SandboxNew", function() {
 
             it("saves the workspace with the new database and sandbox names", function() {
                 expect(this.server.lastCreate().url).toBe('/workspaces/45/sandbox');
-                expect(this.server.lastCreate().params()['sandbox[schema_name]']).toBe('new_schema');
-                expect(this.server.lastCreate().params()['sandbox[schema_id]']).toBeUndefined();
-                expect(this.server.lastCreate().params()['sandbox[database_name]']).toBe('new_database');
-                expect(this.server.lastCreate().params()['sandbox[data_source_id]']).toBe('4');
-                expect(this.server.lastCreate().params()['sandbox[show_sandbox_datasets]']).toBe('true');
+                var json = this.server.lastCreate().json()['sandbox'];
+                expect(json['schema_name']).toBe('new_schema');
+                expect(json['schema_id']).toBeUndefined();
+                expect(json['database_name']).toBe('new_database');
+                expect(json['data_source_id']).toBe('4');
+                expect(json['show_sandbox_datasets']).toBe(true);
             });
         });
 
@@ -213,11 +216,12 @@ describe("chorus.dialogs.SandboxNew", function() {
 
             it("saves the workspace with the new database and sandbox names", function() {
                 expect(this.server.lastCreate().url).toBe('/workspaces/45/sandbox');
-                expect(this.server.lastCreate().params()['sandbox[schema_name]']).toBe('new_schema');
-                expect(this.server.lastCreate().params()['sandbox[schema_id]']).toBeUndefined();
-                expect(this.server.lastCreate().params()['sandbox[database_name]']).toBe('new_database');
-                expect(this.server.lastCreate().params()['sandbox[data_source_id]']).toBe('4');
-                expect(this.server.lastCreate().params()['sandbox[show_sandbox_datasets]']).toBe('false');
+                var json = this.server.lastCreate().json()['sandbox'];
+                expect(json['schema_name']).toBe('new_schema');
+                expect(json['schema_id']).toBeUndefined();
+                expect(json['database_name']).toBe('new_database');
+                expect(json['data_source_id']).toBe('4');
+                expect(json['show_sandbox_datasets']).toBe(false);
             });
         });
     });

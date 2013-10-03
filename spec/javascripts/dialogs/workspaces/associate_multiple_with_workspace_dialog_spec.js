@@ -33,10 +33,8 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
         });
 
         it("sends all of the datasets' ids", function() {
-            var requestBody = decodeURIComponent(this.server.lastCreate().requestBody);
-            expect(requestBody).toContain('dataset_ids[]=123');
-            expect(requestBody).toContain('dataset_ids[]=456');
-            expect(requestBody).toContain('dataset_ids[]=789');
+            var json = this.server.lastCreate().json();
+            expect(json['dataset_ids']).toEqual(['123', '456', '789']);
         });
 
         it("display loading message on the button", function() {

@@ -55,12 +55,12 @@ describe("chorus.dialogs.AssociateHdfsDatasetFromEntry", function() {
             });
 
             it("posts with the correct values", function() {
-                var params = this.server.lastCreate().params();
-                expect(params['hdfs_dataset[name]']).toEqual(this.entry.get('name'));
-                expect(params['hdfs_dataset[data_source_id]']).toEqual("5");
-                expect(params['hdfs_dataset[file_mask]']).toEqual(this.entry.getFullAbsolutePath());
-                expect(params['hdfs_dataset[workspace_id]']).toEqual(this.workspace.id);
-                expect(params['hdfs_dataset[entity_subtype]']).toEqual('HDFS');
+                var json = this.server.lastCreate().json()['hdfs_dataset'];
+                expect(json['name']).toEqual(this.entry.get('name'));
+                expect(json['data_source_id']).toEqual("5");
+                expect(json['file_mask']).toEqual(this.entry.getFullAbsolutePath());
+                expect(json['workspace_id']).toEqual(this.workspace.id);
+                expect(json['entity_subtype']).toEqual('HDFS');
             });
 
             it("starts the spinner loading", function () {

@@ -61,15 +61,15 @@ describe("chorus.views.userEdit", function() {
 
                     context("saving the user with valid data", function() {
                         it("saves the form attributes to the server", function() {
-                            var params = this.server.lastUpdateFor(this.user).params();
-                            expect(params['user[first_name]']).toBe("Frankie");
-                            expect(params['user[last_name]']).toBe(this.user.get("lastName"));
-                            expect(params['user[username]']).toBe(this.user.get("username"));
-                            expect(params['user[email]']).toBe("frankie_knuckles@nyclol.com");
-                            expect(params['user[dept]']).toBe("awesomeness dept");
-                            expect(params['user[notes]']).toBe("Here are some notes\n more than one line");
-                            expect(params['user[admin]']).toEqual('false');
-                            expect(params['user[subscribed_to_emails]']).toEqual('false');
+                            var json = this.server.lastUpdateFor(this.user).json()['user'];
+                            expect(json['first_name']).toBe("Frankie");
+                            expect(json['last_name']).toBe(this.user.get("lastName"));
+                            expect(json['username']).toBe(this.user.get("username"));
+                            expect(json['email']).toBe("frankie_knuckles@nyclol.com");
+                            expect(json['dept']).toBe("awesomeness dept");
+                            expect(json['notes']).toBe("Here are some notes\n more than one line");
+                            expect(json['admin']).toEqual(false);
+                            expect(json['subscribed_to_emails']).toEqual(false);
                         });
 
                         context("when user creation is successful", function() {
@@ -122,8 +122,8 @@ describe("chorus.views.userEdit", function() {
                         });
 
                         it("trims the whitespace before submission", function() {
-                            var params = this.server.lastUpdateFor(this.user).params();
-                            expect(params['user[first_name]']).toBe("spaces");
+                            var json = this.server.lastUpdateFor(this.user).json();
+                            expect(json['user']['first_name']).toBe("spaces");
                         });
                     });
 

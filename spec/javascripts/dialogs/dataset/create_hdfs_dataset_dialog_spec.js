@@ -71,12 +71,12 @@ describe("chorus.dialogs.CreateHdfsDataset", function() {
             });
 
             it("posts with the correct values", function() {
-                var params = this.server.lastCreate().params();
-                expect(params['hdfs_dataset[name]']).toEqual("Jim Carrey");
-                expect(params['hdfs_dataset[data_source_id]']).toEqual(this.dataSources[2].id);
-                expect(params['hdfs_dataset[file_mask]']).toEqual("foo.*.bar");
-                expect(params['hdfs_dataset[workspace_id]']).toEqual(this.workspace.id);
-                expect(params['hdfs_dataset[entity_subtype]']).toEqual('HDFS');
+                var json = this.server.lastCreate().json()['hdfs_dataset'];
+                expect(json['name']).toEqual("Jim Carrey");
+                expect(json['data_source_id']).toEqual(this.dataSources[2].id);
+                expect(json['file_mask']).toEqual("foo.*.bar");
+                expect(json['workspace_id']).toEqual(this.workspace.id);
+                expect(json['entity_subtype']).toEqual('HDFS');
             });
 
             it("starts the spinner loading", function () {

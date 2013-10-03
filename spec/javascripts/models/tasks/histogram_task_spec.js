@@ -22,8 +22,8 @@ describe("chorus.models.HistogramTask", function() {
 
         it("renames the 'xAxis' and 'bins' fields as required by the api", function() {
             var request = this.server.lastCreate();
-            expect(request.params()['chart_task[x_axis]']).toBe("height");
-            expect(request.params()['chart_task[bins]']).toBe('5');
+            expect(request.json()['chart_task']['x_axis']).toBe("height");
+            expect(request.json()['chart_task']['bins']).toBe(5);
         });
     });
 });

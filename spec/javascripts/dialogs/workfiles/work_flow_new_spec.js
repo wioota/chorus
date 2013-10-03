@@ -67,10 +67,10 @@ describe("chorus.dialogs.WorkFlowNew", function() {
 
                 it("submits the form with the right parameters", function() {
                     this.dialog.$("form").submit();
-                    var params = this.server.lastCreate().params();
-                    expect(params["workfile[entity_subtype]"]).toEqual('alpine');
-                    expect(this.server.lastCreate().params()["workfile[execution_locations][0][id]"]).toEqual(this.sandboxDatabase.id.toString());
-                    expect(this.server.lastCreate().params()["workfile[execution_locations][0][entity_type]"]).toEqual('gpdb_database');
+                    var json = this.server.lastCreate().json()["workfile"];
+                    expect(json["entity_subtype"]).toEqual('alpine');
+                    expect(json["execution_locations"][0]["id"]).toEqual(this.sandboxDatabase.id);
+                    expect(json["execution_locations"][0]["entity_type"]).toEqual('gpdb_database');
                 });
 
                 describe("when the workfile creation succeeds", function() {
@@ -115,9 +115,10 @@ describe("chorus.dialogs.WorkFlowNew", function() {
 
                 it("submits the form with the right parameters", function() {
                     this.dialog.$('form').submit();
-                    expect(this.server.lastCreate().params()["workfile[entity_subtype]"]).toEqual('alpine');
-                    expect(this.server.lastCreate().params()["workfile[execution_locations][0][id]"]).toEqual(this.hdfsDataSource.get('id'));
-                    expect(this.server.lastCreate().params()["workfile[execution_locations][0][entity_type]"]).toEqual('hdfs_data_source');
+                    var json = this.server.lastCreate().json()["workfile"];
+                    expect(json["entity_subtype"]).toEqual('alpine');
+                    expect(json["execution_locations"][0]["id"]).toEqual(this.hdfsDataSource.get('id'));
+                    expect(json["execution_locations"][0]["entity_type"]).toEqual('hdfs_data_source');
                 });
             });
         });

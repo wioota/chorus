@@ -20,10 +20,11 @@ describe("chorus.models.KaggleMessage", function() {
     describe("params", function() {
         it("includes the correct parameters", function() {
             this.model.save();
-            expect(this.server.lastCreate().params()["recipient_ids[]"]).toEqual("1");
-            expect(this.server.lastCreate().params()["reply_to"]).toEqual("user@emc.com");
-            expect(this.server.lastCreate().params()["html_body"]).toEqual("Please analyze my data");
-            expect(this.server.lastCreate().params()["subject"]).toEqual("This is a valid subject");
+            var json = this.server.lastCreate().json();
+            expect(json["recipient_ids"]).toEqual([1]);
+            expect(json["reply_to"]).toEqual("user@emc.com");
+            expect(json["html_body"]).toEqual("Please analyze my data");
+            expect(json["subject"]).toEqual("This is a valid subject");
         });
     });
 

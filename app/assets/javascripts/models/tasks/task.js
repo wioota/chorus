@@ -27,7 +27,9 @@ chorus.models.Task = chorus.models.Base.include(
                 this.trigger("canceled");
                 delete this._cancelInProgress;
             }, this),
-            data: this.underscoreKeys(this.destroyParams())
+            data: this.underscoreKeys(this.destroyParams()),
+            processData: true,
+            contentType: 'application/json'
         });
     },
 

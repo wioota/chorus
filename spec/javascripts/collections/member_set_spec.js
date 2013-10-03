@@ -30,7 +30,7 @@ describe("chorus.collections.MemberSet", function() {
         });
 
         it("passes a list of user names as post data", function() {
-            expect(this.server.lastCreateFor(this.memberSet).requestBody).toContain($.param({ member_ids : _.pluck(this.memberSet.models, "id")}));
+            expect(this.server.lastCreateFor(this.memberSet).json()['member_ids']).toEqual(_.pluck(this.memberSet.models, "id"));
         });
 
         context("when the request succeeds", function() {

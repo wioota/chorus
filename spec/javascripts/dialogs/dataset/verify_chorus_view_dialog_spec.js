@@ -54,7 +54,7 @@ describe("chorus.dialogs.VerifyChorusView", function() {
         it("uses the changed SQL for the Data Preview", function() {
             this.dialog.$("button.preview").click();
 
-            expect(this.server.lastCreate().requestBody).toContain("task%5Bquery%5D=newquery");
+            expect(this.server.lastCreate().json()["task"]["query"]).toEqual("newquery");
         });
     });
 });

@@ -207,7 +207,7 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 var lastCreate = this.server.lastCreate();
                 var uri = new URI(lastCreate.url);
 
-                expect(decodeURIComponent(lastCreate.requestBody)).toEqual("dataset_ids[]=" + this.model.id);
+                expect(lastCreate.json()['dataset_ids']).toEqual([this.model.id]);
                 expect(uri.path()).toEqual("/workspaces/" + this.workspace.get("id") + "/datasets");
                 expect(uri.query(true)).toEqual({
                     page: '1',

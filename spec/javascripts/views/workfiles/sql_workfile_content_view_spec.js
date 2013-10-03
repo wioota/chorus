@@ -102,8 +102,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                     });
 
                     it("saves the task", function() {
-                        var requestBody = this.server.lastCreate().requestBody;
-                        expect('foo?' + requestBody).toContainQueryParams({sql: "select * from foos"});
+                        expect(this.server.lastCreate().json()['sql']).toEqual("select * from foos");
                         expect(this.server.lastCreate().url).toBe(this.view.task.url());
                     });
 
@@ -205,8 +204,7 @@ describe("chorus.views.SqlWorkfileContentView", function() {
                         });
 
                         it("saves the task", function() {
-                            var requestBody = this.server.lastCreate().requestBody;
-                            expect('foo?' + requestBody).toContainQueryParams({"sql": "select 1 from table"});
+                            expect(this.server.lastCreate().json()['sql']).toEqual("select 1 from table");
                             expect(this.server.lastCreate().url).toBe(this.view.task.url());
                         });
                     });

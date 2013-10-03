@@ -64,9 +64,9 @@ describe("chorus.dialogs.ConfigureWorkFlowTask", function () {
                         });
 
                         it("submits the correct fields", function () {
-                            var params = this.server.lastCreateFor(this.dialog.model).params();
-                            expect(params['job_task[action]']).toBe('run_work_flow');
-                            expect(params['job_task[work_flow_id]']).toBe(this.workFlow.get('id'));
+                            var json = this.server.lastCreateFor(this.dialog.model).json()['job_task'];
+                            expect(json['action']).toBe('run_work_flow');
+                            expect(json['work_flow_id']).toBe(this.workFlow.get('id'));
                         });
 
                         context("when the save succeeds", function () {
@@ -150,9 +150,9 @@ describe("chorus.dialogs.ConfigureWorkFlowTask", function () {
                 });
 
                 it("submits the correct fields", function () {
-                    var params = this.server.lastUpdateFor(this.dialog.model).params();
-                    expect(params['job_task[action]']).toBe('run_work_flow');
-                    expect(params['job_task[work_flow_id]']).toBe(this.workFlow.get('id'));
+                    var json = this.server.lastUpdateFor(this.dialog.model).json()['job_task'];
+                    expect(json['action']).toBe('run_work_flow');
+                    expect(json['work_flow_id']).toBe(this.workFlow.get('id'));
                 });
 
                 context("when the save succeeds", function () {

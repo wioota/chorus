@@ -14,8 +14,6 @@ var methodMap = {
     'read'  : 'GET'
 };
 
-Backbone.emulateJSON = true;
-
 Backbone.sync = function(method, model, options) {
     var originalOptions = _.clone(options || {});
     method = (options && options.method) || method;
@@ -51,13 +49,13 @@ Backbone.sync = function(method, model, options) {
         _.each(json, function(property, key) {
             if (property === null) delete json[key];
         });
-        params.data = $.param(json);
+        params.data = JSON.stringify(json);
     }
 
     // For older servers, emulate JSON by encoding the request into an HTML-form.
     if (options.emulateJSON) {
         params.contentType = 'application/x-www-form-urlencoded';
-        params.data = params.data || {};
+        params.data = params.data ? {model: params.data} : {};
     }
 
     // For older servers, emulate HTTP by mimicking the HTTP method with `_method`

@@ -259,13 +259,13 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
                                     });
 
                                     it("submits the correct fields", function () {
-                                        var params = this.server.lastCreateFor(this.dialog.model).params();
-                                        expect(params['job_task[action]']).toBe('import_source_data');
-                                        expect(params['job_task[source_id]']).toBe(this.sourceDatasets[0].get("id"));
-                                        expect(params['job_task[destination_id]']).toBe(this.destinationDatasets[0].get("id"));
-                                        expect(params['job_task[new_table_name]']).toBeUndefined();
-                                        expect(params['job_task[row_limit]']).toBe("500");
-                                        expect(params['job_task[truncate]']).toBe("false");
+                                        var json = this.server.lastCreateFor(this.dialog.model).json()['job_task'];
+                                        expect(json['action']).toBe('import_source_data');
+                                        expect(json['source_id']).toBe(this.sourceDatasets[0].get("id"));
+                                        expect(json['destination_id']).toBe(this.destinationDatasets[0].get("id"));
+                                        expect(json['new_table_name']).toBeUndefined();
+                                        expect(json['row_limit']).toBe("500");
+                                        expect(json['truncate']).toBe(false);
                                     });
 
                                     context("when the save succeeds", function () {

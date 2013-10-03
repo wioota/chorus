@@ -26,7 +26,7 @@ describe AlpineWorkfile do
         {
             :description => description,
             :entity_subtype => 'alpine',
-            :versions_attributes => {"0" => {:contents => file}},
+            :versions_attributes => [{:contents => file}],
             :hdfs_data_source_id => hdfs.id,
             :database_id => "",
             :workspace => workspace,
@@ -52,8 +52,8 @@ describe AlpineWorkfile do
 
       describe "notifying alpine" do
         let(:file_contents) do
-          contents = params[:versions_attributes]['0'][:contents].read
-          params[:versions_attributes]['0'][:contents].rewind
+          contents = params[:versions_attributes][0][:contents].read
+          params[:versions_attributes][0][:contents].rewind
           contents
         end
 

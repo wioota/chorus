@@ -341,14 +341,14 @@ describe("chorus.dialogs.ExistingTableImportCSV", function() {
 
             it("imports the file", function() {
                 expect(this.server.lastCreate().url).toBe(this.dialog.model.url());
-                var params = this.server.lastCreate().params();
-                expect(params["fake_model[file_name]"]).toBe(this.dialog.model.get("fileName"));
-                expect(params["fake_model[table_name]"]).toBe("existing_table");
-                expect(params["fake_model[delimiter]"]).toBe(",");
-                expect(params["fake_model[type]"]).toBe("existingTable");
-                expect(params["fake_model[has_header]"]).toBe('true');
-                expect(params["fake_model[truncate]"]).toBe('true');
-                expect(params["fake_model[column_names][]"]).toEqual(this.expectedColumnNames);
+                var json = this.server.lastCreate().json()["fake_model"];
+                expect(json["file_name"]).toBe(this.dialog.model.get("fileName"));
+                expect(json["table_name"]).toBe("existing_table");
+                expect(json["delimiter"]).toBe(",");
+                expect(json["type"]).toBe("existingTable");
+                expect(json["has_header"]).toBe(true);
+                expect(json["truncate"]).toBe(true);
+                expect(json["column_names"]).toEqual(this.expectedColumnNames);
             });
 
             context("when the post to import responds with success", function() {

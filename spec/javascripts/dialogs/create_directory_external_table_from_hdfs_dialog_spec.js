@@ -183,12 +183,13 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                 it("posts to the right URL", function() {
                     var request = this.server.lastCreate();
                     expect(request.url).toMatchUrl("/workspaces/22/external_tables");
-                    expect(request.params()['hdfs_external_table[file_pattern]']).toBe("*");
-                    expect(request.params()['hdfs_external_table[hdfs_data_source_id]']).toBe("234");
-                    expect(request.params()['hdfs_external_table[column_names][]'][0]).toBe("column_1");
-                    expect(request.params()['hdfs_external_table[column_names][]'][1]).toBe("column_2");
-                    expect(request.params()['hdfs_external_table[path_type]']).toBe('directory');
-                    expect(request.params()['hdfs_external_table[hdfs_entry_id]']).toBe('1');
+                    var json = request.json()['hdfs_external_table'];
+                    expect(json['file_pattern']).toBe("*");
+                    expect(json['hdfs_data_source_id']).toBe("234");
+                    expect(json['column_names'][0]).toEqual("column_1");
+                    expect(json['column_names'][1]).toEqual("column_2");
+                    expect(json['path_type']).toBe('directory');
+                    expect(json['hdfs_entry_id']).toBe('1');
                 });
 
                 context("when the post to import responds with success", function() {
@@ -222,8 +223,8 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                     var request = this.server.lastCreate();
 
                     expect(request.url).toMatchUrl("/workspaces/22/external_tables");
-                    expect(request.params()['hdfs_external_table[path_type]']).toBe('pattern');
-                    expect(request.params()['hdfs_external_table[file_pattern]']).toBe("*.csv");
+                    expect(request.json()['hdfs_external_table']['path_type']).toBe('pattern');
+                    expect(request.json()['hdfs_external_table']['file_pattern']).toBe("*.csv");
                 });
             });
 

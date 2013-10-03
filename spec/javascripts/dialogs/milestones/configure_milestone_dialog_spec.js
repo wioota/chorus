@@ -40,8 +40,8 @@ describe("chorus.dialogs.ConfigureMilestone", function () {
             it("posts the form elements to the API", function () {
                 var request = this.server.lastCreateFor(this.dialog.model);
                 expect(request.url).toContain("/workspaces/" + this.workspace.id + "/milestones");
-                expect(request.params()['milestone[name]']).toEqual(this.milestonePlan.name);
-                expect(request.params()['milestone[target_date]']).toEqual(this.dialog.targetDatePicker.getDate().toISOString());
+                expect(request.json()['milestone']['name']).toEqual(this.milestonePlan.name);
+                expect(request.json()['milestone']['target_date']).toEqual(this.dialog.targetDatePicker.getDate().toISOString());
             });
 
             context("when the save succeeds", function () {

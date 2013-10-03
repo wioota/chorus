@@ -24,7 +24,7 @@ describe("chorus.models.Task", function() {
                 task.save();
                 var request = this.server.lastCreate();
                 expect(request.url).toBe("/base");
-                expect(request.params()["task[check_id]"]).toBe("123_4");
+                expect(request.json()["task"]["check_id"]).toBe("123_4");
             });
         });
     });

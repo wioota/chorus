@@ -288,7 +288,7 @@ describe WorkfilesController do
             :workfile => {
               :description => description,
               :entity_subtype => 'alpine',
-              :versions_attributes => {"0" => {:contents => file}},
+              :versions_attributes => [{:contents => file}],
               :hdfs_data_source_id => hdfs.id,
               :database_id => ""
             }
@@ -337,12 +337,12 @@ describe WorkfilesController do
             :workfile => {
               :file_name => 'something',
               :entity_subtype => 'alpine',
-              :execution_locations => {
-                "0" => {
+              :execution_locations => [
+                {
                   :id => database.to_param,
                   :entity_type => 'gpdb_database'
                 }
-              }
+              ]
             }
           }
         end
@@ -367,12 +367,12 @@ describe WorkfilesController do
             :workfile => {
               :entity_subtype => 'alpine',
               :file_name => 'something',
-              :execution_locations => {
-                "0" => {
+              :execution_locations => [
+                {
                   :id => hdfs_data_source.id,
                   :entity_type => 'hdfs_data_source'
                 }
-              }
+              ]
             }
           }
         end
@@ -397,12 +397,12 @@ describe WorkfilesController do
             :workfile => {
               :entity_subtype => 'alpine',
               :file_name => 'something',
-              :execution_locations => {
-                "0" => {
+              :execution_locations => [
+                {
                   :id => oracle_data_source.id,
                   :entity_type => 'oracle_data_source'
                 }
-              }
+              ]
             }
           }
         end
@@ -426,12 +426,12 @@ describe WorkfilesController do
             :workfile => {
               :entity_subtype => 'alpine',
               :file_name => 'something',
-              :execution_locations => {
-                "0" => {
+              :execution_locations => [
+                {
                   :id => 12345,
                   :entity_type => 'sandwich'
                 }
-              }
+              ]
             }
           }
         end
@@ -665,12 +665,12 @@ describe WorkfilesController do
             :workfile => {
               :entity_subtype => 'alpine',
               :file_name => 'something',
-              :execution_locations => {
-                "0" => {
+              :execution_locations => [
+                {
                   :entity_type => 'gpdb_database',
                   :id => database.id
                 }
-              }
+              ]
             }
           }
         end
@@ -694,12 +694,12 @@ describe WorkfilesController do
             :workfile => {
               :entity_subtype => 'alpine',
               :file_name => 'something',
-              :execution_locations => {
-                "0" => {
+              :execution_locations => [
+                {
                   :entity_type => 'hdfs_data_source',
                   :id => hdfs_data_source.id
                 }
-              }
+              ]
             }
           }
         end

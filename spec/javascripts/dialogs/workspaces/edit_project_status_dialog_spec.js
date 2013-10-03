@@ -29,13 +29,13 @@ describe("chorus.dialogs.EditProjectStatus", function() {
             });
 
             it("updates the project status", function() {
-                var params = this.server.lastUpdateFor(this.dialog.model).params();
-                expect(params['workspace[project_status]']).toEqual('needs_attention');
+                var json = this.server.lastUpdateFor(this.dialog.model).json();
+                expect(json['workspace']['project_status']).toEqual('needs_attention');
             });
 
             it("updates the project status reason", function() {
-                var params = this.server.lastUpdateFor(this.dialog.model).params();
-                expect(params['workspace[project_status_reason]']).toEqual(this.reason);
+                var json = this.server.lastUpdateFor(this.dialog.model).json();
+                expect(json['workspace']['project_status_reason']).toEqual(this.reason);
             });
         });
 

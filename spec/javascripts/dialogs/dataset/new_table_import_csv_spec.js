@@ -384,13 +384,13 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
             this.dialog.$("button.submit").click();
 
             expect(this.server.lastCreate().url).toBe(this.dialog.model.url());
-            var params = this.server.lastCreate().params();
+            var json = this.server.lastCreate().json();
 
-            expect(params["fake_model[types][]"]).toEqual(columnTypes);
-            expect(params["fake_model[table_name]"]).toBe("foo_quux_bar");
-            expect(params["fake_model[delimiter]"]).toBe(",");
+            expect(json["fake_model"]["types"]).toEqual(columnTypes);
+            expect(json["fake_model"]["table_name"]).toBe("foo_quux_bar");
+            expect(json["fake_model"]["delimiter"]).toBe(",");
 
-            expect(params["fake_model[column_names][]"]).toEqual(columnNames);
+            expect(json["fake_model"]["column_names"]).toEqual(columnNames);
         });
 
         context("when the post to import responds with success", function() {

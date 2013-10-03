@@ -52,8 +52,8 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
             });
 
             it("saves the model", function(){
-                expect(this.server.lastUpdate().params()["workfile[execution_locations][0][id]"]).toEqual(this.executionLocations[0].id.toString());
-                expect(this.server.lastUpdate().params()["workfile[execution_locations][0][entity_type]"]).toEqual('gpdb_database');
+                expect(this.server.lastUpdate().json()["workfile"]["execution_locations"][0]["id"]).toEqual(this.executionLocations[0].id);
+                expect(this.server.lastUpdate().json()["workfile"]["execution_locations"][0]["entity_type"]).toEqual('gpdb_database');
             });
 
             context("when save succeeds", function(){
@@ -114,8 +114,8 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
             });
 
             it("saves the model", function(){
-                expect(this.server.lastUpdate().params()["workfile[execution_locations][0][id]"]).toEqual(this.executionLocations[0].id.toString());
-                expect(this.server.lastUpdate().params()["workfile[execution_locations][0][entity_type]"]).toEqual('hdfs_data_source');
+                expect(this.server.lastUpdate().json()["workfile"]["execution_locations"][0]["id"]).toEqual(this.executionLocations[0].id);
+                expect(this.server.lastUpdate().json()["workfile"]["execution_locations"][0]["entity_type"]).toEqual('hdfs_data_source');
             });
 
             context("when save succeeds", function(){

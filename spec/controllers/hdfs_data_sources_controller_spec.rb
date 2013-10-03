@@ -33,7 +33,7 @@ describe HdfsDataSourcesController do
     end
 
     context "for a high availability data source" do
-      let(:params) { FactoryGirl.attributes_for(:hdfs_data_source, :high_availability => true, :connection_parameters => {"0" => {"a.key" => "a.value"} }) }
+      let(:params) { FactoryGirl.attributes_for(:hdfs_data_source, :high_availability => true, :connection_parameters => [{"a.key" => "a.value"}]) }
 
       before do
         stub(Hdfs::DataSourceRegistrar).verify_data_source_accessibility.with_any_args { true }

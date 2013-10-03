@@ -39,10 +39,10 @@ describe("chorus.dialogs.EditHdfsDataset", function() {
             });
 
             it("posts with the correct values", function() {
-                var params = this.server.lastUpdate().params();
-                expect(params['hdfs_dataset[name]']).toEqual("Jim Carrey");
-                expect(params['hdfs_dataset[dataset_id]']).toEqual(this.dialog.model.id);
-                expect(params['hdfs_dataset[file_mask]']).toEqual("foo.*.bar");
+                var json = this.server.lastUpdate().json()['hdfs_dataset'];
+                expect(json['name']).toEqual("Jim Carrey");
+                expect(json['dataset_id']).toEqual(this.dialog.model.id);
+                expect(json['file_mask']).toEqual("foo.*.bar");
             });
 
             it("starts the spinner loading", function () {
