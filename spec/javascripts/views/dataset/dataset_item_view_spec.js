@@ -327,13 +327,9 @@ describe("chorus.views.DatasetItem", function() {
     });
 
     context("when the dataset is stale", function () {
-        beforeEach(function () {
+        it("displays a link with an invalid icon", function () {
             this.dataset.set('stale', true);
-        });
-
-        it("displays a span with an invalid icon", function () {
-            expect(this.view.$('span.image img.stale_dataset_icon')).toExist();
-            expect(this.view.$('a.image')).not.toExist();
+            expect(this.view.$('a.image img.stale_dataset_icon')).toExist();
         });
     });
 });
