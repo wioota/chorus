@@ -53,7 +53,7 @@ describe NotesController do
         associated_workfile_ids = associated_workfiles.map(&:id)
         post :create, attributes.merge(:workfile_ids => associated_workfile_ids)
         response.code.should == "201"
-        Events::NoteOnWorkspace.last.workfiles.should =~ associated_workfiles
+        Events::NoteOnWorkspace.last.workfiles.map(&:id).should =~ associated_workfiles.map(&:id)
       end
 
       context "when creator is not a workspace member" do

@@ -347,8 +347,8 @@ describe Job do
       job.notify_on :failure, user_one
       job.notify_on :failure, user_two
 
-      job.reload.success_recipients.should =~ [user_one]
-      job.reload.failure_recipients.should =~ [user_one, user_two]
+      job.reload.success_recipients.map(&:id).should =~ [user_one].map(&:id)
+      job.reload.failure_recipients.map(&:id).should =~ [user_one, user_two].map(&:id)
     end
 
     it "makes one record per user, per condition" do
