@@ -8,9 +8,9 @@
         throw("underscore not detected - Backbone Fixtures requires underscore");
     }
 
-    BackboneFixtures = {};
+    window.BackboneFixtures = {};
 
-    BackboneFixtures.jasmineSetup = _.once(function(models, collections, baseModel, baseCollection, finishedCb) {
+    window.BackboneFixtures.jasmineSetup = _.once(function(models, collections, baseModel, baseCollection, finishedCb) {
         var allFixturesLoaded = false;
 
         function loadAllFixtures() {
@@ -34,7 +34,7 @@
 
         var waitForFixtures = function () {
             if (allFixturesLoaded) {
-                BackboneFixtures.initialize(models, collections, baseModel, baseCollection);
+                window.BackboneFixtures.initialize(models, collections, baseModel, baseCollection);
 
                 finishedCb();
             } else {
@@ -47,7 +47,7 @@
         loadAllFixtures();
     });
 
-    BackboneFixtures.initialize = function(models, collections, baseModel, baseCollection) {
+    window.BackboneFixtures.initialize = function(models, collections, baseModel, baseCollection) {
         function addUniqueDefaults(attributeObjects, keyStrings) {
             if (!_.isArray(attributeObjects)) attributeObjects = [attributeObjects];
             _.each(keyStrings, function(keyString) {
@@ -180,15 +180,15 @@
             });
         }
 
-        backboneFixtures = {
+        window.backboneFixtures = {
             definitions: window.BackboneFixtureDefinitions,
             parsedJson: {},
             rawJsonPathPrefix: "backbone"
         };
 
-        backboneFixtures.safeExtend = safeExtend;
-        backboneFixtures.addUniqueDefaults = addUniqueDefaults;
+        window.backboneFixtures.safeExtend = safeExtend;
+        window.backboneFixtures.addUniqueDefaults = addUniqueDefaults;
 
-        defineAllFixtures(backboneFixtures);
+        defineAllFixtures(window.backboneFixtures);
     };
 })();
