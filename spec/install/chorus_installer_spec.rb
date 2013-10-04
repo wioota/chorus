@@ -182,51 +182,39 @@ describe ChorusInstaller do
         stub(installer).is_supported_mac? { false }
       end
 
-      context "when Linux is CentOS/RHEL 5.5" do
-        before do
-          FileUtils.mkdir_p("/etc/")
-          File.open("/etc/redhat-release", "w") { |f| f.puts "XXXXXXXXX release 5.5 (Final)" }
-        end
+      [5.5, 5.6, 5.7].each do |version|
+        context "when Linux is CentOS/RHEL #{version}" do
+          before do
+            FileUtils.mkdir_p("/etc/")
+            File.open("/etc/redhat-release", "w") { |f| f.puts "XXXXXXXXX release #{version} (Final)" }
+          end
 
-        it "returns the RedHat 5.5 build" do
-          installer.get_postgres_build.should == 'postgres-redhat5.5-9.2.4.tar.gz'
-        end
+          it "returns the RedHat 5.5 build" do
+            installer.get_postgres_build.should == 'postgres-redhat5.5-9.2.4.tar.gz'
+          end
 
-        it "logs the users choice" do
-          mock(logger).log("Selected RedHat version 5.")
-          installer.get_postgres_build
-        end
-      end
-
-      context "when Linux is CentOS/RHEL 5.7" do
-        before do
-          FileUtils.mkdir_p("/etc/")
-          File.open("/etc/redhat-release", "w") { |f| f.puts "XXXXXXXXX release 5.7 (Final)" }
-        end
-
-        it "returns the RedHat 5.5 build" do
-          installer.get_postgres_build.should == 'postgres-redhat5.5-9.2.4.tar.gz'
-        end
-
-        it "logs the users choice" do
-          mock(logger).log("Selected RedHat version 5.")
-          installer.get_postgres_build
+          it "logs the users choice" do
+            mock(logger).log("Selected RedHat version 5.")
+            installer.get_postgres_build
+          end
         end
       end
 
-      context "when Linux is CentOS/RHEL 6.2" do
-        before do
-          FileUtils.mkdir_p("/etc/")
-          File.open("/etc/redhat-release", "w") { |f| f.puts "XXXXXXXXX release 6.2 (Final)" }
-        end
+      [6.2, 6.4].each do |version|
+        context "when Linux is CentOS/RHEL #{version}" do
+          before do
+            FileUtils.mkdir_p("/etc/")
+            File.open("/etc/redhat-release", "w") { |f| f.puts "XXXXXXXXX release #{version} (Final)" }
+          end
 
-        it "returns the RedHat 6.2 build" do
-          installer.get_postgres_build.should == 'postgres-redhat6.2-9.2.4.tar.gz'
-        end
+          it "returns the RedHat 6.2 build" do
+            installer.get_postgres_build.should == 'postgres-redhat6.2-9.2.4.tar.gz'
+          end
 
-        it "logs the users choice" do
-          mock(logger).log("Selected RedHat version 6.")
-          installer.get_postgres_build
+          it "logs the users choice" do
+            mock(logger).log("Selected RedHat version 6.")
+            installer.get_postgres_build
+          end
         end
       end
 

@@ -133,9 +133,10 @@ class ChorusInstaller
     input = 5 if is_supported_mac?
 
     redhat_version = supported_redhat_version
-    input = 1 if redhat_version == '5.5'
-    input = 1 if redhat_version == '5.7'
-    input = 2 if redhat_version == '6.2'
+    if redhat_version
+      input = 1 if redhat_version.start_with?('5.')
+      input = 2 if redhat_version.start_with?('6.')
+    end
 
     if @io.silent? && input.nil?
       raise InstallerErrors::InstallAborted, "Cannot detect OS version automatically. Unable to run in silent mode."
@@ -166,10 +167,8 @@ class ChorusInstaller
   def supported_redhat_version
     return nil unless File.exists?('/etc/redhat-release')
 
-    version_string = File.open('/etc/redhat-release').read
-    version_string =~ /release (\d\.\d)/
-    found_version = $1
-    found_version if %w(5.5 5.7 6.2).include?(found_version)
+    version_string = File.read('/etc/redhat-release')
+    $1 if version_string =~ /release (\d\.\d)/
   end
 
   def is_supported_suse?

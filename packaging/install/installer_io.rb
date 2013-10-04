@@ -49,8 +49,8 @@ class InstallerIO
       accept_terms: "Do you accept the terms above?",
       select_os: <<-TEXT
 Could not detect your Linux version. Please select one of the following:
-  [1] - RedHat (CentOS/RHEL) 5.5 or compatible
-  [2] - RedHat (CentOS/RHEL) 6.2 or compatible
+  [1] - RedHat (CentOS/RHEL) 5.5+ or compatible
+  [2] - RedHat (CentOS/RHEL) 6.2+ or compatible
   [3] - SuSE Enterprise Linux Server 11 or compatible
   [4] - Abort install
       TEXT
