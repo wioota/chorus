@@ -14,7 +14,7 @@ chorus.models.Config = chorus.models.Base.extend({
         return this.get("fileSizesMbCsvImports");
     }
 }, {
-    instance:function () {
+    instance: function () {
         if (!this._instance) {
             this._instance = new chorus.models.Config();
         }

@@ -39,7 +39,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     isOracle: function() {
-        return this.dataSource().isOracle();
+        return this.dataSource() && this.dataSource().isOracle();
     },
 
     isGreenplum: function() {
@@ -66,7 +66,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     dataSource: function() {
-        return this.schema().dataSource();
+        return this.schema() && this.schema().dataSource();
     },
 
     database: function() {
