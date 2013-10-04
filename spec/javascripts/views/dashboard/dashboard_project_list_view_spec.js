@@ -45,10 +45,10 @@ describe("chorus.views.DashboardProjectList", function() {
         });
 
         it("displays the name of the owners as a link", function() {
-            expect(this.view.$(".owner span").eq(0).text()).toBe("Green Giant");
+            expect(this.view.$(".owner").eq(0).text()).toBe("Green Giant");
             expect(this.view.$(".owner").eq(0).attr('href')).toBe(this.workspace1.owner().showUrl());
 
-            expect(this.view.$(".owner span").eq(1).text()).toBe("Andre The Giant");
+            expect(this.view.$(".owner").eq(1).text()).toBe("Andre The Giant");
             expect(this.view.$(".owner").eq(1).attr('href')).toBe(this.workspace2.owner().showUrl());
         });
 
