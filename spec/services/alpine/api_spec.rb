@@ -79,18 +79,23 @@ describe Alpine::API do
   end
 
   describe '#create_work_flow' do
-    before { fake_a_session }
+    before do
+      fake_a_session
+      work_flow.update_attribute(:file_name, 'with space.afm')
+    end
 
-    let(:full_request_url)  { "#{alpine_base_uri}/alpinedatalabs/main/chorus.do?method=importWorkFlow&session_id=#{mock_session_id}&file_name=#{work_flow.file_name}&workfile_id=#{work_flow.id}" }
     let(:file)              { test_file('workflow.afm', "text/xml") }
     let(:file_contents)     { file.read }
 
     it "makes a POST request with the workflow contents and id" do
-      FakeWeb.register_uri(:post, full_request_url, :status => 200, :body => file_contents, :content_type => "text/xml")
+      FakeWeb.register_uri(:post, %r|method=importWorkFlow|, :status => 200, :body => file_contents, :content_type => "text/xml")
       subject.create_work_flow(work_flow, file_contents)
       FakeWeb.last_request.should be_a(Net::HTTP::Post)
 
-      params = CGI::parse(URI(FakeWeb.last_request.path).query)
+      unparsed_query_string = URI(FakeWeb.last_request.path).query
+      unparsed_query_string.should =~ /file_name=with\+space\.afm/
+
+      params = CGI::parse unparsed_query_string
       params['session_id'][0].should == mock_session_id
       params['workfile_id'][0].should == work_flow.id.to_s
     end

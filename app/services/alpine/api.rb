@@ -88,11 +88,22 @@ module Alpine
     end
 
     def delete_path(work_flow)
-      "/alpinedatalabs/main/chorus.do?method=deleteWorkFlow&session_id=#{session_id}&workfile_id=#{work_flow.id}"
+      params = {
+        :method => 'deleteWorkFlow',
+        :session_id => session_id,
+        :workfile_id => work_flow.id
+      }
+      path_with(params)
     end
 
     def create_path(work_flow)
-      "/alpinedatalabs/main/chorus.do?method=importWorkFlow&session_id=#{session_id}&file_name=#{work_flow.file_name}&workfile_id=#{work_flow.id}"
+      params = {
+        :method => 'importWorkFlow',
+        :session_id => session_id,
+        :file_name => work_flow.file_name,
+        :workfile_id => work_flow.id
+      }
+      path_with(params)
     end
 
     def run_path(work_flow, options)
@@ -114,7 +125,7 @@ module Alpine
       end
       params.merge!(categorized_locations)
 
-      "/alpinedatalabs/main/chorus.do?#{params.to_query}"
+      path_with(params)
     end
 
     def stop_path(process_id)
@@ -123,7 +134,7 @@ module Alpine
         session_id: session_id,
         process_id: process_id
       }
-      "/alpinedatalabs/main/chorus.do?#{params.to_query}"
+      path_with(params)
     end
 
     def base_url
@@ -136,6 +147,10 @@ module Alpine
 
     def session_id
       Session.not_expired.where(user_id: user.id).first.session_id
+    end
+
+    def path_with(params)
+      "/alpinedatalabs/main/chorus.do?#{params.to_query}"
     end
   end
 end
