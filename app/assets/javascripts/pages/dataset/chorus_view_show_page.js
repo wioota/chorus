@@ -21,9 +21,7 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
         this.stopListening(this.mainContent.contentDetails);
         var sameHeader = this.mainContent.contentHeader;
 
-        if (this.mainContent) {
-            this.mainContent.teardown(true);
-        }
+        this.mainContent && this.mainContent.teardown(true);
         this.mainContent = new chorus.views.MainContentView({
             content: new chorus.views.DatasetEditChorusView({model: this.dataset}),
             contentHeader: sameHeader,
@@ -35,9 +33,9 @@ chorus.pages.ChorusViewShowPage = chorus.pages.WorkspaceDatasetShowPage.extend({
 
     constructSidebarForType: function(type) {
         if(type === 'edit_chorus_view') {
-            this.secondarySidebar = new chorus.views.DatasetEditChorusViewSidebar({model: this.model});
+            return new chorus.views.DatasetEditChorusViewSidebar({model: this.model});
         } else {
-            this._super('constructSidebarForType', arguments);
+            return this._super('constructSidebarForType', arguments);
         }
     },
 

@@ -19,10 +19,8 @@ chorus.views.CreateChorusViewSidebar = chorus.views.Sidebar.extend({
     },
 
     teardown: function() {
-        this.options.aggregateColumnSet.each(function(column) {
-            delete column.selected;
-        });
-        this._super("teardown");
+        this.options.aggregateColumnSet.each(function(column) { delete column.selected; });
+        this._super("teardown", arguments);
     },
 
     postRender: function() {

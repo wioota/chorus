@@ -98,7 +98,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                     this.page.mainContent.contentDetails.trigger("transform:sidebar", 'chorus_view');
                 });
 
-                it("calls teardown on the old sidebar", function() {
+                it("tears the old sidebar down", function() {
                     expect(this.originalSidebar.teardown).toHaveBeenCalled();
                 });
 
@@ -141,7 +141,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
                         chorus.PageEvents.trigger('cancel:sidebar', 'chorus_view');
                     });
 
-                    it("calls teardown on the old sidebar", function() {
+                    it("tears the old sidebar down", function() {
                         expect(this.originalSidebar.teardown).toHaveBeenCalled();
                     });
 
@@ -231,7 +231,7 @@ describe("chorus.pages.ChorusViewShowPage", function() {
 
                 it("restores the original sidebar while hiding the secondarySidebar", function() {
                     expect(this.page.$('#sidebar .sidebar_content.primary')).not.toHaveClass('hidden');
-                    expect(this.page.$('#sidebar .sidebar_content.secondary')).not.toExist();
+                    expect(this.page.$('#sidebar .sidebar_content.secondary')).toHaveClass('hidden');
                 });
 
                 it("removes all classes added when transform:sidebar is triggered", function() {

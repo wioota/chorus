@@ -21,9 +21,8 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
             requiredResources: [ this.workspace ]
         };
 
-        this.contentDetailsOptions = {
-            workspace: this.workspace
-        };
+        this.contentDetailsOptions = { workspace: this.workspace };
+
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
     },
 
@@ -47,7 +46,7 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
         }
 
         this.mainContent.content.selectMulti = false;
-        this.constructSidebarForType(type);
+        this.secondarySidebar = this.constructSidebarForType(type);
 
         if (this.secondarySidebar) {
             this.secondarySidebar.filters = this.mainContent.contentDetails.filterWizardView.collection;
@@ -65,18 +64,15 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
         this.sidebar.disabled = false;
 
         if (this.secondarySidebar) {
-            this.secondarySidebar.teardown();
+            this.secondarySidebar.teardown(true);
             delete this.secondarySidebar;
         }
+
         this.mainContent.content.render();
         this.$('.sidebar_content.primary').removeClass("hidden");
         this.$('.sidebar_content.secondary').addClass("hidden");
-        this.removeOldSecondaryClasses(type);
-        this.trigger('resized');
-    },
-
-    removeOldSecondaryClasses: function(type) {
         this.$('.sidebar_content.secondary').removeClass("dataset_create_" + type + "_sidebar");
+        this.trigger('resized');
     },
 
     getHeaderView: function(options) {
@@ -87,16 +83,12 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
     },
 
     constructSidebarForType: function(type) {
-        if (type === 'chorus_view') {
-            this.dataset.setDatasetNumber(1);
-            this.sidebar.disabled = true;
-            this.mainContent.content.selectMulti = true;
-            this.mainContent.content.showDatasetName = true;
-            this.mainContent.content.render();
-            this.mainContent.content.selectNone();
-            this.secondarySidebar = new chorus.views.CreateChorusViewSidebar({model: this.model, aggregateColumnSet: this.columnSet});
-        } else {
-            this._super('constructSidebarForType', arguments);
-        }
+        this.dataset.setDatasetNumber(1);
+        this.sidebar.disabled = true;
+        this.mainContent.content.selectMulti = true;
+        this.mainContent.content.showDatasetName = true;
+        this.mainContent.content.render();
+        this.mainContent.content.selectNone();
+        return new chorus.views.CreateChorusViewSidebar({model: this.model, aggregateColumnSet: this.columnSet});
     }
 });
