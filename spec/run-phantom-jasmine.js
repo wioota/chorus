@@ -169,10 +169,21 @@ page.onResourceReceived = function() {
 
                 window.jasmine.getEnv().addReporter(reporter);
 
-//                window.jasmine.getEnv().specFilter = function(spec) {
-//                    var id = spec.id.match(/(\d+)/)[0];
-//                    return id > 1000;
-//                };
+
+                var runParallel = false;
+                if (runParallel) {
+                    // Use this block to run a specific range of tests (0-1000, say)
+                    // Would be useful if there was a test harness that partitioned the
+                    //   testrunning into something like 4 processes.
+                    var specRangeParams = {
+                        start: 2000, // derive from number of total processes
+                        end: 3000
+                    };
+                    window.jasmine.getEnv().specFilter = function(spec) {
+                        var id = spec.id.match(/(\d+)/)[0];
+                        return id >= specRangeParams.start && id < specRangeParams.end;
+                    };
+                }
 
                 return true;
             }

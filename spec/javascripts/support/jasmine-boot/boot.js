@@ -66,7 +66,7 @@
     var catchingExceptions = queryString.getParam("catch");
     env.catchExceptions(typeof catchingExceptions === "undefined" ? true : catchingExceptions);
 
-    // ****** THIS IS THE PART THAT IS DIFFERENT FROM NORMAL JASMINE BOOT.JS
+    // ***** THIS IS THE PART THAT IS DIFFERENT FROM NORMAL JASMINE BOOT.JS *****
     var htmlReporter;
     if (window.location.search.indexOf('phantom=') === -1) {
         htmlReporter = new jasmine.HtmlReporter({
@@ -79,19 +79,9 @@
             timer: new jasmine.Timer()
         });
 
-        env.addReporter(jasmineInterface.jsApiReporter);
         env.addReporter(htmlReporter);
-
-        env.specFilter = function(spec) {
-            return htmlReporter.specFilter(spec);
-        };
-    } else {
-        env.addReporter(jasmineInterface.jsApiReporter);
-        env.specFilter = function(spec) {
-            return jasmineInterface.jsApiReporter.specFilter(spec);
-        };
     }
-    // THAT WAS THE PART THAT IS DIFFERENT FROM NORMAL JASMINE BOOT.JS *****
+    // ***** THAT WAS THE PART THAT IS DIFFERENT FROM NORMAL JASMINE BOOT.JS *****
 
     var specFilter = new jasmine.HtmlSpecFilter({
         filterString: function() { return queryString.getParam("spec"); }
