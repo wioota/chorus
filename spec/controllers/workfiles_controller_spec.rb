@@ -254,6 +254,18 @@ describe WorkfilesController do
     end
 
     context "uploading a file" do
+      describe "a .tiff" do
+        let(:file) { test_file 'picture.tiff' }
+
+        it 'returns a 422' do
+          Workfile.last.file_name.should_not == 'picture.tiff'
+
+          post :create, params
+          response.should be_unprocessable
+          p JSON.parse(response.body)['errors']
+        end
+      end
+
       it 'creates a workfile' do
         Workfile.last.file_name.should_not == 'workfile.sql'
 
