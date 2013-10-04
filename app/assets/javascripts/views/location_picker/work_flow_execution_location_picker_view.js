@@ -61,6 +61,6 @@ chorus.views.WorkFlowExecutionLocationPicker = chorus.views.LocationPicker.BaseV
 
     isSingleLevelSource: function() {
         var selectedDataSource = this.getSelectedDataSource();
-        return selectedDataSource && (selectedDataSource.get("entityType") === "hdfs_data_source" || selectedDataSource.get("entityType") === "oracle_data_source");
+        return selectedDataSource && selectedDataSource.isSingleLevelSource();
     }
 });

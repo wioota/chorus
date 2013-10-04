@@ -23,6 +23,22 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
         });
     });
 
+    context("an oracle database", function () {
+        beforeEach(function () {
+            this.executionLocations = [backboneFixtures.oracleDataSource({id: 9910})];
+            this.model.set('executionLocations', this.executionLocations);
+            this.dialog = new chorus.dialogs.ChangeWorkFlowExecutionLocation({ model: this.model });
+            this.dialog.render();
+        });
+
+        context("pre-populating", function() {
+            it("passes the oracle data source to the picker", function() {
+                expect(this.dialog.executionLocationList.getSelectedLocations()[0].id).toEqual(this.executionLocations[0].get('id'));
+                expect(this.dialog.executionLocationList.getSelectedLocations()[0]).toBeA(chorus.models.OracleDataSource);
+            });
+        });
+    });
+
     context("a gpdb database", function() {
         beforeEach(function() {
             this.executionLocations = [backboneFixtures.database({id: 321})];
@@ -34,6 +50,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
         context("pre-populating", function() {
             it("passes the database and the gpdb data source to the picker", function() {
                 expect(this.dialog.executionLocationList.getSelectedLocations()[0].id).toEqual(this.executionLocations[0].get('id'));
+                expect(this.dialog.executionLocationList.getSelectedLocations()[0]).toBeA(chorus.models.Database);
             });
         });
 
@@ -96,6 +113,7 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
             it("only passes the data source to the picker", function() {
                 expect(this.dialog.executionLocationList.options.pickerOptionSet[0].database).toBeUndefined();
                 expect(this.dialog.executionLocationList.options.pickerOptionSet[0].dataSource.attributes).toEqual(this.executionLocations[0].attributes);
+                expect(this.dialog.executionLocationList.options.pickerOptionSet[0].dataSource).toBeA(chorus.models.HdfsDataSource);
             });
         });
 

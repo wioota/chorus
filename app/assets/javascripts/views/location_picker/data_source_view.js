@@ -18,14 +18,17 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         } else {
             this.collection = new chorus.collections.Base();
         }
-        this.collection.comparator = function(dataSource) {
-            return dataSource.name();
-        };
+
         if (this.options.showOracleDataSources) {
             this.collectDatabaseDataSources();
         } else {
             this.collectGpdbDataSources();
         }
+
+        this.collection.comparator = function(dataSource) {
+            return dataSource.name();
+        };
+
         this.loading();
     },
 
@@ -57,19 +60,15 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         var selectedDataSource = this.getSelectedDataSource();
         this.setSelection(selectedDataSource);
         this.trigger('change');
-        if(!selectedDataSource || this.isSingleLevelSource(selectedDataSource)) {
+        if(!selectedDataSource || selectedDataSource.isSingleLevelSource()) {
             this.childPicker.hide();
         }
     },
 
     onSelection: function() {
-        if (this.selection && !this.isSingleLevelSource(this.selection)) {
+        if (this.selection && !this.selection.isSingleLevelSource()) {
             this.childPicker.parentSelected(this.selection);
         }
-    },
-
-    isSingleLevelSource: function (dataSource) {
-        return dataSource.entityType === "hdfs_data_source" || dataSource.entityType === "oracle_data_source";
     },
 
     getSelectedDataSource: function() {

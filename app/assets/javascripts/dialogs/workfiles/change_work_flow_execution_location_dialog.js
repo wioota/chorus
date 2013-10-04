@@ -18,13 +18,13 @@ chorus.dialogs.ChangeWorkFlowExecutionLocation = chorus.dialogs.Base.extend({
         this.listenTo(this.model, "saveFailed", this.saveFailed);
 
         var options = _.map(this.model.executionLocations(), function (location) {
-            if (location.get('entityType') === 'hdfs_data_source') {
-                return { dataSource: location };
-            } else {
+            if (location.dataSource) {
                 return {
                     database: location,
                     dataSource: location.dataSource()
                 };
+            } else {
+                return { dataSource: location };
             }
         });
 

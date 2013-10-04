@@ -17,6 +17,10 @@ chorus.models.HdfsDataSource = chorus.models.AbstractDataSource.extend({
         return true;
     },
 
+    isSingleLevelSource: function () {
+        return true;
+    },
+
     declareValidations: function(newAttrs) {
         this.require("name", newAttrs);
         this.requirePattern("name", chorus.ValidationRegexes.MaxLength64(), newAttrs);

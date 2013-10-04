@@ -26,5 +26,9 @@ chorus.models.OracleDataSource = chorus.models.DataSource.extend({
         var collection = new chorus.collections.SchemaSet();
         collection.urlTemplate = "data_sources/"+this.get("id")+"/schemas";
         return collection;
+    },
+
+    isSingleLevelSource: function () {
+        return true;
     }
 });
