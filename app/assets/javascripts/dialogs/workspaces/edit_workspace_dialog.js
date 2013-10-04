@@ -89,13 +89,16 @@ chorus.dialogs.EditWorkspace = chorus.dialogs.Base.include(
                 "public": !!this.$("input[name=public]").is(":checked"),
                 active: active,
                 hasChangedSettings: true,
-                showSandboxDatasets: !!this.$(".show_sandbox_datasets").prop("checked"),
                 archived: !active,
                 isProject: !!this.$('input[name=make_project]').prop('checked')
             };
 
             if(this.$("select.owner").length > 0) {
                 attrs.ownerId = this.$("select.owner").val();
+            }
+
+            if (this.model.sandbox()) {
+                attrs.showSandboxDatasets = !!this.$(".show_sandbox_datasets").prop("checked");
             }
 
             this.$("button.submit").startLoading("actions.saving");

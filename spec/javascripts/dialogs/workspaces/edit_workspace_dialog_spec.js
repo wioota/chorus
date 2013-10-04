@@ -142,9 +142,9 @@ describe("chorus.dialogs.EditWorkspace", function() {
 
             context("without a sandbox", function() {
                 beforeEach(function() {
-                    var workspace = backboneFixtures.workspace();
-                    workspace.unset("sandboxInfo");
-                    this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: workspace });
+                    this.workspace = backboneFixtures.workspace();
+                    this.workspace.unset("sandboxInfo");
+                    this.dialog = new chorus.dialogs.EditWorkspace({ pageModel: this.workspace });
                     this.dialog.render();
                 });
 
@@ -154,6 +154,11 @@ describe("chorus.dialogs.EditWorkspace", function() {
 
                 it("does not show the checkbox and label for showing sandbox datasets", function() {
                     expect(this.dialog.$(".show_sandbox_datasets")).not.toExist();
+                });
+
+                it("does not provide displaySandboxDatasets in the API call", function() {
+                    this.dialog.$('form').submit();
+                    expect(this.server.lastUpdateFor(this.workspace).json().workspace.show_sandbox_datasets).toBeTruthy();
                 });
             });
         });
