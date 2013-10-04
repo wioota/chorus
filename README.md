@@ -1,4 +1,4 @@
-This ReadMe mirrors our [Github Wiki page](https://github.com/GreenplumChorus/chorus/wiki), which houses information for developers contributing to the OpenChorus project.  Learn more about the OpenChorus project on the [Greenplum OpenChorus page](http://www.greenplum.com/communities/developer/openchorus).
+This ReadMe mirrors our [Github Wiki page](https://github.com/GreenplumChorus/chorus/wiki), which houses information for developers contributing to the OpenChorus project.  Learn more about the Chorus project on the [Pivotal Chorus page](http://gopivotal.com/pivotal-products/analytics/pivotal-chorus).
 
 Browse to the [Wiki pages list](https://github.com/GreenplumChorus/chorus/wiki/_pages) to review what's available here.Key pages include:
 
@@ -14,4 +14,4 @@ Browse to the [Wiki pages list](https://github.com/GreenplumChorus/chorus/wiki/_
 
 Have a question?  See [Greenplum's site](http://www.greenplum.com/communities/developer/openchorus) for more information.  You can also reach us via the [development mailing list](https://groups.google.com/forum/?fromgroups#!forum/chorus-dev). 
 
-If you wish to download the latest released version of Chorus, go [here](http://info.greenplum.com/Chorus_Software.html)
+If you wish to download the latest released version of Chorus, go [here](http://gopivotal.com/pivotal-products/analytics/pivotal-chorus).
