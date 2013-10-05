@@ -23,16 +23,9 @@ chorus.views.ProjectCard = chorus.views.Base.extend({
     postRender: function () { this.styleTooltip(); },
 
     additionalContext: function () {
-        var numberOfInsightsOrNot;
-
-        if (this.model.get('numberOfInsights') > 1) {
-            numberOfInsightsOrNot = this.model.get('numberOfInsights') - 1;
-        }
-
         return {
             showUrl: this.model.showUrl(),
             latestInsight: this.model.latestInsight() && new chorus.presenters.Activity(this.model.latestInsight()),
-            hiddenInsightCount: numberOfInsightsOrNot,
             allInsightsRoute: this.model.showUrl() + '?filter=insights'
         };
     },

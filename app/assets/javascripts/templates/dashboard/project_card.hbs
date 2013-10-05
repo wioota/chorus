@@ -21,9 +21,8 @@
         </div>
     {{/if}}
 </div>
-
-{{#if hiddenInsightCount}}
+{{#if latestInsight}}
     <a href="{{allInsightsRoute}}" class='all_insights'>
-        {{t 'project_card.insight.all_insights' count=hiddenInsightCount}}
+        {{t 'project_card.insight.all_insights'}}
     </a>
 {{/if}}
