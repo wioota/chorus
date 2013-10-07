@@ -150,7 +150,7 @@ describe ChorusView do
     end
   end
 
-  describe "#convert_to_database_view" do
+  describe "#convert_to_database_view", :greenplum_integration do
     let(:chorus_view) { datasets(:executable_chorus_view) }
     let(:schema) { chorus_view.schema }
     let(:database) { schema.database }
@@ -198,7 +198,7 @@ describe ChorusView do
     end
   end
 
-  describe '#check_duplicate_column' do
+  describe '#check_duplicate_column', :greenplum_integration do
     let(:user) { users(:admin) }
     let(:chorus_view) { datasets(:executable_chorus_view) }
 
