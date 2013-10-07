@@ -4,10 +4,12 @@ if [[ -z "$RAILS_ENV" ]]; then
   export RAILS_ENV=test
 fi
 
-export GPDB_HOST=chorus-gpdb-ci
-export HADOOP_HOST=chorus-gphd02
-export HAWQ_HOST=chorus-gphd20-2
-export ORACLE_HOST=chorus-oracle
+if [ "$HOSTNAME" = chorus-ci ]; then
+  export GPDB_HOST=chorus-gpdb-ci
+  export HADOOP_HOST=chorus-gphd02
+  export HAWQ_HOST=chorus-gphd20-2
+  export ORACLE_HOST=chorus-oracle
+fi
 
 if [[ -z "$JASMINE_PORT" ]]; then
   export JASMINE_PORT=8888
