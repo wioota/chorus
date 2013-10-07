@@ -3,9 +3,9 @@
 export RAILS_ENV=packaging
 
 if [ "$HOSTNAME" = chorus-ci ]; then
-  GPDB_HOST=chorus-gpdb-ci
-  ORACLE_HOST=chorus-oracle
-  HAWQ_HOST=chorus-gphd20-2
+  export GPDB_HOST=chorus-gpdb-ci
+  export ORACLE_HOST=chorus-oracle
+  export HAWQ_HOST=chorus-gphd20-2
 fi
 
 . script/ci/setup.sh
@@ -19,4 +19,4 @@ if [[ $PIVOTALLABEL ]]; then
 fi
 
 rm -fr .bundle
-GPDB_HOST=$GPDB_HOST HAWQ_HOST=$HAWQ_HOST ORACLE_HOST=$ORACLE_HOST bundle exec rake package:installer --trace
+bundle exec rake package:installer --trace
