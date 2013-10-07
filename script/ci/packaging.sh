@@ -1,9 +1,12 @@
 #!/bin/bash
 
 export RAILS_ENV=packaging
-GPDB_HOST=chorus-gpdb-ci
-ORACLE_HOST=chorus-oracle
-HAWQ_HOST=chorus-gphd20-2
+
+if [ "$HOSTNAME" = chorus-ci ]; then
+  GPDB_HOST=chorus-gpdb-ci
+  ORACLE_HOST=chorus-oracle
+  HAWQ_HOST=chorus-gphd20-2
+fi
 
 . script/ci/setup.sh
 
