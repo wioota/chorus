@@ -68,6 +68,7 @@ chorus.views.Header = chorus.views.Base.extend({
         if (chorus.isDevMode()) {
             this.addFastUserToggle();
         }
+        this.modifyTypeAheadSearchLength();
     },
 
     addFastUserToggle: function() {
@@ -168,6 +169,12 @@ chorus.views.Header = chorus.views.Base.extend({
 
     togglePopupGear: function(e) {
         chorus.PopupMenu.toggle(this, ".menu.popup_gear", e);
+    },
+
+    modifyTypeAheadSearchLength: function() {
+        if(!_.isEmpty($('.left')) && !_.isEmpty($('.type_ahead_search'))) {
+            this.$('.type_ahead_search').css('left', (this.$('.left').width() + parseInt($('.search').css('padding-left'), 10) + 1) + "px");
+        }
     },
 
     startSearch: function(e) {

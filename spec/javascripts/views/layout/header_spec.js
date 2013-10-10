@@ -25,6 +25,18 @@ describe("chorus.views.Header", function() {
         expect(this.view.notifications).toHaveBeenFetched();
     });
 
+    context("changing the length of search results bar", function() {
+        beforeEach(function(){
+            spyOn(this.view, "modifyTypeAheadSearchLength").andCallThrough();
+            this.view.render();
+        });
+
+        it("modifies the length of the search results bar", function() {
+            expect(this.view.modifyTypeAheadSearchLength).toHaveBeenCalled();
+        });
+
+    });
+
     describe("the notifications", function() {
         beforeEach(function() {
             this.view.render();
