@@ -36,7 +36,7 @@ data_sources:
         db_password: "secret"
 
     - host: "alpine-gpdb"
-      port: 5433
+      port: 5432
       db_name: "postgres"
       account:
         db_username: "gpadmin"
