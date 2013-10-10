@@ -26,17 +26,23 @@ class ChorusConfig
   end
 
   def hdfs_versions
-    [
-      "Apache Hadoop 0.20.2",
-      "Apache Hadoop 0.20.203",
-      "Apache Hadoop 1.0.4",
-      "Cloudera CDH4",
+    versions = []
+    pivotal_versions = [
       "Greenplum HD 0.20",
       "Greenplum HD 1.1",
       "Greenplum HD 1.2",
-      "MapR",
       "Pivotal HD"
     ]
+    other_versions = [
+    "Apache Hadoop 0.20.2",
+     "Apache Hadoop 0.20.203",
+     "Apache Hadoop 1.0.4",
+     "Cloudera CDH4",
+     "MapR"
+    ]
+    versions += pivotal_versions
+    versions += other_versions if self['alpine.branded.enabled']
+    versions.sort
   end
 
   def time_zones
