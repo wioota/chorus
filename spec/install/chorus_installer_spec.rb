@@ -1094,8 +1094,24 @@ describe ChorusInstaller do
   end
 
   describe "#eula" do
-    it "contains the eula" do
-      installer.eula.should match(/LIMITATION OF LIABILITY/)
+    describe "a pivotal build" do
+      before do
+        ENV['PIVOTALLABEL'] = 'true'
+      end
+
+      it "contains the emc eula" do
+        installer.eula.should match(/EMC Corporation/)
+      end
+    end
+
+    describe "a standard build" do
+      before do
+        ENV['PIVOTALLABEL'] = nil
+      end
+
+      it "contains the alpine eula" do
+        installer.eula.should match(/ALPINE ANALYTICS/)
+      end
     end
   end
 

@@ -518,7 +518,7 @@ class ChorusInstaller
   end
 
   def eula
-    EULA
+    eula_by_brand
   end
 
   def dump_environment
@@ -617,5 +617,15 @@ chorus.port = 8080
       fi
   CHORUS_RAILS_CONSOLE
 
-  EULA = File.read(File.join(File.dirname(__FILE__), 'eula.txt'))
+  def eula_by_brand
+    file_name = ENV['PIVOTALLABEL'] ? 'emc' : 'alp'
+    case file_name
+      when 'alp' then ALP_EULA
+      when 'emc' then EMC_EULA
+      else #nil
+    end
+  end
+
+  EMC_EULA = File.read(File.join(File.dirname(__FILE__), 'eula_emc.txt'))
+  ALP_EULA = File.read(File.join(File.dirname(__FILE__), 'eula_alpine.txt'))
 end
