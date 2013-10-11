@@ -5,7 +5,7 @@ require 'tempfile'
 require 'yaml'
 
 module BackupRestore
-  BACKUP_FILE_PREFIX = "greenplum_chorus_backup_"
+  BACKUP_FILE_PREFIX = "chorus_backup_"
   DATABASE_DATA_FILENAME = "database.gz"
   ASSET_FILENAME = "assets_storage_path"
   ALPINE_BACKUP = "alpine_data_repository"
@@ -168,7 +168,7 @@ module BackupRestore
 
       without_connection do
         full_backup_filename = File.expand_path(backup_filename)
-        SafeMktmpdir.mktmpdir "greenplum_chorus_restore" do |tmp_dir|
+        SafeMktmpdir.mktmpdir "chorus_restore" do |tmp_dir|
           self.temp_dir = Pathname.new tmp_dir
           Dir.chdir tmp_dir do
             capture_options = {:error => "Could not unpack backup file '#{backup_filename}'"}

@@ -22,8 +22,8 @@ class ChorusInstaller
     end
   end
 
-  DEFAULT_PATH = "/usr/local/greenplum-chorus"
-  DEFAULT_DATA_PATH = "/data/greenplum-chorus"
+  DEFAULT_PATH = "/usr/local/chorus"
+  DEFAULT_DATA_PATH = "/data/chorus"
 
   def alpine_source_path
     File.join(release_path, 'vendor', 'alpine')
@@ -555,7 +555,7 @@ class ChorusInstaller
     extract_alpine(alpine_installer)
 
     log "Configuring alpine"
-    set_properties({"workflow.enabled" => true, "workflow.url" => "http://localhost:9090", "alpine.branded.enabled" => true})
+    set_properties( { 'workflow.enabled' => true, 'workflow.url' => 'http://localhost:9090'} )
     set_alpine_properties
 
     log "Setting tomcat port"

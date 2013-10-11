@@ -193,7 +193,7 @@ describe 'BackupRestore' do
     end
 
     def backup_filename(time)
-      "greenplum_chorus_backup_" + time.strftime('%Y%m%d_%H%M%S') + ".tar"
+      "chorus_backup_" + time.strftime('%Y%m%d_%H%M%S') + ".tar"
     end
   end
 
