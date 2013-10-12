@@ -14,9 +14,5 @@ if [[ $ALPINE_ZIP ]]; then
     (mkdir -p vendor/alpine; cd vendor/alpine; wget --quiet $ALPINE_ZIP)
 fi
 
-if [[ $PIVOTALLABEL ]]; then
-    sed -i "s/alpine\.branded\.enabled\=true/alpine\.branded\.enabled\=false/" config/chorus.defaults.properties
-fi
-
 rm -fr .bundle
 bundle exec rake package:installer --trace
