@@ -18,7 +18,7 @@ License. The Software is licensed, not sold, to You for use only under the terms
 of this License ("License").  Subject to the terms set forth in this License
 Agreement ("Agreement"), Alpine, grants You this non-exclusive, non-transferable
 License to use the Software in machine-readable form and any documentation
-delivered with the Software (the &quot;Documentation&quot;).  Documentation
+delivered with the Software (the "Documentation").  Documentation
 means written information (whether contained in user or technical manuals,
 training materials, specifications or otherwise) pertaining to the Software and
 made available with the Software.  This License solely enables You to install
@@ -170,22 +170,22 @@ for any purposes prohibited by United States law, including, without limitation,
 the development, design, manufacture or production of nuclear, missiles, or
 chemical or biological weapons.
 
-Open Source Software Restrictions.  &quot;Open Source&quot; software means
+Open Source Software Restrictions.  "Open Source" software means
 software available without charge for use, modification or distribution is often
 licensed under terms that require the user to make the user's modifications to
 the Open Source software or any software that the user 'combines' with the Open
-Source software freely available in source code form.&nbsp; If You use Open
+Source software freely available in source code form. If You use Open
 Source software in conjunction with the Product, You must ensure that Your use
-does not:&nbsp; (i) create, or purport to create, obligations with respect to
+does not: (i) create, or purport to create, obligations with respect to
 the Alpine Product; or (ii) grant, or purport to grant, to any third party any
 rights to or immunities under our intellectual property or proprietary rights in
-the Alpine Product.&nbsp; For example, You may not develop a software Product
+the Alpine Product. For example, You may not develop a software Product
 using a Alpine Product and an Open Source Product where such use results in a
 Product file(s) that contains code from both the Alpine Product and the Open
 Source Product (including without limitation libraries) if the Open Source
-Product is Licensed under a License that requires any &quot;modifications&quot;
-be made freely available.&nbsp; You also may not combine the Alpine Product with
-programs Licensed under the GNU General Public License (&quot;GPL&quot;) in any
+Product is Licensed under a License that requires any "modifications"
+be made freely available. You also may not combine the Alpine Product with
+programs Licensed under the GNU General Public License ("GPL") in any
 manner that could cause, or could be interpreted or asserted to cause, the
 Alpine Product or any modifications thereto to become subject to the terms of
 the GPL. This commercial product includes third party software ("Third Party
@@ -199,10 +199,10 @@ web sites. Third Party Materials and links to other web sites are provided
 solely as a convenience to You.
 
 Third Party Software. Alpine does not supply all third party software that may
-be required to use the Software.&nbsp;Please consult the Documentation for
-further details. &nbsp;You acknowledge that the Software contains or is provided
+be required to use the Software. Please consult the Documentation for
+further details. You acknowledge that the Software contains or is provided
 with copyrighted software of Alpine’s suppliers which are obtained under a
-license from such suppliers.&nbsp; Your use of any third party software shall be
+license from such suppliers. Your use of any third party software shall be
 subject to and You agree to and shall comply with the applicable restrictions
 and other terms and conditions set forth therein.
 
