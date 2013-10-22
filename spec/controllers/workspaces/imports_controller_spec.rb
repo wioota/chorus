@@ -142,6 +142,11 @@ describe Workspaces::ImportsController do
         end
       end
     end
+
+    it_behaves_like 'a protected demo mode controller', [:create] do
+      let(:params) { attributes }
+    end
+
   end
 
   describe "smoke test for import schedules", :greenplum_integration do

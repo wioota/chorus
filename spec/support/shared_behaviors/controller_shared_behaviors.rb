@@ -75,3 +75,63 @@ shared_examples_for "prefixed file downloads" do
     end
   end
 end
+
+shared_examples_for 'a protected demo mode controller' do |actions = [ :create, :update, :destroy ]|
+  let(:params) {{}}
+
+  before do
+    stub(ChorusConfig.instance).demo_enabled? { true }
+  end
+
+  context 'as a non admin user' do
+    let(:user) { users(:owner) }
+    before { log_in user }
+
+    if actions.include? :create
+      it 'forbids create' do
+        post :create, params
+        response.code.should == '403'
+      end
+    end
+
+    if actions.include? :update
+      it 'forbids update' do
+        put :update, params
+        response.code.should == '403'
+      end
+    end
+
+    if actions.include? :destroy
+      it 'forbids delete' do
+        post :destroy, params
+        response.code.should == '403'
+      end
+    end
+  end
+
+  context 'as the admin user' do
+    let(:user) { users(:admin) }
+    before { log_in user }
+
+    if actions.include? :create
+      it 'forbids create' do
+        post :create, params
+        response.code.should_not == '403'
+      end
+    end
+
+    if actions.include? :update
+      it 'forbids update' do
+        put :update, params
+        response.code.should_not == '403'
+      end
+    end
+
+    if actions.include? :destroy
+      it 'forbids delete' do
+        post :destroy, params
+        response.code.should_not == '403'
+      end
+    end
+  end
+end

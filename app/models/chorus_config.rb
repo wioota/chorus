@@ -154,6 +154,10 @@ class ChorusConfig
     self['work_flow.enabled'] || self['workflow.enabled']
   end
 
+  def demo_enabled?
+    self['demo_mode.enabled']
+  end
+
   def mail_configuration
     self['mail']
   end

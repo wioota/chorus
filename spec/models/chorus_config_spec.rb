@@ -501,4 +501,26 @@ describe ChorusConfig do
 
   end
 
+  describe '#demo_enabled?' do
+    context 'is enabled' do
+      before do
+        config.config = { 'demo_mode' => { 'enabled' => true } }
+      end
+
+      it 'should return true' do
+        config.demo_enabled?.should be_true
+      end
+    end
+
+    context 'is disabled' do
+      before do
+        config.config = { 'demo_mode' => { 'enabled' => false } }
+      end
+
+      it 'should return false' do
+        config.demo_enabled?.should be_false
+      end
+    end
+  end
+
 end

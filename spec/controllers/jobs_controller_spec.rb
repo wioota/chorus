@@ -342,4 +342,26 @@ describe JobsController do
       delete :destroy, params
     end
   end
+
+  context 'in demo mode' do
+    it_behaves_like 'a protected demo mode controller' do
+      let(:job) { FactoryGirl.create(:job, workspace: workspace, enabled: false) }
+      let(:planned_changes) do
+        {
+            enabled: true,
+            next_run: "2020-07-30T14:00:00-00:00",
+            end_run: "false",
+            time_zone: 'Arizona',
+        }
+      end
+
+      let(:params) do
+        {
+            id: job.id,
+            workspace_id: workspace.id,
+            job: planned_changes
+        }
+      end
+    end
+  end
 end

@@ -387,6 +387,24 @@ describe WorkspacesController do
     end
   end
 
+  context 'in demo mode' do
+    let(:public_workspace) { workspaces(:public_with_no_collaborators) }
+    let(:private_workspace) { workspaces(:private_with_no_collaborators) }
+    let(:workspace) {private_workspace}
+    let(:workspace_params) { {
+        :owner => {id: '3'},
+        :public => workspace.public?.to_s,
+        :archived => workspace.archived?.to_s
+    } }
+
+    it_behaves_like 'a protected demo mode controller', [:create, :destroy] do
+      let(:params) { {
+          :id => workspace.id,
+          :workspace => workspace_params
+      } }
+    end
+  end
+
   def expect_to_add_event(event_class, actor)
     expect {
       yield

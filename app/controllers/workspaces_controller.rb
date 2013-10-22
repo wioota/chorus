@@ -1,5 +1,8 @@
 class WorkspacesController < ApplicationController
   wrap_parameters :exclude => []
+
+  before_filter :demo_mode_filter, :only => [:create, :destroy]
+
   def index
     if params[:user_id]
       user = User.find(params[:user_id])

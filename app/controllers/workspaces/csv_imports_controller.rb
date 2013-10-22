@@ -1,6 +1,7 @@
 module Workspaces
   class CsvImportsController < ApplicationController
     wrap_parameters :csv_import, :exclude => []
+    before_filter :demo_mode_filter, :only => [:create]
 
     def create
       csv_file = CsvFile.find params[:csv_id]

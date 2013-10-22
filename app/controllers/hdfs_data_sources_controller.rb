@@ -3,6 +3,8 @@ require 'hdfs_data_source_access'
 
 class HdfsDataSourcesController < ApplicationController
 
+  before_filter :demo_mode_filter, :only => [:create, :update, :destroy]
+
   def create
     data_source = Hdfs::DataSourceRegistrar.create!(params[:hdfs_data_source], current_user)
     QC.enqueue_if_not_queued("HdfsDataSource.refresh", data_source.id)

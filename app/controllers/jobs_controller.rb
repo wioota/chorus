@@ -1,4 +1,5 @@
 class JobsController < ApplicationController
+  before_filter :demo_mode_filter, :only => [:create, :update, :destroy]
   before_filter :apply_timezone, only: [:create, :update]
 
   def index

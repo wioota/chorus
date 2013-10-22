@@ -159,3 +159,6 @@ smtp.enable_starttls_auto=false
 mail.enabled = false
 mail.from = FROM NAME <noreply@chorus.com>
 mail.reply_to = REPLY NAME <noreply@chorus.com>
+
+#Demo
+demo_mode.enabled=false

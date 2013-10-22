@@ -111,4 +111,12 @@ describe Workspaces::CsvImportsController do
       end
     end
   end
+
+  it_behaves_like 'a protected demo mode controller', [:create] do
+    let(:params) {{
+        workspace_id: workspace.to_param,
+        csv_id: csv_file.to_param,
+        csv_import: csv_import
+    }}
+  end
 end

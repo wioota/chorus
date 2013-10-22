@@ -50,6 +50,21 @@ describe Schemas::ImportsController do
     end
   end
 
+  context 'in demo mode' do
+    let(:source_dataset) { datasets(:oracle_table) }
+    let(:schema) { schemas(:default) }
+    let(:attributes) {
+      HashWithIndifferentAccess.new(
+          :schema_id => schema.to_param,
+          :dataset_id => source_dataset.to_param
+      )
+    }
+
+    it_behaves_like 'a protected demo mode controller', [:create] do
+      let(:params) { attributes }
+    end
+  end
+
   context "integration", :greenplum_integration => true, :oracle_integration => true do
     let(:user) { users(:owner) }
     let(:source_table) { OracleIntegration.real_schema.datasets.find_by_name('ALL_COLUMN_TABLE') }

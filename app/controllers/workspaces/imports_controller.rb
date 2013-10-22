@@ -1,6 +1,7 @@
 module Workspaces
   class ImportsController < ApplicationController
     wrap_parameters :dataset_import, :exclude => [:id]
+    before_filter :demo_mode_filter, :only => [:create]
 
     def create
       import_params = params[:dataset_import]

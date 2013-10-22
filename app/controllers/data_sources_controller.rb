@@ -4,6 +4,7 @@ class DataSourcesController < ApplicationController
   wrap_parameters :data_source, :exclude => []
 
   before_filter :find_data_source, :only => [:show, :update, :destroy]
+  before_filter :demo_mode_filter, :only => [:create, :update, :destroy]
 
   def index
     succinct = params[:succinct] == 'true'

@@ -251,9 +251,10 @@ describe DataSourcesController do
     end
   end
 
-  context "in demo mode" do
-
-
-
+  context 'in demo mode' do
+    it_behaves_like 'a protected demo mode controller' do
+      let(:gpdb_data_source) { data_sources(:owners) }
+      let(:params) { { :id => gpdb_data_source.id, :name => 'changed'} }
+    end
   end
 end

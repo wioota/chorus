@@ -1,5 +1,7 @@
 class GnipDataSourcesController < ApplicationController
 
+  before_filter :demo_mode_filter, :only => [:create, :update, :destroy]
+
   def create
     data_source = Gnip::DataSourceRegistrar.create!(params[:gnip_data_source], current_user)
     present data_source, :status => :created

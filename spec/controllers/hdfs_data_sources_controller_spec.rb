@@ -119,4 +119,10 @@ describe HdfsDataSourcesController do
       delete :destroy, :id => hdfs_data_source.id
     end
   end
+
+  context 'in demo mode' do
+    it_behaves_like 'a protected demo mode controller' do
+      let(:params) { { :id => hdfs_data_source } }
+    end
+  end
 end

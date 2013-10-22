@@ -134,6 +134,12 @@ class ApplicationController < ActionController::Base
     head :not_found unless logged_in? && (current_user.admin? || current_user == @user)
   end
 
+  def demo_mode_filter
+    if ChorusConfig.instance.demo_enabled?
+      present_forbidden(nil, :DEMO_FORBIDDEN) unless logged_in? && current_user.admin?
+    end
+  end
+
   def set_collection_defaults
     params.reverse_merge!(Chorus::Application.config.collection_defaults)
   end
