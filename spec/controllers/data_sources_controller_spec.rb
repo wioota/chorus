@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe DataSourcesController do
-  ignore_authorization!
-
   let(:user) { users(:owner) }
 
   before { log_in user }
@@ -88,7 +86,7 @@ describe DataSourcesController do
 
   describe "update" do
     let(:changed_attributes) { {} }
-    let(:gpdb_data_source) { data_sources(:shared) }
+    let(:gpdb_data_source) { data_sources(:owners) }
     let(:params) do
       {
           :id => gpdb_data_source.id,
@@ -240,7 +238,7 @@ describe DataSourcesController do
   end
 
   describe "destroy" do
-    let(:data_source) { data_sources(:shared) }
+    let(:data_source) { data_sources(:owners) }
     it "destroys the model" do
       delete :destroy, :id => data_source.id
       response.should be_success
@@ -251,5 +249,11 @@ describe DataSourcesController do
       mock(subject).authorize! :edit, data_source
       delete :destroy, :id => data_source.id
     end
+  end
+
+  context "in demo mode" do
+
+
+
   end
 end
