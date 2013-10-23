@@ -3,8 +3,10 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe "Insights" do
    it "clicks on the insights link on the home page" do
     login(users(:owner))
-    click_link "Insights"
-    find(".title h1").should have_content("Insights")
+    within ".activity_list_header" do
+      click_link "Insights"
+      find(".title h1").should have_content("Insights")
+    end
   end
 
   it "creates an insight" do
