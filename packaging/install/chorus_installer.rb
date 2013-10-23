@@ -566,7 +566,7 @@ class ChorusInstaller
   end
 
   def extract_alpine(alpine_installer)
-    system("unzip -q #{alpine_installer} -d #{alpine_destination_path}")
+    system("unzip -qo #{alpine_installer} -d #{alpine_destination_path}")
   end
 
   def set_properties(new_properties)
