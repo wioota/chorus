@@ -22,11 +22,11 @@ describe "Data Source", :oracle_integration do
       within_modal do
         select_and_do_within_data_source "register_existing_oracle" do
           fill_in 'name', :with => "new_oracle_data_source"
-          fill_in 'host', :with => WEBPATH['oracle_data_source_db']['oracle_host']
-          fill_in 'port', :with => WEBPATH['oracle_data_source_db']['oracle_port']
-          fill_in 'dbName', :with => WEBPATH['oracle_data_source_db']['oracle_database']
-          fill_in 'dbUsername', :with => WEBPATH['oracle_data_source_db']['oracle_user']
-          fill_in 'dbPassword', :with => WEBPATH['oracle_data_source_db']['oracle_pass']
+          fill_in 'host', :with => OracleIntegration.hostname
+          fill_in 'port', :with => OracleIntegration.port
+          fill_in 'dbName', :with => OracleIntegration.db_name
+          fill_in 'dbUsername', :with => OracleIntegration.username
+          fill_in 'dbPassword', :with => OracleIntegration.password
         end
         click_button "Add Data Source"
       end

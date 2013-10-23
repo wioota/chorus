@@ -14,10 +14,10 @@ describe "Data Sources", :greenplum_integration do
       within_modal do
         select_and_do_within_data_source "register_existing_greenplum" do
           fill_in 'name', :with => "new_gpdb_data_source"
-          fill_in 'host', :with => WEBPATH['gpdb_data_source_db']['gpdb_host']
-          fill_in 'port', :with => WEBPATH['gpdb_data_source_db']['gpdb_port']
-          fill_in 'dbUsername', :with => WEBPATH['gpdb_data_source_db']['gpdb_user']
-          fill_in 'dbPassword', :with => WEBPATH['gpdb_data_source_db']['gpdb_pass']
+          fill_in 'host', :with => GreenplumIntegration.hostname
+          fill_in 'port', :with => GreenplumIntegration.port
+          fill_in 'dbUsername', :with => GreenplumIntegration.username
+          fill_in 'dbPassword', :with => GreenplumIntegration.password
         end
         click_button "Add Data Source"
       end

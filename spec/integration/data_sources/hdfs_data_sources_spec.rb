@@ -14,11 +14,11 @@ describe 'Data Sources', :hdfs_integration do
       within_modal do
         select_and_do_within_data_source 'register_existing_hdfs' do
           fill_in 'name', :with => 'BestHadoop'
-          fill_in 'host', :with => WEBPATH['hdfs_data_source_db']['host']
-          fill_in 'port', :with => WEBPATH['hdfs_data_source_db']['port']
-          fill_in 'username', :with => WEBPATH['hdfs_data_source_db']['username']
-          fill_in 'groupList', :with => WEBPATH['hdfs_data_source_db']['group_list']
-          select_item('[name=hdfsVersion]', 'Greenplum HD 1.1')
+          fill_in 'host', :with => HdfsIntegration.data_source_config.host
+          fill_in 'port', :with => HdfsIntegration.data_source_config.port
+          fill_in 'username', :with => HdfsIntegration.data_source_config.username
+          fill_in 'groupList', :with => 'supergroup'
+          select_item('[name=hdfsVersion]', HdfsIntegration.data_source_config.hdfs_version)
         end
         click_button 'Add Data Source'
       end

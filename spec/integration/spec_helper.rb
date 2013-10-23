@@ -24,8 +24,6 @@ Capybara.default_wait_time = 30
 
 DatabaseCleaner.strategy = :truncation
 
-WEBPATH = YAML.load_file("spec/integration/webpath.yml") unless defined? WEBPATH
-
 Dir[File.join(File.dirname(__FILE__), 'helpers', "**", "*")].each {|f| require f}
 Dir[File.join(File.dirname(__FILE__), 'support', "**", "*")].each {|f| require f}
 FACTORY_GIRL_SEQUENCE_OFFSET = 44444
