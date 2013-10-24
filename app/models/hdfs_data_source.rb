@@ -58,7 +58,7 @@ class HdfsDataSource < ActiveRecord::Base
   end
 
   def hdfs_pairs
-    connection_parameters.map { |hsh| com.emc.greenplum.hadoop.plugins.HdfsPair.new(hsh["key"], hsh["value"]) }
+    connection_parameters.map { |hsh| com.emc.greenplum.hadoop.plugins.HdfsPair.new(hsh["key"], hsh["value"]) } if connection_parameters
   end
 
   private
