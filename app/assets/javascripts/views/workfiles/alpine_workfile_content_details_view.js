@@ -42,6 +42,8 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
     },
 
     navigateToWorkFlow:function(){
+        this.model.checkForHawq();
+
         chorus.router.navigate(this.model.workFlowShowUrl());
     }
 });

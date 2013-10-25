@@ -22,10 +22,20 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
             expect(this.view.$('.open_file')).toContainTranslation('work_flows.show.open');
         });
 
-        it("links the 'Open File' button to the Alpine page", function() {
-            spyOn(chorus.router, 'navigate');
-            this.view.$('.open_file').click();
-            expect(chorus.router.navigate).toHaveBeenCalledWith(this.model.workFlowShowUrl());
+        context("clicking on the open workflow button", function() {
+            beforeEach(function() {
+                spyOn(chorus.router, 'navigate');
+                spyOn(this.model, 'checkForHawq');
+                this.view.$('.open_file').click();
+            });
+
+            it("links the 'Open File' button to the Alpine page", function() {
+                expect(chorus.router.navigate).toHaveBeenCalledWith(this.model.workFlowShowUrl());
+            });
+
+            it("checks for hawq sources", function() {
+                expect(this.model.checkForHawq).toHaveBeenCalled();
+            });
         });
 
         context("when the execution location has multiple data sources", function() {

@@ -106,6 +106,16 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
         }, this);
     },
 
+    checkForHawq: function() {
+        _.every(this.executionLocations(), function(el) {
+            if(el.get('entityType') === 'gpdb_database' && el.dataSource().get('isHawq')) {
+                chorus.toast("work_flows.toast.hawq");
+                return false;
+            }
+            return true;
+        });
+    },
+
     run: function () {
         this.save({action: "run"});
     },
