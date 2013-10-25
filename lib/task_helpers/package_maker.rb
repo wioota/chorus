@@ -97,9 +97,11 @@ module PackageMaker
   end
 
   def write_pivotal_branding(file_path)
-    file = File.read(file_path)
-    file.gsub!('alpine.branded.enabled=true', 'alpine.branded.enabled=false')
-    File.open(file_path, 'w').write(file)
+    content = File.read(file_path)
+    content.gsub!('alpine.branded.enabled=true', 'alpine.branded.enabled=false')
+    File.open(file_path, 'w') do |f|
+      f.write(content)
+    end
   end
 
   def labeler
