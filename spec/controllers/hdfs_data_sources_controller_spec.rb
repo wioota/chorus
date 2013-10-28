@@ -121,6 +121,11 @@ describe HdfsDataSourcesController do
   end
 
   context 'in demo mode' do
+    before do
+      stub(Hdfs::DataSourceRegistrar).verify_data_source_accessibility.with_any_args { true }
+      stub(Hdfs::QueryService).version_of.with_any_args { "Cloudera CDH4" }
+    end
+
     it_behaves_like 'a protected demo mode controller' do
       let(:params) { { :id => hdfs_data_source } }
     end
