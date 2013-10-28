@@ -1578,7 +1578,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
-  context "for a HAWQ datasource" do
+  context "for a HAWQ datasource", :hawq_integration do
     let(:config) { HawqIntegration.hawq_config }
     let(:data_source_attributes) {
       {
