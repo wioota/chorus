@@ -46,7 +46,8 @@ data_sources:
     - host: "alpine-hadoop"
       port: "8200"
       username: "alpine"
-      hdfs_version: "supergroup"
+      groupname: "supergroup"
+      hdfs_version: "Apache Hadoop 0.20.2"
 
     - host: "chorus-gphd02"
       port: 8020
