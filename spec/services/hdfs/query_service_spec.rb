@@ -24,6 +24,7 @@ describe Hdfs::QueryService, :hdfs_integration do
         HdfsDataSource.new hdfs_params
       end
 
+      #todo: these specs should be updated to not depend on specific versions of hadoop
       it "returns the hadoop version" do
         version = described_class.version_of(data_source)
         version.should == "0.20.1gp"

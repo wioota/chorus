@@ -43,6 +43,11 @@ data_sources:
         db_password: "secret"
 
   hadoop:
+    - host: "alpine-hadoop"
+      port: "8200"
+      username: "alpine"
+      hdfs_version: "supergroup"
+
     - host: "chorus-gphd02"
       port: 8020
       username: "pivotal"
