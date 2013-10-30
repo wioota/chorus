@@ -100,7 +100,7 @@ module GreenplumIntegration
   end
 
   def self.database_name
-    "gpdb_#{Socket.gethostname.gsub('.', '_')}_#{ENV['RAILS_ENV']}".slice(0, 26) # needs to fit in 31 characters with _priv appended
+    "gpdb_#{Socket.gethostname.gsub('.', '_').slice(0, 14)}_#{ENV['RAILS_ENV']}".slice(0, 26) # needs to fit in 31 characters with _priv appended
   end
 
   def self.data_source_config(name)
