@@ -17,7 +17,7 @@ describe 'Data Sources', :hdfs_integration do
           fill_in 'host', :with => HdfsIntegration.data_source_config['host']
           fill_in 'port', :with => HdfsIntegration.data_source_config['port']
           fill_in 'username', :with => HdfsIntegration.data_source_config['username']
-          fill_in 'groupList', :with => HdfsIntegration.data_source_config['groupname']
+          fill_in 'groupList', :with => HdfsIntegration.data_source_config['group_list']
           select_item('[name=hdfsVersion]', HdfsIntegration.data_source_config['hdfs_version'])
         end
         click_button 'Add Data Source'
