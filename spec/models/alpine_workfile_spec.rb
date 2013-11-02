@@ -255,6 +255,7 @@ describe AlpineWorkfile do
 
     before do
       any_instance_of(Alpine::API) {|api| stub(api).request_run.with_any_args { process_id } }
+      stub(ChorusConfig.instance).workflow_enabled { true }
     end
 
     it "uses the api to run the work flow" do
