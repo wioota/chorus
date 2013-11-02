@@ -39,7 +39,7 @@ class WorkfileVersion < ActiveRecord::Base
     contents.original_filename
   end
 
-  CODE_EXTENSIONS = ["cpp", "r"]
+  CODE_EXTENSIONS = %w(cpp r)
 
   def extension
     file_name = contents.original_filename || ''
@@ -48,15 +48,15 @@ class WorkfileVersion < ActiveRecord::Base
 
   def file_type
     if image?
-      "image"
+      'image'
     elsif code?
-      "code"
+      'code'
     elsif sql?
-      "sql"
+      'sql'
     elsif text?
-      "text"
+      'text'
     else
-      "other"
+      'other'
     end
   end
 
@@ -69,7 +69,7 @@ class WorkfileVersion < ActiveRecord::Base
   end
 
   def sql?
-    extension == "sql"
+    extension == 'sql'
   end
 
   def code?
@@ -82,7 +82,7 @@ class WorkfileVersion < ActiveRecord::Base
 
   def update_content(new_content)
     if latest_version?
-      File.open(contents.path, "w") do |file|
+      File.open(contents.path, 'w') do |file|
         file.write new_content
       end
       workfile.touch(:user_modified_at)
@@ -95,7 +95,7 @@ class WorkfileVersion < ActiveRecord::Base
   def get_content(to_offset = nil)
     args = [contents.path]
     args << to_offset if to_offset
-    File.read(*args) if (text? || sql?)
+    File.read(*args).force_encoding('utf-8') if (text? || sql?)
   end
 
   private

@@ -370,6 +370,10 @@ FixtureBuilder.configure do |fbuilder|
       Events::ViewCreated.by(owner).add(:source_dataset => chorus_view, :workspace => public_workspace, :dataset => source_view)
     end
 
+    File.open(Rails.root.join('spec', 'fixtures', 'non_utf8.sql')) do |file|
+      FactoryGirl.create(:chorus_workfile, :file_name => 'non_utf8.sql', :owner => owner, :workspace => public_workspace, :execution_schema => public_workspace.sandbox, :versions_attributes => [{:contents => file}])
+    end
+
     text_workfile = nil
     File.open Rails.root + 'spec/fixtures/some.txt' do |file|
       text_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "text.txt", :owner => owner, :workspace => public_workspace, :versions_attributes => [{:contents => file}])

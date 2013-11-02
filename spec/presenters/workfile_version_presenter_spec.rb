@@ -115,9 +115,16 @@ describe WorkfileVersionPresenter, :type => :view do
         it "includes the text of the file" do
           hash[:content].should == File.read(version.contents.path)
         end
+
+        context 'when the content has characters which are ambiguously defined between encodings' do
+          let(:workfile) { workfiles(:'non_utf8.sql') }
+
+          it 'includes the text of the file' do
+            hash[:content].should == File.read(version.contents.path)
+          end
+        end
       end
     end
-
 
     context "when rendering the activity stream" do
       let(:options) { {:activity_stream => true} }
