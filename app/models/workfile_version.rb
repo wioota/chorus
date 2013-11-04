@@ -95,7 +95,10 @@ class WorkfileVersion < ActiveRecord::Base
   def get_content(to_offset = nil)
     args = [contents.path]
     args << to_offset if to_offset
-    File.read(*args).force_encoding('utf-8') if (text? || sql?)
+    if text? || sql?
+      content = File.read(*args)
+      content.force_encoding('utf-8') if content
+    end
   end
 
   private
