@@ -8,8 +8,6 @@ bin=`cd "$bin"; pwd`
 
 . "$bin"/chorus-config.sh
 
-MAX_CONNECTIONS=$($RUBY $CHORUS_HOME/packaging/update_database_thread_count.rb)
-echo "Setting maximum database connections to $MAX_CONNECTIONS"
 
 if [ -f $POSTGRES_PID_FILE ]; then
   if kill -0 `head -1 $POSTGRES_PID_FILE` > /dev/null 2>&1; then
@@ -17,6 +15,9 @@ if [ -f $POSTGRES_PID_FILE ]; then
     exit 0
   fi
 fi
+
+MAX_CONNECTIONS=$($RUBY $CHORUS_HOME/packaging/update_database_thread_count.rb)
+log "Setting maximum database connections to $MAX_CONNECTIONS"
 
 DYLD_LIBRARY_PATH=$CHORUS_HOME/postgres/lib LD_LIBRARY_PATH=$CHORUS_HOME/postgres/lib $CHORUS_HOME/postgres/bin/pg_ctl -l $POSTGRES_DATA_DIR/server.log -D $POSTGRES_DATA_DIR -w -o "-N$MAX_CONNECTIONS -p$POSTGRES_PORT -h127.0.0.1 --bytea_output=escape" start &>$POSTGRES_DATA_DIR/pg_ctl.log
 POSTGRES_START=$?

@@ -49,7 +49,7 @@ case $RAILS_ENV in
     * )
         if [ -f $JETTY_PID_FILE ]; then
           if kill -0 `cat $JETTY_PID_FILE` > /dev/null 2>&1; then
-            log_inline "stopping jetty "
+            log "stopping jetty "
             cd $CHORUS_HOME/vendor/jetty/
             JETTY_PID=$JETTY_PID_FILE RAILS_ENV=$RAILS_ENV ./jetty-init stop
             STOP_SUCCESS=`expr $STOP_SUCCESS + $?`

@@ -45,14 +45,19 @@ case $RAILS_ENV in
         fi
         ;;
     * )
-        log "updating jetty config..."
-        $RUBY packaging/update_jetty_xml.rb
-        RAILS_ENV=$RAILS_ENV $RUBY packaging/update_database_yml.rb
 
-        log "starting jetty..."
-        cd $CHORUS_HOME/vendor/jetty/
-        JETTY_PID=$JETTY_PID_FILE CHORUS_JAVA_OPTIONS=$CHORUS_JAVA_OPTIONS RAILS_ENV=$RAILS_ENV SOLR_PORT=$SOLR_PORT ./jetty-init start 2>> $CHORUS_HOME/log/jetty.log >> $CHORUS_HOME/log/jetty.log &
-        cd $CHORUS_HOME
-        wait_for_start $JETTY_PID_FILE
+        if ( test -f $JETTY_PID_FILE ) && ( kill -0 `cat $JETTY_PID_FILE` > /dev/null 2>&1 ); then
+            log "jetty already running as process `cat $JETTY_PID_FILE`."
+        else
+            log "updating jetty config..."
+            $RUBY packaging/update_jetty_xml.rb
+            RAILS_ENV=$RAILS_ENV $RUBY packaging/update_database_yml.rb
+
+            log "starting jetty..."
+            cd $CHORUS_HOME/vendor/jetty/
+            JETTY_PID=$JETTY_PID_FILE CHORUS_JAVA_OPTIONS=$CHORUS_JAVA_OPTIONS RAILS_ENV=$RAILS_ENV SOLR_PORT=$SOLR_PORT ./jetty-init start 2>> $CHORUS_HOME/log/jetty.log >> $CHORUS_HOME/log/jetty.log &
+            cd $CHORUS_HOME
+            wait_for_start $JETTY_PID_FILE
+        fi
         ;;
 esac

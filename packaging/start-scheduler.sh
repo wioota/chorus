@@ -13,7 +13,7 @@ depends_on postgres
 
 if [ -f $SCHEDULER_PID_FILE ]; then
   if kill -0 `cat $SCHEDULER_PID_FILE` > /dev/null 2>&1; then
-    log "Scheduler already running as process `cat $SCHEDULER_PID_FILE`."
+    log "scheduler already running as process `cat $SCHEDULER_PID_FILE`."
     exit 0
   fi
 fi
@@ -21,4 +21,4 @@ fi
 JRUBY_OPTS=$JRUBY_OPTS CHORUS_JAVA_OPTIONS=$CHORUS_JAVA_OPTIONS_WITHOUT_XMS RAILS_ENV=$RAILS_ENV $RUBY script/rails runner "ServiceScheduler.run" >> $CHORUS_HOME/log/scheduler.$RAILS_ENV.log 2>&1 &
 scheduler_pid=$!
 echo $scheduler_pid > $SCHEDULER_PID_FILE
-log "Scheduler started as pid $scheduler_pid"
+log "scheduler started as pid $scheduler_pid"

@@ -16,7 +16,7 @@ LOG_CONFIG_FILE=$CHORUS_HOME/vendor/solr/logging-$RAILS_ENV.properties
 
 if [ -f $SOLR_PID_FILE ]; then
   if kill -0 `cat $SOLR_PID_FILE` > /dev/null 2>&1; then
-    log "Solr already running as process `cat $SOLR_PID_FILE`."
+    log "solr already running as process `cat $SOLR_PID_FILE`."
     exit 0
   fi
 fi
@@ -30,5 +30,5 @@ cd $CHORUS_HOME/vendor/solr
 java -Djetty.host=localhost -Dsolr.solr.home=$CHORUS_HOME/solr -Djetty.port=$SOLR_PORT -Dsolr.data.dir=$DATA_DIR -Djava.util.logging.config.file=$LOG_CONFIG_FILE -jar start.jar &> /dev/null &
 solr_pid=$!
 echo $solr_pid > $SOLR_PID_FILE
-log "Solr started as pid $solr_pid on port $SOLR_PORT"
+log "solr started as pid $solr_pid on port $SOLR_PORT"
 cd $CHORUS_HOME
