@@ -16,7 +16,12 @@ describe("chorus.models.BulkDestroyer", function() {
 
         it("sends additional options in the 'data' parameter with snaked keys", function() {
             destroyer.destroy({fooParam: 'barValue'});
-            expect(this.server.lastDestroy().params()['foo_param']).toEqual('barValue');
+            expect(this.server.lastDestroy().json()['foo_param']).toEqual('barValue');
+        });
+
+        it("sends arrays", function() {
+            destroyer.destroy({datasetIds: ['barValue', 'varBalue']});
+            expect(this.server.lastDestroy().json()['dataset_ids']).toEqual(['barValue', 'varBalue']);
         });
 
         it("triggers destroy on the collection", function() {
