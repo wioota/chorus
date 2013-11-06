@@ -6,17 +6,17 @@ gem 'will_paginate'
 gem 'net-ldap',      :require => false
 gem 'paperclip', '3.0.4'
 gem 'cocaine', '0.2.1' # cocaine is a paperclip dependency but new versions of cocaine cause trouble. remove this line after upgrading paperclip.
-gem 'queue_classic', :github => "GreenplumChorus/queue_classic"
+gem 'queue_classic', :github => 'Chorus/queue_classic'
 gem 'clockwork',     :require => false
 gem 'allowy'
 gem 'sunspot_rails', '~> 2.0.0'
-gem 'jetpack', :github => "GreenplumChorus/jetpack", :require => false
+gem 'jetpack', :github => 'Chorus/jetpack', :require => false
 gem 'nokogiri'
-gem 'postgresql_cursor', :github => "GreenplumChorus/postgresql_cursor"
+gem 'postgresql_cursor', :github => 'Chorus/postgresql_cursor'
 gem 'sequel', '~> 3.46.0', :require => 'sequel/no_core_ext'
 gem 'attr_encrypted' #if you load attr_encrypted before sequel, it blows up saying 'sequel::model' is undefined
-gem 'tabcmd_gem', :github => "GreenplumChorus/tableau"
-gem 'chorusgnip', :github => 'GreenplumChorus/gnip'
+gem 'tabcmd_gem', :github => 'Chorus/tableau'
+gem 'chorusgnip', :github => 'Chorus/gnip'
 gem 'logger-syslog'
 gem 'newrelic_rpm'
 gem 'premailer-rails'
@@ -71,7 +71,7 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
 
   gem 'jasmine', :github => 'pivotal/jasmine-gem'
   gem 'jasmine-core', :github => 'pivotal/jasmine'
-  gem 'rspec_api_documentation', :github => "GreenplumChorus/rspec_api_documentation"
+  gem 'rspec_api_documentation', :github => 'Chorus/rspec_api_documentation'
   gem 'sunspot_matchers'
   gem 'fixture_builder'
   gem 'ci_reporter', '>= 1.8.2'
