@@ -150,7 +150,7 @@ class Workfile < ActiveRecord::Base
     new_workfile = self.copy(user, workspace, new_file_name)
 
     new_workfile.resolve_name_conflicts = new_file_name.nil?
-    new_workfile.build_new_version(user, self.latest_workfile_version.contents, "") if new_workfile.respond_to?(:build_new_version)
+    new_workfile.build_new_version(user, self.latest_workfile_version.contents, '') if new_workfile.respond_to?(:build_new_version)
     new_workfile.save!
     new_workfile
   end

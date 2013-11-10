@@ -330,4 +330,39 @@ describe AlpineWorkfile do
       end
     end
   end
+
+  describe '#copy' do
+    let(:workflow) { workfiles(:alpine_flow) }
+    let(:workspace) { workspaces(:private) }
+    let(:user) { users(:admin) }
+
+    it 'copies the associated data' do
+      new_workfile = workflow.copy(user, workspace)
+      new_workfile.file_name.should == workflow.file_name
+      new_workfile.description.should == workflow.description
+      new_workfile.workspace.should == workspace
+      new_workfile.owner.should == user
+      new_workfile.workfile_execution_locations.length.should == workflow.workfile_execution_locations.length
+    end
+  end
+
+  describe '#copy!' do
+    let(:workflow) { workfiles(:alpine_flow) }
+    let(:workspace) { workspaces(:private) }
+    let(:user) { users(:admin) }
+
+    it 'notifies Alpine' do
+      mock(Alpine::API).copy_work_flow(workflow, numeric)
+      workflow.copy!(user, workspace)
+    end
+
+    it 'rolls back if it cannot successfully copy in alpine' do
+      stub(Alpine::API).copy_work_flow(workflow, numeric) { raise ModelNotCreated.new }
+      expect {
+        expect {
+          workflow.copy!(user, workspace)
+        }.to raise_error(ModelNotCreated)
+      }.to_not change(Workfile, :count)
+    end
+  end
 end

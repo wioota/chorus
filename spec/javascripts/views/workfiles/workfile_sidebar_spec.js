@@ -34,7 +34,7 @@ describe("chorus.views.WorkfileSidebar", function() {
                 this.view.render();
             });
 
-            it("displays a link to copy the workfile to another workspace", function() {
+            it("displays a link to copy the workfile", function() {
                 var copyLink = this.view.$(".actions a.copy");
                 expect(copyLink).toExist();
             });
@@ -108,18 +108,6 @@ describe("chorus.views.WorkfileSidebar", function() {
             });
 
             itBehavesLike.aDialogLauncher("a.new_note", chorus.dialogs.NotesNew);
-        });
-
-        context("when it is an Alpine workile", function() {
-            beforeEach(function() {
-                var model = backboneFixtures.workfile.alpine();
-                this.view = chorus.views.WorkfileSidebar.buildFor({model: model});
-                this.view.render();
-            });
-
-            it("hides the copy link", function() {
-                expect(this.view.$('.actions a.copy')).not.toExist();
-            });
         });
 
         context("when it is a tableau workbook", function () {

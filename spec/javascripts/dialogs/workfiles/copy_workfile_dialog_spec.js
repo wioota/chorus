@@ -29,10 +29,8 @@ describe("chorus.dialogs.CopyWorkfile", function() {
             ]);
         });
 
-        it("shows all of the user's workspaces except for the one that the workfile currently belongs to", function() {
-            expect(this.dialog.$("li").length).toBe(2);
-            expect(this.dialog.$('li:eq(0) .name')).toContainText("im_not_the_current_one");
-            expect(this.dialog.$('li:eq(1) .name')).toContainText("me_neither");
+        it("shows all of the user's workspaces", function() {
+            expect(this.dialog.$("li").length).toBe(3);
         });
 
         it("has the right button text", function() {

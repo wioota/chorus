@@ -17,7 +17,6 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
     },
 
     resourcesLoaded: function() {
-        this.collection.remove(this.collection.get(this.workfile.workspace().id));
         this.render();
     },
 

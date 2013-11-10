@@ -286,6 +286,68 @@ describe Alpine::API do
       params['process_id'][0].should == 'killbill'
     end
   end
+
+  describe '.copy_work_flow' do
+    before { fake_a_session }
+    let(:work_flow) { workfiles('alpine_flow') }
+    let(:new_id) { 162 }
+
+    it 'describes to a new API instance' do
+      any_instance_of(Alpine::API) do |api|
+        mock(api).copy_work_flow(work_flow, new_id)
+      end
+
+      Alpine::API.copy_work_flow(work_flow, new_id)
+    end
+  end
+
+  describe '#copy_work_flow' do
+    let(:work_flow) { workfiles(:alpine_flow) }
+    let(:new_id) { 162 }
+    let(:full_request_url) { "#{alpine_base_uri}/alpinedatalabs/main/chorus.do?method=duplicateWorkFlow&session_id=#{mock_session_id}&workfile_id=#{work_flow.id}&new_workfile_id=#{new_id}" }
+
+    before do
+      VCR.configure do |c|
+        c.ignore_localhost = true
+      end
+      fake_a_session
+    end
+
+    it 'makes a POST request with the necessary params' do
+      FakeWeb.register_uri(:post, full_request_url, :status => 201)
+      subject.copy_work_flow(work_flow, new_id)
+      FakeWeb.last_request.should be_a(Net::HTTP::Post)
+    end
+
+    context 'when the response in not 201' do
+      before do
+        FakeWeb.register_uri(:post, full_request_url, :status => 500)
+      end
+
+      it 'raises ModelNotCreated' do
+        expect {
+          subject.copy_work_flow(work_flow, new_id)
+        }.to raise_error(ModelNotCreated)
+      end
+    end
+
+    context 'when Alpine is unavailable' do
+      it 'handles SocketError' do
+        FakeWeb.register_uri(:post, full_request_url, :exception => SocketError)
+        expect { subject.copy_work_flow(work_flow, new_id) }.to raise_error(ModelNotCreated)
+      end
+
+      it 'handles Errno::ECONNREFUSED' do
+        FakeWeb.register_uri(:post, full_request_url, :exception => Errno::ECONNREFUSED)
+        expect { subject.copy_work_flow(work_flow, new_id) }.to raise_error(ModelNotCreated)
+      end
+
+      it 'handles TimeoutError' do
+        FakeWeb.register_uri(:post, full_request_url, :exception => TimeoutError)
+        expect { subject.copy_work_flow(work_flow, new_id) }.to raise_error(ModelNotCreated)
+      end
+    end
+  end
 end
 
 def fake_a_session

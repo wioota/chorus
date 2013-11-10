@@ -24,6 +24,10 @@ module Alpine
       new(user: user).stop_work_flow(killer.killable_id)
     end
 
+    def self.copy_work_flow(work_flow, new_id)
+      new.copy_work_flow(work_flow, new_id)
+    end
+
     # INSTANCE METHODS
 
     def initialize(options = nil)
@@ -50,6 +54,10 @@ module Alpine
       request_stop(process_id) if config.workflow_configured?
     end
 
+    def copy_work_flow(work_flow, new_id)
+      request_copy(work_flow, new_id)
+    end
+
     private
 
     attr_reader :config, :user
@@ -69,13 +77,13 @@ module Alpine
     def request_deletion(work_flow)
       request_base.delete(delete_path(work_flow))
     rescue SocketError, Errno::ECONNREFUSED, TimeoutError => e
-      pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
+      log_error(e)
     end
 
     def request_stop(process_id)
       request_base.post(stop_path(process_id), '')
     rescue StandardError => e
-      pa "$$$ Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
+      log_error(e)
     end
 
     def request_run(work_flow, options)
@@ -83,8 +91,16 @@ module Alpine
       raise StandardError.new(response.body) unless response.code == '200'
       JSON.parse(response.body)['process_id']
     rescue StandardError => e
-      pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
+      log_error(e)
       raise e
+    end
+
+    def request_copy(work_flow, new_id)
+      response = request_base.post(copy_path(work_flow, new_id), '')
+      raise StandardError(response.body) unless response.code == '201'
+    rescue Exception => e
+      log_error(e)
+      raise ModelNotCreated.new('Failed to copy workflow.')
     end
 
     def delete_path(work_flow)
@@ -137,6 +153,16 @@ module Alpine
       path_with(params)
     end
 
+    def copy_path(work_flow, new_id)
+      params = {
+        :method => 'duplicateWorkFlow',
+        :session_id => session_id,
+        :workfile_id => work_flow.id,
+        :new_workfile_id => new_id
+      }
+      path_with(params)
+    end
+
     def base_url
       URI(config.workflow_url)
     end
@@ -151,6 +177,10 @@ module Alpine
 
     def path_with(params)
       "/alpinedatalabs/main/chorus.do?#{params.to_query}"
+    end
+
+    def log_error(e)
+      pa "Unable to connect to an Alpine at #{base_url}. Encountered #{e.class}: #{e}"
     end
   end
 end

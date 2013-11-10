@@ -262,7 +262,6 @@ describe WorkfilesController do
 
           post :create, params
           response.should be_unprocessable
-          p JSON.parse(response.body)['errors']
         end
       end
 

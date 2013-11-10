@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'HdfsDataset::HdfsContentsError', :with => :render_hdfs_query_error
   rescue_from 'GreenplumConnection::SqlPermissionDenied', :with => :render_resource_forbidden
   rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
-  rescue_from 'ModelNotCreated', :with => :render_model_error
+  rescue_from 'ModelNotCreated', :with => :render_unprocessable_entity
   rescue_from 'Hdfs::DirectoryNotFoundError', :with => :render_not_found
   rescue_from 'SunspotError', :with => :render_unprocessable_entity
   rescue_from 'SearchExtensions::SolrUnreachable', :with => :render_solr_unreachable_error
@@ -89,12 +89,6 @@ class ApplicationController < ActionController::Base
 
   def render_query_error(e)
     present_errors({:fields => {:query => {:INVALID => {:message => e.to_s}}}}, :status => :unprocessable_entity)
-  end
-
-  def render_model_error(e)
-    present_errors({:fields => {:general =>
-                                  {:GENERIC => {:message => e.message}}}},
-                   {:status => :unprocessable_entity})
   end
 
   def render_solr_unreachable_error(e)

@@ -78,6 +78,23 @@ class AlpineWorkfile < Workfile
     response
   end
 
+  def copy!(user, workspace, new_file_name=nil)
+    AlpineWorkfile.transaction do
+      new_workfile = super
+      Alpine::API.copy_work_flow(self, new_workfile.id)
+      new_workfile
+    end
+  end
+
+  def copy(user, workspace, new_file_name = nil)
+    new_workfile = super
+    workfile_execution_locations.each do |location|
+      new_workfile.workfile_execution_locations.build(:execution_location => location.execution_location)
+    end
+
+    new_workfile
+  end
+
   private
 
   def update_file_name(params)

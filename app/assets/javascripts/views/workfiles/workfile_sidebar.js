@@ -108,9 +108,6 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
                 ctx.showUpdatedTime = false;
                 ctx.showVersions = false;
             }
-            if(this.model.isAlpine()) {
-                ctx.showCopyLink = false;
-            }
             _.extend(ctx, this.modifierContext());
         }
         return ctx;
