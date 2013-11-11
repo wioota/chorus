@@ -76,7 +76,7 @@ class JobsController < ApplicationController
   end
 
   def end_run_exists?
-    params[:job][:end_run] && params[:job][:end_run] != 'false'
+    params[:job][:end_run]
   end
 
   def workspace

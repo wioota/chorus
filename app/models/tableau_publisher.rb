@@ -43,7 +43,7 @@ class TableauPublisher
   end
 
   def build_workfile(params, workspace)
-    if params[:tableau_workbook][:create_work_file] == "true"
+    if params[:tableau_workbook][:create_work_file]
       workfile = LinkedTableauWorkfile.new(file_name: "#{params[:tableau_workbook][:name]}.twb")
       workfile.owner = current_user
       workfile.workspace = workspace

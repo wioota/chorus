@@ -140,8 +140,8 @@ describe JobsController do
             :name => "asd",
             :interval_unit => "on_demand",
             :interval_value => "0",
-            :next_run => "false",
-            :end_run => "false",
+            :next_run => false,
+            :end_run => false,
             :time_zone => "Hawaii"
           },
           :workspace_id => workspace.id
@@ -164,7 +164,7 @@ describe JobsController do
                 :interval_unit => "hours",
                 :interval_value => "1",
                 :next_run => "2000-07-30T14:00:00-07:00",
-                :end_run => "false",
+                :end_run => false,
                 :time_zone => "Hawaii"
             },
             :workspace_id => workspace.id
@@ -183,7 +183,7 @@ describe JobsController do
       {
           enabled: true,
           next_run: "2020-07-30T14:00:00-00:00",
-          end_run: "false",
+          end_run: false,
           time_zone: 'Arizona',
       }
     end
@@ -262,7 +262,7 @@ describe JobsController do
             job: {
                 enabled: true,
                 next_run: "2000-07-30T14:00:00-00:00",
-                end_run: "false",
+                end_run: false,
                 time_zone: 'Arizona',
             }
         }
@@ -350,7 +350,7 @@ describe JobsController do
         {
             enabled: true,
             next_run: "2020-07-30T14:00:00-00:00",
-            end_run: "false",
+            end_run: false,
             time_zone: 'Arizona',
         }
       end
