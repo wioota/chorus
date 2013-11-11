@@ -78,7 +78,7 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
   gem 'faker'
   gem 'fakeweb'
   gem 'sunspot_solr', :github => 'taktsoft/sunspot', :ref => '78717a33894271d012682dbe8902458badb0ca63' # https://github.com/sunspot/sunspot/pull/267
-  gem 'backbone_fixtures_rails', :github => "charleshansen/backbone_fixtures_rails"
+  gem 'backbone_fixtures_rails', :github => 'charleshansen/backbone_fixtures_rails'
 end
 
 group :development do

@@ -50,12 +50,9 @@ describe("chorus.models.AlpineWorkfile", function() {
 
             expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
             expect(url).toContainQueryParams({
-                "database_id[]": 'this_is_a_gpdb_database_id',
-                file_name: "hello.afm",
                 workfile_id: "23",
                 session_id: "hex",
-                method: "chorusEntry",
-                "dataset_id[]": ["3", "4", "5" ]
+                method: "chorusEntry"
             });
             expect(url).not.toContainQueryParams({"hdfs_data_source_id[]": 'this_is_a_hadoop_id'});
         });
@@ -81,12 +78,9 @@ describe("chorus.models.AlpineWorkfile", function() {
 
                 expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
                 expect(url).toContainQueryParams({
-                    "hdfs_data_source_id[]": 'this_is_a_hadoop_id',
-                    file_name: "hello.afm",
                     workfile_id: "23",
                     session_id: "hex",
-                    method: "chorusEntry",
-                    "hdfs_dataset_id[]": [4,5,6]
+                    method: "chorusEntry"
                 });
                 expect(url).not.toContainQueryParams({"database_id[]": 'this_is_a_gpdb_database_id'});
             });
@@ -109,10 +103,6 @@ describe("chorus.models.AlpineWorkfile", function() {
 
             expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
             expect(url).toContainQueryParams({
-                "hdfs_data_source_id[]": 'this_is_a_hadoop_id',
-                "oracle_data_source_id[]": 'this_is_an_oracle_id',
-                "database_id[]": 'this_is_a_gpdb_database_id',
-                file_name: this.model.get('fileName'),
                 workfile_id: this.model.id,
                 session_id: "hex",
                 method: "chorusEntry"
@@ -138,16 +128,9 @@ describe("chorus.models.AlpineWorkfile", function() {
 
                 expect(url).toHaveUrlPath("test.com/alpinedatalabs/main/chorus.do");
                 expect(url).toContainQueryParams({
-                    "database_id[]": 'this_is_a_gpdb_database_id',
-                    "hdfs_data_source_id[]": 'this_is_a_hadoop_id',
-                    "oracle_data_source_id[]": 'this_is_an_oracle_data_source_id',
-                    file_name: this.model.get('fileName'),
                     workfile_id: this.model.id,
                     session_id: "hex",
-                    method: "chorusEntry",
-                    "dataset_id[]": [1],
-                    "hdfs_dataset_id[]": [10,11],
-                    "oracle_dataset_id[]": [1521]
+                    method: "chorusEntry"
                 });
             });
         });

@@ -28,42 +28,12 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
     },
 
     iframeUrl: function() {
-        var executionLocations = this.get('executionLocations');
         var uri = this.alpineUrlBase();
         var queryParams = {
-            file_name: this.get("fileName"),
             workfile_id: this.id,
             session_id: chorus.session.get("sessionId"),
             method: "chorusEntry"
         };
-
-        var databases = [];
-        var hadoops = [];
-        var oracles = [];
-        _.each(executionLocations, function (location) {
-            if(location.entityType === 'hdfs_data_source') {
-                hadoops.push(location.id);
-            } else if (location.entityType === 'gpdb_database') {
-                databases.push(location.id);
-            } else if (location.entityType === 'oracle_data_source') {
-                oracles.push(location.id);
-            }
-        });
-
-        if (hadoops.length > 0) {
-            queryParams["hdfs_data_source_id[]"] = hadoops;
-            if(this.get("hdfsDatasetIds")) queryParams["hdfs_dataset_id[]"] = this.get("hdfsDatasetIds");
-        }
-
-        if (databases.length > 0) {
-            queryParams["database_id[]"] = databases;
-            if (this.get("datasetIds")) queryParams["dataset_id[]"] = this.get("datasetIds");
-        }
-
-        if (oracles.length > 0) {
-            queryParams["oracle_data_source_id[]"] = oracles;
-            if (this.get("oracleDatasetIds")) queryParams["oracle_dataset_id[]"] = this.get("oracleDatasetIds");
-        }
 
         uri.addQuery(queryParams);
 
@@ -81,11 +51,10 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
     },
 
     alpineUrlBase: function() {
-        var uri = URI({
+        return URI({
             hostname: chorus.models.Config.instance().get('workflowUrl'),
             path: "/alpinedatalabs/main/chorus.do"
         });
-        return uri;
     },
 
     isAlpine: function() {
