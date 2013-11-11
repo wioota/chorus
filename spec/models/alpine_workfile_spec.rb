@@ -356,6 +356,12 @@ describe AlpineWorkfile do
       workflow.copy!(user, workspace)
     end
 
+    it 'does not duplicate the dataset_ids from the original workflow' do
+      stub(Alpine::API).copy_work_flow(workflow, numeric) { true }
+      new_workfile = workflow.copy!(user, workspace)
+      new_workfile.dataset_ids.should =~ []
+    end
+
     it 'rolls back if it cannot successfully copy in alpine' do
       stub(Alpine::API).copy_work_flow(workflow, numeric) { raise ModelNotCreated.new }
       expect {
