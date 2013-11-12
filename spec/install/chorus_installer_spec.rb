@@ -1212,78 +1212,68 @@ describe ChorusInstaller do
     end
   end
 
-  describe "#alpine_exists?" do
+  describe '#alpine_exists?' do
     before do
       stub_version
     end
 
-    context "if alpine package exists" do
+    context 'if alpine package exists' do
+      let(:alpine_version_new) { '3.0-asdfsdf' }
+
       before do
         FileUtils.mkdir_p(installer.alpine_source_path)
-        File.open("#{installer.alpine_source_path}/Alpine_Bundle_Rel2.9_single_linux_20130726-0601.zip", 'w') do |f|
-          f.puts "i am alpine"
+        File.open("#{installer.alpine_source_path}/alpine-3.0.0.0.38-e970d467.sh", 'w') do |f|
+          f.puts 'i am alpine'
         end
+        stub(installer).alpine_version { alpine_version_new }
       end
 
       it 'returns true' do
         installer.alpine_exists?.should be_true
       end
+
+      describe '#link_current_to_release' do
+        let(:previous_version) { '/usr/local/chorus/alpine-releases/3-old' }
+        let(:new_version) { '/usr/local/chorus/alpine-releases/' + alpine_version_new }
+        before do
+          installer.destination_path = '/usr/local/chorus'
+          stub(installer).version { '2.2.0.0' }
+          FileUtils.mkdir_p previous_version
+        end
+
+        it 'creates a symlink to the new release from alpine-current' do
+          installer.link_to_current_alpine_release
+
+          File.readlink('/usr/local/chorus/alpine-current').should == new_version
+        end
+
+        context 'when there is an existing link to current' do
+          before do
+            mock(old_release_cleaner).remove_except(new_version, previous_version)
+          end
+
+          it 'should overwrite the existing link to current' do
+            FileUtils.ln_s(previous_version, '/usr/local/chorus/alpine-current')
+            mock(File).delete('/usr/local/chorus/alpine-current') # FakeFS workaround
+            installer.link_to_current_alpine_release
+
+            File.readlink('/usr/local/chorus/alpine-current').should == new_version
+          end
+        end
+
+        context 'when there is no existing link to current' do
+          it 'should not try to remove directories, because this is probably a fresh install' do
+            do_not_allow(old_release_cleaner).remove_except
+            installer.link_to_current_alpine_release
+          end
+        end
+      end
     end
 
-    context "if alpine package does not exist" do
+    context 'if alpine package does not exist' do
       it 'returns false' do
         installer.alpine_exists?.should be_false
       end
-    end
-  end
-
-  describe "#configure_alpine" do
-    before do
-      installer.destination_path = '/usr/local/chorus'
-      stub_version
-      FileUtils.mkdir_p(installer.alpine_source_path)
-      File.open("#{installer.alpine_source_path}/Alpine_Bundle_Rel2.9_single_linux_20130726-0601.zip", 'w') do |f|
-        f.puts "i am alpine"
-      end
-      FileUtils.mkdir_p("#{installer.alpine_destination_path}/apache-tomcat-7.0.30/conf/")
-      FileUtils.mkdir_p("#{installer.alpine_destination_path}/ALPINE_DATA_REPOSITORY/configuration/")
-
-      File.open("#{installer.alpine_destination_path}/apache-tomcat-7.0.30/conf/server.xml", 'w') do |f|
-        f.puts <<-XML
-<Connector port="8080" protocol="HTTP/1.1"
-connectionTimeout="20000"
-redirectPort="8443" />
-        XML
-      end
-
-      stub(installer).extract_alpine
-      stub(installer).set_properties
-    end
-
-    it "unzips alpine into the appropriate place" do
-      stub(installer).extract_alpine(File.join("vendor", "alpine", "Alpine_Bundle_Rel2.9_single_linux_20130726-0601.zip"))
-      installer.configure_alpine
-    end
-
-    it "sets properties in alpine's config to enable chorus mode" do
-      installer.configure_alpine
-
-      alpine_config = File.read("#{installer.alpine_destination_path}/ALPINE_DATA_REPOSITORY/configuration/alpine.config")
-      alpine_config.should == <<-CONFIG
-chorus.active = true
-chorus.port = 8080
-      CONFIG
-    end
-
-    it "sets properties in alpine's tomcat config to set port" do
-      installer.configure_alpine
-
-      changed_xml = File.read("#{installer.alpine_destination_path}/apache-tomcat-7.0.30/conf/server.xml")
-      changed_xml.should == <<-XML
-<Connector port="9090" protocol="HTTP/1.1"
-connectionTimeout="20000"
-redirectPort="8443" />
-      XML
     end
   end
 

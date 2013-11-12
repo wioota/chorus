@@ -10,8 +10,10 @@ fi
 
 . script/ci/setup.sh
 
-if [[ $ALPINE_ZIP ]]; then
-    (mkdir -p vendor/alpine; cd vendor/alpine; wget --quiet $ALPINE_ZIP)
+echo "checking for an alpine package"
+if [[ $(ls vendor/alpine/*.sh 2> /dev/null | wc -l) != "0" ]]; then
+    echo "packaging with alpine"
+    chmod +x vendor/alpine/*.sh
 fi
 
 rm -fr .bundle
