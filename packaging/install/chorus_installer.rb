@@ -559,7 +559,6 @@ class ChorusInstaller
         log 'No Alpine Data Repository detected, creating...'
         FileUtils.cp_r("#{alpine_release_path}/ALPINE_DATA_REPOSITORY", "#{destination_path}/shared")
       end
-      set_properties( { 'workflow.enabled' => true } ) if fresh?
     end
 
     link_to_current_alpine_release
