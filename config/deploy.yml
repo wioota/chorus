@@ -4,6 +4,12 @@ stage: &stage
   postgres_build: 2
   kill_workers: true
 
+daily:
+  host: alpineqa3.alpinenow.local
+  install_path: ~/chorusrails-deploy-new
+  postgres_build: 2
+  kill_workers: true
+
 upgrade21:
   host: chorus-chorus21-upgrade
   legacy_path: ~/chorus
