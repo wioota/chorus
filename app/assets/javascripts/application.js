@@ -27,6 +27,7 @@
 //= require messenger
 //= require messenger-theme-future
 //= require environment
+//= require csrf
 //= require bootstrap
 //= require chorus
 //= require_tree ./utilities

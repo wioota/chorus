@@ -217,10 +217,25 @@ describe ApplicationController do
 
     let(:user) { users(:no_collaborators) }
 
-    it "returns the user based on the session's user id" do
-      log_in user
-      get :index
-      response.body.should == user.id.to_s
+    context 'the user is logged in' do
+      before do
+        log_in user
+      end
+
+      it "returns the user based on the session's user id" do
+        get :index
+        response.body.should == user.id.to_s
+      end
+
+      it 'returns nil when sent an invalid session_id param (csrf bypass attempt)' do
+        get :index, :session_id => 'invalid'
+        response.body.should == ' '
+      end
+
+      it 'returns nil when sent an empty session_id param (csrf bypass attempt)' do
+        get :index, :session_id => ''
+        response.body.should == ' '
+      end
     end
 
     it "returns nil when there is no session_id stored in the session" do

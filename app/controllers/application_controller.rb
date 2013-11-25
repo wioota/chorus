@@ -9,11 +9,13 @@ end
 class ApplicationController < ActionController::Base
   attr_accessor :current_session
 
+  protect_from_forgery
   around_filter :set_current_user
   before_filter :require_login
   before_filter :set_collection_defaults, :only => :index
   before_filter :extend_expiration
   rescue_from 'ActionController::MissingFile', :with => :render_not_found
+  rescue_from 'ActionController::InvalidAuthenticityToken', :with => :invalid_authenticity_token
   rescue_from 'ActiveRecord::RecordNotFound', :with => :render_not_found
   rescue_from 'ActiveRecord::RecordInvalid', :with => :render_not_valid
   rescue_from 'ApiValidationError', :with => :render_not_valid
@@ -45,7 +47,17 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def verified_request?
+    super || params[:session_id]
+  end
+
+  def handle_unverified_request
+    raise ActionController::InvalidAuthenticityToken
+  end
+
   def set_current_user
+    # csrf protection mandates that we authenticate only with params[:session_id] if provided
+    # csrf tokens are not required with session_id authentication, so this order is important
     session_id = params[:session_id] || session[:chorus_session_id]
     if session_id
       self.current_session = Session.find_by_session_id(session_id.to_s)
@@ -118,6 +130,10 @@ class ApplicationController < ActionController::Base
 
   def require_login
     head :unauthorized if !logged_in? || current_session.expired?
+  end
+
+  def invalid_authenticity_token
+    head :forbidden
   end
 
   def require_admin
