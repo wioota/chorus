@@ -24,6 +24,7 @@
 //= require vendor/d3
 //= require_tree ./vendor
 //= require environment
+//= require csrf
 //= require bootstrap
 //= require chorus
 //= require_tree ./utilities
