@@ -25,6 +25,7 @@ describe ChorusExecutor do
     let(:command_success) { true }
     let(:command_times) { 1 }
     let(:debug) { false }
+    let(:alpine_env) { "ALPINE_HOME=#{destination_path}/alpine-current ALPINE_DATA_REPOSITORY=#{destination_path}/shared/ALPINE_DATA_REPOSITORY" }
 
     before do
       executor.destination_path = destination_path
@@ -88,7 +89,7 @@ describe ChorusExecutor do
     end
 
     describe "#start_postgres" do
-      let(:command) { "CHORUS_HOME=#{release_path} #{release_path}/packaging/chorus_control.sh start postgres" }
+      let(:command) { "CHORUS_HOME=#{release_path} #{alpine_env} #{release_path}/packaging/chorus_control.sh start postgres" }
       before do
         mock(logger).log("starting postgres...")
       end
@@ -99,7 +100,7 @@ describe ChorusExecutor do
     end
 
     describe "#start_chorus" do
-      let(:command) { "CHORUS_HOME=#{release_path} #{release_path}/packaging/chorus_control.sh start" }
+      let(:command) { "CHORUS_HOME=#{release_path} #{alpine_env} #{release_path}/packaging/chorus_control.sh start" }
 
       it "should work" do
         executor.start_chorus
@@ -111,7 +112,7 @@ describe ChorusExecutor do
         stub(File).directory?("#{release_path}/postgres") { postgres_extracted }
       end
 
-      let(:command) { "CHORUS_HOME=#{release_path} #{release_path}/packaging/chorus_control.sh stop postgres" }
+      let(:command) { "CHORUS_HOME=#{release_path} #{alpine_env} #{release_path}/packaging/chorus_control.sh stop postgres" }
 
       context "when postgres has been extracted" do
         let(:postgres_extracted) { true }
@@ -149,7 +150,7 @@ describe ChorusExecutor do
 
     describe "#start_previous_release" do
       let(:postgres_bin_path) { "#{destination_path}/current" }
-      let(:command) { "CHORUS_HOME=#{destination_path}/current #{destination_path}/chorus_control.sh start" }
+      let(:command) { "CHORUS_HOME=#{destination_path}/current #{alpine_env} #{destination_path}/chorus_control.sh start" }
 
       it "should work" do
         executor.start_previous_release
@@ -158,7 +159,7 @@ describe ChorusExecutor do
 
     describe "#stop_previous_release" do
       let(:postgres_bin_path) { "#{destination_path}/current" }
-      let(:command) { "CHORUS_HOME=#{destination_path}/current #{destination_path}/chorus_control.sh stop" }
+      let(:command) { "CHORUS_HOME=#{destination_path}/current #{alpine_env} #{destination_path}/chorus_control.sh stop" }
 
       it "should work" do
         executor.stop_previous_release
