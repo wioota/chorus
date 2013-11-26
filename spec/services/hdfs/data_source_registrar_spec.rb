@@ -13,7 +13,7 @@ describe Hdfs::DataSourceRegistrar do
       :group_list => "staff,team1",
       :job_tracker_host => "foobar",
       :job_tracker_port => 3333,
-      :hdfs_version => "Pivotal HD"
+      :hdfs_version => "Pivotal HD 1.0"
     }
   end
   let(:is_accessible) { true }

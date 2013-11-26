@@ -112,7 +112,7 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:oracle_table, name: 'other_oracle_table', schema: oracle_schema)
     FactoryGirl.create(:oracle_view, name: 'oracle_view', schema: oracle_schema)
  
-    hdfs_data_source = HdfsDataSource.create!({:name => "searchquery_hadoop", :description => "searchquery for the hadoop data source", :host => "hadoop.example.com", :port => "1111", :owner => admin, :hdfs_version => "Pivotal HD"}, :without_protection => true)
+    hdfs_data_source = HdfsDataSource.create!({:name => 'searchquery_hadoop', :description => 'searchquery for the hadoop data source', :host => 'hadoop.example.com', :port => '1111', :owner => admin, :hdfs_version => 'Pivotal HD 1.0'}, :without_protection => true)
     fbuilder.name :hadoop, hdfs_data_source
     Events::HdfsDataSourceCreated.by(admin).add(:hdfs_data_source => hdfs_data_source)
 
