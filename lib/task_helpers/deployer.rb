@@ -52,12 +52,17 @@ class Deployer
     !!config['kill_workers']
   end
 
+  def kill_alpine?
+    !!config['kill_alpine']
+  end
+
   def upload(package_file)
     write_install_answers
     remove_previous_chorusrails_install
     copy_legacy_data
 
     ssh.run('pkill -9 -f ChorusWorker') if kill_workers?
+    ssh.run('pkill -9 -f alpine-current/apache-tomcat') if kill_alpine?
 
     # run upgrade script
     installer_dir = "~/chorusrails-installer"
