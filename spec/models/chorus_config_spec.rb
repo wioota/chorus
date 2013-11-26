@@ -398,18 +398,19 @@ describe ChorusConfig do
     end
   end
 
-  describe "#hdfs_versions" do
-    context "is pivotal" do
+  describe '#hdfs_versions' do
+    context 'is pivotal' do
       before do
         config.config = {'alpine' => {'branded' => {'enabled' => false}}}
       end
 
-      it "returns the hdfs versions" do
+      it 'returns the hdfs versions' do
         config.hdfs_versions.should =~ [
-            "Greenplum HD 0.20",
-            "Greenplum HD 1.1",
-            "Greenplum HD 1.2",
-            "Pivotal HD"
+            'Greenplum HD 0.20',
+            'Greenplum HD 1.1',
+            'Greenplum HD 1.2',
+            'Pivotal HD 1.0',
+            'Pivotal HD 1.1'
         ]
       end
     end
@@ -419,17 +420,18 @@ describe ChorusConfig do
         config.config = {'alpine' => {'branded' => {'enabled' => true}}}
       end
 
-      it "returns the hdfs versions" do
+      it 'returns the hdfs versions' do
         config.hdfs_versions.should =~ [
-            "Apache Hadoop 0.20.2",
-            "Apache Hadoop 0.20.203",
-            "Apache Hadoop 1.0.4",
-            "Cloudera CDH4",
-            "Greenplum HD 0.20",
-            "Greenplum HD 1.1",
-            "Greenplum HD 1.2",
-            "MapR",
-            "Pivotal HD"
+            'Apache Hadoop 0.20.2',
+            'Apache Hadoop 0.20.203',
+            'Apache Hadoop 1.0.4',
+            'Cloudera CDH4',
+            'Greenplum HD 0.20',
+            'Greenplum HD 1.1',
+            'Greenplum HD 1.2',
+            'MapR',
+            'Pivotal HD 1.0',
+            'Pivotal HD 1.1'
         ]
       end
     end

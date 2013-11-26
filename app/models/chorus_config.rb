@@ -26,23 +26,7 @@ class ChorusConfig
   end
 
   def hdfs_versions
-    versions = []
-    pivotal_versions = [
-      'Greenplum HD 0.20',
-      'Greenplum HD 1.1',
-      'Greenplum HD 1.2',
-      'Pivotal HD'
-    ]
-    other_versions = [
-      'Apache Hadoop 0.20.2',
-      'Apache Hadoop 0.20.203',
-      'Apache Hadoop 1.0.4',
-      'Cloudera CDH4',
-      'MapR'
-    ]
-    versions += pivotal_versions
-    versions += other_versions if self['alpine.branded.enabled']
-    versions.sort
+    @available_hdfs_versions ||= initialize_hdfs_versions
   end
 
   def time_zones
@@ -167,6 +151,27 @@ class ChorusConfig
   end
 
   private
+
+  def initialize_hdfs_versions
+    versions = []
+    pivotal_versions = [
+        'Greenplum HD 0.20',
+        'Greenplum HD 1.1',
+        'Greenplum HD 1.2',
+        'Pivotal HD 1.0',
+        'Pivotal HD 1.1'
+    ]
+    other_versions = [
+        'Apache Hadoop 0.20.2',
+        'Apache Hadoop 0.20.203',
+        'Apache Hadoop 1.0.4',
+        'Cloudera CDH4',
+        'MapR'
+    ]
+    versions += pivotal_versions
+    versions += other_versions if self['alpine.branded.enabled']
+    versions.sort
+  end
 
   def set_root_dir(root_dir)
     @root_dir = root_dir || Rails.root
