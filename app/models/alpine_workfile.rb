@@ -134,11 +134,6 @@ class AlpineWorkfile < Workfile
   end
 
   def determine_execution_location
-    pa '!!'*200
-    pa 'determine_execution_location'
-    pa 'datasets'
-    pa dataset_ids
-
     unless datasets.empty?
       sources = datasets.map(&:execution_location)
 
