@@ -11,6 +11,9 @@ describe "CSV Uploads", :greenplum_integration do
   it "uploads a csv file into a new table" do
     login(users(:admin))
     visit("#/workspaces/#{workspace.id}/datasets")
+
+    wait_for_page_load
+
     click_button "Add Data"
 
     # Wait for qtip to be visible before clicking on its menu items
