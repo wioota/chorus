@@ -29,7 +29,7 @@ describe 'BackupRestore' do
           make_tmp_path("rspec_backup_install") do |tmp_path|
             @chorus_path = tmp_path.join('chorus')
             FileUtils.mkdir_p @chorus_path
-            @alpine_path = tmp_path.join('alpine')
+            @alpine_path = tmp_path.join('shared', 'ALPINE_DATA_REPOSITORY')
             FileUtils.mkdir_p @alpine_path
 
             populate_fake_chorus_install(@chorus_path, :alpine_path => @alpine_path, :assets => assets)
@@ -221,7 +221,7 @@ describe 'BackupRestore' do
       around do |example|
         make_tmp_path("rspec_backup_restore") do |tmp_path|
           @tmp_path = tmp_path
-          @alpine_path = tmp_path.join('alpine')
+          @alpine_path = tmp_path.join('shared', 'ALPINE_DATA_REPOSITORY')
 
           # create a directory to restore to
           Dir.mkdir restore_path
@@ -333,7 +333,7 @@ describe 'BackupRestore' do
       context "when the backup includes Alpine data to restore" do
         it "restores the alpine data" do
           BackupRestore.restore backup_tar, true
-          @alpine_path.join('ALPINE_DATA_REPOSITORY', 'big_data').should exist
+          @alpine_path.join('big_data').should exist
         end
       end
 
@@ -352,8 +352,8 @@ def with_rails_root(chorus_path, alpine_path)
   ENV['CHORUS_HOME'] = chorus_path.to_s
 
   if alpine_path
-    original_alpine_home = ENV['ALPINE_HOME']
-    ENV['ALPINE_HOME'] = alpine_path.to_s
+    original_adr = ENV['ALPINE_DATA_REPOSITORY']
+    ENV['ALPINE_DATA_REPOSITORY'] = alpine_path.to_s
   end
 
   original_rails_root = Rails.root
@@ -361,7 +361,7 @@ def with_rails_root(chorus_path, alpine_path)
   yield
 ensure
   ENV['CHORUS_HOME'] = original_chorus_home
-  ENV['ALPINE_HOME'] = original_alpine_home if alpine_path
+  ENV['ALPINE_DATA_REPOSITORY'] = original_adr if alpine_path
   Rails.application.config.root = original_rails_root
 end
 

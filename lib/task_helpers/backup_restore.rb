@@ -5,10 +5,10 @@ require 'tempfile'
 require 'yaml'
 
 module BackupRestore
-  BACKUP_FILE_PREFIX = "chorus_backup_"
-  DATABASE_DATA_FILENAME = "database.gz"
-  ASSET_FILENAME = "assets_storage_path"
-  ALPINE_BACKUP = "alpine_data_repository"
+  BACKUP_FILE_PREFIX = 'chorus_backup_'
+  DATABASE_DATA_FILENAME = 'database.gz'
+  ASSET_FILENAME = 'assets_storage_path'
+  ALPINE_BACKUP = 'alpine_data_repository'
   MODELS_WITH_ASSETS = %w{csv_files attachments note_attachments users workfile_versions workspaces}
 
   def self.backup(backup_dir, rolling_days = nil)
@@ -65,6 +65,10 @@ module BackupRestore
     def postgres_username
       @pg_user ||= YAML.load_file(Rails.root.join('config/database.yml'))['production']['username']
     end
+
+    def adr_container
+      File.dirname(ENV['ALPINE_DATA_REPOSITORY'])
+    end
   end
 
   class Backup
@@ -85,7 +89,7 @@ module BackupRestore
         Dir.chdir(temp_dir) do
           dump_database
           compress_assets
-          backup_alpine if ENV['ALPINE_HOME'].present?
+          backup_alpine if ENV['ALPINE_DATA_REPOSITORY'].present?
           package_backup
         end
       end
@@ -117,9 +121,9 @@ module BackupRestore
     end
 
     def backup_alpine
-      log "Backing up Alpine"
-      Dir.chdir ENV['ALPINE_HOME'] do
-        capture_output "tar czf #{temp_dir.join(ALPINE_BACKUP + ".gz")} ALPINE_DATA_REPOSITORY", :error => "Compressing alpine data directory failed."
+      log 'Backing up Alpine...'
+      Dir.chdir adr_container do
+        capture_output "tar czf #{temp_dir.join(ALPINE_BACKUP + ".gz")} ALPINE_DATA_REPOSITORY", :error => 'Compressing alpine data directory failed.'
       end
     end
 
@@ -246,9 +250,13 @@ PROMPT
 
     def restore_alpine
       alpine_file = temp_dir.join(ALPINE_BACKUP + '.gz')
+      if Dir.exists? ENV['ALPINE_DATA_REPOSITORY']
+        log 'Deleting existing Alpine data...'
+        FileUtils.rm_r Pathname.new(ENV['ALPINE_DATA_REPOSITORY']) rescue Errno::ENOENT
+      end
       if File.exists? alpine_file
-        log "Restoring Alpine"
-        Dir.chdir ENV['ALPINE_HOME'] do
+        log 'Restoring Alpine data...'
+        Dir.chdir adr_container do
           capture_output "tar xf #{alpine_file}", :error => 'Restoring Alpine data failed.'
         end
       end
