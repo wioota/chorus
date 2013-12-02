@@ -29,5 +29,15 @@ describe CommentPresenter, :type => :view do
         hash[:author].should_not be_nil
       end
     end
+
+    context 'with evil html in the body' do
+      before do
+        comment.update_attributes(:body => '<b>good</b><script>evil</script>')
+      end
+
+      it 'sanitizes the body' do
+        hash[:body].should == '<b>good</b>'
+      end
+    end
   end
 end

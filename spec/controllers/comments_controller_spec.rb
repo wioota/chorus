@@ -13,33 +13,39 @@ describe CommentsController do
   let(:commenter) { event_author }
 
   describe "#create" do
-    before do
-      @params = {
-          event_id: event.id,
-          body: "hello world in jasmine test!"
+    let(:params) do
+      {
+        event_id: event.id,
+        body: 'hello world in jasmine test!'
       }
     end
 
     it "uses authorization" do
       mock(subject).authorize! :create_comment_on, Comment, event
-      post :create, @params
+      post :create, params
     end
 
     it "should post with appropriate response" do
-      post :create, @params
+      post :create, params
       response.code.should == "201"
     end
 
     it "should create make the current user the author" do
-      post :create, @params
-      Comment.find_by_body(@params[:body]).author.should == commenter
+      post :create, params
+      Comment.find_by_body(params[:body]).author.should == commenter
+    end
+    
+    it 'sanitizes the body of the note' do
+      params[:body] = "<b>not evil</b><script>alert('evil')</script>"
+      post :create, params
+      decoded_response.body.should == '<b>not evil</b>'
     end
 
     context "when event author comments" do
       before do
         Comment.create!({:event => event, :author => first_commenter, :body => "Nice event"}, :without_protection => true)
         Comment.create!({:event => event, :author => second_commenter, :body => "Great event"}, :without_protection => true)
-        post :create, @params
+        post :create, params
       end
 
       it "notifies the other commenters" do
@@ -61,7 +67,7 @@ describe CommentsController do
 
       before do
         Comment.create!({:event => event, :author => second_commenter, :body => "I am a second comment"}, :without_protection => true)
-        post :create, @params
+        post :create, params
       end
 
       it "notifies the event author" do
@@ -89,7 +95,7 @@ describe CommentsController do
       it "only notifies the same user once" do
         expect {
           expect {
-            post :create, @params
+            post :create, params
           }.to change {
             Notification.where(:recipient_id => event_author.id, :event_id => event.id).count
           }.by(1)
@@ -105,7 +111,7 @@ describe CommentsController do
 
       before do
         Comment.create!({:event => event, :author => commenter, :body => "I am a comment"}, :without_protection => true)
-        post :create, @params
+        post :create, params
       end
 
       it "does not notify the event actor" do

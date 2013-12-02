@@ -1,4 +1,7 @@
 class CommentsController < ApplicationController
+  include ActionView::Helpers::SanitizeHelper
+
+  before_filter :sanitize_body, :only => [:create]
 
   def show
     comment = Comment.find(params[:id])
@@ -38,5 +41,11 @@ class CommentsController < ApplicationController
 
     comment.destroy
     render :json => {}
+  end
+
+  private
+
+  def sanitize_body
+    params[:comment][:body] = sanitize(params[:comment][:body]) if params[:comment][:body]
   end
 end
