@@ -48,7 +48,9 @@ describe("chorus.models.Session", function() {
 
             describe("and the server responds", function() {
                 beforeEach(function() {
-                    this.server.lastDestroy().succeed();
+                    spyOn(this.model, 'updateToken');
+                    this.response = {csrf_token: 'new_token'};
+                    this.server.lastDestroy().respondJson(200, this.response);
                 });
 
                 it("triggers needsLogin", function() {
@@ -59,6 +61,10 @@ describe("chorus.models.Session", function() {
                     expect(_.size(this.model.attributes)).toBe(0);
                     expect(this.model._user).toBeUndefined();
                     expect(this.model.sandboxPermissionsCreated).toEqual({});
+                });
+
+                it("updates the csrf token", function() {
+                    expect(this.model.updateToken).toHaveBeenCalledWith(this.response);
                 });
             });
         });
@@ -243,6 +249,18 @@ describe("chorus.models.Session", function() {
                 delete this.session._user;
                 expect(this.session.shouldResume()).toBeTruthy();
             });
+        });
+    });
+
+    describe("#updateToken", function() {
+        beforeEach(function() {
+            this.model = new models.Session();
+            spyOn($.fn, 'attr');
+        });
+
+        it("sets the new token", function() {
+            this.model.updateToken({csrf_token: 'new_token'});
+            expect($.fn.attr).toHaveBeenCalledWith('content', 'new_token');
         });
     });
 });
