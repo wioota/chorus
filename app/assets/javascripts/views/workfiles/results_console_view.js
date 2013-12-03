@@ -79,7 +79,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
                 filename: this.resource.name() + ".csv",
                 mime_type: "text/csv"
             };
-            $.fileDownload("/download_data", { data: data, httpMethod: "post" });
+            chorus.fileDownload("/download_data", { data: data, httpMethod: "POST" });
         }
     },
 

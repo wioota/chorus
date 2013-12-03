@@ -366,7 +366,7 @@ describe("chorus.views.ResultsConsoleView", function() {
                 describe("clicking the download link", function() {
                     context("with the show download dialog option", function() {
                         beforeEach(function() {
-                            spyOn($, "fileDownload");
+                            spyOn(chorus, "fileDownload");
                             this.view.showDownloadDialog = true;
                             this.view.dataset = backboneFixtures.dataset();
                             this.view.$("a.download_csv").click();
@@ -375,13 +375,13 @@ describe("chorus.views.ResultsConsoleView", function() {
                         itBehavesLike.aDialogLauncher("a.download_csv", chorus.dialogs.DatasetDownload);
 
                         it("should not have called $.fileDownload", function() {
-                            expect($.fileDownload).not.toHaveBeenCalled();
+                            expect(chorus.fileDownload).not.toHaveBeenCalled();
                         });
                     });
 
                     context("without the show download dialog option", function() {
                         beforeEach(function() {
-                            spyOn($, "fileDownload");
+                            spyOn(chorus, "fileDownload");
                             this.view.showDownloadDialog = false;
                             this.view.$("a.download_csv").click();
                         });
@@ -392,14 +392,14 @@ describe("chorus.views.ResultsConsoleView", function() {
                                 _.pluck(this.view.resource.getColumns(), "uniqueName"),
                                 this.view.resource.getRows()
                             ).toCsv();
-                            expect($.fileDownload).toHaveBeenCalledWith("/download_data",
+                            expect(chorus.fileDownload).toHaveBeenCalledWith("/download_data",
                                 {
                                     data: {
                                         content: content,
                                         filename: this.view.resource.name()+'.csv',
                                         mime_type: "text/csv"
                                     },
-                                    httpMethod: "post"
+                                    httpMethod: "POST"
                                 });
                         });
                     });

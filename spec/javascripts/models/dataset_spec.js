@@ -446,20 +446,20 @@ describe("chorus.models.Dataset", function() {
 
     describe("#download", function() {
         beforeEach(function() {
-            spyOn($, "fileDownload");
+            spyOn(chorus, "fileDownload");
         });
 
         context("when no number of rows is passed", function() {
             it("includes the number of rows", function() {
                 this.dataset.download();
-                expect($.fileDownload).toHaveBeenCalledWith("/datasets/" + this.dataset.id + "/download.csv", {data: {}});
+                expect(chorus.fileDownload).toHaveBeenCalledWith("/datasets/" + this.dataset.id + "/download.csv", {data: {}});
             });
         });
 
         context("when a number of rows is passed", function() {
             it("makes a request to the tabular data download api", function() {
                 this.dataset.download({ rowLimit: "345" });
-                expect($.fileDownload).toHaveBeenCalledWith("/datasets/" + this.dataset.id + "/download.csv", { data: {row_limit: "345"} });
+                expect(chorus.fileDownload).toHaveBeenCalledWith("/datasets/" + this.dataset.id + "/download.csv", { data: {row_limit: "345"} });
             });
         });
     });
