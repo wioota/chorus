@@ -670,20 +670,20 @@ describe("chorus.dialogs.Visualization", function() {
             describe("downloading the chart", function() {
                 describe("clicking on the 'save chart' button", function() {
                     beforeEach(function() {
-                        spyOn($, "fileDownload");
+                        spyOn(chorus, "fileDownload");
                         this.dialog.$("button.save").prop("disabled", false);
                         this.dialog.$("button.save").click();
                         this.qtip.find("a[data-menu-name='save_to_desktop']").click();
                     });
 
                     it("makes a request to the chart download api", function() {
-                        expect($.fileDownload).toHaveBeenCalledWith("/download_chart", {
+                        expect(chorus.fileDownload).toHaveBeenCalledWith("/download_chart", {
                             data: {
                                 "svg": this.dialog.makeSvgData(),
                                 "chart-name": "Foo",
                                 "chart-type": "boxplot"
                             },
-                            httpMethod: "post"
+                            httpMethod: "POST"
                         });
                     });
                 });

@@ -4,7 +4,7 @@ chorus.models.SqlExecutionAndDownloadTask = chorus.models.WorkfileExecutionTask.
     paramsToSave: ['checkId', 'sql', 'schemaId', 'numOfRows', 'fileName'],
 
     save: function() {
-        $.fileDownload(this.url(), {
+        chorus.fileDownload(this.url(), {
             data: _.extend({
                 download: true
             }, this.toJSON()),

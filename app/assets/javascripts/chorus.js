@@ -94,6 +94,12 @@ window.Chorus = function chorus$Global() {
         self.router.navigate("/login");
     };
 
+    self.fileDownload = function(route, options) {
+        var optsWithToken = _.extend({data: {}}, options);
+        optsWithToken.data.authenticity_token = $('meta[name="csrf-token"]').attr('content');
+        $.fileDownload(route, optsWithToken);
+    };
+
     self.detectFeatures = function() {
         self.features.fileProgress = !$.browser.msie;
     };
