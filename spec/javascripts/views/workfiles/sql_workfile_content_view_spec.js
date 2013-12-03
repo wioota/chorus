@@ -17,7 +17,6 @@ describe("chorus.views.SqlWorkfileContentView", function() {
         spyOn(chorus.views.SqlWorkfileContent.prototype, "runInDefault").andCallThrough();
         spyOn(chorus.views.SqlWorkfileContent.prototype, "runSelected").andCallThrough();
         this.view = new chorus.views.SqlWorkfileContent({model: this.workfile});
-        spyOn($, 'fileDownload');
     });
 
     describe("initialization", function() {

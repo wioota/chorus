@@ -189,6 +189,24 @@ describe("chorus global", function() {
         });
     });
 
+    describe("fileDownload", function() {
+        beforeEach(function() {
+            spyOn($, 'fileDownload');
+            spyOn($.fn, 'attr').andReturn('csrf-token');
+        });
+
+        it("delegate to $.fileDownload with the csrf token", function() {
+            chorus.fileDownload('/route', {data: {key: 'value'}, some: 'property'});
+            expect($.fileDownload).toHaveBeenCalledWith('/route', {
+                data: {
+                    authenticity_token: 'csrf-token',
+                    key: 'value'
+                },
+                some: 'property'
+            });
+        });
+    });
+
     describe("#placeholder", function() {
         it("wraps jquery.placeholder", function() {
             spyOn($.fn, 'placeholder');
