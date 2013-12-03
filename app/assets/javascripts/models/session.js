@@ -50,7 +50,8 @@ chorus.models.Session = chorus.models.Base.extend({
             this.rememberPathBeforeLoggedOut();
             this.trigger("needsLogin");
         } else {
-            this.requestLogout(function() {
+            this.requestLogout(function(res) {
+                self.updateToken(res);
                 self.trigger("needsLogin");
             });
         }
@@ -62,9 +63,9 @@ chorus.models.Session = chorus.models.Base.extend({
         $.ajax({
             type: "DELETE",
             url: self.url(),
-            success: function() {
+            success: function(res) {
                 self.clear();
-                logoutSucceeded();
+                logoutSucceeded(res);
             }
         });
     },
@@ -90,6 +91,12 @@ chorus.models.Session = chorus.models.Base.extend({
     declareValidations: function(newAttrs) {
         this.require("username", newAttrs);
         this.require("password", newAttrs);
+    },
+
+    updateToken: function(response) {
+        if (response['csrf_token']) {
+            $('meta[name="csrf-token"]').attr('content', response['csrf_token']);
+        }
     },
 
     attrToLabel: {

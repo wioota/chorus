@@ -93,16 +93,22 @@ describe SessionsController do
   end
 
   describe "#destroy" do
-    it "returns no content" do
+    it 'returns a new csrf token' do
+      initial_token = subject.send(:form_authenticity_token)
+
       delete :destroy
-      response.code.should == "204"
-      response.body.strip.should be_empty
+      response.should be_success
+
+      new_token = subject.send(:form_authenticity_token)
+      new_token.should_not == initial_token
+      decoded = JSON.parse(response.body)
+      decoded['csrf_token'].should == new_token
     end
 
-    it "clears the session" do
+    it 'clears the session' do
       session_object = log_in users(:owner)
       delete :destroy
-      response.code.should == "204"
+      response.should be_success
       session[:user_id].should_not be_present
       session[:expires_at].should_not be_present
       Session.find_by_id(session_object.id).should be_nil
