@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
   def destroy
     current_session.try(:destroy)
     session.clear
-    head :no_content
+    render :json => {:csrf_token => form_authenticity_token}, :status => :ok
   end
 
   def show
