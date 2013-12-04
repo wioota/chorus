@@ -361,7 +361,7 @@ describe Events::Note do
 
     context "workspace is archived" do
       it "builds a note with errors" do
-        workfile.workspace.archived_at = Time.current
+        workfile.workspace.archived = true
         workfile.workspace.archiver = user
         workfile.workspace.save!
         note = Events::Note.build_for(workfile, {

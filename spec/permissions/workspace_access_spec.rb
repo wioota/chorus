@@ -68,7 +68,7 @@ describe WorkspaceAccess do
       end
 
       it "does not allow archived workspace to have its sub objects edited" do
-        private_workspace.archived_at = Time.current
+        private_workspace.archived = true
         workspace_access.can?(:can_edit_sub_objects, private_workspace).should be_false
       end
     end

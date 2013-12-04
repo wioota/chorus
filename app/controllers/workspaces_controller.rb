@@ -33,7 +33,7 @@ class WorkspacesController < ApplicationController
     workspace = Workspace.find(params[:id])
 
     attributes = params[:workspace]
-    attributes[:archiver] = current_user if attributes[:archived] == 'true'
+    attributes[:archiver] = current_user if (attributes[:archived] && !workspace.archived?)
     workspace.attributes = attributes
 
     authorize! :update, workspace
@@ -62,7 +62,7 @@ class WorkspacesController < ApplicationController
           Events::WorkspaceMakePrivate.by(current_user).add(:workspace => workspace)
     end
 
-    if workspace.archived_at_changed?
+    if workspace.archived_changed?
       workspace.archived? ?
           Events::WorkspaceArchived.by(current_user).add(:workspace => workspace) :
           Events::WorkspaceUnarchived.by(current_user).add(:workspace => workspace)

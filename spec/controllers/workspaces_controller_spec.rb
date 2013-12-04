@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'timecop'
 
 describe WorkspacesController do
   ignore_authorization!
@@ -175,8 +176,7 @@ describe WorkspacesController do
     let(:workspace) {private_workspace}
     let(:workspace_params) { {
         :owner => {id: "3"},
-        :public => workspace.public?.to_s,
-        :archived => workspace.archived?.to_s
+        :public => workspace.public?.to_s
     } }
 
     let(:params) { {
@@ -304,25 +304,35 @@ describe WorkspacesController do
         end
       end
 
-      describe "unarchiving workspace" do
+      describe 'unarchiving workspace' do
         let(:workspace) {workspaces(:archived)}
 
-        it "unarchives the workspace" do
-          put :update, params.merge(:workspace => workspace_params.merge(:archived => "false"))
+        it 'unarchives the workspace' do
+          put :update, params.merge(:workspace => workspace_params.merge(:archived => false))
           workspace.reload
           workspace.archived_at.should be_nil
           workspace.archiver.should be_nil
           response.should be_success
         end
 
-        it "generates an event" do
+        it 'generates an event' do
           expect_to_add_event(Events::WorkspaceUnarchived, owner) do
-            put :update, params.merge(:workspace => workspace_params.merge(:archived => "false"))
+            put :update, params.merge(:workspace => workspace_params.merge(:archived => false))
           end
         end
       end
 
-      describe "archiving the workspace" do
+      describe 'updating an archived workspace' do
+        let(:workspace) {workspaces(:archived)}
+
+        it 'does not generate an event' do
+          expect {
+            put :update, params.merge(:workspace => workspace_params.merge(:summary => 'new summary'))
+          }.to_not change(Events::Base, :count)
+        end
+      end
+
+      describe 'archiving the workspace' do
         let(:workspace) { workspaces(:public) }
 
         before do
@@ -334,17 +344,19 @@ describe WorkspacesController do
           end
         end
 
-        it "archives the workspace" do
-          put :update, params.merge(:workspace => workspace_params.merge(:archived => "true"))
-          workspace.reload
+        it 'archives the workspace' do
+          Timecop.freeze do
+            put :update, params.merge(:workspace => workspace_params.merge(:archived => true))
+            workspace.reload
 
-          workspace.archived_at.should be_within(1.minute).of(Time.current)
-          workspace.archiver.should == owner
+            workspace.archived_at.to_i.should == Time.current.to_i
+            workspace.archiver.should == owner
+          end
         end
 
-        it "generates an event" do
+        it 'generates an event' do
           expect_to_add_event(Events::WorkspaceArchived, owner) do
-            put :update, params.merge(:workspace => workspace_params.merge(:archived => "true"))
+            put :update, params.merge(:workspace => workspace_params.merge(:archived => true))
           end
         end
       end
@@ -393,8 +405,7 @@ describe WorkspacesController do
     let(:workspace) {private_workspace}
     let(:workspace_params) { {
         :owner => {id: '3'},
-        :public => workspace.public?.to_s,
-        :archived => workspace.archived?.to_s
+        :public => workspace.public?.to_s
     } }
 
     it_behaves_like 'a protected demo mode controller', [:create, :destroy] do
