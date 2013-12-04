@@ -5,7 +5,6 @@ class Workspace < ActiveRecord::Base
 
   PROJECT_STATUSES = [:on_track, :needs_attention, :at_risk]
 
-  attr_accessor :archived
   attr_accessible :name, :public, :summary, :member_ids, :has_added_member, :owner_id, :archiver, :archived,
                   :has_changed_settings, :show_sandbox_datasets, :is_project, :project_status, :project_status_reason,
                   :project_target_date
@@ -47,6 +46,7 @@ class Workspace < ActiveRecord::Base
   before_update :create_name_change_event, :if => :name_changed?
   before_update :unassociate_source_datasets_in_sandbox, :if =>  "sandbox_id_changed? || show_sandbox_datasets_changed?"
 
+  before_save :handle_archiving, :if => :archived_changed?
   before_save :update_has_added_sandbox
   after_create :add_owner_as_member
 
@@ -242,10 +242,6 @@ class Workspace < ActiveRecord::Base
     end
   end
 
-  def archived?
-    archived_at?
-  end
-
   def has_dataset?(dataset)
     in_sandbox         = dataset.schema == sandbox && !sandbox.nil?
     in_source_datasets = source_datasets.include?(dataset)
@@ -255,15 +251,6 @@ class Workspace < ActiveRecord::Base
 
   def member?(user)
     user.memberships.find_by_workspace_id(id).present?
-  end
-
-  def archived=(value)
-    if value == 'true'
-      self.archived_at = Time.current
-    elsif value == 'false'
-      self.archived_at = nil
-      self.archiver = nil
-    end
   end
 
   def archiver=(value)
@@ -326,6 +313,15 @@ class Workspace < ActiveRecord::Base
   def archiver_is_set_when_archiving
     if archived? && !archiver
       errors.add(:archived, "Archiver is required for archiving")
+    end
+  end
+
+  def handle_archiving
+    if archived?
+      self.archived_at = Time.current
+    else
+      self.archived_at = nil
+      self.archiver = nil
     end
   end
 

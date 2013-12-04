@@ -529,24 +529,25 @@ describe Workspace do
   end
 
   describe "#archived=" do
-    context "when setting to 'true'" do
+    context "when setting to true" do
       let(:workspace) { workspaces(:public) }
       let(:archiver) { users(:owner) }
+
       it "sets the archived_at timestamp" do
-        workspace.update_attributes!(:archiver => archiver, :archived => 'true')
+        workspace.update_attributes!(:archiver => archiver, :archived => true)
         workspace.archived_at.should be_within(1.minute).of(Time.current)
       end
 
       it "has a validation error when archiver is not set" do
-        workspace.update_attributes(:archived => 'true')
+        workspace.update_attributes(:archived => true)
         workspace.should have(1).error_on(:archived)
       end
     end
 
-    context "when setting to 'false'" do
+    context "when setting to false" do
       let(:workspace) { workspaces(:archived) }
       it "clears the archived_at timestamp and archiver" do
-        workspace.update_attributes(:archived => 'false')
+        workspace.update_attributes(:archived => false)
         workspace.archived_at.should be_nil
         workspace.archiver.should be_nil
       end
