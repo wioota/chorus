@@ -1,6 +1,6 @@
 require 'timeout'
 
-require Rails.root.join('vendor/hadoop/hdfs-query-service-0.0.8.jar')
+require Rails.root.join('vendor/hadoop/hdfs-query-service-0.0.9.jar')
 
 module Hdfs
   include Chorus
