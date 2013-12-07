@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Data sources" do
+resource 'Data sources' do
   let(:owner) { users(:owner) }
   let(:owned_data_source) { data_sources(:owners) }
 
@@ -9,30 +9,30 @@ resource "Data sources" do
     any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? {true} }
   end
 
-  post "/data_sources" do
-    parameter :name, "Name to show Chorus users for data source"
-    parameter :description, "Description of data source"
-    parameter :host, "Host IP or address of data source"
-    parameter :port, "Port of data source"
+  post '/data_sources' do
+    parameter :name, 'Name to show Chorus users for data source'
+    parameter :description, 'Description of data source'
+    parameter :host, 'Host IP or address of data source'
+    parameter :port, 'Port of data source'
     parameter :db_name, "Database on data source to use for initial connection (usually 'postgres')"
-    parameter :db_username, "Username for connection to data source"
-    parameter :db_password, "Password for connection to data source"
-    parameter :shared, "true to allow anyone to connect using these credentials, false to require individuals to enter their own credentials"
-    parameter :entity_type, "The type of data source (either 'gpdb_data_source' or 'oracle_data_source')"
+    parameter :db_username, 'Username for connection to data source'
+    parameter :db_password, 'Password for connection to data source'
+    parameter :shared, 'true to allow anyone to connect using these credentials, false to require individuals to enter their own credentials'
+    parameter :entity_type, "The type of data source ('gpdb_data_source', 'oracle_data_source', or 'jdbc_data_source')"
 
-    let(:name) { "Sesame_Street" }
-    let(:description) { "Can you tell me how to get..." }
-    let(:host) { "sesame.street.local" }
-    let(:port) { "5432" }
-    let(:db_name) { "postgres" }
-    let(:db_username) { "big" }
-    let(:db_password) { "bird_yellow" }
+    let(:name) { 'Sesame_Street' }
+    let(:description) { 'Can you tell me how to get...' }
+    let(:host) { 'sesame.street.local' }
+    let(:port) { '5432' }
+    let(:db_name) { 'postgres' }
+    let(:db_username) { 'big' }
+    let(:db_password) { 'bird_yellow' }
     let(:shared) { true }
-    let(:entity_type) { "gpdb_data_source" }
+    let(:entity_type) { 'gpdb_data_source' }
 
-    required_parameters :name, :host, :port, :db_name, :db_username, :db_password, :entity_type
+    required_parameters :name, :host, :db_username, :db_password, :entity_type
 
-    example_request "Register a data source" do
+    example_request 'Register a data source' do
       status.should == 201
     end
   end
