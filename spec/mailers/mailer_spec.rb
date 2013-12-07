@@ -14,10 +14,6 @@ describe Mailer do
       sent_mail.to.should == [user.email]
     end
 
-    it "respects the Chorus.properties' from_address" do
-      sent_mail.from.should == [ChorusConfig.instance.mail_configuration['from_address']]
-    end
-
     it "adds to the Deliveries list" do
       expect do
         sent_mail

@@ -38,7 +38,7 @@ describe DataSourceNameValidator do
     it "passes on model update" do
       OriginalGpdbDataSource = GpdbDataSource
 
-      class GpdbDataSource < DataSource
+      class GpdbDataSource < ConcreteDataSource
         validates_with DataSourceNameValidator
       end
 
@@ -55,6 +55,7 @@ describe DataSourceNameValidator do
 
     it_validates_against(GpdbDataSource)
     it_validates_against(OracleDataSource)
+    it_validates_against(JdbcDataSource)
     it_validates_against(HdfsDataSource)
     it_validates_against(GnipDataSource)
 
