@@ -21,6 +21,10 @@ chorus.models.DataSource = chorus.models.AbstractDataSource.extend({
         return this.get('entityType') === 'oracle_data_source';
     },
 
+    isJdbc: function() {
+        return this.get('entityType') === 'jdbc_data_source';
+    },
+
     accounts: function() {
         this._accounts || (this._accounts = new chorus.collections.DataSourceAccountSet([], {dataSourceId: this.get("id")}));
         return this._accounts;
@@ -49,7 +53,7 @@ chorus.models.DataSource = chorus.models.AbstractDataSource.extend({
     },
 
     usage: function() {
-        if(this.isOracle()) {
+        if(this.isOracle() || this.isJdbc()) {
             return null;
         }
         if(!this.dataSourceUsage) {

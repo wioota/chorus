@@ -45,6 +45,11 @@ describe DataSourcesController do
         get :index, :entity_type => "oracle_data_source", :all => true
         decoded_response.map(&:id).should =~ OracleDataSource.pluck(:id)
       end
+
+      it 'filters by jdbc data sources' do
+        get :index, :entity_type => 'jdbc_data_source', :all => true
+        decoded_response.map(&:id).should =~ JdbcDataSource.pluck(:id)
+      end
     end
   end
 
@@ -74,6 +79,10 @@ describe DataSourcesController do
 
     generate_fixture "oracleDataSource.json" do
       get :show, :id => data_sources(:oracle).to_param
+    end
+
+    generate_fixture 'jdbcDataSource.json' do
+      get :show, :id => data_sources(:jdbc).to_param
     end
 
     context "with an invalid gpdb data source id" do
@@ -226,12 +235,46 @@ describe DataSourcesController do
       end
     end
 
-    context "for an unknown entity type" do
-      let(:entity_type) { "######" }
+    context 'for a JdbcDataSource' do
+      let(:entity_type) { 'jdbc_data_source' }
 
-      it "returns an error" do
+      it 'creates a new jdbc data source' do
+        expect {
+          post :create, valid_attributes
+        }.to change(JdbcDataSource, :count).by 1
+
+        response.code.should == '201'
+      end
+
+      it 'presents the JdbcDataSource' do
+        mock_present do |data_source|
+          data_source.name == valid_attributes[:name]
+        end
+
+        post :create, :data_source => valid_attributes
+      end
+
+      it 'creates a private JdbcDataSource by default' do
+        mock_present do |data_source|
+          data_source.should_not be_shared
+        end
         post :create, valid_attributes
-        response.code.should == "422"
+      end
+
+      it 'can create a shared JdbcDataSource' do
+        mock_present do |data_source|
+          data_source.should be_shared
+        end
+        post :create, valid_attributes.merge(:shared => true)
+      end
+    end
+
+    context 'for an unknown entity type' do
+      let(:entity_type) { '######' }
+
+      it 'returns an error' do
+        post :create, valid_attributes
+        response.should be_unprocessable
         decoded_errors.fields.entity_type.should have_key :INVALID
       end
     end

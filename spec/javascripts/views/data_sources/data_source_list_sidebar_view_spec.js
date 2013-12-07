@@ -3,8 +3,8 @@ jasmine.sharedExamples.aSidebar = function() {
         expect(this.view.$(".data_source_name")).toContainText(this.dataSource.get("name"));
     });
 
-    it('displays data source type', function() {
-        expect(this.view.$(".data_source_type")).toContainText(t("data_sources.provider." + this.dataSource.get('entityType')));
+    it('displays data source type translation', function() {
+        expect(this.view.$(".data_source_type")).toContainTranslation("data_sources.provider." + this.dataSource.get('entityType'));
     });
 
     it("has a 'add a note' link", function() {
@@ -408,7 +408,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
         });
     });
 
-    context('when a oracle data source is selected', function() {
+    context('when an oracle data source is selected', function() {
         beforeEach(function() {
             this.dataSource = backboneFixtures.oracleDataSource({name: "Harry's House of Glamour", version: "99.999" });
             this.activityViewStub = stubView("", { className: "activity_list" });
@@ -492,6 +492,93 @@ describe("chorus.views.DataSourceListSidebar", function() {
                 });
             });
         });
+    });
+
+    context('when a jdbc data source is selected', function() {
+        beforeEach(function() {
+            this.dataSource = backboneFixtures.jdbcDataSource({name: "Harry's House of Glamour", version: "99.999" });
+            this.activityViewStub = stubView("", { className: "activity_list" });
+            spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub);
+
+            spyOn(chorus.views.Base.prototype, "render").andCallThrough();
+            this.view = new chorus.views.DataSourceListSidebar();
+            chorus.PageEvents.trigger("data_source:selected", this.dataSource);
+            $('#jasmine_content').append(this.view.el);
+        });
+
+        it('fetches the activities, data source usage and accounts', function() {
+            expect(this.dataSource.activities()).toHaveBeenFetched();
+            expect(this.dataSource.accounts()).toHaveAllBeenFetched();
+        });
+
+        context("when the data has been loaded", function() {
+            beforeEach(function() {
+                spyOn(chorus.views.Sidebar.prototype, 'postRender');
+                this.server.completeFetchFor(this.dataSource.activities());
+                var dataSourceAccountSet = backboneFixtures.dataSourceAccountSet();
+                dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
+                this.server.completeFetchAllFor(this.dataSource.accounts(), dataSourceAccountSet.models);
+                this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
+            });
+
+            itBehavesLike.aSidebar();
+            itBehavesLike.aSidebarWithAGreenplumOrOracleDataSourceSelected();
+
+            context("when configuration is clicked", function() {
+                beforeEach(function() {
+                    expect(this.view.$(".data_source_configuration_details")).not.toBeVisible();
+                    this.view.$(".tab_control .tabs li[data-name=configuration]").click();
+                });
+
+                it("shows configuration", function() {
+                    expect(this.view.$(".data_source_configuration_details")).not.toHaveClass("hidden");
+                    expect(this.view.$(".activity_list")).toHaveClass("hidden");
+                });
+
+                describe('for existing data source', function() {
+                    context('and the data source has a shared account', function() {
+                        beforeEach(function() {
+                            var dataSource = backboneFixtures.jdbcDataSource({shared: true});
+                            dataSource.loaded = true;
+                            this.view.setDataSource(dataSource);
+                            var dataSourceAccountSet = backboneFixtures.dataSourceAccountSet();
+                            dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
+                            this.server.completeFetchFor(dataSource.accounts(), dataSourceAccountSet.models);
+                            this.server.completeFetchFor(dataSource.accountForCurrentUser());
+                        });
+
+                        it("includes the shared account information", function() {
+                            expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.shared_account"))).not.toBe(-1);
+                        });
+                    });
+
+                    context('and the data source does not have a shared account', function() {
+                        it("does not include the shared account information", function() {
+                            this.view.render();
+                            expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.shared_account"))).toBe(-1);
+                        });
+                    });
+                });
+
+                describe('for a new data source', function() {
+                    beforeEach(function() {
+                        this.view.model = this.view.model.set({ size: "1", port: null, host: null });
+                        this.view.render();
+                    });
+
+                    it("includes size information", function() {
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.sidebar.size"))).not.toBe(-1);
+                    });
+
+                    it("does not include the port, host, or shared account information", function() {
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.sidebar.host"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.sidebar.port"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.shared_account"))).toBe(-1);
+                    });
+                });
+            });
+        });
+
     });
 
     context('when a hadoop data source is selected', function() {

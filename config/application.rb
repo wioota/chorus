@@ -107,5 +107,7 @@ module Chorus
         "not_logged_in"
       end
     ]
+
+    I18n.config.enforce_available_locales = false
   end
 end

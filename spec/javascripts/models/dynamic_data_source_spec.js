@@ -18,4 +18,9 @@ describe("chorus.models.DynamicDataSource", function() {
         var model = new chorus.models.DynamicDataSource({entityType: "oracle_data_source"});
         expect(model).toBeA(chorus.models.OracleDataSource);
     });
+
+    it("should return a jdbc data source when the entity_type is jdbc_data_source", function() {
+        var model = new chorus.models.DynamicDataSource({entityType: "jdbc_data_source"});
+        expect(model).toBeA(chorus.models.JdbcDataSource);
+    });
 });

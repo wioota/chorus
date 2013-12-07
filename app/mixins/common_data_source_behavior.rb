@@ -22,7 +22,7 @@ module CommonDataSourceBehavior
   end
 
   def online?
-    state == "online"
+    state == 'online'
   end
 
   def attempt_connection(user)

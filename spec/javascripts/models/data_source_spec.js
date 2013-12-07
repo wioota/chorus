@@ -33,11 +33,24 @@ describe('chorus.models.DataSource', function() {
     });
 
     describe('#isGreenplum', function(){
-        it('returns true if the data source is greenplum', function(){
+        it('returns true iff the data source is greenplum', function(){
             var gpdb = new chorus.models.DataSource({entityType: 'gpdb_data_source'});
             expect(gpdb.isGreenplum()).toBeTruthy();
             var oracle = new chorus.models.DataSource({entityType: 'oracle_data_source'});
             expect(oracle.isGreenplum()).toBeFalsy();
+            var jdbc = new chorus.models.DataSource({entityType: 'jdbc_data_source'});
+            expect(jdbc.isGreenplum()).toBeFalsy();
+        });
+    });
+
+    describe('#isJdbc', function() {
+        it('returns true iff the data source is jdbc', function(){
+            var gpdb = new chorus.models.DataSource({entityType: 'gpdb_data_source'});
+            expect(gpdb.isJdbc()).toBeFalsy();
+            var oracle = new chorus.models.DataSource({entityType: 'oracle_data_source'});
+            expect(oracle.isJdbc()).toBeFalsy();
+            var jdbc = new chorus.models.DataSource({entityType: 'jdbc_data_source'});
+            expect(jdbc.isJdbc()).toBeTruthy();
         });
     });
 
@@ -157,6 +170,13 @@ describe('chorus.models.DataSource', function() {
         context("when the data source is Oracle", function() {
             it('returns null', function() {
                 this.model = backboneFixtures.oracleDataSource();
+                expect(this.model.usage()).toBeNull();
+            });
+        });
+
+        context("when the data source is Jdbc", function() {
+            it('returns null', function() {
+                this.model = backboneFixtures.jdbcDataSource();
                 expect(this.model.usage()).toBeNull();
             });
         });

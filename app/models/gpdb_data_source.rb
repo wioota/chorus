@@ -1,4 +1,4 @@
-class GpdbDataSource < DataSource
+class GpdbDataSource < ConcreteDataSource
   has_many :databases, :class_name => 'GpdbDatabase', :foreign_key => "data_source_id"
   has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
   has_many :datasets, :through => :schemas

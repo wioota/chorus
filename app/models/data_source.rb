@@ -12,8 +12,8 @@ class DataSource < ActiveRecord::Base
   before_destroy :cancel_imports
 
   belongs_to :owner, :class_name => 'User'
-  has_many :accounts, :class_name => 'DataSourceAccount', :inverse_of => :data_source, :foreign_key => "data_source_id", :dependent => :destroy
-  has_one :owner_account, :class_name => 'DataSourceAccount', :foreign_key => "data_source_id", :inverse_of => :data_source, :conditions => proc { {:owner_id => owner_id} }
+  has_many :accounts, :class_name => 'DataSourceAccount', :inverse_of => :data_source, :foreign_key => 'data_source_id', :dependent => :destroy
+  has_one :owner_account, :class_name => 'DataSourceAccount', :foreign_key => 'data_source_id', :inverse_of => :data_source, :conditions => proc { {:owner_id => owner_id} }
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
@@ -21,8 +21,7 @@ class DataSource < ActiveRecord::Base
   before_validation :build_data_source_account_for_owner, :on => :create
 
   validates_associated :owner_account, :if => :validate_owner?
-  validates_presence_of :name, :db_name, :host
-  validates_numericality_of :port, :only_integer => true
+  validates_presence_of :name, :host
   validates_length_of :name, :maximum => 64
   validates_with DataSourceNameValidator
 

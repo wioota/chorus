@@ -1,4 +1,4 @@
-class OracleDataSource < DataSource
+class OracleDataSource < ConcreteDataSource
   has_many :schemas, :as => :parent, :class_name => 'OracleSchema'
   has_many :datasets, :through => :schemas
   has_many :imports_as_source, :through => :datasets, :source => :imports

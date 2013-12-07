@@ -62,6 +62,10 @@ chorus.models.AbstractDataSource = chorus.models.Base.extend({
         return false;
     },
 
+    isJdbc: function() {
+        return false;
+    },
+
     isSingleLevelSource: function () {
         return false;
     },

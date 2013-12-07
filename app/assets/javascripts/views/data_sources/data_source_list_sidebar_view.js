@@ -83,7 +83,7 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
         this.requiredResources.reset();
         this.listenTo(this.resource, "change", this.render);
 
-        if(this.resource.isGreenplum() || this.resource.isOracle()) {
+        if(this.resource.isGreenplum() || this.resource.isOracle() || this.resource.isJdbc()) {
             var account = this.dataSource.accountForCurrentUser();
             this.dataSource.accounts().fetchAllIfNotLoaded();
             account.fetchIfNotLoaded();

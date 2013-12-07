@@ -50,6 +50,23 @@ FactoryGirl.define do
     end
   end
 
+  factory :jdbc_data_source do
+    sequence(:name) { |n| "jdbc_data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    sequence(:host) { |n| "jdbc:teradata://jdbc_server#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    owner
+    db_username 'username'
+    db_password 'secret'
+    after(:build) do |data_source|
+      def data_source.valid_db_credentials?(account)
+        true
+      end
+    end
+
+    after(:create) do |data_source|
+      data_source.singleton_class.send :remove_method, :valid_db_credentials?
+    end
+  end
+
   factory :hdfs_data_source do
     sequence(:name) { |n| "hdfs_data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }
