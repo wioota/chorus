@@ -62,10 +62,10 @@ data_sources:
   oracle:
     - host: "chorus-oracle"
       port: 1521
-      db_name: "orcl"
+      db_name: "orcl11g"
       account:
         db_username: "system"
-        db_password: "oracle"
+        db_password: "password"
   hawq:
     - host: "chorus-gphd20-2"
       port: 5432

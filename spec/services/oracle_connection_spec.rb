@@ -95,9 +95,9 @@ describe OracleConnection, :oracle_integration do
 
   end
 
-  describe "#version" do
-    it "returns the Oracle connection" do
-      connection.version.should == '11.2.0.2.0'
+  describe '#version' do
+    it 'returns the Oracle connection' do
+      connection.version.should match /11\.2\.0.*/
     end
   end
 
