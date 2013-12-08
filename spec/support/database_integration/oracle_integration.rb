@@ -33,7 +33,7 @@ module OracleIntegration
   end
 
   def self.schema_name
-    "test_#{Socket.gethostname.gsub('.', '_')}_#{Rails.env}".upcase
+    "test_#{Socket.gethostname.gsub('.', '_').slice(0,14)}_#{Rails.env}".slice(0,30).upcase
   end
 
   def self.real_data_source
