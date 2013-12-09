@@ -3,7 +3,11 @@ shared_examples "a well-behaved database query" do
 
   it "returns the expected result and manages its connection" do
     connection.should_not be_connected
-    subject.should == expected
+    if defined? match_array_in_any_order
+      subject.should =~ expected
+    else
+      subject.should == expected
+    end
     connection.should_not be_connected
     db.disconnect
   end

@@ -33,5 +33,11 @@ describe("chorus.views.SchemaListSidebar", function() {
             chorus.PageEvents.trigger("schema:selected", this.schema);
             expect(this.view.$(".details")).toContainTranslation("schema_list.sidebar.type.gpdb_schema");
         });
+
+        it("presents correctly for JDBC schemas", function() {
+            this.schema.set("entityType", "jdbc_schema");
+            chorus.PageEvents.trigger("schema:selected", this.schema);
+            expect(this.view.$(".details")).toContainTranslation("schema_list.sidebar.type.jdbc_schema");
+        });
     });
 });

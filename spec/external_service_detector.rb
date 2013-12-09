@@ -27,4 +27,8 @@ RSpec.configure do |config|
   unless ENV['HAWQ_HOST']
     config.filter_run_excluding :hawq_integration => true
   end
+
+  unless ENV['JDBC_HOST']
+    config.filter_run_excluding :jdbc_integration => true
+  end
 end

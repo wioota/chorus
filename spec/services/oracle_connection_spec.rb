@@ -6,11 +6,7 @@ describe OracleConnection, :oracle_integration do
   let(:account) { OracleIntegration.real_account }
   let(:exception_class) { OracleConnection::DatabaseError }
 
-  let(:options) {
-    {
-        :logger => Rails.logger
-    }
-  }
+  let(:options) { { :logger => Rails.logger } }
   let(:connection) { OracleConnection.new(data_source, account, options) }
   let(:db_url) { connection.db_url }
   let(:db_options) { connection.db_options }

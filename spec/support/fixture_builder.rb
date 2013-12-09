@@ -1,8 +1,9 @@
-require_relative "./database_integration/greenplum_integration"
-require_relative "./database_integration/hawq_integration"
-require_relative "./database_integration/oracle_integration"
-require_relative "./database_integration/hdfs_integration"
-require_relative "./current_user"
+require_relative './database_integration/greenplum_integration'
+require_relative './database_integration/hawq_integration'
+require_relative './database_integration/oracle_integration'
+require_relative './database_integration/jdbc_integration'
+require_relative './database_integration/hdfs_integration'
+require_relative './current_user'
 require 'rr'
 
 def FixtureBuilder.password
@@ -113,7 +114,9 @@ FixtureBuilder.configure do |fbuilder|
     FactoryGirl.create(:oracle_view, name: 'oracle_view', schema: oracle_schema)
 
     jdbc_data_source = FactoryGirl.create(:jdbc_data_source, :name => 'jdbc', :owner => owner)
- 
+    jdbc_schema = FactoryGirl.create(:jdbc_schema, :name => 'jdbc', :data_source => jdbc_data_source)
+    FactoryGirl.create(:jdbc_schema, :name => 'jdbc_empty', :data_source => jdbc_data_source)
+
     hdfs_data_source = HdfsDataSource.create!({:name => 'searchquery_hadoop', :description => 'searchquery for the hadoop data source', :host => 'hadoop.example.com', :port => '1111', :owner => admin, :hdfs_version => 'Pivotal HD 1.0'}, :without_protection => true)
     fbuilder.name :hadoop, hdfs_data_source
     Events::HdfsDataSourceCreated.by(admin).add(:hdfs_data_source => hdfs_data_source)
@@ -640,6 +643,12 @@ FixtureBuilder.configure do |fbuilder|
       OracleIntegration.setup_test_schemas
       FactoryGirl.create(:oracle_schema, :name => OracleIntegration.schema_name, :data_source => real_oracle_data_source)
       OracleIntegration.real_schema.refresh_datasets(real_oracle_data_source.account_for_user!(owner))
+    end
+
+    if ENV['JDBC_HOST']
+      real_jdbc_data_source = FactoryGirl.create(:jdbc_data_source, :owner => owner, :host => JdbcIntegration.hostname, :db_username => JdbcIntegration.username, :db_password => JdbcIntegration.password)
+      JdbcIntegration.setup_test_schemas
+      FactoryGirl.create(:jdbc_schema, :name => JdbcIntegration.schema_name, :data_source => real_jdbc_data_source)
     end
 
     if ENV['HAWQ_HOST']

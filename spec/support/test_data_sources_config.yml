@@ -66,6 +66,11 @@ data_sources:
       account:
         db_username: "system"
         db_password: "password"
+  jdbc:
+    - host: "jdbc:teradata://172.16.151.129/dbc"
+      account:
+        db_username: "dbc"
+        db_password: "dbc"
   hawq:
     - host: "chorus-gphd20-2"
       port: 5432
