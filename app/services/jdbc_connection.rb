@@ -38,9 +38,7 @@ class JdbcConnection < DataSourceConnection
     disconnect
   end
 
-  private
-
-  def error_class
+  def self.error_class
     JdbcConnection::DatabaseError
   end
 end

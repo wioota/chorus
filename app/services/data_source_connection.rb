@@ -71,7 +71,7 @@ class DataSourceConnection
       @connection ||= Sequel.connect db_url, db_options.merge({:test => true})
     end
   rescue Sequel::DatabaseError => e
-    exception = error_class.new(e)
+    exception = self.class.error_class.new(e)
 
     if exception.error_type == :INVALID_PASSWORD
       @account.invalid_credentials!
@@ -138,12 +138,11 @@ class DataSourceConnection
   def verify_driver_configuration
   end
 
-  private
-
-
-  def error_class
+  def self.error_class
     DataSourceConnection::Error
   end
+
+  private
 
   def db_options
     options = {:login_timeout => 10}

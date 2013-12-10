@@ -117,11 +117,11 @@ class GreenplumConnection < DataSourceConnection
     end
   end
 
-  private
-
-  def error_class
+  def self.error_class
     GreenplumConnection::DatabaseError
   end
+
+  private
 
   def quote_identifier(identifier)
     @connection.send(:quote_identifier, identifier)

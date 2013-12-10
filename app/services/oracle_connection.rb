@@ -149,11 +149,11 @@ class OracleConnection < DataSourceConnection
     disconnect
   end
 
-  private
-
-  def error_class
+  def self.error_class
     OracleConnection::DatabaseError
   end
+
+  private
 
   def datasets_query(options)
     with_connection do |connection|
