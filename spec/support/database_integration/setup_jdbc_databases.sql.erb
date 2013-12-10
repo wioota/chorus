@@ -1,1 +1,6 @@
 CREATE USER "<%= schema_name %>" FROM dbc AS PASSWORD="<%= schema_name %>" PERM = 1000000 SPOOL = 100000;
+CREATE TABLE "<%= schema_name %>".NEWTABLE (id INTEGER, rowname VARCHAR(20));
+<% (1..10).each do |x| %>
+    <%= %Q{INSERT INTO "#{schema_name}".NEWTABLE VALUES (#{x}, 'row_#{x}');} %>
+<% end %>
+CREATE VIEW "<%= schema_name %>".NEWVIEW AS SELECT * FROM "<%= schema_name %>".NEWTABLE;

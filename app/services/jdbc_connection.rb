@@ -25,9 +25,9 @@ class JdbcConnection < DataSourceConnection
     with_connection { |connection| connection.schemas }
   end
 
-  #def tables
-  #  with_connection { |connection| connection.tables}
-  #end
+  def schema_exists?(name)
+    schemas.include? name.to_sym
+  end
 
   def self.error_class
     JdbcConnection::DatabaseError

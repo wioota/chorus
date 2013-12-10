@@ -35,4 +35,19 @@ describe JdbcConnection, :jdbc_integration do
     it_should_behave_like 'a well-behaved database query'
   end
 
+  describe '#schema_exists?' do
+    let(:schema_name) { JdbcIntegration.schema_name }
+    let(:subject) { connection.schema_exists?(schema_name) }
+    let(:expected) { true }
+
+    it_should_behave_like 'a well-behaved database query'
+
+    context 'when the schema does not exist' do
+      let(:schema_name) { 'does_not_exist' }
+
+      it 'returns false' do
+        connection.schema_exists?(schema_name).should be_false
+      end
+    end
+  end
 end

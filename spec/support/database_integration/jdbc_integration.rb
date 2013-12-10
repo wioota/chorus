@@ -6,7 +6,7 @@ require 'socket'
 module JdbcIntegration
 
   def self.hostname
-    ENV['JDBC_HOST']
+    @@hostname ||= ENV['JDBC_HOST']
   end
 
   def self.username
@@ -18,7 +18,7 @@ module JdbcIntegration
   end
 
   def self.schema_name
-    "test_#{Socket.gethostname.gsub('.', '_').slice(0,14)}_#{Rails.env}".slice(0,30).upcase
+    "test_#{Socket.gethostname.gsub('.', '_').slice(0,14)}_#{Rails.env}".slice(0,30)
   end
 
   def self.real_data_source
@@ -46,11 +46,19 @@ module JdbcIntegration
   end
 
   def self.schema_exists?
-    connection.schemas.include? schema_name.downcase.to_sym
+    Sequel.connect(hostname, :user => username, :password => password, :logger => Rails.logger) do |dbc|
+      dbc.fetch(%(SELECT databasename FROM dbc.databases WHERE databasename='#{schema_name}')).any? do |row|
+        row[:databasename].strip == schema_name
+      end
+    end
   end
 
   def self.execute_sql(sql)
-    connection.execute(sql)
+    Sequel.connect(hostname, :user => username, :password => password, :logger => Rails.logger) do |dbc|
+      sql.split(';').each do |line|
+        dbc.run(line) unless line.blank?
+      end
+    end
   end
 
   private
