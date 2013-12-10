@@ -140,15 +140,6 @@ class OracleConnection < DataSourceConnection
     OracleSqlResult.new(:warnings => warnings, :result_set => result_set)
   end
 
-  def with_connection(options = {})
-    connect!
-    yield @connection
-  rescue Sequel::DatabaseError => e
-    raise OracleConnection::DatabaseError.new(e)
-  ensure
-    disconnect
-  end
-
   def self.error_class
     OracleConnection::DatabaseError
   end

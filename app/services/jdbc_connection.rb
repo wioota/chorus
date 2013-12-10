@@ -29,15 +29,6 @@ class JdbcConnection < DataSourceConnection
   #  with_connection { |connection| connection.tables}
   #end
 
-  def with_connection(options = {})
-    connect!
-    yield @connection
-  rescue Sequel::DatabaseError => e
-    raise JdbcConnection::DatabaseError.new(e)
-  ensure
-    disconnect
-  end
-
   def self.error_class
     JdbcConnection::DatabaseError
   end

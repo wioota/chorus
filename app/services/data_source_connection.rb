@@ -94,7 +94,6 @@ class DataSourceConnection
     true
   end
 
-
   def stream_sql(query, options={}, cancelable_query = nil, &record_handler)
     with_jdbc_connection(options) do |jdbc_conn|
       jdbc_conn.set_auto_commit(false)
@@ -136,6 +135,15 @@ class DataSourceConnection
   end
 
   def verify_driver_configuration
+  end
+
+  def with_connection(options = {})
+    connect!
+    yield @connection
+  rescue Sequel::DatabaseError => e
+    raise self.class.error_class.new(e)
+  ensure
+    disconnect
   end
 
   def self.error_class
