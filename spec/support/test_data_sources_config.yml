@@ -67,7 +67,7 @@ data_sources:
         db_username: "system"
         db_password: "password"
   jdbc:
-    - host: "jdbc:teradata://172.16.151.129/dbc"
+    - host: "jdbc:teradata://10.0.0.32/dbc"
       account:
         db_username: "dbc"
         db_password: "dbc"
