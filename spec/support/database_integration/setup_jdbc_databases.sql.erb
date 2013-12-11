@@ -1,3 +1,10 @@
+-- DELETE DATABASE "<%= schema_name %>" ALL;
+-- MODIFY DATABASE "<%= schema_name %>" as drop default journal table;
+-- DROP DATABASE "<%= schema_name %>";
+
+MODIFY USER "<%= schema_name %>" as DROP DEFAULT JOURNAL TABLE;
+DROP USER "<%= schema_name %>";
+
 CREATE USER "<%= schema_name %>" FROM dbc AS PASSWORD="<%= schema_name %>" PERM = 1000000 SPOOL = 100000;
 CREATE TABLE "<%= schema_name %>".NEWTABLE (id INTEGER, rowname VARCHAR(20));
 <% (1..10).each do |x| %>

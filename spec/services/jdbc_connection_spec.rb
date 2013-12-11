@@ -64,6 +64,7 @@ describe JdbcConnection, :jdbc_integration do
 
       let(:expected) { db.fetch(dataset_list_sql).map { |row| {:name => row[:name].strip, :type => row[:ttype] == 'T' ? 't' : 'v' } } }
       let(:subject) { connection.datasets }
+      let(:match_array_in_any_order) { true }
 
       it_should_behave_like 'a well-behaved database query'
 
