@@ -39,7 +39,7 @@ module JdbcIntegration
 
   def self.setup_test_schemas
     return if schema_exists?
-    puts "Importing into #{schema_name}"
+    puts "Importing jdbc fixtures into #{schema_name}"
     sql = ERB.new(File.read(Rails.root.join 'spec/support/database_integration/setup_jdbc_databases.sql.erb')).result(binding)
     puts 'Executing setup_jdbc_databases.sql'
     execute_sql(sql)
