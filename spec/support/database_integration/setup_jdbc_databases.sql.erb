@@ -4,3 +4,6 @@ CREATE TABLE "<%= schema_name %>".NEWTABLE (id INTEGER, rowname VARCHAR(20));
     <%= %Q{INSERT INTO "#{schema_name}".NEWTABLE VALUES (#{x}, 'row_#{x}');} %>
 <% end %>
 CREATE VIEW "<%= schema_name %>".NEWVIEW AS SELECT * FROM "<%= schema_name %>".NEWTABLE;
+
+CREATE TABLE "<%= schema_name %>".TWO_COLUMN_TABLE ("id" NUMBER, "column2" NUMBER);
+CREATE TABLE "<%= schema_name %>"."lower_case" ("id" NUMBER, "column2" NUMBER, "column3" NUMBER);

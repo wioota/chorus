@@ -46,7 +46,8 @@ class JdbcConnection < DataSourceConnection
   end
 
   def metadata_for_dataset(dataset_name)
-    {:column_count => 0}
+    column_count = with_connection { |connection| connection.schema(dataset_name, {:schema => schema_name}).size }
+    { :column_count => column_count }
   end
 
   def self.error_class

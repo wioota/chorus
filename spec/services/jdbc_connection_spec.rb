@@ -198,13 +198,20 @@ describe JdbcConnection, :jdbc_integration do
     #  end
     #end
 
-    #describe '#metadata_for_dataset' do
-    #  let(:schema_name) { OracleIntegration.schema_name }
-    #  let(:expected) { {:column_count => 2} }
-    #  let(:subject) { connection.metadata_for_dataset('TWO_COLUMN_TABLE') }
-    #
-    #  it_should_behave_like 'a well-behaved database query'
-    #end
+    describe '#metadata_for_dataset' do
+      let(:schema_name) { JdbcIntegration.schema_name }
+      let(:expected) { {:column_count => 2} }
+      let(:subject) { connection.metadata_for_dataset('TWO_COLUMN_TABLE') }
+
+      it_should_behave_like 'a well-behaved database query'
+
+      context 'the table has lowercase characters' do
+        let(:expected) { {:column_count => 3} }
+        let(:subject) { connection.metadata_for_dataset('lower_case') }
+
+        it_should_behave_like 'a well-behaved database query'
+      end
+    end
 
     describe '#table_exists?' do
       let(:subject) { connection.table_exists?(table_name) }
@@ -226,6 +233,13 @@ describe JdbcConnection, :jdbc_integration do
       context 'when the table name given is nil' do
         let(:table_name) { nil }
         let(:expected) { false }
+
+        it_should_behave_like 'a well-behaved database query'
+      end
+
+      context 'the table has lowercase characters' do
+        let(:table_name) { 'lower_case' }
+        let(:expected) { true }
 
         it_should_behave_like 'a well-behaved database query'
       end
