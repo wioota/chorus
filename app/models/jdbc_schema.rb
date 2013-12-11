@@ -6,4 +6,9 @@ class JdbcSchema < Schema
   has_many :data_source_accounts, :through => :data_source_account_permissions
 
   validates :data_source, :presence => true
+
+
+  def class_for_type(type)
+    type == 't' ? JdbcTable : JdbcView
+  end
 end

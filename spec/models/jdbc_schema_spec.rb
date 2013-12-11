@@ -38,6 +38,14 @@ describe JdbcSchema do
 
   end
 
+  describe '#class_for_type' do
+    let(:schema) { schemas(:jdbc) }
+    it 'should return JdbcTable and JdbcView correctly' do
+      schema.class_for_type('t').should == JdbcTable
+      schema.class_for_type('v').should == JdbcView
+    end
+  end
+
   it_behaves_like 'a subclass of schema' do
     let(:schema) { schemas(:jdbc) }
   end

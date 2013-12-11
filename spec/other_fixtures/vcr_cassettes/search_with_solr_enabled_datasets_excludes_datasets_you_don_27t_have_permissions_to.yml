@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>25,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
         \ database_name_texts table_description_texts schema_name_texts column_name_texts\
         \ column_description_texts query_texts tag_names_texts body_texts name_stemmed_texts\
         \ database_name_stemmed_texts table_description_stemmed_texts schema_name_stemmed_texts\
@@ -33,13 +33,13 @@ http_interactions:
         \ AND -data_source_account_ids_im:(1000001 OR 1000004))','-(security_type_name_sm:ChorusView\
         \ AND -member_ids_im:1000003 AND -public_b:true)','-(security_type_name_sm:HdfsDataset\
         \ AND -member_ids_im:1000003 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>2,'ngroups'=>2,'groups'=>[{'groupValue'=>'HdfsDataset\
-        \ 1000020','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>4254363.0,'docs'=>[{'id'=>'HdfsDataset\
-        \ 1000020','name_texts'=>['searchquery_hadoop'],'name_stemmed_texts'=>['searchquery_hadoop'],'query_stemmed_texts'=>['/*'],'query_texts'=>['/*'],'score'=>4254363.0}]}},{'groupValue'=>'GpdbTable\
-        \ 1000012','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>3646596.8,'docs'=>[{'id'=>'GpdbTable\
-        \ 1000012','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['searchquery_shared_table'],'database_name_texts'=>['shared_database'],'name_stemmed_texts'=>['searchquery_shared_table'],'table_description_texts'=>['bogus'],'column_name_stemmed_texts'=>['bogus','bogus\
+        \ 1000022','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>4292729.5,'docs'=>[{'id'=>'HdfsDataset\
+        \ 1000022','name_texts'=>['searchquery_hadoop'],'name_stemmed_texts'=>['searchquery_hadoop'],'query_stemmed_texts'=>['/*'],'query_texts'=>['/*'],'score'=>4292729.5}]}},{'groupValue'=>'GpdbTable\
+        \ 1000014','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>3679482.5,'docs'=>[{'id'=>'GpdbTable\
+        \ 1000014','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['searchquery_shared_table'],'database_name_texts'=>['shared_database'],'name_stemmed_texts'=>['searchquery_shared_table'],'table_description_texts'=>['bogus'],'column_name_stemmed_texts'=>['bogus','bogus\
         \ 2'],'schema_name_stemmed_texts'=>['shared_schema'],'schema_name_texts'=>['shared_schema'],'database_name_stemmed_texts'=>['shared_database'],'column_name_texts'=>['bogus','bogus\
-        \ 2'],'score'=>3646596.8}]}}]}},'highlighting'=>{'HdfsDataset 1000020'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_hadoop'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_hadoop']},'GpdbTable\
-        \ 1000012'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_shared_table'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_shared_table']}}}"
+        \ 2'],'score'=>3679482.5}]}}]}},'highlighting'=>{'HdfsDataset 1000022'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_hadoop'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_hadoop']},'GpdbTable\
+        \ 1000014'=>{'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_shared_table'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_shared_table']}}}"
     http_version: '1.1'
-  recorded_at: Fri, 20 Sep 2013 21:50:28 GMT
+  recorded_at: Wed, 11 Dec 2013 05:58:25 GMT
 recorded_with: VCR 2.3.0

@@ -150,3 +150,43 @@ shared_examples "oracle dataset presenter" do |dataset_factory_name|
     end
   end
 end
+
+shared_examples 'jdbc dataset presenter' do |dataset_factory_name|
+  before do
+    data_source = FactoryGirl.build(:jdbc_data_source, :id => 123, :name => 'data_source1')
+    schema = FactoryGirl.build(:jdbc_schema, :id => 456, :name => 'abc', :data_source => data_source)
+    @dataset = FactoryGirl.build(dataset_factory_name,
+                                 :id => 321,
+                                 :name => 'object1',
+                                 :schema => schema
+    )
+  end
+
+  let(:presenter) { described_class.new(@dataset, view) }
+  let(:hash) { presenter.to_hash }
+
+  it 'includes schema and data sourceobject fields' do
+    hash[:id].should == 321
+    hash[:object_name].should == 'object1'
+    hash[:entity_subtype].should == 'SOURCE_TABLE'
+    hash[:associated_workspaces].should_not be_nil
+
+    schema = hash[:schema]
+    schema[:id].should == 456
+    schema[:name].should == 'abc'
+
+    data_source = schema[:data_source]
+    data_source[:id].should == 123
+    data_source[:name].should == 'data_source1'
+  end
+
+  it 'checks if the user is allowed to access' do
+    hash[:has_credentials].should_not be_nil
+  end
+
+  context 'when the :workspace option is not passed' do
+    it 'does not include the :workspace key' do
+      hash.should_not have_key(:workspace)
+    end
+  end
+end

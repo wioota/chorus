@@ -29,7 +29,46 @@ class JdbcConnection < DataSourceConnection
     schemas.include? name.to_sym
   end
 
+  def table_exists?(name)
+    object_exists? :tables, name
+  end
+
+  def view_exists?(name)
+    object_exists? :views, name
+  end
+
+  def datasets(options={})
+    with_connection { |connection| connection.tables(:schema_name => schema_name) | connection.views(:schema_name => schema_name) }
+  end
+
+  def datasets_count(options={})
+    0
+  end
+
+  def metadata_for_dataset(dataset_name)
+    {:column_count => 0}
+  end
+
   def self.error_class
     JdbcConnection::DatabaseError
+  end
+
+  private
+
+  def schema_name
+    @options[:schema]
+  end
+
+  def object_exists?(type, name)
+    found = false
+    with_connection do |connection|
+      connection.send(type, :schema_name => schema_name, :table_name => name).each do |result|
+        if result[:name] == name
+          found = true
+          break
+        end
+      end
+    end
+    found
   end
 end
