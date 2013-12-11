@@ -42,7 +42,7 @@ class JdbcConnection < DataSourceConnection
   end
 
   def datasets_count(options={})
-    0
+    datasets(options).size
   end
 
   def metadata_for_dataset(dataset_name)

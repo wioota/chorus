@@ -151,24 +151,20 @@ describe JdbcConnection, :jdbc_integration do
       #end
     end
 
-    #describe '#datasets_count' do
-    #  let(:connection) { JdbcConnection.new(data_source, account, options.merge(:schema => schema_name)) }
-    #  let(:schema_name) { JdbcIntegration.schema_name }
-    #  let(:dataset_list_sql) {
-    #    <<-SQL
-    #    SELECT count(*) FROM (
-    #      SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}'
-    #      UNION
-    #      SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}'
-    #    )
-    #    SQL
-    #  }
-    #
-    #  let(:expected) { db.fetch(dataset_list_sql).single_value }
-    #  let(:subject) { connection.datasets_count }
-    #
-    #  it_should_behave_like 'a well-behaved database query'
-    #
+    describe '#datasets_count' do
+      let(:connection) { JdbcConnection.new(data_source, account, options.merge(:schema => schema_name)) }
+      let(:schema_name) { JdbcIntegration.schema_name }
+      let(:dataset_list_sql) {
+        <<-SQL
+          SELECT COUNT(*) FROM dbc.tables where databasename = '#{schema_name}'
+        SQL
+      }
+
+      let(:expected) { db.fetch(dataset_list_sql).single_value }
+      let(:subject) { connection.datasets_count }
+
+      it_should_behave_like 'a well-behaved database query'
+
     #  context 'when a name filter is passed' do
     #    let(:dataset_list_sql) {
     #      <<-SQL
@@ -196,7 +192,7 @@ describe JdbcConnection, :jdbc_integration do
     #
     #    it_should_behave_like 'a well-behaved database query'
     #  end
-    #end
+    end
 
     describe '#metadata_for_dataset' do
       let(:schema_name) { JdbcIntegration.schema_name }
