@@ -17,6 +17,11 @@ describe SearchController do
 
     before do
       log_in user
+
+      any_instance_of JdbcConnection do |ds|
+        # teradriver fails loudly
+        stub(ds).metadata_for_dataset.with_any_args { {:column_count => 2} }
+      end
     end
 
     it_behaves_like "an action that requires authentication", :get, :show
