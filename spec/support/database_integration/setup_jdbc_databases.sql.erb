@@ -10,4 +10,5 @@ CREATE TABLE "<%= schema_name %>".NEWTABLE (id INTEGER, rowname VARCHAR(20));
 CREATE VIEW "<%= schema_name %>".NEWVIEW AS SELECT * FROM "<%= schema_name %>".NEWTABLE;
 
 CREATE TABLE "<%= schema_name %>".TWO_COLUMN_TABLE ("id" NUMBER, "column2" NUMBER);
-CREATE TABLE "<%= schema_name %>"."lower_case" ("id" NUMBER, "column2" NUMBER, "column3" NUMBER);
+CREATE TABLE "<%= schema_name %>"."lowercase_table" ("id" NUMBER, "column2" NUMBER, "column3" NUMBER);
+CREATE VIEW "<%= schema_name %>"."lowercase_view" AS SELECT * FROM "<%= schema_name %>"."lowercase_table";

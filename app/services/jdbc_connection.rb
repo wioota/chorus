@@ -7,6 +7,7 @@ class JdbcConnection < DataSourceConnection
 
   def db_options
     super.merge({
+      :identifier_output_method => nil,
       :user => @account.db_username,
       :password => @account.db_password
     })

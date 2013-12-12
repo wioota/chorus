@@ -23,12 +23,12 @@ describe JdbcConnection, :jdbc_integration do
   describe '#schemas' do
     let(:schema_list_sql) {
       <<-SQL
-        SELECT DISTINCT databasenamei as NAME
+        SELECT DISTINCT databasename as name
         FROM DBC.DBASE
       SQL
     }
 
-    let(:expected) { db.fetch(schema_list_sql).all.map { |row| row[:name].downcase.to_sym } }
+    let(:expected) { db.fetch(schema_list_sql).all.map { |row| row[:name].to_sym } }
     let(:subject) { connection.schemas }
     let(:match_array_in_any_order) { true }
 
@@ -204,7 +204,7 @@ describe JdbcConnection, :jdbc_integration do
 
       context 'the table has lowercase characters' do
         let(:expected) { {:column_count => 3} }
-        let(:subject) { connection.metadata_for_dataset('lower_case') }
+        let(:subject) { connection.metadata_for_dataset('lowercase_table') }
 
         it_should_behave_like 'a well-behaved database query'
       end
@@ -215,9 +215,16 @@ describe JdbcConnection, :jdbc_integration do
       let(:expected) { true }
 
       context 'when the table exists' do
-        let(:table_name) { 'NEWTABLE' }
 
-        it_should_behave_like 'a well-behaved database query'
+        context 'with uppercase table name' do
+          let(:table_name) { 'NEWTABLE' }
+          it_should_behave_like 'a well-behaved database query'
+        end
+
+        context 'with a lowercase table name' do
+          let(:table_name) { 'lowercase_table' }
+          it_should_behave_like 'a well-behaved database query'
+        end
       end
 
       context 'when the table does not exist' do
@@ -233,13 +240,6 @@ describe JdbcConnection, :jdbc_integration do
 
         it_should_behave_like 'a well-behaved database query'
       end
-
-      context 'the table has lowercase characters' do
-        let(:table_name) { 'lower_case' }
-        let(:expected) { true }
-
-        it_should_behave_like 'a well-behaved database query'
-      end
     end
 
     describe '#view_exists?' do
@@ -247,9 +247,16 @@ describe JdbcConnection, :jdbc_integration do
 
       context 'when the view exists' do
         let(:expected) { true }
-        let(:view_name) { 'NEWVIEW' }
 
-        it_behaves_like 'a well-behaved database query'
+        context 'with uppercase view name' do
+          let(:view_name) { 'NEWVIEW' }
+          it_should_behave_like 'a well-behaved database query'
+        end
+
+        context 'with a lowercase view name' do
+          let(:view_name) { 'lowercase_view' }
+          it_should_behave_like 'a well-behaved database query'
+        end
       end
 
       context 'when the view does not exist' do
