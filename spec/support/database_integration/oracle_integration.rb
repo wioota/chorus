@@ -1,10 +1,29 @@
-require "tempfile"
+require 'tempfile'
 require 'digest/md5'
 require 'yaml'
 require 'socket'
+require_relative './database_integration_helper'
 
 module OracleIntegration
+  extend DatabaseIntegrationHelper
+
   JAR_FILE = Rails.root + 'lib/libraries/ojdbc6.jar'
+
+  def self.versions_file_name
+    'oracle_integration_file_versions'
+  end
+
+  def self.host_identifier
+    'ORACLE_HOST'
+  end
+
+  def self.files_to_track
+    %w(
+      oracle_integration.rb
+      drop_oracle_databases.sql.erb
+      setup_oracle_databases.sql.erb
+    )
+  end
 
   def self.has_jar_file?
     File.exist? JAR_FILE
@@ -13,7 +32,7 @@ module OracleIntegration
   require JAR_FILE if self.has_jar_file?
 
   def self.hostname
-    ENV['ORACLE_HOST']
+    ENV[host_identifier]
   end
 
   def self.username
@@ -53,10 +72,18 @@ module OracleIntegration
   end
 
   def self.setup_test_schemas
-    return if schema_exists?
-    puts "Importing into #{schema_name}"
-    sql = ERB.new(File.read(Rails.root.join "spec/support/database_integration/setup_oracle_databases.sql.erb")).result(binding)
-    puts "Executing setup_oracle_databases.sql"
+    refresh_if_changed do
+      drop_test_database if schema_exists?
+      puts "Importing into #{schema_name}"
+      sql = ERB.new(File.read(Rails.root.join 'spec/support/database_integration/setup_oracle_databases.sql.erb')).result(binding)
+      puts 'Executing setup_oracle_databases.sql'
+      execute_sql(sql)
+    end
+  end
+
+  def self.drop_test_database
+    puts "Dropping #{schema_name}"
+    sql = ERB.new(File.read(Rails.root.join 'spec/support/database_integration/drop_oracle_databases.sql.erb')).result(binding)
     execute_sql(sql)
   end
 
@@ -76,11 +103,6 @@ module OracleIntegration
   end
 
   private
-
-  def self.config
-    config_file = "test_data_sources_config.yml"
-    @@config ||= YAML.load_file(File.join(File.dirname(__FILE__), '../../..', "spec/support/#{config_file}"))
-  end
 
   def self.oracle_config
     @@oracle_config ||= find_oracle_data_source hostname

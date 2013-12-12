@@ -1,18 +1,30 @@
-require "tempfile"
+require 'tempfile'
 require 'digest/md5'
 require 'yaml'
 require 'socket'
+require_relative './database_integration_helper'
 
 module GreenplumIntegration
-  FILES_TO_TRACK_CHANGES_OF = Dir[*%w{(
-    greenplum_integration.rb
-    create_users.sql.erb
-    drop_and_create_gpdb_databases.sql.erb
-    create_test_schemas.sql.erb
-    create_private_test_schema.sql.erb
-    drop_public_schema.sql.erb
-  }]
-  VERSIONS_FILE = (File.join(File.dirname(__FILE__), '../../..', 'tmp/data_source_integration_file_versions')).to_s
+  extend DatabaseIntegrationHelper
+
+  def self.versions_file_name
+    'data_source_integration_file_versions'
+  end
+
+  def self.host_identifier
+    'GPDB_HOST'
+  end
+
+  def self.files_to_track
+    %w(
+      greenplum_integration.rb
+      create_users.sql.erb
+      drop_and_create_gpdb_databases.sql.erb
+      create_test_schemas.sql.erb
+      create_private_test_schema.sql.erb
+      drop_public_schema.sql.erb
+    )
+  end
 
   def self.execute_sql_file(sql_file, database = greenplum_config['db_name'])
     puts "Executing SQL file: #{sql_file} into #{database} on host: #{hostname}"
@@ -53,7 +65,7 @@ module GreenplumIntegration
   end
 
   def self.setup_gpdb
-    if gpdb_changed?
+    refresh_if_changed do
       puts "  Importing into #{GreenplumIntegration.database_name}"
       drop_test_db
       execute_sql_file("create_users.sql")
@@ -63,40 +75,7 @@ module GreenplumIntegration
       success &&= execute_sql_file("create_test_schemas.sql", "#{database_name}_wo_pub")
       success &&= execute_sql_file("drop_public_schema.sql", "#{database_name}_wo_pub")
       raise "Unable to add test data to #{GreenplumIntegration.hostname}" unless success
-      record_changes
     end
-  end
-
-  def self.record_changes
-    results_hash = FILES_TO_TRACK_CHANGES_OF.inject({}) do |hash, file_name|
-      hash[file_name] = sql_file_hash(file_name)
-      hash
-    end
-    results_hash["GPDB_HOST"] = ENV['GPDB_HOST']
-    gpdb_versions_file.open('w') do |f|
-      YAML.dump(results_hash, f)
-    end
-  end
-
-  def self.gpdb_changed?
-    versions = gpdb_versions_hash
-    FILES_TO_TRACK_CHANGES_OF.any? do |file_name|
-      versions[file_name.to_s] != sql_file_hash(file_name)
-    end || versions["GPDB_HOST"] != ENV['GPDB_HOST']
-  end
-
-  def self.gpdb_versions_hash
-    return {} unless gpdb_versions_file.exist?
-    YAML.load_file(gpdb_versions_file.to_s)
-  end
-
-  def self.gpdb_versions_file
-    Pathname.new(VERSIONS_FILE + "_#{ENV['RAILS_ENV']}.yml")
-  end
-
-  def self.sql_file_hash(file_name)
-    full_path = File.expand_path("../#{file_name}",  __FILE__)
-    Digest::MD5.hexdigest(File.read(full_path))
   end
 
   def self.database_name
@@ -137,7 +116,7 @@ module GreenplumIntegration
   end
 
   def self.hostname
-    ENV['GPDB_HOST']
+    ENV[host_identifier]
   end
 
   def self.real_account
@@ -171,11 +150,6 @@ module GreenplumIntegration
   end
 
   private
-
-  def self.config
-    config_file = "test_data_sources_config.yml"
-    @@config ||= YAML.load_file(File.join(File.dirname(__FILE__), '../../..', "spec/support/#{config_file}"))
-  end
 
   def self.greenplum_config
     @@gp_config ||= find_greenplum_data_source hostname
