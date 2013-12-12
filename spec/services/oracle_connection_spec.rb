@@ -248,7 +248,7 @@ describe OracleConnection, :oracle_integration do
 
           it "only returns datasets which contain '_T' in their names (it should not use _ as a wildcard)" do
             subject.length.should > 0
-            subject.each { |dataset| dataset[:name].should include "_T" }
+            subject.each { |dataset| dataset[:name].should match /_T/i }
           end
         end
       end
