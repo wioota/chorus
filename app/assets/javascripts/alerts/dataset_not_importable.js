@@ -1,6 +1,6 @@
 chorus.alerts.DatasetNotImportable = chorus.alerts.Base.extend({
     constructorName: "DatasetNotImportable",
-    additionalClass:"error",
+    additionalClass: "error",
 
     preRender: function() {
         var invalidColumns = this.options.datasetImportability.get('invalidColumns'),
