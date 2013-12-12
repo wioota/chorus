@@ -346,10 +346,16 @@ describe OracleConnection, :oracle_integration do
       let(:subject) { connection.table_exists?(table_name) }
       let(:expected) { true }
 
-      context "when the table exists" do
-        let(:table_name) { "NEWTABLE" }
+      context 'when the table exists' do
+        context 'with an all caps table name' do
+          let(:table_name) { 'NEWTABLE' }
+          it_should_behave_like 'a well-behaved database query'
+        end
 
-        it_should_behave_like "a well-behaved database query"
+        context 'with a lower case table name' do
+          let(:table_name) { 'lowercase_table' }
+          it_should_behave_like 'a well-behaved database query'
+        end
       end
 
       context "when the table doesn't exist" do
@@ -370,11 +376,18 @@ describe OracleConnection, :oracle_integration do
     describe "#view_exists?" do
       let(:subject) { connection.view_exists?(view_name) }
 
-      context "when the view exists" do
+      context 'when the view exists' do
         let(:expected) { true }
-        let(:view_name) { "NEWVIEW" }
 
-        it_behaves_like 'a well-behaved database query'
+        context 'with an all caps view name' do
+          let(:view_name) { 'NEWVIEW' }
+          it_behaves_like 'a well-behaved database query'
+        end
+
+        context 'with a lowercase view name' do
+          let(:view_name) { 'lowercase_view' }
+          it_behaves_like 'a well-behaved database query'
+        end
       end
 
       context "when the view doesn't exist" do

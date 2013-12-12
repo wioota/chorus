@@ -96,7 +96,6 @@ module OracleIntegration
   def self.execute_sql(sql)
     Sequel.connect(db_url, :logger => Rails.logger) do |database_connection|
       sql.split(";").each do |line|
-        puts line
         database_connection.run(line) unless line.blank?
       end
     end

@@ -83,4 +83,4 @@ INSERT INTO "<%= schema_name %>".PARTITIONED_INTEGERS VALUES (0);
 
 CREATE TABLE "<%= schema_name %>".BASE_TABLE1 (id NUMBER, column1 NUMBER, column2 NUMBER, category CLOB, time_value TIMESTAMP);
 CREATE TABLE "<%= schema_name %>"."lowercase_table" (id NUMBER, column1 NUMBER, column2 NUMBER, category CLOB, time_value TIMESTAMP);
-CREATE TABLE "<%= schema_name %>"."lowercase_view" AS SELECT * FROM "<%= schema_name %>"."lowercase_table";
+CREATE VIEW "<%= schema_name %>"."lowercase_view" AS SELECT * FROM "<%= schema_name %>"."lowercase_table";

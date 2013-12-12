@@ -57,6 +57,7 @@ class OracleConnection < DataSourceConnection
 
   def db_options
     super.merge({
+        :identifier_input_method => nil,
         :user => @account.db_username,
         :password => @account.db_password
     })
@@ -148,8 +149,8 @@ class OracleConnection < DataSourceConnection
 
   def datasets_query(options)
     with_connection do |connection|
-      table_query = connection.select('t' => 'type', :TABLE_NAME => 'name').from(:ALL_TABLES).where(:owner => schema_name)
-      view_query = connection.select('v' => 'type', :VIEW_NAME => 'name').from(:ALL_VIEWS).where(:owner => schema_name)
+      table_query = connection.select('t' => 'type', :TABLE_NAME => 'name').from(:ALL_TABLES).where(:OWNER => schema_name)
+      view_query = connection.select('v' => 'type', :VIEW_NAME => 'name').from(:ALL_VIEWS).where(:OWNER => schema_name)
       if options[:name_filter]
         table_query = table_query.where(["REGEXP_LIKE(TABLE_NAME, :name_filter, 'i')", :name_filter => options[:name_filter]])
         view_query = view_query.where(["REGEXP_LIKE(VIEW_NAME, :name_filter, 'i')", :name_filter => options[:name_filter]])
