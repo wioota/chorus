@@ -22,6 +22,10 @@ class JdbcConnection < DataSourceConnection
     @connection = nil
   end
 
+  def version
+    with_connection { |connection| connection.version }
+  end
+
   def schemas
     with_connection { |connection| connection.schemas }
   end

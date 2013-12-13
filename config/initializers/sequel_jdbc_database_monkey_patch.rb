@@ -18,6 +18,12 @@ module Sequel
         get_tables_s('VIEW', opts)
       end
 
+      def version
+        synchronize do |c|
+          c.getMetaData.send(:getDatabaseProductVersion)
+        end
+      end
+
       private
 
       def get_tables_s(type, opts)

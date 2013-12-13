@@ -30,7 +30,7 @@ describe JdbcConnection, :jdbc_integration do
 
     let(:expected) { db.fetch(schema_list_sql).all.map { |row| row[:name].to_sym } }
     let(:subject) { connection.schemas }
-    let(:match_array_in_any_order) { true }
+    let(:use_match_matcher) { true }
 
     it_should_behave_like 'a well-behaved database query'
   end
@@ -64,7 +64,7 @@ describe JdbcConnection, :jdbc_integration do
 
       let(:expected) { db.fetch(dataset_list_sql).map { |row| {:name => row[:name].strip, :type => row[:ttype] == 'T' ? 't' : 'v' } } }
       let(:subject) { connection.datasets }
-      let(:match_array_in_any_order) { true }
+      let(:use_match_matcher) { true }
 
       it_should_behave_like 'a well-behaved database query'
 
@@ -307,5 +307,13 @@ describe JdbcConnection, :jdbc_integration do
     #    it_should_behave_like 'a well-behaved database query'
     #  end
     #end
+  end
+
+  describe '#version' do
+    let(:subject) { connection.version }
+    let(:expected) { /Teradata Database 14\.10.*/ }
+    let(:use_match_matcher) { true }
+
+    it_should_behave_like 'a well-behaved database query'
   end
 end
