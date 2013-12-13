@@ -224,5 +224,5 @@ all rights not expressly granted. Nothing in this Agreement constitutes a waiver
 of Alpine’s rights under U.S. copyright laws or any other federal, state, local,
 or foreign law or grants You any rights in source code. You are responsible for
 installation, management and operation of the Software.  Should You have any
-questions concerning this Agreement, contact Alpine, Inc. 1900 South Norfolk
-Street, Suite 270, San Mateo, CA  94403 USA.
+questions concerning this Agreement, contact Alpine, Inc. 1550 Bryant Street,
+Suite 1000, San Francisco, CA 94103 USA.
