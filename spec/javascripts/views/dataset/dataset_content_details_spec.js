@@ -254,6 +254,33 @@ describe("chorus.views.DatasetContentDetails", function() {
 
             });
 
+            context("when dataset is jdbc", function() {
+                beforeEach(function() {
+                    spyOn(this.dataset, "isJdbc").andReturn(true);
+                    this.view.render();
+                });
+
+                it("does not render the 'Visualize' button", function() {
+                    expect(this.view.$("button.visualize")).not.toExist();
+                });
+
+                it("does not render the 'Derive' button", function() {
+                    expect(this.view.$("button.derive")).not.toExist();
+                });
+
+                context("with tableau configured", function () {
+                    beforeEach(function () {
+                        chorus.models.Config.instance().set({ tableauConfigured: true });
+                        this.view.render();
+                    });
+
+                    it("does not render the 'Publish to Tableau' button", function() {
+                        expect(this.view.$("button.publish")).not.toExist();
+                    });
+                });
+
+            });
+
             context("when dataset is not oracle", function() {
                 it("renders the 'Visualize' button", function() {
                     expect(this.view.$("button.visualize")).toExist();

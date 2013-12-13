@@ -55,24 +55,42 @@ describe("chorus.models.Dataset", function() {
     describe('#isOracle', function(){
         beforeEach(function() {
             this.oracleDataset = backboneFixtures.oracleDataset();
+            this.jdbcDataset = backboneFixtures.jdbcDataset();
             this.gpdbDataset = backboneFixtures.dataset();
         });
 
         it('returns whether the parent data source is an oracle data source', function(){
             expect(this.oracleDataset.isOracle()).toBeTruthy();
             expect(this.gpdbDataset.isOracle()).toBeFalsy();
+            expect(this.jdbcDataset.isOracle()).toBeFalsy();
+        });
+    });
+
+    describe('#isJdbc', function(){
+        beforeEach(function() {
+            this.oracleDataset = backboneFixtures.oracleDataset();
+            this.jdbcDataset = backboneFixtures.jdbcDataset();
+            this.gpdbDataset = backboneFixtures.dataset();
+        });
+
+        it('returns whether the parent data source is a jdbc data source', function(){
+            expect(this.oracleDataset.isJdbc()).toBeFalsy();
+            expect(this.gpdbDataset.isJdbc()).toBeFalsy();
+            expect(this.jdbcDataset.isJdbc()).toBeTruthy();
         });
     });
 
     describe('#isGreenplum', function(){
         beforeEach(function() {
             this.gpdbDataset = backboneFixtures.dataset();
+            this.jdbcDataset = backboneFixtures.jdbcDataset();
             this.oracleDataset = backboneFixtures.oracleDataset();
         });
 
         it('returns whether the parent data source is greenplum', function(){
             expect(this.gpdbDataset.isGreenplum()).toBeTruthy();
             expect(this.oracleDataset.isGreenplum()).toBeFalsy();
+            expect(this.jdbcDataset.isGreenplum()).toBeFalsy();
         });
     });
 

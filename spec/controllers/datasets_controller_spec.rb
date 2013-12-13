@@ -137,6 +137,17 @@ describe DatasetsController do
         response.code.should == "404"
       end
     end
+
+    context 'for a jdbc dataset' do
+      before do
+        any_instance_of(JdbcTable) { |dataset| stub(dataset).verify_in_source(user) { true } }
+      end
+      let(:dataset) { datasets(:jdbc_table) }
+
+      generate_fixture 'jdbcDataset.json' do
+        get :show, :id => dataset.to_param
+      end
+    end
   end
 
   context "integration", :greenplum_integration do

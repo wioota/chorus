@@ -181,6 +181,11 @@ window.BackboneFixtureDefinitions = {
 
     notificationSet: {},
 
+    jdbcDataset: {
+        unique: ["id"],
+        model: 'Dataset'
+    },
+
     oracleDataset: {
         unique: ["id"],
         model: 'Dataset'

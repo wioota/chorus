@@ -239,7 +239,7 @@ chorus.views.DatasetContentDetails = chorus.views.Base.include(
             showEdit: this.dataset.isChorusView() && !workspaceArchived,
             showDerive: this.showDerive(workspaceArchived),
             showPublish: this.showPublish(workspaceArchived),
-            showVisualize: this.dataset.schema() && !this.dataset.isOracle()
+            showVisualize: this.dataset.schema() && !this.dataset.isOracle() && !this.dataset.isJdbc()
         };
     },
 
@@ -263,12 +263,12 @@ chorus.views.DatasetContentDetails = chorus.views.Base.include(
     },
 
     showDerive: function (workspaceArchived) {
-        return !(this.dataset.isChorusView() || this.dataset.isOracle()) && !this.options.isDataSourceBrowser && !workspaceArchived;
+        return !(this.dataset.isChorusView() || this.dataset.isOracle() || this.dataset.isJdbc()) && !this.options.isDataSourceBrowser && !workspaceArchived;
     },
 
     showPublish: function (workspaceArchived) {
         var canUpdate = this.dataset.workspace() && this.dataset.workspace().canUpdate();
-        return !!(chorus.models.Config.instance().get('tableauConfigured') && !this.dataset.isOracle() && !this.options.isDataSourceBrowser && !workspaceArchived && canUpdate);
+        return !!(chorus.models.Config.instance().get('tableauConfigured') && !this.dataset.isOracle() && !this.dataset.isJdbc() && !this.options.isDataSourceBrowser && !workspaceArchived && canUpdate);
     },
 
     teardown: function() {

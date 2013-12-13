@@ -42,6 +42,10 @@ chorus.models.Dataset = chorus.models.Base.include(
         return this.dataSource() && this.dataSource().isOracle();
     },
 
+    isJdbc: function() {
+        return this.dataSource() && this.dataSource().isJdbc();
+    },
+
     isGreenplum: function() {
         return this.dataSource().isGreenplum();
     },
