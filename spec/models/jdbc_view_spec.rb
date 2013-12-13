@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe JdbcView do
+  let(:view) { datasets(:jdbc_view) }
+
   describe '#verify_in_source' do
-    let(:view) { datasets(:jdbc_view) }
     let(:user) { users(:owner) }
     let(:connection) { Object.new }
 
@@ -13,6 +14,12 @@ describe JdbcView do
 
       mock(connection).view_exists?(view.name) { 'duck' }
       view.verify_in_source(user).should == 'duck'
+    end
+  end
+
+  describe '#column_type' do
+    it 'is JdbcDatasetColumn' do
+      view.column_type.should == 'JdbcDatasetColumn'
     end
   end
 end

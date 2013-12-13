@@ -5,6 +5,10 @@ class JdbcDataset < RelationalDataset
     ''
   end
 
+  def column_type
+    'JdbcDatasetColumn'
+  end
+
   def data_source_account_ids
     schema.data_source_account_ids
   end

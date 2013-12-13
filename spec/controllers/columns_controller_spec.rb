@@ -85,5 +85,24 @@ describe ColumnsController do
         get :index, :dataset_id => dataset.to_param
       end
     end
+
+    context 'with real jdbc data', :jdbc_integration do
+      let(:user) { users(:owner) }
+      let(:account) { JdbcIntegration.real_account }
+      let(:schema) { JdbcIntegration.real_schema }
+      let(:data_source) { JdbcIntegration.real_data_source }
+      let(:dataset) { schema.datasets.find_by_name('TWO_COLUMN_TABLE') }
+
+      before do
+        schema.refresh_datasets(data_source.owner_account)
+      end
+
+      it 'presents jdbc dataset columns' do
+        mock_present do |column_set|
+          column_set.first.should be_a JdbcDatasetColumn
+        end
+        get :index, :dataset_id => dataset.to_param
+      end
+    end
   end
 end

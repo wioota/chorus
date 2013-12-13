@@ -55,6 +55,14 @@ class JdbcConnection < DataSourceConnection
     { :column_count => column_count }
   end
 
+  def column_info(dataset_name, setup_sql)
+    with_connection do |connection|
+      connection.schema(dataset_name, {:schema => schema_name}).map do |col|
+        { :attname => col[0].to_s, :format_type => col[1][:type].to_s }
+      end
+    end
+  end
+
   def self.error_class
     JdbcConnection::DatabaseError
   end

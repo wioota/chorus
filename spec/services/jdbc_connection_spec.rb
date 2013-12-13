@@ -274,24 +274,32 @@ describe JdbcConnection, :jdbc_integration do
       end
     end
 
-    #describe '#column_info' do
-    #  let(:table_name) { 'NEWERTABLE' }
-    #  let(:columns_sql) do
-    #    <<-SQL
-    #      SELECT COLUMN_NAME as attname, DATA_TYPE as format_type, COLUMN_ID as attnum
-    #      FROM ALL_TAB_COLUMNS
-    #      WHERE TABLE_NAME = :table AND OWNER = :schema
-    #      ORDER BY attnum
-    #    SQL
-    #  end
-    #  let(:expected) do
-    #    db.fetch(columns_sql, :schema => schema_name, :table => table_name).all
-    #  end
-    #
-    #  let(:subject) { connection.column_info(table_name, 'ignored setup sql to be consistent with other datasource connections') }
-    #
-    #  it_should_behave_like 'a well-behaved database query'
-    #end
+    describe '#column_info' do
+      let(:table_name) { 'NEWTABLE' }
+      let(:columns_sql) do
+        <<-SQL
+          SELECT
+          TRIM(COLUMNNAME) AS attname,
+          TRIM(COLUMNTYPE) AS format_type
+          FROM (
+          SELECT
+          COLUMNNAME,
+          COLUMNID,
+          CASE WHEN COLUMNTYPE='CV' THEN 'string'
+               WHEN COLUMNTYPE='I' THEN 'integer'
+          END AS COLUMNTYPE
+          FROM DBC.COLUMNS
+          WHERE DATABASENAME=:schema AND TABLENAME=:table ) TBL ORDER BY COLUMNID
+        SQL
+      end
+      let(:expected) do
+        db.fetch(columns_sql, :schema => schema_name, :table => table_name).all
+      end
+
+      let(:subject) { connection.column_info(table_name, 'ignored setup sql to be consistent with other datasource connections') }
+
+      it_should_behave_like 'a well-behaved database query'
+    end
 
     #describe 'primary_key_columns' do
     #  context 'with a primary key' do
