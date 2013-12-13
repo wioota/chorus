@@ -92,9 +92,11 @@ describe OracleConnection, :oracle_integration do
   end
 
   describe '#version' do
-    it 'returns the Oracle connection' do
-      connection.version.should match /11\.2\.0.*/
-    end
+    let(:subject) { connection.version }
+    let(:expected) { /11\.2\.0.*/ }
+    let(:use_match_matcher) { true }
+
+    it_should_behave_like 'a well-behaved database query'
   end
 
   describe "#stream_sql" do

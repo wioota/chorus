@@ -23,7 +23,7 @@ class JdbcConnection < DataSourceConnection
   end
 
   def version
-    with_connection { |connection| connection.version }
+    with_connection { |connection| connection.version }.slice(0,255)
   end
 
   def schemas
