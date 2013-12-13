@@ -5,17 +5,20 @@ module Sequel
     class Database < Sequel::Database
       def schemas
         ss = []
-        m = output_identifier_meth
-        metadata(:getSchemas){ |h| ss << m.call(h[:table_schem]) }
+        metadata(:getSchemas){ |h| ss << h[:table_schem] }
         ss
       end
 
       def tables(opts={})
-        get_tables_s('TABLE', opts)
+        get_tables_s(%w(TABLE), opts)
       end
 
       def views(opts={})
-        get_tables_s('VIEW', opts)
+        get_tables_s(%w(VIEW), opts)
+      end
+
+      def tables_and_views(opts={})
+        get_tables_s(%w(TABLE VIEW), opts)
       end
 
       def version
@@ -26,9 +29,9 @@ module Sequel
 
       private
 
-      def get_tables_s(type, opts)
+      def get_tables_s(types, opts)
         ts = []
-        metadata(:getTables, nil, opts[:schema_name], opts[:table_name], [type].to_java(:string)){ |h| ts << { :name => h[:table_name], :type => table_type?(h[:table_type])} }
+        metadata(:getTables, nil, opts[:schema_name], opts[:table_name], types.to_java(:string)){ |h| ts << { :name => h[:table_name], :type => table_type?(h[:table_type])} }
         ts
       end
 

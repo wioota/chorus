@@ -31,7 +31,7 @@ class JdbcConnection < DataSourceConnection
   end
 
   def schema_exists?(name)
-    schemas.include? name.to_sym
+    schemas.include? name
   end
 
   def table_exists?(name)
@@ -43,7 +43,7 @@ class JdbcConnection < DataSourceConnection
   end
 
   def datasets(options={})
-    with_connection { |connection| connection.tables(:schema_name => schema_name) | connection.views(:schema_name => schema_name) }
+    with_connection { |connection| connection.tables_and_views(:schema_name => schema_name) }
   end
 
   def datasets_count(options={})

@@ -28,7 +28,7 @@ describe JdbcConnection, :jdbc_integration do
       SQL
     }
 
-    let(:expected) { db.fetch(schema_list_sql).all.map { |row| row[:name].to_sym } }
+    let(:expected) { db.fetch(schema_list_sql).all.map { |row| row[:name] } }
     let(:subject) { connection.schemas }
     let(:use_match_matcher) { true }
 
