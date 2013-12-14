@@ -56,38 +56,27 @@ describe JdbcConnection, :jdbc_integration do
     let(:connection) { JdbcConnection.new(data_source, account, options.merge(:schema => schema_name)) }
 
     describe '#datasets' do
-      let(:dataset_list_sql) {
-        <<-SQL
-        SELECT tablename AS name, tablekind as ttype FROM dbc.tables where databasename = '#{schema_name}' ORDER BY name
-        SQL
-      }
 
-      let(:expected) { db.fetch(dataset_list_sql).map { |row| {:name => row[:name].strip, :type => row[:ttype] == 'T' ? 't' : 'v' } } }
-      let(:subject) { connection.datasets }
-      let(:use_match_matcher) { true }
+      context 'fetching all tables and views' do
+        let(:dataset_list_sql) {
+          <<-SQL
+          SELECT tablename AS name, tablekind as ttype FROM dbc.tables where databasename = '#{schema_name}' ORDER BY name
+          SQL
+        }
 
-      it_should_behave_like 'a well-behaved database query'
+        let(:expected) { db.fetch(dataset_list_sql).map { |row| {:name => row[:name].strip, :type => row[:ttype] == 'T' ? 't' : 'v' } } }
+        let(:subject) { connection.datasets }
+        let(:use_match_matcher) { true }
 
-      #context 'when a limit is passed' do
-      #  let(:dataset_list_sql) {
-      #    <<-SQL
-      #  SELECT * FROM (
-      #    SELECT * FROM (
-      #      SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}'
-      #      UNION
-      #      SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}'
-      #    )
-      #    ORDER BY name
-      #  )
-      #  WHERE rownum <= 2
-      #    SQL
-      #  }
-      #
-      #  let(:expected) { db.fetch(dataset_list_sql).all }
-      #  let(:subject) { connection.datasets(:limit => 2) }
-      #
-      #  it_should_behave_like 'a well-behaved database query'
-      #end
+        it_should_behave_like 'a well-behaved database query'
+      end
+
+      context 'when a limit is passed' do
+        let(:expected) { 2 }
+        let(:subject) { connection.datasets(:limit => 2).size }
+
+        it_should_behave_like 'a well-behaved database query'
+      end
 
       #context 'when a name filter is passed' do
       #  let(:subject) { connection.datasets(:name_filter => name_filter) }

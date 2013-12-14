@@ -43,7 +43,10 @@ class JdbcConnection < DataSourceConnection
   end
 
   def datasets(options={})
-    with_connection { |connection| connection.tables_and_views(:schema_name => schema_name) }
+    with_connection do |connection|
+      res = connection.tables_and_views(:schema_name => schema_name)
+      res.take(options[:limit] || res.size)
+    end
   end
 
   def datasets_count(options={})
@@ -52,7 +55,7 @@ class JdbcConnection < DataSourceConnection
 
   def metadata_for_dataset(dataset_name)
     column_count = with_connection { |connection| connection.schema(dataset_name, {:schema => schema_name}).size }
-    { :column_count => column_count }
+    {:column_count => column_count}
   end
 
   def column_info(dataset_name, setup_sql)
