@@ -8,6 +8,9 @@ class WorkspaceDatasetsController < ApplicationController
     params[:name_filter] = params[:name_pattern]
     params[:total_entries] = workspace.dataset_count(current_user, params)
 
+    pa '#'*500
+    pa params
+
     datasets = workspace.datasets(current_user, params).includes(Dataset.eager_load_associations).list_order
 
     present paginate(datasets), :presenter_options => { :workspace => workspace }

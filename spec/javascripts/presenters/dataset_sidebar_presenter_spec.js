@@ -337,6 +337,21 @@ describe("chorus.presenters.DatasetSidebar", function() {
         });
     });
 
+    context("with a JDBC dataset", function() {
+        beforeEach(function() {
+            var resource = backboneFixtures.jdbcDataset();
+            this.presenter = new chorus.presenters.DatasetSidebar(resource);
+        });
+
+        it("cannot export", function() {
+            expect(this.presenter.canExport()).toBeFalsy();
+        });
+
+        it("is associable", function () {
+            expect(this.presenter.canAssociate()).toBeTruthy();
+        });
+    });
+
     context("with a chorus view", function() {
         beforeEach(function() {
             var resource = backboneFixtures.workspaceDataset.chorusView();

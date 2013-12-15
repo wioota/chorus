@@ -331,7 +331,7 @@ describe Workspace do
         workspace.datasets(user).to_a.should include(hdfs_dataset)
       end
 
-      context "when the workspace has associated datasets and a database_id is given" do
+      context 'when the workspace has associated datasets' do
         let!(:chorus_view) { FactoryGirl.create(:chorus_view, :workspace => workspace, :schema => dataset1.schema) }
         let(:dataset1) { datasets(:table) }
         let(:dataset2) { datasets(:searchquery_table) }
@@ -341,8 +341,25 @@ describe Workspace do
           workspace.source_datasets << dataset2
         end
 
-        it "filters for given database" do
-          workspace.datasets(user, {:database_id => dataset1.schema.database.id}).should =~ [dataset1, chorus_view]
+        context 'and a database id is given' do
+          it 'filters for the given database' do
+            workspace.datasets(user, {:database_id => dataset1.schema.database.id}).should =~ [dataset1, chorus_view]
+          end
+        end
+
+        context 'and filtering for SOURCE_TABLE' do
+          let(:jdbc_table) { datasets(:jdbc_table) }
+          let(:oracle_table) { datasets(:oracle_table) }
+
+          before do
+            workspace.source_datasets << jdbc_table
+            workspace.source_datasets << oracle_table
+          end
+
+          it 'includes the source datasets' do
+            datasets = workspace.datasets(user, {:entity_subtype => 'SOURCE_TABLE'})
+            datasets.map(&:id).should =~ [source_table, dataset1, dataset2, jdbc_table, oracle_table].map(&:id)
+          end
         end
       end
     end

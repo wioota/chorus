@@ -130,15 +130,15 @@ class Workspace < ActiveRecord::Base
     database_id = options[:database_id]
 
     scoped_datasets = scope_to_database(source_datasets, database_id)
-    scoped_source_datasets = scope_to_database(source_datasets, database_id).where('schema_id != ?', sandbox_id)
+    scoped_source_datasets = sandbox_id ? scoped_datasets.where('schema_id != ?', sandbox_id) : scoped_datasets
     scoped_directly_associated_datasets = scope_to_database(directly_associated_datasets, database_id)
 
     datasets = []
     case entity_subtype
-      when "SANDBOX_TABLE", "SANDBOX_DATASET" then
-      when "CHORUS_VIEW" then
+      when 'SANDBOX_TABLE', 'SANDBOX_DATASET' then
+      when 'CHORUS_VIEW' then
         datasets << chorus_views
-      when "SOURCE_TABLE", "NON_CHORUS_VIEW" then
+      when 'SOURCE_TABLE', 'NON_CHORUS_VIEW' then
         datasets << scoped_source_datasets
       else
         datasets << scoped_datasets << scoped_directly_associated_datasets
@@ -156,7 +156,7 @@ class Workspace < ActiveRecord::Base
   end
 
   def with_filtered_datasets(user, options = {})
-    options.merge!(:tables_only => true) if options[:entity_subtype] == "SANDBOX_TABLE"
+    options.merge!(:tables_only => true) if options[:entity_subtype] == 'SANDBOX_TABLE'
 
     account = sandbox && sandbox.database.account_for_user(user)
 
