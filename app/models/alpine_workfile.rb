@@ -87,9 +87,6 @@ class AlpineWorkfile < Workfile
   end
 
   def copy(user, workspace, new_file_name = nil)
-    pa '$$'*200
-    pa 'copy pre workfile_execution_locations'
-    pa workfile_execution_locations
     new_workfile = super
     new_workfile.dataset_ids = []
     workfile_execution_locations.each do |location|
@@ -134,11 +131,6 @@ class AlpineWorkfile < Workfile
   end
 
   def determine_execution_location
-    pa '!!'*200
-    pa 'determine_execution_location'
-    pa 'datasets'
-    pa dataset_ids
-
     unless datasets.empty?
       sources = datasets.map(&:execution_location)
 
@@ -146,7 +138,6 @@ class AlpineWorkfile < Workfile
         workfile_execution_locations.create!(:execution_location => source)
       end
     end
-    pa workfile_execution_locations
   end
 
   def notify_alpine_of_deletion
