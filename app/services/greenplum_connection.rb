@@ -32,15 +32,6 @@ class GreenplumConnection < DataSourceConnection
   class ObjectNotFound < StandardError; end
   class SqlPermissionDenied < StandardError; end
 
-  def disconnect
-    @connection.disconnect if @connection
-    @connection = nil
-  end
-
-  def connected?
-    !!@connection
-  end
-
   def set_timeout(timeout, statement)
     @connection.send(:statement, statement.connection) do |timeout_statement|
       timeout_statement.execute "SET statement_timeout TO #{(timeout * 1000).to_i}"
@@ -89,10 +80,7 @@ class GreenplumConnection < DataSourceConnection
   end
 
   def db_options
-    options = {
-      :user => @account.db_username,
-      :password => @account.db_password
-    }
+    options = {}
     options.merge!({
       :jdbc_properties => {
          :sslmode => 'require'

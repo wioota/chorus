@@ -38,15 +38,6 @@ class OracleConnection < DataSourceConnection
     raise DriverNotConfigured.new('Oracle') unless ChorusConfig.instance.oracle_configured?
   end
 
-  def connected?
-    !!@connection
-  end
-
-  def disconnect
-    @connection.disconnect if @connection
-    @connection = nil
-  end
-
   def set_timeout(timeout, statement)
     statement.set_query_timeout(timeout)
   end
@@ -56,11 +47,7 @@ class OracleConnection < DataSourceConnection
   end
 
   def db_options
-    super.merge({
-        :identifier_input_method => nil,
-        :user => @account.db_username,
-        :password => @account.db_password
-    })
+    super.merge :identifier_input_method => nil
   end
 
   def version

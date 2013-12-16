@@ -6,20 +6,7 @@ class JdbcConnection < DataSourceConnection
   end
 
   def db_options
-    super.merge({
-      :identifier_output_method => nil,
-      :user => @account.db_username,
-      :password => @account.db_password
-    })
-  end
-
-  def connected?
-    !!@connection
-  end
-
-  def disconnect
-    @connection.disconnect if @connection
-    @connection = nil
+    super.merge :identifier_output_method => nil
   end
 
   def version

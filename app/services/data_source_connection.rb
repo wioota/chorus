@@ -1,7 +1,7 @@
 require 'sequel'
 
 class DataSourceConnection
-  LIKE_ESCAPE_CHARACTER = "@"
+  LIKE_ESCAPE_CHARACTER = '@'
 
   class Error < StandardError
     attr_reader :error_type
@@ -81,6 +81,15 @@ class DataSourceConnection
     end
   end
 
+  def connected?
+    !!@connection
+  end
+
+  def disconnect
+    @connection.disconnect if @connection
+    @connection = nil
+  end
+
   def fetch(sql, parameters={})
     with_connection { @connection.fetch(sql, parameters).all }
   end
@@ -153,7 +162,11 @@ class DataSourceConnection
   private
 
   def db_options
-    options = {:login_timeout => 10}
+    options = {
+        :user => @account.db_username,
+        :password => @account.db_password,
+        :login_timeout => 10
+    }
     options.merge!({ :logger => @options[:logger], :sql_log_level => :debug }) if @options[:logger]
     options
   end
