@@ -16,4 +16,8 @@ class JdbcDataset < RelationalDataset
   def found_in_workspace_id
     bound_workspace_ids
   end
+
+  def all_rows_sql(limit = nil)
+    Arel::Table.new(%("#{schema_name}"."#{name}")).project('*').to_sql
+  end
 end

@@ -160,7 +160,7 @@ describe Dataset do
   describe "#all_rows_sql" do
     it "returns the correct sql" do
       dataset = datasets(:table)
-      dataset.all_rows_sql().strip.should == %Q{SELECT * FROM "#{dataset.name}"}
+      dataset.all_rows_sql.strip.should == %Q{SELECT * FROM "#{dataset.name}"}
     end
 
     context "with a limit" do

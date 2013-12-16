@@ -8,4 +8,12 @@ describe JdbcDataset do
       dataset.data_source_account_ids.should == dataset.schema.data_source_account_ids
     end
   end
+
+  describe '#all_rows_sql' do
+    let(:expected) { %{SELECT * FROM "#{dataset.schema.name}"."#{dataset.name}"} }
+
+    it 'builds generic select * from qualified table name' do
+      dataset.all_rows_sql.strip.should == expected
+    end
+  end
 end

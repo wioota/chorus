@@ -53,6 +53,10 @@ class JdbcConnection < DataSourceConnection
     end
   end
 
+  def create_sql_result(warnings, result_set)
+    JdbcSqlResult.new(:warnings => warnings, :result_set => result_set)
+  end
+
   def self.error_class
     JdbcConnection::DatabaseError
   end

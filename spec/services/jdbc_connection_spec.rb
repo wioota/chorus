@@ -313,4 +313,66 @@ describe JdbcConnection, :jdbc_integration do
 
     it_should_behave_like 'a well-behaved database query'
   end
+
+  describe '#stream_sql' do
+    let(:sql) { %(SELECT * from "#{JdbcIntegration.schema_name}".NEWTABLE) }
+
+    let(:subject) { connection.stream_sql(sql) { true } }
+    let(:expected) { true }
+
+    it_behaves_like 'a well-behaved database query'
+
+    it 'streams all rows of the results' do
+      bucket = []
+      connection.stream_sql(sql) { |row| bucket << row }
+
+      bucket.length.should == 10
+      bucket.each_with_index do |row, index|
+        row[:rowname].should == "row_#{row[:id]}"
+      end
+    end
+
+    it 'stores the statement through the cancelable_query' do
+      cancelable_query = Object.new
+      mock(cancelable_query).store_statement.with_any_args
+      connection.stream_sql(sql, {}, cancelable_query) {}
+    end
+
+    context 'when a limit is provided' do
+      it 'only processes part of the results' do
+        bucket = []
+        connection.stream_sql(sql, {:limit => 1}) { |row| bucket << row }
+
+        bucket.size.should == 1
+        row = bucket.first
+        row[:rowname].should == "row_#{row[:id]}"
+      end
+    end
+  end
+
+  describe '#prepare_and_execute_statement' do
+    let(:sql) { %(SELECT * from "#{JdbcIntegration.schema_name}".NEWTABLE) }
+
+    it 'stores the statement through the cancelable_query' do
+      cancelable_query = Object.new
+      mock(cancelable_query).store_statement.with_any_args
+      connection.prepare_and_execute_statement(sql, {}, cancelable_query)
+    end
+  end
+
+  describe '#create_sql_result' do
+    it 'returns a JdbcSqlResult' do
+      connection.create_sql_result('warnings', nil).should be_a JdbcSqlResult
+    end
+  end
+
+  describe '#set_timeout' do
+    let (:statement) { Object.new }
+
+    it 'calls setQueryTimeout on statement' do
+      mock(statement).set_query_timeout(123)
+      connection.set_timeout(123, statement)
+    end
+
+  end
 end

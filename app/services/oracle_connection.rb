@@ -38,10 +38,6 @@ class OracleConnection < DataSourceConnection
     raise DriverNotConfigured.new('Oracle') unless ChorusConfig.instance.oracle_configured?
   end
 
-  def set_timeout(timeout, statement)
-    statement.set_query_timeout(timeout)
-  end
-
   def db_url
     "jdbc:oracle:thin:@//#{@data_source.host}:#{@data_source.port}/#{@data_source.db_name}"
   end

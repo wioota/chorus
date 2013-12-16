@@ -155,6 +155,10 @@ class DataSourceConnection
     disconnect
   end
 
+  def set_timeout(timeout, statement)
+    statement.set_query_timeout(timeout)
+  end
+
   def self.error_class
     DataSourceConnection::Error
   end
