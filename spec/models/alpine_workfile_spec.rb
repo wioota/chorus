@@ -76,6 +76,32 @@ describe AlpineWorkfile do
         end
       end
     end
+
+    context 'updating an existing workfile' do
+      let(:workfile) { workfiles(:alpine_flow) }
+      context 'with :execution_locations' do
+        let(:gpdb) { gpdb_databases(:default) }
+        let(:hdfs) { hdfs_data_sources(:hadoop) }
+        let(:oracle) { data_sources(:oracle) }
+        let(:jdbc) { data_sources(:jdbc) }
+        let(:all_locations) { [gpdb, hdfs, oracle, jdbc] }
+
+        let(:params) do
+          {:id => workfile.id}
+        end
+
+        before do
+          params[:execution_locations] = all_locations.map do |source|
+            {:id => source.id, :entity_type => source.entity_type_name}
+          end
+        end
+
+        it 'has the execution locations specified' do
+          workfile.update_from_params! params
+          workfile.execution_locations.map(&:id).should =~ all_locations.map(&:id)
+        end
+      end
+    end
   end
 
   describe "validations" do

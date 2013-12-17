@@ -123,6 +123,8 @@ class AlpineWorkfile < Workfile
                    HdfsDataSource.find location[:id]
                  when 'oracle_data_source' then
                    OracleDataSource.find location[:id]
+                 when 'jdbc_data_source' then
+                   JdbcDataSource.find location[:id]
                  else #nil
                end
 
