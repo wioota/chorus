@@ -20,4 +20,8 @@ class JdbcDataset < RelationalDataset
   def all_rows_sql(limit = nil)
     Arel::Table.new(%("#{schema_name}"."#{name}")).project('*').to_sql
   end
+
+  def execution_location
+    data_source
+  end
 end

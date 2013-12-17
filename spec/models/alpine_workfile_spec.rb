@@ -197,14 +197,15 @@ describe AlpineWorkfile do
         end
       end
 
-      context "with multiple datasources" do
+      context 'with one from each type of supported source' do
         let(:datasetA) { datasets(:hadoop) }
         let(:datasetB) { FactoryGirl.create(:hdfs_dataset) }
         let(:datasetC) { datasets(:oracle_table) }
-        let(:params) { valid_params.merge({:dataset_ids => [datasetA.id, datasetB.id, datasetC.id]}) }
+        let(:datasetD) { datasets(:jdbc_table) }
+        let(:params) { valid_params.merge({:dataset_ids => [datasetA.id, datasetB.id, datasetC.id, datasetD.id]}) }
 
         it 'has multiple execution locations' do
-          model.execution_locations.should =~ [datasetA.hdfs_data_source, datasetB.hdfs_data_source, datasetC.execution_location]
+          model.execution_locations.should =~ [datasetA.execution_location, datasetB.execution_location, datasetC.execution_location, datasetD.execution_location]
         end
       end
     end
@@ -269,9 +270,10 @@ describe AlpineWorkfile do
     let(:table) { datasets(:table) }
     let(:hdfs_set) { datasets(:hadoop) }
     let(:oracle_set) { datasets(:oracle_table) }
+    let(:jdbc_set) { datasets(:jdbc_table) }
 
     it "presents dataset ids categorized by type" do
-      workfile.categorized_dataset_ids.should == {:dataset_ids => [table.id], :hdfs_dataset_ids => [hdfs_set.id], :oracle_dataset_ids => [oracle_set.id]}
+      workfile.categorized_dataset_ids.should == {:dataset_ids => [table.id], :hdfs_dataset_ids => [hdfs_set.id], :oracle_dataset_ids => [oracle_set.id], :jdbc_dataset_ids => [jdbc_set.id]}
     end
   end
 

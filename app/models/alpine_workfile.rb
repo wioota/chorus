@@ -47,11 +47,12 @@ class AlpineWorkfile < Workfile
   end
 
   def categorized_dataset_ids
-    datasets.reduce({:hdfs_dataset_ids => [], :dataset_ids => [], :oracle_dataset_ids => []}) do |obj, dataset|
+    datasets.reduce({:hdfs_dataset_ids => [], :dataset_ids => [], :oracle_dataset_ids => [], :jdbc_dataset_ids => []}) do |obj, dataset|
       case dataset
         when HdfsDataset then obj[:hdfs_dataset_ids] << dataset.id
         when GpdbDataset then obj[:dataset_ids] << dataset.id
         when OracleDataset then obj[:oracle_dataset_ids] << dataset.id
+        when JdbcDataset then obj[:jdbc_dataset_ids] << dataset.id
         else #ignore
       end
       obj

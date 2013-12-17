@@ -16,4 +16,10 @@ describe JdbcDataset do
       dataset.all_rows_sql.strip.should == expected
     end
   end
+
+  describe '#execution_location' do
+    it 'is the jdbc data source' do
+      dataset.execution_location.should == dataset.data_source
+    end
+  end
 end

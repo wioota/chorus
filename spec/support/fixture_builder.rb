@@ -116,7 +116,7 @@ FixtureBuilder.configure do |fbuilder|
     jdbc_data_source = FactoryGirl.create(:jdbc_data_source, :name => 'jdbc', :owner => owner)
     jdbc_schema = FactoryGirl.create(:jdbc_schema, :name => 'jdbc', :data_source => jdbc_data_source)
     FactoryGirl.create(:jdbc_schema, :name => 'jdbc_empty', :data_source => jdbc_data_source)
-    FactoryGirl.create(:jdbc_table, :name => 'jdbc_table', :schema => jdbc_schema)
+    jdbc_table = FactoryGirl.create(:jdbc_table, :name => 'jdbc_table', :schema => jdbc_schema)
     FactoryGirl.create(:jdbc_view, :name => 'jdbc_view', :schema => jdbc_schema)
 
     hdfs_data_source = HdfsDataSource.create!({:name => 'searchquery_hadoop', :description => 'searchquery for the hadoop data source', :host => 'hadoop.example.com', :port => '1111', :owner => admin, :hdfs_version => 'Pivotal HD 1.0'}, :without_protection => true)
@@ -316,7 +316,7 @@ FixtureBuilder.configure do |fbuilder|
     oracle_work_flow.workfile_execution_locations.create!(execution_location: oracle_data_source)
 
     FactoryGirl.create(:work_flow_with_all_data_sources, :file_name => 'multiple_data_source_workflow', :workspace => public_workspace, :owner => owner)
-    FactoryGirl.create(:work_flow, :file_name => 'multiple_dataset_workflow', :dataset_ids => [default_table.id, hadoop_dadoop.id, oracle_table.id], :workspace => public_workspace, :owner => owner)
+    FactoryGirl.create(:work_flow, :file_name => 'multiple_dataset_workflow', :dataset_ids => [default_table.id, hadoop_dadoop.id, oracle_table.id, jdbc_table.id], :workspace => public_workspace, :owner => owner)
 
     Events::WorkfileResult.by(owner).add(:workfile => work_flow, :result_id => "1", :workspace => work_flow.workspace)
 
