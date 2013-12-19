@@ -91,7 +91,7 @@ describe ChorusInstaller do
 
     context "when not upgrading" do
       it "should do a non-upgrade install" do
-        dont_allow(installer).prompt("Existing version of Chorus detected. Upgrading will restart services.  Continue now? [y]:")
+        dont_allow(installer).prompt("Existing version of Chorus detected. Upgrading will stop services.  Continue now? [y]:")
         installer.get_destination_path
         installer.upgrade_existing?.should be_false
       end
