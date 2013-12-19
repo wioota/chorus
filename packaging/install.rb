@@ -21,13 +21,14 @@ if __FILE__ == $0
     })
 
     installer.install
-    installer.startup
     puts "Installation completed."
-    unless installer.upgrade_existing?
-      puts "To start Chorus, run the following commands:"
-      puts "source #{installer.destination_path}/chorus_path.sh"
-      puts "chorus_control.sh start"
+    if installer.upgrade_existing?
+      puts ''
+      puts 'Confirm custom configuration settings as directed in the installation guide before restarting Chorus.'
     end
+    puts "To start Chorus, run the following commands:"
+    puts "source #{installer.destination_path}/chorus_path.sh"
+    puts "chorus_control.sh start"
   rescue InstallerErrors::InstallationFailed => e
     puts "An error has occurred. Trying to back out and restore previous state.."
     installer.remove_and_restart_previous! unless keep
