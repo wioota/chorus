@@ -21,7 +21,7 @@ chorus.models.WorkFlowResult = chorus.models.Base.include(
     },
 
     showUrl: function() {
-        return chorus.models.Config.instance().get('workflowUrl') + this.url();
+        return this.url();
     },
 
     useExternalLink: function() {

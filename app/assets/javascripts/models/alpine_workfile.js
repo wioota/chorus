@@ -51,10 +51,7 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
     },
 
     alpineUrlBase: function() {
-        return URI({
-            hostname: chorus.models.Config.instance().get('workflowUrl'),
-            path: "/alpinedatalabs/main/chorus.do"
-        });
+        return URI({ path: "/alpinedatalabs/main/chorus.do" });
     },
 
     isAlpine: function() {

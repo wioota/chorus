@@ -28,10 +28,8 @@ describe ChorusConfigPresenter, :type => :view do
     end
 
     it "includes the work flow configuration" do
-      stub(config).[]('work_flow.url') { 'http://test.example.com:8080' }
       stub(config).[]('work_flow.enabled') { true }
       hash[:workflow_configured].should be_true
-      hash[:workflow_url].should == 'http://test.example.com:8080'
     end
 
     it "includes the gnip_configured? value" do

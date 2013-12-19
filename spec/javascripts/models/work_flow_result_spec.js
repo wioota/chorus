@@ -4,11 +4,10 @@ describe('chorus.models.WorkFlowResult', function() {
     });
 
     it("has a showUrl", function() {
-        var addonUrl = "/alpinedatalabs/main/chorus.do?method=showResults&session_id=" +
+        var path = "/alpinedatalabs/main/chorus.do?method=showResults&session_id=" +
             chorus.session.get("sessionId") +
             "&workfile_id=2&result_id=0.12334455634";
-        var baseUrl = chorus.models.Config.instance().get('workflowUrl');
-        expect(this.model.showUrl()).toBe(baseUrl + addonUrl);
+        expect(this.model.showUrl()).toBe(path);
     });
 
     it("has an iconUrl", function() {
