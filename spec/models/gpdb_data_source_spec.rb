@@ -324,6 +324,7 @@ describe GpdbDataSource do
   end
 
   it_should_behave_like :data_source_with_access_control
+  it_should_behave_like :data_source_with_db_name_port_validations
 
   it_behaves_like(:data_source_with_update) do
     let(:data_source) { data_sources(:default) }

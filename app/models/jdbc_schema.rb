@@ -7,6 +7,9 @@ class JdbcSchema < Schema
 
   validates :data_source, :presence => true
 
+  def self.destroy_schemas(data_source_id)
+    JdbcSchema.where(:parent_id => data_source_id).destroy_all
+  end
 
   def class_for_type(type)
     type == 't' ? JdbcTable : JdbcView

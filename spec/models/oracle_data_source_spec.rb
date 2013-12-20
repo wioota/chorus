@@ -50,6 +50,7 @@ describe OracleDataSource do
   end
 
   it_should_behave_like :data_source_with_access_control
+  it_should_behave_like :data_source_with_db_name_port_validations
 
   describe "DataSource Integration", :oracle_integration do
     let(:data_source) { OracleIntegration.real_data_source }

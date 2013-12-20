@@ -44,4 +44,14 @@ describe("chorus.alerts.DataSourceDelete", function() {
             expect(this.alert.additionalContext().text).toMatchTranslation('data_sources.delete.text.oracle_data_source');
         });
     });
+
+    describe("for a jdbc data source", function() {
+        beforeEach(function() {
+            this.alert.model = backboneFixtures.jdbcDataSource();
+        });
+
+        it("has the correct text", function() {
+            expect(this.alert.additionalContext().text).toMatchTranslation('data_sources.delete.text.jdbc_data_source');
+        });
+    });
 });

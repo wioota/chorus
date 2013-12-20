@@ -6,8 +6,6 @@ class OracleDataSource < ConcreteDataSource
   has_many :imports_as_source, :through => :datasets, :source => :imports
   has_many :workfile_execution_locations, :foreign_key => :execution_location_id, :conditions => { :execution_location_type => 'DataSource' }, :dependent => :destroy
 
-  after_destroy :enqueue_destroy_schemas
-
   def self.create_for_user(user, params)
     user.oracle_data_sources.create!(params) do |data_source|
       data_source.shared = params[:shared]

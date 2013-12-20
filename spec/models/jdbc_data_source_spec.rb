@@ -15,6 +15,24 @@ describe JdbcDataSource do
     end
   end
 
+  describe 'destroy' do
+    it 'enqueues a destroy_schemas job' do
+      mock(QC.default_queue).enqueue_if_not_queued('JdbcSchema.destroy_schemas', data_source.id)
+      data_source.destroy
+    end
+
+    it 'removes itself from the execution location field of any workfiles it owns' do
+      workfiles = data_source.workfile_execution_locations.all
+      workfiles.length.should > 0
+
+      expect {
+        data_source.destroy
+      }.to change { WorkfileExecutionLocation.where(execution_location_id: data_source.id, execution_location_type: data_source.class.base_class.name).count }.from(workfiles.length).to(0)
+    end
+  end
+
+  it_should_behave_like :data_source_with_access_control
+
   describe '#schemas' do
     let(:new_jdbc) { FactoryGirl.create(:jdbc_data_source) }
     let(:schema) { JdbcSchema.create!(:name => 'test_schema', :data_source => new_jdbc) }
@@ -82,6 +100,12 @@ describe JdbcDataSource do
         data_source.refresh_schemas
         data_source.refresh_schemas
       end
+    end
+  end
+
+  describe '.type_name' do
+    it 'is DataSource' do
+      subject.type_name.should == 'DataSource'
     end
   end
 end

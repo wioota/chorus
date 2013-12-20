@@ -80,8 +80,7 @@ shared_examples_for :data_source_with_access_control do
   end
 
   describe 'validations' do
-    it { should validate_presence_of(:name) }
-    it { should validate_presence_of :db_name }
+    it { should validate_presence_of :name  }
 
     it_should_behave_like "it validates with DataSourceNameValidator" do
       subject { FactoryGirl.create factory_name }
@@ -130,26 +129,6 @@ shared_examples_for :data_source_with_access_control do
         end
         data_source.name = 'purple_bandana'
         data_source.valid?.should be_true
-      end
-    end
-
-    describe "port" do
-      context "when port is not a number" do
-        it "fails validation" do
-          FactoryGirl.build(factory_name, :port => "1aaa1").should_not be_valid
-        end
-      end
-
-      context "when port is number" do
-        it "validates" do
-          FactoryGirl.build(factory_name, :port => "1111").should be_valid
-        end
-      end
-
-      context "when host is set but not port" do
-        it "fails validation" do
-          FactoryGirl.build(factory_name, :host => "1111", :port => "").should_not be_valid
-        end
       end
     end
   end
@@ -240,6 +219,33 @@ shared_examples_for :data_source_with_access_control do
     end
   end
 end
+
+shared_examples_for :data_source_with_db_name_port_validations do
+  let(:factory_name) { described_class.name.underscore.to_sym }
+
+  it { should validate_presence_of :db_name }
+
+  describe 'port' do
+    context 'when port is not a number' do
+      it 'fails validation' do
+        FactoryGirl.build(factory_name, :port => '1aaa1').should_not be_valid
+      end
+    end
+
+    context 'when port is number' do
+      it 'validates' do
+        FactoryGirl.build(factory_name, :port => '1111').should be_valid
+      end
+    end
+
+    context 'when host is set but not port' do
+      it 'fails validation' do
+        FactoryGirl.build(factory_name, :host => '1111', :port => "").should_not be_valid
+      end
+    end
+  end
+end
+
 
 shared_examples_for :data_source_with_update do
   before do

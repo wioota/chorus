@@ -1,4 +1,9 @@
 module SingleLevelDataSourceBehavior
+  extend ActiveSupport::Concern
+
+  included do
+    after_destroy :enqueue_destroy_schemas
+  end
 
   def refresh_databases(options={})
     refresh_schemas options

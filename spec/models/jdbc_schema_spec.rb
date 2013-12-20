@@ -46,6 +46,18 @@ describe JdbcSchema do
     end
   end
 
+  describe '.destroy_schemas' do
+    it 'destroys schemas for given data source id' do
+      data_source = data_sources(:jdbc)
+      data_source.destroy
+      schemas = data_source.schemas
+      schemas.should_not be_empty
+
+      JdbcSchema.destroy_schemas(data_source.id)
+      schemas.reload.should be_empty
+    end
+  end
+
   it_behaves_like 'a subclass of schema' do
     let(:schema) { schemas(:jdbc) }
   end
