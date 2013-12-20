@@ -46,11 +46,14 @@
                                 expected: expected
                             };
 
-                            var result = {
-                                pass: matcher.apply(fakeThis, Array.prototype.slice.call(arguments, 1))
-                            };
+                            var result;
+                            try {
+                                result = {pass: matcher.apply(fakeThis, Array.prototype.slice.call(arguments, 1))};
+                            } catch (e) {
+                                result = {pass: false, message: e};
+                            }
 
-                            if (!result.pass && fakeThis.message) {
+                            if (!result.pass && !result.message && fakeThis.message) {
                                 result.message = fakeThis.message()[0]; // wat
                             }
 
