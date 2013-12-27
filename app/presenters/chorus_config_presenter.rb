@@ -9,6 +9,7 @@ class ChorusConfigPresenter < Presenter
         :file_sizes_mb_user_icon => model['file_sizes_mb.user_icon'],
         :file_sizes_mb_workspace_icon => model['file_sizes_mb.workspace_icon'],
         :file_sizes_mb_attachment => model['file_sizes_mb.attachment'],
+        :file_sizes_mb_hd_upload => model['file_sizes_mb.hd_upload'],
         :visualization_overlay_string => model['visualization.overlay_string'].try(:[], 0...40),
         :kaggle_configured => model.kaggle_configured?,
         :gnip_configured => model.gnip_configured?,

@@ -68,11 +68,13 @@ describe ChorusConfigPresenter, :type => :view do
       stub(config).[]('file_sizes_mb.user_icon') { 5 }
       stub(config).[]('file_sizes_mb.workspace_icon') { 5 }
       stub(config).[]('file_sizes_mb.attachment') { 10 }
+      stub(config).[]('file_sizes_mb.hd_upload') { 3000 }
       hash[:file_sizes_mb_csv_imports].should == 1
       hash[:file_sizes_mb_workfiles].should == 10
       hash[:file_sizes_mb_user_icon].should == 5
       hash[:file_sizes_mb_workspace_icon].should == 5
       hash[:file_sizes_mb_attachment].should == 10
+      hash[:file_sizes_mb_hd_upload].should == 3000
     end
 
     it "includes the visualization overlay string" do

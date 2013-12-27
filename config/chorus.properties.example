@@ -66,6 +66,7 @@ file_sizes_mb.csv_imports = 100
 file_sizes_mb.user_icon = 5
 file_sizes_mb.workspace_icon = 5
 file_sizes_mb.attachment = 10
+file_sizes_mb.hd_upload = 4096
 
 # Log Settings
 

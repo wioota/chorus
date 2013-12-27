@@ -86,6 +86,7 @@ describe ConfigurationsController do
       stub(ChorusConfig.instance).[]('file_sizes_mb.user_icon') { 5 }
       stub(ChorusConfig.instance).[]('file_sizes_mb.workspace_icon') { 5 }
       stub(ChorusConfig.instance).[]('file_sizes_mb.attachment') { 10 }
+      stub(ChorusConfig.instance).[]('file_sizes_mb.hd_upload') { 4096 }
       get :show
       response.code.should == "200"
       decoded_response.file_sizes_mb_csv_imports.should == 1
@@ -93,6 +94,7 @@ describe ConfigurationsController do
       decoded_response.file_sizes_mb_user_icon.should == 5
       decoded_response.file_sizes_mb_workspace_icon.should == 5
       decoded_response.file_sizes_mb_attachment.should == 10
+      decoded_response.file_sizes_mb_hd_upload.should == 4096
     end
 
     it "includes the visualization overlay string" do
@@ -109,6 +111,7 @@ describe ConfigurationsController do
       stub(ChorusConfig.instance).[]('file_sizes_mb.user_icon') { 5 }
       stub(ChorusConfig.instance).[]('file_sizes_mb.workspace_icon') { 5 }
       stub(ChorusConfig.instance).[]('file_sizes_mb.attachment') { 10 }
+      stub(ChorusConfig.instance).[]('file_sizes_mb.hd_upload') { 4096 }
       stub(ChorusConfig.instance).[]('execution_timeout_in_minutes') { 15 }
       stub(ChorusConfig.instance).[]('default_preview_row_limit') { 20 }
       stub(ChorusConfig.instance).oracle_configured? { true }
