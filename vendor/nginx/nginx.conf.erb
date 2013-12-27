@@ -78,6 +78,10 @@ http {
         }
 
 <% if chorus_config['workflow.enabled'] %>
+        location ~ ^/alpinedatalabs/(js|css|images|resource)/ {
+            proxy_pass <%= chorus_config['workflow.url'] %>;
+        }
+
         location ~ ^/(alpinedatalabs|AlpineHadoop.*)/ {
             proxy_pass <%= chorus_config['workflow.url'] %>;
             proxy_redirect / /;
@@ -102,7 +106,7 @@ http {
             proxy_busy_buffers_size    64k;
             proxy_temp_file_write_size 64k;
 
-            # add_header Cache-Control no-cache,no-store;
+            expires epoch;
         }
 <% end %>
 
@@ -127,8 +131,6 @@ http {
             proxy_buffers              4 32k;
             proxy_busy_buffers_size    64k;
             proxy_temp_file_write_size 64k;
-
-            # add_header Cache-Control no-cache,no-store;
         }
 
         #error_page  404              /404.html;
