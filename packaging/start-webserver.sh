@@ -20,7 +20,7 @@ if ( test -f $NGINX_PID_FILE ) && ( kill -0 `cat $NGINX_PID_FILE` > /dev/null 2>
     log "nginx already running as process `cat $NGINX_PID_FILE`."
 else
     log "Writing nginx config..."
-    $RUBY vendor/nginx/generate_nginx_conf.rb
+    RAILS_ENV=$RAILS_ENV $RUBY vendor/nginx/generate_nginx_conf.rb
     cd $CHORUS_HOME/vendor/nginx/nginx_dist/
 
     OPENSSL_CONF=$OPENSSL_CONF ./$NGINX
