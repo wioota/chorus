@@ -86,7 +86,12 @@ http {
 
         location ~ ^/(alpinedatalabs|AlpineHadoop.*)/ {
             proxy_pass <%= chorus_config['workflow.url'] %>;
+            <% if chorus_config['ssl.enabled'] == true %>
+            proxy_redirect http:// https://;
+            <% else %>
             proxy_redirect / /;
+            <% end %>
+
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection $connection_upgrade;
