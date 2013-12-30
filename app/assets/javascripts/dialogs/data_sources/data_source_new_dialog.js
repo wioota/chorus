@@ -95,6 +95,8 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
             return chorus.models.GnipDataSource;
         } else if (dataSourceType === "register_existing_oracle") {
             return chorus.models.OracleDataSource;
+        } else if (dataSourceType === "register_existing_jdbc") {
+            return chorus.models.JdbcDataSource;
         } else {
             return chorus.models.GpdbDataSource;
         }

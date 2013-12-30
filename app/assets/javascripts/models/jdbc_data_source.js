@@ -16,9 +16,7 @@ chorus.models.JdbcDataSource = chorus.models.DataSource.extend({
         "dbUsername": "data_sources.dialog.database_account",
         "dbPassword": "data_sources.dialog.database_password",
         "name": "data_sources.dialog.data_source_name",
-        "host": "data_sources.dialog.host",
-        "port": "data_sources.dialog.port",
-        "dbName": "data_sources.dialog.database_name",
+        "host": "data_sources.dialog.jdbc_url",
         "description": "data_sources.dialog.description"
     },
 
@@ -30,5 +28,16 @@ chorus.models.JdbcDataSource = chorus.models.DataSource.extend({
 
     isSingleLevelSource: function () {
         return true;
+    },
+
+    declareValidations: function(newAttrs) {
+        this.require("name", newAttrs);
+        this.requirePattern("name", chorus.ValidationRegexes.MaxLength64(), newAttrs);
+
+        this.require("host", newAttrs);
+        if (this.isNew()) {
+            this.require("dbUsername", newAttrs);
+            this.require("dbPassword", newAttrs);
+        }
     }
 });

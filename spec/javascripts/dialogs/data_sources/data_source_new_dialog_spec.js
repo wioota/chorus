@@ -40,11 +40,12 @@ describe("chorus.dialogs.DataSourcesNew", function() {
             expect(this.dialog.$("label[for=data_sources]").text()).toMatchTranslation("datasource.type");
         });
 
-        it("has select box for 'Greenplum Database', 'HDFS Cluster'", function() {
-            expect(this.dialog.$("select.data_sources option").length).toBe(4);
+        it("has select box for 'Greenplum Database', 'HDFS Cluster', 'Hawq', and 'JDBC'", function() {
+            expect(this.dialog.$("select.data_sources option").length).toBe(5);
             expect(this.dialog.$("select.data_sources option").eq(1).text()).toMatchTranslation("datasource.greenplum");
             expect(this.dialog.$("select.data_sources option").eq(2).text()).toMatchTranslation("datasource.hdfs");
             expect(this.dialog.$("select.data_sources option").eq(3).text()).toMatchTranslation("datasource.hawq");
+            expect(this.dialog.$("select.data_sources option").eq(4).text()).toMatchTranslation("datasource.jdbc");
         });
 
         it("starts with no select box selected", function() {
@@ -270,6 +271,61 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                         expect(this.dialog.$(".register_existing_hdfs label[name=host]").text()).toMatchTranslation("data_sources.dialog.name_service");
                     });
                 });
+            });
+        });
+
+        describe("selecting the 'JDBC' option", function() {
+            beforeEach(function() {
+                this.dialog.$(".data_sources").val("register_existing_jdbc").change();
+            });
+
+            it("un-collapses the 'register an existing data source'", function() {
+                expect(this.dialog.$(".data_sources_form").not(".collapsed").length).toBe(1);
+                expect(this.dialog.$(".register_existing_jdbc")).not.toHaveClass("collapsed");
+            });
+
+            it("enables the submit button", function() {
+                expect(this.dialog.$("button.submit")).toBeEnabled();
+            });
+
+            it("labels the host field JDBC Url", function() {
+                expect(this.dialog.$(".register_existing_jdbc label[name=host]")).toContainTranslation("data_sources.dialog.jdbc_url");
+            });
+
+            describe("filling out the form", function() {
+                beforeEach(function() {
+                    this.dialog.$(".register_existing_jdbc input[name=name]").val("DataSource_Name");
+                    this.dialog.$(".register_existing_jdbc textarea[name=description]").val("DataSource Description");
+                    this.dialog.$(".register_existing_jdbc input[name=host]").val("foo.bar");
+                    this.dialog.$(".register_existing_jdbc input[name=dbUsername]").val("user");
+                    this.dialog.$(".register_existing_jdbc input[name=dbPassword]").val("my_password");
+
+                    this.dialog.$(".register_existing_jdbc input[name=name]").trigger("change");
+                });
+
+                it("gets the fieldValues", function() {
+                    var values = this.dialog.fieldValues();
+                    expect(values.name).toBe("DataSource_Name");
+                    expect(values.description).toBe("DataSource Description");
+                    expect(values.host).toBe("foo.bar");
+                    expect(values.dbUsername).toBe("user");
+                    expect(values.dbPassword).toBe("my_password");
+                });
+            });
+
+            context("changing to 'Select one' option", function() {
+                beforeEach(function() {
+                    this.dialog.$("select.data_sources").val("").change();
+                });
+
+                it("should hides all forms", function() {
+                    expect(this.dialog.$(".data_sources_form")).toHaveClass("collapsed");
+                });
+
+                it("should disable the submit button", function() {
+                    expect(this.dialog.$("button.submit")).toBeDisabled();
+                });
+
             });
         });
     });
@@ -621,6 +677,34 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                 expect(json["stream_url"]).toBe("gnip.com");
                 expect(json["username"]).toBe("gnip_user");
                 expect(json["password"]).toBe("my_password");
+            });
+
+            testUpload();
+        });
+
+        context("registering a jdbc database", function() {
+            beforeEach(function() {
+                this.dialog.$("select.data_sources").val("register_existing_jdbc").change();
+
+                var section = this.dialog.$(".register_existing_jdbc");
+                section.find("input[name=name]").val("DataSource_Name");
+                section.find("textarea[name=description]").val("DataSource Description");
+                section.find("input[name=host]").val("foo.bar");
+                section.find("input[name=dbUsername]").val("user");
+                section.find("input[name=dbPassword]").val("my_password");
+                section.find("input[name=name]").trigger("change");
+            });
+
+            it("sends the right params", function() {
+                this.dialog.$("button.submit").click();
+                var json = this.server.lastCreate().json()['data_source'];
+
+                expect(json['entity_type']).toBe('jdbc_data_source');
+                expect(json['name']).toBe("DataSource_Name");
+                expect(json['description']).toBe("DataSource Description");
+                expect(json['host']).toBe("foo.bar");
+                expect(json['db_username']).toBe("user");
+                expect(json['db_password']).toBe("my_password");
             });
 
             testUpload();
