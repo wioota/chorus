@@ -74,8 +74,7 @@
         <label>{{t "data_sources.dialog.description"}}</label>
         <textarea rows="3" name="description" tabindex="1"/>
 
-        <label class="required" name="host">{{t "data_sources.dialog.jdbc_url"}}</label>
-        <input type="text" name="host" value="{{host}}" tabindex="1"/>
+        {{jdbcDataSourceFields}}
 
         <label class="required db_username" name="dbUsername">{{t "data_sources.dialog.database_account"}}</label>
         <label class="required db_password" name="dbPassword">{{t "data_sources.dialog.database_password"}}</label>

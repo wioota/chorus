@@ -60,6 +60,7 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
         return {
             gpdbDataSource: this.model.isGreenplum(),
             gpdbOrOracleDataSource: this.model.isGreenplum() || this.model.isOracle(),
+            jdbcDataSource: this.model.isJdbc(),
             hdfsDataSource: this.model.constructorName === "HdfsDataSource",
             gnipDataSource: this.model.constructorName === "GnipDataSource",
             parameterCount: {count: this.model.numberOfConnectionParameters()}

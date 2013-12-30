@@ -91,4 +91,20 @@ describe('chorus.handlebarsHelpers.template', function() {
             expect(Handlebars.helpers.renderTemplate).toHaveBeenCalledWith("data_sources/gpdb_or_oracle_data_source_fields", {});
         });
     });
+
+    describe("jdbcDataSourceFields", function() {
+        beforeEach(function() {
+            spyOn(Handlebars.helpers, "renderTemplate");
+        });
+
+        it("renders the template for jdbc data source with the passed context", function() {
+            Handlebars.helpers.jdbcDataSourceFields({param_one: "param"});
+            expect(Handlebars.helpers.renderTemplate).toHaveBeenCalledWith("data_sources/jdbc_data_source_fields", {param_one: "param"});
+        });
+
+        it("renders the template for hdfs data source with an empty context when none is specified", function() {
+            Handlebars.helpers.jdbcDataSourceFields();
+            expect(Handlebars.helpers.renderTemplate).toHaveBeenCalledWith("data_sources/jdbc_data_source_fields", {});
+        });
+    });
 });

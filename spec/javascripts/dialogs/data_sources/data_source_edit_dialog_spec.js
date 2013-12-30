@@ -243,6 +243,34 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                 expect(this.dialog.$("input[type='password']")).toHaveAttr("autocomplete", "off");
             });
         });
+
+        describe('when editing a jdbc data source', function() {
+            beforeEach(function() {
+                this.dialog.model.set({
+                    entityType: "jdbc_data_source",
+                    name: "jdbc source",
+                    host: "jdbc:teradata://hostname/dbc",
+                    description: "it is a foobar"
+                });
+                this.dialog.render();
+            });
+
+            it("Field called 'name' should be editable and pre populated", function() {
+                expect(this.dialog.$("input[name=name]").val()).toBe("jdbc source");
+                expect(this.dialog.$("input[name=name]").prop("disabled")).toBeFalsy();
+            });
+
+            it("Field called 'description' should be editable and pre populated", function() {
+                expect(this.dialog.$("textarea[name=description]").val()).toBe("it is a foobar");
+                expect(this.dialog.$("textarea[name=description]").prop("disabled")).toBeFalsy();
+            });
+
+            it("Field called 'JDBC Url' should be editable and pre populated", function() {
+                expect(this.dialog.$("label[name=host]").text()).toMatchTranslation("data_sources.dialog.jdbc_url");
+                expect(this.dialog.$("input[name=host]").val()).toBe("jdbc:teradata://hostname/dbc");
+                expect(this.dialog.$("input[name=host]").prop("disabled")).toBeFalsy();
+            });
+        });
     });
 
     describe("saving", function() {
@@ -324,6 +352,21 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                 expect(this.dialog.model.get("jobTrackerPort")).toBe("3333");
                 expect(this.dialog.model.get("hdfsVersion")).toBe("Greenplum HD 1.1");
                 expect(this.dialog.model.get("highAvailability")).toBe(true);
+            });
+        });
+
+        context('with a jdbc data source', function() {
+            beforeEach(function() {
+                this.dialog.model = backboneFixtures.jdbcDataSource();
+                this.dialog.render();
+                this.dialog.$("input[name=name]").val("jdbcname");
+                this.dialog.$("input[name=host]").val("jdbchost");
+                this.dialog.$("button[type=submit]").submit();
+            });
+
+            it("updates the model", function() {
+                expect(this.dialog.model.get("name")).toBe("jdbcname");
+                expect(this.dialog.model.get("host")).toBe("jdbchost");
             });
         });
 

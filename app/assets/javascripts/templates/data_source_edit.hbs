@@ -22,6 +22,10 @@
         {{hdfsDataSourceFields this}}
     {{/if}}
 
+    {{#if jdbcDataSource}}
+        {{jdbcDataSourceFields this}}
+    {{/if}}
+
     {{#if gnipDataSource}}
         <label class="gnip_host required" name="streamUrl">
             {{t "data_sources.dialog.gnip_url"}}

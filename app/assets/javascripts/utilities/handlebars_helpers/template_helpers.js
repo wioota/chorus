@@ -71,6 +71,10 @@ chorus.handlebarsHelpers.template = {
         return Handlebars.helpers.renderTemplate("data_sources/gpdb_or_oracle_data_source_fields", context || {});
     },
 
+    jdbcDataSourceFields: function(context) {
+        return Handlebars.helpers.renderTemplate("data_sources/jdbc_data_source_fields", context || {});
+    },
+
     workflowResultLink: function (jobTaskResult) {
         var result = new chorus.models.WorkFlowResult({workfileId: jobTaskResult.payloadId, id: jobTaskResult.payloadResultId});
         return Handlebars.helpers.renderTemplate("workflow_result_link", { link: result.showUrl(), name: result.name() });
