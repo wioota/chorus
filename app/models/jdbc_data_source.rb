@@ -10,10 +10,6 @@ class JdbcDataSource < DataSource
     user.jdbc_data_sources.create!(data_source_hash, :as => :create)
   end
 
-  def valid_db_credentials?(account)
-    true
-  end
-
   private
 
   def connection_class
