@@ -49,7 +49,6 @@ group :integration do
 end
 
 group :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
-  gem 'rspec', :require => false
   gem 'rr', :require => false
   gem 'fuubar'
   gem 'factory_girl'
@@ -65,13 +64,12 @@ group :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
   gem 'poltergeist'
 end
 
-group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
+group :development, :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
   gem 'foreman', '>= 0.62',      :require => false
   gem 'rake',                    :require => false
-
+  gem 'rspec',                   :require => 'rspec/core/rake_task'
   gem 'jasmine', :github => 'pivotal/jasmine-gem'
   gem 'jasmine-core', :github => 'pivotal/jasmine'
-  gem 'rspec_api_documentation', :github => 'Chorus/rspec_api_documentation'
   gem 'sunspot_matchers'
   gem 'fixture_builder'
   gem 'ci_reporter', '>= 1.8.2'
@@ -79,6 +77,7 @@ group :test, :development, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
   gem 'fakeweb'
   gem 'sunspot_solr', :github => 'taktsoft/sunspot', :ref => '78717a33894271d012682dbe8902458badb0ca63' # https://github.com/sunspot/sunspot/pull/267
   gem 'backbone_fixtures_rails', :github => 'charleshansen/backbone_fixtures_rails'
+  gem 'rspec_api_documentation', :github => 'Chorus/rspec_api_documentation', :require => false
 end
 
 group :development do
