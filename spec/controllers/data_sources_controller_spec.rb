@@ -237,6 +237,9 @@ describe DataSourcesController do
 
     context 'for a JdbcDataSource' do
       let(:entity_type) { 'jdbc_data_source' }
+      before do
+        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
+      end
 
       it 'creates a new jdbc data source' do
         expect {
