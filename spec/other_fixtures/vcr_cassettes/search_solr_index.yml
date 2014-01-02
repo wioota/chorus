@@ -22,9 +22,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>1}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:17:24 GMT
+  recorded_at: Thu, 02 Jan 2014 23:22:01 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -67,9 +67,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:17:24 GMT
+  recorded_at: Thu, 02 Jan 2014 23:22:01 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -92,9 +92,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>9}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:17:24 GMT
+  recorded_at: Thu, 02 Jan 2014 23:22:01 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -117,9 +117,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>1}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:03 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:32 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -240,9 +240,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:05 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -265,9 +265,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:05 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -442,9 +442,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>11}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:05 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -467,9 +467,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>39}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>26}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:05 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:34 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -913,9 +913,9 @@ http_interactions:
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
-        >2candy</field><field name=\"data_source_account_ids_im\">1000018</field><field\
-        \ name=\"data_source_account_ids_im\">1000019</field><field name=\"data_source_account_ids_im\"\
-        >1000020</field><field name=\"found_in_workspace_id_im\">1000016</field><field\
+        >2candy</field><field name=\"data_source_account_ids_im\">1000020</field><field\
+        \ name=\"data_source_account_ids_im\">1000021</field><field name=\"data_source_account_ids_im\"\
+        >1000022</field><field name=\"found_in_workspace_id_im\">1000016</field><field\
         \ name=\"found_in_workspace_id_im\">1000017</field><field boost=\"1000000\"\
         \ name=\"name_texts\">2candy</field><field boost=\"1000\" name=\"database_name_texts\"\
         >gpdb_gill_local_test</field><field boost=\"1000\" name=\"table_description_texts\"\
@@ -931,8 +931,8 @@ http_interactions:
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
         >7_`~!@#$%^&amp;*()+=[]{}|\\;:',&lt;.&gt;/?</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">7_`~!@#$%^&amp;*()+=[]{}|\\;:',&lt;.&gt;/?</field><field\
         \ boost=\"1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field\
@@ -948,8 +948,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">allcaps_candy</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">allcaps_candy</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -965,8 +965,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">base_table1</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">base_table1</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -982,8 +982,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">base_table2</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">base_table2</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -999,8 +999,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">candy</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">candy</field><field boost=\"1000\"\
         \ name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -1016,8 +1016,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">candy_composite</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">candy_composite</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -1033,8 +1033,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">candy_empty</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">candy_empty</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -1050,8 +1050,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">candy_one_column</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">candy_one_column</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -1067,8 +1067,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">different_names_table</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">different_names_table</field><field\
         \ boost=\"1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field\
@@ -1084,8 +1084,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">different_names_table2</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">different_names_table2</field><field\
         \ boost=\"1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field\
@@ -1101,8 +1101,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">different_types_table</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">different_types_table</field><field\
         \ boost=\"1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field\
@@ -1118,8 +1118,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">external_web_table1</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">external_web_table1</field><field\
         \ boost=\"1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field\
@@ -1135,8 +1135,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">master_table1</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">master_table1</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -1152,8 +1152,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">parition_sales</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">parition_sales</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -1169,8 +1169,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">pg_all_types</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">pg_all_types</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -1186,8 +1186,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">second_candy_one_column</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">second_candy_one_column</field><field\
         \ boost=\"1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field\
@@ -1203,8 +1203,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">table_with_nulls</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">table_with_nulls</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -1220,8 +1220,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">view1</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">view1</field><field boost=\"1000\"\
         \ name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -1237,8 +1237,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">non_public_base_table1</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field boost=\"1000000\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field boost=\"1000000\"\
         \ name=\"name_texts\">non_public_base_table1</field><field boost=\"1000\"\
         \ name=\"database_name_texts\">gpdb_gill_local_test_priv</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
@@ -1253,8 +1253,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">table_in_public</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field boost=\"1000000\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field boost=\"1000000\"\
         \ name=\"name_texts\">table_in_public</field><field boost=\"1000\" name=\"\
         database_name_texts\">gpdb_gill_local_test</field><field boost=\"1000\" name=\"\
         table_description_texts\">bogus</field><field boost=\"1000\" name=\"schema_name_texts\"\
@@ -1276,9 +1276,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>14}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>107}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:09 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:38 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1293,9 +1293,9 @@ http_interactions:
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
-        >2candy</field><field name=\"data_source_account_ids_im\">1000018</field><field\
-        \ name=\"data_source_account_ids_im\">1000019</field><field name=\"data_source_account_ids_im\"\
-        >1000020</field><field boost=\"1000000\" name=\"name_texts\">2candy</field><field\
+        >2candy</field><field name=\"data_source_account_ids_im\">1000020</field><field\
+        \ name=\"data_source_account_ids_im\">1000021</field><field name=\"data_source_account_ids_im\"\
+        >1000022</field><field boost=\"1000000\" name=\"name_texts\">2candy</field><field\
         \ boost=\"1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">test_gpfdist_schema</field><field boost=\"\
@@ -1309,9 +1309,9 @@ http_interactions:
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
-        >allcaps_candy</field><field name=\"data_source_account_ids_im\">1000018</field><field\
-        \ name=\"data_source_account_ids_im\">1000019</field><field name=\"data_source_account_ids_im\"\
-        >1000020</field><field boost=\"1000000\" name=\"name_texts\">allcaps_candy</field><field\
+        >allcaps_candy</field><field name=\"data_source_account_ids_im\">1000020</field><field\
+        \ name=\"data_source_account_ids_im\">1000021</field><field name=\"data_source_account_ids_im\"\
+        >1000022</field><field boost=\"1000000\" name=\"name_texts\">allcaps_candy</field><field\
         \ boost=\"1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">test_gpfdist_schema</field><field boost=\"\
@@ -1325,9 +1325,9 @@ http_interactions:
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
-        >candy</field><field name=\"data_source_account_ids_im\">1000018</field><field\
-        \ name=\"data_source_account_ids_im\">1000019</field><field name=\"data_source_account_ids_im\"\
-        >1000020</field><field boost=\"1000000\" name=\"name_texts\">candy</field><field\
+        >candy</field><field name=\"data_source_account_ids_im\">1000020</field><field\
+        \ name=\"data_source_account_ids_im\">1000021</field><field name=\"data_source_account_ids_im\"\
+        >1000022</field><field boost=\"1000000\" name=\"name_texts\">candy</field><field\
         \ boost=\"1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">test_gpfdist_schema</field><field boost=\"\
@@ -1341,9 +1341,9 @@ http_interactions:
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
-        >candy_composite</field><field name=\"data_source_account_ids_im\">1000018</field><field\
-        \ name=\"data_source_account_ids_im\">1000019</field><field name=\"data_source_account_ids_im\"\
-        >1000020</field><field boost=\"1000000\" name=\"name_texts\">candy_composite</field><field\
+        >candy_composite</field><field name=\"data_source_account_ids_im\">1000020</field><field\
+        \ name=\"data_source_account_ids_im\">1000021</field><field name=\"data_source_account_ids_im\"\
+        >1000022</field><field boost=\"1000000\" name=\"name_texts\">candy_composite</field><field\
         \ boost=\"1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">test_gpfdist_schema</field><field boost=\"\
@@ -1357,9 +1357,9 @@ http_interactions:
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
-        >candy_empty</field><field name=\"data_source_account_ids_im\">1000018</field><field\
-        \ name=\"data_source_account_ids_im\">1000019</field><field name=\"data_source_account_ids_im\"\
-        >1000020</field><field boost=\"1000000\" name=\"name_texts\">candy_empty</field><field\
+        >candy_empty</field><field name=\"data_source_account_ids_im\">1000020</field><field\
+        \ name=\"data_source_account_ids_im\">1000021</field><field name=\"data_source_account_ids_im\"\
+        >1000022</field><field boost=\"1000000\" name=\"name_texts\">candy_empty</field><field\
         \ boost=\"1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">test_gpfdist_schema</field><field boost=\"\
@@ -1373,9 +1373,9 @@ http_interactions:
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
-        >candy_one_column</field><field name=\"data_source_account_ids_im\">1000018</field><field\
-        \ name=\"data_source_account_ids_im\">1000019</field><field name=\"data_source_account_ids_im\"\
-        >1000020</field><field boost=\"1000000\" name=\"name_texts\">candy_one_column</field><field\
+        >candy_one_column</field><field name=\"data_source_account_ids_im\">1000020</field><field\
+        \ name=\"data_source_account_ids_im\">1000021</field><field name=\"data_source_account_ids_im\"\
+        >1000022</field><field boost=\"1000000\" name=\"name_texts\">candy_one_column</field><field\
         \ boost=\"1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field\
         \ boost=\"1000\" name=\"table_description_texts\">bogus</field><field boost=\"\
         1000\" name=\"schema_name_texts\">test_gpfdist_schema</field><field boost=\"\
@@ -1389,9 +1389,9 @@ http_interactions:
         security_type_name_sm\">GpdbTable</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
-        >other_base_table</field><field name=\"data_source_account_ids_im\">1000018</field><field\
-        \ name=\"data_source_account_ids_im\">1000019</field><field name=\"data_source_account_ids_im\"\
-        >1000020</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
+        >other_base_table</field><field name=\"data_source_account_ids_im\">1000020</field><field\
+        \ name=\"data_source_account_ids_im\">1000021</field><field name=\"data_source_account_ids_im\"\
+        >1000022</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">other_base_table</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
         1000\" name=\"table_description_texts\">bogus</field><field boost=\"1000\"\
@@ -1406,8 +1406,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">heatmap_table</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field boost=\"1000000\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field boost=\"1000000\"\
         \ name=\"name_texts\">heatmap_table</field><field boost=\"1000\" name=\"database_name_texts\"\
         >gpdb_gill_local_test</field><field boost=\"1000\" name=\"table_description_texts\"\
         >bogus</field><field boost=\"1000\" name=\"schema_name_texts\">test_schema3</field><field\
@@ -1423,9 +1423,9 @@ http_interactions:
         security_type_name_sm\">ChorusView</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
-        >chorus_view</field><field name=\"data_source_account_ids_im\">1000018</field><field\
-        \ name=\"data_source_account_ids_im\">1000019</field><field name=\"data_source_account_ids_im\"\
-        >1000020</field><field name=\"found_in_workspace_id_im\">1000016</field><field\
+        >chorus_view</field><field name=\"data_source_account_ids_im\">1000020</field><field\
+        \ name=\"data_source_account_ids_im\">1000021</field><field name=\"data_source_account_ids_im\"\
+        >1000022</field><field name=\"found_in_workspace_id_im\">1000016</field><field\
         \ name=\"found_in_workspace_id_im\">1000017</field><field boost=\"1000000\"\
         \ name=\"name_texts\">CHORUS_VIEW</field><field boost=\"1000\" name=\"database_name_texts\"\
         >gpdb_gill_local_test</field><field boost=\"1000\" name=\"table_description_texts\"\
@@ -1441,9 +1441,9 @@ http_interactions:
         security_type_name_sm\">ChorusView</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
-        >convert_to_database</field><field name=\"data_source_account_ids_im\">1000018</field><field\
-        \ name=\"data_source_account_ids_im\">1000019</field><field name=\"data_source_account_ids_im\"\
-        >1000020</field><field name=\"found_in_workspace_id_im\">1000016</field><field\
+        >convert_to_database</field><field name=\"data_source_account_ids_im\">1000020</field><field\
+        \ name=\"data_source_account_ids_im\">1000021</field><field name=\"data_source_account_ids_im\"\
+        >1000022</field><field name=\"found_in_workspace_id_im\">1000016</field><field\
         \ name=\"found_in_workspace_id_im\">1000017</field><field boost=\"1000000\"\
         \ name=\"name_texts\">convert_to_database</field><field boost=\"1000\" name=\"\
         database_name_texts\">gpdb_gill_local_test</field><field boost=\"1000\" name=\"\
@@ -1460,8 +1460,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">real_chorus_view</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">real_chorus_view</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -1604,7 +1604,32 @@ http_interactions:
         \ name=\"name_texts\">WITH_COMPOSITE_KEY</field><field boost=\"1000\" name=\"\
         database_name_texts\"></field><field boost=\"1000\" name=\"schema_name_texts\"\
         >TEST_GILL_LOCAL_TEST</field><field boost=\"1000\" name=\"column_name_texts\"\
-        >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc></add>"
+        >bogus</field><field boost=\"1000\" name=\"column_name_texts\">bogus 2</field></doc><doc><field\
+        \ name=\"id\">OracleTable 1000072</field><field name=\"type\">OracleTable</field><field\
+        \ name=\"type\">OracleDataset</field><field name=\"type\">RelationalDataset</field><field\
+        \ name=\"type\">Dataset</field><field name=\"type\">ActiveRecord::Base</field><field\
+        \ name=\"class_name\">OracleTable</field><field name=\"grouping_id_s\">OracleTable\
+        \ 1000072</field><field name=\"type_name_s\">Dataset</field><field name=\"\
+        security_type_name_sm\">OracleTable</field><field name=\"security_type_name_sm\"\
+        >OracleDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
+        \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
+        >lowercase_table</field><field boost=\"1000000\" name=\"name_texts\">lowercase_table</field><field\
+        \ boost=\"1000\" name=\"database_name_texts\"></field><field boost=\"1000\"\
+        \ name=\"schema_name_texts\">TEST_GILL_LOCAL_TEST</field><field boost=\"1000\"\
+        \ name=\"column_name_texts\">bogus</field><field boost=\"1000\" name=\"column_name_texts\"\
+        >bogus 2</field></doc><doc><field name=\"id\">OracleView 1000073</field><field\
+        \ name=\"type\">OracleView</field><field name=\"type\">OracleDataset</field><field\
+        \ name=\"type\">RelationalDataset</field><field name=\"type\">Dataset</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">OracleView</field><field\
+        \ name=\"grouping_id_s\">OracleView 1000073</field><field name=\"type_name_s\"\
+        >Dataset</field><field name=\"security_type_name_sm\">OracleView</field><field\
+        \ name=\"security_type_name_sm\">OracleDataset</field><field name=\"security_type_name_sm\"\
+        >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
+        \ name=\"sort_name_s\">lowercase_view</field><field boost=\"1000000\" name=\"\
+        name_texts\">lowercase_view</field><field boost=\"1000\" name=\"database_name_texts\"\
+        ></field><field boost=\"1000\" name=\"schema_name_texts\">TEST_GILL_LOCAL_TEST</field><field\
+        \ boost=\"1000\" name=\"column_name_texts\">bogus</field><field boost=\"1000\"\
+        \ name=\"column_name_texts\">bogus 2</field></doc></add>"
     headers:
       content-type:
       - text/xml
@@ -1621,9 +1646,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>6}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>14}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:20 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:40 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1646,9 +1671,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>35}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>10}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:20 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:40 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1753,9 +1778,9 @@ http_interactions:
         security_type_name_sm\">ChorusView</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
-        >chorus_view</field><field name=\"data_source_account_ids_im\">1000018</field><field\
-        \ name=\"data_source_account_ids_im\">1000019</field><field name=\"data_source_account_ids_im\"\
-        >1000020</field><field name=\"found_in_workspace_id_im\">1000016</field><field\
+        >chorus_view</field><field name=\"data_source_account_ids_im\">1000020</field><field\
+        \ name=\"data_source_account_ids_im\">1000021</field><field name=\"data_source_account_ids_im\"\
+        >1000022</field><field name=\"found_in_workspace_id_im\">1000016</field><field\
         \ name=\"found_in_workspace_id_im\">1000017</field><field boost=\"1000000\"\
         \ name=\"name_texts\">CHORUS_VIEW</field><field boost=\"1000\" name=\"database_name_texts\"\
         >gpdb_gill_local_test</field><field boost=\"1000\" name=\"table_description_texts\"\
@@ -1771,9 +1796,9 @@ http_interactions:
         security_type_name_sm\">ChorusView</field><field name=\"security_type_name_sm\"\
         >GpdbDataset</field><field name=\"security_type_name_sm\">RelationalDataset</field><field\
         \ name=\"security_type_name_sm\">Dataset</field><field name=\"sort_name_s\"\
-        >convert_to_database</field><field name=\"data_source_account_ids_im\">1000018</field><field\
-        \ name=\"data_source_account_ids_im\">1000019</field><field name=\"data_source_account_ids_im\"\
-        >1000020</field><field name=\"found_in_workspace_id_im\">1000016</field><field\
+        >convert_to_database</field><field name=\"data_source_account_ids_im\">1000020</field><field\
+        \ name=\"data_source_account_ids_im\">1000021</field><field name=\"data_source_account_ids_im\"\
+        >1000022</field><field name=\"found_in_workspace_id_im\">1000016</field><field\
         \ name=\"found_in_workspace_id_im\">1000017</field><field boost=\"1000000\"\
         \ name=\"name_texts\">convert_to_database</field><field boost=\"1000\" name=\"\
         database_name_texts\">gpdb_gill_local_test</field><field boost=\"1000\" name=\"\
@@ -1790,8 +1815,8 @@ http_interactions:
         \ name=\"security_type_name_sm\">GpdbDataset</field><field name=\"security_type_name_sm\"\
         >RelationalDataset</field><field name=\"security_type_name_sm\">Dataset</field><field\
         \ name=\"sort_name_s\">real_chorus_view</field><field name=\"data_source_account_ids_im\"\
-        >1000018</field><field name=\"data_source_account_ids_im\">1000019</field><field\
-        \ name=\"data_source_account_ids_im\">1000020</field><field name=\"found_in_workspace_id_im\"\
+        >1000020</field><field name=\"data_source_account_ids_im\">1000021</field><field\
+        \ name=\"data_source_account_ids_im\">1000022</field><field name=\"found_in_workspace_id_im\"\
         >1000016</field><field name=\"found_in_workspace_id_im\">1000017</field><field\
         \ boost=\"1000000\" name=\"name_texts\">real_chorus_view</field><field boost=\"\
         1000\" name=\"database_name_texts\">gpdb_gill_local_test</field><field boost=\"\
@@ -1814,9 +1839,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1839,9 +1864,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>41}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>55}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1905,9 +1930,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -1930,9 +1955,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>13}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>11}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2010,75 +2035,91 @@ http_interactions:
         >JdbcDataSource 1000009</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
         >DataSource</field><field name=\"sort_name_s\">jdbc</field><field boost=\"\
-        1000000\" name=\"name_texts\">jdbc</field></doc><doc><field name=\"id\">GpdbDataSource\
-        \ 1000010</field><field name=\"type\">GpdbDataSource</field><field name=\"\
-        type\">ConcreteDataSource</field><field name=\"type\">DataSource</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbDataSource</field><field\
-        \ name=\"grouping_id_s\">GpdbDataSource 1000010</field><field name=\"type_name_s\"\
-        >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
+        1000000\" name=\"name_texts\">jdbc</field></doc><doc><field name=\"id\">JdbcDataSource\
+        \ 1000010</field><field name=\"type\">JdbcDataSource</field><field name=\"\
+        type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
+        \ name=\"class_name\">JdbcDataSource</field><field name=\"grouping_id_s\"\
+        >JdbcDataSource 1000010</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
-        >DataSource</field><field name=\"sort_name_s\">typeahead_gpdb_data_source</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">typeahead_gpdb_data_source</field></doc><doc><field\
-        \ name=\"id\">OracleDataSource 1000011</field><field name=\"type\">OracleDataSource</field><field\
-        \ name=\"type\">ConcreteDataSource</field><field name=\"type\">DataSource</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">OracleDataSource</field><field\
-        \ name=\"grouping_id_s\">OracleDataSource 1000011</field><field name=\"type_name_s\"\
-        >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
+        >DataSource</field><field name=\"sort_name_s\">searchquery_jdbc</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">searchquery_jdbc</field><field boost=\"\
+        1000\" name=\"description_texts\">searchquery for jdbc data source</field></doc><doc><field\
+        \ name=\"id\">JdbcDataSource 1000011</field><field name=\"type\">JdbcDataSource</field><field\
+        \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
+        \ name=\"class_name\">JdbcDataSource</field><field name=\"grouping_id_s\"\
+        >JdbcDataSource 1000011</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
-        >DataSource</field><field name=\"sort_name_s\">typeahead_oracle_data_source</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">typeahead_oracle_data_source</field></doc><doc><field\
+        >DataSource</field><field name=\"sort_name_s\">typeahead_jdbc_source</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">typeahead_jdbc_source</field><field\
+        \ boost=\"1000\" name=\"description_texts\">typeahead for jdbc data source</field></doc><doc><field\
         \ name=\"id\">GpdbDataSource 1000012</field><field name=\"type\">GpdbDataSource</field><field\
         \ name=\"type\">ConcreteDataSource</field><field name=\"type\">DataSource</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbDataSource</field><field\
         \ name=\"grouping_id_s\">GpdbDataSource 1000012</field><field name=\"type_name_s\"\
         >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
-        >DataSource</field><field name=\"sort_name_s\">gpdb_data_source44445</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">gpdb_data_source44445</field></doc><doc><field\
+        >DataSource</field><field name=\"sort_name_s\">typeahead_gpdb_data_source</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">typeahead_gpdb_data_source</field></doc><doc><field\
         \ name=\"id\">OracleDataSource 1000013</field><field name=\"type\">OracleDataSource</field><field\
         \ name=\"type\">ConcreteDataSource</field><field name=\"type\">DataSource</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">OracleDataSource</field><field\
         \ name=\"grouping_id_s\">OracleDataSource 1000013</field><field name=\"type_name_s\"\
         >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
-        >DataSource</field><field name=\"sort_name_s\">oracle_data_source44445</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">oracle_data_source44445</field></doc><doc><field\
+        >DataSource</field><field name=\"sort_name_s\">typeahead_oracle_data_source</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">typeahead_oracle_data_source</field></doc><doc><field\
         \ name=\"id\">GpdbDataSource 1000014</field><field name=\"type\">GpdbDataSource</field><field\
         \ name=\"type\">ConcreteDataSource</field><field name=\"type\">DataSource</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbDataSource</field><field\
         \ name=\"grouping_id_s\">GpdbDataSource 1000014</field><field name=\"type_name_s\"\
         >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
-        >DataSource</field><field name=\"sort_name_s\">chorus_gpdb40</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">chorus_gpdb40</field></doc><doc><field\
-        \ name=\"id\">GpdbDataSource 1000015</field><field name=\"type\">GpdbDataSource</field><field\
+        >DataSource</field><field name=\"sort_name_s\">gpdb_data_source44445</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">gpdb_data_source44445</field></doc><doc><field\
+        \ name=\"id\">OracleDataSource 1000015</field><field name=\"type\">OracleDataSource</field><field\
         \ name=\"type\">ConcreteDataSource</field><field name=\"type\">DataSource</field><field\
-        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbDataSource</field><field\
-        \ name=\"grouping_id_s\">GpdbDataSource 1000015</field><field name=\"type_name_s\"\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">OracleDataSource</field><field\
+        \ name=\"grouping_id_s\">OracleDataSource 1000015</field><field name=\"type_name_s\"\
         >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
-        >DataSource</field><field name=\"sort_name_s\">chorus_gpdb41</field><field\
-        \ boost=\"1000000\" name=\"name_texts\">chorus_gpdb41</field></doc><doc><field\
+        >DataSource</field><field name=\"sort_name_s\">oracle_data_source44445</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">oracle_data_source44445</field></doc><doc><field\
         \ name=\"id\">GpdbDataSource 1000016</field><field name=\"type\">GpdbDataSource</field><field\
         \ name=\"type\">ConcreteDataSource</field><field name=\"type\">DataSource</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbDataSource</field><field\
         \ name=\"grouping_id_s\">GpdbDataSource 1000016</field><field name=\"type_name_s\"\
         >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
+        >DataSource</field><field name=\"sort_name_s\">chorus_gpdb40</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">chorus_gpdb40</field></doc><doc><field\
+        \ name=\"id\">GpdbDataSource 1000017</field><field name=\"type\">GpdbDataSource</field><field\
+        \ name=\"type\">ConcreteDataSource</field><field name=\"type\">DataSource</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbDataSource</field><field\
+        \ name=\"grouping_id_s\">GpdbDataSource 1000017</field><field name=\"type_name_s\"\
+        >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
+        \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
+        >DataSource</field><field name=\"sort_name_s\">chorus_gpdb41</field><field\
+        \ boost=\"1000000\" name=\"name_texts\">chorus_gpdb41</field></doc><doc><field\
+        \ name=\"id\">GpdbDataSource 1000018</field><field name=\"type\">GpdbDataSource</field><field\
+        \ name=\"type\">ConcreteDataSource</field><field name=\"type\">DataSource</field><field\
+        \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">GpdbDataSource</field><field\
+        \ name=\"grouping_id_s\">GpdbDataSource 1000018</field><field name=\"type_name_s\"\
+        >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
+        \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
         >DataSource</field><field name=\"sort_name_s\">local-greenplum</field><field\
         \ boost=\"1000000\" name=\"name_texts\">local-greenplum</field></doc><doc><field\
-        \ name=\"id\">OracleDataSource 1000017</field><field name=\"type\">OracleDataSource</field><field\
+        \ name=\"id\">OracleDataSource 1000019</field><field name=\"type\">OracleDataSource</field><field\
         \ name=\"type\">ConcreteDataSource</field><field name=\"type\">DataSource</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">OracleDataSource</field><field\
-        \ name=\"grouping_id_s\">OracleDataSource 1000017</field><field name=\"type_name_s\"\
+        \ name=\"grouping_id_s\">OracleDataSource 1000019</field><field name=\"type_name_s\"\
         >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
         >DataSource</field><field name=\"sort_name_s\">oracle_data_source44446</field><field\
         \ boost=\"1000000\" name=\"name_texts\">oracle_data_source44446</field></doc><doc><field\
-        \ name=\"id\">JdbcDataSource 1000018</field><field name=\"type\">JdbcDataSource</field><field\
+        \ name=\"id\">JdbcDataSource 1000020</field><field name=\"type\">JdbcDataSource</field><field\
         \ name=\"type\">DataSource</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">JdbcDataSource</field><field name=\"grouping_id_s\"\
-        >JdbcDataSource 1000018</field><field name=\"type_name_s\">DataSource</field><field\
+        >JdbcDataSource 1000020</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
         >DataSource</field><field name=\"sort_name_s\">jdbc_data_source44445</field><field\
         \ boost=\"1000000\" name=\"name_texts\">jdbc_data_source44445</field></doc></add>"
@@ -2098,9 +2139,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2123,9 +2164,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>12}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2173,9 +2214,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2200,7 +2241,7 @@ http_interactions:
       encoding: US-ASCII
       string: "{'responseHeader'=>{'status'=>0,'QTime'=>11}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2236,9 +2277,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2261,9 +2302,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>11}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>13}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2307,9 +2348,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2332,9 +2373,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>21}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>36}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2369,7 +2410,7 @@ http_interactions:
       encoding: US-ASCII
       string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2392,9 +2433,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>6}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:41 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2407,84 +2448,84 @@ http_interactions:
         \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
         first_name_texts\">Admin_44445</field><field boost=\"1000000\" name=\"last_name_texts\"\
         >AlphaSearch</field><field boost=\"1000\" name=\"username_texts\">admin</field><field\
-        \ boost=\"1000\" name=\"email_texts\">admin_44445@bartolettibraun.biz</field></doc><doc><field\
+        \ boost=\"1000\" name=\"email_texts\">admin_44445@klingpurdy.biz</field></doc><doc><field\
         \ name=\"id\">User 1000001</field><field name=\"type\">User</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
         \ name=\"grouping_id_s\">User 1000001</field><field name=\"type_name_s\">User</field><field\
         \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
         first_name_texts\">Admin_44446</field><field boost=\"1000000\" name=\"last_name_texts\"\
         >AlphaSearch</field><field boost=\"1000\" name=\"username_texts\">evil_admin</field><field\
-        \ boost=\"1000\" name=\"email_texts\">admin_44446@stiedemann.info</field></doc><doc><field\
+        \ boost=\"1000\" name=\"email_texts\">admin_44446@bashirianprosacco.org</field></doc><doc><field\
         \ name=\"id\">User 1000002</field><field name=\"type\">User</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
         \ name=\"grouping_id_s\">User 1000002</field><field name=\"type_name_s\">User</field><field\
         \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Sydney</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Beier</field><field boost=\"1000\" name=\"username_texts\">default</field><field\
-        \ boost=\"1000\" name=\"email_texts\">sydney@handjaskolski.biz</field></doc><doc><field\
+        first_name_texts\">Mercedes</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Sipes</field><field boost=\"1000\" name=\"username_texts\">default</field><field\
+        \ boost=\"1000\" name=\"email_texts\">mercedes@hettingerhegmann.name</field></doc><doc><field\
         \ name=\"id\">User 1000003</field><field name=\"type\">User</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
         \ name=\"grouping_id_s\">User 1000003</field><field name=\"type_name_s\">User</field><field\
         \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Treva</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Bauch</field><field boost=\"1000\" name=\"username_texts\">no_collaborators</field><field\
-        \ boost=\"1000\" name=\"email_texts\">treva@haagbeer.name</field></doc><doc><field\
+        first_name_texts\">Damien</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Klein</field><field boost=\"1000\" name=\"username_texts\">no_collaborators</field><field\
+        \ boost=\"1000\" name=\"email_texts\">damien@tremblay.com</field></doc><doc><field\
         \ name=\"id\">User 1000004</field><field name=\"type\">User</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
         \ name=\"grouping_id_s\">User 1000004</field><field name=\"type_name_s\">User</field><field\
         \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
         first_name_texts\">no_picture</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Shields</field><field boost=\"1000\" name=\"username_texts\">no_picture</field><field\
-        \ boost=\"1000\" name=\"email_texts\">no_picture@legros.org</field></doc><doc><field\
+        >Cole</field><field boost=\"1000\" name=\"username_texts\">no_picture</field><field\
+        \ boost=\"1000\" name=\"email_texts\">no_picture@gerlach.info</field></doc><doc><field\
         \ name=\"id\">User 1000005</field><field name=\"type\">User</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
         \ name=\"grouping_id_s\">User 1000005</field><field name=\"type_name_s\">User</field><field\
         \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
         first_name_texts\">with_picture</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Hahn</field><field boost=\"1000\" name=\"username_texts\">with_picture</field><field\
-        \ boost=\"1000\" name=\"email_texts\">with_picture@sanfordkohler.net</field></doc><doc><field\
+        >Moore</field><field boost=\"1000\" name=\"username_texts\">with_picture</field><field\
+        \ boost=\"1000\" name=\"email_texts\">with_picture@lindgrengrant.net</field></doc><doc><field\
         \ name=\"id\">User 1000006</field><field name=\"type\">User</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
         \ name=\"grouping_id_s\">User 1000006</field><field name=\"type_name_s\">User</field><field\
         \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
         first_name_texts\">searchquery</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >O'Keefe</field><field boost=\"1000\" name=\"username_texts\">owner</field><field\
-        \ boost=\"1000\" name=\"email_texts\">searchquery@halvorson.com</field></doc><doc><field\
+        >Powlowski</field><field boost=\"1000\" name=\"username_texts\">owner</field><field\
+        \ boost=\"1000\" name=\"email_texts\">searchquery@bergstrom.biz</field></doc><doc><field\
         \ name=\"id\">User 1000007</field><field name=\"type\">User</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
         \ name=\"grouping_id_s\">User 1000007</field><field name=\"type_name_s\">User</field><field\
         \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Mabelle</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Anderson</field><field boost=\"1000\" name=\"username_texts\">the_collaborator</field><field\
-        \ boost=\"1000\" name=\"email_texts\">mabelle@robel.org</field></doc><doc><field\
+        first_name_texts\">Maia</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Leannon</field><field boost=\"1000\" name=\"username_texts\">the_collaborator</field><field\
+        \ boost=\"1000\" name=\"email_texts\">maia@crona.name</field></doc><doc><field\
         \ name=\"id\">User 1000008</field><field name=\"type\">User</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
         \ name=\"grouping_id_s\">User 1000008</field><field name=\"type_name_s\">User</field><field\
         \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Beulah</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Bogan</field><field boost=\"1000\" name=\"username_texts\">not_a_member</field><field\
-        \ boost=\"1000\" name=\"email_texts\">beulah@robertsroob.com</field></doc><doc><field\
+        first_name_texts\">Madaline</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Kemmer</field><field boost=\"1000\" name=\"username_texts\">not_a_member</field><field\
+        \ boost=\"1000\" name=\"email_texts\">madaline@strosinreinger.net</field></doc><doc><field\
         \ name=\"id\">User 1000009</field><field name=\"type\">User</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
         \ name=\"grouping_id_s\">User 1000009</field><field name=\"type_name_s\">User</field><field\
         \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
-        first_name_texts\">Franz</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Stamm</field><field boost=\"1000\" name=\"username_texts\">restricted_user</field><field\
-        \ boost=\"1000\" name=\"email_texts\">franz@braun.info</field></doc><doc><field\
+        first_name_texts\">Hailee</field><field boost=\"1000000\" name=\"last_name_texts\"\
+        >Wisozk</field><field boost=\"1000\" name=\"username_texts\">restricted_user</field><field\
+        \ boost=\"1000\" name=\"email_texts\">hailee@altenwerthcole.com</field></doc><doc><field\
         \ name=\"id\">User 1000010</field><field name=\"type\">User</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
         \ name=\"grouping_id_s\">User 1000010</field><field name=\"type_name_s\">User</field><field\
         \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
         first_name_texts\">typeahead</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Mann</field><field boost=\"1000\" name=\"username_texts\">typeahead</field><field\
-        \ boost=\"1000\" name=\"email_texts\">typeahead@gutmannhermann.com</field></doc><doc><field\
+        >Gerhold</field><field boost=\"1000\" name=\"username_texts\">typeahead</field><field\
+        \ boost=\"1000\" name=\"email_texts\">typeahead@feil.biz</field></doc><doc><field\
         \ name=\"id\">User 1000011</field><field name=\"type\">User</field><field\
         \ name=\"type\">ActiveRecord::Base</field><field name=\"class_name\">User</field><field\
         \ name=\"grouping_id_s\">User 1000011</field><field name=\"type_name_s\">User</field><field\
         \ name=\"security_type_name_sm\">User</field><field boost=\"1000000\" name=\"\
         first_name_texts\">typeahead_too</field><field boost=\"1000000\" name=\"last_name_texts\"\
-        >Stroman</field><field boost=\"1000\" name=\"username_texts\">typeahead_too</field><field\
-        \ boost=\"1000\" name=\"email_texts\">typeahead_too@hanevon.com</field></doc></add>"
+        >Medhurst</field><field boost=\"1000\" name=\"username_texts\">typeahead_too</field><field\
+        \ boost=\"1000\" name=\"email_texts\">typeahead_too@emmerich.biz</field></doc></add>"
     headers:
       content-type:
       - text/xml
@@ -2501,9 +2542,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:42 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2528,7 +2569,7 @@ http_interactions:
       encoding: US-ASCII
       string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:21 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:42 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2612,7 +2653,7 @@ http_interactions:
         \ name=\"security_type_name_sm\">Workfile</field><field name=\"sort_name_s\"\
         >multiple_data_source_workflow</field><field boost=\"1000000\" name=\"file_name_texts\"\
         >multiple_data_source_workflow</field><field boost=\"1000\" name=\"description_texts\"\
-        >Using two datasources to optimize next-generation markets.</field></doc><doc><field\
+        >Using two datasources to brand interactive metrics.</field></doc><doc><field\
         \ name=\"id\">AlpineWorkfile 1000008</field><field name=\"type\">AlpineWorkfile</field><field\
         \ name=\"type\">Workfile</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">AlpineWorkfile</field><field name=\"workspace_id_im\"\
@@ -2623,7 +2664,7 @@ http_interactions:
         \ name=\"security_type_name_sm\">Workfile</field><field name=\"sort_name_s\"\
         >multiple_dataset_workflow</field><field boost=\"1000000\" name=\"file_name_texts\"\
         >multiple_dataset_workflow</field><field boost=\"1000\" name=\"description_texts\"\
-        >Using two datasources to optimize next-generation markets.</field></doc><doc><field\
+        >Using two datasources to brand interactive metrics.</field></doc><doc><field\
         \ name=\"id\">ChorusWorkfile 1000009</field><field name=\"type\">ChorusWorkfile</field><field\
         \ name=\"type\">Workfile</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">ChorusWorkfile</field><field name=\"workspace_id_im\"\
@@ -2809,9 +2850,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>11}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:22 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:42 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2834,9 +2875,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>40}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>10}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:22 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:42 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -2854,7 +2895,7 @@ http_interactions:
         >Events::NoteOnDataSource</field><field name=\"type\">Events::Note</field><field\
         \ name=\"type\">Events::Base</field><field name=\"type\">ActiveRecord::Base</field><field\
         \ name=\"class_name\">Events::NoteOnDataSource</field><field name=\"grouping_id_s\"\
-        >GpdbDataSource 1000010</field><field name=\"type_name_s\">DataSource</field><field\
+        >GpdbDataSource 1000012</field><field name=\"type_name_s\">DataSource</field><field\
         \ name=\"security_type_name_sm\">DataSource</field><field name=\"security_type_name_sm\"\
         >DataSource</field><field name=\"security_type_name_sm\">DataSource</field><field\
         \ name=\"body_texts\">i exist only for my attachments</field></doc><doc><field\
@@ -3107,9 +3148,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:22 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:42 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3132,9 +3173,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>36}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>41}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:22 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:42 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3189,9 +3230,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>6}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:22 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3214,9 +3255,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>15}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:22 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3275,9 +3316,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:23 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3300,9 +3341,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>11}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:23 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3367,9 +3408,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:23 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3392,9 +3433,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>9}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>11}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:23 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3469,9 +3510,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:23 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3494,9 +3535,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>11}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>12}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:23 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3544,9 +3585,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:23 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3569,9 +3610,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>25}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>41}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:23 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3594,9 +3635,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>1}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:23 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3639,9 +3680,9 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>2}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>3}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:23 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 - request:
     method: post
     uri: http://localhost:8981/solr/update?wt=ruby
@@ -3664,7 +3705,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>5}}"
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7}}"
     http_version: '1.1'
-  recorded_at: Wed, 11 Dec 2013 07:26:23 GMT
+  recorded_at: Thu, 02 Jan 2014 23:29:43 GMT
 recorded_with: VCR 2.3.0
