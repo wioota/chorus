@@ -79,6 +79,15 @@ describe("chorus.views.TypeAheadSearch", function() {
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.hdfs_data_source");
         });
 
+        it("should display the correct name and type for jdbc_data_source", function() {
+            var dataSource = resultForEntityType(this.results, 'jdbc_data_source');
+            var resultIndex = this.results.indexOf(dataSource);
+            var result = this.view.$("li.result:eq(" + resultIndex + ")");
+            expect(result.find(".name").html()).toBe(dataSource.get("highlightedAttributes").name[0]);
+            expect(result.find(".name").attr("href")).toBe(dataSource.showUrl());
+            expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.jdbc_data_source");
+        });
+
         it("should display the correct name and type for user", function() {
             var user = resultForEntityType(this.results, 'user');
             var resultIndex = this.results.indexOf(user);

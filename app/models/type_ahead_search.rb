@@ -9,6 +9,7 @@ class TypeAheadSearch
     OracleDataSource,
     HdfsDataSource,
     GnipDataSource,
+    JdbcDataSource,
     Workspace,
     Workfile,
     Tag,

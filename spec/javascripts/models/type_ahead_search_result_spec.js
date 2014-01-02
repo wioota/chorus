@@ -14,12 +14,13 @@ describe("chorus.models.TypeAheadSearchResult", function() {
                 'hdfs_data_source',
                 'gnip_data_source',
                 'oracle_data_source',
+                'jdbc_data_source',
                 'user',
                 'workfile',
                 'dataset',
                 'tag'
             ].sort();
-            expect(_.uniq(entityTypes).sort()).toEqual(expectedEntityTypes);
+            expect(_.uniq(entityTypes).sort()).toEqual(expectedEntityTypes.sort());
         });
     });
 
@@ -50,6 +51,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
             expectToContainClass(this.searchResults, chorus.models.HdfsDataSource);
             expectToContainClass(this.searchResults, chorus.models.GnipDataSource);
             expectToContainClass(this.searchResults, chorus.models.OracleDataSource);
+            expectToContainClass(this.searchResults, chorus.models.JdbcDataSource);
             expectToContainClass(this.searchResults, chorus.models.User);
             expectToContainClass(this.searchResults, chorus.models.Workfile);
         });

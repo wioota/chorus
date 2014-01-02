@@ -24,7 +24,7 @@ describe TypeAheadSearchPresenter, :type => :view do
     it "returns an array of models including one of each type" do
       results = presenter.to_hash[:type_ahead][:results]
       types = results.map { |result| result[:entity_type] }
-      types.should include("user", "workfile", "dataset", "hdfs_file", "gpdb_data_source", "hdfs_data_source", "workspace")
+      types.should include('user', 'workfile', 'dataset', 'hdfs_file', 'gpdb_data_source', 'hdfs_data_source', 'workspace', 'jdbc_data_source')
     end
   end
 end

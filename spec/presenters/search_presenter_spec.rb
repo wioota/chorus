@@ -36,7 +36,7 @@ describe SearchPresenter, :type => :view do
         data_source_hash.should have_key(:numFound)
         data_source_hash.should have_key(:results)
         data_source_types = data_source_hash[:results].map {|result| result[:entity_type]}.uniq
-        data_source_types.should =~ ['gpdb_data_source', 'hdfs_data_source', 'gnip_data_source']
+        data_source_types.should =~ ['gpdb_data_source', 'hdfs_data_source', 'gnip_data_source', 'jdbc_data_source']
         data_source_hash[:results].each do |result|
           result.should have_key(:highlighted_attributes)
         end

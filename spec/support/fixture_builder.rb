@@ -119,6 +119,9 @@ FixtureBuilder.configure do |fbuilder|
     jdbc_table = FactoryGirl.create(:jdbc_table, :name => 'jdbc_table', :schema => jdbc_schema)
     FactoryGirl.create(:jdbc_view, :name => 'jdbc_view', :schema => jdbc_schema)
 
+    FactoryGirl.create(:jdbc_data_source, :name => 'searchquery_jdbc', :owner => owner, :description => 'searchquery for jdbc data source')
+    FactoryGirl.create(:jdbc_data_source, :name => 'typeahead_jdbc_source', :owner => owner, :description => 'typeahead for jdbc data source')
+
     hdfs_data_source = HdfsDataSource.create!({:name => 'searchquery_hadoop', :description => 'searchquery for the hadoop data source', :host => 'hadoop.example.com', :port => '1111', :owner => admin, :hdfs_version => 'Pivotal HD 1.0'}, :without_protection => true)
     fbuilder.name :hadoop, hdfs_data_source
     Events::HdfsDataSourceCreated.by(admin).add(:hdfs_data_source => hdfs_data_source)

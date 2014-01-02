@@ -20,12 +20,12 @@ describe("chorus.views.SearchResultList", function() {
         });
 
         it("has a list element for each model in the collection", function() {
-            expect(this.view.$('li').length).toBe(3);
+            expect(this.view.$('li').length).toBe(4);
         });
 
         it("passes the workspace id for tag links as an option to the item views", function() {
-                expect(this.view.list.options.listItemOptions.workspaceIdForTagLink).toBe(123);
-            });
+            expect(this.view.list.options.listItemOptions.workspaceIdForTagLink).toBe(123);
+        });
 
         it("uses multiListMode (so that selecting all items of a single type doesn't select all items on the page)", function() {
             expect(this.view.list.multiListMode).toBeTruthy();
