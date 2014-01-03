@@ -267,6 +267,24 @@ describe WorkspaceDatasetsController do
           end
         end
 
+        context 'when the dataset is from a JDBC data source' do
+          let (:dataset) { datasets(:jdbc_table) }
+
+          before do
+            any_instance_of(JdbcTable) do |table|
+              stub(table).accessible_to(user) { true }
+              stub(table).verify_in_source { true }
+            end
+            any_instance_of(JdbcSchema) do |schema|
+              stub(schema).verify_in_source(anything) { true }
+            end
+          end
+
+          generate_fixture 'workspaceDataset/jdbcTable.json' do
+            get :show, :id => dataset.to_param, :workspace_id => workspace.to_param
+          end
+        end
+
         context 'when the dataset connection blows up' do
           let(:dataset) { gpdb_table }
 

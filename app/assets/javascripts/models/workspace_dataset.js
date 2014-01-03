@@ -95,11 +95,11 @@ chorus.models.WorkspaceDataset = chorus.models.Dataset.include(
     },
 
     canBeImportSource: function() {
-        return !this.isSandbox();
+        return !this.isSandbox() && !this.isJdbc();
     },
 
     canBeImportDestination: function() {
-        return true;
+        return !this.isJdbc();
     },
 
     setWorkspace: function(workspace) {

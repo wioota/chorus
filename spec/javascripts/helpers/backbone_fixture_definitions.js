@@ -345,6 +345,7 @@ window.BackboneFixtureDefinitions = {
             datasetView: {},
             sourceTable: {},
             sourceView: {},
+            jdbcTable: {},
             hdfsDataset: {
                 model: 'HdfsDataset'
             }

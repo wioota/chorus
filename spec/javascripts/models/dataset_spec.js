@@ -236,11 +236,14 @@ describe("chorus.models.Dataset", function() {
 
             dataset = backboneFixtures.workspaceDataset.chorusView();
             expect(dataset.canBeImportSource()).toBeTruthy();
+
+            dataset = backboneFixtures.workspaceDataset.jdbcTable();
+            expect(dataset.canBeImportSource()).toBeFalsy();
         });
     });
 
     describe("#canBeImportDestination", function() {
-        it("returns true if the object is a Dataset (with a workspace id)", function() {
+        it("returns true if the object is a Dataset (with a workspace id) but not a JDBC dataset", function() {
             var table = backboneFixtures.dataset();
             expect(table.canBeImportDestination()).toBeFalsy();
 
@@ -255,6 +258,9 @@ describe("chorus.models.Dataset", function() {
 
             dataset = backboneFixtures.workspaceDataset.chorusView();
             expect(dataset.canBeImportDestination()).toBeTruthy();
+
+            dataset = backboneFixtures.workspaceDataset.jdbcTable();
+            expect(dataset.canBeImportDestination()).toBeFalsy();
         });
     });
 
