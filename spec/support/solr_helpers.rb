@@ -11,20 +11,19 @@ module SolrHelpers
 
   def reindex_solr_fixtures
     stub(DatasetColumn).columns_for.with_any_args {
-      [ DatasetColumn.new(:name => 'bogus'),
-        DatasetColumn.new(:name => 'bogus 2')
-      ]
+      [ DatasetColumn.new(:name => 'bogus'), DatasetColumn.new(:name => 'bogus 2') ]
     }
 
     #For the searchquery_table fixture specifically, return searchquery columns
     searchquery_dataset = datasets(:searchquery_table)
     stub(DatasetColumn).columns_for(anything, searchquery_dataset) {
-      [ DatasetColumn.new(:name => 'searchquery', :description => "searchquery column description"),
-        DatasetColumn.new(:name => 'searchquery 2', :description => "searchquery column description 2")
+      [
+          DatasetColumn.new(:name => 'searchquery', :description => "searchquery column description"),
+          DatasetColumn.new(:name => 'searchquery 2', :description => "searchquery column description 2")
       ]
     }
 
-    any_instance_of(GpdbDataset) do |ds|
+    any_instance_of(Dataset) do |ds|
       stub(ds).table_description { "bogus" }
     end
 
