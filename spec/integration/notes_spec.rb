@@ -10,7 +10,7 @@ describe "Notes" do
       data_source = data_sources(:default)
       visit("#/data_sources")
       within ".data_source ul" do
-        find("li", :text => data_source.name).click
+        first("li", :text => data_source.name).click
       end
       click_link "Add a note"
 
