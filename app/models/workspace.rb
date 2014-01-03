@@ -151,6 +151,7 @@ class Workspace < ActiveRecord::Base
     datasets.map do |relation|
       relation = relation.with_name_like options[:name_filter] if options[:name_filter]
       relation = relation.where(:id => options[:dataset_ids]) if options[:dataset_ids]
+      relation = relation.where('type NOT IN (?)', %w(JdbcTable JdbcView)) if options[:all_import_sources]
       relation
     end
   end

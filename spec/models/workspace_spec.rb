@@ -199,13 +199,18 @@ describe Workspace do
           end
 
           context "and a sandbox table is associated with the worldspace" do
+            let(:jdbc_table) { datasets(:jdbc_table) }
+            let(:oracle_table) { datasets(:oracle_table) }
+
             before do
+              workspace.source_datasets << jdbc_table
+              workspace.source_datasets << oracle_table
               workspace.source_datasets << sandbox_table
             end
 
-            it "shows all source tables / chorus views excluding the sandbox table when asking for source tables" do
-              workspace.datasets(user, {entity_subtype: 'SOURCE_TABLE', all_import_sources: true}).to_a.should =~ [source_table, chorus_view, chorus_view_from_source]
-              workspace.dataset_count(user, {entity_subtype: 'SOURCE_TABLE', all_import_sources: true}).should == 3
+            it "shows all source tables / chorus views excluding the sandbox table and jdbc table when asking for source tables" do
+              workspace.datasets(user, {entity_subtype: 'SOURCE_TABLE', all_import_sources: true}).to_a.should =~ [source_table, chorus_view, chorus_view_from_source, oracle_table]
+              workspace.dataset_count(user, {entity_subtype: 'SOURCE_TABLE', all_import_sources: true}).should == 4
             end
           end
 
@@ -359,6 +364,13 @@ describe Workspace do
           it 'includes the source datasets' do
             datasets = workspace.datasets(user, {:entity_subtype => 'SOURCE_TABLE'})
             datasets.map(&:id).should =~ [source_table, dataset1, dataset2, jdbc_table, oracle_table].map(&:id)
+          end
+
+          context 'scoped to import sources' do
+            it 'does not include jdbc but does include oracle' do
+              datasets = workspace.datasets(user, {:entity_subtype => 'SOURCE_TABLE', :all_import_sources => true})
+              datasets.map(&:id).should =~ [source_table, chorus_view, chorus_view_from_source, dataset1, dataset2, oracle_table].map(&:id)
+            end
           end
         end
       end
