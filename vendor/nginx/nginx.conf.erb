@@ -114,6 +114,7 @@ http {
             proxy_temp_file_write_size 64k;
 
             expires epoch;
+            add_header Cache-Control no-store;
         }
 <% end %>
 
@@ -138,6 +139,8 @@ http {
             proxy_buffers              4 32k;
             proxy_busy_buffers_size    64k;
             proxy_temp_file_write_size 64k;
+
+            add_header Cache-Control no-store;
         }
 
         #error_page  404              /404.html;
