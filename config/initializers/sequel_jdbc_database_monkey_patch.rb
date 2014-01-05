@@ -31,7 +31,7 @@ module Sequel
 
       def get_tables_s(types, opts)
         ts = []
-        metadata(:getTables, nil, opts[:schema_name], opts[:table_name], types.to_java(:string)){ |h| ts << { :name => h[:table_name], :type => table_type?(h[:table_type])} }
+        metadata(:getTables, nil, opts[:schema], opts[:table_name], types.to_java(:string)){ |h| ts << { :name => h[:table_name], :type => table_type?(h[:table_type])} }
         ts
       end
 
