@@ -10,14 +10,14 @@ module Sequel
       end
 
       def tables(opts={})
-        get_tables_s(%w(TABLE), opts)
+        table_symbols(%w(TABLE), opts)
       end
 
       def views(opts={})
-        get_tables_s(%w(VIEW), opts)
+        table_symbols(%w(VIEW), opts)
       end
 
-      def tables_and_views(opts={})
+      def datasets(opts={})
         get_tables_s(%w(TABLE VIEW), opts)
       end
 
@@ -31,8 +31,19 @@ module Sequel
 
       def get_tables_s(types, opts)
         ts = []
-        metadata(:getTables, nil, opts[:schema], opts[:table_name], types.to_java(:string)){ |h| ts << { :name => h[:table_name], :type => table_type?(h[:table_type])} }
+        metadata_it(types, opts) { |h| ts << { :name => h[:table_name], :type => table_type?(h[:table_type])} }
         ts
+      end
+
+      def table_symbols(types, opts)
+        ts = []
+        m = output_identifier_meth
+        metadata_it(types, opts) { |h| ts << m.call(h[:table_name]) }
+        ts
+      end
+
+      def metadata_it(types, opts, &block)
+        metadata(:getTables, nil, opts[:schema], opts[:table_name], types.to_java(:string), &block)
       end
 
       def table_type?(type)

@@ -227,7 +227,10 @@ describe JdbcConnection, :jdbc_integration do
         let(:table_name) { nil }
         let(:expected) { false }
 
-        it_should_behave_like 'a well-behaved database query'
+        it 'returns false before trying to connect' do
+          do_not_allow(Sequel).connect
+          subject.should == expected
+        end
       end
     end
 
@@ -259,7 +262,10 @@ describe JdbcConnection, :jdbc_integration do
         let(:view_name) { nil }
         let(:expected) { false }
 
-        it_behaves_like 'a well-behaved database query'
+        it 'returns false before trying to connect' do
+          do_not_allow(Sequel).connect
+          subject.should == expected
+        end
       end
     end
 

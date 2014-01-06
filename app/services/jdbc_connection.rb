@@ -31,7 +31,7 @@ class JdbcConnection < DataSourceConnection
 
   def datasets(options={})
     with_connection do |connection|
-      res = connection.tables_and_views(:schema => schema_name)
+      res = connection.datasets(:schema => schema_name)
       res.take(options[:limit] || res.size)
     end
   end
@@ -68,15 +68,10 @@ class JdbcConnection < DataSourceConnection
   end
 
   def object_exists?(type, name)
-    found = false
+    return false unless name
     with_connection do |connection|
-      connection.send(type, :schema => schema_name, :table_name => name).each do |result|
-        if result[:name] == name
-          found = true
-          break
-        end
-      end
+      res = connection.send(type, :schema => schema_name, :table_name => name)
+      res.include? name.to_sym
     end
-    found
   end
 end
