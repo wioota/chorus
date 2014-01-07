@@ -116,6 +116,10 @@ Chorus::Application.routes.draw do
     resource :download, :only => [:show], :controller => 'workfile_download'
     resources :executions, :only => [:create, :destroy], :controller => 'workfile_executions'
     resources :results, :only => [:create], :controller => 'workfile_results'
+    member do
+      post 'run'
+      post 'stop'
+    end
   end
 
   resources :workfile_versions, :only => [] do

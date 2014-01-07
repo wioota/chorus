@@ -5,9 +5,18 @@ class WorkfilesController < ApplicationController
   include DataSourceAuth
 
   before_filter :convert_form_encoded_arrays, :only => [:create, :update]
+  before_filter :authorize_edit_workfile, :only => [:update, :destroy, :run, :stop]
+
+  def index
+    workspace = Workspace.find(params[:workspace_id])
+    authorize! :show, workspace
+
+    workfiles = workspace.filtered_workfiles(params)
+
+    present paginate(workfiles), :presenter_options => {:workfile_as_latest_version => true, :list_view => true}
+  end
 
   def show
-    workfile = Workfile.find(params[:id])
     authorize! :show, workfile.workspace
 
     if params[:connect].present?
@@ -29,8 +38,6 @@ class WorkfilesController < ApplicationController
   end
 
   def update
-    workfile = Workfile.find(params[:id])
-    authorize! :can_edit_sub_objects, workfile.workspace
     execution_schema = params[:workfile][:execution_schema]
 
     if execution_schema && execution_schema[:id]
@@ -38,36 +45,37 @@ class WorkfilesController < ApplicationController
       params[:workfile][:execution_schema] = schema
     end
 
-    if params[:workfile][:action] == "run"
-      workfile.run_now(current_user)
-    elsif params[:workfile][:action] == "stop"
-      workfile.stop_now(current_user)
-    else
-      workfile.assign_attributes(params[:workfile])
-      workfile.update_from_params!(params[:workfile])
-    end
+    workfile.assign_attributes(params[:workfile])
+    workfile.update_from_params!(params[:workfile])
 
     present workfile, :presenter_options => {:include_execution_schema => true}
   end
 
-  def index
-    workspace = Workspace.find(params[:workspace_id])
-    authorize! :show, workspace
-
-    workfiles = workspace.filtered_workfiles(params)
-
-    present paginate(workfiles), :presenter_options => {:workfile_as_latest_version => true, :list_view => true}
-  end
-
   def destroy
-    workfile = Workfile.find(params[:id])
-    authorize! :can_edit_sub_objects, workfile.workspace
-
     workfile.destroy
     render :json => {}
   end
 
+
+  def run
+    workfile.run_now(current_user)
+    present workfile, :status => :accepted
+  end
+
+  def stop
+    workfile.stop_now(current_user)
+    present workfile, :status => :accepted
+  end
+
   private
+
+  def workfile
+    @workfile ||= Workfile.find(params[:id])
+  end
+
+  def authorize_edit_workfile
+    authorize! :can_edit_sub_objects, workfile.workspace
+  end
 
   def convert_form_encoded_arrays
     # Sometimes (usually in areas that upload files via real form submission) the javascript app needs to send things in a form-encoded way,

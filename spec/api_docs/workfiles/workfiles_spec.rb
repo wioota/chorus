@@ -7,6 +7,8 @@ resource "Workfiles" do
   let!(:file) { test_file("workfile.sql", "text/sql") }
   let!(:workfile_id) { workfile.to_param }
   let(:result) { }
+  let(:workflow) { workfiles(:alpine_flow) }
+
 
   before do
     log_in owner
@@ -166,6 +168,38 @@ resource "Workfiles" do
 
     example_request "Cancel execution of a workfile" do
       status.should == 200
+    end
+  end
+
+  post '/workfiles/:id/run' do
+    before do
+      stub(Alpine::API).run_work_flow.with_any_args { 'fakeprocessid' }
+    end
+
+    parameter :id, 'Id of a workflow'
+
+    required_parameters :id
+
+    let(:id) { workflow.to_param }
+
+    example_request 'Run a workflow' do
+      status.should == 202
+    end
+  end
+
+  post '/workfiles/:id/stop' do
+    before do
+      stub(Alpine::API).stop_work_flow.with_any_args { OpenStruct.new({code: '200'}) }
+    end
+
+    parameter :id, 'Id of a workflow'
+
+    required_parameters :id
+
+    let(:id) { workflow.to_param }
+
+    example_request 'Stop a running workflow' do
+      status.should == 202
     end
   end
 end

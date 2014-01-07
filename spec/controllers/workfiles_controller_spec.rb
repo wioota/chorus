@@ -714,40 +714,6 @@ describe WorkfilesController do
           put :update, params
         end
       end
-
-      context "when directed to 'run now'" do
-        let(:params) do
-          {
-            :id => workfile.to_param,
-            :workfile => {
-              :action => 'run'
-            }
-          }
-        end
-
-        it 'runs the workflow' do
-          process_id = 'fakeprocessid'
-          mock(Alpine::API).run_work_flow.with_any_args { process_id }
-          put :update, params
-        end
-      end
-
-      context "when directed to 'stop now'" do
-        let(:params) do
-          {
-            :id => workfile.to_param,
-            :workfile => {
-              :action => 'stop'
-            }
-          }
-        end
-
-        it 'stops the workflow' do
-          success_response = OpenStruct.new({code: '200'})
-          mock(Alpine::API).stop_work_flow.with_any_args { success_response }
-          put :update, params
-        end
-      end
     end
   end
 
@@ -775,6 +741,52 @@ describe WorkfilesController do
       it "should respond with success" do
         response.should be_success
       end
+    end
+  end
+
+  describe '#run' do
+    let(:workfile) { workfiles(:alpine_flow) }
+
+    before do
+      mock(Alpine::API).run_work_flow.with_any_args { 'fakeprocessid' }
+    end
+
+    it 'uses authorization and runs the workflow' do
+      mock(controller).authorize!(:can_edit_sub_objects, workfile.workspace)
+      post :run, :id => workfile.id
+    end
+
+    it 'returns a 202' do
+      post :run, :id => workfile.id
+      response.code.should == '202'
+    end
+
+    it 'presents the workflow' do
+      post :run, :id => workfile.id
+      decoded_response[:status].should == AlpineWorkfile::RUNNING
+    end
+  end
+
+  describe '#stop' do
+    let(:workfile) { workfiles(:alpine_flow) }
+
+    before do
+      mock(Alpine::API).stop_work_flow.with_any_args { OpenStruct.new({code: '200'}) }
+    end
+
+    it 'uses authorization and stops the workflow' do
+      mock(controller).authorize!(:can_edit_sub_objects, workfile.workspace)
+      post :stop, :id => workfile.id
+    end
+
+    it 'returns a 202' do
+      post :stop, :id => workfile.id
+      response.code.should == '202'
+    end
+
+    it 'presents the workflow' do
+      post :stop, :id => workfile.id
+      decoded_response[:status].should == AlpineWorkfile::IDLE
     end
   end
 end

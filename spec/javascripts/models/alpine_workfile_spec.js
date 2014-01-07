@@ -187,4 +187,25 @@ describe("chorus.models.AlpineWorkfile", function() {
         });
     });
 
+    describe('#run', function() {
+        beforeEach(function() {
+            this.model.run();
+        });
+
+        it("posts to the correct url", function() {
+            expect(this.server.lastRequest().method).toBe('POST');
+            expect(this.server.lastRequest().url).toBe('/workfiles/' + this.model.id + '/run');
+        });
+    });
+
+    describe('#stop', function() {
+        beforeEach(function() {
+            this.model.stop();
+        });
+
+        it("posts to the correct url", function() {
+            expect(this.server.lastRequest().method).toBe('POST');
+            expect(this.server.lastRequest().url).toBe('/workfiles/' + this.model.id + '/stop');
+        });
+    });
 });

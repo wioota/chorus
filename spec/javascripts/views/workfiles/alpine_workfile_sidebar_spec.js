@@ -33,7 +33,7 @@ describe('chorus.views.AlpineWorkfileSidebar', function(){
             beforeEach(function () {
                 spyOn(this.view.model, 'run').andCallThrough();
                 this.view.$('a.run_now').click();
-                this.server.completeUpdateFor(this.view.model, {status: 'running'});
+                this.server.lastCreate().succeed(this.view.model.set({status: 'running'}));
             });
 
             it('disables the run now link', function () {
@@ -54,7 +54,7 @@ describe('chorus.views.AlpineWorkfileSidebar', function(){
                 beforeEach(function () {
                     spyOn(this.view.model, 'stop').andCallThrough();
                     this.view.$('a.stop').click();
-                    this.server.completeUpdateFor(this.view.model, {status: 'idle'});
+                    this.server.lastCreate().succeed(this.view.model.set({status: 'idle'}));
                 });
 
                 it('stops the workfile', function () {

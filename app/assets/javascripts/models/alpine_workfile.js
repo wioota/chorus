@@ -9,6 +9,17 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
         entitySubtype: "alpine"
     },
 
+    urlTemplate: function(options) {
+        var action = options && options.workflow_action;
+        if (action === 'run') {
+            return 'workfiles/{{id}}/run';
+        } else if (action === 'stop') {
+            return 'workfiles/{{id}}/stop';
+        } else {
+            return this._super('urlTemplate', arguments);
+        }
+    },
+
     dataSourceRequiringCredentials: function() {
         if (this.serverErrors.modelData.entityType !== "workspace") {
             return this._super('dataSourceRequiringCredentials');
@@ -83,10 +94,10 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
     },
 
     run: function () {
-        this.save({action: "run"});
+        this.save({}, {workflow_action: 'run', method: 'create'});
     },
 
     stop: function () {
-        this.save({action: "stop"});
+        this.save({}, {workflow_action: 'stop', method: 'create'});
     }
 });
