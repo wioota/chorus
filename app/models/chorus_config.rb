@@ -150,6 +150,10 @@ class ChorusConfig
     self['smtp'].symbolize_keys
   end
 
+  def database_login_timeout
+    self['database_login_timeout']
+  end
+
   private
 
   def initialize_hdfs_versions

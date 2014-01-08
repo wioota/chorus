@@ -525,4 +525,13 @@ describe ChorusConfig do
     end
   end
 
+  describe '#database_login_timeout' do
+    before do
+      config.config = { 'database_login_timeout' => 14 }
+    end
+
+    it 'returns the value from the key: database_login_timeout' do
+      config.database_login_timeout.should == 14
+    end
+  end
 end

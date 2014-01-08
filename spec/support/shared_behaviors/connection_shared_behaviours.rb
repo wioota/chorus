@@ -111,8 +111,9 @@ shared_examples "a data source connection" do
       end
     end
 
-    it "has a default login timeout of 10 seconds" do
-      mock(Sequel).connect(db_url, hash_including(:login_timeout => 10))
+    it "has a default login timeout as specified in chorus config" do
+      stub(ChorusConfig.instance).database_login_timeout { 12 }
+      mock(Sequel).connect(db_url, hash_including(:login_timeout => 12))
       connection.connect!
     end
   end

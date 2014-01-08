@@ -169,7 +169,7 @@ class DataSourceConnection
     options = {
         :user => @account.db_username,
         :password => @account.db_password,
-        :login_timeout => 10
+        :login_timeout => ChorusConfig.instance.database_login_timeout
     }
     options.merge!({ :logger => @options[:logger], :sql_log_level => :debug }) if @options[:logger]
     options
