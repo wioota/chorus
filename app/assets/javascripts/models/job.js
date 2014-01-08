@@ -1,8 +1,18 @@
 chorus.models.Job = chorus.models.Base.extend({
     entityType: "Job",
     constructorName: "Job",
-    urlTemplate: "workspaces/{{workspace.id}}/jobs/{{id}}",
     showUrlTemplate: "workspaces/{{workspace.id}}/jobs/{{id}}",
+
+    urlTemplate: function(options) {
+        var action = options && options.job_action;
+        if (action === 'run') {
+            return 'jobs/{{id}}/run';
+        } else if (action === 'kill') {
+            return 'jobs/{{id}}/stop';
+        } else {
+            return 'workspaces/{{workspace.id}}/jobs/{{id}}';
+        }
+    },
 
     workspace: function() {
         if (!this._workspace && this.get("workspace")) {
@@ -78,8 +88,8 @@ chorus.models.Job = chorus.models.Base.extend({
         function saveFailed(){ chorus.toast('job.not_running_toast', {jobName: name, toastOpts: {type: 'error'}}); }
 
         this.save(
-            {job_action: "run"},
-            {success: saveSucceeded, error: saveFailed}
+            {},
+            {job_action: 'run', method: 'create', success: saveSucceeded, error: saveFailed}
         );
     },
 
@@ -89,8 +99,8 @@ chorus.models.Job = chorus.models.Base.extend({
         function saveFailed(){ chorus.toast('job.not_stopping_toast', {jobName: name, toastOpts: {type: 'error'}}); }
 
         this.save(
-            {job_action: "kill", status: 'stopping'},
-            {success: saveSucceeded, error: saveFailed}
+            {},
+            {job_action: 'kill', method: 'create', success: saveSucceeded, error: saveFailed}
         );
     },
 

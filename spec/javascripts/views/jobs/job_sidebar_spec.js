@@ -86,7 +86,7 @@ describe("chorus.views.JobSidebar", function () {
         beforeEach(function () {
             spyOn(this.view.model, 'run').andCallThrough();
             this.view.$('a.run_job').click();
-            this.server.completeUpdateFor(this.view.model, {status: 'enqueued'});
+            this.server.lastCreate().succeed(this.view.model.set('status', 'enqueued'));
         });
 
         it("runs the job", function () {
@@ -107,6 +107,7 @@ describe("chorus.views.JobSidebar", function () {
             beforeEach(function () {
                 spyOn(this.view.model, 'stop').andCallThrough();
                 this.view.$('a.stop_job').click();
+                this.server.lastCreate().succeed(this.view.model.set('status', 'stopping'));
             });
 
             it("stops the job", function () {

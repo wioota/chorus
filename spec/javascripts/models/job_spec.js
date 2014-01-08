@@ -97,15 +97,10 @@ describe("chorus.models.Job", function () {
         });
 
         it("saves", function () {
-            var postUrl = this.server.lastUpdateFor(this.model).url;
-            expect(postUrl).toContain("/workspaces/" + this.model.workspace().id + "/jobs/" + this.model.id);
+            var postUrl = this.server.lastCreate().url;
+            expect(postUrl).toBe('/jobs/' + this.model.id + '/run');
         });
 
-
-        it("passes the 'job_action: run' parameter", function () {
-            var json = this.server.lastUpdateFor(this.model).json();
-            expect(json['job']['job_action']).toEqual('run');
-        });
 
         it("does not toast without success", function () {
             expect(chorus.toast).not.toHaveBeenCalled();
@@ -114,7 +109,7 @@ describe("chorus.models.Job", function () {
 
         context("when the save succeeds", function () {
             beforeEach(function () {
-                this.server.lastUpdate().succeed();
+                this.server.lastCreate().succeed();
             });
 
             it("flashes a toast message", function () {
@@ -130,17 +125,8 @@ describe("chorus.models.Job", function () {
         });
 
         it("saves", function () {
-            var postUrl = this.server.lastUpdateFor(this.model).url;
-            expect(postUrl).toContain("/workspaces/" + this.model.workspace().id + "/jobs/" + this.model.id);
-        });
-
-        it("sets the jobs status to 'stopping'", function () {
-            expect(this.model.get('status')).toBe('stopping');
-        });
-
-        it("passes the 'job_action: kill' parameter", function () {
-            var json = this.server.lastUpdateFor(this.model).json();
-            expect(json['job']['job_action']).toEqual('kill');
+            var postUrl = this.server.lastCreate().url;
+            expect(postUrl).toContain('/jobs/' + this.model.id + '/stop');
         });
 
         it("does not toast without success", function () {
@@ -149,7 +135,7 @@ describe("chorus.models.Job", function () {
 
         context("when the save succeeds", function () {
             beforeEach(function () {
-                this.server.lastUpdate().succeed();
+                this.server.lastCreate().succeed();
             });
 
             it("flashes a toast message", function () {

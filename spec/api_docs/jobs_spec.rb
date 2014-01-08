@@ -85,4 +85,26 @@ resource 'Job' do
       status.should == 200
     end
   end
+
+  post '/jobs/:id/run' do
+    parameter :id, 'Job ID'
+    required_parameters :id
+
+    let(:id) { workspaces(:public).jobs.first.id }
+
+    example_request 'Run a job' do
+      status.should == 202
+    end
+  end
+
+  post '/jobs/:id/stop' do
+    parameter :id, 'Job ID'
+    required_parameters :id
+
+    let(:id) { workspaces(:public).jobs.first.id }
+
+    example_request 'Stop a job' do
+      status.should == 202
+    end
+  end
 end

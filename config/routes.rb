@@ -105,6 +105,10 @@ Chorus::Application.routes.draw do
 
   resources :jobs, :only => [] do
     resources :job_results, :only => [:show]
+    member do
+      post 'run'
+      post 'stop'
+    end
   end
 
   resources :job_tasks, :only => [:update]

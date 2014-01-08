@@ -274,40 +274,6 @@ describe JobsController do
       end
     end
 
-    describe 'demanding an immediate run' do
-      let(:params) do
-        {
-            id: job.id,
-            workspace_id: workspace.id,
-            job: {
-              job_action: "run"
-            }
-        }
-      end
-
-      it "enqueues the job" do
-        mock(QC.default_queue).enqueue_if_not_queued("Job.run", job.id)
-        post :update, params
-      end
-    end
-
-    describe 'demanding an immediate stop' do
-      let(:params) do
-        {
-            id: job.id,
-            workspace_id: workspace.id,
-            job: {
-              job_action: "kill"
-            }
-        }
-      end
-
-      it "kills the job" do
-        any_instance_of(Job) { |job| mock(job).kill }
-        post :update, params
-      end
-    end
-
     describe 'requesting a reorder' do
       let(:ids) { %w(1 2 3) }
       let(:params) do
@@ -340,6 +306,48 @@ describe JobsController do
     it "uses authorization" do
       mock(controller).authorize!(:can_edit_sub_objects, workspace)
       delete :destroy, params
+    end
+  end
+
+  describe '#run' do
+    let(:job) { FactoryGirl.create(:job, workspace: workspace, enabled: false) }
+
+    it 'uses authorization and enqueues the job' do
+      mock(controller).authorize!(:can_edit_sub_objects, workspace)
+      mock(QC.default_queue).enqueue_if_not_queued('Job.run', job.id)
+      post :run, :id => job.id
+    end
+
+    it 'returns a 202' do
+      post :run, :id => job.id
+      response.code.should == '202'
+    end
+
+    it 'presents the job' do
+      post :run, :id => job.id
+      decoded_response[:id].should == job.id
+      decoded_response[:status].should == Job::ENQUEUED
+    end
+  end
+
+  describe '#stop' do
+    let(:job) { FactoryGirl.create(:job, workspace: workspace, enabled: false) }
+
+    it 'uses authorization and kills the job' do
+      mock(controller).authorize!(:can_edit_sub_objects, workspace)
+      any_instance_of(Job) { |job| mock(job).kill }
+      post :stop, :id => job.id
+    end
+
+    it 'returns a 202' do
+      post :stop, :id => job.id
+      response.code.should == '202'
+    end
+
+    it 'presents the job' do
+      post :stop, :id => job.id
+      decoded_response[:id].should == job.id
+      decoded_response[:status].should == Job::STOPPING
     end
   end
 

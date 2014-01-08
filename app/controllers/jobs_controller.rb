@@ -40,11 +40,7 @@ class JobsController < ApplicationController
 
     job = workspace.jobs.find(params[:id])
 
-    if params[:job][:job_action] == 'run'
-      job.enqueue
-    elsif params[:job][:job_action] == 'kill'
-      job.kill
-    elsif params[:job]['task_id_order']
+    if params[:job]['task_id_order']
       job.reorder_tasks params[:job]['task_id_order'].map(&:to_i)
     else
       Job.transaction do
@@ -62,6 +58,24 @@ class JobsController < ApplicationController
     Job.find(params[:id]).destroy
 
     head :ok
+  end
+
+  def run
+    job = Job.find(params[:id])
+    authorize! :can_edit_sub_objects, job.workspace
+
+    job.enqueue
+
+    present job, :status => :accepted
+  end
+
+  def stop
+    job = Job.find(params[:id])
+    authorize! :can_edit_sub_objects, job.workspace
+
+    job.kill
+
+    present job, :status => :accepted
   end
 
   protected
