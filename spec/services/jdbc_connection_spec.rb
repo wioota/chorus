@@ -78,34 +78,30 @@ describe JdbcConnection, :jdbc_integration do
         it_should_behave_like 'a well-behaved database query'
       end
 
-      #context 'when a name filter is passed' do
-      #  let(:subject) { connection.datasets(:name_filter => name_filter) }
-      #
-      #  context 'and the filter does not contain LIKE wildcards' do
-      #    let(:name_filter) {'nEWer'}
-      #    let(:dataset_list_sql) {
-      #      <<-SQL
-      #    SELECT * FROM (
-      #      SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(TABLE_NAME, 'EWer', 'i')
-      #      UNION
-      #      SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(VIEW_NAME, 'EWer', 'i'))
-      #    ORDER BY name
-      #      SQL
-      #    }
-      #    let(:expected) { db.fetch(dataset_list_sql).all }
-      #
-      #    it_should_behave_like 'a well-behaved database query'
-      #  end
-      #
-      #  context 'and the filter contains LIKE wildcards' do
-      #    let(:name_filter) {'_T'}
-      #
-      #    it 'only returns datasets which contain '_T' in their names (it should not use _ as a wildcard)' do
-      #      subject.length.should > 0
-      #      subject.each { |dataset| dataset[:name].should include "_T" }
-      #    end
-      #  end
-      #end
+      context 'when a name filter is passed' do
+        let(:subject) { connection.datasets(:name_filter => name_filter) }
+
+        context 'and the filter does not contain LIKE wildcards' do
+          let(:name_filter) {'nEWer'}
+          let(:dataset_list_sql) {
+            <<-SQL
+          SELECT tablename AS name, tablekind as ttype FROM dbc.tables where databasename = '#{schema_name}' and name LIKE '%#{name_filter}%' (NOT CASESPECIFIC) ORDER BY name
+            SQL
+          }
+          let(:expected) { db.fetch(dataset_list_sql).map { |row| {:name => row[:name].strip, :type => row[:ttype] == 'T' ? 't' : 'v' } } }
+
+          it_should_behave_like 'a well-behaved database query'
+        end
+
+        context 'and the filter contains LIKE wildcards' do
+          let(:name_filter) {'_T'}
+
+          it 'only returns datasets which contain `_T` in their names (it should not use _ as a wildcard)' do
+            subject.length.should > 0
+            subject.each { |dataset| dataset[:name].should match /_T/i }
+          end
+        end
+      end
 
       #context 'when showing only tables' do
       #  let(:dataset_list_sql) {

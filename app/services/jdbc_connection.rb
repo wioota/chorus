@@ -31,7 +31,7 @@ class JdbcConnection < DataSourceConnection
 
   def datasets(options={})
     with_connection do |connection|
-      res = connection.datasets(:schema => schema_name)
+      res = connection.datasets(options.merge(:schema => schema_name))
       res.take(options[:limit] || res.size)
     end
   end

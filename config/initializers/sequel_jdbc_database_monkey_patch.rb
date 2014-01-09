@@ -31,7 +31,12 @@ module Sequel
 
       def get_tables_s(types, opts)
         ts = []
-        metadata_it(types, opts) { |h| ts << { :name => h[:table_name], :type => table_type?(h[:table_type])} }
+        name_matcher = Regexp.compile(Regexp.escape(opts[:name_filter]), Regexp::IGNORECASE) if opts[:name_filter]
+        metadata_it(types, opts) do |h|
+          unless name_matcher && name_matcher !~ h[:table_name]
+            ts << {:name => h[:table_name], :type => table_type?(h[:table_type])}
+          end
+        end
         ts
       end
 
