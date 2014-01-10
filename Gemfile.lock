@@ -321,7 +321,7 @@ GEM
       multi_json (~> 1.0)
       rubyzip (< 1.0.0)
       websocket (~> 1.0.4)
-    sequel (3.46.0)
+    sequel (4.6.0)
     shoulda-matchers (2.3.0)
       activesupport (>= 3.0.0)
     sprockets (2.2.2)
@@ -419,7 +419,7 @@ DEPENDENCIES
   rspec-rails
   rspec_api_documentation!
   sass-rails
-  sequel (~> 3.46.0)
+  sequel (~> 4.0)
   shoulda-matchers
   sunspot_matchers
   sunspot_rails (~> 2.0.0)

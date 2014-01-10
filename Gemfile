@@ -13,7 +13,7 @@ gem 'sunspot_rails', '~> 2.0.0'
 gem 'jetpack', :github => 'Chorus/jetpack', :require => false
 gem 'nokogiri'
 gem 'postgresql_cursor', :github => 'Chorus/postgresql_cursor'
-gem 'sequel', '~> 3.46.0', :require => 'sequel/no_core_ext'
+gem 'sequel', '~> 4.0', :require => 'sequel/no_core_ext'
 gem 'attr_encrypted' #if you load attr_encrypted before sequel, it blows up saying 'sequel::model' is undefined
 gem 'tabcmd_gem', :github => 'Chorus/tableau'
 gem 'chorusgnip', :github => 'Chorus/gnip'

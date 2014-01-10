@@ -446,8 +446,7 @@ describe GreenplumConnection, :greenplum_integration do
       let!(:db) { Sequel.connect(db_url, db_options) }
 
       after do
-        db.default_schema = schema_name
-        db.drop_view('a_new_db_view') if db.views.map(&:to_s).include? 'a_new_db_view'
+        db.drop_view(Sequel.qualify(schema_name, 'a_new_db_view')) if db.views(:schema => schema_name).map(&:to_s).include? 'a_new_db_view'
         db.disconnect
       end
 
@@ -459,7 +458,7 @@ describe GreenplumConnection, :greenplum_integration do
       it 'creates a view' do
         expect {
           connection.create_view('a_new_db_view', 'select 1;')
-        }.to change { Sequel.connect(db_url, db_options).views }
+        }.to change { db.views(:schema => schema_name) }
       end
 
       context 'when a view with that name already exists' do
@@ -476,7 +475,6 @@ describe GreenplumConnection, :greenplum_integration do
 
       after do
         if table_name == "a_new_external_table"
-          db.default_schema = schema_name
           db.execute("DROP EXTERNAL TABLE IF EXISTS \"#{schema_name}\".\"#{table_name}\"")
           db.disconnect
         end
@@ -505,7 +503,7 @@ describe GreenplumConnection, :greenplum_integration do
       it 'creates an external table' do
         expect {
           subject
-        }.to change { Sequel.connect(db_url, db_options).tables }
+        }.to change { db.tables(:schema => schema_name) }
       end
 
       it 'sets the format to TEXT' do
@@ -625,12 +623,11 @@ describe GreenplumConnection, :greenplum_integration do
 
         around do |example|
           db = Sequel.connect(db_url, db_options)
-          db.default_schema = schema_name
-          db.create_table(table_to_drop)
+          db.create_table(Sequel.qualify schema_name, table_to_drop)
 
           example.run
 
-          db.drop_table(table_to_drop, :if_exists => true)
+          db.drop_table(Sequel.qualify(schema_name, table_to_drop), :if_exists => true)
           db.disconnect
         end
 
@@ -1234,8 +1231,7 @@ describe GreenplumConnection, :greenplum_integration do
       let!(:db) { Sequel.connect(db_url, db_options) }
 
       after do
-        db.default_schema = schema_name
-        db.drop_table('a_new_db_table', :if_exists => true)
+        db.drop_table(Sequel.qualify(schema_name, 'a_new_db_table'), :if_exists => true)
         db.disconnect
       end
 
@@ -1249,7 +1245,7 @@ describe GreenplumConnection, :greenplum_integration do
       it 'creates a table' do
         expect {
           subject
-        }.to change { Sequel.connect(db_url, db_options).tables }
+        }.to change { Sequel.connect(db_url, db_options).tables(:schema => schema_name) }
       end
 
       context 'when a table with that name already exists' do
@@ -1280,7 +1276,6 @@ describe GreenplumConnection, :greenplum_integration do
       before do
         stub(user).id { 'user id' }
         stub(connection).current_user { current_user }
-        conn.default_schema = schema_name
         conn.execute("SET search_path to \"#{schema_name}\"")
         conn.create_table(destination_table_name, :as => "select * from #{schema_name}.base_table1 limit 0")
       end
@@ -1350,8 +1345,7 @@ describe GreenplumConnection, :greenplum_integration do
       end
 
       after do
-        db.default_schema = schema_name
-        db.drop_table(table_name, :if_exists => true)
+        db.drop_table(Sequel.qualify(schema_name, table_name), :if_exists => true)
         db.disconnect
       end
 

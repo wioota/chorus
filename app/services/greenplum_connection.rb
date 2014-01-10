@@ -63,7 +63,6 @@ class GreenplumConnection < DataSourceConnection
       if include_public_schema
         search_path << ", public"
       end
-      @connection.default_schema = schema_name
       @connection.execute(search_path)
     end
 
@@ -247,7 +246,6 @@ class GreenplumConnection < DataSourceConnection
           search_path << ", public"
         end
 
-        @connection.default_schema = schema_name
         @connection.execute(search_path)
       end
 
@@ -301,8 +299,8 @@ class GreenplumConnection < DataSourceConnection
 
     def metadata_for_dataset(table_name)
       with_connection do |connection|
-        relations = connection.from(:pg_catalog__pg_class => :relations)
-        schema_query = connection.from(:pg_namespace => :schemas).where(:nspname => schema_name).select(:oid)
+        relations = connection.from(Sequel.as(:pg_catalog__pg_class, :relations))
+        schema_query = connection.from(Sequel.as(:pg_namespace, :schemas)).where(:nspname => schema_name).select(:oid)
         relations_in_schema = relations.where(:relnamespace => schema_query)
         query = relations_in_schema.where(:relations__relname => table_name)
 
@@ -315,12 +313,12 @@ class GreenplumConnection < DataSourceConnection
         # Last analyzed time
         query = query.left_outer_join(:pg_stat_last_operation, :objid => :relations__oid, :staactionname => 'ANALYZE')
 
-        query = query.select(:relations__reltuples => :row_count, :relations__relname => :name,
-                             :pg_views__definition => :definition, :relations__relnatts => :column_count,
-                             :pg_stat_last_operation__statime => :last_analyzed, :relations__oid => :oid)
+        query = query.select(Sequel.as(:relations__reltuples, :row_count), Sequel.as(:relations__relname, :name),
+                             Sequel.as(:pg_views__definition, :definition), Sequel.as(:relations__relnatts, :column_count),
+                             Sequel.as(:pg_stat_last_operation__statime, :last_analyzed), Sequel.as(:relations__oid, :oid))
 
         partition_count_query = connection[:pg_partitions].where(:schemaname => schema_name, :tablename => table_name).select { count(schemaname) }
-        query = query.select_append(partition_count_query => :partition_count)
+        query = query.select_append(Sequel.as(partition_count_query, :partition_count))
 
         query = query.select_append { obj_description(relations__oid).as('description') }
 
@@ -333,7 +331,7 @@ class GreenplumConnection < DataSourceConnection
             ],
             'EXT_TABLE'
         )
-        query = query.select_append(table_type => :table_type)
+        query = query.select_append(Sequel.as(table_type, :table_type))
 
         result = query_with_disk_size(query, connection)
 
@@ -355,7 +353,7 @@ class GreenplumConnection < DataSourceConnection
           Sequel.cast(Sequel.lit("pg_total_relation_size(relations.oid)"), String)
         )
 
-        result = query.select_append(disk_size => :disk_size).first
+        result = query.select_append(Sequel.as(disk_size, :disk_size)).first
       rescue Sequel::DatabaseError # if the above query fails, assume we're querying HAWQ and use the equivalent HAWQ query instead
         result = query.first
         result[:disk_size] = connection.from(:"pg_aoseg__pg_aoseg_#{result[:oid]}").sum(:eof) if result
@@ -429,7 +427,7 @@ class GreenplumConnection < DataSourceConnection
 
     def datasets_query(options)
       with_connection do |connection|
-        query = connection.from(:pg_catalog__pg_class => :relations).select(:relkind => 'type', :relname => 'name', :relhassubclass => 'master_table')
+        query = connection.from(Sequel.as(:pg_catalog__pg_class, :relations)).select(Sequel.as(:relkind, 'type'), Sequel.as(:relname, 'name'), Sequel.as(:relhassubclass, 'master_table'))
         query = query.select_append do |o|
           o.`(%Q{('#{quote_identifier(schema_name)}."' || relations.relname || '"')::regclass})
         end
@@ -445,7 +443,7 @@ class GreenplumConnection < DataSourceConnection
           query = query.where("\"relname\" ILIKE '%#{::DataSourceConnection.escape_like_string(options[:name_filter])}%' ESCAPE '#{::DataSourceConnection::LIKE_ESCAPE_CHARACTER}'")
         end
 
-        yield query.qualify_to_first_source
+        yield query.qualify
       end
     rescue DatabaseError => e
       raise SqlPermissionDenied, e if e.message =~ /permission denied/i
