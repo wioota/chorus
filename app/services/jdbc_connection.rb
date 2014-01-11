@@ -9,12 +9,22 @@ class JdbcConnection < DataSourceConnection
     super.merge :identifier_output_method => nil
   end
 
+  def connect!
+    super
+    @connection.extension :jdbc_metadata
+    @connection
+  end
+
   def version
-    with_connection { |connection| connection.version }.slice(0,255)
+    with_connection { |connection| connection.get_metadata(:getDatabaseProductVersion) }.slice(0,255)
   end
 
   def schemas
-    with_connection { |connection| connection.schemas }
+    with_connection do |connection|
+      ss = []
+      connection.process_metadata(:getSchemas){ |h| ss << h[:table_schem] }
+      ss
+    end
   end
 
   def schema_exists?(name)
@@ -22,21 +32,29 @@ class JdbcConnection < DataSourceConnection
   end
 
   def table_exists?(name)
-    object_exists? :tables, name
+    object_exists? JDBC_TYPES[:tables], name
   end
 
   def view_exists?(name)
-    object_exists? :views, name
+    object_exists? JDBC_TYPES[:views], name
   end
 
   def datasets(options={})
-    with_connection do |connection|
-      res = connection.datasets(options.merge(:schema => schema_name))
-      res.take(options[:limit] || res.size)
+    res = []
+    name_matcher = Regexp.compile(Regexp.escape(options[:name_filter]), Regexp::IGNORECASE) if options[:name_filter]
+    count = 0
+    metadata_get_tables(JDBC_TYPES[:datasets], options.merge(:schema => schema_name)) do |h|
+      break if options[:limit] && count >= options[:limit]
+      unless name_matcher && name_matcher !~ h[:table_name]
+        count += 1
+        res << {:name => h[:table_name], :type => table_type?(h[:table_type])}
+      end
     end
+    res
   end
 
   def datasets_count(options={})
+    # todo: this is pretty egregious, loads all the datasets...
     datasets(options).size
   end
 
@@ -63,15 +81,36 @@ class JdbcConnection < DataSourceConnection
 
   private
 
+  JDBC_TYPES = {
+      :tables => %w(TABLE),
+      :views => %w(VIEW),
+      :datasets => %w(TABLE VIEW)
+  }
+
   def schema_name
     @options[:schema]
   end
 
-  def object_exists?(type, name)
+  def object_exists?(types, name)
     return false unless name
+    ts = []
+    metadata_get_tables(types, :schema => schema_name, :table_name => name) do |h|
+      ts << h[:table_name]
+    end
+    ts.include? name
+  end
+
+  def table_type?(type)
+    case type
+      when 'TABLE' then 't'
+      when 'VIEW' then 'v'
+      else nil
+    end
+  end
+
+  def metadata_get_tables(types, opts, &block)
     with_connection do |connection|
-      res = connection.send(type, :schema => schema_name, :table_name => name)
-      res.include? name.to_sym
+      connection.process_metadata(:getTables, nil, opts[:schema], opts[:table_name], types.to_java(:string), &block)
     end
   end
 end

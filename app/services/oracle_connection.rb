@@ -47,7 +47,9 @@ class OracleConnection < DataSourceConnection
   end
 
   def version
-    with_connection { |connection| connection.version }.slice(0,255)
+    with_connection do |connection|
+      connection.fetch(%Q{select * from v$version where banner like 'Oracle%'}).first.first[1]
+    end.match(/((\d+\.)+\d+)/)[1]
   end
 
   def schemas
