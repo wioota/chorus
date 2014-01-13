@@ -116,25 +116,18 @@ describe JdbcConnection, :jdbc_integration do
       #  it_should_behave_like 'a well-behaved database query'
       #end
 
-      #context 'when multiple options are passed' do
-      #  let(:dataset_list_sql) {
-      #    <<-SQL
-      #  SELECT * FROM (
-      #    SELECT * FROM (
-      #      SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(TABLE_NAME, 'EWer', 'i')
-      #      UNION
-      #      SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(VIEW_NAME, 'EWer', 'i')
-      #    )
-      #    ORDER BY name
-      #  )
-      #  WHERE rownum <= 1
-      #    SQL
-      #  }
-      #  let(:expected) { db.fetch(dataset_list_sql).all }
-      #  let(:subject) { connection.datasets(:name_filter => 'nEWer', :limit => 1) }
-      #
-      #  it_should_behave_like 'a well-behaved database query'
-      #end
+      context 'when multiple options are passed' do
+        let(:name_filter) {'nEWer'}
+        let(:dataset_list_sql) {
+          <<-SQL
+        SELECT top 1 tablename AS name, tablekind as ttype FROM dbc.tables where databasename = '#{schema_name}' and name LIKE '%#{name_filter}%' (NOT CASESPECIFIC) ORDER BY name
+          SQL
+        }
+        let(:expected) { db.fetch(dataset_list_sql).map { |row| {:name => row[:name].strip, :type => row[:ttype] == 'T' ? 't' : 'v' } }  }
+        let(:subject) { connection.datasets(:name_filter => name_filter, :limit => 1) }
+
+        it_should_behave_like 'a well-behaved database query'
+      end
     end
 
     describe '#datasets_count' do
@@ -151,22 +144,19 @@ describe JdbcConnection, :jdbc_integration do
 
       it_should_behave_like 'a well-behaved database query'
 
-    #  context 'when a name filter is passed' do
-    #    let(:dataset_list_sql) {
-    #      <<-SQL
-    #    SELECT count(*) FROM (
-    #      SELECT 't' as type, TABLE_NAME AS name FROM ALL_TABLES WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(TABLE_NAME, 'EWer', 'i')
-    #      UNION
-    #      SELECT 'v' as type, VIEW_NAME AS name FROM ALL_VIEWS WHERE OWNER = '#{schema_name}' AND REGEXP_LIKE(VIEW_NAME, 'EWer', 'i')
-    #    )
-    #      SQL
-    #    }
-    #    let(:expected) { db.fetch(dataset_list_sql).single_value }
-    #    let(:subject) { connection.datasets_count(:name_filter => 'nEWer') }
-    #
-    #    it_should_behave_like 'a well-behaved database query'
-    #  end
-    #
+      context 'when a name filter is passed' do
+        let(:name_filter) {'nEWer'}
+        let(:dataset_list_sql) {
+          <<-SQL
+        SELECT COUNT(*) FROM dbc.tables where databasename = '#{schema_name}' and tablename LIKE '%#{name_filter}%' (NOT CASESPECIFIC)
+          SQL
+        }
+        let(:expected) { db.fetch(dataset_list_sql).single_value }
+        let(:subject) { connection.datasets_count(:name_filter => name_filter) }
+
+        it_should_behave_like 'a well-behaved database query'
+      end
+
     #  context 'when showing only tables' do
     #    let(:dataset_list_sql) {
     #      <<-SQL
