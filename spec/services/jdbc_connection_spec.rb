@@ -276,8 +276,8 @@ describe JdbcConnection, :jdbc_integration do
           SELECT
           COLUMNNAME,
           COLUMNID,
-          CASE WHEN COLUMNTYPE='CV' THEN 'string'
-               WHEN COLUMNTYPE='I' THEN 'integer'
+          CASE WHEN COLUMNTYPE='CV' THEN 'VARCHAR'
+               WHEN COLUMNTYPE='I' THEN 'INTEGER'
           END AS COLUMNTYPE
           FROM DBC.COLUMNS
           WHERE DATABASENAME=:schema AND TABLENAME=:table ) TBL ORDER BY COLUMNID
