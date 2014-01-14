@@ -272,7 +272,7 @@ describe DataSource do
       DataSource.reindex_data_source(data_source.id)
     end
 
-    it "should reindex all of it's datasets" do
+    it "should reindex all of its datasets" do
       mock(Sunspot).index(is_a(Dataset)).times(data_source.datasets.count)
       DataSource.reindex_data_source(data_source.id)
     end

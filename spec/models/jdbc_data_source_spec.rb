@@ -108,4 +108,20 @@ describe JdbcDataSource do
       subject.type_name.should == 'DataSource'
     end
   end
+
+  describe '.reindex_data_source' do
+    before do
+      stub(Sunspot).index.with_any_args
+    end
+
+    it 'reindexes itself' do
+      mock(Sunspot).index(data_source)
+      DataSource.reindex_data_source(data_source.id)
+    end
+
+    it 'should reindex all of its datasets' do
+      mock(Sunspot).index(is_a(Dataset)).times(data_source.datasets.count)
+      DataSource.reindex_data_source(data_source.id)
+    end
+  end
 end
