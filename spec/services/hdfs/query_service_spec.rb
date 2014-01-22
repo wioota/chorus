@@ -3,6 +3,8 @@ require 'java'
 
 describe Hdfs::QueryService, :hdfs_integration do
   let(:hdfs_params) { HdfsIntegration.data_source_config }
+  let(:service) { Hdfs::QueryService.new(hdfs_params["host"], hdfs_params["port"], hdfs_params["username"], nil, false, []) }
+
   before :all do
     # silence the HDFS log output from failed version connections
     @java_stdout = java.lang.System.out
@@ -24,10 +26,9 @@ describe Hdfs::QueryService, :hdfs_integration do
         HdfsDataSource.new hdfs_params
       end
 
-      #todo: these specs should be updated to not depend on specific versions of hadoop
       it "returns the hadoop version" do
         version = described_class.version_of(data_source)
-        version.should == "0.20.1gp"
+        version.should == hdfs_params['adapter_version']
       end
     end
 
@@ -76,8 +77,6 @@ describe Hdfs::QueryService, :hdfs_integration do
   end
 
   describe "#list" do
-    let(:service) { Hdfs::QueryService.new(hdfs_params["host"], hdfs_params["port"], hdfs_params["username"], "0.20.1gp", false, []) }
-
     context "listing root with sub content" do
       it "returns list of content for root directory" do
         response = service.list("/")
@@ -108,8 +107,6 @@ describe Hdfs::QueryService, :hdfs_integration do
   end
 
   describe "#details" do
-    let(:service) { Hdfs::QueryService.new(hdfs_params["host"], hdfs_params["port"], hdfs_params["username"], "0.20.1gp", false, []) }
-
     it "fetches details" do
       hdfs_entry_details = service.details("/")
       hdfs_entry_details.owner.should_not be_nil
@@ -131,7 +128,6 @@ describe Hdfs::QueryService, :hdfs_integration do
   end
 
   describe "#show" do
-    let(:service) { Hdfs::QueryService.new(hdfs_params["host"], hdfs_params["port"], hdfs_params["username"], "0.20.1gp", false, []) }
     before do
       any_instance_of(com.emc.greenplum.hadoop.Hdfs) do |java_hdfs|
         stub(java_hdfs).content(is_a(String), 200) { file_content }

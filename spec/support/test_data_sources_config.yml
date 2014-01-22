@@ -44,20 +44,17 @@ data_sources:
 
   hadoop:
     - host: "alpine-hadoop"
-      port: "8200"
+      port: "9000"
       username: "alpine"
       group_list: "supergroup"
       hdfs_version: "Apache Hadoop 0.20.2"
+      adapter_version: "1.0.0"
 
     - host: "chorus-gphd02"
       port: 8020
       username: "pivotal"
       hdfs_version: "Greenplum HD 0.20"
-
-    - host: "chorus-gphd11"
-      port: 8020
-      username: "hadoop"
-      hdfs_version: "Greenplum HD 1.1"
+      adapter_version: "0.20.1gp"
 
   oracle:
     - host: "chorus-oracle"
