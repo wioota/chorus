@@ -19,6 +19,13 @@ demo:
   kill_workers: true
   kill_alpine: true
 
+alpineqa4:
+  host: alpineqa4.alpinenow.local
+  install_path: ~/chorusrails-deploy-new
+  postgres_build: 2
+  kill_workers: true
+  kill_alpine: true
+
 upgrade21:
   host: chorus-chorus21-upgrade
   legacy_path: ~/chorus
