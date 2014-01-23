@@ -282,6 +282,19 @@ describe JdbcConnection, :jdbc_integration do
       it_should_behave_like 'a well-behaved database query'
     end
 
+    context 'Sequel column parsing' do
+      describe '#schema_parse_table' do
+        # a pseudo test of sequel's jdbc schema_parse_table implementation, mostly affecting sql server
+        # it will skip any columns with :table_schem == 'INFORMATION_SCHEMA' causing it to
+        # raise Sequel::Error when there are not non INFORMATION_SCHEMA cols in a table/view
+        it 'does not skip information schema columns' do
+          connection.with_connection do |c|
+            c.send(:'schema_parse_table_skip?', 'any', 'any').should be_false
+          end
+        end
+      end
+    end
+
     #describe 'primary_key_columns' do
     #  context 'with a primary key' do
     #    let(:expected) { %w(COLUMN2 COLUMN1) }
