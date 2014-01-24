@@ -18,6 +18,11 @@ describe("chorus.alerts.DataSourceDelete", function() {
     describe("for a hdfs data source", function() {
         beforeEach(function() {
             this.alert.model = backboneFixtures.hdfsDataSource();
+            this.alert.render();
+        });
+
+        it("has the correct title", function() {
+            expect(this.alert.$el).toContainTranslation("data_sources.delete.title", {datasourceName: this.dataSource.name()});
         });
 
         it("has the correct text", function() {
@@ -28,6 +33,11 @@ describe("chorus.alerts.DataSourceDelete", function() {
     describe("for a greenplum data source", function() {
         beforeEach(function() {
             this.alert.model = backboneFixtures.gpdbDataSource();
+            this.alert.render();
+        });
+
+        it("has the correct title", function() {
+            expect(this.alert.$el).toContainTranslation("data_sources.delete.title", {datasourceName: this.dataSource.name()});
         });
 
         it("has the correct text", function() {
@@ -38,6 +48,11 @@ describe("chorus.alerts.DataSourceDelete", function() {
     describe("for an oracle data source", function() {
         beforeEach(function() {
             this.alert.model = backboneFixtures.oracleDataSource();
+            this.alert.render();
+        });
+
+        it("has the correct title", function() {
+            expect(this.alert.$el).toContainTranslation("data_sources.delete.title", {datasourceName: this.dataSource.name()});
         });
 
         it("has the correct text", function() {
@@ -48,6 +63,11 @@ describe("chorus.alerts.DataSourceDelete", function() {
     describe("for a jdbc data source", function() {
         beforeEach(function() {
             this.alert.model = backboneFixtures.jdbcDataSource();
+            this.alert.render();
+        });
+
+        it("has the correct title", function() {
+            expect(this.alert.$el).toContainTranslation("data_sources.delete.title", {datasourceName: this.dataSource.name()});
         });
 
         it("has the correct text", function() {

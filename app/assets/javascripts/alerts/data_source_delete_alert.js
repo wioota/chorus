@@ -1,7 +1,9 @@
 chorus.alerts.DataSourceDelete = chorus.alerts.ModelDelete.extend({
     constructorName: "DataSourceDelete",
 
-    title: t("data_sources.delete.title"),
+    title: function() {
+        return t("data_sources.delete.title", {datasourceName: this.name});
+    },
     ok: t("actions.delete_data_source"),
     deleteMessage: "data_sources.delete.toast",
 
