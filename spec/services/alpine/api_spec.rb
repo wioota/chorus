@@ -95,6 +95,7 @@ describe Alpine::API do
       params = CGI::parse unparsed_query_string
       params['session_id'][0].should == mock_session_id
       params['workfile_id'][0].should == work_flow.id.to_s
+      params['workspace_id'][0].should == work_flow.workspace.id.to_s
     end
 
     context 'when work_flow is disabled' do

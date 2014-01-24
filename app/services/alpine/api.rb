@@ -117,7 +117,8 @@ module Alpine
         :method => 'importWorkFlow',
         :session_id => session_id,
         :file_name => work_flow.file_name,
-        :workfile_id => work_flow.id
+        :workfile_id => work_flow.id,
+        :workspace_id => work_flow.workspace.id
       }
       path_with(params)
     end
