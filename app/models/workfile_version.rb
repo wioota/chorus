@@ -53,6 +53,8 @@ class WorkfileVersion < ActiveRecord::Base
       'code'
     elsif sql?
       'sql'
+    elsif xml?
+      'xml'
     elsif text?
       'text'
     else
@@ -65,7 +67,11 @@ class WorkfileVersion < ActiveRecord::Base
   end
 
   def text?
-    content_type && content_type.include?('text') && !content_type.include?('opendocument')
+    content_type && (content_type.include?('text') || xml?) && !content_type.include?('opendocument')
+  end
+
+  def xml?
+    content_type && content_type.include?('application/xml')
   end
 
   def sql?

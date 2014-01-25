@@ -7,7 +7,7 @@ chorus.views.WorkfileContent = chorus.views.Base.extend({
                 return new chorus.views.ImageWorkfileContent({ model:model });
             }
 
-            if (model.isPartialFile()) {
+            if (model.isPartialFile() || model.isXml()) {
                 return new chorus.views.ReadOnlyTextContent({ model:model });
             }
 

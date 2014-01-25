@@ -60,9 +60,21 @@ describe("chorus.views.WorkfileContentDetails", function() {
                 this.model = backboneFixtures.workfile.sql({versionInfo: {partialFile: true}});
             });
 
-            it("instantiates a ReadOnlyWorkfileContentDetails", function() {
+            it("instantiates a PartialWorkfileContentDetails", function() {
                 var contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
                 expect(contentDetails).toBeA(chorus.views.PartialWorkfileContentDetails);
+            });
+        });
+
+        context("when the given workfile is an xml file", function() {
+            beforeEach(function() {
+                this.model = backboneFixtures.workfile.sql();
+                this.model.set('fileType', 'xml');
+            });
+
+            it("instantiates a ReadOnlyWorkfileContentDetails", function() {
+                var contentDetails = chorus.views.WorkfileContentDetails.buildFor(this.model);
+                expect(contentDetails).toBeA(chorus.views.ReadOnlyWorkfileContentDetails);
             });
         });
 

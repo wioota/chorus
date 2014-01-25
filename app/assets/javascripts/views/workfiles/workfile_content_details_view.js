@@ -102,6 +102,10 @@ chorus.views.WorkfileContentDetails = chorus.views.Base.include(
             return new chorus.views.BinaryWorkfileContentDetails({ model:model });
         }
 
+        if (model.isXml()) {
+            return new chorus.views.ReadOnlyWorkfileContentDetails({ model:model });
+        }
+
         return new chorus.views.WorkfileContentDetails({ model:model });
     }
 });

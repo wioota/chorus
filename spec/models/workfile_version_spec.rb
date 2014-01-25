@@ -60,6 +60,13 @@ describe WorkfileVersion do
       its(:image?) { should be_false }
       its(:text?) { should be_false }
     end
+
+    context 'with a pmml file' do
+      let(:filename) { 'model.pmml' }
+      its(:file_type) { should == 'xml' }
+      its(:image?) { should be_false }
+      its(:text?) { should be_true }
+    end
   end
 
   describe "validations" do
@@ -169,6 +176,13 @@ describe WorkfileVersion do
       let(:workfile_version) { workfiles(:'image.png').versions.first }
       it "returns nil" do
         workfile_version.get_content.should be_nil
+      end
+    end
+
+    context 'when it is a pmml file' do
+      let(:workfile_version) { workfiles(:'model.pmml').versions.first }
+      it 'returns the file contents' do
+        workfile_version.get_content.should == expected_contents
       end
     end
   end

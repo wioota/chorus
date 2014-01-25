@@ -6,6 +6,7 @@
     var TEXT = 'text';
     var ALPINE = 'alpine';
     var TABLEAU = 'tableau_workbook';
+    var XML_TYPE = 'xml';
     var OTHER = 'other';
 
     chorus.models.Workfile = chorus.models.Base.include(
@@ -153,6 +154,10 @@
 
         isBinary: function() {
             return this.get("fileType") === OTHER;
+        },
+
+        isXml: function() {
+            return this.get("fileType") === XML_TYPE;
         },
 
         extension: function() {

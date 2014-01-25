@@ -23,7 +23,20 @@ describe("chorus.views.WorkfileContent", function() {
                 chorus.views.WorkfileContent.buildFor(this.model);
             });
 
-            it("instantiates an TextWorkfileContent view with the given workfile", function() {
+            it("instantiates an ReadOnlyTextContent view with the given workfile", function() {
+                expect(chorus.views.ReadOnlyTextContent).toHaveBeenCalledWith({ model : this.model });
+            });
+        });
+
+        context("when the given workfile is an xml file", function() {
+            beforeEach(function() {
+                this.model = backboneFixtures.workfile.text();
+                this.model.set('fileType', 'xml');
+                spyOn(chorus.views, "ReadOnlyTextContent");
+                chorus.views.WorkfileContent.buildFor(this.model);
+            });
+
+            it("instantiates an ReadOnlyTextContent view with the given workfile", function() {
                 expect(chorus.views.ReadOnlyTextContent).toHaveBeenCalledWith({ model : this.model });
             });
         });
