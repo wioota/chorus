@@ -29,6 +29,8 @@ describe("chorus.urlHelpers", function() {
             verifyUrl("xls", "xls");
             verifyUrl("xlsx", "xls");
             verifyUrl("twb", "tableau");
+            verifyUrl("pmml", "pmml");
+            verifyUrl("xml", "xml");
         });
 
         it("maps unknown fileTypes to plain.png", function() {
