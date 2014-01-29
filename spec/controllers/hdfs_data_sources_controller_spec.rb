@@ -36,7 +36,7 @@ describe HdfsDataSourcesController do
       let(:params) { FactoryGirl.attributes_for(:hdfs_data_source, :high_availability => true, :connection_parameters => [{"a.key" => "a.value"}]) }
 
       before do
-        stub(Hdfs::DataSourceRegistrar).verify_data_source_accessibility.with_any_args { true }
+        stub(Hdfs::DataSourceRegistrar).verify_accessibility!.with_any_args { true }
         stub(Hdfs::QueryService).version_of.with_any_args { "Cloudera CDH4" }
       end
 
@@ -122,7 +122,7 @@ describe HdfsDataSourcesController do
 
   context 'in demo mode' do
     before do
-      stub(Hdfs::DataSourceRegistrar).verify_data_source_accessibility.with_any_args { true }
+      stub(Hdfs::DataSourceRegistrar).verify_accessibility!.with_any_args { true }
       stub(Hdfs::QueryService).version_of.with_any_args { "Cloudera CDH4" }
     end
 

@@ -83,6 +83,23 @@ describe Hdfs::DataSourceRegistrar do
       hdfs_data_source.save
     end
 
+    context 'any changes to the data source are made' do
+      let(:new_attributes) { data_source_attributes.merge(:port => 7000) }
+
+      it 'checks version and accessibility with the updated attributes' do
+        mock(Hdfs::QueryService).version_of(is_a HdfsDataSource) do |ds|
+          ds.port.should == 7000
+          hadoop_version
+        end
+        mock(Hdfs::QueryService).accessible?(is_a HdfsDataSource) do |ds|
+          ds.port.should == 7000
+          is_accessible
+        end
+
+        described_class.update!(hdfs_data_source.id, new_attributes, user)
+      end
+    end
+
     context "invalid changes to the data_source are made" do
       before do
         data_source_attributes[:name] = ''
