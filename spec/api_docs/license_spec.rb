@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource License do
+resource 'License' do
   let(:user) { users(:admin) }
 
   get '/license' do
