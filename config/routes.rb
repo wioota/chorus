@@ -1,6 +1,7 @@
 Chorus::Application.routes.draw do
   resource :sessions, :only => [:create, :destroy, :show]
   resource :config, :only => [:show], :controller => 'configurations'
+  resource :license, :only => [:show]
   resources :activities, :only => [:index, :show], :controller => 'events'
   resources :taggings, :only => [:create, :index]
   resources :tags, :only => [:index, :destroy, :update]

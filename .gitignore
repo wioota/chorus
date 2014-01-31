@@ -69,6 +69,7 @@ GREENPLUM_IP
 
 # Ignore app configuration
 /config/chorus.properties
+/config/chorus.license
 /config/database.yml
 
 # Ignore secret keys

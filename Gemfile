@@ -21,6 +21,7 @@ gem 'logger-syslog'
 gem 'newrelic_rpm'
 gem 'premailer-rails'
 gem 'messengerjs-rails'
+gem 'honor_codes', '~> 0.1.0'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false

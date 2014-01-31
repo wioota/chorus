@@ -195,6 +195,8 @@ GEM
     headless (1.0.1)
     highline (1.6.20)
     hike (1.2.3)
+    honor_codes (0.1.1)
+      thor (~> 0.18.1)
     hpricot (0.8.6)
     hpricot (0.8.6-java)
     htmlentities (4.3.1)
@@ -393,6 +395,7 @@ DEPENDENCIES
   handlebars_assets
   hashie
   headless
+  honor_codes (~> 0.1.0)
   jasmine!
   jasmine-core!
   jetpack!

@@ -1,6 +1,6 @@
 require 'minimal_spec_helper'
-require_relative "../../packaging/install/chorus_installer"
-require_relative "stub_executor"
+require_relative '../../packaging/install/chorus_installer'
+require_relative 'stub_executor'
 require 'fakefs/spec_helpers'
 
 describe ChorusInstaller do
@@ -413,19 +413,7 @@ describe ChorusInstaller do
     before do
       installer.destination_path = "/usr/local/chorus"
 
-      FileUtils.mkdir_p './chorus_installation/config'
-      FileUtils.mkdir_p './chorus_installation/packaging'
-      FileUtils.touch './chorus_installation/packaging/database.yml.example'
-      FileUtils.touch './chorus_installation/packaging/sunspot.yml.example'
-      FileUtils.touch './chorus_installation/config/chorus.properties.example'
-      FileUtils.touch './chorus_installation/config/chorus.defaults.properties'
-    end
-
-    it "should create chorus.properties.example in shared path" do
-      File.exists?('/usr/local/chorus/shared/chorus.properties.example').should be_false
-      installer.copy_config_files
-
-      File.exists?('/usr/local/chorus/shared/chorus.properties.example').should be_true
+      touch_files
     end
 
     context "chorus.properties" do
@@ -447,6 +435,50 @@ describe ChorusInstaller do
         it "should not overwrite existing chorus.properties" do
           installer.copy_config_files
           File.read('/usr/local/chorus/shared/chorus.properties').strip.should == "some yaml stuff"
+        end
+      end
+    end
+
+    context 'chorus.license' do
+      context 'when chorus.license does not exist in shared path' do
+        it 'creates chorus.license file in shared path' do
+          expect {
+            installer.copy_config_files
+          }.to change { File.exists? '/usr/local/chorus/shared/chorus.license' }.from(false).to(true)
+        end
+      end
+
+      context 'when chorus.license file already exists in the shared path' do
+        before do
+          FileUtils.mkdir_p('/usr/local/chorus/shared')
+          File.open('/usr/local/chorus/shared/chorus.license', 'w') { |f| f.puts 'existing' }
+        end
+
+        it 'should not overwrite existing chorus.license' do
+          installer.copy_config_files
+          File.read('/usr/local/chorus/shared/chorus.license').strip.should == 'existing'
+        end
+      end
+    end
+
+    context 'chorus.license.default' do
+      context 'when chorus.license.default does not exist in shared path' do
+        it 'creates chorus.license.default file in shared path' do
+          expect {
+            installer.copy_config_files
+          }.to change { File.exists? '/usr/local/chorus/shared/chorus.license.default' }.from(false).to(true)
+        end
+      end
+
+      context 'when chorus.license.default file already exists in the shared path' do
+        before do
+          FileUtils.mkdir_p('/usr/local/chorus/shared')
+          File.open('/usr/local/chorus/shared/chorus.license.default', 'w') { |f| f.puts 'existing' }
+        end
+
+        it 'should overwrite existing chorus.license.default' do
+          installer.copy_config_files
+          File.read('/usr/local/chorus/shared/chorus.license.default').strip.should == ''
         end
       end
     end
@@ -498,12 +530,7 @@ describe ChorusInstaller do
     before do
       installer.destination_path = "/usr/local/chorus"
 
-      FileUtils.mkdir_p './chorus_installation/config'
-      FileUtils.mkdir_p './chorus_installation/packaging'
-      FileUtils.touch './chorus_installation/packaging/database.yml.example'
-      FileUtils.touch './chorus_installation/packaging/sunspot.yml.example'
-      FileUtils.touch './chorus_installation/config/chorus.properties.example'
-      FileUtils.touch './chorus_installation/config/chorus.defaults.properties'
+      touch_files
       installer.copy_config_files
     end
 
@@ -551,12 +578,7 @@ describe ChorusInstaller do
     before do
       installer.destination_path = "/usr/local/chorus"
 
-      FileUtils.mkdir_p './chorus_installation/config'
-      FileUtils.mkdir_p './chorus_installation/packaging'
-      FileUtils.touch './chorus_installation/packaging/database.yml.example'
-      FileUtils.touch './chorus_installation/packaging/sunspot.yml.example'
-      FileUtils.touch './chorus_installation/config/chorus.properties.example'
-      FileUtils.touch './chorus_installation/config/chorus.defaults.properties'
+      touch_files
       installer.copy_config_files
     end
 
@@ -586,10 +608,11 @@ describe ChorusInstaller do
         /usr/local/chorus/shared/secret.token
         /usr/local/chorus/shared/secret.key
         /usr/local/chorus/shared/chorus.properties
+        /usr/local/chorus/shared/chorus.license
       }
     }
     before do
-      installer.destination_path = "/usr/local/chorus"
+      installer.destination_path = '/usr/local/chorus'
       FileUtils.mkdir_p '/usr/local/chorus/shared'
       files.each do |file|
         FileUtils.touch file
@@ -708,6 +731,10 @@ describe ChorusInstaller do
 
     it "links the chorus.properties file" do
       File.readlink('/usr/local/chorus/releases/2.2.0.0/config/chorus.properties').should == '/usr/local/chorus/shared/chorus.properties'
+    end
+
+    it "links the chorus.license file" do
+      File.readlink('/usr/local/chorus/releases/2.2.0.0/config/chorus.license').should == '/usr/local/chorus/shared/chorus.license'
     end
 
     it "links the demo data" do
@@ -1295,5 +1322,15 @@ describe ChorusInstaller do
   def stub_version
     FileUtils.mkdir_p('./chorus_installation')
     File.open('./chorus_installation/version_build', 'w') { |f| f.puts "2.2.0.0" }
+  end
+
+  def touch_files
+    FileUtils.mkdir_p './chorus_installation/config'
+    FileUtils.mkdir_p './chorus_installation/packaging'
+    FileUtils.touch './chorus_installation/packaging/database.yml.example'
+    FileUtils.touch './chorus_installation/packaging/sunspot.yml.example'
+    FileUtils.touch './chorus_installation/config/chorus.properties.example'
+    FileUtils.touch './chorus_installation/config/chorus.defaults.properties'
+    FileUtils.touch './chorus_installation/config/chorus.license.default'
   end
 end

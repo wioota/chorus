@@ -33,6 +33,7 @@ module PackageMaker
     config/jetpack.yml
     config/jshint.json
     config/license_finder.yml
+    config/license_template.default.yml
     lib/libraries
   }
 
