@@ -9,3 +9,5 @@ Handlebars.registerPartial("csvImportConsole", window.HandlebarsTemplates["csv_i
 Handlebars.registerPartial("closeWindowFormControls", window.HandlebarsTemplates["components/close_window_form_controls"]);
 Handlebars.registerPartial("timeZoneSelector", window.HandlebarsTemplates["time_zone_selector"]);
 Handlebars.registerPartial("activity", window.HandlebarsTemplates["activity"]);
+Handlebars.registerPartial("adminBadge", window.HandlebarsTemplates["components/admin_badge"]);
+Handlebars.registerPartial("developerBadge", window.HandlebarsTemplates["components/developer_badge"]);

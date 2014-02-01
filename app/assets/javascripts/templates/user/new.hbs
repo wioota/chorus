@@ -26,8 +26,10 @@
 
                <span class="right admin">
                    <label class="placeholder"></label>
-                   <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}}checked{{/if}}/>
-                   <label for="admin-checkbox">{{t "users.make_admin"}}</label>
+                   <label>
+                       <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}}checked{{/if}}/>
+                       {{t "users.make_admin"}}
+                   </label>
                </span>
         </div>
 
@@ -35,6 +37,14 @@
                <span class="left">
                    <label class="required">{{t "users.email"}}</label>
                    <input type="text" name="email" maxlength="256" value="{{email}}"/>
+               </span>
+
+               <span class="right admin">
+                   <label class="placeholder"></label>
+                   <label>
+                       <input type="checkbox" name="developer" id="developer-checkbox" {{#if developer}}checked{{/if}}/>
+                       {{t "users.make_developer"}}
+                   </label>
                </span>
         </div>
 

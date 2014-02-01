@@ -27,6 +27,7 @@ describe("chorus.views.UserNewLdap", function() {
                     this.view.$("input[name=dept]").val("awesomeness dept");
                     this.view.$("input[name=title]").val("fashion policeman");
                     this.view.$("input[name=admin]").prop("checked", true);
+                    this.view.$("input[name=developer]").prop("checked", true);
                     this.view.$("textarea[name=notes]").val("some notes");
                 });
 
@@ -39,6 +40,7 @@ describe("chorus.views.UserNewLdap", function() {
                         dept: "awesomeness dept",
                         title: "fashion policeman",
                         admin: true,
+                        developer: true,
                         notes: "some notes"
                     });
                 });
@@ -53,6 +55,19 @@ describe("chorus.views.UserNewLdap", function() {
                     it("sets the 'admin' field to false", function() {
                         this.view.$("input[name=admin]").prop("checked", false);
                         expect(this.view.fieldValues().admin).toBeFalsy();
+                    });
+                });
+
+                context("when the 'developer' box is checked", function() {
+                    it("sets the 'developer' field to true", function() {
+                        expect(this.view.fieldValues().developer).toBeTruthy();
+                    });
+                });
+
+                context("when the 'developer' box is unchecked", function() {
+                    it("sets the 'developer' field to false", function() {
+                        this.view.$("input[name=developer]").prop("checked", false);
+                        expect(this.view.fieldValues().developer).toBeFalsy();
                     });
                 });
 
@@ -134,6 +149,7 @@ describe("chorus.views.UserNewLdap", function() {
                     this.view.$("input[name=email]").val("frankie_knuckles@nyclol.com");
                     this.view.$("input[name=dept]").val("awesomeness dept");
                     this.view.$("input[name=admin]").prop("checked", true);
+                    this.view.$("input[name=developer]").prop("checked", true);
 
                     this.view.$("form").submit();
                 });
@@ -169,6 +185,7 @@ describe("chorus.views.UserNewLdap", function() {
                         expect(this.view.$("input[name=email]").val()).toBe("frankie_knuckles@nyclol.com");
                         expect(this.view.$("input[name=dept]").val()).toBe("awesomeness dept");
                         expect(this.view.$("input[name=admin]")).toBeChecked();
+                        expect(this.view.$("input[name=developer]")).toBeChecked();
                     });
 
                     describe("check another user name", function() {

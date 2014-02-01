@@ -41,6 +41,7 @@ describe("chorus.views.userEdit", function() {
                     expect(this.view.$("textarea[name=notes]").text()).toBe(this.user.get('notes'));
                     expect(this.view.$("input[name=dept]").val()).toBe(this.user.get('dept'));
                     expect(this.view.$("input[name=admin]").prop("checked")).toBe(this.user.get("admin"));
+                    expect(this.view.$("input[name=developer]").prop("checked")).toBe(this.user.get("developer"));
                     expect(this.view.$("input[name=subscribed_to_emails]").prop("checked")).toBe(this.user.get("subscribedToEmails"));
                 });
 
@@ -50,11 +51,13 @@ describe("chorus.views.userEdit", function() {
 
                 context("submitting the form", function() {
                     beforeEach(function() {
+                        chorus.page = new chorus.pages.Base();
                         this.view.$("input[name=firstName]").val("Frankie");
                         this.view.$("input[name=email]").val("frankie_knuckles@nyclol.com");
                         this.view.$("input[name=dept]").val("awesomeness dept");
                         this.view.$("textarea[name=notes]").text("Here are some notes\n more than one line");
                         this.view.$("input[name=admin]").prop("checked", false);
+                        this.view.$("input[name=developer]").prop("checked", true);
                         this.view.$("input[name=subscribed_to_emails]").prop("checked", false);
                         this.view.$("form").submit();
                     });
@@ -69,6 +72,7 @@ describe("chorus.views.userEdit", function() {
                             expect(json['dept']).toBe("awesomeness dept");
                             expect(json['notes']).toBe("Here are some notes\n more than one line");
                             expect(json['admin']).toEqual(false);
+                            expect(json['developer']).toEqual(true);
                             expect(json['subscribed_to_emails']).toEqual(false);
                         });
 
@@ -83,12 +87,12 @@ describe("chorus.views.userEdit", function() {
 
                     context("when user creation fails on the server", function() {
                         beforeEach(function() {
-                            this.view.model.serverErrors = {fields: {a: {BLANK: {}}}};
-                            this.view.model.trigger("saveFailed");
+                            spyOn(Backbone.history, 'loadUrl');
+                            this.server.lastUpdate().failUnprocessableEntity({fields: {developer: {BLANK: {}}}});
                         });
 
-                        it("doesn't redirect", function() {
-                            expect(this.view.$("form")).toExist();
+                        it("displays the errors", function() {
+                            expect(this.view.$('errors')).not.toBeHidden();
                         });
 
                         it("retains the data already entered", function() {

@@ -101,10 +101,6 @@ describe User do
   end
 
   describe "validations" do
-    before do
-      @user = FactoryGirl.create :user #, :username => 'aDmin'
-    end
-
     let(:max_user_icon_size) {ChorusConfig.instance['file_sizes_mb']['user_icon']}
 
     it { should validate_presence_of :first_name }
@@ -112,6 +108,7 @@ describe User do
     it { should validate_presence_of :username }
     it { should validate_presence_of :email }
     it { should validate_attachment_size(:image).less_than(max_user_icon_size.megabytes) }
+    it { should validate_with DeveloperCountValidator }
 
     describe "field length" do
       it { should ensure_length_of(:username).is_at_most(256) }
@@ -211,28 +208,34 @@ describe User do
       end
     end
 
-    describe "email" do
-      it "should require a@b.c..." do
-        @user.email = "abc"
-        @user.should be_invalid
+    context 'with user' do
+      before do
+        @user = FactoryGirl.create :user #, :username => 'aDmin'
       end
 
-      it "should accept + in the left-hand side of emails" do
-        @user.email = "xyz+123@emc.com"
-        @user.should be_valid
-      end
-    end
+      describe "email" do
+        it "should require a@b.c..." do
+          @user.email = "abc"
+          @user.should be_invalid
+        end
 
-    describe "duplicate user names" do
-      it "should be disallowed" do
-        user2 = FactoryGirl.build(:user, :username => @user.username.upcase)
-        user2.should_not be_valid
+        it "should accept + in the left-hand side of emails" do
+          @user.email = "xyz+123@emc.com"
+          @user.should be_valid
+        end
       end
 
-      it "should be allowed when user name belongs to a deleted user" do
-        @user.destroy
-        user2 = FactoryGirl.build(:user, :username => @user.username)
-        user2.should be_valid
+      describe "duplicate user names" do
+        it "should be disallowed" do
+          user2 = FactoryGirl.build(:user, :username => @user.username.upcase)
+          user2.should_not be_valid
+        end
+
+        it "should be allowed when user name belongs to a deleted user" do
+          @user.destroy
+          user2 = FactoryGirl.build(:user, :username => @user.username)
+          user2.should be_valid
+        end
       end
     end
   end
@@ -274,6 +277,12 @@ describe User do
       users(:evil_admin).delete
       admin.admin = false
       admin.should be_admin
+    end
+  end
+
+  describe '.developer_count' do
+    it 'returns the number of developers that exist' do
+      User.developer_count.should == User.where(:developer => true).count
     end
   end
 

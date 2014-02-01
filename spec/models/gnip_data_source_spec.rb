@@ -20,7 +20,7 @@ describe GnipDataSource do
     it { should validate_presence_of :password }
     it { should validate_presence_of :owner }
 
-    it_should_behave_like "it validates with DataSourceNameValidator"
+    it { should validate_with DataSourceNameValidator }
 
     it_should_behave_like 'a model with name validations' do
       let(:factory_name) { :gnip_data_source }

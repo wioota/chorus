@@ -27,6 +27,7 @@ describe("chorus.views.userNew", function() {
                     this.view.$("input[name=passwordConfirmation]").val("whoaomg");
                     this.view.$("input[name=dept]").val("awesomeness dept");
                     this.view.$("input[name=admin]").prop("checked", true);
+                    this.view.$("input[name=developer]").prop("checked", true);
                     this.view.$("textarea[name=notes]").val("some notes");
                 });
 
@@ -40,6 +41,7 @@ describe("chorus.views.userNew", function() {
                     expect(this.user.attributes["passwordConfirmation"]).toBe("whoaomg");
                     expect(this.user.attributes["dept"]).toBe("awesomeness dept");
                     expect(this.user.attributes["admin"]).toBe(true);
+                    expect(this.user.attributes["developer"]).toBe(true);
                     expect(this.user.get("notes")).toBe("some notes");
                 });
 
@@ -65,7 +67,6 @@ describe("chorus.views.userNew", function() {
                     expect(this.view.clearErrors).toHaveBeenCalled();
                 });
 
-
                 context("when the user form has admin unchecked", function() {
                     beforeEach(function() {
                         this.view.$("input[name=admin]").prop("checked", false);
@@ -74,6 +75,17 @@ describe("chorus.views.userNew", function() {
                     it("sets the user attribute 'admin' to false", function() {
                         this.view.$("form").submit();
                         expect(this.user.attributes["admin"]).toBe(false);
+                    });
+                });
+
+                context("when the user form has developer unchecked", function() {
+                    beforeEach(function() {
+                        this.view.$("input[name=developer]").prop("checked", false);
+                    });
+
+                    it("sets the user attribute 'developer' to false", function() {
+                        this.view.$("form").submit();
+                        expect(this.user.attributes["developer"]).toBe(false);
                     });
                 });
 
@@ -86,7 +98,6 @@ describe("chorus.views.userNew", function() {
                         this.view.$("form").submit();
                         expect(this.user.save).toHaveBeenCalled();
                     });
-
 
                     context("when user creation is successful", function() {
                         it("redirects to user index", function() {
@@ -118,7 +129,8 @@ describe("chorus.views.userNew", function() {
                             expect(this.view.$("input[name=passwordConfirmation]").val()).toBe("whoaomg");
                             expect(this.view.$("input[name=dept]").val()).toBe("awesomeness dept");
                             expect(this.view.$("input[name=admin]")).toBeChecked();
-                            
+                            expect(this.view.$("input[name=developer]")).toBeChecked();
+
                         });
                     });
                 });

@@ -28,8 +28,7 @@ describe HdfsDataSource do
     it { should validate_presence_of :name }
     it { should validate_presence_of :port }
     it { should ensure_inclusion_of(:hdfs_version).in_array(ChorusConfig.instance.hdfs_versions) }
-
-    it_should_behave_like "it validates with DataSourceNameValidator"
+    it { should validate_with DataSourceNameValidator }
 
     it_should_behave_like 'a model with name validations' do
       let(:factory_name) { :hdfs_data_source }

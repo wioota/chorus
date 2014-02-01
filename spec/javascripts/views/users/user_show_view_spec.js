@@ -6,6 +6,7 @@ describe("chorus.views.UserShow", function() {
                 title: "My Title",
                 dept: "My Department",
                 admin: true,
+                developer: true,
                 username: "gabe1",
                 notes: "My Notes"
             });
@@ -57,6 +58,10 @@ describe("chorus.views.UserShow", function() {
                 expect(this.view.$(".administrator")).toExist();
             });
 
+            it("renders developer", function() {
+                expect(this.view.$(".developer")).toExist();
+            });
+
             it("renders the user's notes", function() {
                 expect(this.view.$(".notes").text()).toBe(this.model.get("notes"));
             });
@@ -86,16 +91,27 @@ describe("chorus.views.UserShow", function() {
             });
 
 
-            context("When the user is not the administrator", function() {
-                        beforeEach(function() {
-                            this.model.set({admin: false}, {silent : true});
-                            this.view.render();
-                        });
-            
-                        it("does not render administrator", function() {
-                            expect(this.view.$(".administrator")).not.toExist();
-                        });
-                    });
+            context("when the user is not the administrator", function() {
+                beforeEach(function() {
+                    this.model.set({admin: false}, {silent : true});
+                    this.view.render();
+                });
+
+                it("does not render administrator", function() {
+                    expect(this.view.$(".administrator")).not.toExist();
+                });
+            });
+
+            context("when the user in not a developer", function() {
+                beforeEach(function () {
+                    this.model.set({developer:false});
+                    this.view.render();
+                });
+
+                it("does not render developer", function() {
+                    expect(this.view.$(".developer")).not.toExist();
+                });
+            });
 
             context("when the view changes and re-renders several times before workspaces is fetched", function(){
                 beforeEach(function(){

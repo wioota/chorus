@@ -82,9 +82,7 @@ shared_examples_for :data_source_with_access_control do
   describe 'validations' do
     it { should validate_presence_of :name  }
 
-    it_should_behave_like "it validates with DataSourceNameValidator" do
-      subject { FactoryGirl.create factory_name }
-    end
+    it { should validate_with DataSourceNameValidator }
 
     it_should_behave_like 'a model with name validations'
 

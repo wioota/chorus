@@ -35,6 +35,13 @@
                    <label class="required">{{t "users.email"}}</label>
                    <input type="text" name="email" maxlength="256" value="{{email}}"/>
                </span>
+
+            {{#ifAdmin}}
+                <span class="right admin">
+                   <input type="checkbox" name="developer" id="developer-checkbox" {{#if developer}} checked="true" {{/if}}>
+                   <label class='checkbox-label' for="developer-checkbox">{{t "users.make_developer"}}</label>
+               </span>
+            {{/ifAdmin}}
         </div>
 
         <div class="row">

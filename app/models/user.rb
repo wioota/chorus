@@ -46,6 +46,8 @@ class User < ActiveRecord::Base
   validates_length_of :notes, :maximum => 4096
   validates_attachment_size :image, :less_than => ChorusConfig.instance['file_sizes_mb']['user_icon'].megabytes, :message => :file_size_exceeded
 
+  validates_with DeveloperCountValidator
+
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable_model do
     text :first_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
@@ -87,6 +89,12 @@ class User < ActiveRecord::Base
 
   def admin=(value)
     write_attribute(:admin, value) unless admin? && self.class.admin_count == 1 # don't unset last admin
+  end
+
+  scope :developer, where(:developer => true)
+
+  def self.developer_count
+    developer.size
   end
 
   def authenticate(unencrypted_password)

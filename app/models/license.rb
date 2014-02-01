@@ -2,6 +2,7 @@ require 'honor_codes/core'
 
 class License
   attr_accessor :license
+  OPEN_CHORUS = 'openchorus'
 
   def initialize
     path = (File.exists?(license_path) ? license_path : default_license_path)

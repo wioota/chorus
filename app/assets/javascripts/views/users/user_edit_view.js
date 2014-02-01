@@ -33,6 +33,7 @@
 
         saveEditUser:function saveEditUser(e) {
             e.preventDefault();
+            chorus.page.stopListening(this.model, "unprocessableEntity");
             var updates = {};
             _.each(this.$("input"), function (i) {
                 var input = $(i);
@@ -40,6 +41,7 @@
             });
 
             updates.admin = this.$("input#admin-checkbox").prop("checked") || false;
+            updates.developer = this.$("input#developer-checkbox").prop("checked") || false;
             updates.subscribed_to_emails = this.$("input#subscribed-to-emails-checkbox").prop("checked") || false;
             updates.notes = this.$("textarea").val().trim();
 

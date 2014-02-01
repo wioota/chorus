@@ -16,8 +16,9 @@ class UsersController < ApplicationController
 
   def create
     user = User.new
-    user.attributes = params[:user]
-    user.admin = params[:user][:admin]
+    user.attributes = user_params
+    user.admin = user_params[:admin] if user_params.key?(:admin)
+    user.developer = user_params[:developer] if user_params.key?(:developer)
     User.transaction do
       user.save!
 
@@ -28,8 +29,11 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.attributes = params[:user]
-    @user.admin = params[:user][:admin] if current_user.admin?
+    @user.attributes = user_params
+    if current_user.admin?
+      @user.admin = user_params[:admin] if user_params.key?(:admin)
+      @user.developer = user_params[:developer] if user_params.key?(:developer)
+    end
     @user.save!
     present @user
   end
@@ -55,4 +59,9 @@ class UsersController < ApplicationController
   def require_not_current_user
     render_forbidden if current_user.id == @user.id
   end
+
+  def user_params
+    @user_params ||= params[:user]
+  end
+
 end

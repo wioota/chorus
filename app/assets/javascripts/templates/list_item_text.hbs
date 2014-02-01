@@ -6,11 +6,7 @@
         {{else}}
             <span class="name">{{name}}</span>
         {{/if}}
-        {{#if admin}}
-            <span class="administrator tag">
-                <span class="arrow_left"/><span class="tag_name">{{t "users.administrator"}}</span>
-            </span>
-        {{/if}}
+        {{> adminBadge }}
     </div>
 
     <div class="item_metadata">
@@ -49,6 +45,7 @@
                 {{datasetLocation resource}}
             </div>
         {{/if}}
+        {{> developerBadge }}
 
         {{> itemTags}}
     </div>

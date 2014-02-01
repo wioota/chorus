@@ -67,9 +67,12 @@ describe UsersController do
 
   describe "#create" do
     let(:params) {
-      {:username => "another_user", :password => "secret", :first_name => "joe",
-       :last_name => "user", :email => "joe@chorus.com", :title => "Data Scientist",
-       :dept => "bureau of bureaucracy", :notes => "poor personal hygiene", :admin => true}
+      {
+          :username => "another_user", :password => "secret", :first_name => "joe",
+          :last_name => "user", :email => "joe@chorus.com", :title => "Data Scientist",
+          :dept => "bureau of bureaucracy", :notes => "poor personal hygiene", :admin => true,
+          :developer => true
+      }
     }
 
     it_behaves_like "an action that requires authentication", :post, :create
@@ -100,6 +103,10 @@ describe UsersController do
 
       it "should make a user an admin" do
         User.find_by_username(params[:username]).admin.should be_true
+      end
+
+      it 'should make a user a developer' do
+        User.find_by_username(params[:username]).should be_developer
       end
 
       it "should return the user's fields except password" do
@@ -140,27 +147,34 @@ describe UsersController do
 
       context "with a valid user id" do
         it "responds with the updated user" do
-          put :update, :id => other_user.to_param, :admin => "true"
+          put :update, :id => other_user.to_param, :admin => true
           response.code.should == "200"
           decoded_response.admin.should == true
         end
 
         it "allows making someone an admin" do
-          put :update, :id => other_user.to_param, :admin => "true"
+          put :update, :id => other_user.to_param, :admin => true
           other_user.reload.should be_admin
         end
 
         it "allows an admin to remove their own privileges, if there are other admins" do
-          put :update, :id => admin.to_param, :admin => "false"
+          put :update, :id => admin.to_param, :admin => false
           response.code.should == "200"
           decoded_response.admin.should == false
         end
 
         it "does not allow an admin to remove their own privileges if there are no other admins" do
           users(:evil_admin).delete
-          put :update, :id => admin.to_param, :admin => "false"
+          put :update, :id => admin.to_param, :admin => false
           response.code.should == "200"
           decoded_response.admin.should == true
+        end
+
+        it 'allows making someone a developer' do
+          expect {
+            put :update, :id => other_user.to_param, :developer => true
+          }.to change { other_user.reload.developer? }.from(false).to(true)
+          response.code.should == '200'
         end
 
         it "updates other attributes" do
@@ -191,7 +205,7 @@ describe UsersController do
       end
 
       it "does not allow non-admins to make themselves an admin" do
-        put :update, :id => non_admin.to_param, :admin => "true"
+        put :update, :id => non_admin.to_param, :admin => true
         non_admin.reload.should_not be_admin
       end
 
@@ -200,6 +214,12 @@ describe UsersController do
           put :update, :id => other_user.to_param, :first_name => "updated"
         }.to_not change { other_user.reload.first_name }
         response.code.should == "404"
+      end
+
+      it 'does not allow non-admins to make themselves a developer' do
+        expect {
+          put :update, :id => other_user.to_param, :developer => true
+        }.to_not change { other_user.reload.developer? }
       end
 
       it "lets users change their own password" do
