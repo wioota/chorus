@@ -232,15 +232,18 @@ class Workspace < ActiveRecord::Base
   end
 
   def permissions_for(user)
-    if user.admin? || (owner_id == user.id)
+    has_membership = user.memberships.find_by_workspace_id(id)
+    perm = if user.admin? || (owner_id == user.id)
       [:admin]
-    elsif user.memberships.find_by_workspace_id(id)
-      [:read, :commenting, :update, :create_work_flow, :duplicate_chorus_view]
+    elsif has_membership
+      [:read, :commenting, :update, :duplicate_chorus_view]
     elsif public?
       [:read, :commenting]
     else
       []
     end
+    perm << :create_workflow if user.developer? && has_membership
+    perm
   end
 
   def has_dataset?(dataset)

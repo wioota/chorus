@@ -474,9 +474,9 @@ describe("chorus.models.Workspace", function() {
                 spyOn(this.model, "isActive").andReturn(true);
             });
 
-            context("the current user is a member", function () {
+            context("the current user is a member-developer", function () {
                 beforeEach(function () {
-                    this.model.set({permission: ["create_work_flow"]});
+                    this.model.set({permission: ["create_workflow"]});
                 });
 
                 it("returns true", function(){
@@ -489,8 +489,8 @@ describe("chorus.models.Workspace", function() {
                     this.model.set({permission: ["admin"]});
                 });
 
-                it("returns true", function(){
-                    expect(this.model.currentUserCanCreateWorkFlows()).toBeTruthy();
+                it("returns false", function(){
+                    expect(this.model.currentUserCanCreateWorkFlows()).toBeFalsy();
                 });
             });
         });

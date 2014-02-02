@@ -777,6 +777,7 @@ describe("chorus.views.DatasetSidebar", function() {
                     context("when the selected dataset is stale", function () {
                         beforeEach(function () {
                             chorus.models.Config.instance().set('workflowConfigured', true);
+                            spyOn(this.dataset.workspace(), 'currentUserCanCreateWorkFlows').andReturn(true);
                             this.dataset.set('stale', true);
                             chorus.PageEvents.trigger("dataset:selected", this.dataset);
                         });
@@ -796,6 +797,19 @@ describe("chorus.views.DatasetSidebar", function() {
                                 expect(this.view.$('.actions span.' + actionName)).not.toExist();
                                 expect(this.view.$('.actions a.' + actionName)).toExist();
                             }, this);
+                        });
+                    });
+
+                    context("when the user does not have create workflow permissions", function() {
+                        beforeEach(function() {
+                            chorus.models.Config.instance().set('workflowConfigured', true);
+                            spyOn(this.dataset.workspace(), 'currentUserCanCreateWorkFlows').andReturn(false);
+                            chorus.PageEvents.trigger("dataset:selected", this.dataset);
+                        });
+
+                        it("does not show the workflow actions", function() {
+                            expect(this.view.$('.actions a.new_work_flow')).not.toExist();
+                            expect(this.view.$('.actions span.new_work_flow')).not.toExist();
                         });
                     });
                 });
@@ -818,7 +832,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 context("when the current user is a member of the workspace", function () {
                     beforeEach(function () {
-                        this.workspace.set({permission: ["create_work_flow"]});
+                        this.workspace.set({permission: ["create_workflow"]});
                         this.view.render();
                     });
 

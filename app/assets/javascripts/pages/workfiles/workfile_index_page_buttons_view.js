@@ -13,11 +13,14 @@ chorus.views.WorkfileIndexPageButtons = chorus.views.Base.extend({
         "a.create_sql_workfile": function(e) {
             e && e.preventDefault();
             new chorus.dialogs.WorkfilesSqlNew({workspaceId: this.model.get('id')}).launchModal();
+        },
+        "a.create_work_flow": function(e) {
+            e && e.preventDefault();
+            new chorus.dialogs.WorkFlowNew({workspace: this.model}).launchModal();
         }
     },
 
     setup: function() {
-        chorus.applyPlugins(this);
         this.model.fetchIfNotLoaded();
     },
 
@@ -33,10 +36,15 @@ chorus.views.WorkfileIndexPageButtons = chorus.views.Base.extend({
         return this.model.loaded && this.model.canUpdate() && this.model.isActive();
     },
 
+    currentUserCanCreateWorkFlows: function() {
+        return this.model.loaded && this.model.currentUserCanCreateWorkFlows();
+    },
+
     additionalContext: function() {
         return {
             canUpdate: this.canUpdate(),
-            createActions: this.createActions
+            createActions: this.createActions,
+            currentUserCanCreateWorkFlow: this.currentUserCanCreateWorkFlows()
         };
     },
 
