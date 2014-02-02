@@ -13,7 +13,8 @@ chorus.views.Login = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            alpineBranded: chorus.models.Config.instance().get('alpineBranded')
+            alpineBranded: chorus.models.Config.instance().get('alpineBranded'),
+            currentYear: moment().year()
         };
     },
 
