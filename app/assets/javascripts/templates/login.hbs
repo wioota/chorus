@@ -1,7 +1,7 @@
 <div class="card">
     {{> errorDiv }}
     <form class="login" action="/auth/login/" method="post">
-        <img class="logo {{#if alpineBranded}}alpine{{/if}}" src="{{#if alpineBranded}}images/alpine-logo.png{{else}}images/login-logo.png{{/if}}"/>
+        <img class="logo {{branding}}" src="images/{{logo}}"/>
         <div class="content">
             <label for="username">{{t "login.username"}}</label>
             <input type="text" name="username" id="username" maxlength="256" autocomplete="off"/>
@@ -15,9 +15,9 @@
     </form>
 </div>
 <footer>
-    <div class="legal {{#if alpineBranded}}alpine{{/if}}">
+    <div class="legal {{branding}}">
         <p>
-            {{t "login.version"}} <span class="version"></span>|<span class="copyright">{{#if alpineBranded}}{{{t "login.alpine_copyright" year=currentYear}}}{{else}}{{{t "login.copyright" year=currentYear}}}{{/if}}</span>
+            {{t "login.version"}} <span class="version"></span>|<span class="copyright">{{{copyright}}}</span>
         </p>
     </div>
 </footer>

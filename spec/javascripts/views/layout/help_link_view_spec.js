@@ -6,7 +6,7 @@ describe("chorus.views.HelpLink", function() {
 
     context("it is alpine branded", function () {
         beforeEach(function () {
-            chorus.models.Config.instance().set('alpineBranded', true);
+            chorus.models.Config.instance().set('branding', 'alpine');
             this.view.render();
         });
 
@@ -18,7 +18,7 @@ describe("chorus.views.HelpLink", function() {
 
     context("it is not alpine branded", function () {
         beforeEach(function () {
-            chorus.models.Config.instance().set('alpineBranded', false);
+            chorus.models.Config.instance().set('branding', 'pivotal');
             this.view.render();
         });
 

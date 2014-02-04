@@ -165,60 +165,19 @@ describe ChorusConfig do
     end
   end
 
-  describe "Work flow integration" do
+  describe 'workflow integration' do
     let(:workflow_config) do
-      {
-        'enabled' => true,
-        'url' => 'localhost'
-      }
+      { 'url' => 'localhost' }
     end
 
-    describe "workflow_configured?" do
+    describe 'workflow_url' do
       before do
-        config.config = {'work_flow' => workflow_config}
+        config.config = {'workflow' => workflow_config}
       end
 
-      context "when enabled is true and url is provided" do
-        it "is true" do
-          config.workflow_configured?.should be_true
-        end
-      end
-
-      context "when url is provided and enabled is false" do
-        let(:workflow_config) do
-          {
-              'url' => 'localhost',
-              'enabled' => false
-          }
-        end
-
-        it "is false" do
-          config.workflow_configured?.should be_false
-        end
-      end
-
-      context "when enabled is true but url is not provided" do
-        let(:workflow_config) do
-          {
-              'enabled' => true
-          }
-        end
-
-        it "is false" do
-          config.workflow_configured?.should be_false
-        end
-      end
-    end
-
-    describe "workflow_url" do
-      before do
-        config.config = {'work_flow' => workflow_config}
-      end
-
-      it "returns the value of work_flow.url" do
+      it 'returns the value of workflow.url' do
         config.workflow_url.should == 'localhost'
       end
-
     end
   end
 
@@ -401,7 +360,7 @@ describe ChorusConfig do
   describe '#hdfs_versions' do
     context 'is pivotal' do
       before do
-        config.config = {'alpine' => {'branded' => {'enabled' => false}}}
+        mock(License.instance).[](:vendor) { 'pivotal' }
       end
 
       it 'returns the hdfs versions' do
@@ -415,9 +374,9 @@ describe ChorusConfig do
       end
     end
 
-    context "is alpine" do
+    context 'is alpine' do
       before do
-        config.config = {'alpine' => {'branded' => {'enabled' => true}}}
+        mock(License.instance).[](:vendor) { 'alpine' }
       end
 
       it 'returns the hdfs versions' do
@@ -433,36 +392,6 @@ describe ChorusConfig do
             'Pivotal HD 1.0',
             'Pivotal HD 1.1'
         ]
-      end
-    end
-  end
-
-  describe "branding" do
-    context "is greenplum" do
-      before do
-        config.config = {'alpine' => {'branded' => {'enabled' => false}}}
-      end
-
-      it "has the pivotal title" do
-        config.branding_title.should == "Pivotal Chorus"
-      end
-
-      it "has the pivotal favicon" do
-        config.branding_favicon.should == "favicon.ico"
-      end
-    end
-
-    context "is alpine" do
-      before do
-        config.config = {'alpine' => {'branded' => {'enabled' => true}}}
-      end
-
-      it "has the alpine title" do
-        config.branding_title.should == "Alpine Chorus"
-      end
-
-      it "has the alpine favicon" do
-        config.branding_favicon.should == "alpine-favicon.ico"
       end
     end
   end

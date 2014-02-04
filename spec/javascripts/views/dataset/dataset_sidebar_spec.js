@@ -776,7 +776,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     context("when the selected dataset is stale", function () {
                         beforeEach(function () {
-                            chorus.models.Config.instance().set('workflowConfigured', true);
+                            chorus.models.Config.instance().set('workflowEnabled', true);
                             spyOn(this.dataset.workspace(), 'currentUserCanCreateWorkFlows').andReturn(true);
                             this.dataset.set('stale', true);
                             chorus.PageEvents.trigger("dataset:selected", this.dataset);
@@ -802,7 +802,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                     context("when the user does not have create workflow permissions", function() {
                         beforeEach(function() {
-                            chorus.models.Config.instance().set('workflowConfigured', true);
+                            chorus.models.Config.instance().set('workflowEnabled', true);
                             spyOn(this.dataset.workspace(), 'currentUserCanCreateWorkFlows').andReturn(false);
                             chorus.PageEvents.trigger("dataset:selected", this.dataset);
                         });
@@ -823,7 +823,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("when work_flows are enabled", function () {
                 beforeEach(function () {
-                    chorus.models.Config.instance().set("workflowConfigured", true);
+                    chorus.models.Config.instance().set("workflowEnabled", true);
                     this.view = new chorus.views.DatasetSidebar();
                     this.dataset = backboneFixtures.workspaceDataset.sourceTable();
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
@@ -882,7 +882,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
             context("when workflows are enabled", function () {
                 beforeEach(function () {
-                    chorus.models.Config.instance().set("workflowConfigured", true);
+                    chorus.models.Config.instance().set("workflowEnabled", true);
                     this.view = new chorus.views.DatasetSidebar();
                     this.view.render();
                     this.dataset = backboneFixtures.dataset({id: "XYZ"});

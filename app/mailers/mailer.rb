@@ -13,7 +13,7 @@ class Mailer < ActionMailer::Base
     @job_result = event.job_result
     @job_task_results = event.job_result.job_task_results
 
-    attachments['logo'] = File.read(Rails.root.join('public', 'images', ChorusConfig.instance.branding_logo))
+    attachments['logo'] = File.read(Rails.root.join('public', 'images', %Q(#{License.instance.branding}-logo.png)))
     attachments[RunWorkFlowTaskResult.name] = File.read(Rails.root.join('public', 'images', 'workfiles', 'icon', 'afm.png'))
     attachments[ImportSourceDataTaskResult.name] = File.read(Rails.root.join('public', 'images', 'import_icon.png'))
 

@@ -33,34 +33,43 @@ module Alpine
     def initialize(options = nil)
       options ||= {}
       @config = options[:config] || ChorusConfig.instance
+      @license = options[:license] || License.instance
       @user = options[:user] || User.current_user
     end
 
     def delete_work_flow(work_flow)
-      request_deletion(work_flow) if config.workflow_configured?
+      if_enabled { request_deletion(work_flow) }
     end
 
     def create_work_flow(work_flow, body)
-      request_creation(body, work_flow) if config.workflow_configured?
+      if_enabled { request_creation(body, work_flow) }
     end
 
     def run_work_flow(work_flow, options = {})
-      ensure_session
-      request_run(work_flow, options) if config.workflow_configured?
+      if_enabled do
+        ensure_session
+        request_run(work_flow, options)
+      end
     end
 
     def stop_work_flow(process_id)
-      ensure_session
-      request_stop(process_id) if config.workflow_configured?
+      if_enabled do
+        ensure_session
+        request_stop(process_id)
+      end
     end
 
     def copy_work_flow(work_flow, new_id)
-      request_copy(work_flow, new_id)
+      if_enabled { request_copy(work_flow, new_id) }
     end
 
     private
 
-    attr_reader :config, :user
+    attr_reader :config, :license, :user
+
+    def if_enabled
+      yield if license.workflow_enabled?
+    end
 
     def ensure_session
       unless Session.not_expired.where(user_id: user.id).present?

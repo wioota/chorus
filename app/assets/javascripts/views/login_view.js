@@ -13,8 +13,9 @@ chorus.views.Login = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            alpineBranded: chorus.models.Config.instance().get('alpineBranded'),
-            currentYear: moment().year()
+            branding: this.branding(),
+            logo: this.branding() + "-logo.png",
+            copyright: t("login." + this.branding() + "_copyright", {year:moment().year()})
         };
     },
 
@@ -48,5 +49,9 @@ chorus.views.Login = chorus.views.Base.extend({
             password:this.$("input[name='password']").val()
         });
         this.model.save();
+    },
+
+    branding: function() {
+        return chorus.models.Config.instance().get('branding');
     }
 });

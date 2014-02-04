@@ -225,7 +225,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
                     context("when work flow is configured", function () {
                         beforeEach(function () {
-                            chorus.models.Config.instance().set("workflowConfigured", true);
+                            chorus.models.Config.instance().set("workflowEnabled", true);
                             spyOn(chorus.models.Workspace.prototype, 'currentUserCanCreateWorkFlows').andReturn(true);
                             this.page = new chorus.pages.WorkspaceDatasetIndexPage(this.workspace.get("id"));
                             this.page.render();

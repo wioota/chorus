@@ -48,10 +48,6 @@ class ChorusConfig
     !!self['gnip.enabled']
   end
 
-  def workflow_configured?
-    !!(workflow_url.present? && workflow_enabled.present?)
-  end
-
   def syslog_configured?
     (self['logging.syslog.enabled'] && true)
   end
@@ -118,24 +114,8 @@ class ChorusConfig
     self['public_url']
   end
 
-  def branding_title
-    self['alpine.branded.enabled'] ? "Alpine Chorus" : "Pivotal Chorus"
-  end
-
-  def branding_favicon
-    self['alpine.branded.enabled'] ? "alpine-favicon.ico" : "favicon.ico"
-  end
-
-  def branding_logo
-    self['alpine.branded.enabled'] ? "alpine-logo.png" : "headertitle.png"
-  end
-
   def workflow_url
     self['work_flow.url'] || self['workflow.url']
-  end
-
-  def workflow_enabled
-    self['work_flow.enabled'] || self['workflow.enabled']
   end
 
   def demo_enabled?
@@ -173,7 +153,7 @@ class ChorusConfig
         'MapR'
     ]
     versions += pivotal_versions
-    versions += other_versions if self['alpine.branded.enabled']
+    versions += other_versions unless License.instance.branding == 'pivotal'
     versions.sort
   end
 

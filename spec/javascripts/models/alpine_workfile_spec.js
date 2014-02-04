@@ -9,7 +9,7 @@ describe("chorus.models.AlpineWorkfile", function() {
         });
 
         chorus.models.Config.instance().set({
-            workflowConfigured: true
+            workflowEnabled: true
         });
         chorus.session.set("sessionId", "hex");
     });

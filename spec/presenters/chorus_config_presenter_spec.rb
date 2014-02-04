@@ -28,8 +28,8 @@ describe ChorusConfigPresenter, :type => :view do
     end
 
     it "includes the work flow configuration" do
-      stub(config).[]('work_flow.enabled') { true }
-      hash[:workflow_configured].should be_true
+      stub(License.instance).workflow_enabled? { true }
+      hash[:workflow_enabled].should be_true
     end
 
     it "includes the gnip_configured? value" do
@@ -86,11 +86,6 @@ describe ChorusConfigPresenter, :type => :view do
     it "includes the hdfs versions" do
       stub(config).hdfs_versions { %w(An array of versions) }
       hash[:hdfs_versions].should == %w(An array of versions)
-    end
-
-    it "includes the branding logo" do
-      stub(config).branding_logo { '/foo/bar.jpg' }
-      hash[:branding_logo].should == '/foo/bar.jpg'
     end
   end
 end

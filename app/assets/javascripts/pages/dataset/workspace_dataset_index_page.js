@@ -125,7 +125,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
     sidebarMultiselectActions: function () {
         var actions = [ '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>' ];
 
-        if (chorus.models.Config.instance().get("workflowConfigured") && this.workspace.currentUserCanCreateWorkFlows()) {
+        if (chorus.models.Config.instance().get("workflowEnabled") && this.workspace.currentUserCanCreateWorkFlows()) {
             actions.push('<a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a>');
         }
 

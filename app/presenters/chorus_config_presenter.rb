@@ -16,9 +16,8 @@ class ChorusConfigPresenter < Presenter
         :execution_timeout_in_minutes => model['execution_timeout_in_minutes'],
         :default_preview_row_limit => model['default_preview_row_limit'] || 100,
         :oracle_configured => model.oracle_configured?,
-        :workflow_configured => model.workflow_configured?,
-        :alpine_branded => model['alpine.branded.enabled'],
-        :branding_logo => model.branding_logo,
+        :workflow_enabled => License.instance.workflow_enabled?,
+        :branding => License.instance.branding,
         :hdfs_versions => model.hdfs_versions,
         :time_zones => model.time_zones
     }

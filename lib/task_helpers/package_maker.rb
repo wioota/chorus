@@ -43,9 +43,6 @@ module PackageMaker
     rails_root = File.expand_path(File.dirname(__FILE__) + '/../../')
     install_root = rails_root + '/tmp/installer/'
     installation_path = install_root + 'chorus_installation'
-    default_properties_file = rails_root + '/config/chorus.defaults.properties'
-
-    write_pivotal_branding(default_properties_file) if ENV['PIVOTALLABEL']
 
     FileUtils.rm_rf(install_root)
     FileUtils.mkdir_p(installation_path)
@@ -95,14 +92,6 @@ module PackageMaker
 
   def version_name
     "#{Chorus::VERSION::STRING}-#{head_sha}"
-  end
-
-  def write_pivotal_branding(file_path)
-    content = File.read(file_path)
-    content.gsub!('alpine.branded.enabled=true', 'alpine.branded.enabled=false')
-    File.open(file_path, 'w') do |f|
-      f.write(content)
-    end
   end
 
   def labeler

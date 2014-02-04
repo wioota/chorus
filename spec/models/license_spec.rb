@@ -48,4 +48,64 @@ NTAtMDEtMDEK
       license[:vendor].should == 'custom'
     end
   end
+
+  describe 'workflow_enabled?' do
+    before do
+      mock(license).[](:vendor) { vendor }
+    end
+
+    context 'vendor:alpine' do
+      let(:vendor) { 'alpine' }
+
+      it 'returns true' do
+        license.workflow_enabled?.should be_true
+      end
+    end
+
+    context 'vendor:pivotal' do
+      let(:vendor) { 'pivotal' }
+
+      it 'returns true' do
+        license.workflow_enabled?.should be_true
+      end
+    end
+
+    context 'vendor:other' do
+      let(:vendor) { 'other' }
+
+      it 'returns false' do
+        license.workflow_enabled?.should be_false
+      end
+    end
+  end
+
+  describe 'branding' do
+    before do
+      mock(license).[](:vendor) { vendor }
+    end
+
+    context 'vendor:alpine' do
+      let(:vendor) { 'alpine' }
+
+      it 'returns alpine' do
+        license.branding.should == 'alpine'
+      end
+    end
+
+    context 'vendor:pivotal' do
+      let(:vendor) { 'pivotal' }
+
+      it 'returns pivotal' do
+        license.branding.should == 'pivotal'
+      end
+    end
+
+    context 'vendor:other' do
+      let(:vendor) { 'other' }
+
+      it 'returns alpine' do
+        license.branding.should == 'alpine'
+      end
+    end
+  end
 end

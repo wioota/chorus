@@ -4,13 +4,14 @@ describe Alpine::API do
   let(:alpine_base_uri) { 'http://localhost:8090' }
   let(:work_flow) { workfiles('multiple_data_source_workflow') }
   let(:config) { ChorusConfig.instance }
+  let(:license) { License.instance }
   let(:user) { users(:admin) }
   let(:mock_session_id) { 'fortytwo' }
 
   subject { Alpine::API.new config: config, user: user }
 
   before do
-    stub(ChorusConfig.instance).workflow_configured? { true }
+    stub(License.instance).workflow_enabled? { true }
     stub(config).workflow_url { alpine_base_uri }
   end
 
@@ -62,7 +63,7 @@ describe Alpine::API do
 
     context 'when work_flow is disabled' do
       before do
-        stub(config).workflow_configured? { false }
+        stub(license).workflow_enabled? { false }
       end
 
       it 'does not make an http request' do
@@ -100,7 +101,7 @@ describe Alpine::API do
 
     context 'when work_flow is disabled' do
       before do
-        stub(config).workflow_configured? { false }
+        stub(license).workflow_enabled? { false }
       end
 
       it 'does not make an http request' do

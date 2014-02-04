@@ -32,10 +32,10 @@ describe ConfigurationsController do
     end
 
     it "includes the work flow configuration" do
-      stub(ChorusConfig.instance).[]('work_flow.enabled') { true }
+      stub(License.instance).workflow_enabled? { true }
       get :show
       response.code.should == "200"
-      decoded_response.workflow_configured.should be_true
+      decoded_response.workflow_enabled.should be_true
     end
 
     it "includes the gnip_configured? value" do
