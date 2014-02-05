@@ -79,7 +79,6 @@ http {
             alias ../../../../system/;
         }
 
-<% if license.workflow_enabled? %>
         location ~ ^/alpinedatalabs/(js|css|images|resource)/ {
             proxy_pass <%= chorus_config['workflow.url'] %>;
         }
@@ -116,7 +115,6 @@ http {
             expires epoch;
             add_header Cache-Control no-store;
         }
-<% end %>
 
         location @app {
             proxy_pass http://127.0.0.1:3000;
