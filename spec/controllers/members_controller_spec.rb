@@ -117,7 +117,7 @@ describe MembersController do
         Events::MembersAdded.last.num_added.should == 2
       end
 
-      it "creates a notification for each member of the workspace" do
+      it "creates a notification for each new member of the workspace" do
         parameters = {:workspace_id => workspace.id, :member_ids => [member1.id, member2.id, member3.id, member4.id]}
 
         expect {

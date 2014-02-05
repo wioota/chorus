@@ -1382,7 +1382,7 @@ describe("chorus.presenters.Activity", function() {
 
         context("a single member is added", function() {
             beforeEach(function () {
-                this.model.set({numAdded: "1"});
+                this.model.set({numAdded: 1});
                 this.presenter = new chorus.presenters.Activity(this.model);
             });
 
@@ -1405,7 +1405,7 @@ describe("chorus.presenters.Activity", function() {
 
         context("two members are added", function() {
             beforeEach(function () {
-                this.model.set({numAdded: "2"});
+                this.model.set({numAdded: 2});
                 this.presenter = new chorus.presenters.Activity(this.model);
             });
 
@@ -1437,7 +1437,7 @@ describe("chorus.presenters.Activity", function() {
 
         context("more than two members are added", function() {
             beforeEach(function () {
-                this.model.set({numAdded: "5"});
+                this.model.set({numAdded: 5});
                 this.presenter = new chorus.presenters.Activity(this.model);
             });
 

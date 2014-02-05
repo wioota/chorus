@@ -21,15 +21,14 @@ class MembersController < ApplicationController
   private
 
   def create_events(workspace, workspace_current_members, member_ids)
-    added_members = member_ids - workspace_current_members.map(&:to_s)
-    unless added_members.empty?
-      member = User.find(added_members.first)
-      num_added = added_members.count
+    new_members = member_ids.map(&:to_i) - workspace_current_members
+    unless new_members.empty?
+      member = User.find(new_members.first)
+      num_added = new_members.count
       member_added_event = Events::MembersAdded.by(current_user).add(:workspace => workspace, :member => member, :num_added => num_added)
-    end
-    added_members.each do |member_id|
-      Notification.create!(:recipient_id => member_id.to_i, :event_id => member_added_event.id)
+      new_members.each do |new_member_id|
+        Notification.create!(:recipient_id => new_member_id.to_i, :event_id => member_added_event.id)
+      end
     end
   end
-
 end

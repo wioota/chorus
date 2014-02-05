@@ -456,9 +456,9 @@
                 if (isNotification === true) return "notification.default";
 
                 switch(self.get("numAdded")) {
-                case "1":
+                case 1:
                     return 'one.default';
-                case "2":
+                case 2:
                     return 'two.default';
                 default:
                     return 'many.default';
@@ -475,9 +475,9 @@
                 if (isNotification === true) return ("notification." + style);
 
                 switch(self.get("numAdded")) {
-                case "1":
+                case 1:
                     return ('one.' + style);
-                case "2":
+                case 2:
                     return ('two.' + style);
                 default:
                     return ('many.' + style);
