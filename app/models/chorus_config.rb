@@ -150,6 +150,7 @@ class ChorusConfig
         'Apache Hadoop 0.20.203',
         'Apache Hadoop 1.0.4',
         'Cloudera CDH4',
+        'Cloudera CDH5',
         'MapR'
     ]
     versions += pivotal_versions
