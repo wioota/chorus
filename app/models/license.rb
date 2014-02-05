@@ -3,9 +3,12 @@ require 'honor_codes/core'
 class License
   OPEN_CHORUS = 'openchorus'
 
-  def initialize
+  def initialize(root_dir=nil)
+    # not guaranteed to have rails/active support (e.g. generate nginx conf)
+    set_root_dir(root_dir)
     path = (File.exists?(license_path) ? license_path : default_license_path)
-    @license = HonorCodes.interpret(path)[:license].symbolize_keys
+    @license = HonorCodes.interpret(path)[:license]
+    symbolize_keys_of @license
   end
 
   def self.instance
@@ -33,10 +36,20 @@ class License
   attr_reader :license
 
   def license_path
-    Rails.root.join 'config', 'chorus.license'
+    File.join @root_dir, 'config', 'chorus.license'
   end
 
   def default_license_path
-    Rails.root.join 'config', 'chorus.license.default'
+    File.join @root_dir, 'config', 'chorus.license.default'
+  end
+
+  def set_root_dir(root_dir)
+    @root_dir = root_dir || Rails.root
+  end
+
+  def symbolize_keys_of(hash)
+    hash.keys.each do |key|
+      hash[(key.to_sym rescue key) || key] = hash.delete(key)
+    end
   end
 end

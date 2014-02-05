@@ -79,7 +79,7 @@ http {
             alias ../../../../system/;
         }
 
-<% if chorus_config['workflow.enabled'] %>
+<% if license.workflow_enabled? %>
         location ~ ^/alpinedatalabs/(js|css|images|resource)/ {
             proxy_pass <%= chorus_config['workflow.url'] %>;
         }
