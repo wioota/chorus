@@ -3,7 +3,6 @@ require 'yaml'
 
 chorus_home = File.expand_path(File.dirname(__FILE__) + '/../../')
 require File.join(chorus_home, 'app/models/chorus_config')
-require File.join(chorus_home, 'app/models/license')
 
 destination_path = chorus_home + '/vendor/nginx/nginx_dist/nginx_data/conf'
 nginx_template_path = chorus_home + '/vendor/nginx/nginx.conf.erb'
