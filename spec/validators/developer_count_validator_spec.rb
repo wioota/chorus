@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-class Validatable
+class DeveloperValidatable
   include ActiveModel::Validations
   validates_with DeveloperCountValidator
   attr_accessor :developer
@@ -8,7 +8,7 @@ end
 
 describe DeveloperCountValidator do
 
-  let(:user) { Validatable.new }
+  let(:user) { DeveloperValidatable.new }
 
   before do
     stub(License.instance).[](:developers) { 10 }

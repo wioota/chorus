@@ -47,6 +47,7 @@ class User < ActiveRecord::Base
   validates_attachment_size :image, :less_than => ChorusConfig.instance['file_sizes_mb']['user_icon'].megabytes, :message => :file_size_exceeded
 
   validates_with DeveloperCountValidator
+  validates_with AdminCountValidator
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable_model do

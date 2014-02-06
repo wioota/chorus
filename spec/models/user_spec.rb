@@ -109,6 +109,7 @@ describe User do
     it { should validate_presence_of :email }
     it { should validate_attachment_size(:image).less_than(max_user_icon_size.megabytes) }
     it { should validate_with DeveloperCountValidator }
+    it { should validate_with AdminCountValidator }
 
     describe "field length" do
       it { should ensure_length_of(:username).is_at_most(256) }
