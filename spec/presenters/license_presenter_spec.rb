@@ -15,7 +15,7 @@ describe LicensePresenter, :type => :view do
       :developers => 10,
       :collaborators => 100,
       :level => 'triple-platinum',
-      :vendor => 'chorus',
+      :vendor => 'openchorus',
       :organization_uuid => 'o-r-g',
       :expires => Date.parse('2014-07-31')
     }
