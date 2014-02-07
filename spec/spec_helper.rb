@@ -46,7 +46,10 @@ RSpec.configure do |config|
     Rails.logger.info "Started test: #{example.full_description}"
   end
 
-  config.before(:each) { ActionMailer::Base.deliveries.clear }
+  config.before(:each) do
+    stub(License.instance).[](:vendor) { License::OPEN_CHORUS }
+    ActionMailer::Base.deliveries.clear
+  end
 
   config.after(:each) do
     Rails.logger.info "Finished test: #{example.full_description}"
