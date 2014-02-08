@@ -181,7 +181,7 @@ chorus.views.Header = chorus.views.Base.extend({
     startSearch: function(e) {
         e.preventDefault();
         var query = this.$(".search input:text").val();
-        if (query.length > 0) {
+        if (query.length > 0 && this.typeAheadView.fullSearchEnabled()) {
             var search = new chorus.models.SearchResult({
                 workspaceId: this.workspaceId,
                 query: query

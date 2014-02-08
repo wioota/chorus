@@ -2,6 +2,11 @@ require 'honor_codes/core'
 
 class License
   OPEN_CHORUS = 'openchorus'
+  VENDOR_ALPINE = 'alpine'
+  VENDOR_PIVOTAL = 'pivotal'
+  LEVEL_EXPLORER = 'explorer'
+  LEVEL_BASECAMP = 'basecamp'
+  LEVEL_SUMMIT = 'summit'
 
   def initialize
     path = (File.exists?(license_path) ? license_path : default_license_path)
@@ -17,20 +22,28 @@ class License
   end
 
   def workflow_enabled?
-    %w(alpine pivotal).include? self[:vendor]
+    [VENDOR_ALPINE, VENDOR_PIVOTAL].include? self[:vendor]
   end
 
   def branding
-    self[:vendor] == 'pivotal' ? 'pivotal' : 'alpine'
+    self[:vendor] == VENDOR_PIVOTAL ? VENDOR_PIVOTAL : VENDOR_ALPINE
   end
 
   def branding_title
     %Q(#{self.branding.titlecase} Chorus)
   end
 
+  def full_search_enabled?
+    !explorer?
+  end
+
   private
 
   attr_reader :license
+
+  def explorer?
+    self[:vendor] == VENDOR_ALPINE && self[:level] == LEVEL_EXPLORER
+  end
 
   def license_path
     Rails.root.join 'config', 'chorus.license'

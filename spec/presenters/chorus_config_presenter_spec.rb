@@ -32,6 +32,16 @@ describe ChorusConfigPresenter, :type => :view do
       hash[:workflow_enabled].should be_true
     end
 
+    it 'includes the branding' do
+      stub(License.instance).branding { 'brands' }
+      hash[:branding].should == 'brands'
+    end
+
+    it 'includes the search configuration' do
+      stub(License.instance).full_search_enabled? { true }
+      hash[:full_search_enabled].should be_true
+    end
+
     it "includes the gnip_configured? value" do
       stub(config).gnip_configured? { 'value' }
       hash[:gnip_configured].should == 'value'

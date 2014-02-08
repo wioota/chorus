@@ -24,6 +24,7 @@
             ["unauthorized", "Unauthorized"],
             ["forbidden", "Forbidden"],
             ["invalidRoute", "InvalidRoute"],
+            ["notLicensed", "NotLicensed"],
             ["unprocessableEntity", "UnprocessableEntity"],
             ["?*query", "Dashboard"],
             ["", "Dashboard"],

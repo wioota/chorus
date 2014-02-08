@@ -162,9 +162,21 @@ describe("chorus.pages.Base", function() {
                     this.resource.trigger("resourceForbidden");
                 });
 
-                it("navigates to the InvalidRoutePage if requiredResource fetch fails", function() {
+                it("navigates to the ForbiddenPage", function() {
                     expect(chorus.pageOptions).toEqual({ foo: "bar" });
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/forbidden");
+                });
+            });
+
+            context("when the fetch returns forbidden and has a license key", function() {
+                beforeEach(function() {
+                    spyOn(Backbone.history, "loadUrl");
+                    this.resource.serverErrors = {message: "error message", license: "NOT_LICENSED" };
+                    this.resource.trigger("resourceForbidden");
+                });
+
+                it("navigates to the NotLicensedPage", function() {
+                    expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/notLicensed");
                 });
             });
 

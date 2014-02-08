@@ -209,50 +209,66 @@ describe("chorus.views.Header", function() {
             });
 
             describe("submitting the search", function() {
-                beforeEach(function() {
-                    spyOn(chorus.router, 'navigate');
-                });
 
-                it("includes the query", function() {
-                    this.view.$(".search form").trigger("submit");
-                    expect(chorus.router.navigate).toHaveBeenCalled();
-                    var url = chorus.router.navigate.lastCall().args[0];
-                    expect(url).toMatch(/test_query%2Fwith%2Fslashes/);
-                });
-
-                context("when the header has a workspace id", function() {
+                context("with full search enabled", function() {
                     beforeEach(function() {
-                        this.view.workspaceId = '11';
-                        this.view.$(".search form").trigger("submit");
+                        spyOn(chorus.router, 'navigate');
+                        spyOn(this.view.typeAheadView, "fullSearchEnabled").andReturn(true);
                     });
 
-                    it("navigates to the workspace search page", function() {
+                    it("includes the query", function() {
+                        this.view.$(".search form").trigger("submit");
                         expect(chorus.router.navigate).toHaveBeenCalled();
                         var url = chorus.router.navigate.lastCall().args[0];
-                        expect(url).toMatchUrl("#/workspaces/11/search/test_query%252Fwith%252Fslashes");
+                        expect(url).toMatch(/test_query%2Fwith%2Fslashes/);
+                    });
+
+                    context("when the header has a workspace id", function() {
+                        beforeEach(function() {
+                            this.view.workspaceId = '11';
+                            this.view.$(".search form").trigger("submit");
+                        });
+
+                        it("navigates to the workspace search page", function() {
+                            expect(chorus.router.navigate).toHaveBeenCalled();
+                            var url = chorus.router.navigate.lastCall().args[0];
+                            expect(url).toMatchUrl("#/workspaces/11/search/test_query%252Fwith%252Fslashes");
+                        });
+                    });
+
+                    context("when the header doesn't have a workspace id", function() {
+                        beforeEach(function() {
+                            delete this.view.workspaceId;
+                            this.view.$(".search form").trigger("submit");
+                        });
+
+                        it("navigates to the global search page", function() {
+                            expect(chorus.router.navigate).toHaveBeenCalled();
+                            var url = chorus.router.navigate.lastCall().args[0];
+                            expect(url).toMatchUrl("#/search/test_query%252Fwith%252Fslashes");
+                        });
+                    });
+
+                    context("when the search input is empty", function() {
+                        beforeEach(function() {
+                            this.view.$(".search input:text").val("").trigger("textchange");
+                            this.view.$(".search form").trigger("submit");
+                        });
+
+                        it("should not search", function() {
+                            expect(chorus.router.navigate).not.toHaveBeenCalled();
+                        });
                     });
                 });
 
-                context("when the header doesn't have a workspace id", function() {
+                context("when full search is disabled", function() {
                     beforeEach(function() {
-                        delete this.view.workspaceId;
-                        this.view.$(".search form").trigger("submit");
+                        spyOn(chorus.router, 'navigate');
+                        spyOn(this.view.typeAheadView, "fullSearchEnabled").andReturn(false);
                     });
 
-                    it("navigates to the global search page", function() {
-                        expect(chorus.router.navigate).toHaveBeenCalled();
-                        var url = chorus.router.navigate.lastCall().args[0];
-                        expect(url).toMatchUrl("#/search/test_query%252Fwith%252Fslashes");
-                    });
-                });
-
-                context("when the search input is empty", function() {
-                    beforeEach(function() {
-                        this.view.$(".search input:text").val("").trigger("textchange");
+                    it("does not navigate", function() {
                         this.view.$(".search form").trigger("submit");
-                    });
-                   
-                    it("should not search", function() {
                         expect(chorus.router.navigate).not.toHaveBeenCalled();
                     });
                 });

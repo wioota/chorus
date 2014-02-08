@@ -11,7 +11,10 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
     },
 
     context: function() {
-        var ctx = {query: this.model.get("query")};
+        var ctx = {
+            query: this.model.get("query"),
+            fullSearchEnabled: this.fullSearchEnabled()
+        };
         ctx.results = _.map(_.first(this.model.results(), this.resultLimit), function(result) {
 
             var isBinaryHdfs = result.get('entityType') === 'hdfs_file' && ( result.get('isBinary') !== false );
@@ -96,5 +99,9 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
         } else {
             return false;
         }
+    },
+
+    fullSearchEnabled: function() {
+        return chorus.models.Config.instance().get('fullSearchEnabled');
     }
 });

@@ -1,5 +1,6 @@
 class SearchController < ApplicationController
   before_filter :require_admin, :only => [:reindex]
+  before_filter :require_full_search, :only => [:show, :workspaces]
 
   def show
     present Search.new(current_user, params)

@@ -1,4 +1,5 @@
 class WorkspaceSearchController < ApplicationController
+  before_filter :require_full_search
 
   def show
     workspace = Workspace.find(params[:workspace_id])

@@ -14,13 +14,16 @@ chorus.pages.Bare = chorus.views.Bare.extend({
         var error = model.serverErrors;
         if(error && error.type) {
             Backbone.history.loadUrl("/forbidden");
-            return;
+        } else if (error && error.license) {
+            Backbone.history.loadUrl("/notLicensed");
+        } else {
+            Backbone.history.loadUrl("/unauthorized");
         }
-
-        Backbone.history.loadUrl("/unauthorized");
     },
 
     unprocessableEntity: function(model) {
+        chorus.pageOptions = this.failurePageOptions();
+
         var errors = model.serverErrors;
         if (errors) {
             var undefinedErrorTitle = "unprocessable_entity.unidentified_error.title";

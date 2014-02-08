@@ -211,4 +211,8 @@ class ApplicationController < ActionController::Base
       raise ApiValidationError.new(options[:field_name] || param, :blank) if params[param].blank?
     end
   end
+
+  def require_full_search
+    present_errors({:license => :NOT_LICENSED}, :status => :forbidden) unless License.instance.full_search_enabled?
+  end
 end

@@ -49,7 +49,7 @@ NTAtMDEtMDEK
     end
   end
 
-  describe 'workflow_enabled?' do
+  describe '#workflow_enabled?' do
     before do
       mock(license).[](:vendor) { vendor }
     end
@@ -79,7 +79,7 @@ NTAtMDEtMDEK
     end
   end
 
-  describe 'branding' do
+  describe '#branding' do
     before do
       mock(license).[](:vendor) { vendor }
     end
@@ -105,6 +105,57 @@ NTAtMDEtMDEK
 
       it 'returns alpine' do
         license.branding.should == 'alpine'
+      end
+    end
+  end
+
+  describe '#full_search_enabled?' do
+    before do
+      stub(license).[](:vendor) { vendor }
+    end
+
+    context 'vendor:openchorus' do
+      let(:vendor) { License::OPEN_CHORUS }
+      before do
+        mock(license).[](:level).never
+      end
+
+      it 'returns true regardless of level' do
+        license.full_search_enabled?.should be_true
+      end
+    end
+
+    context 'vendor:pivotal' do
+      let(:vendor) { 'pivotal' }
+      before do
+        mock(license).[](:level).never
+      end
+
+      it 'returns true regardless of level' do
+        license.full_search_enabled?.should be_true
+      end
+    end
+
+    context 'vendor:alpine' do
+      let(:vendor) { 'alpine' }
+      before do
+        stub(license).[](:level) { license_level }
+      end
+
+      [
+          {:level => 'explorer', :search => false},
+          {:level => 'basecamp', :search => true},
+          {:level => 'summit', :search => true}
+      ].each do |obj|
+        context "with level:#{obj[:level]}" do
+          before do
+            mock(license).[](:level) { obj[:level] }
+          end
+
+          it "returns #{obj[:search]}" do
+            license.full_search_enabled?.should == obj[:search]
+          end
+        end
       end
     end
   end

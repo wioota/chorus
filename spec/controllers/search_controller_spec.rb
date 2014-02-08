@@ -156,4 +156,35 @@ describe SearchController do
       end
     end
   end
+
+  context 'when License#full_search_enabled? is false' do
+    let(:user) { users(:owner) }
+    before do
+      log_in user
+      stub(License.instance).full_search_enabled? { false }
+    end
+
+    it 'forbids #show' do
+      get :show, :query => 'nope'
+      response.should be_forbidden
+      decoded_errors.license.should == 'NOT_LICENSED'
+    end
+
+    it 'forbids #workspaces' do
+      get :workspaces, :query => 'nope'
+      response.should be_forbidden
+      decoded_errors.license.should == 'NOT_LICENSED'
+    end
+
+    it 'allows #typeahead' do
+      fake_search = Object.new
+      mock(TypeAheadSearch).new(user, anything) do |_, params|
+        params[:query].should == 'marty'
+        fake_search
+      end
+      mock_present { |model| model.should == fake_search }
+      get :type_ahead, :query => 'marty'
+      response.code.should == '200'
+    end
+  end
 end

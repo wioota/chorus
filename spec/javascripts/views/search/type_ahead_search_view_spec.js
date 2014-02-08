@@ -4,6 +4,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         this.result.set({query: "test"});
         this.view = new chorus.views.TypeAheadSearch();
         this.view.searchFor("test");
+        chorus.models.Config.instance().set('fullSearchEnabled', true);
     });
 
     it("should fetch the search result", function() {
@@ -30,6 +31,18 @@ describe("chorus.views.TypeAheadSearch", function() {
         it("should show the link to show all search result", function() {
             expect(this.view.$("li:eq(0)").text().trim()).toMatchTranslation("type_ahead.show_all_results", {query: "test"});
             expect(this.view.$("li:eq(0) a").attr("href")).toBe("#/search/test");
+        });
+
+        context("when full_search_enabled is false", function() {
+            beforeEach(function() {
+                chorus.models.Config.instance().set('fullSearchEnabled', false);
+                this.view.render();
+            });
+
+            it("should not show the link to show all search result", function() {
+                expect(this.view.$(".search_all")).not.toExist();
+                expect(this.view.$el).not.toContainTranslation('type_ahead.show_all_results', {query: "test"});
+            });
         });
 
         it("should display the correct name and type for hdfs", function() {

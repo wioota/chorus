@@ -1,9 +1,11 @@
 <ul>
-    <li class="search_all">
-        <div class="container">
-            <a href="#/search/{{query}}">{{t "type_ahead.show_all_results" query=query}}</a>
-        </div>
-    </li>
+    {{#if fullSearchEnabled}}
+        <li class="search_all">
+            <div class="container">
+                <a href="#/search/{{query}}">{{t "type_ahead.show_all_results" query=query}}</a>
+            </div>
+        </li>
+    {{/if}}
 {{#each results}}
     {{#if linkable }}
     <li class="result">

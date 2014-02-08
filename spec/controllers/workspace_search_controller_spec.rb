@@ -46,4 +46,20 @@ describe WorkspaceSearchController do
       end
     end
   end
+
+  context 'when License#full_search_enabled? is false' do
+    let(:user) { users(:owner) }
+    let(:workspace) { workspaces(:search_public) }
+
+    before do
+      log_in user
+      stub(License.instance).full_search_enabled? { false }
+    end
+
+    it 'forbids #show' do
+      get :show, :query => 'nope', :workspace_id => workspace.id
+      response.should be_forbidden
+      decoded_errors.license.should == 'NOT_LICENSED'
+    end
+  end
 end
