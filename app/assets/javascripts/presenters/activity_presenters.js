@@ -285,7 +285,7 @@
 
         MembersAdded: {
             links: ["actor", "workspace", "member"],
-            computed: ["count"]
+            computed: ["countExcludingNamed"]
         },
 
         WorkspaceImportCreated: {
@@ -521,8 +521,8 @@
             return "<a href='" + projectUrl  + "' target='_blank'>" + projectName + "</a>";
         },
 
-        count: function(self)    {
-            return self.model.get("numAdded");
+        countExcludingNamed: function(self)    {
+            return self.model.get("numAdded") - 1;
         },
 
         noteObjectType: function(self) {

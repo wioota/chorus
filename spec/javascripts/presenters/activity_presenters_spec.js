@@ -1442,7 +1442,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("has the right header html for the default style", function() {
-                this.activity_data["count"] = this.model.get("numAdded");
+                this.activity_data["countExcludingNamed"] = this.model.get("numAdded") - 1;
                 expect(this.presenter.headerHtml().toString()).toMatchTranslation(
                     "activity.header.MembersAdded.many.default",
                     this.activity_data
@@ -1451,7 +1451,7 @@ describe("chorus.presenters.Activity", function() {
 
             it("has the right header html for the without_workspace style", function() {
                 this.presenter.options.displayStyle = ["without_workspace"];
-                this.activity_without_workspace_data["count"] = this.model.get("numAdded");
+                this.activity_without_workspace_data["countExcludingNamed"] = this.model.get("numAdded") - 1;
                 expect(this.presenter.headerHtml().toString()).toMatchTranslation(
                     "activity.header.MembersAdded.many.without_workspace",
                         this.activity_without_workspace_data
