@@ -5,6 +5,10 @@ class LicensePresenter < Presenter
     KEYS.inject({}) do |memo, key|
       memo[key] = License.instance[key]
       memo
-    end
+    end.merge({
+            :workflow_enabled => License.instance.workflow_enabled?,
+            :full_search_enabled => License.instance.full_search_enabled?,
+            :branding => License.instance.branding
+    })
   end
 end

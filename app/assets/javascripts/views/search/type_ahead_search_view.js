@@ -102,6 +102,6 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
     },
 
     fullSearchEnabled: function() {
-        return chorus.models.Config.instance().get('fullSearchEnabled');
+        return chorus.models.Config.instance().license().get('fullSearchEnabled');
     }
 });

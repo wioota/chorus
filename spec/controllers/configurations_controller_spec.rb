@@ -8,6 +8,7 @@ describe ConfigurationsController do
       mock(LdapClient).enabled? { true }
       stub(File).directory? { true }
       stub.proxy(ChorusConfig.instance).[](anything)
+      stub.proxy(License.instance).[](anything)
     end
 
     it "includes the ldap status" do
@@ -29,13 +30,6 @@ describe ConfigurationsController do
       get :show
       response.code.should == "200"
       decoded_response.kaggle_configured.should == 'value'
-    end
-
-    it "includes the work flow configuration" do
-      stub(License.instance).workflow_enabled? { true }
-      get :show
-      response.code.should == "200"
-      decoded_response.workflow_enabled.should be_true
     end
 
     it "includes the gnip_configured? value" do

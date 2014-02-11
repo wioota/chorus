@@ -202,7 +202,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
 
             context("when workflows are enabled", function () {
                 beforeEach(function () {
-                    chorus.models.Config.instance().set("workflowEnabled", true);
+                    chorus.models.Config.instance().license().set("workflowEnabled", true);
                     this.page = new chorus.pages.WorkfileIndexPage(this.workspace.id);
                     this.server.completeFetchFor(this.workspace);
                     this.server.completeFetchFor(this.page.collection);

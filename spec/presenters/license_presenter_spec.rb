@@ -31,5 +31,20 @@ describe LicensePresenter, :type => :view do
         hash[key].should == value
       end
     end
+
+    it 'includes the work flow configuration' do
+      stub(License.instance).workflow_enabled? { true }
+      hash[:workflow_enabled].should be_true
+    end
+
+    it 'includes the branding' do
+      stub(License.instance).branding { 'brands' }
+      hash[:branding].should == 'brands'
+    end
+
+    it 'includes the search configuration' do
+      stub(License.instance).full_search_enabled? { true }
+      hash[:full_search_enabled].should be_true
+    end
   end
 end

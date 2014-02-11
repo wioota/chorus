@@ -132,7 +132,7 @@ chorus.views.Header = chorus.views.Base.extend({
             fullName: user && user.displayName(),
             displayName: user && user.displayShortName(),
             userUrl: user && user.showUrl(),
-            brandingLogo: chorus.models.Config.instance().get("branding") + "-logo.png"
+            brandingLogo: chorus.models.Config.instance().license().get("branding") + "-logo.png"
         });
     },
 

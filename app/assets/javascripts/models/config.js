@@ -12,6 +12,19 @@ chorus.models.Config = chorus.models.Base.extend({
 
     fileSizeMbCsvImports: function() {
         return this.get("fileSizesMbCsvImports");
+    },
+
+    license: function() {
+        if (!this._license) {
+            this._license = new chorus.models.License(this.get("license"));
+        }
+
+        return this._license;
+    },
+
+    clear: function() {
+        this._super("clear", arguments);
+        delete this._license;
     }
 }, {
     instance: function () {

@@ -16,11 +16,9 @@ class ChorusConfigPresenter < Presenter
         :execution_timeout_in_minutes => model['execution_timeout_in_minutes'],
         :default_preview_row_limit => model['default_preview_row_limit'] || 100,
         :oracle_configured => model.oracle_configured?,
-        :workflow_enabled => License.instance.workflow_enabled?,
-        :full_search_enabled => License.instance.full_search_enabled?,
-        :branding => License.instance.branding,
         :hdfs_versions => model.hdfs_versions,
-        :time_zones => model.time_zones
+        :time_zones => model.time_zones,
+        :license => present(License.instance, options)
     }
   end
 end

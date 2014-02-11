@@ -4,7 +4,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         this.result.set({query: "test"});
         this.view = new chorus.views.TypeAheadSearch();
         this.view.searchFor("test");
-        chorus.models.Config.instance().set('fullSearchEnabled', true);
+        chorus.models.Config.instance().license().set('fullSearchEnabled', true);
     });
 
     it("should fetch the search result", function() {
@@ -35,7 +35,7 @@ describe("chorus.views.TypeAheadSearch", function() {
 
         context("when full_search_enabled is false", function() {
             beforeEach(function() {
-                chorus.models.Config.instance().set('fullSearchEnabled', false);
+                chorus.models.Config.instance().license().set('fullSearchEnabled', false);
                 this.view.render();
             });
 

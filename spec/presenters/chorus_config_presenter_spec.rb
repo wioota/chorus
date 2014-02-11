@@ -6,6 +6,7 @@ describe ChorusConfigPresenter, :type => :view do
     mock(LdapClient).enabled? { true }
     stub(File).directory? { true }
     stub.proxy(config).[](anything)
+    stub.proxy(License.instance).[](anything)
   end
 
   let(:presenter) { ChorusConfigPresenter.new(config, view, {}) }
@@ -25,21 +26,6 @@ describe ChorusConfigPresenter, :type => :view do
     it "includes the kaggle_configured? value" do
       stub(config).kaggle_configured? { 'value' }
       hash[:kaggle_configured].should == 'value'
-    end
-
-    it "includes the work flow configuration" do
-      stub(License.instance).workflow_enabled? { true }
-      hash[:workflow_enabled].should be_true
-    end
-
-    it 'includes the branding' do
-      stub(License.instance).branding { 'brands' }
-      hash[:branding].should == 'brands'
-    end
-
-    it 'includes the search configuration' do
-      stub(License.instance).full_search_enabled? { true }
-      hash[:full_search_enabled].should be_true
     end
 
     it "includes the gnip_configured? value" do
@@ -96,6 +82,10 @@ describe ChorusConfigPresenter, :type => :view do
     it "includes the hdfs versions" do
       stub(config).hdfs_versions { %w(An array of versions) }
       hash[:hdfs_versions].should == %w(An array of versions)
+    end
+
+    it 'presents the license' do
+      hash[:license].should == (LicensePresenter.new(License.instance, view).presentation_hash)
     end
   end
 end

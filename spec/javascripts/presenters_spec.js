@@ -13,7 +13,7 @@ describe("chorus.presenters.Base", function() {
     describe("#workFlowsEnabled", function() {
         context("when work flows are enabled", function() {
             beforeEach(function() {
-                chorus.models.Config.instance().set("workflowEnabled", true);
+                chorus.models.Config.instance().license().set("workflowEnabled", true);
             });
 
             it("returns true", function() {
