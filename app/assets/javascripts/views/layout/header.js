@@ -126,13 +126,16 @@ chorus.views.Header = chorus.views.Base.extend({
     additionalContext: function(ctx) {
         this.requiredResources.reset();
         var user = this.session.user();
+        var license = chorus.models.Config.instance().license();
 
         return _.extend(ctx, this.session.attributes, {
             notifications: this.unreadNotifications,
             fullName: user && user.displayName(),
             displayName: user && user.displayShortName(),
             userUrl: user && user.showUrl(),
-            brandingLogo: chorus.models.Config.instance().license().get("branding") + "-logo.png"
+            brandingLogo: license.get("branding") + "-logo.png",
+            advisorNow: license.get("advisorNowEnabled"),
+            advisorNowLink: this.advisorNowLink(user, license)
         });
     },
 
@@ -188,5 +191,18 @@ chorus.views.Header = chorus.views.Base.extend({
             });
             chorus.router.navigate(search.showUrl());
         }
+    },
+
+    advisorNowLink: function(user, license) {
+        return URI({
+            hostname: "http://advisor.alpinenow.com",
+            path: "start",
+            query: $.param({
+                first_name: user.get("firstName"),
+                last_name: user.get("lastName"),
+                email: user.get("email"),
+                org_id: license.get("organizationUuid")
+            })
+        });
     }
 });

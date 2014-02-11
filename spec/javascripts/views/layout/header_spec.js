@@ -275,6 +275,40 @@ describe("chorus.views.Header", function() {
             });
         });
 
+        describe("advisorNow", function() {
+            context("when advisorNow is not enabled", function() {
+                beforeEach(function () {
+                    chorus.models.Config.instance().license().set('advisorNowEnabled', false);
+                    this.view.render();
+                });
+
+                it("does not display the advisorNow link", function () {
+                    expect(this.view.$(".advisor_now")).not.toExist();
+                });
+            });
+
+            context("when advisorNow is enabled", function() {
+                beforeEach(function () {
+                    chorus.models.Config.instance().license().set('advisorNowEnabled', true);
+                    chorus.models.Config.instance().license().set('organizationUuid', 'my_org');
+                    this.view.render();
+                });
+
+                it("displays the advisorNow link", function () {
+                    var user = chorus.session.user();
+                    var url = "http://advisor.alpinenow.com/start?" + $.param({
+                        first_name: user.get("firstName"),
+                        last_name: user.get("lastName"),
+                        email: user.get("email"),
+                        org_id: 'my_org'
+                    });
+                    expect(this.view.$(".advisor_now a")).toExist();
+                    expect(this.view.$(".advisor_now a")).toHaveAttr("target", "_blank");
+                    expect(this.view.$(".advisor_now a")).toHaveAttr("href", url);
+                });
+            });
+        });
+
         describe("username", function() {
             beforeEach(function() {
                 spyOn(chorus.session.user(), "displayName").andReturn("Armadillo");

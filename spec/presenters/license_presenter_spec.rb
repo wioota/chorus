@@ -46,5 +46,10 @@ describe LicensePresenter, :type => :view do
       stub(License.instance).full_search_enabled? { true }
       hash[:full_search_enabled].should be_true
     end
+
+    it 'includes the advisor now configuration' do
+      stub(License.instance).advisor_now_enabled? { true }
+      hash[:advisor_now_enabled].should be_true
+    end
   end
 end

@@ -22,7 +22,7 @@ class License
   end
 
   def workflow_enabled?
-    [VENDOR_ALPINE, VENDOR_PIVOTAL].include? self[:vendor]
+    alpine_or_pivotal?
   end
 
   def branding
@@ -30,11 +30,15 @@ class License
   end
 
   def branding_title
-    %Q(#{self.branding.titlecase} Chorus)
+    %(#{self.branding.titlecase} Chorus)
   end
 
   def full_search_enabled?
     !explorer?
+  end
+
+  def advisor_now_enabled?
+    alpine_or_pivotal?
   end
 
   private
@@ -43,6 +47,10 @@ class License
 
   def explorer?
     self[:vendor] == VENDOR_ALPINE && self[:level] == LEVEL_EXPLORER
+  end
+
+  def alpine_or_pivotal?
+    [VENDOR_ALPINE, VENDOR_PIVOTAL].include? self[:vendor]
   end
 
   def license_path

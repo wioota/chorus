@@ -159,4 +159,34 @@ NTAtMDEtMDEK
       end
     end
   end
+
+  describe '#advisor_now_enabled?' do
+    before do
+      stub(license).[](:vendor) { vendor }
+    end
+
+    context 'vendor:openchorus' do
+      let(:vendor) { License::OPEN_CHORUS }
+
+      it 'returns false' do
+        license.advisor_now_enabled?.should be_false
+      end
+    end
+
+    context 'vendor:alpine' do
+      let(:vendor) { License::VENDOR_ALPINE }
+
+      it 'returns true' do
+        license.advisor_now_enabled?.should be_true
+      end
+    end
+
+    context 'vendor:pivotal' do
+      let(:vendor) { License::VENDOR_PIVOTAL }
+
+      it 'returns true' do
+        license.advisor_now_enabled?.should be_true
+      end
+    end
+  end
 end
