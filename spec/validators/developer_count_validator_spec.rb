@@ -15,9 +15,9 @@ describe DeveloperCountValidator do
     stub(user).developer_changed? { true }
   end
 
-  context 'with the open chorus license' do
+  context 'when license does not limit developer count' do
     before do
-      stub(License.instance).[](:vendor) { License::OPEN_CHORUS }
+      stub(License.instance).limit_user_count? { false }
       mock(user).developer?.never
       mock(User).developer_count.never
     end
@@ -27,9 +27,9 @@ describe DeveloperCountValidator do
     end
   end
 
-  context 'with a vendored license' do
+  context 'when license limits developer count' do
     before do
-      stub(License.instance).[](:vendor) { 'my_vendor' }
+      stub(License.instance).limit_user_count? { true }
     end
 
     context 'user is designated as a developer' do

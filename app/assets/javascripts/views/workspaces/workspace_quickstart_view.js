@@ -15,7 +15,7 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
     additionalContext: function() {
         return {
             workspaceUrl: this.model.showUrl(),
-            needsMember: !this.model.get("hasAddedMember"),
+            needsMember: this.needsMember(),
             needsWorkfile: !this.model.get("hasAddedWorkfile"),
             needsSandbox: !this.model.get("hasAddedSandbox"),
             needsSettings: !this.model.get("hasChangedSettings")
@@ -69,6 +69,10 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
 
     makeModal: function (key, options) {
         return new (this.modalClasses()[key])(options);
+    },
+
+    needsMember: function() {
+        return !(this.model.get("hasAddedMember") || chorus.models.Config.instance().license().limitWorkspaceMembership());
     },
 
     launchEditWorkspaceDialog: function (e) {

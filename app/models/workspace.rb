@@ -41,6 +41,7 @@ class Workspace < ActiveRecord::Base
   validate :owner_is_member, :on => :update
   validate :archiver_is_set_when_archiving
   validates_attachment_size :image, :less_than => ChorusConfig.instance['file_sizes_mb']['workspace_icon'].megabytes, :message => :file_size_exceeded
+  validates_with MemberCountValidator
 
   before_update :reindex_sandbox, :if => :show_sandbox_datasets_changed?
   before_update :create_name_change_event, :if => :name_changed?

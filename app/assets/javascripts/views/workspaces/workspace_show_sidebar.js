@@ -4,7 +4,7 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
 
     events: {
         "click .edit_workspace": 'launchEditWorkspaceDialog',
-        "click .edit_workspace_members": 'launchWorkspaceEditMembersDialog',
+        "click a.edit_workspace_members": 'launchWorkspaceEditMembersDialog',
         "click .delete_workspace": 'launchWorkspaceDeleteAlert',
         "click .new_note": 'launchNotesNewDialog',
         "click .new_sandbox": 'launchSandboxNewDialog',
@@ -29,7 +29,8 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
             canUpdate: this.model.canUpdate(),
             active: this.model.isActive(),
             canKaggle: chorus.models.Config.instance().get("kaggleConfigured") && this.model.canUpdate() && this.model.isActive(),
-            kaggleUrl: this.model.showUrl()+"/kaggle"
+            kaggleUrl: this.model.showUrl()+"/kaggle",
+            explorer: chorus.models.Config.instance().license().limitWorkspaceMembership()
         };
     },
 

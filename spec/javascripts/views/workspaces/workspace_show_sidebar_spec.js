@@ -110,8 +110,28 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
                 expect(this.view.$("a.delete_workspace").text().trim()).toMatchTranslation("actions.delete_workspace");
             });
 
-            it("has a link to edit members of the workspace", function() {
-                expect(this.view.$("a.edit_workspace_members").text().trim()).toMatchTranslation("workspace.edit_members");
+            context("when the licensing model is explorer", function() {
+                beforeEach(function () {
+                    spyOn(chorus.models.Config.instance().license(), 'limitWorkspaceMembership').andReturn(true);
+                    this.view.render();
+                });
+
+                it("has a non-link to edit members of the workspace with reason tooltip", function() {
+                    expect(this.view.$("a.edit_workspace_members")).not.toExist();
+                    expect(this.view.$("span.edit_workspace_members")).toContainTranslation("workspace.edit_members");
+                    expect(this.view.$("span.edit_workspace_members")).toHaveAttr("title", t("not_licensed.for_explorer"));
+                });
+            });
+
+            context("when the licensing model is not explorer", function() {
+                beforeEach(function () {
+                    spyOn(chorus.models.Config.instance().license(), 'limitWorkspaceMembership').andReturn(false);
+                    this.view.render();
+                });
+
+                it("has a link to edit members of the workspace", function() {
+                    expect(this.view.$("a.edit_workspace_members")).toContainTranslation("workspace.edit_members");
+                });
             });
 
             itBehavesLike.aDialogLauncher("a.delete_workspace", chorus.alerts.WorkspaceDelete);

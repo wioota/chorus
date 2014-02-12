@@ -51,5 +51,10 @@ describe LicensePresenter, :type => :view do
       stub(License.instance).advisor_now_enabled? { true }
       hash[:advisor_now_enabled].should be_true
     end
+
+    it 'includes limit_workspace_membership' do
+      stub(License.instance).limit_workspace_membership? { true }
+      hash[:limit_workspace_membership].should be_true
+    end
   end
 end

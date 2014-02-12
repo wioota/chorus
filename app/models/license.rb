@@ -41,6 +41,14 @@ class License
     alpine_or_pivotal?
   end
 
+  def limit_workspace_membership?
+    explorer?
+  end
+
+  def limit_user_count?
+    alpine_or_pivotal?
+  end
+
   private
 
   attr_reader :license

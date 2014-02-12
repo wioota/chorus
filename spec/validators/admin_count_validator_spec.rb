@@ -15,9 +15,9 @@ describe AdminCountValidator do
     stub(user).admin_changed? { true }
   end
 
-  context 'with the open chorus license' do
+  context 'when license does not limit admin count' do
     before do
-      stub(License.instance).[](:vendor) { License::OPEN_CHORUS }
+      stub(License.instance).limit_user_count? { false }
       mock(user).admin?.never
       mock(User).admin_count.never
     end
@@ -27,9 +27,9 @@ describe AdminCountValidator do
     end
   end
 
-  context 'with a vendored license' do
+  context 'when license limits admin count' do
     before do
-      stub(License.instance).[](:vendor) { 'my_vendor' }
+      stub(License.instance).limit_user_count? { true }
     end
 
     context 'user is designated as a admin' do

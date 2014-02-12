@@ -28,13 +28,35 @@ describe("chorus.views.WorkspaceQuickstart", function() {
                 this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
             });
 
-            it("shows the correct boxes", function() {
-                this.view.render();
-                expect(this.view.$(".add_team_members")).toExist();
-                expect(this.view.$(".edit_workspace_settings")).toExist();
-                expect(this.view.$(".add_sandbox")).toExist();
-                expect(this.view.$(".add_workfiles")).toExist();
+            context("when the licensing model is explorer", function() {
+                beforeEach(function () {
+                    spyOn(chorus.models.Config.instance().license(), 'limitWorkspaceMembership').andReturn(true);
+                    this.view.render();
+                });
+
+                it("shows the correct boxes without add_team_members", function() {
+                    expect(this.view.$(".add_team_members")).not.toExist();
+                    expect(this.view.$(".edit_workspace_settings")).toExist();
+                    expect(this.view.$(".add_sandbox")).toExist();
+                    expect(this.view.$(".add_workfiles")).toExist();
+                });
             });
+
+            context("when the licensing model is not explorer", function() {
+                beforeEach(function () {
+                    spyOn(chorus.models.Config.instance().license(), 'limitWorkspaceMembership').andReturn(false);
+                    this.view.render();
+                });
+
+                it("shows the correct boxes", function() {
+                    expect(this.view.$(".add_team_members")).toExist();
+                    expect(this.view.$(".edit_workspace_settings")).toExist();
+                    expect(this.view.$(".add_sandbox")).toExist();
+                    expect(this.view.$(".add_workfiles")).toExist();
+                });
+            });
+
+
         });
 
         context("the tasks have mostly been done", function() {

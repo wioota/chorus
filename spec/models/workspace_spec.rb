@@ -55,6 +55,7 @@ describe Workspace do
     it { should validate_presence_of :name }
     it { should validate_uniqueness_of(:name).case_insensitive }
     it { should validate_attachment_size(:image).less_than(max_workspace_icon_size.megabytes) }
+    it { should validate_with MemberCountValidator }
   end
 
   describe ".active" do

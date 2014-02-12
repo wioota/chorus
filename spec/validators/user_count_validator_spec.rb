@@ -13,9 +13,9 @@ describe UserCountValidator do
     stub(License.instance).[](:collaborators) { 100 }
   end
 
-  context 'with the open chorus license' do
+  context 'when license does not limit user count' do
     before do
-      stub(License.instance).[](:vendor) { License::OPEN_CHORUS }
+      stub(License.instance).limit_user_count? { false }
       mock(User).count.never
     end
 
@@ -24,9 +24,9 @@ describe UserCountValidator do
     end
   end
 
-  context 'with a vendored license' do
+  context 'when license limits user count' do
     before do
-      stub(License.instance).[](:vendor) { 'my_vendor' }
+      stub(License.instance).limit_user_count? { true }
     end
 
     context 'on create' do
@@ -42,5 +42,6 @@ describe UserCountValidator do
         user.should_not be_valid
       end
     end
+
   end
 end

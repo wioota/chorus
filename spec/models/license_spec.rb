@@ -189,4 +189,85 @@ NTAtMDEtMDEK
       end
     end
   end
+
+  describe '#limit_workspace_membership?' do
+    before do
+      stub(license).[](:vendor) { vendor }
+    end
+
+    context 'vendor:openchorus' do
+      let(:vendor) { License::OPEN_CHORUS }
+      before do
+        mock(license).[](:level).never
+      end
+
+      it 'returns false regardless of level' do
+        license.limit_workspace_membership?.should be_false
+      end
+    end
+
+    context 'vendor:pivotal' do
+      let(:vendor) { 'pivotal' }
+      before do
+        mock(license).[](:level).never
+      end
+
+      it 'returns false regardless of level' do
+        license.limit_workspace_membership?.should be_false
+      end
+    end
+
+    context 'vendor:alpine' do
+      let(:vendor) { 'alpine' }
+      before do
+        stub(license).[](:level) { license_level }
+      end
+
+      [
+          {:level => 'explorer', :search => true},
+          {:level => 'basecamp', :search => false},
+          {:level => 'summit', :search => false}
+      ].each do |obj|
+        context "with level:#{obj[:level]}" do
+          before do
+            mock(license).[](:level) { obj[:level] }
+          end
+
+          it "returns #{obj[:search]}" do
+            license.limit_workspace_membership?.should == obj[:search]
+          end
+        end
+      end
+    end
+  end
+
+  describe '#limit_user_count?' do
+    before do
+      stub(license).[](:vendor) { vendor }
+    end
+
+    context 'vendor:openchorus' do
+      let(:vendor) { License::OPEN_CHORUS }
+
+      it 'returns false' do
+        license.limit_user_count?.should be_false
+      end
+    end
+
+    context 'vendor:alpine' do
+      let(:vendor) { License::VENDOR_ALPINE }
+
+      it 'returns true' do
+        license.limit_user_count?.should be_true
+      end
+    end
+
+    context 'vendor:pivotal' do
+      let(:vendor) { License::VENDOR_PIVOTAL }
+
+      it 'returns true' do
+        license.limit_user_count?.should be_true
+      end
+    end
+  end
 end
