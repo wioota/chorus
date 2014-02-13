@@ -21,7 +21,7 @@
 
             {{#if workspaceAdmin}}
                 {{#if active}}
-                    {{#if explorer}}
+                    {{#if limitWorkspaceMembership}}
                         <li><span class="edit_workspace_members disabled" title="{{t "not_licensed.for_explorer"}}">{{t "workspace.edit_members"}}</span></li>
                     {{else}}
                         <li><a class="edit_workspace_members" href="#">{{t "workspace.edit_members"}}</a></li>

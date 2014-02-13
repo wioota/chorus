@@ -30,7 +30,7 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
             active: this.model.isActive(),
             canKaggle: chorus.models.Config.instance().get("kaggleConfigured") && this.model.canUpdate() && this.model.isActive(),
             kaggleUrl: this.model.showUrl()+"/kaggle",
-            explorer: chorus.models.Config.instance().license().limitWorkspaceMembership()
+            limitWorkspaceMembership: chorus.models.Config.instance().license().limitWorkspaceMembership()
         };
     },
 

@@ -28,7 +28,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
                 this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
             });
 
-            context("when the licensing model is explorer", function() {
+            context("when workspace membership is limited", function() {
                 beforeEach(function () {
                     spyOn(chorus.models.Config.instance().license(), 'limitWorkspaceMembership').andReturn(true);
                     this.view.render();
@@ -42,7 +42,7 @@ describe("chorus.views.WorkspaceQuickstart", function() {
                 });
             });
 
-            context("when the licensing model is not explorer", function() {
+            context("when workspace membership is not limited", function() {
                 beforeEach(function () {
                     spyOn(chorus.models.Config.instance().license(), 'limitWorkspaceMembership').andReturn(false);
                     this.view.render();
