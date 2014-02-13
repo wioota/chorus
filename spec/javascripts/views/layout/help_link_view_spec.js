@@ -6,7 +6,7 @@ describe("chorus.views.HelpLink", function() {
 
     context("it is alpine branded", function () {
         beforeEach(function () {
-            chorus.models.Config.instance().license().set('branding', 'alpine');
+            spyOn(chorus.models.Config.instance().license(), "branding").andReturn('alpine');
             this.view.render();
         });
 
@@ -18,7 +18,7 @@ describe("chorus.views.HelpLink", function() {
 
     context("it is not alpine branded", function () {
         beforeEach(function () {
-            chorus.models.Config.instance().license().set('branding', 'pivotal');
+            spyOn(chorus.models.Config.instance().license(), "branding").andReturn('pivotal');
             this.view.render();
         });
 

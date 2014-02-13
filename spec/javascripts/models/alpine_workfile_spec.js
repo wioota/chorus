@@ -8,9 +8,7 @@ describe("chorus.models.AlpineWorkfile", function() {
             datasetIds: ["3", "4", "5"]
         });
 
-        chorus.models.Config.instance().license().set({
-            workflowEnabled: true
-        });
+        spyOn(chorus.models.Config.instance().license(), "workflowEnabled").andReturn(true);
         chorus.session.set("sessionId", "hex");
     });
 

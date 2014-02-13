@@ -3,7 +3,7 @@ chorus.views.HelpLink = chorus.views.Base.extend({
     templateName: 'help_link',
 
     linkAddress: function () {
-        return 'help.link_address.' + chorus.models.Config.instance().license().get('branding');
+        return 'help.link_address.' + chorus.models.Config.instance().license().branding();
     },
 
     additionalContext: function () {

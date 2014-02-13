@@ -106,7 +106,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
             {data: "OTHER", text: t("workfiles.header.menu.filter.other")}
         ];
 
-        if (chorus.models.Config.instance().license().get("workflowEnabled")) {
+        if (chorus.models.Config.instance().license().workflowEnabled()) {
             var workFlowsOption = {data: "WORK_FLOW", text: t("workfiles.header.menu.filter.work_flow")};
             items.splice(2, 0, workFlowsOption);
         }

@@ -133,8 +133,8 @@ chorus.views.Header = chorus.views.Base.extend({
             fullName: user && user.displayName(),
             displayName: user && user.displayShortName(),
             userUrl: user && user.showUrl(),
-            brandingLogo: license.get("branding") + "-logo.png",
-            advisorNow: license.get("advisorNowEnabled"),
+            brandingLogo: license.branding() + "-logo.png",
+            advisorNow: license.advisorNowEnabled(),
             advisorNowLink: this.advisorNowLink(user, license)
         });
     },
@@ -184,7 +184,7 @@ chorus.views.Header = chorus.views.Base.extend({
     startSearch: function(e) {
         e.preventDefault();
         var query = this.$(".search input:text").val();
-        if (query.length > 0 && this.typeAheadView.fullSearchEnabled()) {
+        if (query.length > 0 && chorus.models.Config.instance().license().fullSearchEnabled()) {
             var search = new chorus.models.SearchResult({
                 workspaceId: this.workspaceId,
                 query: query

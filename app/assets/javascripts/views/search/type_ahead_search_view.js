@@ -13,7 +13,7 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
     context: function() {
         var ctx = {
             query: this.model.get("query"),
-            fullSearchEnabled: this.fullSearchEnabled()
+            fullSearchEnabled: chorus.models.Config.instance().license().fullSearchEnabled()
         };
         ctx.results = _.map(_.first(this.model.results(), this.resultLimit), function(result) {
 
@@ -99,9 +99,5 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
         } else {
             return false;
         }
-    },
-
-    fullSearchEnabled: function() {
-        return chorus.models.Config.instance().license().get('fullSearchEnabled');
     }
 });

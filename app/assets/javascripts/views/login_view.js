@@ -52,6 +52,6 @@ chorus.views.Login = chorus.views.Base.extend({
     },
 
     branding: function() {
-        return chorus.models.Config.instance().license().get('branding');
+        return chorus.models.Config.instance().license().branding();
     }
 });
