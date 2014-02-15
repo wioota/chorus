@@ -35,6 +35,15 @@ describe HdfsDataSource do
     end
   end
 
+  describe '#license_type' do
+    before do
+      mock(subject).version { 'the_version' }
+      mock(subject).hdfs_version { 'hdfs_version' }
+    end
+
+    its(:license_type) { should == 'hdfs_version+the_version'}
+  end
+
   describe "destroy" do
     it "enqueues a destroy_entries job" do
       mock(QC.default_queue).enqueue_if_not_queued("HdfsEntry.destroy_entries", subject.id)

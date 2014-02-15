@@ -79,10 +79,15 @@ shared_examples_for :data_source_with_access_control do
     end
   end
 
+  describe '#license_type' do
+    its(:license_type) { should == subject.type }
+  end
+
   describe 'validations' do
     it { should validate_presence_of :name  }
 
     it { should validate_with DataSourceNameValidator }
+    it { should validate_with DataSourceTypeValidator }
 
     it_should_behave_like 'a model with name validations'
 

@@ -21,6 +21,7 @@ describe GnipDataSource do
     it { should validate_presence_of :owner }
 
     it { should validate_with DataSourceNameValidator }
+    it { should validate_with DataSourceTypeValidator }
 
     it_should_behave_like 'a model with name validations' do
       let(:factory_name) { :gnip_data_source }
@@ -44,5 +45,9 @@ describe GnipDataSource do
     set_current_user(users(:admin))
     expect { subject.destroy }.to change { Events::DataSourceDeleted.count }.by(1)
     Events::DataSourceDeleted.last.data_source.should == subject
+  end
+
+  describe '#license_type' do
+    its(:license_type) { should == subject.class.name }
   end
 end

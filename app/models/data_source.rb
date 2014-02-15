@@ -49,7 +49,6 @@ class DataSource < ActiveRecord::Base
     end
   end
 
-
   def self.reindex_data_source(id)
     data_source = find(id)
     data_source.solr_index
@@ -71,7 +70,7 @@ class DataSource < ActiveRecord::Base
     DataSource.accessible_to(user).include?(self)
   end
 
-  def self.refresh_databases data_source_id
+  def self.refresh_databases(data_source_id)
     find(data_source_id).refresh_databases
   end
 

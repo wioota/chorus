@@ -11,6 +11,8 @@ module CommonDataSourceBehavior
     def self.type_name
       'DataSource'
     end
+
+    validates_with DataSourceTypeValidator
   end
 
   def check_status!
@@ -19,6 +21,10 @@ module CommonDataSourceBehavior
     touch(:last_checked_at)
     touch(:last_online_at) if online?
     save!
+  end
+
+  def license_type
+    type
   end
 
   def online?

@@ -61,6 +61,10 @@ class HdfsDataSource < ActiveRecord::Base
     connection_parameters.map { |hsh| com.emc.greenplum.hadoop.plugins.HdfsPair.new(hsh["key"], hsh["value"]) } if connection_parameters
   end
 
+  def license_type
+    %(#{hdfs_version}+#{version})
+  end
+
   private
 
   def enqueue_destroy_entries

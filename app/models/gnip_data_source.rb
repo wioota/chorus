@@ -12,6 +12,7 @@ class GnipDataSource < ActiveRecord::Base
   validates_length_of :name, :maximum => 64
 
   validates_with DataSourceNameValidator
+  validates_with DataSourceTypeValidator
 
   belongs_to :owner, :class_name => 'User'
   has_many :events, :through => :activities
@@ -24,6 +25,10 @@ class GnipDataSource < ActiveRecord::Base
 
   def self.type_name
     'DataSource'
+  end
+
+  def license_type
+    self.class.name
   end
 
   private

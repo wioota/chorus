@@ -49,12 +49,20 @@ class License
     alpine_or_pivotal?
   end
 
+  def limit_data_source_types?
+    explorer? || basecamp?
+  end
+
   private
 
   attr_reader :license
 
   def explorer?
     self[:vendor] == VENDOR_ALPINE && self[:level] == LEVEL_EXPLORER
+  end
+
+  def basecamp?
+    self[:vendor] == VENDOR_ALPINE && self[:level] == LEVEL_BASECAMP
   end
 
   def alpine_or_pivotal?
