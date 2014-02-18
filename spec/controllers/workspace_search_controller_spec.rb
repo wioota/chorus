@@ -58,8 +58,7 @@ describe WorkspaceSearchController do
 
     it 'forbids #show' do
       get :show, :query => 'nope', :workspace_id => workspace.id
-      response.should be_forbidden
-      decoded_errors.license.should == 'NOT_LICENSED'
+      response.should be_forbidden_by_license
     end
   end
 end

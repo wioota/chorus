@@ -109,26 +109,22 @@ describe MilestonesController do
 
     it 'forbids #index' do
       get :index, :workspace_id => workspace.id
-      response.should be_forbidden
-      decoded_errors.license.should == 'NOT_LICENSED'
+      response.should be_forbidden_by_license
     end
 
     it 'forbids #create' do
       post :create, {:workspace_id => workspace.id}
-      response.should be_forbidden
-      decoded_errors.license.should == 'NOT_LICENSED'
+      response.should be_forbidden_by_license
     end
 
     it 'forbids #update' do
       put :update, {:workspace_id => workspace.id, :id => milestone.id}
-      response.should be_forbidden
-      decoded_errors.license.should == 'NOT_LICENSED'
+      response.should be_forbidden_by_license
     end
 
     it 'forbids #destroy' do
       delete :destroy, {:workspace_id => workspace.id, :id => milestone.id}
-      response.should be_forbidden
-      decoded_errors.license.should == 'NOT_LICENSED'
+      response.should be_forbidden_by_license
     end
   end
 end

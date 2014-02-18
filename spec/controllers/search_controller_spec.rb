@@ -166,14 +166,12 @@ describe SearchController do
 
     it 'forbids #show' do
       get :show, :query => 'nope'
-      response.should be_forbidden
-      decoded_errors.license.should == 'NOT_LICENSED'
+      response.should be_forbidden_by_license
     end
 
     it 'forbids #workspaces' do
       get :workspaces, :query => 'nope'
-      response.should be_forbidden
-      decoded_errors.license.should == 'NOT_LICENSED'
+      response.should be_forbidden_by_license
     end
 
     it 'allows #typeahead' do
