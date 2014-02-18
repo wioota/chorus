@@ -21,6 +21,10 @@ chorus.models.License = chorus.models.Base.extend({
         return this.get("limitMilestones");
     },
 
+    limitJobs: function() {
+        return this.get("limitJobs");
+    },
+
     advisorNowEnabled: function() {
         return this.get("advisorNowEnabled");
     }

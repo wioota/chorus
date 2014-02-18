@@ -372,4 +372,42 @@ describe JobsController do
       end
     end
   end
+
+  context 'when License#limit_jobs? is true' do
+    let(:job) { jobs(:default) }
+
+    before do
+      stub(License.instance).limit_jobs? { true }
+    end
+
+    it 'forbids #index' do
+      get :index, :workspace_id => workspace.id
+      response.should be_forbidden_by_license
+    end
+
+    it 'forbids #create' do
+      post :create, {:workspace_id => workspace.id}
+      response.should be_forbidden_by_license
+    end
+
+    it 'forbids #update' do
+      put :update, {:workspace_id => workspace.id, :id => job.id}
+      response.should be_forbidden_by_license
+    end
+
+    it 'forbids #destroy' do
+      delete :destroy, {:workspace_id => workspace.id, :id => job.id}
+      response.should be_forbidden_by_license
+    end
+
+    it 'forbids #run' do
+      post :run, :id => job.id
+      response.should be_forbidden_by_license
+    end
+
+    it 'forbids #stop' do
+      post :stop, :id => job.id
+      response.should be_forbidden_by_license
+    end
+  end
 end

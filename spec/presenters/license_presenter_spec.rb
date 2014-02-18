@@ -61,5 +61,10 @@ describe LicensePresenter, :type => :view do
       stub(License.instance).limit_milestones? { true }
       hash[:limit_milestones].should be_true
     end
+
+    it 'includes limit_jobs' do
+      stub(License.instance).limit_jobs? { true }
+      hash[:limit_jobs].should be_true
+    end
   end
 end

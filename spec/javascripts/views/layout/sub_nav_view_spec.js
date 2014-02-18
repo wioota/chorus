@@ -25,6 +25,18 @@ describe("chorus.views.SubNav", function() {
             });
         });
 
+        context("when jobs are not enabled", function() {
+            beforeEach(function () {
+                spyOn(chorus.models.Config.instance().license(), 'limitJobs').andReturn(true);
+                this.view.render();
+            });
+
+            it("the jobs tab does not contain a link", function() {
+                expect(this.view.$("li.jobs a")).not.toExist();
+                expect(this.view.$("li.jobs span")).toHaveAttr("title", t("not_licensed.only_summit"));
+            });
+        });
+
         it("selects the correct tab", function() {
             expect(this.view.$("li.workfiles")).toHaveClass("selected");
         });

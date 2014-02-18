@@ -1,4 +1,5 @@
 class JobsController < ApplicationController
+  before_filter :require_jobs
   before_filter :demo_mode_filter, :only => [:create, :update, :destroy]
   before_filter :apply_timezone, only: [:create, :update]
 
@@ -95,5 +96,9 @@ class JobsController < ApplicationController
 
   def workspace
     @workspace ||= Workspace.find(params[:workspace_id])
+  end
+
+  def require_jobs
+    render_not_licensed if License.instance.limit_jobs?
   end
 end

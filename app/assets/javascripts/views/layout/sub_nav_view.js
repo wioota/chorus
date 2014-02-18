@@ -16,7 +16,8 @@ chorus.views.SubNav = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            limitMilestones: chorus.models.Config.instance().license().limitMilestones()
+            limitMilestones: chorus.models.Config.instance().license().limitMilestones(),
+            limitJobs: chorus.models.Config.instance().license().limitJobs()
         };
     }
 });

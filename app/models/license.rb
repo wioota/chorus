@@ -57,6 +57,10 @@ class License
     explorer? || basecamp?
   end
 
+  def limit_jobs?
+    explorer? || basecamp?
+  end
+
   private
 
   attr_reader :license

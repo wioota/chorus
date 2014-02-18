@@ -11,7 +11,8 @@ class LicensePresenter < Presenter
             :advisor_now_enabled => License.instance.advisor_now_enabled?,
             :branding => License.instance.branding,
             :limit_workspace_membership => License.instance.limit_workspace_membership?,
-            :limit_milestones => License.instance.limit_milestones?
+            :limit_milestones => License.instance.limit_milestones?,
+            :limit_jobs => License.instance.limit_jobs?
     })
   end
 end

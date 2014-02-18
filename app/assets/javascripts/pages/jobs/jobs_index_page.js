@@ -7,6 +7,7 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
 
         this.collection = new chorus.collections.JobSet([], {workspaceId: workspaceId});
         this.collection.sortAsc("name");
+        this.handleFetchErrorsFor(this.collection);
         this.collection.fetch();
         this.onceLoaded(this.collection, this.pollForJobs);
 
