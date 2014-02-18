@@ -3,16 +3,17 @@ class LicensePresenter < Presenter
 
   def to_hash
     KEYS.inject({}) do |memo, key|
-      memo[key] = License.instance[key]
+      memo[key] = model[key]
       memo
     end.merge({
-            :workflow_enabled => License.instance.workflow_enabled?,
-            :full_search_enabled => License.instance.full_search_enabled?,
-            :advisor_now_enabled => License.instance.advisor_now_enabled?,
-            :branding => License.instance.branding,
-            :limit_workspace_membership => License.instance.limit_workspace_membership?,
-            :limit_milestones => License.instance.limit_milestones?,
-            :limit_jobs => License.instance.limit_jobs?
+            :workflow_enabled => model.workflow_enabled?,
+            :full_search_enabled => model.full_search_enabled?,
+            :advisor_now_enabled => model.advisor_now_enabled?,
+            :branding => model.branding,
+            :limit_workspace_membership => model.limit_workspace_membership?,
+            :limit_milestones => model.limit_milestones?,
+            :limit_jobs => model.limit_jobs?,
+            :home_page => model.home_page
     })
   end
 end

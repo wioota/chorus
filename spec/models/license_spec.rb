@@ -408,4 +408,52 @@ NTAtMDEtMDEK
       end
     end
   end
+
+  describe '#home_page' do
+    before do
+      stub(license).[](:vendor) { vendor }
+    end
+
+    context 'vendor:openchorus' do
+      let(:vendor) { License::OPEN_CHORUS }
+      before do
+        mock(license).[](:level).never
+      end
+
+      it 'is nil regardless of level' do
+        license.home_page.should be_nil
+      end
+    end
+
+    context 'vendor:pivotal' do
+      let(:vendor) { 'pivotal' }
+      before do
+        mock(license).[](:level).never
+      end
+
+      it 'is nil regardless of level' do
+        license.home_page.should be_nil
+      end
+    end
+
+    context 'vendor:alpine' do
+      let(:vendor) { 'alpine' }
+
+      [
+          {:level => 'explorer', :limit => 'WorkspaceIndex'},
+          {:level => 'basecamp', :limit => nil},
+          {:level => 'summit', :limit => nil}
+      ].each do |obj|
+        context "with level:#{obj[:level]}" do
+          before do
+            mock(license).[](:level).at_least(1) { obj[:level] }
+          end
+
+          it "returns #{obj[:limit]}" do
+            license.home_page.should == obj[:limit]
+          end
+        end
+      end
+    end
+  end
 end

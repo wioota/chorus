@@ -79,6 +79,8 @@ window.BackboneFixtureDefinitions = {
 
     config: {},
 
+    license: {},
+
     csvImport: {  model: "CSVImport" },
 
     csvImportSet: {

@@ -32,5 +32,9 @@ describe LicensesController do
         decoded_response[key].should == (value.is_a?(Date) ? value.to_s : value)
       end
     end
+
+    generate_fixture 'license.json' do
+      get :show
+    end
   end
 end

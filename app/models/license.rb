@@ -61,6 +61,10 @@ class License
     explorer? || basecamp?
   end
 
+  def home_page
+    explorer? ? 'WorkspaceIndex' : nil
+  end
+
   private
 
   attr_reader :license

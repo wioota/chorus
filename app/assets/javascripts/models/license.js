@@ -27,5 +27,9 @@ chorus.models.License = chorus.models.Base.extend({
 
     advisorNowEnabled: function() {
         return this.get("advisorNowEnabled");
+    },
+
+    homePage: function() {
+        return this.get("homePage") || "Dashboard";
     }
 });

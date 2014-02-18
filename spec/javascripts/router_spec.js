@@ -197,6 +197,42 @@ describe("chorus.router", function() {
         });
     });
 
+    describe("when there is an alternate home page", function () {
+        beforeEach(function () {
+            spyOn(chorus.models.Config.instance().license(), 'homePage').andReturn("UserIndex");
+            this.chorus = new window.Chorus();
+            this.backboneSpy = spyOn(Backbone.history, "start");
+            this.chorus.initialize();
+            var session = this.chorus.session;
+            spyOn(this.chorus.session, "fetch").andCallFake(function(options) {
+                options.success(session, { status: "ok" });
+            });
+        });
+
+        it("uses the alternate home page", function() {
+            this.chorus.router.navigate("");
+            expect(this.chorus.page).toBeA(chorus.pages.UserIndexPage);
+        });
+    });
+
+    describe("when there is not an alternate home page", function () {
+        beforeEach(function () {
+            spyOn(chorus.models.Config.instance().license(), 'homePage').andReturn(null);
+            this.chorus = new window.Chorus();
+            this.backboneSpy = spyOn(Backbone.history, "start");
+            this.chorus.initialize();
+            var session = this.chorus.session;
+            spyOn(this.chorus.session, "fetch").andCallFake(function(options) {
+                options.success(session, { status: "ok" });
+            });
+        });
+
+        it("uses the Dashboard page", function() {
+            this.chorus.router.navigate("");
+            expect(this.chorus.page).toBeA(chorus.pages.DashboardPage);
+        });
+    });
+
     describe("#reload", function() {
         it("navigates to the current url fragment", function() {
             Backbone.history.fragment = '/somewhere';

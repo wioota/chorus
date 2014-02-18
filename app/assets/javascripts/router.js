@@ -82,6 +82,9 @@
                 self.route(pattern, pageClassName, callback);
             });
 
+            var alternateHomePage = chorus.models.Config.instance().license().homePage();
+            alternateHomePage && self.route("", alternateHomePage, self.generateRouteCallback(alternateHomePage));
+
             self.route("logout", "Logout", self.app.session.logout);
         },
 
