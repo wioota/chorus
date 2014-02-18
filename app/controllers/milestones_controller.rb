@@ -1,4 +1,6 @@
 class MilestonesController < ApplicationController
+  before_filter :require_milestones
+
   def index
     authorize! :show, workspace
 
@@ -38,4 +40,7 @@ class MilestonesController < ApplicationController
     @workspace ||= Workspace.find(params[:workspace_id])
   end
 
+  def require_milestones
+    render_not_licensed if License.instance.limit_milestones?
+  end
 end

@@ -53,6 +53,10 @@ class License
     explorer? || basecamp?
   end
 
+  def limit_milestones?
+    explorer? || basecamp?
+  end
+
   private
 
   attr_reader :license

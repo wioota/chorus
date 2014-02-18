@@ -1,4 +1,10 @@
-<li class="milestones"><a href="#/workspaces/{{id}}/milestones">{{t "workspace.milestones"}}</a></li>
+<li class="milestones">
+        {{#if limitMilestones}}
+            <span title="{{t "not_licensed.only_summit"}}">{{t "workspace.milestones"}}</span>
+        {{else}}
+            <a href="#/workspaces/{{id}}/milestones">{{t "workspace.milestones"}}</a>
+        {{/if}}
+</li>
 <li class="jobs"><a href="#/workspaces/{{id}}/jobs">{{t "workspace.jobs"}}</a></li>
 <li class="workfiles"><a href="#/workspaces/{{id}}/workfiles">{{t "workspace.workfiles"}}</a></li>
 <li class="datasets"><a href="#/workspaces/{{id}}/datasets">{{t "workspace.datasets"}}</a></li>

@@ -21,6 +21,7 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
             ownerShowUrl: this.model.owner().showUrl(),
             projectStatusKey: 'workspace.project.status.' + this.model.get('projectStatus'),
             statusReason: this.model.get('projectStatusReason'),
+            limitMilestones: chorus.models.Config.instance().license().limitMilestones(),
             milestoneProgress: this.model.milestoneProgress(),
             milestonesUrl: this.model.milestonesUrl()
         };

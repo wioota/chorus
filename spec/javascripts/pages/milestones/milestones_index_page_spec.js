@@ -75,5 +75,16 @@ describe("chorus.pages.MilestonesIndexPage", function () {
                 itBehavesLike.aDialogLauncher('button.create_milestone', chorus.dialogs.ConfigureMilestone);
             });
         });
+
+        describe("when fetching the collection is forbidden", function () {
+            beforeEach(function () {
+                spyOn(Backbone.history, "loadUrl");
+                this.server.lastFetchFor(this.page.collection).failForbidden({license: "NOT_LICENSED"});
+            });
+
+            it("routes to the not licensed page", function() {
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/notLicensed");
+            });
+        });
     });
 });

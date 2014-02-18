@@ -99,4 +99,36 @@ describe MilestonesController do
       put :update, params
     end
   end
+
+  context 'when License#limit_milestones? is true' do
+    let(:milestone) { milestones(:default) }
+
+    before do
+      stub(License.instance).limit_milestones? { true }
+    end
+
+    it 'forbids #index' do
+      get :index, :workspace_id => workspace.id
+      response.should be_forbidden
+      decoded_errors.license.should == 'NOT_LICENSED'
+    end
+
+    it 'forbids #create' do
+      post :create, {:workspace_id => workspace.id}
+      response.should be_forbidden
+      decoded_errors.license.should == 'NOT_LICENSED'
+    end
+
+    it 'forbids #update' do
+      put :update, {:workspace_id => workspace.id, :id => milestone.id}
+      response.should be_forbidden
+      decoded_errors.license.should == 'NOT_LICENSED'
+    end
+
+    it 'forbids #destroy' do
+      delete :destroy, {:workspace_id => workspace.id, :id => milestone.id}
+      response.should be_forbidden
+      decoded_errors.license.should == 'NOT_LICENSED'
+    end
+  end
 end

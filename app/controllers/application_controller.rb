@@ -212,7 +212,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def render_not_licensed
+    present_errors({:license => :NOT_LICENSED}, :status => :forbidden)
+  end
+
   def require_full_search
-    present_errors({:license => :NOT_LICENSED}, :status => :forbidden) unless License.instance.full_search_enabled?
+    render_not_licensed unless License.instance.full_search_enabled?
   end
 end

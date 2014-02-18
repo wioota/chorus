@@ -70,4 +70,15 @@ describe("chorus.views.ProjectStatusView", function() {
             });
         });
     });
+
+    describe("when milestone tracking is not enabled", function () {
+        beforeEach(function () {
+            spyOn(chorus.models.Config.instance().license(), 'limitMilestones').andReturn(true);
+            this.view.render();
+        });
+
+        it("does not display the milestone elements", function() {
+            expect(this.view.$(".milestones")).not.toExist();
+        });
+    });
 });

@@ -10,7 +10,8 @@ class LicensePresenter < Presenter
             :full_search_enabled => License.instance.full_search_enabled?,
             :advisor_now_enabled => License.instance.advisor_now_enabled?,
             :branding => License.instance.branding,
-            :limit_workspace_membership => License.instance.limit_workspace_membership?
+            :limit_workspace_membership => License.instance.limit_workspace_membership?,
+            :limit_milestones => License.instance.limit_milestones?
     })
   end
 end

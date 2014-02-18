@@ -6,6 +6,7 @@ chorus.pages.MilestonesIndexPage = chorus.pages.Base.extend({
         this.buttonView = new chorus.views.MilestonesIndexPageButtons({model: this.workspace});
 
         this.collection = new chorus.collections.MilestoneSet([], {workspaceId: workspaceId});
+        this.handleFetchErrorsFor(this.collection);
         this.collection.fetch();
 
         this.mainContent = new chorus.views.MainContentList(this.listConfig());

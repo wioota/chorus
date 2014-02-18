@@ -11,7 +11,7 @@
     </div>
 </div>
 
-
+{{#unless limitMilestones}}
 <div class="milestones">
     <div class='target_date'>
         <span class="label">Target:</span>
@@ -29,3 +29,4 @@
     </div>
     <a class='ratio' href="{{milestonesUrl}}">{{milestoneCompletedCount}} / {{milestoneCount}}</a>
 </div>
+{{/unless}}

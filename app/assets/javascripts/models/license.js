@@ -17,6 +17,10 @@ chorus.models.License = chorus.models.Base.extend({
         return this.get("limitWorkspaceMembership");
     },
 
+    limitMilestones: function() {
+        return this.get("limitMilestones");
+    },
+
     advisorNowEnabled: function() {
         return this.get("advisorNowEnabled");
     }
