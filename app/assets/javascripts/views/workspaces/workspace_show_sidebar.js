@@ -7,7 +7,7 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
         "click a.edit_workspace_members": 'launchWorkspaceEditMembersDialog',
         "click .delete_workspace": 'launchWorkspaceDeleteAlert',
         "click .new_note": 'launchNotesNewDialog',
-        "click .new_sandbox": 'launchSandboxNewDialog',
+        "click a.new_sandbox": 'launchSandboxNewDialog',
         "click .new_insight": 'launchInsightsNewDialog'
     },
 
@@ -21,16 +21,18 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
     },
 
     additionalContext:function () {
+        var license = chorus.models.Config.instance().license();
         return {
             workspaceAdmin:this.model.workspaceAdmin(),
             imageUrl:this.model.fetchImageUrl(),
             hasImage:this.model.hasImage(),
             hasSandbox:!!this.model.sandbox(),
+            limitSandboxes: license.limitSandboxes(),
             canUpdate: this.model.canUpdate(),
             active: this.model.isActive(),
             canKaggle: chorus.models.Config.instance().get("kaggleConfigured") && this.model.canUpdate() && this.model.isActive(),
             kaggleUrl: this.model.showUrl()+"/kaggle",
-            limitWorkspaceMembership: chorus.models.Config.instance().license().limitWorkspaceMembership()
+            limitWorkspaceMembership: license.limitWorkspaceMembership()
         };
     },
 

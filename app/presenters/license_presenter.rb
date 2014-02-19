@@ -13,6 +13,7 @@ class LicensePresenter < Presenter
             :limit_workspace_membership => model.limit_workspace_membership?,
             :limit_milestones => model.limit_milestones?,
             :limit_jobs => model.limit_jobs?,
+            :limit_sandboxes => model.limit_sandboxes?,
             :home_page => model.home_page
     })
   end

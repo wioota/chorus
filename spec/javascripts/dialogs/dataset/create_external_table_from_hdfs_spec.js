@@ -56,6 +56,14 @@ describe("chorus.dialogs.CreateExternalTableFromHdfs", function() {
             expect(this.dialog.$('button.submit')).toBeDisabled();
         });
 
+        context("when sandboxes are disabled", function () {
+            it("populates the dialog's errors div", function() {
+                spyOn(chorus.models.Config.instance().license(), "limitSandboxes").andReturn(true);
+                this.dialog.render();
+                expect(this.dialog.$(".errors")).toContainTranslation("not_licensed.for_explorer");
+            });
+        });
+
     });
 
     context("when the workspace fetch completes and there are workspaces", function() {

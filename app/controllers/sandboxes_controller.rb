@@ -1,4 +1,5 @@
 class SandboxesController < ApplicationController
+  before_filter :require_sandboxes
   wrap_parameters :sandbox, :exclude => [:workspace_id]
 
   def create
@@ -43,5 +44,11 @@ class SandboxesController < ApplicationController
     end
 
     render :json => {}, :status => :created
+  end
+
+  private
+
+  def require_sandboxes
+    render_not_licensed if License.instance.limit_sandboxes?
   end
 end

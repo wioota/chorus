@@ -28,6 +28,11 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         if (this.workspaces.loaded) {
             if (!this.workspaces.length) {
                 this.workspaces.serverErrors = { fields: { workspaces: { EMPTY: {} } } };
+
+                if (chorus.models.Config.instance().license().limitSandboxes()) {
+                    this.workspaces.serverErrors = {message: t("not_licensed.for_explorer")};
+                }
+
                 this.showErrors(this.workspaces);
                 this.$('button.submit').attr('disabled', true);
             }

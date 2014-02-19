@@ -26,6 +26,10 @@ chorus.models.License = chorus.models.Base.extend({
         return this.get("limitJobs");
     },
 
+    limitSandboxes: function() {
+        return this.get("limitSandboxes");
+    },
+
     advisorNowEnabled: function() {
         return this.get("advisorNowEnabled");
     },

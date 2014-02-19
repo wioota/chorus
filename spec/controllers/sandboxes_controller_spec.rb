@@ -163,6 +163,17 @@ describe SandboxesController do
         workspace.reload.sandbox.database.name.should == database_name
       end
     end
+
+    context 'when sandboxes are limited by license' do
+      before do
+        stub(License.instance).limit_sandboxes? { true }
+      end
+
+      it 'is forbidden' do
+        post :create, :workspace_id => workspace.id, :schema_id => sandbox.id
+        response.should be_forbidden_by_license
+      end
+    end
   end
 end
 

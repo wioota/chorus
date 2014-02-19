@@ -17,7 +17,7 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
             workspaceUrl: this.model.showUrl(),
             needsMember: this.needsMember(),
             needsWorkfile: !this.model.get("hasAddedWorkfile"),
-            needsSandbox: !this.model.get("hasAddedSandbox"),
+            needsSandbox: this.needsSandbox(),
             needsSettings: !this.model.get("hasChangedSettings")
         };
     },
@@ -73,6 +73,10 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
 
     needsMember: function() {
         return !(this.model.get("hasAddedMember") || chorus.models.Config.instance().license().limitWorkspaceMembership());
+    },
+
+    needsSandbox: function() {
+        return !(this.model.get("hasAddedSandbox") || chorus.models.Config.instance().license().limitSandboxes());
     },
 
     launchEditWorkspaceDialog: function (e) {

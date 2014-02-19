@@ -71,5 +71,10 @@ describe LicensePresenter, :type => :view do
       stub(License.instance).home_page { 'CustomHomePage' }
       hash[:home_page].should == 'CustomHomePage'
     end
+
+    it 'includes limit_sandboxes?' do
+      stub(License.instance).limit_sandboxes? { true }
+      hash[:limit_sandboxes].should be_true
+    end
   end
 end

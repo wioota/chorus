@@ -456,4 +456,52 @@ NTAtMDEtMDEK
       end
     end
   end
+
+  describe '#limit_sandboxes?' do
+    before do
+      stub(license).[](:vendor) { vendor }
+    end
+
+    context 'vendor:openchorus' do
+      let(:vendor) { License::OPEN_CHORUS }
+      before do
+        mock(license).[](:level).never
+      end
+
+      it 'returns false regardless of level' do
+        license.limit_sandboxes?.should be_false
+      end
+    end
+
+    context 'vendor:pivotal' do
+      let(:vendor) { 'pivotal' }
+      before do
+        mock(license).[](:level).never
+      end
+
+      it 'returns false regardless of level' do
+        license.limit_sandboxes?.should be_false
+      end
+    end
+
+    context 'vendor:alpine' do
+      let(:vendor) { 'alpine' }
+
+      [
+          {:level => 'explorer', :limit => true},
+          {:level => 'basecamp', :limit => false},
+          {:level => 'summit', :limit => false}
+      ].each do |obj|
+        context "with level:#{obj[:level]}" do
+          before do
+            mock(license).[](:level).at_least(1) { obj[:level] }
+          end
+
+          it "returns #{obj[:limit]}" do
+            license.limit_sandboxes?.should == obj[:limit]
+          end
+        end
+      end
+    end
+  end
 end

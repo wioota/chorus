@@ -28,23 +28,25 @@ describe("chorus.views.WorkspaceQuickstart", function() {
                 this.view = new chorus.views.WorkspaceQuickstart({model: this.model});
             });
 
-            context("when workspace membership is limited", function() {
+            context("when some actions are limited", function() {
                 beforeEach(function () {
                     spyOn(chorus.models.Config.instance().license(), 'limitWorkspaceMembership').andReturn(true);
+                    spyOn(chorus.models.Config.instance().license(), 'limitSandboxes').andReturn(true);
                     this.view.render();
                 });
 
                 it("shows the correct boxes without add_team_members", function() {
                     expect(this.view.$(".add_team_members")).not.toExist();
                     expect(this.view.$(".edit_workspace_settings")).toExist();
-                    expect(this.view.$(".add_sandbox")).toExist();
+                    expect(this.view.$(".add_sandbox")).not.toExist();
                     expect(this.view.$(".add_workfiles")).toExist();
                 });
             });
 
-            context("when workspace membership is not limited", function() {
+            context("when actions are not limited", function() {
                 beforeEach(function () {
                     spyOn(chorus.models.Config.instance().license(), 'limitWorkspaceMembership').andReturn(false);
+                    spyOn(chorus.models.Config.instance().license(), 'limitSandboxes').andReturn(false);
                     this.view.render();
                 });
 

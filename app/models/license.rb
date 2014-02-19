@@ -65,6 +65,10 @@ class License
     explorer? ? 'WorkspaceIndex' : nil
   end
 
+  def limit_sandboxes?
+    explorer?
+  end
+
   private
 
   attr_reader :license

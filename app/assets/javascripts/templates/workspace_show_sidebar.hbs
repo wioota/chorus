@@ -27,7 +27,11 @@
                         <li><a class="edit_workspace_members" href="#">{{t "workspace.edit_members"}}</a></li>
                     {{/if}}
                     {{#unless hasSandbox}}
-                        <li><a class="new_sandbox" href="#">{{t "sandbox.create_a_sandbox"}}</a></li>
+                        {{#if limitSandboxes}}
+                            <li><span class="new_sandbox disabled" title="{{t "not_licensed.for_explorer"}}">{{t "sandbox.create_a_sandbox"}}</span></li>
+                        {{else}}
+                            <li><a class="new_sandbox" href="#">{{t "sandbox.create_a_sandbox"}}</a></li>
+                        {{/if}}
                     {{/unless}}
                 {{/if}}
             {{/if}}

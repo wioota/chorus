@@ -144,10 +144,25 @@ describe("chorus.views.WorkspaceShowSidebar", function() {
                 });
 
                 it("has a link to add a new sandbox", function() {
-                    expect(this.view.$("a.new_sandbox").text().trim()).toMatchTranslation("sandbox.create_a_sandbox");
+                    expect(this.view.$("a.new_sandbox")).toContainTranslation("sandbox.create_a_sandbox");
                 });
 
                 itBehavesLike.aDialogLauncher("a.new_sandbox", chorus.dialogs.SandboxNew);
+
+                context("with sandboxes disabled", function () {
+                    beforeEach(function () {
+                        spyOn(chorus.models.Config.instance().license(), 'limitSandboxes').andReturn(true);
+                        this.view.render();
+                    });
+
+                    it("has a disabled span about adding a new sandbox", function() {
+                        expect(this.view.$("a.new_sandbox")).not.toExist();
+                        expect(this.view.$("span.new_sandbox")).toContainTranslation("sandbox.create_a_sandbox");
+                        expect(this.view.$("span.new_sandbox")).toHaveAttr("title", t("not_licensed.for_explorer"));
+                        expect(this.view.$("span.new_sandbox")).toHaveClass("disabled");
+                    });
+                });
+
             });
 
             context("and the workspace has a sandbox", function() {
