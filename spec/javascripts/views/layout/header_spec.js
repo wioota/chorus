@@ -420,6 +420,10 @@ describe("chorus.views.Header", function() {
                 it("has a link to the tags", function() {
                     expect(this.view.$(".menu.popup_gear a[href='#/tags']").text()).toMatchTranslation("header.tags");
                 });
+
+                it("has a link to about", function() {
+                    expect(this.view.$(".menu.popup_gear a[href='#/about']").text()).toMatchTranslation("header.about");
+                });
             });
 
         });

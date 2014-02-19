@@ -68,7 +68,8 @@
             ["tags/:name", "TagShow"],
             ["tags/:scope/:entityType/:name", "TagShow"],
             ["data_sources/:id/schemas", "OracleSchemaIndex"],
-            ["work_flows/:id", "WorkFlowShow"]
+            ["work_flows/:id", "WorkFlowShow"],
+            ["about", "About"]
         ],
 
         initialize:function (app) {

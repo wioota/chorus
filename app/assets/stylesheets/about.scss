@@ -1,0 +1,26 @@
+@import "_common.scss";
+
+.about_box {
+    font-size: 12px;
+    line-height: 16px;
+
+    position: relative;
+    top: 60px;
+
+    border: 2px solid $guts-border-color;
+
+    width: 425px;
+    margin-left: auto;
+    margin-right: auto;
+
+    .title {
+        background-color: $dialog-background-color;
+        padding: 20px;
+    }
+
+    .content{
+        .text {
+            padding: 10px;
+        }
+    }
+}

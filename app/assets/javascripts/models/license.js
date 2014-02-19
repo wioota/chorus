@@ -1,5 +1,6 @@
 chorus.models.License = chorus.models.Base.extend({
     constructorName: "License",
+    urlTemplate: "license",
 
     branding: function() {
         return this.get("branding");
@@ -31,5 +32,15 @@ chorus.models.License = chorus.models.Base.extend({
 
     homePage: function() {
         return this.get("homePage") || "Dashboard";
+    },
+
+    applicationKey: function() {
+        var vendor = this.get("vendor");
+        switch (vendor) {
+            case "alpine":
+                return "alpine_" + this.get("level");
+            default:
+                return vendor;
+        }
     }
 });

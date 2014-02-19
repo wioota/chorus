@@ -24,4 +24,22 @@ describe("chorus.models.License", function () {
             });
         });
     });
+
+    describe("#applicationKey", function () {
+        context("when vendor is alpine", function() {
+            it("returns alpine_#{level}", function() {
+                this.model.set("vendor", "alpine");
+                this.model.set("level", "triple-platinum");
+                expect(this.model.applicationKey()).toBe("alpine_triple-platinum");
+            });
+        });
+
+        context("when vendor is not alpine", function() {
+            it("returns vendor", function() {
+                this.model.set("vendor", "openchorus");
+                this.model.set("level", "triple-platinum");
+                expect(this.model.applicationKey()).toBe("openchorus");
+            });
+        });
+    });
 });
