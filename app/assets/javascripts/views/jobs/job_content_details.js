@@ -23,7 +23,6 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
     },
 
     setup: function() {
-        chorus.applyPlugins(this);
         this.model.fetchIfNotLoaded();
         this.workspace = this.model.workspace();
     },

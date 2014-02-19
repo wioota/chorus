@@ -7,7 +7,6 @@ chorus.views.JobsIndexPageButtons = chorus.views.Base.extend({
     },
 
     setup: function() {
-        chorus.applyPlugins(this);
         this.model.fetchIfNotLoaded();
     },
 

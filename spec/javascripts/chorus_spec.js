@@ -71,26 +71,6 @@ describe("chorus global", function() {
                 expect(this.chorus.cachebuster()).toBe(this.time);
             });
         });
-
-        describe("plugins", function() {
-            beforeEach(function() {
-                this.model = new chorus.models.User();
-                this.plugin1Spy = jasmine.createSpy("plugin1");
-                this.plugin2Spy = jasmine.createSpy("plugin2");
-                this.otherPluginSpy = jasmine.createSpy("otherPlugin");
-                this.chorus.plugins.push({User: {init: this.plugin1Spy}});
-                this.chorus.plugins.push({User: {init: this.plugin2Spy}});
-                this.chorus.plugins.push({NotUser: {init: this.otherPluginSpy}});
-            });
-
-            it("are initialized on appropriate classes", function() {
-                this.chorus.applyPlugins(this.model);
-                expect(this.plugin1Spy).toHaveBeenCalledWith(this.model);
-                expect(this.plugin2Spy).toHaveBeenCalledWith(this.model);
-                expect(this.otherPluginSpy).not.toHaveBeenCalled();
-            });
-
-        });
     });
 
     describe("#afterNavigate", function() {
