@@ -33,8 +33,8 @@ class License
     %(#{self.branding.titlecase} Chorus)
   end
 
-  def full_search_enabled?
-    !explorer?
+  def limit_search?
+    explorer?
   end
 
   def advisor_now_enabled?

@@ -13,7 +13,7 @@ chorus.views.TypeAheadSearch = chorus.views.Base.extend({
     context: function() {
         var ctx = {
             query: this.model.get("query"),
-            fullSearchEnabled: chorus.models.Config.instance().license().fullSearchEnabled()
+            limitSearch: chorus.models.Config.instance().license().limitSearch()
         };
         ctx.results = _.map(_.first(this.model.results(), this.resultLimit), function(result) {
 

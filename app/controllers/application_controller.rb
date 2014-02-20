@@ -217,6 +217,6 @@ class ApplicationController < ActionController::Base
   end
 
   def require_full_search
-    render_not_licensed unless License.instance.full_search_enabled?
+    render_not_licensed if License.instance.limit_search?
   end
 end

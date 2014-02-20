@@ -213,7 +213,7 @@ describe("chorus.views.Header", function() {
                 context("with full search enabled", function() {
                     beforeEach(function() {
                         spyOn(chorus.router, 'navigate');
-                        spyOn(chorus.models.Config.instance().license(), "fullSearchEnabled").andReturn(true);
+                        spyOn(chorus.models.Config.instance().license(), "limitSearch").andReturn(false);
                     });
 
                     it("includes the query", function() {
@@ -264,7 +264,7 @@ describe("chorus.views.Header", function() {
                 context("when full search is disabled", function() {
                     beforeEach(function() {
                         spyOn(chorus.router, 'navigate');
-                        spyOn(chorus.models.Config.instance().license(), "fullSearchEnabled").andReturn(false);
+                        spyOn(chorus.models.Config.instance().license(), "limitSearch").andReturn(true);
                     });
 
                     it("does not navigate", function() {

@@ -6,8 +6,8 @@ chorus.models.License = chorus.models.Base.extend({
         return this.get("branding");
     },
 
-    fullSearchEnabled: function() {
-        return this.get("fullSearchEnabled");
+    limitSearch: function() {
+        return this.get("limitSearch");
     },
 
     workflowEnabled: function() {

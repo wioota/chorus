@@ -7,9 +7,9 @@ class LicensePresenter < Presenter
       memo
     end.merge({
             :workflow_enabled => model.workflow_enabled?,
-            :full_search_enabled => model.full_search_enabled?,
             :advisor_now_enabled => model.advisor_now_enabled?,
             :branding => model.branding,
+            :limit_search => model.limit_search?,
             :limit_workspace_membership => model.limit_workspace_membership?,
             :limit_milestones => model.limit_milestones?,
             :limit_jobs => model.limit_jobs?,

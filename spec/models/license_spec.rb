@@ -109,7 +109,7 @@ NTAtMDEtMDEK
     end
   end
 
-  describe '#full_search_enabled?' do
+  describe '#limit_search?' do
     before do
       stub(license).[](:vendor) { vendor }
     end
@@ -121,7 +121,7 @@ NTAtMDEtMDEK
       end
 
       it 'returns true regardless of level' do
-        license.full_search_enabled?.should be_true
+        license.limit_search?.should be_false
       end
     end
 
@@ -132,7 +132,7 @@ NTAtMDEtMDEK
       end
 
       it 'returns true regardless of level' do
-        license.full_search_enabled?.should be_true
+        license.limit_search?.should be_false
       end
     end
 
@@ -140,9 +140,9 @@ NTAtMDEtMDEK
       let(:vendor) { 'alpine' }
 
       [
-          {:level => 'explorer', :search => false},
-          {:level => 'basecamp', :search => true},
-          {:level => 'summit', :search => true}
+          {:level => 'explorer', :search => true},
+          {:level => 'basecamp', :search => false},
+          {:level => 'summit', :search => false}
       ].each do |obj|
         context "with level:#{obj[:level]}" do
           before do
@@ -150,7 +150,7 @@ NTAtMDEtMDEK
           end
 
           it "returns #{obj[:search]}" do
-            license.full_search_enabled?.should == obj[:search]
+            license.limit_search?.should == obj[:search]
           end
         end
       end

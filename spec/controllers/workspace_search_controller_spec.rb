@@ -47,13 +47,13 @@ describe WorkspaceSearchController do
     end
   end
 
-  context 'when License#full_search_enabled? is false' do
+  context 'when License#limit_search? is true' do
     let(:user) { users(:owner) }
     let(:workspace) { workspaces(:search_public) }
 
     before do
       log_in user
-      stub(License.instance).full_search_enabled? { false }
+      stub(License.instance).limit_search? { true }
     end
 
     it 'forbids #show' do

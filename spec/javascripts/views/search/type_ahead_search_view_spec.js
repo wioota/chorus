@@ -4,7 +4,6 @@ describe("chorus.views.TypeAheadSearch", function() {
         this.result.set({query: "test"});
         this.view = new chorus.views.TypeAheadSearch();
         this.view.searchFor("test");
-        spyOn(chorus.models.Config.instance().license(), "fullSearchEnabled").andReturn(true);
     });
 
     it("should fetch the search result", function() {
@@ -33,9 +32,9 @@ describe("chorus.views.TypeAheadSearch", function() {
             expect(this.view.$("li:eq(0) a").attr("href")).toBe("#/search/test");
         });
 
-        context("when full_search_enabled is false", function() {
+        context("when limit_search is true", function() {
             beforeEach(function() {
-                chorus.models.Config.instance().license().fullSearchEnabled.andReturn(false);
+                spyOn(chorus.models.Config.instance().license(), "limitSearch").andReturn(true);
                 this.view.render();
             });
 
