@@ -163,7 +163,14 @@ class DataSource < ActiveRecord::Base
     self.state = "offline"
   end
 
+  def attempt_connection(user)
+    # pass empty block to attempt connection and ensure connection disconnects
+    # so we do not leak connections
+    connect_as(user).with_connection {}
+  end
+
   private
+
   def build_data_source_account_for_owner
     build_owner_account(:owner => owner, :db_username => db_username, :db_password => db_password)
   end

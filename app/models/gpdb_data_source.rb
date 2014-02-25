@@ -76,10 +76,6 @@ class GpdbDataSource < ConcreteDataSource
     "Greenplum Database"
   end
 
-  def attempt_connection(user)
-    connect_as(user).connect!
-  end
-
   private
 
   def account_names

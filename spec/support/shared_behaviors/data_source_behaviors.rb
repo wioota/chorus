@@ -221,6 +221,19 @@ shared_examples_for :data_source_with_access_control do
       data_source.connect_with(account).should be_an_instance_of(fake_connection_class)
     end
   end
+
+  describe '#attempt_connection' do
+    let(:data_source) { FactoryGirl.build factory_name }
+    let(:user) { users(:default) }
+
+    it 'should try to connect as the given user' do
+      mock(data_source).connect_as(user) do |connection|
+        mock(connection).with_connection
+      end
+
+      data_source.attempt_connection(user)
+    end
+  end
 end
 
 shared_examples_for :data_source_with_db_name_port_validations do
