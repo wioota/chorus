@@ -36,8 +36,12 @@ class ChorusWorkfile < Workfile
   end
 
   def create_new_version(user, params)
-    file = build_new_file(file_name, params[:content])
-    file.content_type = latest_workfile_version.contents_content_type
+    file = params[:content]
+    unless file.respond_to? :original_filename
+      file = build_new_file(file_name, file)
+      file.content_type = latest_workfile_version.contents_content_type
+    end
+
     Workfile.transaction do
       workfile_version = build_new_version(user, file, params[:commit_message])
       workfile_version.save!

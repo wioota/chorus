@@ -250,12 +250,28 @@ describe ChorusWorkfile do
     let(:user) { users(:owner) }
     let(:workfile) { workfiles(:public) }
 
-    it 'changes the file content' do
-      workfile.create_new_version(user, {:content => 'New content', :commit_message => 'A new version'})
+    context 'when :content is a string' do
+      it 'changes the file content' do
+        workfile.create_new_version(user, {:content => 'New content', :commit_message => 'A new version'})
 
-      File.read(workfile.latest_workfile_version.contents.path).should == 'New content'
-      workfile.latest_workfile_version.commit_message.should == 'A new version'
-      workfile.latest_workfile_version.version_num.should == 2
+        new_version = workfile.latest_workfile_version
+        File.read(new_version.contents.path).should == 'New content'
+        new_version.commit_message.should == 'A new version'
+        new_version.version_num.should == 2
+      end
+    end
+
+    context 'when :content is an uploaded file' do
+      let(:file) { test_file('some.txt', 'text/sql') }
+
+      it 'changes the file content' do
+        workfile.create_new_version(user, {:content => file, :commit_message => 'A new version'})
+
+        new_version = workfile.latest_workfile_version
+        File.read(new_version.contents.path).should == File.read(file.path)
+        new_version.commit_message.should == 'A new version'
+        new_version.version_num.should == 2
+      end
     end
 
     it 'deletes any saved workfile drafts for this workfile and user' do
