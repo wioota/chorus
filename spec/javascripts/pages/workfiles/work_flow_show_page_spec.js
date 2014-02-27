@@ -56,7 +56,7 @@ describe("chorus.pages.WorkFlowShowPage", function() {
                 spyOn(this.iframeWindow, "postMessage").andCallThrough();
             });
 
-            context("clicking any link with a value on the header", function() {
+            context("clicking an internal link on the header", function() {
                 beforeEach(function() {
                     this.event = jQuery.Event("click");
                     spyOn(this.event, "preventDefault");
@@ -74,6 +74,27 @@ describe("chorus.pages.WorkFlowShowPage", function() {
 
                 it("publishes an 'intent_to_close' message", function() {
                     expect(this.iframeWindow.postMessage).toHaveBeenCalledWith({action: "intent_to_close"}, "*");
+                });
+            });
+
+            context("clicking a link that should open a new tab on the header", function() {
+                beforeEach(function() {
+                    this.event = jQuery.Event("click");
+                    spyOn(this.event, "preventDefault");
+                    this.page.$(".header").append('<a href="http://github.com/Chorus" target="_blank"></a>');
+                    this.page.$("a[href='http://github.com/Chorus']").trigger(this.event);
+                });
+
+                it("does not block the event", function() {
+                    expect(this.event.preventDefault).not.toHaveBeenCalled();
+                });
+
+                it("does not store the intended href", function() {
+                    expect(this.page.intendedHref).not.toBeDefined();
+                });
+
+                it("does not publishes an 'intent_to_close' message", function() {
+                    expect(this.iframeWindow.postMessage).not.toHaveBeenCalled();
                 });
             });
 

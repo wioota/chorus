@@ -50,9 +50,12 @@ chorus.pages.WorkFlowShowPage = chorus.pages.Base.include(
     },
 
     preventLinkNavigation: function(e) {
-        e.preventDefault();
-        this.intendedHref = $(e.currentTarget).attr("href");
-        this.postMessageToIframe({'action': 'intent_to_close'}, '*');
+        var target = $(e.currentTarget);
+        if (target.attr("target") !== "_blank") {
+            e.preventDefault();
+            this.intendedHref = target.attr("href");
+            this.postMessageToIframe({'action': 'intent_to_close'}, '*');
+        }
     },
 
     preventSearchNavigation: function(e) {
