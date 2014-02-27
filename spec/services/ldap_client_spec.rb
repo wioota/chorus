@@ -97,6 +97,34 @@ ldap:
 
 YAML
 
+CUSTOMIZED_LDAPS_CHORUS_YML = <<YAML
+session_timeout_minutes: 120
+instance_poll_interval_minutes: 1
+ldap:
+  host: 10.32.88.212
+  enable: true
+  port: 389
+  start_tls: true
+  connect_timeout: 10000
+  bind_timeout: 10000
+  search:
+    timeout: 20000
+    size_limit: 200
+  base: DC=greenplum,DC=com
+  user_dn:
+  password:
+  dn_template: greenplum\\{0}
+  attribute:
+    uid: sAMAccountName
+    ou: department
+    gn: givenName
+    sn: sn
+    cn: cn
+    mail: userprincipalname
+    title: title
+
+YAML
+
 LDAP_WITH_AUTH_CHORUS_YML = <<YAML
 session_timeout_minutes: 120
 instance_poll_interval_minutes: 1
@@ -317,13 +345,34 @@ describe LdapClient do
       end
     end
 
-    context "with standard config" do
+    context 'with standard config' do
       before do
         stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] }
       end
 
-      it "uses host and port to connect" do
-        mock(Net::LDAP).new(hash_including(:host => '10.32.88.212', :port => 389))
+      it 'uses host and port to connect' do
+        mock(Net::LDAP).new.with_any_args do |params|
+          params.should include :host => '10.32.88.212'
+          params.should include :port => 389
+          params.should_not include :encryption
+        end
+
+        LdapClient.client
+      end
+    end
+
+    context 'with ldaps config' do
+      before do
+        stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAPS_CHORUS_YML)['ldap'] }
+      end
+
+      it 'uses :encryption' do
+        mock(Net::LDAP).new.with_any_args do |params|
+          params.should include :host => '10.32.88.212'
+          params.should include :port => 389
+          params.should include :encryption => :start_tls
+        end
+
         LdapClient.client
       end
     end
