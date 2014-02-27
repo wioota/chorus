@@ -78,10 +78,10 @@ chorus.views.Header = chorus.views.Base.extend({
         function switchUser(username) {
             session.requestLogout(function(res) {
                 // log back in as new user
+                session.updateToken(res);
                 self.listenTo(session, "saved", _.bind(chorus.router.reload, chorus.router));
                 self.listenTo(session, "saveFailed", function() { session.trigger("needsLogin"); });
                 session.save({username: username, password: "secret"});
-                session.updateToken(res);
             });
         }
 
