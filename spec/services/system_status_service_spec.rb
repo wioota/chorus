@@ -3,6 +3,10 @@ require 'timecop'
 
 describe SystemStatusService do
 
+  include_context 'license hash'
+  let(:mock_license) { License.new license_hash }
+  let(:service) { SystemStatusService.new(Date.current, mock_license) }
+
   describe '.refresh' do
     it 'creates a Checker with the current time and license and refreshes it' do
       Timecop.freeze do
@@ -38,26 +42,6 @@ describe SystemStatusService do
       end
     end
   end
-
-  let(:vendor) { 'openchorus' }
-  let(:level) { 'openchorus' }
-  let(:admins) { 10 }
-  let(:developers) { 100 }
-  let(:collaborators) { 1000 }
-  let(:expires) { 2.months.from_now.to_date }
-  let(:license_hash) do
-    {
-        :vendor => vendor,
-        :level => level,
-        :admins => admins,
-        :developers => developers,
-        :collaborators => collaborators,
-        :expires => expires
-    }
-  end
-
-  let(:mock_license) { License.new license_hash }
-  let(:service) { SystemStatusService.new(Date.current, mock_license) }
 
   describe '#refresh' do
     it 'creates a new SystemStatus' do

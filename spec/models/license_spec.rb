@@ -49,488 +49,390 @@ NTAtMDEtMDEK
     end
   end
 
-  describe '#workflow_enabled?' do
-    before do
-      mock(license).[](:vendor) { vendor }
-    end
+  context 'with mock license' do
+    include_context 'license hash'
 
-    context 'vendor:alpine' do
-      let(:vendor) { 'alpine' }
+    let(:license) { License.new license_hash }
 
-      it 'returns true' do
-        license.workflow_enabled?.should be_true
+    describe '#workflow_enabled?' do
+      context 'vendor:alpine' do
+        let(:vendor) { 'alpine' }
+
+        it 'returns true' do
+          license.workflow_enabled?.should be_true
+        end
+      end
+
+      context 'vendor:pivotal' do
+        let(:vendor) { 'pivotal' }
+
+        it 'returns true' do
+          license.workflow_enabled?.should be_true
+        end
+      end
+
+      context 'vendor:openchorus' do
+        let(:vendor) { 'openchorus' }
+
+        it 'returns false' do
+          license.workflow_enabled?.should be_false
+        end
       end
     end
 
-    context 'vendor:pivotal' do
-      let(:vendor) { 'pivotal' }
+    describe '#branding' do
+      context 'vendor:alpine' do
+        let(:vendor) { 'alpine' }
 
-      it 'returns true' do
-        license.workflow_enabled?.should be_true
+        it 'returns alpine' do
+          license.branding.should == 'alpine'
+        end
+      end
+
+      context 'vendor:pivotal' do
+        let(:vendor) { 'pivotal' }
+
+        it 'returns pivotal' do
+          license.branding.should == 'pivotal'
+        end
+      end
+
+      context 'vendor:openchorus' do
+        let(:vendor) { 'openchorus' }
+
+        it 'returns alpine' do
+          license.branding.should == 'alpine'
+        end
       end
     end
 
-    context 'vendor:other' do
-      let(:vendor) { 'other' }
+    describe '#limit_search?' do
+      context 'vendor:openchorus' do
+        let(:vendor) { License::OPEN_CHORUS }
 
-      it 'returns false' do
-        license.workflow_enabled?.should be_false
-      end
-    end
-  end
-
-  describe '#branding' do
-    before do
-      mock(license).[](:vendor) { vendor }
-    end
-
-    context 'vendor:alpine' do
-      let(:vendor) { 'alpine' }
-
-      it 'returns alpine' do
-        license.branding.should == 'alpine'
-      end
-    end
-
-    context 'vendor:pivotal' do
-      let(:vendor) { 'pivotal' }
-
-      it 'returns pivotal' do
-        license.branding.should == 'pivotal'
-      end
-    end
-
-    context 'vendor:other' do
-      let(:vendor) { 'other' }
-
-      it 'returns alpine' do
-        license.branding.should == 'alpine'
-      end
-    end
-  end
-
-  describe '#limit_search?' do
-    before do
-      stub(license).[](:vendor) { vendor }
-    end
-
-    context 'vendor:openchorus' do
-      let(:vendor) { License::OPEN_CHORUS }
-      before do
-        mock(license).[](:level).never
+        it 'returns true regardless of level' do
+          license.limit_search?.should be_false
+        end
       end
 
-      it 'returns true regardless of level' do
-        license.limit_search?.should be_false
-      end
-    end
+      context 'vendor:pivotal' do
+        let(:vendor) { 'pivotal' }
 
-    context 'vendor:pivotal' do
-      let(:vendor) { 'pivotal' }
-      before do
-        mock(license).[](:level).never
+        it 'returns true regardless of level' do
+          license.limit_search?.should be_false
+        end
       end
 
-      it 'returns true regardless of level' do
-        license.limit_search?.should be_false
-      end
-    end
+      context 'vendor:alpine' do
+        let(:vendor) { 'alpine' }
 
-    context 'vendor:alpine' do
-      let(:vendor) { 'alpine' }
+        [
+            {:level => 'explorer', :search => true},
+            {:level => 'basecamp', :search => false},
+            {:level => 'summit', :search => false}
+        ].each do |obj|
+          context "with level:#{obj[:level]}" do
+            let(:level) { obj[:level] }
 
-      [
-          {:level => 'explorer', :search => true},
-          {:level => 'basecamp', :search => false},
-          {:level => 'summit', :search => false}
-      ].each do |obj|
-        context "with level:#{obj[:level]}" do
-          before do
-            mock(license).[](:level) { obj[:level] }
-          end
-
-          it "returns #{obj[:search]}" do
-            license.limit_search?.should == obj[:search]
+            it "returns #{obj[:search]}" do
+              license.limit_search?.should == obj[:search]
+            end
           end
         end
       end
     end
-  end
 
-  describe '#advisor_now_enabled?' do
-    before do
-      stub(license).[](:vendor) { vendor }
-    end
+    describe '#advisor_now_enabled?' do
+      context 'vendor:openchorus' do
+        let(:vendor) { License::OPEN_CHORUS }
 
-    context 'vendor:openchorus' do
-      let(:vendor) { License::OPEN_CHORUS }
+        it 'returns false' do
+          license.advisor_now_enabled?.should be_false
+        end
+      end
 
-      it 'returns false' do
-        license.advisor_now_enabled?.should be_false
+      context 'vendor:alpine' do
+        let(:vendor) { License::VENDOR_ALPINE }
+
+        it 'returns true' do
+          license.advisor_now_enabled?.should be_true
+        end
+      end
+
+      context 'vendor:pivotal' do
+        let(:vendor) { License::VENDOR_PIVOTAL }
+
+        it 'returns true' do
+          license.advisor_now_enabled?.should be_true
+        end
       end
     end
 
-    context 'vendor:alpine' do
-      let(:vendor) { License::VENDOR_ALPINE }
+    describe '#limit_workspace_membership?' do
+      context 'vendor:openchorus' do
+        let(:vendor) { License::OPEN_CHORUS }
 
-      it 'returns true' do
-        license.advisor_now_enabled?.should be_true
-      end
-    end
-
-    context 'vendor:pivotal' do
-      let(:vendor) { License::VENDOR_PIVOTAL }
-
-      it 'returns true' do
-        license.advisor_now_enabled?.should be_true
-      end
-    end
-  end
-
-  describe '#limit_workspace_membership?' do
-    before do
-      stub(license).[](:vendor) { vendor }
-    end
-
-    context 'vendor:openchorus' do
-      let(:vendor) { License::OPEN_CHORUS }
-      before do
-        mock(license).[](:level).never
+        it 'returns false regardless of level' do
+          license.limit_workspace_membership?.should be_false
+        end
       end
 
-      it 'returns false regardless of level' do
-        license.limit_workspace_membership?.should be_false
-      end
-    end
+      context 'vendor:pivotal' do
+        let(:vendor) { 'pivotal' }
 
-    context 'vendor:pivotal' do
-      let(:vendor) { 'pivotal' }
-      before do
-        mock(license).[](:level).never
+        it 'returns false regardless of level' do
+          license.limit_workspace_membership?.should be_false
+        end
       end
 
-      it 'returns false regardless of level' do
-        license.limit_workspace_membership?.should be_false
-      end
-    end
+      context 'vendor:alpine' do
+        let(:vendor) { 'alpine' }
 
-    context 'vendor:alpine' do
-      let(:vendor) { 'alpine' }
+        [
+            {:level => 'explorer', :search => true},
+            {:level => 'basecamp', :search => false},
+            {:level => 'summit', :search => false}
+        ].each do |obj|
+          context "with level:#{obj[:level]}" do
+            let(:level) { obj[:level] }
 
-      [
-          {:level => 'explorer', :search => true},
-          {:level => 'basecamp', :search => false},
-          {:level => 'summit', :search => false}
-      ].each do |obj|
-        context "with level:#{obj[:level]}" do
-          before do
-            mock(license).[](:level) { obj[:level] }
-          end
-
-          it "returns #{obj[:search]}" do
-            license.limit_workspace_membership?.should == obj[:search]
+            it "returns #{obj[:search]}" do
+              license.limit_workspace_membership?.should == obj[:search]
+            end
           end
         end
       end
     end
-  end
 
-  describe '#limit_user_count?' do
-    before do
-      stub(license).[](:vendor) { vendor }
-    end
+    describe '#limit_user_count?' do
+      context 'vendor:openchorus' do
+        let(:vendor) { License::OPEN_CHORUS }
 
-    context 'vendor:openchorus' do
-      let(:vendor) { License::OPEN_CHORUS }
+        it 'returns false' do
+          license.limit_user_count?.should be_false
+        end
+      end
 
-      it 'returns false' do
-        license.limit_user_count?.should be_false
+      context 'vendor:alpine' do
+        let(:vendor) { License::VENDOR_ALPINE }
+
+        it 'returns true' do
+          license.limit_user_count?.should be_true
+        end
+      end
+
+      context 'vendor:pivotal' do
+        let(:vendor) { License::VENDOR_PIVOTAL }
+
+        it 'returns true' do
+          license.limit_user_count?.should be_true
+        end
       end
     end
 
-    context 'vendor:alpine' do
-      let(:vendor) { License::VENDOR_ALPINE }
+    describe '#limit_data_source_types?' do
+      context 'vendor:openchorus' do
+        let(:vendor) { License::OPEN_CHORUS }
 
-      it 'returns true' do
-        license.limit_user_count?.should be_true
-      end
-    end
-
-    context 'vendor:pivotal' do
-      let(:vendor) { License::VENDOR_PIVOTAL }
-
-      it 'returns true' do
-        license.limit_user_count?.should be_true
-      end
-    end
-  end
-
-  describe '#limit_data_source_types?' do
-    before do
-      stub(license).[](:vendor) { vendor }
-    end
-
-    context 'vendor:openchorus' do
-      let(:vendor) { License::OPEN_CHORUS }
-      before do
-        mock(license).[](:level).never
+        it 'returns false regardless of level' do
+          license.limit_data_source_types?.should be_false
+        end
       end
 
-      it 'returns false regardless of level' do
-        license.limit_data_source_types?.should be_false
-      end
-    end
+      context 'vendor:pivotal' do
+        let(:vendor) { 'pivotal' }
 
-    context 'vendor:pivotal' do
-      let(:vendor) { 'pivotal' }
-      before do
-        mock(license).[](:level).never
+        it 'returns false regardless of level' do
+          license.limit_data_source_types?.should be_false
+        end
       end
 
-      it 'returns false regardless of level' do
-        license.limit_data_source_types?.should be_false
-      end
-    end
+      context 'vendor:alpine' do
+        let(:vendor) { 'alpine' }
 
-    context 'vendor:alpine' do
-      let(:vendor) { 'alpine' }
+        [
+            {:level => 'explorer', :limit => true},
+            {:level => 'basecamp', :limit => true},
+            {:level => 'summit', :limit => false}
+        ].each do |obj|
+          context "with level:#{obj[:level]}" do
+            let(:level) { obj[:level] }
 
-      [
-          {:level => 'explorer', :limit => true},
-          {:level => 'basecamp', :limit => true},
-          {:level => 'summit', :limit => false}
-      ].each do |obj|
-        context "with level:#{obj[:level]}" do
-          before do
-            mock(license).[](:level).at_least(1) { obj[:level] }
-          end
-
-          it "returns #{obj[:limit]}" do
-            license.limit_data_source_types?.should == obj[:limit]
+            it "returns #{obj[:limit]}" do
+              license.limit_data_source_types?.should == obj[:limit]
+            end
           end
         end
       end
     end
-  end
 
-  describe '#limit_milestones?' do
-    before do
-      stub(license).[](:vendor) { vendor }
-    end
+    describe '#limit_milestones?' do
+      context 'vendor:openchorus' do
+        let(:vendor) { License::OPEN_CHORUS }
 
-    context 'vendor:openchorus' do
-      let(:vendor) { License::OPEN_CHORUS }
-      before do
-        mock(license).[](:level).never
+        it 'returns false regardless of level' do
+          license.limit_milestones?.should be_false
+        end
       end
 
-      it 'returns false regardless of level' do
-        license.limit_milestones?.should be_false
-      end
-    end
+      context 'vendor:pivotal' do
+        let(:vendor) { 'pivotal' }
 
-    context 'vendor:pivotal' do
-      let(:vendor) { 'pivotal' }
-      before do
-        mock(license).[](:level).never
+        it 'returns false regardless of level' do
+          license.limit_milestones?.should be_false
+        end
       end
 
-      it 'returns false regardless of level' do
-        license.limit_milestones?.should be_false
-      end
-    end
+      context 'vendor:alpine' do
+        let(:vendor) { 'alpine' }
 
-    context 'vendor:alpine' do
-      let(:vendor) { 'alpine' }
+        [
+            {:level => 'explorer', :limit => true},
+            {:level => 'basecamp', :limit => true},
+            {:level => 'summit', :limit => false}
+        ].each do |obj|
+          context "with level:#{obj[:level]}" do
+            let(:level) { obj[:level] }
 
-      [
-          {:level => 'explorer', :limit => true},
-          {:level => 'basecamp', :limit => true},
-          {:level => 'summit', :limit => false}
-      ].each do |obj|
-        context "with level:#{obj[:level]}" do
-          before do
-            mock(license).[](:level).at_least(1) { obj[:level] }
-          end
-
-          it "returns #{obj[:limit]}" do
-            license.limit_milestones?.should == obj[:limit]
+            it "returns #{obj[:limit]}" do
+              license.limit_milestones?.should == obj[:limit]
+            end
           end
         end
       end
     end
-  end
 
-  describe '#limit_jobs?' do
-    before do
-      stub(license).[](:vendor) { vendor }
-    end
+    describe '#limit_jobs?' do
+      context 'vendor:openchorus' do
+        let(:vendor) { License::OPEN_CHORUS }
 
-    context 'vendor:openchorus' do
-      let(:vendor) { License::OPEN_CHORUS }
-      before do
-        mock(license).[](:level).never
+        it 'returns false regardless of level' do
+          license.limit_jobs?.should be_false
+        end
       end
 
-      it 'returns false regardless of level' do
-        license.limit_jobs?.should be_false
-      end
-    end
+      context 'vendor:pivotal' do
+        let(:vendor) { 'pivotal' }
 
-    context 'vendor:pivotal' do
-      let(:vendor) { 'pivotal' }
-      before do
-        mock(license).[](:level).never
+        it 'returns false regardless of level' do
+          license.limit_jobs?.should be_false
+        end
       end
 
-      it 'returns false regardless of level' do
-        license.limit_jobs?.should be_false
-      end
-    end
+      context 'vendor:alpine' do
+        let(:vendor) { 'alpine' }
 
-    context 'vendor:alpine' do
-      let(:vendor) { 'alpine' }
+        [
+            {:level => 'explorer', :limit => true},
+            {:level => 'basecamp', :limit => true},
+            {:level => 'summit', :limit => false}
+        ].each do |obj|
+          context "with level:#{obj[:level]}" do
+            let(:level) { obj[:level] }
 
-      [
-          {:level => 'explorer', :limit => true},
-          {:level => 'basecamp', :limit => true},
-          {:level => 'summit', :limit => false}
-      ].each do |obj|
-        context "with level:#{obj[:level]}" do
-          before do
-            mock(license).[](:level).at_least(1) { obj[:level] }
-          end
-
-          it "returns #{obj[:limit]}" do
-            license.limit_jobs?.should == obj[:limit]
+            it "returns #{obj[:limit]}" do
+              license.limit_jobs?.should == obj[:limit]
+            end
           end
         end
       end
     end
-  end
 
-  describe '#home_page' do
-    before do
-      stub(license).[](:vendor) { vendor }
-    end
+    describe '#home_page' do
+      context 'vendor:openchorus' do
+        let(:vendor) { License::OPEN_CHORUS }
 
-    context 'vendor:openchorus' do
-      let(:vendor) { License::OPEN_CHORUS }
-      before do
-        mock(license).[](:level).never
+        it 'is nil regardless of level' do
+          license.home_page.should be_nil
+        end
       end
 
-      it 'is nil regardless of level' do
-        license.home_page.should be_nil
-      end
-    end
+      context 'vendor:pivotal' do
+        let(:vendor) { 'pivotal' }
 
-    context 'vendor:pivotal' do
-      let(:vendor) { 'pivotal' }
-      before do
-        mock(license).[](:level).never
+        it 'is nil regardless of level' do
+          license.home_page.should be_nil
+        end
       end
 
-      it 'is nil regardless of level' do
-        license.home_page.should be_nil
-      end
-    end
+      context 'vendor:alpine' do
+        let(:vendor) { 'alpine' }
 
-    context 'vendor:alpine' do
-      let(:vendor) { 'alpine' }
+        [
+            {:level => 'explorer', :limit => 'WorkspaceIndex'},
+            {:level => 'basecamp', :limit => nil},
+            {:level => 'summit', :limit => nil}
+        ].each do |obj|
+          context "with level:#{obj[:level]}" do
+            let(:level) { obj[:level] }
 
-      [
-          {:level => 'explorer', :limit => 'WorkspaceIndex'},
-          {:level => 'basecamp', :limit => nil},
-          {:level => 'summit', :limit => nil}
-      ].each do |obj|
-        context "with level:#{obj[:level]}" do
-          before do
-            mock(license).[](:level).at_least(1) { obj[:level] }
-          end
-
-          it "returns #{obj[:limit]}" do
-            license.home_page.should == obj[:limit]
+            it "returns #{obj[:limit]}" do
+              license.home_page.should == obj[:limit]
+            end
           end
         end
       end
     end
-  end
 
-  describe '#limit_sandboxes?' do
-    before do
-      stub(license).[](:vendor) { vendor }
-    end
+    describe '#limit_sandboxes?' do
+      context 'vendor:openchorus' do
+        let(:vendor) { License::OPEN_CHORUS }
 
-    context 'vendor:openchorus' do
-      let(:vendor) { License::OPEN_CHORUS }
-      before do
-        mock(license).[](:level).never
+        it 'returns false regardless of level' do
+          license.limit_sandboxes?.should be_false
+        end
       end
 
-      it 'returns false regardless of level' do
-        license.limit_sandboxes?.should be_false
-      end
-    end
+      context 'vendor:pivotal' do
+        let(:vendor) { 'pivotal' }
 
-    context 'vendor:pivotal' do
-      let(:vendor) { 'pivotal' }
-      before do
-        mock(license).[](:level).never
+        it 'returns false regardless of level' do
+          license.limit_sandboxes?.should be_false
+        end
       end
 
-      it 'returns false regardless of level' do
-        license.limit_sandboxes?.should be_false
-      end
-    end
+      context 'vendor:alpine' do
+        let(:vendor) { 'alpine' }
 
-    context 'vendor:alpine' do
-      let(:vendor) { 'alpine' }
+        [
+            {:level => 'explorer', :limit => true},
+            {:level => 'basecamp', :limit => false},
+            {:level => 'summit', :limit => false}
+        ].each do |obj|
+          context "with level:#{obj[:level]}" do
+            let(:level) { obj[:level] }
 
-      [
-          {:level => 'explorer', :limit => true},
-          {:level => 'basecamp', :limit => false},
-          {:level => 'summit', :limit => false}
-      ].each do |obj|
-        context "with level:#{obj[:level]}" do
-          before do
-            mock(license).[](:level).at_least(1) { obj[:level] }
-          end
-
-          it "returns #{obj[:limit]}" do
-            license.limit_sandboxes?.should == obj[:limit]
+            it "returns #{obj[:limit]}" do
+              license.limit_sandboxes?.should == obj[:limit]
+            end
           end
         end
       end
     end
-  end
 
-  describe '#expires?' do
-    before do
-      mock(license).[](:vendor) { vendor }
-    end
+    describe '#expires?' do
+      context 'vendor:alpine' do
+        let(:vendor) { 'alpine' }
 
-    context 'vendor:alpine' do
-      let(:vendor) { 'alpine' }
-
-      it 'returns true' do
-        license.expires?.should be_true
+        it 'returns true' do
+          license.expires?.should be_true
+        end
       end
-    end
 
-    context 'vendor:pivotal' do
-      let(:vendor) { 'pivotal' }
+      context 'vendor:pivotal' do
+        let(:vendor) { 'pivotal' }
 
-      it 'returns true' do
-        license.expires?.should be_true
+        it 'returns true' do
+          license.expires?.should be_true
+        end
       end
-    end
 
-    context 'vendor:other' do
-      let(:vendor) { 'other' }
+      context 'vendor:openchorus' do
+        let(:vendor) { 'openchorus' }
 
-      it 'returns false' do
-        license.expires?.should be_false
+        it 'returns false' do
+          license.expires?.should be_false
+        end
       end
     end
   end
