@@ -51,20 +51,17 @@ describe SystemStatusService do
     end
 
     it 'transfers the results to the SystemStatus model' do
-      mock(service).users_exceeded? { true }
-      mock(service).expired? { true }
+      stub(service).users_exceeded? { true }
+      stub(mock_license).expired?(is_a(Date)) { true }
       service.refresh
       ss = SystemStatus.last
       ss.user_count_exceeded?.should be_true
       ss.expired?.should be_true
     end
 
-    context 'when the license is 2 weeks from expiring' do
-      before do
-        mock(mock_license).expires?.at_least(1) { true }
-      end
-
-      let(:expires) { 2.weeks.from_now.to_date }
+    context 'when the license expires in less than 2 weeks' do
+      let(:expires) { 13.days.from_now.to_date }
+      before { stub(mock_license).expires? { true } }
 
       it 'should notify all admin users' do
         service.refresh
@@ -116,42 +113,6 @@ describe SystemStatusService do
         mock(User).developer_count.never
         mock(User).count.never
         service.users_exceeded?.should be_false
-      end
-    end
-  end
-
-  describe '#expired?' do
-    context 'when license#expires? is true' do
-      before do
-        mock(mock_license).expires?.at_least(1) { true }
-      end
-
-      context 'when current date is after expires' do
-        let(:expires) { 1.day.ago.to_date }
-
-        it 'returns true' do
-          service.expired?.should be_true
-        end
-      end
-
-      context 'when current date is before expires' do
-        let(:expires) { 1.day.from_now.to_date }
-
-        it 'returns false' do
-          service.expired?.should be_false
-        end
-      end
-    end
-
-    context 'when license#expires? is false' do
-      before do
-        mock(mock_license).expires?.at_least(1) { false }
-      end
-
-      let(:expires) { 1.year.ago.to_date }
-
-      it 'returns false' do
-        service.expired?.should be_false
       end
     end
   end

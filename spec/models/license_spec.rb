@@ -435,5 +435,50 @@ NTAtMDEtMDEK
         end
       end
     end
+
+    describe '#expired?' do
+      context 'when license#expires? is true' do
+        before do
+          stub(license).expires? { true }
+        end
+
+        context 'when current date is after expires' do
+          let(:expires) { 1.day.ago.to_date }
+
+          it 'returns true' do
+            license.expired?.should be_true
+          end
+        end
+
+        context 'when current date is before expires' do
+          let(:expires) { 1.day.from_now.to_date }
+
+          it 'returns false' do
+            license.expired?.should be_false
+          end
+        end
+
+        context 'when passed a date' do
+          let(:expires) { 2.weeks.from_now.to_date }
+
+          it 'checks expiration on the passed date' do
+            license.expired?.should be_false
+            license.expired?(15.days.from_now.to_date).should be_true
+          end
+        end
+      end
+
+      context 'when license#expires? is false' do
+        before do
+          stub(license).expires? { false }
+        end
+
+        let(:expires) { 1.year.ago.to_date }
+
+        it 'returns false' do
+          license.expired?.should be_false
+        end
+      end
+    end
   end
 end

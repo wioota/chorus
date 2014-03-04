@@ -76,6 +76,10 @@ class License
     alpine_or_pivotal?
   end
 
+  def expired?(date=Date.current)
+    expires? && self[:expires] < date
+  end
+
   private
 
   attr_reader :license

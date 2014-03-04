@@ -23,11 +23,11 @@ class SystemStatusService
     @license.limit_user_count? && any_user_count_exceeded?
   end
 
-  def expired?
-    @license.expires? && @current_date > @license[:expires]
-  end
-
   private
+
+  def expired?
+    @license.expired?(@current_date)
+  end
 
   def any_user_count_exceeded?
     {
@@ -38,7 +38,7 @@ class SystemStatusService
   end
 
   def should_notify?
-    @license.expires? && @license[:expires] == 2.weeks.from_now.to_date
+    @license.expired?(2.weeks.from_now.to_date)
   end
 
   def notify_admins
