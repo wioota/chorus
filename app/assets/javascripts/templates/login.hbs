@@ -1,4 +1,7 @@
 <div class="card">
+    <div class="warning{{#unless warning}} hidden{{/unless}}">
+        {{#if warning}}{{renderErrors warning}}{{/if}}
+    </div>
     {{> errorDiv }}
     <form class="login" action="/auth/login/" method="post">
         <img class="logo {{branding}}" src="images/{{logo}}"/>

@@ -261,6 +261,8 @@ window.BackboneFixtureDefinitions = {
         model: "SearchResult"
     },
 
+    status: {},
+
     tableauWorkbook: {
         unique: [ "id" ]
     },

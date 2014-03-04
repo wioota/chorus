@@ -6,8 +6,12 @@ chorus.views.Login = chorus.views.Base.extend({
     },
 
     persistent:true,
+    warning: null,
 
     setup:function () {
+        this.status = new chorus.models.Status();
+        this.status.fetch();
+        this.onceLoaded(this.status, this.processStatus);
         this.listenTo(this.model, "saved", this.onLogin);
     },
 
@@ -15,7 +19,8 @@ chorus.views.Login = chorus.views.Base.extend({
         return {
             branding: this.branding(),
             logo: this.branding() + "-logo.png",
-            copyright: t("login." + this.branding() + "_copyright", {year:moment().year()})
+            copyright: t("login." + this.branding() + "_copyright", {year:moment().year()}),
+            warning: this.warning
         };
     },
 
@@ -53,5 +58,12 @@ chorus.views.Login = chorus.views.Base.extend({
 
     branding: function() {
         return chorus.models.Config.instance().license().branding();
+    },
+
+    processStatus: function() {
+        if (this.status.get("userCountExceeded")) {
+            this.warning = {message: t("warn.user_count_exceeded")};
+            this.render();
+        }
     }
 });

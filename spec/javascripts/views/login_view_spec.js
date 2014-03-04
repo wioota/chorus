@@ -15,11 +15,11 @@ describe("chorus.views.Login", function() {
     });
 
     it("requests the version string from the server", function() {
-        expect(this.server.requests[0].url).toHaveUrlPath("/VERSION");
+        expect(this.server.requests[1].url).toHaveUrlPath("/VERSION");
     });
 
     it("uses a cache buster when requesting the version string", function() {
-        expect(this.server.requests[0].url.match(/buster=/)).toBeTruthy();
+        expect(this.server.requests[1].url.match(/buster=/)).toBeTruthy();
     });
 
     it("focuses the username field by default", function() {
@@ -30,7 +30,7 @@ describe("chorus.views.Login", function() {
     describe("when the version string is returned", function() {
         beforeEach(function() {
             this.version = "0123456789ABCDEF012";
-            this.server.requests[0].respond(200, {}, this.version);
+            this.server.requests[1].respond(200, {}, this.version);
         });
 
         it("inserts the version string", function() {
@@ -38,12 +38,23 @@ describe("chorus.views.Login", function() {
         });
 
         it("limits the version to 19 characters", function() {
-            this.server.requests[0].respond(200, {}, "0123456789ABCDEF012345");
+            this.server.requests[1].respond(200, {}, "0123456789ABCDEF012345");
             expect(this.view.$(".legal .version")).toHaveText("0123456789ABCDEF012");
         });
 
         it("sets the version title to the full version", function() {
             expect(this.view.$(".legal .version").attr('title')).toBe("Version " + this.version);
+        });
+    });
+
+    describe("when the status is returned", function() {
+        beforeEach(function () {
+            this.status = backboneFixtures.status({userCountExceeded: true});
+            this.server.completeFetchFor(this.status);
+        });
+
+        it("displays a warning if user count is exceeded", function () {
+            expect(this.view.$(".warning")).toContainTranslation('warn.user_count_exceeded');
         });
     });
 

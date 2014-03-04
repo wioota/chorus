@@ -1,4 +1,4 @@
-Handlebars.registerPartial("errorDiv", '<div class="errors {{#unless serverErrors}}hidden{{/unless}}">{{#if serverErrors}}{{renderErrors serverErrors}}<a class="close_errors action" href="#">{{t "actions.close"}}</a>{{/if}}</div>');
+Handlebars.registerPartial("errorDiv", window.HandlebarsTemplates["components/error_div"]);
 Handlebars.registerPartial("itemTags", window.HandlebarsTemplates["item_tags"]);
 Handlebars.registerPartial("workspaceItemDetails", window.HandlebarsTemplates["workspace_item_details"]);
 Handlebars.registerPartial("itemLastComment", window.HandlebarsTemplates["item_last_comment"]);
