@@ -45,13 +45,26 @@ describe Mailer do
     let(:recipient) { users(:admin) }
     let(:subject) { 'Your Chorus license is expiring.' }
     let(:expiration) { 2.weeks.from_now.to_date }
-    let(:sent_mail) { Mailer.chorus_expiring(recipient, expiration) }
+    let(:vendor) { 'alpine' }
+    let(:license) { License.new :expires => expiration, :vendor => vendor }
+    let(:sent_mail) { Mailer.chorus_expiring(recipient, license) }
 
     it_behaves_like 'a sent mail with subject and recipient'
 
-    it 'includes the expiration date' do
+    it 'includes the expiration message' do
       encoded_body = sent_mail.body.encoded
-      encoded_body.should include "Your Chorus license will expire on #{expiration}."
+      encoded_body.should match(/Your Chorus license will expire on #{expiration}/)
+      encoded_body.should match(/Please contact Alpine/)
+    end
+
+    context 'pivotal branding' do
+      let(:vendor) { 'pivotal' }
+
+      it 'includes the expiration message' do
+        encoded_body = sent_mail.body.encoded
+        encoded_body.should match(/Your Chorus license will expire on #{expiration}/)
+        encoded_body.should match(/Please contact Pivotal/)
+      end
     end
   end
 end

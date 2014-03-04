@@ -13,7 +13,7 @@ class Mailer < ActionMailer::Base
     @job_result = event.job_result
     @job_task_results = event.job_result.job_task_results
 
-    attachments['logo'] = logo
+    attachments['logo'] = logo(License.instance)
     attachments[RunWorkFlowTaskResult.name] = File.read(Rails.root.join('public', 'images', 'workfiles', 'icon', 'afm.png'))
     attachments[ImportSourceDataTaskResult.name] = File.read(Rails.root.join('public', 'images', 'import_icon.png'))
 
@@ -21,17 +21,18 @@ class Mailer < ActionMailer::Base
     m.deliver
   end
 
-  def chorus_expiring(user, expiration_date)
+  def chorus_expiring(user, license)
     @user = user
-    @expiration_date = expiration_date
-    attachments['logo'] = logo
+    @expiration_date = license[:expires]
+    @branding = license.branding
+    attachments['logo'] = logo(license)
     m = mail(:to => user.email, :subject => 'Your Chorus license is expiring.')
     m.deliver
   end
 
   private
 
-  def logo
-    File.read(Rails.root.join('public', 'images', %(#{License.instance.branding}-logo.png)))
+  def logo(license)
+    File.read(Rails.root.join('public', 'images', %(#{license.branding}-logo.png)))
   end
 end

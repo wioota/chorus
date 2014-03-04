@@ -42,6 +42,6 @@ class SystemStatusService
   end
 
   def notify_admins
-    User.admin.each { |admin| Mailer.chorus_expiring(admin, @license[:expires]) }
+    User.admin.each { |admin| Mailer.chorus_expiring(admin, @license) }
   end
 end
