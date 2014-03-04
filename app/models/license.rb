@@ -8,9 +8,12 @@ class License
   LEVEL_BASECAMP = 'basecamp'
   LEVEL_SUMMIT = 'summit'
 
-  def initialize
-    path = (File.exists?(license_path) ? license_path : default_license_path)
-    @license = HonorCodes.interpret(path)[:license].symbolize_keys
+  def initialize(lic=nil)
+    unless lic
+      path = (File.exists?(license_path) ? license_path : default_license_path)
+      lic = HonorCodes.interpret(path)[:license].symbolize_keys
+    end
+    @license = lic
   end
 
   def self.instance
@@ -67,6 +70,10 @@ class License
 
   def limit_sandboxes?
     explorer?
+  end
+
+  def expires?
+    alpine_or_pivotal?
   end
 
   private

@@ -57,6 +57,17 @@ describe SessionsController do
         decoded_errors.fields.username_or_password.INVALID.should == {}
       end
     end
+
+    context 'the last system status indicates expired' do
+      before do
+        FactoryGirl.create(:system_status, :expired => true)
+      end
+
+      it 'presents license expired errors' do
+        post :create, params
+        response.code.should == '503'
+      end
+    end
   end
 
   describe "#show" do

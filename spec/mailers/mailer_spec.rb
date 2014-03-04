@@ -3,22 +3,11 @@ require "spec_helper"
 describe Mailer do
   describe '#notify' do
     let(:event) { Events::JobSucceeded.last }
-    let(:user) { users(:the_collaborator) }
-    let(:sent_mail) { Mailer.notify(user, event) }
+    let(:recipient) { users(:the_collaborator) }
+    let(:sent_mail) { Mailer.notify(recipient, event) }
+    let(:subject) { event.header }
 
-    it 'renders the notification header as the subject line' do
-      sent_mail.subject.should == event.header
-    end
-
-    it 'renders the receiver email' do
-      sent_mail.to.should == [user.email]
-    end
-
-    it "adds to the Deliveries list" do
-      expect do
-        sent_mail
-      end.to change(ActionMailer::Base.deliveries, :count).by(1)
-    end
+    it_behaves_like 'a sent mail with subject and recipient'
 
     context "the event is a JobSucceeded/JobFailed" do
       it "has a body with the job name and workspace name" do
@@ -49,6 +38,20 @@ describe Mailer do
           sent_mail.body.encoded.should include 'failed'
         end
       end
+    end
+  end
+
+  describe '#chorus_expiring' do
+    let(:recipient) { users(:admin) }
+    let(:subject) { 'Your Chorus license is expiring.' }
+    let(:expiration) { 2.weeks.from_now.to_date }
+    let(:sent_mail) { Mailer.chorus_expiring(recipient, expiration) }
+
+    it_behaves_like 'a sent mail with subject and recipient'
+
+    it 'includes the expiration date' do
+      encoded_body = sent_mail.body.encoded
+      encoded_body.should include "Your Chorus license will expire on #{expiration}."
     end
   end
 end

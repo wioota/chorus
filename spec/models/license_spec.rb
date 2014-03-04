@@ -504,4 +504,34 @@ NTAtMDEtMDEK
       end
     end
   end
+
+  describe '#expires?' do
+    before do
+      mock(license).[](:vendor) { vendor }
+    end
+
+    context 'vendor:alpine' do
+      let(:vendor) { 'alpine' }
+
+      it 'returns true' do
+        license.expires?.should be_true
+      end
+    end
+
+    context 'vendor:pivotal' do
+      let(:vendor) { 'pivotal' }
+
+      it 'returns true' do
+        license.expires?.should be_true
+      end
+    end
+
+    context 'vendor:other' do
+      let(:vendor) { 'other' }
+
+      it 'returns false' do
+        license.expires?.should be_false
+      end
+    end
+  end
 end

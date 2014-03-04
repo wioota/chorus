@@ -102,6 +102,17 @@ describe ServiceScheduler do
     end
   end
 
+  describe 'SystemStatusService' do
+    it 'once per day' do
+      job_scheduler.job_named('SystemStatusService.refresh').period.should == 1.day
+    end
+
+    it 'runs in the same thread' do
+      mock(SystemStatusService).refresh
+      job_scheduler.job_named('SystemStatusService.refresh').run(Time.current)
+    end
+  end
+
   describe "SeviceScheduler.run" do
     it "builds a ServiceScheduler and then runs it starts the clockwork" do
       built = false

@@ -264,5 +264,10 @@ FactoryGirl.define do
     permissions 'rwx--w--r'
     replication { rand(1..4) }
   end
+
+  factory :system_status do
+    expired false
+    user_count_exceeded false
+  end
 end
 
