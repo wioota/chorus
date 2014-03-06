@@ -135,6 +135,19 @@ describe("chorus.dialogs.ConfigureJob", function () {
                 expect(this.dialog.$(".end_date_widget")).toExist();
             });
 
+            describe("changing the next run date then opening and closing the recipients dialog", function () {
+                beforeEach(function () {
+                    this.dialog.$(".start_date > input.day").val("14");
+                    this.dialog.launchSuccessRecipientSelectionDialog();
+                    this.dialog.render();
+                });
+
+                it("should maintain the changed date", function() {
+                    expect(this.dialog.$(".start_date > input.day").val()).toBe("14");
+                });
+
+            });
+
             describe("selected time zone", function () {
                 it("should be the first timezone that matches the browser's current offset according to jstz", function () {
                     chorus.models.Config.instance().set("timeZones", backboneFixtures.config().get('timeZones'));
@@ -236,6 +249,19 @@ describe("chorus.dialogs.ConfigureJob", function () {
 
                 it("should enable the end date widget", function () {
                     expect(this.dialog.endDatePicker.enable).toHaveBeenCalled();
+                });
+
+                describe("changing the end run date then opening and closing the recipients dialog", function () {
+                    beforeEach(function () {
+                        this.dialog.$(".end_date > input.day").val("14");
+                        this.dialog.launchFailureRecipientSelectionDialog();
+                        this.dialog.render();
+                    });
+
+                    it("should maintain the changed date", function() {
+                        expect(this.dialog.$(".end_date > input.day").val()).toBe("14");
+                    });
+
                 });
 
                 describe("submitting the form", function () {

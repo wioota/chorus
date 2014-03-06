@@ -60,7 +60,7 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
 
     setupDatePickers: function () {
         this.startDatePicker = new chorus.views.DatePicker({date: this.model.nextRunDate(), selector: 'start_date'});
-        this.endDatePicker = new chorus.views.DatePicker({date: this.model.endRunDate(),selector: 'end_date'});
+        this.endDatePicker = new chorus.views.DatePicker({date: this.model.endRunDate(), selector: 'end_date'});
     },
 
     postRender: function () {
@@ -205,6 +205,8 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
 
     preserveFieldValues: function () {
         this.model.set(this.fieldValues());
+        this.endDatePicker.date = this.model.endRunDate();
+        this.startDatePicker.date = this.model.nextRunDate();
     },
 
     additionalContext: function () {
