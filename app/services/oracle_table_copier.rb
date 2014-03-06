@@ -56,8 +56,7 @@ class OracleTableCopier < TableCopier
   end
 
   def streamer_enum
-    cancelable_query.
-        stream(source_dataset.all_rows_sql(sample_count), {:show_headers => false})
+    cancelable_query.stream(source_dataset.all_rows_sql(sample_count), {:show_headers => false})
   end
 
   def cancelable_query

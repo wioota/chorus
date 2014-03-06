@@ -25,6 +25,7 @@ describe OracleDataTypes do
     it_has_type_category('CLOB', 'LONG_STRING', 'text')
     it_has_type_category('DATE', 'DATETIME', 'timestamp without time zone')
     it_has_type_category('DECIMAL', 'REAL_NUMBER', 'double precision')
+    it_has_type_category('FLOAT', 'REAL_NUMBER', 'double precision')
     it_has_type_category('INT', 'WHOLE_NUMBER', 'numeric')
     it_has_type_category('LONG', 'LONG_STRING')
     it_has_type_category('LONG RAW', 'OTHER')
