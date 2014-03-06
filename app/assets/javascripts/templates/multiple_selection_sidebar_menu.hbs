@@ -1,7 +1,12 @@
 <div class="title">{{selectedModels.length}} {{t "sidebar.selected"}}</div>
-<a class="deselect_all">{{t "sidebar.deselect_all"}}</a>
-<ul class="multiselect_actions">
-    {{#each actions}}
-        <li>{{{this}}}</li>
-    {{/each}}
-</ul>
+<div class="selected_models">
+    {{modelNamesList selectedModels}}
+    <a class="deselect_all">{{t "sidebar.deselect_all"}}</a>
+</div>
+<div class="actions">
+    <ul class="multiselect_actions">
+        {{#each actions}}
+            <li>{{{this}}}</li>
+        {{/each}}
+    </ul>
+</div>

@@ -196,7 +196,7 @@ chorus.models = {
             if (this.nameFunction) {
                 return this[this.nameFunction]();
             }
-            return this.get(this.nameAttribute || "name");
+            return this.get(this.nameAttribute || "name") || "";
         },
 
         displayName: function() {

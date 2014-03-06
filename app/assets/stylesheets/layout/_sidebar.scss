@@ -14,12 +14,10 @@ body .ui-draggable-dragging {
 
 #sidebar {
     .multiple_selection {
-        @include box-shadow(0 0 4px #999 inset);
-        @include border-radius(8px);
         margin-bottom: 10px;
         margin-right: 10px;
-        padding: 10px;
-        background-color: $shaded-background-color;
+        padding: 10px 0 10px 0;
+        border-bottom: 1px solid $link-color;
 
         .title {
             @include heading-sidebar;
@@ -30,13 +28,17 @@ body .ui-draggable-dragging {
             margin-bottom: 8px;
         }
 
-        a {
+        .selected_models {
+            @include secondary-text-small;
+            word-break: break-all;
+        }
+
+        a.deselect_all {
             font-size: 12px;
         }
 
         ul.multiselect_actions {
-            margin-top: 15px;
-            font-weight: $semibold;
+            margin-top: 10px;
         }
     }
 

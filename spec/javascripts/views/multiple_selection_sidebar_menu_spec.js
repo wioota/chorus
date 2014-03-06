@@ -21,7 +21,7 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
     context("when a model is selected", function() {
         beforeEach(function() {
             chorus.PageEvents.trigger("model:selected", new chorus.collections.Base([
-                {}
+                new chorus.models.Base()
             ]));
             this.view.render();
         });
@@ -31,7 +31,17 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
         });
 
         it("shows the number of models selected", function() {
-            expect(this.view.$el).toContainText('1 Selected');
+            expect(this.view.$el).toContainText('1 Checked');
+        });
+
+        it("lists the model names under the selected text", function() {
+            var collection = new chorus.collections.Base([
+                backboneFixtures.workfile.sql(),
+                backboneFixtures.jdbcDataset(),
+                backboneFixtures.oracleSchema()
+            ]);
+            chorus.PageEvents.trigger("model:selected", collection);
+            expect(this.view.$('.selected_models')).toContainText(Handlebars.helpers.modelNamesList(collection));
         });
 
         it("renders custom actions", function() {

@@ -107,4 +107,47 @@ describe('chorus.handlebarsHelpers.template', function() {
             expect(Handlebars.helpers.renderTemplate).toHaveBeenCalledWith("data_sources/jdbc_data_source_fields", {});
         });
     });
+
+    describe("modelNamesList", function () {
+        beforeEach(function () {
+            this.collection = new chorus.collections.Base();
+            this.wf = backboneFixtures.workfile.alpine();
+            this.ds = backboneFixtures.oracleDataset();
+            this.user = backboneFixtures.user();
+            this.ws = backboneFixtures.workspace();
+            this.models = [this.wf, this.ds, this.user];
+            this.collection.reset(this.models);
+        });
+
+        it("with 1 model returns the name", function () {
+            this.models = [this.wf];
+            this.collection.reset(this.models);
+            var hbsSafe = Handlebars.helpers.modelNamesList(this.collection).toString();
+            expect(hbsSafe).toBe(this.wf.name());
+        });
+
+
+        it("with 2 models returns and-ed list", function () {
+            this.models = [this.wf, this.ds];
+            this.collection.reset(this.models);
+            var hbsSafe = Handlebars.helpers.modelNamesList(this.collection).toString();
+            expect(hbsSafe).toBe(this.collection.map(function(model) { return model.name(); }).join(" and "));
+        });
+
+        it("with 3 models returns a comma separated list of the models", function() {
+            this.models = [this.wf, this.ds, this.user];
+            this.collection.reset(this.models);
+            var hbsSafe = Handlebars.helpers.modelNamesList(this.collection).toString();
+            expect(hbsSafe).toBe(this.wf.name() + ", " + this.ds.name() + ", and " + this.user.name());
+        });
+
+
+        it("with 4 models returns the first 2 and count others", function() {
+            this.models = [this.wf, this.ds, this.user, this.ws];
+            this.collection.reset(this.models);
+            var hbsSafe = Handlebars.helpers.modelNamesList(this.collection).toString();
+            expect(hbsSafe).toBe(this.wf.name() + ", " + this.ds.name() + ", and 2 others");
+        });
+
+    });
 });
