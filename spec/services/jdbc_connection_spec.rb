@@ -21,10 +21,12 @@ describe JdbcConnection, :jdbc_integration do
   end
 
   describe '#schemas' do
+    let(:schema_blacklist) { %w(All Crashdumps DBC dbcmngr Default EXTUSER LockLogShredder PUBLIC SQLJ SysAdmin SYSBAR SYSLIB SYSSPATIAL SystemFe SYSUDTLIB Sys_Calendar TDPUSER TDQCD TDStats tdwm TD_SYSFNLIB TD_SYSXML) }
     let(:schema_list_sql) {
+      blacklist = schema_blacklist.join("', '")
       <<-SQL
-        SELECT DISTINCT databasename as name
-        FROM DBC.DBASE
+        SELECT DISTINCT databasename AS name
+        FROM DBC.DBASE WHERE databasename NOT IN ('#{blacklist}');
       SQL
     }
 
@@ -33,6 +35,15 @@ describe JdbcConnection, :jdbc_integration do
     let(:use_match_matcher) { true }
 
     it_should_behave_like 'a well-behaved database query'
+
+    context 'when no schema blacklist is specified' do
+      let(:schema_blacklist) {[]}
+      before do
+        mock(ChorusConfig.instance).jdbc_schema_blacklists { Hash.new Set.new }
+      end
+
+      it_should_behave_like 'a well-behaved database query'
+    end
   end
 
   describe '#schema_exists?' do
@@ -44,6 +55,14 @@ describe JdbcConnection, :jdbc_integration do
 
     context 'when the schema does not exist' do
       let(:schema_name) { 'does_not_exist' }
+
+      it 'returns false' do
+        connection.schema_exists?(schema_name).should be_false
+      end
+    end
+
+    context 'when the schema exists but is in the blacklist' do
+      let(:schema_name) { 'DBC' }
 
       it 'returns false' do
         connection.schema_exists?(schema_name).should be_false

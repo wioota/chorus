@@ -1,6 +1,11 @@
 class JdbcConnection < DataSourceConnection
   class DatabaseError < Error; end
 
+  def initialize(*args)
+    super(*args)
+    @schema_blacklist = load_schema_blacklist
+  end
+
   def db_url
     @data_source.url
   end
@@ -22,7 +27,7 @@ class JdbcConnection < DataSourceConnection
   def schemas
     with_connection do |connection|
       ss = []
-      connection.process_metadata(:getSchemas){ |h| ss << h[:table_schem] }
+      connection.process_metadata(:getSchemas){ |h| ss << h[:table_schem] unless @schema_blacklist.include?(h[:table_schem])}
       ss
     end
   end
@@ -112,5 +117,10 @@ class JdbcConnection < DataSourceConnection
     with_connection do |connection|
       connection.process_metadata(:getTables, nil, opts[:schema], opts[:table_name], types.to_java(:string), &block)
     end
+  end
+
+  def load_schema_blacklist
+    type = /\Ajdbc:([^:]+)/.match(db_url).try(:[], 1).try(:to_sym)
+    ChorusConfig.instance.jdbc_schema_blacklists[type]
   end
 end

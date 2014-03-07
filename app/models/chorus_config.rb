@@ -1,4 +1,5 @@
 require_relative '../../lib/shared/properties'
+require 'set'
 
 class ChorusConfig
   attr_accessor :config
@@ -134,6 +135,10 @@ class ChorusConfig
     self['database_login_timeout']
   end
 
+  def jdbc_schema_blacklists
+    @schema_blacklists ||= initialize_schema_blacklists
+  end
+
   private
 
   def initialize_hdfs_versions
@@ -156,6 +161,13 @@ class ChorusConfig
     versions += pivotal_versions
     versions += other_versions unless License.instance.branding == 'pivotal'
     versions.sort
+  end
+
+  def initialize_schema_blacklists
+    self['jdbc_schema_blacklist'].inject(Hash.new Set.new.freeze) do |memo, kv|
+      memo[kv.first.to_sym] = Set.new(kv.last)
+      memo
+    end
   end
 
   def set_root_dir(root_dir)

@@ -464,4 +464,18 @@ describe ChorusConfig do
       config.database_login_timeout.should == 14
     end
   end
+
+  describe '#jdbc_schema_blacklists' do
+    before do
+      config.config = { 'jdbc_schema_blacklist' => { 'postgresql' => %w(pg_sys_1 pg_sys_2), 'teradata' => %w(td_sys_1 td_sys_2) } }
+    end
+
+    it 'returns a hash with symbolized keys' do
+      config.jdbc_schema_blacklists.should include(:postgresql => Set.new(%w(pg_sys_1 pg_sys_2)), :teradata => Set.new(%w(td_sys_1 td_sys_2)))
+    end
+
+    it 'has a default value of Set.new' do
+      config.jdbc_schema_blacklists[:not_my_key].should == Set.new
+    end
+  end
 end
