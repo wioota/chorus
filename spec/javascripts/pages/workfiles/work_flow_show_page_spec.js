@@ -99,72 +99,101 @@ describe("chorus.pages.WorkFlowShowPage", function() {
             });
 
             context("searching through the header", function() {
-                context("when hitting the enter key", function() {
-                    beforeEach(function() {
-                        this.event = jQuery.Event("keydown", {keyCode: 13});
-                        spyOn(this.event, "preventDefault");
-                        this.page.$(".search input").val("sfo");
-                        this.page.$(".search input").trigger(this.event);
+
+                itBehavesLike.standardWorkflowShowPageSearch = function() {
+                    context("when selecting an item and hitting the enter key", function() {
+                        beforeEach(function() {
+                            var searchInput = this.page.$(".search input");
+                            searchInput.val("sfo");
+                            searchInput.trigger("keydown");
+                            searchInput.trigger("keyup");
+                            this.server.lastFetch().succeed(backboneFixtures.typeAheadSearchResult());
+
+                            searchInput.trigger(jQuery.Event("keydown", {keyCode: 40}));
+                            searchInput.trigger(jQuery.Event("keyup", {keyCode: 40}));
+                            searchInput.trigger(jQuery.Event("keydown", {keyCode: 40}));
+                            searchInput.trigger(jQuery.Event("keyup", {keyCode: 40}));
+
+                            this.event = jQuery.Event("keydown", {keyCode: 13});
+                            spyOn(this.event, "preventDefault");
+                            spyOn(chorus.router, "navigate");
+                            searchInput.trigger(this.event);
+                        });
+
+                        it("does not navigate away", function() {
+                            expect(chorus.router.navigate).not.toHaveBeenCalled();
+                            expect(this.event.preventDefault).toHaveBeenCalled();
+                        });
+
+                        it("stores the intended href", function() {
+                            expect(this.page.intendedHref).toBeDefined();
+                            expect(this.page.intendedHref).toBe(this.page.$(".type_ahead_search li.selected a").attr("href"));
+                        });
+
+                        it("publishes an 'intent_to_close' message", function() {
+                            expect(this.iframeWindow.postMessage).toHaveBeenCalledWith({action: "intent_to_close"}, "*");
+                        });
                     });
 
-                    it("does not navigate away", function() {
-                        expect(this.event.preventDefault).toHaveBeenCalled();
-                    });
+                    context("when hitting any other key", function() {
+                        beforeEach(function() {
+                            this.event = jQuery.Event("keydown", {keyCode: 32});
+                            spyOn(this.event, "preventDefault");
+                            this.page.$(".search input").val("sfo");
+                            this.page.$(".search input").trigger(this.event);
+                        });
 
-                    it("stores the intended href", function() {
-                        expect(this.page.intendedHref).toBeDefined();
-                        expect(this.page.intendedHref).toBe("#/search/sfo");
+                        it("allows the event to happen", function() {
+                            expect(this.event.preventDefault).not.toHaveBeenCalled();
+                        });
                     });
+                };
 
-                    it("publishes an 'intent_to_close' message", function() {
-                        expect(this.iframeWindow.postMessage).toHaveBeenCalledWith({action: "intent_to_close"}, "*");
+                context("when full search is enabled", function() {
+
+                    itBehavesLike.standardWorkflowShowPageSearch();
+
+                    context("when hitting the enter key", function() {
+                        beforeEach(function() {
+                            this.event = jQuery.Event("keydown", {keyCode: 13});
+                            spyOn(this.event, "preventDefault");
+                            this.page.$(".search input").val("sfo");
+                            this.page.$(".search input").trigger(this.event);
+                        });
+
+                        it("does not navigate away", function() {
+                            expect(this.event.preventDefault).toHaveBeenCalled();
+                        });
+
+                        it("stores the intended href", function() {
+                            expect(this.page.intendedHref).toBeDefined();
+                            expect(this.page.intendedHref).toBe("#/search/sfo");
+                        });
+
+                        it("publishes an 'intent_to_close' message", function() {
+                            expect(this.iframeWindow.postMessage).toHaveBeenCalledWith({action: "intent_to_close"}, "*");
+                        });
                     });
                 });
 
-                context("when selecting an item and hitting the enter key", function() {
-                    beforeEach(function() {
-                        var searchInput = this.page.$(".search input");
-                        searchInput.val("sfo");
-                        searchInput.trigger("keydown");
-                        searchInput.trigger("keyup");
-                        this.server.lastFetch().succeed(backboneFixtures.typeAheadSearchResult());
-
-                        searchInput.trigger(jQuery.Event("keydown", {keyCode: 40}));
-                        searchInput.trigger(jQuery.Event("keyup", {keyCode: 40}));
-                        searchInput.trigger(jQuery.Event("keydown", {keyCode: 40}));
-                        searchInput.trigger(jQuery.Event("keyup", {keyCode: 40}));
-
-                        this.event = jQuery.Event("keydown", {keyCode: 13});
-                        spyOn(this.event, "preventDefault");
-                        spyOn(chorus.router, "navigate");
-                        searchInput.trigger(this.event);
+                context("when full search is disabled", function() {
+                    beforeEach(function () {
+                        spyOn(chorus.models.Config.instance().license(), "limitSearch").andReturn(true);
                     });
 
-                    it("does not navigate away", function() {
-                        expect(chorus.router.navigate).not.toHaveBeenCalled();
-                        expect(this.event.preventDefault).toHaveBeenCalled();
-                    });
+                    itBehavesLike.standardWorkflowShowPageSearch();
 
-                    it("stores the intended href", function() {
-                        expect(this.page.intendedHref).toBeDefined();
-                        expect(this.page.intendedHref).toBe(this.page.$(".type_ahead_search li.selected a").attr("href"));
-                    });
+                    context("when hitting the enter key", function() {
+                        beforeEach(function() {
+                            this.event = jQuery.Event("keydown", {keyCode: 13});
+                            spyOn(this.event, "preventDefault");
+                            this.page.$(".search input").val("sfo");
+                            this.page.$(".search input").trigger(this.event);
+                        });
 
-                    it("publishes an 'intent_to_close' message", function() {
-                        expect(this.iframeWindow.postMessage).toHaveBeenCalledWith({action: "intent_to_close"}, "*");
-                    });
-                });
-
-                context("when hitting any other key", function() {
-                    beforeEach(function() {
-                        this.event = jQuery.Event("keydown", {keyCode: 32});
-                        spyOn(this.event, "preventDefault");
-                        this.page.$(".search input").val("sfo");
-                        this.page.$(".search input").trigger(this.event);
-                    });
-
-                    it("allows the event to happen", function() {
-                        expect(this.event.preventDefault).not.toHaveBeenCalled();
+                        it("does not publish an 'intent_to_close' message", function() {
+                            expect(this.iframeWindow.postMessage).not.toHaveBeenCalled();
+                        });
                     });
                 });
             });

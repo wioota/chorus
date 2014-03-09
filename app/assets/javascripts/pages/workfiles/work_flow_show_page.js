@@ -63,8 +63,10 @@ chorus.pages.WorkFlowShowPage = chorus.pages.Base.include(
             e.preventDefault();
 
             var searchHref = this.$("li.selected a").attr("href");
-            this.intendedHref = searchHref || "#/search/" + $(e.currentTarget).val();
-            this.postMessageToIframe({'action': 'intent_to_close'}, '*');
+            if (searchHref || !chorus.models.Config.instance().license().limitSearch()) {
+                this.intendedHref = searchHref || "#/search/" + $(e.currentTarget).val();
+                this.postMessageToIframe({'action': 'intent_to_close'}, '*');
+            }
         }
     },
 
