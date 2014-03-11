@@ -77,7 +77,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
                     beforeEach(function() {
                         spyOn(this.dialog, "closeModal");
                         spyOn(chorus.router, "navigate");
-                        spyOn(this.dialog.model, "checkForHawq");
+                        spyOn(this.dialog.model, "notifyWorkflowLimitedDataSource");
                         this.dialog.$("form").submit();
                         this.server.completeCreateFor(this.dialog.resource, {id: 42});
                     });
@@ -87,7 +87,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
                     });
 
                     it("checks for hawq databases", function() {
-                        expect(this.dialog.model.checkForHawq).toHaveBeenCalled();
+                        expect(this.dialog.model.notifyWorkflowLimitedDataSource).toHaveBeenCalled();
                     });
 
                     it("navigates to the workflow page", function() {

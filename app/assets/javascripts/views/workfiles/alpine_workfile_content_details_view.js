@@ -42,7 +42,7 @@ chorus.views.AlpineWorkfileContentDetails = chorus.views.WorkfileContentDetails.
     },
 
     navigateToWorkFlow:function(){
-        this.model.checkForHawq();
+        this.model.notifyWorkflowLimitedDataSource();
 
         chorus.router.navigate(this.model.workFlowShowUrl());
     }

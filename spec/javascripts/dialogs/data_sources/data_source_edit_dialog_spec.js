@@ -102,7 +102,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                     groupList: 'hadoop',
                     jobTrackerHost: 'job-tracker-host.emc.com',
                     jobTrackerPort: "5000",
-                    hdfsVersion: "Greenplum HD 1.2",
+                    hdfsVersion: "Pivotal HD 1.1",
                     highAvailability: "true"
                 });
                 this.dialog = new chorus.dialogs.DataSourceEdit({ model: this.dataSource });
@@ -336,7 +336,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                 this.dialog.$("input[name=groupList]").val("groupList");
                 this.dialog.$("input[name=jobTrackerHost]").val("whatever");
                 this.dialog.$("input[name=jobTrackerPort]").val("3333");
-                this.dialog.$("select[name=hdfsVersion]").val("Greenplum HD 1.1");
+                this.dialog.$("select[name=hdfsVersion]").val("Pivotal HD 1.1");
                 this.dialog.$("input[name=high_availability]").prop("checked", "checked");
                 this.dialog.$("button[type=submit]").submit();
             });
@@ -350,7 +350,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                 expect(this.dialog.model.has("dbName")).toBeFalsy();
                 expect(this.dialog.model.get("jobTrackerHost")).toBe("whatever");
                 expect(this.dialog.model.get("jobTrackerPort")).toBe("3333");
-                expect(this.dialog.model.get("hdfsVersion")).toBe("Greenplum HD 1.1");
+                expect(this.dialog.model.get("hdfsVersion")).toBe("Pivotal HD 1.1");
                 expect(this.dialog.model.get("highAvailability")).toBe(true);
             });
         });

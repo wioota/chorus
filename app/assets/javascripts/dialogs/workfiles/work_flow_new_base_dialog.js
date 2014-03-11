@@ -36,7 +36,7 @@ chorus.dialogs.WorkFlowNewBase = chorus.dialogs.Base.include(chorus.Mixins.Dialo
 
     workfileSaved: function() {
         this.closeModal();
-        this.model.checkForHawq();
+        this.model.notifyWorkflowLimitedDataSource();
         chorus.router.navigate(this.resource.showUrl({workFlow: true}));
     }
 });

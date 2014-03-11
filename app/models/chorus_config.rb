@@ -144,16 +144,11 @@ class ChorusConfig
   def initialize_hdfs_versions
     versions = []
     pivotal_versions = [
-        'Greenplum HD 0.20',
-        'Greenplum HD 1.1',
-        'Greenplum HD 1.2',
         'Pivotal HD 1.0',
         'Pivotal HD 1.1'
     ]
     other_versions = [
-        'Apache Hadoop 0.20.2',
-        'Apache Hadoop 0.20.203',
-        'Apache Hadoop 1.0.4',
+        'Apache Hadoop 1.2',
         'Cloudera CDH4',
         'Cloudera CDH5',
         'MapR'

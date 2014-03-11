@@ -25,7 +25,7 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
         context("clicking on the open workflow button", function() {
             beforeEach(function() {
                 spyOn(chorus.router, 'navigate');
-                spyOn(this.model, 'checkForHawq');
+                spyOn(this.model, 'notifyWorkflowLimitedDataSource');
                 this.view.$('.open_file').click();
             });
 
@@ -33,8 +33,8 @@ describe("chorus.views.AlpineWorkfileContentDetails", function() {
                 expect(chorus.router.navigate).toHaveBeenCalledWith(this.model.workFlowShowUrl());
             });
 
-            it("checks for hawq sources", function() {
-                expect(this.model.checkForHawq).toHaveBeenCalled();
+            it("checks for workflow limited sources", function() {
+                expect(this.model.notifyWorkflowLimitedDataSource).toHaveBeenCalled();
             });
         });
 

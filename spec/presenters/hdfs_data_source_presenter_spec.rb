@@ -52,6 +52,7 @@ describe HdfsDataSourcePresenter, :type => :view do
 
       it "should have the correct keys" do
         hash.should have_key(:supports_work_flows)
+        hash.should have_key(:hdfs_version)
       end
     end
   end

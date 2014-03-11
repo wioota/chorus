@@ -206,4 +206,22 @@ describe("chorus.models.AlpineWorkfile", function() {
             expect(this.server.lastRequest().url).toBe('/workfiles/' + this.model.id + '/stop');
         });
     });
+
+    describe("#notifyWorkflowLimitedDataSource", function() {
+        beforeEach(function() {
+            this.model = backboneFixtures.workfile.alpineMultiDataSourceFlow({
+                executionLocations: [
+                    { id: 'this_is_an_oracle_id', entityType: 'oracle_data_source' },
+                    { id: 'this_is_a_hadoop_id', entityType: 'hdfs_data_source', hdfsVersion: 'Apache Hadoop 1.2' },
+                    { id: 'this_is_a_gpdb_database_id', entityType: 'gpdb_database' }
+                ]
+            });
+            spyOn(chorus, 'toast');
+            this.model.notifyWorkflowLimitedDataSource();
+        });
+
+        it("warns when there is a workflow limited datasource", function() {
+            expect(chorus.toast).toHaveBeenCalledWith("work_flows.toast.hdfs_read_only");
+        });
+    });
 });

@@ -4,8 +4,9 @@ class HdfsDataSourcePresenter < Presenter
     hash = {
         :id => model.id,
         :name => model.name,
-        :supports_work_flows => model.supports_work_flows,
         :entity_type => model.entity_type_name,
+        :supports_work_flows => model.supports_work_flows,
+        :hdfs_version => model.hdfs_version,
         :is_deleted => model.deleted?
     }
     unless succinct?
@@ -19,7 +20,6 @@ class HdfsDataSourcePresenter < Presenter
           :group_list => model.group_list,
           :job_tracker_host => model.job_tracker_host,
           :job_tracker_port => model.job_tracker_port,
-          :hdfs_version => model.hdfs_version,
           :high_availability => model.high_availability?,
           :connection_parameters => model.connection_parameters
       }.merge(owner_hash).

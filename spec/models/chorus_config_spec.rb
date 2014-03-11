@@ -365,9 +365,6 @@ describe ChorusConfig do
 
       it 'returns the hdfs versions' do
         config.hdfs_versions.should =~ [
-            'Greenplum HD 0.20',
-            'Greenplum HD 1.1',
-            'Greenplum HD 1.2',
             'Pivotal HD 1.0',
             'Pivotal HD 1.1'
         ]
@@ -381,14 +378,9 @@ describe ChorusConfig do
 
       it 'returns the hdfs versions' do
         config.hdfs_versions.should =~ [
-            'Apache Hadoop 0.20.2',
-            'Apache Hadoop 0.20.203',
-            'Apache Hadoop 1.0.4',
+            'Apache Hadoop 1.2',
             'Cloudera CDH4',
             'Cloudera CDH5',
-            'Greenplum HD 0.20',
-            'Greenplum HD 1.1',
-            'Greenplum HD 1.2',
             'MapR',
             'Pivotal HD 1.0',
             'Pivotal HD 1.1'
