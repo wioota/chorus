@@ -39,6 +39,7 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.extend({
     additionalContext: function() {
         return {
             selectedModels: this.selectedModels,
+            modelCount: this.selectedModels.length,
             actions: _.result(this, 'actions').map(function(action) {
                 return Handlebars.compile(action)();
             })

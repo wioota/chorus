@@ -31,7 +31,7 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
         });
 
         it("shows the number of models selected", function() {
-            expect(this.view.$el).toContainText('1 Checked');
+            expect(this.view.$('.title')).toContainTranslation('sidebar.selected', {count: 1});
         });
 
         it("lists the model names under the selected text", function() {
