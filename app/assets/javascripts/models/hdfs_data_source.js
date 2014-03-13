@@ -40,6 +40,10 @@ chorus.models.HdfsDataSource = chorus.models.AbstractDataSource.extend({
 
     sharedAccountDetails: function() {
         return this.get("username") + ", " + this.get("groupList");
+    },
+
+    version: function() {
+        return this.get("hdfsVersion");
     }
 
 });

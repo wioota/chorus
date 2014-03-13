@@ -22,7 +22,7 @@ describe("chorus.views.DataSourceConfigurationDetails", function() {
             expect(this.view.$(".job_tracker_port")).not.toExist();
         });
 
-        it("should display the properly translation for the host field", function() {
+        it("should display the proper translation for the host field", function() {
             this.view.render();
             expect(this.view.$('.host_label').text()).toContainTranslation("data_sources.sidebar.hadoop_host");
         });

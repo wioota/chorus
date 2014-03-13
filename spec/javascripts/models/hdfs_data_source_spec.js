@@ -71,4 +71,11 @@ describe("chorus.models.HdfsDataSource", function() {
             expect(this.model.sharedAccountDetails()).toBe(sharedAccountDetails);
         });
     });
+
+    describe("#version", function() {
+        it("returns the hdfsVersion attribute (not the adaptor version)", function () {
+            this.model.set("hdfsVersion", "spacejam");
+            expect(this.model.version()).toBe("spacejam");
+        });
+    });
 });
