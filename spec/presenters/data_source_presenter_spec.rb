@@ -27,6 +27,7 @@ describe DataSourcePresenter, :type => :view do
       hash.should have_key(:owner_id)
       hash.should have_key(:shared)
       hash.should have_key(:is_hawq)
+      hash.should have_key(:schema_blacklist)
       hash[:entity_type].should == "oracle_data_source"
     end
   end

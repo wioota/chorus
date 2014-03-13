@@ -21,6 +21,7 @@ describe JdbcDataSourcePresenter, :type => :view do
       hash.should have_key(:online)
       hash.should have_key(:shared)
       hash.should have_key(:owner)
+      hash.should have_key(:schema_blacklist)
       hash[:entity_type].should == 'jdbc_data_source'
     end
   end
@@ -28,6 +29,11 @@ describe JdbcDataSourcePresenter, :type => :view do
   it 'should use ownerPresenter Hash method for owner' do
     owner = hash[:owner]
     owner.to_hash.should == (UserPresenter.new(user, view).presentation_hash)
+  end
+
+  it 'should present the schema blacklist' do
+    hash[:schema_blacklist].size.should > 0
+    hash[:schema_blacklist].should == jdbc_data_source.connect_as_owner.schema_blacklist
   end
 
   it_behaves_like 'activity stream data source presenter'

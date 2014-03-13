@@ -1,11 +1,6 @@
 class JdbcConnection < DataSourceConnection
   class DatabaseError < Error; end
 
-  def initialize(*args)
-    super(*args)
-    @schema_blacklist = load_schema_blacklist
-  end
-
   def db_url
     @data_source.url
   end

@@ -1,6 +1,8 @@
 require 'sequel'
+require 'set'
 
 class DataSourceConnection
+  attr_reader :schema_blacklist
   LIKE_ESCAPE_CHARACTER = '@'
 
   class Error < StandardError
@@ -61,6 +63,7 @@ class DataSourceConnection
     @data_source = data_source
     @account = account
     @options = options
+    @schema_blacklist = load_schema_blacklist
   end
 
   def connect!
@@ -231,5 +234,9 @@ class DataSourceConnection
 
   def support_multiple_result_sets?
     false
+  end
+
+  def load_schema_blacklist
+    Set.new
   end
 end
