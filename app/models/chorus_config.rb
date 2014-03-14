@@ -104,11 +104,7 @@ class ChorusConfig
   end
 
   def server_port
-    if self['ssl.enabled']
-      return self['ssl_server_port']
-    end
-
-    self['server_port']
+    self['ssl.enabled'] ? self['ssl_server_port'] : self['server_port']
   end
 
   def public_url

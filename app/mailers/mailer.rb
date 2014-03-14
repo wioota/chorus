@@ -1,8 +1,8 @@
 class Mailer < ActionMailer::Base
   helper do
     def build_backbone_url(path)
-      url_options = Rails.configuration.action_mailer.default_url_options
-      "http://#{url_options[:host]}:#{url_options[:port]}/##{path}"
+      urls = Rails.configuration.action_mailer.default_url_options
+      "#{urls[:protocol]}://#{urls[:host]}:#{urls[:port]}/##{path}"
     end
   end
 
