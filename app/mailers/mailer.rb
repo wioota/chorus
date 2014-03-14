@@ -1,10 +1,4 @@
 class Mailer < ActionMailer::Base
-  helper do
-    def build_backbone_url(path)
-      urls = Rails.configuration.action_mailer.default_url_options
-      "#{urls[:protocol]}://#{urls[:host]}:#{urls[:port]}/##{path}"
-    end
-  end
 
   def notify(user, event)
     @user = user
@@ -13,9 +7,9 @@ class Mailer < ActionMailer::Base
     @job_result = event.job_result
     @job_task_results = event.job_result.job_task_results
 
-    attachments['logo'] = logo(License.instance)
-    attachments[RunWorkFlowTaskResult.name] = File.read(Rails.root.join('public', 'images', 'workfiles', 'icon', 'afm.png'))
-    attachments[ImportSourceDataTaskResult.name] = File.read(Rails.root.join('public', 'images', 'import_icon.png'))
+    attachments[as_png('logo')] = logo(License.instance)
+    attachments[as_png(RunWorkFlowTaskResult.name)] = File.read(Rails.root.join('public', 'images', 'workfiles', 'icon', 'afm.png'))
+    attachments[as_png(ImportSourceDataTaskResult.name)] = File.read(Rails.root.join('public', 'images', 'import_icon.png'))
 
     m = mail(:to => user.email, :subject => event.header)
     m.deliver
@@ -25,7 +19,7 @@ class Mailer < ActionMailer::Base
     @user = user
     @expiration_date = license[:expires]
     @branding = license.branding
-    attachments['logo'] = logo(license)
+    attachments[as_png('logo')] = logo(license)
     m = mail(:to => user.email, :subject => 'Your Chorus license is expiring.')
     m.deliver
   end
@@ -35,4 +29,18 @@ class Mailer < ActionMailer::Base
   def logo(license)
     File.read(Rails.root.join('public', 'images', %(#{license.branding}-logo.png)))
   end
+
+  module MailerHelper
+    def build_backbone_url(path)
+      urls = Rails.configuration.action_mailer.default_url_options
+      "#{urls[:protocol]}://#{urls[:host]}:#{urls[:port]}/##{path}"
+    end
+
+    def as_png(name)
+      %(#{name}.png)
+    end
+  end
+
+  helper MailerHelper
+  include MailerHelper
 end

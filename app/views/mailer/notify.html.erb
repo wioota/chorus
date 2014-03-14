@@ -6,7 +6,7 @@
     <ul class="attachments">
       <% @job_task_results.each do |result| %>
           <li>
-            <%= image_tag attachments[result.class.name].url, class: 'icon' -%>
+            <%= image_tag attachments[as_png(result.class.name)].url, class: 'icon' -%>
             <%= result.name %>
           </li>
       <% end %>

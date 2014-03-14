@@ -36,9 +36,9 @@ Chorus::Application.configure do
   #config.allow_concurrency = true
   #config.threadsafe!
 
-  if ChorusConfig.instance["mail.enabled"]
+  if ChorusConfig.instance['mail.enabled']
     config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+    config.action_mailer.smtp_settings = { :address => 'localhost', :port => 1025 }
     ActionMailer::Base.default ChorusConfig.instance.mail_configuration
   else
     config.action_mailer.perform_deliveries = false
