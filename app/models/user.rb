@@ -113,10 +113,7 @@ class User < ActiveRecord::Base
       raise ActiveRecord::RecordInvalid.new(self)
     end
 
-    owned_jobs.each do |job|
-      job.owner = job.workspace.owner
-      job.save!
-    end
+    owned_jobs.each(&:reset_ownership!)
 
     super
   end

@@ -181,6 +181,18 @@ describe MembersController do
         decoded['errors']['fields']['owner'].should have_key('OWNER MUST BE A MEMBER')
       end
     end
+
+    context 'removing users who own jobs in the workspace' do
+      let!(:job) { FactoryGirl.create(:job, :workspace => workspace, :owner => member3) }
+      let(:parameters) { {:workspace_id => workspace.id, :member_ids => [workspace.owner.id]} }
+
+      it 'transfers job ownership to the workspace owner' do
+        expect {
+          post :create, parameters
+          job.reload
+        }.to change(job, :owner).from(member3).to(workspace.owner)
+      end
+    end
   end
 end
 

@@ -421,4 +421,17 @@ describe Job do
       end
     end
   end
+
+  describe '#reset_ownership!' do
+    let(:workspace) { workspaces(:public) }
+    let(:job_owner) { users(:the_collaborator) }
+    let(:job) { FactoryGirl.create(:job, :workspace => workspace, :owner => job_owner) }
+
+    it 'changes the owner to the workspace owner' do
+      workspace.owner.should_not == job_owner
+      expect {
+        job.reset_ownership!
+      }.to change(job, :owner).from(job_owner).to(workspace.owner)
+    end
+  end
 end

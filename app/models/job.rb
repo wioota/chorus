@@ -133,6 +133,11 @@ class Job < ActiveRecord::Base
     options[:failure_recipients].each { |id| notify_on(:failure, workspace.members.find(id)) } if options[:failure_recipients]
   end
 
+  def reset_ownership!
+    self.owner = workspace.owner
+    save!
+  end
+
   private
 
   def initialize_results
