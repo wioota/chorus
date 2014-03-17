@@ -208,6 +208,27 @@ describe JobsController do
       end.to change(job, :enabled).from(false).to(true)
     end
 
+    describe 'changing the owner' do
+      let(:new_owner) { users(:the_collaborator) }
+      let(:planned_changes) { {:owner_id => new_owner.id} }
+
+      it 'checks access when updating the owner' do
+        mock(subject).can?(:update_owner, job) { true }
+        expect do
+          put :update, params
+          job.reload
+        end.to change(job, :owner).from(job.owner).to(new_owner)
+      end
+
+      it 'does not change the owner if not authorized' do
+        mock(subject).can?(:update_owner, job) { false }
+        expect do
+          put :update, params
+          job.reload
+        end.to_not change(job, :owner)
+      end
+    end
+
     it "applies the passed-in time zone to the passed-in next_run without shifting time" do
       put :update, params
       job.reload.next_run.to_i.should == DateTime.parse("2020-07-30T14:00:00-07:00").to_i

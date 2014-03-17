@@ -339,6 +339,15 @@ describe User do
         user.destroy
       }.to change { DataSourceAccount.where(owner_id: user.id).count }.to(0)
     end
+
+    it 'updates job ownership to the owner of the workspace containing the job' do
+      user = users(:the_collaborator)
+      FactoryGirl.create(:job, :workspace => user.workspaces.first, :owner => user)
+      Job.where(:owner_id => user.id).count.should > 0
+      expect {
+        user.destroy
+      }.to change { Job.where(:owner_id => user.id).count }.to(0)
+    end
   end
 
   describe "search fields" do

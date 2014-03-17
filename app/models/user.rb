@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
   has_many :owned_workspaces, :foreign_key => :owner_id, :class_name => 'Workspace'
   has_many :memberships, :dependent => :destroy
   has_many :workspaces, :through => :memberships
+  has_many :owned_jobs, :foreign_key => :owner_id, :class_name => 'Job'
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
@@ -111,6 +112,12 @@ class User < ActiveRecord::Base
       errors.add(:workspace_count, :equal_to, {:count => 0})
       raise ActiveRecord::RecordInvalid.new(self)
     end
+
+    owned_jobs.each do |job|
+      job.owner = job.workspace.owner
+      job.save!
+    end
+
     super
   end
 

@@ -22,13 +22,11 @@ class JobsController < ApplicationController
   def create
     authorize! :can_edit_sub_objects, workspace
 
-    job = Job.new(params[:job])
+    job = workspace.jobs.build(params[:job])
 
     Job.transaction do
       job.owner = current_user
       job.save!
-
-      workspace.jobs << job
 
       job.subscribe_recipients(params[:job]) if (params[:job][:success_recipients] || params[:job][:failure_recipients])
     end
@@ -45,6 +43,7 @@ class JobsController < ApplicationController
       job.reorder_tasks params[:job]['task_id_order'].map(&:to_i)
     else
       Job.transaction do
+        job.owner_id = params[:job][:owner_id] if params[:job][:owner_id] && can?(:update_owner, job)
         job.update_attributes!(params[:job])
         job.subscribe_recipients(params[:job]) if (params[:job][:success_recipients] || params[:job][:failure_recipients])
       end

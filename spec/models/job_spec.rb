@@ -13,6 +13,7 @@ describe Job do
     it { should have_many :job_results }
     it { should have_many :events }
     it { should belong_to :owner }
+    it { should belong_to :workspace }
 
     describe "name uniqueness validation" do
       let(:workspace) { workspaces(:public) }
@@ -57,6 +58,16 @@ describe Job do
         impossible_job = FactoryGirl.build(:job, :end_run => 1.day.ago)
         impossible_job.should_not be_valid
         impossible_job.should have_error_on(:job).with_message(:END_RUN_IN_PAST)
+      end
+    end
+
+    describe 'owner workspace membership' do
+      let(:impossible_owner) { users(:no_collaborators) }
+
+      it 'should require the owner to be a member of the workspace' do
+        ready_job.owner = impossible_owner
+        ready_job.should_not be_valid
+        ready_job.should have_error_on(:owner).with_message(:JOB_OWNER_MEMBERSHIP_REQUIRED)
       end
     end
   end

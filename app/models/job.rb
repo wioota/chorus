@@ -27,9 +27,11 @@ class Job < ActiveRecord::Base
   validates_presence_of :interval_value
   validates_presence_of :name
   validates_presence_of :owner
+  validates_presence_of :workspace
   validates_uniqueness_of :name, :scope => [:workspace_id, :deleted_at]
   validate :next_run_not_in_past, :if => Proc.new { |job| job.changed.include?('next_run') }
   validate :end_run_not_in_past, :if => :end_run
+  validate :owner_is_workspace_member, :on => :update
 
   scope :ready_to_run, -> { where(enabled: true).where(status: IDLE).where('next_run <= ?', Time.current).order(:next_run) }
 
@@ -203,5 +205,9 @@ class Job < ActiveRecord::Base
 
   def idle!
     update_attributes!(:status => IDLE)
+  end
+
+  def owner_is_workspace_member
+    errors.add(:owner, :JOB_OWNER_MEMBERSHIP_REQUIRED) unless workspace.members.include? owner
   end
 end
