@@ -167,6 +167,11 @@ describe("chorus global", function() {
             chorus.toast("test.with_param", { param: "Nobody", toastOpts: {hideAfter: 0, foo: "bar"}});
             expect(Messenger().post).toHaveBeenCalledWith({message: "Nobody says hi", hideAfter: 0, foo: "bar"});
         });
+
+        it("accepts a message and does not translate it with flag skipTranslation", function() {
+            chorus.toast("No translation for me", { skipTranslation: true });
+            expect(Messenger().post).toHaveBeenCalledWith({message: "No translation for me"});
+        });
     });
 
     describe("fileDownload", function() {

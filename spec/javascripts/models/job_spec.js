@@ -116,6 +116,19 @@ describe("chorus.models.Job", function () {
                 expect(chorus.toast).toHaveBeenCalledWith('job.running_toast', {jobName: this.model.name()});
             });
         });
+
+        context("when the run is unprocessable", function() {
+            it("flashes an error toast message", function () {
+                this.server.lastCreate().failUnprocessableEntity();
+                expect(chorus.toast).toHaveBeenCalledWith('job.not_running_toast', {jobName: this.model.name(), toastOpts: {type: 'error'}});
+            });
+
+            it("includes server errors if present", function() {
+                this.server.lastCreate().failUnprocessableEntity({fields: { owner: { BLANK: {}, JOB_OWNER_MEMBERSHIP_REQUIRED: {} } } });
+                expect(chorus.toast).toHaveBeenCalledWith('job.not_running_toast', {jobName: this.model.name(), toastOpts: {type: 'error'}});
+                expect(chorus.toast).toHaveBeenCalledWith(this.model.serverErrorMessage(), jasmine.objectContaining({ skipTranslation: true }));
+            });
+        });
     });
 
     describe("stop", function () {

@@ -83,25 +83,35 @@ chorus.models.Job = chorus.models.Base.extend({
     },
 
     run: function () {
-        var name = this.name();
-        function saveSucceeded(){ chorus.toast('job.running_toast', {jobName: name}); }
-        function saveFailed(){ chorus.toast('job.not_running_toast', {jobName: name, toastOpts: {type: 'error'}}); }
-
-        this.save(
-            {},
-            {job_action: 'run', method: 'create', success: saveSucceeded, error: saveFailed}
-        );
+        this.runner('run');
     },
 
     stop: function () {
-        var name = this.name();
-        function saveSucceeded(){ chorus.toast('job.stopping_toast', {jobName: name}); }
-        function saveFailed(){ chorus.toast('job.not_stopping_toast', {jobName: name, toastOpts: {type: 'error'}}); }
+        this.runner('kill');
+    },
 
-        this.save(
-            {},
-            {job_action: 'kill', method: 'create', success: saveSucceeded, error: saveFailed}
+    runner: function(action) {
+        var name = this.name();
+        this.save({},
+            {
+                job_action: action,
+                method: 'create',
+                unprocessableEntity: _.bind(this.runnerNotify(this.actions[action].failure, {jobName: name, toastOpts: {type: 'error'}}), this),
+                success: _.bind(this.runnerNotify(this.actions[action].success, {jobName: name}), this)
+            }
         );
+    },
+
+    runnerNotify: function(key, opts) {
+        return function() {
+            this.serverErrors && chorus.toast(this.serverErrorMessage(), _.extend({ skipTranslation: true }, opts));
+            chorus.toast(key, opts);
+        };
+    },
+
+    actions: {
+        run: {success: 'job.running_toast', failure: 'job.not_running_toast'},
+        kill: {success: 'job.stopping_toast', failure: 'job.not_stopping_toast'}
     },
 
     isRunning: function () {

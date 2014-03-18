@@ -43,8 +43,8 @@ class Job < ActiveRecord::Base
   end
 
   def self.order_by(column_name)
-    if column_name.blank? || column_name == "name"
-      return order("lower(name), id")
+    if column_name.blank? || column_name == 'name'
+      return order('lower(name), id')
     end
 
     if %w(next_run).include?(column_name)
@@ -57,8 +57,8 @@ class Job < ActiveRecord::Base
   end
 
   def enqueue
-    QC.default_queue.enqueue_if_not_queued("Job.run", id)
     update_attributes!(:status => ENQUEUED)
+    QC.default_queue.enqueue_if_not_queued('Job.run', id)
   end
 
   def run
@@ -71,7 +71,7 @@ class Job < ActiveRecord::Base
   rescue JobTask::JobTaskFailure
     job_failed
   ensure
-    idle!
+    idle
   end
 
   def frequency
@@ -208,8 +208,8 @@ class Job < ActiveRecord::Base
     status == STOPPING
   end
 
-  def idle!
-    update_attributes!(:status => IDLE)
+  def idle
+    update_attribute(:status, IDLE)
   end
 
   def owner_is_workspace_member

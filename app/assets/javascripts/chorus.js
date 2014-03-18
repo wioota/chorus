@@ -96,8 +96,8 @@ window.Chorus = function chorus$Global() {
 
     self.toast = function(message, options) {
         options = options || {};
-
-        var toastOpts = _.extend({message: t(message, options)}, options.toastOpts);
+        var toastText = options.skipTranslation ? message : t(message, options);
+        var toastOpts = _.extend({message: toastText}, options.toastOpts);
         Messenger().post(toastOpts);
     };
 

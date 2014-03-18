@@ -30,8 +30,7 @@ module Alpine
 
     # INSTANCE METHODS
 
-    def initialize(options = nil)
-      options ||= {}
+    def initialize(options = {})
       @config = options[:config] || ChorusConfig.instance
       @license = options[:license] || License.instance
       @user = options[:user] || User.current_user
@@ -80,7 +79,7 @@ module Alpine
     end
 
     def request_creation(body, work_flow)
-      request_base.post(create_path(work_flow), body, {"Content-Type" => "application/xml"})
+      request_base.post(create_path(work_flow), body, {'Content-Type' => 'application/xml'})
     end
 
     def request_deletion(work_flow)
