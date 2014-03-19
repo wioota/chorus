@@ -7,6 +7,12 @@ chorus.views.JobTaskSidebar = chorus.views.Sidebar.extend({
         'click .edit_job_task': 'launchTaskConfigurationDialog'
     },
 
+    additionalContext: function() {
+        return {
+            canUpdate: this.model.job().workspace().canUpdate()
+        };
+    },
+
     launchDeleteAlert: function (e) {
         e && e.preventDefault();
         new chorus.alerts.JobTaskDelete({model: this.model}).launchModal();

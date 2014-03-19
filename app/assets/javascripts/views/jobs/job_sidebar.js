@@ -46,6 +46,7 @@ chorus.views.JobSidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function () {
         return this.model ? {
+            canUpdate: this.model.workspace().canUpdate(),
             enabled: this.model.get('enabled'),
             running: this.model.isRunning(),
             ableToRun: this.model.ableToRun(),
