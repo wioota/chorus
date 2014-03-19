@@ -88,14 +88,15 @@ chorus.views.WorkfileSidebar = chorus.views.Sidebar.extend({
 
     additionalContext:function () {
         var workspaceActive = this.model && this.model.workspace().isActive();
+        var canUpdate = this.model && this.model.workspace().canUpdate();
         var ctx = {
             showAddNoteLink: workspaceActive && this.options.showEditingLinks,
             showCopyLink: true,
             showDownloadLink: this.options.showDownloadLink,
-            showEditLinks: workspaceActive && this.options.showEditingLinks && this.model.workspace().canUpdate(),
+            showEditLinks: workspaceActive && this.options.showEditingLinks && canUpdate,
             showUpdatedTime: this.options.showUpdatedTime,
             showVersions: this.options.showVersions,
-            isAlpine: this.model.isAlpine(),
+            showRunWorkflow: workspaceActive && this.model.isAlpine() && canUpdate,
             isRunning: this.model.get('status') === 'running'
         };
 

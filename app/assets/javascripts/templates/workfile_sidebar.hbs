@@ -14,7 +14,7 @@
     </div>
     <div class="actions">
         <ul>
-            {{#if isAlpine}}
+            {{#if showRunWorkflow}}
                 {{#unless isRunning}}
                     <li><a class="run_now" href="#">{{t 'work_flows.actions.run_now'}}</a></li>
                     <li><span class="stop disabled" href="#">{{t 'work_flows.actions.stop'}}</span></li>
