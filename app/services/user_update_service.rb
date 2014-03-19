@@ -1,8 +1,8 @@
 class UserUpdateService
 
-  def initialize(actor, target)
-    @actor = actor
-    @target = target
+  def initialize(params)
+    @actor = params[:actor]
+    @target = params[:target]
   end
 
   def update!(params)

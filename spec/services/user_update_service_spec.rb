@@ -6,7 +6,7 @@ describe UserUpdateService do
 
   describe '#update!' do
     context 'when the actor is an admin' do
-      let(:service) { UserUpdateService.new(admin, user) }
+      let(:service) { UserUpdateService.new(actor: admin, target: user) }
       let(:params) { {:admin => true, :developer => true, :first_name => 'Joey'} }
 
       it 'updates params including admin and developer' do
@@ -16,7 +16,7 @@ describe UserUpdateService do
       end
 
       context 'when the target is an admin' do
-        let(:service) { UserUpdateService.new(admin, admin) }
+        let(:service) { UserUpdateService.new(actor: admin, target: admin) }
 
         context 'when the target admin owns a job in a workspace of which they are not a member' do
           let(:workspace) { workspaces(:public_with_no_collaborators) }
@@ -66,7 +66,7 @@ describe UserUpdateService do
     end
 
     context 'when the actor is not an admin' do
-      let(:service) { UserUpdateService.new(user, user) }
+      let(:service) { UserUpdateService.new(actor: user, target: user) }
       let(:params) { {:admin => true, :developer => true, :first_name => 'Joey'} }
 
       before do

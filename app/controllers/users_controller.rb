@@ -29,7 +29,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    UserUpdateService.new(current_user, @user).update!(user_params)
+    UserUpdateService.new(actor: current_user, target: @user).update!(user_params)
     present @user
   end
 
