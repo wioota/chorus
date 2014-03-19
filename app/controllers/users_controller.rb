@@ -29,12 +29,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.attributes = user_params
-    if current_user.admin?
-      @user.admin = user_params[:admin] if user_params.key?(:admin)
-      @user.developer = user_params[:developer] if user_params.key?(:developer)
-    end
-    @user.save!
+    UserUpdateService.new(current_user, @user).update!(user_params)
     present @user
   end
 
