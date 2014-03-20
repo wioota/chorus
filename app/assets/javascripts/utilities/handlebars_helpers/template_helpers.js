@@ -81,31 +81,29 @@ chorus.handlebarsHelpers.template = {
     },
 
     modelNamesList: function(collection) {
-        function name(m) { return _.result(m, "name"); }
-        function appendLast(model) { return ", and " + name(model); }
+        function appendLast(name) { return ", and " + name; }
 
         var list = "";
         var comma = ", ";
-        var last;
-        var c = collection.clone();
-        var length = c.length;
+        var names = collection.map(function(m) { return _.result(m, "name"); });
+        var length = names.length;
 
         switch (length) {
             case 0:
                 list = "";
                 break;
             case 1:
-                list = name(c.pop());
+                list = names[0];
                 break;
             case 2:
-                list = c.map(name).join(" and ");
+                list = names.join(" and ");
                 break;
             case 3:
-                last = c.pop();
-                list = c.map(name).join(comma) + appendLast(last);
+                var last = names.pop();
+                list = names.join(comma) + appendLast(last);
                 break;
             default:
-                list = c.slice(0,2).map(name).join(comma) + appendLast({name: length - 2 + " others"});
+                list = names.slice(0,2).join(comma) + appendLast(length - 2 + " others");
                 break;
         }
 

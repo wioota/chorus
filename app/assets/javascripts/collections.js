@@ -163,13 +163,14 @@ chorus.collections = {
         },
 
         remove: function (models, options) {
-            var i, l, index, model;
-            options || (options = {});
             models = _.isArray(models) ? models.slice() : [models];
+            options || (options = {});
+            var i, l, index, model;
             for (i = 0, l = models.length; i < l; i++) {
                 model = this.get(models[i]);
                 if (!model) continue;
                 delete this._byId[model.id];
+                delete this._byId[model.cid];
                 index = this.indexOf(model);
                 this.models.splice(index, 1);
                 this.length--;
