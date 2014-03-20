@@ -1,12 +1,13 @@
 <div class="info">
     <div title="{{name}}" class="name">{{name}}</div>
 </div>
-
-<div class="actions">
-    <ul>
-        <li><a class="delete_milestone" href="#">{{t "milestone.actions.delete"}}</a></li>
-        <li><a class="toggle_state" href="#">{{t stateToggleKey}}</a></li>
-    </ul>
-</div>
+{{#if canUpdate}}
+    <div class="actions">
+        <ul>
+            <li><a class="delete_milestone" href="#">{{t "milestone.actions.delete"}}</a></li>
+            <li><a class="toggle_state" href="#">{{t stateToggleKey}}</a></li>
+        </ul>
+    </div>
+{{/if}}
 
 <div class="tab_control"></div>

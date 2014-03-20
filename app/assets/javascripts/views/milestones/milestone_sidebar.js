@@ -16,6 +16,7 @@ chorus.views.MilestoneSidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function () {
         return this.model ? {
+            canUpdate: this.model.workspace().canUpdate(),
             stateToggleKey: 'milestone.actions.toggle.' + this.model.get('state')
         } : {};
     },
@@ -28,8 +29,5 @@ chorus.views.MilestoneSidebar = chorus.views.Sidebar.extend({
     toggleState: function (e) {
         e && e.preventDefault();
         this.model.toggleState();
-    },
-
-    launchEditDialog: function (e) {
     }
 });

@@ -10,42 +10,60 @@ describe("chorus.views.MilestoneSidebar", function () {
         expect(this.view.$(".name")).toContainText(this.milestone.get("name"));
     });
 
-    describe("clicking 'Delete Milestone'", function () {
-        itBehavesLike.aDialogLauncher("a.delete_milestone", chorus.alerts.MilestoneDelete);
-    });
+    context("when the user has workspace permissions", function () {
+        beforeEach(function () {
+            spyOn(this.milestone.workspace(), 'canUpdate').andReturn(true);
+            this.view.render();
+        });
 
-    describe('milestone state toggle', function () {
-        context('the milestone is "planned"', function () {
-            beforeEach(function () {
-                this.milestone.set('state', 'planned');
-                this.view.render();
-            });
+        describe("clicking 'Delete Milestone'", function () {
+            itBehavesLike.aDialogLauncher("a.delete_milestone", chorus.alerts.MilestoneDelete);
+        });
 
-            it("displays a 'complete' link", function () {
-                expect(this.view.$('.toggle_state')).toContainTranslation('milestone.actions.toggle.planned');
-            });
-
-            describe("clicking the link", function () {
+        describe('milestone state toggle', function () {
+            context('the milestone is "planned"', function () {
                 beforeEach(function () {
-                    spyOn(this.milestone, "toggleState");
-                    this.view.$('.toggle_state').click();
+                    this.milestone.set('state', 'planned');
+                    this.view.render();
                 });
 
-                it("toggles the state", function () {
-                    expect(this.milestone.toggleState).toHaveBeenCalled();
+                it("displays a 'complete' link", function () {
+                    expect(this.view.$('.toggle_state')).toContainTranslation('milestone.actions.toggle.planned');
+                });
+
+                describe("clicking the link", function () {
+                    beforeEach(function () {
+                        spyOn(this.milestone, "toggleState");
+                        this.view.$('.toggle_state').click();
+                    });
+
+                    it("toggles the state", function () {
+                        expect(this.milestone.toggleState).toHaveBeenCalled();
+                    });
+                });
+            });
+
+            context('the milestone is "achieved"', function () {
+                beforeEach(function () {
+                    this.milestone.set('state', 'achieved');
+                    this.view.render();
+                });
+
+                it("displays a 'restart' link", function () {
+                    expect(this.view.$('.toggle_state')).toContainTranslation('milestone.actions.toggle.achieved');
                 });
             });
         });
+    });
 
-        context('the milestone is "achieved"', function () {
-            beforeEach(function () {
-                this.milestone.set('state', 'achieved');
-                this.view.render();
-            });
+    context("when the user does not have workspace permissions", function () {
+        beforeEach(function () {
+            spyOn(this.milestone.workspace(), 'canUpdate').andReturn(false);
+            this.view.render();
+        });
 
-            it("displays a 'restart' link", function () {
-                expect(this.view.$('.toggle_state')).toContainTranslation('milestone.actions.toggle.achieved');
-            });
+        it("should not display the edit/delete links", function () {
+            expect(this.view.$('.actions a')).not.toExist();
         });
     });
 });
