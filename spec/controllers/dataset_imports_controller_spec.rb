@@ -129,6 +129,15 @@ describe DatasetImportsController do
       response.should be_forbidden
     end
 
+    context 'when it is a csv import' do
+      let(:import) { imports(:csv) }
+
+      it 'the admin is authorized' do
+        put :update, params
+        response.should be_ok
+      end
+    end
+
     context "for an import that has already finished" do
       let(:finished_at) { 1.day.ago }
       before do
