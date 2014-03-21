@@ -64,10 +64,12 @@ describe Job do
     describe 'owner workspace membership' do
       let(:impossible_owner) { users(:no_collaborators) }
 
-      it 'should require the owner to be a member of the workspace' do
+      it 'should require the owner to be a member of the workspace or an admin' do
         ready_job.owner = impossible_owner
         ready_job.should_not be_valid
         ready_job.should have_error_on(:owner).with_message(:JOB_OWNER_MEMBERSHIP_REQUIRED)
+        ready_job.owner = users(:admin)
+        ready_job.should be_valid
       end
     end
   end
