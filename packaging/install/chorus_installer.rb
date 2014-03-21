@@ -361,14 +361,6 @@ class ChorusInstaller
     end
   end
 
-  def startup
-    return unless upgrade_existing?
-
-    log "Starting up Chorus..." do
-      @executor.start_chorus
-    end
-  end
-
   def prompt_for_eula
     @io.log eula
     @io.require_confirmation :accept_terms

@@ -21,25 +21,26 @@ if __FILE__ == $0
     })
 
     installer.install
-    installer.startup
-    puts "Installation completed."
-    unless installer.upgrade_existing?
-      puts "To start Chorus, run the following commands:"
-      puts "source #{installer.destination_path}/chorus_path.sh"
-      puts "chorus_control.sh start"
+    puts 'Installation completed.'
+    if installer.upgrade_existing?
+      puts ''
+      puts 'Confirm custom configuration settings as directed in the upgrade guide before restarting Chorus.'
     end
+    puts 'To start Chorus, run the following commands:'
+    puts "source #{installer.destination_path}/chorus_path.sh"
+    puts 'chorus_control.sh start'
   rescue InstallerErrors::InstallationFailed => e
-    puts "An error has occurred. Trying to back out and restore previous state.."
+    puts 'An error has occurred. Trying to back out and restore previous state...'
     installer.remove_and_restart_previous! unless keep
-    puts "Please check the installation log (install.log) for failure details."
+    puts 'Please check the installation log (install.log) for failure details.'
     exit 1
   rescue => e
-    File.open("install.log", "a") { |f| f.puts "#{e.class}: #{e.message}" }
-    puts "Failed to start chorus back up"
+    File.open('install.log', 'a') { |f| f.puts "#{e.class}: #{e.message}" }
+    puts 'Failed to start chorus back up'
     exit 1
   ensure
     if STDIN.tty?
-      exec "stty echo"
+      exec 'stty echo'
     end
   end
 end

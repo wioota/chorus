@@ -949,31 +949,6 @@ describe ChorusInstaller do
     end
   end
 
-  describe "#startup" do
-    context "when installing fresh" do
-      before do
-        dont_allow(installer).system
-      end
-
-      it "should do nothing" do
-        installer.startup
-      end
-    end
-
-    context "when upgrading" do
-      before do
-        stub(installer).version { '2.2.0.0' }
-        installer.install_mode = :upgrade_existing
-        installer.destination_path = '/usr/local/chorus'
-        mock(executor).start_chorus
-      end
-
-      it "should stop the previous version" do
-        installer.startup
-      end
-    end
-  end
-
   describe "#link_current_to_release" do
     let(:previous_version) { '/usr/local/chorus/releases/1.2.2.2' }
     let(:new_version) { '/usr/local/chorus/releases/2.2.0.0' }
