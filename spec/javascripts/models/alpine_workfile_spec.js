@@ -194,6 +194,17 @@ describe("chorus.models.AlpineWorkfile", function() {
             expect(this.server.lastRequest().method).toBe('POST');
             expect(this.server.lastRequest().url).toBe('/workfiles/' + this.model.id + '/run');
         });
+
+        context("when the server responds 422", function () {
+            beforeEach(function () {
+                spyOn(chorus, 'toast');
+                this.server.lastCreate().failUnprocessableEntity();
+            });
+
+            it("toasts that the flow has not started running", function () {
+                expect(chorus.toast).toHaveBeenCalledWith('work_flows.start_running_unprocessable', {toastOpts: {type: 'error'}});
+            });
+        });
     });
 
     describe('#stop', function() {

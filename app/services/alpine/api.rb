@@ -3,6 +3,8 @@ require 'uri'
 
 module Alpine
   class API
+    class RunError < StandardError; end
+
     def self.delete_work_flow(work_flow)
       new.delete_work_flow(work_flow)
     end
@@ -96,8 +98,10 @@ module Alpine
 
     def request_run(work_flow, options)
       response = request_base.post(run_path(work_flow, options), '')
-      raise StandardError.new(response.body) unless response.code == '200'
-      JSON.parse(response.body)['process_id']
+      unless response.code == '200' && (process_id = JSON.parse(response.body)['process_id']).present?
+        raise RunError.new(response.body)
+      end
+      process_id
     rescue StandardError => e
       log_error(e)
       raise e

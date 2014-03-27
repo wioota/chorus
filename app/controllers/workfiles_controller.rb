@@ -59,7 +59,10 @@ class WorkfilesController < ApplicationController
 
   def run
     workfile.run_now(current_user)
+
     present workfile, :status => :accepted
+  rescue Alpine::API::RunError
+    render_run_failed
   end
 
   def stop
@@ -84,5 +87,9 @@ class WorkfilesController < ApplicationController
     [:execution_locations, :versions_attributes].each do |key|
       params[:workfile][key] = params[:workfile][key].values if params[:workfile][key] && params[:workfile][key].is_a?(Hash)
     end
+  end
+
+  def render_run_failed
+    present_errors({:record => :RUN_FAILED}, :status => :unprocessable_entity)
   end
 end

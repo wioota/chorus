@@ -105,7 +105,11 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
     },
 
     run: function () {
-        this.save({}, {workflow_action: 'run', method: 'create'});
+        this.save({}, {
+            workflow_action: 'run',
+            method: 'create',
+            unprocessableEntity: function() { chorus.toast('work_flows.start_running_unprocessable', {toastOpts: {type: 'error'}}); }
+        });
     },
 
     stop: function () {

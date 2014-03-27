@@ -320,6 +320,20 @@ describe AlpineWorkfile do
         }.not_to change(workflow, :killable_id).from(nil)
       end
     end
+
+    context 'when the alpine api raises' do
+      before do
+        any_instance_of(Alpine::API) {|api| stub(api).request_run.with_any_args { raise Alpine::API::RunError } }
+      end
+
+      it 'does not put the workflow into running state and raises the exception' do
+        expect {
+          expect {
+            workflow.run_now(user)
+          }.to raise_error(Alpine::API::RunError)
+        }.not_to change(workflow, :status).from('idle')
+      end
+    end
   end
 
   describe '#stop_now' do

@@ -190,7 +190,14 @@ describe Alpine::API do
       FakeWeb.register_uri(:post, %r|method=runWorkFlow|, :status => 500, :body => 'oh no')
       expect {
         subject.run_work_flow(work_flow)
-      }.to raise_error(StandardError, 'oh no')
+      }.to raise_error(Alpine::API::RunError)
+    end
+
+    it 'raises exception if the process id is empty' do
+      register_run_success_post('')
+      expect {
+        subject.run_work_flow(work_flow)
+      }.to raise_error(Alpine::API::RunError)
     end
 
     it "returns the process_id from alpine on success" do

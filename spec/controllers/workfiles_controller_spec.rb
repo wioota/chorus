@@ -746,9 +746,10 @@ describe WorkfilesController do
 
   describe '#run' do
     let(:workfile) { workfiles(:alpine_flow) }
+    let(:run_process_id) { 'fakeprocessid' }
 
     before do
-      mock(Alpine::API).run_work_flow.with_any_args { 'fakeprocessid' }
+      mock(Alpine::API).run_work_flow.with_any_args { run_process_id }
     end
 
     it 'uses authorization and runs the workflow' do
@@ -756,14 +757,26 @@ describe WorkfilesController do
       post :run, :id => workfile.id
     end
 
-    it 'returns a 202' do
-      post :run, :id => workfile.id
-      response.code.should == '202'
+    context 'when the workfile starts running successfully' do
+      it 'returns a 202' do
+        post :run, :id => workfile.id
+        response.code.should == '202'
+      end
+
+      it 'presents the workflow' do
+        post :run, :id => workfile.id
+        decoded_response[:status].should == AlpineWorkfile::RUNNING
+      end
     end
 
-    it 'presents the workflow' do
-      post :run, :id => workfile.id
-      decoded_response[:status].should == AlpineWorkfile::RUNNING
+    context 'when the workfile does not start running successfully' do
+      let(:run_process_id) { raise Alpine::API::RunError }
+
+      it 'returns 422' do
+        post :run, :id => workfile.id
+        response.should be_unprocessable
+        decoded_errors.record.should == 'RUN_FAILED'
+      end
     end
   end
 
