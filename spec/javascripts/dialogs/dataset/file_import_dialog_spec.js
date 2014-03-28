@@ -307,23 +307,10 @@ describe("chorus.dialogs.FileImport", function() {
                 beforeEach(function() {
                     this.dialog.$(".new_table input:radio").removeAttr('checked').change();
                     this.dialog.$(".workfile input:radio").attr('checked', 'checked').change();
-                    this.dialog.uploadObj.fileInput = [jasmine.createSpyObj('uploadObjSpy',['attr'])];
-
                 });
 
                 it("should enable the upload button", function() {
                     expect(this.dialog.$('button.submit')).toBeEnabled();
-                });
-
-                context("changing params structure", function() {
-                    beforeEach(function() {
-                        this.uploadObjSpy = spyOn($.fn, 'attr');
-                        this.dialog.$("button.submit").click();
-                    });
-
-                    it("changes the params structure for the workfile controller", function() {
-                        expect(this.uploadObjSpy).toHaveBeenCalledWith("name", "workfile[versions_attributes][0][contents]");
-                    });
                 });
 
                 context("clicking the upload button", function() {
@@ -333,6 +320,12 @@ describe("chorus.dialogs.FileImport", function() {
 
                     it("Should disable the change file link", function() {
                         expect(this.dialog.$(".file-wrapper a")).toHaveClass("hidden");
+                    });
+
+                    it("uploads with the workfile wrapper instead of the csv wrapper", function() {
+                        expect(this.dialog.uploadObj.paramName).toBe("workfile[versions_attributes][0][contents]");
+                        expect(this.dialog.uploadObj.url).toBe("/workspaces/242/workfiles");
+                        expect(this.fakeFileUpload.wasSubmitted).toBeTruthy();
                     });
 
                     context("when upload succeeds", function() {
