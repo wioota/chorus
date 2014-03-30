@@ -1,21 +1,15 @@
-class UnknownVisualizationException
-end
-
 module Visualization
-  def self.build(dataset, chart_task_params)
-    if chart_task_params[:type] == 'frequency'
-      Visualization::Frequency.new(dataset, chart_task_params)
-    elsif chart_task_params[:type] == 'histogram'
-      Visualization::Histogram.new(dataset, chart_task_params)
-    elsif chart_task_params[:type] == 'heatmap'
-      Visualization::Heatmap.new(dataset, chart_task_params)
-    elsif chart_task_params[:type] == 'timeseries'
-      Visualization::Timeseries.new(dataset, chart_task_params)
-    elsif chart_task_params[:type] == 'boxplot'
-      Visualization::Boxplot.new(dataset, chart_task_params)
-    else
-      raise UnknownVisualizationException, "Unknown visualization: #{chart_task_params[:type]}"
-    end
+  UnknownType = Class.new(StandardError)
+
+  def self.build(dataset, attributes)
+    case attributes[:type]
+      when 'frequency' then Visualization::Frequency
+      when 'histogram' then Visualization::Histogram
+      when 'heatmap' then Visualization::Heatmap
+      when 'timeseries' then Visualization::Timeseries
+      when 'boxplot' then Visualization::Boxplot
+      else raise UnknownType, "Unknown visualization: #{attributes[:type]}"
+    end.new(dataset, attributes)
   end
 
   class Base
