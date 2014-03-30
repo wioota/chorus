@@ -60,7 +60,7 @@ class HdfsEntry < ActiveRecord::Base
   end
 
   def highlighted_path
-    dir = @highlighted_attributes.has_key?(:parent_name) ? @highlighted_attributes[:parent_name].first : parent_name
+    dir = @highlighted_attributes.key?(:parent_name) ? @highlighted_attributes[:parent_name].first : parent_name
 
     *rest, dir_name, file_name = path.split("/")
     rest << dir

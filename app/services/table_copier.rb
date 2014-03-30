@@ -49,7 +49,7 @@ class TableCopier
   end
 
   def method_missing(name, *args, &block)
-    if @attributes.has_key?(name)
+    if @attributes.key?(name)
       @attributes[name]
     else
       super
