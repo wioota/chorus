@@ -36,6 +36,15 @@ describe HdfsEntry do
     end
 
     it { should validate_presence_of(:hdfs_data_source) }
+
+    it { should ensure_length_of(:path).is_at_most(4096) }
+
+    it 'supports paths of length 4096 in the database' do
+      entry = hdfs_entries(:hdfs_file)
+      entry.path = "/#{'a'*4095}"
+      entry.save!
+      entry.path.size.should == 4096
+    end
   end
 
   describe ".list" do

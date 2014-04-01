@@ -16,6 +16,7 @@ class HdfsEntry < ActiveRecord::Base
   validates_uniqueness_of :path, :scope => :hdfs_data_source_id
   validates_presence_of :hdfs_data_source
   validates_format_of :path, :with => %r{\A/.*}
+  validates_length_of :path, :maximum => 4096
 
   scope :files, where(:is_directory => false)
 
