@@ -31,7 +31,7 @@ class RunWorkFlowTask < JobTask
   end
 
   def self.sleep_time
-    60
+    45
   end
 
   def kill

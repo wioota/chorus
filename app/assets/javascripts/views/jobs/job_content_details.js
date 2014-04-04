@@ -67,7 +67,7 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
             enabledButtonLabel: this.enabledButtonLabel(),
             actionBarClass: this.actionBarClass(),
             createActions: this.createActions,
-            running: this.model.isRunning(),
+            ableToRun: this.model.ableToRun(),
             runsOnDemand: this.model.runsOnDemand()
         };
     },

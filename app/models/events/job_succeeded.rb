@@ -1,5 +1,9 @@
 module Events
   class JobSucceeded < JobFinished
+    def self.succeeded
+      true
+    end
+
     def header
       "Job #{job.name} succeeded in workspace #{workspace.name}."
     end

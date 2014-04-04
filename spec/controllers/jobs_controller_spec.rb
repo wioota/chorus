@@ -349,6 +349,15 @@ describe JobsController do
       decoded_response[:id].should == job.id
       decoded_response[:status].should == Job::ENQUEUED
     end
+
+    context 'when the job is not idle' do
+      let(:job) { FactoryGirl.create(:job, workspace: workspace, enabled: false, status: 'running') }
+
+      it 'is unprocessable' do
+        post :run, :id => job.id
+        response.should be_unprocessable
+      end
+    end
   end
 
   describe '#stop' do

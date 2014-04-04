@@ -71,6 +71,26 @@ describe("chorus.models.Job", function () {
         });
     });
 
+    describe("#ableToRun", function () {
+        it("is true iff status is idle", function () {
+            var res =_.filter(['enqueued', 'running', 'stopping', 'idle'], function(status) {
+                this.model.set('status', status);
+                return this.model.ableToRun();
+            }, this);
+            expect(res).toEqual(['idle']);
+        });
+    });
+
+    describe("#isRunning", function () {
+        it("is true iff status is running or enqueued", function () {
+            var res =_.filter(['enqueued', 'running', 'stopping', 'idle'], function(status) {
+                this.model.set('status', status);
+                return this.model.isRunning();
+            }, this);
+            expect(res).toEqual(['enqueued', 'running']);
+        });
+    });
+
     describe("tasks", function () {
         it("are not memoized", function () {
             expect(this.model.tasks().models.length).toBeGreaterThan(0);

@@ -1,5 +1,9 @@
 module Events
   class JobFailed < JobFinished
+    def self.succeeded
+      false
+    end
+
     def header
       "Job #{job.name} failed in workspace #{workspace.name}."
     end

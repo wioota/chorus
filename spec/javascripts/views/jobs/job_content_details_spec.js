@@ -114,6 +114,29 @@ describe("chorus.views.JobContentDetails", function () {
         describe("when the job is running", function () {
             beforeEach(function () {
                 this.job.set('status', 'running');
+                this.view.render();
+            });
+
+            it("is disabled", function () {
+                expect(this.view.$('.run_job')).toBeDisabled();
+            });
+        });
+
+        describe("when the job is stopping", function () {
+            beforeEach(function () {
+                this.job.set('status', 'stopping');
+                this.view.render();
+            });
+
+            it("is disabled", function () {
+                expect(this.view.$('.run_job')).toBeDisabled();
+            });
+        });
+
+        describe("when the job is stopping", function () {
+            beforeEach(function () {
+                this.job.set('status', 'enqueued');
+                this.view.render();
             });
 
             it("is disabled", function () {

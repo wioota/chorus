@@ -123,7 +123,7 @@ chorus.models.Job = chorus.models.Base.extend({
     },
 
     ableToRun: function () {
-        return !(this.isStopping() || this.isRunning());
+        return this.get("status") === "idle";
     },
 
     lastRunLinkKey: function () {

@@ -64,6 +64,7 @@ class JobsController < ApplicationController
     job = Job.find(params[:id])
     authorize! :can_edit_sub_objects, job.workspace
 
+    raise ApiValidationError.new(:base, :not_runnable) unless job.status == Job::IDLE
     job.enqueue
 
     present job, :status => :accepted

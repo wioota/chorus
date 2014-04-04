@@ -34,6 +34,7 @@ class Job < ActiveRecord::Base
   validate :owner_can_edit, :on => :update
 
   scope :ready_to_run, -> { where(enabled: true).where(status: IDLE).where('next_run <= ?', Time.current).order(:next_run) }
+  scope :awaiting_stop, -> { where(status: STOPPING).where('updated_at < ?', 1.minutes.ago) }
 
   def self.eager_load_associations
     [
@@ -58,20 +59,20 @@ class Job < ActiveRecord::Base
 
   def enqueue
     update_attributes!(:status => ENQUEUED)
-    QC.default_queue.enqueue_if_not_queued('Job.run', id)
+    QC.enqueue_if_not_queued('Job.run', id)
   end
 
   def run
-    unless stopping?
-      prepare_to_run!
-      initialize_results
-      perform_tasks
-      job_succeeded
-    end
+    raise ApiValidationError.new(:base, :not_enqueued) unless enqueued?
+    prepare_to_run!
+    initialize_results
+    perform_tasks
+    finalize_results_and_event Events::JobSucceeded
   rescue JobTask::JobTaskFailure
-    job_failed
-  ensure
-    idle
+    finalize_results_and_event Events::JobFailed
+  rescue ApiValidationError
+    Chorus.log_debug "Job#id=#{id}. Attempt to run non-enqueued job aborted. It was either cancelled or run without being enqueued."
+    raise
   end
 
   def frequency
@@ -138,6 +139,10 @@ class Job < ActiveRecord::Base
     save!
   end
 
+  def idle
+    update_attribute(:status, IDLE)
+  end
+
   private
 
   def initialize_results
@@ -173,16 +178,11 @@ class Job < ActiveRecord::Base
     errors.add(:job, :END_RUN_IN_PAST) if (!on_demand? && end_run < 1.minutes.ago)
   end
 
-  def job_succeeded
-    @result.update_attributes(:succeeded => true, :finished_at => Time.current)
+  def finalize_results_and_event(event_class)
+    @result.update_attributes(:succeeded => event_class.succeeded, :finished_at => Time.current)
     @result.job_task_results << @tasks_results
-    Events::JobSucceeded.by(owner).add(:job => self, :workspace => workspace, :job_result => @result)
-  end
-
-  def job_failed
-    @result.update_attributes(:succeeded => false, :finished_at => Time.current)
-    @result.job_task_results << @tasks_results
-    Events::JobFailed.by(owner).add(:job => self, :workspace => workspace, :job_result => @result)
+    event_class.by(owner).add(:job => self, :workspace => workspace, :job_result => @result)
+    idle
   end
 
   def perform_tasks
@@ -204,12 +204,8 @@ class Job < ActiveRecord::Base
     on_demand? ? false : (end_run && next_run > end_run.to_date)
   end
 
-  def stopping?
-    status == STOPPING
-  end
-
-  def idle
-    update_attribute(:status, IDLE)
+  def enqueued?
+    status == ENQUEUED
   end
 
   def owner_can_edit
