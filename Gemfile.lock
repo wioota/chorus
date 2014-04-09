@@ -31,11 +31,11 @@ GIT
 
 GIT
   remote: git://github.com/Chorus/tableau.git
-  revision: db963b175c31c1baca67f8218f427be49e253a3f
+  revision: ac80ed33cc874b718e91ac2412ed79e0fdad5ee2
+  branch: drop_hpricot
   specs:
     tabcmd_gem (0.0.1)
       highline
-      hpricot
       rchardet19
 
 GIT
@@ -190,8 +190,6 @@ GEM
     hike (1.2.3)
     honor_codes (0.1.1)
       thor (~> 0.18.1)
-    hpricot (0.8.6)
-    hpricot (0.8.6-java)
     htmlentities (4.3.1)
     http_parser.rb (0.5.3)
     http_parser.rb (0.5.3-java)
