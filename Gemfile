@@ -10,7 +10,7 @@ gem 'queue_classic', :github => 'Chorus/queue_classic'
 gem 'clockwork',     :require => false
 gem 'allowy'
 gem 'sunspot_rails', '~> 2.0.0'
-gem 'jetpack', :github => 'Chorus/jetpack', :require => false
+gem 'jetpack', :github => 'robbiegill/jetpack', :branch => :port_chorus_changes, :require => false
 gem 'nokogiri'
 gem 'sequel', '~> 4.0', :require => 'sequel/no_core_ext'
 gem 'attr_encrypted' #if you load attr_encrypted before sequel, it blows up saying 'sequel::model' is undefined

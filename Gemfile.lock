@@ -5,12 +5,6 @@ GIT
     chorusgnip (0.0.1)
 
 GIT
-  remote: git://github.com/Chorus/jetpack.git
-  revision: 555003253a1f55cba18d9f47024f99524185cdb6
-  specs:
-    jetpack (0.1.2)
-
-GIT
   remote: git://github.com/Chorus/queue_classic.git
   revision: 3f30501e8bb15f394c07401aab083771ca5598f7
   specs:
@@ -62,6 +56,13 @@ GIT
   revision: 706180ad0188f317b456091da70c9b323f4bbc20
   specs:
     jasmine-core (2.0.0.rc3)
+
+GIT
+  remote: git://github.com/robbiegill/jetpack.git
+  revision: 86f62730db647a903a1179934a22290e8617a2d6
+  branch: port_chorus_changes
+  specs:
+    jetpack (0.1.5)
 
 GIT
   remote: git://github.com/robbiegill/mizuno.git

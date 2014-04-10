@@ -16,5 +16,9 @@ if [[ $(ls vendor/alpine/*.sh 2> /dev/null | wc -l) != "0" ]]; then
     chmod +x vendor/alpine/*.sh
 fi
 
+# jetpack is calling jruby -S gem, but gem is a .rbenv shim (shell script) and jruby chokes
+# https://github.com/jruby/jruby/issues/1218
+export PATH=/var/lib/jenkins/.rbenv/versions/jruby-1.7.11/bin:$PATH
+
 rm -fr .bundle
 bundle exec rake package:installer --trace
