@@ -59,7 +59,7 @@ GIT
 
 GIT
   remote: git://github.com/robbiegill/jetpack.git
-  revision: 86f62730db647a903a1179934a22290e8617a2d6
+  revision: b971191beda4581c1fc86e67d89830698f0b717f
   branch: port_chorus_changes
   specs:
     jetpack (0.1.5)
