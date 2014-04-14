@@ -19,6 +19,7 @@ module JdbcIntegration
     %w(
       jdbc_integration.rb
       setup_jdbc_databases.sql.erb
+      drop_jdbc_databases.sql.erb
     )
   end
 
@@ -56,11 +57,18 @@ module JdbcIntegration
 
   def self.setup_test_schemas
     refresh_if_changed do
+      drop_test_database if schema_exists?
       puts "Importing jdbc fixtures into #{schema_name}"
       sql = ERB.new(File.read(Rails.root.join 'spec/support/database_integration/setup_jdbc_databases.sql.erb')).result(binding)
       puts 'Executing setup_jdbc_databases.sql'
       execute_sql(sql)
     end
+  end
+
+  def self.drop_test_database
+    puts "Dropping #{schema_name}"
+    sql = ERB.new(File.read(Rails.root.join 'spec/support/database_integration/drop_jdbc_databases.sql.erb')).result(binding)
+    execute_sql(sql)
   end
 
   def self.schema_exists?
