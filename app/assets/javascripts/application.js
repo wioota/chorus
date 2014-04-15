@@ -13,8 +13,8 @@
 //= require handlebars
 //= require_tree ./templates
 //= require jquery
-//= require vendor/underscore-1.4.4
-//= require vendor/backbone-0.9.10
+//= require vendor/underscore-1.6.0
+//= require vendor/backbone-1.0.0
 //= require vendor/jquery.ui.core
 //= require vendor/jquery.ui.widget
 //= require vendor/jquery.ui.mouse

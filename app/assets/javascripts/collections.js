@@ -104,7 +104,7 @@ chorus.collections = {
                 this.fetch({
                     url: this.url({ page: page, per_page: 1000 }),
                     silent: true,
-                    update: page !== 1,
+                    reset: page === 1,
                     remove: false,
                     success: function(collection, data, xhr) {
                         var total = data.pagination ? parseInt(data.pagination.total, 10) : 1;
@@ -190,7 +190,7 @@ chorus.collections = {
             } else if (this.pagination) {
                 this.pagination.records = (models || []).length;
             }
-            return this._super("reset", arguments);
+            return this._super("reset", [models || [], options]);
         },
 
         _prepareModel: function() {

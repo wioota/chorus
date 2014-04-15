@@ -78,7 +78,7 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
     fetchMoreDatasets: function(e) {
         e && e.preventDefault();
         var next = parseInt(this.collection.pagination.page, 10) + 1;
-        this.collection.fetchPage(next, { update: true, remove: false , success: _.bind(this.render, this) });
+        this.collection.fetchPage(next, { reset: false, remove: false , success: _.bind(this.render, this) });
     },
 
     searchTextChanged: function(e) {

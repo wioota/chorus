@@ -65,6 +65,7 @@
             this.fetching = true;
             options || (options = {});
             options.parse = true;
+            options.reset = options.reset !== false;
             var success = options.success, error = options.error;
             options.success = this.makeSuccessFunction(options, success);
             options.error = function(collection_or_model, xhr) {

@@ -18,7 +18,7 @@ Backbone.sync = function(method, model, options) {
     });
 
     // Default JSON-request options.
-    var params = { type:type, dataType: 'json'};
+    var params = {type: type, dataType: 'json'};
 
     // Ensure that we have a URL.
     if (!options.url) {
@@ -66,18 +66,6 @@ Backbone.sync = function(method, model, options) {
         params.processData = false;
     }
 
-    var success = options.success;
-    options.success = function(resp) {
-        if (success) success(model, resp, options);
-        model.trigger('sync', model, resp, options);
-    };
-
-    var error = options.error;
-    options.error = function(xhr) {
-        if (error) error(model, xhr, options);
-        model.trigger('error', model, xhr, options);
-    };
-
     // Make the request, allowing the user to override any Ajax options.
     if (this.uploadObj && method === "create") {
         var uploadOptions = $(this.uploadObj.form).find("input[type=file]").data("fileupload").options;
@@ -111,12 +99,11 @@ Backbone.History.prototype.loadUrl = function(fragmentOverride) {
         }
     });
     return matched;
-}
+};
 
 // super function, taken from here:
 // -- https://gist.github.com/1542120
-;
-(function(Backbone) {
+;(function (Backbone) {
 
     // Find the next object up the prototype chain that has a
     // different implementation of the method.
