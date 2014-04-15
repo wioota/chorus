@@ -26,6 +26,13 @@ alpineqa4:
   kill_workers: true
   kill_alpine: true
 
+fuji:
+  host: 10.0.0.220
+  install_path: ~/chorusrails-deploy-new
+  postgres_build: 2
+  kill_workers: true
+  kill_alpine: true
+
 upgrade21:
   host: chorus-chorus21-upgrade
   legacy_path: ~/chorus
