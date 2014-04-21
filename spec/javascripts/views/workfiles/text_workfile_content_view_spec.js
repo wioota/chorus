@@ -24,6 +24,8 @@ describe("chorus.views.TextWorkfileContentView", function() {
 
         it("correctly sets the extraKeys on the CodeMirror options", function() {
             var opts = CodeMirror.fromTextArea.lastCall().args[1];
+            expect(opts.extraKeys["Ctrl-Space"]).toBe("autocomplete");
+            expect(opts.extraKeys["Shift-Space"]).toBe("autocomplete");
             expect(opts.extraKeys[_.str.capitalize(chorus.hotKeyMeta) + "-A"]).toBeDefined();
             expect(opts.extraKeys[_.str.capitalize(chorus.hotKeyMeta) + "-B"]).toBeDefined();
         });

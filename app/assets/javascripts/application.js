@@ -18,6 +18,13 @@
 //= require vendor/jquery.ui.core
 //= require vendor/jquery.ui.widget
 //= require vendor/jquery.ui.mouse
+//= require codemirror
+//= require codemirror/modes/sql
+//= require codemirror/addons/edit/matchbrackets
+//= require codemirror/addons/hint/show-hint
+//= require codemirror/addons/hint/sql-hint
+//= require codemirror/addons/selection/active-line
+//= require codemirror/addons/search/match-highlighter
 //= require vendor/textext
 //= require vendor/es5-shim
 //= require vendor/d3

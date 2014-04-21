@@ -9,6 +9,7 @@ chorus.views.CodeEditorView = chorus.views.Base.extend({
             styleActiveLine: true,
             theme: "default",
             lineWrapping: true,
+            matchBrackets: true,
             onBlur: _.bind(this.onBlur, this),
             onChange: _.bind(this.onChange, this),
             onCursorActivity: $.noop,

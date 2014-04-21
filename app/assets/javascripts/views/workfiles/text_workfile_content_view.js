@@ -1,4 +1,6 @@
 chorus.views.TextWorkfileContent = chorus.views.Base.extend({
+    constructorName: "TextWorkfileContent",
+
     templateName: "text_workfile_content",
     saveInterval: 30000,
 
@@ -13,7 +15,7 @@ chorus.views.TextWorkfileContent = chorus.views.Base.extend({
             var hotkeyString = _.str.capitalize(chorus.hotKeyMeta) + "-" + key.toUpperCase();
             acc[hotkeyString] = function() { chorus.triggerHotKey(key); };
             return acc;
-        }, {});
+        }, {"Ctrl-Space": "autocomplete", "Shift-Space": "autocomplete"});
 
         this.editor = new chorus.views.CodeEditorView({
             model: this.model,
