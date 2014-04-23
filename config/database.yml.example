@@ -51,7 +51,6 @@ integration:
 production:
   database: chorus
   <<: *default
-  username: pivotal
 
 packaging:
   database: chorus_rails_packaging
