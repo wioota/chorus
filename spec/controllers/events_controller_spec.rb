@@ -2,6 +2,25 @@ require "spec_helper"
 
 describe EventsController do
   let(:current_user) { users(:the_collaborator) }
+  let(:eager_loading_checker) do
+    Proc.new do |model|
+      model.association(:workspace).should be_loaded
+      model.association(:datasets).should be_loaded
+      model.association(:actor).should be_loaded
+      model.association(:target1).should be_loaded
+      model.association(:target2).should be_loaded
+
+      model.association(:attachments).should be_loaded
+      model.attachments.each { |attachment| attachment.association(:note).should be_loaded }
+
+      model.association(:workfiles).should be_loaded
+      model.workfiles.each { |workfile| workfile.association(:latest_workfile_version).should be_loaded }
+      model.workfiles.each { |workfile| workfile.latest_workfile_version.association(:workfile).should be_loaded }
+
+      model.association(:comments).should be_loaded
+      model.comments.each { |comment| comment.association(:author).should be_loaded }
+    end
+  end
 
   before do
     log_in current_user
@@ -16,23 +35,7 @@ describe EventsController do
 
    it "eager loads the associations" do
      mock_present do |models|
-       models.each do |model|
-         model.association(:workspace).should be_loaded
-         model.association(:datasets).should be_loaded
-         model.association(:actor).should be_loaded
-         model.association(:target1).should be_loaded
-         model.association(:target2).should be_loaded
-
-         model.association(:attachments).should be_loaded
-         model.attachments.each { |attachment| attachment.association(:note).should be_loaded }
-
-         model.association(:workfiles).should be_loaded
-         model.workfiles.each { |workfile| workfile.association(:latest_workfile_version).should be_loaded }
-         model.workfiles.each { |workfile| workfile.latest_workfile_version.association(:workfile).should be_loaded }
-
-         model.association(:comments).should be_loaded
-         model.comments.each { |comment| comment.association(:author).should be_loaded }
-       end
+       models.each {|m| eager_loading_checker.call m }
      end
 
      get :index, :entity_type => "dashboard"
@@ -47,6 +50,28 @@ describe EventsController do
       let(:event) { Events::Base.last }
       before do
         Activity.create!(:entity => object, :event => event)
+      end
+
+      context 'eager loading' do
+        context 'for a user' do
+          let(:object) { users(:owner) }
+
+          it 'eager loads the associations' do
+            any_instance_of(User) { |u| mock.proxy(u).accessible_events(current_user) }
+            mock_present { |models| models.each {|m| eager_loading_checker.call m } }
+            get :index, :entity_type => 'user', :entity_id => object.id
+          end
+        end
+
+        context 'for a workfile' do
+          let(:object) { workfiles(:private) }
+
+          it 'eager loads the associations' do
+            log_in(users(:owner))
+            mock_present { |models| models.each {|m| eager_loading_checker.call m } }
+            get :index, :entity_type => 'workfile', :entity_id => object.id
+          end
+        end
       end
 
       context "for a gpdb data source" do
