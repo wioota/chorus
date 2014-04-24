@@ -33,6 +33,13 @@ describe DatasetImportsController do
         response.should be_success
         decoded_response.length.should == 3
       end
+
+      it 'eager loads the destination dataset' do
+        mock_present do |imports|
+          imports.each { |i| i.association(:destination_dataset).should be_loaded }
+        end
+        get :index, :workspace_id => workspace.to_param, :dataset_id => destination_dataset.to_param
+      end
     end
 
     context "for a chorus view" do

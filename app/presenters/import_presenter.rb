@@ -15,10 +15,10 @@ class ImportPresenter < Presenter
   end
 
   def source_dataset
-    hide_source = model.source.nil? || (model.respond_to?(:deleted_at) && model.source.deleted_at)
+    hide_source = model.source_id.nil?
     {
         :id => hide_source ? nil : model.source_id,
-        :object_name => model.source.try(:name)
+        :object_name => hide_source ? nil : model.source.try(:name)
     }
   end
 
