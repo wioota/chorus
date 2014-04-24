@@ -9,15 +9,7 @@ class WorkspacePresenter < Presenter
       :summary => sanitize(model.summary),
       :archived_at => model.archived_at,
       :permission => model.permissions_for(current_user),
-      :is_member => model.member?(current_user),
-      :owner => present(model.owner),
-      :public => model.public,
-      :is_project => model.is_project,
-      :project_status => model.project_status,
-      :project_status_reason => model.project_status_reason,
-      :milestone_count => model.milestones_count,
-      :milestone_completed_count => model.milestones_achieved_count,
-      :project_target_date => model.project_target_date.try(:strftime, "%Y-%m-%dT%H:%M:%SZ")
+      :public => model.public
     }
 
     unless succinct?
@@ -34,13 +26,26 @@ class WorkspacePresenter < Presenter
       )
     end
 
-    results.merge!(latest_comments_hash)
-    results.merge!(status_change_activity_hash) if latest_status_change_activity
+    unless rendering_activities?
+      results.merge!(
+          :owner => present(model.owner, options),
+          :is_member => model.member?(current_user),
+          :is_project => model.is_project,
+          :project_status => model.project_status,
+          :project_status_reason => model.project_status_reason,
+          :milestone_count => model.milestones_count,
+          :milestone_completed_count => model.milestones_achieved_count,
+          :project_target_date => model.project_target_date.try(:strftime, "%Y-%m-%dT%H:%M:%SZ")
+      )
+      results.merge!(status_change_activity_hash) if latest_status_change_activity
+      results.merge!(latest_comments_hash)
+    end
+
     results
   end
 
   def complete_json?
-    !succinct?
+    !succinct? && !rendering_activities?
   end
 
   private

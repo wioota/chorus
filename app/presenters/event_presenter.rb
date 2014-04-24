@@ -122,16 +122,19 @@ class EventPresenter < Presenter
       end
     end
 
-    model.notes_work_flow_results.each do |work_flow_result|
-      model_hash = {
-          :entity_type => 'work_flow_result',
-          :id => work_flow_result.result_id,
-      }
+    if model.is_a?(Events::NoteOnWorkfile) || model.is_a?(Events::WorkfileResult)
+      model.notes_work_flow_results.each do |workflow_result|
+        model_hash = {
+            :entity_type => 'work_flow_result',
+            :id => workflow_result.result_id,
+        }
 
-      model_hash.merge!(:workfile_id => model.workfile.id) if model.respond_to?(:workfile)
-      attachments << model_hash
+        model_hash.merge!(:workfile_id => model.workfile.id) if model.respond_to?(:workfile)
+        attachments << model_hash
+      end
     end
-    return {:attachments => attachments}
+
+    {:attachments => attachments}
   end
 
   def extended_options

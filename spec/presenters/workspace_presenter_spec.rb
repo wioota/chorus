@@ -39,12 +39,12 @@ describe WorkspacePresenter, :type => :view do
       hash[:permission].should == [:admin]
     end
 
-    it "should use ownerPresenter Hash method for owner" do
+    it 'should use UserPresenter presentation_hash method for owner' do
       new_owner = hash[:owner]
       new_owner.to_hash.should == (UserPresenter.new(user, view).presentation_hash)
     end
 
-    it "should use ownerPresenter Hash method for owner" do
+    it 'should use UserPresenter presentation_hash method for archiver' do
       new_archiver = hash[:archiver]
       new_archiver.to_hash.should == (UserPresenter.new(archiver, view).presentation_hash)
     end
@@ -166,6 +166,29 @@ describe WorkspacePresenter, :type => :view do
         end
       end
     end
+
+    context 'when activity_stream is true' do
+      let(:options) { {:activity_stream => true} }
+
+      it 'does not include owner, latest comments, and project info' do
+        hash.should_not have_key(:owner)
+
+        hash.should_not have_key(:number_of_insights)
+        hash.should_not have_key(:number_of_comments)
+        hash.should_not have_key(:latest_comment_list)
+        hash.should_not have_key(:latest_insight)
+
+        hash.should_not have_key(:is_member)
+        hash.should_not have_key(:is_project)
+        hash.should_not have_key(:project_status)
+        hash.should_not have_key(:project_status_reason)
+        hash.should_not have_key(:milestone_count)
+        hash.should_not have_key(:milestone_completed_count)
+        hash.should_not have_key(:project_target_date)
+        hash.should_not have_key(:latest_status_change_activity)
+        hash.should_not have_key(:latest_status_change_activity)
+      end
+    end
   end
 
   describe "complete_json?" do
@@ -177,6 +200,14 @@ describe WorkspacePresenter, :type => :view do
       let(:options) { {:succinct => true} }
 
       it "is false" do
+        presenter.presentation_hash[:complete_json].should be_false
+      end
+    end
+
+    context 'when activity_stream is true' do
+      let(:options) { {:activity_stream => true} }
+
+      it 'is false' do
         presenter.presentation_hash[:complete_json].should be_false
       end
     end
