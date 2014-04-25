@@ -39,7 +39,7 @@ class WorkfileVersion < ActiveRecord::Base
     contents.original_filename
   end
 
-  CODE_EXTENSIONS = %w(cpp r)
+  CODE_EXTENSIONS = %w(cpp r rb py js java pig md)
 
   def extension
     file_name = contents.original_filename || ''
@@ -67,7 +67,7 @@ class WorkfileVersion < ActiveRecord::Base
   end
 
   def text?
-    content_type && (content_type.include?('text') || xml?) && !content_type.include?('opendocument')
+    content_type && (content_type.include?('text') || xml? || code?) && !content_type.include?('opendocument')
   end
 
   def xml?

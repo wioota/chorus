@@ -20,6 +20,12 @@
 //= require vendor/jquery.ui.mouse
 //= require codemirror
 //= require codemirror/modes/sql
+//= require codemirror/modes/ruby
+//= require codemirror/modes/python
+//= require codemirror/modes/javascript
+//= require codemirror/modes/r
+//= require codemirror/modes/pig
+//= require codemirror/modes/markdown
 //= require codemirror/addons/edit/matchbrackets
 //= require codemirror/addons/hint/show-hint
 //= require codemirror/addons/hint/sql-hint

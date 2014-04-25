@@ -70,15 +70,25 @@ describe("chorus.views.TextWorkfileContentView", function() {
             expect(chorus.triggerHotKey).toHaveBeenCalledWith('r');
         });
 
-        context("when the model is an SQL file", function() {
+        context("determining syntax highlighting", function() {
             beforeEach(function() {
-                this.textfile.set({ fileType: "sql" });
-                this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
-                this.view.render();
+                spyOn(chorus.utilities, "mime").and.callThrough();
             });
 
-            it("uses the 'text/x-plsql' mode", function() {
+            it("uses the 'text/x-plsql' mode for sql files", function() {
+                this.textfile.set({ fileType: "sql", fileName: "sweet.sql" });
+                this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
+                this.view.render();
+                expect(chorus.utilities.mime).toHaveBeenCalledWith("sql");
                 expect(this.view.editor.getOption("mode")).toBe("text/x-plsql");
+            });
+
+            it("uses the 'text/x-ruby' mode for rb files", function() {
+                this.textfile.set({ fileType: "code", fileName: "sweet.rb" });
+                this.view = new chorus.views.TextWorkfileContent({model: this.textfile});
+                this.view.render();
+                expect(chorus.utilities.mime).toHaveBeenCalledWith("rb");
+                expect(this.view.editor.getOption("mode")).toBe("text/x-ruby");
             });
         });
     });

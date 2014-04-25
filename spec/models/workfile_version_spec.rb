@@ -19,13 +19,6 @@ describe WorkfileVersion do
       its(:text?) { should be_false }
     end
 
-    context "with a c++ file" do
-      let(:filename) { "code.cpp" }
-      its(:file_type) { should == "code" }
-      its(:image?) { should be_false }
-      its(:text?) { should be_true }
-    end
-
     context "with a text file with the '.txt' extension" do
       let(:filename) { "multiple_extensions.png.xls.txt" }
       its(:file_type) { should == "text" }
@@ -66,6 +59,17 @@ describe WorkfileVersion do
       its(:file_type) { should == 'xml' }
       its(:image?) { should be_false }
       its(:text?) { should be_true }
+    end
+
+    context 'code files' do
+      %w(cpp rb py js java md).each do |type|
+        context "for #{type}" do
+          let(:filename) { "code.#{type}" }
+          its(:file_type) { should == 'code' }
+          its(:image?) { should be_false }
+          its(:text?) { should be_true }
+        end
+      end
     end
   end
 

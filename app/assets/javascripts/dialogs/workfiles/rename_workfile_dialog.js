@@ -4,12 +4,8 @@ chorus.dialogs.RenameWorkfile = chorus.dialogs.Base.include(chorus.Mixins.Dialog
 
     title: t("workfile.rename_dialog.title"),
 
-    isSqlFile: function() {
-        return this.model.get('fileType') === "sql";
-    },
-
     additionalContext: function(){
-        var isSql = this.isSqlFile();
+        var isSql = this.model.isSql();
         return {
             isSql: isSql,
             fileName: isSql ? this.model.get('fileName').replace(/\.sql$/,'') : this.model.get('fileName')
@@ -27,7 +23,7 @@ chorus.dialogs.RenameWorkfile = chorus.dialogs.Base.include(chorus.Mixins.Dialog
 
     create: function(e) {
         var fileName = this.$("input").val();
-        this.model.save({fileName: this.isSqlFile() ? fileName + ".sql" : fileName }, {wait: true});
+        this.model.save({fileName: this.model.isSql() ? fileName + ".sql" : fileName }, {wait: true});
         this.$("button.submit").startLoading("actions.renaming");
     },
 
