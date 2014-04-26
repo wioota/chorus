@@ -18,14 +18,6 @@ chorus.collections = {
             return clone;
         },
 
-        findWhere: function(attrs) {
-            return this.find(function(model) {
-                return _.all(attrs, function(value, key) {
-                    return model.get(key) === value;
-                });
-            });
-        },
-
         setup: $.noop,
 
         url: function(options) {

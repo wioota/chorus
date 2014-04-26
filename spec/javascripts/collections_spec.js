@@ -195,12 +195,13 @@ describe("chorus.collections.Base", function() {
         });
 
         context("when a model with the given attributes exists in the collection", function() {
-            it("returns that model", function() {
+            it("returns the first matching model", function() {
                 expect(this.collection.findWhere({ firstName: "john", lastName: "coltrane" })).toBe(this.m1);
                 expect(this.collection.findWhere({ firstName: "john", admin: false })).toBe(this.m1);
                 expect(this.collection.findWhere({ lastName: "coltrane", admin: true })).toBe(this.m2);
                 expect(this.collection.findWhere({ firstName: "john", admin: true })).toBe(this.m3);
                 expect(this.collection.findWhere({ lastName: "medeski" })).toBe(this.m3);
+                expect(this.collection.findWhere({ admin: true })).toBe(this.m2);
             });
         });
 
