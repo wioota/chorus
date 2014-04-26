@@ -45,7 +45,7 @@ class Workspace < ActiveRecord::Base
 
   before_update :reindex_sandbox, :if => :show_sandbox_datasets_changed?
   before_update :create_name_change_event, :if => :name_changed?
-  before_update :unassociate_source_datasets_in_sandbox, :if =>  "sandbox_id_changed? || show_sandbox_datasets_changed?"
+  before_update :disassociate_source_datasets_in_sandbox, :if => 'sandbox_id_changed? || show_sandbox_datasets_changed?'
 
   before_save :handle_archiving, :if => :archived_changed?
   before_save :update_has_added_sandbox
@@ -278,11 +278,7 @@ class Workspace < ActiveRecord::Base
 
         association = associated_datasets.build
         association.dataset = dataset
-        if(should_raise_errors)
-          association.save!
-        else
-          association.save
-        end
+        should_raise_errors ? association.save! : association.save
 
         create_event_for_dataset(user, dataset) if association.valid?
       end
@@ -300,7 +296,7 @@ class Workspace < ActiveRecord::Base
     entity_subtype = options[:entity_subtype]
 
     (!account || account.invalid_credentials? ||
-        ["CHORUS_VIEW", "SOURCE_TABLE"].include?(entity_subtype) ||
+        %w(CHORUS_VIEW SOURCE_TABLE).include?(entity_subtype) ||
         !show_sandbox_datasets) && !options[:all_import_destinations]
   end
 
@@ -339,7 +335,7 @@ class Workspace < ActiveRecord::Base
     create_workspace_name_change_event
   end
 
-  def unassociate_source_datasets_in_sandbox
+  def disassociate_source_datasets_in_sandbox
     return true unless sandbox && show_sandbox_datasets
     source_datasets.each do |source_dataset|
       source_datasets.destroy(source_dataset) if sandbox.datasets.include? source_dataset
