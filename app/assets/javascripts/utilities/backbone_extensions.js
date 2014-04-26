@@ -92,14 +92,42 @@ Backbone.History.prototype.loadUrl = function(fragmentOverride) {
     if (fragment[fragment.length - 1] === '/') {
         fragment = fragment.substr(0,fragment.length-1);
     }
-    var matched = _.any(this.handlers, function(handler) {
+    return _.any(this.handlers, function(handler) {
         if (handler.route.test(fragment)) {
             handler.callback(fragment);
             return true;
         }
     });
-    return matched;
 };
+
+// Backbone 1.0 introduced automatic attachment of url to a model from options.
+// It was promptly removed in 1.1.0, but 1.1.x introduces several more breaking changes
+// (no attachment of options to Views and Collection#add,set,reset,remove
+// return the changed model or list of models instead of the collection itself).
+// The below is the 1.0 implementation of Backbone.Model with 'url' removed from modelOptions.
+Backbone.Model = (function(Model) {
+    var modelOptions = ['urlRoot', 'collection'];
+
+    return Model.extend({
+        constructor: function(attributes, options) {
+            var defaults; // jshint ignore:line
+            var attrs = attributes || {};
+            options || (options = {});
+            this.cid = _.uniqueId('c');
+            this.attributes = {};
+            _.extend(this, _.pick(options, modelOptions));
+            if (options.parse) attrs = this.parse(attrs, options) || {};
+            /* jshint ignore:start */
+            if (defaults = _.result(this, 'defaults')) {
+                attrs = _.defaults({}, attrs, defaults);
+            }
+            /* jshint ignore:end */
+            this.set(attrs, options);
+            this.changed = {};
+            this.initialize.apply(this, arguments);
+        }
+    });
+})(Backbone.Model);
 
 // super function, taken from here:
 // -- https://gist.github.com/1542120

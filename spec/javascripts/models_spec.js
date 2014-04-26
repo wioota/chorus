@@ -74,6 +74,15 @@ describe("chorus.models.Base", function() {
                 });
             });
         });
+
+        context("when the model is instantiated with options containing `url`", function() {
+            // Backbone 1.0 regression
+            it("does not override the url method", function () {
+                this.model = new chorus.models.Base({ id: 1 }, { url: "/models/1?parm=true" });
+                expect(this.model.url).toBeA(Function);
+            });
+
+        });
     });
 
     describe("activities", function() {
