@@ -66,6 +66,13 @@ describe WorkfilesController do
         response.code.should == "200"
         decoded_response.map(&:file_type).uniq.should == ['work_flow']
       end
+
+      it 'includes all types if file_type is nil or empty string' do
+        get :index, :workspace_id => workspace.id, :order => 'file_name', :file_type => ''
+        decoded_response.size.should > 0
+        get :index, :workspace_id => workspace.id, :order => 'file_name', :file_type => nil
+        decoded_response.size.should > 0
+      end
     end
 
     describe "pagination" do
