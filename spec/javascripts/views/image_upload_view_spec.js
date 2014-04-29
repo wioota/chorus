@@ -244,6 +244,13 @@ describe("chorus.views.ImageUpload", function() {
             });
 
         });
+
+        it("does not automatically listen to paste events on the document", function() {
+            //cannot simulate originalEvent of paste events, so check widget option
+            // $(null).length == 0
+            var widget = this.view.$('input').data('fileupload');
+            expect(widget.options.pasteZone.length).toBe(0);
+        });
     });
 });
 

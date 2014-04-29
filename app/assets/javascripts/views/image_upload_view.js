@@ -101,7 +101,8 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
             done: uploadFinished,
             fail: uploadFailed,
             multipart: multipart,
-            dataType: "text"
+            dataType: "text",
+            pasteZone: null
         });
 
         if (this.model.hasImage()) {
