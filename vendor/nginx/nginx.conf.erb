@@ -114,6 +114,7 @@ http {
 
             expires epoch;
             add_header Cache-Control no-store;
+            add_header X-Frame-Options SAMEORIGIN;
         }
 
         location @app {
@@ -139,6 +140,7 @@ http {
             proxy_temp_file_write_size 64k;
 
             add_header Cache-Control no-store;
+            add_header X-Frame-Options DENY;
         }
 
         #error_page  404              /404.html;
