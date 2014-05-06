@@ -399,4 +399,32 @@ describe JdbcConnection, :jdbc_integration do
     end
 
   end
+
+  describe '::DatabaseError' do
+    let(:message) { 'A message' }
+    let(:sequel_exception) {
+      exception = Exception.new
+      wrapped_exception = Object.new
+      stub(exception).wrapped_exception { wrapped_exception }
+      stub(exception).message { message }
+      exception
+    }
+
+    let(:error) { JdbcConnection::DatabaseError.new(sequel_exception) }
+
+    describe '#error_type' do
+      it 'returns nil' do
+        # needs vendor specific error mapping
+        error.error_type.should be_nil
+      end
+    end
+
+    describe 'sanitizing exception messages' do
+      let(:message) { (1..500).to_a.join }
+
+      it 'truncates the message to the first 300 characters' do
+        error.message.should == (1..136).to_a.join
+      end
+    end
+  end
 end

@@ -1,5 +1,25 @@
 class JdbcConnection < DataSourceConnection
-  class DatabaseError < Error; end
+  class DatabaseError < Error
+
+    def error_type
+      log_error
+      nil
+    end
+
+    private
+
+    def sanitize_message(message)
+      message[0, 300]
+    end
+
+    def log_error
+      return @error_code if @error_code
+      @error_code = @exception.wrapped_exception && @exception.wrapped_exception.respond_to?(:get_error_code) && @exception.wrapped_exception.get_error_code
+      Rails.logger.error "JDBC error code = #{@error_code}"
+      Rails.logger.error @exception.message
+      @error_code
+    end
+  end
 
   def db_url
     @data_source.url
