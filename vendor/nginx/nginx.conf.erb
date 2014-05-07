@@ -44,11 +44,11 @@ http {
         listen      <%if ip6_enabled %>[::]:<% end %><%= chorus_config['server_port'] %> ipv6only=off;
 
 <% if chorus_config['ssl.enabled'] == true %>
-        rewrite ^ https://$host:8443$request_uri? redirect;
+        rewrite ^ https://$host:<%= chorus_config['ssl_server_port'] %>$request_uri? redirect;
         #rewrite ^(.*) https://$host$1 permanent;
     }
     server {
-        listen      <%if ip6_enabled %>[::]:<% end %><%=  chorus_config['ssl_server_port'] %> ssl ipv6only=off;
+        listen      <%if ip6_enabled %>[::]:<% end %><%= chorus_config['ssl_server_port'] %> ssl ipv6only=off;
         ssl_certificate <%= chorus_config['ssl_certificate'] %>;
         ssl_certificate_key <%= chorus_config['ssl_certificate_key'] %>;
         keepalive_timeout 70;
