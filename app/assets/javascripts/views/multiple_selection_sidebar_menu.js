@@ -49,9 +49,5 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.extend({
     postRender: function() {
         this.showOrHideMultipleSelectionSection();
         this._super("postRender");
-    },
-
-    setActions: function(newActions){
-        this.actions = newActions;
     }
 });
