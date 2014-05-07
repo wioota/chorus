@@ -415,7 +415,7 @@ describe JdbcConnection, :jdbc_integration do
     describe '#error_type' do
       it 'returns nil' do
         # needs vendor specific error mapping
-        error.error_type.should be_nil
+        error.error_type.should == :JDBC_ERROR
       end
     end
 

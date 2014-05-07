@@ -2,8 +2,9 @@ class JdbcConnection < DataSourceConnection
   class DatabaseError < Error
 
     def error_type
+      return @error_type if @error_type
       log_error
-      nil
+      @error_type = :JDBC_ERROR
     end
 
     private
@@ -13,11 +14,9 @@ class JdbcConnection < DataSourceConnection
     end
 
     def log_error
-      return @error_code if @error_code
-      @error_code = @exception.wrapped_exception && @exception.wrapped_exception.respond_to?(:get_error_code) && @exception.wrapped_exception.get_error_code
-      Rails.logger.error "JDBC error code = #{@error_code}"
+      error_code = @exception.wrapped_exception && @exception.wrapped_exception.respond_to?(:get_error_code) && @exception.wrapped_exception.get_error_code
+      Rails.logger.error "JDBC error code = #{error_code}"
       Rails.logger.error @exception.message
-      @error_code
     end
   end
 
