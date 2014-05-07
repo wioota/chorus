@@ -1,18 +1,6 @@
 class OracleDataset < RelationalDataset
   delegate :data_source, :to => :schema
 
-  def database_name
-   ''
-  end
-
-  def data_source_account_ids
-    schema.data_source_account_ids
-  end
-
-  def found_in_workspace_id
-    bound_workspace_ids
-  end
-
   def column_type
     "OracleDatasetColumn"
   end
@@ -39,9 +27,5 @@ class OracleDataset < RelationalDataset
     consistent_size && source_columns.all? do |source_column|
       destination_columns.find { |destination_column| source_column.match?(destination_column) }
     end
-  end
-
-  def execution_location
-    data_source
   end
 end
