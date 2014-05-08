@@ -84,6 +84,16 @@ describe EventsController do
         end
       end
 
+      context 'for a pg data source' do
+        let(:object) { data_sources(:postgres) }
+
+        it "presents the pg data source's activities" do
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => 'pg_data_source', :entity_id => object.id
+          response.code.should == '200'
+        end
+      end
+
       context "for an hdfs data source" do
         let(:object) { hdfs_data_sources(:hadoop) }
 

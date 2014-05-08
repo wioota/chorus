@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   has_many :gpdb_data_sources, :foreign_key => :owner_id
   has_many :oracle_data_sources, :foreign_key => :owner_id
   has_many :jdbc_data_sources, :foreign_key => :owner_id
+  has_many :pg_data_sources, :foreign_key => :owner_id
   has_many :hdfs_data_sources, :foreign_key => :owner_id
   has_many :gnip_data_sources, :foreign_key => :owner_id
   has_many :data_source_accounts, :foreign_key => :owner_id, :dependent => :destroy

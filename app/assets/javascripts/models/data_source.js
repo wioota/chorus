@@ -17,6 +17,10 @@ chorus.models.DataSource = chorus.models.AbstractDataSource.extend({
         return this.get('entityType') === 'gpdb_data_source';
     },
 
+    isPostgres: function() {
+        return this.get('entityType') === 'pg_data_source';
+    },
+
     isOracle: function() {
         return this.get('entityType') === 'oracle_data_source';
     },
@@ -53,7 +57,7 @@ chorus.models.DataSource = chorus.models.AbstractDataSource.extend({
     },
 
     usage: function() {
-        if(this.isOracle() || this.isJdbc()) {
+        if(this.isOracle() || this.isJdbc() || this.isPostgres()) {
             return null;
         }
         if(!this.dataSourceUsage) {

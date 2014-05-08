@@ -93,7 +93,7 @@ jasmine.sharedExamples.aSidebar = function() {
     });
 };
 
-jasmine.sharedExamples.aSidebarWithAGreenplumOrOracleDataSourceSelected = function() {
+jasmine.sharedExamples.aSidebarWithAGreenplumPostgresOrOracleDataSourceSelected = function() {
     context('when the data source has a shared account', function() {
         beforeEach(function() {
             this.dataSource.set({
@@ -340,7 +340,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
             });
 
             itBehavesLike.aSidebar();
-            itBehavesLike.aSidebarWithAGreenplumOrOracleDataSourceSelected();
+            itBehavesLike.aSidebarWithAGreenplumPostgresOrOracleDataSourceSelected();
 
             context("when configuration is clicked", function() {
                 beforeEach(function() {
@@ -408,6 +408,102 @@ describe("chorus.views.DataSourceListSidebar", function() {
         });
     });
 
+    context('when a postgres data source is selected', function() {
+        beforeEach(function() {
+            this.dataSource = backboneFixtures.pgDataSource({name: "Postgres!", version: "99.999" });
+            this.activityViewStub = stubView("", { className: "activity_list" });
+            spyOn(chorus.views, 'ActivityList').andReturn(this.activityViewStub);
+
+            spyOn(chorus.views.Base.prototype, "render").andCallThrough();
+            this.view = new chorus.views.DataSourceListSidebar();
+            chorus.PageEvents.trigger("data_source:selected", this.dataSource);
+            $('#jasmine_content').append(this.view.el);
+        });
+
+        it('fetches the activities, data source usage and accounts', function() {
+            expect(this.dataSource.activities()).toHaveBeenFetched();
+            expect(this.dataSource.accounts()).toHaveAllBeenFetched();
+        });
+
+        context("when the data has been loaded", function() {
+            beforeEach(function() {
+                spyOn(chorus.views.Sidebar.prototype, 'postRender');
+                this.server.completeFetchFor(this.dataSource.activities());
+                var dataSourceAccountSet = backboneFixtures.dataSourceAccountSet();
+                dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
+                this.server.completeFetchAllFor(this.dataSource.accounts(), dataSourceAccountSet.models);
+                this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
+            });
+
+            itBehavesLike.aSidebar();
+            itBehavesLike.aSidebarWithAGreenplumPostgresOrOracleDataSourceSelected();
+
+            context("when configuration is clicked", function() {
+                beforeEach(function() {
+                    expect(this.view.$(".data_source_configuration_details")).not.toBeVisible();
+                    this.view.$(".tab_control .tabs li[data-name=configuration]").click();
+                });
+
+                it("shows configuration", function() {
+                    expect(this.view.$(".data_source_configuration_details")).not.toHaveClass("hidden");
+                    expect(this.view.$(".activity_list")).toHaveClass("hidden");
+                });
+
+                it("shows the database version", function() {
+                    expect(this.view.$(".data_source_configuration_details")).toContainTranslation("data_sources.version");
+                    expect(this.view.$(".data_source_configuration_details")).toContainText("99.999");
+                });
+
+                it("shows the owner", function() {
+                    expect(this.view.$(".data_source_configuration_details")).toContainTranslation("data_sources.permissions.owner");
+                    expect(this.view.$(".data_source_configuration_details")).toContainText(this.dataSource.owner().displayName());
+                });
+
+                describe('for existing greenplum data source', function() {
+                    context('and the data source has a shared account', function() {
+                        beforeEach(function() {
+                            var dataSource = backboneFixtures.gpdbDataSource({"shared": true});
+                            dataSource.loaded = true;
+                            this.view.setDataSource(dataSource);
+                            var dataSourceAccountSet = backboneFixtures.dataSourceAccountSet();
+                            dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
+                            this.server.completeFetchFor(dataSource.accounts(), dataSourceAccountSet.models);
+                            this.server.completeFetchFor(dataSource.accountForCurrentUser());
+                        });
+
+                        it("includes the shared account information", function() {
+                            expect(this.view.$(".data_source_configuration_details").text()).toContainTranslation("data_sources.shared_account");
+                        });
+                    });
+
+                    context('and the data source does not have a shared account', function() {
+                        it("does not include the shared account information", function() {
+                            this.view.render();
+                            expect(this.view.$(".data_source_configuration_details").text()).not.toContainTranslation("data_sources.shared_account");
+                        });
+                    });
+                });
+
+                describe('for a new data source', function() {
+                    beforeEach(function() {
+                        this.view.model = this.view.model.set({ size: "1", port: null, host: null });
+                        this.view.render();
+                    });
+
+                    it("includes gpdb size information", function() {
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.sidebar.size"))).not.toBe(-1);
+                    });
+
+                    it("does not include the port, host, or shared account information", function() {
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.sidebar.host"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.sidebar.port"))).toBe(-1);
+                        expect(this.view.$(".data_source_configuration_details").text().indexOf(t("data_sources.shared_account"))).toBe(-1);
+                    });
+                });
+            });
+        });
+    });
+
     context('when an oracle data source is selected', function() {
         beforeEach(function() {
             this.dataSource = backboneFixtures.oracleDataSource({name: "Harry's House of Glamour", version: "99.999" });
@@ -436,7 +532,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
             });
 
             itBehavesLike.aSidebar();
-            itBehavesLike.aSidebarWithAGreenplumOrOracleDataSourceSelected();
+            itBehavesLike.aSidebarWithAGreenplumPostgresOrOracleDataSourceSelected();
 
             context("when configuration is clicked", function() {
                 beforeEach(function() {
@@ -522,7 +618,7 @@ describe("chorus.views.DataSourceListSidebar", function() {
             });
 
             itBehavesLike.aSidebar();
-            itBehavesLike.aSidebarWithAGreenplumOrOracleDataSourceSelected();
+            itBehavesLike.aSidebarWithAGreenplumPostgresOrOracleDataSourceSelected();
 
             context("when configuration is clicked", function() {
                 beforeEach(function() {

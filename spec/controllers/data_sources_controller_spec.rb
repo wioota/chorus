@@ -38,17 +38,22 @@ describe DataSourcesController do
     describe "filtering by type" do
       it "filters by gpdb data sources" do
         get :index, :entity_type => "gpdb_data_source", :all => true
-        decoded_response.map(&:id).should =~ GpdbDataSource.pluck(:id)
+        decoded_response.map(&:id).should =~ DataSource.where(:type => GpdbDataSource).pluck(:id)
       end
 
       it "filters by oracle data sources" do
         get :index, :entity_type => "oracle_data_source", :all => true
-        decoded_response.map(&:id).should =~ OracleDataSource.pluck(:id)
+        decoded_response.map(&:id).should =~ DataSource.where(:type => OracleDataSource).pluck(:id)
       end
 
       it 'filters by jdbc data sources' do
         get :index, :entity_type => 'jdbc_data_source', :all => true
-        decoded_response.map(&:id).should =~ JdbcDataSource.pluck(:id)
+        decoded_response.map(&:id).should =~ DataSource.where(:type => JdbcDataSource).pluck(:id)
+      end
+
+      it 'filters by pg data sources' do
+        get :index, :entity_type => 'pg_data_source', :all => true
+        decoded_response.map(&:id).should =~ DataSource.where(:type => PgDataSource).pluck(:id)
       end
     end
   end
@@ -83,6 +88,10 @@ describe DataSourcesController do
 
     generate_fixture 'jdbcDataSource.json' do
       get :show, :id => data_sources(:jdbc).to_param
+    end
+
+    generate_fixture 'pgDataSource.json' do
+      get :show, :id => data_sources(:postgres).to_param
     end
 
     context "with an invalid gpdb data source id" do
@@ -178,6 +187,42 @@ describe DataSourcesController do
           valid_attributes.delete(:name)
           post :create, valid_attributes
           response.code.should == "422"
+        end
+      end
+    end
+
+    context 'for a PgDataSource' do
+      let(:entity_type) { 'pg_data_source' }
+
+      before do
+        any_instance_of(DataSource) { |ds| stub(ds).valid_db_credentials? { true } }
+      end
+
+      it 'creates the data source' do
+        expect {
+          post :create, valid_attributes
+        }.to change(PgDataSource, :count).by(1)
+        response.code.should == '201'
+      end
+
+      it 'presents the data source' do
+        mock_present do |data_source|
+          data_source.name == valid_attributes[:name]
+        end
+        post :create, valid_attributes
+      end
+
+      it 'schedules a job to refresh the data source' do
+        stub(QC.default_queue).enqueue_if_not_queued(anything, anything)
+        mock(QC.default_queue).enqueue_if_not_queued('DataSource.refresh', numeric, {'new' => true})
+        post :create, :data_source => valid_attributes
+      end
+
+      context 'with invalid attributes' do
+        it 'responds with validation errors' do
+          valid_attributes.delete(:name)
+          post :create, valid_attributes
+          response.code.should == '422'
         end
       end
     end

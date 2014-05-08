@@ -137,18 +137,18 @@ describe GpdbDataSource do
       let(:gpdb_data_source) { account_with_access.data_source }
       let(:database) { GreenplumIntegration.real_database }
 
-      it "adds new database_data_source_accounts and enqueues a GpdbDatabase.reindex_datasets" do
-        mock(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_datasets", database.id)
-        stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_datasets", anything)
+      it 'adds new database_data_source_accounts and enqueues a Database.reindex_datasets' do
+        mock(QC.default_queue).enqueue_if_not_queued('Database.reindex_datasets', database.id)
+        stub(QC.default_queue).enqueue_if_not_queued('Database.reindex_datasets', anything)
         database.data_source_accounts = []
         database.data_source_accounts.find_by_id(account_with_access.id).should be_nil
         gpdb_data_source.refresh_databases
         database.data_source_accounts.find_by_id(account_with_access.id).should == account_with_access
       end
 
-      it "does not enqueue GpdbDatabase.reindex_datasets if the data_source accounts for a database have not changed" do
-        stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_datasets", anything)
-        dont_allow(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_datasets", database.id)
+      it 'does not enqueue Database.reindex_datasets if the data_source accounts for a database have not changed' do
+        stub(QC.default_queue).enqueue_if_not_queued('Database.reindex_datasets', anything)
+        dont_allow(QC.default_queue).enqueue_if_not_queued('Database.reindex_datasets', database.id)
         gpdb_data_source.refresh_databases
       end
     end
@@ -174,9 +174,9 @@ describe GpdbDataSource do
           gpdb_data_source.databases.where(:name => 'something_new').should exist
         end
 
-        it "should not index databases that were just created" do
-          stub(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.reindex_datasets", anything) do |method, id|
-            GpdbDatabase.find(id).name.should_not == 'something_new'
+        it 'should not index databases that were just created' do
+          stub(QC.default_queue).enqueue_if_not_queued('Database.reindex_datasets', anything) do |method, id|
+            Database.find(id).name.should_not == 'something_new'
           end
           gpdb_data_source.refresh_databases
         end
@@ -276,7 +276,7 @@ describe GpdbDataSource do
     end
 
     it "enqueues a destroy_databases job" do
-      mock(QC.default_queue).enqueue_if_not_queued("GpdbDatabase.destroy_databases", data_source.id)
+      mock(QC.default_queue).enqueue_if_not_queued('Database.destroy_databases', data_source.id)
       data_source.destroy
     end
 

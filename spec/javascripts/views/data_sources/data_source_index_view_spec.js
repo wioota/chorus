@@ -30,7 +30,8 @@ describe("chorus.views.DataSourceIndex", function() {
             this.server.completeFetchFor(this.dataSources, [
                 backboneFixtures.gpdbDataSource({name : "GP9", id: "1"}),
                 backboneFixtures.gpdbDataSource({name : "gP1", id: "2"}),
-                backboneFixtures.oracleDataSource({name : "oracle", id: "3"})
+                backboneFixtures.oracleDataSource({name : "oracle", id: "3"}),
+                backboneFixtures.pgDataSource({name : "postgres", id: "4"})
             ]);
             this.server.completeFetchFor(this.hdfsDataSources, [
                 backboneFixtures.hdfsDataSource({name : "Hadoop9", id: "1"}),
@@ -58,10 +59,11 @@ describe("chorus.views.DataSourceIndex", function() {
 
         it('renders the data sources in the correct data source div', function() {
             var dataSources = this.view.$(".data_source li");
-            expect(dataSources.length).toBe(3);
+            expect(dataSources.length).toBe(4);
             expect(dataSources).toContainText("gP1");
             expect(dataSources).toContainText("GP9");
             expect(dataSources).toContainText("oracle");
+            expect(dataSources).toContainText("postgres");
         });
 
         it('renders the hadoop data sources in the correct data source div', function() {
@@ -179,7 +181,7 @@ describe("chorus.views.DataSourceIndex", function() {
                 var selectedDataSourceCheckbox = this.view.$("input[type=checkbox]").eq(0);
                 expect(selectedDataSourceCheckbox).toBeChecked();
 
-                var selectedHdfsDataSourceCheckbox = this.view.$("input[type=checkbox]").eq(3);
+                var selectedHdfsDataSourceCheckbox = this.view.$("input[type=checkbox]").eq(4);
                 expect(selectedHdfsDataSourceCheckbox).toBeChecked();
 
                 var unselectedModelCheckbox = this.view.$("input[type=checkbox]").eq(1);

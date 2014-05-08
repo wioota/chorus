@@ -97,6 +97,8 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
             return chorus.models.OracleDataSource;
         } else if (dataSourceType === "register_existing_jdbc") {
             return chorus.models.JdbcDataSource;
+        } else if (dataSourceType === "register_existing_postgres") {
+            return chorus.models.PgDataSource;
         } else {
             return chorus.models.GpdbDataSource;
         }

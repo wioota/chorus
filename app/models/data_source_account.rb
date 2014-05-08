@@ -9,8 +9,8 @@ class DataSourceAccount < ActiveRecord::Base
 
   has_many :data_source_account_permissions, :dependent => :destroy
   has_many :accesseds, :through => :data_source_account_permissions
-  has_many :gpdb_databases, :through => :data_source_account_permissions, :source => :accessed,
-           :conditions => "data_source_account_permissions.accessed_type = 'GpdbDatabase'"
+  # has_many :gpdb_databases, :through => :data_source_account_permissions, :source => :accessed,
+  #          :conditions => "data_source_account_permissions.accessed_type = 'GpdbDatabase'"
 
   belongs_to :owner, :class_name => 'User'
   belongs_to :data_source

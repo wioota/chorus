@@ -23,4 +23,9 @@ describe("chorus.models.DynamicDataSource", function() {
         var model = new chorus.models.DynamicDataSource({entityType: "jdbc_data_source"});
         expect(model).toBeA(chorus.models.JdbcDataSource);
     });
+
+    it("should return a pg data source when the entity_type is pg_data_source", function() {
+        var model = new chorus.models.DynamicDataSource({entityType: "pg_data_source"});
+        expect(model).toBeA(chorus.models.PgDataSource);
+    });
 });

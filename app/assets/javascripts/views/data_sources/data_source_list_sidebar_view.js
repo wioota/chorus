@@ -39,8 +39,7 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
             entityType: this.model.entityType,
             dataSourceProvider: t("data_sources.provider." + dataSourceType),
             shared: this.model.isShared && this.model.isShared(),
-            isGnip: this.model.isGnip(),
-            isOracle: this.model.isOracle()
+            isGnip: this.model.isGnip()
         };
     },
 
@@ -83,7 +82,7 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
         this.requiredResources.reset();
         this.listenTo(this.resource, "change", this.render);
 
-        if(this.resource.isGreenplum() || this.resource.isOracle() || this.resource.isJdbc()) {
+        if(this.resource.isGreenplum() || this.resource.isPostgres() || this.resource.isOracle() || this.resource.isJdbc()) {
             var account = this.dataSource.accountForCurrentUser();
             this.dataSource.accounts().fetchAllIfNotLoaded();
             account.fetchIfNotLoaded();

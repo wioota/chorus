@@ -67,6 +67,26 @@ FactoryGirl.define do
     end
   end
 
+  factory :pg_data_source, :class => PgDataSource do
+    sequence(:name) { |n| "pg_data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    sequence(:host) { |n| "pg_host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.my_postgres.com" }
+    sequence(:port) { |n| 5000+n }
+    db_name "postgres"
+    owner
+    version "9.1.2 - FactoryVersion"
+    db_username 'username'
+    db_password 'secret'
+    after(:build) do |data_source|
+      def data_source.valid_db_credentials?(account)
+        true
+      end
+    end
+
+    after(:create) do |data_source|
+      data_source.singleton_class.send :remove_method, :valid_db_credentials?
+    end
+  end
+
   factory :hdfs_data_source do
     sequence(:name) { |n| "hdfs_data_source#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     sequence(:host) { |n| "host#{n + FACTORY_GIRL_SEQUENCE_OFFSET}.emc.com" }

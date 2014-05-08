@@ -137,6 +137,8 @@ window.BackboneFixtureDefinitions = {
 
     jdbcDataSource: { unique: ["id"] },
 
+    pgDataSource: { unique: ["id"] },
+
     heatmapTask: {},
 
     hdfsEntrySet: {},

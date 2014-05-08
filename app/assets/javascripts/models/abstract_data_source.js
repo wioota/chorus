@@ -50,6 +50,10 @@ chorus.models.AbstractDataSource = chorus.models.Base.extend({
         return false;
     },
 
+    isPostgres: function() {
+        return false;
+    },
+
     isHadoop: function() {
         return false;
     },

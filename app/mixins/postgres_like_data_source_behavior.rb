@@ -26,7 +26,7 @@ module PostgresLikeDataSourceBehavior
       database_accounts = accounts.where(:db_username => db_usernames)
       if database.data_source_accounts.sort != database_accounts.sort
         database.data_source_accounts = database_accounts
-        QC.enqueue_if_not_queued("GpdbDatabase.reindex_datasets", database.id) if database.datasets.count > 0
+        QC.enqueue_if_not_queued('Database.reindex_datasets', database.id) if database.datasets.count > 0
       end
       found_databases << database
     end
@@ -70,11 +70,11 @@ module PostgresLikeDataSourceBehavior
     ).to_sql
   end
 
-  def connection_class
-    GreenplumConnection
+  def enqueue_destroy_databases
+    QC.enqueue_if_not_queued('Database.destroy_databases', id)
   end
 
-  def enqueue_destroy_databases
-    QC.enqueue_if_not_queued("GpdbDatabase.destroy_databases", id)
+  def connection_class
+    GreenplumConnection
   end
 end

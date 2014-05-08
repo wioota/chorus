@@ -1,9 +1,10 @@
 class GpdbDataSource < ConcreteDataSource
   include PostgresLikeDataSourceBehavior
 
-  has_many :databases, :class_name => 'GpdbDatabase', :foreign_key => "data_source_id"
-  has_many :schemas, :through => :databases, :class_name => 'GpdbSchema'
+  has_many :databases, :foreign_key => 'data_source_id', :class_name => 'GpdbDatabase'
+  has_many :schemas, :through => :databases
   has_many :datasets, :through => :schemas
+
   has_many :imports_as_source, :through => :datasets, :source => :imports
   has_many :imports_as_destination_via_schema, :through => :schemas, :source => :imports
   has_many :imports_as_destination_via_workspace, :through => :schemas, :source => :imports_via_workspaces
@@ -27,7 +28,7 @@ class GpdbDataSource < ConcreteDataSource
   end
 
   def data_source_provider
-    "Greenplum Database"
+    'Greenplum Database'
   end
 
   private

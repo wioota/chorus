@@ -180,6 +180,13 @@ describe('chorus.models.DataSource', function() {
                 expect(this.model.usage()).toBeNull();
             });
         });
+
+        context("when the data source is Postgres", function() {
+            it('returns null', function() {
+                this.model = backboneFixtures.pgDataSource();
+                expect(this.model.usage()).toBeNull();
+            });
+        });
     });
 
     describe("#hasWorkspaceUsageInfo", function() {
