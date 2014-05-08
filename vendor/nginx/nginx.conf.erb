@@ -140,7 +140,7 @@ http {
             proxy_temp_file_write_size 64k;
 
             add_header Cache-Control no-store;
-            add_header X-Frame-Options DENY;
+            add_header X-Frame-Options SAMEORIGIN;
         }
 
         #error_page  404              /404.html;

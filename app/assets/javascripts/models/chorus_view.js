@@ -5,7 +5,9 @@ chorus.models.ChorusView = chorus.models.WorkspaceDataset.extend({
     showUrlTemplate: "workspaces/{{workspace.id}}/chorus_views/{{id}}",
 
     urlTemplate: function(options) {
-        if(this.duplicate) {
+        if(options && options.download) {
+            return "datasets/{{id}}/download.csv";
+        } else if (this.duplicate) {
             return "chorus_views/" + this.get("sourceObjectId") + "/duplicate";
         } else if (options.method === "read") {
             return "workspaces/{{workspace.id}}/datasets/{{id}}";

@@ -377,4 +377,25 @@ describe("chorus.models.ChorusView", function() {
             });
         });
     });
+
+    describe("#download", function() {
+        beforeEach(function() {
+            spyOn(chorus, "fileDownload");
+            this.model = backboneFixtures.workspaceDataset.chorusView();
+        });
+
+        context("when no number of rows is passed", function() {
+            it("includes the number of rows", function() {
+                this.model.download();
+                expect(chorus.fileDownload).toHaveBeenCalledWith("/datasets/" + this.model.id + "/download.csv", {data: {}});
+            });
+        });
+
+        context("when a number of rows is passed", function() {
+            it("makes a request to the tabular data download api", function() {
+                this.model.download({ rowLimit: "345" });
+                expect(chorus.fileDownload).toHaveBeenCalledWith("/datasets/" + this.model.id + "/download.csv", { data: {row_limit: "345"} });
+            });
+        });
+    });
 });
