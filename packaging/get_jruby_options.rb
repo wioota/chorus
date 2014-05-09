@@ -13,4 +13,8 @@ jruby_options = java_options.split(" ").map do |option|
   end
 end
 
+unless ENV['RAILS_ENV'] == 'production'
+  jruby_options << '-J-Dapple.awt.UIElement=true'
+end
+
 print jruby_options.join(" ")
