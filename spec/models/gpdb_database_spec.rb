@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GpdbDatabase do
   it_should_behave_like 'something that can go stale' do
-    let(:model) { gpdb_databases(:default) }
+    let(:model) { databases(:default) }
   end
 
   describe "validations" do
@@ -20,7 +20,7 @@ describe GpdbDatabase do
     end
 
     describe 'name uniqueness' do
-      let(:existing) { gpdb_databases(:default) }
+      let(:existing) { databases(:default) }
 
       context 'in the same data_source' do
         it 'does not allow two databases with the same name' do
@@ -104,7 +104,7 @@ describe GpdbDatabase do
   end
 
   describe "reindex_datasets" do
-    let(:database) { gpdb_databases(:default) }
+    let(:database) { databases(:default) }
 
     it "calls solr_index on all datasets" do
       database.datasets.each do |dataset|
@@ -139,12 +139,12 @@ describe GpdbDatabase do
     it { should have_many :schemas }
 
     it "has many datasets" do
-      gpdb_databases(:default).datasets.should include(datasets(:table))
+      databases(:default).datasets.should include(datasets(:table))
     end
   end
 
   describe "callbacks" do
-    let(:database) { gpdb_databases(:default) }
+    let(:database) { databases(:default) }
 
     describe "before_save" do
       describe "#mark_schemas_as_stale" do
@@ -160,7 +160,7 @@ describe GpdbDatabase do
 
   describe ".create_schema" do
     let(:connection) { Object.new }
-    let(:database) { gpdb_databases(:default) }
+    let(:database) { databases(:default) }
     let(:user) { users(:owner) }
     let(:schema_name) { "stuff" }
 
@@ -195,7 +195,7 @@ describe GpdbDatabase do
   end
 
   describe "#connect_with" do
-    let(:database) { gpdb_databases(:default) }
+    let(:database) { databases(:default) }
     let(:data_source) { database.data_source }
     let(:account) { data_source_accounts(:unauthorized) }
 
@@ -209,7 +209,7 @@ describe GpdbDatabase do
   end
 
   describe "#destroy" do
-    let(:database) { gpdb_databases(:default) }
+    let(:database) { databases(:default) }
 
     before do
       any_instance_of(GreenplumConnection) do |data_source|
@@ -251,7 +251,7 @@ describe GpdbDatabase do
 
       expect {
         database.destroy
-      }.to change { WorkfileExecutionLocation.where(execution_location_id: database.id, execution_location_type: database.class.name).count }.from(workfiles.length).to(0)
+      }.to change { WorkfileExecutionLocation.where(execution_location_id: database.id, execution_location_type: %w(Database GpdbDatabase)).count }.from(workfiles.length).to(0)
 
       hdfs_data_source.workfile_execution_locations.length.should > 0
     end
@@ -269,6 +269,6 @@ describe GpdbDatabase do
   end
 
   it_behaves_like 'a soft deletable model' do
-    let(:model) { gpdb_databases(:default) }
+    let(:model) { databases(:default) }
   end
 end

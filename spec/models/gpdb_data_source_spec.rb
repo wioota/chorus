@@ -155,7 +155,7 @@ describe GpdbDataSource do
 
     context "with database stubbed" do
       let(:gpdb_data_source) { data_sources(:owners) }
-      let(:database) { gpdb_databases(:default) }
+      let(:database) { databases(:default) }
       let(:missing_database) { gpdb_data_source.databases.where("id <> #{database.id}").first }
       let(:account_with_access) { gpdb_data_source.owner_account }
       let(:account_without_access) { data_source_accounts(:unauthorized) }

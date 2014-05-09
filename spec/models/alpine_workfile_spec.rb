@@ -80,7 +80,7 @@ describe AlpineWorkfile do
     context 'updating an existing workfile' do
       let(:workfile) { workfiles(:alpine_flow) }
       context 'with :execution_locations' do
-        let(:gpdb) { gpdb_databases(:default) }
+        let(:gpdb) { databases(:default) }
         let(:hdfs) { hdfs_data_sources(:hadoop) }
         let(:oracle) { data_sources(:oracle) }
         let(:jdbc) { data_sources(:jdbc) }
@@ -212,7 +212,7 @@ describe AlpineWorkfile do
   end
 
   describe "#execution_locations" do
-    let(:database) { gpdb_databases(:default) }
+    let(:database) { databases(:default) }
     let(:hdfs) { hdfs_data_sources(:hadoop) }
     let(:params) { valid_params }
 
@@ -227,7 +227,7 @@ describe AlpineWorkfile do
   end
 
   describe "#attempt_data_source_connection" do
-    let(:database) { gpdb_databases(:default) }
+    let(:database) { databases(:default) }
 
     before do
       set_current_user(user)

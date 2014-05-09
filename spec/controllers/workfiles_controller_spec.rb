@@ -159,7 +159,7 @@ describe WorkfilesController do
         let(:alpine_workfile) { workfiles("alpine_flow") }
 
         before do
-          alpine_workfile.execution_locations.first.should == gpdb_databases(:default)
+          alpine_workfile.execution_locations.first.should == databases(:default)
         end
 
         describe "connecting to the data source" do
@@ -337,7 +337,7 @@ describe WorkfilesController do
 
     context 'when entity_subtype is alpine' do
       context "and a database has been chosen" do
-        let(:database) { gpdb_databases(:default) }
+        let(:database) { databases(:default) }
         let(:params) do
           {
             :workspace_id => workspace.to_param,
@@ -653,7 +653,7 @@ describe WorkfilesController do
         {
           :entity_subtype => 'alpine',
           :file_name => 'something',
-          :database_id => gpdb_databases(:alternate).to_param,
+          :database_id => databases(:alternate).to_param,
           :id => workfile.to_param
         }
       end
@@ -665,7 +665,7 @@ describe WorkfilesController do
       end
 
       context "and a database has been chosen" do
-        let(:database) { gpdb_databases(:alternate) }
+        let(:database) { databases(:alternate) }
         let(:params) do
           {
             :id => workfile.to_param,

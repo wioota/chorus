@@ -11,7 +11,7 @@ describe DatabaseSchemasController do
 
   describe "#index" do
     let(:gpdb_data_source) { data_sources(:owners) }
-    let(:database) { gpdb_databases(:default) }
+    let(:database) { databases(:default) }
     let(:schema1) { database.schemas[0] }
     let(:schema2) { database.schemas[1] }
 

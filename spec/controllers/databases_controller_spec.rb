@@ -17,8 +17,8 @@ describe DatabasesController do
 
     context "when the data source is accessible" do
       let(:gpdb_data_source) { data_sources(:shared) }
-      let(:database) { gpdb_databases(:shared_database) }
-      let(:database2) { gpdb_databases(:shared_database) }
+      let(:database) { databases(:shared_database) }
+      let(:database2) { databases(:shared_database) }
 
       it "checks authorization" do
         stub(GpdbDatabase).refresh { [database] }
@@ -58,7 +58,7 @@ describe DatabasesController do
   end
 
   describe "#show" do
-    let(:database) { gpdb_databases(:default) }
+    let(:database) { databases(:default) }
 
     it "uses authorization" do
       mock(subject).authorize!(:show_contents, database.data_source)

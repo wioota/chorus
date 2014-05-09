@@ -9,11 +9,11 @@ describe GpdbSchema do
 
     describe "#database" do
       let(:schema) {
-         GpdbSchema.create!(:name => 'test_schema', :database => gpdb_databases(:default))
+         GpdbSchema.create!(:name => 'test_schema', :database => databases(:default))
       }
 
       it "returns the schemas parent" do
-        schema.reload.database.should == gpdb_databases(:default)
+        schema.reload.database.should == databases(:default)
       end
     end
 

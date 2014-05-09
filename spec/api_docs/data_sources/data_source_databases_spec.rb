@@ -3,7 +3,7 @@ require 'spec_helper'
 resource "Greenplum DB: data sources" do
   let(:owner) { users(:owner) }
   let(:data_source) { data_sources(:owners) }
-  let!(:database) { gpdb_databases(:default) }
+  let!(:database) { databases(:default) }
   let!(:data_source_id) {data_source.to_param}
 
   before do

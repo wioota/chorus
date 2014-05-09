@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ExternalTable do
   let(:hdfs_entry) { hdfs_entries(:hdfs_file) }
-  let(:sandbox_data_source) { gpdb_databases(:default).data_source }
+  let(:sandbox_data_source) { databases(:default).data_source }
   let(:connection) { Object.new }
   let(:params) do
     {

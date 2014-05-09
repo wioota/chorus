@@ -119,7 +119,7 @@ resource "Workfiles" do
 
   post "/workspaces/:workspace_id/workfiles" do
     let(:workspace_id) { workspace.to_param }
-    let(:database_id) { gpdb_databases(:default).id }
+    let(:database_id) { databases(:default).id }
 
     parameter :entity_subtype, ""
     parameter :database_id, "GPDB Database Id"

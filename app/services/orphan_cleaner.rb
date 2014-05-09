@@ -8,7 +8,7 @@ class OrphanCleaner
       database.destroy
     end
 
-    GpdbSchema.where("parent_id IN (SELECT id FROM gpdb_databases WHERE deleted_at IS NOT NULL)").find_each do |schema|
+    GpdbSchema.where("parent_id IN (SELECT id FROM databases WHERE deleted_at IS NOT NULL)").find_each do |schema|
       schema.destroy
     end
 
