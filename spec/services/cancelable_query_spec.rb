@@ -130,7 +130,7 @@ describe CancelableQuery do
           query_connection = gpdb_data_source.connect_with(account)
           expect {
             CancelableQuery.new(query_connection, check_id, user).execute("SELECT pg_sleep(15)")
-          }.to raise_error GreenplumConnection::QueryError
+          }.to raise_error PostgresLikeConnection::QueryError
           cancel_thread.join
           get_running_queries_by_check_id(query_connection).should be_nil
         end

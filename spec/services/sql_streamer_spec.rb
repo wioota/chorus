@@ -101,7 +101,7 @@ describe SqlStreamer do
       let(:connection) {
         obj = Object.new
         mock(obj).stream_sql(sql, streamer_options, anything) do |sql, options, block|
-          raise GreenplumConnection::DatabaseError, StandardError.new("Some friendly error message")
+          raise PostgresLikeConnection::DatabaseError, StandardError.new("Some friendly error message")
         end
 
         obj
@@ -112,7 +112,7 @@ describe SqlStreamer do
         it "raises error" do
           expect {
             streamer.enum.next
-          }.to raise_error(GreenplumConnection::DatabaseError)
+          }.to raise_error(PostgresLikeConnection::DatabaseError)
         end
       end
 

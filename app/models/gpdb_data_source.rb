@@ -45,4 +45,7 @@ class GpdbDataSource < ConcreteDataSource
     end
   end
 
+  def connection_class
+    GreenplumConnection
+  end
 end

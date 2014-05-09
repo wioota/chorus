@@ -21,7 +21,7 @@ module GpdbTestHelpers
 
   def stub_gpdb_fail
     any_instance_of(GreenplumConnection) do |data_source|
-      stub(data_source).prepare_and_execute_statement.with_any_args { raise GreenplumConnection::QueryError }
+      stub(data_source).prepare_and_execute_statement.with_any_args { raise PostgresLikeConnection::QueryError }
     end
   end
 

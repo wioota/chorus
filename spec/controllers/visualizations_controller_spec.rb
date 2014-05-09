@@ -98,7 +98,7 @@ describe VisualizationsController do
     context "when there is an error" do
       before do
         any_instance_of(Visualization::Histogram) do |visualization|
-          stub(visualization).fetch!(data_source_account, "43") { raise GreenplumConnection::QueryError }
+          stub(visualization).fetch!(data_source_account, "43") { raise PostgresLikeConnection::QueryError }
         end
       end
 

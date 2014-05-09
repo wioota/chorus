@@ -39,7 +39,7 @@ class ChorusView < GpdbDataset
 
     begin
       schema.connect_as(current_user).validate_query(query_without_comments.gsub(";", ""))
-    rescue GreenplumConnection::DatabaseError => e
+    rescue PostgresLikeConnection::DatabaseError => e
       errors.add(:query, :generic, {:message => e.message})
     end
   end
@@ -96,7 +96,7 @@ class ChorusView < GpdbDataset
       view.save!
       view
       # TODO
-    rescue GreenplumConnection::DatabaseError => e
+    rescue PostgresLikeConnection::DatabaseError => e
       view.errors.add(:base, :generic, {:message => e.message})
       raise ActiveRecord::RecordInvalid.new(view)
     end

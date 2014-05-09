@@ -62,7 +62,7 @@ describe PreviewsController do
       before do
         mock(CancelableQuery).new(connection, check_id, user) do
           mock(Object.new).execute(gpdb_table.preview_sql, { :limit => row_limit }) do
-            raise GreenplumConnection::QueryError
+            raise PostgresLikeConnection::QueryError
           end
         end
       end

@@ -190,7 +190,7 @@ describe ChorusView do
     end
 
     it "raises if it cant create the view" do
-      stub(connection).create_view(view_name, anything) { raise GreenplumConnection::DatabaseError.new(StandardError.new()) }
+      stub(connection).create_view(view_name, anything) { raise PostgresLikeConnection::DatabaseError.new(StandardError.new()) }
 
       expect {
         chorus_view.convert_to_database_view(view_name, user)
@@ -206,7 +206,7 @@ describe ChorusView do
       chorus_view.update_attribute :query, 'select 1 as colname, 2 as colname, 3 as colname;'
       expect {
         chorus_view.check_duplicate_column(user)
-      }.to raise_error(GreenplumConnection::DatabaseError, /column \"colname\" duplicated/)
+      }.to raise_error(PostgresLikeConnection::DatabaseError, /column \"colname\" duplicated/)
     end
 
     it 'returns true when the column names are unique' do

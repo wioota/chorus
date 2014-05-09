@@ -55,7 +55,7 @@ describe ApplicationController do
     end
 
     it "returns error 422 when a Greenplum Connection error occurs" do
-      error = GreenplumConnection::DatabaseError.new(StandardError.new('oops'))
+      error = PostgresLikeConnection::DatabaseError.new(StandardError.new('oops'))
       stub(error).error_type { :SOME_ERROR_TYPE }
       stub(controller).index { raise error }
 
@@ -133,14 +133,14 @@ describe ApplicationController do
       decoded_errors.fields.general.GENERIC.message.should == "Invalid entity type"
     end
 
-    it "returns error 403 when a GreenplumConnection::SqlPermissionDenied occurs" do
-      stub(controller).index { raise GreenplumConnection::SqlPermissionDenied.new("SqlPermissionDenied error") }
+    it "returns error 403 when a PostgresLikeConnection::SqlPermissionDenied occurs" do
+      stub(controller).index { raise PostgresLikeConnection::SqlPermissionDenied.new("SqlPermissionDenied error") }
 
       get :index
 
       response.should be_forbidden
       decoded_errors.message.should == "SqlPermissionDenied error"
-      decoded_errors.type.should == "GreenplumConnection::SqlPermissionDenied"
+      decoded_errors.type.should == "PostgresLikeConnection::SqlPermissionDenied"
     end
 
     it "returns error 403 when a DataSourceConnection::InvalidCredentials occurs" do

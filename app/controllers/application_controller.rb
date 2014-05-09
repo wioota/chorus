@@ -23,10 +23,10 @@ class ApplicationController < ActionController::Base
   rescue_from 'ActiveRecord::StatementInvalid', :with => :render_unprocessable_entity
   rescue_from 'DataSourceConnection::Error', :with => :render_database_error
   rescue_from 'DataSourceConnection::DriverNotConfigured', :with => :render_driver_not_configured
-  rescue_from 'GreenplumConnection::ObjectNotFound', :with => :render_missing_database_object
+  rescue_from 'PostgresLikeConnection::ObjectNotFound', :with => :render_missing_database_object
   rescue_from 'DataSourceConnection::QueryError', :with => :render_query_error
   rescue_from 'HdfsDataset::HdfsContentsError', :with => :render_hdfs_query_error
-  rescue_from 'GreenplumConnection::SqlPermissionDenied', :with => :render_resource_forbidden
+  rescue_from 'PostgresLikeConnection::SqlPermissionDenied', :with => :render_resource_forbidden
   rescue_from 'Allowy::AccessDenied', :with => :render_forbidden
   rescue_from 'ModelNotCreated', :with => :render_unprocessable_entity
   rescue_from 'Hdfs::DirectoryNotFoundError', :with => :render_not_found

@@ -35,7 +35,7 @@ class ExternalTable
       :delimiter => delimiter
     )
     true
-  rescue GreenplumConnection::DatabaseError => e
+  rescue PostgresLikeConnection::DatabaseError => e
     errors.add(:name, :TAKEN)
     false
   end

@@ -37,7 +37,7 @@ class WorkspaceDatasetsController < ApplicationController
       render_dataset_with_error(dataset)
     end
 
-  rescue GreenplumConnection::DatabaseError => e
+  rescue PostgresLikeConnection::DatabaseError => e
     render_dataset_with_error(dataset, e.error_type)
   end
 

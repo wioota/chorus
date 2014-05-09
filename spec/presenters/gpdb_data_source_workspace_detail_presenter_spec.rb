@@ -84,7 +84,7 @@ describe GpdbDataSourceWorkspaceDetailPresenter, :type => :view do
 
   context 'with unauthorized LDAP' do
     let(:hash) { presenter.to_hash }
-    let(:authentication_error) { GreenplumConnection::DatabaseError.new }
+    let(:authentication_error) { PostgresLikeConnection::DatabaseError.new }
 
     before do
       stub(authentication_error).error_type { :INVALID_PASSWORD }

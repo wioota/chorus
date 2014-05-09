@@ -31,7 +31,7 @@ module PostgresLikeDataSourceBehavior
       found_databases << database
     end
     refresh_schemas options unless options[:skip_schema_refresh]
-  rescue GreenplumConnection::QueryError => e
+  rescue PostgresLikeConnection::QueryError => e
     Chorus.log_error "Could not refresh database: #{e.message} on #{e.backtrace[0]}"
   ensure
     (databases.not_stale - found_databases).each(&:mark_stale!) if options[:mark_stale]
@@ -41,7 +41,7 @@ module PostgresLikeDataSourceBehavior
     databases.not_stale.each do |database|
       begin
         Schema.refresh(owner_account, database, options.reverse_merge(:refresh_all => true))
-      rescue GreenplumConnection::DatabaseError => e
+      rescue PostgresLikeConnection::DatabaseError => e
         Chorus.log_debug "Could not refresh database #{database.name}: #{e.message} #{e.backtrace.to_s}"
       end
     end
@@ -75,6 +75,6 @@ module PostgresLikeDataSourceBehavior
   end
 
   def connection_class
-    GreenplumConnection
+    PostgresConnection
   end
 end

@@ -44,7 +44,7 @@ describe DataSourceAccount do
 
         context "and the credentials are still invalid" do
           before do
-            any_instance_of(GreenplumConnection::DatabaseError) do |exception|
+            any_instance_of(PostgresLikeConnection::DatabaseError) do |exception|
               stub(exception).error_type { :INVALID_PASSWORD }
             end
             stub(Sequel).connect { raise Sequel::DatabaseError }
@@ -66,7 +66,7 @@ describe DataSourceAccount do
       context "when the account is not flagged as invalid_credentials" do
         context "and the new credentials are invalid" do
           before do
-            any_instance_of(GreenplumConnection::DatabaseError) do |exception|
+            any_instance_of(PostgresLikeConnection::DatabaseError) do |exception|
               stub(exception).error_type { :INVALID_PASSWORD }
             end
             stub(Sequel).connect { raise Sequel::DatabaseError }

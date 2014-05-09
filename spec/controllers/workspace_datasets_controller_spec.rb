@@ -292,7 +292,7 @@ describe WorkspaceDatasetsController do
             any_instance_of(WorkspaceDatasetsController) do |controller|
               stub(controller).authorize_data_source_access
             end
-            error = GreenplumConnection::DatabaseError.new(nil)
+            error = PostgresLikeConnection::DatabaseError.new(nil)
             mock(error).error_type { :DATA_SOURCE_UNREACHABLE }
             any_instance_of(GpdbTable) do |table|
               stub(table).verify_in_source(anything) { raise error }

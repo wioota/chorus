@@ -6,7 +6,7 @@ describe GreenplumConnection, :greenplum_integration do
   let(:db_url) { connection.db_url }
   let(:db_options) { connection.db_options }
   let(:account) { GreenplumIntegration.real_account }
-  let(:exception_class) { GreenplumConnection::DatabaseError }
+  let(:exception_class) { PostgresLikeConnection::DatabaseError }
 
   before :all do
     GreenplumIntegration.setup_gpdb
@@ -85,7 +85,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:sql) { "SELECT * from table_in_public" }
 
       it "doesn't search public by default" do
-        expect { subject }.to raise_error(GreenplumConnection::QueryError, /"table_in_public" does not exist/)
+        expect { subject }.to raise_error(PostgresLikeConnection::QueryError, /"table_in_public" does not exist/)
       end
 
       describe "when including the public schema in the search path" do
@@ -200,7 +200,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:sql) { "select hi from non_existant_table_please" }
 
       it "should wrap it in a QueryError" do
-        expect { subject }.to raise_error(GreenplumConnection::QueryError)
+        expect { subject }.to raise_error(PostgresLikeConnection::QueryError)
       end
     end
 
@@ -219,7 +219,7 @@ describe GreenplumConnection, :greenplum_integration do
       let(:sql) { "SELECT pg_sleep(.2);" }
 
       it "should raise a timeout error" do
-        expect { subject }.to raise_error(GreenplumConnection::QueryError, /timeout/)
+        expect { subject }.to raise_error(PostgresLikeConnection::QueryError, /timeout/)
       end
     end
   end
@@ -231,7 +231,7 @@ describe GreenplumConnection, :greenplum_integration do
       Thread.new do
         begin
           runner_connection.fetch sql
-        rescue GreenplumConnection::DatabaseError
+        rescue PostgresLikeConnection::DatabaseError
         end
       end
     end
@@ -465,7 +465,7 @@ describe GreenplumConnection, :greenplum_integration do
         it 'raises an error' do
           expect {
             connection.create_view('view1', 'select 1;')
-          }.to raise_error(GreenplumConnection::DatabaseError)
+          }.to raise_error(PostgresLikeConnection::DatabaseError)
         end
       end
     end
@@ -528,7 +528,7 @@ describe GreenplumConnection, :greenplum_integration do
         it 'raises an error' do
           expect {
             subject
-          }.to raise_error(GreenplumConnection::DatabaseError)
+          }.to raise_error(PostgresLikeConnection::DatabaseError)
         end
       end
     end
@@ -610,7 +610,7 @@ describe GreenplumConnection, :greenplum_integration do
         it "raises an error" do
           expect do
             connection.analyze_table(table_name)
-          end.to raise_error(GreenplumConnection::DatabaseError)
+          end.to raise_error(PostgresLikeConnection::DatabaseError)
         end
       end
     end
@@ -844,19 +844,19 @@ describe GreenplumConnection, :greenplum_integration do
       it "catches SQL errors" do
         expect {
           connection.validate_query('SELECT WHEREuwiuwiue12321')
-        }.to raise_error(GreenplumConnection::DatabaseError)
+        }.to raise_error(PostgresLikeConnection::DatabaseError)
       end
 
       it "doesn't allow for queries with multiple results" do
         expect {
           connection.validate_query('SELECT 1; SELECT 2;')
-        }.to raise_error(GreenplumConnection::DatabaseError)
+        }.to raise_error(PostgresLikeConnection::DatabaseError)
       end
 
       it "doesn't allow statements that don't return results" do
         expect {
           connection.validate_query('create table test_transaction()')
-        }.to raise_error(GreenplumConnection::DatabaseError)
+        }.to raise_error(PostgresLikeConnection::DatabaseError)
 
         connection.table_exists?('test_transaction').should_not be_true
       end
@@ -906,7 +906,7 @@ describe GreenplumConnection, :greenplum_integration do
         end
 
         it "should raise a SqlPermissionDenied" do
-          expect { subject }.to raise_error(GreenplumConnection::SqlPermissionDenied)
+          expect { subject }.to raise_error(PostgresLikeConnection::SqlPermissionDenied)
         end
       end
 
@@ -1051,7 +1051,7 @@ describe GreenplumConnection, :greenplum_integration do
         end
 
         it 'raises SqlPermissionDenied' do
-          expect { subject }.to raise_error(GreenplumConnection::SqlPermissionDenied)
+          expect { subject }.to raise_error(PostgresLikeConnection::SqlPermissionDenied)
         end
       end
 
@@ -1253,7 +1253,7 @@ describe GreenplumConnection, :greenplum_integration do
         it 'raises an error' do
           expect {
             subject
-          }.to raise_error(GreenplumConnection::DatabaseError)
+          }.to raise_error(PostgresLikeConnection::DatabaseError)
         end
       end
     end
@@ -1372,7 +1372,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
   end
 
-  describe "GreenplumConnection::DatabaseError" do
+  describe "PostgresLikeConnection::DatabaseError" do
     let(:sequel_exception) {
       exception = Exception.new
       wrapped_exception = Object.new
@@ -1381,7 +1381,7 @@ describe GreenplumConnection, :greenplum_integration do
       exception
     }
 
-    let(:error) { GreenplumConnection::DatabaseError.new(sequel_exception) }
+    let(:error) { PostgresLikeConnection::DatabaseError.new(sequel_exception) }
 
     describe "error_type" do
       context "when the wrapped error has a sql state error code" do
@@ -1392,7 +1392,7 @@ describe GreenplumConnection, :greenplum_integration do
         it "handles unwrapped exceptions" do
           unwrapped_exception = StandardError.new("I am a message")
           stub(unwrapped_exception).get_sql_state { '3D000' }
-          exception = GreenplumConnection::DatabaseError.new(unwrapped_exception)
+          exception = PostgresLikeConnection::DatabaseError.new(unwrapped_exception)
 
           exception.error_type.should == :DATABASE_MISSING
         end
@@ -1454,7 +1454,7 @@ describe GreenplumConnection, :greenplum_integration do
     end
 
     describe "sanitizing exception messages" do
-      let(:error) { GreenplumConnection::DatabaseError.new(StandardError.new(message)) }
+      let(:error) { PostgresLikeConnection::DatabaseError.new(StandardError.new(message)) }
 
       context "one kind" do
         let(:message) do
