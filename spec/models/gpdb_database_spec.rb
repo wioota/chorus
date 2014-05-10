@@ -136,7 +136,7 @@ describe GpdbDatabase do
   end
 
   context "association" do
-    it { should have_many :schemas }
+    it { should have_many(:schemas).class_name('GpdbSchema') }
 
     it "has many datasets" do
       databases(:default).datasets.should include(datasets(:table))
@@ -247,6 +247,7 @@ describe GpdbDatabase do
       # GpdbDatabase X get nullified, not the ones with GpdbSchema X or HdfsDataSource X
       hdfs_data_source = HdfsDataSource.find database.id
       hdfs_data_source.should_not be_nil
+      hdfs_data_source.workfile_execution_locations.create!(:workfile => workfiles.first)
       hdfs_data_source.workfile_execution_locations.length.should > 0
 
       expect {

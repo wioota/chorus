@@ -16,7 +16,7 @@ describe DatabaseSchemasController do
     let(:schema2) { database.schemas[1] }
 
     before do
-      stub(GpdbSchema).refresh(gpdb_data_source.account_for_user!(user), database) { [schema1, schema2] }
+      stub(Schema).refresh(gpdb_data_source.account_for_user!(user), database) { [schema1, schema2] }
     end
 
     it 'uses authorization' do

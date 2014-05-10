@@ -4,8 +4,8 @@ class SchemaPresenter < Presenter
         :id => model.id,
         :name => model.name,
         :dataset_count => model.active_tables_and_views_count,
-        :entity_type => model.entity_type_name,
         :refreshed_at => model.refreshed_at,
+        :entity_type => model.entity_type_name,
         :is_deleted => model.deleted?
     }
     unless rendering_activities?

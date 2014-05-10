@@ -119,7 +119,7 @@ FactoryGirl.define do
   end
 
   factory :pg_database do
-    sequence(:name) { |n| "database#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    sequence(:name) { |n| "pg_database#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     association :data_source, :factory => :pg_data_source
   end
 
@@ -137,6 +137,11 @@ FactoryGirl.define do
   factory :jdbc_schema do
     sequence(:name) { |n| "jdbc_schema#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
     association :data_source, :factory => :jdbc_data_source
+  end
+
+  factory :pg_schema do
+    sequence(:name) { |n| "pg_schema#{n + FACTORY_GIRL_SEQUENCE_OFFSET}" }
+    association :database, :factory => :pg_database
   end
 
   factory :oracle_table do

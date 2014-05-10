@@ -75,5 +75,14 @@ describe SchemasController do
         get :show, :id => schema.to_param
       end
     end
+
+    context 'for a Postgres Schema' do
+      let(:schema) { schemas(:pg) }
+
+      generate_fixture 'pgSchema.json' do
+        log_in users(:the_collaborator)
+        get :show, :id => schema.to_param
+      end
+    end
   end
 end
