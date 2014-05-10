@@ -35,7 +35,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 }
             }
         });
-        this.models.workspace._sandbox = new chorus.models.Sandbox({database: {id: 1, dataSource: {id: 1, name: 'Data Source'}}});
+        this.models.workspace._sandbox = new chorus.models.Sandbox({database: {id: 1, dataSource: {id: 1, name: 'Data Source', entityType: 'gpdb_data_source'}}});
 
         this.models.privateWorkspace = new chorus.models.Workspace({ name: "Private Workspace", summary: "Lots of secrets here", owner: {firstName: "Not", lastName: "You"}, "public": false, archivedAt: null});
         this.models.privateWorkspace.loaded = true;

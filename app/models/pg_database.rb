@@ -1,0 +1,1 @@
+class PgDatabase < Database; end

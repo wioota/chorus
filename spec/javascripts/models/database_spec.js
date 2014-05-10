@@ -10,9 +10,10 @@ describe("chorus.models.Database", function() {
     });
 
     describe("#dataSource", function() {
-        it("returns a data source with the right id and name", function() {
+        it("returns a data source with the right id and name and class", function() {
             expect(this.model.dataSource().id).toEqual('1');
             expect(this.model.dataSource().name()).toEqual('insta_whip');
+            expect(this.model.dataSource()).toBeA(chorus.models.GpdbDataSource);
         });
 
         it("memoizes", function() {
@@ -37,5 +38,22 @@ describe("chorus.models.Database", function() {
 
     it("includes DataSourceCredentials mixin", function() {
         expect(this.model.dataSourceRequiringCredentials).toBeTruthy();
+    });
+
+    describe("for a pg_database", function () {
+        beforeEach(function () {
+            this.model = backboneFixtures.pgDatabase();
+        });
+
+        describe("#dataSource", function() {
+            it("returns a data source with the right class", function() {
+                expect(this.model.get("entityType")).toBe("pg_database");
+                expect(this.model.dataSource()).toBeA(chorus.models.PgDataSource);
+            });
+
+            it("memoizes", function() {
+                expect(this.model.dataSource()).toBe(this.model.dataSource());
+            });
+        });
     });
 });

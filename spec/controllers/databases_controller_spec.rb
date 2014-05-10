@@ -21,14 +21,14 @@ describe DatabasesController do
       let(:database2) { databases(:shared_database) }
 
       it "checks authorization" do
-        stub(GpdbDatabase).refresh { [database] }
+        stub(Database).refresh { [database] }
         mock(subject).authorize!(:show_contents, gpdb_data_source)
         get :index, :data_source_id => gpdb_data_source.id
       end
 
       context "when the refresh of the db fails" do
         before do
-          stub(GpdbDatabase).refresh { raise ActiveRecord::JDBCError.new }
+          stub(Database).refresh { raise ActiveRecord::JDBCError.new }
         end
 
         it "should fail" do
@@ -39,7 +39,7 @@ describe DatabasesController do
 
       context "when refresh of the db succeeds" do
         before do
-          stub(GpdbDatabase).refresh { [database, database2] }
+          stub(Database).refresh { [database, database2] }
         end
 
         it "should succeed" do
@@ -53,6 +53,27 @@ describe DatabasesController do
         it_behaves_like "a paginated list" do
           let(:params) {{ :data_source_id => gpdb_data_source.id }}
         end
+      end
+    end
+
+    context 'when it is a postgres data source' do
+      let(:data_source) { data_sources(:postgres) }
+      let(:database) { databases(:pg) }
+
+      before do
+        stub(Database).refresh { [database] }
+      end
+
+      it 'should succeed' do
+        get :index, :data_source_id => data_source.id
+        response.code.should == '200'
+        decoded_response[0].id.should == database.id
+        decoded_response[0].data_source.id.should == data_source.id
+        decoded_response.size.should == 1
+      end
+
+      it_behaves_like 'a paginated list' do
+        let(:params) {{ :data_source_id => data_source.id }}
       end
     end
   end
@@ -74,9 +95,18 @@ describe DatabasesController do
       decoded_response.name.should == database.name
     end
 
-    generate_fixture "database.json" do
-      get :show, :id => database.to_param
+    context 'generating fixtures' do
+      let(:pg_database) { databases(:pg) }
+
+      generate_fixture 'database.json' do
+        get :show, :id => database.to_param
+      end
+
+      generate_fixture 'pgDatabase.json' do
+        get :show, :id => pg_database.to_param
+      end
     end
+
 
     context "when the db can't be found" do
       it "returns 404" do

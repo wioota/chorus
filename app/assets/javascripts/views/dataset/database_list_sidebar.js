@@ -14,5 +14,9 @@ chorus.views.DatabaseListSidebar = chorus.views.Sidebar.extend({
     unsetDatabase: function() {
         delete this.resource;
         this.render();
+    },
+
+    additionalContext: function() {
+        return this.resource ? { type: "database_list.sidebar." + this.resource.get("entityType") } : {};
     }
 });

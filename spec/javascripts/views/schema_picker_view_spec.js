@@ -613,7 +613,7 @@ describe("chorus.views.SchemaPicker", function() {
 
         context("a default schema is provided", function() {
             beforeEach(function() {
-                this.dataSource = new chorus.models.AbstractDataSource({name: "dataSource", id: 789});
+                this.dataSource = new chorus.models.AbstractDataSource({name: "dataSource", id: 789, entityType: "gpdb_data_source"});
                 this.database = new chorus.models.Database({name: "database", id: 456, dataSource:this.dataSource.attributes});
                 this.schema = new chorus.models.Schema({name: "schema", id: 123, database: this.database.attributes});
                 this.view = new chorus.views.SchemaPicker({ defaultSchema: this.schema });

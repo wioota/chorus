@@ -89,6 +89,8 @@ window.BackboneFixtureDefinitions = {
 
     database: { unique: ["id"] },
 
+    pgDatabase: { model: 'Database' },
+
     databaseColumn: {},
 
     databaseColumnSet: {},

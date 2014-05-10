@@ -16,8 +16,11 @@ describe("chorus.views.DatabaseListSidebar", function() {
         expect(this.view.$(".name")).toContainText(db.get("name"));
     });
 
-    it("displays the database type", function() {
-        expect(this.view.$(".details")).toContainTranslation("database_list.sidebar.type");
+    it("displays the correct database type", function() {
+        expect(this.view.$(".details")).toContainTranslation("database_list.sidebar.gpdb_database");
+        this.pgDatabase = backboneFixtures.pgDatabase();
+        chorus.PageEvents.trigger("database:selected", this.pgDatabase);
+        expect(this.view.$(".details")).toContainTranslation("database_list.sidebar.pg_database");
     });
 
     it("displays nothing when a database is deselected", function() {

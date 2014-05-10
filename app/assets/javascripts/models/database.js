@@ -6,7 +6,7 @@ chorus.models.Database = chorus.models.Base.include(
     urlTemplate: "databases/{{id}}",
 
     dataSource: function() {
-        var dataSource = this._dataSource || new chorus.models.GpdbDataSource(this.get("dataSource"));
+        var dataSource = this._dataSource || new chorus.models.DynamicDataSource(this.get("dataSource"));
         if(this.loaded) {
             this._dataSource = dataSource;
         }
