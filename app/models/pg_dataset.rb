@@ -1,0 +1,3 @@
+class PgDataset < RelationalDataset
+
+end

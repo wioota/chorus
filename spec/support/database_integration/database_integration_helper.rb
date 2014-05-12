@@ -1,3 +1,7 @@
+require 'tempfile'
+require 'digest/md5'
+require 'yaml'
+
 module DatabaseIntegrationHelper
 
   def host_identifier

@@ -69,3 +69,10 @@ data_sources:
       account:
         db_username: "gpadmin"
         db_password: "secret"
+  postgres:
+    - host: "chorus-postgres"
+      port: 5432
+      db_name: "postgres"
+      account:
+        db_username: "chorus_test"
+        db_password: "secret"

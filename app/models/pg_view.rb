@@ -1,0 +1,3 @@
+class PgView < PgDataset
+
+end

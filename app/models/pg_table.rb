@@ -1,0 +1,3 @@
+class PgTable < PgDataset
+
+end

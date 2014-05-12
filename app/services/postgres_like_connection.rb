@@ -69,7 +69,7 @@ class PostgresLikeConnection < DataSourceConnection
     yield @connection
 
   rescue Sequel::DatabaseError => e
-    raise PostgresLikeConnection::DatabaseError.new(e)
+    raise self.class.error_class.new(e)
   ensure
     disconnect if destroy_connection_on_exit
   end
@@ -264,9 +264,9 @@ class PostgresLikeConnection < DataSourceConnection
       disconnect
       true
     rescue Java::OrgPostgresqlUtil::PSQLException => e
-      raise PostgresLikeConnection::DatabaseError.new(e)
+      raise self.class.error_class.new(e)
     rescue Sequel::DatabaseError => e
-      raise PostgresLikeConnection::DatabaseError.new(e)
+      raise self.class.error_class.new(e)
     ensure
       disconnect
     end
@@ -311,37 +311,18 @@ class PostgresLikeConnection < DataSourceConnection
         # Is it a view?
         query = query.left_outer_join(:pg_views, :viewname => :relname)
 
-        # Is it an external table?
-        query = query.left_outer_join(:pg_exttable, :pg_exttable__reloid => :relations__oid)
-
-        # Last analyzed time
-        query = query.left_outer_join(:pg_stat_last_operation, :objid => :relations__oid, :staactionname => 'ANALYZE')
-
         query = query.select(Sequel.as(:relations__reltuples, :row_count), Sequel.as(:relations__relname, :name),
-                             Sequel.as(:pg_views__definition, :definition), Sequel.as(:relations__relnatts, :column_count),
-                             Sequel.as(:pg_stat_last_operation__statime, :last_analyzed), Sequel.as(:relations__oid, :oid))
-
-        partition_count_query = connection[:pg_partitions].where(:schemaname => schema_name, :tablename => table_name).select { count(schemaname) }
-        query = query.select_append(Sequel.as(partition_count_query, :partition_count))
+                             Sequel.as(:pg_views__definition, :definition), Sequel.as(:relations__relnatts, :column_count))
 
         query = query.select_append { obj_description(relations__oid).as('description') }
 
-        table_type = Sequel.case(
-            [
-                [{:relations__relhassubclass => 't'}, 'MASTER_TABLE'],
-                [{:relations__relkind => 'v'}, 'VIEW'],
-                [{:pg_exttable__location => nil}, 'BASE_TABLE'],
-                [Sequel.lit("position('gphdfs' in pg_exttable.location[1]) > 0"), 'HD_EXT_TABLE']
-            ],
-            'EXT_TABLE'
-        )
+        table_type = Sequel.case({'v' => 'VIEW'}, 'BASE_TABLE', :relations__relkind)
         query = query.select_append(Sequel.as(table_type, :table_type))
 
-        result = query_with_disk_size(query, connection)
+        result = query.first
 
         if result
           result[:row_count] = result[:row_count].to_i
-          result[:disk_size] = result[:disk_size].to_i unless result[:disk_size] == 'unknown'
         end
         result
       end
@@ -431,25 +412,19 @@ class PostgresLikeConnection < DataSourceConnection
 
     def datasets_query(options)
       with_connection do |connection|
-        query = connection.from(Sequel.as(:pg_catalog__pg_class, :relations)).select(Sequel.as(:relkind, 'type'), Sequel.as(:relname, 'name'), Sequel.as(:relhassubclass, 'master_table'))
-        query = query.select_append do |o|
-          o.`(%Q{('#{quote_identifier(schema_name)}."' || relations.relname || '"')::regclass})
-        end
-        query = query.join(:pg_namespace, :oid => :relnamespace)
-        query = query.left_outer_join(:pg_partition_rule, :parchildrelid => :relations__oid, :relations__relhassubclass => 'f')
-        query = query.where(:pg_namespace__nspname => schema_name)
-        query = query.where(:relations__relkind => options[:tables_only] ? 'r' : ['r', 'v'])
-        query = query.where(:relations__relstorage => ['h','a']) if options[:tables_only]
-        query = query.where(%Q|"relations"."relhassubclass" = 't' OR "pg_partition_rule"."parchildrelid" is null|)
-        query = query.where(%Q|"relations"."oid" NOT IN (SELECT "parchildrelid" FROM "pg_partition_rule")|)
+        query = connection.from(Sequel.as(:pg_catalog__pg_class, :c)).
+            select(Sequel.as(:relkind, 'type'), Sequel.as(:relname, 'name'), Sequel.as(:relhassubclass, 'master_table')).
+            select_append { |o| o.`(%Q{('#{quote_identifier(schema_name)}."' || c.relname || '"')::regclass}) }.
+            join(Sequel.as(:pg_catalog__pg_namespace, :n), :oid => :relnamespace, :nspname => schema_name).
+            where(:c__relkind => options[:tables_only] ? 'r' : %w(r v))
 
         if options[:name_filter]
-          query = query.where("\"relname\" ILIKE '%#{::DataSourceConnection.escape_like_string(options[:name_filter])}%' ESCAPE '#{::DataSourceConnection::LIKE_ESCAPE_CHARACTER}'")
+          query = query.where(%("relname" ILIKE '%#{::DataSourceConnection.escape_like_string(options[:name_filter])}%' ESCAPE '#{::DataSourceConnection::LIKE_ESCAPE_CHARACTER}'))
         end
 
         yield query.qualify
       end
-    rescue DatabaseError => e
+    rescue self.class.error_class => e
       raise SqlPermissionDenied, e if e.message =~ /permission denied/i
       raise e
     end

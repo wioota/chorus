@@ -31,4 +31,9 @@ RSpec.configure do |config|
   unless ENV['JDBC_HOST']
     config.filter_run_excluding :jdbc_integration => true
   end
+
+  unless ENV['PG_HOST']
+    warn "No Postgres data source detected in environment variable 'PG_HOST'. Skipping Postgres integration tests"
+    config.filter_run_excluding :postgres_integration => true
+  end
 end

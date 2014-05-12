@@ -3,6 +3,7 @@ require_relative './database_integration/hawq_integration'
 require_relative './database_integration/oracle_integration'
 require_relative './database_integration/jdbc_integration'
 require_relative './database_integration/hdfs_integration'
+require_relative './database_integration/postgres_integration'
 require_relative './current_user'
 require 'rr'
 
@@ -647,6 +648,11 @@ FixtureBuilder.configure do |fbuilder|
                                                :schema => test_schema,
                                                :query => "select 1",
                                                :workspace => real_workspace)
+    end
+
+    if ENV['PG_HOST']
+      chorus_pg = FactoryGirl.create(:pg_data_source, PostgresIntegration.data_source_config.merge(:owner => admin))
+      FactoryGirl.create(:data_source_account, :db_username => PostgresIntegration.username, :db_password => PostgresIntegration.password, :owner => owner, :data_source => chorus_pg)
     end
 
     if ENV['HADOOP_HOST']
