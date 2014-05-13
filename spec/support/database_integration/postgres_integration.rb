@@ -29,7 +29,9 @@ module PostgresIntegration
         :name => hostname,
         :host => hostname,
         :port => port,
-        :db_name => db_name
+        :db_name => db_name,
+        :db_username => username,
+        :db_password => password
     }
   end
 
@@ -59,6 +61,14 @@ module PostgresIntegration
 
   def self.real_data_source
     PgDataSource.find_by_name(hostname)
+  end
+
+  def self.real_account
+    real_data_source.owner_account
+  end
+
+  def self.real_database
+    real_data_source.databases.find_by_name!(self.database_name)
   end
 
   def self.db_url(db=nil)
@@ -100,6 +110,15 @@ module PostgresIntegration
 
       raise 'Postgres fixture building failed' unless success
     end
+  end
+
+  def self.refresh
+    account = real_account
+    PgDatabase.refresh(account)
+    database = PgDatabase.find_by_name(database_name)
+    PgSchema.refresh(account, database)
+    schema = database.schemas.find_by_name(schema_name)
+    schema.refresh_datasets(account)
   end
 
   def self.account_config

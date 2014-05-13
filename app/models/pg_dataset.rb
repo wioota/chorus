@@ -12,4 +12,8 @@ class PgDataset < RelationalDataset
   def execution_location
     database
   end
+
+  def column_type
+    'PgDatasetColumn'
+  end
 end

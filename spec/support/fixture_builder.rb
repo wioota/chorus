@@ -658,6 +658,7 @@ FixtureBuilder.configure do |fbuilder|
     if ENV['PG_HOST']
       chorus_pg = FactoryGirl.create(:pg_data_source, PostgresIntegration.data_source_config.merge(:owner => admin))
       FactoryGirl.create(:data_source_account, :db_username => PostgresIntegration.username, :db_password => PostgresIntegration.password, :owner => owner, :data_source => chorus_pg)
+      PostgresIntegration.refresh
     end
 
     if ENV['HADOOP_HOST']

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe GpdbView do
+describe PgView do
   it_behaves_like 'a dataset view' do
-    let(:view) { datasets(:view) }
+    let(:view) { datasets(:pg_view) }
   end
 end

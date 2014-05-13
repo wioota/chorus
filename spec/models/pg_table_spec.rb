@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe GpdbTable do
+describe PgTable do
   it_behaves_like 'a dataset table' do
-    let(:table) { datasets(:table) }
+    let(:table) { datasets(:pg_table) }
   end
 end

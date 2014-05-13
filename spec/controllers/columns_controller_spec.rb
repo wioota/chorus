@@ -67,6 +67,29 @@ describe ColumnsController do
       end
     end
 
+    context 'with real postgres data', :postgres_integration do
+      let(:account) { PostgresIntegration.real_account }
+      let(:user) { account.owner }
+      let(:database) { PostgresIntegration.real_database }
+      let(:dataset) {database.find_dataset_in_schema('base_table1', 'test_schema')}
+
+      before do
+        dataset.analyze(account)
+      end
+
+      it 'presents pg dataset columns' do
+        mock_present do |column_set|
+          column_set.first.should be_a PgDatasetColumn
+        end
+        get :index, :dataset_id => dataset.to_param
+      end
+
+      it 'presents' do
+        get :index, :dataset_id => dataset.to_param
+        response.code.should == '200'
+      end
+    end
+
     context 'with real oracle data', :oracle_integration do
       let(:user) { users(:owner) }
       let(:account) { OracleIntegration.real_account }

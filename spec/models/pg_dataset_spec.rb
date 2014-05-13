@@ -20,4 +20,10 @@ describe PgDataset do
       dataset.database_name.should == dataset.database.name
     end
   end
+
+  describe '#column_type' do
+    it 'is PgDatasetColumn' do
+      dataset.column_type.should == 'PgDatasetColumn'
+    end
+  end
 end
