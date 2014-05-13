@@ -218,6 +218,30 @@ describe EventsController do
         end
       end
 
+      context 'for a pg_table' do
+        let(:object) { datasets(:pg_table) }
+
+        it 'presents the activities' do
+          log_in(users(:owner))
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => 'dataset', :entity_id => object.id
+
+          response.code.should == '200'
+        end
+      end
+
+      context 'for a pg_view' do
+        let(:object) { datasets(:pg_view) }
+
+        it 'presents the activities' do
+          log_in(users(:owner))
+          mock_present { |models| models.should include(event) }
+          get :index, :entity_type => 'dataset', :entity_id => object.id
+
+          response.code.should == '200'
+        end
+      end
+
       context "for a HDFS Dataset" do
         let(:object) { datasets(:hadoop) }
 

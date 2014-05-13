@@ -128,6 +128,7 @@ FixtureBuilder.configure do |fbuilder|
     pg_data_source = FactoryGirl.create(:pg_data_source, :name => 'postgres', :owner => owner)
     pg_database = FactoryGirl.create(:pg_database, :name => 'pg', :data_source => pg_data_source)
     pg_schema = FactoryGirl.create(:pg_schema, :name => 'pg', :database => pg_database)
+    FactoryGirl.create(:pg_schema, :name => 'pg_alternate', :database => pg_database)
 
     hdfs_data_source = HdfsDataSource.create!({:name => 'searchquery_hadoop', :description => 'searchquery for the hadoop data source', :host => 'hadoop.example.com', :port => '1111', :owner => admin, :hdfs_version => 'Pivotal HD 1.0'}, :without_protection => true)
     fbuilder.name :hadoop, hdfs_data_source
@@ -167,6 +168,10 @@ FixtureBuilder.configure do |fbuilder|
     alternate_database = FactoryGirl.create(:gpdb_database, :data_source => alternate_data_source, :name => 'alternate')
     alternate_schema = FactoryGirl.create(:gpdb_schema, :name => 'alternate', :database => alternate_database)
     FactoryGirl.create(:gpdb_table, :name => "alternate", :schema => alternate_schema)
+
+    FactoryGirl.create(:pg_table, :name => 'pg_table', :schema => pg_schema)
+    FactoryGirl.create(:pg_table, :name => 'pg_table_alternate', :schema => pg_schema)
+    FactoryGirl.create(:pg_view, :name => 'pg_view', :schema => pg_schema)
 
     # Search setup
     searchquery_database = FactoryGirl.create(:gpdb_database, :data_source => owners_data_source, :name => 'searchquery_database')

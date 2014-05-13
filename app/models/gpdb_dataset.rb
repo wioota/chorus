@@ -23,7 +23,7 @@ class GpdbDataset < RelationalDataset
   end
 
   def database_name
-    schema.database.name
+    database.name
   end
 
   def scoped_name

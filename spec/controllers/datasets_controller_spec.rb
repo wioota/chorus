@@ -83,6 +83,19 @@ describe DatasetsController do
         get :index, :schema_id => schema.to_param
       end
     end
+
+    context 'for a postgres schema' do
+      let(:schema) { schemas(:pg) }
+      let(:dataset1) { datasets(:pg_table) }
+      let(:dataset2) { datasets(:pg_view) }
+      let(:dataset3) { datasets(:pg_table_alternate) }
+
+      it_should_behave_like :works
+
+      generate_fixture "pgSchemaDatasetSet.json" do
+        get :index, :schema_id => schema.to_param
+      end
+    end
   end
 
   describe "#show" do
