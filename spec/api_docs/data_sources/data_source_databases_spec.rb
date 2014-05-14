@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB: data sources" do
+resource 'Greenplum/Postgres DB: data sources' do
   let(:owner) { users(:owner) }
   let(:data_source) { data_sources(:owners) }
   let!(:database) { databases(:default) }
@@ -8,15 +8,15 @@ resource "Greenplum DB: data sources" do
 
   before do
     log_in owner
-    stub(GpdbDatabase).refresh.with_any_args { [database] }
+    stub(Database).refresh.with_any_args { [database] }
   end
 
 
-  get "/data_sources/:data_source_id/databases" do
-    parameter :data_source_id, "Greenplum data source id"
+  get '/data_sources/:data_source_id/databases' do
+    parameter :data_source_id, 'Data source id'
     pagination
 
-    example_request "Get a list of databases on the data source" do
+    example_request 'Get a list of databases on the data source' do
       status.should == 200
     end
   end
