@@ -161,6 +161,17 @@ describe DatasetsController do
         get :show, :id => dataset.to_param
       end
     end
+
+    context 'for a pg dataset' do
+      before do
+        any_instance_of(PgTable) { |dataset| stub(dataset).verify_in_source(user) { true } }
+      end
+      let(:dataset) { datasets(:pg_table) }
+
+      generate_fixture 'pgDataset.json' do
+        get :show, :id => dataset.to_param
+      end
+    end
   end
 
   context "integration", :greenplum_integration do

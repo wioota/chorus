@@ -50,6 +50,10 @@ chorus.models.Dataset = chorus.models.Base.include(
         return this.dataSource().isGreenplum();
     },
 
+    isPostgres: function() {
+        return this.dataSource().isPostgres();
+    },
+
     isExternal: function() {
         var objectType = this.statistics().get("objectType");
         return (/EXT_TABLE$/).test(objectType);
@@ -263,12 +267,12 @@ chorus.models.Dataset = chorus.models.Base.include(
         return this.get('hasCredentials') !== false;
     },
 
-    isGpdbTable: function() {
-        return this.get("objectType") === "TABLE" && this.isGreenplum();
+    supportsAnalyze: function() {
+        return this.get("objectType") === "TABLE" && (this.isGreenplum() || this.isPostgres());
     },
 
     canAnalyze: function() {
-        return this.hasCredentials() && this.isGpdbTable() && !this.workspaceArchived() && !this.isExternal();
+        return this.hasCredentials() && this.supportsAnalyze() && !this.workspaceArchived() && !this.isExternal();
     },
 
     analyze: function() {

@@ -57,12 +57,14 @@ describe("chorus.models.Dataset", function() {
             this.oracleDataset = backboneFixtures.oracleDataset();
             this.jdbcDataset = backboneFixtures.jdbcDataset();
             this.gpdbDataset = backboneFixtures.dataset();
+            this.pgDataset = backboneFixtures.pgDataset();
         });
 
         it('returns whether the parent data source is an oracle data source', function(){
             expect(this.oracleDataset.isOracle()).toBeTruthy();
             expect(this.gpdbDataset.isOracle()).toBeFalsy();
             expect(this.jdbcDataset.isOracle()).toBeFalsy();
+            expect(this.pgDataset.isOracle()).toBeFalsy();
         });
     });
 
@@ -71,12 +73,14 @@ describe("chorus.models.Dataset", function() {
             this.oracleDataset = backboneFixtures.oracleDataset();
             this.jdbcDataset = backboneFixtures.jdbcDataset();
             this.gpdbDataset = backboneFixtures.dataset();
+            this.pgDataset = backboneFixtures.pgDataset();
         });
 
         it('returns whether the parent data source is a jdbc data source', function(){
             expect(this.oracleDataset.isJdbc()).toBeFalsy();
             expect(this.gpdbDataset.isJdbc()).toBeFalsy();
             expect(this.jdbcDataset.isJdbc()).toBeTruthy();
+            expect(this.pgDataset.isJdbc()).toBeFalsy();
         });
     });
 
@@ -85,12 +89,30 @@ describe("chorus.models.Dataset", function() {
             this.gpdbDataset = backboneFixtures.dataset();
             this.jdbcDataset = backboneFixtures.jdbcDataset();
             this.oracleDataset = backboneFixtures.oracleDataset();
+            this.pgDataset = backboneFixtures.pgDataset();
         });
 
         it('returns whether the parent data source is greenplum', function(){
             expect(this.gpdbDataset.isGreenplum()).toBeTruthy();
             expect(this.oracleDataset.isGreenplum()).toBeFalsy();
             expect(this.jdbcDataset.isGreenplum()).toBeFalsy();
+            expect(this.pgDataset.isGreenplum()).toBeFalsy();
+        });
+    });
+
+    describe('#isPostgres', function(){
+        beforeEach(function() {
+            this.gpdbDataset = backboneFixtures.dataset();
+            this.jdbcDataset = backboneFixtures.jdbcDataset();
+            this.oracleDataset = backboneFixtures.oracleDataset();
+            this.pgDataset = backboneFixtures.pgDataset();
+        });
+
+        it('returns whether the parent data source is greenplum', function(){
+            expect(this.gpdbDataset.isPostgres()).toBeFalsy();
+            expect(this.oracleDataset.isPostgres()).toBeFalsy();
+            expect(this.jdbcDataset.isPostgres()).toBeFalsy();
+            expect(this.pgDataset.isPostgres()).toBeTruthy();
         });
     });
 
@@ -935,32 +957,38 @@ describe("chorus.models.Dataset", function() {
         });
     });
 
-    describe("#isGpdbTable", function() {
+    describe("#supportsAnalyze", function() {
         var dataset;
         
         it("returns true for a sandbox table", function() {
             dataset = backboneFixtures.workspaceDataset.datasetTable();
-            expect(dataset.isGpdbTable()).toBeTruthy();
+            expect(dataset.supportsAnalyze()).toBeTruthy();
         });
 
         it("returns true for a source table", function() {
             dataset = backboneFixtures.dataset();
-            expect(dataset.isGpdbTable()).toBeTruthy();
+            expect(dataset.supportsAnalyze()).toBeTruthy();
         });
+
+        it("returns true for a pg table", function () {
+            dataset = backboneFixtures.pgDataset();
+            expect(dataset.supportsAnalyze()).toBeTruthy();
+        });
+
 
         it("returns false for views", function() {
             dataset = backboneFixtures.workspaceDataset.datasetView();
-            expect(dataset.isGpdbTable()).toBeFalsy();
+            expect(dataset.supportsAnalyze()).toBeFalsy();
         });
 
         it("returns false for chorus views", function() {
             dataset = backboneFixtures.workspaceDataset.chorusView();
-            expect(dataset.isGpdbTable()).toBeFalsy();
+            expect(dataset.supportsAnalyze()).toBeFalsy();
         });
 
-        it('returns false when the dataset is not greenplum', function(){
+        it('returns false when the dataset is not pg or gp', function(){
             dataset = backboneFixtures.oracleDataset();
-            expect(dataset.isGpdbTable()).toBeFalsy();
+            expect(dataset.supportsAnalyze()).toBeFalsy();
         });
     });
 
@@ -1037,31 +1065,47 @@ describe("chorus.models.Dataset", function() {
     });
 
     describe("#canAnalyze", function() {
-        it("returns true when user has credentials, object type is table and workspace is not archived", function() {
-            this.dataset.set({ hasCredentials: true, objectType: "TABLE" });
-            expect(this.dataset.canAnalyze()).toBeTruthy();
+        describe("for a gpdb table", function () {
+            it("returns true when user has credentials, object type is table, the workspace is not archived", function() {
+                this.dataset.set({ hasCredentials: true, objectType: "TABLE" });
+                expect(this.dataset.canAnalyze()).toBeTruthy();
+            });
+
+            it("returns false when the user has no credentials", function() {
+                this.dataset.set({ hasCredentials: false, objectType: "TABLE" });
+                expect(this.dataset.canAnalyze()).toBeFalsy();
+            });
+
+            it("returns false when the workspace is archived", function() {
+                this.dataset.set({ hasCredentials: true, objectType: "TABLE" });
+                this.dataset._workspace = backboneFixtures.workspace({ archivedAt: "2012-12-12"});
+                expect(this.dataset.canAnalyze()).toBeFalsy();
+            });
+
+            it("returns false when the dataset is an external table", function(){
+                spyOn(this.dataset, "isExternal").andReturn(true);
+                expect(this.dataset.canAnalyze()).toBeFalsy();
+            });
         });
 
-        it("returns false when the user has no credentials", function() {
-            this.dataset.set({ hasCredentials: false, objectType: "TABLE" });
-            expect(this.dataset.canAnalyze()).toBeFalsy();
+        describe("for a pg table", function () {
+            beforeEach(function () {
+                this.dataset = backboneFixtures.pgDataset();
+            });
+
+            it("returns true when user has credentials, object type is table, the workspace is not archived", function() {
+                this.dataset.set({ hasCredentials: true, objectType: "TABLE" });
+                expect(this.dataset.canAnalyze()).toBeTruthy();
+            });
         });
 
-        it("returns false for dataset that is not a gpdb table", function() {
+
+        it("returns false for dataset that is not a gpdb/pg table", function() {
             this.dataset.set({ hasCredentials: true, objectType: "RUBBISH" });
             expect(this.dataset.canAnalyze()).toBeFalsy();
         });
 
-        it("returns false when the workspace is archived", function() {
-            this.dataset.set({ hasCredentials: true, objectType: "TABLE" });
-            this.dataset._workspace = backboneFixtures.workspace({ archivedAt: "2012-12-12"});
-            expect(this.dataset.canAnalyze()).toBeFalsy();
-        });
 
-        it("returns false when the dataset is an external table", function(){
-            spyOn(this.dataset, "isExternal").andReturn(true);
-            expect(this.dataset.canAnalyze()).toBeFalsy();
-        });
     });
 
     describe("#isExternal", function() {
