@@ -310,9 +310,11 @@ class PostgresLikeConnection < DataSourceConnection
 
         # Is it a view?
         query = query.left_outer_join(:pg_views, :viewname => :relname)
+        query = query.left_outer_join(:pg_stat_user_tables, :relid => :relations__oid)
 
         query = query.select(Sequel.as(:relations__reltuples, :row_count), Sequel.as(:relations__relname, :name),
-                             Sequel.as(:pg_views__definition, :definition), Sequel.as(:relations__relnatts, :column_count))
+                             Sequel.as(:pg_views__definition, :definition), Sequel.as(:relations__relnatts, :column_count),
+                             Sequel.as(Sequel.function(:GREATEST, :last_analyze, :last_autoanalyze), :last_analyzed))
 
         query = query.select_append { obj_description(relations__oid).as('description') }
 

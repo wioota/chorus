@@ -443,6 +443,7 @@ describe PostgresConnection, :postgres_integration do
           row[:name].should == 'base_table1'
           row[:description].should == 'comment on base_table1'
           row[:column_count].should == 5
+          row[:last_analyzed].should_not be_nil
           row[:row_count].should be 9
           row[:definition].should be_nil
           row[:table_type].should == 'BASE_TABLE'
