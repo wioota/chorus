@@ -8,10 +8,6 @@ describe PostgresConnection, :postgres_integration do
   let(:account) { data_source.account_for_user!(users(:owner)) }
   let(:exception_class) { described_class.error_class }
 
-  before :all do
-    PostgresIntegration.setup
-  end
-
   before do
     stub.proxy(Sequel).connect.with_any_args
   end
