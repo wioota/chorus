@@ -56,7 +56,10 @@ shared_examples 'a well-behaved database' do
       end
     end
 
+    let(:workfile) { workfiles(:alpine_flow) }
+
     it 'removes itself from the execution location field of any workfiles it owns' do
+      workfile.workfile_execution_locations.create(execution_location: database)
       workfiles = database.workfile_execution_locations.all
       workfiles.length.should > 0
 
@@ -78,7 +81,6 @@ shared_examples 'a well-behaved database' do
   describe 'destroy_databases' do
     it 'destroys databases for given data source id' do
       data_source = database.data_source
-      data_source.destroy
       databases = data_source.databases
       databases.should_not be_empty
       Database.destroy_databases(data_source.id)
