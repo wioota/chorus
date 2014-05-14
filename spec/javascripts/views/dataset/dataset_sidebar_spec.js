@@ -390,7 +390,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 this.server.completeFetchFor(this.view.imports, []);
             });
 
-            it("has no action links except for 'Preview Data' and 'Download'", function() {
+            it("has no action links except for 'Preview Data', 'Download', and 'Tags'", function() {
                 expect(this.view.$(".actions a").length).toBe(3);
                 expect(this.view.$(".actions a.dataset_preview")).toExist();
                 expect(this.view.$(".actions a.download")).toExist();

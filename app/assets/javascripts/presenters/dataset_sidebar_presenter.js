@@ -48,11 +48,7 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     },
 
     canAssociate: function() {
-        if (!this.hasWorkspace()) {
-            return this.resource.isGreenplum() || this.resource.isOracle() || this.resource.isJdbc();
-        }
-
-        return !(this.resource.workspaceArchived() || this.resource.isChorusView() || this.resource.isHdfsDataset());
+        return !(this.resource.isChorusView() || this.resource.isHdfsDataset() || this.resource.workspaceArchived());
     },
 
     isDeleteable: function() {

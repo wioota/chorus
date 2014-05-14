@@ -6,12 +6,6 @@ function itHasNoImports(presenter) {
     expect(presenter.inProgressText()).toBeFalsy();
 }
 
-function itBehavesLikeADataset(presenter) {
-    expect(presenter.isChorusView()).toBeFalsy();
-    expect(presenter.canAnalyze()).toBe(presenter.resource.canAnalyze());
-    expect(presenter.canAssociate()).toBe(presenter.resource.isGreenplum());
-}
-
 function itBehavesLikeAGpdbDataset(presenter) {
     expect(presenter.canExport()).toBeFalsy();
     expect(presenter.displayEntityType()).toEqual("table");
@@ -22,7 +16,9 @@ function itBehavesLikeAGpdbDataset(presenter) {
     expect(presenter.realWorkspace()).toBeFalsy();
     expect(presenter.importsEnabled()).toBeFalsy();
     expect(presenter.isDeleteable()).toBeFalsy();
-    itBehavesLikeADataset(presenter);
+    expect(presenter.isChorusView()).toBeFalsy();
+    expect(presenter.canAnalyze()).toBe(presenter.resource.canAnalyze());
+    expect(presenter.canAssociate()).toBe(presenter.resource.isGreenplum());
     itHasNoImports(presenter);
 }
 
@@ -356,6 +352,25 @@ describe("chorus.presenters.DatasetSidebar", function() {
         });
     });
 
+    context("with a Postgres dataset", function() {
+        beforeEach(function() {
+            var resource = backboneFixtures.pgDataset();
+            this.presenter = new chorus.presenters.DatasetSidebar(resource);
+        });
+
+        it("cannot export", function() {
+            expect(this.presenter.canExport()).toBeFalsy();
+        });
+
+        it("is associable", function () {
+            expect(this.presenter.canAssociate()).toBeTruthy();
+        });
+
+        it("does not allow importing at all", function () {
+            expect(this.presenter.importsEnabled()).toBeFalsy();
+        });
+    });
+
     context("with a JDBC dataset", function() {
         beforeEach(function() {
             var resource = backboneFixtures.jdbcDataset();
@@ -389,6 +404,10 @@ describe("chorus.presenters.DatasetSidebar", function() {
             spyOn(this.presenter.resource.workspace(), 'currentUserCanDuplicateChorusViews').andReturn(true);
             expect(this.presenter.currentUserCanDuplicateChorusViews()).toBe(true);
         });
+
+        it("is not associable", function () {
+            expect(this.presenter.canAssociate()).toBeFalsy();
+        });
     });
 
     context("with an hdfs dataset", function() {
@@ -411,6 +430,10 @@ describe("chorus.presenters.DatasetSidebar", function() {
 
         it("is deletable", function () {
             expect(this.presenter.isDeleteable()).toBeTruthy();
+        });
+
+        it("is not associable", function () {
+            expect(this.presenter.canAssociate()).toBeFalsy();
         });
     });
 });
