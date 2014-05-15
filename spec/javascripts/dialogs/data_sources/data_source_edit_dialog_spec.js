@@ -17,37 +17,60 @@ describe("chorus.dialogs.DataSourceEdit", function() {
     });
 
     describe("#render", function() {
+        function itBehavesLikeADbDataSource() {
+            it("Field called 'name' should be editable and pre populated", function() {
+                expect(this.dialog.$("input[name=name]").val()).toBe(this.dialog.model.name());
+                expect(this.dialog.$("input[name=name]").prop("disabled")).toBeFalsy();
+            });
+
+            it("Field called 'description' should be editable and pre populated", function() {
+                expect(this.dialog.$("textarea[name=description]").val()).toBe(this.dialog.model.get("description"));
+                expect(this.dialog.$("textarea[name=description]").prop("disabled")).toBeFalsy();
+            });
+
+            it("Field called 'host' should be editable and pre populated", function() {
+                expect(this.dialog.$("input[name=host]").val()).toBe(this.dialog.model.get("host"));
+                expect(this.dialog.$("input[name=host]").prop("disabled")).toBeFalsy();
+            });
+
+            it("Field called 'port' should be editable and pre populated", function() {
+                expect(this.dialog.$("input[name=port]").val()).toBe(this.dialog.model.get("port"));
+                expect(this.dialog.$("input[name=port]").prop("disabled")).toBeFalsy();
+            });
+
+            it("has a 'database' field that is pre-populated", function() {
+                expect(this.dialog.$("input[name='dbName']").val()).toBe(this.dialog.model.get("dbName"));
+                expect(this.dialog.$("label[name='dbName']").text()).toMatchTranslation("data_sources.dialog.database_name");
+                expect(this.dialog.$("input[name='dbName']").prop("disabled")).toBeFalsy();
+            });
+        }
+
         describe('when editing a greenplum data source', function() {
             beforeEach(function() {
                 this.dialog.model.set({ entityType: "gpdb_data_source", ssl: true });
                 this.dialog.render();
             });
 
-            it("Field called 'name' should be editable and pre populated", function() {
-                expect(this.dialog.$("input[name=name]").val()).toBe("pasta");
-                expect(this.dialog.$("input[name=name]").prop("disabled")).toBeFalsy();
+            itBehavesLikeADbDataSource();
+
+            it("has a 'ssl' field that is pre-populated", function () {
+                expect(this.dialog.$("input[name='ssl']").prop('checked')).toBe(this.dialog.model.get('ssl'));
+                expect(this.dialog.$("input[name='ssl']").prop("disabled")).toBeFalsy();
+            });
+        });
+
+        describe('when editing a postgres data source', function() {
+            beforeEach(function() {
+                this.dialog.model.set({
+                    name: "pgsql",
+                    host: "pg-host",
+                    entityType: "pg_data_source",
+                    ssl: true
+                });
+                this.dialog.render();
             });
 
-            it("Field called 'description' should be editable and pre populated", function() {
-                expect(this.dialog.$("textarea[name=description]").val()).toBe("it is a food name");
-                expect(this.dialog.$("textarea[name=description]").prop("disabled")).toBeFalsy();
-            });
-
-            it("Field called 'host' should be editable and pre populated", function() {
-                expect(this.dialog.$("input[name=host]").val()).toBe("greenplum");
-                expect(this.dialog.$("input[name=host]").prop("disabled")).toBeFalsy();
-            });
-
-            it("Field called 'port' should be editable and pre populated", function() {
-                expect(this.dialog.$("input[name=port]").val()).toBe("8555");
-                expect(this.dialog.$("input[name=port]").prop("disabled")).toBeFalsy();
-            });
-
-            it("has a 'database' field that is pre-populated", function() {
-                expect(this.dialog.$("input[name='dbName']").val()).toBe("postgres");
-                expect(this.dialog.$("label[name='dbName']").text()).toMatchTranslation("data_sources.dialog.database_name");
-                expect(this.dialog.$("input[name='dbName']").prop("disabled")).toBeFalsy();
-            });
+            itBehavesLikeADbDataSource();
 
             it("has a 'ssl' field that is pre-populated", function () {
                 expect(this.dialog.$("input[name='ssl']").prop('checked')).toBe(this.dialog.model.get('ssl'));
@@ -68,31 +91,7 @@ describe("chorus.dialogs.DataSourceEdit", function() {
                 this.dialog.render();
             });
 
-            it("Field called 'name' should be editable and pre populated", function() {
-                expect(this.dialog.$("input[name=name]").val()).toBe("orcl");
-                expect(this.dialog.$("input[name=name]").prop("disabled")).toBeFalsy();
-            });
-
-            it("Field called 'description' should be editable and pre populated", function() {
-                expect(this.dialog.$("textarea[name=description]").val()).toBe("it is a foobar");
-                expect(this.dialog.$("textarea[name=description]").prop("disabled")).toBeFalsy();
-            });
-
-            it("Field called 'host' should be editable and pre populated", function() {
-                expect(this.dialog.$("input[name=host]").val()).toBe("oracle");
-                expect(this.dialog.$("input[name=host]").prop("disabled")).toBeFalsy();
-            });
-
-            it("Field called 'port' should be editable and pre populated", function() {
-                expect(this.dialog.$("input[name=port]").val()).toBe("1521");
-                expect(this.dialog.$("input[name=port]").prop("disabled")).toBeFalsy();
-            });
-
-            it("has a 'database' field that is pre-populated", function() {
-                expect(this.dialog.$("input[name='dbName']").val()).toBe("oracle-db121");
-                expect(this.dialog.$("label[name='dbName']").text()).toMatchTranslation("data_sources.dialog.database_name");
-                expect(this.dialog.$("input[name='dbName']").prop("disabled")).toBeFalsy();
-            });
+            itBehavesLikeADbDataSource();
         });
 
         describe('when editing a hdfs data source', function() {

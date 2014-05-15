@@ -58,13 +58,17 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
 
     additionalContext: function() {
         return {
-            gpdbDataSource: this.model.isGreenplum(),
-            gpdbOrOracleDataSource: this.model.isGreenplum() || this.model.isOracle(),
+            gpOrPg: this.gpOrPg(),
+            gpdbPgOrOracle: this.gpOrPg() || this.model.isOracle(),
             jdbcDataSource: this.model.isJdbc(),
             hdfsDataSource: this.model.constructorName === "HdfsDataSource",
             gnipDataSource: this.model.constructorName === "GnipDataSource",
             parameterCount: {count: this.model.numberOfConnectionParameters()}
         };
+    },
+
+    gpOrPg: function() {
+        return this.model.isGreenplum() || this.model.isPostgres();
     },
 
     save: function(e) {

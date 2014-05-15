@@ -67,8 +67,8 @@ chorus.handlebarsHelpers.template = {
         });
     },
 
-    gpdbOrOracleDataSourceFields: function(context) {
-        return Handlebars.helpers.renderTemplate("data_sources/gpdb_or_oracle_data_source_fields", context || {});
+    dbDataSourceFields: function(context) {
+        return Handlebars.helpers.renderTemplate("data_sources/db_data_source_fields", context || {});
     },
 
     jdbcDataSourceFields: function(context) {
