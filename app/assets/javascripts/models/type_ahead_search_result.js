@@ -31,6 +31,8 @@ chorus.models.TypeAheadSearchResult = chorus.models.SearchResult.extend({
                 return new chorus.models.OracleDataSource(result);
             case "jdbc_data_source":
                 return new chorus.models.JdbcDataSource(result);
+            case "pg_data_source":
+                return new chorus.models.PgDataSource(result);
             case "attachment":
                 return new chorus.models.Attachment(result);
             case "tag":

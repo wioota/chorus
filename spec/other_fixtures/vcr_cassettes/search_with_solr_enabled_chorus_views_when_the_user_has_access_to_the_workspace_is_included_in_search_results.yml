@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:8981/solr/select?wt=ruby
     body:
       encoding: US-ASCII
-      string: fq=type%3A%28Dataset+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28Dataset%29&fq=-%28security_type_name_sm%3ARelationalDataset+AND+-data_source_account_ids_im%3A%281000001+OR+1000004+OR+1000002+OR+1000006+OR+1000007+OR+1000008+OR+1000010+OR+1000011+OR+1000012+OR+1000013+OR+1000015+OR+1000016+OR+1000017+OR+1000018+OR+1000023+OR+1000025+OR+1000026+OR+1000027%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3AHdfsDataset+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&q=searchquery&fl=%2A+score&qf=name_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+tag_names_texts+body_texts+name_stemmed_texts+database_name_stemmed_texts+table_description_stemmed_texts+schema_name_stemmed_texts+column_name_stemmed_texts+column_description_stemmed_texts+query_stemmed_texts+tag_names_stemmed_texts+body_stemmed_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
+      string: fq=type%3A%28Dataset+OR+Events%5C%3A%5C%3ANote+OR+Comment%29&fq=type_name_s%3A%28Dataset%29&fq=-%28security_type_name_sm%3ARelationalDataset+AND+-data_source_account_ids_im%3A%281000001+OR+1000004+OR+1000002+OR+1000006+OR+1000007+OR+1000008+OR+1000010+OR+1000011+OR+1000012+OR+1000013+OR+1000014+OR+1000015+OR+1000017+OR+1000018+OR+1000019+OR+1000020+OR+1000025+OR+1000027+OR+1000028+OR+1000029%29%29&fq=-%28security_type_name_sm%3AChorusView+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&fq=-%28security_type_name_sm%3AHdfsDataset+AND+-member_ids_im%3A1000006+AND+-public_b%3Atrue%29&q=searchquery&fl=%2A+score&qf=name_texts+database_name_texts+table_description_texts+schema_name_texts+column_name_texts+column_description_texts+query_texts+tag_names_texts+body_texts+name_stemmed_texts+database_name_stemmed_texts+table_description_stemmed_texts+schema_name_stemmed_texts+column_name_stemmed_texts+column_description_stemmed_texts+query_stemmed_texts+tag_names_stemmed_texts+body_stemmed_texts&defType=edismax&hl=on&hl.simple.pre=%40%40%40hl%40%40%40&hl.simple.post=%40%40%40endhl%40%40%40&hl.snippets=100&start=0&rows=50&group=true&group.ngroups=true&group.field=grouping_id_s&group.limit=3&group.truncate=true
     headers:
       content-type:
       - application/x-www-form-urlencoded; charset=UTF-8
@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>8,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>10,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
         \ database_name_texts table_description_texts schema_name_texts column_name_texts\
         \ column_description_texts query_texts tag_names_texts body_texts name_stemmed_texts\
         \ database_name_stemmed_texts table_description_stemmed_texts schema_name_stemmed_texts\
@@ -31,41 +31,42 @@ http_interactions:
         \ score','hl.snippets'=>'100','start'=>'0','q'=>'searchquery','group.truncate'=>'true','group.field'=>'grouping_id_s','hl.simple.post'=>'@@@endhl@@@','group'=>'true','fq'=>['type:(Dataset\
         \ OR Events\\\\:\\\\:Note OR Comment)','type_name_s:(Dataset)','-(security_type_name_sm:RelationalDataset\
         \ AND -data_source_account_ids_im:(1000001 OR 1000004 OR 1000002 OR 1000006\
-        \ OR 1000007 OR 1000008 OR 1000010 OR 1000011 OR 1000012 OR 1000013 OR 1000015\
-        \ OR 1000016 OR 1000017 OR 1000018 OR 1000023 OR 1000025 OR 1000026 OR 1000027))','-(security_type_name_sm:ChorusView\
-        \ AND -member_ids_im:1000006 AND -public_b:true)','-(security_type_name_sm:HdfsDataset\
-        \ AND -member_ids_im:1000006 AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>8,'ngroups'=>8,'groups'=>[{'groupValue'=>'GpdbTable\
-        \ 1000016','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.544704E7,'docs'=>[{'id'=>'GpdbTable\
+        \ OR 1000007 OR 1000008 OR 1000010 OR 1000011 OR 1000012 OR 1000013 OR 1000014\
+        \ OR 1000015 OR 1000017 OR 1000018 OR 1000019 OR 1000020 OR 1000025 OR 1000027\
+        \ OR 1000028 OR 1000029))','-(security_type_name_sm:ChorusView AND -member_ids_im:1000006\
+        \ AND -public_b:true)','-(security_type_name_sm:HdfsDataset AND -member_ids_im:1000006\
+        \ AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>8,'ngroups'=>8,'groups'=>[{'groupValue'=>'GpdbTable\
+        \ 1000016','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>1.6061463E7,'docs'=>[{'id'=>'GpdbTable\
         \ 1000016','column_description_texts'=>['searchquery column description','searchquery\
         \ column description 2'],'table_description_stemmed_texts'=>['searchquery\
         \ table description'],'name_texts'=>['searchquery_table'],'database_name_texts'=>['searchquery_database'],'name_stemmed_texts'=>['searchquery_table'],'table_description_texts'=>['searchquery\
         \ table description'],'column_name_stemmed_texts'=>['searchquery','searchquery\
         \ 2'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'column_name_texts'=>['searchquery','searchquery\
         \ 2'],'column_description_stemmed_texts'=>['searchquery column description','searchquery\
-        \ column description 2'],'score'=>1.544704E7}]}},{'groupValue'=>'HdfsDataset\
-        \ 1000025','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>4370847.5,'docs'=>[{'id'=>'HdfsDataset\
-        \ 1000025','name_texts'=>['searchquery_hadoop'],'name_stemmed_texts'=>['searchquery_hadoop'],'query_stemmed_texts'=>['/*'],'query_texts'=>['/*'],'score'=>4370847.5}]}},{'groupValue'=>'GpdbTable\
-        \ 1000017','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>3746441.0,'docs'=>[{'id'=>'GpdbTable\
+        \ column description 2'],'score'=>1.6061463E7}]}},{'groupValue'=>'HdfsDataset\
+        \ 1000025','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>4620433.5,'docs'=>[{'id'=>'HdfsDataset\
+        \ 1000025','name_texts'=>['searchquery_hadoop'],'name_stemmed_texts'=>['searchquery_hadoop'],'query_stemmed_texts'=>['/*'],'query_texts'=>['/*'],'score'=>4620433.5}]}},{'groupValue'=>'GpdbTable\
+        \ 1000017','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>3960371.5,'docs'=>[{'id'=>'GpdbTable\
         \ 1000017','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['searchquery_shared_table'],'database_name_texts'=>['shared_database'],'name_stemmed_texts'=>['searchquery_shared_table'],'table_description_texts'=>['bogus'],'column_name_stemmed_texts'=>['bogus','bogus\
         \ 2'],'schema_name_stemmed_texts'=>['shared_schema'],'schema_name_texts'=>['shared_schema'],'database_name_stemmed_texts'=>['shared_database'],'column_name_texts'=>['bogus','bogus\
-        \ 2'],'score'=>3746441.0}]}},{'groupValue'=>'ChorusView 1000028','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>3746441.0,'docs'=>[{'id'=>'ChorusView\
+        \ 2'],'score'=>3960371.5}]}},{'groupValue'=>'ChorusView 1000028','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>3960371.5,'docs'=>[{'id'=>'ChorusView\
         \ 1000028','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['searchquery_chorus_view'],'database_name_texts'=>['searchquery_database'],'name_stemmed_texts'=>['searchquery_chorus_view'],'query_stemmed_texts'=>['select\
         \ searchquery from a_table'],'table_description_texts'=>['bogus'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'query_texts'=>['select\
-        \ searchquery from a_table'],'score'=>3746441.0}]}},{'groupValue'=>'ChorusView\
-        \ 1000029','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>3122034.0,'docs'=>[{'id'=>'ChorusView\
+        \ searchquery from a_table'],'score'=>3960371.5}]}},{'groupValue'=>'ChorusView\
+        \ 1000029','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>3300309.8,'docs'=>[{'id'=>'ChorusView\
         \ 1000029','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['searchquery_chorus_view_private'],'database_name_texts'=>['searchquery_database'],'name_stemmed_texts'=>['searchquery_chorus_view_private'],'query_stemmed_texts'=>['select\
         \ searchquery from a_table'],'table_description_texts'=>['bogus'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'query_texts'=>['select\
-        \ searchquery from a_table'],'score'=>3122034.0}]}},{'groupValue'=>'GpdbTable\
-        \ 1000021','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7411.583,'docs'=>[{'id'=>'GpdbTable\
+        \ searchquery from a_table'],'score'=>3300309.8}]}},{'groupValue'=>'GpdbTable\
+        \ 1000021','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7864.993,'docs'=>[{'id'=>'GpdbTable\
         \ 1000021','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['typeahead_gpdb_table'],'database_name_texts'=>['searchquery_database'],'name_stemmed_texts'=>['typeahead_gpdb_table'],'table_description_texts'=>['bogus'],'column_name_stemmed_texts'=>['bogus','bogus\
         \ 2'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'column_name_texts'=>['bogus','bogus\
-        \ 2'],'score'=>7411.583}]}},{'groupValue'=>'GpdbTable 1000023','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7411.583,'docs'=>[{'id'=>'GpdbTable\
+        \ 2'],'score'=>7864.993}]}},{'groupValue'=>'GpdbTable 1000023','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7864.993,'docs'=>[{'id'=>'GpdbTable\
         \ 1000023','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['searchable_tag'],'database_name_texts'=>['searchquery_database'],'name_stemmed_texts'=>['searchable_tag'],'tag_names_stemmed_texts'=>['typeahead'],'table_description_texts'=>['bogus'],'tag_names_texts'=>['typeahead'],'column_name_stemmed_texts'=>['bogus','bogus\
         \ 2'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'column_name_texts'=>['bogus','bogus\
-        \ 2'],'score'=>7411.583}]}},{'groupValue'=>'ChorusView 1000022','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7411.583,'docs'=>[{'id'=>'ChorusView\
+        \ 2'],'score'=>7864.993}]}},{'groupValue'=>'ChorusView 1000022','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>7864.993,'docs'=>[{'id'=>'ChorusView\
         \ 1000022','table_description_stemmed_texts'=>['bogus'],'name_texts'=>['typeahead_chorus_view'],'database_name_texts'=>['searchquery_database'],'name_stemmed_texts'=>['typeahead_chorus_view'],'query_stemmed_texts'=>['select\
         \ 1'],'table_description_texts'=>['bogus'],'schema_name_stemmed_texts'=>['searchquery_schema'],'schema_name_texts'=>['searchquery_schema'],'database_name_stemmed_texts'=>['searchquery_database'],'query_texts'=>['select\
-        \ 1'],'score'=>7411.583}]}}]}},'highlighting'=>{'GpdbTable 1000016'=>{'table_description_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
+        \ 1'],'score'=>7864.993}]}}]}},'highlighting'=>{'GpdbTable 1000016'=>{'table_description_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
         \ table description'],'database_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'column_description_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
         \ column description','@@@hl@@@searchquery@@@endhl@@@ column description 2'],'name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_table'],'database_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_table'],'table_description_texts'=>['@@@hl@@@searchquery@@@endhl@@@\
         \ table description'],'column_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@','@@@hl@@@searchquery@@@endhl@@@\
@@ -84,5 +85,5 @@ http_interactions:
         \ 1000023'=>{'database_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'database_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'schema_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema'],'schema_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema']},'ChorusView\
         \ 1000022'=>{'database_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'database_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_database'],'schema_name_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema'],'schema_name_stemmed_texts'=>['@@@hl@@@searchquery@@@endhl@@@_schema']}}}"
     http_version: '1.1'
-  recorded_at: Tue, 13 May 2014 22:07:49 GMT
+  recorded_at: Thu, 15 May 2014 00:47:45 GMT
 recorded_with: VCR 2.3.0

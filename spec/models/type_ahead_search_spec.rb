@@ -25,6 +25,7 @@ describe TypeAheadSearch do
       Sunspot.session.should be_a_search_for(Dataset)
       Sunspot.session.should be_a_search_for(HdfsEntry)
       Sunspot.session.should be_a_search_for(OracleDataSource)
+      Sunspot.session.should be_a_search_for(PgDataSource)
       Sunspot.session.should have_search_params(:fulltext) {
         fulltext 'bob', :fields => [:name, :first_name, :last_name, :file_name]
       }

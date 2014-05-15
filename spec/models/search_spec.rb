@@ -44,6 +44,7 @@ describe Search do
       Sunspot.session.should be_a_search_for(HdfsDataSource)
       Sunspot.session.should be_a_search_for(GnipDataSource)
       Sunspot.session.should be_a_search_for(JdbcDataSource)
+      Sunspot.session.should be_a_search_for(PgDataSource)
       Sunspot.session.should be_a_search_for(Workspace)
       Sunspot.session.should be_a_search_for(Workfile)
       Sunspot.session.should be_a_search_for(Dataset)
@@ -131,6 +132,7 @@ describe Search do
         Sunspot.session.should be_a_search_for(HdfsDataSource)
         Sunspot.session.should be_a_search_for(GnipDataSource)
         Sunspot.session.should be_a_search_for(JdbcDataSource)
+        Sunspot.session.should be_a_search_for(PgDataSource)
       end
 
       it "creates a search session just for that model" do
@@ -279,6 +281,7 @@ describe Search do
     let(:hdfs_data_source) { hdfs_data_sources(:hadoop) }
     let(:gnip_data_source) { gnip_data_sources(:default) }
     let(:jdbc_data_source) { data_sources(:searchquery_jdbc) }
+    let(:pg_data_source) { data_sources(:searchquery_pg) }
     let(:hdfs_entry) { HdfsEntry.find_by_path("/searchquery/result.txt") }
     let(:attachment) { attachments(:attachment) }
     let(:public_workspace) { workspaces(:public_with_no_collaborators) }
@@ -333,7 +336,7 @@ describe Search do
       it "returns a hash with the number found of each type" do
         create_and_record_search do |search|
           search.num_found[:users].should == 1
-          search.num_found[:data_sources].should == 4
+          search.num_found[:data_sources].should == 5
           search.num_found[:datasets].should == 8
         end
       end
@@ -380,7 +383,7 @@ describe Search do
       end
 
       context "including highlighted attributes" do
-        [GpdbDataSource, HdfsDataSource, GnipDataSource, JdbcDataSource].each do |data_source_type|
+        [GpdbDataSource, HdfsDataSource, GnipDataSource, JdbcDataSource, PgDataSource].each do |data_source_type|
           it "should include highlighted attributes for #{data_source_type.name}" do
             create_and_record_search do |search|
               data_source = search.data_sources.select { |data_source| data_source.is_a?(data_source_type) }.first

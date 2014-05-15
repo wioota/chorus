@@ -7,6 +7,21 @@ class Search
 
   validate :valid_entity_type
 
+  AVAILABLE_MODELS = [
+      User,
+      GpdbDataSource,
+      HdfsDataSource,
+      GnipDataSource,
+      Workspace,
+      Workfile,
+      Dataset,
+      HdfsEntry,
+      Attachment,
+      OracleDataSource,
+      JdbcDataSource,
+      PgDataSource
+  ]
+
   def initialize(current_user, params = {})
     @current_user = current_user
     self.query = params[:query]
@@ -29,7 +44,7 @@ class Search
   end
 
   def models_to_search
-    [User, GpdbDataSource, HdfsDataSource, GnipDataSource, Workspace, Workfile, Dataset, HdfsEntry, Attachment, OracleDataSource, JdbcDataSource].select do |model|
+    AVAILABLE_MODELS.select do |model|
       entity_type.nil? || class_name_to_key(model.type_name) == class_name_to_key(entity_type)
     end
   end

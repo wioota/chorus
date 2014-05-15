@@ -130,6 +130,9 @@ FixtureBuilder.configure do |fbuilder|
     pg_schema = FactoryGirl.create(:pg_schema, :name => 'pg', :database => pg_database)
     FactoryGirl.create(:pg_schema, :name => 'pg_alternate', :database => pg_database)
 
+    FactoryGirl.create(:pg_data_source, :name => 'typeahead_pg_source', :owner => owner, :description => 'typeahead for pg data source')
+    FactoryGirl.create(:pg_data_source, :name => 'searchquery_pg', :owner => owner, :description => 'searchquery for pg data source')
+
     hdfs_data_source = HdfsDataSource.create!({:name => 'searchquery_hadoop', :description => 'searchquery for the hadoop data source', :host => 'hadoop.example.com', :port => '1111', :owner => admin, :hdfs_version => 'Pivotal HD 1.0'}, :without_protection => true)
     fbuilder.name :hadoop, hdfs_data_source
     Events::HdfsDataSourceCreated.by(admin).add(:hdfs_data_source => hdfs_data_source)

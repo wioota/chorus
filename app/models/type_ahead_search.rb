@@ -10,6 +10,7 @@ class TypeAheadSearch
     HdfsDataSource,
     GnipDataSource,
     JdbcDataSource,
+    PgDataSource,
     Workspace,
     Workfile,
     Tag,

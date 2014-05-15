@@ -15,6 +15,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
                 'gnip_data_source',
                 'oracle_data_source',
                 'jdbc_data_source',
+                'pg_data_source',
                 'user',
                 'workfile',
                 'dataset',
@@ -52,6 +53,7 @@ describe("chorus.models.TypeAheadSearchResult", function() {
             expectToContainClass(this.searchResults, chorus.models.GnipDataSource);
             expectToContainClass(this.searchResults, chorus.models.OracleDataSource);
             expectToContainClass(this.searchResults, chorus.models.JdbcDataSource);
+            expectToContainClass(this.searchResults, chorus.models.PgDataSource);
             expectToContainClass(this.searchResults, chorus.models.User);
             expectToContainClass(this.searchResults, chorus.models.Workfile);
         });
