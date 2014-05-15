@@ -11,15 +11,15 @@ class DatasetPresenter < Presenter
         :schema => schema_hash,
         :entity_type => model.entity_type_name,
         :entity_subtype => subtype,
-        :stale => model.stale?
+        :stale => model.stale?,
+        :is_deleted => model.deleted?
     }.merge(associated_workspaces_hash)
   end
 
   def complete_hash
     {
         :recent_comments => present(recent_comments, :as_comment => true),
-        :comment_count => recent_comments.empty? ? 0 : model.comments.count + model.notes.count,
-        :is_deleted => model.deleted?
+        :comment_count => recent_comments.empty? ? 0 : model.comments.count + model.notes.count
     }.merge(succinct_hash).
         merge(workspace_hash).
         merge(credentials_hash).

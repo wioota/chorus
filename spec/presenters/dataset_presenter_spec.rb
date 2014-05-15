@@ -95,19 +95,24 @@ describe DatasetPresenter, :type => :view do
       let(:dataset) { FactoryGirl.create :gpdb_table, :schema => schema }
       let(:schema) { FactoryGirl.create :gpdb_schema }
       let(:activity_stream) { true }
+      let(:succinct) { true }
 
-      it 'renders no tags' do
-        hash.should_not have_key(:tags)
+      it 'renders no tags, workbooks, credentials' do
+        [:tags, :tableau_workbooks, :has_credentials].each do |key|
+          hash.should_not have_key(key)
+        end
       end
 
       it 'renders defaults for other keys' do
-        hash[:tableau_workbooks].should == []
         hash[:associated_workspaces].should == []
-        hash[:has_credentials].should == true
       end
 
       it 'renders schemas succinctly' do
         hash[:schema].should_not have_key(:has_credentials)
+      end
+
+      it 'renders is_deleted' do
+        hash.should have_key(:is_deleted)
       end
     end
 
@@ -192,7 +197,7 @@ describe DatasetPresenter, :type => :view do
       let(:succinct) { true }
 
       it 'has the correct keys' do
-        hash.keys.should =~ [:id, :object_name, :schema, :associated_workspaces, :entity_subtype, :entity_type, :stale]
+        hash.keys.should =~ [:id, :object_name, :schema, :associated_workspaces, :entity_subtype, :entity_type, :stale, :is_deleted]
       end
 
       it 'presents the schema' do
