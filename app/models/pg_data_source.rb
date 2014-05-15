@@ -10,4 +10,8 @@ class PgDataSource < ConcreteDataSource
   def data_source_provider
     'PostgreSQL Database'
   end
+
+  def cancel_imports
+    #no-op until has imports
+  end
 end
