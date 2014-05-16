@@ -55,6 +55,11 @@ describe DataSourcesController do
         get :index, :entity_type => 'pg_data_source', :all => true
         decoded_response.map(&:id).should =~ DataSource.where(:type => PgDataSource).pluck(:id)
       end
+
+      it 'filters by multiple types' do
+        get :index, :entity_type => %w(pg_data_source gpdb_data_source), :all => true
+        decoded_response.map(&:id).should =~ DataSource.where(:type => %w(PgDataSource GpdbDataSource)).pluck(:id)
+      end
     end
   end
 

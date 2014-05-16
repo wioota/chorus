@@ -33,9 +33,9 @@ class DataSource < ActiveRecord::Base
 
   after_destroy :create_deleted_event, :if => :current_user
 
-  def self.by_type(entity_type)
-    if entity_type
-      where(type: entity_type.classify)
+  def self.by_type(entity_types)
+    if entity_types.present?
+      where(type: [*entity_types].map(&:classify))
     else
       self
     end

@@ -47,6 +47,15 @@ module PostgresLikeDataSourceBehavior
     end
   end
 
+  def create_database(name, current_user)
+    new_db = databases.build(:name => name)
+    raise ActiveRecord::RecordInvalid.new(new_db) unless new_db.valid?
+
+    connect_as(current_user).create_database(name)
+    refresh_databases
+    databases.find_by_name!(name)
+  end
+
   private
 
   def account_names

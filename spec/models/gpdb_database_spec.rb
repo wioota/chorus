@@ -78,7 +78,7 @@ describe GpdbDatabase do
 
     before do
       stub(database).connect_as(user) { connection }
-      stub(GpdbSchema).refresh.with_any_args { database.schemas.create(:name => schema_name) }
+      stub(Schema).refresh.with_any_args { database.schemas.create(:name => schema_name) }
     end
 
     it "should create the schema" do

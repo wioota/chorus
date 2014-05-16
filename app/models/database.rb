@@ -73,6 +73,15 @@ class Database < ActiveRecord::Base
     data_source.connect_with account, options.merge({:database => name }), &block
   end
 
+  def create_schema(name, current_user)
+    new_schema = schemas.build(:name => name)
+    raise ActiveRecord::RecordInvalid.new(new_schema) if new_schema.invalid?
+
+    connect_as(current_user).create_schema(name)
+    Schema.refresh(account_for_user!(current_user), self)
+    schemas.find_by_name!(name)
+  end
+
   private
 
   def mark_schemas_as_stale

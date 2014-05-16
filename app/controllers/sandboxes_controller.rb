@@ -9,16 +9,16 @@ class SandboxesController < ApplicationController
     attributes = params[:sandbox]
     Workspace.transaction do
       begin
-        workspace.sandbox = GpdbSchema.find(attributes[:schema_id]) if attributes[:schema_id]
+        workspace.sandbox = Schema.where(type: %w(GpdbSchema PgSchema)).find(attributes[:schema_id]) if attributes[:schema_id]
         if attributes[:schema_name]
           if attributes[:database_name]
-            gpdb_data_source = GpdbDataSource.find(attributes[:data_source_id])
+            gpdb_data_source = DataSource.where(type: %w(GpdbDataSource PgDataSource)).find(attributes[:data_source_id])
             database = gpdb_data_source.create_database(attributes[:database_name], current_user)
           else
-            database = GpdbDatabase.find(attributes[:database_id])
+            database = Database.where(type: %w(GpdbDatabase PgDatabase)).find(attributes[:database_id])
           end
 
-          GpdbSchema.refresh(database.data_source.account_for_user!(current_user), database)
+          Schema.refresh(database.data_source.account_for_user!(current_user), database)
 
           create_schema = attributes[:schema_name] && attributes[:schema_name] != 'public'
           if create_schema

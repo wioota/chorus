@@ -17,6 +17,42 @@ describe PgDataSource do
     end
   end
 
+  describe '#create_database' do
+    let(:connection) { Object.new }
+    let(:data_source) { data_sources(:postgres) }
+    let(:user) { 'hiya' }
+    let(:database_name) { 'things' }
+
+    before do
+      stub(data_source).connect_as(user) { connection }
+      stub(data_source).refresh_databases { data_source.databases.create(:name => database_name) }
+    end
+
+    it 'should create the database' do
+      mock(connection).create_database(database_name)
+      expect do
+        data_source.create_database(database_name, user).name.should == database_name
+      end.to change(PgDatabase, :count).by(1)
+    end
+
+    context 'when the database is invalid' do
+      before do
+        any_instance_of(PgDatabase) do |database|
+          stub(database).valid? { false }
+        end
+      end
+
+      it 'should not create a database' do
+        dont_allow(connection).create_database.with_any_args
+        expect do
+          expect do
+            data_source.create_database(database_name, user)
+          end.to raise_error(ActiveRecord::RecordInvalid)
+        end.not_to change(PgDatabase, :count)
+      end
+    end
+  end
+
   it_should_behave_like :data_source_with_access_control
   it_should_behave_like :data_source_with_db_name_port_validations
 
