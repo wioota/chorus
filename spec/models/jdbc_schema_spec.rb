@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe JdbcSchema do
+  it_behaves_like 'a subclass of schema' do
+    let(:schema) { schemas(:jdbc) }
+  end
+
   describe '#data_source' do
     let(:schema) {
       JdbcSchema.create!(:name => 'test_schema', :data_source => data_sources(:jdbc))
@@ -56,13 +60,5 @@ describe JdbcSchema do
       JdbcSchema.destroy_schemas(data_source.id)
       schemas.reload.should be_empty
     end
-  end
-
-  it_behaves_like 'a subclass of schema' do
-    let(:schema) { schemas(:jdbc) }
-  end
-
-  it_behaves_like 'a soft deletable model' do
-    let(:model) { schemas(:jdbc)}
   end
 end

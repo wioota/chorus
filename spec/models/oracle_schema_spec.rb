@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe OracleSchema do
+  it_behaves_like 'a subclass of schema' do
+    let(:schema) { schemas(:oracle) }
+  end
+
   describe "#data_source" do
     let(:schema) {
       OracleSchema.create!(:name => 'test_schema', :data_source => data_sources(:oracle))
@@ -124,13 +128,5 @@ describe OracleSchema do
       OracleSchema.destroy_schemas(data_source.id)
       schemas.reload.should be_empty
     end
-  end
-
-  it_behaves_like 'a subclass of schema' do
-    let(:schema) { schemas(:oracle) }
-  end
-
-  it_behaves_like 'a soft deletable model' do
-    let(:model) { schemas(:oracle)}
   end
 end

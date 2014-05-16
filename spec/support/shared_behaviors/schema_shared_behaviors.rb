@@ -1,5 +1,5 @@
 shared_examples_for 'a subclass of schema' do
-  context ".refresh" do
+  context '.refresh' do
     let(:schema_parent) do
       stub(schema.parent).connect_with(account) { connection }
       schema.parent
@@ -10,39 +10,39 @@ shared_examples_for 'a subclass of schema' do
 
     before(:each) do
       stub(Dataset).refresh
-      stub(connection).schemas { ["new_schema", schema.name] }
+      stub(connection).schemas { ['new_schema', schema.name] }
     end
 
-    it "creates new copies of the schemas in our db" do
+    it 'creates new copies of the schemas in our db' do
       Schema.refresh(account, schema_parent)
-      schema_parent.schemas.where(:name => "new_schema").should exist
+      schema_parent.schemas.where(:name => 'new_schema').should exist
     end
 
-    it "refreshes all Datasets when :refresh_all is true, passing the options to schema refresh_datasets" do
+    it 'refreshes all Datasets when :refresh_all is true, passing the options to schema refresh_datasets' do
       options = {:dostuff => true, :refresh_all => true}
       mock(Dataset).refresh(account, anything, options).times(2)
       Schema.refresh(account, schema_parent, options)
     end
 
-    it "does not re-create schemas that already exist in our schema_parent" do
+    it 'does not re-create schemas that already exist in our schema_parent' do
       Schema.refresh(account, schema_parent)
       expect {
         Schema.refresh(account, schema_parent)
       }.not_to change(Schema, :count)
     end
 
-    it "marks schema as stale if it does not exist" do
+    it 'marks schema as stale if it does not exist' do
       Schema.refresh(account, schema_parent, :mark_stale => true)
       dropped_schema.should be_stale
       dropped_schema.stale_at.should be_within(5.seconds).of(Time.current)
     end
 
-    it "does not mark schema as stale if flag is not set" do
+    it 'does not mark schema as stale if flag is not set' do
       Schema.refresh(account, schema_parent)
       dropped_schema.should_not be_stale
     end
 
-    it "does not update the stale_at time" do
+    it 'does not update the stale_at time' do
       Timecop.freeze(1.year.ago) do
         dropped_schema.mark_stale!
       end
@@ -50,25 +50,25 @@ shared_examples_for 'a subclass of schema' do
       dropped_schema.reload.stale_at.should be_within(5.seconds).of(1.year.ago)
     end
 
-    it "clears stale flag on schema if it is found again" do
+    it 'clears stale flag on schema if it is found again' do
       schema.mark_stale!
       Schema.refresh(account, schema_parent)
       schema.reload.should_not be_stale
     end
 
-    context "when the schema_parent is not available" do
+    context 'when the schema_parent is not available' do
       before do
         stub(connection).schemas { raise DataSourceConnection::Error.new }
       end
 
-      it "marks all the associated schemas as stale if mark_stale is set" do
+      it 'marks all the associated schemas as stale if mark_stale is set' do
         expect {
           Schema.refresh(account, schema_parent, :mark_stale => true)
         }.to raise_error(DataSourceConnection::Error)
         schema.reload.should be_stale
       end
 
-      it "does not mark the associated schemas as stale if mark_stale is not set" do
+      it 'does not mark the associated schemas as stale if mark_stale is not set' do
         expect {
           Schema.refresh(account, schema_parent)
         }.to raise_error(DataSourceConnection::Error)
@@ -79,5 +79,33 @@ shared_examples_for 'a subclass of schema' do
 
   it_should_behave_like 'something that can go stale' do
     let(:model) { schema }
+  end
+
+  it_behaves_like 'a soft deletable model' do
+    let(:model) { schema }
+  end
+
+  describe '#destroy' do
+    it 'destroys dependent datasets' do
+      datasets = schema.datasets
+      datasets.length.should > 0
+
+      expect {
+        schema.destroy
+      }.to change(schema.datasets, :count).to(0)
+    end
+  end
+
+  describe 'callbacks' do
+    describe 'before_save' do
+      describe '#mark_datasets_as_stale' do
+        it 'if the schema has become stale, datasets will also be marked as stale' do
+          schema.mark_stale!
+          dataset = schema.datasets.views_tables.first
+          dataset.should be_stale
+          dataset.stale_at.should be_within(5.seconds).of(Time.current)
+        end
+      end
+    end
   end
 end

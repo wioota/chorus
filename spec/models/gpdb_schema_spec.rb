@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe GpdbSchema do
+  it_behaves_like 'a subclass of schema' do
+    let(:schema) { schemas(:default) }
+  end
+
   describe "associations" do
     it { should belong_to(:scoped_parent) }
     it { should have_many(:datasets) }
@@ -60,14 +64,6 @@ describe GpdbSchema do
         end
       end
 
-      it "deletes its datasets when it is destroyed" do
-        schema = schemas(:default)
-
-        expect {
-          schema.destroy
-        }.to change(schema.datasets, :count).to(0)
-      end
-
       it "nullifies its sandbox association in workspaces" do
         schema = schemas(:searchquery_schema)
         workspace = FactoryGirl.create(:workspace, :sandbox => schema)
@@ -94,10 +90,6 @@ describe GpdbSchema do
 
       schema.accessible_to(owner).should be_true
     end
-  end
-
-  it_behaves_like 'a subclass of schema' do
-    let(:schema) { schemas(:default) }
   end
 
   context "refresh returns the list of schemas", :greenplum_integration do
@@ -180,21 +172,6 @@ describe GpdbSchema do
     end
   end
 
-  describe "callbacks" do
-    let(:schema) { schemas(:default) }
-
-    describe "before_save" do
-      describe "#mark_datasets_as_stale" do
-        it "if the schema has become stale, datasets will also be marked as stale" do
-          schema.mark_stale!
-          dataset = schema.datasets.views_tables.first
-          dataset.should be_stale
-          dataset.stale_at.should be_within(5.seconds).of(Time.current)
-        end
-      end
-    end
-  end
-
   describe "#connect_with" do
     let(:schema) { schemas(:public) }
     let(:account) { data_source_accounts(:unauthorized) }
@@ -273,16 +250,6 @@ describe GpdbSchema do
       end
     end
 
-    it "destroys dependent datasets" do
-      datasets = schema.datasets
-      datasets.length.should > 0
-
-      schema.destroy
-      datasets.each do |dataset|
-        Dataset.find_by_id(dataset.id).should be_nil
-      end
-    end
-
     it "removes any sandboxes from associated workspaces" do
       workspaces = schema.workspaces
       workspaces.length.should > 0
@@ -329,9 +296,5 @@ describe GpdbSchema do
       schema.class_for_type('r').should == GpdbTable
       schema.class_for_type('v').should == GpdbView
     end
-  end
-
-  it_behaves_like 'a soft deletable model' do
-    let(:model) { schemas(:default)}
   end
 end
