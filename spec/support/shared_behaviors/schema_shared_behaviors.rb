@@ -109,3 +109,33 @@ shared_examples_for 'a subclass of schema' do
     end
   end
 end
+
+shared_examples 'a sandbox schema' do
+
+  describe 'associations' do
+    it { should have_many(:workspaces) }
+  end
+
+  describe '#destroy' do
+    it 'nullifies its sandbox association in workspaces' do
+      workspace = FactoryGirl.create(:workspace, :sandbox => schema)
+
+      expect {
+        expect {
+          schema.destroy
+        }.to_not change(Workspace, :count)
+      }.to change { workspace.reload.sandbox }.from(schema).to(nil)
+    end
+
+    it 'removes any execution schemas from associated workfiles' do
+      FactoryGirl.create(:chorus_workfile, :execution_schema => schema)
+      workfiles = schema.workfiles_as_execution_location.all
+      workfiles.length.should > 0
+
+      schema.destroy
+      workfiles.each do |workfile|
+        workfile.reload.execution_location_id.should be_nil
+      end
+    end
+  end
+end

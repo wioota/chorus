@@ -5,10 +5,13 @@ describe GpdbSchema do
     let(:schema) { schemas(:default) }
   end
 
+  it_behaves_like 'a sandbox schema' do
+    let(:schema) { schemas(:default) }
+  end
+
   describe "associations" do
     it { should belong_to(:scoped_parent) }
     it { should have_many(:datasets) }
-    it { should have_many(:workspaces) }
     it { should have_many(:imports) }
 
     describe "#database" do
@@ -62,17 +65,6 @@ describe GpdbSchema do
         any_instance_of(GreenplumConnection) do |data_source|
           stub(data_source).running? { false }
         end
-      end
-
-      it "nullifies its sandbox association in workspaces" do
-        schema = schemas(:searchquery_schema)
-        workspace = FactoryGirl.create(:workspace, :sandbox => schema)
-
-        expect {
-          expect {
-            schema.destroy
-          }.to change(Workspace, :count).by(0)
-        }.to change { workspace.reload.sandbox }.from(schema).to(nil)
       end
     end
   end
@@ -247,26 +239,6 @@ describe GpdbSchema do
     before do
       any_instance_of(GreenplumConnection) do |connection|
         stub(connection).running? { false }
-      end
-    end
-
-    it "removes any sandboxes from associated workspaces" do
-      workspaces = schema.workspaces
-      workspaces.length.should > 0
-
-      schema.destroy
-      workspaces.each do |workspace|
-        workspace.reload.sandbox_id.should be_nil
-      end
-    end
-
-    it "removes any execution schemas from associated workfiles" do
-      workfiles = schema.workfiles_as_execution_location.all
-      workfiles.length.should > 0
-
-      schema.destroy
-      workfiles.each do |workfile|
-        workfile.reload.execution_location_id.should be_nil
       end
     end
 

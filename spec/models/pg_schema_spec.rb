@@ -5,10 +5,13 @@ describe PgSchema do
     let(:schema) { schemas(:pg) }
   end
 
+  it_behaves_like 'a sandbox schema' do
+    let(:schema) { schemas(:pg) }
+  end
+
   describe 'associations' do
     it { should belong_to(:scoped_parent) }
     it { should have_many(:datasets) }
-    it { should have_many(:workspaces) }
 
     describe 'database' do
       let(:schema) { schemas(:pg) }
