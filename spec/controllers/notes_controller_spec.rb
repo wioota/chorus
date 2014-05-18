@@ -60,7 +60,6 @@ describe NotesController do
         let(:user) { users(:no_collaborators) }
         let(:workspace) { workspaces(:private) }
 
-        # TODO: [#41132931] fix the permissions for creating notes
         it "returns a forbidden status" do
           post :create, attributes
           response.code.should == "403"
