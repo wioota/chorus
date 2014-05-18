@@ -95,7 +95,6 @@ class ChorusView < GpdbDataset
       schema.connect_as(user).create_view(name, query)
       view.save!
       view
-      # TODO
     rescue PostgresLikeConnection::DatabaseError => e
       view.errors.add(:base, :generic, {:message => e.message})
       raise ActiveRecord::RecordInvalid.new(view)

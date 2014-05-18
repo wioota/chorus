@@ -9,6 +9,10 @@ module Events
       self.workspace = model
     end
 
+    def note_target
+      self.workspace
+    end
+
     private
 
     def has_workspace?

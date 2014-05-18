@@ -77,6 +77,10 @@ module Events
       self.target1 = model
     end
 
+    def note_target
+      self.target1
+    end
+
     def demotable_by(user)
       return true if user.admin?
       return true if user == promoted_by

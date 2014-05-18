@@ -73,7 +73,7 @@ class JdbcConnection < DataSourceConnection
   end
 
   def datasets_count(options={})
-    # todo: this is pretty egregious, loads all the datasets...
+    # TODO: this is pretty egregious, loads all the datasets...
     datasets(options).size
   end
 
