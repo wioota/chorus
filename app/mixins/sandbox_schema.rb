@@ -5,6 +5,10 @@ module SandboxSchema
     #imports must be cancelled before we nullify the sandbox_id on workspaces
     before_destroy :cancel_imports
 
+    attr_accessible :database
+    alias_attribute :database, :parent
+    delegate :data_source, :account_for_user!, :to => :database
+
     has_many :workspaces, :foreign_key => :sandbox_id, :dependent => :nullify
 
     has_many :imports, class_name: 'SchemaImport', foreign_key: 'schema_id'

@@ -11,7 +11,7 @@ class Schema < ActiveRecord::Base
   before_destroy :destroy_datasets
 
   def active_tables_and_views
-    datasets.not_stale
+    datasets.not_stale.where(%(type != 'ChorusView'))
   end
 
   validates :name,

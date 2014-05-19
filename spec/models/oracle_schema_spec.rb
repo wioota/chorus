@@ -3,6 +3,8 @@ require 'spec_helper'
 describe OracleSchema do
   it_behaves_like 'a subclass of schema' do
     let(:schema) { schemas(:oracle) }
+    let(:table_factory) { :oracle_table }
+    let(:view_factory) { :oracle_view }
   end
 
   describe "#data_source" do
@@ -47,37 +49,6 @@ describe OracleSchema do
     it "should return OracleTable and OracleView correctly" do
       schema.class_for_type('t').should == OracleTable
       schema.class_for_type('v').should == OracleView
-    end
-  end
-
-  describe '#active_tables_and_views' do
-    let(:schema) { schemas(:oracle) }
-
-    it 'includes tables' do
-      table = nil
-      expect {
-        table = FactoryGirl.create(:oracle_table, :schema => schema)
-      }.to change { schema.reload.active_tables_and_views.size }.by(1)
-      schema.active_tables_and_views.should include(table)
-
-      expect {
-        table.mark_stale!
-      }.to change { schema.reload.active_tables_and_views.size }.by(-1)
-      schema.active_tables_and_views.should_not include(table)
-    end
-
-    it 'includes views' do
-      view = nil
-
-      expect {
-        view = FactoryGirl.create(:oracle_view, :schema => schema)
-      }.to change { schema.reload.active_tables_and_views.size }.by(1)
-      schema.active_tables_and_views.should include(view)
-
-      expect {
-        view.mark_stale!
-      }.to change { schema.reload.active_tables_and_views.size }.by(-1)
-      schema.active_tables_and_views.should_not include(view)
     end
   end
 

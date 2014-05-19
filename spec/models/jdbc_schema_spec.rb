@@ -3,6 +3,8 @@ require 'spec_helper'
 describe JdbcSchema do
   it_behaves_like 'a subclass of schema' do
     let(:schema) { schemas(:jdbc) }
+    let(:table_factory) { :jdbc_table }
+    let(:view_factory) { :jdbc_view }
   end
 
   describe '#data_source' do

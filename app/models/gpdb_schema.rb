@@ -1,19 +1,10 @@
 class GpdbSchema < Schema
   include SandboxSchema
 
-  attr_accessible :database
-  alias_attribute :database, :parent
-
-  def active_tables_and_views
-    super.where("type != 'ChorusView'")
-  end
-
   has_many :views, :source => :datasets, :class_name => 'GpdbView', :foreign_key => :schema_id
   has_many :tables, :source => :datasets, :class_name => 'GpdbTable', :foreign_key => :schema_id
 
   validates :name, :format => /^[^\/?&]*$/
-
-  delegate :data_source, :account_for_user!, :to => :database
 
   before_save :mark_schemas_as_stale
 

@@ -3,6 +3,8 @@ require 'spec_helper'
 describe GpdbSchema do
   it_behaves_like 'a subclass of schema' do
     let(:schema) { schemas(:default) }
+    let(:table_factory) { :gpdb_table }
+    let(:view_factory) { :gpdb_view }
   end
 
   it_behaves_like 'a sandbox schema' do
@@ -203,33 +205,6 @@ describe GpdbSchema do
         cv = FactoryGirl.create(:chorus_view, :schema => schema)
       }.not_to change { schema.reload.active_tables_and_views.size }
       schema.active_tables_and_views.should_not include(cv)
-    end
-
-    it 'includes tables' do
-      table = nil
-      expect {
-        table = FactoryGirl.create(:gpdb_table, :schema => schema)
-      }.to change { schema.reload.active_tables_and_views.size }.by(1)
-      schema.active_tables_and_views.should include(table)
-
-      expect {
-        table.mark_stale!
-      }.to change { schema.reload.active_tables_and_views.size }.by(-1)
-      schema.active_tables_and_views.should_not include(table)
-    end
-
-    it 'includes views' do
-      view = nil
-
-      expect {
-        view = FactoryGirl.create(:gpdb_view, :schema => schema)
-      }.to change { schema.reload.active_tables_and_views.size }.by(1)
-      schema.active_tables_and_views.should include(view)
-
-      expect {
-        view.mark_stale!
-      }.to change { schema.reload.active_tables_and_views.size }.by(-1)
-      schema.active_tables_and_views.should_not include(view)
     end
   end
 

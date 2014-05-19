@@ -3,6 +3,8 @@ require 'spec_helper'
 describe PgSchema do
   it_behaves_like 'a subclass of schema' do
     let(:schema) { schemas(:pg) }
+    let(:table_factory) { :pg_table }
+    let(:view_factory) { :pg_view }
   end
 
   it_behaves_like 'a sandbox schema' do

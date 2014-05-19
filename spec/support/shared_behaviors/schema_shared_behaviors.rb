@@ -108,6 +108,35 @@ shared_examples_for 'a subclass of schema' do
       end
     end
   end
+
+  describe '#active_tables_and_views' do
+    it 'includes tables' do
+      table = nil
+      expect {
+        table = FactoryGirl.create(table_factory, :schema => schema)
+      }.to change { schema.reload.active_tables_and_views.size }.by(1)
+      schema.active_tables_and_views.should include(table)
+
+      expect {
+        table.mark_stale!
+      }.to change { schema.reload.active_tables_and_views.size }.by(-1)
+      schema.active_tables_and_views.should_not include(table)
+    end
+
+    it 'includes views' do
+      view = nil
+
+      expect {
+        view = FactoryGirl.create(view_factory, :schema => schema)
+      }.to change { schema.reload.active_tables_and_views.size }.by(1)
+      schema.active_tables_and_views.should include(view)
+
+      expect {
+        view.mark_stale!
+      }.to change { schema.reload.active_tables_and_views.size }.by(-1)
+      schema.active_tables_and_views.should_not include(view)
+    end
+  end
 end
 
 shared_examples 'a sandbox schema' do
