@@ -67,7 +67,7 @@ resource "Workspaces" do
     required_parameters :data_source_id, :database_name, :schema_name, :workspace_id
 
     let(:gpdb_data_source) { GreenplumIntegration.real_data_source }
-    let(:database_name) { "newdb_#{Rails.env}" }
+    let(:database_name) { GreenplumIntegration.sandbox_created_db }
     let(:schema_name) { "a_new_schema_name" }
     let(:user) { gpdb_data_source.owner }
 

@@ -61,7 +61,8 @@ module GreenplumIntegration
   end
 
   def self.drop_test_db
-    execute_sql("DROP DATABASE IF EXISTS \"#{GreenplumIntegration.database_name}\"")
+    execute_sql(%(DROP DATABASE IF EXISTS "#{GreenplumIntegration.database_name}"))
+    execute_sql(%(DROP DATABASE IF EXISTS "#{sandbox_created_db}"))
   end
 
   def self.setup_gpdb
@@ -147,6 +148,10 @@ module GreenplumIntegration
 
   def self.ssl
     greenplum_config['ssl']
+  end
+
+  def self.sandbox_created_db
+    "sand_db_#{Rails.env}"
   end
 
   private
