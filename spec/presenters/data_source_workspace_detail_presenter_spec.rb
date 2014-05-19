@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe GpdbDataSourceWorkspaceDetailPresenter, :type => :view do
+describe DataSourceWorkspaceDetailPresenter, :type => :view do
   let(:gpdb_data_source) { data_sources(:owners) }
   let(:user) { gpdb_data_source.owner }
-  let(:presenter) { GpdbDataSourceWorkspaceDetailPresenter.new(gpdb_data_source, view, {}) }
+  let(:presenter) { DataSourceWorkspaceDetailPresenter.new(gpdb_data_source, view, {}) }
   let(:config_instance) { { 'kaggle.enabled' => true } }
 
   before do

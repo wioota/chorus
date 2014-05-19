@@ -132,40 +132,6 @@ describe GpdbSchema do
     end
   end
 
-  describe "#disk_space_used" do
-    let(:schema) { schemas(:default) }
-    let(:account) { data_source_accounts(:unauthorized) }
-    let(:connection) { Object.new }
-    let(:disk_space_used) { 12345 }
-
-    before do
-      stub(schema).connect_with(account) { connection }
-      mock(connection).disk_space_used { disk_space_used }
-    end
-
-    it "returns the disk space used by all relations in the schema" do
-      schema.disk_space_used(account).should == 12345
-    end
-
-    it "caches the value" do
-      schema.disk_space_used(account).should == 12345
-      schema.disk_space_used(account).should == 12345
-    end
-
-    context "when we can't calculate the size" do
-      let(:disk_space_used) { raise Exception }
-
-      it "should return nil" do
-        schema.disk_space_used(account).should be_nil
-      end
-
-      it "should cache the value correctly" do
-        schema.disk_space_used(account).should be_nil
-        schema.disk_space_used(account).should be_nil
-      end
-    end
-  end
-
   describe "#connect_with" do
     let(:schema) { schemas(:public) }
     let(:account) { data_source_accounts(:unauthorized) }

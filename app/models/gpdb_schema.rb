@@ -37,15 +37,6 @@ class GpdbSchema < Schema
     end
   end
 
-  def disk_space_used(account)
-    @disk_space_used ||= connect_with(account).disk_space_used
-    @disk_space_used == :error ? nil : @disk_space_used
-  rescue Exception => e
-    @disk_space_used = :error
-    raise e if (e.respond_to?(:error_type) && e.error_type == :INVALID_PASSWORD)
-    nil
-  end
-
   def class_for_type(type)
     type == 'r' ? GpdbTable : GpdbView
   end

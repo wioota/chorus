@@ -17,6 +17,15 @@ module SandboxSchema
     has_many :workfiles_as_execution_location, :class_name => 'Workfile', :as => :execution_location, :dependent => :nullify
   end
 
+  def disk_space_used(account)
+    @disk_space_used ||= connect_with(account).disk_space_used
+    @disk_space_used == :error ? nil : @disk_space_used
+  rescue Exception => e
+    @disk_space_used = :error
+    raise e if (e.respond_to?(:error_type) && e.error_type == :INVALID_PASSWORD)
+    nil
+  end
+
   private
 
   def cancel_imports
