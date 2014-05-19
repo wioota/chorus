@@ -90,7 +90,6 @@
 //= require models/insight
 //= require models/filter
 //= require_tree ./models
-//= require collections/gpdb_data_source_set
 //= require collections/hdfs_entry_set
 //= require collections/schema_dataset_set
 //= require collections/user_set

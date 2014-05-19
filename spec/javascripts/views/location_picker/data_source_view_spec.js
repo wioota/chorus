@@ -25,7 +25,7 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
 
         context("selecting an HDFS data source", function() {
             beforeEach(function() {
-                this.server.completeFetchAllFor(this.view.gpdbDataSources, [this.gpdbDataSource]);
+                this.server.completeFetchAllFor(this.view.pgGpDataSources, [this.gpdbDataSource]);
                 this.server.completeFetchAllFor(this.view.hdfsDataSources, [this.hdfsDataSource]);
                 this.view.render();
                 this.databasePicker.hide.reset();
@@ -38,16 +38,16 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
         });
     });
 
-    context("when 'showOracleDataSources' is true", function() {
+    context("when 'showAllDbDataSources' is true", function() {
         beforeEach(function() {
             this.databasePicker = jasmine.createSpyObj('DatabaseView', ['hide', 'isHidden']);
             this.view = new chorus.views.LocationPicker.DataSourceView({
-                showOracleDataSources: true,
+                showAllDbDataSources: true,
                 childPicker: this.databasePicker
             });
         });
 
-        it("should fetch both oracle and gpdb data sources", function() {
+        it("should fetch all data source entity types", function() {
             expect(this.server.requests.length).toBe(1);
             expect(this.server.requests[0].params()['entity_type']).toBeUndefined();
         });
@@ -71,7 +71,7 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
             this.view = new chorus.views.LocationPicker.DataSourceView({
                 showHdfsDataSources: false
             });
-            this.server.completeFetchAllFor(this.view.gpdbDataSources, [this.gpdbDataSource]);
+            this.server.completeFetchAllFor(this.view.pgGpDataSources, [this.gpdbDataSource]);
         });
 
         it("should fetch only gpdb data sources", function() {
@@ -94,7 +94,7 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
                 childPicker: childPicker
             });
             this.view.setSelection(this.gpdbDataSource);
-            this.server.completeFetchAllFor(this.view.gpdbDataSources, [this.gpdbDataSource]);
+            this.server.completeFetchAllFor(this.view.pgGpDataSources, [this.gpdbDataSource]);
             this.view.render();
         });
 

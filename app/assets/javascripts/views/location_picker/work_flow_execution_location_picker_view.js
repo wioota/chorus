@@ -25,7 +25,7 @@ chorus.views.WorkFlowExecutionLocationPicker = chorus.views.LocationPicker.BaseV
         this.databaseView = new chorus.views.LocationPicker.DatabaseView();
 
         this.dataSourceView = new chorus.views.LocationPicker.DataSourceView({
-            showOracleDataSources: true,
+            showAllDbDataSources: true,
             showHdfsDataSources: true,
             childPicker: this.databaseView
         });

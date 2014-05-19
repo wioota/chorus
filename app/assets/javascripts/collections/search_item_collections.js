@@ -47,7 +47,7 @@
         searchKey: "hdfsEntries"
     });
 
-    chorus.collections.Search.DataSourceSet = chorus.collections.GpdbDataSourceSet.include(
+    chorus.collections.Search.DataSourceSet = chorus.collections.PgGpDataSourceSet.include(
         searchCollectionMixins, chorus.Mixins.MultiModelSet
     ).extend({
         searchKey: "dataSources",

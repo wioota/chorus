@@ -79,7 +79,7 @@ describe("chorus.views.SchemaPicker", function() {
                 beforeEach(function() {
                     var collection;
                     if(type === 'dataSource') {
-                        collection = this.view.dataSourceView.gpdbDataSources;
+                        collection = this.view.dataSourceView.pgGpDataSources;
                         expect(collection).not.toBeFalsy();
                         this.server.completeFetchFor(collection, []);
                     } else {
@@ -106,7 +106,7 @@ describe("chorus.views.SchemaPicker", function() {
             it("sorts the select options alphabetically for " + type, function() {
 
                 if(type === "dataSource") {
-                    this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, [
+                    this.server.completeFetchAllFor(this.view.dataSourceView.pgGpDataSources, [
                         backboneFixtures.gpdbDataSource({name: "Zoo"}),
                         backboneFixtures.gpdbDataSource({name: "Aardvark"}),
                         backboneFixtures.gpdbDataSource({name: "bear"})
@@ -160,7 +160,9 @@ describe("chorus.views.SchemaPicker", function() {
                 });
 
                 it("fetches the list of data sources", function() {
-                    expect(this.server.requests[0].url).toMatch("/data_sources/");
+                    var req = this.server.lastFetchFor(this.view.dataSourceView.pgGpDataSources);
+                    expect(req.url).toHaveUrlPath("/data_sources");
+                    expect(req.params()["entity_type[]"]).toMatch(["gpdb_data_source", "pg_data_source"]);
                 });
 
                 itDisplaysLoadingPlaceholderFor('dataSource');
@@ -171,7 +173,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                 context('when the data source list fetch completes', function() {
                     beforeEach(function() {
-                        this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, [
+                        this.server.completeFetchAllFor(this.view.dataSourceView.pgGpDataSources, [
                             backboneFixtures.gpdbDataSource({ name: "<script>alert(hi)<script>", shared: true, id: 1 }),
                             backboneFixtures.gpdbDataSource({ shared: true, id: 2 }),
                             backboneFixtures.gpdbDataSource({ shared: false, id: 3 })
@@ -574,7 +576,7 @@ describe("chorus.views.SchemaPicker", function() {
 
                 context('when the data source list fetch completes without any data sources', function() {
                     beforeEach(function() {
-                        this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, []);
+                        this.server.completeFetchAllFor(this.view.dataSourceView.pgGpDataSources, []);
                     });
 
                     itShowsUnavailable('dataSource');
@@ -585,11 +587,11 @@ describe("chorus.views.SchemaPicker", function() {
                 context('when the data source list fetch fails', function() {
                     beforeEach(function() {
                         spyOnEvent(this.view, 'error');
-                        this.server.lastFetchAllFor(this.view.dataSourceView.gpdbDataSources).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+                        this.server.lastFetchAllFor(this.view.dataSourceView.pgGpDataSources).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                     });
 
                     it("triggers error with the message", function() {
-                        expect("error").toHaveBeenTriggeredOn(this.view, [this.view.dataSourceView.gpdbDataSources]);
+                        expect("error").toHaveBeenTriggeredOn(this.view, [this.view.dataSourceView.pgGpDataSources]);
                     });
                 });
 
@@ -624,7 +626,7 @@ describe("chorus.views.SchemaPicker", function() {
 
             context('when the data sources list does not include the selected data source', function() {
                 beforeEach(function() {
-                    this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, [
+                    this.server.completeFetchAllFor(this.view.dataSourceView.pgGpDataSources, [
                         backboneFixtures.gpdbDataSource({id: 1, name: "A"}),
                         backboneFixtures.gpdbDataSource({id: 2, name: "B"})
                     ]);
@@ -639,7 +641,7 @@ describe("chorus.views.SchemaPicker", function() {
 
             context('when the data sources list is empty', function() {
                 beforeEach(function() {
-                    this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, []);
+                    this.server.completeFetchAllFor(this.view.dataSourceView.pgGpDataSources, []);
                     this.server.lastFetchAllFor(this.view.databaseView.collection).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                     this.server.lastFetchAllFor(this.view.schemaView.collection).failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
                 });
@@ -651,7 +653,7 @@ describe("chorus.views.SchemaPicker", function() {
 
             context('when the data source list fetch completes', function() {
                 beforeEach(function() {
-                    this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, [
+                    this.server.completeFetchAllFor(this.view.dataSourceView.pgGpDataSources, [
                         backboneFixtures.gpdbDataSource(),
                         this.dataSource.attributes,
                         backboneFixtures.gpdbDataSource()
@@ -756,7 +758,7 @@ describe("chorus.views.SchemaPicker", function() {
                 this.view = new chorus.views.SchemaPicker({ allowCreate: true });
                 $('#jasmine_content').append(this.view.el);
                 this.view.render();
-                this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, [ backboneFixtures.gpdbDataSource({ id: '4' }) ]);
+                this.server.completeFetchAllFor(this.view.dataSourceView.pgGpDataSources, [ backboneFixtures.gpdbDataSource({ id: '4' }) ]);
                 this.view.$(".data_source select").val("4").change();
                 this.server.completeFetchFor(this.view.databaseView.collection, [ backboneFixtures.database({ id: '5' }) ]);
                 this.view.$(".database select").val("5").change();
@@ -805,7 +807,7 @@ describe("chorus.views.SchemaPicker", function() {
                     this.view = new chorus.views.SchemaPicker({ allowCreate: true });
                     $('#jasmine_content').append(this.view.el);
                     this.view.render();
-                    this.server.completeFetchAllFor(this.view.dataSourceView.gpdbDataSources, [ backboneFixtures.gpdbDataSource({ id: '4' }) ]);
+                    this.server.completeFetchAllFor(this.view.dataSourceView.pgGpDataSources, [ backboneFixtures.gpdbDataSource({ id: '4' }) ]);
                     this.view.$(".data_source select").val("4").change();
                 });
 

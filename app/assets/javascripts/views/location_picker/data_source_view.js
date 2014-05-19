@@ -19,10 +19,10 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
             this.collection = new chorus.collections.Base();
         }
 
-        if (this.options.showOracleDataSources) {
+        if (this.options.showAllDbDataSources) {
             this.collectDatabaseDataSources();
         } else {
-            this.collectGpdbDataSources();
+            this.collectPgGpDataSources();
         }
 
         this.collection.comparator = function(dataSource) {
@@ -38,9 +38,9 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         this.addDataSourceCollection(this.hdfsDataSources);
     },
 
-    collectGpdbDataSources: function() {
-        this.gpdbDataSources = new chorus.collections.GpdbDataSourceSet();
-        this.addDataSourceCollection(this.gpdbDataSources);
+    collectPgGpDataSources: function() {
+        this.pgGpDataSources = new chorus.collections.PgGpDataSourceSet();
+        this.addDataSourceCollection(this.pgGpDataSources);
     },
     
     collectDatabaseDataSources: function () {
