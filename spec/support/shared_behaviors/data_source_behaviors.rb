@@ -293,3 +293,28 @@ shared_examples_for :data_source_with_update do
     }.to_not change(Events::DataSourceChangedName, :count)
   end
 end
+
+shared_examples_for 'a data source with sandboxes' do
+  let!(:ws_sandbox) { FactoryGirl.create(:workspace, :name => 'Z_workspace', :sandbox => schema) }
+  let!(:public_ws_sandbox) { FactoryGirl.create(:workspace, :name => 'a_workspace', :sandbox => schema, :public => false) }
+  let!(:ws_without_sandbox) { FactoryGirl.create(:workspace, :name => 'ws_3') }
+
+  it "returns the workspaces that use this data_source's schema as sandbox" do
+    workspaces = data_source.used_by_workspaces(users(:admin))
+    workspaces.count.should == 2
+    workspaces.should include(ws_sandbox)
+    workspaces.should include(public_ws_sandbox)
+    workspaces.should_not include(ws_without_sandbox)
+  end
+
+  it 'only returns workspaces visible to the user' do
+    workspaces = data_source.used_by_workspaces(users(:not_a_member))
+    workspaces.count.should == 1
+    workspaces.should include(ws_sandbox)
+  end
+
+  it 'sorts the workspaces alphabetically (case insensitive)' do
+    workspaces = data_source.used_by_workspaces(users(:admin))
+    workspaces.map(&:name).should == [public_ws_sandbox, ws_sandbox].map(&:name).sort_by { |name| name.downcase }
+  end
+end

@@ -2,7 +2,9 @@ require "spec_helper"
 
 describe GpdbDataSource do
   describe "associations" do
-    it { should have_many :databases }
+    it { should have_many(:databases).class_name('GpdbDatabase') }
+    it { should have_many(:schemas).through(:databases) }
+    it { should have_many(:datasets).through(:schemas) }
   end
 
   describe "#create" do
@@ -103,32 +105,10 @@ describe GpdbDataSource do
     end
   end
 
-  describe "#used_by_workspaces" do
-    let!(:gpdb_data_source) { FactoryGirl.create :gpdb_data_source }
-    let!(:gpdb_database) { FactoryGirl.create(:gpdb_database, :data_source => gpdb_data_source, :name => 'db') }
-    let!(:gpdb_schema) { FactoryGirl.create(:gpdb_schema, :name => 'schema', :database => gpdb_database) }
-    let!(:workspace1) { FactoryGirl.create(:workspace, :name => "Z_workspace", :sandbox => gpdb_schema) }
-    let!(:workspace2) { FactoryGirl.create(:workspace, :name => "a_workspace", :sandbox => gpdb_schema, :public => false) }
-    let!(:workspace3) { FactoryGirl.create(:workspace, :name => "ws_3") }
-
-    it "returns the workspaces that use this data_source's schema as sandbox" do
-      workspaces = gpdb_data_source.used_by_workspaces(users(:admin))
-      workspaces.count.should == 2
-      workspaces.should include(workspace1)
-      workspaces.should include(workspace2)
-      workspaces.should_not include(workspace3)
-    end
-
-    it "only returns workspaces visible to the user" do
-      workspaces = gpdb_data_source.used_by_workspaces(users(:not_a_member))
-      workspaces.count.should == 1
-      workspaces.should include(workspace1)
-    end
-
-    it "sorts the workspaces alphabetically" do
-      workspaces = gpdb_data_source.used_by_workspaces(users(:admin))
-      workspaces.should == [workspace2, workspace1]
-    end
+  it_behaves_like 'a data source with sandboxes' do
+    let(:data_source) { FactoryGirl.create :gpdb_data_source }
+    let(:database) { FactoryGirl.create(:gpdb_database, :data_source => data_source, :name => 'db') }
+    let(:schema) { FactoryGirl.create(:gpdb_schema, :name => 'schema', :database => database) }
   end
 
   describe "#refresh_databases", :greenplum_integration do

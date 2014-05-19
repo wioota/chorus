@@ -2,7 +2,9 @@ require 'spec_helper'
 
 describe PgDataSource do
 
-  it { should have_many :databases }
+  it { should have_many(:databases).class_name('PgDatabase') }
+  it { should have_many(:schemas).through(:databases) }
+  it { should have_many(:datasets).through(:schemas) }
 
   describe '#destroy' do
     let(:data_source) { data_sources(:postgres) }
@@ -60,4 +62,9 @@ describe PgDataSource do
     let(:data_source) { data_sources(:postgres) }
   end
 
+  it_behaves_like 'a data source with sandboxes' do
+    let(:data_source) { FactoryGirl.create :pg_data_source }
+    let(:database) { FactoryGirl.create(:pg_database, :data_source => data_source, :name => 'db') }
+    let(:schema) { FactoryGirl.create(:pg_schema, :name => 'schema', :database => database) }
+  end
 end

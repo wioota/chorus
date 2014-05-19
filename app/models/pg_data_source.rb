@@ -1,5 +1,6 @@
 class PgDataSource < ConcreteDataSource
   include PostgresLikeDataSourceBehavior
+  include DataSourceWithSandbox
 
   has_many :databases, :foreign_key => 'data_source_id', :class_name => 'PgDatabase'
 
