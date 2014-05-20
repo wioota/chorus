@@ -12,8 +12,8 @@ class SandboxesController < ApplicationController
         workspace.sandbox = Schema.where(type: %w(GpdbSchema PgSchema)).find(attributes[:schema_id]) if attributes[:schema_id]
         if attributes[:schema_name]
           if attributes[:database_name]
-            gpdb_data_source = DataSource.where(type: %w(GpdbDataSource PgDataSource)).find(attributes[:data_source_id])
-            database = gpdb_data_source.create_database(attributes[:database_name], current_user)
+            data_source = DataSource.where(type: %w(GpdbDataSource PgDataSource)).find(attributes[:data_source_id])
+            database = data_source.create_database(attributes[:database_name], current_user)
           else
             database = Database.where(type: %w(GpdbDatabase PgDatabase)).find(attributes[:database_id])
           end
