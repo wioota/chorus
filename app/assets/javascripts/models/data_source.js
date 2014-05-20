@@ -57,7 +57,7 @@ chorus.models.DataSource = chorus.models.AbstractDataSource.extend({
     },
 
     usage: function() {
-        if(this.isOracle() || this.isJdbc() || this.isPostgres()) {
+        if(this.isOracle() || this.isJdbc()) {
             return null;
         }
         if(!this.dataSourceUsage) {

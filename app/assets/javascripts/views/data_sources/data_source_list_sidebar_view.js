@@ -30,7 +30,7 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
         var dataSourceAccountsCount = dataSourceAccounts.persistedAccountCount ? dataSourceAccounts.persistedAccountCount() : dataSourceAccounts.length;
 
         return {
-            isGreenplum: this.model.isGreenplum(),
+            hasUsage: this.model.usage(),
             userHasAccount: this.model.accountForCurrentUser() && this.model.accountForCurrentUser().has("id"),
             userCanEditPermissions: this.canEditPermissions(),
             userCanEditDataSource: this.canEditDataSource(),

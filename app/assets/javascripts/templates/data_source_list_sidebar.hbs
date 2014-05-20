@@ -47,7 +47,7 @@
             <li><a class="dialog edit_data_source" href="#">{{t "data_sources.sidebar.edit_data_source"}}</a></li>
             <li><a class="alert delete_data_source" href="#">{{t "data_sources.sidebar.delete_data_source"}}</a></li>
         {{/if}}
-        {{#if isGreenplum}}
+        {{#if hasUsage}}
             <li class="workspace_usage_container"></li>
         {{/if}}
         <li><a class="dialog" href="#" data-entity-id="{{id}}" data-entity-type="{{entityType}}" data-allow-workspace-attachments="false" data-dialog="NotesNew">{{t "actions.add_note"}}</a></li>

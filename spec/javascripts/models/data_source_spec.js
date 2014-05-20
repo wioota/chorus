@@ -182,9 +182,9 @@ describe('chorus.models.DataSource', function() {
         });
 
         context("when the data source is Postgres", function() {
-            it('returns null', function() {
+            it("returns an DataSourceUsage object", function() {
                 this.model = backboneFixtures.pgDataSource();
-                expect(this.model.usage()).toBeNull();
+                expect(this.model.usage()).toBeA(chorus.models.DataSourceUsage);
             });
         });
     });
