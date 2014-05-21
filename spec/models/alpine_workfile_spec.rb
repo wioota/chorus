@@ -84,7 +84,8 @@ describe AlpineWorkfile do
         let(:hdfs) { hdfs_data_sources(:hadoop) }
         let(:oracle) { data_sources(:oracle) }
         let(:jdbc) { data_sources(:jdbc) }
-        let(:all_locations) { [gpdb, hdfs, oracle, jdbc] }
+        let(:pgdb) { databases(:pg) }
+        let(:all_locations) { [gpdb, hdfs, oracle, jdbc, pgdb] }
 
         let(:params) do
           {:id => workfile.id}
@@ -99,6 +100,13 @@ describe AlpineWorkfile do
         it 'has the execution locations specified' do
           workfile.update_from_params! params
           workfile.execution_locations.map(&:id).should =~ all_locations.map(&:id)
+        end
+
+        it 'does not find gpdb data sources disguised as oracle data sources' do
+          params[:execution_locations] = [{:id => gpdb.data_source.id, :entity_type => oracle.entity_type_name}]
+          expect {
+            workfile.update_from_params! params
+          }.to raise_exception(ActiveRecord::RecordNotFound)
         end
       end
     end
@@ -211,7 +219,7 @@ describe AlpineWorkfile do
     end
   end
 
-  describe "#execution_locations" do
+  describe '#execution_locations' do
     let(:database) { databases(:default) }
     let(:hdfs) { hdfs_data_sources(:hadoop) }
     let(:params) { valid_params }
@@ -221,7 +229,7 @@ describe AlpineWorkfile do
       WorkfileExecutionLocation.create!(workfile: model, execution_location: hdfs)
     end
 
-    it "returns an array of gpdb database and hdfs data sources" do
+    it 'returns an array of gpdb database and hdfs data sources' do
       model.reload.execution_locations.should =~ [database, hdfs]
     end
   end
