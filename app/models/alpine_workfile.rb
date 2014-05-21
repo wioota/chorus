@@ -49,17 +49,8 @@ class AlpineWorkfile < Workfile
     @datasets ||= Dataset.where(:id => dataset_ids)
   end
 
-  def categorized_dataset_ids
-    datasets.reduce({:hdfs_dataset_ids => [], :dataset_ids => [], :oracle_dataset_ids => [], :jdbc_dataset_ids => []}) do |obj, dataset|
-      case dataset
-        when HdfsDataset then obj[:hdfs_dataset_ids] << dataset.id
-        when GpdbDataset then obj[:dataset_ids] << dataset.id
-        when OracleDataset then obj[:oracle_dataset_ids] << dataset.id
-        when JdbcDataset then obj[:jdbc_dataset_ids] << dataset.id
-        else #ignore
-      end
-      obj
-    end
+  def live_dataset_ids
+    datasets.map &:id
   end
 
   def create_new_version(user, params)

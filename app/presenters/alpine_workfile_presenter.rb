@@ -11,7 +11,7 @@ class AlpineWorkfilePresenter < WorkfilePresenter
 
     unless options[:list_view]
       workfile[:execution_locations] = present(model.execution_locations, :succinct => true)
-      workfile.merge!(model.categorized_dataset_ids)
+      workfile.merge!(:dataset_ids => model.live_dataset_ids)
     end
 
     workfile

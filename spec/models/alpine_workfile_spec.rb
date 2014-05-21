@@ -265,15 +265,15 @@ describe AlpineWorkfile do
     end
   end
 
-  describe "#categorized_dataset_ids" do
+  describe '#live_dataset_ids' do
     let(:workfile) { workfiles(:multiple_dataset_workflow) }
     let(:table) { datasets(:table) }
     let(:hdfs_set) { datasets(:hadoop) }
     let(:oracle_set) { datasets(:oracle_table) }
     let(:jdbc_set) { datasets(:jdbc_table) }
 
-    it "presents dataset ids categorized by type" do
-      workfile.categorized_dataset_ids.should == {:dataset_ids => [table.id], :hdfs_dataset_ids => [hdfs_set.id], :oracle_dataset_ids => [oracle_set.id], :jdbc_dataset_ids => [jdbc_set.id]}
+    it 'presents dataset ids' do
+      workfile.live_dataset_ids.should =~ [table.id, hdfs_set.id, oracle_set.id, jdbc_set.id]
     end
   end
 
