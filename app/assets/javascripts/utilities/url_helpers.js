@@ -39,7 +39,11 @@
         "jpeg":"img",
         "twb":"tableau",
         "pmml":"pmml",
-        "xml":"xml"
+        "xml":"xml",
+        "js":"js",
+        "md":"md",
+        "pig":"pig",
+        "rb":"rb"
     };
 
     chorus.urlHelpers.fileIconUrl = function fileIconUrl(key, size) {

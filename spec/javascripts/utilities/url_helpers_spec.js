@@ -31,6 +31,10 @@ describe("chorus.urlHelpers", function() {
             verifyUrl("twb", "tableau");
             verifyUrl("pmml", "pmml");
             verifyUrl("xml", "xml");
+            verifyUrl("js", "js");
+            verifyUrl("md", "md");
+            verifyUrl("pig", "pig");
+            verifyUrl("rb", "rb");
         });
 
         it("maps unknown fileTypes to plain.png", function() {
