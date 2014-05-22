@@ -44,19 +44,24 @@ describe HdfsDataSource do
     its(:license_type) { should == 'hdfs_version+the_version'}
   end
 
-  describe "destroy" do
-    it "enqueues a destroy_entries job" do
-      mock(QC.default_queue).enqueue_if_not_queued("HdfsEntry.destroy_entries", subject.id)
+  describe '#destroy' do
+    it 'enqueues a destroy_entries job' do
+      mock(QC.default_queue).enqueue_if_not_queued('HdfsEntry.destroy_entries', subject.id)
       subject.destroy
     end
 
-    it "creates an event" do
+    it 'destroys child datasets' do
+      mock(HdfsDataset).destroy_datasets(subject.id)
+      subject.destroy
+    end
+
+    it 'creates an event' do
       set_current_user(users(:admin))
       expect { subject.destroy }.to change { Events::DataSourceDeleted.count }.by(1)
       Events::DataSourceDeleted.last.data_source.should == subject
     end
 
-    it "removes itself from the execution location field of any workfiles it owns" do
+    it 'removes itself from the execution location field of any workfiles it owns' do
       workfiles = subject.workfile_execution_locations.all
       workfiles.length.should > 0
 

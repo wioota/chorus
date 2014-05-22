@@ -25,6 +25,11 @@ class HdfsDataset < Dataset
       dataset
   end
 
+  def self.destroy_datasets(data_source_id)
+    # Don't use dependent => destroy because it pulls them all into memory
+    HdfsDataset.where(:hdfs_data_source_id => data_source_id).find_each { |dataset| dataset.destroy }
+  end
+
   ## include bogus definitions for fields that are searchable in other models
   [:database_name, :table_description, :schema_name, :column_name, :column_description].each do |searchable_field|
     define_method(searchable_field) do
