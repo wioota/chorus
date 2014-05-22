@@ -1,4 +1,3 @@
-require 'tableau_workbook'
 require 'optparse'
 
 class TableauWorkbooksController < ApplicationController
