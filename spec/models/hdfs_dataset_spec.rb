@@ -185,4 +185,14 @@ describe HdfsDataset do
       dataset.save!
     end
   end
+
+  describe '.destroy_datasets' do
+    let(:data_source) { hdfs_data_sources(:hadoop) }
+
+    it 'destroys datasets for given data source id' do
+      HdfsDataset.where(hdfs_data_source_id: data_source.id).count.should > 0
+      HdfsDataset.destroy_datasets(data_source.id)
+      HdfsDataset.where(hdfs_data_source_id: data_source.id).should be_empty
+    end
+  end
 end

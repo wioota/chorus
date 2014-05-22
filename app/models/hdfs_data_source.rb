@@ -20,7 +20,7 @@ class HdfsDataSource < ActiveRecord::Base
   serialize :connection_parameters, JsonArraySerializer
 
   after_create :create_root_entry
-  after_destroy :enqueue_destroy_entries
+  after_destroy :enqueue_destroy_children
   after_destroy :create_deleted_event, :if => :current_user
 
   def self.with_job_tracker
@@ -58,7 +58,7 @@ class HdfsDataSource < ActiveRecord::Base
   end
 
   def hdfs_pairs
-    connection_parameters.map { |hsh| com.emc.greenplum.hadoop.plugins.HdfsPair.new(hsh["key"], hsh["value"]) } if connection_parameters
+    connection_parameters.map { |hsh| com.emc.greenplum.hadoop.plugins.HdfsPair.new(hsh['key'], hsh['value']) } if connection_parameters
   end
 
   def license_type
@@ -67,8 +67,9 @@ class HdfsDataSource < ActiveRecord::Base
 
   private
 
-  def enqueue_destroy_entries
-    QC.enqueue_if_not_queued("HdfsEntry.destroy_entries", id)
+  def enqueue_destroy_children
+    HdfsDataset.destroy_datasets(id)
+    QC.enqueue_if_not_queued('HdfsEntry.destroy_entries', id)
   end
 
   def create_deleted_event
