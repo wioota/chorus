@@ -200,4 +200,39 @@ shared_examples 'a sandbox schema' do
       end
     end
   end
+
+  describe '#stored_functions' do
+    let(:account) { schema.database.data_source.owner_account }
+    let(:connection) { Object.new }
+
+    before do
+      stub(schema).connect_with(account) { connection }
+      stub(connection).functions do
+        [
+            {:oid => 62792, :proname => 'funky_town', :lanname => 'sql', :rettype => 'text', :proargnames => ['i'], :argtypes => 'int4', :prosrc => " SELECT CAST($1 AS text) || ' is text' ", :description => 'comment on funky_town'},
+            {:oid => 62793, :proname => 'towny_funk', :lanname => 'sql', :rettype => 'record', :proargnames => ['i', 'foo', 'bar'], :argtypes => 'int4', :prosrc => " SELECT $1, CAST($1 AS text) || ' is text' ", :description => nil},
+            {:oid => 63121, :proname => 'multi_arg_function', :lanname => 'sql', :rettype => 'int4', :proargnames => ['i', 'j', 'k'], :argtypes => 'float8', :prosrc => 'select 1', :description => 'comment on multi_arg'},
+            {:oid => 63121, :proname => 'multi_arg_function', :lanname => 'sql', :rettype => 'int4', :proargnames => ['i', 'j', 'k'], :argtypes => 'varchar', :prosrc => 'select 1', :description => 'comment on multi_arg'},
+            {:oid => 63121, :proname => 'multi_arg_function', :lanname => 'sql', :rettype => 'int4', :proargnames => ['i', 'j', 'k'], :argtypes => 'int4', :prosrc => 'select 1', :description => 'comment on multi_arg'}
+        ]
+      end
+    end
+
+    it 'returns the GpdbSchemaFunctions' do
+      functions = schema.stored_functions(account)
+
+      functions.count.should == 3
+
+      last_function = functions.last
+      last_function.should be_a GpdbSchemaFunction
+      last_function.schema_name.should == schema.name
+      last_function.function_name.should == 'multi_arg_function'
+      last_function.language.should == 'sql'
+      last_function.return_type.should == 'int4'
+      last_function.arg_names.should == ['i', 'j', 'k']
+      last_function.arg_types.should == ['float8', 'varchar', 'int4']
+      last_function.definition.should == 'select 1'
+      last_function.description.should == 'comment on multi_arg'
+    end
+  end
 end

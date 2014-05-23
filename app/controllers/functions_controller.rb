@@ -2,7 +2,7 @@ class FunctionsController < ApplicationController
   include DataSourceAuth
 
   def index
-    schema = GpdbSchema.find(params[:schema_id])
+    schema = Schema.where(type: %w(GpdbSchema PgSchema)).find(params[:schema_id])
     schema_functions = schema.stored_functions(authorized_account(schema))
     present paginate schema_functions
   end
