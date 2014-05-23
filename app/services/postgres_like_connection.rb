@@ -375,7 +375,7 @@ class PostgresLikeConnection < DataSourceConnection
     def create_table(table_name, table_definition, distribution_clause)
       with_connection do |connection|
         connection.execute <<-SQL
-        CREATE TABLE #{quote_identifier(table_name)} (#{table_definition}) #{distribution_clause}
+        CREATE TABLE #{quote_identifier(table_name)} (#{table_definition}) #{build_distribution_clause(distribution_clause)}
         SQL
       end
       true
@@ -433,6 +433,10 @@ class PostgresLikeConnection < DataSourceConnection
 
     def schema_name
       @options[:schema]
+    end
+
+    def build_distribution_clause(clause)
+      ''
     end
 
     SCHEMA_FUNCTIONS_SQL = <<-SQL

@@ -73,6 +73,10 @@ class GreenplumConnection < PostgresLikeConnection
     raise e
   end
 
+  def build_distribution_clause(clause)
+    clause
+  end
+
   def version_prefix
     'Greenplum Database'
   end

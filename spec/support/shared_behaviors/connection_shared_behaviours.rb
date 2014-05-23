@@ -901,6 +901,48 @@ shared_examples 'a postgres-like connection' do
         it_should_behave_like 'a well-behaved database query'
       end
     end
+
+    describe 'copy_csv' do
+      let(:number_of_lines) { 200 }
+      let(:expected) { number_of_lines }
+      let(:reader) { java.io.FileReader.new Rails.root.join('spec', 'fixtures', 'test.csv').to_s }
+      let(:table_name) { 'csv_to_table' }
+      let(:column_names) {['a', 'b', 'c']}
+      let(:delimiter) { ',' }
+      let(:has_header) { true }
+      let(:subject) { connection.copy_csv(reader, table_name, column_names, delimiter, has_header) }
+      let!(:db) { Sequel.connect(db_url, db_options) }
+
+      before do
+        connection.create_table(table_name, 'a integer, b text, c text', 'DISTRIBUTED RANDOMLY')
+      end
+
+      after do
+        db.drop_table(Sequel.qualify(schema_name, table_name), :if_exists => true)
+        db.disconnect
+      end
+
+      it_should_behave_like 'a well-behaved database query'
+
+      it 'should have the correct number of rows in destination table' do
+        subject
+        connection.count_rows(table_name).should == number_of_lines
+      end
+
+      it 'populates the table with the correct data' do
+        subject
+        result = connection.fetch(<<-SQL)
+            SELECT *
+            FROM #{table_name}
+            ORDER BY a ASC LIMIT 3;
+        SQL
+
+        result[0].should == {:a => 1, :b => '1', :c => '1'}
+        result[1].should == {:a => 2, :b => '2', :c => '2'}
+        result[2].should == {:a => 3, :b => '3', :c => '3'}
+      end
+
+    end
   end
 
   describe 'Database Errors' do
