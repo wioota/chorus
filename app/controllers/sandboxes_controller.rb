@@ -9,7 +9,7 @@ class SandboxesController < ApplicationController
     attributes = params[:sandbox]
     Workspace.transaction do
       begin
-        workspace.sandbox = Schema.where(type: %w(GpdbSchema PgSchema)).find(attributes[:schema_id]) if attributes[:schema_id]
+        workspace.sandbox = Schema.sandboxable.find(attributes[:schema_id]) if attributes[:schema_id]
         if attributes[:schema_name]
           if attributes[:database_name]
             data_source = DataSource.where(type: %w(GpdbDataSource PgDataSource)).find(attributes[:data_source_id])

@@ -18,6 +18,8 @@ class Schema < ActiveRecord::Base
             :presence => true,
             :uniqueness => { :scope => [:parent_type, :parent_id] }
 
+  scope :sandboxable, -> { where(type: %w(GpdbSchema PgSchema)) }
+
   def self.find_and_verify_in_source(schema_id, user)
     schema = find(schema_id)
     raise ActiveRecord::RecordNotFound unless schema.verify_in_source(user)
