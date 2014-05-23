@@ -1,4 +1,4 @@
-class GpdbSchemaFunction
+class SchemaFunction
   attr_reader :schema_name, :function_name, :language, :return_type, :arg_names, :arg_types, :definition, :description
 
   def initialize(schema_name, func_name, lang, return_type, arg_names, arg_type, definition, description)
@@ -13,6 +13,6 @@ class GpdbSchemaFunction
   end
 
   def entity_type_name
-    'gpdb_schema_function'
+    'schema_function'
   end
 end

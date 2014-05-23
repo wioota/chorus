@@ -23,7 +23,7 @@ resource "Schemas" do
     any_instance_of(GpdbSchema) do |schema|
       stub(schema).verify_in_source { true }
       stub(schema).stored_functions(owner_account) {
-        [ GpdbSchemaFunction.new(
+        [ SchemaFunction.new(
           db_schema.name,
           "test_function",
           "SQL",

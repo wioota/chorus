@@ -1,9 +1,9 @@
 require "spec_helper"
 
-describe GpdbSchemaFunctionPresenter, :type => :view do
-  let(:gpdb_schema_function) { GpdbSchemaFunction.new("a_schema", "hello", "sql", "int4", %w{arg1}, ["text"], "Hi!!!", "awesome") }
+describe SchemaFunctionPresenter, :type => :view do
+  let(:schema_function) { SchemaFunction.new("a_schema", "hello", "sql", "int4", %w{arg1}, ["text"], "Hi!!!", "awesome") }
 
-  subject { GpdbSchemaFunctionPresenter.new(gpdb_schema_function, view)}
+  subject { SchemaFunctionPresenter.new(schema_function, view)}
 
   describe "#to_hash" do
     it "includes basic information" do

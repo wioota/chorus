@@ -12,9 +12,9 @@ describe FunctionsController do
   describe "#index" do
     let(:schema) { schemas(:default) }
     let(:functions) { [
-          GpdbSchemaFunction.new("a_schema", "ZOO", "sql", "text", [], "{text}", "Hi!!", "awesome"),
-          GpdbSchemaFunction.new("a_schema", "hello", "sql", "int4", %w{arg1, arg2}, "{text, int4}", "Hi2", "awesome2"),
-          GpdbSchemaFunction.new("a_schema", "foo", "sql", "text", %w{arg1}, "{text}", "hi3", "cross joins FTW")
+          SchemaFunction.new("a_schema", "ZOO", "sql", "text", [], "{text}", "Hi!!", "awesome"),
+          SchemaFunction.new("a_schema", "hello", "sql", "int4", %w{arg1, arg2}, "{text, int4}", "Hi2", "awesome2"),
+          SchemaFunction.new("a_schema", "foo", "sql", "text", %w{arg1}, "{text}", "hi3", "cross joins FTW")
     ]}
 
     context 'for a gpdb schema' do

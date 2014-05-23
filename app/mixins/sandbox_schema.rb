@@ -51,7 +51,7 @@ module SandboxSchema
     end
 
     reduced_results.last.map do |record|
-      GpdbSchemaFunction.new(name, *record[1..7])
+      SchemaFunction.new(name, *record[1..7])
     end
   end
 

@@ -218,13 +218,13 @@ shared_examples 'a sandbox schema' do
       end
     end
 
-    it 'returns the GpdbSchemaFunctions' do
+    it 'returns the SchemaFunctions' do
       functions = schema.stored_functions(account)
 
       functions.count.should == 3
 
       last_function = functions.last
-      last_function.should be_a GpdbSchemaFunction
+      last_function.should be_a SchemaFunction
       last_function.schema_name.should == schema.name
       last_function.function_name.should == 'multi_arg_function'
       last_function.language.should == 'sql'

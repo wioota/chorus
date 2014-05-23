@@ -1,4 +1,4 @@
-class GpdbSchemaFunctionPresenter < Presenter
+class SchemaFunctionPresenter < Presenter
 
   def to_hash
     {
