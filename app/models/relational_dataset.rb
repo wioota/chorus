@@ -14,6 +14,10 @@ class RelationalDataset < Dataset
     ''
   end
 
+  def scoped_name
+    %("#{schema_name}"."#{name}")
+  end
+
   def execution_location
     data_source
   end

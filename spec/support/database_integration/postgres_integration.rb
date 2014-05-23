@@ -119,6 +119,9 @@ module PostgresIntegration
     PgSchema.refresh(account, database)
     schema = database.schemas.find_by_name(schema_name)
     schema.refresh_datasets(account)
+
+    schema3 = database.schemas.find_by_name('test_schema3')
+    schema3.refresh_datasets(account)
   end
 
   def self.account_config

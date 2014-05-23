@@ -55,73 +55,38 @@ describe Visualization::Histogram do
     end
   end
 
-  context "integration", :greenplum_integration do
-    let(:account) { GreenplumIntegration.real_account }
-    let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source)}
-    let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
+  context 'integration' do
+    let(:schema_name) { 'test_schema' }
+    let(:table_name) { 'base_table1' }
 
-    let(:visualization) do
-      Visualization::Histogram.new(dataset, {
-          :bins => 2,
-          :x_axis => 'column1',
-          :filters => filters
-      })
+    context 'for gpdb', :greenplum_integration do
+      let(:data_source_account) { GreenplumIntegration.real_account }
+      let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source)}
+
+      context 'with a table' do
+        let(:dataset) { database.find_dataset_in_schema(table_name, schema_name) }
+
+        it_behaves_like 'a histogram visualization'
+      end
+
+      context 'with a chorus view' do
+        let(:dataset) do
+          ChorusView.new({:name => 'CHORUS_VIEW',
+                          :schema => database.schemas.find_by_name!(schema_name),
+                          :query => "select * from #{table_name}"
+                         }, :without_protection => true)
+        end
+
+        it_behaves_like 'a histogram visualization'
+      end
     end
 
-    describe "#fetch!" do
-      before do
-        visualization.fetch!(account, 12345)
-      end
+    context 'for postgres', :postgres_integration do
+      let(:data_source_account) { PostgresIntegration.real_account }
+      let(:database) { PostgresIntegration.real_database }
+      let(:dataset) { database.find_dataset_in_schema(table_name, schema_name) }
 
-      context 'dataset is a chorus view' do
-        let(:dataset) { datasets(:executable_chorus_view) }
-
-        context 'with no filter' do
-          let(:filters) { nil }
-
-          it 'fetches the data' do
-            visualization.rows.should == [
-                {:bin => [0, 0.5], :frequency => 3},
-                {:bin => [0.5, 1.0], :frequency => 6}
-            ]
-          end
-        end
-
-        context 'with a filter' do
-          let(:filters) { ['"CHORUS_VIEW"."category" = \'papaya\''] }
-
-          it 'fetches the data' do
-            visualization.rows.should == [
-                {:bin => [0, 0.5], :frequency => 1},
-                {:bin => [0.5, 1.0], :frequency => 3}
-            ]
-          end
-        end
-      end
-
-      context 'dataset is a table' do
-        context "with no filter" do
-          let(:filters) { nil }
-
-          it "returns the frequency data" do
-            visualization.rows.should == [
-                {:bin => [0, 0.5], :frequency => 3},
-                {:bin => [0.5, 1.0], :frequency => 6}
-            ]
-          end
-        end
-
-        context "with filters" do
-          let(:filters) { ['"base_table1"."category" = \'papaya\''] }
-
-          it "returns the frequency data based on the filtered dataset" do
-            visualization.rows.should == [
-                {:bin => [0, 0.5], :frequency => 1},
-                {:bin => [0.5, 1.0], :frequency => 3}
-            ]
-          end
-        end
-      end
+      it_behaves_like 'a histogram visualization'
     end
   end
 end

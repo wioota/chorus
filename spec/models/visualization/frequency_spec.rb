@@ -1,74 +1,31 @@
 require 'spec_helper'
 
-describe Visualization::Frequency, :greenplum_integration do
-  before do
-    set_current_user users(:default)
-  end
+describe Visualization::Frequency do
+  let(:schema_name) { 'test_schema' }
+  let(:table_name) { 'base_table1' }
 
-  let(:account) { GreenplumIntegration.real_account }
-  let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source)}
-  let(:dataset) { database.find_dataset_in_schema('base_table1', 'test_schema') }
+  context 'for gpdb', :greenplum_integration do
+    let(:data_source_account) { GreenplumIntegration.real_account }
+    let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source)}
 
-  let(:visualization) do
-    Visualization::Frequency.new(dataset, {
-      :bins => 2,
-      :y_axis => 'category',
-      :filters => filters
-    })
-  end
+    context 'for a table' do
+      let(:dataset) { database.find_dataset_in_schema(table_name, schema_name) }
 
-  describe "#fetch!" do
-    before do
-      visualization.fetch!(account, 12345)
+      it_behaves_like 'a frequency visualization'
     end
 
-    context "dataset is a table" do
-      context "with no filter" do
-        let(:filters) { nil }
-
-        it "returns the frequency data" do
-          visualization.rows.should == [
-              {:count => 4, :bucket => 'papaya'},
-              {:count => 3, :bucket => "orange"}
-          ]
-        end
-      end
-
-      context "with filters" do
-        let(:filters) { ['"base_table1"."column1" > 0', '"base_table1"."column2" < 5'] }
-
-        it "returns the frequency data based on the filtered dataset" do
-          visualization.rows.should == [
-              {:count => 2, :bucket => "orange"},
-              {:count => 1, :bucket => 'apple'}
-          ]
-        end
-      end
-    end
-
-    context "dataset is a chorus view" do
+    context 'for a chorus view' do
       let(:dataset) { datasets(:executable_chorus_view) }
-      context "with no filter" do
-        let(:filters) { nil }
 
-        it "returns the frequency data" do
-          visualization.rows.should == [
-              {:count => 4, :bucket => 'papaya'},
-              {:count => 3, :bucket => "orange"}
-          ]
-        end
-      end
-
-      context "with filters" do
-        let(:filters) { ['"CHORUS_VIEW"."column1" > 0', '"CHORUS_VIEW"."column2" < 5'] }
-
-        it "returns the frequency data based on the filtered dataset" do
-          visualization.rows.should == [
-              {:count => 2, :bucket => "orange"},
-              {:count => 1, :bucket => 'apple'}
-          ]
-        end
-      end
+      it_behaves_like 'a frequency visualization'
     end
+  end
+
+  context 'for postgres', :postgres_integration do
+    let(:data_source_account) { PostgresIntegration.real_account }
+    let(:database) { PostgresIntegration.real_database }
+    let(:dataset) { database.find_dataset_in_schema(table_name, schema_name) }
+
+    it_behaves_like 'a frequency visualization'
   end
 end

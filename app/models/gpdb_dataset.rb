@@ -26,10 +26,6 @@ class GpdbDataset < RelationalDataset
     database.name
   end
 
-  def scoped_name
-    %Q{"#{schema_name}"."#{name}"}
-  end
-
   def can_import_into(destination)
     destination_columns = destination.column_data
     source_columns = column_data
