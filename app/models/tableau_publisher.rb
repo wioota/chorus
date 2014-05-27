@@ -1,3 +1,11 @@
+if ChorusConfig.instance.tableau_configured?
+  begin
+    require 'tableau_workbook'
+  rescue LoadError
+    Rails.logger.warn 'Error loading tableau_workbook'
+  end
+end
+
 class TableauPublisher
 
   attr_accessor :current_user
