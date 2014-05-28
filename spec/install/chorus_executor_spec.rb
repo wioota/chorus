@@ -62,7 +62,7 @@ describe ChorusExecutor do
 
     describe "#rake" do
       let(:rake_task) { "hahaha" }
-      let(:command) { "cd #{release_path} && RAILS_ENV=production bin/rake #{rake_task}" }
+      let(:command) { "cd #{release_path} && RAILS_ENV=production bin/ruby -S bin/rake #{rake_task}" }
 
       it "should execute correctly" do
         executor.rake rake_task
@@ -70,7 +70,7 @@ describe ChorusExecutor do
 
       context "when debugging" do
         let(:debug) { true }
-        let(:command) { "cd #{release_path} && RAILS_ENV=production bin/rake #{rake_task} --trace" }
+        let(:command) { "cd #{release_path} && RAILS_ENV=production bin/ruby -S bin/rake #{rake_task} --trace" }
 
         it "should append --trace" do
           executor.rake rake_task

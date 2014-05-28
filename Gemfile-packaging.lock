@@ -15,9 +15,10 @@ GIT
 
 GIT
   remote: git://github.com/Chorus/jetpack.git
-  revision: 555003253a1f55cba18d9f47024f99524185cdb6
+  revision: fd7a55d8a95174583f134805df2d0179ae2297c7
+  branch: 6c9253195b+chorus
   specs:
-    jetpack (0.1.2)
+    jetpack (0.1.5)
 
 GIT
   remote: git://github.com/Chorus/queue_classic.git

@@ -167,7 +167,7 @@ class Deployer
     end
 
     def run_rake(rake_task)
-      run %Q{cd #{install_path}/current && RAILS_ENV=production bin/rake #{rake_task}}
+      run %Q{cd #{install_path}/current && RAILS_ENV=production bin/ruby -S bin/rake #{rake_task}}
     end
 
     def run_in_legacy(cmd)

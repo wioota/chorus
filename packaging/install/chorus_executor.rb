@@ -17,7 +17,7 @@ class ChorusExecutor
   end
 
   def rake(command)
-    exec "cd #{release_path} && RAILS_ENV=production bin/rake #{command}#{if_debug(' --trace')}"
+    exec "cd #{release_path} && RAILS_ENV=production bin/ruby -S bin/rake #{command}#{if_debug(' --trace')}"
   end
 
   def start_chorus
