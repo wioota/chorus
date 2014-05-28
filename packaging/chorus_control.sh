@@ -136,7 +136,7 @@ function backup () {
   COMPLETION_MESSAGE=""
 
   echo "Backing up chorus data to $BACKUP_DIR..."
-  run_in_root_dir_with_postgres "$RAKE backup:create[$BACKUP_DIR,$ROLLING_DAYS]" "$COMPLETION_MESSAGE"
+  run_in_root_dir_with_postgres "$RUBY -S $RAKE backup:create[$BACKUP_DIR,$ROLLING_DAYS]" "$COMPLETION_MESSAGE"
 }
 
 function restore () {
@@ -186,7 +186,7 @@ To start Chorus, run the following commands:
     chorus_control.sh start"
 
   echo "Restoring chorus data..."
-  run_in_root_dir_with_postgres "$RAKE backup:restore[$BACKUP_ABSOLUTE_FILENAME,$SILENT] --trace" "$COMPLETION_MESSAGE"
+  run_in_root_dir_with_postgres "$RUBY -S $RAKE backup:restore[$BACKUP_ABSOLUTE_FILENAME,$SILENT] --trace" "$COMPLETION_MESSAGE"
 }
 
 function run_in_root_dir_with_postgres () {

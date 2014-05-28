@@ -541,7 +541,7 @@ class ChorusInstaller
   end
 
   def alpine_exists?
-    File.exist? alpine_source_path
+    Dir["#{alpine_source_path}/*.sh"].size > 0
   end
 
   def configure_alpine

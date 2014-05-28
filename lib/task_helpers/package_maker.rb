@@ -47,7 +47,12 @@ module PackageMaker
     FileUtils.rm_rf(install_root)
     FileUtils.mkdir_p(installation_path)
 
-    PATHS_TO_PACKAGE.each do |path|
+    gemfile = File.basename(ENV['BUNDLE_GEMFILE'])
+    gemfile_lock = "#{gemfile}.lock"
+
+    PATHS_TO_PACKAGE << gemfile << gemfile_lock
+
+    PATHS_TO_PACKAGE.uniq.each do |path|
       source_path = File.join(rails_root, path)
       destination_directory = File.dirname(File.join(installation_path, path))
 
