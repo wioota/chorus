@@ -136,8 +136,6 @@ GEM
       activesupport
       tzinfo (~> 0.3.35)
     cocaine (0.2.1)
-    codemirror-rails (3.23)
-      railties (>= 3.0, < 5)
     compass (0.12.2)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
@@ -378,7 +376,6 @@ DEPENDENCIES
   ci_reporter (>= 1.8.2)
   clockwork
   cocaine (= 0.2.1)
-  codemirror-rails (= 3.23)
   compass-rails
   database_cleaner
   factory_girl
