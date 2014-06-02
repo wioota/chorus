@@ -63,12 +63,12 @@ data_sources:
         db_username: "dbc"
         db_password: "dbc"
   hawq:
-    - host: "chorus-gphd20-2"
+    - host: "phd20a.alpinenow.local"
       port: 5432
       db_name: "postgres"
       account:
-        db_username: "gpadmin"
-        db_password: "secret"
+        db_username: "miner_demo"
+        db_password: "miner_demo"
   postgres:
     - host: "chorus-postgres"
       port: 5432

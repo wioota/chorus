@@ -7,6 +7,7 @@ class ChorusView < GpdbDataset
   attr_readonly :schema_id, :workspace_id
 
   belongs_to :workspace
+  unscoped_belongs_to :schema
 
   include_shared_search_fields :workspace, :workspace
 

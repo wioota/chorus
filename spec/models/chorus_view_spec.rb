@@ -89,6 +89,48 @@ describe ChorusView do
     end
   end
 
+  describe '#save' do
+    let(:user) { users(:owner) }
+    let(:workspace) { workspaces(:public) }
+    let(:params) do
+      {
+          object_name: 'joe',
+          query: "SELECT * FROM workspace.nba0610 AS a WHERE a.player = 'Joe Johnson'",
+          schema_id: schema.id,
+          workspace_id: workspace.id
+      }
+    end
+
+    before do
+      set_current_user(user)
+      any_instance_of(PostgresLikeConnection) do |pg_conn|
+        mock(pg_conn).validate_query.with_any_args { true }
+      end
+    end
+
+    context 'with a postgres schema' do
+      let(:schema) { schemas(:pg) }
+
+      it 'can be created' do
+        expect {
+          cv = ChorusView.new params
+          cv.save!
+        }.to change(ChorusView, :count).by(1)
+      end
+    end
+
+    context 'with a greenplum schema' do
+      let(:schema) { schemas(:default) }
+
+      it 'can be created' do
+        expect {
+          cv = ChorusView.new params
+          cv.save!
+        }.to change(ChorusView, :count).by(1)
+      end
+    end
+  end
+
   describe "update" do
     let(:chorus_view) { datasets(:chorus_view) }
 
