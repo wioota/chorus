@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-resource "Greenplum DB: datasets" do
+resource 'Greenplum/Postgres DB: datasets' do
   let(:owner) { users(:owner) }
   let(:gpdb_table) { datasets(:table) }
   let(:table_id) { gpdb_table.to_param }
@@ -14,11 +14,11 @@ resource "Greenplum DB: datasets" do
     log_in owner
   end
 
-  post "/tables/:table_id/analyze" do
-    parameter :table_id, "Table ID"
+  post '/tables/:table_id/analyze' do
+    parameter :table_id, 'Table ID'
     required_parameters :table_id
 
-    example_request "Run analyze on the specified table" do
+    example_request 'Run analyze on the specified table' do
       status.should == 200
     end
   end
