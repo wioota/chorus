@@ -112,7 +112,7 @@ describe GpdbDatasetColumn do
 
     it_simplifies_type("complex", nil)
     it_simplifies_type("numeric", :decimal)
-    it_simplifies_type("integer[]", :integer)
+    it_simplifies_type("integer[]", :string)
     it_simplifies_type("bigint", :integer)
     it_simplifies_type("bit(5)", :string)
     it_simplifies_type("bit varying(10)", :string)
