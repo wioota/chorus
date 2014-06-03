@@ -192,12 +192,11 @@ describe ChorusView do
     end
   end
 
-  describe "#convert_to_database_view", :greenplum_integration do
-    let(:chorus_view) { datasets(:executable_chorus_view) }
+  describe '#convert_to_database_view' do
     let(:schema) { chorus_view.schema }
     let(:database) { schema.database }
-    let(:gpdb_data_source) { database.data_source }
-    let(:account) { gpdb_data_source.owner_account }
+    let(:data_source) { database.data_source }
+    let(:account) { data_source.owner_account }
     let(:user) { account.owner }
     let(:connection) { Object.new }
     let(:view_name) { 'a_new_database_view' }
@@ -208,35 +207,52 @@ describe ChorusView do
       stub(connection).create_view(anything, anything)
     end
 
-    it 'creates a database view' do
-      expect {
-        chorus_view.convert_to_database_view(view_name, user)
-      }.to change(GpdbView, :count).by(1)
+    shared_examples :convertable_to_a_database_view do
+      let(:view_class) { schema.class_for_type('v') }
 
-      GpdbView.last.query.should == chorus_view.query
-      GpdbView.last.name.should == view_name
+      it 'creates a database view' do
+        expect {
+          chorus_view.convert_to_database_view(view_name, user)
+        }.to change(view_class, :count).by(1)
+
+        created = view_class.last
+        created.query.should == chorus_view.query
+        created.name.should == view_name
+      end
+
+      it 'creates the view in greenplum db' do
+        mock(connection).create_view(view_name, chorus_view.query)
+
+        chorus_view.convert_to_database_view(view_name, user)
+      end
+
+      it 'raises if a view with the same name already exists' do
+        stub(connection).view_exists?(anything) { true }
+
+        expect {
+          chorus_view.convert_to_database_view(view_name, user)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it 'raises if it cant create the view' do
+        stub(connection).create_view(view_name, anything) { raise PostgresLikeConnection::DatabaseError.new(StandardError.new()) }
+
+        expect {
+          chorus_view.convert_to_database_view(view_name, user)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
     end
 
-    it 'creates the view in greenplum db' do
-      mock(connection).create_view(view_name, chorus_view.query)
-
-      chorus_view.convert_to_database_view(view_name, user)
+    context 'for greenplum', :greenplum_integration do
+      it_behaves_like :convertable_to_a_database_view do
+        let(:chorus_view) { datasets(:executable_chorus_view) }
+      end
     end
 
-    it "raises if a view with the same name already exists" do
-      stub(connection).view_exists?(anything) { true }
-
-      expect {
-        chorus_view.convert_to_database_view(view_name, user)
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it "raises if it cant create the view" do
-      stub(connection).create_view(view_name, anything) { raise PostgresLikeConnection::DatabaseError.new(StandardError.new()) }
-
-      expect {
-        chorus_view.convert_to_database_view(view_name, user)
-      }.to raise_error(ActiveRecord::RecordInvalid)
+    context 'for postgres' do
+      it_behaves_like :convertable_to_a_database_view do
+        let(:chorus_view) { FactoryGirl.create(:chorus_view, :schema => schemas(:pg), :query => 'select 2;') }
+      end
     end
   end
 
