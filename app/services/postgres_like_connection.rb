@@ -361,15 +361,7 @@ class PostgresLikeConnection < DataSourceConnection
     end
 
     def distribution_key_columns(table_name)
-      with_connection do |connection|
-        sql = <<-SQL
-          SELECT attname
-          FROM   (SELECT *, generate_series(1, array_upper(attrnums, 1)) AS rn
-          FROM   gp_distribution_policy where localoid = '#{quote_identifier(schema_name)}.#{quote_identifier(table_name)}'::regclass
-          ) y, pg_attribute WHERE attrelid = '#{quote_identifier(schema_name)}.#{quote_identifier(table_name)}'::regclass::oid AND attrnums[rn] = attnum ORDER by rn;
-        SQL
-        connection.fetch(sql).map { |row| row[:attname] }
-      end
+      []
     end
 
     def create_table(table_name, table_definition, distribution_clause)

@@ -88,7 +88,7 @@ class TableCopier
   def load_table_definition
     account = source_dataset.data_source.account_for_user!(user)
     columns = DatasetColumn.columns_for(account, source_dataset)
-    columns.map { |column| "\"#{column.name}\" #{convert_column_type(column.data_type)}" }.join(", ")
+    columns.map { |column| %("#{column.name}" #{convert_column_type(column.data_type)}) }.join(', ')
   end
 
   def table_definition
@@ -100,9 +100,7 @@ class TableCopier
   end
 
   def quote_and_join(collection)
-    collection.map do |element|
-      "\"#{element}\""
-    end.join(', ')
+    collection.map { |element| %("#{element}") }.join(', ')
   end
 
   def convert_column_type(type)
@@ -122,6 +120,6 @@ class TableCopier
   end
 
   def destination_table_fullname
-    %Q{"#{destination_schema.name}"."#{destination_table_name}"}
+    %("#{destination_schema.name}"."#{destination_table_name}")
   end
 end

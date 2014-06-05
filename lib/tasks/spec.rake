@@ -5,6 +5,8 @@ unless Rails.env.production?
     `echo "#{ENV['GPDB_HOST']}" > tmp/GPDB_HOST_STALE`
     `echo "#{ENV['ORACLE_HOST']}" > tmp/ORACLE_HOST_STALE`
     `echo "#{ENV['HADOOP_HOST']}" > tmp/HADOOP_HOST_STALE`
+    `echo "#{ENV['JDBC_HOST']}" > tmp/JDBC_HOST_STALE`
+    `echo "#{ENV['PG_HOST']}" > tmp/PG_HOST_STALE`
   end
 
   # remove default rspec_rails tasks and prereqs to start clean (because it assumes the database is test)

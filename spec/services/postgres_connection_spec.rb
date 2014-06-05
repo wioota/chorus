@@ -509,5 +509,11 @@ describe PostgresConnection, :postgres_integration do
         }.to_not raise_error
       end
     end
+
+    describe '#distribution_key_columns' do
+      it 'returns empty array' do
+        connection.distribution_key_columns('base_table1').should == []
+      end
+    end
   end
 end
