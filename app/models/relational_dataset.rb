@@ -35,4 +35,15 @@ class RelationalDataset < Dataset
   def associable?
     true
   end
+
+  def can_import_into(destination)
+    destination_columns = destination.column_data
+    source_columns = column_data
+
+    consistent_size = source_columns.size == destination_columns.size
+
+    consistent_size && source_columns.all? do |source_column|
+      destination_columns.find { |destination_column| source_column.match?(destination_column) }
+    end
+  end
 end
