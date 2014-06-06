@@ -193,8 +193,8 @@ describe Workspaces::ImportsController do
       log_in user
       GreenplumIntegration.execute_sql("delete from #{source_table_name}")
 
-      stub(CrossDatabaseTableCopier).gpfdist_url { Socket.gethostname }
-      stub(CrossDatabaseTableCopier).grace_period_seconds { 1 }
+      stub(GpfdistTableCopier).gpfdist_url { Socket.gethostname }
+      stub(GpfdistTableCopier).grace_period_seconds { 1 }
 
       GreenplumIntegration.execute_sql("insert into #{source_table_name}(id, name, id2, id3) values (1, 'marsbar', 3, 5)")
       GreenplumIntegration.execute_sql("insert into #{source_table_name}(id, name, id2, id3) values (2, 'kitkat', 4, 6)")

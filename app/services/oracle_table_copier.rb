@@ -1,7 +1,7 @@
 class OracleTableCopier < TableCopier
   def run
     destination_connection.connect!.synchronize do |jdbc_conn|
-      copy_manager(jdbc_conn).copy_in(copy_sql, java_stream)
+      copy_manager(jdbc_conn).copy_in(copy_in_sql, java_stream)
     end
   ensure
     destination_connection.disconnect
@@ -47,10 +47,6 @@ class OracleTableCopier < TableCopier
     org.postgresql.copy.CopyManager.new(jdbc_conn)
   end
 
-  def copy_sql
-    "COPY #{destination_table_fullname}(#{column_names}) FROM STDIN WITH DELIMITER ',' CSV"
-  end
-
   def java_stream
     java.io.InputStreamReader.new(org.jruby.util.IOInputStream.new(EnumeratorIO.new(streamer_enum)))
   end
@@ -61,12 +57,6 @@ class OracleTableCopier < TableCopier
 
   def cancelable_query
     @cancelable_query ||= CancelableQuery.new(source_connection, pipe_name, user)
-  end
-
-  def column_names
-    account = source_dataset.data_source.account_for_user!(user)
-    columns = DatasetColumn.columns_for(account, source_dataset)
-    columns.map { |column| "\"#{column.name}\"" }.join(", ")
   end
 
   def distribution_key_columns

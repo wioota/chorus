@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CrossDatabaseTableCopier, :greenplum_integration do
+describe GpfdistTableCopier, :greenplum_integration do
   let(:data_source_account) { GreenplumIntegration.real_account }
   let(:user) { data_source_account.owner }
   let(:database) { GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source) }
@@ -49,7 +49,7 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
   let(:truncate) { false }
   let(:sample_count) { nil }
   let(:extra_options) { {} }
-  let(:copier) { CrossDatabaseTableCopier.new(options) }
+  let(:copier) { GpfdistTableCopier.new(options) }
   let(:sandbox) { schema }
 
   def setup_data
@@ -127,7 +127,7 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
       end
 
       it "drops the newly created table when the write does not complete" do
-        any_instance_of(CrossDatabaseTableCopier) do |pipe|
+        any_instance_of(GpfdistTableCopier) do |pipe|
           stub(pipe).write_data { }
         end
         stub(copier).semaphore_timeout { 1000 }
@@ -138,7 +138,7 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
       end
 
       it "drops the newly created table when the read does not complete" do
-        any_instance_of(CrossDatabaseTableCopier) do |pipe|
+        any_instance_of(GpfdistTableCopier) do |pipe|
           stub(pipe).reader_loop { }
         end
         stub(copier).semaphore_timeout { 1000 }
@@ -172,7 +172,7 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
       end
 
       it "does not drop the table when the import does not complete" do
-        any_instance_of(CrossDatabaseTableCopier) do |pipe|
+        any_instance_of(GpfdistTableCopier) do |pipe|
           stub(pipe).writer_sql { "select pg_sleep(1)" }
         end
         destination_table_exists?.should be_true
@@ -295,7 +295,7 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
     let(:write_connection) { Object.new }
 
     before do
-      stub(CrossDatabaseTableCopier).log.with_any_args
+      stub(GpfdistTableCopier).log.with_any_args
       stub(import.source_dataset).connect_as(user) { source_connection }
       stub(import.schema).connect_as(user) { write_connection }
       stub(source_connection).running?.with_any_args { true }
@@ -307,13 +307,13 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
     it 'kills the source connection' do
       mock(source_connection).kill("pipe%_#{import.created_at.to_i}_#{import.id}_w")
 
-      CrossDatabaseTableCopier.cancel(import)
+      GpfdistTableCopier.cancel(import)
     end
 
     it 'kills the write connection' do
       mock(write_connection).kill("pipe%_#{import.created_at.to_i}_#{import.id}_r")
 
-      CrossDatabaseTableCopier.cancel(import)
+      GpfdistTableCopier.cancel(import)
     end
 
     it 'removes the named pipe from disk' do
@@ -321,7 +321,7 @@ describe CrossDatabaseTableCopier, :greenplum_integration do
       FileUtils.mkdir_p dir
       pipe_file = File.join(dir, "pipe_with_some_extra_stuff_#{import.created_at.to_i}_#{import.id}")
       FileUtils.touch pipe_file
-      CrossDatabaseTableCopier.cancel(import)
+      GpfdistTableCopier.cancel(import)
       File.exists?(pipe_file).should be_false
     end
   end

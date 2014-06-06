@@ -46,8 +46,12 @@ class WorkspaceImport < Import
   def copier_class
     if source.is_a?(OracleDataset)
       OracleTableCopier
+    elsif source.database == schema.database
+      TableCopier
+    elsif source.is_a?(PgDataset) || schema.is_a?(PgSchema)
+      MultiPgTableCopier
     else
-      source.database != schema.database ? CrossDatabaseTableCopier : TableCopier
+      GpfdistTableCopier
     end
   end
 

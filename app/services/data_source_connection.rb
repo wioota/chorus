@@ -158,6 +158,12 @@ class DataSourceConnection
     disconnect
   end
 
+  def with_jdbc_connection(options={})
+    with_connection(options) do |connection|
+      connection.synchronize { |jdbc| yield jdbc }
+    end
+  end
+
   def set_timeout(timeout, statement)
     statement.set_query_timeout(timeout)
   end
@@ -201,12 +207,6 @@ class DataSourceConnection
     statement.set_fetch_size(1000)
     statement.set_max_rows(options[:limit]) if options[:limit]
     statement
-  end
-
-  def with_jdbc_connection(options={})
-    with_connection options do
-      @connection.synchronize { |jdbc| yield jdbc }
-    end
   end
 
   def warnings(options, statement)

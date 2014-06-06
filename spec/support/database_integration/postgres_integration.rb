@@ -67,8 +67,12 @@ module PostgresIntegration
     real_data_source.owner_account
   end
 
-  def self.real_database
-    real_data_source.databases.find_by_name!(self.database_name)
+  def self.real_database(db=database_name)
+    real_data_source.databases.find_by_name!(db)
+  end
+
+  def self.real_database_priv
+    real_database("#{database_name}_priv")
   end
 
   def self.db_url(db=nil)
@@ -91,7 +95,7 @@ module PostgresIntegration
   end
 
   def self.execute_sql_file(sql_file, database='postgres')
-    puts "Executing SQL file: #{sql_file} into #{database}"
+    puts "Executing SQL file: #{sql_file} into #{database} on host #{hostname}"
     sql_erb = ERB.new(File.read(File.expand_path("../#{sql_file}.erb", __FILE__)))
 
     sql = sql_erb.result(binding)
@@ -122,6 +126,9 @@ module PostgresIntegration
 
     schema3 = database.schemas.find_by_name('test_schema3')
     schema3.refresh_datasets(account)
+
+    database_priv = PgDatabase.find_by_name("#{database_name}_priv")
+    PgSchema.refresh(account, database_priv)
   end
 
   def self.account_config

@@ -1,7 +1,7 @@
 require 'fileutils'
 require 'timeout'
 
-class CrossDatabaseTableCopier < TableCopier
+class GpfdistTableCopier < TableCopier
   def run
     source_connection.connect!
     destination_connection.connect!

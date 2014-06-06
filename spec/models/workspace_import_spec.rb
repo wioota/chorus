@@ -132,29 +132,57 @@ describe WorkspaceImport do
     end
   end
 
-  describe "copier_class" do
-    let(:import) { FactoryGirl.build(:import, :source_dataset => source_dataset, :workspace => workspaces(:public)) }
-    context "when the source and destinations are in different greenplum databases" do
-      let(:source_dataset) { datasets(:searchquery_table) }
+  describe '#copier_class' do
+    let(:import) { FactoryGirl.build(:import, :source_dataset => source_dataset, :workspace => workspace) }
+    let(:copier_class) { import.copier_class }
 
-      it "should be CrossDatabaseTableCopier" do
-        import.copier_class.should == CrossDatabaseTableCopier
+    context 'the destination is greenplum' do
+      let(:workspace) { workspaces(:public) }
+
+      context 'when the source is in the same database' do
+        let(:source_dataset) { datasets(:table) }
+        it('is TableCopier') { copier_class.should == TableCopier }
+      end
+
+      context 'when the source is in a different greenplum database' do
+        let(:source_dataset) { datasets(:searchquery_table) }
+        it('is GpfdistTableCopier') { copier_class.should == GpfdistTableCopier }
+      end
+
+      context 'when the source is in a different (postgres) database' do
+        let(:source_dataset) { datasets(:pg_table) }
+        it('is MultiPgTableCopier') { copier_class.should == MultiPgTableCopier }
+      end
+
+      context 'when the source is in an oracle database' do
+        let(:source_dataset) { datasets(:oracle_table) }
+        it('is OracleTableCopier') { copier_class.should == OracleTableCopier }
       end
     end
 
-    context "when the source and destination are in the same database" do
-      let(:source_dataset) { datasets(:table) }
+    context 'the destination is postgres' do
+      let(:workspace) { FactoryGirl.create(:workspace, :sandbox => schemas(:pg)) }
 
-      it "should be TableCopier" do
-        import.copier_class.should == TableCopier
+      context 'when the source is in the same database' do
+        let(:source_dataset) { datasets(:pg_table) }
+        it('is TableCopier') { copier_class.should == TableCopier }
       end
-    end
 
-    context "when the source is an oracle talbe" do
-      let(:source_dataset) { datasets(:oracle_table) }
+      context 'when the source is in a greenplum database' do
+        let(:source_dataset) { datasets(:table) }
+        it('is MultiPgTableCopier') { copier_class.should == MultiPgTableCopier }
+      end
 
-      it "should be an OracleTableCopier" do
-        import.copier_class.should == OracleTableCopier
+      context 'when the source is in a different postgres database' do
+        let(:other_db) { FactoryGirl.create(:pg_database, :data_source => data_sources(:postgres)) }
+        let(:other_db_schema) { FactoryGirl.create(:pg_schema, :database => other_db) }
+        let(:source_dataset) { FactoryGirl.create(:pg_table, :schema => other_db_schema) }
+        it('is MultiPgTableCopier') { copier_class.should == MultiPgTableCopier }
+      end
+
+      context 'when the source is in an oracle database' do
+        let(:source_dataset) { datasets(:oracle_table) }
+        it('is OracleTableCopier') { copier_class.should == OracleTableCopier }
       end
     end
   end
