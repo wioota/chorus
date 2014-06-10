@@ -93,10 +93,6 @@ class TableCopier
     @source_columns ||= DatasetColumn.columns_for(source_account, source_dataset)
   end
 
-  def quoted_source_columns
-    quote_and_join source_columns.map(&:name)
-  end
-
   def source_account
     source_dataset.data_source.account_for_user!(user)
   end
@@ -131,9 +127,5 @@ class TableCopier
 
   def destination_table_fullname
     %("#{destination_schema.name}"."#{destination_table_name}")
-  end
-
-  def copy_in_sql
-    %(COPY #{destination_table_fullname} (#{quoted_source_columns}) FROM STDIN WITH DELIMITER ',' CSV)
   end
 end

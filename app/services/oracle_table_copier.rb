@@ -1,10 +1,8 @@
 class OracleTableCopier < TableCopier
+  include PgCopyManagerMixin
+
   def run
-    destination_connection.connect!.synchronize do |jdbc_conn|
-      copy_manager(jdbc_conn).copy_in(copy_in_sql, java_stream)
-    end
-  ensure
-    destination_connection.disconnect
+    copy_in(java_stream)
   end
 
   def self.cancel(import)
@@ -41,10 +39,6 @@ class OracleTableCopier < TableCopier
     <<-SQL
       ALTER SYSTEM DISCONNECT SESSION #{sid} IMMEDIATE
     SQL
-  end
-
-  def copy_manager(jdbc_conn)
-    org.postgresql.copy.CopyManager.new(jdbc_conn)
   end
 
   def java_stream

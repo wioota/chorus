@@ -1,4 +1,5 @@
 class MultiPgTableCopier < TableCopier
+  include PgCopyManagerMixin
   include_package 'org.postgresql.copy'
 
   def run
@@ -6,9 +7,7 @@ class MultiPgTableCopier < TableCopier
       PGCopyInputStream.new source_jdbc, copy_out_sql
     end
 
-    destination_connection.with_jdbc_connection do |destination_jdbc|
-      destination_jdbc.copy_api.copy_in(copy_in_sql, source_data_stream)
-    end
+    copy_in(source_data_stream)
   ensure
     source_connection.disconnect
   end
