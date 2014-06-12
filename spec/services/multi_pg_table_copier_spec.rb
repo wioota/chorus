@@ -50,7 +50,7 @@ describe MultiPgTableCopier, :postgres_integration do
     it 'copies it in' do
       copier.start
       source_row_count = with_connection(source_db_url) { |c| c.fetch('select count(*) from test_schema.base_table1;').single_value }
-      source_row_count.should > 0
+      source_row_count.should > 5
       dest_row_count = with_connection(dest_db_url) { |c| c.fetch("select count(*) from #{qualified_dest_name}").single_value }
       dest_row_count.should == source_row_count
     end
@@ -58,6 +58,18 @@ describe MultiPgTableCopier, :postgres_integration do
     it 'includes pipe_name in the query for cancel-ability' do
       mock.proxy(Java::OrgPostgresqlCopy::PGCopyInputStream).new(anything, %r|/\*pipe_id\*/|)
       copier.start
+    end
+
+    context 'when limiting the number of rows imported' do
+      let(:sample_count) { 2 }
+
+      it 'copies only the reduced row count' do
+        copier.start
+        source_row_count = with_connection(source_db_url) { |c| c.fetch('select count(*) from test_schema.base_table1;').single_value }
+        source_row_count.should > 2
+        dest_row_count = with_connection(dest_db_url) { |c| c.fetch("select count(*) from #{qualified_dest_name}").single_value }
+        dest_row_count.should == 2
+      end
     end
 
     context 'into an existing table' do

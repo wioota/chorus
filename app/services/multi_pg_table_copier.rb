@@ -20,6 +20,10 @@ class MultiPgTableCopier < TableCopier
   private
 
   def copy_out_sql
-    %(/*#{pipe_name}*/ COPY #{source_dataset.scoped_name} TO STDOUT WITH DELIMITER ',' CSV)
+    %(/*#{pipe_name}*/ COPY (select * from #{source_dataset.scoped_name} #{limit_clause}) TO STDOUT WITH DELIMITER ',' CSV)
+  end
+
+  def limit_clause
+    sample_count ? "limit #{sample_count}" : ''
   end
 end
