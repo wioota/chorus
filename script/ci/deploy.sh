@@ -12,7 +12,7 @@ if [[ $install_processes -le 1 ]]; then
     do
       echo "Deploying $file"
       chmod +x $file
-      rake deploy["$server","$file"]
+      bundle exec rake deploy["$server","$file"]
       exit $?
     done
 else
