@@ -22,7 +22,7 @@ http_interactions:
       - Jetty(6.1-SNAPSHOT)
     body:
       encoding: US-ASCII
-      string: "{'responseHeader'=>{'status'=>0,'QTime'=>4,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
+      string: "{'responseHeader'=>{'status'=>0,'QTime'=>7,'params'=>{'group.ngroups'=>'true','group.limit'=>'3','qf'=>'name_texts\
         \ database_name_texts table_description_texts schema_name_texts column_name_texts\
         \ column_description_texts query_texts tag_names_texts body_texts name_stemmed_texts\
         \ database_name_stemmed_texts table_description_stemmed_texts schema_name_stemmed_texts\
@@ -36,9 +36,9 @@ http_interactions:
         \ OR 1000028 OR 1000029))','-(security_type_name_sm:ChorusView AND -member_ids_im:1000006\
         \ AND -public_b:true)','-(security_type_name_sm:HdfsDataset AND -member_ids_im:1000006\
         \ AND -public_b:true)']}},'grouped'=>{'grouping_id_s'=>{'matches'=>1,'ngroups'=>1,'groups'=>[{'groupValue'=>'ChorusView\
-        \ 1000029','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>11.290819,'docs'=>[{'id'=>'Comment\
-        \ 1000004','body_stemmed_texts'=>['commentsearch'],'body_texts'=>['commentsearch'],'score'=>11.290819}]}}]}},'highlighting'=>{'Comment\
+        \ 1000029','doclist'=>{'numFound'=>1,'start'=>0,'maxScore'=>11.336588,'docs'=>[{'id'=>'Comment\
+        \ 1000004','body_stemmed_texts'=>['commentsearch'],'body_texts'=>['commentsearch'],'score'=>11.336588}]}}]}},'highlighting'=>{'Comment\
         \ 1000004'=>{'body_texts'=>['@@@hl@@@commentsearch@@@endhl@@@'],'body_stemmed_texts'=>['@@@hl@@@commentsearch@@@endhl@@@']}}}"
     http_version: '1.1'
-  recorded_at: Thu, 15 May 2014 00:47:45 GMT
+  recorded_at: Mon, 16 Jun 2014 20:54:58 GMT
 recorded_with: VCR 2.3.0
