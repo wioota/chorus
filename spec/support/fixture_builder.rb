@@ -469,6 +469,7 @@ FixtureBuilder.configure do |fbuilder|
 
     Events::JobSucceeded.by(owner).add(:job => default_job, :workspace => default_job.workspace, :job_result => b_result)
     Events::JobFailed.by(owner).add(:job => default_job, :workspace => default_job.workspace, :job_result => FactoryGirl.create(:job_result, :job => default_job, :succeeded => false))
+    Events::JobDisabled.by(owner).add(:job => default_job)
 
     #CSV File
     csv_file = CsvFile.new({:user => the_collaborator, :workspace => public_workspace, :column_names => [:id], :types => [:integer], :delimiter => ',', :has_header => true, :to_table => 'table', :new_table => true, :contents_file_name => 'import.csv'}, :without_protection => true)
