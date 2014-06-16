@@ -85,9 +85,8 @@ class Job < ActiveRecord::Base
     save!
   end
 
-  def disable!
-    self.enabled = false
-    save!
+  def disable
+    update_attribute(:enabled, false)
   end
 
   def next_task_index
@@ -153,7 +152,7 @@ class Job < ActiveRecord::Base
   def prepare_to_run!
     ensure_next_run_is_in_the_future
     self.last_run = Time.current
-    self.disable! if expiring?
+    self.disable if expiring?
     self.status = RUNNING
     save!
   end
