@@ -19,6 +19,16 @@ describe JobBoss do
       JobBoss.run
     end
 
+    it 'disables jobs that are invalid instead of running them' do
+      mock(job1).enqueue
+      stub(job2).valid? { false }
+      mock(job2).disable
+      dont_allow(job2).enqueue
+      dont_allow(job3).enqueue
+
+      JobBoss.run
+    end
+
     it 'finds the jobs that have stalled while stopping and idles them' do
       dont_allow(job1).idle
       mock(job2).idle
