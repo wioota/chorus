@@ -417,6 +417,10 @@
             dialogs: [{name: "jobResult", dialogClass: chorus.dialogs.JobResultDetail, linkTranslation: 'job.show_errors'}]
         },
 
+        JobDisabled: {
+            links: ["actor", "job", "workspace"]
+        },
+
         WorkfileResult: {
             links: ["workfile"]
         }

@@ -19,14 +19,39 @@ describe JobBoss do
       JobBoss.run
     end
 
-    it 'disables jobs that are invalid instead of running them' do
-      mock(job1).enqueue
-      stub(job2).valid? { false }
-      mock(job2).disable
-      dont_allow(job2).enqueue
-      dont_allow(job3).enqueue
+    context 'when a job is invalid' do
+      before do
+        stub(job2).valid? { false }
+      end
 
-      JobBoss.run
+      it 'disables the jobs that are invalid instead of running them' do
+        mock(job1).enqueue
+        mock(job2).disable
+        dont_allow(job2).enqueue
+        dont_allow(job3).enqueue
+
+        JobBoss.run
+      end
+
+      it 'creates a JobDisabled event' do
+        expect { JobBoss.run }.to change(Events::JobDisabled, :count).by(1)
+      end
+
+      it 'creates a notification for the job owner' do
+        expect { JobBoss.run }.to change(Notification, :count).by(1)
+        notification = Notification.last
+        notification.event.should == Events::Base.last
+        notification.recipient.should == job2.owner
+      end
+
+      it 'does not blow up if an error is raised' do
+        stub(Job).ready_to_run { [job1, job2, job3] }
+        mock(job2).disable { raise }
+        mock(job1).enqueue
+        mock(job3).enqueue
+
+        JobBoss.run
+      end
     end
 
     it 'finds the jobs that have stalled while stopping and idles them' do
