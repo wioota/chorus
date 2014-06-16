@@ -11,8 +11,7 @@ class Mailer < ActionMailer::Base
     attachments[as_png(RunWorkFlowTaskResult.name)] = File.read(Rails.root.join('public', 'images', 'workfiles', 'icon', 'afm.png'))
     attachments[as_png(ImportSourceDataTaskResult.name)] = File.read(Rails.root.join('public', 'images', 'import_icon.png'))
 
-    m = mail(:to => user.email, :subject => event.header)
-    m.deliver
+    safe_deliver mail(:to => user.email, :subject => event.header)
   end
 
   def chorus_expiring(user, license)
@@ -20,14 +19,20 @@ class Mailer < ActionMailer::Base
     @expiration_date = license[:expires]
     @branding = license.branding
     attachments[as_png('logo')] = logo(license)
-    m = mail(:to => user.email, :subject => 'Your Chorus license is expiring.')
-    m.deliver
+
+    safe_deliver mail(:to => user.email, :subject => 'Your Chorus license is expiring.')
   end
 
   private
 
   def logo(license)
     File.read(Rails.root.join('public', 'images', %(#{license.branding}-logo.png)))
+  end
+
+  def safe_deliver(mail)
+    mail.deliver
+  rescue => e
+    Chorus.log_error 'Mail failed to deliver: ' + e.message
   end
 
   module MailerHelper
