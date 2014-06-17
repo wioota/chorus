@@ -104,11 +104,13 @@ Chorus::Application.routes.draw do
     end
   end
 
+  resource :uploads, :only => [:create]
+
   resources :jobs, :only => [] do
     resources :job_results, :only => [:show]
     member do
-      post 'run'
-      post 'stop'
+      post :run
+      post :stop
     end
   end
 

@@ -309,5 +309,10 @@ FactoryGirl.define do
     expired false
     user_count_exceeded false
   end
+
+  factory :upload do
+    user
+    contents { Rack::Test::UploadedFile.new(File.expand_path('spec/fixtures/test.csv', Rails.root), 'text/csv') }
+  end
 end
 
