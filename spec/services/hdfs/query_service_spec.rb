@@ -152,4 +152,55 @@ describe Hdfs::QueryService, :hdfs_integration do
       end
     end
   end
+
+  describe '#delete' do
+    before do
+      any_instance_of(com.emc.greenplum.hadoop.Hdfs) do |java_hdfs|
+        stub(java_hdfs).delete(is_a(String)) { response }
+      end
+    end
+
+    context 'when the delete is successful' do
+      let(:response) { true }
+
+      it 'returns true' do
+        service.delete('/some/path').should be_true
+      end
+    end
+
+    context 'when the delete is unsuccessful' do
+      let(:response) { false }
+
+      it 'returns false' do
+        service.delete('/some/path').should be_false
+      end
+    end
+  end
+
+  describe '#import_data' do
+    # let(:stream) { org.jruby.util.IOInputStream.new(EnumeratorIO.new({})) }
+    let(:stream) { {} }
+
+    before do
+      any_instance_of(com.emc.greenplum.hadoop.Hdfs) do |java_hdfs|
+        stub(java_hdfs).import_data(is_a(String), anything, false) { response }
+      end
+    end
+
+    context 'when the import is successful' do
+      let(:response) { true }
+
+      it 'returns true' do
+        service.import_data('/some/path', stream).should be_true
+      end
+    end
+
+    context 'when the import is unsuccessful' do
+      let(:response) { false }
+
+      it 'raises' do
+        expect { service.import_data('/some/path', stream) }.to raise_error
+      end
+    end
+  end
 end

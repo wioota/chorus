@@ -69,6 +69,16 @@ module Hdfs
       contents
     end
 
+    def delete(path)
+      java_hdfs.delete(path)
+    end
+
+    def import_data(path, stream, opts={})
+      opts  = {:overwrite => false}.merge opts
+      imported = java_hdfs.import_data(path, stream, opts[:overwrite])
+      imported || (raise StandardError.new "Import Failed to #{path}")
+    end
+
     def java_hdfs
       JavaHdfs.new(@host, @port, @username, @version, @high_availability, @connection_parameters)
     end
