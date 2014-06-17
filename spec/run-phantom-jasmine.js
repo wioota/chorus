@@ -207,7 +207,7 @@ page.open(url, function(success) {
             }
         }, 250);
     } else {
-        printError("Failure opening " + url);
+        printError("Failure opening " + url + " - is foreman running?");
         phantom.exit(1);
     }
 });
