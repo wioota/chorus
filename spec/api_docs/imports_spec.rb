@@ -32,7 +32,7 @@ resource 'Imports' do
     let(:new_table) { 'true' }
     let(:sample_count) { '500' }
 
-    example_request 'Import an Oracle dataset into a Greenplum schema' do
+    example_request 'Import an Oracle dataset into a Greenplum/Postgres schema' do
       status.should == 201
     end
   end
