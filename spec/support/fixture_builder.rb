@@ -487,6 +487,10 @@ FixtureBuilder.configure do |fbuilder|
     unimported_csv_file.save!(:validate => false)
     fbuilder.name :unimported, unimported_csv_file
 
+    #Upload
+    default_upload = FactoryGirl.create(:upload, :user => the_collaborator)
+    fbuilder.name :default, default_upload
+
     #Imports
     dataset_import_created = FactoryGirl.create(:dataset_import_created_event,
                                                 :workspace => public_workspace, :dataset => nil,

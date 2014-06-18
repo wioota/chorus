@@ -16,6 +16,7 @@ Chorus::Application.routes.draw do
     scope :module => 'hdfs' do
       resources :files, :only => [:show, :index] do
         resource :statistics, :only => :show
+        resource :imports, :only => :create
       end
     end
   end

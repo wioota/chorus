@@ -131,6 +131,19 @@ resource "Hdfs" do
     end
   end
 
+  post '/hdfs_data_sources/:hdfs_data_source_id/files/:file_id/imports' do
+    parameter :hdfs_data_source_id, 'HDFS data source id'
+    parameter :file_id, 'HDFS directory file_id'
+    parameter :upload_id, 'Uploaded file id'
+
+    let(:file_id) { dir_entry.id }
+    let(:upload_id) { uploads(:default).id }
+
+    example_request 'Create an import into an HDFS directory' do
+      status.should == 201
+    end
+  end
+
   delete "/hdfs_data_sources/:id" do
     parameter :id, "HDFS data source id"
 
