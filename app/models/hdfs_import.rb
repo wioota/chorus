@@ -1,13 +1,17 @@
 class HdfsImport < ActiveRecord::Base
 
-  attr_accessible :hdfs_entry, :upload
+  attr_accessible :hdfs_entry, :upload, :file_name
 
   belongs_to :user
   belongs_to :hdfs_entry
-  belongs_to :upload
+  belongs_to :upload, :dependent => :destroy
 
   validates_presence_of :user, :hdfs_entry, :upload
   validate :hdfs_entry_is_directory
+
+  def destination_file_name
+    file_name || upload.contents_file_name
+  end
 
   private
 

@@ -33,6 +33,11 @@ describe Hdfs::ImportsController do
         last.hdfs_entry.should == hdfs_dir
       end
 
+      it 'enqueues the import' do
+        mock(QC.default_queue).enqueue_if_not_queued('Hdfs::ImportExecutor.run', is_a(Fixnum))
+        post :create, params
+      end
+
       it 'uses authorization' do
         mock(subject).authorize! :use, upload
         post :create, params

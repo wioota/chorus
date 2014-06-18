@@ -7,6 +7,8 @@ module Hdfs
       hdfs_import.user = current_user
       hdfs_import.save!
 
+      QC.enqueue_if_not_queued('Hdfs::ImportExecutor.run', hdfs_import.id)
+
       present hdfs_import, :status => :created
     end
 
