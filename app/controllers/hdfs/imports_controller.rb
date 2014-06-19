@@ -3,7 +3,7 @@ module Hdfs
     def create
       authorize! :use, upload
 
-      hdfs_import = HdfsImport.new(:hdfs_entry => hdfs_entry, :upload => upload)
+      hdfs_import = HdfsImport.new(:hdfs_entry => hdfs_entry, :upload => upload, :file_name => file_name)
       hdfs_import.user = current_user
       hdfs_import.save!
 
@@ -20,6 +20,10 @@ module Hdfs
 
     def upload
       @upload ||= Upload.find params[:upload_id]
+    end
+
+    def file_name
+      params[:file_name]
     end
   end
 end

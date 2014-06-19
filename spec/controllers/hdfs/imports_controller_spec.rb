@@ -51,6 +51,13 @@ describe Hdfs::ImportsController do
           response.should be_forbidden
         end
       end
+
+      context 'with a file name' do
+        it 'sets the file name' do
+          post :create, params.merge(:file_name => 'custom_name')
+          HdfsImport.last.file_name.should == 'custom_name'
+        end
+      end
     end
 
     context 'into a file' do

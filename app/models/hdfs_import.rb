@@ -10,7 +10,7 @@ class HdfsImport < ActiveRecord::Base
   validate :hdfs_entry_is_directory
 
   def destination_file_name
-    file_name || upload.contents_file_name
+    file_name.present? ? file_name : upload.contents_file_name
   end
 
   private
