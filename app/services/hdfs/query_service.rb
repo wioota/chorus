@@ -75,12 +75,18 @@ module Hdfs
 
     def import_data(path, stream, opts={})
       opts  = {:overwrite => false}.merge opts
-      imported = java_hdfs.import_data(path, stream, opts[:overwrite])
-      imported || (raise StandardError.new "Import Failed to #{path}")
+      wrapped_result = java_hdfs.import_data(path, stream, opts[:overwrite])
+      wrapped_result.success? || (raise StandardError.new unwrap_message(wrapped_result))
     end
 
     def java_hdfs
       JavaHdfs.new(@host, @port, @username, @version, @high_availability, @connection_parameters)
+    end
+
+    private
+
+    def unwrap_message(wrapped_result)
+      wrapped_result.message.each_line.first.strip unless wrapped_result.message.nil?
     end
   end
 end

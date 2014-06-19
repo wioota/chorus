@@ -178,7 +178,6 @@ describe Hdfs::QueryService, :hdfs_integration do
   end
 
   describe '#import_data' do
-    # let(:stream) { org.jruby.util.IOInputStream.new(EnumeratorIO.new({})) }
     let(:stream) { {} }
 
     before do
@@ -188,7 +187,7 @@ describe Hdfs::QueryService, :hdfs_integration do
     end
 
     context 'when the import is successful' do
-      let(:response) { true }
+      let(:response) { OpenStruct.new :success? => true }
 
       it 'returns true' do
         service.import_data('/some/path', stream).should be_true
@@ -196,10 +195,10 @@ describe Hdfs::QueryService, :hdfs_integration do
     end
 
     context 'when the import is unsuccessful' do
-      let(:response) { false }
+      let(:response) { OpenStruct.new :success? => false, :message => 'nope' }
 
       it 'raises' do
-        expect { service.import_data('/some/path', stream) }.to raise_error
+        expect { service.import_data('/some/path', stream) }.to raise_error(StandardError, 'nope')
       end
     end
   end
