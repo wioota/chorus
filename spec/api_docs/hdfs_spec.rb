@@ -136,6 +136,8 @@ resource "Hdfs" do
     parameter :file_id, 'HDFS directory file_id'
     parameter :upload_id, 'Uploaded file id'
 
+    required_parameters :upload_id
+
     let(:file_id) { dir_entry.id }
     let(:upload_id) { uploads(:default).id }
 
