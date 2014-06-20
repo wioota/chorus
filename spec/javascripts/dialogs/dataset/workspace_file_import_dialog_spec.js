@@ -1,4 +1,4 @@
-describe("chorus.dialogs.FileImport", function() {
+describe("chorus.dialogs.WorkspaceFileImport", function() {
     beforeEach(function() {
         chorus.models.Config.instance().set({fileSizesMbCsvImports: 1 });
         chorus.page = {};
@@ -15,7 +15,7 @@ describe("chorus.dialogs.FileImport", function() {
             backboneFixtures.workspaceDataset.datasetView()
         ];
         this.datasets = this.validDatasets.concat(this.invalidDatasets);
-        this.dialog = new chorus.dialogs.FileImport({
+        this.dialog = new chorus.dialogs.WorkspaceFileImport({
             workspace: this.workspace
         });
         spyOn(this.dialog, "modalClosed").andCallThrough();

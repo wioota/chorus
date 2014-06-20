@@ -1,5 +1,5 @@
-chorus.dialogs.FileImport = chorus.dialogs.Base.extend({
-    constructorName: "FileImport",
+chorus.dialogs.WorkspaceFileImport = chorus.dialogs.Base.extend({
+    constructorName: "WorkspaceFileImport",
 
     templateName: "dataset_import",
     title: t("dataset.import.title"),

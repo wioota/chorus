@@ -41,11 +41,11 @@ describe("chorus.views.WorkspaceDatasetIndexPageButtons", function() {
                 });
 
                 context("clicking on 'Import File'", function() {
-                    it("launches the FileImport dialog", function() {
-                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.FileImport);
+                    it("launches the WorkspaceFileImport dialog", function() {
+                        expect(this.modalSpy).not.toHaveModal(chorus.dialogs.WorkspaceFileImport);
                         expect(this.qtipElement.find('.import_file')).toContainTranslation('actions.import_file');
                         this.qtipElement.find('.import_file').click();
-                        expect(this.modalSpy).toHaveModal(chorus.dialogs.FileImport);
+                        expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkspaceFileImport);
                         expect(this.modalSpy.lastModal().options.workspace).toBe(this.workspace);
                     });
                 });
