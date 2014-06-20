@@ -78,6 +78,7 @@
 //= require dialogs/memo_new_dialog
 //= require dialogs/dataset/new_table_import_csv
 //= require dialogs/sql_preview_dialog
+//= require dialogs/upload_dialog
 //= require models/dataset
 //= require models/workspace_dataset
 //= require models/tasks/task
