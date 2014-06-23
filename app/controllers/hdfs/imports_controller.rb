@@ -1,5 +1,7 @@
 module Hdfs
   class ImportsController < ::ApplicationController
+    wrap_parameters :hdfs_import, :exclude => []
+
     def create
       authorize! :use, upload
 
@@ -19,11 +21,15 @@ module Hdfs
     end
 
     def upload
-      @upload ||= Upload.find params[:upload_id]
+      @upload ||= Upload.find hdfs_import_params[:upload_id]
     end
 
     def file_name
-      params[:file_name]
+      hdfs_import_params[:file_name]
+    end
+
+    def hdfs_import_params
+      params[:hdfs_import]
     end
   end
 end
