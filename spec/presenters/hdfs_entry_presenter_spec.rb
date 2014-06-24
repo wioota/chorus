@@ -19,7 +19,7 @@ describe HdfsEntryPresenter, :type => :view do
     context "for a directory" do
       let(:entry) do
         hdfs_data_source.hdfs_entries.create!({
-           :path => "/data",
+           :path => "/data2",
            :modified_at => "2010-10-20 10:11:12",
            :size => '10',
            :is_directory => 'true',
@@ -35,7 +35,7 @@ describe HdfsEntryPresenter, :type => :view do
 
       it "includes the fields" do
         hash[:id].should == entry.id
-        hash[:name].should == "data"
+        hash[:name].should == "data2"
         hash[:path].should == "/"
         hash[:last_updated_stamp].should == "2010-10-20T10:11:12Z"
         hash[:size].should == 10

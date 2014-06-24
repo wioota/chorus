@@ -20,8 +20,8 @@ describe Hdfs::FilesController do
     end
 
     it "takes an id and renders the list of entries inside that directory" do
-      parent_entry = HdfsEntry.create!({:is_directory => true, :path => '/data', :hdfs_data_source => hdfs_data_source}, :without_protection => true)
-      child_entry = HdfsEntry.create!({:is_directory => false, :path => '/data/test.csv', :parent_id => parent_entry.id, :hdfs_data_source => hdfs_data_source}, :without_protection => true)
+      parent_entry = HdfsEntry.create!({:is_directory => true, :path => '/data2', :hdfs_data_source => hdfs_data_source}, :without_protection => true)
+      child_entry = HdfsEntry.create!({:is_directory => false, :path => '/data2/test.csv', :parent_id => parent_entry.id, :hdfs_data_source => hdfs_data_source}, :without_protection => true)
 
       any_instance_of(Hdfs::QueryService) do |h|
         stub(h).show { ["a, b, c", "row1a, row1b, row1c"] }

@@ -14,7 +14,7 @@ module Hdfs
 
     def run
       query_service = QueryService.for_data_source(directory.hdfs_data_source)
-      query_service.import_data(destination_path, stream)
+      query_service.import_data(import.destination_path, stream)
     rescue StandardError => e
       Chorus.log_error %(Hdfs::ImportExecutor import failed: #{e.message})
     ensure
@@ -22,10 +22,6 @@ module Hdfs
     end
 
     private
-
-    def destination_path
-      %(#{directory.path.chomp('/')}/#{import.destination_file_name})
-    end
 
     def stream
       java.io.FileInputStream.new(import.upload.contents.path)

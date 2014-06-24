@@ -19,6 +19,23 @@ describe HdfsImport do
 
       FactoryGirl.build(:hdfs_import, :hdfs_entry => hdfs_directory).should be_valid
     end
+
+    describe 'destination uniqueness' do
+      before do
+        hdfs_directory.children.create!(
+            {
+                :path => "#{hdfs_directory.path}/collide.csv",
+                :hdfs_data_source => hdfs_directory.hdfs_data_source
+            }, :without_protection => true
+        )
+      end
+
+      it 'is not valid if a name collision exists on create' do
+        import = HdfsImport.new(:hdfs_entry => hdfs_directory, :file_name => 'collide.csv')
+
+        import.should have_error_on(:file_name).with_message(:TAKEN)
+      end
+    end
   end
 
   describe '#destination_file_name' do
