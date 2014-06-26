@@ -41,7 +41,7 @@ describe("chorus.dialogs.HdfsImportDialog", function () {
     });
 
     it("hides the file type img by default", function() {
-        expect(this.dialog.$(".file_details img")).toHaveClass("hidden");
+        expect(this.dialog.$(".upload_widget img")).toHaveClass("hidden");
     });
 
     it("hides the 'Change' link by default", function() {
@@ -64,8 +64,8 @@ describe("chorus.dialogs.HdfsImportDialog", function () {
             });
 
             it("displays the appropriate file icon", function() {
-                expect(this.dialog.$(".file_details img")).not.toHaveClass("hidden");
-                expect(this.dialog.$(".file_details img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("csv", "icon"));
+                expect(this.dialog.$(".upload_widget img")).not.toHaveClass("hidden");
+                expect(this.dialog.$(".upload_widget img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl("csv", "icon"));
             });
 
             it("should hide the 'No file Selected' text", function() {
