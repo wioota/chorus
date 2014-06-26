@@ -86,7 +86,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
                         expect(this.dialog.closeModal).toHaveBeenCalled();
                     });
 
-                    it("checks for hawq databases", function() {
+                    it("checks for limited data sources", function() {
                         expect(this.dialog.model.notifyWorkflowLimitedDataSource).toHaveBeenCalled();
                     });
 
