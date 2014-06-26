@@ -84,19 +84,12 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
     },
 
     notifyWorkflowLimitedDataSource: function() {
-        function isHawq(el) {
-            return el.get('entityType') === 'gpdb_database' && el.dataSource().get('isHawq');
-        }
-
         function isReadOnlyHdfs(el) {
             return el.get('entityType') === 'hdfs_data_source' && el.get('hdfsVersion') === 'Apache Hadoop 1.2';
         }
 
         _.every(this.executionLocations(), function(el) {
-            if(isHawq(el)) {
-                chorus.toast("work_flows.toast.hawq");
-                return false;
-            } else if (isReadOnlyHdfs(el)) {
+            if (isReadOnlyHdfs(el)) {
                 chorus.toast("work_flows.toast.hdfs_read_only");
                 return false;
             }
