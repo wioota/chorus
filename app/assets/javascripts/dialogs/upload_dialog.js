@@ -2,6 +2,7 @@ chorus.dialogs.Upload = chorus.dialogs.Base.extend({
     constructorName: "UploadDialog",
     templateName: "upload_dialog",
     title: t("upload.dialog.title"),
+    submitKey: "upload.dialog.submit",
 
     setup: function() {
         this.config = chorus.models.Config.instance();
@@ -139,6 +140,10 @@ chorus.dialogs.Upload = chorus.dialogs.Base.extend({
             always: _.bind(this.uploadFinished, this),
             dataType: "json"
         });
+    },
+
+    additionalContext: function() {
+        return { submitKey: this.submitKey };
     }
 
 });

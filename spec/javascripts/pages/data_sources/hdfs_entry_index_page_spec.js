@@ -23,6 +23,11 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         expect(this.hdfsDataSource).toHaveBeenFetched();
     });
 
+    it("creates the correct buttons", function() {
+        expect(this.page.mainContent.contentDetails.buttonView).toBeA(chorus.views.HdfsEntryIndexPageButtons);
+        expect(this.page.mainContent.contentDetails.buttonView.model.get("id")).toBe(this.hdfsEntry.get("id"));
+    });
+
     describe('before the data source fetch completes', function() {
         beforeEach(function() {
             this.page.render();

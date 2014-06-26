@@ -300,6 +300,8 @@ window.BackboneFixtureDefinitions = {
 
     typeAheadSearchResult: {},
 
+    upload: {},
+
     user: { unique: [ "id" ] },
 
     userSet: { unique: [ "id" ] },
