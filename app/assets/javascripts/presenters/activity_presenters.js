@@ -25,7 +25,11 @@
             if (this.isFailure()) {
                 return null;
             } else if (this.model.isSuccessfulImport()) {
-                return this.model.dataset().showUrl();
+                if (this.model.isHdfsImport()) {
+                    return this.model.hdfsEntry().showUrl();
+                } else {
+                    return this.model.dataset().showUrl();
+                }
             } else {
                 return this.model.author().showUrl();
             }
@@ -405,6 +409,10 @@
 
         HdfsDatasetUpdated: {
             links: ["actor", "workspace", "dataset"]
+        },
+
+        HdfsImportSuccess: {
+            links: ["actor", "hdfsEntry", "hdfsDataSource"]
         },
 
         JobSucceeded: {

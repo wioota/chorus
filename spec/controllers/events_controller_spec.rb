@@ -392,7 +392,8 @@ describe EventsController do
         'jobSucceeded' => Events::JobSucceeded,
         'jobFailed' => Events::JobFailed,
         'workfileResult' => Events::WorkfileResult,
-        'jobDisabled' => Events::JobDisabled
+        'jobDisabled' => Events::JobDisabled,
+        'hdfsImportSuccess' => Events::HdfsImportSuccess
     }
 
     FIXTURE_FILES.each do |file_name, event_class|

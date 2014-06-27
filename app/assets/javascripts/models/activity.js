@@ -271,10 +271,15 @@
                 "GnipStreamImportSuccess",
                 "FileImportSuccess",
                 "WorkspaceImportSuccess",
-                "SchemaImportSuccess"
+                "SchemaImportSuccess",
+                "HdfsImportSuccess"
             ];
 
             return _.contains(successActions, this.get("action"));
+        },
+
+        isHdfsImport: function() {
+            return this.get("action") === "HdfsImportSuccess";
         },
 
         promoterLink: function() {

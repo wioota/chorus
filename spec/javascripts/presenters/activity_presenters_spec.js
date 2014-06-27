@@ -912,6 +912,29 @@ describe("chorus.presenters.Activity", function() {
         });
     });
 
+    context("hdfs imports", function () {
+        context("successful imports", function () {
+            beforeEach(function () {
+                this.model = backboneFixtures.activity.hdfsImportSuccess();
+                this.presenter = new chorus.presenters.Activity(this.model);
+                this.actor = this.model.actor();
+                this.dataset = this.hdfsEntry = this.model.hdfsEntry();
+                this.hdfsDataSource = this.model.hdfsDataSource();
+            });
+
+            itHasTheImportIcon();
+
+            it("has the right header html", function () {
+                expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.HdfsImportSuccess.default", {
+                        hdfsEntryLink: linkTo(this.hdfsEntry.showUrl(), this.hdfsEntry.name()),
+                        hdfsDataSourceLink: linkTo(this.hdfsDataSource.showUrl(), this.hdfsDataSource.name())
+                    }
+                );
+            });
+        });
+    });
+
     context("workspace import success", function() {
         beforeEach(function() {
             this.model = backboneFixtures.activity.workspaceImportSuccess();
