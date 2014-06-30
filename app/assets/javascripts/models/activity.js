@@ -260,7 +260,8 @@
                 "GnipStreamImportFailed",
                 "FileImportFailed",
                 "WorkspaceImportFailed",
-                "SchemaImportFailed"
+                "SchemaImportFailed",
+                "HdfsImportFailed"
             ];
 
             return _.contains(failureActions, this.get("action"));

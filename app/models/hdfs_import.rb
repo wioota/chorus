@@ -11,11 +11,15 @@ class HdfsImport < ActiveRecord::Base
   validate :no_destination_collision, :on => :create
 
   def destination_file_name
-    file_name.present? ? file_name : upload.contents_file_name
+    file_name.present? ? file_name : uploaded_file_name
   end
 
   def destination_path
     %(#{hdfs_entry.path.chomp('/')}/#{destination_file_name})
+  end
+
+  def uploaded_file_name
+    upload.contents_file_name
   end
 
   private

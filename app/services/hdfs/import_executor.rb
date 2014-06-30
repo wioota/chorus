@@ -18,7 +18,9 @@ module Hdfs
 
       create_success_event
     rescue StandardError => e
-      Chorus.log_error %(Hdfs::ImportExecutor import failed: #{e.message})
+      message = e.message
+      Chorus.log_error %(Hdfs::ImportExecutor import failed: #{message})
+      create_failure_event(message)
     ensure
       import.destroy
     end
@@ -34,6 +36,14 @@ module Hdfs
       entry = HdfsEntry.find_by_path import.destination_path
 
       event = Events::HdfsImportSuccess.by(import.user).add(:hdfs_entry => entry, :hdfs_data_source => entry.hdfs_data_source)
+      notify_user(event)
+    end
+
+    def create_failure_event(message)
+      event = Events::HdfsImportFailed.by(import.user).add(
+          :hdfs_data_source => directory.hdfs_data_source,
+          :file_name => import.uploaded_file_name,
+          :error_message => message)
       notify_user(event)
     end
 

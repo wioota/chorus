@@ -60,7 +60,7 @@ describe Hdfs::ImportExecutor do
 
     context 'when the import fails' do
       before do
-        any_instance_of(Hdfs::QueryService) { |qs| mock(qs).import_data.with_any_args { raise } }
+        any_instance_of(Hdfs::QueryService) { |qs| mock(qs).import_data.with_any_args { raise 'boom' } }
         exe
       end
 
@@ -70,6 +70,26 @@ describe Hdfs::ImportExecutor do
             exe.run
           }.to change(HdfsImport, :count).by(-1)
         }.to change(Upload, :count).by(-1)
+      end
+
+      it 'creates a failure event' do
+        expect {
+          exe.run
+        }.to change(Events::HdfsImportFailed, :count).by(1)
+        e = Events::Base.last
+        e.actor.should be_present
+        e.hdfs_data_source.should be_present
+        e.file_name.should be_present
+        e.error_message.should == 'boom'
+      end
+
+      it 'creates a notification for the user' do
+        expect {
+          exe.run
+        }.to change(Notification, :count).by(1)
+        n = Notification.last
+        n.event.should == Events::Base.last
+        n.recipient.should == import.user
       end
     end
 

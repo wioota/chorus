@@ -415,6 +415,11 @@
             links: ["actor", "hdfsEntry", "hdfsDataSource"]
         },
 
+        HdfsImportFailed: {
+            links: ["actor", "hdfsDataSource"],
+            computed: ["fileName"]
+        },
+
         JobSucceeded: {
             links: ["actor", "job", "workspace"],
             dialogs: [{name: "jobResult", dialogClass: chorus.dialogs.JobResultDetail, linkTranslation: 'job.show_details'}]
@@ -655,6 +660,10 @@
 
         status: function(self) {
             return t('workspace.project.status.' + self.model.get("status"));
+        },
+
+        fileName: function (self) {
+            return self.model.get("fileName");
         }
     };
 })();

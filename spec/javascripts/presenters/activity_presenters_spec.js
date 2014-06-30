@@ -933,6 +933,26 @@ describe("chorus.presenters.Activity", function() {
                 );
             });
         });
+
+        context("failed imports", function () {
+            beforeEach(function () {
+                this.model = backboneFixtures.activity.hdfsImportFailed();
+                this.presenter = new chorus.presenters.Activity(this.model);
+                this.actor = this.model.actor();
+                this.hdfsDataSource = this.model.hdfsDataSource();
+            });
+
+            itHasTheErrorIcon();
+
+            it("has the right header html", function () {
+                expect(this.presenter.headerHtml().toString()).toMatchTranslation(
+                    "activity.header.HdfsImportFailed.default", {
+                        fileName: this.model.get("fileName"),
+                        hdfsDataSourceLink: linkTo(this.hdfsDataSource.showUrl(), this.hdfsDataSource.name())
+                    }
+                );
+            });
+        });
     });
 
     context("workspace import success", function() {

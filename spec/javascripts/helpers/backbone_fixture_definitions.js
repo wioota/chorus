@@ -26,6 +26,7 @@ window.BackboneFixtureDefinitions = {
             hdfsFileExtTableCreated: {},
             hdfsDatasetExtTableCreated: {},
             hdfsDirectoryExtTableCreated: {},
+            hdfsImportFailed: {},
             hdfsImportSuccess: {},
             hdfsPatternExtTableCreated: {},
             importScheduleDeleted: {},

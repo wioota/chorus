@@ -589,6 +589,7 @@ FixtureBuilder.configure do |fbuilder|
     @schema_import_success = Events::SchemaImportSuccess.by(owner).add(:dataset => default_table, :source_dataset => oracle_table)
     @schema_import_failed = Events::SchemaImportFailed.by(owner).add(:dataset => default_table, :source_dataset => oracle_table, :destination_table => 'other_table', :error_message => "oh no's! everything is broken!", :schema_id => default_table.schema.id)
     Events::HdfsImportSuccess.by(owner).add(:hdfs_entry => @hdfs_file, :hdfs_data_source => hdfs_data_source)
+    Events::HdfsImportFailed.by(owner).add(:hdfs_data_source => hdfs_data_source, :error_message => 'catastrophe!', :file_name => 'original.csv')
     Events::DataSourceChangedOwner.by(admin).add(:data_source => gpdb_data_source, :new_owner => no_collaborators)
     Events::DataSourceChangedName.by(admin).add(:data_source => gpdb_data_source, :old_name => 'mahna_mahna', :new_name => gpdb_data_source.name)
     Events::HdfsDataSourceChangedName.by(admin).add(:hdfs_data_source => hdfs_data_source, :old_name => 'Slartibartfast', :new_name => hdfs_data_source.name)
