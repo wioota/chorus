@@ -27,6 +27,10 @@ chorus.models.Schema = chorus.models.Base.include(
         return this._tables;
     },
 
+    parent: function() {
+        return this.database() || this.dataSource();
+    },
+
     database: function() {
         var database = this._database || (this.get("database") && new chorus.models.Database(this.get("database")));
         if(this.loaded) {

@@ -110,9 +110,9 @@ chorus.views.DatabaseSidebarList = chorus.views.Base.extend({
     setSchema: function(schema) {
         var oldSchema = this.schema;
         this.schema = schema;
-        var databaseChanged = !oldSchema || oldSchema.database().id !== this.schema.database().id;
+        var databaseChanged = !oldSchema || oldSchema.parent().id !== this.schema.parent().id;
         if(this.schema && databaseChanged) {
-            this.schemas = this.schema.database().schemas();
+            this.schemas = this.schema.parent().schemas();
             this.requiredResources.add(this.schemas);
             this.schemas.fetchAll();
             this.fetchResourceAfterSchemaSelected();

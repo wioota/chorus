@@ -144,6 +144,28 @@ describe("chorus.models.Schema", function() {
         });
     });
 
+    describe("#parent", function () {
+        context("in a data source with databases", function () {
+            beforeEach(function () {
+                this.model = backboneFixtures.schema({name: "schema", database: {name: "database", dataSource: {name: "dataSource"}}});
+            });
+
+            it("returns the database", function () {
+                expect(this.model.parent()).toBe(this.model.database());
+            });
+        });
+
+        context("in a data source directly containing schemas", function () {
+            beforeEach(function () {
+                this.model = backboneFixtures.oracleSchema({name: "schema", dataSource: {name: "dataSource", id: 45}});
+            });
+
+            it("returns the data source", function () {
+                expect(this.model.parent()).toBe(this.model.dataSource());
+            });
+        });
+    });
+
     describe("dataSource credentials", function() {
         beforeEach(function() {
             this.model = backboneFixtures.schema();

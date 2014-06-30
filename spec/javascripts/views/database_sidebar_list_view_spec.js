@@ -20,118 +20,135 @@ describe("chorus.views.DatabaseSidebarList", function() {
     });
 
     context("when there is a schema", function() {
-        beforeEach(function() {
-            var object0 = new chorus.models.DynamicDataset();
-            var object1 = new chorus.models.DynamicDataset();
-            object0.cid = 'c44';
-            object1.cid = 'c55';
-
-            this.schema = backboneFixtures.workspace({ sandboxInfo: { name: "righteous_tables" } }).sandbox().schema();
-            this.collection = new chorus.collections.Base([object0, object1]);
-
-            spyOn(this.collection.models[0], 'toText').andReturn('object1');
-            spyOn(this.collection.models[1], 'toText').andReturn('object2');
-            var subclass = chorus.views.DatabaseSidebarList.extend({
-                templateName: "data_tab"
-            });
-
-            this.view = new subclass({collection: this.collection, schema: this.schema });
-
-            spyOn(this.view, "postRender").andCallThrough();
-            this.view.render();
-        });
-
-        it("fetches the schemas", function() {
-            expect(this.server.lastFetchFor(this.schema.database().schemas())).toBeDefined();
-        });
-
-        it("does not render", function() {
-            expect(this.view.postRender).not.toHaveBeenCalled();
-        });
-
-        describe("when the fetch completes", function() {
+        context("when the schema's parent is a database", function () {
             beforeEach(function() {
-                this.qtip = stubQtip(".context a");
-                spyOn(this.view, 'closeQtip');
+                var object0 = new chorus.models.DynamicDataset();
+                var object1 = new chorus.models.DynamicDataset();
+                object0.cid = 'c44';
+                object1.cid = 'c55';
 
-                this.server.completeFetchFor(this.schema.database().schemas(), [
-                    this.schema,
-                    backboneFixtures.schema({ name: "awesome_tables", id: "5" }),
-                    backboneFixtures.schema({ name: "orphaned_tables", id: "6" })
-                ]);
+                this.schema = backboneFixtures.workspace({ sandboxInfo: { name: "righteous_tables" } }).sandbox().schema();
+                this.collection = new chorus.collections.Base([object0, object1]);
+
+                spyOn(this.collection.models[0], 'toText').andReturn('object1');
+                spyOn(this.collection.models[1], 'toText').andReturn('object2');
+                var subclass = chorus.views.DatabaseSidebarList.extend({
+                    templateName: "data_tab"
+                });
+
+                this.view = new subclass({collection: this.collection, schema: this.schema });
+
+                spyOn(this.view, "postRender").andCallThrough();
+                this.view.render();
             });
 
-            it("renders", function() {
-                expect(this.view.postRender).toHaveBeenCalled();
+            it("fetches the schemas", function() {
+                expect(this.server.lastFetchFor(this.schema.database().schemas())).toBeDefined();
             });
-            describe("selecting a schema", function() {
+
+            it("does not render", function() {
+                expect(this.view.postRender).not.toHaveBeenCalled();
+            });
+
+            describe("when the fetch completes", function() {
                 beforeEach(function() {
-                    spyOn(this.view, 'fetchResourceAfterSchemaSelected');
-                    this.view.$(".context a").click();
+                    this.qtip = stubQtip(".context a");
+                    spyOn(this.view, 'closeQtip');
+
+                    this.server.completeFetchFor(this.schema.database().schemas(), [
+                        this.schema,
+                        backboneFixtures.schema({ name: "awesome_tables", id: "5" }),
+                        backboneFixtures.schema({ name: "orphaned_tables", id: "6" })
+                    ]);
                 });
 
-                it("opens a chorus menu", function() {
-                    expect(this.qtip).toHaveVisibleQtip();
+                it("renders", function() {
+                    expect(this.view.postRender).toHaveBeenCalled();
                 });
-
-                it("shows a check mark next to the current schema", function() {
-                    expect(this.view.$("li:contains('righteous_tables')")).toContain('.check');
-                    expect(this.view.$("li:contains('awesome_tables')")).not.toContain('.check');
-                });
-
-                it("shows the names of all of the workspace's database's schemas", function() {
-                    var $lis = this.qtip.find("li a");
-                    expect($lis.length).toBe(4);
-                    expect($lis.eq(0)).toContainText("this workspace");
-                    expect($lis.eq(1)).toContainText("awesome_tables");
-                    expect($lis.eq(2)).toContainText("orphaned_tables");
-                    expect($lis.eq(3)).toContainText("righteous_tables");
-                });
-
-                describe("when a schema is clicked", function() {
+                describe("selecting a schema", function() {
                     beforeEach(function() {
-                        this.qtip.find("a[data-id=5]").click();
-                        this.otherSchema = this.view.schemas.get("5");
+                        spyOn(this.view, 'fetchResourceAfterSchemaSelected');
+                        this.view.$(".context a").click();
                     });
 
-                    it("calls the 'fetchResourceAfterSchemaSelected' hook", function() {
-                        expect(this.view.fetchResourceAfterSchemaSelected).toHaveBeenCalled();
+                    it("opens a chorus menu", function() {
+                        expect(this.qtip).toHaveVisibleQtip();
+                    });
+
+                    it("shows a check mark next to the current schema", function() {
+                        expect(this.view.$("li:contains('righteous_tables')")).toContain('.check');
+                        expect(this.view.$("li:contains('awesome_tables')")).not.toContain('.check');
+                    });
+
+                    it("shows the names of all of the workspace's database's schemas", function() {
+                        var $lis = this.qtip.find("li a");
+                        expect($lis.length).toBe(4);
+                        expect($lis.eq(0)).toContainText("this workspace");
+                        expect($lis.eq(1)).toContainText("awesome_tables");
+                        expect($lis.eq(2)).toContainText("orphaned_tables");
+                        expect($lis.eq(3)).toContainText("righteous_tables");
+                    });
+
+                    describe("when a schema is clicked", function() {
+                        beforeEach(function() {
+                            this.qtip.find("a[data-id=5]").click();
+                            this.otherSchema = this.view.schemas.get("5");
+                        });
+
+                        it("calls the 'fetchResourceAfterSchemaSelected' hook", function() {
+                            expect(this.view.fetchResourceAfterSchemaSelected).toHaveBeenCalled();
+                        });
+                    });
+                });
+
+                describe("event handling", function() {
+                    describe("workfile:changed", function() {
+                        beforeEach(function() {
+                            this.server.reset();
+                        });
+
+                        context("when the execution schema is in the same database as the view's schema", function() {
+                            beforeEach(function() {
+                                this.executionSchema = backboneFixtures.schema({id: 101, name: 'other_schema', database: this.schema.get('database')});
+                                this.workfile = new chorus.models.Workfile(backboneFixtures.workfile.sql({executionSchema: this.executionSchema.attributes}));
+                                chorus.PageEvents.trigger("workfile:changed", this.workfile);
+                            });
+
+                            it("does not fetch anything", function() {
+                                expect(this.server.fetches().length).toBe(0);
+                                expect(this.view.schema.id).toEqual(this.executionSchema.id);
+                            });
+                        });
+
+                        context("when the execution schema is not in the same database as the view's schema", function() {
+                            beforeEach(function() {
+                                this.executionSchema = backboneFixtures.schema({id: 101, name: 'other_schema', database: {id: 102, name: 'other_database'}});
+                                this.workfile = new chorus.models.Workfile(backboneFixtures.workfile.sql({executionSchema: this.executionSchema.attributes}));
+                                chorus.PageEvents.trigger("workfile:changed", this.workfile);
+                            });
+
+                            it("fetches the execution schema", function() {
+                                expect(this.executionSchema.database().schemas()).toHaveBeenFetched();
+                                expect(this.view.schema.id).toEqual(this.executionSchema.id);
+                            });
+                        });
                     });
                 });
             });
+        });
 
-            describe("event handling", function() {
-                describe("workfile:changed", function() {
-                    beforeEach(function() {
-                        this.server.reset();
-                    });
+        context("when the schema's parent is a data source", function () {
+            beforeEach(function () {
+                this.schema = backboneFixtures.oracleSchema();
 
-                    context("when the execution schema is in the same database as the view's schema", function() {
-                        beforeEach(function() {
-                            this.executionSchema = backboneFixtures.schema({id: 101, name: 'other_schema', database: this.schema.get('database')});
-                            this.workfile = new chorus.models.Workfile(backboneFixtures.workfile.sql({executionSchema: this.executionSchema.attributes}));
-                            chorus.PageEvents.trigger("workfile:changed", this.workfile);
-                        });
+                var subclass = chorus.views.DatabaseSidebarList.extend({ templateName: "data_tab" });
+                this.view = new subclass({collection: this.collection, schema: this.schema });
 
-                        it("does not fetch anything", function() {
-                            expect(this.server.fetches().length).toBe(0);
-                            expect(this.view.schema.id).toEqual(this.executionSchema.id);
-                        });
-                    });
+                this.view.render();
+            });
 
-                    context("when the execution schema is not in the same database as the view's schema", function() {
-                        beforeEach(function() {
-                            this.executionSchema = backboneFixtures.schema({id: 101, name: 'other_schema', database: {id: 102, name: 'other_database'}});
-                            this.workfile = new chorus.models.Workfile(backboneFixtures.workfile.sql({executionSchema: this.executionSchema.attributes}));
-                            chorus.PageEvents.trigger("workfile:changed", this.workfile);
-                        });
-
-                        it("fetches the execution schema", function() {
-                            expect(this.executionSchema.database().schemas()).toHaveBeenFetched();
-                            expect(this.view.schema.id).toEqual(this.executionSchema.id);
-                        });
-                    });
-                });
+            it("fetches the schemas", function() {
+                expect(this.server.lastFetchFor(this.schema.dataSource().schemas())).toBeDefined();
             });
         });
     });
