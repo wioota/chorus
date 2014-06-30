@@ -1,4 +1,6 @@
 class Upload < ActiveRecord::Base
+  include StaleUpload
+
   attr_accessible :contents
 
   belongs_to :user

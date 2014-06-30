@@ -6,8 +6,8 @@ class ServiceScheduler
       QC.enqueue_if_not_queued('DataSourceStatusChecker.check_all')
     end
 
-    every(ChorusConfig.instance['delete_unimported_csv_files_interval_hours'].hours, 'CsvFile.delete_old_files!') do
-      QC.enqueue_if_not_queued('CsvFile.delete_old_files!')
+    every(ChorusConfig.instance['delete_unimported_csv_files_interval_hours'].hours, 'delete_old_files!') do
+      [CsvFile, Upload].each { |clazz| QC.enqueue_if_not_queued("#{clazz}.delete_old_files!") }
     end
 
     every(24.hours, 'OrphanCleaner.clean') do

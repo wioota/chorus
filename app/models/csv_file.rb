@@ -1,4 +1,6 @@
 class CsvFile < ActiveRecord::Base
+  include StaleUpload
+
   attr_accessible :contents, :column_names, :types, :delimiter, :to_table, :has_header, :new_table, :truncate
 
   serialize :column_names
@@ -21,12 +23,6 @@ class CsvFile < ActiveRecord::Base
 
   def escaped_column_names
     column_names.map { |column_name| %Q|"#{column_name}"| }
-  end
-
-  def self.delete_old_files!
-    age_limit = ChorusConfig.instance['delete_unimported_csv_files_after_hours']
-    return unless age_limit
-    CsvFile.where("created_at < ?", Time.current - age_limit.hours).destroy_all
   end
 
   def table_already_exists(table_name)

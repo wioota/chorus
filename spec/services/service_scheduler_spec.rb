@@ -36,14 +36,15 @@ describe ServiceScheduler do
     end
   end
 
-  describe "CsvFile.delete_old_files!" do
+  describe 'delete_old_files!' do
     it "runs every ChorusConfig.instance['delete_unimported_csv_files_interval_hours'] hours" do
-      job_scheduler.job_named('CsvFile.delete_old_files!').period.should == ChorusConfig.instance['delete_unimported_csv_files_interval_hours'].hours
+      job_scheduler.job_named('delete_old_files!').period.should == ChorusConfig.instance['delete_unimported_csv_files_interval_hours'].hours
     end
 
-    it "enqueues the 'CsvFile.delete_old_files!' job in QC" do
-      mock(QC.default_queue).enqueue_if_not_queued("CsvFile.delete_old_files!")
-      job_scheduler.job_named('CsvFile.delete_old_files!').run(Time.current)
+    it "enqueues the 'CsvFile.delete_old_files!' and 'Upload.delete_old_files!' jobs in QC" do
+      mock(QC.default_queue).enqueue_if_not_queued('CsvFile.delete_old_files!')
+      mock(QC.default_queue).enqueue_if_not_queued('Upload.delete_old_files!')
+      job_scheduler.job_named('delete_old_files!').run(Time.current)
     end
   end
 
