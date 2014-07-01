@@ -577,6 +577,17 @@ describe WorkfilesController do
       end
     end
 
+    context 'when the schema cannot be a sandbox' do
+      let(:schema) { schemas(:oracle) }
+
+      it 'updates the schema of workfile' do
+        put :update, options
+        response.should be_success
+        decoded_response[:execution_schema][:id].should == schema.id
+        public_workfile.reload.execution_schema.should == schema
+      end
+    end
+
     describe "updating file names" do
       let(:new_name) { "new_name.sql" }
       let(:workfile) { public_workfile }

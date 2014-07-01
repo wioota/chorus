@@ -41,7 +41,7 @@ class WorkfilesController < ApplicationController
     execution_schema = params[:workfile][:execution_schema]
 
     if execution_schema && execution_schema[:id]
-      schema = Schema.sandboxable.find(execution_schema[:id])
+      schema = Schema.find(execution_schema[:id])
       params[:workfile][:execution_schema] = schema
     end
 
