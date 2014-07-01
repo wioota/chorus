@@ -184,7 +184,6 @@ body .ui-draggable-dragging {
 
             .data_tab_dataset {
                 .toggle_visibility {
-                    top: 8px;
                     position: relative;
                 }
             }
@@ -217,14 +216,17 @@ body .ui-draggable-dragging {
 
         img {
             display: inline-block;
+            vertical-align: middle;
         }
 
         .name {
             font-weight: $semibold;
+            padding-bottom: 0px;
         }
 
         .list_item_text {
             margin-top: 2px;
+            margin-bottom: 2px;
             font-size: 14px;
             display: inline-block;
             max-width: 75%;
@@ -298,16 +300,6 @@ body .ui-draggable-dragging {
         &:hover {
             @include grab_cursor;
         }
-    }
-}
-
-data_tab_dataset_list {
-    &:first-child {
-        border-top: $dotted-list-item-border;
-        margin-top: -1px;
-    }
-    &:last-child {
-        border-bottom: $dotted-list-item-border;
     }
 }
 
