@@ -36,6 +36,14 @@ chorus.views.LocationPicker.SchemaView = chorus.views.LocationPicker.SelectorVie
         this.trigger("error", this.collection);
     },
 
+    parentSelected: function(parent) {
+        this.clearSelection();
+        if (parent) {
+            this.loading();
+            this.fetchSchemas(parent);
+        }
+    },
+
     fetchSchemas: function(selectedDatabase) {
         this.collection = selectedDatabase.schemas();
         if(!this.collection.loaded) { // TEST ME

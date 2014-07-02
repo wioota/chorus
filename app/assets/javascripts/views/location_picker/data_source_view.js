@@ -60,13 +60,13 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         var selectedDataSource = this.getSelectedDataSource();
         this.setSelection(selectedDataSource);
         this.trigger('change');
-        if(!selectedDataSource || selectedDataSource.isSingleLevelSource()) {
+        if(!selectedDataSource || this.hideNextPicker(selectedDataSource)) {
             this.childPicker.hide();
         }
     },
 
     onSelection: function() {
-        if (this.selection && !this.selection.isSingleLevelSource()) {
+        if (this.selection && !this.hideNextPicker(this.selection)) {
             this.childPicker.parentSelected(this.selection);
         }
     },
@@ -113,5 +113,9 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
     ready: function() {
         var attrs = this.fieldValues();
         return !!attrs.dataSource;
+    },
+
+    hideNextPicker: function(currentSelection) {
+        return currentSelection.isSingleLevelSource();
     }
 });

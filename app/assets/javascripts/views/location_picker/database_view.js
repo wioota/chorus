@@ -39,20 +39,19 @@ chorus.views.LocationPicker.DatabaseView = chorus.views.LocationPicker.SelectorV
 
     databaseSelected: function() {
         this.trigger("clearErrors");
-        this.childPicker && this.childPicker.clearSelection();
         var selectedDatabase = this.getSelectedDatabase();
-
-        if(selectedDatabase) {
-            this.selection = selectedDatabase;
-            if (this.childPicker) {
-                this.childPicker.loading();
-                this.childPicker.fetchSchemas(selectedDatabase);
-            }
-        } else {
-            this.clearSelection();
-            this.childPicker && this.childPicker.hide();
-        }
+        this.setSelection(selectedDatabase);
         this.trigger('change');
+    },
+
+    onSelection: function() {
+        if (this.childPicker) {
+            if (this.selection) {
+                this.childPicker.parentSelected(this.selection);
+            } else {
+                this.childPicker.hide();
+            }
+        }
     },
 
     fieldValues: function() {
