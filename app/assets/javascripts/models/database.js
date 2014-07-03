@@ -19,5 +19,9 @@ chorus.models.Database = chorus.models.Base.include(
             this._schemas = schema;
         }
         return schema;
+    },
+
+    parent: function() {
+        return this.dataSource();
     }
 });

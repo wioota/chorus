@@ -20,9 +20,12 @@ chorus.views.LocationPicker.DatabaseView = chorus.views.LocationPicker.SelectorV
     parentSelected: function(dataSource) {
         this.clearSelection();
         this.childPicker && this.childPicker.clearSelection();
-        if (dataSource) {
+        if (dataSource && !dataSource.isSingleLevelSource()) {
             this.loading();
             this.fetchDatabases(dataSource);
+        } else {
+            this.hide();
+            this.childPicker && this.childPicker.parentSelected(dataSource);
         }
     },
 

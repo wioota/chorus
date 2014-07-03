@@ -40,7 +40,7 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
 
     context("when 'showAllDbDataSources' is true", function() {
         beforeEach(function() {
-            this.databasePicker = jasmine.createSpyObj('DatabaseView', ['hide', 'isHidden']);
+            this.databasePicker = jasmine.createSpyObj('DatabaseView', ['hide', 'isHidden', 'parentSelected']);
             this.view = new chorus.views.LocationPicker.DataSourceView({
                 showAllDbDataSources: true,
                 childPicker: this.databasePicker
@@ -56,12 +56,12 @@ describe("chorus.views.LocationPicker.DataSourceView", function() {
             beforeEach(function() {
                 this.server.completeFetchAllFor(this.view.databaseDataSources, [this.gpdbDataSource, this.oracleDataSource]);
                 this.view.render();
-                this.databasePicker.hide.reset();
+                this.databasePicker.parentSelected.reset();
                 this.view.$('select').val(this.oracleDataSource.get('id')).change();
             });
 
             it("hides the database selector", function() {
-                expect(this.databasePicker.hide).toHaveBeenCalled();
+                expect(this.databasePicker.parentSelected).toHaveBeenCalled();
             });
         });
     });

@@ -16,7 +16,7 @@ chorus.dialogs.ChangeWorkfileSchema = chorus.dialogs.Base.extend({
         this.listenTo(this.model, "saved", this.saved);
         this.listenTo(this.model, "saveFailed", this.saveFailed);
 
-        var options = {};
+        var options = { showAllDbDataSources: true };
 
         var schema = this.model.executionSchema();
         if(schema) {

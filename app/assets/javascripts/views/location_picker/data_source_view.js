@@ -10,6 +10,8 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
     setup: function() {
         this._super('setup');
 
+        this.alwaysPickSchema = this.options.alwaysPickSchema;
+
         this.dataSourceCollections = [];
 
         if(this.options.showHdfsDataSources) {
@@ -60,14 +62,10 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
         var selectedDataSource = this.getSelectedDataSource();
         this.setSelection(selectedDataSource);
         this.trigger('change');
-        if(!selectedDataSource || this.hideNextPicker(selectedDataSource)) {
+        if (!selectedDataSource) {
             this.childPicker.hide();
-        }
-    },
-
-    onSelection: function() {
-        if (this.selection && !this.hideNextPicker(this.selection)) {
-            this.childPicker.parentSelected(this.selection);
+        } else {
+            this.childPicker.parentSelected(selectedDataSource);
         }
     },
 
@@ -116,6 +114,6 @@ chorus.views.LocationPicker.DataSourceView = chorus.views.LocationPicker.Selecto
     },
 
     hideNextPicker: function(currentSelection) {
-        return currentSelection.isSingleLevelSource();
+        return !this.alwaysPickSchema && currentSelection.isSingleLevelSource();
     }
 });

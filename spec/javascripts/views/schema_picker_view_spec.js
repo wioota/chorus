@@ -611,6 +611,74 @@ describe("chorus.views.SchemaPicker", function() {
                     });
                 });
             });
+
+            context("when showing single and multi-level database data sources", function () {
+                beforeEach(function () {
+                    this.view = new chorus.views.SchemaPicker({ showAllDbDataSources: true });
+                    this.view.render();
+
+                    this.server.completeFetchFor(this.view.dataSourceView.databaseDataSources, [
+                        backboneFixtures.gpdbDataSource({id: "11"}),
+                        backboneFixtures.oracleDataSource({id: "12"})
+                    ]);
+                });
+
+                describe("selecting an oracle data source", function () {
+                    beforeEach(function () {
+                        this.view.$('select[name="data_source"]').val("12").change();
+                    });
+
+                    it("hides the database picker and shows the schema picker", function () {
+                        expect(this.view.$(".database")).toHaveClass("hidden");
+                        expect(this.view.$(".schema")).not.toHaveClass("hidden");
+                    });
+
+                    it("fetches the oracle data source's schemas", function () {
+                        var req = this.server.lastFetch();
+                        expect(req.url).toHaveUrlPath("/data_sources/12/schemas");
+                    });
+
+                    describe("picking a schema", function () {
+                        beforeEach(function () {
+                            this.schemaSet = backboneFixtures.oracleSchemaSet();
+                            this.server.completeFetchFor(this.view.schemaView.collection, this.schemaSet.models);
+                        });
+
+                        it("is ready", function () {
+                            expect(this.view.ready()).toBe(false);
+                            this.view.$('select[name="schema"]').val(this.schemaSet.first().id).change();
+                            expect(this.view.ready()).toBe(true);
+                        });
+
+                        describe("un-selecting the data source", function () {
+                            beforeEach(function () {
+                                this.view.$('select[name="data_source"]').val("").change();
+                            });
+
+                            it("hides the schema and database selectors", function () {
+                                expect(this.view.$(".database")).toHaveClass("hidden");
+                                expect(this.view.$(".schema")).toHaveClass("hidden");
+                            });
+                        });
+
+                        describe("selecting a gpdb soruce", function () {
+                            beforeEach(function () {
+                                this.view.$('select[name="data_source"]').val("11").change();
+                            });
+
+                            it("shows the database picker and hides the schema picker", function () {
+                                expect(this.view.$(".database")).not.toHaveClass("hidden");
+                                expect(this.view.$(".schema")).toHaveClass("hidden");
+                            });
+
+                            it("fetches the databases", function () {
+                                var req = this.server.lastFetch();
+                                expect(req.url).toHaveUrlPath("/data_sources/11/databases");
+                            });
+                        });
+                    });
+                });
+            });
         });
 
         context("a default schema is provided", function() {
@@ -784,9 +852,11 @@ describe("chorus.views.SchemaPicker", function() {
         describe("#fieldValues", function() {
             context('with a data source provided', function() {
                 beforeEach(function() {
-                    this.dataSource = backboneFixtures.gpdbDataSource();
-                    this.view = new chorus.views.SchemaPicker({ dataSource: this.dataSource });
+                    this.dataSource = backboneFixtures.gpdbDataSource({ id: "3" });
+                    this.view = new chorus.views.SchemaPicker();
                     this.view.render();
+                    this.server.completeFetchFor(this.view.dataSourceView.pgGpDataSources, [ this.dataSource ]);
+                    this.view.$(".data_source select").val("3").change();
                     this.server.completeFetchFor(this.view.databaseView.collection, [ backboneFixtures.database({ id: '5' }) ]);
                     this.view.$(".database select").val("5").change();
                     this.server.completeFetchAllFor(this.view.schemaView.collection, [ backboneFixtures.schema({ id: '6' }) ]);
