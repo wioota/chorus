@@ -7,7 +7,7 @@ describe Visualization::Histogram do
   let(:user) { data_source_account.owner }
   let(:connection) {
     object = Object.new
-    stub(object).visualization_sql_generator { Visualization::SqlGenerator::Base.new }
+    stub(object).visualization_sql_generator { Visualization::SqlGenerator::PgLike.new }
     stub(schema).connect_with(data_source_account) { object }
     object
   }
@@ -23,7 +23,7 @@ describe Visualization::Histogram do
       })
 
       mock(CancelableQuery).new(connection, 17, user) do
-        mock(Object.new).execute(visualization.build_min_max_sql) do
+        mock(Object.new).execute.with_any_args do
           GreenplumSqlResult.new.tap do |result|
             result.add_column("min", "double")
             result.add_column("max", "double")
@@ -35,7 +35,7 @@ describe Visualization::Histogram do
       visualization.instance_variable_set(:@min, "1.0")
       visualization.instance_variable_set(:@max, "9.0")
       mock(CancelableQuery).new(connection, 17, user) do
-        mock(Object.new).execute(visualization.build_row_sql) do
+        mock(Object.new).execute.with_any_args do
           GreenplumSqlResult.new.tap do |result|
             result.add_column("bin", "text")
             result.add_column("frequency", "int8")

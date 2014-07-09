@@ -9,27 +9,7 @@ module Visualization
       @filters = attributes[:filters]
     end
 
-    def build_row_sql
-      category = %Q{#{@dataset.scoped_name}."#{@category}"}
-
-      width_bucket = "width_bucket(CAST(#{category} as numeric), CAST(#{@min} as numeric), CAST(#{@max} as numeric), #{@bins})"
-
-      query = relation.
-          group(width_bucket).
-          project(Arel.sql(width_bucket).as("bucket"), Arel.sql("COUNT(#{width_bucket})").as('frequency')).
-          where(relation[@category].not_eq(nil))
-
-      query = query.where(Arel.sql(@filters.join(" AND "))) if @filters.present?
-
-      query.to_sql
-    end
-
-    def build_min_max_sql
-      query = relation.
-          project(relation[@category].minimum.as('min'), relation[@category].maximum.as('max'))
-
-      query.to_sql
-    end
+    private
 
     def complete_fetch(check_id)
       min_max_result = CancelableQuery.new(@connection, check_id, current_user).execute(min_max_sql)
@@ -43,6 +23,27 @@ module Visualization
       @rows = massage(row_data)
     end
 
+    def build_row_sql
+      opts = {
+          :dataset => @dataset,
+          :category => @category,
+          :min => @min,
+          :max => @max,
+          :bins => @bins,
+          :filters => @filters
+      }
+
+      @sql_generator.histogram_row_sql(opts)
+    end
+
+    def build_min_max_sql
+      opts = {
+          :dataset => @dataset,
+          :category => @category
+      }
+
+      @sql_generator.histogram_min_max_sql(opts)
+    end
 
     def massage(row_data)
       new_row_data = []

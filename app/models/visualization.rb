@@ -31,6 +31,8 @@ module Visualization
       complete_fetch(check_id)
     end
 
+    private
+
     def post_initialize(dataset, attributes); end
 
     def complete_fetch(check_id); end

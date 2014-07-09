@@ -1,7 +1,9 @@
 module Visualization
   module SqlGenerator
     class Jdbc < Base
-      def frequency_row_sql(dataset, bins, category, filters)
+      def frequency_row_sql(o)
+        dataset, bins, category, filters = fetch_opts(o, :dataset, :bins, :category, :filters)
+
         query = <<-SQL
           SELECT TOP #{bins} #{category} AS bucket, count(1) AS counted
             FROM #{dataset.scoped_name}

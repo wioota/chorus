@@ -11,41 +11,38 @@ module Visualization
       @type = attributes[:type]
     end
 
-    def column_information
-      Arel::Table.new(%Q{"information_schema"."columns"})
+    private
+
+    def complete_fetch(check_id)
+      fetch_min_max(@connection, check_id)
+      result = CancelableQuery.new(@connection, check_id, current_user).execute(row_sql)
+      row_data = result.rows.map { |row| {:x => row[0].to_i, :y => row[1].to_i, :value => row[2].to_i} }
+      @rows = fill_missing(row_data)
     end
 
     def build_min_max_sql
-      query = relation.project(
-        relation[@x_axis].minimum.as('xmin'), relation[@x_axis].maximum.as('xmax'),
-        relation[@y_axis].minimum.as('ymin'), relation[@y_axis].maximum.as('ymax')
+      @sql_generator.heatmap_min_max_sql(
+          :dataset => @dataset,
+          :x_axis => @x_axis,
+          :y_axis => @y_axis
       )
-
-      query.to_sql
     end
 
     def build_row_sql
-      query = "SELECT *, count(*) AS value
-      FROM (
-      SELECT width_bucket(
-      CAST(\"#{@x_axis}\" AS numeric),
-      CAST(#{@min_x} AS numeric),
-      CAST(#{@max_x} AS numeric),
-      #{x_bins}) AS x,
-      width_bucket( CAST(\"#{@y_axis}\" AS numeric),
-      CAST(#{@min_y} AS numeric),
-      CAST(#{@max_y} AS numeric),
-      #{y_bins}) AS y
-      FROM ( SELECT * FROM #{@dataset.scoped_name}"
+      opts = {
+        :dataset => @dataset,
+        :x_axis => @x_axis,
+        :y_axis => @y_axis,
+        :min_x => @min_x,
+        :min_y => @min_y,
+        :max_x => @max_x,
+        :max_y => @max_y,
+        :x_bins => @x_bins,
+        :y_bins => @y_bins,
+        :filters => @filters
+      }
 
-      query += " WHERE " + @filters.join(" AND ") if @filters.present?
-
-      query += ") AS subquery
-      WHERE \"#{@x_axis}\" IS NOT NULL
-      AND \"#{@y_axis}\" IS NOT NULL) AS foo
-      GROUP BY x, y"
-
-      query
+      @sql_generator.heatmap_row_sql(opts)
     end
 
     def fetch_min_max(connection, check_id)
@@ -55,13 +52,6 @@ module Visualization
       @max_x = result[1].to_f
       @min_y = result[2].to_f
       @max_y = result[3].to_f
-    end
-
-    def complete_fetch(check_id)
-      fetch_min_max(@connection, check_id)
-      result = CancelableQuery.new(@connection, check_id, current_user).execute(row_sql)
-      row_data = result.rows.map { |row| {:x => row[0].to_i, :y => row[1].to_i, :value => row[2].to_i} }
-      @rows = fill_missing(row_data)
     end
 
     def fill_missing(rows)

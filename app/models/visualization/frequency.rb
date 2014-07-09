@@ -17,7 +17,12 @@ module Visualization
     private
 
     def build_row_sql
-      @sql_generator.frequency_row_sql(@dataset, @bins, @category, @filters)
+      @sql_generator.frequency_row_sql(
+          :dataset => @dataset,
+          :bins => @bins,
+          :category => @category,
+          :filters => @filters
+      )
     end
   end
 end

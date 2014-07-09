@@ -19,32 +19,13 @@ module Visualization
     private
 
     def build_row_sql
-      filters = @filters.present? ? "#{@filters.join(" AND ")} AND" : ""
-
-      ntiles_for_each_datapoint = <<-SQL
-        SELECT "#{@category}", "#{@values}", ntile(4) OVER (t) AS ntile
-        FROM #{@dataset.scoped_name}
-        WHERE #{filters} "#{@category}" IS NOT NULL AND "#{@values}" IS NOT NULL WINDOW t
-        AS (PARTITION BY "#{@category}" ORDER BY "#{@values}")
-      SQL
-
-      ntiles_for_each_bucket = <<-SQL
-        SELECT "#{@category}", ntile, MIN("#{@values}"), MAX("#{@values}"), COUNT(*) cnt
-        FROM (#{ntiles_for_each_datapoint}) AS ntilesForEachDataPoint
-        GROUP BY "#{@category}", ntile ORDER BY "#{@category}", ntile
-      SQL
-
-      # this was removed previously, but is a key performance optimization and must remain in place.
-      # The query needs to limit the number of buckets, there could be a large number of rows
-      # the 'limit' clause is the important part, not the 'total' field
-      ntiles_for_each_bin_with_total = <<-SQL
-        SELECT "#{@category}", ntile, min, max, cnt, SUM(cnt) OVER(w) AS total
-        FROM (#{ntiles_for_each_bucket}) AS ntilesForEachBin
-        WINDOW w AS (PARTITION BY "#{@category}")
-        ORDER BY total desc, "#{@category}", ntile LIMIT #{(@buckets * 4).to_s}
-      SQL
-
-      return ntiles_for_each_bin_with_total
+      @sql_generator.boxplot_row_sql(
+          :dataset => @dataset,
+          :values => @values,
+          :category => @category,
+          :buckets => @buckets,
+          :filters => @filters
+      )
     end
   end
 end
