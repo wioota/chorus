@@ -42,6 +42,7 @@ $default-dialog-width: 500px;
 
 $primary: #00a0e5;
 $primary-highlight: lighten($primary, 30%);
+$primary-lowlight: darken($primary, 5%);
 
 // Background colors
 $administrator-background-color: #5f5f5f;

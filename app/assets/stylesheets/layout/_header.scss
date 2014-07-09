@@ -39,14 +39,13 @@ $header-item-spacing: 2*$padding-x;
             margin: 9px 0 0 0;
 
             input {
-                padding: 4px;
+                padding: 8px;
                 height: 32px;
 
-                background-color: transparent; 
-                border-top: none;
-                border-right: none;
-                border-left: none;
-                border-bottom: 1px solid $xkcd-border-color;
+                background-color: $primary-lowlight; 
+                border: none;
+                border-radius: 3px;
+                width: 178px;
 
                 @include placeholder {
                     color: $xkcd-border-color;
