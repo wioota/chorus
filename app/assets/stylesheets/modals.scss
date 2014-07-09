@@ -1,8 +1,8 @@
-@import "_common.scss";
+@import "_common";
 @import "compass/css3/border-radius";
 @import "compass/css3/opacity";
 
-@import "vendorish/_facebox.scss"; //keep facebox first
+@import "vendorish/_facebox"; //keep facebox first
 @import "modals/alert";
 @import "modals/pick_items";
 @import "modals/collection_list";

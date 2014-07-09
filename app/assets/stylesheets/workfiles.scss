@@ -1,12 +1,12 @@
-@import "_common.scss";
+@import "_common";
 @import "components/_variables";
 @import "compass/css3/border-radius";
 @import "compass/css3/opacity";
 
-@import "workfiles/_workfile_new.scss";
-@import "workfiles/_workfile_show.scss";
-@import "workfiles/_workfile_sidebar.scss";
-@import "workfiles/_results_console.scss";
+@import "workfiles/_workfile_new";
+@import "workfiles/_workfile_show";
+@import "workfiles/_workfile_sidebar";
+@import "workfiles/_results_console";
 
 .image_workfile_content {
     background: white;
