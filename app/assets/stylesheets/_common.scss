@@ -1,6 +1,19 @@
 // Do not put any css rules into this file.  This file is only for declaration of variables and mixins
 //
 
+/* basic color rules - DO NOT use these in component files, they should only be used in config sections! */
+
+$dark-gray: #464646;
+$gray: #7D7D7D;
+$light-gray: #D0D0D0;
+$light-green: #B3D988;
+$light-blue: #EAEFF6;
+$blue: #2c95dd;
+$green: #98B675;
+$dark-green: #4E7225;
+$gray-blue: #B2C7D6;
+
+
 // Dimensions
 $sidebar-width : 266px;
 $sidebar-padding-x : 16px;
@@ -27,7 +40,11 @@ $default-dialog-width: 500px;
 // Colors
 //
 
-//Background colors
+$primary: #00a0e5;
+$primary-highlight: lighten($primary, 30%);
+
+// Background colors
+$administrator-background-color: #5f5f5f;
 $body-background-color: #EAEFF6;
 $body-glow-color : #C8DCED;
 $shaded-background-color: #E1E5E9;
@@ -37,26 +54,27 @@ $element-background: white;
 $list-hover-color: #e3e8ed;
 $list-checked-color: #dde3e9;
 $progress-bar-background-color : #D8DEE6;
-$progress-bar-full-background-color : #AE0020;
-$administrator-background-color: #5f5f5f;
-$search-highlight-color: #FFFF00;
-$error-background-color: #B61B1D;
-$alert-background-color: #B5121B;
-$content-details-action-background-color: #B3D988;
-$content-details-create-background-color: #49A942;
-$content-details-chart-icon-hover-background-color: #C3ECA0;
-$content-details-chart-icon-selected-background-color: #42AA3D;
-$content-details-info-bar-background-color: #C4DCEB;
-$picklist-selected-background-color: #3795DD;
-$activity-stream-comment-background-color: #DFE5EB;
 $selected-row-hover-background-color: #DCE2E8;
-$chart-fill-color: #4A83C3;
-$dataset-number-background-color: #788DA5;
+$content-details-info-bar-background-color: #C4DCEB;
 $ie-header-color: #c7c7c7;
 $tab-gradient-color : #D5E0EB;
+$activity-stream-comment-background-color: #DFE5EB;
+$progress-bar-full-background-color : #AE0020;
+$error-background-color: #B61B1D;
+$alert-background-color: #B5121B;
+$search-highlight-color: #FFFF00;
+$content-details-create-background-color: #49A942;
+$content-details-chart-icon-selected-background-color: #42AA3D;
+$content-details-action-background-color: #B3D988;
+$content-details-chart-icon-hover-background-color: #C3ECA0;
+$picklist-selected-background-color: #3795DD;
+$chart-fill-color: #4A83C3;
+$dataset-number-background-color: #788DA5;
 
 // Border colors
-$border-color : #D0D0D0;
+$xkcd-border-color: $primary-highlight;
+//
+$border-color: $light-gray;
 $weak-header-border-color : #bebfc9;
 $subheader-border-color : #D1D4D7;
 $subheader-border-color-dark : #A4A6A8;
@@ -128,6 +146,14 @@ $summary-line-height: 19px;
 // * { text-shadow: red 0 0 2px !important; }
 @mixin debugging-mixin {
     // text-shadow: none !important;
+}
+
+@mixin placeholder {
+  @include debugging-mixin;
+  &::-webkit-input-placeholder {@content}
+  &:-moz-placeholder           {@content}
+  &::-moz-placeholder          {@content}
+  &:-ms-input-placeholder      {@content}
 }
 
 @mixin heading-normal {
