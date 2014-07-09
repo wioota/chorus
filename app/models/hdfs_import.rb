@@ -29,6 +29,6 @@ class HdfsImport < ActiveRecord::Base
   end
 
   def no_destination_collision
-    errors.add(:file_name, :TAKEN) if hdfs_entry && hdfs_entry.children.where(:path => destination_path).present?
+    errors.add(:file_name, :TAKEN) if hdfs_entry && hdfs_entry.children.not_stale.where(:path => destination_path).present?
   end
 end

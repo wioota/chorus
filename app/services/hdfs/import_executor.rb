@@ -33,7 +33,7 @@ module Hdfs
 
     def create_success_event
       directory.refresh
-      entry = HdfsEntry.find_by_path import.destination_path
+      entry = directory.children.find_by_path import.destination_path
 
       event = Events::HdfsImportSuccess.by(import.user).add(:hdfs_entry => entry, :hdfs_data_source => entry.hdfs_data_source)
       notify_user(event)

@@ -11,9 +11,6 @@ def FixtureBuilder.password
   'password'
 end
 
-
-
-
 FixtureBuilder.configure do |fbuilder|
   # rebuild fixtures automatically when these files change:
   fbuilder.files_to_check += Dir[*%w{

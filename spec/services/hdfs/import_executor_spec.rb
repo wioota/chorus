@@ -22,7 +22,7 @@ describe Hdfs::ImportExecutor do
           mock(qs).import_data is_a(String), is_a(java.io.FileInputStream)
         end
         mock(hdfs_dir).refresh
-        mock(HdfsEntry).find_by_path(import.destination_path) { hdfs_entries(:hdfs_file) }
+        mock(hdfs_dir.children).find_by_path(import.destination_path) { hdfs_entries(:hdfs_file) }
         exe
       end
 

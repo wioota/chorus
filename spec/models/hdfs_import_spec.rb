@@ -21,11 +21,14 @@ describe HdfsImport do
     end
 
     describe 'destination uniqueness' do
+      let(:stale_at) { nil }
+
       before do
         hdfs_directory.children.create!(
             {
                 :path => "#{hdfs_directory.path}/collide.csv",
-                :hdfs_data_source => hdfs_directory.hdfs_data_source
+                :hdfs_data_source => hdfs_directory.hdfs_data_source,
+                :stale_at => stale_at
             }, :without_protection => true
         )
       end
@@ -34,6 +37,16 @@ describe HdfsImport do
         import = HdfsImport.new(:hdfs_entry => hdfs_directory, :file_name => 'collide.csv')
 
         import.should have_error_on(:file_name).with_message(:TAKEN)
+      end
+
+      context 'when the colliding entry is stale' do
+        let(:stale_at) { 5.minutes.ago }
+
+        it 'does not consider stale entries when determining uniqueness' do
+          import = HdfsImport.new(:hdfs_entry => hdfs_directory, :file_name => 'collide.csv')
+
+          import.should_not have_error_on(:file_name)
+        end
       end
     end
   end
