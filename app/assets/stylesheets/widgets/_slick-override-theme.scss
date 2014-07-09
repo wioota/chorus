@@ -21,12 +21,12 @@
 }
 
 .slick-sort-indicator-desc {
-  @include triangle(down, $dark-gray, 10px, 5px);
+  @include triangle(down, $default-font-color, 10px, 5px);
   margin-top: 4px;
 }
 
 .slick-sort-indicator-asc {
-  @include triangle(up, $dark-gray, 10px, 5px);
+  @include triangle(up, $default-font-color, 10px, 5px);
 }
 
 .slick-header-column-sorted {

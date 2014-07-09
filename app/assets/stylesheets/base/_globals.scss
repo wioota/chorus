@@ -16,7 +16,7 @@ a {
 html, body {
     color: $color-text1;
     background-color: $body-background-color !important;
-    font-family: "Open Sans", Verdana;
+    font-family: $font-family;
     height: 100%;
 }
 
@@ -31,7 +31,7 @@ input, textarea {
     width: 100%;
     font-size: 14px;
     padding: 3px;
-    font-family: "Open Sans", Verdana;
+    font-family: $font-family;
     @include borderbox;
 }
 

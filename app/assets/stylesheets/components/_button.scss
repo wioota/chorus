@@ -9,7 +9,7 @@ a.button, button, input[type=submit] {
     vertical-align: middle;
     cursor: pointer;
     outline-color: $button-border-color;
-    font-family: "Open Sans", Verdana;
+    font-family: $font-family;
 
     &:disabled {
         cursor: initial;

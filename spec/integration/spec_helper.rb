@@ -23,7 +23,7 @@ Capybara.save_and_open_page_path = ENV['WORKSPACE'] || Rails.root.join('tmp', 's
 Capybara.default_wait_time = 30
 
 DatabaseCleaner.strategy = :truncation
-
+0
 Dir[File.join(File.dirname(__FILE__), 'helpers', "**", "*")].each {|f| require f}
 Dir[File.join(File.dirname(__FILE__), 'support', "**", "*")].each {|f| require f}
 FACTORY_GIRL_SEQUENCE_OFFSET = 44444

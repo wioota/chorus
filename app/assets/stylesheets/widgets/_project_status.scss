@@ -3,10 +3,10 @@
         &.on_track          { color: $content-details-action-link-color; }
         &.needs_attention   { color: $needs-attention-color; }
         &.at_risk           { color: $alert-background-color; }
-        font-weight: bold;
+        font-weight: $semibold;
     }
 
-    .label { font-weight: bold; }
+    .label { font-weight: $semibold; }
 
     .facts > a {
         text-overflow: ellipsis;

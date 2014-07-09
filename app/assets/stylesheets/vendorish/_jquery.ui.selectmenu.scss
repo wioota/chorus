@@ -34,7 +34,7 @@
 
 .ui-selectmenu-menu .ui-menu li.ui-selectmenu-optgroup {
   font-size: 1em;
-  font-weight: bold;
+  font-weight: $semibold;
   line-height: 1.5;
   padding: 2px 0.4em;
   margin: 0.5em 0 0 0;
@@ -228,7 +228,7 @@ a.ui-selectmenu-disabled {
 }
 
 .ui-selectmenu-menu li .ui-selectmenu-item-header {
-  font-weight: bold;
+  font-weight: $semibold;
 }
 
 .ui-selectmenu-menu li .ui-selectmenu-item-footer {
@@ -244,7 +244,7 @@ a.ui-selectmenu-disabled {
   line-height: 1.4em;
   display: block;
   padding: .6em .5em 0;
-  font-weight: bold;
+  font-weight: $semibold;
 }
 
 .ui-selectmenu-menu .ui-selectmenu-group ul {

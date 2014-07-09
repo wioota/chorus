@@ -85,7 +85,7 @@
                 border: 1px solid $type-ahead-result-border-color;
                 font: inherit;
                 font-size: 12px;
-                font-weight: bold;
+                font-weight: $semibold;
 
                 .text-list {
                     .text-suggestion {
