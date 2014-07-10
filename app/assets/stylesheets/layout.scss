@@ -23,7 +23,6 @@
     padding: 0 0 $guts-padding-bottom $guts-padding;
     @include after-clearfix;
     z-index: $guts-z-index;
-    @include background-image(linear-gradient($body-glow-color, $body-glow-color 49px, $body-background-color 89px, $body-background-color));
 }
 
 #left {
