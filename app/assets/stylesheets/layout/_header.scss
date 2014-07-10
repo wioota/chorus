@@ -7,7 +7,7 @@ $expanded-search-width: 444px;
     > .header {
 
         height: $header-height;
-        background-color: $primary;
+        background-color: $brand;
         vertical-align: middle;
 
         .left {
@@ -42,7 +42,7 @@ $expanded-search-width: 444px;
             input {
 
                 height: 32px;
-                background-color: $primary-lowlight; 
+                background-color: $brand-shade; 
                 border: none;
                 
                 transition-duration: 0.7s;
@@ -50,7 +50,7 @@ $expanded-search-width: 444px;
                 width: $collapsed-search-width;
                 &:focus {
                     width: $expanded-search-width;
-                    background-color: $primary-dark;
+                    background-color: $brand-dark;
                 }
                 
                 @include placeholder {
