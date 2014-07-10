@@ -45,4 +45,15 @@ describe Visualization::Boxplot do
 
     it_behaves_like 'a boxplot visualization'
   end
+
+  context 'for teradata', :jdbc_integration do
+    let(:data_source_account) { JdbcIntegration.real_account }
+    let(:schema) { JdbcIntegration.real_schema }
+
+    let(:dataset) { schema.find_or_initialize_dataset(table_name) }
+    let(:all_caps_column_dataset) { schema.find_or_initialize_dataset('allcaps_candy') }
+    let(:table_with_nulls) { schema.find_or_initialize_dataset('table_with_nulls') }
+
+    it_behaves_like 'a boxplot visualization'
+  end
 end

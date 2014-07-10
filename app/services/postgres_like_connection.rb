@@ -109,7 +109,7 @@ class PostgresLikeConnection < DataSourceConnection
   end
 
   def visualization_sql_generator
-    Visualization::PgLikeSqlGenerator.new
+    Visualization::SqlGenerator.new.extend(Visualization::PgLikeSql)
   end
 
   private

@@ -1,5 +1,5 @@
 module Visualization
-  class JdbcSqlGenerator < SqlGenerator
+  module JdbcSql
     def frequency_row_sql(o)
       dataset, bins, category, filters = fetch_opts(o, :dataset, :bins, :category, :filters)
 

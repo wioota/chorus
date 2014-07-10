@@ -1,5 +1,5 @@
 module Visualization
-  class PgLikeSqlGenerator < SqlGenerator
+  module PgLikeSql
     def frequency_row_sql(o)
       dataset, bins, category, filters = fetch_opts(o, :dataset, :bins, :category, :filters)
       relation = relation(dataset)
@@ -12,37 +12,6 @@ module Visualization
       query = query.where(Arel.sql(filters.join(' AND '))) if filters.present?
 
       query.to_sql
-    end
-
-    def boxplot_row_sql(o)
-      dataset, values, category, buckets, filters = fetch_opts(o, :dataset, :values, :category, :buckets, :filters)
-
-      filters = filters.present? ? "#{filters.join(' AND ')} AND" : ''
-
-      ntiles_for_each_datapoint = <<-SQL
-        SELECT "#{category}", "#{values}", ntile(4) OVER (t) AS ntile
-          FROM #{dataset.scoped_name}
-            WHERE #{filters} "#{category}" IS NOT NULL AND "#{values}" IS NOT NULL WINDOW t
-            AS (PARTITION BY "#{category}" ORDER BY "#{values}")
-      SQL
-
-      ntiles_for_each_bucket = <<-SQL
-        SELECT "#{category}", ntile, MIN("#{values}"), MAX("#{values}"), COUNT(*) cnt
-          FROM (#{ntiles_for_each_datapoint}) AS ntilesForEachDataPoint
-            GROUP BY "#{category}", ntile ORDER BY "#{category}", ntile
-      SQL
-
-      # this was removed previously, but is a key performance optimization and must remain in place.
-      # The query needs to limit the number of buckets, there could be a large number of rows
-      # the 'limit' clause is the important part, not the 'total' field
-      ntiles_for_each_bin_with_total = <<-SQL
-        SELECT "#{category}", ntile, min, max, cnt, SUM(cnt) OVER(w) AS total
-          FROM (#{ntiles_for_each_bucket}) AS ntilesForEachBin
-            WINDOW w AS (PARTITION BY "#{category}")
-            ORDER BY total desc, "#{category}", ntile LIMIT #{(buckets * 4).to_s}
-      SQL
-
-      ntiles_for_each_bin_with_total
     end
 
     def heatmap_min_max_sql(o)

@@ -7,7 +7,12 @@ describe Visualization::Histogram do
   let(:user) { data_source_account.owner }
   let(:connection) {
     object = Object.new
-    stub(object).visualization_sql_generator { Visualization::PgLikeSqlGenerator.new }
+    stub(object).visualization_sql_generator do
+      sql_gen = Visualization::SqlGenerator.new
+      sql_gen.define_singleton_method(:histogram_min_max_sql, ->(o){''})
+      sql_gen.define_singleton_method(:histogram_row_sql, ->(o){''})
+      sql_gen
+    end
     stub(schema).connect_with(data_source_account) { object }
     object
   }

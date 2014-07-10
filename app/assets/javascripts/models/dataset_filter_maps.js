@@ -40,7 +40,7 @@
 
         comparators: {
             "equal": {usesInput: true, generate: makeGenerate("=") },
-            "not_equal": {usesInput: true, generate: makeGenerate("!=") },
+            "not_equal": {usesInput: true, generate: makeGenerate("<>") },
             "null": {usesInput: false, generate: isNull },
             "not_null": {usesInput: false, generate: isNotNull },
             "like": {usesInput: true, generate: makeGenerate("LIKE") },
@@ -77,7 +77,7 @@
 
         comparators: {
             "equal": {usesInput: true, generate: makeGenerate("=") },
-            "not_equal": {usesInput: true, generate: makeGenerate("!=") },
+            "not_equal": {usesInput: true, generate: makeGenerate("<>") },
             "null": {usesInput: false, generate: isNull },
             "not_null": {usesInput: false, generate: isNotNull },
             "greater": {usesInput: true, generate: makeGenerate(">") },
@@ -96,7 +96,7 @@
 
         comparators: {
             "equal": {usesInput: true, generate: makeGenerate("=") },
-            "not_equal": {usesInput: true, generate: makeGenerate("!=") },
+            "not_equal": {usesInput: true, generate: makeGenerate("<>") },
             "null": {usesInput: false, generate: isNull },
             "not_null": {usesInput: false, generate: isNotNull },
             "greater": {usesInput: true, generate: makeGenerate(">") },

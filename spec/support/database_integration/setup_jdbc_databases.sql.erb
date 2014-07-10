@@ -24,3 +24,22 @@ CREATE VIEW "<%= schema_name %>"."lowercase_view" AS SELECT * FROM "<%= schema_n
   INSERT INTO "<%= schema_name %>"."base_table1" VALUES ( 6,1,6, 'papaya' , '2012-04-08 00:10:02');
   INSERT INTO "<%= schema_name %>"."base_table1" VALUES ( 7,1,7, 'papaya' , '2012-05-11 00:10:02');
   INSERT INTO "<%= schema_name %>"."base_table1" VALUES ( 8,1,8, 'papaya' , '2012-04-09 00:00:02');
+
+  CREATE TABLE "<%= schema_name %>"."allcaps_candy" (
+    id NUMBER,
+    "STUFF" INTEGER,
+    "KITKAT" INTEGER,
+    "SNICKERS" VARCHAR(20)
+  );
+
+  CREATE TABLE "<%= schema_name %>"."table_with_nulls"
+    ("id" INTEGER, "all_nulls" INTEGER, "some_nulls" INTEGER, "category" VARCHAR(255), "time_value" TIMESTAMP );
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 0,NULL,5, 'apple', '2012-03-01 00:00:02' );
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 1,NULL,NULL, 'apple', '2012-03-02 00:00:02' );
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 2,NULL,7, 'orange' , '2012-04-01 00:00:02');
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 3,NULL,1, 'orange' , '2012-04-01 00:00:02');
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 4,NULL,2, 'orange' , '2012-04-01 00:00:02');
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 5,NULL,7, 'apple' , '2012-04-01 00:00:02');
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 6,NULL,NULL, 'orange' , '2012-04-01 00:00:02');
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 7,NULL,3, 'orange' , '2012-04-01 00:00:02');
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 8,NULL,14, 'apple', '2012-03-02 00:00:02' );
