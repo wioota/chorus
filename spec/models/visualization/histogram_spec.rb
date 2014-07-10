@@ -7,7 +7,7 @@ describe Visualization::Histogram do
   let(:user) { data_source_account.owner }
   let(:connection) {
     object = Object.new
-    stub(object).visualization_sql_generator { Visualization::SqlGenerator::PgLike.new }
+    stub(object).visualization_sql_generator { Visualization::PgLikeSqlGenerator.new }
     stub(schema).connect_with(data_source_account) { object }
     object
   }

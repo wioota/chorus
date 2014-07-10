@@ -108,6 +108,20 @@ describe VisualizationsController do
         decoded_errors.fields.query.INVALID.message.should_not be_nil
       end
     end
+
+    context 'when the visualization has not been implemented' do
+      before do
+        any_instance_of(GreenplumConnection) do |conn|
+          stub(conn).visualization_sql_generator { Visualization::SqlGenerator.new }
+        end
+      end
+
+      it 'returns an error' do
+        post :create, :type => 'histogram', :check_id => '43', :dataset_id => dataset.id
+        response.code.should == '422'
+        decoded_errors.fields.visualization.should have_key(:NOT_IMPLEMENTED)
+      end
+    end
   end
 
   describe "#destroy" do

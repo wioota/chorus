@@ -1,5 +1,3 @@
-require 'visualization/sql_generator/base'
-
 module Visualization
   UnknownType = Class.new(StandardError)
 

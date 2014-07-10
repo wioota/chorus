@@ -99,7 +99,7 @@ class JdbcConnection < DataSourceConnection
   end
 
   def visualization_sql_generator
-    Visualization::SqlGenerator::Jdbc.new
+    Visualization::JdbcSqlGenerator.new
   end
 
   private
