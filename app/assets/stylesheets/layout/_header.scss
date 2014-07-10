@@ -40,25 +40,25 @@ $expanded-search-width: 444px;
             }
 
             input {
+                @include placeholder { color: $xkcd-border-color; }
 
                 height: 32px;
                 background-color: $brand-shade; 
                 border: none;
-                
+                color: white;
+                font-weight: normal;
+
                 transition-duration: 0.7s;
                 padding-left: $icon-box-width;
                 width: $collapsed-search-width;
+
                 &:focus {
                     width: $expanded-search-width;
                     background-color: $brand-dark;
+                    @include placeholder { color: transparent; }
                 }
                 
-                @include placeholder {
-                    color: $xkcd-border-color;
-                }
-                html.ie8 & {
-                    height: 17px;
-                }
+                html.ie8 & { height: 17px; }
             }
         }
 
