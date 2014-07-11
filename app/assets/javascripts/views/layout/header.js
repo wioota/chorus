@@ -133,6 +133,7 @@ chorus.views.Header = chorus.views.Base.extend({
             fullName: user && user.displayName(),
             displayName: user && user.get('firstName'),
             userUrl: user && user.showUrl(),
+            helpLinkUrl: 'help.link_address.' + license.branding(),
             brandingLogo: license.branding() + "-logo.png",
             advisorNow: license.advisorNowEnabled(),
             advisorNowLink: this.advisorNowLink(user, license)
