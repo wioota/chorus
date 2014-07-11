@@ -55,8 +55,14 @@ module Visualization
       not_implemented
     end
 
-    def histogram_min_max_sql(opts)
-      not_implemented
+    def histogram_min_max_sql(o)
+      relation = relation(o[:dataset])
+      category = o[:category]
+
+      query = relation.
+          project(relation[category].minimum.as('"min"'), relation[category].maximum.as('"max"'))
+
+      query.to_sql
     end
 
     def histogram_row_sql(opts)

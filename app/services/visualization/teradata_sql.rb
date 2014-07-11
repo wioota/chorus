@@ -37,5 +37,22 @@ module Visualization
 
       ntiles_for_each_bin_with_total
     end
+
+    def histogram_row_sql(o)
+      dataset, min, max, bins, filters, category = fetch_opts(o, :dataset, :min, :max, :bins, :filters, :category)
+      relation = relation(dataset)
+      scoped_category = %(#{dataset.scoped_name}."#{category}")
+
+      width_bucket = "width_bucket(CAST(#{scoped_category} as numeric(32)), CAST(#{min} as numeric(32)), CAST(#{max} as numeric(32)), #{bins})"
+
+      query = relation.
+          group(width_bucket).
+          project(Arel.sql(width_bucket).as('bucket'), Arel.sql("COUNT(#{width_bucket})").as('frequency')).
+          where(relation[category].not_eq(nil))
+
+      query = query.where(Arel.sql(filters.join(' AND '))) if filters.present?
+
+      query.to_sql
+    end
   end
 end

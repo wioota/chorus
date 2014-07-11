@@ -58,16 +58,6 @@ module Visualization
       query
     end
 
-    def histogram_min_max_sql(o)
-      relation = relation(o[:dataset])
-      category = o[:category]
-
-      query = relation.
-          project(relation[category].minimum.as('min'), relation[category].maximum.as('max'))
-
-      query.to_sql
-    end
-
     def histogram_row_sql(o)
       dataset, min, max, bins, filters, category = fetch_opts(o, :dataset, :min, :max, :bins, :filters, :category)
       relation = relation(dataset)
