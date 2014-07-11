@@ -1,6 +1,6 @@
 jasmine.sharedExamples.PopupMenu = function(linkSelector, menuSelector, indicatorSelector) {
     if (indicatorSelector) {
-        described("when opened with an indicator", function() {
+        describe("when opened with an indicator", function() {
             it('activates the indicator', function(){
                 this.view.render();
                 this.view.$(linkSelector).click();
