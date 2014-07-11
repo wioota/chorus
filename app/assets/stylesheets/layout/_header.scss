@@ -1,3 +1,4 @@
+@import "compass/css3";
 $header-margin: 30px;
 $expanded-search-width: 444px;
 
@@ -139,11 +140,8 @@ $expanded-search-width: 444px;
         }
 
         .username, .account, .gear, .messages {
-            &.active a span i::before { 
-                transform:          rotateX(180deg);
-                -webkit-transform:  rotateX(180deg);
-                -moz-transform:     rotateX(180deg);
-                -ms-transform:      rotateX(180deg);
+            &.active a span i::before {
+                @include rotateX(180deg);
             }
 
             a {
