@@ -18,8 +18,8 @@ module JdbcIntegration
   def self.files_to_track
     %w(
       jdbc_integration.rb
-      setup_jdbc_databases.sql.erb
-      drop_jdbc_databases.sql.erb
+      setup_td_databases.sql.erb
+      drop_td_databases.sql.erb
     )
   end
 
@@ -59,15 +59,15 @@ module JdbcIntegration
     refresh_if_changed do
       drop_test_database if schema_exists?
       puts "Importing jdbc fixtures into #{schema_name}"
-      sql = ERB.new(File.read(Rails.root.join 'spec/support/database_integration/setup_jdbc_databases.sql.erb')).result(binding)
-      puts 'Executing setup_jdbc_databases.sql'
+      sql = ERB.new(File.read(Rails.root.join 'spec/support/database_integration/setup_td_databases.sql.erb')).result(binding)
+      puts 'Executing setup_td_databases.sql'
       execute_sql(sql)
     end
   end
 
   def self.drop_test_database
     puts "Dropping #{schema_name}"
-    sql = ERB.new(File.read(Rails.root.join 'spec/support/database_integration/drop_jdbc_databases.sql.erb')).result(binding)
+    sql = ERB.new(File.read(Rails.root.join 'spec/support/database_integration/drop_td_databases.sql.erb')).result(binding)
     execute_sql(sql)
   end
 
