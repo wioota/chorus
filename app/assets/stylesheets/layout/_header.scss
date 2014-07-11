@@ -141,6 +141,7 @@ $expanded-search-width: 444px;
         }
 
         .username, .account, .gear, .messages {
+            &.active a span i { -webkit-transform: rotateX(180deg) }
             a {
                 text-decoration: none;
                 height: 100%;
@@ -152,12 +153,10 @@ $expanded-search-width: 444px;
                 span {
                     display: inline-block;
                     vertical-align: middle;
+                    i { margin-left: 15px; }
                 }
 
-                img {
-                    padding-left: 10px;
-                    vertical-align: middle;
-                }
+                
             }
         }
 
@@ -165,7 +164,7 @@ $expanded-search-width: 444px;
             width: 90px;
             a {
                 text-align: center;
-                img, span { margin-top: 10px; @include ellipsis; }
+                span { margin-top: 10px; @include ellipsis; }
             }
         }
 
