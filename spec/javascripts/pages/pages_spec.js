@@ -343,16 +343,6 @@ describe("chorus.pages.Base", function() {
         });
     });
 
-    describe("help", function() {
-        beforeEach(function() {
-            this.page = new chorus.pages.Base();
-        });
-
-        it("renders the help view", function() {
-            expect(this.page.helpLink).toBeA(chorus.views.HelpLink);
-        });
-    });
-
     describe("loadWorkspace", function(){
         beforeEach(function() {
             this.workspace = backboneFixtures.workspace({id: 123});

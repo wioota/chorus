@@ -387,6 +387,40 @@ describe("chorus.views.Header", function() {
                 it("has a link to 'sign out'", function() {
                     expect(this.view.$(".menu.popup_username a[href='#/logout']").text()).toBe(t("header.sign_out"));
                 });
+
+                it("has a link to 'about'", function() {
+                    expect(this.view.$(".menu.popup_username a[href='#/about']").text()).toBe(t("header.about"));
+                });
+
+                describe('the help link', function(){
+                    it("has a link to 'about'", function() {
+                        expect(this.view.$(".menu.popup_username a.helpLink").text()).toBe(t("help.link"));
+                    });
+                    
+                    context("it is alpine branded", function () {
+                        beforeEach(function () {
+                            spyOn(chorus.models.Config.instance().license(), "branding").andReturn('alpine');
+                            this.view.render();
+                        });
+
+                        it("displays the alpine help link", function () {
+                            expect(this.view.$("a.helpLink")).toHaveAttr('href', 'http://alpine.atlassian.net/wiki/display/CD/Chorus+Documentation+Home');
+                            expect(this.view.$("a.helpLink")).toHaveAttr('target', '_blank');
+                        });
+                    });
+
+                    context("it is not alpine branded", function () {
+                        beforeEach(function () {
+                            spyOn(chorus.models.Config.instance().license(), "branding").andReturn('pivotal');
+                            this.view.render();
+                        });
+
+                        it("displays the non-alpine help link", function () {
+                            expect(this.view.$("a.helpLink")).toHaveAttr('href', 'http://alpine.atlassian.net/wiki/display/CD/Chorus+Documentation+Home?pivotal=true');
+                            expect(this.view.$("a.helpLink")).toHaveAttr('target', '_blank');
+                        });
+                    });
+                });
             });
         });
 
