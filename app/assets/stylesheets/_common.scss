@@ -1,19 +1,6 @@
 // Do not put any css rules into this file.  This file is only for declaration of variables and mixins
 //
 
-/* basic color rules - DO NOT use these in component files, they should only be used in config sections! */
-
-$dark-gray: #464646;
-$gray: #7D7D7D;
-$light-gray: #D0D0D0;
-$light-green: #B3D988;
-$light-blue: #c4dceb;
-$blue: #2c95dd;
-$green: #98B675;
-$dark-green: #4E7225;
-$gray-blue: #B2C7D6;
-
-
 // Dimensions
 $sidebar-width : 266px;
 $sidebar-padding-x : 16px;
@@ -25,7 +12,7 @@ $margin-x : 10px;
 $guts-padding: 7px;
 $guts-padding-bottom: 15px;
 $user-detail-image-width: 150px;
-$header-height : 49px;
+$header-height : 50px;
 $icon-image-width : 35px;
 $icon-image-height : 35px;
 $large-image-width : 45px;
@@ -38,29 +25,42 @@ $texteditor-min-height: 300px;
 $default-dialog-width: 500px;
 
 // Colors
+/* basic color rules - DO NOT use these in component files, they should only be used in config sections! */
+
+$dark-gray: #464646;
+$gray: #7D7D7D;
+$light-green: #B3D988;
+$light-blue: #c4dceb;
+$blue: #2c95dd;
+$green: #98B675;
+$dark-green: #4E7225;
+$gray-blue: #B2C7D6;
 
 // Brand Colors
 $brand: #00a0e5;
+$alice-blue: rgb(234, 245, 254);
+$solitude: rgb(234, 238,241);
 
 // Tints & Shades of Brand Colors
-$brand-tint: lighten($brand, 30%);
+$brand-light: lighten($brand, 10%);
+$brand-tint: lighten($brand, 5%);
 
 $brand-shade: darken($brand, 5%);
-$brand-dark: darken($brand-shade, 5%);
+$brand-dark: darken($brand, 10%);
 
 // Background colors
-$administrator-background-color: #5f5f5f;
+$list-hover-color: $alice-blue;
+$content-details-info-bar-background-color: $light-blue;
 $body-background-color: white;
+$dialog-background-color: white;
+$element-background: white;
+$administrator-background-color: #5f5f5f;
 $body-glow-color : #C8DCED;
 $shaded-background-color: #E1E5E9;
 $data-grid-background-color: #EAEEF2;
-$dialog-background-color: white;
-$element-background: white;
-$list-hover-color: #e3e8ed;
 $list-checked-color: #dde3e9;
 $progress-bar-background-color : #D8DEE6;
 $selected-row-hover-background-color: #DCE2E8;
-$content-details-info-bar-background-color: $light-blue;
 $ie-header-color: #c7c7c7;
 $tab-gradient-color : #D5E0EB;
 $activity-stream-comment-background-color: #DFE5EB;
@@ -77,9 +77,7 @@ $chart-fill-color: #4A83C3;
 $dataset-number-background-color: #788DA5;
 
 // Border colors
-$xkcd-border-color: $brand-tint;
-//
-$border-color: $light-gray;
+$border-color: $solitude;
 $weak-header-border-color : #bebfc9;
 $subheader-border-color : #D1D4D7;
 $subheader-border-color-dark : #A4A6A8;

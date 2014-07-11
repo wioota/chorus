@@ -23,8 +23,8 @@ $low-light-link-color: $gray;
 
 /* Lists */
 
-$list-horizontal-divider: 1px solid $light-gray;
-$list-vertical-divider: 1px solid $light-gray;
+$list-horizontal-divider: 1px solid $solitude;
+$list-vertical-divider: 1px solid $solitude;
 $list-selectable-hover-color: rgba(0,0,0,0.1);
 $list-selectable-selected-color: white;
 $list-breadcrumb-divider: "\f0da";
@@ -52,7 +52,7 @@ $spacingHelpers: ($emRatio*$baseLineHeight/3, $emRatio*$baseLineHeight/2, $emRat
 
 /* buttons */
 $button-height : 26px;
-$button-border-color: $light-gray;
+$button-border-color: $solitude;
 $button-background-color : white;
 
 $button-border-color-highlighted: $green;
