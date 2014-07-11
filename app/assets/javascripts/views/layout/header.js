@@ -151,7 +151,7 @@ chorus.views.Header = chorus.views.Base.extend({
     togglePopupNotifications: function(e) {
         var beingShown = this.$(".menu.popup_notifications").hasClass("hidden");
 
-        chorus.PopupMenu.toggle(this, ".menu.popup_notifications", e);
+        chorus.PopupMenu.toggle(this, ".menu.popup_notifications", e, '.messages');
 
         if (beingShown) {
             this.unreadNotifications.markAllRead({ success: _.bind(this.clearNotificationCount, this) });
@@ -172,9 +172,9 @@ chorus.views.Header = chorus.views.Base.extend({
         chorus.PopupMenu.toggle(this, ".menu.popup_username", e, '.username');
     },
 
-    togglePopupGear: function(e) {
-        chorus.PopupMenu.toggle(this, ".menu.popup_gear", e);
-    },
+    // togglePopupGear: function(e) {
+    //     chorus.PopupMenu.toggle(this, ".menu.popup_gear", e);
+    // },
 
     modifyTypeAheadSearchLength: function() {
         if(!_.isEmpty($('.left')) && !_.isEmpty($('.type_ahead_search'))) {

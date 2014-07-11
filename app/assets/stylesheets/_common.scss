@@ -40,6 +40,7 @@ $gray-blue: #B2C7D6;
 $brand: #00a0e5;
 $alice-blue: rgb(234, 245, 254);
 $solitude: rgb(234, 238,241);
+$bright-turquoise: rgb(21, 214, 203);
 
 // Tints & Shades of Brand Colors
 $brand-light: lighten($brand, 10%);
@@ -107,6 +108,7 @@ $content-details-create-bar-link-color: #608437;
 // Notification colors
 $notification-error-dark: #d43a0b;
 $notification-error-light: #ffd6d6;
+$notification: $bright-turquoise;
 
 $dotted-list-item-border: 1px dotted $subheader-border-color;
 

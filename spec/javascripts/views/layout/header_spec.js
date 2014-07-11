@@ -492,35 +492,49 @@ describe("chorus.views.Header", function() {
                 expect(this.view.$("a.notifications")).toExist();
             });
 
-            describe("when the notification count is clicked", function() {
+            describe("when clicked", function() {
                 beforeEach(function() {
                     spyOn(chorus.PopupMenu, "toggle").andCallThrough();
                     spyOn(this.view.unreadNotifications, "markAllRead").andCallFake(_.bind(function(options) {
                         this.successFunction = options.success;
                     }, this));
                     spyOn(this.view.notificationList, "show");
-                    this.view.$("a.notifications").click();
+                });
+
+                it("becomes active", function() {
+                    var containerDiv = this.view.$(".messages");
+                    expect(containerDiv).not.toHaveClass("active");
+                    
+                    var messagesLink = this.view.$(".messages a");
+                    messagesLink.click();
+                    
+                    expect(containerDiv).toHaveClass("active");
                 });
 
                 it("shows a popup menu", function() {
+                    this.view.$("a.notifications").click();
                     expect(this.view.$(".menu.popup_notifications")).not.toHaveClass("hidden");
                 });
 
                 it("opens a popup menu with the correct element", function() {
-                    expect(chorus.PopupMenu.toggle).toHaveBeenCalledWith(this.view, ".menu.popup_notifications", jasmine.any(jQuery.Event));
+                    this.view.$("a.notifications").click();
+                    expect(chorus.PopupMenu.toggle).toHaveBeenCalledWith(this.view, ".menu.popup_notifications", jasmine.any(jQuery.Event), '.messages');
                 });
 
                 it("marks the notifications as read", function() {
+                    this.view.$("a.notifications").click();
                     expect(this.view.unreadNotifications.markAllRead).toHaveBeenCalled();
                     expect(this.successFunction).toBeDefined();
                 });
 
                 it("calls show on the notification list", function() {
+                    this.view.$("a.notifications").click();
                     expect(this.view.notificationList.show).toHaveBeenCalled();
                 });
 
                 describe("when the mark-all-read call succeeds", function() {
                     beforeEach(function() {
+                        this.view.$("a.notifications").click();
                         this.successFunction();
                     });
 
@@ -535,24 +549,28 @@ describe("chorus.views.Header", function() {
 
                 describe("and then clicked again", function() {
                     beforeEach(function() {
+                        this.view.$("a.notifications").click();
                         this.view.unreadNotifications.markAllRead.reset();
                         spyOn(this.view.notificationList, "postRender");
-                        this.view.$("a.notifications").click();
                     });
 
                     it("becomes hidden again", function() {
+                        this.view.$("a.notifications").click();
                         expect(this.view.$(".menu.popup_notifications")).toHaveClass("hidden");
                     });
 
                     it("internally marks the unread notifications as read", function() {
+                        this.view.$("a.notifications").click();
                         expect(this.view.unreadNotifications.find(function(model) { return model.get("unread"); })).toBeUndefined();
                     });
 
                     it("re-renders the notification list subview", function() {
+                        this.view.$("a.notifications").click();
                         expect(this.view.notificationList.postRender).toHaveBeenCalled();
                     });
 
                     it("does not re-mark the notifications as read", function() {
+                        this.view.$("a.notifications").click();
                         expect(this.view.unreadNotifications.markAllRead).not.toHaveBeenCalled();
                     });
                 });
@@ -587,7 +605,7 @@ describe("chorus.views.Header", function() {
                         });
 
                         it("should display the new unread notification count", function() {
-                            expect(this.view.$("a.notifications").text()).toBe("0");
+                            expect(this.view.$("a.notifications").text().trim()).toBe("0");
                         });
 
                         it("should render the new notification list", function() {

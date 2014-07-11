@@ -38,7 +38,9 @@
     </div> --}}
 
     <div class="messages">
-        <a href="#" class="notifications {{#unless notifications.length}}empty{{/unless}}" title="notifications">{{notifications.pagination.records}}</a>
+        <a href="#" class="notifications {{#unless notifications.length}}empty{{/unless}}" title="notifications">
+            <div class="lozenge">{{notifications.pagination.records}}</div>
+        </a>
     </div>
     <div class="menu hidden popup_notifications">
         <div class="pointer"/>

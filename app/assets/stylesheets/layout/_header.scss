@@ -133,24 +133,21 @@ $expanded-search-width: 444px;
             .active { background-color: $brand-tint; }
         }
 
-        .username, .account, .gear, .messages, .advisor_now {
+        .username, .messages, .advisor_now {
             float: right;
             height: $header-height;
-            margin-right: $header-margin;
+            line-height: $header-height;
         }
 
-        .username, .account, .gear, .messages {
-            &.active a span i::before {
-                @include rotateX(180deg);
-            }
+
+        .username, .messages {
+            &.active a span i::before { @include rotateX(180deg); }
 
             a {
                 text-decoration: none;
                 height: 100%;
                 display: block;
                 color: inherit;
-
-                line-height: 24px;
 
                 span {
                     display: inline-block;
@@ -162,31 +159,35 @@ $expanded-search-width: 444px;
         }
 
         .username {
+            &:hover { background-color: $brand-tint; }
             width: $header-margin * 3;
+            margin-right: $header-margin;
             a {
                 text-align: center;
-                span { margin-top: 10px; @include ellipsis; }
+                span { @include ellipsis; }
             }
         }
 
         .messages {
-            .notifications {
-                display: inline-block;
-                height: 17px;
-                @include font-menu;
-                vertical-align: middle;
-                @include border-radius(2px);
-                height: 19px;
-                padding: 1px 7px 0 7px;
-                background: $alert-background-color;
-                text-align: center;
-                min-width: 8px;
-                color: white;
-                line-height: 20px;
+            width: $header-margin * 2;
+            height: $header-height;
+            line-height: $header-height;
+            text-align: center; 
+            
+            a.notifications.empty .lozenge { background: $brand-dark; }
+            a.notifications .lozenge {
+                    font-weight: $semibold;
+                    display: inline-block;
+                    min-width: 30px;
+                    padding: 2px;
 
-                &.empty {
-                    background: $color-text2;
-                }
+                    height: $header-height / 3 ;
+                    line-height: $header-height / 3;
+
+                    text-align: center; 
+
+                    border-radius: 30px;
+                    background: $notification; 
             }
         }
 
@@ -279,15 +280,12 @@ $expanded-search-width: 444px;
     }
 
     a {
+        text-decoration: none;
         vertical-align: baseline;
         color: $link-color;
 
         &.delete_link {
             @include secondary-text-small;
-        }
-
-        &:hover {
-            text-decoration: none;
         }
     }
 
