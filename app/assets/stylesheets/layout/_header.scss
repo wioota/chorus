@@ -28,13 +28,13 @@ $expanded-search-width: 444px;
             border-radius: 3px;
             display: inline-block;
 
-            i.icon-search {
+            i {
                 z-index: 1;
                 position: absolute;
                 left: 154px;
                 top: 15px;
                 color: $brand-tint;
-                font-size: 18px;
+                font-size: 15px;
             }
 
             input {
@@ -139,7 +139,8 @@ $expanded-search-width: 444px;
         }
 
         .username, .account, .gear, .messages {
-            &.active a span i { -webkit-transform: rotateX(180deg) }
+            &.active a span i::before { -webkit-transform: rotateX(180deg); }
+
             a {
                 text-decoration: none;
                 height: 100%;
@@ -150,7 +151,7 @@ $expanded-search-width: 444px;
 
                 span {
                     display: inline-block;
-                    vertical-align: middle;
+                    // vertical-align: middle;
                     i { margin-left: 15px; }
                 }
 
