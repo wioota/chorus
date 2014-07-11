@@ -125,56 +125,51 @@ $expanded-search-width: 444px;
         }
 
         .right {
+            color: white;
             position: relative;
             float: right;
             width: $sidebar-width + $padding-x + 75px;
             text-align: right;
             height: 100%;
+            .active { background-color: $brand-tint; }
         }
+
         .username, .account, .gear, .messages, .advisor_now {
             float: right;
-            line-height: 24px;
-            height: 24px;
-            padding: 0 $header-padding;
-            margin: 12px 0 0 0;
+            height: $header-height;
+            margin: 0 $header-padding;
         }
 
         .username, .account, .gear, .messages {
             a {
+                text-decoration: none;
+                height: 100%;
+                display: block;
                 color: inherit;
-                font-size: 12px;
-                vertical-align: middle;
+
                 line-height: 24px;
-                height: 24px;
 
                 span {
                     display: inline-block;
                     vertical-align: middle;
-
                 }
+
                 img {
-                    padding: 0;
+                    padding-left: 10px;
                     vertical-align: middle;
                 }
             }
         }
 
         .username {
-            border-right: 1px solid $color-text3;
+            width: 90px;
             a {
-                span {
-                    @include ellipsis;
-                    max-width: 100px;
-                }
-                img {
-                    padding: 3px 0 3px 10px;
-                }
+                text-align: center;
+                img, span { margin-top: 10px; @include ellipsis; }
             }
         }
 
         .messages {
-            border-right: 1px solid $color-text3;
-
             .notifications {
                 display: inline-block;
                 height: 17px;
@@ -195,19 +190,19 @@ $expanded-search-width: 444px;
             }
         }
 
-        .gear {
-            a img {
-                padding-bottom: 4px;
-            }
-        }
+        // .gear {
+        //     a img {
+        //         padding-bottom: 4px;
+        //     }
+        // }
 
         .popup_username, .popup_account, .popup_gear {
             line-height: 24px;
         }
 
         .menu.popup_username {
-            right: 100px;
-            top: 47px;
+            right: 12px;
+            top: 48px;
         }
 
         .menu.popup_account {
@@ -215,19 +210,18 @@ $expanded-search-width: 444px;
             top: 47px;
 
             .pointer {
-                right: 17px;
-                left: auto;
+                // background-color: fuchsia;
             }
         }
 
-        .menu.popup_gear {
-            right: 0;
-            top: 47px;
+        // .menu.popup_gear {
+        //     right: 0;
+        //     top: 47px;
 
-            .pointer {
-                left: 90px;
-            }
-        }
+        //     .pointer {
+        //         left: 90px;
+        //     }
+        // }
 
         .advisor_now {
             border-right: 1px solid $color-text3;

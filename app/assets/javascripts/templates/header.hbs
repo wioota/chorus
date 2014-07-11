@@ -5,7 +5,23 @@
 </div>
 
 <div class="right">
-    <div class="gear">
+
+    <div class="username">
+        <a href="#" title="{{fullName}}">
+            <span>{{displayName}}</span>
+            <img src="/images/menu-indicator.png"/>
+        </a>
+    </div>
+
+    <div class="menu hidden popup_username">
+        <div class="pointer"/>
+        <ul>
+            <li><a href="{{userUrl}}">{{t "header.your_profile"}}</a></li>
+            <li><a href="#/logout">{{t "header.sign_out"}}</a></li>
+        </ul>
+    </div>
+    
+    {{!-- <div class="gear">
         <a href="#" title=""><img src="/images/gear_menu.png"/></a>
     </div>
     <div class="menu hidden popup_gear">
@@ -18,7 +34,8 @@
             <li><a href="#/tags">{{t "header.tags"}}</a></li>
             <li><a href="#/about">{{t "header.about"}}</a></li>
         </ul>
-    </div>
+    </div> --}}
+
     <div class="messages">
         <a href="#" class="notifications {{#unless notifications.length}}empty{{/unless}}" title="notifications">{{notifications.pagination.records}}</a>
     </div>
@@ -29,16 +46,7 @@
             <a class="notifications_all" href="#/notifications">{{t "notification.see_all"}}</a>
         </div>
     </div>
-    <div class="username">
-        <a href="#" title="{{fullName}}"><span>{{displayName}}</span><img src="/images/menu-indicator.png"/></a>
-    </div>
-    <div class="menu hidden popup_username">
-        <div class="pointer"/>
-        <ul>
-            <li><a href="{{userUrl}}">{{t "header.your_profile"}}</a></li>
-            <li><a href="#/logout">{{t "header.sign_out"}}</a></li>
-        </ul>
-    </div>
+
     {{#if advisorNow}}
         <div class="advisor_now">
             <a href="{{advisorNowLink}}" target="_blank"><img src="/images/advisor_now.png"/></a>

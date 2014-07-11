@@ -1,5 +1,6 @@
 chorus.PopupMenu = (function() {
     var currentMenu;
+    var currentIndicator;
 
     var releaseClicks = function() {
         $(document).unbind("click.popup_menu");
@@ -8,6 +9,7 @@ chorus.PopupMenu = (function() {
     var dismissPopups = function(parentView) {
         releaseClicks();
         parentView.$(".menu").addClass("hidden");
+        currentIndicator && currentIndicator.removeClass("active");
     };
 
     var captureClicks = function(parentView) {
@@ -15,7 +17,7 @@ chorus.PopupMenu = (function() {
     };
 
     return {
-        toggle: function(parentView, selector, e) {
+        toggle: function(parentView, selector, e, indicatorSelector) {
             if(e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
@@ -27,14 +29,18 @@ chorus.PopupMenu = (function() {
             var isPoppedUp = !currentMenu.hasClass("hidden");
             dismissPopups(parentView);
 
-            if (!isPoppedUp) {
-                captureClicks(parentView);
-            }
 
-            if(previousMenu) {
-                previousMenu.addClass("hidden");
-            }
+            
 
+            isPoppedUp || captureClicks(parentView);
+
+            previousMenu && previousMenu.addClass("hidden");
+
+            if (indicatorSelector) {
+                currentIndicator = parentView.$(indicatorSelector);
+                currentIndicator.toggleClass("active", !isPoppedUp);
+            }
+            
             currentMenu.toggleClass("hidden", isPoppedUp);
         },
 

@@ -4,7 +4,7 @@ chorus.views.Header = chorus.views.Base.extend({
     events: {
         "click .username a": "togglePopupUsername",
         "click a.notifications": "togglePopupNotifications",
-        "click .gear a": "togglePopupGear",
+        // "click .gear a": "togglePopupGear",
         "click .type_ahead_result a": "clearSearch",
         "submit .search form": "startSearch",
         "keydown .search input": "searchKeyPressed"
@@ -131,7 +131,7 @@ chorus.views.Header = chorus.views.Base.extend({
         return _.extend(ctx, this.session.attributes, {
             notifications: this.unreadNotifications,
             fullName: user && user.displayName(),
-            displayName: user && user.displayShortName(),
+            displayName: user && user.get('firstName'),
             userUrl: user && user.showUrl(),
             brandingLogo: license.branding() + "-logo.png",
             advisorNow: license.advisorNowEnabled(),
@@ -168,7 +168,7 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     togglePopupUsername: function(e) {
-        chorus.PopupMenu.toggle(this, ".menu.popup_username", e);
+        chorus.PopupMenu.toggle(this, ".menu.popup_username", e, '.username');
     },
 
     togglePopupGear: function(e) {
