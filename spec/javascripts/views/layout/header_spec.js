@@ -539,11 +539,11 @@ describe("chorus.views.Header", function() {
                     });
 
                     it("updates the unread notification count", function() {
-                        expect(this.view.$("a.notifications")).toHaveText("0");
+                        expect(this.view.$("a.notifications .lozenge")).toHaveText("0");
                     });
 
                     it("makes the notifications look empty", function() {
-                        expect(this.view.$("a.notifications")).toHaveClass("empty");
+                        expect(this.view.$("a.notifications .lozenge")).toHaveClass("empty");
                     });
                 });
 

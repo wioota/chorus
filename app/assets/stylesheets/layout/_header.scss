@@ -174,8 +174,8 @@ $expanded-search-width: 444px;
             line-height: $header-height;
             text-align: center; 
             
-            a.notifications.empty .lozenge { background: $brand-dark; }
             a.notifications .lozenge {
+                    &.empty { background: $brand-dark; }
                     font-weight: $semibold;
                     display: inline-block;
                     min-width: 30px;

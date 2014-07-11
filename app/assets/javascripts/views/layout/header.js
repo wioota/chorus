@@ -165,7 +165,7 @@ chorus.views.Header = chorus.views.Base.extend({
     },
 
     clearNotificationCount: function() {
-        this.$("a.notifications").text("0").addClass("empty");
+        this.$("a.notifications .lozenge").text("0").addClass("empty");
     },
 
     togglePopupUsername: function(e) {

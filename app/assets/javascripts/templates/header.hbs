@@ -38,8 +38,8 @@
     </div> --}}
 
     <div class="messages">
-        <a href="#" class="notifications {{#unless notifications.length}}empty{{/unless}}" title="notifications">
-            <div class="lozenge">{{notifications.pagination.records}}</div>
+        <a href="#" class="notifications" title="notifications">
+            <div class="lozenge {{#unless notifications.length}}empty{{/unless}}">{{notifications.pagination.records}}</div>
         </a>
     </div>
     <div class="menu hidden popup_notifications">
