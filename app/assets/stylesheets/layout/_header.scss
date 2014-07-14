@@ -1,6 +1,7 @@
 @import "compass/css3";
 $header-margin: 30px;
 $expanded-search-width: 444px;
+$header-menu-separator: 1px solid $border-color;
 
 .logged_in_layout {
     > .header {
@@ -222,7 +223,7 @@ $expanded-search-width: 444px;
             height: $item-height;
             line-height: $item-height;
             padding-left: 15px;
-            &.underline { border-bottom: 1px solid $border-color; }
+            &.underline { border-bottom: $header-menu-separator }
         }
     }
 }

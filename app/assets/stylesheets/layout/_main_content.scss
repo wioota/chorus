@@ -7,7 +7,7 @@
     background: white;
     min-height: 36px;
     padding: 12px $padding-x 5px;
-    border-bottom: 1px solid $subheader-border-color;
+    border-bottom: 1px solid $border-color;
     @include border-top-radius(3px);
 
     h1 {

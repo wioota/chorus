@@ -33,7 +33,7 @@
     }
 
     .th, .column {
-        border-right: 1px solid $subheader-border-color-dark;
+        border-right: 1px solid $border-color-dark;
         display: inline-block;
     }
 
@@ -64,7 +64,7 @@
         vertical-align: middle;
         line-height: $header-line-height;
         height: $header-line-height;
-        border-bottom: 1px solid $subheader-border-color-dark;
+        border-bottom: 1px solid $border-color-dark;
 
         .name {
             display: inline-block;

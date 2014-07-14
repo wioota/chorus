@@ -12,19 +12,18 @@ $gray-blue: #B2C7D6;
 $gray: #7D7D7D;
 
 // Brand Colors
-$brand: #00a0e5;
+$pacific-blue: rgb(0, 160, 229);
 $alice-blue: rgb(234, 245, 254);
-$solitude: rgb(234, 238,241);
 $bright-turquoise: rgb(21, 214, 203);
 $acadia: #464646;
 
 // Tints & Shades of Brand Colors
+$brand: $pacific-blue;
 $brand-light: lighten($brand, 10%);
 $brand-tint: lighten($brand, 5%);
 
 $brand-shade: darken($brand, 5%);
 $brand-dark: darken($brand, 10%);
-
 
 
 /* applied color rules - USE these in component files! */
@@ -57,11 +56,9 @@ $chart-fill-color: #4A83C3;
 $dataset-number-background-color: #788DA5;
 
 // Border colors
-$border-color: $solitude;
-$weak-header-border-color : #bebfc9;
-$subheader-border-color : #D1D4D7;
-$subheader-border-color-dark : #A4A6A8;
-$guts-border-color : #CCD2D7;
+$border-color: lighten(desaturate($brand, 90%), 45%);;
+$border-color-dark: darken($border-color, 5%);
+$guts-border-color: #CCD2D7;
 $pagination-border-color: #A4A6A8;
 $menu-border-color: #B0B0B0;
 $header-border-color: #8A97A2;
@@ -89,7 +86,7 @@ $notification-error-dark: #d43a0b;
 $notification-error-light: #ffd6d6;
 $notification: $bright-turquoise;
 
-$dotted-list-item-border: 1px dotted $subheader-border-color;
+$dotted-list-item-border: 1px dotted $border-color;
 
 // Dimensions
 $sidebar-width : 266px;

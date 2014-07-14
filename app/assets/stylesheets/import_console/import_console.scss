@@ -12,14 +12,14 @@
     }
 
     td, th {
-        border-right: 1px solid $subheader-border-color-dark;
+        border-right: 1px solid $border-color-dark;
     }
 
     th {
         line-height: $header-line-height;
         height: $header-line-height;
         padding: 0 10px;
-        border-bottom: 1px solid $subheader-border-color-dark;
+        border-bottom: 1px solid $border-color-dark;
     }
 
     td {
