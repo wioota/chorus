@@ -11,11 +11,15 @@ $dark-green: #4E7225;
 $gray-blue: #B2C7D6;
 $gray: #7D7D7D;
 
+
 // Brand Colors
 $pacific-blue: rgb(0, 160, 229);
 $alice-blue: rgb(234, 245, 254);
 $bright-turquoise: rgb(21, 214, 203);
-$acadia: #464646;
+
+$charcoal: #464646;
+$bright-gray: rgb(88, 89, 95);
+$suva-gray: lighten($bright-gray, 20%);
 
 // Tints & Shades of Brand Colors
 $brand: $pacific-blue;
@@ -69,10 +73,9 @@ $type-ahead-result-border-color: #A5A6A8;
 
 // Text colors
 $color-text1: black;
-$color-text2: #5f5f5f;
-$color-text3: $acadia;
-$color-text4: #959595;
-$color-text5: #464646;
+$color-text2: $bright-gray;
+$color-text3: $charcoal;
+$color-text4: $suva-gray;
 $error-text-color: white;
 $error-color: white;
 $needs-attention-color: #f7771b;
@@ -265,7 +268,7 @@ $summary-line-height: 19px;
     @include debugging-mixin;
     font-size: 12px;
     font-weight: normal;
-    color: $color-text3;
+    color: $color-text4;
 }
 
 @mixin secondary-text-small-semibold {

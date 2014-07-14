@@ -381,20 +381,20 @@ describe("chorus.views.Header", function() {
                 itBehavesLike.PopupMenu(".username a", ".menu.popup_username", null, ".username");
                 
                 it("has a link to 'your profile'", function() {
-                    expect(this.view.$(".menu.popup_username a[href='#/users/55']").text()).toBe(t("header.your_profile"));
+                    expect(this.view.$(".menu.popup_username a[href='#/users/55']").text().trim()).toBe(t("header.your_profile"));
                 });
 
                 it("has a link to 'sign out'", function() {
-                    expect(this.view.$(".menu.popup_username a[href='#/logout']").text()).toBe(t("header.sign_out"));
+                    expect(this.view.$(".menu.popup_username a[href='#/logout']").text().trim()).toBe(t("header.sign_out"));
                 });
 
                 it("has a link to 'about'", function() {
-                    expect(this.view.$(".menu.popup_username a[href='#/about']").text()).toBe(t("header.about"));
+                    expect(this.view.$(".menu.popup_username a[href='#/about']").text().trim()).toBe(t("header.about"));
                 });
 
                 describe('the help link', function(){
                     it("has a link to 'about'", function() {
-                        expect(this.view.$(".menu.popup_username a.helpLink").text()).toBe(t("help.link"));
+                        expect(this.view.$(".menu.popup_username a.helpLink").text().trim()).toBe(t("help.link"));
                     });
                     
                     context("it is alpine branded", function () {

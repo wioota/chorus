@@ -1,7 +1,8 @@
 describe("chorus.views.TypeAheadSearch", function() {
     beforeEach(function() {
         this.result = backboneFixtures.typeAheadSearchResult();
-        this.result.set({query: "test"});
+        this.query = "test";
+        this.result.set({query: this.query});
         this.view = new chorus.views.TypeAheadSearch();
         this.view.searchFor("test");
     });
@@ -28,8 +29,17 @@ describe("chorus.views.TypeAheadSearch", function() {
         });
 
         it("should show the link to show all search result", function() {
-            expect(this.view.$("li:eq(0)").text().trim()).toMatchTranslation("type_ahead.show_all_results", {query: "test"});
-            expect(this.view.$("li:eq(0) a").attr("href")).toBe("#/search/test");
+            var text = this.view.$("li:eq(0)").text().trim();
+            var link = this.view.$("li:eq(0) a").attr("href");
+            
+            expect(text).toContainTranslation("type_ahead.show_all_results");
+            expect(link).toBe("#/search/test");
+        });
+
+        it("emphasizes the search term in the first item", function () {
+            var text = this.view.$("li:eq(0) em").text().trim();
+            
+            expect(text).toBe(this.query);
         });
 
         context("when limit_search is true", function() {
@@ -40,7 +50,7 @@ describe("chorus.views.TypeAheadSearch", function() {
 
             it("should not show the link to show all search result", function() {
                 expect(this.view.$(".search_all")).not.toExist();
-                expect(this.view.$el).not.toContainTranslation('type_ahead.show_all_results', {query: "test"});
+                expect(this.view.$el).not.toContainTranslation('type_ahead.show_all_results');
             });
         });
 
@@ -49,7 +59,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var resultIndex = this.results.indexOf(hdfs);
             var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(hdfs.get("highlightedAttributes").name[0]);
-            expect(result.find(".name").attr("href")).toBe(hdfs.showUrl());
+            expect(result.find("a").attr("href")).toBe(hdfs.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.hdfs_file");
         });
 
@@ -69,7 +79,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var resultIndex = this.results.indexOf(workspace);
             var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(workspace.get("highlightedAttributes").name[0]);
-            expect(result.find(".name").attr("href")).toBe(workspace.showUrl());
+            expect(result.find("a").attr("href")).toBe(workspace.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.workspace");
         });
 
@@ -78,7 +88,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var resultIndex = this.results.indexOf(dataSource);
             var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(dataSource.get("highlightedAttributes").name[0]);
-            expect(result.find(".name").attr("href")).toBe(dataSource.showUrl());
+            expect(result.find("a").attr("href")).toBe(dataSource.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.gpdb_data_source");
         });
 
@@ -87,7 +97,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var resultIndex = this.results.indexOf(dataSource);
             var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(dataSource.get("highlightedAttributes").name[0]);
-            expect(result.find(".name").attr("href")).toBe(dataSource.showUrl());
+            expect(result.find("a").attr("href")).toBe(dataSource.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.hdfs_data_source");
         });
 
@@ -96,7 +106,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var resultIndex = this.results.indexOf(dataSource);
             var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(dataSource.get("highlightedAttributes").name[0]);
-            expect(result.find(".name").attr("href")).toBe(dataSource.showUrl());
+            expect(result.find("a").attr("href")).toBe(dataSource.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.jdbc_data_source");
         });
 
@@ -105,7 +115,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var resultIndex = this.results.indexOf(user);
             var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe((user.get("highlightedAttributes").firstName[0] + ' ' + user.get("lastName")));
-            expect(result.find(".name").attr("href")).toBe(user.showUrl());
+            expect(result.find("a").attr("href")).toBe(user.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.user");
         });
 
@@ -114,7 +124,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var resultIndex = this.results.indexOf(workfile);
             var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(workfile.get("highlightedAttributes").fileName[0]);
-            expect(result.find(".name").attr("href")).toBe(workfile.showUrl());
+            expect(result.find("a").attr("href")).toBe(workfile.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.workfile");
         });
 
@@ -123,7 +133,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var resultIndex = this.results.indexOf(dataset);
             var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(dataset.get("highlightedAttributes").objectName[0]);
-            expect(result.find(".name").attr("href")).toBe(dataset.showUrl());
+            expect(result.find("a").attr("href")).toBe(dataset.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.dataset");
         });
 
@@ -134,7 +144,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var resultIndex = this.results.indexOf(chorusView);
             var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(chorusView.get("highlightedAttributes").objectName[0]);
-            expect(result.find(".name").attr("href")).toBe(chorusView.showUrl());
+            expect(result.find("a").attr("href")).toBe(chorusView.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.chorusView");
         });
 
@@ -143,7 +153,7 @@ describe("chorus.views.TypeAheadSearch", function() {
             var resultIndex = this.results.indexOf(attachment);
             var result = this.view.$("li.result:eq(" + resultIndex + ")");
             expect(result.find(".name").html()).toBe(attachment.get("highlightedAttributes").name[0]);
-            expect(result.find(".name").attr("href")).toBe(attachment.showUrl());
+            expect(result.find("a").attr("href")).toBe(attachment.showUrl());
             expect(result.find(".type").text()).toMatchTranslation("type_ahead.entity.attachment");
         });
 
@@ -356,7 +366,7 @@ describe("chorus.views.TypeAheadSearch", function() {
         });
 
         it("should show the link to show all search result", function() {
-            expect(this.view.$("li:eq(0)").text().trim()).toMatchTranslation("type_ahead.show_all_results", {query: "test"});
+            expect(this.view.$("li:eq(0)").text().trim()).toContainTranslation("type_ahead.show_all_results");
             expect(this.view.$("li:eq(0) a").attr("href")).toBe("#/search/test");
         });
     });

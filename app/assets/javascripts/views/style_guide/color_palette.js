@@ -52,7 +52,6 @@ chorus.views.ColorPaletteView = chorus.views.Base.extend({
         "$color-text2": "#5f5f5f",
         "$color-text3": "#7D7D7D",
         "$color-text4": "#959595",
-        "$color-text5": "#464646",
         "$error-text-color": "white",
         "$error-color": "white",
         "$link-color": "#2c95dd",
