@@ -69,12 +69,16 @@ $header-menu-separator: 1px solid $border-color;
             display: inline-block;
 
             i {
-                z-index: 1;
-                position: absolute;
-                left: 154px;
-                top: 15px;
-                color: $brand-tint;
-                font-size: 15px;
+                color: $brand-light; z-index: 1; 
+                
+                &.search_clear { 
+                    font-size: 9px; 
+                    margin-right: 5px;
+                }
+                &.magnifying_glass {
+                    position: absolute; left: 154px; top: 15px;
+                    font-size: 15px;
+                }
             }
 
             input {

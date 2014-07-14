@@ -230,8 +230,8 @@ window.Chorus = function chorus$Global() {
 
         var $input = $(input);
         var clearLink = $("<a href='#'/>")
+            .append("<i class='oi search_clear' data-glyph='x'></i>")
             .addClass("chorus_search_clear hidden")
-            .append("<img src='/images/icon_clear_search.png'></a>")
             .bind('click', function(e) {
                 e.preventDefault();
                 $input.val("").trigger('textchange').blur();
