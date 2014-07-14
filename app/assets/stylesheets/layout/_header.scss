@@ -124,21 +124,27 @@ $expanded-search-width: 444px;
         }
 
         .right {
-            color: white;
             position: relative;
             float: right;
             width: $sidebar-width + $padding-x + 75px;
             text-align: right;
             height: 100%;
             .active { background-color: $brand-tint; }
+            .menu {
+                // Overrides
+                border: none;
+                padding: 0 0 0 0;
+                top: $header-height;
+                box-shadow: 0px 4px 13px 0px $border-color;
+            }
         }
 
         .username, .messages, .advisor_now {
+            color: white;
             float: right;
             height: $header-height;
             line-height: $header-height;
         }
-
 
         .username, .messages {
             &.active a span i::before { @include rotateX(180deg); }
@@ -191,54 +197,6 @@ $expanded-search-width: 444px;
             }
         }
 
-        // .gear {
-        //     a img {
-        //         padding-bottom: 4px;
-        //     }
-        // }
-
-        .popup_username, .popup_account, .popup_gear {
-            line-height: 24px;
-        }
-
-        .menu.popup_username {
-            // Overrides
-            border: none;
-            padding: 0 0 0 0;
-
-            right: $header-margin;
-            top: $header-height;
-            box-shadow: 0px 4px 13px 0px $border-color;
-
-            width: $header-margin * 6;
-            
-            $item-height: 40px;
-            a {
-                text-decoration: none;
-                li {
-                    &:hover { background-color: $list-hover-color; }
-                    height: $item-height;
-                    line-height: $item-height;
-                    padding-left: 15px;
-                    &.underline { border-bottom: 1px solid $border-color; }
-                }
-            }
-        }
-
-        .menu.popup_account {
-            right: 10px;
-            top: 47px;
-        }
-
-        // .menu.popup_gear {
-        //     right: 0;
-        //     top: 47px;
-
-        //     .pointer {
-        //         left: 90px;
-        //     }
-        // }
-
         .advisor_now {
             border-right: 1px solid $color-text3;
             a {
@@ -251,18 +209,37 @@ $expanded-search-width: 444px;
     }
 }
 
-.popup_notifications {
-    right: 3px;
-    top: 47px;
-    width: 450px;
+.menu.popup_username {
+    line-height: 24px;
+    right: $header-margin;
+    width: $header-margin * 6;
+    
+    $item-height: 40px;
+    a {
+        text-decoration: none;
+        li {
+            &:hover { background-color: $list-hover-color; }
+            height: $item-height;
+            line-height: $item-height;
+            padding-left: 15px;
+            &.underline { border-bottom: 1px solid $border-color; }
+        }
+    }
+}
+
+.menu.popup_notifications {
+    right: $header-margin * 4;
+    top: $header-height;
+    width: 320px;
     padding: 0;
     line-height: 14px;
+
+    border: none;
 
     .notification_area {
         overflow: auto;
         padding: 8px;
         max-height: 900px;
-
 
         $difference: 150px;
         $window-height: 1000px;
@@ -272,11 +249,6 @@ $expanded-search-width: 444px;
             }
             $window-height: $window-height - 50px;
         }
-    }
-
-    .pointer {
-        right: 56px;
-        left: auto;
     }
 
     a {

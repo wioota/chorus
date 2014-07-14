@@ -116,9 +116,7 @@ $system-action-color: #7C7D7D;
         @include secondary-text-normal;
         line-height: 18px;
         padding-bottom: $text-padding-y;
-        .author {
-            font-weight: $semibold;
-        }
+        .author { font-weight: $semibold; }
     }
 
     .actions {
