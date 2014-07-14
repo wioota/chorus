@@ -3,6 +3,18 @@ $header-margin: 30px;
 $expanded-search-width: 444px;
 $header-menu-separator: 1px solid $border-color;
 
+@mixin header-menu-link-item($height) {
+    padding-left: 15px;
+    &:hover { background-color: $list-hover-color; }
+    &.underline { border-bottom: $header-menu-separator }    
+    a { 
+        height: $height; 
+        line-height: $height;
+        text-decoration: none;
+        display: block;
+    }    
+}
+
 .logged_in_layout {
     > .header {
 
@@ -215,17 +227,8 @@ $header-menu-separator: 1px solid $border-color;
     right: $header-margin;
     width: $header-margin * 6;
     
-    $item-height: 40px;
-    a {
-        text-decoration: none;
-        li {
-            &:hover { background-color: $list-hover-color; }
-            height: $item-height;
-            line-height: $item-height;
-            padding-left: 15px;
-            &.underline { border-bottom: $header-menu-separator }
-        }
-    }
+    li { @include header-menu-link-item(40px) }
+    
 }
 
 .menu.popup_notifications {
