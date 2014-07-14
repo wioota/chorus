@@ -239,15 +239,12 @@ $header-menu-separator: 1px solid $border-color;
 
     .notification_area {
         overflow: auto;
-        padding: 8px;
         max-height: 900px;
 
         $difference: 150px;
         $window-height: 1000px;
         @while $window-height > 300px {
-            @media (max-height: #{$window-height}) {
-                max-height: $window-height - $difference;
-            }
+            @media (max-height: #{$window-height}) { max-height: $window-height - $difference; }
             $window-height: $window-height - 50px;
         }
     }
@@ -263,15 +260,13 @@ $header-menu-separator: 1px solid $border-color;
     }
 
     .notification_list > ul > li {
-        padding: 5px 0;
-        border-bottom: $dotted-list-item-border;
-
+        border-bottom: $header-menu-separator;
+        
+        
         &.insight {
             padding: 12px 0 5px;
 
-            .activity_item {
-                padding-top: 12px;
-            }
+            .activity_item { padding-top: 12px; }
         }
     }
 
