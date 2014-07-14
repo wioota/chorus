@@ -30,6 +30,13 @@ $header-menu-separator: 1px solid $border-color;
         height: $header-height;
         background-color: $brand;
         vertical-align: middle;
+        .active { background-color: $brand-tint; }
+        
+        .menu {
+            border: none;
+            box-shadow: 0px 4px 13px 0px $border-color;
+            padding: 0 0 0 0;
+        }
 
         .left {
             float: left;
@@ -41,6 +48,16 @@ $header-menu-separator: 1px solid $border-color;
                 a img { vertical-align: middle; }
             }
         }
+
+        .right {
+            float: right;
+            
+            position: relative;
+            text-align: right;
+            height: 100%;
+            .menu { top: $header-height; }
+        }
+
 
         .search {
             $icon-box-width: 32px;
@@ -83,42 +100,13 @@ $header-menu-separator: 1px solid $border-color;
             }
         }
 
-        .menu.type_ahead_result {
-            em { font-weight: bold; color: $color-text2}
-            position: absolute;
-            top: 38px;
-            left: 137px;
-            right: $sidebar-width + $padding-x + 75px;
-            width: $expanded-search-width;
-
-            li.result { @include header-menu-link-item(60px); }
-            li.search_all { @include header-menu-link-item(40px); }
-        }
-
-        .right {
-            position: relative;
-            float: right;
-            width: $sidebar-width + $padding-x + 75px;
-            text-align: right;
-            height: 100%;
-            .active { background-color: $brand-tint; }
-            .menu {
-                // Overrides
-                border: none;
-                padding: 0 0 0 0;
-                top: $header-height;
-                box-shadow: 0px 4px 13px 0px $border-color;
-            }
-        }
 
         .username, .messages, .advisor_now {
             color: white;
             float: right;
             height: $header-height;
             line-height: $header-height;
-        }
 
-        .username, .messages {
             &.active a span i::before { @include rotateX(180deg); }
 
             a {
@@ -153,19 +141,19 @@ $header-menu-separator: 1px solid $border-color;
             text-align: center; 
             
             a.notifications .lozenge {
-                    &.empty { background: $brand-dark; }
-                    font-weight: $semibold;
-                    display: inline-block;
-                    min-width: 30px;
-                    padding: 2px;
+                &.empty { background: $brand-dark; }
+                font-weight: $semibold;
+                display: inline-block;
+                min-width: 30px;
+                padding: 2px;
 
-                    height: $header-height / 3 ;
-                    line-height: $header-height / 3;
+                height: $header-height / 3 ;
+                line-height: $header-height / 3;
 
-                    text-align: center; 
+                text-align: center; 
 
-                    border-radius: 30px;
-                    background: $notification; 
+                border-radius: 30px;
+                background: $notification; 
             }
         }
 
@@ -178,64 +166,79 @@ $header-menu-separator: 1px solid $border-color;
                 }
             }
         }
+
+        .menu.type_ahead_result {
+            em { font-weight: bold; color: $color-text2}
+            border: none;
+            position: absolute;
+            top: 38px;
+            left: 137px;
+            right: $sidebar-width + $padding-x + 75px;
+            width: $expanded-search-width;
+
+            li.result { @include header-menu-link-item(60px); }
+            li.search_all { @include header-menu-link-item(40px); }
+        }
+
+        .menu.popup_username {
+            line-height: 24px;
+            right: $header-margin;
+            width: $header-margin * 6;
+            
+            li { @include header-menu-link-item(40px) }
+        }
+
+        .menu.popup_notifications {
+            right: $header-margin * 4;
+            top: $header-height;
+            width: 320px;
+            padding: 0;
+            line-height: 14px;
+
+            border: none;
+
+            .notification_area {
+                overflow: auto;
+                max-height: 900px;
+
+                $difference: 150px;
+                $window-height: 1000px;
+                @while $window-height > 300px {
+                    @media (max-height: #{$window-height}) { max-height: $window-height - $difference; }
+                    $window-height: $window-height - 50px;
+                }
+            }
+
+            a {
+                text-decoration: none;
+                vertical-align: baseline;
+                color: $link-color;
+
+                &.delete_link {
+                    @include secondary-text-small;
+                }
+            }
+
+            .notification_list > ul > li {
+                border-bottom: $header-menu-separator;
+                
+                .activity_item:hover { background: $alice-blue; }
+                &.insight {
+                    padding: 12px 0 5px;
+
+                    .activity_item { padding-top: 12px; }
+                }
+            }
+
+            a.notifications_all {
+                padding: 10px 0;
+                display: block;
+                text-align: center;
+                font-size: 12px;
+                font-weight: $semibold;
+            }
+        }
+
     }
 }
 
-.menu.popup_username {
-    line-height: 24px;
-    right: $header-margin;
-    width: $header-margin * 6;
-    
-    li { @include header-menu-link-item(40px) }
-}
-
-.menu.popup_notifications {
-    right: $header-margin * 4;
-    top: $header-height;
-    width: 320px;
-    padding: 0;
-    line-height: 14px;
-
-    border: none;
-
-    .notification_area {
-        overflow: auto;
-        max-height: 900px;
-
-        $difference: 150px;
-        $window-height: 1000px;
-        @while $window-height > 300px {
-            @media (max-height: #{$window-height}) { max-height: $window-height - $difference; }
-            $window-height: $window-height - 50px;
-        }
-    }
-
-    a {
-        text-decoration: none;
-        vertical-align: baseline;
-        color: $link-color;
-
-        &.delete_link {
-            @include secondary-text-small;
-        }
-    }
-
-    .notification_list > ul > li {
-        border-bottom: $header-menu-separator;
-        
-        .activity_item:hover { background: $alice-blue; }
-        &.insight {
-            padding: 12px 0 5px;
-
-            .activity_item { padding-top: 12px; }
-        }
-    }
-
-    a.notifications_all {
-        padding: 10px 0;
-        display: block;
-        text-align: center;
-        font-size: 12px;
-        font-weight: $semibold;
-    }
-}
