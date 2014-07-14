@@ -47,8 +47,16 @@ module Visualization
       ntiles_for_each_bin_with_total
     end
 
-    def heatmap_min_max_sql(opts)
-      not_implemented
+    def heatmap_min_max_sql(o)
+      dataset, x_axis, y_axis = fetch_opts(o, :dataset, :x_axis, :y_axis)
+      relation = relation(dataset)
+
+      query = relation.project(
+          relation[x_axis].minimum.as('xmin'), relation[x_axis].maximum.as('xmax'),
+          relation[y_axis].minimum.as('ymin'), relation[y_axis].maximum.as('ymax')
+      )
+
+      query.to_sql
     end
 
     def heatmap_row_sql(opts)
