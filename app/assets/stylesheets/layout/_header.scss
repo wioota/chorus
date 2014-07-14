@@ -90,7 +90,7 @@ $header-menu-separator: 1px solid $border-color;
                 padding-left: $icon-box-width;
                 width: $collapsed-search-width;
 
-                &:focus {
+                &:valid, &:focus {
                     width: $expanded-search-width;
                     background-color: $brand-dark;
                     @include placeholder { color: transparent; }
