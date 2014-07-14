@@ -123,8 +123,6 @@ $header-menu-separator: 1px solid $border-color;
                     display: inline-block;
                     i { margin-left: 15px; }
                 }
-
-                
             }
         }
 
@@ -140,8 +138,6 @@ $header-menu-separator: 1px solid $border-color;
 
         .messages {
             width: $header-margin * 2;
-            height: $header-height;
-            line-height: $header-height;
             text-align: center; 
             
             a.notifications .lozenge {
@@ -161,15 +157,7 @@ $header-menu-separator: 1px solid $border-color;
             }
         }
 
-        .advisor_now {
-            border-right: 1px solid $color-text3;
-            a {
-                img {
-                    vertical-align: middle;
-                    padding-bottom: 3px;
-                }
-            }
-        }
+        .advisor_now a img { margin-bottom: -4px; }
 
         .menu.type_ahead_result {
             em { font-weight: bold; color: $color-text2}
