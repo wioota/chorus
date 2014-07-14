@@ -262,7 +262,7 @@ $header-menu-separator: 1px solid $border-color;
     .notification_list > ul > li {
         border-bottom: $header-menu-separator;
         
-        
+        .activity_item:hover { background: $alice-blue; }
         &.insight {
             padding: 12px 0 5px;
 
