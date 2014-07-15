@@ -247,18 +247,6 @@
                 text-decoration: underline;
             }
 
-            &.checked {
-                background-color: $list-checked-color;
-
-                .spacer_left {
-                    background: $list-checked-color;
-                    bottom: -1px;
-                }
-
-                a {
-                    color: $link-color;
-                }
-            }
 
             &:hover {
                 background-color: $list-hover-color;
@@ -273,10 +261,19 @@
                 }
             }
 
+            &.checked {
+                .spacer_left { bottom: -1px; }
+                a { color: $link-color; }
+            }
+
+            &.selected, &.checked {
+                .spacer_left { background: $list-checked-color; }
+                background: $list-checked-color;
+            }
+
             &.selected {
                 $border-width: 2px;
 
-                background-color: white;
                 padding-bottom: $padding-y - ($border-width - 1px);
                 // default border is 1px
                 border-bottom: $border-width solid $border-color;
@@ -286,7 +283,6 @@
                 }
 
                 .spacer_left {
-                    background: white;
                     bottom: -$border-width;
                     border-bottom: $border-width solid $border-color;
                 }

@@ -17,12 +17,13 @@ $pacific-blue: rgb(0, 160, 229);
 $alice-blue: rgb(234, 245, 254);
 $bright-turquoise: rgb(21, 214, 203);
 
-$charcoal: #464646;
 $bright-gray: rgb(88, 89, 95);
-$suva-gray: lighten($bright-gray, 20%);
 
-// Tints & Shades of Brand Colors
 $brand: $pacific-blue;
+$light-gray: lighten(desaturate($brand, 90%), 45%);;
+$charcoal: #464646;
+// Tints & Shades of Brand Colors
+
 $brand-light: lighten($brand, 10%);
 $brand-tint: lighten($brand, 5%);
 
@@ -30,18 +31,32 @@ $brand-shade: darken($brand, 5%);
 $brand-dark: darken($brand, 10%);
 
 
-/* applied color rules - USE these in component files! */
 // Background colors
 $list-hover-color: $alice-blue;
-$content-details-info-bar-background-color: $light-blue;
+$list-checked-color: darken($alice-blue, 5%);
 $body-background-color: white;
+$shaded-background-color: $light-gray;
+
+
+// Border colors
+$border-color: $light-gray;
+$border-color-dark: darken($border-color, 5%);
+
+// Text colors
+$color-text1: darken($charcoal, 10%);
+$color-text2: $charcoal;
+$color-text3: lighten($charcoal, 10%);
+$color-text4: lighten($bright-gray, 20%);
+
+// Font weights
+$semibold: 600;
+// "normal" defaults to 400
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* applied color rules - USE these in component files! */
+// Background colors
 $dialog-background-color: white;
-$element-background: white;
-$administrator-background-color: #5f5f5f;
-$body-glow-color : #C8DCED;
-$shaded-background-color: #E1E5E9;
 $data-grid-background-color: #EAEEF2;
-$list-checked-color: #dde3e9;
 $progress-bar-background-color : #D8DEE6;
 $selected-row-hover-background-color: #DCE2E8;
 $ie-header-color: #c7c7c7;
@@ -60,7 +75,7 @@ $chart-fill-color: #4A83C3;
 $dataset-number-background-color: #788DA5;
 
 // Border colors
-$border-color: lighten(desaturate($brand, 90%), 45%);;
+$border-color: $light-gray;
 $border-color-dark: darken($border-color, 5%);
 $guts-border-color: #CCD2D7;
 $pagination-border-color: #A4A6A8;
@@ -72,10 +87,6 @@ $results-console-border-color: #88A8D3;
 $type-ahead-result-border-color: #A5A6A8;
 
 // Text colors
-$color-text1: black;
-$color-text2: $bright-gray;
-$color-text3: $charcoal;
-$color-text4: $suva-gray;
 $error-text-color: white;
 $error-color: white;
 $needs-attention-color: #f7771b;
@@ -137,14 +148,9 @@ $hidden-z-index: -100;
 $select-menu-z-index: 1000000;
 $drag-z-index: 9999;
 
-// Font weights
-$semibold: 600;
-// "normal" defaults to 400
-
 // Font size
 $medium-font: 14px;
-
-$summary-font-size: 14px;
+$summary-font-size: $medium-font;
 $summary-line-height: 19px;
 
 // Mixins
