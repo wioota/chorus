@@ -9,8 +9,20 @@ module Visualization
       @numeric_cast = params.fetch(:numeric_cast, 'numeric')
     end
 
-    def frequency_row_sql(opts)
-      not_implemented
+    def frequency_row_sql(o)
+      dataset, bins, category, filters = fetch_opts(o, :dataset, :bins, :category, :filters)
+
+      limits = limit_clause(bins)
+
+      query = <<-SQL
+        SELECT #{limits[:top]} #{category} AS bucket, count(1) AS counted
+          FROM #{dataset.scoped_name}
+      SQL
+      query << " WHERE #{filters.join(' AND ')}" if filters.present?
+      query << " GROUP BY #{category}"
+      query << ' ORDER BY counted DESC'
+      query << " #{limits[:limit]}" if limits[:limit]
+      query
     end
 
     def boxplot_row_sql(o)

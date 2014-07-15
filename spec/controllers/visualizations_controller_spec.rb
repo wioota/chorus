@@ -117,7 +117,7 @@ describe VisualizationsController do
       end
 
       it 'returns an error' do
-        post :create, :type => 'frequency', :check_id => '43', :dataset_id => dataset.id
+        post :create, :type => 'timeseries', :check_id => '43', :dataset_id => dataset.id
         response.code.should == '422'
         decoded_errors.fields.visualization.should have_key(:NOT_IMPLEMENTED)
       end
