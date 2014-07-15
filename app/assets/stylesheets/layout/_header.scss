@@ -36,40 +36,67 @@ $header-menu-separator: 1px solid $border-color;
             border: none;
             box-shadow: 0px 4px 13px 0px $border-color;
             padding: 0 0 0 0;
+            top: $header-height;
         }
 
-        .left { float: left; }
-
-        .logo, .hamburger {
+        .left { 
             float: left;
-        }
-
-        .logo {
-            width: 90px;
-            line-height: $header-height;
-            padding: 0px 15px;
-
-            a img { vertical-align: middle; }
-        }
-        .hamburger {
-            color: white;
-            width: $header-height;
-            height: $header-height;
-            line-height: $header-height;
-            text-align: center;
+            .token { float: left; }
             
-            &:hover { background-color: $brand-tint; }
+            .logo {
+                width: 90px;
+                padding: 0px 15px;
 
-            i { font-size: 16px; }
+                a img { vertical-align: middle; }
+            }
+            .hamburger {
+                width: $header-height;
+                text-align: center;
+                &:hover { background-color: $brand-tint; }
+
+                i { font-size: 16px; }
+            }
         }
 
         .right {
             float: right;
+            .token {
+                float: right;
+                &.active .caret::before { @include rotateX(180deg); }
+            }
+
+            .username {
+            &:hover { background-color: $brand-tint; }
+            width: $header-margin * 3;
+            margin-right: $header-margin;
+            a {
+                text-align: center;
+                span { @include ellipsis; }
+            }
+        }
+
+        .messages {
+            width: $header-margin * 2;
+            text-align: center; 
             
-            position: relative;
-            text-align: right;
-            height: 100%;
-            .menu { top: $header-height; }
+            a.notifications .lozenge {
+                &.empty { background: $brand-dark; }
+                font-weight: $semibold;
+                display: inline-block;
+                min-width: 30px;
+                padding: 2px;
+
+                height: $header-height / 3 ;
+                line-height: $header-height / 3;
+
+                text-align: center; 
+
+                border-radius: 30px;
+                background: $notification; 
+            }
+        }
+
+        .advisor_now a img { margin-bottom: -4px; }
         }
 
 
@@ -118,19 +145,16 @@ $header-menu-separator: 1px solid $border-color;
             }
         }
 
-        .username, .messages, .advisor_now {
-            color: white;
-            float: right;
-            height: $header-height;
-            line-height: $header-height;
-
-            &.active a span i::before { @include rotateX(180deg); }
-
+        .token {
+            
             a {
+                color: white;
                 text-decoration: none;
                 height: 100%;
                 display: block;
-                color: inherit;
+
+                height: $header-height;
+                line-height: $header-height;
 
                 span {
                     display: inline-block;
@@ -139,42 +163,8 @@ $header-menu-separator: 1px solid $border-color;
             }
         }
 
-        .username {
-            &:hover { background-color: $brand-tint; }
-            width: $header-margin * 3;
-            margin-right: $header-margin;
-            a {
-                text-align: center;
-                span { @include ellipsis; }
-            }
-        }
-
-        .messages {
-            width: $header-margin * 2;
-            text-align: center; 
-            
-            a.notifications .lozenge {
-                &.empty { background: $brand-dark; }
-                font-weight: $semibold;
-                display: inline-block;
-                min-width: 30px;
-                padding: 2px;
-
-                height: $header-height / 3 ;
-                line-height: $header-height / 3;
-
-                text-align: center; 
-
-                border-radius: 30px;
-                background: $notification; 
-            }
-        }
-
-        .advisor_now a img { margin-bottom: -4px; }
-
         .menu.type_ahead_result {
             em { font-weight: bold; color: $color-text2}
-            border: none;
             position: absolute;
             top: 38px;
             left: 137px;
@@ -195,12 +185,9 @@ $header-menu-separator: 1px solid $border-color;
 
         .menu.popup_notifications {
             right: $header-margin * 4;
-            top: $header-height;
             width: 320px;
             padding: 0;
             line-height: 14px;
-
-            border: none;
 
             .notification_area {
                 overflow: auto;

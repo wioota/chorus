@@ -1,18 +1,31 @@
 <div class="left">
-    <div class="hamburger">
-        <i class='oi' data-glyph="menu"></i>
+    <div class="token hamburger">
+        <a href ="#">
+            <i class='oi' data-glyph="menu"></i>
+        </a> 
     </div>
 
-    <div class="logo">
-        <a href="#/"><img src="/images/light-{{brandingLogo}}" style="max-height: 35px"/></a>
+    <div class="menu hidden popup_hamburger">
+        <ul>
+            {{!-- <li><a href="#">{{t "header.users_list"}}</a></li> --}}
+{{!--             <li><a href="#/workspaces">{{t "header.workspaces"}}</a></li>
+            <li><a href="#/data_sources">{{t "header.data_sources"}}</a></li>
+            <li><a href="#/notifications">{{t "header.notifications"}}</a></li>
+            <li><a href="#/tags">{{t "header.tags"}}</a></li>
+            <li><a href="#/about">{{t "header.about"}}</a></li> --}}
+        </ul>
+    </div>
+
+    <div class="token logo">
+        <a href="#"><img src="/images/light-{{brandingLogo}}" style="max-height: 35px"/></a>
     </div>
 </div>
 
 <div class="right">
 
-    <div class="username">
-        <a href="#" title="{{fullName}}">
-            <span>{{displayName}}<i class="oi" data-glyph="caret-bottom"/></span>
+    <div class="token username">
+        <a href="#">
+            <span>{{displayName}}<i class="caret oi" data-glyph="caret-bottom"/></span>
             
         </a>
     </div>
@@ -42,23 +55,8 @@
         </ul>
     </div>
 
-    {{!-- <div class="gear">
-        <a href="#" title=""><img src="/images/gear_menu.png"/></a>
-    </div>
-    <div class="menu hidden popup_gear">
-        <div class="pointer"/>
-        <ul>
-            <li><a href="#/users">{{t "header.users_list"}}</a></li>
-            <li><a href="#/workspaces">{{t "header.workspaces"}}</a></li>
-            <li><a href="#/data_sources">{{t "header.data_sources"}}</a></li>
-            <li><a href="#/notifications">{{t "header.notifications"}}</a></li>
-            <li><a href="#/tags">{{t "header.tags"}}</a></li>
-            <li><a href="#/about">{{t "header.about"}}</a></li>
-        </ul>
-    </div> --}}
-
-    <div class="messages">
-        <a href="#" class="notifications" title="notifications">
+    <div class="token messages">
+        <a href="#" class="notifications">
             <div class="lozenge {{#unless notifications.length}}empty{{/unless}}">{{notifications.pagination.records}}</div>
         </a>
     </div>
@@ -70,7 +68,7 @@
     </div>
 
     {{#if advisorNow}}
-        <div class="advisor_now">
+        <div class="token advisor_now">
             <a href="{{advisorNowLink}}" target="_blank"><img src="/images/advisor_now.png"/></a>
         </div>
     {{/if}}

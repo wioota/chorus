@@ -4,7 +4,7 @@ chorus.views.Header = chorus.views.Base.extend({
     events: {
         "click .username a": "togglePopupUsername",
         "click a.notifications": "togglePopupNotifications",
-        // "click .gear a": "togglePopupGear",
+        "click .hamburger a": "togglePopupHamburger",
         "click .type_ahead_result a": "clearSearch",
         "submit .search form": "startSearch",
         "keydown .search input": "searchKeyPressed"
@@ -172,9 +172,9 @@ chorus.views.Header = chorus.views.Base.extend({
         chorus.PopupMenu.toggle(this, ".menu.popup_username", e, '.username');
     },
 
-    // togglePopupGear: function(e) {
-    //     chorus.PopupMenu.toggle(this, ".menu.popup_gear", e);
-    // },
+    togglePopupHamburger: function(e) {
+        chorus.PopupMenu.toggle(this, ".menu.popup_hamburger", e, '.hamburger');
+    },
 
     modifyTypeAheadSearchLength: function() {
         if(!_.isEmpty($('.left')) && !_.isEmpty($('.type_ahead_search'))) {

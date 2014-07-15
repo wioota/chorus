@@ -375,7 +375,7 @@ describe("chorus.views.Header", function() {
                         usernameLink.click();
                         usernameLink.click();
                         
-                        var usernameDiv = this.view.$(".username a");
+                        var usernameDiv = this.view.$(".username");
                         expect(usernameDiv).not.toHaveClass("active");
                     });
                 });
@@ -428,39 +428,83 @@ describe("chorus.views.Header", function() {
             });
         });
 
-        // describe("the gear menu", function() {
-        //     it("is rendered", function() {
-        //         expect(this.view.$(".gear a img")).toHaveAttr("src", "/images/gear_menu.png");
-        //     });
+        describe("the hamburger menu", function() {
+            it("has a visible button", function() {
+                expect(this.view.$(".hamburger i")).toHaveAttr("data-glyph", "menu");
+            });
 
-        //     it("has a hidden popup menu", function() {
-        //         expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
-        //     });
+            it("has a hidden popup menu", function() {
+                expect(this.view.$(".menu.popup_hamburger")).toHaveClass("hidden");
+            });
 
-        //     describe("when clicked", function() {
-        //         beforeEach(function() {
-        //             spyOn(chorus.PopupMenu, "toggle").andCallThrough();
-        //             this.view.$(".gear a").click();
-        //         });
+            describe("when clicked", function() {
+                beforeEach(function() {
+                    spyOn(chorus.PopupMenu, "toggle").andCallThrough();
+                });
 
-        //         it("shows a popup menu", function() {
-        //             expect(this.view.$(".menu.popup_gear")).not.toHaveClass("hidden");
-        //         });
+                it("shows a popup menu", function() {
+                    var hamburgerLink = this.view.$(".hamburger a");
+                    expect(this.view.$(".menu.popup_hamburger")).toHaveClass("hidden");
+                    hamburgerLink.click();
+                    expect(this.view.$(".menu.popup_hamburger")).not.toHaveClass("hidden");
+                });
 
-        //         it("opens a popup menu with the correct element", function() {
-        //             expect(chorus.PopupMenu.toggle).toHaveBeenCalledWith(this.view, ".menu.popup_gear", jasmine.any(jQuery.Event));
-        //         });
+                it("becomes active", function() {
+                    var hamburgerDiv = this.view.$(".hamburger");
+                    expect(hamburgerDiv).not.toHaveClass("active");
+                    
+                    var hamburgerLink = this.view.$(".hamburger a");
+                    hamburgerLink.click();
+                    
+                    expect(hamburgerDiv).toHaveClass("active");
+                });
 
-        //         describe("and when clicked again", function() {
-        //             beforeEach(function() {
-        //                 this.view.$(".gear a").click();
-        //             });
-        //             it("becomes hidden again", function() {
-        //                 expect(this.view.$(".menu.popup_gear")).toHaveClass("hidden");
-        //             });
-        //         });
-        //     });
+                it("opens a popup menu with the correct element", function() {
+                    this.view.$(".hamburger a").click();
+                    expect(chorus.PopupMenu.toggle).toHaveBeenCalledWith(this.view, ".menu.popup_hamburger", jasmine.any(jQuery.Event), '.hamburger');
+                });
 
+                describe("and when clicked again", function() {
+                    it("hides the popup menu", function() {
+                        this.view.$(".hamburger a").click();
+                        this.view.$(".hamburger a").click();
+                        expect(this.view.$(".menu.popup_hamburger")).toHaveClass("hidden");
+                    });
+
+                    it("ceases to be active", function() {
+                        var hamburgerLink = this.view.$(".hamburger a");
+
+                        hamburgerLink.click();
+                        hamburgerLink.click();
+                        
+                        var hamburgerDiv = this.view.$(".hamburger a");
+                        expect(hamburgerDiv).not.toHaveClass("active");
+                    });
+                });
+            });
+
+            describe("the popup menu", function() {
+                itBehavesLike.PopupMenu(".hamburger a", ".menu.popup_hamburger", null, ".hamburger");
+                
+                it("has a link to 'home'", function() {
+                    expect(this.view.$(".menu.popup_hamburger a[href='#']").text().trim()).toBe(t("header.home"));
+                });
+
+                // it("has a link to 'your profile'", function() {
+                //     expect(this.view.$(".menu.popup_hamburger a[href='#/users/55']").text().trim()).toBe(t("header.your_profile"));
+                // });
+
+                // it("has a link to 'sign out'", function() {
+                //     expect(this.view.$(".menu.popup_hamburger a[href='#/logout']").text().trim()).toBe(t("header.sign_out"));
+                // });
+
+                // it("has a link to 'about'", function() {
+                //     expect(this.view.$(".menu.popup_hamburger a[href='#/about']").text().trim()).toBe(t("header.about"));
+                // });
+            });
+        });
+
+            
         //     describe("the popup menu", function() {
         //         itBehavesLike.PopupMenu(".gear a", ".menu.popup_gear");
 
