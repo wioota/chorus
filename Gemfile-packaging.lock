@@ -1,10 +1,10 @@
 GIT
   remote: gemserver@chorus-gemserver:tableau
-  revision: 236c69f47c5a9b16c320b7bb08bf00b81e196e12
+  revision: dca1d6539d2539186a89ebda265d76a0acac6680
+  branch: master
   specs:
     tabcmd_gem (0.0.1)
       highline
-      hpricot
       rchardet19
 
 GIT
@@ -193,8 +193,6 @@ GEM
     hike (1.2.3)
     honor_codes (0.1.1)
       thor (~> 0.18.1)
-    hpricot (0.8.6)
-    hpricot (0.8.6-java)
     htmlentities (4.3.1)
     http_parser.rb (0.5.3)
     http_parser.rb (0.5.3-java)
