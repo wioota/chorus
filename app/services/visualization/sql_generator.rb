@@ -102,8 +102,21 @@ module Visualization
       query.to_sql
     end
 
-    def histogram_row_sql(opts)
-      not_implemented
+    def histogram_row_sql(o)
+      dataset, min, max, bins, filters, category = fetch_opts(o, :dataset, :min, :max, :bins, :filters, :category)
+      relation = relation(dataset)
+      scoped_category = %(#{dataset.scoped_name}."#{category}")
+
+      width_bucket = "width_bucket(CAST(#{scoped_category} as #{numeric_cast}), CAST(#{min} as #{numeric_cast}), CAST(#{max} as #{numeric_cast}), #{bins})"
+
+      query = relation.
+          group(width_bucket).
+          project(Arel.sql(width_bucket).as('bucket'), Arel.sql("COUNT(#{width_bucket})").as('frequency')).
+          where(relation[category].not_eq(nil))
+
+      query = query.where(Arel.sql(filters.join(' AND '))) if filters.present?
+
+      query.to_sql
     end
 
     def timeseries_row_sql(opts)
