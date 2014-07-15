@@ -237,8 +237,12 @@ end
 shared_examples 'a timeseries visualization' do
   # dataset, data_source_account
 
-  let(:filters) { [%Q{"#{dataset.name}"."time_value" > '2012-03-03'},
-                   %Q{"#{dataset.name}"."column1" < 5}] }
+  let(:default_filters) {
+    [
+        %Q{"#{dataset.name}"."time_value" > '2012-03-03'},
+        %Q{"#{dataset.name}"."column1" < 5}
+    ]
+  }
 
   let(:visualization) do
     Visualization::Timeseries.new(dataset, {
@@ -246,7 +250,7 @@ shared_examples 'a timeseries visualization' do
         :aggregation => 'sum',
         :x_axis => 'time_value',
         :y_axis => 'column1',
-        :filters => filters
+        :filters => defined?(filters) ? filters : default_filters
     })
   end
 

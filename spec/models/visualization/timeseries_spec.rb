@@ -57,4 +57,19 @@ describe Visualization::Timeseries do
 
     it_behaves_like 'a timeseries visualization'
   end
+
+  context 'for teradata', :jdbc_integration do
+    let(:data_source_account) { JdbcIntegration.real_account }
+    let(:schema) { JdbcIntegration.real_schema }
+    let(:dataset) { schema.find_or_initialize_dataset(table_name) }
+
+    it_behaves_like 'a timeseries visualization' do
+      let(:filters) {
+        [
+            %Q{"#{dataset.name}"."time_value" > '2012-03-03 11:53:50' (Timestamp(0), Format 'yyyy-mm-ddbhh:mi:ss')},
+            %Q{"#{dataset.name}"."column1" < 5}
+        ]
+      }
+    end
+  end
 end

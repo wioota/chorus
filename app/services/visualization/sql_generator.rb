@@ -6,12 +6,12 @@ module Visualization
   end
 
   class SqlGenerator
-    attr_accessor :limit_type, :numeric_cast
-
+    attr_accessor :limit_type, :numeric_cast, :date_trunc_method
 
     def initialize(params={})
       @limit_type = params.fetch(:limit, :limit)
       @numeric_cast = params.fetch(:numeric_cast, 'numeric')
+      @date_trunc_method = params.fetch(:date_trunc_method, :trunc)
     end
 
     def frequency_row_sql(o)
@@ -136,8 +136,24 @@ module Visualization
       query.to_sql
     end
 
-    def timeseries_row_sql(opts)
-      raise NotImplemented.new
+    def timeseries_row_sql(o)
+      time, time_interval, aggregation = fetch_opts(o, :time, :time_interval, :aggregation)
+      value, filters, pattern = fetch_opts(o, :value, :filters, :pattern)
+      dataset = o[:dataset]
+
+      date_trunc = date_trunc_expression(time, time_interval)
+
+      query = <<-SQL
+        SELECT #{aggregation}("#{value}"), to_char(#{date_trunc}, '#{pattern}')
+          FROM #{dataset.scoped_name}
+      SQL
+      query << " WHERE #{filters.join(' AND ')}" if filters.present?
+      query << <<-SQL
+        GROUP BY #{date_trunc}
+        ORDER BY #{date_trunc} ASC
+      SQL
+
+      query
     end
 
     private
@@ -147,6 +163,14 @@ module Visualization
           :top => limit_type == :top ? "TOP #{limit}" : '',
           :limit => limit_type == :limit ? "LIMIT #{limit}" : ''
       }
+    end
+
+    def date_trunc_expression(column, time_interval)
+      if date_trunc_method == :date_trunc
+        %(date_trunc('#{time_interval}', "#{column}"))
+      else
+        %(TRUNC("#{column}", '#{time_interval}'))
+      end
     end
 
     def relation(dataset)

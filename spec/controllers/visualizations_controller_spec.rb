@@ -111,8 +111,8 @@ describe VisualizationsController do
 
     context 'when the visualization has not been implemented' do
       before do
-        any_instance_of(GreenplumConnection) do |conn|
-          stub(conn).visualization_sql_generator { Visualization::SqlGenerator.new }
+        any_instance_of(Visualization::SqlGenerator) do |sql_gen|
+          mock(sql_gen).timeseries_row_sql.with_any_args { raise Visualization::NotImplemented }
         end
       end
 

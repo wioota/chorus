@@ -17,5 +17,11 @@ module Visualization
     def histogram_row_sql(o)
       raise NotImplemented.new
     end
+
+    # sql server does not support trunc or date_trunc
+    # and needs special implementation
+    def timeseries_row_sql(o)
+      raise NotImplemented.new
+    end
   end
 end

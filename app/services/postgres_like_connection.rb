@@ -109,7 +109,7 @@ class PostgresLikeConnection < DataSourceConnection
   end
 
   def visualization_sql_generator
-    Visualization::SqlGenerator.new.extend(Visualization::PgLikeSql)
+    Visualization::SqlGenerator.new(:date_trunc_method => :date_trunc).extend(Visualization::PgLikeSql)
   end
 
   private
