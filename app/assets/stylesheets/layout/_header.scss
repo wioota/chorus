@@ -38,15 +38,29 @@ $header-menu-separator: 1px solid $border-color;
             padding: 0 0 0 0;
         }
 
-        .left {
+        .left { float: left; }
+
+        .logo, .hamburger {
             float: left;
+        }
 
-            .logo {
-                line-height: $header-height;
-                margin: 0 40px 0 20px;
+        .logo {
+            width: 90px;
+            line-height: $header-height;
+            padding: 0px 15px;
 
-                a img { vertical-align: middle; }
-            }
+            a img { vertical-align: middle; }
+        }
+        .hamburger {
+            color: white;
+            width: $header-height;
+            height: $header-height;
+            line-height: $header-height;
+            text-align: center;
+            
+            &:hover { background-color: $brand-tint; }
+
+            i { font-size: 16px; }
         }
 
         .right {
@@ -76,7 +90,7 @@ $header-menu-separator: 1px solid $border-color;
                     margin-right: 5px;
                 }
                 &.magnifying_glass {
-                    position: absolute; left: 154px; top: 15px;
+                    position: absolute; left: 180px; top: 15px;
                     font-size: 15px;
                 }
             }
@@ -103,7 +117,6 @@ $header-menu-separator: 1px solid $border-color;
                 html.ie8 & { height: 17px; }
             }
         }
-
 
         .username, .messages, .advisor_now {
             color: white;

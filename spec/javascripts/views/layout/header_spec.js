@@ -131,6 +131,10 @@ describe("chorus.views.Header", function() {
                 ]);
         });
 
+        it("should have a hamburger menu icon", function() {
+            expect(this.view.$(".hamburger")).toExist();
+        });
+
         it("should have a search field", function() {
             expect(this.view.$(".search input[type=text]")).toExist();
         });
