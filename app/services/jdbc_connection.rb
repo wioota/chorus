@@ -101,7 +101,8 @@ class JdbcConnection < DataSourceConnection
   def visualization_sql_generator
     params = { :limit => :top, :numeric_cast => 'numeric(32)' }
     sql_gen = Visualization::SqlGenerator.new(params).extend(Visualization::JdbcSql)
-    sql_gen.extend(Visualization::TeradataSql) if db_url.include?('teradata')
+    sql_gen.extend(Visualization::TeradataSql) if /jdbc:teradata:/ =~ db_url
+    sql_gen.extend(Visualization::SqlServerSql) if /jdbc:sqlserver:/ =~ db_url
     sql_gen
   end
 

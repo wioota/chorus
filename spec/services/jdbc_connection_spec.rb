@@ -400,6 +400,21 @@ describe JdbcConnection, :jdbc_integration do
 
   end
 
+  describe '#visualization_sql_generator' do
+    # move to visualization specs when implemented
+    context 'for sql server' do
+      before do
+        mock(data_source).url.any_number_of_times { 'jdbc:sqlserver://the_host/somemore' }
+      end
+
+      it 'provides a sql generator that raises on unimplemented visualizations' do
+        sql_gen = connection.visualization_sql_generator
+        expect { sql_gen.histogram_min_max_sql({}) }.to raise_error(Visualization::NotImplemented)
+        expect { sql_gen.heatmap_min_max_sql({}) }.to raise_error(Visualization::NotImplemented)
+      end
+    end
+  end
+
   describe '::DatabaseError' do
     let(:message) { 'A message' }
     let(:sequel_exception) {

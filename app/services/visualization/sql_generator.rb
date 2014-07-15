@@ -1,8 +1,13 @@
 module Visualization
+  class NotImplemented < ApiValidationError
+    def initialize
+      super :visualization, :not_implemented
+    end
+  end
+
   class SqlGenerator
     attr_accessor :limit_type, :numeric_cast
 
-    NotImplemented = Class.new(ApiValidationError)
 
     def initialize(params={})
       @limit_type = params.fetch(:limit, :limit)
@@ -132,7 +137,7 @@ module Visualization
     end
 
     def timeseries_row_sql(opts)
-      not_implemented
+      raise NotImplemented.new
     end
 
     private
@@ -150,10 +155,6 @@ module Visualization
 
     def fetch_opts(opts, *keys)
       keys.map { |key| opts.fetch key }
-    end
-
-    def not_implemented
-      raise NotImplemented.new :visualization, :not_implemented
     end
   end
 end
