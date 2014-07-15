@@ -163,8 +163,8 @@ $shadow-canon: 1px 2px 2px 0px $border-color;
                 z-index: 1;
 
                 &.search_clear {
-                    font-size: 9px;
-                    margin-right: 5px;
+                    font-size: 10px;
+                    margin-right: 8px;
                 }
                 &.magnifying_glass {
                     position: absolute;
@@ -187,6 +187,7 @@ $shadow-canon: 1px 2px 2px 0px $border-color;
 
                 transition-duration: 0.7s;
                 padding-left: $icon-box-width;
+                padding-right: $icon-box-width;
                 width: $collapsed-search-width;
 
                 &:valid, &:focus {
