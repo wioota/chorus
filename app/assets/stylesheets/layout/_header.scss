@@ -223,7 +223,11 @@ $shadow-canon: 1px 2px 2px 0px $border-color;
         }
 
         .menu.popup_drawer {
-            width: 165px + $header-height;
+            $drawer-width: 165px + $header-height;
+            transition-duration: 0.1s;
+            &.hidden { left: -$drawer-width; display: block !important;}
+
+            width: $drawer-width;
             height: 100vh;
             left: 0px;
             li { 
