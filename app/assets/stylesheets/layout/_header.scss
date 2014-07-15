@@ -1,25 +1,32 @@
 @import "compass/css3";
+
 $header-margin: 30px;
 $expanded-search-width: 444px;
 $header-menu-separator: 1px solid $border-color;
 
 @mixin header-menu-link-item($height) {
     padding-left: 15px;
-    
-    &:hover { background-color: $list-hover-color; }
-    &.underline { border-bottom: $header-menu-separator }    
-    a { 
-        height: $height; 
+
+    &:hover {
+        background-color: $list-hover-color;
+    }
+    &.underline {
+        border-bottom: $header-menu-separator
+    }
+    a {
+        height: $height;
         width: 100%;
         display: table;
 
         text-decoration: none;
-        
-        div { 
-            display: table-cell; 
+
+        div {
+            display: table-cell;
             vertical-align: middle;
 
-            sub { @include secondary-text-small; }
+            sub {
+                @include secondary-text-small;
+            }
         }
     }
 }
@@ -30,8 +37,7 @@ $header-menu-separator: 1px solid $border-color;
         height: $header-height;
         background-color: $brand;
         vertical-align: middle;
-        .active { background-color: $brand-tint; }
-        
+
         .menu {
             border: none;
             box-shadow: 0px 4px 13px 0px $border-color;
@@ -39,114 +45,10 @@ $header-menu-separator: 1px solid $border-color;
             top: $header-height;
         }
 
-        .left { 
-            float: left;
-            .token { float: left; }
-            
-            .logo {
-                width: 90px;
-                padding: 0px 15px;
-
-                a img { vertical-align: middle; }
-            }
-            .hamburger {
-                width: $header-height;
-                text-align: center;
-                &:hover { background-color: $brand-tint; }
-
-                i { font-size: 16px; }
-            }
-        }
-
-        .right {
-            float: right;
-            .token {
-                float: right;
-                &.active .caret::before { @include rotateX(180deg); }
-            }
-
-            .username {
-            &:hover { background-color: $brand-tint; }
-            width: $header-margin * 3;
-            margin-right: $header-margin;
-            a {
-                text-align: center;
-                span { @include ellipsis; }
-            }
-        }
-
-        .messages {
-            width: $header-margin * 2;
-            text-align: center; 
-            
-            a.notifications .lozenge {
-                &.empty { background: $brand-dark; }
-                font-weight: $semibold;
-                display: inline-block;
-                min-width: 30px;
-                padding: 2px;
-
-                height: $header-height / 3 ;
-                line-height: $header-height / 3;
-
-                text-align: center; 
-
-                border-radius: 30px;
-                background: $notification; 
-            }
-        }
-
-        .advisor_now a img { margin-bottom: -4px; }
-        }
-
-
-        .search {
-            $icon-box-width: 32px;
-            $collapsed-search-width: 178px;
-            
-            overflow: hidden;
-            margin: 8px 0 0 0;
-            border-radius: 3px;
-            display: inline-block;
-
-            i {
-                color: $brand-light; z-index: 1; 
-                
-                &.search_clear { 
-                    font-size: 9px; 
-                    margin-right: 5px;
-                }
-                &.magnifying_glass {
-                    position: absolute; left: 180px; top: 15px;
-                    font-size: 15px;
-                }
-            }
-
-            input {
-                @include placeholder { color: $brand-tint; }
-
-                height: 32px;
-                background-color: $brand-shade; 
-                border: none;
-                color: white;
-                font-weight: normal;
-
-                transition-duration: 0.7s;
-                padding-left: $icon-box-width;
-                width: $collapsed-search-width;
-
-                &:valid, &:focus {
-                    width: $expanded-search-width;
-                    background-color: $brand-dark;
-                    @include placeholder { color: transparent; }
-                }
-                
-                html.ie8 & { height: 17px; }
-            }
-        }
-
         .token {
-            
+            &.active {
+                background-color: $brand-tint;
+            }
             a {
                 color: white;
                 text-decoration: none;
@@ -158,29 +60,177 @@ $header-menu-separator: 1px solid $border-color;
 
                 span {
                     display: inline-block;
-                    i { margin-left: 15px; }
+                    i {
+                        margin-left: 15px;
+                    }
+                }
+            }
+        }
+
+        .left {
+            float: left;
+            .token {
+                float: left;
+                &.logo {
+                    width: 90px;
+                    padding: 0px 15px;
+
+                    a img {
+                        vertical-align: middle;
+                    }
+                }
+
+                &.hamburger {
+                    width: $header-height;
+                    text-align: center;
+
+                    &.active {
+                        background-color: $brand-shade;
+                    }
+
+                    &:hover {
+                        background-color: $brand-tint;
+                    }
+
+                    i {
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+
+        .right {
+            float: right;
+            .token {
+                float: right;
+                &.active .caret::before {
+                    @include rotateX(180deg);
+                }
+
+                &.username {
+                    &:hover {
+                        background-color: $brand-tint;
+                    }
+                    width: $header-margin * 3;
+                    margin-right: $header-margin;
+                    a {
+                        text-align: center;
+                        span {
+                            @include ellipsis;
+                        }
+                    }
+                }
+
+                &.messages {
+                    width: $header-margin * 2;
+                    text-align: center;
+
+                    a.notifications .lozenge {
+                        &.empty {
+                            background: $brand-dark;
+                        }
+                        font-weight: $semibold;
+                        display: inline-block;
+                        min-width: 30px;
+                        padding: 2px;
+
+                        height: $header-height / 3;
+                        line-height: $header-height / 3;
+
+                        text-align: center;
+
+                        border-radius: 30px;
+                        background: $notification;
+                    }
+                }
+
+                &.advisor_now a img {
+                    margin-bottom: -4px;
+                }
+            }
+        }
+
+        .search {
+            $icon-box-width: 32px;
+            $collapsed-search-width: 178px;
+
+            overflow: hidden;
+            margin: 8px 0 0 0;
+            border-radius: 3px;
+            display: inline-block;
+
+            i {
+                color: $brand-light;
+                z-index: 1;
+
+                &.search_clear {
+                    font-size: 9px;
+                    margin-right: 5px;
+                }
+                &.magnifying_glass {
+                    position: absolute;
+                    left: 180px;
+                    top: 15px;
+                    font-size: 15px;
+                }
+            }
+
+            input {
+                @include placeholder {
+                    color: $brand-tint;
+                }
+
+                height: 32px;
+                background-color: $brand-shade;
+                border: none;
+                color: white;
+                font-weight: normal;
+
+                transition-duration: 0.7s;
+                padding-left: $icon-box-width;
+                width: $collapsed-search-width;
+
+                &:valid, &:focus {
+                    width: $expanded-search-width;
+                    background-color: $brand-dark;
+                    @include placeholder {
+                        color: transparent;
+                    }
+                }
+
+                html.ie8 & {
+                    height: 17px;
                 }
             }
         }
 
         .menu.type_ahead_result {
-            em { font-weight: bold; color: $color-text2}
+            em {
+                font-weight: bold;
+                color: $color-text2
+            }
             position: absolute;
             top: 38px;
             left: 137px;
             right: $sidebar-width + $padding-x + 75px;
             width: $expanded-search-width;
 
-            li.result { @include header-menu-link-item(60px); }
-            li.search_all { @include header-menu-link-item(40px); }
+            li.result {
+                @include header-menu-link-item(60px);
+            }
+            li.search_all {
+                @include header-menu-link-item(40px);
+            }
         }
 
         .menu.popup_username {
             line-height: 24px;
             right: $header-margin;
             width: $header-margin * 6;
-            
-            li { @include header-menu-link-item(40px) }
+
+            li {
+                @include header-menu-link-item(40px)
+            }
         }
 
         .menu.popup_notifications {
@@ -196,7 +246,9 @@ $header-menu-separator: 1px solid $border-color;
                 $difference: 150px;
                 $window-height: 1000px;
                 @while $window-height > 300px {
-                    @media (max-height: #{$window-height}) { max-height: $window-height - $difference; }
+                    @media (max-height: #{$window-height}) {
+                        max-height: $window-height - $difference;
+                    }
                     $window-height: $window-height - 50px;
                 }
             }
@@ -213,12 +265,16 @@ $header-menu-separator: 1px solid $border-color;
 
             .notification_list > ul > li {
                 border-bottom: $header-menu-separator;
-                
-                .activity_item:hover { background: $alice-blue; }
+
+                .activity_item:hover {
+                    background: $alice-blue;
+                }
                 &.insight {
                     padding: 12px 0 5px;
 
-                    .activity_item { padding-top: 12px; }
+                    .activity_item {
+                        padding-top: 12px;
+                    }
                 }
             }
 
