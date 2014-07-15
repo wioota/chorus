@@ -6,7 +6,7 @@ $header-menu-separator: 1px solid $border-color;
 $shadow-canon: 1px 2px 2px 0px $border-color;
 
 @mixin header-menu-link-item($height) {
-    &:hover {
+    &:hover, &.selected {
         background-color: $list-hover-color;
     }
 
