@@ -1,11 +1,12 @@
 module Visualization
   class SqlGenerator
-    attr_accessor :limit_type
+    attr_accessor :limit_type, :numeric_cast
 
     NotImplemented = Class.new(ApiValidationError)
 
     def initialize(params={})
       @limit_type = params.fetch(:limit, :limit)
+      @numeric_cast = params.fetch(:numeric_cast, 'numeric')
     end
 
     def frequency_row_sql(opts)
@@ -59,8 +60,36 @@ module Visualization
       query.to_sql
     end
 
-    def heatmap_row_sql(opts)
-      not_implemented
+    def heatmap_row_sql(o)
+      x_axis, x_bins, min_x, max_x = fetch_opts(o, :x_axis, :x_bins, :min_x, :max_x)
+      y_axis, y_bins, min_y, max_y = fetch_opts(o, :y_axis, :y_bins, :min_y, :max_y)
+      dataset, filters = fetch_opts(o, :dataset, :filters)
+
+      query = <<-SQL
+        SELECT x, y, COUNT(*) AS "value" FROM (
+          SELECT width_bucket(
+            CAST("#{x_axis}" AS #{numeric_cast}),
+            CAST(#{min_x} AS #{numeric_cast}),
+            CAST(#{max_x} AS #{numeric_cast}),
+            #{x_bins}
+          ) AS x,
+          width_bucket( CAST("#{y_axis}" AS #{numeric_cast}),
+            CAST(#{min_y} AS #{numeric_cast}),
+            CAST(#{max_y} AS #{numeric_cast}),
+            #{y_bins}
+          ) AS y FROM ( SELECT * FROM #{dataset.scoped_name}
+      SQL
+
+      query +=  ' WHERE ' + filters.join(' AND ') if filters.present?
+
+      query += <<-SQL
+        ) AS subquery
+          WHERE "#{x_axis}" IS NOT NULL
+          AND "#{y_axis}" IS NOT NULL) AS foo
+          GROUP BY x, y
+      SQL
+
+      query
     end
 
     def histogram_min_max_sql(o)

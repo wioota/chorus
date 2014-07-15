@@ -14,38 +14,6 @@ module Visualization
       query.to_sql
     end
 
-    def heatmap_row_sql(o)
-      x_axis, x_bins, min_x, max_x = fetch_opts(o, :x_axis, :x_bins, :min_x, :max_x)
-      y_axis, y_bins, min_y, max_y = fetch_opts(o, :y_axis, :y_bins, :min_y, :max_y)
-      dataset, filters = fetch_opts(o, :dataset, :filters)
-
-      query = <<-SQL
-        SELECT *, count(*) AS value FROM (
-          SELECT width_bucket(
-            CAST("#{x_axis}" AS numeric),
-            CAST(#{min_x} AS numeric),
-            CAST(#{max_x} AS numeric),
-            #{x_bins}
-          ) AS x,
-          width_bucket( CAST("#{y_axis}" AS numeric),
-            CAST(#{min_y} AS numeric),
-            CAST(#{max_y} AS numeric),
-            #{y_bins}
-          ) AS y FROM ( SELECT * FROM #{dataset.scoped_name}
-      SQL
-
-      query +=  ' WHERE ' + filters.join(' AND ') if filters.present?
-
-      query += <<-SQL
-        ) AS subquery
-          WHERE "#{x_axis}" IS NOT NULL
-          AND "#{y_axis}" IS NOT NULL) AS foo
-          GROUP BY x, y
-      SQL
-
-      query
-    end
-
     def histogram_row_sql(o)
       dataset, min, max, bins, filters, category = fetch_opts(o, :dataset, :min, :max, :bins, :filters, :category)
       relation = relation(dataset)
