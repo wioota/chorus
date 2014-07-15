@@ -44,7 +44,7 @@ describe("chorus.pages.DashboardPage", function() {
             });
 
             it("has a title", function() {
-                expect(this.workspaceList.$("h1").text()).toBe("My Workspaces");
+                expect(this.workspaceList.$("h1").text()).toBe("Workspaces");
             });
 
             it("creates a WorkspaceList view", function() {

@@ -4,7 +4,7 @@ chorus.views.Header = chorus.views.Base.extend({
     events: {
         "click .username a": "togglePopupUsername",
         "click a.notifications": "togglePopupNotifications",
-        "click .hamburger a": "togglePopupHamburger",
+        "click .drawer a": "togglePopupDrawer",
         "click .type_ahead_result a": "clearSearch",
         "submit .search form": "startSearch",
         "keydown .search input": "searchKeyPressed"
@@ -131,7 +131,7 @@ chorus.views.Header = chorus.views.Base.extend({
         return _.extend(ctx, this.session.attributes, {
             notifications: this.unreadNotifications,
             fullName: user && user.displayName(),
-            displayName: user && user.get('firstName'),
+            firstName: user && user.get('firstName'),
             userUrl: user && user.showUrl(),
             helpLinkUrl: 'help.link_address.' + license.branding(),
             brandingLogo: license.branding() + "-logo.png",
@@ -172,8 +172,8 @@ chorus.views.Header = chorus.views.Base.extend({
         chorus.PopupMenu.toggle(this, ".menu.popup_username", e, '.username');
     },
 
-    togglePopupHamburger: function(e) {
-        chorus.PopupMenu.toggle(this, ".menu.popup_hamburger", e, '.hamburger');
+    togglePopupDrawer: function(e) {
+        chorus.PopupMenu.toggle(this, ".menu.popup_drawer", e, '.drawer');
     },
 
     modifyTypeAheadSearchLength: function() {

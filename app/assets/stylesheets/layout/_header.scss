@@ -3,13 +3,13 @@
 $header-margin: 30px;
 $expanded-search-width: 444px;
 $header-menu-separator: 1px solid $border-color;
+$shadow-canon: 1px 2px 2px 0px $border-color;
 
 @mixin header-menu-link-item($height) {
-    padding-left: 15px;
-
     &:hover {
         background-color: $list-hover-color;
     }
+
     &.underline {
         border-bottom: $header-menu-separator
     }
@@ -23,6 +23,7 @@ $header-menu-separator: 1px solid $border-color;
         div {
             display: table-cell;
             vertical-align: middle;
+            padding-left: 15px;
 
             sub {
                 @include secondary-text-small;
@@ -40,7 +41,7 @@ $header-menu-separator: 1px solid $border-color;
 
         .menu {
             border: none;
-            box-shadow: 0px 4px 13px 0px $border-color;
+            box-shadow: $shadow-canon;
             padding: 0 0 0 0;
             top: $header-height;
         }
@@ -69,6 +70,8 @@ $header-menu-separator: 1px solid $border-color;
 
         .left {
             float: left;
+            i { font-size: 16px; }
+            
             .token {
                 float: left;
                 &.logo {
@@ -80,7 +83,7 @@ $header-menu-separator: 1px solid $border-color;
                     }
                 }
 
-                &.hamburger {
+                &.drawer {
                     width: $header-height;
                     text-align: center;
 
@@ -90,10 +93,6 @@ $header-menu-separator: 1px solid $border-color;
 
                     &:hover {
                         background-color: $brand-tint;
-                    }
-
-                    i {
-                        font-size: 16px;
                     }
                 }
             }
@@ -221,6 +220,25 @@ $header-menu-separator: 1px solid $border-color;
             li.search_all {
                 @include header-menu-link-item(40px);
             }
+        }
+
+        .menu.popup_drawer {
+            width: 165px + $header-height;
+            height: 100vh;
+            left: 0px;
+            li { 
+                @include header-menu-link-item($header-height); 
+                &:hover .knob { background: $brand-shade; }
+            }
+            .knob {
+                padding-left: 0px;
+                color: white;
+                background: $brand-dark;
+                width: $header-height;
+                text-align: center;
+                &.remainder { height: 100vh; }
+            }
+            
         }
 
         .menu.popup_username {

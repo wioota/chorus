@@ -94,7 +94,7 @@ describe("chorus.views.Dashboard", function(){
 
         describe("the workspace list", function(){
             it("renders the workspace list with the right title", function() {
-                expect(this.view.$(".main_content.workspace_list .content_header h1").text()).toMatchTranslation("header.my_workspaces");
+                expect(this.view.$(".main_content.workspace_list .content_header h1").text()).toMatchTranslation("header.workspaces");
             });
 
             it("has a create workspace link in the content details", function() {

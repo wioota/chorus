@@ -131,8 +131,8 @@ describe("chorus.views.Header", function() {
                 ]);
         });
 
-        it("should have a hamburger menu icon", function() {
-            expect(this.view.$(".hamburger")).toExist();
+        it("should have a menu icon", function() {
+            expect(this.view.$(".drawer.token")).toExist();
         });
 
         it("should have a search field", function() {
@@ -325,10 +325,11 @@ describe("chorus.views.Header", function() {
                 expect(usernameSpan.text()).toBe(userFirstName);
             });
 
-            it("has the full name in the title of the username link", function() {
+            it("jaz has the full name in the title of the username link", function() {
                 var userFullName = chorus.session.user().displayName();
+                var title        = this.view.$(".username a").attr("title");
 
-                expect(this.view.$(".username a").attr("title")).toBe(userFullName);
+                expect(title).toBe(userFullName);
             });
 
             it("has a hidden popup menu", function() {
@@ -428,13 +429,13 @@ describe("chorus.views.Header", function() {
             });
         });
 
-        describe("the hamburger menu", function() {
+        describe("the drawer menu", function() {
             it("has a visible button", function() {
-                expect(this.view.$(".hamburger i")).toHaveAttr("data-glyph", "menu");
+                expect(this.view.$(".drawer i")).toHaveAttr("data-glyph", "menu");
             });
 
             it("has a hidden popup menu", function() {
-                expect(this.view.$(".menu.popup_hamburger")).toHaveClass("hidden");
+                expect(this.view.$(".menu.popup_drawer")).toHaveClass("hidden");
             });
 
             describe("when clicked", function() {
@@ -443,97 +444,65 @@ describe("chorus.views.Header", function() {
                 });
 
                 it("shows a popup menu", function() {
-                    var hamburgerLink = this.view.$(".hamburger a");
-                    expect(this.view.$(".menu.popup_hamburger")).toHaveClass("hidden");
-                    hamburgerLink.click();
-                    expect(this.view.$(".menu.popup_hamburger")).not.toHaveClass("hidden");
+                    var drawerLink = this.view.$(".drawer a");
+                    expect(this.view.$(".menu.popup_drawer")).toHaveClass("hidden");
+                    drawerLink.click();
+                    expect(this.view.$(".menu.popup_drawer")).not.toHaveClass("hidden");
                 });
 
                 it("becomes active", function() {
-                    var hamburgerDiv = this.view.$(".hamburger");
-                    expect(hamburgerDiv).not.toHaveClass("active");
+                    var drawerDiv = this.view.$(".drawer");
+                    expect(drawerDiv).not.toHaveClass("active");
                     
-                    var hamburgerLink = this.view.$(".hamburger a");
-                    hamburgerLink.click();
+                    var drawerLink = this.view.$(".drawer a");
+                    drawerLink.click();
                     
-                    expect(hamburgerDiv).toHaveClass("active");
+                    expect(drawerDiv).toHaveClass("active");
                 });
 
                 it("opens a popup menu with the correct element", function() {
-                    this.view.$(".hamburger a").click();
-                    expect(chorus.PopupMenu.toggle).toHaveBeenCalledWith(this.view, ".menu.popup_hamburger", jasmine.any(jQuery.Event), '.hamburger');
+                    this.view.$(".drawer a").click();
+                    expect(chorus.PopupMenu.toggle).toHaveBeenCalledWith(this.view, ".menu.popup_drawer", jasmine.any(jQuery.Event), '.drawer');
                 });
 
                 describe("and when clicked again", function() {
                     it("hides the popup menu", function() {
-                        this.view.$(".hamburger a").click();
-                        this.view.$(".hamburger a").click();
-                        expect(this.view.$(".menu.popup_hamburger")).toHaveClass("hidden");
+                        this.view.$(".drawer a").click();
+                        this.view.$(".drawer a").click();
+                        expect(this.view.$(".menu.popup_drawer")).toHaveClass("hidden");
                     });
 
                     it("ceases to be active", function() {
-                        var hamburgerLink = this.view.$(".hamburger a");
+                        var drawerLink = this.view.$(".drawer a");
 
-                        hamburgerLink.click();
-                        hamburgerLink.click();
+                        drawerLink.click();
+                        drawerLink.click();
                         
-                        var hamburgerDiv = this.view.$(".hamburger a");
-                        expect(hamburgerDiv).not.toHaveClass("active");
+                        var drawerDiv = this.view.$(".drawer a");
+                        expect(drawerDiv).not.toHaveClass("active");
                     });
                 });
             });
 
             describe("the popup menu", function() {
-                itBehavesLike.PopupMenu(".hamburger a", ".menu.popup_hamburger", null, ".hamburger");
+                itBehavesLike.PopupMenu(".drawer a", ".menu.popup_drawer", null, ".drawer");
                 
                 it("has a link to 'home'", function() {
-                    expect(this.view.$(".menu.popup_hamburger a[href='#']").text().trim()).toBe(t("header.home"));
+                    var linkElement = this.view.$(".menu.popup_drawer a[href='#/']");
+                    expect(linkElement.text().trim()).toBe(t("header.home"));
                 });
 
-                // it("has a link to 'your profile'", function() {
-                //     expect(this.view.$(".menu.popup_hamburger a[href='#/users/55']").text().trim()).toBe(t("header.your_profile"));
-                // });
-
-                // it("has a link to 'sign out'", function() {
-                //     expect(this.view.$(".menu.popup_hamburger a[href='#/logout']").text().trim()).toBe(t("header.sign_out"));
-                // });
-
-                // it("has a link to 'about'", function() {
-                //     expect(this.view.$(".menu.popup_hamburger a[href='#/about']").text().trim()).toBe(t("header.about"));
-                // });
+                ['workspaces', 'data_sources', 'users', 'tags'].forEach(function(place) {
+                    it("has a link to "+place, function() {
+                        var linkElement = this.view.$(".menu.popup_drawer a[href='#/" + place + "']");
+                        var text        = linkElement.text().trim();
+                        var translation = t("header." + place);
+                        
+                        expect(text).toBe(translation);
+                    });
+                });
             });
-        });
-
-            
-        //     describe("the popup menu", function() {
-        //         itBehavesLike.PopupMenu(".gear a", ".menu.popup_gear");
-
-        //         it("has a link to 'Users'", function() {
-        //             expect(this.view.$(".menu.popup_gear a[href='#/users']").text()).toMatchTranslation("header.users_list");
-        //         });
-
-        //         it('has a link to data sources', function() {
-        //             expect(this.view.$(".menu.popup_gear a[href='#/data_sources']").text()).toMatchTranslation("header.data_sources");
-        //         });
-
-        //         it("has a link to the workspaces list", function() {
-        //             expect(this.view.$(".menu.popup_gear a[href='#/workspaces']").text()).toMatchTranslation("header.workspaces");
-        //         });
-
-        //         it("has a link to the notifications", function() {
-        //             expect(this.view.$(".menu.popup_gear a[href='#/notifications']").text()).toMatchTranslation("header.notifications");
-        //         });
-
-        //         it("has a link to the tags", function() {
-        //             expect(this.view.$(".menu.popup_gear a[href='#/tags']").text()).toMatchTranslation("header.tags");
-        //         });
-
-        //         it("has a link to about", function() {
-        //             expect(this.view.$(".menu.popup_gear a[href='#/about']").text()).toMatchTranslation("header.about");
-        //         });
-        //     });
-
-        // });
+        }); 
 
         describe("notifications", function() {
             it("displays the notification link", function() {

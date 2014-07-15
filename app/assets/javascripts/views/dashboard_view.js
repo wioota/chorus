@@ -18,7 +18,7 @@ chorus.views.Dashboard = chorus.views.Base.extend({
 
         this.workspaceList = new chorus.views.MainContentView({
             collection: this.memberWorkspaces,
-            contentHeader: new chorus.views.StaticTemplate("default_content_header", {title:t("header.my_workspaces")}),
+            contentHeader: new chorus.views.StaticTemplate("default_content_header", {title:t("header.workspaces")}),
             contentDetails:new chorus.views.StaticTemplate("dashboard/workspace_list_content_details"),
             content:new chorus.views.DashboardWorkspaceList({ collection: this.memberWorkspaces })
         });

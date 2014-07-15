@@ -24,11 +24,11 @@ $light-gray: lighten(desaturate($brand, 90%), 45%);;
 $charcoal: #464646;
 // Tints & Shades of Brand Colors
 
-$brand-light: lighten($brand, 10%);
-$brand-tint: lighten($brand, 5%);
+$brand-light: lighten($brand, 14%);
+$brand-tint: lighten($brand, 7%);
 
-$brand-shade: darken($brand, 5%);
-$brand-dark: darken($brand, 10%);
+$brand-shade: darken($brand, 7%);
+$brand-dark: darken($brand, 14%);
 
 
 // Background colors

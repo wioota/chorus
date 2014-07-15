@@ -11,3 +11,12 @@ Handlebars.registerPartial("timeZoneSelector", window.HandlebarsTemplates["time_
 Handlebars.registerPartial("activity", window.HandlebarsTemplates["activity"]);
 Handlebars.registerPartial("adminBadge", window.HandlebarsTemplates["components/admin_badge"]);
 Handlebars.registerPartial("developerBadge", window.HandlebarsTemplates["components/developer_badge"]);
+
+
+Handlebars.registerPartial("drawerMenu", window.HandlebarsTemplates["components/drawer_menu"]);
+Handlebars.registerPartial("usernameMenu", window.HandlebarsTemplates["components/username_menu"]);
+Handlebars.registerPartial("notificationsMenu", window.HandlebarsTemplates["components/notifications_menu"]);
+
+Handlebars.registerPartial("headerLeft", window.HandlebarsTemplates["components/header_left"]);
+Handlebars.registerPartial("headerSearchbar", window.HandlebarsTemplates["components/header_searchbar"]);
+Handlebars.registerPartial("headerRight", window.HandlebarsTemplates["components/header_right"]);
