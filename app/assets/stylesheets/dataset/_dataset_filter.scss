@@ -17,13 +17,13 @@
 
         .brackets_top {
             height:50%;
-            border-left: 1px solid $list-border-color;
-            border-bottom: 1px solid $list-border-color;
+            border-left: $border-canon;
+            border-bottom: $border-canon;
         }
 
         .brackets_bottom {
             height:50%;
-            border-left: 1px solid $list-border-color;
+            border-left: $border-canon;
         }
     }
 

@@ -196,12 +196,12 @@ li .activity_content,
     }
 
     li.activity {
-        border-bottom: 1px dotted $list-border-color;
+        border-bottom: $border-canon;
 
         &.insight {
             background: white;
-            border-right: 1px dotted $list-border-color;
-            border-bottom: 1px dotted $list-border-color;
+            border-right: $border-canon;
+            border-bottom: $border-canon;
             .activity_item {
                 padding-top: 12px;
             }

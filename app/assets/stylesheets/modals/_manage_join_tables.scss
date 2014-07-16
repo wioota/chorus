@@ -19,7 +19,7 @@
 .pick_dataset_with_action, .import_datasets_picker_list, .workfile_picker_list {
     .search {
         padding: 5px 10px;
-        border-bottom: 1px solid $menu-border-color;
+        border-bottom: $border-canon;
     }
 
     .list_content_details {

@@ -82,7 +82,7 @@
 
         .sub_header {
             padding: 0 15px;
-            border-bottom: 1px solid $menu-border-color;
+            border-bottom: $border-canon;
         }
 
         .sub_content {
@@ -95,7 +95,7 @@
 
         .form_controls {
             padding: $dialog-padding;
-            border-top: 1px solid $menu-border-color;
+            border-top: $border-canon;
             margin: 0;
         }
     }

@@ -7,8 +7,8 @@
         display: inline;
         float: right;
 
-        border-left: 1px solid $guts-border-color;
-        border-top: 1px solid $guts-border-color;
+        border-left: $border-canon;
+        border-top: $border-canon;
         border-bottom: none;
         @include border-top-left-radius(3px);
         @include border-top-right-radius(3px);
@@ -28,7 +28,7 @@
         }
 
         &:first-child {
-            border-right: 1px solid $guts-border-color;
+            border-right: $border-canon;
         }
 
         &.selected {

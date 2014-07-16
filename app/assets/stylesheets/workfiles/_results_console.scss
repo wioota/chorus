@@ -6,7 +6,7 @@
         vertical-align: middle;
         padding: 0 $padding-x;
         background: $shaded-background-color;
-        border-bottom: 1px solid $guts-border-color;
+        border-bottom: $border-canon;
 
         h1 {
             @include results-console;
@@ -97,7 +97,7 @@
         height: 20px;
         text-align: center;
         vertical-align: top;
-        border-top: 1px solid $list-border-color;
+        border-top: $border-canon;
         line-height: 16px;
     }
 
@@ -109,7 +109,7 @@
 
         display: inline-block;
 
-        border: 1px solid $list-border-color;
+        border: $border-canon;
         border-top: none;
         margin-top: -4px;
 

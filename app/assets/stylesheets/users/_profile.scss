@@ -1,7 +1,7 @@
 @mixin profile_image {
     background: white;
     padding: 2px;
-    border: 1px solid $guts-border-color;
+    border: $border-canon;
 }
 
 img.profile {

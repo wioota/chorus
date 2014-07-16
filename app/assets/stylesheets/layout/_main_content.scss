@@ -1,5 +1,5 @@
 #main_content {
-    border: 1px solid $guts-border-color;
+    border: $border-canon;
     @include border-radius(3px);
 }
 
@@ -7,7 +7,7 @@
     background: white;
     min-height: 36px;
     padding: 12px $padding-x 5px;
-    border-bottom: 1px solid $border-color;
+    border-bottom: $border-canon;
     @include border-top-radius(3px);
 
     h1 {
@@ -67,14 +67,14 @@
 }
 
 .content_details, .content_footer {
-    border-bottom: 1px solid $pagination-border-color;
+    border-bottom: $border-canon;
 }
 
 
 .content_footer {
     height: auto;
     border-bottom: none;
-    border-top: 1px solid $pagination-border-color;
+    border-top: $border-canon;
 }
 
 .tableau_icon {

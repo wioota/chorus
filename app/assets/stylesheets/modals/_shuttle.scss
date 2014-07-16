@@ -1,19 +1,18 @@
 $list-item-height: 39px;
-$list-border-width: 1px;
 
 .shuttle_widget {
     background-color: $body-background-color;
-    border-bottom: 1px solid $list-border-color;
-    border-top: 1px solid $list-border-color;
+    border-bottom: $border-canon;
+    border-top: $border-canon;
 
     .shuttle_header {
-        border-bottom: 1px solid $list-border-color;
+        border-bottom: $border-canon;
         position: relative;
         height: 33px;
 
         .search_container {
             left: 0;
-            border-right: 1px solid $list-border-color;
+            border-right: $border-canon;
 
             .chorus_search_container {
                 width: 70%;
@@ -55,7 +54,7 @@ $list-border-width: 1px;
 
     .shuttle_body {
         position: relative;
-        height: (($list-item-height + $list-border-width) * 8);
+        height: (($list-item-height + $border-width) * 8);
     }
 
     a {
@@ -95,7 +94,7 @@ $list-border-width: 1px;
 
         li {
             height: $list-item-height;
-            border-bottom: $list-border-width dotted $list-border-color;
+            border-bottom: $border-canon;
             padding: 0 8px;
             line-height: $list-item-height - 3px;
 
@@ -111,7 +110,7 @@ $list-border-width: 1px;
 
         &.available {
             left: 0;
-            border-right: 1px solid $list-border-color;
+            border-right: $border-canon;
 
             li {
                 img.checkmark {

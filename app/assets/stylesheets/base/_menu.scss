@@ -42,7 +42,7 @@
     display: inline;
     position: absolute;
     background: white;
-    border: 1px solid $menu-border-color;
+    border: $border-canon;
     text-align: left;
     z-index: $menu-z-index;
 

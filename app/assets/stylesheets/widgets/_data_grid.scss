@@ -54,7 +54,7 @@
 
     .td {
         line-height: $line-height;
-        border-bottom : $dotted-list-item-border;
+        border-bottom : $border-canon;
         @include font-normal-alpha;
     }
 

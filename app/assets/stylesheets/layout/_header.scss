@@ -2,8 +2,6 @@
 
 $header-margin: 30px;
 $expanded-search-width: 444px;
-$header-menu-separator: 1px solid $border-color;
-$shadow-canon: 1px 2px 2px 0px $border-color;
 
 @mixin header-menu-link-item($height) {
     &:hover, &.selected {
@@ -11,7 +9,7 @@ $shadow-canon: 1px 2px 2px 0px $border-color;
     }
 
     &.underline {
-        border-bottom: $header-menu-separator
+        border-bottom: $border-canon;
     }
     a {
         height: $height;
@@ -287,7 +285,7 @@ $shadow-canon: 1px 2px 2px 0px $border-color;
             }
 
             .notification_list > ul > li {
-                border-bottom: $header-menu-separator;
+                border-bottom: $border-canon;
 
                 .activity_item:hover {
                     background: $alice-blue;
