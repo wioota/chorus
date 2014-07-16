@@ -66,14 +66,13 @@
     }
 }
 
-.content_details, .content_footer {
+.content_details {
     border-bottom: $border-canon;
 }
 
 
 .content_footer {
     height: auto;
-    border-bottom: none;
     border-top: $border-canon;
 }
 
