@@ -257,21 +257,11 @@ body .ui-draggable-dragging {
 
     .accordion {
         li {
-            .dataset_title_section, li {
-                &:hover {
-                    background-color: $selected-row-hover-background-color;
-                }
-
-                .dataset_title {
-                    &:hover {
-                        @include grab_cursor;
-                    }
-                }
+            .dataset_title {
+                &:hover { @include grab_cursor; }
             }
 
-            a {
-                @include grab_cursor;
-            }
+            a { @include grab_cursor; }
         }
     }
 }

@@ -4,24 +4,12 @@
     li {
         @include after-clearfix;
         border-bottom: $border-canon;
-        margin-left: $padding-x;
-        padding: $padding-y 0;
+        padding: $padding-y $padding-x;
         position: relative;
 
         &:last-child {
             border-bottom: none;
-            .spacer-left { bottom: 0; }
         }
-
-        .spacer_left, .spacer_right {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: $padding-x;
-        }
-
-        .spacer_left { left: -$padding-x; }
-        .spacer_right { right: -$padding-x; }
 
         .image {
             display: block;
@@ -199,7 +187,7 @@
 
     }
 
-    &.selectable {
+    &.selectable, &.accordion {
         input[type=checkbox] {
             float: left;
             margin-top: 5px;
@@ -227,17 +215,14 @@
             
             &:nth-child(odd) {
                 background-color: $list-striping-color;
-                .spacer_left { background: $list-striping-color; }
             }
 
             &:hover {
                 background-color: $list-hover-color;
-                .spacer_left { background: $list-hover-color; }
             }
 
             &.selected, &.checked {
                 background: $list-checked-color;
-                .spacer_left { background: $list-checked-color; }
             }
         }
     }
