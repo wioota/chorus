@@ -3,6 +3,10 @@
 $header-margin: 30px;
 $expanded-search-width: 444px;
 
+.oi[data-glyph=data-source]:before {
+  content: url(../images/data-source-glyph.svg);
+}
+
 @mixin header-menu-link-item($height) {
     &:hover, &.selected {
         background-color: $list-hover-color;
@@ -23,9 +27,7 @@ $expanded-search-width: 444px;
             vertical-align: middle;
             padding-left: 15px;
 
-            sub {
-                @include secondary-text-small;
-            }
+            sub { @include secondary-text-small; }
         }
     }
 }
