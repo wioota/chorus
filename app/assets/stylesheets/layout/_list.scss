@@ -3,7 +3,7 @@
 
     li {
         @include after-clearfix;
-        border-bottom: $dotted-list-item-border;
+        border-bottom: $border-canon;
         margin-left: $padding-x;
         padding: $padding-y 0;
         position: relative;
@@ -223,27 +223,21 @@
         }
 
         li {
-            a:hover {
-                text-decoration: underline;
+            a:hover { text-decoration: underline; }
+            
+            &:nth-child(odd) {
+                background-color: $list-striping-color;
+                .spacer_left { background: $list-striping-color; }
             }
-
 
             &:hover {
                 background-color: $list-hover-color;
-
-                .spacer_left {
-                    background: $list-hover-color;
-                    bottom: -1px;
-                }
-            }
-
-            &.checked {
-                .spacer_left { bottom: -1px; }
+                .spacer_left { background: $list-hover-color; }
             }
 
             &.selected, &.checked {
-                .spacer_left { background: $list-checked-color; }
                 background: $list-checked-color;
+                .spacer_left { background: $list-checked-color; }
             }
         }
     }
