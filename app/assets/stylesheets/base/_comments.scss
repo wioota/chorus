@@ -1,16 +1,10 @@
 .comment {
     font-size: 13px;
-
-    .body {
-        color: $color-text4;
-    }
-
+    
+    color: $color-text4;
+    
     .user {
         font-weight: $semibold;
-    }
-
-    .comment_info {
-        color: $color-text4;
     }
 
     padding-top: 4px;

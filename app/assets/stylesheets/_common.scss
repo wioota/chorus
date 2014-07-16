@@ -15,9 +15,8 @@ $gray: #7D7D7D;
 // Brand Colors
 $pacific-blue: rgb(0, 160, 229);
 $alice-blue: rgb(234, 245, 254);
-$bright-turquoise: rgb(21, 214, 203);
-
 $bright-gray: rgb(88, 89, 95);
+$bright-turquoise: rgb(21, 214, 203);
 
 $brand: $pacific-blue;
 $light-gray: lighten(desaturate($brand, 90%), 45%);;
@@ -33,7 +32,7 @@ $brand-dark: darken($brand, 14%);
 
 // Background colors
 $list-hover-color: $alice-blue;
-$list-checked-color: darken($alice-blue, 5%);
+$list-checked-color: darken($alice-blue, 2%);
 $body-background-color: white;
 $shaded-background-color: $light-gray;
 
@@ -47,12 +46,20 @@ $color-text1: darken($charcoal, 10%);
 $color-text2: $charcoal;
 $color-text3: lighten($charcoal, 10%);
 $color-text4: lighten($bright-gray, 20%);
+$link-color: $brand;
 
 // Font weights
 $semibold: 600;
+$light: 300;
 // "normal" defaults to 400
 
+//Dimensions
+$header-height: 50px;
+$subheader-height: 60px;
+$summary-line-height: 19px;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /* applied color rules - USE these in component files! */
 // Background colors
 $dialog-background-color: white;
@@ -90,7 +97,6 @@ $type-ahead-result-border-color: #A5A6A8;
 $error-text-color: white;
 $error-color: white;
 $needs-attention-color: #f7771b;
-$link-color: #2c95dd;
 $content-header-link-color: $color-text4;
 $content-details-action-link-color: #4E7225;
 $content-details-create-bar-link-color: #608437;
@@ -113,7 +119,6 @@ $margin-x : 10px;
 $guts-padding: 7px;
 $guts-padding-bottom: 15px;
 $user-detail-image-width: 150px;
-$header-height : 50px;
 $icon-image-width : 35px;
 $icon-image-height : 35px;
 $large-image-width : 45px;
@@ -150,8 +155,6 @@ $drag-z-index: 9999;
 
 // Font size
 $medium-font: 14px;
-$summary-font-size: $medium-font;
-$summary-line-height: 19px;
 
 // Mixins
 
@@ -213,11 +216,23 @@ $summary-line-height: 19px;
     color: black;
 }
 
-@mixin font-content-details {
+@mixin font-secondary-content {
     @include debugging-mixin;
     font-size: 12px;
-    font-weight: $semibold;
+    font-weight: normal;
     color: $color-text2;
+}
+
+@mixin font-primary-link {
+    color: $brand;
+    font-size: 18px;
+    font-weight: $light;
+}
+
+@mixin font-secondary-link {
+    color: $brand-dark;
+    font-size: 12px;
+    font-weight: $semibold;
 }
 
 @mixin font-menu {
@@ -263,6 +278,13 @@ $summary-line-height: 19px;
     color: $color-text3;
 }
 
+@mixin tertiary-text-normal {
+    @include debugging-mixin;
+    font-size: 14px;
+    font-weight: normal;
+    color: $color-text4;
+}
+
 @mixin secondary-text-semibold {
     @include debugging-mixin;
     font-size: 14px;
@@ -282,12 +304,6 @@ $summary-line-height: 19px;
     font-size: 12px;
     font-weight: $semibold;
     color: $color-text3;
-}
-
-@mixin summary-text {
-    @include debugging-mixin;
-    font-size: $summary-font-size;
-    line-height: $summary-line-height;
 }
 
 @mixin after-clearfix($which: both) {

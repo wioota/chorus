@@ -4,16 +4,13 @@
     li {
         @include after-clearfix;
         border-bottom: $dotted-list-item-border;
-        margin: 0 $padding-x;
+        margin-left: $padding-x;
         padding: $padding-y 0;
         position: relative;
 
         &:last-child {
             border-bottom: none;
-
-            .spacer-left {
-                bottom: 0;
-            }
+            .spacer-left { bottom: 0; }
         }
 
         .spacer_left, .spacer_right {
@@ -23,13 +20,8 @@
             width: $padding-x;
         }
 
-        .spacer_left {
-            left: -$padding-x;
-        }
-
-        .spacer_right {
-            right: -$padding-x;
-        }
+        .spacer_left { left: -$padding-x; }
+        .spacer_right { right: -$padding-x; }
 
         .image {
             display: block;
@@ -56,7 +48,14 @@
 
         .name {
             padding-bottom: 5px;
-            font-weight: $semibold;
+            
+            @include font-primary-link;
+            display: inline-block;
+            max-width: 68%;
+            word-break: break-all;
+            span {
+                max-width: none;
+            }
         }
 
         .item_information {
@@ -164,7 +163,8 @@
 
         .summary {
             color: $color-text4;
-            @include summary-text;
+            line-height: $summary-line-height;
+            @include tertiary-text-normal;
 
             .styled_text {
                 height: auto;
@@ -179,20 +179,6 @@
                     max-height: none;
                 }
             }
-        }
-
-        .name span {
-            max-width: none;
-        }
-
-        .main {
-        }
-
-        .name {
-            font-size: 18px;
-            display: inline-block;
-            max-width: 68%;
-            word-break: break-all;
         }
 
         .tag {
@@ -233,16 +219,10 @@
             @include font-normal-beta;
             height: auto;
 
-            a {
-                font-size: 13px;
-            }
+            a { font-size: 13px; }
         }
 
         li {
-            .name, a {
-                color: $color-text2;
-            }
-
             a:hover {
                 text-decoration: underline;
             }
@@ -255,41 +235,15 @@
                     background: $list-hover-color;
                     bottom: -1px;
                 }
-
-                a {
-                    color: $link-color;
-                }
             }
 
             &.checked {
                 .spacer_left { bottom: -1px; }
-                a { color: $link-color; }
             }
 
             &.selected, &.checked {
                 .spacer_left { background: $list-checked-color; }
                 background: $list-checked-color;
-            }
-
-            &.selected {
-                $border-width: 2px;
-
-                padding-bottom: $padding-y - ($border-width - 1px);
-                // default border is 1px
-                border-bottom: $border-width solid $border-color;
-
-                a {
-                    color: $link-color;
-                }
-
-                .spacer_left {
-                    bottom: -$border-width;
-                    border-bottom: $border-width solid $border-color;
-                }
-
-                .spacer_right {
-                    border-left: 2px solid $border-color;
-                }
             }
         }
     }

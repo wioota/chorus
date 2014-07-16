@@ -4,14 +4,12 @@
 }
 
 .item_metadata {
-  font-size: 12px;
   line-height: 21px;
-
-  color: $color-text2;
+  
+  @include font-secondary-content;
 
   a {
-    font-size: inherit;
-    font-weight: $semibold;
+    @include font-secondary-link;
     @include ellipsis;
     max-width: 80%;
   }

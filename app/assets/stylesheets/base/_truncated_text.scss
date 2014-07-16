@@ -8,11 +8,12 @@
         overflow: hidden;
 
         .original {
-            @include summary-text;
+            line-height: $summary-line-height;
+            @include tertiary-text-normal;
 
             a { font-size: 10pt; }
 
-            b { font-weight: $semibold; }
+            b { font-weight: bold; }
 
             i { font-style: italic; }
 
