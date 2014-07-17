@@ -141,7 +141,8 @@ class ChorusConfig
     versions = []
     pivotal_versions = [
         'Pivotal HD 1.0',
-        'Pivotal HD 1.1'
+        'Pivotal HD 1.1',
+        'Pivotal HD 2.0'
     ]
     other_versions = [
         'Apache Hadoop 1.2',
