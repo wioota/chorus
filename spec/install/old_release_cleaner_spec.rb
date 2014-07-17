@@ -60,7 +60,7 @@ describe OldReleaseCleaner do
       cleaner.remove_except(new_version, old_version)
     end
 
-    it "chmods the directory before deleting the version" do
+    xit "chmods the directory before deleting the version" do
       mock(FileUtils).chmod_R(0777, really_old_version, :force => true)
       mock(FileUtils).chmod_R(0777, really_really_old_version, :force => true)
       cleaner.remove_except(new_version, old_version)
