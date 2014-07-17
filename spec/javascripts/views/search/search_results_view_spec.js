@@ -166,7 +166,7 @@ describe("chorus.views.SearchResults", function() {
                     this.view.render();
                     
                     filter = function(type){
-                        return function(item) {return item.get("entityType") === type;}
+                        return function(item) {return item.get("entityType") === type; };
                     };
 
                     item = function(scope, type){

@@ -79,8 +79,8 @@ chorus.views.PageItemList = chorus.views.Base.extend({
 
         this.checkSelectedModels();
 
-        var nextPage = this.collection.pagination && this.collection.pagination.page
-        var paginating = nextPage != this.lastPage;
+        var nextPage = this.collection.pagination && this.collection.pagination.page;
+        var paginating = nextPage !== this.lastPage;
         if(paginating) delete this.selectedIndex;
         if(this.selectedIndex) this.selectItem(this.$(">li").eq(this.selectedIndex));
 
