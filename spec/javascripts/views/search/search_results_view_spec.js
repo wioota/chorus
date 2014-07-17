@@ -154,6 +154,8 @@ describe("chorus.views.SearchResults", function() {
             });
 
             context("when the li is in the 'this workspace' section", function() {
+                var filter, item;
+
                 beforeEach(function() {
                     this.model = backboneFixtures.searchResultInWorkspace();
                     this.model.set({
@@ -162,22 +164,26 @@ describe("chorus.views.SearchResults", function() {
                     });
                     this.view = new chorus.views.SearchResults({ model: this.model });
                     this.view.render();
+                    
+                    filter = function(type){
+                        return function(item) {return item.get("entityType") === type;}
+                    };
+
+                    item = function(scope, type){
+                        return scope.view.$(".this_workspace [data-template=search_"+type+"]");
+                    };
                 });
 
-                context("and it is for a workfile", function() {
-                    it("triggers the 'workfile:selected' event on itself, with the clicked model", function() {
-                        var modelToClick = this.model.workspaceItems().find(function(item) {return item.get("entityType") === 'workfile';});
-                        this.view.$(".this_workspace [data-template=search_workfile]").click();
-                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("workfile:selected", modelToClick);
-                    });
+                it("triggers the 'workfile:selected' event on itself, with the clicked model, when a workfile is clicked", function() {
+                    var modelToClick = this.model.workspaceItems().find(filter('workfile'));
+                    item(this, 'workfile').click();
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("workfile:selected", modelToClick);
                 });
 
-                context("and it is for a dataset", function() {
-                    it("triggers the 'dataset:selected' event on itself, with the clicked model", function() {
-                        var modelToClick = this.model.workspaceItems().find(function(item) {return item.get("entityType") === 'dataset';});
-                        this.view.$(".this_workspace li[data-template=search_dataset]:first").click();
-                        expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("dataset:selected", modelToClick);
-                    });
+                it("triggers the 'dataset:selected' event on itself, with the clicked model, when a dataset is clicked", function() {
+                    var modelToClick = this.model.workspaceItems().find(filter('dataset'));
+                    item(this, 'dataset').click();
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("dataset:selected", modelToClick);
                 });
             });
 

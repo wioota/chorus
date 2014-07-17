@@ -41,9 +41,13 @@ describe("chorus.pages.TagIndexPage", function() {
         it("loads the correct count", function() {
             expect(this.page.$('.count')).toContainText(this.fetchedTags.length);
         });
+    
+        describe("selecting the first tag", function(){
+            beforeEach(function(){
+                this.page.$('.item_wrapper:eq(0)').click();
+            });
 
-        describe("sidebar", function() {
-            it("selects the first tag and shows it on the sidebar", function() {
+            it("shows it on the sidebar", function() {
                 var firstTag = this.page.$('.tag_item:first .name').text();
                 var $tag_title = this.page.$('.tag_title');
                 expect($tag_title).toContainText(firstTag);

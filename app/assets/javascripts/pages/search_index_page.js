@@ -167,10 +167,6 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
         }
     },
 
-    postRender: function() {
-        this.$('.result_item').eq(0).click();
-    },
-
     scopeSearchResults: function(data) {
         this.search.set({ searchIn: data });
         chorus.router.navigate(this.search.showUrl());

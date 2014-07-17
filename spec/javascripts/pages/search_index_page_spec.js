@@ -122,11 +122,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                 it("shows a list of search results", function() {
                     expect(this.workfileLIs.length).toBeGreaterThan(0);
                 });
-
-                it("selects the first workfile by default", function() {
-                    expect(this.workfileLIs.eq(0)).toHaveClass("selected");
-                });
-
+                
                 describe("clicking on a workfile search result", function() {
                     beforeEach(function() {
                         this.searchedWorkfile = this.workfileLIs.eq(1);

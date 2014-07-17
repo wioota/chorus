@@ -13,12 +13,6 @@ jasmine.sharedExamples.PageItemList = function() {
         it("renders each item in the collection", function() {
             expect(this.view.$("li").length).toBe(this.view.collection.length);
         });
-
-        it("selects the first item", function() {
-            expect(this.view.$("> li").eq(0)).toHaveClass("selected");
-            expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(0));
-            expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selected", this.collection.at(0));
-        });
     });
 
     describe('when an item is changed', function(){
@@ -174,6 +168,17 @@ jasmine.sharedExamples.PageItemList = function() {
         });
     });
 
+    describe("clicking an item", function(){
+        beforeEach(function () {
+            this.view.$('.item_wrapper:eq(0)').click();
+        });
+
+        it("selects the item", function() {
+            expect(this.view.$("> li").eq(0)).toHaveClass("selected");
+            expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(0));
+            expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selected", this.collection.at(0));
+        });
+
     describe("clicking on the same entry again", function() {
         beforeEach(function() {
             this.eventSpy.reset();
@@ -222,12 +227,12 @@ jasmine.sharedExamples.PageItemList = function() {
 
         describe("loading the next page of results", function() {
             beforeEach(function() {
-                this.collection.fetchPage(2);
-                this.server.completeFetchFor(this.collection, this.collection.models, {page: 2});
+                this.view.collection.fetchPage(2);
+                this.server.completeFetchFor(this.view.collection, this.collection.models, {page: 2}, {page: 2});
             });
 
-            it("selects the first item on that page", function() {
-                expect(this.view.$("> li").eq(0)).toHaveClass("selected");
+            it("zzz selects nothing", function() {
+                expect(this.view.$('.selected').length).toBe(0);
             });
         });
 
@@ -257,5 +262,6 @@ jasmine.sharedExamples.PageItemList = function() {
                 expect(this.view.$("li").eq(1)).toHaveClass("selected");
             });
         });
+    });
     });
 };

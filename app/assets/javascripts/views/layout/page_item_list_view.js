@@ -54,11 +54,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         this.subscribePageEvent("clear_selection", this.clearSelection);
         this.subscribePageEvent("checked", this.checkSelectedModels);
 
-        this.selectedIndex = 0;
-        this.collection.bind("paginate", function() {
-            this.selectedIndex = 0;
-            this.render();
-        }, this);
+        this.collection.bind("paginate", function() { this.render(); }, this);
 
         if(this.eventName) {
             this.subscribePageEvent(this.eventName + ":search", function() {
@@ -83,7 +79,12 @@ chorus.views.PageItemList = chorus.views.Base.extend({
 
         this.checkSelectedModels();
 
-        this.selectItem(this.$(">li").eq(this.selectedIndex));
+        var nextPage = this.collection.pagination && this.collection.pagination.page
+        var paginating = nextPage != this.lastPage;
+        if(paginating) delete this.selectedIndex;
+        if(this.selectedIndex) this.selectItem(this.$(">li").eq(this.selectedIndex));
+
+        this.lastPage = nextPage;
     },
 
     listItemClicked: function(e) {
