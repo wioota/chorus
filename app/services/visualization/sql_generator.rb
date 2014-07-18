@@ -100,9 +100,9 @@ module Visualization
       query +=  ' WHERE ' + filters.join(' AND ') if filters.present?
 
       query += <<-SQL
-        ) AS subquery
+        ) subquery
           WHERE "#{x_axis}" IS NOT NULL
-          AND "#{y_axis}" IS NOT NULL) AS foo
+          AND "#{y_axis}" IS NOT NULL) foo
           GROUP BY x, y
       SQL
 

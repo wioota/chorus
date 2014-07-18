@@ -24,14 +24,6 @@ module Visualization
       raise NotImplemented
     end
 
-    def heatmap_min_max_sql(o)
-      raise NotImplemented
-    end
-
-    def heatmap_row_sql(o)
-      raise NotImplemented
-    end
-
     def timeseries_row_sql(o)
       raise NotImplemented
     end

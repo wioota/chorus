@@ -42,4 +42,12 @@ describe Visualization::Heatmap do
 
     it_behaves_like 'a heatmap visualization'
   end
+
+  context 'for oracle', :oracle_integration do
+    let(:data_source_account) { OracleIntegration.real_account }
+    let(:schema) { OracleIntegration.real_schema }
+    let(:dataset) { schema.find_or_initialize_dataset(table_name) }
+
+    it_behaves_like 'a heatmap visualization'
+  end
 end
