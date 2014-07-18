@@ -174,7 +174,7 @@ shared_examples 'a boxplot visualization' do
     end
 
     context 'with filters' do
-      let(:filters) { ["category <> 'apple'"] }
+      let(:filters) { [%("category" <> 'apple')] }
 
       it 'returns the boxplot data based on the filtered dataset' do
         visualization.fetch!(data_source_account, 12345)
@@ -199,7 +199,7 @@ shared_examples 'a boxplot visualization' do
 
     context 'with null values' do
       let(:dataset) { table_with_nulls }
-      let(:filters) { ["category <> 'banana'"] }
+      let(:filters) { [%("category" <> 'banana')] }
       let(:x_axis) { 'category' }
       let(:y_axis) { 'some_nulls' }
 

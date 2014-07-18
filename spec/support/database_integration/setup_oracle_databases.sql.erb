@@ -109,3 +109,22 @@ CREATE TABLE "<%= schema_name %>"."heatmap_table"
   INSERT INTO "<%= schema_name %>"."heatmap_table" VALUES ( 7, 6, 4, 'cornflower blue');
   INSERT INTO "<%= schema_name %>"."heatmap_table" VALUES ( 8, 6, 6, 'red');
   INSERT INTO "<%= schema_name %>"."heatmap_table" VALUES ( 9, 6, 6, 'green');
+
+    CREATE TABLE "<%= schema_name %>"."allcaps_candy" (
+    id NUMBER,
+    "STUFF" INTEGER,
+    "KITKAT" INTEGER,
+    "SNICKERS" VARCHAR(20)
+  );
+
+  CREATE TABLE "<%= schema_name %>"."table_with_nulls"
+    ("id" INTEGER, "all_nulls" INTEGER, "some_nulls" INTEGER, "category" VARCHAR(255), "time_value" TIMESTAMP );
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 0,NULL,5, 'apple',  TIMESTAMP '2012-03-01 00:00:02' );
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 1,NULL,NULL, 'apple',  TIMESTAMP '2012-03-02 00:00:02' );
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 2,NULL,7, 'orange' ,  TIMESTAMP '2012-04-01 00:00:02');
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 3,NULL,1, 'orange' ,  TIMESTAMP '2012-04-01 00:00:02');
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 4,NULL,2, 'orange' ,  TIMESTAMP '2012-04-01 00:00:02');
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 5,NULL,7, 'apple' ,  TIMESTAMP '2012-04-01 00:00:02');
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 6,NULL,NULL, 'orange' ,  TIMESTAMP '2012-04-01 00:00:02');
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 7,NULL,3, 'orange' ,  TIMESTAMP '2012-04-01 00:00:02');
+  INSERT INTO "<%= schema_name %>"."table_with_nulls" VALUES ( 8,NULL,14, 'apple',  TIMESTAMP '2012-03-02 00:00:02' );

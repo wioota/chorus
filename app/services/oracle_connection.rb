@@ -128,7 +128,7 @@ class OracleConnection < DataSourceConnection
   end
 
   def visualization_sql_generator
-    Visualization::SqlGenerator.new.extend(Visualization::OracleSql)
+    Visualization::SqlGenerator.new(:limit_type => :oracle).extend(Visualization::OracleSql)
   end
 
   private
