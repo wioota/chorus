@@ -43,5 +43,6 @@ describe OracleDataTypes do
     it_has_type_category('XMLTYPE', 'OTHER')
     it_has_type_category('TIMESTAMP WITH TIME ZONE', 'DATETIME', 'timestamp with time zone')
     it_has_type_category('TIMESTAMP WITH LOCAL TIME ZONE', 'DATETIME', 'timestamp without time zone')
+    it_has_type_category('TIMESTAMP(6)', 'DATETIME', 'timestamp without time zone')
   end
 end

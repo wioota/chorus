@@ -72,4 +72,19 @@ describe Visualization::Timeseries do
       }
     end
   end
+
+  context 'for oracle', :oracle_integration do
+    let(:data_source_account) { OracleIntegration.real_account }
+    let(:schema) { OracleIntegration.real_schema }
+    let(:dataset) { schema.find_or_initialize_dataset(table_name) }
+
+    it_behaves_like 'a timeseries visualization' do
+      let(:filters) {
+        [
+            %Q{"#{dataset.name}"."time_value" > TIMESTAMP '2012-03-03 11:53:50'},
+            %Q{"#{dataset.name}"."column1" < 5}
+        ]
+      }
+    end
+  end
 end

@@ -52,15 +52,20 @@ module OracleDataTypes
   }
 
   def self.greenplum_type_for(oracle_type)
-    oracle_type_without_specification = oracle_type.split('(').first
-    ORACLE_TO_GPDB_TYPE_MAP[oracle_type_without_specification]
+    ORACLE_TO_GPDB_TYPE_MAP[without_specification(oracle_type)]
   end
 
   def self.pretty_category_name(oracle_type)
-    ORACLE_TO_PRETTY_CATEGORY_NAME_MAP[oracle_type.upcase]
+    ORACLE_TO_PRETTY_CATEGORY_NAME_MAP[without_specification(oracle_type).upcase]
   end
 
   def self.supported_column_types
     ORACLE_TO_GPDB_TYPE_MAP.keys
+  end
+
+  private
+
+  def self.without_specification(type)
+    type.split('(').first
   end
 end

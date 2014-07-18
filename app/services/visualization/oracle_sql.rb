@@ -56,8 +56,8 @@ module Visualization
       result
     end
 
-    def timeseries_row_sql(o)
-      raise NotImplemented
-    end
+    # def timeseries_row_sql(o)
+    #   raise NotImplemented
+    # end
   end
 end
