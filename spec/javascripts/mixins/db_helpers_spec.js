@@ -1,5 +1,5 @@
 describe("chorus.Mixins.dbHelpers", function() {
-    describe(".safePGName", function() {
+    describe(".ensureDoubleQuoted", function() {
         beforeEach(function() {
             this.originalValidationRegexes = chorus.ValidationRegexes;
         });
@@ -9,34 +9,15 @@ describe("chorus.Mixins.dbHelpers", function() {
         });
 
         context("with one argument", function() {
-            context("when the name matches chorus.ValidationRegexes.SafePgName", function() {
-                beforeEach(function() {
-                    chorus.ValidationRegexes = {
-                        SafePgName: function() { return (/.*/); }
-                    };
-                });
-
-                it("does not quote the name", function() {
-                    expect(chorus.Mixins.dbHelpers.safePGName("foo")).toBe("foo");
-                });
-            });
-
-            context("when the name does not match chorus.ValidationRegexes.SafePgName", function() {
-                beforeEach(function() {
-                    chorus.ValidationRegexes = {
-                        SafePgName: function() { return (/no match/); }
-                    };
-                });
-
-                it("quotes the name", function() {
-                    expect(chorus.Mixins.dbHelpers.safePGName("foo")).toBe('"foo"');
-                });
+            it("ensures the name starts and ends with a double quote", function () {
+                expect(chorus.Mixins.dbHelpers.ensureDoubleQuoted('foo')).toBe('"foo"');
+                expect(chorus.Mixins.dbHelpers.ensureDoubleQuoted('Foo')).toBe('"Foo"');
             });
         });
 
         context("with two arguments", function() {
             it("encodes each argument separately, then concatenates them with '.'", function() {
-                expect(chorus.Mixins.dbHelpers.safePGName("Foo", "bar")).toBe('"Foo".bar');
+                expect(chorus.Mixins.dbHelpers.ensureDoubleQuoted("Foo", "bar")).toBe('"Foo"."bar"');
             });
         });
     });

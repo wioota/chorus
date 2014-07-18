@@ -12,7 +12,7 @@ describe("chorus.models.SchemaFunction", function() {
     describe("#toText", function() {
         context("with lowercase names", function() {
             it("formats the string to put into the sql editor", function() {
-                expect(this.model.toText()).toBe('aa.fun(Int elephant, Bool arg2)');
+                expect(this.model.toText()).toBe('"aa"."fun"(Int elephant, Bool arg2)');
             });
         });
         context("with uppercase letters in the names", function() {

@@ -556,8 +556,8 @@ describe("chorus.models.Dataset", function() {
             this.dataset.set({objectName: "My_Object"});
         });
 
-        it("uses the safePGName helper", function() {
-            expect(this.dataset.quotedName()).toBe(chorus.Mixins.dbHelpers.safePGName(this.dataset.name()));
+        it("uses the ensureDoubleQuoted helper", function() {
+            expect(this.dataset.quotedName()).toBe(chorus.Mixins.dbHelpers.ensureDoubleQuoted(this.dataset.name()));
         });
     });
 
@@ -568,7 +568,7 @@ describe("chorus.models.Dataset", function() {
             });
 
             it("formats the string to put into the sql editor", function() {
-                expect(this.dataset.toText()).toBe('party_schema.tabler');
+                expect(this.dataset.toText()).toBe('"party_schema"."tabler"');
             });
         });
 
@@ -614,7 +614,7 @@ describe("chorus.models.Dataset", function() {
     describe("#fromClause", function() {
         context("when a datasetNumber is not set", function() {
             it("returns the quoted schema name and table name", function() {
-                expect(this.dataset.fromClause()).toBe(this.dataset.schema().name() + "." + this.dataset.quotedName());
+                expect(this.dataset.fromClause()).toBe('"' + this.dataset.schema().name() + '".' + this.dataset.quotedName());
             });
         });
 
@@ -624,7 +624,7 @@ describe("chorus.models.Dataset", function() {
             });
 
             it("returns the aliased from clause", function() {
-                expect(this.dataset.fromClause()).toBe(this.dataset.schema().name() + "." + this.dataset.quotedName() + " AS a");
+                expect(this.dataset.fromClause()).toBe('"' + this.dataset.schema().name() + '".' + this.dataset.quotedName() + ' AS "a"');
             });
         });
 
@@ -646,7 +646,7 @@ describe("chorus.models.Dataset", function() {
                 });
 
                 it("returns the query aliased as the aliasedName", function() {
-                    var expectedFrom = "(" + this.dataset.get('query') + ') AS ' + this.dataset.aliasedName;
+                    var expectedFrom = "(" + this.dataset.get('query') + ') AS "' + this.dataset.aliasedName + '"';
                     expect(this.dataset.fromClause()).toBe(expectedFrom);
                 });
             });

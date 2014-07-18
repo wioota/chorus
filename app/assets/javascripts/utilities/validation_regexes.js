@@ -2,7 +2,7 @@ chorus.ValidationRegexes = (function(){
     var chorusIdentifier64 = /^[a-zA-Z][a-zA-Z0-9_]{0,63}$/;
     var chorusIdentifierLower64 = /^[a-z][a-z0-9_]{0,63}$/;
     var chorusIdentifier = /^[a-zA-Z][a-zA-Z0-9_]*$/;
-    var safePgName = /^[a-z_][a-z0-9_"]*$|^".*"$/;
+    var doubleQuoted = /^".*"$/;
     var allWhitespace = /^(\s|&nbsp;)*$/;
     var time = /^(\d{1,2}(:\d{2}){1,2})?$/;
     var year = /^[0-9]{1,4}$/;
@@ -48,8 +48,8 @@ chorus.ValidationRegexes = (function(){
             }
         },
 
-        SafePgName: function() {
-            return safePgName;
+        DoubleQuoted: function() {
+            return doubleQuoted;
         },
 
         PostgresIdentifier: function(length) {

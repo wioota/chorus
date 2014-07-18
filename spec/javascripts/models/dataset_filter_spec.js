@@ -88,7 +88,7 @@ describe("chorus.models.DatasetFilter", function() {
 
         it("calls the generate function of the correct filter type", function() {
             expect(this.column.dataset).not.toBeNull();
-            var qualifiedName = chorus.Mixins.dbHelpers.safePGName(this.column.dataset.selectName(), this.column.get("name"));
+            var qualifiedName = chorus.Mixins.dbHelpers.ensureDoubleQuoted(this.column.dataset.selectName(), this.column.get("name"));
             expect(this.model.getFilterMap().comparators.not_equal.generate).toHaveBeenCalledWith(qualifiedName, "test");
         });
 

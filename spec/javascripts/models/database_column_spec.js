@@ -37,7 +37,7 @@ describe("chorus.models.DatabaseColumn", function() {
                         this.model.set({name: "col"});
                     });
                     it("formats the string to put into the sql editor", function() {
-                        expect(this.model.toText()).toBe('col');
+                        expect(this.model.toText()).toBe('"col"');
                     });
                 });
                 context("with uppercase names", function() {

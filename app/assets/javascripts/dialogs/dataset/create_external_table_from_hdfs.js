@@ -53,7 +53,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
         var names = this.importDataGrid.getColumnNames();
 
         var columnNames = _.map(names, function(name) {
-            return chorus.Mixins.dbHelpers.safePGName(name);
+            return chorus.Mixins.dbHelpers.ensureDoubleQuoted(name);
         });
 
         this.workspaceName = this.$("option:selected").text();

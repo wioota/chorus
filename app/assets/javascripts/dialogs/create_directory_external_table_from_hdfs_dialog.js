@@ -86,7 +86,7 @@ chorus.dialogs.CreateDirectoryExternalTableFromHdfs = chorus.dialogs.NewTableImp
         var tableName = this.$(".directions input:text").val();
         var columns = _.map($names, function(name, i) {
             var $name = $names.eq(i);
-            return chorus.Mixins.dbHelpers.safePGName($name.val());
+            return chorus.Mixins.dbHelpers.ensureDoubleQuoted($name.val());
         });
 
         this.tableName = this.$(".directions input:text").val();

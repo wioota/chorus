@@ -28,7 +28,7 @@ describe("chorus.views.DatasetFilter", function() {
             this.collection.each(function(model, index) {
                 var option = view.$(".column_filter option:eq(" + index + ")");
                 expect(option).toContainText(model.get("name"));
-                expect(option).toHaveAttr("value", chorus.Mixins.dbHelpers.safePGName(model.dataset.get("objectName"), model.get("name")));
+                expect(option).toHaveAttr("value", chorus.Mixins.dbHelpers.ensureDoubleQuoted(model.dataset.get("objectName"), model.get("name")));
             }, this);
         });
 

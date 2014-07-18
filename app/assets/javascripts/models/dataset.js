@@ -196,15 +196,15 @@ chorus.models.Dataset = chorus.models.Base.include(
     },
 
     quotedName: function() {
-        return this.safePGName(this.name());
+        return this.ensureDoubleQuoted(this.name());
     },
 
     toText: function() {
         if (this.has("query")) {
             var query = this.get("query").trim().replace(/;$/, "").trim();
-            return "(" + query + ") AS " + this.safePGName(this.name());
+            return "(" + query + ") AS " + this.ensureDoubleQuoted(this.name());
         } else {
-            return this.safePGName(this.schema().name()) + '.' + this.safePGName(this.name());
+            return this.ensureDoubleQuoted(this.schema().name()) + '.' + this.ensureDoubleQuoted(this.name());
         }
     },
 
@@ -229,7 +229,7 @@ chorus.models.Dataset = chorus.models.Base.include(
         if (this.has("query")) {
             return "(" + this.get("query") + ")";
         }
-        return this.safePGName(this.schema().name()) + "." + this.quotedName();
+        return this.ensureDoubleQuoted(this.schema().name()) + "." + this.quotedName();
     },
 
     alias: function() {
@@ -242,7 +242,7 @@ chorus.models.Dataset = chorus.models.Base.include(
 
     fromClause: function() {
         if (this.aliased()) {
-            return this.fromClauseBody() + " AS " + this.alias();
+            return this.fromClauseBody() + " AS " + this.ensureDoubleQuoted(this.alias());
         }
         return this.fromClauseBody();
     },

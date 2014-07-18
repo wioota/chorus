@@ -4,8 +4,8 @@ chorus.models.SchemaFunction = chorus.models.Base.extend({
     toText: function() {
         var functionArguments = this.getFunctionArguments();
 
-        var schemaName = this.safePGName(this.get("schemaName"));
-        var functionName = this.safePGName(this.get("name"));
+        var schemaName = this.ensureDoubleQuoted(this.get("schemaName"));
+        var functionName = this.ensureDoubleQuoted(this.get("name"));
 
         var result = schemaName + "." + functionName + '(';
         result = result + functionArguments.join(', ');

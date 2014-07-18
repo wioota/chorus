@@ -30,8 +30,8 @@ describe("chorus.ValidationRegexes", function() {
         bad: [ "some invalid name", "123", "okay_until_$^#$%#$", "_leading_underscore" ]
     });
 
-    itWorks("SafePgName", {
-        good: ['"a_good_name"', '"1number"', "a_b_c_5", "_still_good"],
+    itWorks("DoubleQuoted", {
+        good: ['"a_good_name"', '"1number"', '"a_b_c_5"', '"_still_good"'],
         bad: ["1number", "'single quotes'", "   ", '"hi"there', "hiThere"]
     });
 

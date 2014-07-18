@@ -54,8 +54,8 @@ describe("chorus.views.DataTabDatasetColumnList", function() {
                 });
 
                 it("should have the fullname on the list elements", function() {
-                    expect(this.view.$('li:eq(0)').data('fullname')).toEqual("column_1");
-                    expect(this.view.$('li:eq(1)').data('fullname')).toEqual("column_2");
+                    expect(this.view.$('li:eq(0)').data('fullname')).toEqual('"column_1"');
+                    expect(this.view.$('li:eq(1)').data('fullname')).toEqual('"column_2"');
                 });
 
                 it("should make the list elements draggable", function() {

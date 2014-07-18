@@ -8,7 +8,7 @@ describe("chorus.views.DataTabDataset", function() {
     });
 
     it("adds the correct data attribute for fullname", function() {
-        expect(this.view.$el.data("fullname")).toBe('schema_name."1234"');
+        expect(this.view.$el.data("fullname")).toBe('"schema_name"."1234"');
     });
 
     it("renders the appropriate icon", function() {

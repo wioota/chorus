@@ -186,8 +186,8 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
                     var json = request.json()['hdfs_external_table'];
                     expect(json['file_pattern']).toBe("*");
                     expect(json['hdfs_data_source_id']).toBe("234");
-                    expect(json['column_names'][0]).toEqual("column_1");
-                    expect(json['column_names'][1]).toEqual("column_2");
+                    expect(json['column_names'][0]).toEqual('"column_1"');
+                    expect(json['column_names'][1]).toEqual('"column_2"');
                     expect(json['path_type']).toBe('directory');
                     expect(json['hdfs_entry_id']).toBe('1');
                 });
