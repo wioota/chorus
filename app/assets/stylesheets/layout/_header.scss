@@ -76,11 +76,16 @@ $expanded-search-width: 444px;
                 float: left;
                 &.logo {
                     width: 90px;
-                    padding: 0px 15px;
+                    padding: 0px 10px;
 
                     a img {
                         vertical-align: middle;
                     }
+
+                    img {
+                        max-height: 25px;
+                    }
+
                 }
 
                 &.drawer {
@@ -100,6 +105,10 @@ $expanded-search-width: 444px;
 
         .right {
             float: right;
+
+            .menu {
+                border: $border-canon;
+            }
             .token {
                 float: right;
                 &.active .caret::before {
@@ -157,6 +166,8 @@ $expanded-search-width: 444px;
             margin: 8px 0 0 0;
             border-radius: 3px;
             display: inline-block;
+            margin-top: 10px;
+            height: 30px;
 
             i {
                 color: $brand-light;
@@ -168,8 +179,8 @@ $expanded-search-width: 444px;
                 }
                 &.magnifying_glass {
                     position: absolute;
-                    left: 180px;
-                    top: 15px;
+                    left: 168px;
+                    top: 16px;
                     font-size: 15px;
                 }
             }
@@ -186,6 +197,7 @@ $expanded-search-width: 444px;
                 font-weight: normal;
 
                 transition-duration: 0.7s;
+                padding-bottom: 6px;
                 padding-left: $icon-box-width;
                 padding-right: $icon-box-width;
                 width: $collapsed-search-width;
@@ -225,7 +237,7 @@ $expanded-search-width: 444px;
 
         .menu.popup_drawer {
             $drawer-width: 165px + $header-height;
-            transition-duration: 0.1s;
+            transition-duration: 0.45s;
             &.hidden { left: -$drawer-width; display: block !important;}
 
             width: $drawer-width;

@@ -20,7 +20,7 @@ $bright-gray: rgb(88, 89, 95);
 $bright-turquoise: rgb(21, 214, 203);
 
 $brand: $pacific-blue;
-$light-gray: lighten(desaturate($brand, 90%), 45%);;
+$light-gray: rgb(234,238,241);
 $charcoal: #464646;
 // Tints & Shades of Brand Colors
 
@@ -37,7 +37,7 @@ $needs-attention: $pumpkin;
 
 
 // Background colors
-$list-hover-color: $alice-blue;
+$list-hover-color: rgb(245, 250, 254);
 $list-checked-color: darken($alice-blue, 2%);
 $list-striping-color: lighten(desaturate($alice-blue, 50%), 3%);
 $body-background-color: white;
@@ -68,7 +68,7 @@ $border-width: 1px;
 
 //Specials
 $border-canon: $border-width solid $border-color;
-$shadow-canon: 1px 2px 2px 0px $border-color;
+$shadow-canon: 1px 1px 2px 0px $border-color;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
