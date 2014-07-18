@@ -58,8 +58,6 @@ chorus.views.DataSourceIndex = chorus.views.Base.extend({
             if (this.selectedModel) {
                 chorus.PageEvents.trigger('selected', this.selectedModel);
                 chorus.PageEvents.trigger('data_source:selected', this.selectedModel);
-            } else {
-                this.$("li:first").click();
             }
         }
     },

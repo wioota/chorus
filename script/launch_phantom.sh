@@ -14,7 +14,7 @@ if [ $? -eq 0 ]; then
   SPECFILE=$1
 else
   # inject _spec and find the file with the right name
-  SPECFILE=$(find ./ofbiz/hot-deploy/client/spec -type f -iname $(basename $1 | sed 's/.js$/_spec.js/'))
+  SPECFILE=$(script/find_spec_or_impl.rb $1)
   if [ -z "$SPECFILE" ]; then
     echo "Could not locate a spec file to go with $1" >&2
     exit 1
@@ -36,4 +36,4 @@ SPEC=$(echo $DESCRIBE_LINE | sed 's/.*["'\'']\(.*\)["'\''][^"'\'']*$/\1/')
 
 echo "Running $JASMINE_URL$SPEC in phantom"
 
-phantomjs /Users/pivotal/workspace/chorusrails/lib/tasks/../../spec/run-phantom-jasmine.js 8888 $SPEC
+phantomjs spec/run-phantom-jasmine.js 8888 $SPEC

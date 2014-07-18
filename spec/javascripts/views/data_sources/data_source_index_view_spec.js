@@ -82,12 +82,6 @@ describe("chorus.views.DataSourceIndex", function() {
             expect(gnipItems).toContainText("Gnip3");
         });
 
-        it('pre-selects the first data source', function() {
-            expect(this.view.$("li:first-child")).toHaveClass("selected");
-            expect(this.view.$("li.selected").length).toBe(1);
-            expect(this.view.$("li.selected")).toContainText('gP1');
-        });
-
         describe('when a data source is offline', function() {
             beforeEach(function() {
                 this.dataSources.at(0).set({ name: "Greenplum", online: false });
@@ -169,7 +163,7 @@ describe("chorus.views.DataSourceIndex", function() {
 
         describe("rendering the checkboxes", function() {
             it("ensures that selected models are checked", function() {
-                // expect(this.view.$("input:checked").length).toBe(0);
+                expect(this.view.$("input:checked").length).toBe(0);
                 
                 this.view.selectedModels.reset([
                     this.dataSources.at(0),
