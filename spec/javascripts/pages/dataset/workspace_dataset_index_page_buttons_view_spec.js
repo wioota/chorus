@@ -24,7 +24,7 @@ describe("chorus.views.WorkspaceDatasetIndexPageButtons", function() {
                 this.server.completeFetchFor(this.workspace);
             });
 
-            it("renders buttons", function() {
+            it("jaz renders buttons", function() {
                 expect(this.view.$("button.add_data")).toExist();
                 expect(this.view.$("button.add_data")).toContainTranslation("actions.add_data");
             });

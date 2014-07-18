@@ -32,7 +32,7 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
         describe("when the collection is loaded", function() {
             beforeEach(function() {
                 chorus.bindModalLaunchingClicks(this.page);
-                this.server.completeFetchFor(this.page.collection, this.workspaces);
+                this.server.completeFetchFor(this.page.collection, this.workspaces.models);
             });
 
             it("passes the multiSelect option to the list content details", function() {

@@ -87,10 +87,13 @@ jasmine.sharedExamples.PageItemList = function() {
         });
 
         it("retains checked items after collection fetches", function() {
+            var originalNumberOfCheckedItems = this.view.$("input[type=checkbox]").filter(":checked").length;
             this.view.collection.fetch();
             this.server.completeFetchFor(this.view.collection, this.view.collection.models);
-            expect(this.view.$("input[type=checkbox]").filter(":checked").length).toBe(1);
-            expect(this.view.$("input[type=checkbox]").eq(1)).toBe(":checked");
+            
+            var checkboxes = this.view.$("input[type=checkbox]");
+            expect(checkboxes.filter(":checked").length).toBe(originalNumberOfCheckedItems);
+            expect(checkboxes.eq(1)).toBe(":checked");
         });
 
         it('is persisted when the item is re-rendered', function(){
@@ -174,19 +177,23 @@ jasmine.sharedExamples.PageItemList = function() {
         });
 
         it("selects the item", function() {
-            expect(this.view.$("> li").eq(0)).toHaveClass("selected");
+            expect(this.view.$('.item_wrapper:eq(0)').click()).toHaveClass("selected");
             expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(0));
             expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selected", this.collection.at(0));
+        });
+
+        it("fires the checked event", function() {
+            expect(this.eventSpy).toHaveBeenCalledWith('checked', jasmine.any(Object));
         });
 
     describe("clicking on the same entry again", function() {
         beforeEach(function() {
             this.eventSpy.reset();
-            this.view.$("> li").eq(0).click();
+            this.view.$('.item_wrapper:eq(0)').click();
         });
 
         it("doesn't fire the selected event again", function() {
-            expect(this.eventSpy).not.toHaveBeenCalled();
+            expect(this.eventSpy).not.toHaveBeenCalledWith('checked', jasmine.any(Object));
         });
     });
 
@@ -231,7 +238,7 @@ jasmine.sharedExamples.PageItemList = function() {
                 this.server.completeFetchFor(this.view.collection, this.collection.models, {page: 2}, {page: 2});
             });
 
-            it("zzz selects nothing", function() {
+            it("selects nothing", function() {
                 expect(this.view.$('.selected').length).toBe(0);
             });
         });

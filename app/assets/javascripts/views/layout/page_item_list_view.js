@@ -13,6 +13,13 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         "click .item_wrapper": "listItemClicked"
     },
 
+    listItemClicked: function(e) {
+        
+        var item = $(e.target).closest('.item_wrapper');
+        if(!item.hasClass('checked')) { this.selectItem(item); }
+
+    },
+
     checkboxClicked: function(e) {
         e.stopPropagation();
         var clickedBox = $(e.currentTarget);
@@ -79,16 +86,19 @@ chorus.views.PageItemList = chorus.views.Base.extend({
 
         this.checkSelectedModels();
 
+        var $lis = this.$(">li");
+        var $item = $lis.eq(this.selectedIndex);
+
+        this.rememberOrForgetSelectedItem();
+
+        if(this.selectedIndex) this.focusSideBarOnItem($item, $lis);
+    },
+
+    rememberOrForgetSelectedItem: function(){
         var nextPage = this.collection.pagination && this.collection.pagination.page;
         var paginating = nextPage !== this.lastPage;
         if(paginating) delete this.selectedIndex;
-        if(this.selectedIndex) this.selectItem(this.$(">li").eq(this.selectedIndex));
-
         this.lastPage = nextPage;
-    },
-
-    listItemClicked: function(e) {
-        this.selectItem($(e.currentTarget));
     },
 
     checkSelectedModels: function() {
@@ -120,6 +130,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
     },
 
     selectNone: function() {
+        // This method name is a lie.
         this.selectedModels.reset();
         chorus.PageEvents.trigger("checked", this.selectedModels);
         chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
@@ -131,22 +142,32 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         this.$(">li").removeClass("selected");
     },
 
-    selectItem: function($target) {
-        var $lis = this.$(">li");
-        var preSelected = $target.hasClass("selected");
+    focusSideBarOnItem: function($item, $lis){
+        var preSelected = $item.hasClass("selected");
+        
+        $item.addClass("selected");
+        $item.addClass("checked");
 
-        $lis.removeClass("selected");
-        $target.addClass("selected");
+        $item.find('input').prop("checked", true);
+        $item.find('input').change();
 
-        this.selectedIndex = $lis.index($target);
+        this.selectedIndex = $lis.index($item);
         if(this.selectedIndex >= 0) {
-            if(!preSelected) {
-                this.itemSelected(this.collection.at(this.selectedIndex));
-            }
+            preSelected || this.itemSelected(this.collection.at(this.selectedIndex));
         } else {
             this.selectedIndex = 0;
             this.itemDeselected();
         }
+    },
+
+    selectItem: function($item) {
+        this.selectAll();
+        this.selectNone();
+
+        var $lis = this.$(">li");
+        $lis.removeClass("selected");
+        $lis.removeClass("checked");
+        this.focusSideBarOnItem($item, $lis);
     },
 
     unselectItem: function(model) {
@@ -168,9 +189,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
     },
 
     itemDeselected: function() {
-        if(this.lastEventName) {
-            chorus.PageEvents.trigger(this.lastEventName + ":deselected");
-        }
+        this.lastEventName && chorus.PageEvents.trigger(this.lastEventName + ":deselected");
     },
 
     updateSelection: function(selectedModel) {

@@ -99,6 +99,50 @@ describe("chorus.views.PageItemList", function() {
             });
         });
 
+        context("when all rows are unchecked", function() {
+            describe("and the user clicks on a row", function(){
+                beforeEach(function(){
+                    this.initialRow = function() { return this.view.$('.item_wrapper:nth-child(1)'); };
+                    this.initialRow().click();
+                });
+
+                it("becomes selected", function(){
+                    expect(this.initialRow()).toHaveClass('selected');
+                });
+
+                it("becomes checked", function(){
+                    expect(this.initialRow()).toHaveClass('checked');
+                    expect(this.initialRow().find('input')).toBeChecked();
+                });
+
+                describe("and then another row", function(){
+                    beforeEach(function(){
+                        this.otherRow = function() { return this.view.$('.item_wrapper:nth-child(2)'); };
+                        this.otherRow().click();
+                    });
+
+                    it("unchecks the previous row", function(){
+                        expect(this.initialRow()).not.toHaveClass('checked');
+                        var checkbox = this.initialRow().find("input[type=checkbox]");
+                        expect(checkbox).not.toBeChecked();
+                    });
+
+                    it("unselects the previous row", function(){
+                        expect(this.initialRow()).not.toHaveClass('selected');
+                    });
+
+                    it("becomes selected", function(){
+                        expect(this.otherRow()).toHaveClass('selected');
+                    });
+
+                    it("becomes checked", function(){
+                        expect(this.otherRow()).toHaveClass('checked');
+                        expect(this.otherRow().find('input')).toBeChecked();
+                    });
+                });
+            });
+        });
+
         describe('shift+click', function() {
             beforeEach(function() {
                 expect(this.view.$("input[type=checkbox]:checked").length).toBe(0);
