@@ -237,7 +237,9 @@ $expanded-search-width: 444px;
 
         .menu.popup_drawer {
             $drawer-width: 165px + $header-height;
-            transition-duration: 0.45s;
+            @include transition-duration(0.45s);
+            @include transition-timing-function(cubic-bezier(0,0,0,1));
+
             &.hidden { left: -$drawer-width; display: block !important;}
 
             width: $drawer-width;
