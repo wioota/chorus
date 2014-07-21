@@ -37,14 +37,16 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
             var checkbox = this.page.$(".multiselect .select_all");
             checkbox.prop("checked", false);
             chorus.PageEvents.trigger("allSelected");
-            expect(checkbox.prop("checked")).toBeTruthy();
+            expect(checkbox).toBeChecked();
+            expect(checkbox.prop('indeterminate')).toBeFalsy();
         });
 
         it("subscribes to 'unselectAny'", function () {
             var checkbox = this.page.$(".multiselect .select_all");
             checkbox.prop("checked", true);
             chorus.PageEvents.trigger("unselectAny");
-            expect(checkbox.prop("checked")).toBeFalsy();
+            expect(checkbox).toBeChecked();
+            expect(checkbox.prop('indeterminate')).toBeTruthy();
         });
 
         it("does not display the multiple selection section", function() {

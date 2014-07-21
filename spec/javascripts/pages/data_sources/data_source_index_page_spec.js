@@ -157,8 +157,9 @@ describe("chorus.pages.DataSourceIndexPage", function() {
                     });
                 });
 
-                it("does not check the 'select_all' checkbox", function () {
-                    expect(this.page.$(".select_all").prop("checked")).toBeFalsy();
+                it("checks the 'select_all' checkbox and marks it as indeterminate", function () {
+                    expect(this.page.$(".select_all").prop("checked")).toBeTruthy();
+                    expect(this.page.$(".select_all").prop("indeterminate")).toBeTruthy();
                 });
             });
 
