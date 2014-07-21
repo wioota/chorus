@@ -19,6 +19,12 @@ describe JobTasksController do
         :job_task => planned_job_task
       }
     end
+    let(:planned_job_task) { {} }
+
+    it 'uses authorization' do
+      mock(subject).authorize! :can_edit_sub_objects, workspace
+      post :create, params
+    end
 
     context 'import tasks' do
       let(:planned_job_task) do
@@ -59,14 +65,30 @@ describe JobTasksController do
         end
       end
 
-      it "uses authorization" do
-        mock(subject).authorize! :can_edit_sub_objects, workspace
+      it 'returns 201' do
         post :create, params
+        response.code.should == '201'
+      end
+    end
+
+    context 'run sql tasks' do
+      let(:workfile) { workfiles(:'sql.sql') }
+      let(:planned_job_task) do
+        {
+            :action => 'run_sql_workfile',
+            :workfile_id => workfile.id
+        }
       end
 
-      it "returns 201" do
+      it 'creates the task' do
+        expect {
+          post :create, params
+        }.to change(RunSqlWorkfileTask, :count).by(1)
+      end
+
+      it 'returns 201' do
         post :create, params
-        response.code.should == "201"
+        response.code.should == '201'
       end
     end
   end

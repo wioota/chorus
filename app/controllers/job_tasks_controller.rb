@@ -1,4 +1,6 @@
 class JobTasksController < ApplicationController
+  wrap_parameters :job_task, :exclude => [:job_id, :workspace_id]
+
   def create
     authorize! :can_edit_sub_objects, workspace
 

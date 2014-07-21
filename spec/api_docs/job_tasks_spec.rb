@@ -13,8 +13,6 @@ resource 'JobTask' do
     parameter :destination_name, "Destination Table Name"
     parameter :truncate, "Truncate destination table?"
     parameter :row_limit, "Row limit"
-    required_parameters :action, :job_id, :workspace_id
-    scope_parameters :job_task, [:action, :source_id, :destination_name, :truncate, :row_limit]
 
     let(:workspace_id) { jobs(:default).workspace.id }
     let(:job_id) { jobs(:default).id }
@@ -23,6 +21,8 @@ resource 'JobTask' do
     let(:destination_name) { 'create_me' }
     let(:truncate) { 'false' }
     let(:row_limit) { '1000' }
+
+    required_parameters :action, :job_id, :workspace_id
 
     example_request "Create a Job Task in a job in a workspace" do
       status.should == 201

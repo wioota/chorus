@@ -20,11 +20,22 @@ describe("chorus.views.JobTaskItem", function () {
         this.model.set('action', 'run_work_flow');
         expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/afm-task.png");
 
-        this.model.set('action', 'run_sql_file');
+        this.model.set('action', 'run_sql_workfile');
         expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/icon/sql.png");
 
         this.model.set('action', 'import_source_data');
         expect(this.view.$("img")).toHaveAttr("src", "/images/import_icon.png");
+    });
+
+    it("includes the correct task translation", function () {
+        this.model.set('action', 'run_work_flow');
+        expect(this.view.$(".action")).toContainTranslation("job_task.action.run_work_flow");
+
+        this.model.set('action', 'run_sql_workfile');
+        expect(this.view.$(".action")).toContainTranslation("job_task.action.run_sql_workfile");
+
+        this.model.set('action', 'import_source_data');
+        expect(this.view.$(".action")).toContainTranslation("job_task.action.import_source_data");
     });
 
     it("links the task's name to its show page", function() {

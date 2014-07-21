@@ -8,6 +8,7 @@ class JobTask < ActiveRecord::Base
 
   belongs_to :job
   validates_presence_of :job_id
+  delegate :workspace, :to => :job
 
   before_create :provide_index
   validates :type, :presence => true
@@ -16,7 +17,8 @@ class JobTask < ActiveRecord::Base
   JobTaskFailure = Class.new(StandardError)
 
   def self.assemble!(params, job)
-    klass = "#{params[:action].camelize}Task".constantize
+    klass = "#{params[:action]}_task".classify.constantize rescue NameError
+    raise ApiValidationError.new(:entity_type, :invalid) unless klass < JobTask
     task = klass.new(params)
     task.job = job
     task.attach_payload params

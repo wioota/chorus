@@ -366,11 +366,10 @@ FixtureBuilder.configure do |fbuilder|
 
       archived_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "archived", :owner => no_collaborators, :workspace => no_collaborators_archived_workspace, :versions_attributes => [{:contents => file}])
 
-      sql_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "sql.sql", :owner => owner, :workspace => public_workspace, :execution_schema => public_workspace.sandbox, :versions_attributes => [{:contents => file}])
-      fbuilder.name :sql, sql_workfile
+      @sql_workfile = FactoryGirl.create(:chorus_workfile, :file_name => "sql.sql", :owner => owner, :workspace => public_workspace, :execution_schema => public_workspace.sandbox, :versions_attributes => [{:contents => file}])
 
       with_current_user(owner) do
-        Events::NoteOnWorkfile.create!({:note_target => sql_workfile, :body => 'note on workfile'}, :as => :create)
+        Events::NoteOnWorkfile.create!({:note_target => @sql_workfile, :body => 'note on workfile'}, :as => :create)
       end
 
       @no_collaborators_creates_private_workfile = Events::WorkfileCreated.by(no_collaborators).add(:workfile => no_collaborators_private, :workspace => no_collaborators_private_workspace, :commit_message => "Fix all the bugs!")
@@ -446,6 +445,9 @@ FixtureBuilder.configure do |fbuilder|
 
     work_flow_task = FactoryGirl.create(:run_work_flow_task, :job => default_job, :payload => work_flow)
     fbuilder.name :rwft, work_flow_task
+
+    sql_task = FactoryGirl.create(:run_sql_workfile_task, :job => default_job, :payload => @sql_workfile)
+    fbuilder.name :rswt, sql_task
 
     FactoryGirl.create(:import_source_data_task, :job => default_job, payload: import_template)
     FactoryGirl.create(:import_source_data_task, :job => default_job, payload: import_template)

@@ -7,6 +7,12 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
         "click .up_arrow"  : "moveJobTaskUp"
     },
 
+    iconMap: {
+        run_work_flow: "/images/jobs/afm-task.png",
+        run_sql_workfile: "/images/workfiles/icon/sql.png",
+        import_source_data: "/images/import_icon.png"
+    },
+
     additionalContext: function () {
         var action = this.model.get("action");
         var collection = this.model.collection;
@@ -21,12 +27,7 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
     },
 
     iconUrlForType: function (action) {
-        var iconMap = {
-            run_work_flow: "/images/jobs/afm-task.png",
-            run_sql_file: "/images/workfiles/icon/sql.png",
-            import_source_data: "/images/import_icon.png"
-        };
-        return iconMap[action];
+        return this.iconMap[action];
     },
 
     moveJobTaskDown: function() { chorus.page.model.moveTaskDown(this.model); },

@@ -3,7 +3,6 @@ class ImportSourceDataTask < JobTask
 
   belongs_to :payload, :class_name => 'ImportTemplate', :autosave => true
   belongs_to :current_import, :class_name => 'Import', :foreign_key => :killable_id
-  delegate :workspace, :to => :job
 
   def attach_payload(params)
     self.build_payload(params)

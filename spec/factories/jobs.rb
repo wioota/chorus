@@ -85,6 +85,10 @@ FactoryGirl.define do
     factory :run_work_flow_task, :class => RunWorkFlowTask do
       association :payload, :factory => :work_flow
     end
+
+    factory :run_sql_workfile_task, :class => RunSqlWorkfileTask do
+      association :payload, :factory => :chorus_workfile
+    end
   end
 
   factory :import_template do

@@ -25,13 +25,23 @@ describe JobTask do
       expect {
         JobTask.assemble!(params, job)
       }.to change(job.job_tasks, :count).by(1)
-  end
+    end
 
-    it "chooses a non-conflicting index" do
+    it 'chooses a non-conflicting index' do
       doomed_task = JobTask.assemble!(params, job)
       JobTask.assemble!(params, job)
       doomed_task.destroy
       JobTask.assemble!(params, job)
+    end
+
+    context 'with an invalid entity type' do
+      let(:params) { { :action => 'missing' } }
+
+      it 'raises an ApiValidation error' do
+        expect {
+          JobTask.assemble!(params, job)
+        }.to raise_error(ApiValidationError)
+      end
     end
   end
 
@@ -49,7 +59,7 @@ describe JobTask do
       @task3 = FactoryGirl.create(:isdt, index: 3, job: @job)
     end
 
-    it "compacts indices" do
+    it 'compacts indices' do
       @task2.destroy
       @job.job_tasks.reload.map(&:index).should == [1,2]
     end

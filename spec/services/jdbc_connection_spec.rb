@@ -332,7 +332,7 @@ describe JdbcConnection, :jdbc_integration do
 
   describe '#version' do
     let(:subject) { connection.version }
-    let(:expected) { /Teradata Database 14\.10.*/ }
+    let(:expected) { /Teradata Database 14\..*/ }
     let(:use_match_matcher) { true }
 
     it_should_behave_like 'a well-behaved database query'
