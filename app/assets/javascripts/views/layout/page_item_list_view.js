@@ -124,9 +124,13 @@ chorus.views.PageItemList = chorus.views.Base.extend({
     },
 
     selectAll: function() {
-        this.selectedModels.add(this.collection.models);
+        this.selectedModels.add(this.selectableModels());
         chorus.PageEvents.trigger("checked", this.selectedModels);
         chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
+    },
+
+    selectableModels: function () {
+        return this.collection.models;
     },
 
     selectNone: function() {

@@ -11,13 +11,9 @@ chorus.views.HdfsEntryList = chorus.views.PageItemList.extend({
         this._super("setup", arguments);
     },
 
-    selectAll: function() {
-        var files = this.collection.reject(function(entry) {
-            return entry.get('isDir');
-        });
+    selectableModels: function() {
+        var directories = function(entry) { return entry.get('isDir'); };
 
-        this.selectedModels.reset(files);
-        chorus.PageEvents.trigger("checked", this.selectedModels);
-        chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
+        return this.collection.reject(directories);
     }
 });
