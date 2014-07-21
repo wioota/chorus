@@ -145,7 +145,7 @@ describe JobTasksController do
             job_id: task.job.id,
             workspace_id: task.job.workspace.id,
             job_task: {
-                work_flow_id: desired_work_flow.id
+                workfile_id: desired_work_flow.id
             },
         }
       end

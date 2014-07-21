@@ -18,7 +18,7 @@ class RunWorkFlowTask < JobTask
   end
 
   def attach_payload(params)
-    self.payload = AlpineWorkfile.find params[:work_flow_id]
+    self.payload = AlpineWorkfile.find params[:workfile_id]
   end
 
   def build_task_name
@@ -26,7 +26,7 @@ class RunWorkFlowTask < JobTask
   end
 
   def update_attributes(params)
-    attach_payload(params) if params[:work_flow_id]
+    attach_payload(params) if params[:workfile_id]
     super
   end
 

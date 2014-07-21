@@ -1,7 +1,7 @@
-chorus.dialogs.ConfigureWorkFlowTask = chorus.dialogs.PickItems.include(chorus.Mixins.DialogFormHelpers).extend({
-    constructorName: 'CreateWorkFlowTask',
+chorus.dialogs.ConfigureWorkfileTask = chorus.dialogs.PickItems.include(chorus.Mixins.DialogFormHelpers).extend({
+    constructorName: 'CreateWorkfileTask',
     searchPlaceholderKey: 'job_task.work_flow.search_placeholder',
-    modelClass: "WorkFlow",
+    modelClass: 'Workfile',
     pagination: true,
     multiSelection: false,
     message: 'create_job_task_dialog.toast',
@@ -28,7 +28,7 @@ chorus.dialogs.ConfigureWorkFlowTask = chorus.dialogs.PickItems.include(chorus.M
 
         this.disableFormUnlessValid({
             formSelector: "form",
-            checkInput: this.isWorkFlowSelected
+            checkInput: this.isWorkfileSelected
         });
 
         this.listenTo(this.model, "saved", this.modelSaved);
@@ -45,20 +45,28 @@ chorus.dialogs.ConfigureWorkFlowTask = chorus.dialogs.PickItems.include(chorus.M
         };
     },
 
-    itemSelected: function (workFlow) {
-        this.selectedWorkFlowId = workFlow.get("id");
+    itemSelected: function (workfile) {
+        this.selectedWorkfileId = workfile.get("id");
         this.enableOrDisableSubmitButton();
     },
 
-    isWorkFlowSelected: function () {
-        return !!this.selectedWorkFlowId;
+    isWorkfileSelected: function () {
+        return !!this.selectedWorkfileId;
     },
 
     fieldValues: function () {
         return {
-            workFlowId: this.selectedWorkFlowId,
-            action: "run_work_flow"
+            workfileId: this.selectedWorkfileId,
+            action: this.action()
         };
+    },
+
+    action: function() {
+        return this.isSql() ? 'run_sql_workfile' : 'run_work_flow';
+    },
+
+    isSql: function () {
+        return this.collection && this.collection.attributes.fileType === 'sql';
     },
 
     submit: function () {

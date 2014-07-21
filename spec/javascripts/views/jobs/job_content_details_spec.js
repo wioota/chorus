@@ -14,23 +14,40 @@ describe("chorus.views.JobContentDetails", function () {
         });
 
         it("enables the 'Import Source Data' link", function () {
-            expect(this.qtipElement.find(".import_source_data").text()).toMatchTranslation("job_task.action.import_source_data");
+            expect(this.qtipElement.find(".import_source_data")).toContainTranslation("job_task.action.import_source_data");
         });
 
         it("enables the 'Run Workflow' link", function() {
-            expect(this.qtipElement.find(".run_work_flow").text()).toMatchTranslation("job_task.action.run_work_flow");
+            expect(this.qtipElement.find(".run_work_flow")).toContainTranslation("job_task.action.run_work_flow");
+        });
+
+        it("enables the 'Run Sql Workfile' link", function() {
+            expect(this.qtipElement.find(".run_sql_workfile")).toContainTranslation("job_task.action.run_sql_workfile");
         });
 
         context("clicking on 'Run Work Flow'", function () {
             it("launches the WorkFlowPicker dialog", function() {
-                expect(this.modalSpy).not.toHaveModal(chorus.dialogs.ConfigureWorkFlowTask);
+                expect(this.modalSpy).not.toHaveModal(chorus.dialogs.ConfigureWorkfileTask);
                 this.qtipElement.find('.run_work_flow').click();
-                expect(this.modalSpy).toHaveModal(chorus.dialogs.ConfigureWorkFlowTask);
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.ConfigureWorkfileTask);
             });
 
             it("launches the picker dialog with only work flows", function() {
                 this.qtipElement.find('.run_work_flow').click();
                 expect(this.modalSpy.lastModal().collection.attributes.fileType).toBe('work_flow');
+            });
+        });
+
+        context("clicking on 'Run Sql Workfile'", function () {
+            it("launches the WorkFlowPicker dialog", function() {
+                expect(this.modalSpy).not.toHaveModal(chorus.dialogs.ConfigureWorkfileTask);
+                this.qtipElement.find('.run_sql_workfile').click();
+                expect(this.modalSpy).toHaveModal(chorus.dialogs.ConfigureWorkfileTask);
+            });
+
+            it("launches the picker dialog with only sql workfiles", function() {
+                this.qtipElement.find('.run_sql_workfile').click();
+                expect(this.modalSpy.lastModal().collection.attributes.fileType).toBe('sql');
             });
         });
 

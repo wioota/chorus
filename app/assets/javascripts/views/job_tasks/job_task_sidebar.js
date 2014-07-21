@@ -24,7 +24,7 @@ chorus.views.JobTaskSidebar = chorus.views.Sidebar.extend({
             new chorus.dialogs.ConfigureImportSourceDataTask({model: this.model}).launchModal();
         } else if (this.model.get('action') === 'run_work_flow') {
             var workFlows = new chorus.collections.WorkfileSet([], {fileType: 'work_flow', workspaceId: this.model.job().workspace().get("id")});
-            new chorus.dialogs.ConfigureWorkFlowTask({model: this.model, collection: workFlows}).launchModal();
+            new chorus.dialogs.ConfigureWorkfileTask({model: this.model, collection: workFlows}).launchModal();
         }
     }
 });

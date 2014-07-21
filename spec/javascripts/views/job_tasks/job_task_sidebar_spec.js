@@ -26,7 +26,7 @@ describe("chorus.views.JobTaskSidebar", function () {
                 beforeEach(function () {
                     this.task.set('action', 'run_work_flow');
                 });
-                itBehavesLike.aDialogLauncher("a.edit_job_task", chorus.dialogs.ConfigureWorkFlowTask);
+                itBehavesLike.aDialogLauncher("a.edit_job_task", chorus.dialogs.ConfigureWorkfileTask);
             });
 
             context("when an Import task is selected", function () {

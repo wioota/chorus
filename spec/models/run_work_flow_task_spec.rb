@@ -6,7 +6,7 @@ describe RunWorkFlowTask do
   let(:job) { jobs(:default) }
   let(:task_plan) do
     {
-        :work_flow_id => work_flow.id,
+        :workfile_id => work_flow.id,
         :action => 'run_work_flow'
     }
   end

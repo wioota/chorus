@@ -10,6 +10,7 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
 
     createActions: [
         {className: 'import_source_data', text: t("job_task.action.import_source_data")},
+        {className: 'run_sql_workfile', text: t("job_task.action.run_sql_workfile")},
         {className: 'run_work_flow', text: t("job_task.action.run_work_flow")}
     ],
 
@@ -18,7 +19,10 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
             this.launchCreateImportSourceDataTaskDialog(e);
         },
         "a.run_work_flow": function(e) {
-            this.launchCreateFlowTaskDialog(e);
+            this.launchCreateFlowTaskDialog(e, 'work_flow');
+        },
+        "a.run_sql_workfile": function(e) {
+            this.launchCreateFlowTaskDialog(e, 'sql');
         }
     },
 
@@ -35,10 +39,10 @@ chorus.views.JobContentDetails = chorus.views.Base.extend({
         });
     },
 
-    launchCreateFlowTaskDialog: function(e) {
+    launchCreateFlowTaskDialog: function(e, workfileFilter) {
         e && e.preventDefault();
-        var workFlows = new chorus.collections.WorkfileSet([], {fileType: 'work_flow', workspaceId: this.model.workspace().get("id")});
-        new chorus.dialogs.ConfigureWorkFlowTask({job: this.model, collection: workFlows}).launchModal();
+        var workfileSet = new chorus.collections.WorkfileSet([], {fileType: workfileFilter, workspaceId: this.model.workspace().get("id")});
+        new chorus.dialogs.ConfigureWorkfileTask({job: this.model, collection: workfileSet}).launchModal();
     },
 
     launchCreateImportSourceDataTaskDialog: function (e) {
