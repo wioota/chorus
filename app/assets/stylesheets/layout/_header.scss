@@ -153,7 +153,8 @@ $expanded-search-width: 444px;
                 }
 
                 &.advisor_now a img {
-                    margin-bottom: -4px;
+                    max-height: $header-height / 4;
+                    margin-bottom: -2px;
                 }
             }
         }
@@ -190,7 +191,7 @@ $expanded-search-width: 444px;
                     color: $brand-tint;
                 }
 
-                height: 32px;
+                height: $icon-box-width;
                 background-color: $brand-shade;
                 border: none;
                 color: white;
