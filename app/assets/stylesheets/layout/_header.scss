@@ -7,7 +7,7 @@ $expanded-search-width: 444px;
   content: url(../images/data-source-glyph.svg);
 }
 
-@mixin header-menu-link-item($height) {
+@mixin full-item-link($height) {
     &:hover, &.selected {
         background-color: $list-hover-color;
     }
@@ -228,10 +228,10 @@ $expanded-search-width: 444px;
             width: $expanded-search-width;
 
             li.result {
-                @include header-menu-link-item(60px);
+                @include full-item-link(60px);
             }
             li.search_all {
-                @include header-menu-link-item(40px);
+                @include full-item-link(40px);
             }
         }
 
@@ -244,7 +244,7 @@ $expanded-search-width: 444px;
             height: 100vh;
             left: 0px;
             li { 
-                @include header-menu-link-item($header-height); 
+                @include full-item-link($header-height);
                 &:hover .knob { background: $brand-shade; }
             }
             .knob {
@@ -264,7 +264,7 @@ $expanded-search-width: 444px;
             width: $header-margin * 6;
 
             li {
-                @include header-menu-link-item(40px)
+                @include full-item-link(40px)
             }
         }
 
@@ -302,7 +302,7 @@ $expanded-search-width: 444px;
                 border-bottom: $border-canon;
 
                 .activity_item:hover {
-                    background: $alice-blue;
+                    background: $list-hover-color;
                 }
                 &.insight {
                     padding: 12px 0 5px;

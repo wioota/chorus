@@ -1,5 +1,4 @@
 // Do not put any css rules into this file.  This file is only for declaration of variables and mixins
-//
 
 // Grand Old Colors
 /* basic color rules - DO NOT use these in component files, they should only be used in config sections! */
@@ -14,21 +13,27 @@ $fire-engine-red: #B5121B;
 $pumpkin: #f7771b;
 
 // Brand New Colors
+// These colors were mapped to names via www.color-blindness.com/color-name-hue.
 $pacific-blue: rgb(0, 160, 229);
-$alice-blue: rgb(234, 245, 254);
+$alice-blue: rgb(245, 250, 254);
 $bright-gray: rgb(88, 89, 95);
 $bright-turquoise: rgb(21, 214, 203);
-
-$brand: $pacific-blue;
 $light-gray: rgb(234,238,241);
 $charcoal: #464646;
-// Tints & Shades of Brand Colors
 
+// Tints & Shades of Brand Colors
+// Brand
+$brand: $pacific-blue;
 $brand-light: lighten($brand, 14%);
 $brand-tint: lighten($brand, 7%);
-
 $brand-shade: darken($brand, 7%);
 $brand-dark: darken($brand, 14%);
+
+$accent: $alice-blue;
+//$accent-light: unused;
+$accent-tint: rgb(250, 252, 253);
+$accent-shade: rgb(231, 243, 253);
+//$accent-dark: unused;
 
 // Semantic Colors
 $ok: $fiji-green;
@@ -37,9 +42,9 @@ $needs-attention: $pumpkin;
 
 
 // Background colors
-$list-hover-color: rgb(245, 250, 254);
-$list-checked-color: darken($alice-blue, 2%);
-$list-striping-color: lighten(desaturate($alice-blue, 50%), 3%);
+$list-hover-color: $accent;
+$list-checked-color: $accent-shade;
+$list-striping-color: $accent-tint;
 $body-background-color: white;
 $shaded-background-color: $light-gray;
 
