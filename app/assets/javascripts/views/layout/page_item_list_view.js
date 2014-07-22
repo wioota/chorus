@@ -219,7 +219,16 @@ chorus.views.PageItemList = chorus.views.Base.extend({
 
     getSelectionEvent: function () {
         var element = this.multiListMode ? this.$el.closest(".content") : this.$el;
-        return element.find("input[type=checkbox]:not(:checked)").length === 0 ? "allSelected" : "unselectAny";
+
+        var checkedInputs = element.find('input:checked');
+        var uncheckedInputs = element.find('input:not(:checked)');
+
+        var anySelected = _.any(checkedInputs);
+        var allSelected = !_.any(uncheckedInputs);
+
+        if (!anySelected) return "noneSelected";
+        if (allSelected) return  "allSelected";
+        if (anySelected) return "unselectAny";
     },
 
     makeListItemView: function(model) {

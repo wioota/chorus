@@ -26,10 +26,10 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
             });
         });
 
-        it("subscribes to 'selectNone'", function () {
+        it("subscribes to 'noneSelected'", function () {
             var checkbox = this.page.$(".multiselect .select_all");
             checkbox.prop("checked", true);
-            chorus.PageEvents.trigger("selectNone");
+            chorus.PageEvents.trigger("noneSelected");
             expect(checkbox.prop("checked")).toBeFalsy();
         });
 

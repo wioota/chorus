@@ -1,7 +1,7 @@
 chorus.Mixins.BoundForMultiSelect = {
     preInitialize: function () {
         this.events["change .select_all"] = "changeSelection";
-        this.subscribePageEvent("selectNone", this.allUnselected);
+        this.subscribePageEvent("noneSelected", this.allUnselected);
         this.subscribePageEvent("unselectAny", this.anyUnselected);
         this.subscribePageEvent("allSelected", this.allSelected);
         this.selectAllChecked = false;
