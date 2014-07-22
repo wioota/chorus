@@ -23,6 +23,11 @@ class RunSqlWorkfileTask < JobTask
     "Run #{payload.file_name}"
   end
 
+  def update_attributes(params)
+    attach_payload(params) if params[:workfile_id]
+    super
+  end
+
   private
 
   def account

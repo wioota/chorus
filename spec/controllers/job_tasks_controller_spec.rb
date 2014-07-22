@@ -150,7 +150,28 @@ describe JobTasksController do
         }
       end
 
-      it "updates the task's name" do
+      it 'updates the task' do
+        expect do
+          put :update, params
+        end.to change { task.reload.payload.id }.to(desired_work_flow.id)
+      end
+    end
+
+    context 'run sql workfile' do
+      let(:task) { job_tasks(:rswt) }
+      let(:desired_work_flow) { FactoryGirl.create(:chorus_workfile, :file_name => 'another.sql', :workspace => workspaces(:public), :owner => users(:owner)) }
+      let(:params) do
+        {
+            id: task.id,
+            job_id: task.job.id,
+            workspace_id: task.job.workspace.id,
+            job_task: {
+                workfile_id: desired_work_flow.id
+            },
+        }
+      end
+
+      it 'updates the task' do
         expect do
           put :update, params
         end.to change { task.reload.payload.id }.to(desired_work_flow.id)

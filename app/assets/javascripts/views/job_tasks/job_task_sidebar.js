@@ -20,11 +20,18 @@ chorus.views.JobTaskSidebar = chorus.views.Sidebar.extend({
 
     launchTaskConfigurationDialog: function (e) {
         e && e.preventDefault();
-        if (this.model.get('action') === 'import_source_data') {
+        var action = this.model.get('action');
+        if (action === 'import_source_data') {
             new chorus.dialogs.ConfigureImportSourceDataTask({model: this.model}).launchModal();
-        } else if (this.model.get('action') === 'run_work_flow') {
-            var workFlows = new chorus.collections.WorkfileSet([], {fileType: 'work_flow', workspaceId: this.model.job().workspace().get("id")});
-            new chorus.dialogs.ConfigureWorkfileTask({model: this.model, collection: workFlows}).launchModal();
+        } else if (action === 'run_work_flow') {
+            this.launchWorkfilePicker('work_flow');
+        } else if (action === 'run_sql_workfile') {
+            this.launchWorkfilePicker('sql');
         }
+    },
+
+    launchWorkfilePicker: function(fileType) {
+        var workfiles = new chorus.collections.WorkfileSet([], {fileType: fileType, workspaceId: this.model.job().workspace().get("id")});
+        new chorus.dialogs.ConfigureWorkfileTask({model: this.model, collection: workfiles}).launchModal();
     }
 });

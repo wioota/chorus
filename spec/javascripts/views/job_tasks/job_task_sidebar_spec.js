@@ -29,6 +29,13 @@ describe("chorus.views.JobTaskSidebar", function () {
                 itBehavesLike.aDialogLauncher("a.edit_job_task", chorus.dialogs.ConfigureWorkfileTask);
             });
 
+            context("when a RunWorkFlow task is selected", function () {
+                beforeEach(function () {
+                    this.task.set('action', 'run_sql_workfile');
+                });
+                itBehavesLike.aDialogLauncher("a.edit_job_task", chorus.dialogs.ConfigureWorkfileTask);
+            });
+
             context("when an Import task is selected", function () {
                 beforeEach(function () {
                     this.task.set('action', 'import_source_data');
