@@ -35,8 +35,8 @@ jasmine.sharedExamples.PageItemList = function () {
             });
         }
 
-        context("When no items are selected", function () {
-            beforeEach(function () {
+        function nothingIsSelected() {
+            it("Then all items in the list are neither checked nor highlighted.", function () {
                 var $items = this.view.$('.item_wrapper');
                 $items.each(function (i, item) {
                     var $item = $(item);
@@ -45,8 +45,37 @@ jasmine.sharedExamples.PageItemList = function () {
                     expect(checkbox).not.toBeChecked();
                 });
             });
+        }
 
+        context("When no items are selected", function () {
+            var item1, item2;
+            nothingIsSelected();
             anItemIsCheckable();
+
+            describe("And I click the body of an item", function () {
+                beforeEach(function () {
+                    item1 = this.view.$('.item_wrapper').first();
+                    safeClick(item1);
+                });
+
+                describe("And then check another item", function () {
+                    beforeEach(function () {
+                        item2 = this.view.$('.item_wrapper').last();
+                        safeClick(item2.find('input'));
+                    });
+
+                    it("Both items should be checked & highlighted", function () {
+                        var $items = [item1, item2];
+
+                        _.each($items, function ($item) {
+                            expect($item).toHaveClass('checked');
+                            var checkbox = $item.find('input[type=checkbox]');
+                            expect(checkbox).toBeChecked();
+                        });
+                    });
+
+                });
+            });
 
             describe("And I click the top level checkbox", function () {
                 beforeEach(function () {
@@ -107,14 +136,7 @@ jasmine.sharedExamples.PageItemList = function () {
                 });
 
                 it("Then all items in the list are neither checked nor highlighted.", function () {
-                    var $items = this.view.$('.item_wrapper');
-
-                    $items.each(function (i, item) {
-                        var $item = $(item);
-                        expect($item).not.toHaveClass('checked');
-                        var checkbox = $item.find('input[type=checkbox]');
-                        expect(checkbox).not.toBeChecked();
-                    });
+                    nothingIsSelected();
                 });
             });
 
@@ -146,6 +168,13 @@ jasmine.sharedExamples.PageItemList = function () {
                 expect(chorus.PageEvents.trigger).toHaveBeenCalledWith('allSelected');
             });
 
+            describe("And I click the top-level checkbox", function () {
+                beforeEach(function () {
+                    chorus.PageEvents.trigger("selectNone");
+                });
+                
+                nothingIsSelected();
+            });
         });
     });
 };

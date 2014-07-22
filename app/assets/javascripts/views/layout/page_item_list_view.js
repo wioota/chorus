@@ -26,9 +26,9 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         var clickedLi = clickedBox.closest(".item_wrapper");
         var index = this.$(".item_wrapper").index(clickedLi);
         var model = this.collection.at(index);
-        var willBeChecked = !this.findSelectedModel(model);
+        var notCollected = !this.findSelectedModel(model);
 
-        if(willBeChecked) {
+        if(notCollected) {
             var modelsToAdd = [model];
             if(e.shiftKey && this.previousIndex >= 0) {
                 var min = _.min([this.previousIndex, index]);
@@ -62,12 +62,6 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         this.subscribePageEvent("checked", this.checkSelectedModels);
 
         this.collection.bind("paginate", function() { this.render(); }, this);
-
-        if(this.eventName) {
-            this.subscribePageEvent(this.eventName + ":search", function() {
-                this.selectItem(this.$(">li:not(:hidden)").eq(0));
-            });
-        }
 
         this.subscribePageEvent("selected", this.updateSelection);
     },
@@ -168,10 +162,14 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         this.selectAll();
         this.selectNone();
 
-        var $lis = this.$(">li");
-        $lis.removeClass("selected");
-        $lis.removeClass("checked");
-        this.focusSideBarOnItem($item, $lis);
+        var $allItems = this.$(".item_wrapper");
+        $allItems.removeClass("selected");
+        $allItems.removeClass("checked");
+
+        var index = $allItems.index($item);
+        var model = this.collection.at(index);
+        this.addModelsToSelection([model]);
+        this.focusSideBarOnItem($item, $allItems);
     },
 
     unselectItem: function(model) {
