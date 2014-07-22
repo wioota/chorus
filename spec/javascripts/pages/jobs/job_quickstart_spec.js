@@ -7,4 +7,5 @@ describe("chorus.views.JobQuickstart", function () {
 
     itBehavesLike.aDialogLauncher('a.new_import_source_data.dialog', chorus.dialogs.ConfigureImportSourceDataTask);
     itBehavesLike.aDialogLauncher('a.new_run_work_flow.dialog', chorus.dialogs.ConfigureWorkfileTask);
+    itBehavesLike.aDialogLauncher('a.new_run_sql.dialog', chorus.dialogs.ConfigureWorkfileTask);
 });
