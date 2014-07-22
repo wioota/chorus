@@ -60,6 +60,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         this.subscribePageEvent("selectNone", this.selectNone);
         this.subscribePageEvent("clear_selection", this.clearSelection);
         this.subscribePageEvent("checked", this.checkSelectedModels);
+        this.subscribePageEvent(this.eventName+":search", this.clearSelection);
 
         this.collection.bind("paginate", function() { this.render(); }, this);
 
@@ -128,16 +129,14 @@ chorus.views.PageItemList = chorus.views.Base.extend({
     },
 
     selectNone: function() {
-        // This method name is a lie.
         this.selectedModels.reset();
         chorus.PageEvents.trigger("checked", this.selectedModels);
         chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
     },
 
     clearSelection: function(model) {
-        this.unselectItem(model);
         delete this.selectedIndex;
-        this.$(">li").removeClass("selected");
+        this.selectNone();
     },
 
     focusSideBarOnItem: function($item, $lis){

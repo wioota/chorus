@@ -1,5 +1,5 @@
 jasmine.sharedExamples.PageItemList = function () {
-    describe("zzz item selection", function () {
+    describe("zzz a selectable list", function () {
         beforeEach(function () {
             spyOn(chorus.PageEvents, "trigger").andCallThrough();
         });
@@ -38,6 +38,7 @@ jasmine.sharedExamples.PageItemList = function () {
         function nothingIsSelected() {
             it("Then all items in the list are neither checked nor highlighted.", function () {
                 var $items = this.view.$('.item_wrapper');
+
                 $items.each(function (i, item) {
                     var $item = $(item);
                     expect($item).not.toHaveClass('checked');
@@ -47,15 +48,126 @@ jasmine.sharedExamples.PageItemList = function () {
             });
         }
 
+        function typedEventNameIsSent() {
+            it("triggers the '{{eventName}}:checked' event with the collection of currently-checked items", function() {
+                var entityCheckedEvent = this.view.options.entityType + ":checked";
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("checked", jasmine.any(chorus.collections[this.collection.constructorName]));
+                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(entityCheckedEvent, jasmine.any(chorus.collections[this.collection.constructorName]));
+            });
+        }
+
+        function firstModelsIsSentInEvents() {
+            typedEventNameIsSent();
+
+            it("sends the clicked model's ID in a page event", function () {
+                var entityCheckedEvent = this.view.options.entityType + ":checked";
+                var anyEventAboutChecking = function (call) {
+                    return call.args[0] === "checked" || call.args[0] === entityCheckedEvent;
+                };
+
+                var allTriggers = chorus.PageEvents.trigger.calls.all();
+                var lastCall = _(allTriggers).chain().filter(anyEventAboutChecking).last().value();
+                var broadcastID = lastCall.args[1].pluck("id").pop();
+                var clickedID = this.collection.first().get('id');
+
+                expect(broadcastID).toEqual(clickedID);
+            });
+        }
+
+        function allModelsAreSentInEvents() {
+            typedEventNameIsSent();
+
+            it("sends all models' IDs in a page event", function () {
+                var entityCheckedEvent = this.view.options.entityType + ":checked";
+                var anyEventAboutChecking = function (call) {
+                    return call.args[0] === "checked" || call.args[0] === entityCheckedEvent;
+                };
+
+                var allTriggers = chorus.PageEvents.trigger.calls.all();
+                var lastCall = _(allTriggers).chain().filter(anyEventAboutChecking).last().value();
+                var broadcastIDs = lastCall.args[1].pluck("id");
+                var clickedIDs = this.collection.pluck('id');
+
+                expect(broadcastIDs).toEqual(clickedIDs);
+            });
+        }
+
+        function searchDeselectsAllItems() {
+            describe("when eventName:search is triggered", function() {
+                beforeEach(function() {
+                    chorus.PageEvents.trigger(this.view.options.entityType + ":search");
+                });
+
+                nothingIsSelected();
+            });
+        }
+
+        function paginatesCleanly() {
+            describe("loading the next page of results", function() {
+                beforeEach(function() {
+                    this.view.collection.fetchPage(2);
+                    this.server.completeFetchFor(this.view.collection, this.collection.models, {page: 2}, {page: 2});
+                });
+
+                it("selects nothing", function() {
+                    expect(this.view.$('.selected').length).toBe(0);
+                });
+            });
+        }
+
+        it("renders each item in the collection", function() {
+            expect(this.view.$("li").length).toBe(this.view.collection.length);
+        });
+
+        describe('when an item is changed', function(){
+            it("does not re-render the entire list", function() {
+                spyOn(this.view, 'preRender');
+                this.collection.at(0).trigger('change');
+                expect(this.view.preRender).not.toHaveBeenCalled();
+            });
+
+            context("when the tags on an item are changed", function() {
+                it("re renders the item's view", function() {
+                    spyOn(this.view.entityViewType.prototype, 'render');
+                    this.view.render();
+                    this.view.liViews[0].itemView.render.reset();
+                    this.collection.at(0).trigger('change:tags');
+                    expect(this.view.liViews[0].itemView.render).toHaveBeenCalled();
+                    expect(this.view.entityViewType.prototype.render.calls.count()).toEqual(1);
+                });
+            });
+        });
+
         context("When no items are selected", function () {
             var item1, item2;
             nothingIsSelected();
             anItemIsCheckable();
+            paginatesCleanly();
+            searchDeselectsAllItems();
+
+            describe("And I double-click a checkbox", function () {
+                beforeEach(function () {
+                    var $items = this.view.$('.item_wrapper');
+                    var checkbox = $items.first().find('input[type=checkbox]');
+
+                    safeClick(checkbox);
+                    safeClick(checkbox);
+                });
+
+                nothingIsSelected();
+            });
 
             describe("And I click the body of an item", function () {
                 beforeEach(function () {
                     item1 = this.view.$('.item_wrapper').first();
                     safeClick(item1);
+                });
+
+                it("selects the item", function() {
+                    expect(item1).toHaveClass("selected");
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(0));
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selected", this.collection.at(0));
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith('checked', jasmine.any(chorus.collections[this.collection.constructorName]));
                 });
 
                 describe("And then check another item", function () {
@@ -79,7 +191,7 @@ jasmine.sharedExamples.PageItemList = function () {
 
             describe("And I click the top level checkbox", function () {
                 beforeEach(function () {
-                    this.view.selectAll();
+                    chorus.PageEvents.trigger('selectAll');
                 });
 
                 it("Then all items in the list are selected", function () {
@@ -92,12 +204,25 @@ jasmine.sharedExamples.PageItemList = function () {
                         expect(checkbox).toBeChecked();
                     });
                 });
+
+                allModelsAreSentInEvents();
+            });
+
+            describe("And I check an item's checkbox", function () {
+                beforeEach(function () {
+                    chorus.PageEvents.trigger.reset();
+
+                    var $items = this.view.$('.item_wrapper');
+                    var checkbox = $items.first().find('input[type=checkbox]');
+                    safeClick(checkbox);
+                });
+
+                firstModelsIsSentInEvents();
             });
         });
 
         context("When a populated proper subset of items are selected", function () {
-            var $items;
-            var $initiallySelectedItems;
+            var $items, $initiallySelectedItems;
 
             beforeEach(function () {
                 $items = this.view.$('.item_wrapper');
@@ -110,6 +235,9 @@ jasmine.sharedExamples.PageItemList = function () {
                 expect($initiallySelectedItems.length).toBeGreaterThan(0);
                 expect($initiallySelectedItems.length).toBeLessThan($items.length);
             });
+
+            paginatesCleanly();
+            searchDeselectsAllItems();
 
             it("Then the top level checkbox is semi-filled", function () {
                 expect(chorus.PageEvents.trigger).toHaveBeenCalledWith('unselectAny');
@@ -150,6 +278,44 @@ jasmine.sharedExamples.PageItemList = function () {
                     });
                 });
             });
+
+            describe("And the collection completes a fetch", function () {
+                beforeEach(function () {
+                    this.view.collection.fetch();
+                    this.server.completeFetchFor(this.view.collection, this.view.collection.models);
+                });
+
+                it("retains checked items", function() {
+                    var $currentlyCheckedBoxes = this.view.$("input[type=checkbox]:checked");
+
+                    expect($currentlyCheckedBoxes.length).toBe($initiallySelectedItems.length);
+                    expect($initiallySelectedItems.find("input")).toBeChecked();
+                });
+            });
+
+            describe("And an item changes", function () {
+                beforeEach(function () {
+                    this.view.collection.first().trigger('change');
+                });
+
+                it("retains checked items", function() {
+                    var $currentlyCheckedBoxes = this.view.$("input[type=checkbox]:checked");
+
+                    expect($currentlyCheckedBoxes.length).toBe($initiallySelectedItems.length);
+                    expect($initiallySelectedItems.find("input")).toBeChecked();
+                });
+            });
+
+            describe("And clear_selection is triggered for that item", function() {
+                it("un-checks the entry", function() {
+                    var firstCheckbox = this.view.$("li input[type=checkbox]").eq(0);
+                    var firstModel = this.view.selectedModels.first();
+
+                    expect(firstCheckbox).toBeChecked();
+                    chorus.PageEvents.trigger("clear_selection", firstModel);
+                    expect(firstCheckbox).not.toBeChecked();
+                });
+            });
         });
 
         context("When all items are selected", function () {
@@ -164,6 +330,9 @@ jasmine.sharedExamples.PageItemList = function () {
                 });
             });
 
+            paginatesCleanly();
+            searchDeselectsAllItems();
+
             it("Then the top level checkbox is checked", function () {
                 expect(chorus.PageEvents.trigger).toHaveBeenCalledWith('allSelected');
             });
@@ -175,6 +344,18 @@ jasmine.sharedExamples.PageItemList = function () {
                 
                 nothingIsSelected();
             });
+        });
+
+        it("doesn't check models with the same id but different entity types", function() {
+            var decoyModel = this.view.collection.at(0).clone();
+            decoyModel.set({entityType: "notReal"});
+
+            this.view.selectedModels.reset(this.collection.models.slice(1));
+            this.view.selectedModels.add([decoyModel]);
+            chorus.PageEvents.trigger("checked", this.view.selectedModels);
+
+            expect(this.view.$("input[type=checkbox]").eq(0)).not.toBeChecked();
+            expect(this.view.$("input[type=checkbox]").eq(1)).toBeChecked();
         });
     });
 };
