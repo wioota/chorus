@@ -382,6 +382,7 @@ describe ChorusConfig do
             'Apache Hadoop 1.2',
             'Cloudera CDH4',
             'Cloudera CDH5',
+            'Hortonworks HDP 2.1',
             'MapR',
             'Pivotal HD 1.0',
             'Pivotal HD 1.1',
