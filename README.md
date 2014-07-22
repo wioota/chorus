@@ -10,7 +10,8 @@ Browse to the [Wiki pages list](https://github.com/Chorus/chorus/wiki/_pages) to
 1. [New-Class-Walkthrough](https://github.com/Chorus/chorus/wiki/New-Class-Walkthrough)
 1. [How to run Chorus tests](https://github.com/Chorus/chorus/wiki/How-to-run-Chorus-tests)
 1. [Test Writing Guidelines](https://github.com/Chorus/chorus/wiki/Test-Writing-Guidelines)
-1. [Code Style Guidelines](https://github.com/horus/chorus/wiki/Code-style)
+1. [Code Style Guidelines](https://github.com/Chorus/chorus/wiki/Code-style)
+1. [Troubleshooting and Environment Notes](https://github.com/Chorus/chorus/wiki/Troubleshooting-and-Environment-Notes)
 
 Have a question? Reach us via the [development mailing list](https://groups.google.com/forum/?fromgroups#!forum/chorus-dev). 
 
