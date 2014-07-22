@@ -59,6 +59,8 @@ $color-text2: $charcoal;
 $color-text3: lighten($charcoal, 10%);
 $color-text4: lighten($bright-gray, 20%);
 $link-color: $brand;
+$disabled-text: rgb(147, 154, 159);
+$caret-color: rgb(148, 215, 244);
 
 // Font weights
 $semibold: 600;

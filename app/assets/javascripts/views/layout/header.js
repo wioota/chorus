@@ -178,7 +178,7 @@ chorus.views.Header = chorus.views.Base.extend({
 
     modifyTypeAheadSearchLength: function() {
         if(!_.isEmpty($('.left')) && !_.isEmpty($('.type_ahead_search'))) {
-            this.$('.type_ahead_search').css('left', (this.$('.left').width() + parseInt($('.search').css('padding-left'), 10) + 1) + "px");
+            this.$('.type_ahead_search').css('left', (this.$('.left').width() + parseInt($('.search').css('padding-left'), 10)) + "px");
         }
     },
 

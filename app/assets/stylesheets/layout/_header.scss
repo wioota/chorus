@@ -1,7 +1,7 @@
 @import "compass/css3";
 
 $header-margin: 30px;
-$expanded-search-width: 444px;
+$expanded-search-width: 450px;
 
 .oi[data-glyph=data-source]:before {
   content: url(../images/data-source-glyph.svg);
@@ -62,7 +62,8 @@ $expanded-search-width: 444px;
                 span {
                     display: inline-block;
                     i {
-                        margin-left: 15px;
+                        margin-left: 10px;
+                        color: $caret-color;
                     }
                 }
             }
@@ -111,6 +112,11 @@ $expanded-search-width: 444px;
             }
             .token {
                 float: right;
+
+                .caret {
+                    font-size: 10px;
+                }
+
                 &.active .caret::before {
                     @include rotateX(180deg);
                 }
@@ -174,10 +180,7 @@ $expanded-search-width: 444px;
                 color: $brand-light;
                 z-index: 1;
 
-                &.search_clear {
-                    font-size: 10px;
-                    margin-right: 8px;
-                }
+                &.search_clear { font-size: 10px; }
                 &.magnifying_glass {
                     position: absolute;
                     left: 168px;
