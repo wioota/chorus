@@ -89,9 +89,8 @@ chorus.pages.Base = chorus.pages.Bare.extend({
     //Instantiate and attached the header and breadcrumb views for the page.
     _initializeHeaderAndBreadcrumbs: function() {
         this.header = this.header || new chorus.views.Header();
-        if (this.workspaceId) {
-            this.header.workspaceId = this.workspaceId;
-        }
+        this.header.workspaceId = this.workspaceId;
+
         var page = this;
         this.breadcrumbs = new chorus.views.BreadcrumbsView({
             breadcrumbs: _.isFunction(page.crumbs) ? _.bind(page.crumbs, page) : page.crumbs
