@@ -47,11 +47,11 @@ $list-checked-color: $accent-shade;
 $list-striping-color: $accent-tint;
 $body-background-color: white;
 $shaded-background-color: $light-gray;
-
+$subheader-background-color: rgb(240, 245, 250);
 
 // Border colors
 $border-color: $light-gray;
-$border-color-dark: darken($border-color, 5%);
+$border-color-dark: rgb(215, 227, 236);
 
 // Text colors
 $color-text1: darken($charcoal, 10%);
@@ -327,9 +327,10 @@ $action-bar-secondary-background-color: $light-blue;
 
 @mixin list-section-heading {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: $semibold;
-    color: $color-text2;
+    color: $disabled-text;
+    text-transform: uppercase;
 }
 
 @mixin list-item-details-area {

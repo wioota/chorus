@@ -141,10 +141,13 @@ $system-action-color: #7C7D7D;
             padding-left: 5px;
             margin-left: 5px;
 
-            img {
-                height: 12px;
-                width: 12px;
-                margin-bottom: 4px;
+            i {
+                padding-left: 4px;
+                vertical-align: middle;
+            }
+
+            span {
+                padding-left: 3px;
                 vertical-align: middle;
             }
         }

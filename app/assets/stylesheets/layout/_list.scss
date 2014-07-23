@@ -192,6 +192,7 @@
         input[type=checkbox] {
             float: left;
             margin-top: 5px;
+            margin-right: 10px;
         }
 
         .no_credentials {
@@ -224,9 +225,13 @@
 
             &.selected, &.checked {
                 background: $list-checked-color;
+                border: $border-width solid $border-color-dark;
+
             }
         }
     }
+
+
 }
 
 .item_tag_list {
