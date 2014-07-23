@@ -95,6 +95,7 @@ chorus.pages.Base = chorus.pages.Bare.extend({
     },
 
     setupWorkspaceTitle: function () {
+        this.additionalClass = "workspace";
         this.workspaceTitle = new chorus.views.WorkspaceTitle({model: this.workspace});
     },
 
