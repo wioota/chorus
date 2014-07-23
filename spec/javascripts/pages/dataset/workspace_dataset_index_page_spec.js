@@ -173,10 +173,6 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 expect(this.page.multiSelectSidebarMenu.options.selectEvent).toEqual("dataset:checked");
             });
 
-            it("has breadcrumbs", function() {
-                expect(this.page.$(".breadcrumbs")).toContainTranslation("breadcrumbs.workspaces_data");
-            });
-
             it("creates the main content", function() {
                 expect(this.page.mainContent).toBeDefined();
                 expect(this.page.mainContent.model).toBeA(chorus.models.Workspace);
@@ -186,9 +182,8 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 expect(this.page.$("#main_content")).not.toBeEmpty();
             });
 
-            it("creates the header and breadcrumbs", function() {
+            it("creates the header", function() {
                 expect(this.page.$("#header")).toExist();
-                expect(this.page.$("#breadcrumbs")).toExist();
             });
 
             it("shows the page title", function() {

@@ -45,11 +45,6 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                     it("navigates to the quickstart page", function() {
                         expect(chorus.router.navigate).toHaveBeenCalledWith("/workspaces/4/quickstart");
                     });
-
-                    it("doesn't break the breadcrumbs", function() {
-                        var page = this.page;
-                        expect(function(){ page.crumbs(); }).not.toThrow();
-                    });
                 });
             });
 
@@ -143,16 +138,6 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                 expect(this.page.mainContent.contentHeader.$(".original").text()).toBe(this.page.model.get("summary"));
             });
 
-            it("displays the breadcrumbs", function() {
-                expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-                expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toBe(t("breadcrumbs.home"));
-
-                expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
-                expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toBe(t("breadcrumbs.workspaces"));
-
-                expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("Cool Workspace");
-            });
-
             context("when the workspace settings dialog modifies the workspace", function() {
                 beforeEach(function() {
                     this.page.model.set({name: "bar", "public": false});
@@ -166,10 +151,6 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
                 it("changes the icon", function() {
                     expect(this.page.$(".activity_list_header .title img").attr("src")).toBe("/images/workspaces/private_workspace_large.png");
-                });
-
-                it("displays the new breadcrumb automatically", function() {
-                    expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("bar");
                 });
             });
         });

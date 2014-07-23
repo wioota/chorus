@@ -129,32 +129,6 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
 
         });
 
-        describe("breadcrumbs", function() {
-            it("links to home for the first crumb", function() {
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).text()).toBe(t("breadcrumbs.home"));
-            });
-
-            it("links to /workspaces for the second crumb", function() {
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).attr("href")).toBe("#/workspaces");
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).text()).toBe(t("breadcrumbs.workspaces"));
-            });
-
-            it("links to workspace show for the third crumb", function() {
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2).attr("href")).toBe(this.workspace.showUrl());
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2).text()).toBe(this.workspace.displayName());
-            });
-
-            it("links to the workspace data tab for the fourth crumb", function() {
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).attr("href")).toBe(this.workspace.showUrl() + "/datasets");
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).text()).toBe(t("breadcrumbs.workspaces_data"));
-            });
-
-            it("displays the object name for the fifth crumb", function() {
-                expect(this.page.$("#breadcrumbs .breadcrumb .slug").text()).toBe(this.columnSet.attributes.tableName);
-            });
-        });
-
         describe("#contentDetails", function() {
             it("has a Derive Chorus View button", function() {
                 expect(this.page.$(".derive")).toExist();

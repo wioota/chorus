@@ -12,7 +12,6 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
             contentHeader: new chorus.views.WorkspaceSummaryContentHeader({model: this.model})
         });
 
-        this.breadcrumbs.requiredResources.add(this.model);
         this.listenTo(this.model, 'saved', this.render);
     },
 
@@ -33,13 +32,5 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
                 return;
             }
         }
-    },
-
-    crumbs: function() {
-        return [
-            {label: t("breadcrumbs.home"), url: "#/"},
-            {label: t("breadcrumbs.workspaces"), url: "#/workspaces"},
-            {label: this.model && this.model.loaded ? this.model.displayName() : "..."}
-        ];
     }
 });

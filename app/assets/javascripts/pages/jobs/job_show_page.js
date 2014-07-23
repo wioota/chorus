@@ -16,23 +16,12 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
         this.model.fetch();
 
         this.requiredResources.add(this.job);
-        this.breadcrumbs.requiredResources.add(this.job);
 
         this.onceLoaded(this.model, this.pollForJob);
 
         this.mainContent = new chorus.views.LoadingSection();
         this.onceLoaded(this.model, this.setupMainContent);
         this.listenTo(this.model, "invalidated", function () { this.model.fetch(); });
-    },
-
-    crumbs: function() {
-        return [
-            {label: t("breadcrumbs.home"), url: "#/"},
-            {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
-            {label: this.workspace.loaded ? this.workspace.displayName() : "...", url: this.workspace.showUrl()},
-            {label: t("breadcrumbs.jobs"), url: this.workspace.jobsUrl()},
-            {label: this.job.get("name")}
-        ];
     },
 
     jobTaskSelected: function (task) {

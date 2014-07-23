@@ -110,23 +110,6 @@ describe("chorus.pages.JobsShowPage", function () {
             });
         });
 
-        describe("breadcrumbs", function() {
-            it("renders home > Workspaces > {workspace name} > Jobs", function() {
-                expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-                expect(this.page.$(".breadcrumb:eq(0) a").text()).toMatchTranslation("breadcrumbs.home");
-
-                expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
-                expect(this.page.$(".breadcrumb:eq(1) a").text()).toMatchTranslation("breadcrumbs.workspaces");
-
-                expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/" + this.workspace.id);
-                expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe(this.workspace.get("name"));
-
-                expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toMatchTranslation("breadcrumbs.jobs");
-
-                expect(this.page.$(".breadcrumb:eq(4)").text().trim()).toBe(this.model.get("name"));
-            });
-        });
-
         describe("polling", function () {
             beforeEach(function () {
                 spyOn(this.page.model, 'fetch');

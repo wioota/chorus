@@ -1,16 +1,10 @@
 chorus.pages.WorkspaceSearchIndexPage = chorus.pages.SearchIndexPage.extend({
+    crumbs: [],
+
     parseSearchParams: function(searchParams) {
         var workspaceId = searchParams.shift();
         var result = this._super("parseSearchParams", [ searchParams ]);
         return _.extend(result, { workspaceId: workspaceId });
-    },
-
-    crumbs: function() {
-        return [
-            { label: t("breadcrumbs.home"), url: "#/" },
-            { label: this.search.workspace().get("name"), url: this.search.workspace().showUrl() },
-            { label: t("breadcrumbs.search_results") }
-        ];
     },
 
     searchInMenuOptions: function() {
@@ -41,7 +35,6 @@ chorus.pages.WorkspaceSearchIndexPage = chorus.pages.SearchIndexPage.extend({
     setup: function() {
         this._super("setup", arguments);
         this.listenTo(this.search.workspace(), "loaded", this.resourcesLoaded);
-        this.breadcrumbs.requiredResources.add(this.search.workspace());
         this.search.workspace().fetch();
     },
 

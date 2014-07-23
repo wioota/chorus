@@ -10,28 +10,6 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         expect(this.page.helpId).toBe("workfiles");
     });
 
-    describe("breadcrumbs", function() {
-        beforeEach(function() {
-            this.workspace.set({name: "Cool Workspace"});
-            this.server.completeFetchFor(this.workspace);
-            this.server.completeFetchFor(this.page.collection);
-            this.page.render();
-        });
-
-        it("renders home > Workspaces > {workspace name} > All work files", function() {
-            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-            expect(this.page.$(".breadcrumb:eq(0) a").text()).toMatchTranslation("breadcrumbs.home");
-
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
-            expect(this.page.$(".breadcrumb:eq(1) a").text()).toMatchTranslation("breadcrumbs.workspaces");
-
-            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/" + this.model.workspace().id);
-            expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("Cool Workspace");
-
-            expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toMatchTranslation("breadcrumbs.workfiles.all");
-        });
-    });
-
     describe("#setup", function() {
         it("fetches the model", function() {
             var theUrl = "/workspaces/" + this.model.workspace().id;

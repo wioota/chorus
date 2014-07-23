@@ -3,15 +3,7 @@ chorus.pages.WorkspaceDatasetShowPage = chorus.pages.DatasetShowPage.extend({
     helpId: "dataset",
     isDataSourceBrowser: false,
 
-    crumbs: function() {
-        return [
-            {label: t("breadcrumbs.home"), url: "#/"},
-            {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
-            {label: this.workspace.displayName(), url: this.workspace.showUrl()},
-            {label: t("breadcrumbs.workspaces_data"), url: this.workspace.datasets().showUrl()},
-            {label: this.dataset.name()}
-        ];
-    },
+    crumbs: [],
 
     setup: function() {
         this._super('setup', arguments);

@@ -68,7 +68,6 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.sidebar = new chorus.views.DatasetSidebar({ workspace: this.workspace, listMode: true });
 
         this.onceLoaded(this.workspace, this.workspaceLoaded);
-        this.breadcrumbs.requiredResources.add(this.workspace);
     },
 
     // This prevents a 422 on a single dataset from redirecting the entire page.
@@ -78,14 +77,6 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.loadWorkspace(workspaceId);
     },
 
-    crumbs: function() {
-        return [
-            {label: t("breadcrumbs.home"), url: "#/"},
-            {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
-            {label: this.workspace.displayName(), url: this.workspace.showUrl()},
-            {label: t("breadcrumbs.workspaces_data")}
-        ];
-    },
 
     workspaceLoaded: function() {
         this.mainContent.contentHeader.options.sandbox = this.workspace.sandbox();

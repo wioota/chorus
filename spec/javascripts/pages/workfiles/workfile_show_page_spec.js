@@ -172,24 +172,6 @@ describe("chorus.pages.WorkfileShowPage", function() {
             this.page.render();
             expect(this.page.mainContent.contentHeader.$("img").attr("src")).toBe(chorus.urlHelpers.fileIconUrl('sql'));
         });
-
-        describe("breadcrumbs", function() {
-            it("renders home > Workspaces > {workspace name} > All work files > {workfile name}", function() {
-                expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-                expect(this.page.$(".breadcrumb:eq(0) a").text()).toMatchTranslation("breadcrumbs.home");
-
-                expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
-                expect(this.page.$(".breadcrumb:eq(1) a").text()).toMatchTranslation("breadcrumbs.workspaces");
-
-                expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/workspaces/4");
-                expect(this.page.$(".breadcrumb:eq(2) a").text()).toBe("Cool Workspace");
-
-                expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toMatchTranslation("breadcrumbs.workfiles.all");
-                expect(this.page.$(".breadcrumb:eq(3) a").attr("href")).toBe("#/workspaces/4/workfiles");
-
-                expect(this.page.$(".breadcrumb:eq(4)").text().trim()).toBe(this.model.get('fileName'));
-            });
-        });
     });
 
     describe("changing the workfile version", function() {

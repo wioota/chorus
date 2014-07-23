@@ -22,23 +22,11 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
 
         this.onceLoaded(this.model, this.buildPage);
 
-        this.breadcrumbs.requiredResources.add(this.model);
-
         this.subscribePageEvent("workfile:rename", this.reload);
     },
 
     reload: function() {
         window.location.reload();
-    },
-
-    crumbs: function() {
-        return [
-            {label:t("breadcrumbs.home"), url:"#/"},
-            {label:t("breadcrumbs.workspaces"), url:'#/workspaces'},
-            {label: this.workspace.loaded ? this.workspace.displayName() : "...", url:this.workspace.showUrl()},
-            {label:t("breadcrumbs.workfiles.all"), url:this.workspace.workfilesUrl()},
-            {label:this.model.loaded ? this.model.get("fileName") : "..." }
-        ];
     },
 
     buildPage: function() {

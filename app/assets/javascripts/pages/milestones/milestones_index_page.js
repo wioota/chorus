@@ -15,16 +15,6 @@ chorus.pages.MilestonesIndexPage = chorus.pages.Base.extend({
         this.listenTo(this.collection, "invalidated", function () { this.collection.fetch(); });
 
         this.requiredResources.add(this.workspace);
-        this.breadcrumbs.requiredResources.add(this.workspace);
-    },
-
-    crumbs: function() {
-        return [
-            {label: t("breadcrumbs.home"), url: "#/"},
-            {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
-            {label: this.workspace.loaded ? this.workspace.displayName() : "...", url: this.workspace.showUrl()},
-            {label: t("breadcrumbs.milestones")}
-        ];
     },
 
     makeModel: function(workspaceId) {

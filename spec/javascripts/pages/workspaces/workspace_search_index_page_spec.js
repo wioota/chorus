@@ -25,15 +25,6 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
                 this.server.completeFetchFor(this.page.search.workspace(), { id: "101", name: "Bob the workspace" });
             });
 
-            it("includes the workspace in the breadcrumbs", function() {
-                var crumbs = this.page.$("#breadcrumbs li");
-                expect(crumbs.length).toBe(3);
-                expect(crumbs.eq(0)).toContainTranslation("breadcrumbs.home");
-                expect(crumbs.eq(1).text().trim()).toBe("Bob the workspace");
-                expect(crumbs.eq(1).find("a")).toHaveHref(this.page.search.workspace().showUrl());
-                expect(crumbs.eq(2)).toContainTranslation("breadcrumbs.search_results");
-            });
-
             it("disables the 'data sources', 'people', 'hdfs entries' and 'workspaces' options in the filter menu", function() {
                 var menuOptions = this.page.$(".default_content_header .link_menu.type li");
                 expect(menuOptions.find("a").length).toBe(4);

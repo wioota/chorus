@@ -28,16 +28,6 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
         this.subscribePageEvent("job:selected", this.jobSelected);
 
         this.requiredResources.add(this.workspace);
-        this.breadcrumbs.requiredResources.add(this.workspace);
-    },
-
-    crumbs: function() {
-        return [
-            {label: t("breadcrumbs.home"), url: "#/"},
-            {label: t("breadcrumbs.workspaces"), url: '#/workspaces'},
-            {label: this.workspace.loaded ? this.workspace.displayName() : "...", url: this.workspace.showUrl()},
-            {label: t("breadcrumbs.jobs")}
-        ];
     },
 
     makeModel: function(workspaceId) {
