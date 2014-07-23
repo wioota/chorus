@@ -63,6 +63,10 @@ describe("chorus.pages.WorkspaceDatasetShowPage", function() {
                 this.server.completeFetchFor(this.workspace);
             });
 
+            it("has a titlebar", function() {
+                expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());
+            });
+
             it("constructs a dataset with the right id", function() {
                 expect(this.page.model).toBeA(chorus.models.WorkspaceDataset);
                 expect(this.page.model.get("id")).toBe(this.datasetId);

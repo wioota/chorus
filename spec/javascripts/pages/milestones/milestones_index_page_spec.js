@@ -14,6 +14,16 @@ describe("chorus.pages.MilestonesIndexPage", function () {
         it("fetches the collection", function() {
             expect(this.page.collection).toHaveBeenFetched();
         });
+
+        context("when the workspace fetch completes", function () {
+            beforeEach(function () {
+                this.server.completeFetchFor(this.workspace);
+            });
+
+            it("has a titlebar", function() {
+                expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());
+            });
+        });
     });
 
     describe("#render", function () {

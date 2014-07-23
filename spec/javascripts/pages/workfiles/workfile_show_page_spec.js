@@ -162,6 +162,13 @@ describe("chorus.pages.WorkfileShowPage", function() {
             this.server.completeFetchFor(this.model);
         });
 
+        it("has a titlebar", function() {
+            this.server.completeFetchFor(this.workspace);
+
+            this.page.render();
+            expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());
+        });
+
         it("it displays the workfile name in the content header", function() {
             expect(this.page.mainContent.contentHeader.$("h1").text()).toBe(this.model.get('fileName'));
             expect(this.page.mainContent.contentHeader.$("h1").attr("title")).toBe(this.model.get('fileName'));

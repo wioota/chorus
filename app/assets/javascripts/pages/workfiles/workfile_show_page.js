@@ -2,7 +2,7 @@ chorus.pages.WorkfileShowPage = chorus.pages.Base.extend({
     helpId: "workfile",
 
     makeModel: function(workspaceId) {
-        this.loadWorkspace(workspaceId, {fetch: false});
+        this.loadWorkspace(workspaceId);
     },
 
     setup: function(workspaceId, workfileId, versionId) {

@@ -473,6 +473,11 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
         });
     });
 
+    it("gets a titlebar", function() {
+        this.server.completeFetchFor(this.workspace);
+        expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());
+    });
+
     describe("when the workfile:selected event is triggered on the list view", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace);

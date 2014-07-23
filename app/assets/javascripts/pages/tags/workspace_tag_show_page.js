@@ -1,4 +1,6 @@
 chorus.pages.WorkspaceTagShowPage = chorus.pages.TagShowPage.extend({
+    crumbs: [],
+
     searchInMenuOptions: function() {
         return this._super("searchInMenuOptions", arguments).concat([
             { data: "this_workspace", text: t("search.in.this_workspace", {workspaceName: this.search.workspace().get("name")}) }
@@ -22,6 +24,9 @@ chorus.pages.WorkspaceTagShowPage = chorus.pages.TagShowPage.extend({
     makeModel: function(workspaceId) {
         this.workspaceId = workspaceId;
         this._super("makeModel", Array.prototype.slice.call(arguments, 1));
+
+        this.workspace = this.search.workspace();
+        this.requiredResources.add(this.workspace);
     },
 
     parseSearchParams: function(searchParams) {
@@ -31,9 +36,8 @@ chorus.pages.WorkspaceTagShowPage = chorus.pages.TagShowPage.extend({
     },
 
     setup: function() {
-        this.breadcrumbs.requiredResources.add(this.search.workspace());
         this.listenTo(this.search.workspace(), "loaded", this.resourcesLoaded);
-        this.search.workspace().fetch();
+        this.workspace.fetch();
     },
 
     resourcesLoaded: function() {

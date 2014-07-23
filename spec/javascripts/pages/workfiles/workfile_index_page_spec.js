@@ -91,9 +91,14 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             this.server.completeFetchFor(this.page.collection, backboneFixtures.workfileSet());
         });
 
+        it("has a titlebar", function() {
+            expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());
+        });
+
         it("shows the page title", function() {
             expect(this.page.$('.content_header h1').text().trim()).toEqual(t("workfiles.title"));
         });
+
         describe("multiple selection", function() {
             it("does not display the multiple selection section", function() {
                 expect(this.page.$(".multiple_selection")).toHaveClass("hidden");

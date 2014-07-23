@@ -30,35 +30,13 @@ describe("chorus.pages.HdfsDatasetShowPage", function () {
             this.server.completeFetchFor(this.dataset);
         });
 
+        it("has a titlebar", function () {
+            expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());
+        });
+
         it("sets up the main content", function () {
             expect(this.page.mainContent).toBeA(chorus.views.MainContentView);
             expect(this.page.sidebar).not.toBeUndefined();
-        });
-
-        describe("breadcrumbs", function () {
-            it("links to home for the first crumb", function () {
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).text()).toBe(t("breadcrumbs.home"));
-            });
-
-            it("links to /workspaces for the second crumb", function () {
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).attr("href")).toBe("#/workspaces");
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1).text()).toBe(t("breadcrumbs.workspaces"));
-            });
-
-            it("links to workspace show for the third crumb", function () {
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2).attr("href")).toBe(this.workspace.showUrl());
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(2).text()).toBe(this.workspace.displayName());
-            });
-
-            it("links to the workspace data tab for the fourth crumb", function () {
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).attr("href")).toBe(this.workspace.showUrl() + "/datasets");
-                expect(this.page.$("#breadcrumbs .breadcrumb a").eq(3).text()).toBe(t("breadcrumbs.workspaces_data"));
-            });
-
-            it("displays the object name for the fifth crumb", function () {
-                expect(this.page.$("#breadcrumbs .breadcrumb .slug").text()).toBe(this.dataset.name());
-            });
         });
 
         it("shows the dataset content", function () {

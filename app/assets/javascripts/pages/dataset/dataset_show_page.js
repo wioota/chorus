@@ -26,7 +26,7 @@ chorus.pages.DatasetShowPage = chorus.pages.Base.include(
 
             this.listenTo(this.dataset, "loaded", this.datasetLoaded);
 
-            this.breadcrumbs.requiredResources.add(this.dataset);
+            this.workspaceId || this.breadcrumbs.requiredResources.add(this.dataset);
         },
 
         datasetLoaded: function() {

@@ -34,19 +34,6 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
             this.server.completeFetchFor(this.workspace, this.workspace);
         });
 
-        it("displays the breadcrumbs", function() {
-            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-            expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toBe(t("breadcrumbs.home"));
-
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/workspaces");
-            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toBe(t("breadcrumbs.workspaces"));
-
-            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe(this.workspace.showUrl());
-            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("kagSpace");
-
-            expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toBe("Kaggle");
-        });
-
         it("shows the kaggle header", function() {
             expect(this.page.$(".content_header .summary")).toContainTranslation("kaggle.summary", {kaggleLink: 'Kaggle'});
         });

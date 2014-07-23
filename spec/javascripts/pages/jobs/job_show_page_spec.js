@@ -31,6 +31,16 @@ describe("chorus.pages.JobsShowPage", function () {
             this.server.completeFetchFor(this.model);
         });
 
+        context("after the workspace fetch completes", function () {
+            beforeEach(function () {
+                this.server.completeFetchFor(this.workspace);
+            });
+
+            it("has a titlebar", function() {
+                expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());
+            });
+        });
+
         it("should create the subnav on the jobs tab", function () {
             expect(this.page.subNav).toBeA(chorus.views.SubNav);
         });
@@ -160,4 +170,6 @@ describe("chorus.pages.JobsShowPage", function () {
             });
         });
     });
+
+
 });

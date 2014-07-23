@@ -3,6 +3,7 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
         this.workspaceId = '101';
         this.query = 'foo';
         this.page = new chorus.pages.WorkspaceSearchIndexPage(this.workspaceId, "this_workspace", "all", this.query);
+        this.workspace = this.page.search.workspace();
     });
 
     it("fetches the right search result", function() {
@@ -11,11 +12,17 @@ describe("chorus.pages.WorkspaceSearchIndexPage", function() {
     });
 
     it("fetches the workspace", function() {
-        expect(this.page.search.workspace()).toHaveBeenFetched();
+        expect(this.workspace).toHaveBeenFetched();
     });
 
-    it("has no required resources", function() {
-        expect(this.page.requiredResources.length).toBe(0);
+    context("when the workspace fetch completes", function () {
+        beforeEach(function () {
+            this.server.completeFetchFor(this.workspace);
+        });
+
+        it("has a titlebar", function() {
+            expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());
+        });
     });
 
     describe("when the workspace and search are fetched", function() {

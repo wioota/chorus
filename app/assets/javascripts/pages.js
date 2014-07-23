@@ -63,6 +63,7 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         "#header": "header",
         "#main_content": "mainContent",
         "#breadcrumbs": "breadcrumbs",
+        "#workspace_title": "workspaceTitle",
         "#sidebar .multiple_selection": "multiSelectSidebarMenu",
         "#sidebar .sidebar_content.primary": "sidebar",
         "#sidebar .sidebar_content.secondary": "secondarySidebar",
@@ -86,14 +87,21 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         }
     },
 
-    //Instantiate and attached the header and breadcrumb views for the page.
-    _initializeHeaderAndBreadcrumbs: function() {
-        this.header = this.header || new chorus.views.Header();
-        this.header.workspaceId = this.workspaceId;
-
+    setupBreadcrumbs: function () {
         var page = this;
         this.breadcrumbs = new chorus.views.BreadcrumbsView({
             breadcrumbs: _.isFunction(page.crumbs) ? _.bind(page.crumbs, page) : page.crumbs
         });
+    },
+
+    setupWorkspaceTitle: function () {
+        this.workspaceTitle = new chorus.views.WorkspaceTitle({model: this.workspace});
+    },
+
+    _initializeHeaderAndBreadcrumbs: function() {
+        this.header = this.header || new chorus.views.Header();
+        this.header.workspaceId = this.workspaceId;
+
+        this.workspaceId ? this.setupWorkspaceTitle() : this.setupBreadcrumbs();
     }
 });

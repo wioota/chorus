@@ -30,16 +30,18 @@ chorus.pages.WorkspaceSearchIndexPage = chorus.pages.SearchIndexPage.extend({
     makeModel: function() {
         this._super("makeModel", arguments);
         this.workspaceId = this.search.get("workspaceId");
+        this.workspace = this.search.workspace();
+        this.requiredResources.add(this.workspace);
     },
 
     setup: function() {
         this._super("setup", arguments);
         this.listenTo(this.search.workspace(), "loaded", this.resourcesLoaded);
-        this.search.workspace().fetch();
+        this.workspace.fetch();
     },
 
     resourcesLoaded: function() {
-        if(this.search.workspace().loaded && this.search.loaded) {
+        if(this.workspace.loaded && this.search.loaded) {
             this._super("resourcesLoaded", arguments);
         }
     }

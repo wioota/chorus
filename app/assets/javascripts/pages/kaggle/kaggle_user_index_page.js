@@ -31,21 +31,11 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
 
         this.subscribePageEvent("filterKaggleUsers", this.filterKaggleUsers);
 
-        this.breadcrumbs.requiredResources.add(this.workspace);
         this.requiredResources.add(this.workspace);
     },
 
     makeModel: function(workspaceId) {
         this.loadWorkspace(workspaceId);
-    },
-
-    crumbs: function() {
-        return [
-            {label: t("breadcrumbs.home"), url: "#/"},
-            {label: t("breadcrumbs.workspaces"), url: "#/workspaces"},
-            {label: this.workspace && this.workspace.loaded ? this.workspace.displayName() : "...", url: this.workspace && this.workspace.showUrl()},
-            {label: "Kaggle"}
-        ];
     },
 
     filterKaggleUsers: function(filterCollection) {

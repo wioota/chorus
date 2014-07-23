@@ -7,7 +7,7 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
 
     makeModel: function (workspaceId, jobId) {
         this.job = this.model = new chorus.models.Job({id: jobId, workspace: {id: workspaceId}});
-        this.loadWorkspace(workspaceId, {fetch: false});
+        this.loadWorkspace(workspaceId);
     },
 
     setup: function () {

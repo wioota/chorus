@@ -113,10 +113,15 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
         context("when the model has loaded", function() {
             beforeEach(function() {
-                this.server.completeFetchFor(this.page.model, backboneFixtures.workspace({id: 4, summary: "this is a summary", name: "Cool Workspace"}));
+                this.workspaceName = "Cool Workspace";
+                this.server.completeFetchFor(this.page.model, backboneFixtures.workspace({id: 4, summary: "this is a summary", name: this.workspaceName}));
                 this.server.completeFetchFor(this.page.model.activities(), [backboneFixtures.activity.noteOnWorkfileCreated(), backboneFixtures.activity.insightOnGreenplumDataSource()]);
                 this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightsCount, [], {}, { records: 5 });
                 this.page.render();
+            });
+
+            it("has a titlebar", function() {
+                expect(this.page.$(".workspace_title")).toContainText(this.workspaceName);
             });
 
             it("displays all activities by default", function() {

@@ -6,25 +6,6 @@ describe("chorus.pages.WorkspaceTagShowPage", function() {
         page = new chorus.pages.WorkspaceTagShowPage(workspace.id, "this_workspace", "all", tag.name());
     });
 
-    describe("breadcrumbs", function() {
-        beforeEach(function() {
-            this.server.completeFetchFor(page.search, { thisWorkspace: { docs: [], numFound: 0 }});
-            this.server.completeFetchFor(page.search.workspace(), { id: "101", name: "Bob the workspace" });
-        });
-
-        it("displays the Tags breadcrumb", function() {
-            var breadcrumbs = page.$("#breadcrumbs .breadcrumb a");
-
-            expect(breadcrumbs.eq(0).attr("href")).toBe("#/");
-            expect(breadcrumbs.eq(0).text()).toBe(t("breadcrumbs.home"));
-
-            expect(breadcrumbs.eq(1).attr("href")).toBe("#/tags");
-            expect(breadcrumbs.eq(1).text()).toBe(t("breadcrumbs.tags"));
-
-            expect(page.$("#breadcrumbs .breadcrumb .slug")).toContainText(tag.name());
-        });
-    });
-
     it("searches tags", function() {
         expect(page.search.get("isTag")).toBeTruthy();
     });
@@ -34,23 +15,25 @@ describe("chorus.pages.WorkspaceTagShowPage", function() {
     });
 
     it("has no required resources", function() {
-        expect(page.requiredResources.length).toBe(0);
+        expect(page.requiredResources.length).toBe(1);
     });
+
+    context("when the workspace fetch completes", function () {
+        beforeEach(function () {
+            this.server.completeFetchFor(workspace);
+        });
+
+        it("has a titlebar", function() {
+            expect(page.$(".workspace_title")).toContainText(workspace.name());
+        });
+    });
+
 
     describe("when the workspace and tagged objects are fetched", function() {
         context("when the search is scoped", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(page.search, { thisWorkspace: { docs: [], numFound: 0 }});
                 this.server.completeFetchFor(page.search.workspace(), { id: "101", name: "Bob the workspace" });
-            });
-
-            xit("includes the workspace in the breadcrumbs", function() {
-                var crumbs = page.$("#breadcrumbs li");
-                expect(crumbs.length).toBe(3);
-                expect(crumbs.eq(0)).toContainTranslation("breadcrumbs.home");
-                expect(crumbs.eq(1).text().trim()).toBe("Bob the workspace");
-                expect(crumbs.eq(1).find("a")).toHaveHref(page.search.workspace().showUrl());
-                expect(crumbs.eq(2)).toContainTranslation("breadcrumbs.search_results");
             });
 
             it("disables the 'data sources', 'people', 'hdfs entries' and 'workspaces' options in the filter menu", function() {

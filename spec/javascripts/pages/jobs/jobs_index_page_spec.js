@@ -38,6 +38,16 @@ describe("chorus.pages.JobsIndexPage", function () {
             expect(this.page.mainContent.contentDetails.options.multiSelect).toBeTruthy();
             expect(this.page.multiSelectSidebarMenu).toBeTruthy();
         });
+
+        context("after the workspace fetch completes", function () {
+            beforeEach(function () {
+                this.server.completeFetchFor(this.workspace);
+            });
+
+            it("has a titlebar", function() {
+                expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());
+            });
+        });
     });
 
     describe("when the job:selected event is triggered on the list view", function() {
