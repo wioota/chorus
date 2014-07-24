@@ -63,12 +63,15 @@ describe "Workspace datasets" do
     end
 
     it "shows the 'add credentials' link in the sidebar" do
+      dataset_name = workspace.associated_datasets.first.dataset.name
+      page.find('.dataset_item', :text => dataset_name).click
       page.find('.notice.no_credentials').should have_text("You do not have permission to access the data source #{workspace.associated_datasets.first.dataset.data_source.name}. Click here to add your credentials.")
     end
   end
 
   context "when the user has invalid credentials for an associated dataset" do
     let(:account) { workspace.sandbox.data_source.account_for_user(user) }
+    let(:dataset_name) { workspace.associated_datasets.first.dataset.name }
     before { account.invalid_credentials! }
 
     context "and the datasource is shared" do
@@ -82,6 +85,7 @@ describe "Workspace datasets" do
 
         it "shows the 'update credentials' notice in the sidebar" do
           visit("#/workspaces/#{workspace.id}/datasets")
+          page.find('.dataset_item', :text => dataset_name).click
           page.should have_selector('.dataset_sidebar .notice.invalid_credentials')
           page.should have_selector('.dataset_sidebar .notice .update_credentials')
         end
@@ -93,6 +97,7 @@ describe "Workspace datasets" do
 
         it "shows the 'update credentials' notice in the sidebar" do
           visit("#/workspaces/#{workspace.id}/datasets")
+          page.find('.dataset_item', :text => dataset_name).click
           page.should have_selector('.dataset_sidebar .notice.invalid_credentials')
           page.should have_selector('.dataset_sidebar .notice .update_credentials')
         end
@@ -103,6 +108,7 @@ describe "Workspace datasets" do
 
         it "shows the 'update credentials' notice without a link" do
           visit("#/workspaces/#{workspace.id}/datasets")
+          page.find('.dataset_item', :text => dataset_name).click
           page.should have_selector('.dataset_sidebar .notice.invalid_credentials')
           page.should_not have_selector('.dataset_sidebar .notice .update_credentials')
         end
@@ -114,6 +120,7 @@ describe "Workspace datasets" do
 
       it "shows the 'update credentials' link in the sidebar" do
         visit("#/workspaces/#{workspace.id}/datasets")
+        page.find('.dataset_item', :text => dataset_name).click
         page.should have_selector('.dataset_sidebar .notice.invalid_credentials')
         page.should have_selector('.dataset_sidebar .notice .update_credentials')
       end
