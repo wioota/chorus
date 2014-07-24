@@ -2,6 +2,7 @@
 
 $header-margin: 30px;
 $expanded-search-width: 450px;
+$notification-token-width: $header-margin * 2;
 
 .oi[data-glyph=data-source]:before {
   content: url(../images/data-source-glyph.svg);
@@ -50,10 +51,9 @@ $expanded-search-width: 450px;
             &.active {
                 background-color: $brand-tint;
             }
-            a {
+            a.label {
                 color: white;
                 text-decoration: none;
-                height: 100%;
                 display: block;
 
                 height: $header-height;
@@ -122,21 +122,13 @@ $expanded-search-width: 450px;
                 }
 
                 &.username {
-                    &:hover {
-                        background-color: $brand-tint;
-                    }
-                    width: $header-margin * 3;
+                    &:hover { background-color: $brand-tint; }
+                    padding: 0 12px;
                     margin-right: $header-margin;
-                    a {
-                        text-align: center;
-                        span {
-                            @include ellipsis;
-                        }
-                    }
                 }
 
                 &.messages {
-                    width: $header-margin * 2;
+                    width: $notification-token-width;
                     text-align: center;
 
                     a.notifications .lozenge {
@@ -266,9 +258,10 @@ $expanded-search-width: 450px;
         }
 
         .menu.popup_notifications {
-            right: $header-margin * 4;
-            width: 320px;
-            padding: 0;
+            $width: 320px;
+            margin-left: -($width - $notification-token-width / 2);
+            width: $width;
+
             line-height: 14px;
 
             .notification_area {
