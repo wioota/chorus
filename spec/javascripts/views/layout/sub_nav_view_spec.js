@@ -21,7 +21,6 @@ describe("chorus.views.SubNav", function() {
 
             it("the milestones tab does not contain a link", function() {
                 expect(this.view.$("li.milestones a")).not.toExist();
-                expect(this.view.$("li.milestones span")).toHaveAttr("title", t("not_licensed.only_summit"));
             });
         });
 
@@ -33,7 +32,6 @@ describe("chorus.views.SubNav", function() {
 
             it("the jobs tab does not contain a link", function() {
                 expect(this.view.$("li.jobs a")).not.toExist();
-                expect(this.view.$("li.jobs span")).toHaveAttr("title", t("not_licensed.only_summit"));
             });
         });
 
