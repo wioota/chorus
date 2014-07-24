@@ -27,7 +27,7 @@ describe "Workspaces" do
       click_link "Edit Workspace"
       attach_file("image_upload_input", File.join(File.dirname(__FILE__), '../fixtures/User.png'))
       click_button "Save Changes"
-      page.should have_selector(".breadcrumb:contains('#{workspace.name}')")
+      page.should have_selector(".workspace_title")
       workspace.reload.image.original_filename.should == 'User.png'
     end
 
