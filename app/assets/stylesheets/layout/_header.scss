@@ -149,7 +149,7 @@ $notification-token-width: $header-margin * 2;
         }
 
         .search {
-            $icon-box-width: 32px;
+            $icon-box-width: 30px;
             $collapsed-search-width: 178px;
 
             overflow: hidden;
@@ -184,7 +184,6 @@ $notification-token-width: $header-margin * 2;
                 font-weight: normal;
 
                 transition-duration: 0.7s;
-                padding-bottom: 6px;
                 padding-left: $icon-box-width;
                 padding-right: $icon-box-width;
                 width: $collapsed-search-width;
