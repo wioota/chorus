@@ -20,7 +20,10 @@ chorus.Mixins.StickyHeader = {
         if (!this.$el) return;
         this.topPosition = this.topPosition || this.$el.offset().top;
         var distanceToTop = this.topPosition  - $(window).scrollTop();
-        var distanceToHeader = distanceToTop - $(".header").outerHeight();
+
+        var $subNav = $(".sub_nav");
+        var header =  $subNav.length ? $subNav : $(".header");
+        var distanceToHeader = distanceToTop - header.outerHeight();
         this.contentDetailsAtTop = distanceToHeader <= 0;
 
         _.each(this.stickyHeaderElements(), _.bind(this.makeSpacerForElement, this));

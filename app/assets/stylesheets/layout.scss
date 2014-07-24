@@ -26,9 +26,9 @@
 }
 
 .workspace > #guts {
-    padding-top: $header-height + $subheader-height;
+    padding-top: $workspace-header-height;
     & > #sidebar_wrapper {
-        top: $header-height + $subheader-height;
+        top: $workspace-header-height;
     }
 }
 
@@ -38,7 +38,7 @@
 
 //hax for position fixed header and sidebar
 .logged_in_layout {
-    > .header, .workspace_title {
+    > .header, .workspace_title, .sub_nav {
         position: fixed;
         width: 100%;
         z-index: $header-z-index;

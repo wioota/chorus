@@ -1,3 +1,7 @@
+.workspace .fixed_header {
+    top: $workspace-header-height;
+}
+
 .fixed_header {
   position: fixed;
   min-width: $page-min-width - $sidebar-width - $sidebar-padding-x - 8;

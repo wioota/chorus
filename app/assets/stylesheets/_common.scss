@@ -16,7 +16,6 @@ $pumpkin: #f7771b;
 // These colors were mapped to names via www.color-blindness.com/color-name-hue.
 $pacific-blue: rgb(0, 160, 229);
 $alice-blue: rgb(245, 250, 254);
-$bright-gray: rgb(88, 89, 95);
 $bright-turquoise: rgb(21, 214, 203);
 $light-gray: rgb(234,238,241);
 $charcoal: #464646;
@@ -57,6 +56,7 @@ $border-color-dark: rgb(215, 227, 236);
 $color-text1: darken($charcoal, 10%);
 $color-text2: $charcoal;
 $color-text3: lighten($charcoal, 10%);
+$bright-gray: rgb(88, 89, 95);
 $color-text4: lighten($bright-gray, 20%);
 $link-color: $brand;
 $disabled-text: rgb(147, 154, 159);
@@ -70,6 +70,8 @@ $light: 300;
 //Dimensions
 $header-height: 50px;
 $subheader-height: 60px;
+$subnav-height: 45px;
+$workspace-header-height: $subnav-height + $subheader-height + $header-height;
 $summary-line-height: 19px;
 $border-width: 1px;
 
@@ -441,6 +443,15 @@ $action-bar-secondary-background-color: $light-blue;
 		border-top: $height/2 solid transparent;
 		border-bottom: $height/2 solid transparent;
 	}
+}
+
+@mixin lozenge($padding, $min-width) {
+    font-weight: $semibold;
+    display: inline-block;
+    padding: $padding;
+    text-align: center;
+    border-radius: 30px;
+    min-width: $min-width;
 }
 
 @mixin grab_cursor {
