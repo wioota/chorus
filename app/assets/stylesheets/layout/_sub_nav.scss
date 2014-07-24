@@ -9,35 +9,17 @@
         display: inline;
         float: left;
         padding: 0 10px;
+        a { display: block; }
 
-        a, span {
-            display: block;
+        .lozenge {
             text-transform: uppercase;
             font-size: 12px;
             color: $color-text2;
         }
 
-        .lozenge {
-            height: 21px;
-            line-height: 21px;
-            @include lozenge(0, 110px);
-        }
+        @include pill-tab(90px);
 
-        &.selected {
-            &:hover .lozenge {
-                background: $brand-dark;
-            }
 
-            .lozenge {
-                background: $brand-dark;
-                color: white;
-            }
-        }
-
-        &:hover .lozenge {
-            background: $shaded-background-color;
-        }
     }
-
     @include after-clearfix;
 }

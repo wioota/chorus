@@ -134,9 +134,8 @@ $notification-token-width: $header-margin * 2;
                     a.notifications .lozenge {
                         &.empty { background: $brand-dark; }
                         background: $notification;
-                        height: $header-height / 3;
-                        line-height: $header-height / 3;
-                        @include lozenge(2px, 30px);
+
+                        @include lozenge(2px, 30px, $header-height/3);
                     }
                 }
 

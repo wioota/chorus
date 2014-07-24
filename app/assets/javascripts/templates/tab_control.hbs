@@ -1,8 +1,9 @@
-<div class='tabs_container'>
-    <ul class='tabs'>
-        <img class='divider' src='/images/sidebar_tab_separator.png'>
-        {{#each tabKeys}}<li data-name="{{name}}">{{text}}</li><img class='divider' src='/images/sidebar_tab_separator.png'>{{/each}}
-    </ul>
-</div>
+<ul class='tabs'>
+    {{#each tabKeys}}
+        <li class="tab" data-name="{{name}}">
+            <div class="lozenge">{{text}}</div>
+        </li>
+    {{/each}}
+</ul>
 
 <div class="tabbed_area"/>
