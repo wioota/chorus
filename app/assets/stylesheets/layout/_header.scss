@@ -183,7 +183,8 @@ $notification-token-width: $header-margin * 2;
                 color: white;
                 font-weight: normal;
 
-                transition-duration: 0.7s;
+                @include transition-duration(0.7s);
+                @include transition-timing-function(cubic-bezier(0,0,0,1));
                 padding-left: $icon-box-width;
                 padding-right: $icon-box-width;
                 width: $collapsed-search-width;
