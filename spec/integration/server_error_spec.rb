@@ -15,7 +15,7 @@ describe "500 Internal Server Error" do
         click_button("Upload File")
       end
 
-      find('.sub_nav a', :text => "Work Files").click
+      find('.sub_nav a', :text => "Work Files".upcase).click
       page.should have_content "some.txt"
 
       workfile_version = workspace.workfiles.find_by_file_name("some.txt").latest_workfile_version

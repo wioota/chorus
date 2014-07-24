@@ -15,7 +15,7 @@ describe "Workfiles" do
         attach_file("workfile[versions_attributes][0][contents]", File.join(File.dirname(__FILE__), '../fixtures/some.txt'))
         click_button("Upload File")
       end
-      find('.sub_nav a', :text => "Work Files").click
+      find('.sub_nav a', :text => "Work Files".upcase).click
       page.should have_content "some.txt"
       workspace.workfiles.find_by_file_name("some.txt").should_not be_nil
     end
@@ -54,7 +54,7 @@ describe "Workfiles" do
         wait_for_page_load
         find('a', :text => "Alphabetically", :visible => true).click
         find('a', :text => "By Date", :visible => true).click
-        find('.workfile_sidebar .fileName').should have_content(workfile_first_by_date.file_name)
+        sleep 2 # im sorry - how to know when page re-renders without sidebar?
         workfiles = page.all(".workfile_item")
         workfiles.first.text.should include workfile_first_by_date.file_name
         workfiles.last.text.should include workfile_last_by_date.file_name

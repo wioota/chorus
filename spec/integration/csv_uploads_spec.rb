@@ -31,7 +31,7 @@ describe "CSV Uploads", :greenplum_integration do
     within ".dataset_sidebar" do
       page.should have_no_selector(".loading_section")
       page.should have_no_text("loading...")
-      first("li", :text => "Information").click()
+      first("li", :text => "Details".upcase).click
       csv_length = File.read(csv_file).split("\n").length - 1
       page.should have_content("Rows (est) #{csv_length}")
     end
