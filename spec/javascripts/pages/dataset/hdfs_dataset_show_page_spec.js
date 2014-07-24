@@ -30,6 +30,12 @@ describe("chorus.pages.HdfsDatasetShowPage", function () {
             this.server.completeFetchFor(this.dataset);
         });
 
+        it("has the subnav focused on data", function () {
+            expect(this.page.subNav).toBeA(chorus.views.SubNav);
+            expect(this.page.subNav.$(".datasets")).toHaveClass("selected");
+        });
+
+
         it("has a titlebar", function () {
             expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());
         });

@@ -23,6 +23,8 @@ chorus.pages.HdfsDatasetShowPage = chorus.pages.Base.extend({
             this.model.fetch();
         });
         this.handleFetchErrorsFor(this.model);
+
+        this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
     },
 
     setupMainContent: function() {
