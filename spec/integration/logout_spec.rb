@@ -4,7 +4,7 @@ describe "Logout" do
   it "logs the user out" do
     login(users(:admin))
     wait_for_page_load
-    find(".header .username a").click
+    find(".header .username a.label").click
     find(".menu.popup_username").should have_no_selector(".hidden")
     within '.menu.popup_username' do
       find("a", :text => "Sign Out", :visible => true).click
