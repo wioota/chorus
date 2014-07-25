@@ -17,7 +17,7 @@ $pumpkin: #f7771b;
 $pacific-blue: rgb(0, 160, 229);
 $alice-blue: rgb(245, 250, 254);
 $bright-turquoise: rgb(21, 214, 203);
-$light-gray: rgb(234,238,241);
+$light-gray: rgb(234, 238, 241);
 $charcoal: #464646;
 
 // Tints & Shades of Brand Colors
@@ -303,6 +303,11 @@ $action-bar-secondary-background-color: $light-blue;
     color: $brand;
     font-size: 18px;
     font-weight: $light;
+}
+
+@mixin font-action-link {
+    color: $brand;
+    font-size: 14px;
 }
 
 @mixin font-secondary-link {

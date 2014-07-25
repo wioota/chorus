@@ -1,0 +1,11 @@
+{{#if canUpdate}}
+    <div class="panel">
+        <ul>
+            {{#each actions}}
+                <li class="action">
+                    <a class="{{name}}">{{message}}</a>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}

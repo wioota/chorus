@@ -141,6 +141,11 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 this.server.completeFetchFor(this.workspace);
             });
 
+            itBehavesLike.aPageWithPrimaryActions([
+                {name: 'create_hdfs_dataset', target: chorus.dialogs.CreateHdfsDataset},
+                {name: 'browse_data_sources', target: "/data_sources"}
+            ]);
+
             itHandlesTheWorkspaceResponse(t("dataset.import.need_sandbox_no_permissions"));
         });
     });
@@ -287,6 +292,12 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             beforeEach(function() {
                 this.server.completeFetchFor(this.workspace);
             });
+
+            itBehavesLike.aPageWithPrimaryActions([
+                {name: 'import_file',         target: chorus.dialogs.WorkspaceFileImport},
+                {name: 'create_hdfs_dataset', target: chorus.dialogs.CreateHdfsDataset},
+                {name: 'browse_data_sources', target: "/data_sources"}
+            ]);
 
             it("fetches the account for the current user", function() {
                 expect(this.server.lastFetchFor(this.account)).not.toBeUndefined();

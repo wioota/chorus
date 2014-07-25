@@ -29,7 +29,6 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         }, this), 300);
 
         this.buildSidebar();
-
         this.buttonView = new chorus.views.WorkspaceDatasetIndexPageButtons({model: this.workspace});
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
         this.mainContent = new chorus.views.MainContentList({
@@ -70,6 +69,8 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.onceLoaded(this.workspace, this.workspaceLoaded);
     },
 
+
+
     // This prevents a 422 on a single dataset from redirecting the entire page.
     unprocessableEntity: $.noop,
 
@@ -77,8 +78,25 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.loadWorkspace(workspaceId);
     },
 
+    buildPrimaryActionPanel: function () {
+        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({model: this.workspace, actions: this.primaryActions()});
+    },
+
+    primaryActions: function () {
+        var actions =  [
+            {name: 'create_hdfs_dataset', target: chorus.dialogs.CreateHdfsDataset},
+            {name: 'browse_data_sources', target: '/data_sources'}
+        ];
+
+        var fileImport = {name: 'import_file', target: chorus.dialogs.WorkspaceFileImport};
+
+        this.workspace.sandbox() && actions.push(fileImport);
+
+        return actions;
+    },
 
     workspaceLoaded: function() {
+        this.buildPrimaryActionPanel();
         this.mainContent.contentHeader.options.sandbox = this.workspace.sandbox();
         this.render();
 

@@ -72,7 +72,11 @@ chorus.dialogs.WorkspaceFileImport = chorus.dialogs.Upload.extend({
     },
 
     additionalContext: function() {
-        return { canonicalName: this.workspace.sandbox().canonicalName() };
+        var workspace = this.workspace;
+        var sandbox = workspace.sandbox();
+        var canonicalName = sandbox.canonicalName();
+
+        return { canonicalName: canonicalName };
     },
 
     importDestination: function() {

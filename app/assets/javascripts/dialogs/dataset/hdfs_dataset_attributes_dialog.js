@@ -65,6 +65,8 @@ chorus.dialogs.HdfsDatasetAttributes = chorus.dialogs.Base.include(chorus.Mixins
             needsDataSource: false,
             needsWorkspace: false
         };
-    }
+    },
+
+    findModel: function() { throw new Error('Not implemented on abstract parent'); }
 
 });
