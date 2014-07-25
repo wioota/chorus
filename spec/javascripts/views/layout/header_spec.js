@@ -325,7 +325,7 @@ describe("chorus.views.Header", function() {
                 expect(usernameSpan.text()).toBe(userFirstName);
             });
 
-            it("jaz has the full name in the title of the username link", function() {
+            it("has the full name in the title of the username link", function() {
                 var userFullName = chorus.session.user().displayName();
                 var title        = this.view.$(".username a").attr("title");
 
@@ -380,26 +380,36 @@ describe("chorus.views.Header", function() {
                         expect(usernameDiv).not.toHaveClass("active");
                     });
                 });
+
+                describe("clicking links in the popup", function () {
+                    beforeEach(function () {
+                        this.view.$('.popup_username a').click();
+                    });
+
+                    it("does not close the popup and intercept the event (regression)", function () {
+                        expect(chorus.PopupMenu.toggle).not.toHaveBeenCalled();
+                    });
+                });
             });
 
             describe("the popup menu", function() {
                 itBehavesLike.PopupMenu(".username a", ".menu.popup_username", null, ".username");
                 
                 it("has a link to 'your profile'", function() {
-                    expect(this.view.$(".menu.popup_username a[href='#/users/55']").text().trim()).toBe(t("header.your_profile"));
+                    expect(this.view.$(".menu.popup_username a[href='#/users/55']")).toContainTranslation("header.your_profile");
                 });
 
                 it("has a link to 'sign out'", function() {
-                    expect(this.view.$(".menu.popup_username a[href='#/logout']").text().trim()).toBe(t("header.sign_out"));
+                    expect(this.view.$(".menu.popup_username a[href='#/logout']")).toContainTranslation("header.sign_out");
                 });
 
                 it("has a link to 'about'", function() {
-                    expect(this.view.$(".menu.popup_username a[href='#/about']").text().trim()).toBe(t("header.about"));
+                    expect(this.view.$(".menu.popup_username a[href='#/about']")).toContainTranslation("header.about");
                 });
 
                 describe('the help link', function(){
                     it("has a link to 'about'", function() {
-                        expect(this.view.$(".menu.popup_username a.helpLink").text().trim()).toBe(t("help.link"));
+                        expect(this.view.$(".menu.popup_username a.helpLink")).toContainTranslation("help.link");
                     });
                     
                     context("it is alpine branded", function () {
@@ -489,7 +499,7 @@ describe("chorus.views.Header", function() {
                 
                 it("has a link to 'home'", function() {
                     var linkElement = this.view.$(".menu.popup_drawer a[href='#/']");
-                    expect(linkElement.text().trim()).toBe(t("header.home"));
+                    expect(linkElement).toContainTranslation("header.home");
                 });
 
                 ['workspaces', 'data_sources', 'users', 'tags'].forEach(function(place) {
