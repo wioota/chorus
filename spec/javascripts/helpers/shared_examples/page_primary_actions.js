@@ -20,7 +20,7 @@ jasmine.sharedExamples.aPageWithPrimaryActions = function(actions) {
             this.page.render();
         });
 
-        it("has only these actions: " + _.pluck(actions, 'action'), function () {
+        it("has only these actions: " + _.pluck(actions, 'name'), function () {
             expect(this.$panel.find('.action').length).toEqual(actions.length);
         });
 

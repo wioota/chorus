@@ -22,13 +22,12 @@ chorus.views.PrimaryActionPanel = chorus.views.Base.extend({
     },
 
     eventBindings: function (actions) {
-        var bindEvent = function (action) {
+        var bindEvent = function (events, action) {
             events[("click a." + action.name)] = this.launcherFunction(action.target);
+            return events;
         };
 
-        var events = {}; // TODO: Use _.reduce
-        _.each(actions, bindEvent, this);
-        return events;
+        return _.reduce(actions, bindEvent, {}, this);
     },
 
     launcherFunction: function (target) {
