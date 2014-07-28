@@ -12,10 +12,6 @@ jasmine.sharedExamples.aPageWithPrimaryActions = function(actions) {
             this.$panel = this.page.$('.primary_action_panel');
             this.navigationSpy = this.navigationSpy || spyOn(chorus.router, "navigate");
             this.modalSpy = this.modalSpy || stubModals();
-            this.model = this.page.primaryActionPanel.model;
-            this.model.loaded = true;
-            spyOn(this.model, 'canUpdate').andReturn(true);
-            spyOn(this.model, 'isActive').andReturn(true);
 
             this.page.render();
         });

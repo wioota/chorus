@@ -4,6 +4,7 @@ chorus.views.PrimaryActionPanel = chorus.views.Base.extend({
 
     setup: function () {
         this.events = this.eventBindings(this.options.actions);
+        _.extend(this, this.options.models);
     },
 
     additionalContext: function () {
@@ -18,7 +19,7 @@ chorus.views.PrimaryActionPanel = chorus.views.Base.extend({
     },
 
     canUpdate: function() {
-        return this.model.loaded && this.model.canUpdate() && this.model.isActive();
+        return this.workspace.loaded && this.workspace.canUpdate() && this.workspace.isActive();
     },
 
     eventBindings: function (actions) {
@@ -31,7 +32,7 @@ chorus.views.PrimaryActionPanel = chorus.views.Base.extend({
     },
 
     launcherFunction: function (target) {
-        var dialogLauncher = function () { new target({workspace: this.model}).launchModal(); };
+        var dialogLauncher = function () { new target(this.options.models).launchModal(); };
         var navigator = function () { chorus.router.navigate(target); };
 
         var targetIsConstructor = target instanceof Function;

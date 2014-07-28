@@ -139,6 +139,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             beforeEach(function() {
                 setLoggedInUser({ id: "888", admin: false});
                 this.server.completeFetchFor(this.workspace);
+                this.workspace.loaded = true;
             });
 
             itBehavesLike.aPageWithPrimaryActions([
@@ -293,11 +294,20 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 this.server.completeFetchFor(this.workspace);
             });
 
-            itBehavesLike.aPageWithPrimaryActions([
-                {name: 'import_file',         target: chorus.dialogs.WorkspaceFileImport},
-                {name: 'create_hdfs_dataset', target: chorus.dialogs.CreateHdfsDataset},
-                {name: 'browse_data_sources', target: "/data_sources"}
-            ]);
+            context("and the workspace is active & can update", function () {
+                beforeEach(function () {
+                    this.workspace.loaded = true;
+                    spyOn(this.workspace, 'canUpdate').andReturn(true);
+                    spyOn(this.workspace, 'isActive').andReturn(true);
+
+                });
+
+                itBehavesLike.aPageWithPrimaryActions([
+                    {name: 'import_file',         target: chorus.dialogs.WorkspaceFileImport},
+                    {name: 'create_hdfs_dataset', target: chorus.dialogs.CreateHdfsDataset},
+                    {name: 'browse_data_sources', target: "/data_sources"}
+                ]);
+            });
 
             it("fetches the account for the current user", function() {
                 expect(this.server.lastFetchFor(this.account)).not.toBeUndefined();
