@@ -12,14 +12,7 @@ chorus.views.PrimaryActionPanel = chorus.views.Base.extend({
             return { name: action.name, message: t('actions.' + action.name) };
         };
 
-        return {
-            canUpdate: this.canUpdate(),
-            actions: _.map(this.options.actions, templateValues)
-        };
-    },
-
-    canUpdate: function() {
-        return this.workspace.loaded && this.workspace.canUpdate() && this.workspace.isActive();
+        return { actions: _.map(this.options.actions, templateValues) };
     },
 
     eventBindings: function (actions) {

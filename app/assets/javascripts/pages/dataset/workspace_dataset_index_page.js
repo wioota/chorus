@@ -70,7 +70,6 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
     },
 
 
-
     // This prevents a 422 on a single dataset from redirecting the entire page.
     unprocessableEntity: $.noop,
 
@@ -86,7 +85,14 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         this.primaryActionPanel = new chorus.views.PrimaryActionPanel(dependencies);
     },
 
+    workspaceCanUpdate: function () {
+
+        return this.workspace.loaded && this.workspace.canUpdate() && this.workspace.isActive();
+    },
+
     primaryActions: function () {
+        if (!this.workspaceCanUpdate()) return [];
+
         var actions =  [
             {name: 'create_hdfs_dataset', target: chorus.dialogs.CreateHdfsDataset},
             {name: 'browse_data_sources', target: '/data_sources'}
