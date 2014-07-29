@@ -102,7 +102,7 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
 
     launchImportWorkfilesDialog: function(e) {
         e && e.preventDefault();
-        var dialog = this.makeModal('import_workfile', {workspaceId: this.model.id});
+        var dialog = this.makeModal('import_workfile', {pageModel: this.model});
         dialog.launchModal();
     }
 });

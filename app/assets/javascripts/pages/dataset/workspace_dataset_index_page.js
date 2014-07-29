@@ -80,7 +80,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
     buildPrimaryActionPanel: function () {
         var dependencies = {
             actions: this.primaryActions(),
-            models: {workspace: this.workspace}
+            pageModel: this.workspace
         };
         this.primaryActionPanel = new chorus.views.PrimaryActionPanel(dependencies);
     },

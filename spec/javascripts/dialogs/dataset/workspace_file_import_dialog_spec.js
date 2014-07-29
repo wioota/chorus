@@ -16,7 +16,7 @@ describe("chorus.dialogs.WorkspaceFileImport", function() {
         ];
         this.datasets = this.validDatasets.concat(this.invalidDatasets);
         this.dialog = new chorus.dialogs.WorkspaceFileImport({
-            workspace: this.workspace
+            pageModel: this.workspace
         });
         spyOn(this.dialog, "modalClosed").andCallThrough();
         this.dialog.launchModal();

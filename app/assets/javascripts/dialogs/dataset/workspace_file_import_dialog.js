@@ -5,7 +5,7 @@ chorus.dialogs.WorkspaceFileImport = chorus.dialogs.Upload.extend({
     title: t("dataset.import.title"),
 
     makeModel: function() {
-        this.workspace = this.options.workspace;
+        this.workspace = this.options.pageModel;
         this.resource = this.model = this.csvImport = new chorus.models.CSVImport({ workspaceId: this.workspace.id });
         this.csvOptions = {hasHeader: true};
     },

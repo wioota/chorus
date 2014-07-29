@@ -13,11 +13,11 @@ chorus.views.WorkspaceDatasetIndexPageButtons = chorus.views.Base.extend({
     menuEvents: {
         "a.import_file": function(e) {
             e && e.preventDefault();
-            new chorus.dialogs.WorkspaceFileImport({ workspace: this.model }).launchModal();
+            new chorus.dialogs.WorkspaceFileImport({ pageModel: this.model }).launchModal();
         },
         "a.create_hdfs_dataset": function(e) {
             e && e.preventDefault();
-            new chorus.dialogs.CreateHdfsDataset({ workspace: this.model }).launchModal();
+            new chorus.dialogs.CreateHdfsDataset({ pageModel: this.model }).launchModal();
         },
         "a.browse_data_sources": function(e) {
             e && e.preventDefault();

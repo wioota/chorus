@@ -46,7 +46,7 @@ describe("chorus.views.WorkspaceDatasetIndexPageButtons", function() {
                         expect(this.qtipElement.find('.import_file')).toContainTranslation('actions.import_file');
                         this.qtipElement.find('.import_file').click();
                         expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkspaceFileImport);
-                        expect(this.modalSpy.lastModal().options.workspace).toBe(this.workspace);
+                        expect(this.modalSpy.lastModal().workspace).toBe(this.workspace);
                     });
                 });
 
@@ -56,7 +56,7 @@ describe("chorus.views.WorkspaceDatasetIndexPageButtons", function() {
                         expect(this.qtipElement.find('.create_hdfs_dataset')).toContainTranslation('actions.create_hdfs_dataset');
                         this.qtipElement.find('.create_hdfs_dataset').click();
                         expect(this.modalSpy).toHaveModal(chorus.dialogs.CreateHdfsDataset);
-                        expect(this.modalSpy.lastModal().options.workspace).toBe(this.workspace);
+                        expect(this.modalSpy.lastModal().workspace).toBe(this.workspace);
                     });
                 });
 

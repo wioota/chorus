@@ -63,7 +63,8 @@ chorus.dialogs.HdfsDatasetAttributes = chorus.dialogs.Base.include(chorus.Mixins
     additionalContext: function () {
         return {
             needsDataSource: false,
-            needsWorkspace: false
+            needsWorkspace: false,
+            datasetPersisted: this.model.id
         };
     },
 

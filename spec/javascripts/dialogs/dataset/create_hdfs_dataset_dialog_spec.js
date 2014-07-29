@@ -3,7 +3,7 @@ describe("chorus.dialogs.CreateHdfsDataset", function() {
         this.modalSpy = stubModals();
         this.workspace = backboneFixtures.workspace();
         this.dataSources = [backboneFixtures.hdfsDataSource(), backboneFixtures.hdfsDataSource(), backboneFixtures.hdfsDataSource()];
-        this.dialog = new chorus.dialogs.CreateHdfsDataset({ workspace: this.workspace });
+        this.dialog = new chorus.dialogs.CreateHdfsDataset({ pageModel: this.workspace });
         this.dialog.launchModal();
     });
 

@@ -1,9 +1,8 @@
 describe("chorus.dialogs.WorkfilesImport", function() {
     beforeEach(function() {
         chorus.models.Config.instance().set({fileSizesMbWorkfiles: 10});
-        this.model = backboneFixtures.workfile.sql({ workspace: { id: 4 } });
-        var workfileSet = new chorus.collections.WorkfileSet([this.model], { workspaceId: 4 });
-        this.dialog = new chorus.dialogs.WorkfilesImport({ workspaceId: 4, pageModel: this.model, pageCollection: workfileSet });
+        this.workspace = backboneFixtures.workspace();
+        this.dialog = new chorus.dialogs.WorkfilesImport({pageModel: this.workspace});
         spyOn(this.dialog, 'centerHorizontally');
     });
 
@@ -18,7 +17,7 @@ describe("chorus.dialogs.WorkfilesImport", function() {
         });
 
         it("has the right action url", function() {
-            expect(this.dialog.$("form").attr("action")).toBe("/workspaces/4/workfiles");
+            expect(this.dialog.$("form").attr("action")).toBe("/workspaces/" + this.workspace.id + "/workfiles");
         });
 
         it("disables the upload button", function() {
@@ -54,13 +53,13 @@ describe("chorus.dialogs.WorkfilesImport", function() {
                     id: "9",
                     file_name: "new_file.txt",
                     mime_type: "text/plain",
-                    workspace: { id: "4" }
+                    workspace: { id: this.workspace.id.toString() }
                 }
             });
         });
 
         it("navigates to the show page of the workfile", function() {
-            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/4/workfiles/9");
+            expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/" + this.workspace.id + "/workfiles/9");
         });
 
         it ("enables the choosefile button again", function() {

@@ -3,7 +3,7 @@
     <input class="name mbm" maxlength="256" value="{{objectName}}">
     {{#if needsDataSource}}
         <div class="data_source mbm">
-            <div class="loading_text{{#if loaded}} hidden{{/if}}"><span class="loading_spinner"></span></div>
+            <div class="loading_text{{#if dataSourcesLoaded}} hidden{{/if}}"><span class="loading_spinner"></span></div>
             <label class="required">{{t "create_hdfs_dataset_dialog.data_source_select_title"}}</label><br/>
 
             {{#if dataSourcesLoaded}}
@@ -26,7 +26,7 @@
         <a class='workspace_picked'>{{t "associate_hdfs_dataset_from_entry.select_workspace"}}</a>
     {{/if}}
 
-    {{#if id}}
+    {{#if datasetPersisted}}
         {{formControls "edit_hdfs_dataset.submit"}}
     {{else}}
         {{formControlsWithDisabledSubmit "create_hdfs_dataset_dialog.submit"}}

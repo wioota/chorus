@@ -50,6 +50,6 @@ chorus.views.WorkfileIndexPageButtons = chorus.views.Base.extend({
 
     launchWorkfileImportsDialog: function(e) {
         e && e.preventDefault();
-        new chorus.dialogs.WorkfilesImport({workspaceId: this.model.get('id')}).launchModal();
+        new chorus.dialogs.WorkfilesImport({pageModel: this.model}).launchModal();
     }
 });
