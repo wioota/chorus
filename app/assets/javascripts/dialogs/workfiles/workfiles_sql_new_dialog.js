@@ -8,7 +8,7 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.include(chorus.Mixins.Dialo
 
     makeModel:function () {
         this.model = this.model || new chorus.models.Workfile({
-            workspace: { id: this.options.workspaceId }
+            workspace: { id: this.options.pageModel.id }
         });
     },
 

@@ -1,6 +1,7 @@
 describe("chorus.dialogs.WorkfilesSqlNew", function() {
     beforeEach(function() {
-        this.dialog = new chorus.dialogs.WorkfilesSqlNew({ workspaceId: 4 });
+        this.workspace = backboneFixtures.workspace();
+        this.dialog = new chorus.dialogs.WorkfilesSqlNew({ pageModel: this.workspace });
     });
 
     it("does not re-render when the model changes", function() {
@@ -63,7 +64,7 @@ describe("chorus.dialogs.WorkfilesSqlNew", function() {
             });
 
             it("posts to the correct URL", function() {
-                expect(this.server.requests[0].url).toBe("/workspaces/4/workfiles");
+                expect(this.server.requests[0].url).toBe("/workspaces/" + this.workspace.id + "/workfiles");
             });
 
             it("puts the button in the loading state", function() {
@@ -81,7 +82,7 @@ describe("chorus.dialogs.WorkfilesSqlNew", function() {
                 });
 
                 it("redirects to the new workspace show page", function() {
-                    expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/4/workfiles/10108");
+                    expect(chorus.router.navigate).toHaveBeenCalledWith("#/workspaces/" + this.workspace.id + "/workfiles/10108");
                 });
 
                 it("dismisses the dialog", function() {
