@@ -1,6 +1,7 @@
 describe("chorus.dialogs.InsightsNewDialog", function() {
     beforeEach(function() {
-        this.dialog = new chorus.dialogs.InsightsNew({ allowWorkspaceAttachments: true, workspaceId: 22 });
+        this.model = backboneFixtures.workspace();
+        this.dialog = new chorus.dialogs.InsightsNew({pageModel: this.model});
 
         $('#jasmine_content').append(this.dialog.el);
         this.dialog.render();
@@ -11,8 +12,14 @@ describe("chorus.dialogs.InsightsNewDialog", function() {
             expect(this.dialog.model).toBeA(chorus.models.Insight);
         });
 
-        it("uses the correct workspace id", function() {
-            expect(this.dialog.model.get("workspaceId")).toBe(22);
+        it("uses the correct entity", function() {
+            expect(this.dialog.model.get("workspaceId")).toBe(this.model.id);
+            expect(this.dialog.model.get("entityId")).toBe(this.model.id);
+            expect(this.dialog.model.get("entityType")).toBe(this.model.entityType);
+        });
+
+        it("allows workspace attachments", function () {
+            expect(this.dialog.additionalContext().allowWorkspaceAttachments).toBeTruthy();
         });
     });
 
