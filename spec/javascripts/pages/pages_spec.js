@@ -315,8 +315,14 @@ describe("chorus.pages.Base", function() {
 
         beforeEach(function() {
             this.modalSpy = stubModals();
-
-            this.view = new chorus.pages.Base();
+            var randomModel = _.sample([
+                backboneFixtures.workspace,
+                backboneFixtures.user,
+                backboneFixtures.dataset,
+                backboneFixtures.hdfsDataSource,
+                backboneFixtures.typeAheadSearchResult
+            ])();
+            this.view = new chorus.pages.Base({model: randomModel});
             chorus.page = this.view;
             this.view.mainContent = stubView();
             chorus.bindModalLaunchingClicks(this.view);

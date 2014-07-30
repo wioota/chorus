@@ -1,5 +1,5 @@
 chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
-    constructorName: "WorkfilesSqlNew",
+    constructorName: "WorkfilesSqlNewDialog",
 
     templateName:"workfiles_sql_new",
     title:t("workfiles.sql_dialog.title"),
@@ -8,7 +8,7 @@ chorus.dialogs.WorkfilesSqlNew = chorus.dialogs.Base.include(chorus.Mixins.Dialo
 
     makeModel:function () {
         this.model = this.model || new chorus.models.Workfile({
-            workspace: { id: this.options.pageModel.id }
+            workspace: {id: this.options.pageModel.id}
         });
     },
 

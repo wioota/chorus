@@ -865,7 +865,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 pageCollection: this.models.workfileSet
             }),
 
-            "New SQL Workfile": new chorus.dialogs.WorkfilesSqlNew({ workspaceId: 'the-singing-detective' }),
+            "New SQL Workfile": new chorus.dialogs.WorkfilesSqlNew({ pageModel: {id: 'the-singing-detective'} }),
 
             "Associate With Workspace": new chorus.dialogs.AssociateWithWorkspace({
                 model: this.models.dataset,

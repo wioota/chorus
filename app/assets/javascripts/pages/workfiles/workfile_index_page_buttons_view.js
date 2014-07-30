@@ -12,7 +12,7 @@ chorus.views.WorkfileIndexPageButtons = chorus.views.Base.extend({
     menuEvents: {
         "a.create_sql_workfile": function(e) {
             e && e.preventDefault();
-            new chorus.dialogs.WorkfilesSqlNew({workspaceId: this.model.get('id')}).launchModal();
+            new chorus.dialogs.WorkfilesSqlNew({pageModel: this.model}).launchModal();
         },
         "a.create_work_flow": function(e) {
             e && e.preventDefault();

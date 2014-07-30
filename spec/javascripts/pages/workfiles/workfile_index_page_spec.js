@@ -91,6 +91,11 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             this.server.completeFetchFor(this.page.collection, backboneFixtures.workfileSet());
         });
 
+        itBehavesLike.aPageWithPrimaryActions([
+            {name: 'import_workfile', target: chorus.dialogs.WorkfilesImport},
+            {name: 'create_sql_workfile', target: chorus.dialogs.WorkfilesSqlNew}
+        ]);
+
         it("has a titlebar", function() {
             expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());
         });

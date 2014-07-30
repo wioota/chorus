@@ -10,6 +10,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
 
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
         this.buttonView = new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
+        this.primaryActionPanel = this.buildPrimaryActionPanel();
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Workfile",
             collection: this.collection,
@@ -102,5 +103,14 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         }
 
         return items;
+    },
+
+    buildPrimaryActionPanel: function () {
+        var actions = [
+            {name: 'import_workfile', target: chorus.dialogs.WorkfilesImport},
+            {name: 'create_sql_workfile', target: chorus.dialogs.WorkfilesSqlNew}
+        ];
+
+        return new chorus.views.PrimaryActionPanel({pageModel: this.workspace, actions: actions});
     }
 });

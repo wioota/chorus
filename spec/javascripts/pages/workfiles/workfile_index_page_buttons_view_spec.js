@@ -48,7 +48,7 @@ describe("chorus.views.WorkfileIndexPageButtons", function() {
                         expect(this.qtipElement.find('.create_sql_workfile')).toContainTranslation('actions.create_sql_workfile');
                         this.qtipElement.find('.create_sql_workfile').click();
                         expect(this.modalSpy).toHaveModal(chorus.dialogs.WorkfilesSqlNew);
-                        expect(this.modalSpy.lastModal().options.workspaceId).toBe(this.workspace.id);
+                        expect(this.modalSpy.lastModal().model.workspace().id).toBe(this.workspace.id);
                     });
                 });
             });
