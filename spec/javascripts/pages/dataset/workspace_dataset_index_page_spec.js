@@ -303,9 +303,9 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 });
 
                 itBehavesLike.aPageWithPrimaryActions([
-                    {name: 'import_file',         target: chorus.dialogs.WorkspaceFileImport},
                     {name: 'create_hdfs_dataset', target: chorus.dialogs.CreateHdfsDataset},
-                    {name: 'browse_data_sources', target: "/data_sources"}
+                    {name: 'browse_data_sources', target: "/data_sources"},
+                    {name: 'import_file',         target: chorus.dialogs.WorkspaceFileImport}
                 ]);
             });
 

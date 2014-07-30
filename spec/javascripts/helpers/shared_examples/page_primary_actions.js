@@ -12,12 +12,13 @@ jasmine.sharedExamples.aPageWithPrimaryActions = function(actions) {
             this.$panel = this.page.$('.primary_action_panel');
             this.navigationSpy = this.navigationSpy || spyOn(chorus.router, "navigate");
             this.modalSpy = this.modalSpy || stubModals();
-
-            this.page.render();
         });
 
         it("has only these actions: " + _.pluck(actions, 'name'), function () {
-            expect(this.$panel.find('.action').length).toEqual(actions.length);
+            var actionLinks = _.pluck(this.$panel.find('.action a'), 'className');
+            var actionNames = _.pluck(actions, 'name');
+
+            expect(actionLinks).toEqual(actionNames);
         });
 
 

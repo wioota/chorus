@@ -2,15 +2,6 @@ chorus.views.WorkspaceShowSidebar = chorus.views.Sidebar.extend({
     constructorName: "WorkspaceShowSidebarView",
     templateName:"workspace_show_sidebar",
 
-    events: {
-        "click .edit_workspace": 'launchEditWorkspaceDialog',
-        "click a.edit_workspace_members": 'launchWorkspaceEditMembersDialog',
-        "click .delete_workspace": 'launchWorkspaceDeleteAlert',
-        "click .new_note": 'launchNotesNewDialog',
-        "click a.new_sandbox": 'launchSandboxNewDialog',
-        "click .new_insight": 'launchInsightsNewDialog'
-    },
-
     subviews: {
         ".workspace_member_list": "workspaceMemberList"
     },

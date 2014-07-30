@@ -15,6 +15,41 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
         this.listenTo(this.model, 'saved', this.render);
     },
 
+    preRender: function () {
+        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({pageModel: this.model, actions: this.primaryActions()});
+    },
+
+    primaryActions: function () {
+        var canKaggle   = !!chorus.models.Config.instance().get("kaggleConfigured"); // && this.model.canUpdate()
+        var active      = !!this.model.isActive();
+        var admin       = !!this.model.workspaceAdmin();
+        var sandbox     = !!this.model.sandbox();
+
+        var actions = [
+            {name: 'workspace_settings', target: chorus.dialogs.EditWorkspace}
+        ];
+
+        var memberActions = [
+            {name: 'add_insight', target: chorus.dialogs.InsightsNew},
+            {name: 'add_note', target: chorus.dialogs.NotesNew}
+        ];
+
+        var addSandbox      = {name: 'create_a_sandbox', target: chorus.dialogs.SandboxNew};
+        var deleteWorkspace = {name: 'delete_workspace', target: chorus.alerts.WorkspaceDelete};
+        var editMembers     = {name: 'edit_workspace_members', target: chorus.dialogs.WorkspaceEditMembers};
+        var kaggle          = {name: 'find_kaggle_contributors', target: this.model.showUrl() + "/kaggle"};
+
+
+        active && _.each(memberActions, function (action) { actions.push(action); });
+
+        sandbox || (active &&   actions.push(addSandbox));
+        active && admin &&      actions.push(editMembers);
+        admin &&                actions.push(deleteWorkspace);
+        canKaggle &&            actions.push(kaggle);
+
+        return actions;
+    },
+
     makeModel: function(workspaceId) {
         this.loadWorkspace(workspaceId, {required: true});
         this.model = this.workspace;

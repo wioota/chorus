@@ -113,8 +113,11 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
         context("when the model has loaded", function() {
             beforeEach(function() {
+                chorus.models.Config.instance().set({ kaggleConfigured: false });
+                spyOn(this.page.model, "workspaceAdmin").andReturn(false);
                 this.workspaceName = "Cool Workspace";
-                this.server.completeFetchFor(this.page.model, backboneFixtures.workspace({id: 4, summary: "this is a summary", name: this.workspaceName}));
+                var workspace = backboneFixtures.workspace({id: 4, summary: "this is a summary", name: this.workspaceName});
+                this.server.completeFetchFor(this.page.model, workspace);
                 this.server.completeFetchFor(this.page.model.activities(), [backboneFixtures.activity.noteOnWorkfileCreated(), backboneFixtures.activity.insightOnGreenplumDataSource()]);
                 this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightsCount, [], {}, { records: 5 });
                 this.page.render();
@@ -122,6 +125,78 @@ describe("chorus.pages.WorkspaceShowPage", function() {
 
             it("has a titlebar", function() {
                 expect(this.page.$(".workspace_title")).toContainText(this.workspaceName);
+            });
+
+            itBehavesLike.aPageWithPrimaryActions([
+                {name: 'workspace_settings', target: chorus.dialogs.EditWorkspace},
+                {name: 'add_insight', target: chorus.dialogs.InsightsNew},
+                {name: 'add_note', target: chorus.dialogs.NotesNew},
+            ]);
+
+            describe("when the workspace does not have a sandbox", function () {
+                beforeEach(function () {
+                    spyOn(this.page.model, "sandbox").andReturn(undefined);
+                    this.page.render();
+                });
+
+                itBehavesLike.aPageWithPrimaryActions([
+                    {name: 'workspace_settings', target: chorus.dialogs.EditWorkspace},
+                    {name: 'add_insight', target: chorus.dialogs.InsightsNew},
+                    {name: 'add_note', target: chorus.dialogs.NotesNew},
+                    {name: 'create_a_sandbox', target: chorus.dialogs.SandboxNew}
+                ]);
+
+                context("but the workspace is archived", function () {
+                    beforeEach(function () {
+                        this.page.model.set({archivedAt: "2012-05-08 21:40:14"});
+                        this.page.render();
+                    });
+
+                    itBehavesLike.aPageWithPrimaryActions([
+                        {name: 'workspace_settings', target: chorus.dialogs.EditWorkspace}
+                    ]);
+                });
+            });
+
+            describe("when the current user has workspace admin permissions on the workspace", function () {
+                beforeEach(function () {
+                    this.page.model.workspaceAdmin.andReturn(true);
+                    this.page.render();
+                });
+
+                itBehavesLike.aPageWithPrimaryActions([
+                    {name: 'workspace_settings', target: chorus.dialogs.EditWorkspace},
+                    {name: 'add_insight', target: chorus.dialogs.InsightsNew},
+                    {name: 'add_note', target: chorus.dialogs.NotesNew},
+                    {name: 'edit_workspace_members', target: chorus.dialogs.WorkspaceEditMembers},
+                    {name: 'delete_workspace', target: chorus.alerts.WorkspaceDelete}
+                ]);
+
+                context("but the workspace is archived", function () {
+                    beforeEach(function () {
+                        this.page.model.set({archivedAt: "2012-05-08 21:40:14"});
+                        this.page.render();
+                    });
+
+                    itBehavesLike.aPageWithPrimaryActions([
+                        {name: 'workspace_settings', target: chorus.dialogs.EditWorkspace},
+                        {name: 'delete_workspace', target: chorus.alerts.WorkspaceDelete}
+                    ]);
+                });
+            });
+
+            describe("when Kaggle is enabled", function () {
+                beforeEach(function () {
+                    chorus.models.Config.instance().set({ kaggleConfigured: true });
+                    this.page.render();
+                });
+
+                itBehavesLike.aPageWithPrimaryActions([
+                    {name: 'workspace_settings', target: chorus.dialogs.EditWorkspace},
+                    {name: 'add_insight', target: chorus.dialogs.InsightsNew},
+                    {name: 'add_note', target: chorus.dialogs.NotesNew},
+                    {name: 'find_kaggle_contributors', target: '#/workspaces/4/kaggle'}
+                ]);
             });
 
             it("displays all activities by default", function() {

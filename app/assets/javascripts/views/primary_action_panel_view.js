@@ -2,9 +2,8 @@ chorus.views.PrimaryActionPanel = chorus.views.Base.extend({
     constructorName: "PrimaryActionPanel",
     templateName: "primary_action_panel",
 
-    setup: function () {
-        this.events = this.eventBindings(this.options.actions);
-        _.extend(this, this.options.models);
+    setup: function (options) {
+        this.events = this.eventBindings(options.actions);
     },
 
     additionalContext: function () {
