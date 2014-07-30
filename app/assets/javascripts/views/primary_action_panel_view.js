@@ -31,4 +31,3 @@ chorus.views.PrimaryActionPanel = chorus.views.Base.extend({
         return targetIsConstructor ? dialogLauncher : navigator;
     }
 });
-

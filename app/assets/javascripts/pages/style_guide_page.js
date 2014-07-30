@@ -775,7 +775,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Change Password": new chorus.dialogs.ChangePassword(),
 
-            "New Note": new chorus.dialogs.NotesNew(),
+            "New Note": new chorus.dialogs.NotesNew({pageModel: new chorus.models.Job()}),
 
             "Comment": new chorus.dialogs.Comment(),
 
@@ -792,7 +792,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 collection: this.collections.workfileSet
             }),
 
-            "Insights New": new chorus.dialogs.InsightsNew(),
+            "Insights New": new chorus.dialogs.InsightsNew({pageModel: new chorus.models.Job()}),
 
             "Pick Workspace": new chorus.dialogs.PickWorkspace({collection: this.collections.workspaceSet}),
 

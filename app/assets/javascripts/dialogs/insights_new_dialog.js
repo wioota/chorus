@@ -13,10 +13,12 @@ chorus.dialogs.InsightsNew = chorus.dialogs.MemoNew.extend({
     },
 
     makeModel:function () {
+        this.pageModel = this.options.pageModel;
+
         this.model = new chorus.models.Insight({
-            entityType: this.options.pageModel.entityType,
-            entityId: this.options.pageModel.id,
-            workspaceId: this.options.pageModel.id
+            entityType: this.pageModel.entityType,
+            entityId: this.pageModel.id,
+            workspaceId: this.pageModel.id
         });
         this._super("makeModel", arguments);
     }
