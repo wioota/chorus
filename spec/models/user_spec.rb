@@ -259,6 +259,7 @@ describe User do
     it { should have_many(:owned_workspaces) }
     it { should have_many(:activities) }
     it { should have_many(:events) }
+    it { should have_many(:dashboard_items).dependent(:destroy) }
   end
 
   describe ".admin_count" do

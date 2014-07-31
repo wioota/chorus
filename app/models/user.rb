@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
   has_many :hdfs_data_sources, :foreign_key => :owner_id
   has_many :gnip_data_sources, :foreign_key => :owner_id
   has_many :data_source_accounts, :foreign_key => :owner_id, :dependent => :destroy
+  has_many :dashboard_items, :dependent => :destroy
 
   has_many :owned_workspaces, :foreign_key => :owner_id, :class_name => 'Workspace'
   has_many :memberships, :dependent => :destroy
