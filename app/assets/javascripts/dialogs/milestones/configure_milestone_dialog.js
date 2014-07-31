@@ -26,7 +26,7 @@ chorus.dialogs.ConfigureMilestone = chorus.dialogs.Base.include(chorus.Mixins.Di
             this.model = this.model.clone();
         }
         this.creating = !this.model;
-        this.model = this.model || new chorus.models.Milestone({ workspace: {id: this.options.workspace.id} });
+        this.model = this.model || new chorus.models.Milestone({ workspace: {id: this.options.pageModel.id} });
     },
 
     create: function () {

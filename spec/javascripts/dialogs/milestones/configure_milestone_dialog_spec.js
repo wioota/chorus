@@ -9,7 +9,7 @@ describe("chorus.dialogs.ConfigureMilestone", function () {
         spyOn(chorus.router, "navigate");
 
         this.workspace = backboneFixtures.workspace();
-        this.dialog = new chorus.dialogs.ConfigureMilestone({workspace: this.workspace});
+        this.dialog = new chorus.dialogs.ConfigureMilestone({pageModel: this.workspace});
         this.dialog.render();
     });
 

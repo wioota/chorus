@@ -57,12 +57,27 @@ describe("chorus.pages.MilestonesIndexPage", function () {
                 });
             });
 
-            describe("actions", function () {
+            itBehavesLike.aPageWithPrimaryActions([
+                {name: 'create_milestone', target: chorus.dialogs.ConfigureMilestone}
+            ]);
+
+
+            describe("if the user cannot update the workspace", function () {
                 beforeEach(function () {
-                    this.modalSpy = stubModals();
+                    this.page.workspace.set({permission: ['read']});
+                    this.page.render();
                 });
 
-                itBehavesLike.aDialogLauncher('button.create_milestone', chorus.dialogs.ConfigureMilestone);
+                itBehavesLike.aPageWithPrimaryActions([]);
+            });
+
+            describe("if the workspace is archived", function () {
+                beforeEach(function () {
+                    this.page.workspace.set({archivedAt: "2012-05-08 21:40:14"});
+                    this.page.render();
+                });
+
+                itBehavesLike.aPageWithPrimaryActions([]);
             });
         });
 

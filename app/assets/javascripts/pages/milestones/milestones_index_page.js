@@ -17,6 +17,10 @@ chorus.pages.MilestonesIndexPage = chorus.pages.Base.extend({
         this.requiredResources.add(this.workspace);
     },
 
+    preRender: function () {
+        this.buildPrimaryActionPanel();
+    },
+
     makeModel: function(workspaceId) {
         this.loadWorkspace(workspaceId);
     },
@@ -42,6 +46,12 @@ chorus.pages.MilestonesIndexPage = chorus.pages.Base.extend({
 
             }
         };
+    },
+
+    buildPrimaryActionPanel: function () {
+        var canUpdate = this.workspace.isActive() && this.workspace.canUpdate();
+        var actions = canUpdate ? [ {name: 'create_milestone', target: chorus.dialogs.ConfigureMilestone} ] : [];
+        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({actions: actions, pageModel: this.workspace});
     }
 
 });

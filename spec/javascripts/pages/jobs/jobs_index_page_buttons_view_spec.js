@@ -30,10 +30,6 @@ describe("chorus.views.JobsIndexPageButtons", function () {
                 expect(this.view.$("button.create_job")).toExist();
                 expect(this.view.$("button.create_job")).toContainTranslation("actions.create_job");
             });
-
-            describe("the 'Create' button", function () {
-                itBehavesLike.aDialogLauncher('button.create_job', chorus.dialogs.ConfigureJob);
-            });
         });
     });
 
