@@ -42,6 +42,7 @@ chorus.pages.WorkspaceIndexPage = chorus.pages.Base.extend({
             contentDetailsOptions: { multiSelect: true }
         });
 
+        this.buildPrimaryActions();
         this.sidebar = new chorus.views.WorkspaceListSidebar();
         this.subscribePageEvent("workspace:selected", this.setModel);
 
@@ -56,5 +57,10 @@ chorus.pages.WorkspaceIndexPage = chorus.pages.Base.extend({
 
     setModel: function(workspace) {
         this.model = workspace;
+    },
+
+    buildPrimaryActions: function() {
+        var actions = [{name: 'create_workspace', target: chorus.dialogs.WorkspacesNew}];
+        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({actions: actions});
     }
 });

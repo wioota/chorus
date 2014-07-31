@@ -39,9 +39,7 @@ describe("chorus.pages.WorkspaceIndexPage", function() {
                 expect(this.page.mainContent.contentDetails.options.multiSelect).toBeTruthy();
             });
 
-            it("displays an 'add workspace' button", function() {
-                expect(this.page.$("button:contains('Create Workspace')")).toExist();
-            });
+            itBehavesLike.aPageWithPrimaryActions([{name: 'create_workspace', target: chorus.dialogs.WorkspacesNew}]);
 
             describe("when the workspace:selected event is triggered on the list view", function() {
                 beforeEach(function() {
