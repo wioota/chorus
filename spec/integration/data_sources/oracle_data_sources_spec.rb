@@ -15,7 +15,7 @@ describe "Data Source", :oracle_integration do
   describe "adding an oracle data source" do
     before do
       visit("#/data_sources")
-      click_button "Add Data Source"
+      click_link "Add Data Source"
     end
 
     it "creates a data source" do

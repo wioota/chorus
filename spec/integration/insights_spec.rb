@@ -17,7 +17,8 @@ describe "Insights" do
       find("a", :text => /^#{workspace_name}$/).click()
     end
 
-    find("div.sidebar_content.primary").should have_content(workspace_name)
+    find("#workspace_title").should have_content(workspace_name)
+
     click_link "Add an insight"
 
     within_modal do

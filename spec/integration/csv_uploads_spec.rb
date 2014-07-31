@@ -11,14 +11,9 @@ describe "CSV Uploads", :greenplum_integration do
   it "uploads a csv file into a new table" do
     login(users(:admin))
     visit("#/workspaces/#{workspace.id}/datasets")
-
     wait_for_page_load
 
-    click_button "Add Data"
-
-    # Wait for qtip to be visible before clicking on its menu items
-    page.should have_css('.qtip', visible: true)
-    click_link "Import File"
+    click_link 'Import File'
 
     csv_file = File.expand_path(File.join(File.dirname(__FILE__), '../fixtures/test.csv'))
     within_modal do
@@ -28,6 +23,7 @@ describe "CSV Uploads", :greenplum_integration do
     end
     find("a.name:contains('test')").click
     page_title_should_be("test")
+
     within ".dataset_sidebar" do
       page.should have_no_selector(".loading_section")
       page.should have_no_text("loading...")
@@ -35,6 +31,7 @@ describe "CSV Uploads", :greenplum_integration do
       csv_length = File.read(csv_file).split("\n").length - 1
       page.should have_content("Rows (est) #{csv_length}")
     end
+
     current_route.should =~ /datasets\/(\d)+/
   end
 end

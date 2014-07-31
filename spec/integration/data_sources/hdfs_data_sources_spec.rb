@@ -7,7 +7,7 @@ describe 'Data Sources', :hdfs_integration do
     before do
       login(users(:admin))
       visit('#/data_sources')
-      click_button 'Add Data Source'
+      click_link 'Add Data Source'
     end
 
     it 'creates an hadoop data source' do

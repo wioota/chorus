@@ -24,10 +24,8 @@ describe "Users" do
       fill_in 'notes', :with => "This is a test user."
       click_button "Add This User"
 
-      within ".main_content" do
-        click_link "new person"
-        find("h1").should have_content("new person")
-      end
+      click_link "Add User"
+      within(".main_content") { find("h1").should have_content("new person") }
     end
 
     it "user can upload a user image" do

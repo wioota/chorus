@@ -24,8 +24,14 @@ chorus.views.PrimaryActionPanel = chorus.views.Base.extend({
     },
 
     launcherFunction: function (target) {
-        var dialogLauncher = function () { new target({pageModel: this.options.pageModel}).launchModal(); };
-        var navigator = function () { chorus.router.navigate(target); };
+        var dialogLauncher = function (e) {
+            e.preventDefault();
+            new target({pageModel: this.options.pageModel}).launchModal();
+        };
+        var navigator = function (e) {
+            e.preventDefault();
+            chorus.router.navigate(target);
+        };
 
         var targetIsConstructor = target instanceof Function;
         return targetIsConstructor ? dialogLauncher : navigator;
