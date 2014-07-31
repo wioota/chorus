@@ -5,9 +5,7 @@ chorus.views.DataSourceIndexContentDetails = chorus.views.Base.include(
     templateName:"data_source_index_content_details",
     additionalClass: "action_bar_primary",
 
-    events: {
-        "click button.add_data_source": "launchAddDataSourceDialog"
-    },
+    events: {},
 
     setup: function(){
         this.dataSources = this.options.dataSources;
@@ -28,12 +26,5 @@ chorus.views.DataSourceIndexContentDetails = chorus.views.Base.include(
             loaded: this.dataSources.loaded && this.gnipDataSources.loaded && this.hdfsDataSources.loaded,
             count: this.dataSources.length + this.hdfsDataSources.length + this.gnipDataSources.length
         };
-    },
-
-    launchAddDataSourceDialog: function(e) {
-        e.preventDefault();
-        var dialog = new chorus.dialogs.DataSourcesNew();
-        dialog.launchModal();
     }
-
 });
