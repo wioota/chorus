@@ -148,4 +148,18 @@ resource "Users" do
       status.should == 200
     end
   end
+
+  post '/users/:user_id/dashboard_config' do
+    let(:user_id) { users(:owner).to_param }
+    let(:'modules[]') { %w(Module2 Module1) }
+
+    parameter :user_id, 'Id of a user'
+    parameter :'modules[]', 'List of dashboard items'
+
+    required_parameters :'modules[]'
+
+    example_request "Update a user's dashboard config" do
+      status.should == 200
+    end
+  end
 end

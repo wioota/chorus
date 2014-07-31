@@ -2,13 +2,18 @@ class UserDashboardsController < ApplicationController
 
   def show
     authorize! :update, user
-    modules = user.dashboard_items.order(:location).map &:name
 
-    if modules.empty?
-      modules = DashboardItem::DEFAULT_MODULES
-    end
+    present DashboardConfig.new(user)
+  end
 
-    render :json => { :response => { :modules => modules } }
+  def create
+    authorize! :update, user
+
+    modules = params[:modules]
+    config = DashboardConfig.new(user)
+    config.update(modules)
+
+    present config
   end
 
   private

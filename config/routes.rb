@@ -10,7 +10,7 @@ Chorus::Application.routes.draw do
       get :ldap
     end
     resource :image, :only => [:show, :create], :controller => :user_images
-    resource :dashboard_config, :only => [:show], :controller => :user_dashboards
+    resource :dashboard_config, :only => [:show, :create], :controller => :user_dashboards
   end
 
   resources :hdfs_data_sources, :only => [:create, :index, :show, :update, :destroy] do
