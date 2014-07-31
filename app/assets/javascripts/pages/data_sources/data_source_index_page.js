@@ -48,6 +48,12 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
         this.subscribePageEvent("clear_selection", this.clearModel);
     },
 
+    preRender: function () {
+        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({actions: [
+            {name: 'add_data_source', target: chorus.dialogs.DataSourcesNew}
+        ], pageModel: {}});
+    },
+
     setModel:function (dataSource) {
         this.model = dataSource;
     },

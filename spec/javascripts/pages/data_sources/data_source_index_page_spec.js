@@ -61,11 +61,9 @@ describe("chorus.pages.DataSourceIndexPage", function() {
             this.page.render();
         });
 
-        it('launches a new data source dialog', function() {
-            var modal = stubModals();
-            this.page.mainContent.contentDetails.$("button").click();
-            expect(modal.lastModal()).toBeA(chorus.dialogs.DataSourcesNew);
-        });
+        itBehavesLike.aPageWithPrimaryActions([
+            {name: 'add_data_source', target: chorus.dialogs.DataSourcesNew}
+        ]);
 
         it("sets the page model when a 'data_source:selected' event is triggered", function() {
             var dataSource = backboneFixtures.gpdbDataSource();
