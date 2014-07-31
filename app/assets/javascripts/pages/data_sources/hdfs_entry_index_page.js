@@ -55,10 +55,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
             modelClass: "HdfsEntry",
             collection: this.collection,
             useCustomList: true,
-            contentDetailsOptions: {
-                multiSelect: true,
-                buttonView: new chorus.views.HdfsEntryIndexPageButtons({model: this.hdfsEntry})
-            }
+            contentDetailsOptions: { multiSelect: true }
         });
 
         this.buildPrimaryActionPanel();
