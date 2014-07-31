@@ -19,7 +19,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
 
         spyOn(chorus.router, "navigate");
 
-        this.dialog = new chorus.dialogs.ConfigureJob({workspace: this.workspace});
+        this.dialog = new chorus.dialogs.ConfigureJob({pageModel: this.workspace});
         spyOn(this.dialog.endDatePicker, "disable");
         this.dialog.render();
     });

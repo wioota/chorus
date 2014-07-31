@@ -31,7 +31,7 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
             this.model = this.model.clone();
         }
         this.creating = !this.model;
-        this.model = this.model || new chorus.models.Job({ workspace: {id: this.options.workspace.id}, intervalUnit: 'on_demand' });
+        this.model = this.model || new chorus.models.Job({ workspace: {id: this.options.pageModel.id}, intervalUnit: 'on_demand' });
     },
 
     modelSaved: function () {

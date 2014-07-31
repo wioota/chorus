@@ -30,6 +30,10 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
         this.requiredResources.add(this.workspace);
     },
 
+    preRender: function () {
+        this.buildPrimaryActionPanel();
+    },
+
     makeModel: function(workspaceId) {
         this.loadWorkspace(workspaceId);
     },
@@ -98,5 +102,11 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
     teardown: function () {
         clearInterval(this.collectionFetchPollerID);
         return this._super('teardown');
+    },
+
+    buildPrimaryActionPanel: function () {
+        var canUpdate = this.workspace.isActive() && this.workspace.canUpdate();
+        var actions = canUpdate ? [{name: 'create_job', target: chorus.dialogs.ConfigureJob}] : [];
+        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({actions: actions, pageModel: this.workspace});
     }
 });

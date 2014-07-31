@@ -112,6 +112,28 @@ describe("chorus.pages.JobsIndexPage", function () {
             this.jobs = this.page.collection.models;
         });
 
+        itBehavesLike.aPageWithPrimaryActions([
+            {name: 'create_job', target: chorus.dialogs.ConfigureJob}
+        ]);
+
+        describe("if the user cannot update the workspace", function () {
+            beforeEach(function () {
+                this.page.workspace.set({permission: ['read']});
+                this.page.render();
+            });
+
+            itBehavesLike.aPageWithPrimaryActions([]);
+        });
+
+        describe("if the workspace is archived", function () {
+            beforeEach(function () {
+                this.page.workspace.set({archivedAt: "2012-05-08 21:40:14"});
+                this.page.render();
+            });
+
+            itBehavesLike.aPageWithPrimaryActions([]);
+        });
+
         describe("multiselection menu", function () {
             beforeEach(function () {
                 this.page.$('.select_all').prop('checked', true).trigger('change');
