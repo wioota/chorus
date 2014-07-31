@@ -33,12 +33,6 @@ chorus.pages.WorkspaceIndexPage = chorus.pages.Base.extend({
                     event:"filter"
                 }
             },
-            buttons:[
-                {
-                    view:"WorkspacesNew",
-                    text:t("actions.create_workspace")
-                }
-            ],
             contentDetailsOptions: { multiSelect: true }
         });
 
