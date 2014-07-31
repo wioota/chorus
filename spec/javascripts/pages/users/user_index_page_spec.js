@@ -9,6 +9,7 @@ describe("chorus.pages.UserIndexPage", function() {
         this.page.render();
     });
 
+
     describe("#initialize", function() {
         it("defaults to first name sorting ascending", function() {
             expect(this.page.collection.order).toBe("firstName");
@@ -44,9 +45,7 @@ describe("chorus.pages.UserIndexPage", function() {
                 this.page.render();
             });
 
-            it("displays an 'add user' button", function() {
-                expect(this.page.$("a.button[href='#/users/new']")).toExist();
-            });
+            itBehavesLike.aPageWithPrimaryActions([{name: 'add_user', target: '#/users/new'}]);
         });
 
         describe("when the authenticated user is not an admin", function() {
@@ -56,9 +55,7 @@ describe("chorus.pages.UserIndexPage", function() {
                 this.page.render();
             });
 
-            it("does not display an 'add user' button", function() {
-                expect(this.page.$("a[href='#/users/new'] button")).not.toExist();
-            });
+            itBehavesLike.aPageWithPrimaryActions([]);
         });
     });
 

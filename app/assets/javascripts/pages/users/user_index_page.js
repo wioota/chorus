@@ -12,15 +12,6 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
         this.collection.sortAsc("firstName");
         this.collection.fetch();
 
-        var buttons = [];
-        if (chorus.session.user().get("admin")) {
-            buttons.push({
-                    url:"#/users/new",
-                    text:t("actions.add_user")
-                }
-            );
-        }
-
         this.mainContent = new chorus.views.MainContentList({
             modelClass:"User",
             collection:this.collection,
@@ -43,7 +34,9 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
             this.collection.fetch();
         }, this);
 
-        this.mainContent.contentDetails = new chorus.views.ListContentDetails({ collection: this.collection, modelClass: "User", multiSelect: true, buttons: buttons});
+        this.mainContent.contentDetails = new chorus.views.ListContentDetails({ collection: this.collection, modelClass: "User", multiSelect: true});
+
+        this.buildPrimaryActionPanel();
 
         this.sidebar = new chorus.views.UserSidebar({listMode: true});
 
@@ -64,5 +57,11 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
 
     setModel:function(user) {
         this.model = user;
+    },
+
+    buildPrimaryActionPanel: function () {
+        var isAdmin = chorus.session.user().get("admin");
+        var actions = isAdmin ? [{name: 'add_user', target: '#/users/new'}] : [];
+        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({actions: actions});
     }
 });
