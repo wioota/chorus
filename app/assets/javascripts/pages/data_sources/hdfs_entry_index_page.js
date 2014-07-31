@@ -61,6 +61,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
             }
         });
 
+        this.buildPrimaryActionPanel();
         this.sidebar = new chorus.views.HdfsEntrySidebar();
 
         this.listenTo(this.dataSource, 'loaded', this.setupMultiSelectSidebar);
@@ -126,5 +127,10 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
 
     entrySelected : function(model) {
         this.model = model;
+    },
+
+    buildPrimaryActionPanel: function() {
+        var actions = [ {name: 'add_data', target: chorus.dialogs.HdfsImportDialog} ];
+        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({actions: actions});
     }
 });
