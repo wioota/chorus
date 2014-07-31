@@ -29,11 +29,6 @@ describe("chorus.pages.JobsIndexPage", function () {
             expect(this.page.collection.order).toBe("name");
         });
 
-        it("creates the correct buttons", function() {
-            expect(this.page.mainContent.contentDetails.buttonView).toBeA(chorus.views.JobsIndexPageButtons);
-            expect(this.page.mainContent.contentDetails.buttonView.model.get("id")).toBe(this.workspace.get("id"));
-        });
-
         it("passes the multiSelect option to the list content details", function() {
             expect(this.page.mainContent.contentDetails.options.multiSelect).toBeTruthy();
             expect(this.page.multiSelectSidebarMenu).toBeTruthy();
