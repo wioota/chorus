@@ -48,11 +48,6 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         it("passes the workspaceIdForTagLink option as listItemOptions to the main content options", function() {
             expect(this.page.mainContent.content.options.listItemOptions.workspaceIdForTagLink).toBe(this.workspace.id);
         });
-
-        it("creates the correct buttons", function() {
-            expect(this.page.mainContent.contentDetails.buttonView).toBeA(chorus.views.WorkfileIndexPageButtons);
-            expect(this.page.mainContent.contentDetails.buttonView.model.get("id")).toBe(this.workspace.get("id"));
-        });
     });
 
     describe("when the workfile:selected event is triggered on the list view", function() {
@@ -95,6 +90,19 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             {name: 'import_workfile', target: chorus.dialogs.WorkfilesImport},
             {name: 'create_sql_workfile', target: chorus.dialogs.WorkfilesSqlNew}
         ]);
+
+        describe("when the user can create workflows", function () {
+            beforeEach(function () {
+                spyOn(this.page.workspace, 'currentUserCanCreateWorkFlows').andReturn(true);
+                this.page.render();
+            });
+
+            itBehavesLike.aPageWithPrimaryActions([
+                {name: 'import_workfile', target: chorus.dialogs.WorkfilesImport},
+                {name: 'create_sql_workfile', target: chorus.dialogs.WorkfilesSqlNew},
+                {name: 'create_workflow', target: chorus.dialogs.WorkFlowNew}
+            ]);
+        });
 
         it("has a titlebar", function() {
             expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());

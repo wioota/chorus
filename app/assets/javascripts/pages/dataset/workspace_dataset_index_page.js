@@ -156,7 +156,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
                 new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
             }, this),
             'click .new_work_flow': _.bind(function () {
-                new chorus.dialogs.WorkFlowNewForDatasetList({workspace: this.workspace, collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+                new chorus.dialogs.WorkFlowNewForDatasetList({pageModel: this.workspace, collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
             }, this),
             'click .disassociate_dataset': _.bind(function () {
                 // Send the delete confirm dialog a WorkspaceDatasetSet that is a list of selected workspaces (this.multiSelectSidebarMenu.selectedModels)

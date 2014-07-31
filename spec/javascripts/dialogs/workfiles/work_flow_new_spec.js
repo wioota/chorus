@@ -2,7 +2,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
     beforeEach(function() {
         this.workspace = backboneFixtures.workspace();
         this.sandboxDatabase = this.workspace.sandbox().database();
-        this.dialog = new chorus.dialogs.WorkFlowNew({workspace: this.workspace});
+        this.dialog = new chorus.dialogs.WorkFlowNew({pageModel: this.workspace});
         this.dialog.render();
     });
 
@@ -34,7 +34,7 @@ describe("chorus.dialogs.WorkFlowNew", function() {
         beforeEach(function() {
             this.workspace._sandbox = null;
             this.workspace.set('sandboxInfo', null);
-            this.dialog = new chorus.dialogs.WorkFlowNew({workspace: this.workspace});
+            this.dialog = new chorus.dialogs.WorkFlowNew({pageModel: this.workspace});
             this.dialog.render();
         });
 

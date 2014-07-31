@@ -155,7 +155,7 @@ chorus.views.DatasetSidebar = chorus.views.Sidebar.extend({
 
     launchWorkFlowDialog: function(e) {
         e && e.preventDefault();
-        var dialog = new chorus.dialogs.WorkFlowNewForDatasetList({workspace: this.resource.workspace(), collection: new chorus.collections.Base([this.resource])});
+        var dialog = new chorus.dialogs.WorkFlowNewForDatasetList({pageModel: this.resource.workspace(), collection: new chorus.collections.Base([this.resource])});
         dialog.launchModal();
     },
 

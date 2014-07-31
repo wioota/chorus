@@ -11,7 +11,7 @@ chorus.dialogs.WorkFlowNewBase = chorus.dialogs.Base.include(chorus.Mixins.Dialo
 
     setup: function() {
         this.model = this.resource = new chorus.models.AlpineWorkfile({
-            workspace: {id: this.options.workspace.id }
+            workspace: {id: this.options.pageModel.id }
         });
         this.disableFormUnlessValid({
             formSelector: "form",

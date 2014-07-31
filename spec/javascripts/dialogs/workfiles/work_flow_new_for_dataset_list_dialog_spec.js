@@ -4,7 +4,7 @@ describe("chorus.dialogs.WorkFlowNewForDatasetList", function() {
         var dataset2 = backboneFixtures.dataset({id: 2});
         this.workspace = backboneFixtures.workspace();
         this.dialog = new chorus.dialogs.WorkFlowNewForDatasetList({
-            workspace: this.workspace,
+            pageModel: this.workspace,
             collection: new chorus.collections.Base([dataset1, dataset2])
         });
         this.dialog.render();

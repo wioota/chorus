@@ -9,17 +9,12 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         this.collection.fetchAll();
 
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
-        this.buttonView = new chorus.views.WorkfileIndexPageButtons({model: this.workspace});
-        this.primaryActionPanel = this.buildPrimaryActionPanel();
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Workfile",
             collection: this.collection,
             model: this.workspace,
             title: t("workfiles.title"),
-            contentDetailsOptions: {
-                multiSelect: true,
-                buttonView: this.buttonView
-            },
+            contentDetailsOptions: { multiSelect: true },
             contentOptions: {listItemOptions: {workspaceIdForTagLink: this.workspace.id} },
             linkMenus: {
                 type: {
@@ -105,12 +100,19 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         return items;
     },
 
+    preRender: function () {
+        this.buildPrimaryActionPanel();
+    },
+
     buildPrimaryActionPanel: function () {
         var actions = [
             {name: 'import_workfile', target: chorus.dialogs.WorkfilesImport},
             {name: 'create_sql_workfile', target: chorus.dialogs.WorkfilesSqlNew}
         ];
 
-        return new chorus.views.PrimaryActionPanel({pageModel: this.workspace, actions: actions});
+        var createWorkflow = {name: 'create_workflow', target: chorus.dialogs.WorkFlowNew};
+        this.workspace.currentUserCanCreateWorkFlows() && actions.push(createWorkflow);
+
+        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({pageModel: this.workspace, actions: actions});
     }
 });

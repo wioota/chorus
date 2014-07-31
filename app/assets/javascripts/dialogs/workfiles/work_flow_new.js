@@ -11,7 +11,7 @@ chorus.dialogs.WorkFlowNew = chorus.dialogs.WorkFlowNewBase.extend({
     userWillPickSchema: true,
 
     setupSubviews: function(){
-        var sandbox = this.options.workspace.sandbox();
+        var sandbox = this.options.pageModel.sandbox();
         this.executionLocationList = new chorus.views.WorkFlowExecutionLocationPickerList({
             dataSource: sandbox && sandbox.database().dataSource(),
             database: sandbox && sandbox.database()
