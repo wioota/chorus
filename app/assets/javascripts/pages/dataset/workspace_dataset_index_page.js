@@ -29,7 +29,6 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         }, this), 300);
 
         this.buildSidebar();
-        this.buttonView = new chorus.views.WorkspaceDatasetIndexPageButtons({model: this.workspace});
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Dataset",
@@ -37,10 +36,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             model: this.workspace,
             useCustomList: true,
             title: t("dataset.title"),
-            contentDetailsOptions: {
-                multiSelect: true,
-                buttonView: this.buttonView
-            },
+            contentDetailsOptions: { multiSelect: true },
             search: {
                 placeholder: t("workspace.search"),
                 onTextChange: onTextChangeFunction
