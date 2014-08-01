@@ -1,9 +1,8 @@
-
-
 jasmine.sharedExamples.PageItemList = function () {
     describe("a selectable list", function () {
         beforeEach(function () {
             spyOn(chorus.PageEvents, "trigger").andCallThrough();
+            spyOn(this.view.selectedModels, "reset").andCallThrough();
         });
 
         function safeClick(target) {
@@ -67,13 +66,14 @@ jasmine.sharedExamples.PageItemList = function () {
             return _(allTriggers).chain().filter(anyEventAboutChecking).last().value();
         }
 
-        function firstModelsIsSentInEvents() {
+        function onlyFirstModelIsSentInEvents() {
             typedEventNameIsSent();
 
             it("sends the clicked model's ID in a page event", function () {
-                var lastCall = lastCheckEvent(this.view.options.entityType + ":checked");
-                var broadcastIDs = lastCall.args[1].pluck("id");
-                var clickedIDs = [this.collection.first().get('id')];
+                var lastCall        = lastCheckEvent(this.view.options.entityType + ":checked");
+                var collection      = lastCall.args[1];
+                var broadcastIDs    = collection.pluck("id");
+                var clickedIDs      = [this.collection.first().get('id')];
 
                 expect(broadcastIDs).toEqual(clickedIDs);
             });
@@ -183,6 +183,12 @@ jasmine.sharedExamples.PageItemList = function () {
                     expect(chorus.PageEvents.trigger).toHaveBeenCalledWith('checked', jasmine.any(chorus.collections[this.collection.constructorName]));
                 });
 
+                it("Then the top level checkbox is semi-filled", function () {
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith('unselectAny');
+                });
+
+                onlyFirstModelIsSentInEvents();
+
                 describe("And then check another item", function () {
                     beforeEach(function () {
                         $item2 = this.view.$('.item_wrapper').last();
@@ -225,7 +231,7 @@ jasmine.sharedExamples.PageItemList = function () {
 
                     $items.each(function (i, item) {
                         expect($(item)).toHaveClass('checked');
-                        
+
                         var checkbox = $(item).find('input[type=checkbox]');
                         expect(checkbox).toBeChecked();
                     });
@@ -243,7 +249,7 @@ jasmine.sharedExamples.PageItemList = function () {
                     safeClick(checkbox);
                 });
 
-                firstModelsIsSentInEvents();
+                onlyFirstModelIsSentInEvents();
             });
 
             describe('shift+click', function() {
@@ -350,7 +356,7 @@ jasmine.sharedExamples.PageItemList = function () {
                 it("And the previously selected items remain highlighted and checked.", function () {
                     $initiallySelectedItems.each(function (i, item) {
                         expect($(item)).toHaveClass('checked');
-                        
+
                         var checkbox = $(item).find('input[type=checkbox]');
                         expect(checkbox).toBeChecked();
                     });
@@ -419,7 +425,7 @@ jasmine.sharedExamples.PageItemList = function () {
                 beforeEach(function () {
                     chorus.PageEvents.trigger("selectNone");
                 });
-                
+
                 nothingIsSelected();
                 noModelsAreSentInEvents();
             });

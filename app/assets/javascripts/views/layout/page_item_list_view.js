@@ -14,10 +14,10 @@ chorus.views.PageItemList = chorus.views.Base.extend({
     },
 
     listItemClicked: function(e) {
-        
+
         var item = $(e.target).closest('.item_wrapper');
         if(!item.hasClass('checked')) { this.selectItem(item); }
-
+        this.sendCheckedEvents();
     },
 
     checkboxClicked: function(e) {
