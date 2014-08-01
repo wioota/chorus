@@ -46,12 +46,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
             var page = parseInt(this.collection.pagination.page, 10);
             var total = parseInt(this.collection.pagination.total, 10);
 
-            if (parseInt(this.collection.pagination.total, 10) !== -1) {
-                ctx.showMoreLink = total > page;
-            } else {
-                var maxSize = this.collection.attributes.pageSize * page;
-                ctx.showMoreLink = this.collection.length === maxSize;
-            }
+            ctx.showMoreLink = total > page;
         } else {
             ctx.showMoreLink = false;
         }

@@ -40,7 +40,6 @@ chorus.views.Dashboard = chorus.views.Base.extend({
         this.modularDashboard = new chorus.views.ModularDashboard();
 
         var activities = new chorus.collections.ActivitySet([]);
-        activities.attributes.pageSize = 50;
 
         activities.fetch();
         this.activityList = new chorus.views.ActivityList({ collection: activities, additionalClass: "dashboard" });

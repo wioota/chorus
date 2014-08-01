@@ -199,43 +199,7 @@ describe("chorus.views.ActivityList", function() {
                     itShowsAMoreLink(2);
                 });
             });
-
-            context("with partial pagination information in the response", function() {
-                beforeEach(function() {
-                    this.collection.reset([
-                        backboneFixtures.activity.dataSourceCreated(),
-                        backboneFixtures.activity.dataSourceCreated(),
-                        backboneFixtures.activity.dataSourceCreated(),
-                        backboneFixtures.activity.dataSourceCreated()
-                    ]);
-
-                    this.collection.pagination = {};
-                    this.collection.pagination.total = "-1";
-                    this.collection.pagination.records = "-1";
-                });
-
-                context("when there are no more activities", function() {
-                    beforeEach(function() {
-                        this.collection.pagination.page = "2";
-                        this.collection.attributes.pageSize = 3;
-                        this.view.render();
-                    });
-
-                    itDoesNotShowAMoreLink();
-                });
-
-                context("when there might be more activities", function() {
-                    beforeEach(function() {
-                        this.collection.pagination.page = "2";
-                        this.collection.attributes.pageSize = 2;
-                        this.view.render();
-                    });
-
-                    itShowsAMoreLink(3);
-                });
-            });
         });
-
     });
 
     describe("error handling", function() {

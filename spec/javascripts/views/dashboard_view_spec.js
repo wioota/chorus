@@ -12,10 +12,6 @@ describe("chorus.views.Dashboard", function(){
             expect(this.activities).toHaveBeenFetched();
         });
 
-        it("sets page size information on the activity list", function() {
-            expect(this.view.activityList.collection.attributes.pageSize).toBe(50);
-        });
-
         it("doesnt re-fetch the activity list if a comment is added", function() {
             this.server.reset();
             chorus.PageEvents.trigger("comment:added", backboneFixtures.comment());
