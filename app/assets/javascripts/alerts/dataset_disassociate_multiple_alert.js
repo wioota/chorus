@@ -1,6 +1,12 @@
 chorus.alerts.DatasetDisassociateMultiple = chorus.alerts.ModelDelete.extend({
     constructorName: "DatasetDisassociateMultiple",
 
+    makeModel: function () {
+    // Yes, this is silly.  If you want it to make more sense, try extending CollectionDelete.
+      this.model = this.collection;
+      this._super("makeModel");
+    },
+
     setup: function() {
         this._super("setup");
 
@@ -8,12 +14,12 @@ chorus.alerts.DatasetDisassociateMultiple = chorus.alerts.ModelDelete.extend({
         this.title = t("dataset_delete.many.title");
         this.ok = t("dataset_delete.many.button");
         this.deleteMessage = "dataset_delete.many.toast";
-        this.redirectUrl = this.model.showUrl();
+        this.redirectUrl = this.collection.showUrl();
     },
 
     deleteMessageParams:function () {
         return {
-            count: this.model.length
+            count: this.collection.length
         };
     }
 });

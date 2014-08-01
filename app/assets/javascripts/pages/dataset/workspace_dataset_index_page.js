@@ -160,7 +160,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             }, this),
             'click .disassociate_dataset': _.bind(function () {
                 // Send the delete confirm dialog a WorkspaceDatasetSet that is a list of selected workspaces (this.multiSelectSidebarMenu.selectedModels)
-                new chorus.alerts.DatasetDisassociateMultiple({pageModel: this.multiSelectSidebarMenu.selectedModels}).launchModal();
+                new chorus.alerts.DatasetDisassociateMultiple({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
             }, this)
         };
     },
