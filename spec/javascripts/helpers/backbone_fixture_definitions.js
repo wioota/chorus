@@ -104,6 +104,8 @@ window.BackboneFixtureDefinitions = {
         model: 'Dataset'
     },
 
+    dashboardConfig: {},
+
     databaseColumn: {},
 
     databaseColumnSet: {},
@@ -226,7 +228,6 @@ window.BackboneFixtureDefinitions = {
     schemaFunctionSet: {},
 
     schemaSet: { unique: [ "id" ] },
-
 
     searchResult: {},
 

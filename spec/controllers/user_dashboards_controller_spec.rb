@@ -32,6 +32,10 @@ describe UserDashboardsController do
         decoded_response.modules.should == %w(Module1 Module2 Module3)
       end
     end
+
+    generate_fixture 'dashboardConfig.json' do
+      get :show, :user_id => user.id
+    end
   end
 
   describe 'create' do

@@ -2,7 +2,7 @@ describe("chorus.views.ModularDashboard", function() {
     beforeEach(function() {
         this.view = new chorus.views.ModularDashboard();
         this.modules = ["Module2", "Module3"];
-        this.fetchedModel = new chorus.models.DashboardConfig({modules: this.modules});
+        this.fetchedModel = backboneFixtures.dashboardConfig({modules: this.modules});
     });
 
     context("when the fetch completes", function () {
