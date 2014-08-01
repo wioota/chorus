@@ -816,7 +816,7 @@ describe("chorus.views.DatasetSidebar", function() {
             });
 
             it("has an 'associate with another workspace' link", function() {
-                expect(this.view.$('.actions .associate')).toContainTranslation("actions.associate_with_a_workspace");
+                expect(this.view.$('.actions .associate')).toContainTranslation("actions.associate");
             });
 
             itBehavesLike.aDialogLauncher(".actions a.associate", chorus.dialogs.AssociateWithWorkspace);
@@ -901,7 +901,7 @@ describe("chorus.views.DatasetSidebar", function() {
             });
 
             it("has a link to associate the dataset with a workspace", function() {
-                expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate_with_a_workspace');
+                expect(this.view.$('.actions .associate')).toContainTranslation('actions.associate');
             });
 
             itBehavesLike.aDialogLauncher("a.new_note", chorus.dialogs.NotesNew);

@@ -5,8 +5,7 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
     submitButtonTranslationKey: "dataset.associate.button.other",
 
     setup: function(options) {
-        this.datasets = options.datasets;
-        this.requiredResources.add(this.collection);
+        this.datasets = options.collection;
         this._super('setup', arguments);
     },
 

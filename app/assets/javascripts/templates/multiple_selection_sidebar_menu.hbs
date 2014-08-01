@@ -6,7 +6,9 @@
 <div class="actions">
     <ul class="multiselect_actions">
         {{#each actions}}
-            <li>{{{this}}}</li>
+            <li class="action">
+                <a href="#" class="{{name}}">{{message}}</a>
+            </li>
         {{/each}}
     </ul>
 </div>

@@ -45,7 +45,5 @@ describe("chorus.views.KaggleUserSidebar", function () {
             expect(this.view.tabs.information).toBeA(chorus.views.KaggleUserInformation);
             expect(this.view.tabs.information.el).toBe(this.view.$(".tabbed_area .kaggle_user_information")[0]);
         });
-
-        itBehavesLike.aDialogLauncher(".actions a.sendMessage", chorus.dialogs.ComposeKaggleMessage);
     });
 });

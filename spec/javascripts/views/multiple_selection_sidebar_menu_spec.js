@@ -1,12 +1,18 @@
 describe("chorus.views.MultipleSelectionSidebar", function() {
+    var dialogConstructor = chorus.dialogs.ChangePassword;
+    var method = 'enable';
+    var actionName = 'add_data';
+    var methodActionName = 'enable';
+
     beforeEach(function() {
-        this.eventSpy = jasmine.createSpy('eventSpy');
+        this.modalSpy = stubModals();
+        this.selectEvent = "arbitrarily:anything";
         this.view = new chorus.views.MultipleSelectionSidebarMenu({
-            actions: ['<span class="action_one">I am an action</span>'],
-            selectEvent: "model:selected",
-            actionEvents: {
-                'click .action_one': this.eventSpy
-            }
+            actions: [
+                {name: actionName, target: dialogConstructor},
+                {name: methodActionName, target: method}
+            ],
+            selectEvent: this.selectEvent
         });
         this.view.render();
         $('#jasmine_content').append(this.view.el);
@@ -20,9 +26,9 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
 
     context("when a model is selected", function() {
         beforeEach(function() {
-            chorus.PageEvents.trigger("model:selected", new chorus.collections.Base([
-                new chorus.models.Base()
-            ]));
+            this.collection = new chorus.collections.Base([new chorus.models.Base()]);
+            spyOn(this.collection, 'invoke');
+            chorus.PageEvents.trigger(this.selectEvent, this.collection);
             this.view.render();
         });
 
@@ -40,28 +46,23 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
                 backboneFixtures.jdbcDataset(),
                 backboneFixtures.oracleSchema()
             ]);
-            chorus.PageEvents.trigger("model:selected", collection);
+            chorus.PageEvents.trigger(this.selectEvent, collection);
             expect(this.view.$('.selected_models')).toContainText(Handlebars.helpers.modelNamesList(collection));
         });
 
         it("renders custom actions", function() {
-            expect(this.view.$("li")).toContainText('I am an action');
+            expect(this.view.$("li")).toContainTranslation('actions.'+actionName);
         });
 
-        it("binds custom events", function() {
-            this.view.$(".action_one").click();
-            expect(this.eventSpy).toHaveBeenCalled();
-        });
-
-        it("keeps event bindings separate", function() {
-            var otherView = new chorus.views.MultipleSelectionSidebarMenu({
-                actions: ['<span class="action_one">I am an action</span>'],
-                selectEvent: "model:selected"
+        describe("zzz clicking a method action", function () {
+            it("invokes the method on the selectedModels", function () {
+                expect(this.collection.invoke).not.toHaveBeenCalled();
+                this.view.$("."+methodActionName).click();
+                expect(this.collection.invoke).toHaveBeenCalledWith(method);
             });
-            otherView.render();
-            otherView.$(".action_one").click();
-            expect(this.eventSpy).not.toHaveBeenCalled();
         });
+
+        itBehavesLike.aDialogLauncher("."+actionName, dialogConstructor);
 
         describe("clicking deselect all link", function() {
             beforeEach(function() {

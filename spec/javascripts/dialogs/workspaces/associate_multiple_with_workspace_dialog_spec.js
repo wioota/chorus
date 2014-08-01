@@ -7,7 +7,7 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
         ]);
 
         this.dialog = new chorus.dialogs.AssociateMultipleWithWorkspace({
-            datasets: this.datasets
+            collection: this.datasets
         });
         this.dialog.render();
     });

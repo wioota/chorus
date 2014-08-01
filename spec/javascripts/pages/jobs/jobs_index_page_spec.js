@@ -139,14 +139,14 @@ describe("chorus.pages.JobsIndexPage", function () {
 
             describe("clicking the 'disable' action", function () {
                 it("disables all selected jobs", function () {
-                    this.page.multiSelectSidebarMenu.$('.disable_jobs').click();
+                    this.page.multiSelectSidebarMenu.$('.disable').click();
                     expect(this.jobs[0].disable).toHaveBeenCalled();
                 });
             });
 
             describe("clicking then 'enable' action", function () {
                 it("enables all selected jobs", function () {
-                    this.page.multiSelectSidebarMenu.$('.enable_jobs').click();
+                    this.page.multiSelectSidebarMenu.$('.enable').click();
                     expect(this.jobs[0].enable).toHaveBeenCalled();
                 });
             });
@@ -156,7 +156,7 @@ describe("chorus.pages.JobsIndexPage", function () {
                     this.modalSpy = stubModals();
                 });
 
-                itBehavesLike.aDialogLauncher("a.delete_jobs", chorus.alerts.MultipleJobDelete);
+                itBehavesLike.aDialogLauncher("a.delete", chorus.alerts.MultipleJobDelete);
             });
         });
     });

@@ -10,14 +10,7 @@ chorus.pages.WorkspaceIndexPage = chorus.pages.Base.extend({
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "workspace:checked",
-            actions: [
-                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
-            ],
-            actionEvents: {
-                'click .edit_tags': _.bind(function() {
-                    new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
-                }, this)
-            }
+            actions: [{name: "edit_tags", target: chorus.dialogs.EditTags}]
         });
 
         this.mainContent = new chorus.views.MainContentList({

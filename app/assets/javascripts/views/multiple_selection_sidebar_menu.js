@@ -2,15 +2,11 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.extend({
     constructorName: "MultiSelectionSidebarMenu",
     templateName: "multiple_selection_sidebar_menu",
 
-    events: {
-        "click .deselect_all": 'deselectAll'
-    },
-
     setup: function() {
         this.actions = this.options.actions || [];
         this.selectEvent = this.options.selectEvent;
         this.selectedModels = new chorus.collections.Base();
-        this.events = _.extend({}, this.events, this.options.actionEvents);
+        this.events = this.eventBindings(this.actions, { "click .deselect_all": 'deselectAll' });
         this.subscribePageEvent(this.selectEvent, this.modelSelected);
     },
 
@@ -37,17 +33,51 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.extend({
     },
 
     additionalContext: function() {
+        var actions = _.map(this.actions, this.templateValues);
         return {
             selectedModels: this.selectedModels,
             modelCount: this.selectedModels.length,
-            actions: _.result(this, 'actions').map(function(action) {
-                return Handlebars.compile(action)();
-            })
+            actions: actions
         };
     },
 
     postRender: function() {
         this.showOrHideMultipleSelectionSection();
         this._super("postRender");
+    },
+
+    templateValues: function (action) {
+        return { name: action.name, message: t('actions.' + action.name) };
+    },
+
+    eventBindings: function (actions, initialEvents) {
+        var bindEvent = function (events, action) {
+            events[("click a." + action.name)] = this.launcherFunction(action.target);
+            return events;
+        };
+
+        return _.reduce(actions, bindEvent, initialEvents || {}, this);
+    },
+
+    launcherFunction: function (target) {
+        var dialogLauncher = function (e) {
+            e.preventDefault();
+            new target({pageModel: this.options.pageModel, collection: this.selectedModels}).launchModal();
+        };
+        var navigator = function (e) {
+            e.preventDefault();
+            chorus.router.navigate(target);
+        };
+
+        var invoker = function (e) {
+            e.preventDefault();
+            this.selectedModels.invoke(target);
+        };
+
+        var targetIsConstructor = target instanceof Function;
+
+        var targetIsURL = !targetIsConstructor && target.match(/\\/);
+
+        return targetIsConstructor ? dialogLauncher : targetIsURL ? navigator : invoker;
     }
 });

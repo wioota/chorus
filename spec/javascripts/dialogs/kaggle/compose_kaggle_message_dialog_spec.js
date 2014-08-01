@@ -5,8 +5,8 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
         this.kaggleUser = new chorus.models.KaggleUser({fullName:"Batman"});
         this.workspace = backboneFixtures.workspace();
         this.dialog = new chorus.dialogs.ComposeKaggleMessage({
-            recipients:new chorus.collections.KaggleUserSet(this.kaggleUser),
-            workspace:this.workspace
+            collection:new chorus.collections.KaggleUserSet(this.kaggleUser),
+            pageModel:this.workspace
         });
         this.dialog.render();
     });
@@ -27,8 +27,8 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
                         new chorus.models.KaggleUser({fullName:"Catwoman"})]
                     );
                 this.dialog = new chorus.dialogs.ComposeKaggleMessage({
-                    recipients:this.kaggleUsers,
-                    workspace:this.workspace
+                    collection: this.kaggleUsers,
+                    pageModel: this.workspace
                 });
                 this.dialog.render();
             });
@@ -40,8 +40,8 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
             context("when the recipient names run over the limit", function () {
                 beforeEach(function () {
                     this.dialog = new chorus.dialogs.ComposeKaggleMessage({
-                        recipients:this.kaggleUsers,
-                        workspace:this.workspace,
+                        collection: this.kaggleUsers,
+                        pageModel: this.workspace,
                         maxRecipientCharacters:10
                     });
                     this.dialog.render();

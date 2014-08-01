@@ -1,10 +1,6 @@
 chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
     templateName:"kaggle/user_sidebar",
 
-    events: {
-        "click .actions .sendMessage": "launchSingleUserKaggleSendMessageDialog"
-    },
-
     subviews: {
         '.tab_control': 'tabs'
     },
@@ -34,13 +30,5 @@ chorus.views.KaggleUserSidebar = chorus.views.Sidebar.extend({
             this.tabs = null;
         }
         this.render();
-    },
-
-    launchSingleUserKaggleSendMessageDialog: function(e) {
-        e.preventDefault();
-        new chorus.dialogs.ComposeKaggleMessage(
-            { recipients: new chorus.collections.KaggleUserSet([this.resource]),
-              workspace: this.workspace
-            }).launchModal();
     }
 });

@@ -49,7 +49,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             it("should have a link 'associate with workspace'", function() {
                 expect(this.view.$("a.associate_with_workspace")).toExist();
-                expect(this.view.$("a.associate_with_workspace").text()).toMatchTranslation("actions.associate_with_a_workspace");
+                expect(this.view.$("a.associate_with_workspace").text()).toMatchTranslation("actions.associate");
             });
 
             itBehavesLike.aDialogLauncher("a.associate_with_workspace", chorus.dialogs.AssociateHdfsDatasetFromEntry);

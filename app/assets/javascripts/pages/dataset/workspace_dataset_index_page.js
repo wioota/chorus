@@ -137,39 +137,24 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
     },
 
     sidebarMultiselectActions: function () {
-        var actions = [ '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>' ];
+        var actions                 = [ { name:"edit_tags", target: chorus.dialogs.EditTags} ];
+        var newWorkFlow             = { name: "new_work_flow", target: chorus.dialogs.WorkFlowNewForDatasetList};
+        var disassociateDatasets    = { name: "disassociate_dataset", target: chorus.alerts.DatasetDisassociateMultiple};
 
-        if (chorus.models.Config.instance().license().workflowEnabled() && this.workspace.currentUserCanCreateWorkFlows()) {
-            actions.push('<a class="new_work_flow">{{t "sidebar.new_work_flow"}}</a>');
-        }
+        var onlySourceTablesSelected    = true;
+        var workFlowsOK                 = chorus.models.Config.instance().license().workflowEnabled() && this.workspace.currentUserCanCreateWorkFlows();
 
-        var selectedModels = this.multiSelectSidebarMenu.selectedModels;
-        if (selectedModels.all(function(model) { return model.get("entitySubtype") === "SOURCE_TABLE"; })) {
-            actions.push('<a class="disassociate_dataset">{{t "actions.delete_association"}}</a>');
-        }
+        workFlowsOK &&              actions.push(newWorkFlow);
+        onlySourceTablesSelected && actions.push(disassociateDatasets);
+
         return actions;
-    },
-
-    sidebarMultiselectActionEvents: function () {
-        return {
-            'click .edit_tags': _.bind(function () {
-                new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
-            }, this),
-            'click .new_work_flow': _.bind(function () {
-                new chorus.dialogs.WorkFlowNewForDatasetList({pageModel: this.workspace, collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
-            }, this),
-            'click .disassociate_dataset': _.bind(function () {
-                // Send the delete confirm dialog a WorkspaceDatasetSet that is a list of selected workspaces (this.multiSelectSidebarMenu.selectedModels)
-                new chorus.alerts.DatasetDisassociateMultiple({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
-            }, this)
-        };
     },
 
     buildSidebar: function () {
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "dataset:checked",
-            actions: _.bind(this.sidebarMultiselectActions, this),
-            actionEvents: this.sidebarMultiselectActionEvents()
+            actions: this.sidebarMultiselectActions(),
+            pageModel: this.workspace
         });
     }
 });

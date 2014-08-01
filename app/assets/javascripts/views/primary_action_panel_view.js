@@ -3,24 +3,21 @@ chorus.views.PrimaryActionPanel = chorus.views.Base.extend({
     templateName: "primary_action_panel",
 
     setup: function (options) {
+        this.actions = this.options.actions || [];
         this.events = this.eventBindings(options.actions);
     },
 
     additionalContext: function () {
-        var templateValues = function (action) {
-            return { name: action.name, message: t('actions.' + action.name) };
-        };
-
-        return { actions: _.map(this.options.actions, templateValues) };
+        return { actions: _.map(this.actions, this.templateValues) };
     },
 
-    eventBindings: function (actions) {
+    eventBindings: function (actions, initialEvents) {
         var bindEvent = function (events, action) {
             events[("click a." + action.name)] = this.launcherFunction(action.target);
             return events;
         };
 
-        return _.reduce(actions, bindEvent, {}, this);
+        return _.reduce(actions, bindEvent, initialEvents || {}, this);
     },
 
     launcherFunction: function (target) {
@@ -35,5 +32,9 @@ chorus.views.PrimaryActionPanel = chorus.views.Base.extend({
 
         var targetIsConstructor = target instanceof Function;
         return targetIsConstructor ? dialogLauncher : navigator;
+    },
+
+    templateValues: function (action) {
+        return { name: action.name, message: t('actions.' + action.name) };
     }
 });

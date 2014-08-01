@@ -33,8 +33,8 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
     },
 
     setup: function(options) {
-        this.recipients = options.recipients;
-        this.workspace = options.workspace;
+        this.recipients = options.collection;
+        this.workspace = options.pageModel;
         this.maxRecipientCharacters = options.maxRecipientCharacters || 70;
         this.requiredDatasets = new chorus.RequiredResources();
         this.listenTo(this.model, "saveFailed", this.saveFailed);
@@ -67,7 +67,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
 
     makeModel: function (options) {
         this.model = new chorus.models.KaggleMessage({
-            recipients: options.recipients
+            recipients: options.collection
         });
         this.listenTo(this.model, "saved", this.saved);
     },

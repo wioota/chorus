@@ -794,7 +794,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Insights New": new chorus.dialogs.InsightsNew({pageModel: new chorus.models.Job()}),
 
-            "Pick Workspace": new chorus.dialogs.PickWorkspace({collection: this.collections.workspaceSet}),
+            "Pick Workspace": new chorus.dialogs.PickWorkspace(),
 
             "SQL Preview": new chorus.dialogs.SqlPreview({model: this.models.chorusView}),
 
@@ -850,7 +850,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             }),
 
             "Compose Kaggle Message": new chorus.dialogs.ComposeKaggleMessage({
-                recipients: this.collections.kaggleUserSet
+                collection: this.collections.kaggleUserSet
             }),
 
             "Change Workfile Schema": new chorus.dialogs.ChangeWorkfileSchema({ model: this.models.workfile }),

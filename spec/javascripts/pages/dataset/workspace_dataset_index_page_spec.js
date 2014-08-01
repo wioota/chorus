@@ -216,7 +216,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                     });
 
                     it("has an action to edit tags", function() {
-                        expect(this.page.$(".multiple_selection a.edit_tags")).toContainTranslation("sidebar.edit_tags");
+                        expect(this.page.$(".multiple_selection a.edit_tags")).toContainTranslation("actions.edit_tags");
                     });
 
                     context("when work flow is configured", function () {
@@ -228,7 +228,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                         });
 
                         it("has an action to create a new workFlow", function () {
-                            expect(this.page.$(".multiple_selection a.new_work_flow")).toContainTranslation("sidebar.new_work_flow");
+                            expect(this.page.$(".multiple_selection a.new_work_flow")).toContainTranslation("actions.new_work_flow");
                         });
 
                         itBehavesLike.aDialogLauncher(".multiple_selection a.new_work_flow", chorus.dialogs.WorkFlowNewForDatasetList);
@@ -253,7 +253,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                     itBehavesLike.aDialogLauncher(".multiple_selection a.edit_tags", chorus.dialogs.EditTags);
                 });
 
-                context("when a greenplum dataset is selected", function() {
+                context("when only source table are selected", function() {
                     beforeEach(function() {
                         var selections = this.page.collection.clone();
                         selections.reset([this.gpdbTable]);
@@ -261,7 +261,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                     });
 
                     it("displays the disassociate workspace link", function () {
-                        expect(this.page.$(".multiple_selection a.disassociate_dataset")).toContainTranslation("actions.delete_association");
+                        expect(this.page.$(".multiple_selection a.disassociate_dataset")).toContainTranslation("actions.disassociate_dataset");
                     });
 
                     context("when the disassociate link is clicked", function () {
@@ -269,14 +269,16 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                     });
                 });
 
-                context("a group of datasets are selected that do not include a greenplum dataset", function() {
+                context("a when source tables and sandbox tables are selected", function() {
                     beforeEach(function() {
-                        var selections = this.page.collection.clone();
-                        selections.reset([this.sandboxTable]);
-                        chorus.PageEvents.trigger("dataset:checked", selections);
+                        this.selections = this.page.collection.clone();
+                        this.selections.reset([this.gpdbTable, this.sandboxTable]);
+                        chorus.PageEvents.trigger("dataset:checked", this.selections);
                     });
 
-                    it("displays the disassociate workspace link", function () {
+                    it("hides the disassociate workspace link", function () {
+                        expect(this.page.$(".multiple_selection a.disassociate_dataset")).toExist();
+                        chorus.PageEvents.trigger("dataset:checked", this.selections);
                         expect(this.page.$(".multiple_selection a.disassociate_dataset")).not.toExist();
                     });
 

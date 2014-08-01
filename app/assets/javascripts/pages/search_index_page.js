@@ -96,14 +96,7 @@ chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "checked",
-            actions: [
-                '<a class="edit_tags">{{t "sidebar.edit_tags"}}</a>'
-            ],
-            actionEvents: {
-                'click .edit_tags': _.bind(function() {
-                    new chorus.dialogs.EditTags({collection: this.multiSelectSidebarMenu.selectedModels}).launchModal();
-                }, this)
-            }
+            actions: [{name: "edit_tags", target: chorus.dialogs.EditTags}]
         });
 
         // explicitly set up bindings after initializing sidebar collection
