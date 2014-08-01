@@ -9,8 +9,7 @@ chorus.dialogs.PickWorkspace = chorus.dialogs.PickItems.extend({
 
     makeModel: function() {
         this.pageModel = this.options.pageModel;
-        this.collection = this.collection || this.defaultWorkspaces();
-        this.collection = new chorus.collections.FilteringCollection(null, {collection: this.collection});
+        this.collection = new chorus.collections.FilteringCollection(null, {collection: this.defaultWorkspaces()});
         this.collection.fetchAll();
     },
 
