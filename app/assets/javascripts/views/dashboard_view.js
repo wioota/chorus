@@ -5,7 +5,8 @@ chorus.views.Dashboard = chorus.views.Base.extend({
         '.dashboard_main': "dashboardMain",
         '.data_source_list': "dataSourceList",
         '.workspace_list': "workspaceList",
-        '.project_list': "projectList"
+        '.project_list': "projectList",
+        '.modular_dashboard': "modularDashboard"
     },
 
     setup: function() {
@@ -35,6 +36,8 @@ chorus.views.Dashboard = chorus.views.Base.extend({
             contentDetails: new chorus.views.StaticTemplate("dashboard/data_source_list_content_details"),
             content: new chorus.views.DashboardDataSourceList({ collection: this.options.dataSourceSet })
         });
+
+        this.modularDashboard = new chorus.views.ModularDashboard();
 
         var activities = new chorus.collections.ActivitySet([]);
         activities.attributes.pageSize = 50;
