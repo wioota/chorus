@@ -3,8 +3,8 @@ describe("chorus.views.PrimaryActionPanel", function () {
 
     var actions = [
         {name: 'download', target: chorus.dialogs.RunAndDownload},
-        {name: 'display', target: 'destination'},
-        {name: 'explore', target: 'destination'}
+        {name: 'display', target: '/destination'},
+        {name: 'explore', target: '/final/destination'}
     ];
 
     beforeEach(function () {
@@ -23,5 +23,4 @@ describe("chorus.views.PrimaryActionPanel", function () {
 
         itBehavesLike.aPageWithPrimaryActions(actions);
     });
-
 });
