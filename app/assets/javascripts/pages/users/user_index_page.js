@@ -42,7 +42,7 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "user:checked",
-            actions: [{name: "edit_tags", target: chorus.dialogs.EditTags}] 
+            actionProvider: [{name: "edit_tags", target: chorus.dialogs.EditTags}]
         });
 
         this.subscribePageEvent("user:selected", this.setModel);

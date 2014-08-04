@@ -136,12 +136,13 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
         }
     },
 
-    sidebarMultiselectActions: function () {
+    sidebarMultiselectActions: function (collection) {
         var actions                 = [ { name:"edit_tags", target: chorus.dialogs.EditTags} ];
         var newWorkFlow             = { name: "new_work_flow", target: chorus.dialogs.WorkFlowNewForDatasetList};
         var disassociateDatasets    = { name: "disassociate_dataset", target: chorus.alerts.DatasetDisassociateMultiple};
 
-        var onlySourceTablesSelected    = true;
+        var onlySourceTablesSelected    = collection.all(function (dataset) { return dataset.get('entitySubtype') === 'SOURCE_TABLE'; });
+
         var workFlowsOK                 = chorus.models.Config.instance().license().workflowEnabled() && this.workspace.currentUserCanCreateWorkFlows();
 
         workFlowsOK &&              actions.push(newWorkFlow);
@@ -153,7 +154,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
     buildSidebar: function () {
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "dataset:checked",
-            actions: this.sidebarMultiselectActions(),
+            actionProvider: _.bind(this.sidebarMultiselectActions, this),
             pageModel: this.workspace
         });
     }

@@ -69,7 +69,7 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
     multiSelectSidebarConfig: function () {
         return {
             selectEvent: "job:checked",
-            actions: [
+            actionProvider: [
                 {name: 'disable', target: 'disable'},
                 {name: 'enable', target: 'enable'},
                 {name: 'delete', target: chorus.alerts.MultipleJobDelete}

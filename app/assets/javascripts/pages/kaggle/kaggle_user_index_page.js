@@ -16,7 +16,7 @@ chorus.pages.KaggleUserIndexPage = chorus.pages.Base.extend({
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "kaggle_user:checked",
-            actions: [
+            actionProvider: [
                 { name: "send_message", target: chorus.dialogs.ComposeKaggleMessage }
             ]
         });

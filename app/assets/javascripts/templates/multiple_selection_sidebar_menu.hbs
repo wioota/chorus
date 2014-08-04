@@ -1,14 +1,16 @@
-<div class="title">{{t "sidebar.selected" count=modelCount}}</div>
-<div class="selected_models">
-    {{modelNamesList selectedModels}}
-    <a class="deselect_all">{{t "sidebar.deselect_all"}}</a>
-</div>
-<div class="actions">
-    <ul class="multiselect_actions">
-        {{#each actions}}
-            <li class="action">
-                <a href="#" class="{{name}}">{{message}}</a>
-            </li>
-        {{/each}}
-    </ul>
-</div>
+{{#if actions}}
+    <div class="title">{{t "sidebar.selected" count=modelCount}}</div>
+    <div class="selected_models">
+        {{modelNamesList selectedModels}}
+        <a class="deselect_all">{{t "sidebar.deselect_all"}}</a>
+    </div>
+    <div class="actions">
+        <ul class="multiselect_actions">
+            {{#each actions}}
+                <li class="action">
+                    <a href="#" class="{{name}}">{{message}}</a>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}

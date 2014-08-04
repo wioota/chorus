@@ -34,7 +34,7 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "data_source:checked",
-            actions: [ {name: 'edit_tags', target: chorus.dialogs.EditTags}]
+            actionProvider: [ {name: 'edit_tags', target: chorus.dialogs.EditTags}]
         });
 
         this.subscribePageEvent("data_source:selected", this.setModel);

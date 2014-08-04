@@ -225,6 +225,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                             spyOn(chorus.models.Workspace.prototype, 'currentUserCanCreateWorkFlows').andReturn(true);
                             this.page = new chorus.pages.WorkspaceDatasetIndexPage(this.workspace.get("id"));
                             this.page.render();
+                            chorus.PageEvents.trigger("dataset:checked", this.page.collection.clone());
                         });
 
                         it("has an action to create a new workFlow", function () {
@@ -272,12 +273,11 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                 context("a when source tables and sandbox tables are selected", function() {
                     beforeEach(function() {
                         this.selections = this.page.collection.clone();
-                        this.selections.reset([this.gpdbTable, this.sandboxTable]);
                         chorus.PageEvents.trigger("dataset:checked", this.selections);
+                        this.selections.reset([this.gpdbTable, this.sandboxTable]);
                     });
 
                     it("hides the disassociate workspace link", function () {
-                        expect(this.page.$(".multiple_selection a.disassociate_dataset")).toExist();
                         chorus.PageEvents.trigger("dataset:checked", this.selections);
                         expect(this.page.$(".multiple_selection a.disassociate_dataset")).not.toExist();
                     });

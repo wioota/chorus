@@ -14,7 +14,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
     setupMultiSelectSidebar: function() {
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "hdfs_entry:checked",
-            actions: [{name: "edit_tags", target: chorus.dialogs.EditTags}]
+            actionProvider: [{name: "edit_tags", target: chorus.dialogs.EditTags}]
         });
     },
 

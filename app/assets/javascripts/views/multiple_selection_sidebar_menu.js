@@ -2,11 +2,9 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.extend({
     constructorName: "MultiSelectionSidebarMenu",
     templateName: "multiple_selection_sidebar_menu",
 
-    setup: function() {
-        this.actions = this.options.actions || [];
-        this.selectEvent = this.options.selectEvent;
+    setup: function(options) {
+        this.selectEvent    = options.selectEvent;
         this.selectedModels = new chorus.collections.Base();
-        this.events = this.eventBindings(this.actions, { "click .deselect_all": 'deselectAll' });
         this.subscribePageEvent(this.selectEvent, this.modelSelected);
     },
 
@@ -14,9 +12,19 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.extend({
         this._super("render", arguments);
     },
 
+    repopulateActions: function (selectedModels) {
+        var providerIsAFunction = (this.options.actionProvider instanceof Function);
+        this.actions = providerIsAFunction ? this.options.actionProvider(selectedModels) : this.options.actionProvider;
+
+        var events = this.eventBindings(this.actions, { "click .deselect_all": 'deselectAll' });
+        this.delegateEvents(events);
+
+        this.render();
+    },
+
     modelSelected: function(selectedModels) {
         this.selectedModels = selectedModels;
-        this.render();
+        this.repopulateActions(this.selectedModels);
     },
 
     showOrHideMultipleSelectionSection: function() {

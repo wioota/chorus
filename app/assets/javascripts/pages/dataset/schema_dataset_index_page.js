@@ -20,7 +20,7 @@ chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "dataset:checked",
-            actions: [
+            actionProvider: [
                 {name: "associate", target: chorus.dialogs.AssociateMultipleWithWorkspace},
                 {name: "edit_tags", target: chorus.dialogs.EditTags}
             ]
