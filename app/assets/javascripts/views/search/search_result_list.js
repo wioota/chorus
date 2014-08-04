@@ -30,7 +30,8 @@ chorus.views.SearchResultList = chorus.views.Base.extend({
                 workspaceIdForTagLink: this.options.search.get('workspaceId')
             },
             selectedModels: this.selectedModels,
-            multiListMode: true
+            multiListMode: true,
+            eventName: this.options.entityType
         });
     },
 

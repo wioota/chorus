@@ -15,12 +15,9 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
     },
 
     setup: function() {
-        this.subscribePageEvent("hdfs_entry:selected", this.setEntry);
+        this.subscribePageEvent("hdfs_entry:checked", this.setEntry);
         this.subscribePageEvent("csv_import:started", this.refreshActivities);
         this.tabs = new chorus.views.TabControl(["activity", "statistics"]);
-        if (this.resource) {
-            this.setEntry(this.resource);
-        }
     },
 
     refreshActivities: function() {
@@ -38,7 +35,10 @@ chorus.views.HdfsEntrySidebar = chorus.views.Sidebar.extend({
         }
     },
 
-    setEntry: function(entry) {
+    setEntry: function(collection) {
+        var entry = collection.first();
+        if (!entry) { return false; }
+
         this.resource && this.stopListening(this.resource, "unprocessableEntity");
         this.resource = entry;
         if (entry) {

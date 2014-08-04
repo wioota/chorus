@@ -44,7 +44,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             beforeEach(function() {
                 this.modalSpy = stubModals();
                 this.hdfsEntry = backboneFixtures.hdfsDir();
-                chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
+                chorus.PageEvents.trigger("hdfs_entry:checked", new chorus.collections.HdfsEntrySet([this.hdfsEntry]));
             });
 
             it("should have a link 'associate with workspace'", function() {
@@ -57,7 +57,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
             context("when the model is a directory", function() {
                 beforeEach(function() {
                     this.hdfsEntry = backboneFixtures.hdfsDir();
-                    chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
+                    chorus.PageEvents.trigger("hdfs_entry:checked", new chorus.collections.HdfsEntrySet([this.hdfsEntry]));
                 });
 
                 itHasTheRightDefaultBehavior(false);
@@ -83,7 +83,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             context("when the model is a non-binary file", function() {
                 beforeEach(function() {
-                // set up page to catch launch dialog click
+                    // set up page to catch launch dialog click
                     var page = new chorus.pages.Base();
                     $(page.el).append(this.view.el);
                     chorus.bindModalLaunchingClicks(page);
@@ -98,7 +98,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                         isBinary: false
                     });
 
-                    chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
+                    chorus.PageEvents.trigger("hdfs_entry:checked", new chorus.collections.HdfsEntrySet([this.hdfsEntry]));
                 });
 
                 itHasTheRightDefaultBehavior(true);
@@ -119,7 +119,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                             isBinary: false
                         });
 
-                        chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
+                        chorus.PageEvents.trigger("hdfs_entry:checked", new chorus.collections.HdfsEntrySet([this.hdfsEntry]));
                     });
 
                     it("launches the dialog with right HdfsFile", function() {
@@ -152,7 +152,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                             name: 'my_file.sql',
                             isBinary: false
                         });
-                        chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
+                        chorus.PageEvents.trigger("hdfs_entry:checked", new chorus.collections.HdfsEntrySet([this.hdfsEntry]));
                     });
 
                     it("launches the dialog with right HdfsFile", function() {
@@ -168,7 +168,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
             context("when the model is a binary file", function() {
                 beforeEach(function() {
-                // set up page to catch launch dialog click
+                    // set up page to catch launch dialog click
                     var page = new chorus.pages.Base();
                     $(page.el).append(this.view.el);
                     chorus.bindModalLaunchingClicks(page);
@@ -182,7 +182,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                         isBinary: true
                     });
 
-                    chorus.PageEvents.trigger("hdfs_entry:selected", this.hdfsEntry);
+                    chorus.PageEvents.trigger("hdfs_entry:checked", new chorus.collections.HdfsEntrySet([this.hdfsEntry]));
                 });
 
                 it("does not have a create external table link", function() {
@@ -192,8 +192,20 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                 itBehavesLike.aDialogLauncher("a.edit_tags", chorus.dialogs.EditTags);
             });
         });
-        
+
         context("when there is no model", function() {
+            it("does not render anything", function() {
+                this.view.render();
+                expect(this.view.$(".info")).not.toExist();
+                expect(this.view.$(".actions")).not.toExist();
+            });
+        });
+
+        describe("when selectNone is triggered", function () {
+            beforeEach(function () {
+                chorus.PageEvents.trigger("hdfs_entry:checked", new chorus.collections.HdfsEntrySet([]));
+            });
+
             it("does not render anything", function() {
                 this.view.render();
                 expect(this.view.$(".info")).not.toExist();
