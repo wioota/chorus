@@ -202,17 +202,13 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             });
 
             describe("multiple selection", function() {
-                it("does not display the multiple selection section", function() {
-                    expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
-                });
-
                 context("when a row has been checked", function() {
                     beforeEach(function() {
                         chorus.PageEvents.trigger("dataset:checked", this.page.collection.clone());
                     });
 
                     it("displays the multiple selection section", function() {
-                        expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
+                        expect(this.page.$(".multiple_selection .actions")).not.toHaveClass("hidden");
                     });
 
                     it("has an action to edit tags", function() {

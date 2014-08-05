@@ -6,10 +6,6 @@ describe("chorus.views.MilestoneSidebar", function () {
         this.view.render();
     });
 
-    it("displays the milestone name", function () {
-        expect(this.view.$(".name")).toContainText(this.milestone.get("name"));
-    });
-
     context("when the user has workspace permissions", function () {
         beforeEach(function () {
             spyOn(this.milestone.workspace(), 'canUpdate').andReturn(true);

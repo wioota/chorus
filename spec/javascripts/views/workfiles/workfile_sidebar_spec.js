@@ -77,22 +77,6 @@ describe("chorus.views.WorkfileSidebar", function() {
                 expect(copyLink).toExist();
             });
 
-            it("displays the filename", function() {
-                expect(this.view.$(".fileName").text().trim()).toBe(this.workfile.get("fileName"));
-            });
-
-            it("displays the workfile's date", function() {
-                expect(this.view.$(".updated_on").text().trim()).toBe("November 22");
-            });
-
-            it("displays the name of the person who updated the workfile", function() {
-                expect(this.view.$(".updated_by").text().trim()).toBe(this.workfile.modifier().displayShortName());
-            });
-
-            it("links to the profile page of the modifier", function() {
-                expect(this.view.$("a.updated_by").attr("href")).toBe(this.workfile.modifier().showUrl());
-            });
-
             it("displays a link to delete the workfile", function() {
                 var deleteLink = this.view.$(".actions a.delete");
                 expect(deleteLink).toExist();

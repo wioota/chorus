@@ -124,12 +124,6 @@ describe("chorus.pages.DataSourceIndexPage", function() {
                 this.page.render();
             });
 
-            context("when nothing is checked", function() {
-                it("does not display the multiple selection section", function() {
-                    expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
-                });
-            });
-
             context("when two rows have been checked", function() {
                 beforeEach(function() {
                     this.modalSpy = stubModals();
@@ -138,7 +132,7 @@ describe("chorus.pages.DataSourceIndexPage", function() {
                 });
 
                 it("displays the multiple selection section", function() {
-                    expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
+                    expect(this.page.$(".multiple_selection .actions")).not.toHaveClass("hidden");
                 });
 
                 it("has an action to edit tags", function() {

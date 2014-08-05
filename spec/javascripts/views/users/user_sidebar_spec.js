@@ -106,11 +106,6 @@ describe("chorus.views.UserSidebar", function() {
                 this.view.setUser(this.user2);
             });
 
-            it("shows the new user's name and title'", function() {
-                expect(this.view.$(".full_name")).toHaveText(this.user2.displayName());
-                expect(this.view.$(".title")).toHaveText(this.user2.get("title"));
-            });
-
             it("fetches the other user's activities'", function() {
                 expect(this.user2.activities()).toHaveBeenFetched();
             });
@@ -120,17 +115,6 @@ describe("chorus.views.UserSidebar", function() {
                 chorus.PageEvents.trigger("user:selected", backboneFixtures.user());
                 expect(this.view.setUser).toHaveBeenCalled();
             });
-        });
-    });
-
-    context("without a user", function() {
-        beforeEach(function() {
-            this.view = new chorus.views.UserSidebar({listMode: false});
-            this.view.render();
-        });
-
-        it("should render something", function() {
-            expect(this.view.$(".info")).toExist();
         });
     });
 });

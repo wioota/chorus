@@ -60,10 +60,6 @@ describe("chorus.views.DatasetSidebar", function() {
             $("#jasmine_content").append(this.view.$el);
         });
 
-        it("displays the selected dataset name", function() {
-            expect(this.view.$(".name").text().trim()).toBe(this.dataset.get("objectName"));
-        });
-
         describe("statistics", function() {
             context("when the dataset is stale", function () {
                 beforeEach(function () {
@@ -74,12 +70,6 @@ describe("chorus.views.DatasetSidebar", function() {
                 it("do not fetch", function () {
                     chorus.PageEvents.trigger("dataset:selected", this.dataset);
                     expect(this.dataset.statistics()).not.toHaveBeenFetched();
-                });
-            });
-
-            context("when the statistics have not yet loaded", function() {
-                it("displays the selected dataset type", function() {
-                    expect(this.view.$(".details").text().trim()).toBe('Source Table');
                 });
             });
 

@@ -49,8 +49,10 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
             expect(checkbox.prop('indeterminate')).toBeTruthy();
         });
 
-        it("does not display the multiple selection section", function() {
-            expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
+        context("when nothing has been checked", function () {
+            it("does not display the multiple selection actions", function() {
+                expect(this.page.$(".multiple_selection .actions")).not.toExist();
+            });
         });
 
         context("when only ONE row has been checked", function() {
@@ -60,8 +62,8 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
                 chorus.PageEvents.trigger(this.page.mainContent.content.eventName + ":checked", oneModelCollection);
             });
 
-            it("does not display the multiple selection section", function() {
-                expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
+            it("does not display the multiple selection actions", function() {
+                expect(this.page.$(".multiple_selection .actions")).toHaveClass("hidden");
             });
         });
 
@@ -73,8 +75,8 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
                 chorus.PageEvents.trigger(this.page.mainContent.content.eventName + ":checked", rowModels);
             });
 
-            it("displays the multiple selection section", function() {
-                expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
+            it("displays the multiple selection actions", function() {
+                expect(this.page.$(".multiple_selection .actions")).not.toHaveClass("hidden");
             });
 
             it("has an action to edit tags", function() {

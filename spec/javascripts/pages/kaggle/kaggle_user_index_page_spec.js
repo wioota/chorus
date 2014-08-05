@@ -39,10 +39,6 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
         });
 
         describe("multiple selection", function() {
-            it("does not display the multiple selection section", function() {
-                expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
-            });
-
             context("when a row has been checked", function() {
                 beforeEach(function() {
                     this.modalSpy = stubModals();
@@ -50,7 +46,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
                 });
 
                 it("displays the multiple selection section", function() {
-                    expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
+                    expect(this.page.$(".multiple_selection .actions")).not.toHaveClass("hidden");
                 });
 
                 it("has an action to send message to kaggle users", function() {

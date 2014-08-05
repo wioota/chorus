@@ -58,10 +58,6 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
             );
         });
 
-        it("does not display the multiple selection section", function() {
-            expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
-        });
-
         describe('multiselect', function() {
 
             it("creates the multi select sidebar", function() {

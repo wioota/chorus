@@ -24,14 +24,8 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
     });
 
     context("when no models are selected", function() {
-        it("is not visible", function() {
-            expect(this.view.$el).not.toBeVisible();
-        });
-    });
-
-    context("when one model is selected", function() {
-        it("is not visible", function() {
-            expect(this.view.$el).not.toBeVisible();
+        it("shows no actions", function() {
+            expect(this.view.$('.actions')).not.toBeVisible();
         });
     });
 

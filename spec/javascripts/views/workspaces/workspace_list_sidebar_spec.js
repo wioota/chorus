@@ -18,10 +18,6 @@ describe("chorus.views.WorkspaceListSidebar", function() {
             chorus.PageEvents.trigger("workspace:selected", this.workspace);
         });
 
-        it("displays the workspace name", function() {
-            expect(this.view.$(".name")).toContainText(this.workspace.get("name"));
-        });
-
         context("the workspace has an image", function() {
             beforeEach(function() {
                 spyOn(this.view.model, 'hasImage').andReturn(true);

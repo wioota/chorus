@@ -65,13 +65,6 @@ describe('chorus.pages.OracleSchemaIndexPage', function(){
                     expect(this.page.sidebar).toBeA(chorus.views.SchemaListSidebar);
                     expect(this.page.$(this.page.sidebar.el)).toExist();
                 });
-
-                it("includes the selected schemas name and type", function() {
-                    expect(this.page.sidebar.$el).toContainText("schema1");
-                    this.page.$('.item_wrapper:eq(1)').click();
-                    expect(this.page.sidebar.$el).toContainText("schema2");
-                    expect(this.page.sidebar.$el).toContainText("Oracle DB Schema");
-                });
             });
         });
     });

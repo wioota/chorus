@@ -7,10 +7,6 @@ describe("chorus.views.JobTaskSidebar", function () {
         this.view.render();
     });
 
-    it("displays the job tasks name", function () {
-        expect(this.view.$(".name")).toContainText(this.task.get("name"));
-    });
-
     context("when the user has workspace permissions", function () {
         beforeEach(function () {
             spyOn(this.task.job().workspace(), 'canUpdate').andReturn(true);

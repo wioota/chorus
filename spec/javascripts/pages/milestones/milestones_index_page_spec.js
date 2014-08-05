@@ -45,11 +45,6 @@ describe("chorus.pages.MilestonesIndexPage", function () {
                 }, this);
             });
 
-            it("renders a sidebar with the selected milestone name", function () {
-                this.page.$('.item_wrapper:eq(0)').click();
-                expect(this.page.$('#sidebar')).toContainText(this.milestones.at(0).get('name'));
-            });
-
             describe("when invalidated is triggered on the model", function () {
                 it("refetches the model", function () {
                     this.page.collection.trigger('invalidated');

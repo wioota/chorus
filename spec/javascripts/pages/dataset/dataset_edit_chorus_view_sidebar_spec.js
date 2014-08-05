@@ -13,10 +13,6 @@ describe("chorus.views.DatasetEditChorusViewSidebar", function() {
             this.view.render();
         });
 
-        it("displays the chorus view name", function() {
-            expect(this.view.$(".name").text()).toBe(this.dataset.get("objectName"));
-        });
-
         it("should have an activities tab", function() {
             expect(this.view.$('.tab_control .activity_list')).toExist();
             expect(this.view.tabs.activity).toBeA(chorus.views.ActivityList);

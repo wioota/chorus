@@ -15,10 +15,6 @@ describe("chorus.views.KaggleUserSidebar", function () {
             chorus.PageEvents.trigger('kaggle_user:deselected', null);
         });
 
-        it("does not show an username", function () {
-            expect(this.view.$(".info .name").text()).toBe("");
-        });
-
         it("does not show the user information sidebar", function() {
             expect(this.view.$('.tab_control')).toBeEmpty();
         });
@@ -31,14 +27,6 @@ describe("chorus.views.KaggleUserSidebar", function () {
     context("with a user", function () {
         beforeEach(function () {
             chorus.PageEvents.trigger('kaggle_user:selected', this.model);
-        });
-
-        it("shows the user's name", function () {
-            expect(this.view.$(".info .name")).toContainText(this.model.get("fullName"));
-        });
-
-        it("shows the user's location", function () {
-            expect(this.view.$(".location")).toContainText(this.model.get("location"));
         });
 
         it("renders information inside the tabbed area", function () {

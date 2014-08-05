@@ -1,12 +1,4 @@
 jasmine.sharedExamples.aSidebar = function() {
-    it('displays data source name', function() {
-        expect(this.view.$(".data_source_name")).toContainText(this.dataSource.get("name"));
-    });
-
-    it('displays data source type translation', function() {
-        expect(this.view.$(".data_source_type")).toContainTranslation("data_sources.provider." + this.dataSource.get('entityType'));
-    });
-
     it("has a 'add a note' link", function() {
         expect(this.view.$("a[data-dialog=NotesNew]")).toExist();
         expect(this.view.$("a[data-dialog=NotesNew]").text()).toMatchTranslation("actions.add_note");
@@ -326,17 +318,6 @@ describe("chorus.views.DataSourceListSidebar", function() {
                 dataSourceAccountSet.models[0].set({owner: {id: this.dataSource.owner().id}});
                 this.server.completeFetchAllFor(this.dataSource.accounts(), dataSourceAccountSet.models);
                 this.server.completeFetchFor(this.dataSource.accountForCurrentUser());
-            });
-
-            describe("when isHawq is true", function () {
-                beforeEach(function () {
-                    this.dataSource.set("isHawq", true);
-                    this.view.render();
-                });
-
-                it ('displays "HAWQ Data Source" as its type', function() {
-                    expect(this.view.$(".data_source_type")).toContainText(t("data_sources.provider.hawq_data_source"));
-                });
             });
 
             itBehavesLike.aSidebar();

@@ -167,11 +167,6 @@ describe("chorus.pages.SearchIndexPage", function() {
                         expect(this.workspaceLIs.eq(selectedIndex)).toHaveClass("selected");
                     });
 
-                    it("shows that workspace in the sidebar", function() {
-                        var workspaceAtSelectedIndex = this.page.mainContent.content.workspaceList.collection.at(selectedIndex);
-                        expect(this.page.sidebar.$(".info .name")).toHaveText(workspaceAtSelectedIndex.get('name'));
-                    });
-
                     it("show the 'add a note' link in the sidebar", function() {
                         expect(this.page.sidebar.$("a.new_note")).toExist();
                     });
@@ -206,12 +201,6 @@ describe("chorus.pages.SearchIndexPage", function() {
                         expect(this.datasetResult).toHaveClass("selected");
                     });
 
-                    it("shows the tabular data item in the sidebar", function() {
-                        var name = this.dataset.name();
-                        expect(name.length).toBeGreaterThan(0);
-                        expect(this.page.sidebar.$(".info .name")).toHaveText(name);
-                    });
-
                     it("shows the associate-with-workspace link in the sidebar", function() {
                         expect(this.page.sidebar.$('a.associate')).toExist();
                     });
@@ -235,11 +224,6 @@ describe("chorus.pages.SearchIndexPage", function() {
 
                     it('selects that data source', function() {
                         expect(this.dataSourceLIs.eq(0)).toHaveClass("selected");
-                    });
-
-                    it('shows the data source in the sidebar', function() {
-                        expect($(this.page.sidebar.el)).toHaveClass("data_source_list_sidebar");
-                        expect(this.page.sidebars.dataSource.setDataSource).toHaveBeenCalledWith(this.page.search.dataSources().at(0));
                     });
                 });
             });
@@ -266,17 +250,6 @@ describe("chorus.pages.SearchIndexPage", function() {
 
                     it("fetches the user's activities'", function() {
                         expect(this.clickedUser.activities()).toHaveBeenFetched();
-                    });
-
-                    describe("when all of the sidebar's fetches complete", function() {
-                        beforeEach(function() {
-                            this.server.completeFetchFor(this.clickedUser.activities(), []);
-                            loadConfig();
-                        });
-
-                        it("shows that user in the sidebar", function() {
-                            expect(this.page.sidebar.$(".info .full_name")).toHaveText(this.users.at(0).displayName());
-                        });
                     });
                 });
             });

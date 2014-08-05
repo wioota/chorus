@@ -14,10 +14,7 @@ body .ui-draggable-dragging {
 
 #sidebar {
     .multiple_selection {
-        margin-bottom: 10px;
         margin-right: 10px;
-        padding: 10px 0 10px 0;
-        border-bottom: 1px solid $link-color;
 
         .title {
             @include heading-sidebar;

@@ -31,9 +31,11 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.include(
 
     showOrHideMultipleSelectionSection: function() {
         if(this.selectedModels.length > 1) {
-            this.$el.removeClass('hidden');
+            this.$('.actions').removeClass('hidden');
+            $('#sidebar .primary .actions').addClass('hidden');
         } else {
-            this.$el.addClass("hidden");
+            this.$('.actions').addClass("hidden");
+            $('#sidebar .primary .actions').removeClass('hidden');
         }
     },
 
