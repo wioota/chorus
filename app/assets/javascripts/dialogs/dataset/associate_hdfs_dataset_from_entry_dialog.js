@@ -9,11 +9,15 @@ chorus.dialogs.AssociateHdfsDatasetFromEntry = chorus.dialogs.HdfsDatasetAttribu
     },
 
     setup: function () {
+        this.options.entry = this.options.pageModel;
         this._super("setup");
     },
 
     findModel: function () {
-        return this.options.model;
+        var dataSourceID = this.options.pageModel.get('hdfsDataSource').id;
+        return new chorus.models.HdfsDataset({
+            hdfsDataSource: new chorus.models.HdfsDataSource({id: dataSourceID})
+        });
     },
 
     postRender: function() {

@@ -1,10 +1,8 @@
 describe("chorus.dialogs.AssociateHdfsDatasetFromEntry", function() {
     beforeEach(function() {
         this.entry = backboneFixtures.hdfsFile();
-        var hdfsDataset = new chorus.models.HdfsDataset({
-            hdfsDataSource: new chorus.models.HdfsDataSource({id: "5"})
-        });
-        this.dialog = new chorus.dialogs.AssociateHdfsDatasetFromEntry({entry: this.entry, model: hdfsDataset});
+        this.hdfsDataSourceID = this.entry.get('hdfsDataSource').id;
+        this.dialog = new chorus.dialogs.AssociateHdfsDatasetFromEntry({pageModel: this.entry});
 
         this.modalSpy = stubModals();
         this.dialog.launchModal();
@@ -57,7 +55,7 @@ describe("chorus.dialogs.AssociateHdfsDatasetFromEntry", function() {
             it("posts with the correct values", function() {
                 var json = this.server.lastCreate().json()['hdfs_dataset'];
                 expect(json['name']).toEqual(this.entry.get('name'));
-                expect(json['data_source_id']).toEqual("5");
+                expect(json['data_source_id']).toEqual(this.hdfsDataSourceID);
                 expect(json['file_mask']).toEqual(this.entry.getFullAbsolutePath());
                 expect(json['workspace_id']).toEqual(this.workspace.id);
                 expect(json['entity_subtype']).toEqual('HDFS');
