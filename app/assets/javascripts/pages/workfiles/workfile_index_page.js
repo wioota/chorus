@@ -98,11 +98,14 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
     },
 
     buildPrimaryActionPanel: function () {
-        var actions = [
+        var actions = [];
+
+        var updateActions = [
             {name: 'import_workfile', target: chorus.dialogs.WorkfilesImport},
             {name: 'create_sql_workfile', target: chorus.dialogs.WorkfilesSqlNew}
         ];
 
+        this.workspace.canUpdate() && _.each(updateActions, function (action) { actions.push(action); });
         var createWorkflow = {name: 'create_workflow', target: chorus.dialogs.WorkFlowNew};
         this.workspace.currentUserCanCreateWorkFlows() && actions.push(createWorkflow);
 

@@ -86,6 +86,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             this.server.completeFetchFor(this.page.collection, backboneFixtures.workfileSet());
         });
 
+
         itBehavesLike.aPageWithPrimaryActions([
             {name: 'import_workfile', target: chorus.dialogs.WorkfilesImport},
             {name: 'create_sql_workfile', target: chorus.dialogs.WorkfilesSqlNew}
@@ -102,6 +103,15 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                 {name: 'create_sql_workfile', target: chorus.dialogs.WorkfilesSqlNew},
                 {name: 'create_workflow', target: chorus.dialogs.WorkFlowNew}
             ]);
+        });
+
+        describe("when the user cannot update the workspace", function () {
+            beforeEach(function () {
+                spyOn(this.page.workspace, 'canUpdate').andReturn(false);
+                this.page.render();
+            });
+
+            itBehavesLike.aPageWithPrimaryActions([]);
         });
 
         it("has a titlebar", function() {
