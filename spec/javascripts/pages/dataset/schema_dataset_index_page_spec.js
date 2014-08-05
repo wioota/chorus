@@ -201,9 +201,11 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
         });
 
         describe("multiple selection", function() {
-            context("when a row has been checked", function() {
+            context("when two rows have been checked", function() {
                 beforeEach(function() {
-                    chorus.PageEvents.trigger("dataset:checked", this.page.collection.clone());
+                    var someModels = this.page.collection.clone().reset([backboneFixtures.dataset({ objectName: "bar" }),
+                        backboneFixtures.dataset({ objectName: "foo", objectType: "VIEW" })]);
+                    chorus.PageEvents.trigger("dataset:checked", someModels);
                 });
 
                 it("has an action to associate datasets with workspace", function() {

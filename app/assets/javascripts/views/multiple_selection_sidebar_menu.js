@@ -30,7 +30,7 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.include(
     },
 
     showOrHideMultipleSelectionSection: function() {
-        if(this.selectedModels.length > 0) {
+        if(this.selectedModels.length > 1) {
             this.$el.removeClass('hidden');
         } else {
             this.$el.addClass("hidden");

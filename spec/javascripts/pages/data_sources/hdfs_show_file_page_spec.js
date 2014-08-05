@@ -45,11 +45,6 @@ describe("chorus.pages.HdfsShowFilePage", function() {
             expect(this.page.$(".content_details")).toContainTranslation("hdfs.read_only");
         });
 
-        it("has the correct sidebar", function() {
-            expect(this.page.sidebar).toBeA(chorus.views.HdfsEntrySidebar);
-            expect(this.page.sidebar.$('.name')).toContainText(this.file.name());
-        });
-
         it("has a header file", function() {
             expect(this.page.mainContent.contentHeader).toBeA(chorus.views.HdfsShowFileHeader);
             expect(this.page.mainContent.contentHeader.model.get('contents').length).toBe(2);

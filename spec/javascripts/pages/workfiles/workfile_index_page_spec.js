@@ -112,28 +112,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             expect(this.page.$('.content_header h1').text().trim()).toEqual(t("workfiles.title"));
         });
 
-        describe("multiple selection", function() {
-            it("does not display the multiple selection section", function() {
-                expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
-            });
-
-            context("when a row has been checked", function() {
-                beforeEach(function() {
-                    this.modalSpy = stubModals();
-                    chorus.PageEvents.trigger("workfile:checked", this.page.collection.clone());
-                });
-
-                it("displays the multiple selection section", function() {
-                    expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
-                });
-
-                it("has an action to edit tags", function() {
-                    expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
-                });
-
-                itBehavesLike.aDialogLauncher(".multiple_selection a.edit_tags", chorus.dialogs.EditTags);
-            });
-        });
+        itBehavesLike.aPageWithMultiSelect();
     });
 
     describe("search", function() {

@@ -133,11 +133,6 @@ describe("chorus.pages.SearchIndexPage", function() {
                         expect(this.searchedWorkfile).toHaveClass("selected");
                     });
 
-                    it("shows that workfile in the sidebar", function() {
-                        var workfileName = this.searchedWorkfile.find('a.name').text();
-                        expect(this.page.sidebar.$(".fileName")).toHaveText(workfileName);
-                    });
-
                     it('shows the right links', function(){
                         expect(this.page.sidebar.$('.actions')).toContainTranslation('actions.copy_workfile');
                         expect(this.page.sidebar.$('.actions')).toContainTranslation('actions.download');
@@ -309,16 +304,6 @@ describe("chorus.pages.SearchIndexPage", function() {
                     it("fetches the file's activities'", function() {
                         expect(this.clickedFile.activities()).toHaveBeenFetched();
                     });
-
-                    describe("when all of the sidebar's fetches complete", function() {
-                        beforeEach(function() {
-                            this.server.completeFetchFor(this.clickedFile.activities(), []);
-                        });
-
-                        it("shows that file in the sidebar", function() {
-                            expect(this.page.sidebar.$(".info .name")).toHaveText(this.clickedFile.get('name'));
-                        });
-                    });
                 });
             });
 
@@ -340,10 +325,6 @@ describe("chorus.pages.SearchIndexPage", function() {
 
                     it("selects that file", function() {
                         expect(this.attachmentLis.eq(0)).toHaveClass("selected");
-                    });
-
-                    it("shows that file in the sidebar", function() {
-                        expect(this.page.sidebar.$(".info .name")).toHaveText(this.clickedFile.get("name"));
                     });
                 });
             });
@@ -444,35 +425,6 @@ describe("chorus.pages.SearchIndexPage", function() {
             it("doesn't display the list content details", function() {
                 expect(this.page.mainContent.contentDetails).toBeUndefined();
             });
-        });
-    });
-
-    describe("multiple selection", function() {
-        beforeEach(function() {
-            this.page = new chorus.pages.SearchIndexPage(this.query);
-            this.server.completeFetchFor(this.page.search, smallSearchResult());
-        });
-
-        it("does not display the multiple selection menu until items have been selected", function() {
-            expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
-        });
-
-        context("when an item has been checked", function() {
-            beforeEach(function() {
-                this.workfile = backboneFixtures.workfile.sql();
-                this.selectedModels = new chorus.collections.Base([this.workfile]);
-                chorus.PageEvents.trigger("checked", this.selectedModels);
-            });
-
-            it("displays the multiple selection section", function() {
-                expect(this.page.$(".multiple_selection")).not.toHaveClass("hidden");
-            });
-
-            it("has an action to edit tags", function() {
-                expect(this.page.$(".multiple_selection a.edit_tags")).toExist();
-            });
-
-            itBehavesLike.aDialogLauncher(".multiple_selection a.edit_tags", chorus.dialogs.EditTags);
         });
     });
 

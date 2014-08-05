@@ -53,10 +53,24 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
             expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
         });
 
-        context("when a row has been checked", function() {
+        context("when only ONE row has been checked", function() {
             beforeEach(function() {
                 this.modalSpy = stubModals();
-                chorus.PageEvents.trigger(this.page.mainContent.content.eventName + ":checked", this.page.collection.clone());
+                var oneModelCollection = this.page.collection.clone().reset([this.page.collection.first()]);
+                chorus.PageEvents.trigger(this.page.mainContent.content.eventName + ":checked", oneModelCollection);
+            });
+
+            it("does not display the multiple selection section", function() {
+                expect(this.page.$(".multiple_selection")).toHaveClass("hidden");
+            });
+        });
+
+        context("when at least TWO rows have been checked", function() {
+            beforeEach(function() {
+                this.modalSpy = stubModals();
+                var someModel = this.page.collection.first();
+                var rowModels = this.page.collection.clone().reset([someModel, new chorus.models[someModel.constructorName]()]);
+                chorus.PageEvents.trigger(this.page.mainContent.content.eventName + ":checked", rowModels);
             });
 
             it("displays the multiple selection section", function() {

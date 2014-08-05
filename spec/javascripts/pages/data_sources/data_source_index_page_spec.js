@@ -130,10 +130,10 @@ describe("chorus.pages.DataSourceIndexPage", function() {
                 });
             });
 
-            context("when a row has been checked", function() {
+            context("when two rows have been checked", function() {
                 beforeEach(function() {
                     this.modalSpy = stubModals();
-                    var dataSources = new chorus.collections.DataSourceSet([backboneFixtures.gpdbDataSource()]);
+                    var dataSources = new chorus.collections.DataSourceSet([backboneFixtures.gpdbDataSource(), backboneFixtures.gpdbDataSource()]);
                     chorus.PageEvents.trigger("data_source:checked", dataSources);
                 });
 

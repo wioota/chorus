@@ -29,6 +29,12 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
         });
     });
 
+    context("when one model is selected", function() {
+        it("is not visible", function() {
+            expect(this.view.$el).not.toBeVisible();
+        });
+    });
+
     describe("context-aware actions", function () {
         var actionProviderSpy;
 
@@ -49,10 +55,11 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
         });
 
     });
-    
-    context("when a model is selected", function() {
+
+    context("when two models are selected", function() {
         beforeEach(function() {
-            this.collection = new chorus.collections.Base([new chorus.models.Base()]);
+            var twoModels = [new chorus.models.Base(), new chorus.models.Base()];
+            this.collection = new chorus.collections.Base(twoModels);
             spyOn(this.collection, 'invoke');
         });
 
@@ -63,7 +70,7 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
 
         it("shows the number of models selected", function() {
             chorus.PageEvents.trigger(this.selectEvent, this.collection);
-            expect(this.view.$('.title')).toContainTranslation('sidebar.selected', {count: 1});
+            expect(this.view.$('.title')).toContainTranslation('sidebar.selected', {count: 2});
         });
 
         it("lists the model names under the selected text", function() {

@@ -6,14 +6,6 @@ describe("chorus.views.HdfsEntrySidebar", function() {
 
     describe("#render", function() {
         function itHasTheRightDefaultBehavior(withActivities) {
-            it("should display the file name", function() {
-                expect(this.view.$(".info .name").text()).toBe(this.hdfsEntry.get("name"));
-            });
-
-            it("should display the last updated timestamp", function() {
-                var when = Handlebars.helpers.relativeTimestamp(this.hdfsEntry.get("lastUpdatedStamp"));
-                expect(this.view.$(".info .last_updated").text()).toContainTranslation("hdfs.last_updated", {when: when});
-            });
 
             if (withActivities) {
                 it("shows the activity stream", function() {
