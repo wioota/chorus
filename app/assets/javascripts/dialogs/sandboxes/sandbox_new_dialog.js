@@ -31,9 +31,8 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     makeModel: function() {
         this._super("makeModel", arguments);
-        var workspaceId = this.options.workspaceId;
-        this.workspace = new chorus.models.Workspace({id : workspaceId});
-        this.model = new chorus.models.Sandbox({ workspaceId: workspaceId });
+        this.workspace = this.options.pageModel;
+        this.model = new chorus.models.Sandbox({ workspaceId: this.workspace.id });
     },
 
     resourcesLoaded: function() {
@@ -63,9 +62,6 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
 
     saved: function() {
         chorus.toast("sandbox.create.toast");
-        if (!this.options.noReload) {
-            chorus.router.reload();
-        }
         this.closeModal();
     },
 

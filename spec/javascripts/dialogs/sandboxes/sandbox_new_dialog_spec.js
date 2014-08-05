@@ -4,7 +4,7 @@ describe("chorus.dialogs.SandboxNew", function() {
         spyOn(chorus, "toast");
         spyOn(chorus, 'styleSelect');
         spyOn(chorus.router, 'reload');
-        this.dialog = new chorus.dialogs.SandboxNew({ workspaceId: 45});
+        this.dialog = new chorus.dialogs.SandboxNew({ pageModel: this.workspace});
         this.server.completeFetchFor(this.workspace);
         this.dialog.render();
     });
@@ -124,12 +124,6 @@ describe("chorus.dialogs.SandboxNew", function() {
                         this.dialog.options.noReload = true;
                         this.sandbox.trigger("saved");
                         expect(chorus.router.reload).not.toHaveBeenCalled();
-                    });
-                });
-
-                context("when the 'noReload' option is falsy", function() {
-                    it("reloads the page", function() {
-                        expect(chorus.router.reload).toHaveBeenCalled();
                     });
                 });
 

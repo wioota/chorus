@@ -90,7 +90,7 @@ chorus.views.WorkspaceQuickstart = chorus.views.Base.extend({
 
     launchSandboxNewDialog: function(e) {
         e && e.preventDefault();
-        var dialog = this.makeModal('new_sandbox', {workspaceId: this.model.id, noReload: true});
+        var dialog = this.makeModal('new_sandbox', {pageModel: this.model, noReload: true});
         dialog.launchModal();
     },
 
