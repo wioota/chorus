@@ -15,17 +15,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
 
     listItemClicked: function(e) {
         var $item = $(e.target).closest('.item_wrapper');
-        if($item.hasClass('checked')) { return false; }
-
-        this.selectAll();
-        this.selectNone();
-        var $allItems = this.$(".item_wrapper");
-        $allItems.removeClass("checked");
-        var index = $allItems.index($item);
-        var model = this.collection.at(index);
-        this.addModelsToSelection([model]);
-        this.focusSideBarOnItem($item, $allItems);
-        this.sendCheckedEvents();
+        $item.hasClass('checked') || this.deselectAllOtherItemsAndFocusOnThisOne($item);
     },
 
     checkboxClicked: function(e) {
@@ -226,5 +216,18 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         var itemView = new this.entityViewType(_.extend({model: model, checkable: true}, this.listItemOptions));
         itemView.listenTo(model, 'change:tags', itemView.render);
         return new chorus.views.ItemWrapper({itemView: itemView});
+    },
+
+
+    deselectAllOtherItemsAndFocusOnThisOne: function ($item) {
+        this.selectAll();
+        this.selectNone();
+        var $allItems = this.$(".item_wrapper");
+        $allItems.removeClass("checked");
+        var index = $allItems.index($item);
+        var model = this.collection.at(index);
+        this.addModelsToSelection([model]);
+        this.focusSideBarOnItem($item, $allItems);
+        this.sendCheckedEvents();
     }
 });

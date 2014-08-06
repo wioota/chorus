@@ -28,19 +28,23 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.include(
             this.repopulateActions(this.selectedModels);
         },
 
+        revealOnlyMultiActions: function () {
+            this.$('.actions').removeClass('hidden');
+            $('#sidebar').find('.primary .actions').addClass('hidden');
+//            this.$('.multiple_selection_sidebar_menu').removeClass('hidden');
+        }, revealOnlySingleActions: function () {
+            this.$('.actions').addClass("hidden");
+            this.$('.multiple_selection_sidebar_menu').removeClass('hidden');
+//            $('#sidebar').find('.primary .actions').removeClass('hidden');
+        }, revealNoActions: function () {
+            this.$('.multiple_selection_sidebar_menu').addClass('hidden');
+//            $('#sidebar').find('.primary .actions').addClass('hidden');
+        },
+
         showOrHideMultipleSelectionSection: function () {
-            if (this.selectedModels.length > 1) {
-                this.$('.actions').removeClass('hidden');
-                $('#sidebar').find('.primary .actions').addClass('hidden');
-                this.$('.multiple_selection_sidebar_menu').removeClass('hidden');
-            } else if (this.selectedModels.length === 1) {
-                this.$('.actions').addClass("hidden");
-                this.$('.multiple_selection_sidebar_menu').removeClass('hidden');
-                $('#sidebar').find('.primary .actions').removeClass('hidden');
-            } else {
-                this.$('.multiple_selection_sidebar_menu').addClass('hidden');
-                $('#sidebar').find('.primary .actions').addClass('hidden');
-            }
+            if (this.selectedModels.length > 1)     { this.revealOnlyMultiActions(); } else
+            if (this.selectedModels.length === 1)   { this.revealOnlySingleActions(); } else
+            if (this.selectedModels.length === 0)   { this.revealNoActions(); }
         },
 
         deselectAll: function (e) {
@@ -61,6 +65,5 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.include(
             this.showOrHideMultipleSelectionSection();
             this._super("postRender");
         }
-
-
     });
+
