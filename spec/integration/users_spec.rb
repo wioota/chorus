@@ -13,9 +13,9 @@ describe "Users" do
 
     it "creates a user and saves their information" do
       visit "/#/users/new"
-      fill_in 'firstName', :with => "new"
-      fill_in 'lastName', :with => "person"
-      fill_in 'username', :with => "new_user"
+      fill_in 'firstName', :with => "James"
+      fill_in 'lastName', :with => "Bond"
+      fill_in 'username', :with => "bondjamesbond007"
       fill_in 'email', :with => "new_user@example.com"
       fill_in 'password', :with => "secret"
       fill_in 'passwordConfirmation', :with => "secret"
@@ -24,8 +24,10 @@ describe "Users" do
       fill_in 'notes', :with => "This is a test user."
       click_button "Add This User"
 
-      click_link "Add User"
-      within(".main_content") { find("h1").should have_content("new person") }
+      within ".main_content" do
+        click_link "James Bond"
+        find("h1").should have_content("James Bond")
+      end
     end
 
     it "user can upload a user image" do
