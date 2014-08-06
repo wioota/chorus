@@ -9,12 +9,8 @@ div[data-page="Dashboard"] {
     }
 
     #main_content {
+        border: none;
         @include after-clearfix();
-    }
-
-    #user_count {
-      top: 50px;
-      right: $guts-padding;
     }
 
     .main_activity_list .heading {
