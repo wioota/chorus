@@ -14,9 +14,17 @@ chorus.views.PageItemList = chorus.views.Base.extend({
     },
 
     listItemClicked: function(e) {
+        var $item = $(e.target).closest('.item_wrapper');
+        if($item.hasClass('checked')) { return false; }
 
-        var item = $(e.target).closest('.item_wrapper');
-        if(!item.hasClass('checked')) { this.selectItem(item); }
+        this.selectAll();
+        this.selectNone();
+        var $allItems = this.$(".item_wrapper");
+        $allItems.removeClass("checked");
+        var index = $allItems.index($item);
+        var model = this.collection.at(index);
+        this.addModelsToSelection([model]);
+        this.focusSideBarOnItem($item, $allItems);
         this.sendCheckedEvents();
     },
 
@@ -140,9 +148,8 @@ chorus.views.PageItemList = chorus.views.Base.extend({
     },
 
     focusSideBarOnItem: function($item, $lis){
-        var preSelected = $item.hasClass("selected");
-        
-        $item.addClass("selected");
+        var preSelected = $item.hasClass("checked");
+
         $item.addClass("checked");
 
         $item.find('input').prop("checked", true);
@@ -157,19 +164,6 @@ chorus.views.PageItemList = chorus.views.Base.extend({
         }
     },
 
-    selectItem: function($item) {
-        this.selectAll();
-        this.selectNone();
-
-        var $allItems = this.$(".item_wrapper");
-        $allItems.removeClass("selected");
-        $allItems.removeClass("checked");
-
-        var index = $allItems.index($item);
-        var model = this.collection.at(index);
-        this.addModelsToSelection([model]);
-        this.focusSideBarOnItem($item, $allItems);
-    },
 
     unselectItem: function(model) {
         if(model) {
@@ -209,6 +203,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
     sendCheckedEvents: function() {
         chorus.PageEvents.trigger("checked", this.selectedModels);
         chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
+        if (this.selectedModels.length === 1) { chorus.PageEvents.trigger(this.eventName + ":selected", this.selectedModels.first()); }
 
         var event = this.getSelectionEvent();
         event && chorus.PageEvents.trigger(event);

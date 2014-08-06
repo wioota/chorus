@@ -81,8 +81,8 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
 
         it("changes the selection after clicking another item", function() {
             this.page.$(".list > li").eq(1).click();
-            expect(this.page.$(".list > li").eq(0)).not.toHaveClass("selected");
-            expect(this.page.$(".list > li").eq(1)).toHaveClass("selected");
+            expect(this.page.$(".list > li").eq(0)).not.toHaveClass("checked");
+            expect(this.page.$(".list > li").eq(1)).toHaveClass("checked");
         });
 
         it("has the right breadcrumbs", function() {

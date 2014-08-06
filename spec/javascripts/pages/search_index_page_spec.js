@@ -130,7 +130,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("selects that workfile", function() {
-                        expect(this.searchedWorkfile).toHaveClass("selected");
+                        expect(this.searchedWorkfile).toHaveClass("checked");
                     });
 
                     it('shows the right links', function(){
@@ -164,7 +164,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("selects that workspace", function() {
-                        expect(this.workspaceLIs.eq(selectedIndex)).toHaveClass("selected");
+                        expect(this.workspaceLIs.eq(selectedIndex)).toHaveClass("checked");
                     });
 
                     it("show the 'add a note' link in the sidebar", function() {
@@ -198,7 +198,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("selects that tabular data item", function() {
-                        expect(this.datasetResult).toHaveClass("selected");
+                        expect(this.datasetResult).toHaveClass("checked");
                     });
 
                     it("shows the associate-with-workspace link in the sidebar", function() {
@@ -223,7 +223,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it('selects that data source', function() {
-                        expect(this.dataSourceLIs.eq(0)).toHaveClass("selected");
+                        expect(this.dataSourceLIs.eq(0)).toHaveClass("checked");
                     });
                 });
             });
@@ -245,7 +245,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("selects that user", function() {
-                        expect(this.userLis.eq(0)).toHaveClass("selected");
+                        expect(this.userLis.eq(0)).toHaveClass("checked");
                     });
 
                     it("fetches the user's activities'", function() {
@@ -271,7 +271,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("selects that file", function() {
-                        expect(this.fileLis.eq(0)).toHaveClass("selected");
+                        expect(this.fileLis.eq(0)).toHaveClass("checked");
                     });
 
                     it("fetches the file's activities'", function() {
@@ -297,7 +297,7 @@ describe("chorus.pages.SearchIndexPage", function() {
                     });
 
                     it("selects that file", function() {
-                        expect(this.attachmentLis.eq(0)).toHaveClass("selected");
+                        expect(this.attachmentLis.eq(0)).toHaveClass("checked");
                     });
                 });
             });

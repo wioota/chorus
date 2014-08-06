@@ -66,6 +66,15 @@ jasmine.sharedExamples.PageItemList = function () {
             return _(allTriggers).chain().filter(anyEventAboutChecking).last().value();
         }
 
+        function lastSelectEvent(entitySelectEvent) {
+            var anyEventAboutChecking = function (call) {
+                return call.args[0] === entitySelectEvent;
+            };
+
+            var allTriggers = chorus.PageEvents.trigger.calls.all();
+            return _(allTriggers).chain().filter(anyEventAboutChecking).last().value();
+        }
+
         function onlyFirstModelIsSentInEvents() {
             typedEventNameIsSent();
 
@@ -151,7 +160,6 @@ jasmine.sharedExamples.PageItemList = function () {
         });
 
         context("When no items are selected", function () {
-            var item1, $item2;
             nothingIsSelected();
             anItemIsCheckable();
             paginatesCleanly();
@@ -172,12 +180,12 @@ jasmine.sharedExamples.PageItemList = function () {
 
             describe("And I click the body of an item", function () {
                 beforeEach(function () {
-                    item1 = this.view.$('.item_wrapper').first();
-                    safeClick(item1);
+                    this.$firstItem = this.view.$('.item_wrapper').first();
+                    safeClick(this.$firstItem);
                 });
 
                 it("selects the item", function() {
-                    expect(item1).toHaveClass("selected");
+                    expect(this.$firstItem).toHaveClass("checked");
                     expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(this.view.options.entityType + ":selected", this.collection.at(0));
                     expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selected", this.collection.at(0));
                     expect(chorus.PageEvents.trigger).toHaveBeenCalledWith('checked', jasmine.any(chorus.collections[this.collection.constructorName]));
@@ -191,12 +199,12 @@ jasmine.sharedExamples.PageItemList = function () {
 
                 describe("And then check another item", function () {
                     beforeEach(function () {
-                        $item2 = this.view.$('.item_wrapper').last();
-                        safeClick($item2.find('input'));
+                        this.$lastItem = this.view.$('.item_wrapper').last();
+                        safeClick(this.$lastItem.find('input'));
                     });
 
                     it("Both items should be checked & highlighted", function () {
-                        var $items = [item1, $item2];
+                        var $items = [this.$firstItem, this.$lastItem];
 
                         _.each($items, function ($item) {
                             expect($item).toHaveClass('checked');
@@ -205,17 +213,35 @@ jasmine.sharedExamples.PageItemList = function () {
                         });
                     });
 
+                    describe("And then uncheck the first item", function () {
+                        beforeEach(function () {
+                            chorus.PageEvents.trigger.reset();
+                            safeClick(this.$firstItem.find('input'));
+                        });
+
+                        it("Shows actions for the second item", function () {
+                            expect(chorus.PageEvents.trigger).toHaveBeenCalled();
+                            var selectEvent = lastSelectEvent(this.view.eventName + ':selected');
+                            expect(selectEvent).toBeDefined();
+                            var selectedModelID = selectEvent.args[1].id;
+                            var lastModelID = this.collection.last().id;
+
+                            expect(selectedModelID).toBe(lastModelID);
+                        });
+
+                    });
+
                 });
 
                 describe("And then click the body of another item", function () {
                     beforeEach(function () {
-                        $item2 = this.view.$('.item_wrapper').last();
-                        safeClick($item2);
+                        this.$lastItem = this.view.$('.item_wrapper').last();
+                        safeClick(this.$lastItem);
                     });
 
                     it("Only the second item is checked & highlighted", function () {
-                        expect($item2).toHaveClass('checked');
-                        var checkbox = $item2.find('input[type=checkbox]');
+                        expect(this.$lastItem).toHaveClass('checked');
+                        var checkbox = this.$lastItem.find('input[type=checkbox]');
                         expect(checkbox).toBeChecked();
                     });
                 });

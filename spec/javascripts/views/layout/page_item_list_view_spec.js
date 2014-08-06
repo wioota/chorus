@@ -18,7 +18,6 @@ describe("chorus.views.PageItemList", function() {
 
     itBehavesLike.PageItemList();
 
-
     describe("creating the item views", function() {
         it("passes through the list item options", function() {
             expect(this.view.liViews[0].itemView.options.itemOption).toBe(123);
