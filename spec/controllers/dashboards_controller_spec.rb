@@ -33,10 +33,15 @@ describe DashboardsController do
         decoded_response.entity_type.should == entity_type
       end
 
-      it 'includes stats for Workfiles, Users, Workspaces, and Events' do
-        %w(workfiles users workspaces events/bases).each do |key|
-          decoded_response.should have_key(key)
+      it 'includes stats for Workfiles, Users, Workspaces, and AssociatedDatasets' do
+        decoded_response.data.length.should == 4
+        %w(workfile user workspace associated_dataset).each do |key|
+          decoded_response.data.detect { |o| o[:model] == key }.should_not be_nil
         end
+      end
+
+      generate_fixture 'dashboard/siteSnapshot.json' do
+        get :show, params
       end
     end
   end
