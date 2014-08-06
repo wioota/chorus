@@ -11,7 +11,7 @@ describe("chorus.dialogs.NotesNewDialog", function () {
 
     describe("when passed an independent model", function () {
         beforeEach(function () {
-            this.model = backboneFixtures.gpdbDataSource();
+            this.model = backboneFixtures.hdfsDataSource();
             this.dialog = new chorus.dialogs.NotesNew({pageModel: this.model});
             $('#jasmine_content').append(this.dialog.el);
             this.dialog.render();
@@ -26,17 +26,36 @@ describe("chorus.dialogs.NotesNewDialog", function () {
             expect(noteWorkspaceID).toBeUndefined();
         });
 
-        it("passes on the model's entity type", function () {
-            expect(this.dialog.model.get("entityType")).toBe("data_source");
-        });
-
         it("passes on the model's ID", function () {
             expect(this.dialog.model.get("entityId")).toBe(this.model.id);
         });
 
+        it("passes on the model's entity type", function () {
+            expect(this.dialog.model.get("entityType")).toBe(this.model.entityType);
+        });
+
         it("has the right placeholder", function () {
             var placeholder = this.dialog.$("textarea[name=body]").attr("placeholder");
-            expect(placeholder).toContainTranslation("notes.placeholder", {noteSubject: "data_source"});
+            expect(placeholder).toContainTranslation("notes.placeholder", {noteSubject: this.model.entityType});
+        });
+
+        describe("when the model is a sql-type-ish data_source", function () {
+            beforeEach(function () {
+                this.model = _.sample([backboneFixtures.gpdbDataSource(), backboneFixtures.gpdbDataSource()]);
+                this.specialCaseEntityType = 'data_source';
+                this.dialog = new chorus.dialogs.NotesNew({pageModel: this.model});
+                $('#jasmine_content').append(this.dialog.el);
+                this.dialog.render();
+            });
+
+            it("passes on the model's entity type", function () {
+                expect(this.dialog.model.get("entityType")).toBe(this.specialCaseEntityType);
+            });
+
+            it("has a more generic placeholder", function () {
+                var placeholder = this.dialog.$("textarea[name=body]").attr("placeholder");
+                expect(placeholder).toContainTranslation("notes.placeholder", {noteSubject: this.specialCaseEntityType});
+            });
         });
 
         it("stores the correct pageModel", function () {

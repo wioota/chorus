@@ -7,7 +7,9 @@ chorus.dialogs.NotesNew = chorus.dialogs.MemoNew.extend({
     makeModel: function() {
         this.pageModel = this.options.pageModel;
 
-        var entityType = this.pageModel.entityType.match(/data_source/) ? 'data_source' : this.pageModel.entityType;
+        var sqlDB = this.pageModel.entityType.match(/data_source/) && !this.pageModel.entityType.match(/hdfs/);
+        var entityType = sqlDB ? 'data_source' : this.pageModel.entityType;
+//        var entityType = false ? 'data_source' : this.pageModel.entityType;
         var workspaceId = this.pageModel.workspace && this.pageModel.workspace() && this.pageModel.workspace().id;
 
         this.model = new chorus.models.Note({
