@@ -107,9 +107,15 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
             it("triggers a selectNone event", function() {
                 expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectNone");
             });
+        });
 
+        describe("and then no models are selected", function () {
+            beforeEach(function () {
+                this.collection = new chorus.collections.Base([]);
+            });
             it("shows no actions", function() {
-                expect(this.view.$('.multiple_selection_sidebar_menu')).not.toBeVisible();
+                chorus.PageEvents.trigger(this.selectEvent, this.collection);
+                expect(this.view.$el).not.toBeVisible();
             });
         });
     });

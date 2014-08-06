@@ -31,15 +31,16 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.include(
         revealOnlyMultiActions: function () {
             this.$('.actions').removeClass('hidden');
             $('#sidebar').find('.primary .actions').addClass('hidden');
-//            this.$('.multiple_selection_sidebar_menu').removeClass('hidden');
+            this.$el.removeClass('hidden');
         }, revealOnlySingleActions: function () {
             this.$('.actions').addClass("hidden");
-            this.$('.multiple_selection_sidebar_menu').removeClass('hidden');
-//            $('#sidebar').find('.primary .actions').removeClass('hidden');
+            $('#sidebar').find('.primary .actions').removeClass('hidden');
+            this.$el.removeClass('hidden');
         }, revealNoActions: function () {
-            this.$('.multiple_selection_sidebar_menu').addClass('hidden');
-//            $('#sidebar').find('.primary .actions').addClass('hidden');
+            $('#sidebar').find('.primary .actions').addClass('hidden');
+            this.$el.addClass('hidden');
         },
+
 
         showOrHideMultipleSelectionSection: function () {
             if (this.selectedModels.length > 1)     { this.revealOnlyMultiActions(); } else
