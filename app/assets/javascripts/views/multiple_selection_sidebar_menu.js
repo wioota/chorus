@@ -20,7 +20,6 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.include(
 
         var events = this.eventBindings(this.actions, { "click .deselect_all": 'deselectAll' });
         this.delegateEvents(events);
-
         this.render();
     },
 
@@ -32,10 +31,15 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.include(
     showOrHideMultipleSelectionSection: function() {
         if(this.selectedModels.length > 1) {
             this.$('.actions').removeClass('hidden');
-            $('#sidebar .primary .actions').addClass('hidden');
-        } else {
+            $('#sidebar').find('.primary .actions').addClass('hidden');
+            this.$('.multiple_selection_sidebar_menu').removeClass('hidden');
+        } else if (this.selectedModels.length === 1) {
             this.$('.actions').addClass("hidden");
-            $('#sidebar .primary .actions').removeClass('hidden');
+            this.$('.multiple_selection_sidebar_menu').removeClass('hidden');
+            $('#sidebar').find('.primary .actions').removeClass('hidden');
+        } else {
+            this.$('.multiple_selection_sidebar_menu').addClass('hidden');
+            $('#sidebar').find('.primary .actions').addClass('hidden');
         }
     },
 

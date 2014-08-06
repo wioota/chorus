@@ -193,7 +193,6 @@ chorus.views.PageItemList = chorus.views.Base.extend({
             var selected = _.isEqual(
                 _.pick(model.attributes, 'id', 'entityType'),
                 _.pick(selectedModel.attributes, 'id', 'entityType'));
-            this.$(">li").eq(index).toggleClass("selected", selected);
             if(selected) {
                 this.selectedIndex = index;
             }

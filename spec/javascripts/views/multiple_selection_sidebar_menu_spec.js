@@ -107,6 +107,10 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
             it("triggers a selectNone event", function() {
                 expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectNone");
             });
+
+            it("shows no actions", function() {
+                expect(this.view.$('.multiple_selection_sidebar_menu')).not.toBeVisible();
+            });
         });
     });
 });
