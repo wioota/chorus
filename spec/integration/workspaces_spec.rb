@@ -10,11 +10,13 @@ describe "Workspaces" do
   describe "Create workspaces" do
     it "creates a public workspace" do
       visit('#/workspaces')
-      click_button "Create Workspace"
+      click_link "Create Workspace"
+
       within_modal do
         fill_in 'name', :with => "New Workspace"
         click_button "Create Workspace"
       end
+
       click_link "Dismiss the workspace quick start guide"
       page.should have_content('All Activity')
       Workspace.find_by_name("New Workspace").should_not be_nil
@@ -24,7 +26,7 @@ describe "Workspaces" do
   describe "Edit a workspace" do
     it "uploads an image for a workspace" do
       visit("#/workspaces/#{workspace.id}")
-      click_link "Edit Workspace"
+      click_link "Workspace Settings"
       attach_file("image_upload_input", File.join(File.dirname(__FILE__), '../fixtures/User.png'))
       click_button "Save Changes"
       page.should have_selector(".workspace_title")
@@ -41,7 +43,7 @@ describe "Workspaces" do
       describe "the 'change owner' drop-down menu" do
         before do
           visit("#/workspaces/#{workspace.id}")
-          click_link "Edit Workspace"
+          click_link "Workspace Settings"
         end
 
         it "displays all members" do

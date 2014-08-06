@@ -8,6 +8,7 @@ describe "500 Internal Server Error" do
       login(users(:admin))
       visit("#/workspaces/#{workspace.id}")
 
+      click_link "Work Files"
       click_link("Upload a File")
 
       within_modal do
