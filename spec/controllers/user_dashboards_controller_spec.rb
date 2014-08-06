@@ -6,14 +6,14 @@ describe UserDashboardsController do
   describe 'show' do
     before do
       log_in user
-      %w(Module2 Module1 Module3).each_with_index do |name, i|
+      DashboardItem::DEFAULT_MODULES.reverse.each_with_index do |name, i|
         user.dashboard_items.create!(:name => name, :location => i)
       end
     end
 
     it 'presents the modules in order' do
       get :show, :user_id => user.id
-      decoded_response.modules.should == %w(Module2 Module1 Module3)
+      decoded_response.modules.should == DashboardItem::DEFAULT_MODULES.reverse
     end
 
     it 'uses authorization' do
@@ -29,7 +29,7 @@ describe UserDashboardsController do
 
       it 'uses the default' do
         get :show, :user_id => user.id
-        decoded_response.modules.should == %w(Module1 Module2 Module3)
+        decoded_response.modules.should == DashboardItem::DEFAULT_MODULES
       end
     end
 
@@ -43,24 +43,27 @@ describe UserDashboardsController do
       log_in user
     end
 
+    let(:initial_module) { DashboardItem::ALLOWED_MODULES.first }
+    let(:multiple_modules) { DashboardItem::ALLOWED_MODULES.sample(2) }
+
     it 'updates the dashboard config for the user' do
-      user.dashboard_items.create!(:name => 'Module1')
+      user.dashboard_items.create!(:name => initial_module)
 
-      post :create, :user_id => user.id, :modules => %w(Module3 Module2)
+      post :create, :user_id => user.id, :modules => multiple_modules
 
-      user.reload.dashboard_items.order(:location).map(&:name).should == %w(Module3 Module2)
+      user.reload.dashboard_items.order(:location).map(&:name).should == multiple_modules
     end
 
     context 'when the new config is invalid' do
       let(:modules) { %w(InvalidModule) }
 
       before do
-        user.dashboard_items.create!(:name => 'Module1')
+        user.dashboard_items.create!(:name => initial_module)
         post :create, :user_id => user.id, :modules => modules
       end
 
       it 'does not change the existing' do
-        user.reload.dashboard_items.map(&:name).should == %w(Module1)
+        user.reload.dashboard_items.map(&:name).should == [initial_module]
       end
 
       it 'returns 422' do

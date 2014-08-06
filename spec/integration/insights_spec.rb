@@ -12,11 +12,10 @@ describe "Insights" do
   it "creates an insight" do
     login(users(:owner))
 
-    workspace_name = workspaces(:public).name
-    within ".dashboard_workspace_list.list" do
-      find("a", :text => /^#{workspace_name}$/).click()
-    end
+    workspace_id = workspaces(:public).id
+    visit("#/workspaces/#{workspace_id}")
 
+    workspace_name = workspaces(:public).name
     find("#workspace_title").should have_content(workspace_name)
 
     click_link "Add an insight"
