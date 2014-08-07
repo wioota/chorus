@@ -15,6 +15,25 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
                 checkbox.change();
                 expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectAll");
             });
+
+            describe("zzz when there is only one item in the list", function () {
+                beforeEach(function () {
+                    this.singleModel = {};
+                    spyOn(this.page.mainContent.content, 'selectableModels').andReturn([this.singleModel]);
+                });
+
+                it("broadcasts a single model:selected event", function () {
+                    var checkbox = this.page.$(".multiselect .select_all");
+                    checkbox.prop("checked", true);
+                    checkbox.change();
+
+                    var selectedEvent = this.page.mainContent.content.eventName + ':selected';
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith(selectedEvent, jasmine.any(chorus.models.Base));
+                });
+            });
+
+
+
         });
 
         describe("when the 'select all' checkbox is unchecked", function() {

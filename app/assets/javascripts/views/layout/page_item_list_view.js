@@ -118,8 +118,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
 
     selectAll: function() {
         this.selectedModels.add(this.selectableModels());
-        chorus.PageEvents.trigger("checked", this.selectedModels);
-        chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
+        this.sendCheckedEvents();
     },
 
     selectableModels: function () {
@@ -128,8 +127,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
 
     selectNone: function() {
         this.selectedModels.reset();
-        chorus.PageEvents.trigger("checked", this.selectedModels);
-        chorus.PageEvents.trigger(this.eventName + ":checked", this.selectedModels);
+        this.sendCheckedEvents();
     },
 
     clearSelection: function(model) {
