@@ -1,24 +1,12 @@
-@mixin sidebar-panel {
-    $sidebar-panel-width: $sidebar-width - 16px;
-    width: $sidebar-panel-width;
-    border: $border-canon;
-    @include border-radius(3px);
-}
-
 .primary_action_panel {
     .panel {
         @include sidebar-panel;
         @include font-action-link;
     }
-
-    ul {
-        padding: 10px;
-    }
 }
 
 .tab_control {
     @include sidebar-panel;
-
     .tabs {
         $pill-padding: 2px;
 

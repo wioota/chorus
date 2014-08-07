@@ -15,7 +15,7 @@ $pumpkin: #f7771b;
 // Brand New Colors
 // These colors were mapped to names via www.color-blindness.com/color-name-hue.
 $pacific-blue: rgb(0, 160, 229);
-$alice-blue: rgb(245, 250, 254);
+$alice-blue: rgb(240, 247, 254);
 $bright-turquoise: rgb(21, 214, 203);
 $light-gray: rgb(234, 238, 241);
 $charcoal: #464646;
@@ -56,8 +56,7 @@ $border-color-dark: rgb(215, 227, 236);
 $color-text1: darken($charcoal, 10%);
 $color-text2: $charcoal;
 $color-text3: lighten($charcoal, 10%);
-$bright-gray: rgb(88, 89, 95);
-$color-text4: lighten($bright-gray, 20%);
+$color-text4: lighten(rgb(88, 89, 95), 20%);
 $link-color: $brand;
 $disabled-text: rgb(147, 154, 159);
 $caret-color: rgb(148, 215, 244);
@@ -77,6 +76,7 @@ $border-width: 1px;
 
 //Specials
 $border-canon: $border-width solid $border-color;
+$dark-border-canon: $border-width solid $border-color-dark;
 $shadow-canon: 1px 2px 2px 0px $border-color;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -490,6 +490,34 @@ $action-bar-secondary-background-color: $light-blue;
     cursor: -ms-grab;
     cursor: -webkit-grab;
     cursor: grab;
+}
+
+@mixin sidebar-panel {
+    margin-top: $sidebar-padding-top;
+    $border-radius: 3px;
+    $sidebar-panel-width: $sidebar-width - 16px;
+    width: $sidebar-panel-width;
+    border: $border-canon;
+    @include border-radius($border-radius);
+    li {
+        padding-top: 10px;
+        padding-left: 10px;
+    }
+    a { @include font-action-link; }
+
+    label {
+        @include border-top-radius($border-radius);
+        border-bottom: $border-canon;
+        display: block;
+        @include secondary-text-small-semibold;
+        text-transform: uppercase;
+        padding: 10px;
+    }
+
+    ul {
+        padding-bottom: 10px;
+    }
+
 }
 
 // Do not put any css rules into this file.  This file is only for declaration of variables and mixins

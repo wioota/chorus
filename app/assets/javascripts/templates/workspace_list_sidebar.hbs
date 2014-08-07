@@ -3,11 +3,15 @@
 {{/if}}
 
 {{#if showAddNoteInsightLinks}}
-<ul class="actions">
-    <li><a class="new_note" href="#">{{t "actions.add_note"}}</a></li>
-    <li><a class="new_insight" href="#">{{t "actions.add_insight"}}</a></li>
-    <li><a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a></li>
-</ul>
+    <div class="actions">
+        <label>{{t "sidebar.selected.one"}}</label>
+        <ul>
+
+            <li><a class="new_note" href="#">{{t "actions.add_note"}}</a></li>
+            <li><a class="new_insight" href="#">{{t "actions.add_insight"}}</a></li>
+            <li><a class="edit_tags" href="#">{{t "sidebar.edit_tags"}}</a></li>
+        </ul>
+    </div>
 {{/if}}
 
 <div class="workspace_member_list"></div>

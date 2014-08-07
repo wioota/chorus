@@ -77,22 +77,6 @@ body .ui-draggable-dragging {
         text-align: center;
     }
 
-    .actions {
-        h1 {
-            @include ellipsis;
-            @include heading-sidebar;
-            margin-bottom: 10px;
-        }
-
-        .disabled {
-            color: $color-text4;
-        }
-
-        li {
-            padding-bottom: 3px;
-            margin-left: 10px;
-        }
-    }
     .pairs {
         font-size: 14px;
         line-height: 18px;
@@ -150,6 +134,18 @@ body .ui-draggable-dragging {
 
     .sidebar_content {
         margin-bottom: $guts-padding-bottom;
+
+        & > .actions {
+            @include sidebar-panel;
+            .disabled { color: $color-text4; }
+
+            background: $accent;
+            label {
+                background: $accent-shade;
+                border-bottom: $dark-border-canon;
+            }
+        }
+
         .tabbed_area {
             .context {
                 font-size: 14px;

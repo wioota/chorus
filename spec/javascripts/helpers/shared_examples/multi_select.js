@@ -63,7 +63,7 @@ jasmine.sharedExamples.aPageWithMultiSelect = function() {
             });
 
             it("does not display the multiple selection actions", function() {
-                expect(this.page.$(".multiple_selection .actions")).toHaveClass("hidden");
+                expect(this.page.$(".multiple_selection .actions")).not.toBeVisible();
             });
         });
 

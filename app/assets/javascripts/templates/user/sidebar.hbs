@@ -1,4 +1,6 @@
+{{#if displayName}}
 <div class="actions">
+    <label>{{t "sidebar.selected.one"}}</label>
     <ul>
         <li><a class="edit_tags">{{t "sidebar.edit_tags"}}</a></li>
         {{#if permission}}
@@ -18,3 +20,4 @@
 </div>
 
 <div class="tab_control"></div>
+{{/if}}
