@@ -151,7 +151,7 @@ resource "Users" do
 
   post '/users/:user_id/dashboard_config' do
     let(:user_id) { users(:owner).to_param }
-    let(:'modules[]') { %w(Module2 Module1) }
+    let(:'modules[]') { DashboardItem::DEFAULT_MODULES }
 
     parameter :user_id, 'Id of a user'
     parameter :'modules[]', 'List of dashboard items'
