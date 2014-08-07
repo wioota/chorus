@@ -18,7 +18,7 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.include(
             var providerIsAFunction = (this.options.actionProvider instanceof Function);
             this.actions = providerIsAFunction ? this.options.actionProvider(selectedModels) : this.options.actionProvider;
 
-            var events = this.eventBindings(this.actions, { "click .deselect_all": 'deselectAll' });
+            var events = this.eventBindings(this.actions);
             this.delegateEvents(events);
             this.render();
         },
@@ -30,25 +30,19 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.include(
 
         revealOnlyMultiActions: function () {
             this.$el.show();
-            $('#sidebar').find('.primary .actions').hide();
+            $('#sidebar').find('.primary').hide();
         }, revealOnlySingleActions: function () {
             this.$el.hide();
-            $('#sidebar').find('.primary .actions').show();
+            $('#sidebar').find('.primary').show();
         }, revealNoActions: function () {
-            $('#sidebar').find('.primary .actions').hide();
+            $('#sidebar').find('.primary').hide();
             this.$el.hide();
         },
-
 
         showOrHideMultipleSelectionSection: function () {
             if (this.selectedModels.length > 1)     { this.revealOnlyMultiActions(); } else
             if (this.selectedModels.length === 1)   { this.revealOnlySingleActions(); } else
             if (this.selectedModels.length === 0)   { this.revealNoActions(); }
-        },
-
-        deselectAll: function (e) {
-            e.preventDefault();
-            chorus.PageEvents.trigger("selectNone");
         },
 
         additionalContext: function () {
