@@ -7,7 +7,6 @@ chorus.views.ModularDashboard = chorus.views.Base.extend({
     },
 
     setup: function() {
-        this.requiredResources.add(this.model);
         this.model.fetch();
     },
 
