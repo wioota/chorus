@@ -26,7 +26,7 @@ describe("chorus.views.ProjectListHeader", function(){
                 expect(this.view.$(".title")).toContainTranslation('header.my_projects');
             });
 
-            it("triggers fitler on the collection", function() {
+            it("triggers filter on the collection", function() {
                 expect(this.collection.trigger).toHaveBeenCalledWith('filter:members_only');
             });
 

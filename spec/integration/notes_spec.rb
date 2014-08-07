@@ -9,6 +9,8 @@ describe "Notes" do
     it "contains the note" do
       data_source = data_sources(:default)
       visit("#/data_sources")
+      wait_for_page_load
+
       within ".data_source ul" do
         first("li", :text => data_source.name).click
       end

@@ -1,4 +1,4 @@
-chorus.views.DashboardProjectCardList = chorus.views.MainContentView.extend({
+chorus.views.DashboardProjectCardList = chorus.views.DashboardModule.extend({
     constructorName: "DashboardProjectCardList",
     additionalClass: "project_list",
 
@@ -10,7 +10,7 @@ chorus.views.DashboardProjectCardList = chorus.views.MainContentView.extend({
         workspaceSet.sortAsc("name");
         workspaceSet.fetchAll();
 
-        this.content = new chorus.views.DashboardProjectList({ collection: workspaceSet });
         this.contentHeader = new chorus.views.ProjectListHeader({ collection: workspaceSet });
+        this.content = new chorus.views.DashboardProjectList({ collection: workspaceSet });
     }
 });

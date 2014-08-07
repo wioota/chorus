@@ -14,12 +14,16 @@ describe("chorus.views.DashboardSiteSnapshot", function() {
                 this.server.lastFetch().respondJson(200, this.siteSnapshotAttrs);
             });
 
+            it("has a title", function() {
+                expect(this.view.$('.title')).toContainTranslation("dashboard.site_snapshot.title");
+            });
+
             it("displays the snapshot data", function() {
                 expect(this.view.$('.square').length).toBe(4);
                 _.each(this.siteSnapshotAttrs.data, function(one) {
-                    expect(this.view.$("." + one.model)).toContainTranslation("dashboard.site_snapshot." + one.model);
+                    expect(this.view.$("." + one.model)).toContainTranslation("dashboard.site_snapshot." + one.model, {count:one.total});
                     expect(this.view.$("." + one.model)).toContainText(one.total);
-                    expect(this.view.$("." + one.model)).toContainText(one.increment);
+                    expect(this.view.$("." + one.model)).toContainTranslation("dashboard.site_snapshot.increment", {inc:one.increment});
                 }, this);
             });
         });

@@ -5,11 +5,13 @@ div[data-page="Dashboard"] {
     $workspace-list-width: 350px;
 
     #guts {
-        padding-top: $header-height + $subheader-height;
+        padding: ($header-height + $subheader-height) 25px 10px 25px;
     }
 
+    #sidebar_wrapper { display: none; }
+
     #left {
-        margin-right: 0;
+        margin: 0;
     }
 
     #main_content {
@@ -17,92 +19,61 @@ div[data-page="Dashboard"] {
         @include after-clearfix();
     }
 
-    .main_activity_list .heading {
-        display: none;
-    }
+    .dashboard_module {
+        $dashboard-module-title-height: 35px;
+        $dashboard-module-padding: 10px;
+        $title-height: $dashboard-module-title-height - $dashboard-module-padding;
 
-    .dashboard_sidebar {
-        float: right;
-        width: $workspace-list-width;
-    }
+        padding: $dashboard-module-padding;
+        margin-top: 20px;
+        border: $border-canon;
+        @include border-radius(3px);
+        border-top-color: $border-color-dark;
 
-    .main_content.workspace_list {
-        font-weight: $semibold;
-
-        .content_header {
-            background: transparent;
-        }
-
-        .dashboard_workspace_list {
-            li {
-                padding-bottom : 4px;
-
-                .comment {
-                    line-height : 16px;
-                    padding-top : 3px;
-                    .count {
-                        font-size: 13px;
-                        font-weight: normal;
-                        &.nonzero {
-                            color: $link-color;
-                        }
-                    }
-
-                    .date {
-                        font-size: 12px;
-                        font-weight: normal;
-                        color: $color-text2;
-                    }
-
-                    .recent {
-                        font-size: 12px;
-                        font-weight: normal;
-                        color: $color-text2;
-
-                        .author {
-                            font-weight: $semibold;
-                        }
-                    }
-                }
-            }
-
-            > li:last-child {
-                border-bottom:  $border-canon;
-            }
-        }
-    }
-
-    .main_content.data_source_list {
-        font-weight: $semibold;
-
-        .dashboard_data_source_list {
-
-            .main {
-                padding-bottom: 5px;
-            }
-
-            > li:last-child {
-                border-bottom:  $border-canon;
-            }
-        }
-    }
-
-    .main_content.dashboard_main {
-        margin-right:  $workspace-list-width;
-    }
-
-    .dashboard_site_snapshot {
-        text-align: center;
-        li {
+        .title {
             display: inline-block;
+            @include dashboard-module-title;
+            height: $title-height;
+            line-height: $title-height;
+        }
 
-            .square {
-                width: 200px;
+        &.dashboard_site_snapshot {
+            ul {
+                text-align: center;
+                padding-bottom: 10px;
 
-                .total {
-                    @include dashboard-huge;
+                li {
+                    display: inline-block;
+
+                    .square {
+                        width: 200px;
+
+                        .total {
+                            @include dashboard-huge;
+                        }
+
+                        .model {
+                            @include dashboard-module-title;
+                            padding-bottom: 3px;
+                        }
+
+                        .increment {
+                            @include secondary-text-small;
+                        }
+
+                        &.workfile .total { color: rgb(249, 93, 41); }
+                        &.workspace .total { color: rgb(64, 149, 34); }
+                        &.user .total { color: rgb(36, 148, 235); }
+                        &.associated_dataset .total { color: rgb(153, 35, 114); }
+                    }
                 }
             }
+        }
+
+        .module_header {
+            @include toggle-menus;
+            height: $title-height;
+            line-height: $title-height;
         }
     }
 }

@@ -4,6 +4,7 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
 
     setup: function() {
         this.mainContent = new chorus.views.ModularDashboard({});
+        this.mainContent.additionalClass = "main_content";
     },
 
     setupSubHeader: function() {

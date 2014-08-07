@@ -52,6 +52,7 @@
 //= require views/core/main_content_view
 //= require views/core/list_header_view
 //= require views/core/main_content_list_view
+//= require views/dashboard/dashboard_module
 //= require pages
 //= require modals
 //= require presenters

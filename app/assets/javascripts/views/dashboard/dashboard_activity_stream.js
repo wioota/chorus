@@ -1,4 +1,4 @@
-chorus.views.DashboardActivityStream = chorus.views.MainContentView.extend({
+chorus.views.DashboardActivityStream = chorus.views.DashboardModule.extend({
     constructorName: "DashboardActivityStream",
 
     setup: function () {

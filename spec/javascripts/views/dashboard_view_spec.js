@@ -1,4 +1,4 @@
-describe("chorus.views.Dashboard", function(){
+xdescribe("chorus.views.Dashboard", function(){
     beforeEach(function(){
         chorus.session = backboneFixtures.session();
         this.workspaceSet = backboneFixtures.workspaceSet();

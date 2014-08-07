@@ -32,28 +32,7 @@
     }
 
     .list_header {
-        .menus {
-            float: right;
-            margin-right: 10px;
-
-            a {
-                &.active {
-                    color: black;
-                    border-bottom: none;
-                }
-            }
-
-            .separator {
-                padding: 0 5px;
-                position: relative;
-                top: 2px;
-                color: $link-color;
-            }
-
-            .badge {
-                display: inline-block;
-            }
-        }
+        @include toggle-menus;
 
         .title {
             img {

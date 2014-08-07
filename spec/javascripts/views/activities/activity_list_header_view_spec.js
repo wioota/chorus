@@ -91,8 +91,8 @@ describe("chorus.views.ActivityListHeader", function() {
                     });
 
                     it("displays the title for 'insights'", function() {
-                        expect(this.view.$("h1")).toContainText(this.view.pickTitle());
-                        expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
+                        expect(this.view.$(".workspace_title")).toContainText(this.view.pickTitle());
+                        expect(this.view.$(".workspace_title")).toHaveAttr("title", this.view.pickTitle());
                     });
 
                     it("displays the 'Insights' link as active", function() {
@@ -103,8 +103,8 @@ describe("chorus.views.ActivityListHeader", function() {
 
                 context("when insights is set to false", function() {
                     it("displays the title for 'all' mode by default", function() {
-                        expect(this.view.$("h1")).toContainText(this.view.pickTitle());
-                        expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
+                        expect(this.view.$(".workspace_title")).toContainText(this.view.pickTitle());
+                        expect(this.view.$(".workspace_title")).toHaveAttr("title", this.view.pickTitle());
                     });
 
                     it("displays the workspace icon", function() {
@@ -117,7 +117,7 @@ describe("chorus.views.ActivityListHeader", function() {
                     });
 
                     it("should have a filter menu", function() {
-                        expect(this.view.$(".menus .title")).toContainTranslation("filter.show");
+                        expect(this.view.$(".menus .filter")).toContainTranslation("filter.show");
                         expect(this.view.$(".menus .all")).toContainTranslation("filter.all_activity");
                         expect(this.view.$(".menus .insights")).toContainTranslation("filter.only_insights");
                     });
@@ -141,8 +141,8 @@ describe("chorus.views.ActivityListHeader", function() {
                         });
 
                         it("switches to the title for 'insights' mode", function() {
-                            expect(this.view.$("h1")).toContainText(this.view.pickTitle());
-                            expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
+                            expect(this.view.$(".workspace_title")).toContainText(this.view.pickTitle());
+                            expect(this.view.$(".workspace_title")).toHaveAttr("title", this.view.pickTitle());
                         });
 
                         it("clears the loaded flag on the collection", function() {
@@ -172,8 +172,8 @@ describe("chorus.views.ActivityListHeader", function() {
                         });
 
                         it("switches back to the title for 'all' mode", function() {
-                            expect(this.view.$("h1")).toContainText(this.view.pickTitle());
-                            expect(this.view.$("h1")).toHaveAttr("title", this.view.pickTitle());
+                            expect(this.view.$(".workspace_title")).toContainText(this.view.pickTitle());
+                            expect(this.view.$(".workspace_title")).toHaveAttr("title", this.view.pickTitle());
                         });
 
                         it("clears the loaded flag on the collection", function() {

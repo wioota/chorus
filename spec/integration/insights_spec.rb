@@ -5,7 +5,7 @@ describe "Insights" do
     login(users(:owner))
     within ".activity_list_header" do
       click_link "Insights"
-      find(".title h1").should have_content("Insights")
+      find('.title').should have_content('Insights'.capitalize)
     end
   end
 

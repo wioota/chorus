@@ -226,7 +226,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                 });
 
                 it("updates the title", function() {
-                    expect(this.page.$(".content_header h1")).toContainText("bar");
+                    expect(this.page.$(".content_header .title")).toContainText("bar");
                 });
 
                 it("changes the icon", function() {

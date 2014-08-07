@@ -17,7 +17,7 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
         });
 
         it("displays the workspace title", function() {
-            expect(this.view.$("h1")).toContainText(this.workspace.get("name"));
+            expect(this.view.$(".workspace_title")).toContainText(this.workspace.get("name"));
         });
 
         it("fills the activityListHeader subview", function() {
@@ -47,7 +47,7 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
         });
 
         it("displays the correct title", function() {
-            expect(this.view.$("h1")).toContainText(this.workspace.get("name"));
+            expect(this.view.$(".workspace_title")).toContainText(this.workspace.get("name"));
         });
     });
 
@@ -63,7 +63,7 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
             this.view.model.trigger("saved");
             this.server.completeFetchFor(this.view.activityListHeader.insightsCount, [], {}, { records: 5 });
 
-            expect(this.view.$(".activity_list_header h1")).toContainText("super workspace");
+            expect(this.view.$(".activity_list_header .workspace_title")).toContainText("super workspace");
         });
     });
 

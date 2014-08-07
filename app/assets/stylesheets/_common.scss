@@ -395,6 +395,14 @@ $action-bar-secondary-background-color: $light-blue;
     color: $color-text2;
 }
 
+@mixin dashboard-module-title {
+    @include debugging-mixin;
+    font-size: 14px;
+    color: $color-text2;
+    text-transform: uppercase;
+    letter-spacing: .6pt;
+}
+
 @mixin after-clearfix($which: both) {
     &:after {
             content: ".";
@@ -530,6 +538,31 @@ $action-bar-secondary-background-color: $light-blue;
     label {
         background: $accent-shade;
         border-bottom: $dark-border-canon;
+    }
+}
+
+@mixin toggle-menus {
+    .menus {
+        float: right;
+        margin-right: 10px;
+
+        a {
+            &.active {
+                color: black;
+                border-bottom: none;
+            }
+        }
+
+        .separator {
+            padding: 0 5px;
+            position: relative;
+            top: 2px;
+            color: $link-color;
+        }
+
+        .badge {
+            display: inline-block;
+        }
     }
 }
 

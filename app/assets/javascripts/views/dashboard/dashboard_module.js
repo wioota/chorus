@@ -2,18 +2,19 @@ chorus.views.DashboardModule = chorus.views.Base.extend({
     constructorName: "DashboardModuleView",
     templateName:"dashboard/module",
 
-    additionalContext: function () {
-        return {
-            content: this.options.content
-        };
+    setup: function(options) {
+        options = options || {};
+        this.contentHeader = this.contentHeader || options.contentHeader;
+        this.content = this.content || options.content;
+    },
+
+    subviews: {
+        ".module_header": "contentHeader",
+        ".module_content": "content"
+    },
+
+    postRender: function() {
+        if (!this.content)        this.$(".content").addClass("hidden");
+        if (!this.contentFooter)  this.$(".content_footer").addClass("hidden");
     }
-
-});
-
-_.each([
-    "Module1",
-    "Module2",
-    "Module3"
-], function(moduleName) {
-    chorus.views["Dashboard" + moduleName] = chorus.views.DashboardModule;
 });
