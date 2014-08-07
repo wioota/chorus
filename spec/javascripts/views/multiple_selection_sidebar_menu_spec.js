@@ -64,18 +64,7 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
 
         it("shows the number of models selected", function() {
             chorus.PageEvents.trigger(this.selectEvent, this.collection);
-            expect(this.view.$('.title')).toContainTranslation('sidebar.selected', {count: 2});
-        });
-
-        it("lists the model names under the selected text", function() {
-            chorus.PageEvents.trigger(this.selectEvent, this.collection);
-            var collection = new chorus.collections.Base([
-                backboneFixtures.workfile.sql(),
-                backboneFixtures.jdbcDataset(),
-                backboneFixtures.oracleSchema()
-            ]);
-            chorus.PageEvents.trigger(this.selectEvent, collection);
-            expect(this.view.$('.selected_models')).toContainText(Handlebars.helpers.modelNamesList(collection));
+            expect(this.view.$('label')).toContainTranslation('sidebar.selected', {count: 2});
         });
 
         it("renders custom actions", function() {
@@ -95,18 +84,6 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
             });
 
             itBehavesLike.aDialogLauncher("."+actionName, dialogConstructor);
-        });
-
-        describe("clicking deselect all link", function() {
-            beforeEach(function() {
-                chorus.PageEvents.trigger(this.selectEvent, this.collection);
-                spyOn(chorus.PageEvents, "trigger");
-                this.view.$(".deselect_all").click();
-            });
-
-            it("triggers a selectNone event", function() {
-                expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("selectNone");
-            });
         });
 
         describe("and then no models are selected", function () {
