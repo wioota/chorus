@@ -489,7 +489,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
 
     it("gets a titlebar", function() {
         this.server.completeFetchFor(this.workspace);
-        expect(this.page.$(".sub_header")).toContainText(this.workspace.name());
+        expect(this.page.$(".page_sub_header")).toContainText(this.workspace.name());
     });
 
     describe("when the workfile:selected event is triggered on the list view", function() {

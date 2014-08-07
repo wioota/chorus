@@ -24,7 +24,7 @@ describe("chorus.pages.WorkspaceTagShowPage", function() {
         });
 
         it("has a titlebar", function() {
-            expect(page.$(".sub_header")).toContainText(workspace.name());
+            expect(page.$(".page_sub_header")).toContainText(workspace.name());
         });
     });
 

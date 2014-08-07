@@ -16,7 +16,7 @@ describe "Insights" do
     visit("#/workspaces/#{workspace_id}")
 
     workspace_name = workspaces(:public).name
-    find("#sub_header").should have_content(workspace_name)
+    find("#page_sub_header").should have_content(workspace_name)
 
     click_link "Add an insight"
 

@@ -40,7 +40,7 @@ describe("chorus.pages.JobsIndexPage", function () {
             });
 
             it("has a titlebar", function() {
-                expect(this.page.$(".sub_header")).toContainText(this.workspace.name());
+                expect(this.page.$(".page_sub_header")).toContainText(this.workspace.name());
             });
         });
     });

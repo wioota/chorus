@@ -124,7 +124,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
             });
 
             it("has a titlebar", function() {
-                expect(this.page.$(".sub_header")).toContainText(this.workspaceName);
+                expect(this.page.$(".page_sub_header")).toContainText(this.workspaceName);
             });
 
             itBehavesLike.aPageWithPrimaryActions([

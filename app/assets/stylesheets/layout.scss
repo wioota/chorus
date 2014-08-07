@@ -38,7 +38,7 @@
 
 //hax for position fixed header and sidebar
 .logged_in_layout {
-    > .header, .sub_header, .sub_nav {
+    > .header, .page_sub_header, .sub_nav {
         position: fixed;
         width: 100%;
         z-index: $header-z-index;

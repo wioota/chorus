@@ -166,7 +166,7 @@ describe("chorus.pages.WorkfileShowPage", function() {
             this.server.completeFetchFor(this.workspace);
 
             this.page.render();
-            expect(this.page.$(".sub_header")).toContainText(this.workspace.name());
+            expect(this.page.$(".page_sub_header")).toContainText(this.workspace.name());
         });
 
         it("it displays the workfile name in the content header", function() {

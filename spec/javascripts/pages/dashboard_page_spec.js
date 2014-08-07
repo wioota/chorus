@@ -7,7 +7,7 @@ describe("chorus.pages.DashboardPage", function() {
 
         it("has a 'Home' sub header", function() {
             this.page.render();
-            expect(this.page.$(".sub_header")).toContainTranslation("header.home");
+            expect(this.page.$(".page_sub_header")).toContainTranslation("header.home");
         });
 
         it("creates a module dashboard view", function() {
