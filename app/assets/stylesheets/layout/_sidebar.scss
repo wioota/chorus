@@ -13,31 +13,7 @@ body .ui-draggable-dragging {
 }
 
 #sidebar {
-    .multiple_selection {
-        margin-right: 10px;
-
-        .title {
-            @include heading-sidebar;
-        }
-
-        .count {
-            @include secondary-text-small;
-            margin-bottom: 8px;
-        }
-
-        .selected_models {
-            @include secondary-text-small;
-            word-break: break-all;
-        }
-
-        a.deselect_all {
-            font-size: 12px;
-        }
-
-        ul.multiselect_actions {
-            margin-top: 10px;
-        }
-    }
+    .multiple_selection { @include dark-sidebar-panel; }
 
     &:focus {
         outline: none;
@@ -136,14 +112,7 @@ body .ui-draggable-dragging {
         margin-bottom: $guts-padding-bottom;
 
         & > .actions {
-            @include sidebar-panel;
-            .disabled { color: $color-text4; }
-
-            background: $accent;
-            label {
-                background: $accent-shade;
-                border-bottom: $dark-border-canon;
-            }
+            @include dark-sidebar-panel;
         }
 
         .tabbed_area {

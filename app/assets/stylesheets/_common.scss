@@ -499,10 +499,13 @@ $action-bar-secondary-background-color: $light-blue;
     width: $sidebar-panel-width;
     border: $border-canon;
     @include border-radius($border-radius);
+    .disabled { color: $color-text4; }
+
     li {
         padding-top: 10px;
         padding-left: 10px;
     }
+
     a { @include font-action-link; }
 
     label {
@@ -518,6 +521,16 @@ $action-bar-secondary-background-color: $light-blue;
         padding-bottom: 10px;
     }
 
+}
+@mixin dark-sidebar-panel {
+    @include sidebar-panel;
+
+    background: $accent;
+
+    label {
+        background: $accent-shade;
+        border-bottom: $dark-border-canon;
+    }
 }
 
 // Do not put any css rules into this file.  This file is only for declaration of variables and mixins

@@ -1,9 +1,5 @@
 {{#if actions}}
-    <div class="title">{{t "sidebar.selected" count=modelCount}}</div>
-    <div class="selected_models">
-        {{modelNamesList selectedModels}}
-        <a class="deselect_all">{{t "sidebar.deselect_all"}}</a>
-    </div>
+    <label>{{t "sidebar.selected" count=modelCount}}</label>
     <div class="actions">
         <ul class="multiselect_actions">
             {{#each actions}}
