@@ -5,6 +5,11 @@ describe("chorus.pages.DashboardPage", function() {
             this.page = new chorus.pages.DashboardPage();
         });
 
+        it("has a 'Home' sub header", function() {
+            this.page.render();
+            expect(this.page.$(".sub_header")).toContainTranslation("header.home");
+        });
+
         it("creates a module dashboard view", function() {
             expect(this.page.mainContent).toBeA(chorus.views.ModularDashboard);
         });

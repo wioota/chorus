@@ -29,7 +29,7 @@ describe "Workspaces" do
       click_link "Workspace Settings"
       attach_file("image_upload_input", File.join(File.dirname(__FILE__), '../fixtures/User.png'))
       click_button "Save Changes"
-      page.should have_selector(".workspace_title")
+      page.should have_selector(".sub_header")
       workspace.reload.image.original_filename.should == 'User.png'
     end
 

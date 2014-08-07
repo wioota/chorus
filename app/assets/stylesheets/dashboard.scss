@@ -4,6 +4,10 @@
 div[data-page="Dashboard"] {
     $workspace-list-width: 350px;
 
+    #guts {
+        padding-top: $header-height + $subheader-height;
+    }
+
     #left {
         margin-right: 0;
     }

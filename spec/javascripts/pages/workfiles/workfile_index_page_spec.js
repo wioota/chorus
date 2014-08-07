@@ -115,7 +115,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         });
 
         it("has a titlebar", function() {
-            expect(this.page.$(".workspace_title")).toContainText(this.workspace.name());
+            expect(this.page.$(".sub_header")).toContainText(this.workspace.name());
         });
 
         it("shows the page title", function() {

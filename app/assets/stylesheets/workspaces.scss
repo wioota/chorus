@@ -10,7 +10,7 @@
 @import "widgets/quickstart";
 @import "workspaces/_workspace_summary_content_header";
 
-.workspace_title {
+.sub_header {
     position: fixed;
     font-size: $subheader-height / 3;
     color: $color-text3;

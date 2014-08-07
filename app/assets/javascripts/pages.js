@@ -63,7 +63,7 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         "#header": "header",
         "#main_content": "mainContent",
         "#breadcrumbs": "breadcrumbs",
-        "#workspace_title": "workspaceTitle",
+        "#sub_header": "subHeader",
         "#sidebar .primary_action_panel": "primaryActionPanel",
         "#sidebar .multiple_selection": "multiSelectSidebarMenu",
         "#sidebar .sidebar_content.primary": "sidebar",
@@ -95,15 +95,19 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         });
     },
 
-    setupWorkspaceTitle: function () {
+    hasSubHeader: function() {
+        return !!this.workspaceId;
+    },
+
+    setupSubHeader: function () {
         this.additionalClass = "workspace";
-        this.workspaceTitle = new chorus.views.WorkspaceTitle({model: this.workspace});
+        this.subHeader = new chorus.views.SubHeader({model: this.workspace});
     },
 
     _initializeHeaderAndBreadcrumbs: function() {
         this.header = this.header || new chorus.views.Header();
         this.header.workspaceId = this.workspaceId;
 
-        this.workspaceId ? this.setupWorkspaceTitle() : this.setupBreadcrumbs();
+        _.result(this, "hasSubHeader") ? this.setupSubHeader() : this.setupBreadcrumbs();
     }
 });
