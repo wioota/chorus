@@ -21,6 +21,7 @@ chorus.alerts.ModelDelete = chorus.alerts.Confirm.extend({
     },
 
     deleteModel: function(e) {
+        chorus.page.stopListening(this.model, "unprocessableEntity");
         e.preventDefault();
         this.model.destroy();
         this.$("button.submit").startLoading("actions.deleting");
