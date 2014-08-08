@@ -7,8 +7,8 @@
         }
     }
 
-    .workspace_member_list {
-        margin: 5px 0px;
+    .workspace_member_list .members {
+        @include sidebar-panel;
     }
 
     img.workspace_image {
