@@ -29,14 +29,14 @@ chorus.views.MultipleSelectionSidebarMenu = chorus.views.Base.include(
         },
 
         revealOnlyMultiActions: function () {
-            this.$el.show();
-            $('#sidebar').find('.primary').hide();
+            $('.multiple_selection').removeClass('hidden');
+            $('#sidebar').find('.primary').addClass('hidden');
         }, revealOnlySingleActions: function () {
-            this.$el.hide();
-            $('#sidebar').find('.primary').show();
+            $('.multiple_selection').addClass('hidden');
+            $('#sidebar').find('.primary').removeClass('hidden');
         }, revealNoActions: function () {
-            $('#sidebar').find('.primary').hide();
-            this.$el.hide();
+            $('#sidebar').find('.primary').addClass('hidden');
+            $('.multiple_selection').addClass('hidden');
         },
 
         showOrHideMultipleSelectionSection: function () {
