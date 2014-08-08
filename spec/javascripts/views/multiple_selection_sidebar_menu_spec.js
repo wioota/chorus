@@ -92,7 +92,7 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
             });
             it("shows no actions", function() {
                 chorus.PageEvents.trigger(this.selectEvent, this.collection);
-                expect(this.view.$el).not.toBeVisible();
+                expect(this.view.$el).not.toHaveClass('hidden');
             });
         });
     });
