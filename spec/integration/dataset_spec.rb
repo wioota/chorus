@@ -17,15 +17,13 @@ describe "Dataset", :database_integration do
 
     first('.select_all').click
 
-    within '.multiple_selection_sidebar_menu' do
-      click_link 'Associate with a workspace'
-    end
+    find('a', :text => 'Associate with a workspace', :visible => true).click
 
     within_modal do
       within ".items.collection_list" do
         find("li[data-id='#{workspace.id}']").click
       end
-      click_button "Associate Datasets"
+      find('button', :text => /Associate/).click
     end
     workspace.source_datasets.should include(dataset)
   end
