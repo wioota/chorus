@@ -30,8 +30,8 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             expect(this.page.collection.fileType).toBe("");
         });
 
-        it("fetches the entire collection", function() {
-            expect(this.page.collection).toHaveAllBeenFetched();
+        it("fetches the first page of the collection", function() {
+            expect(this.page.collection).toHaveBeenFetched();
         });
 
         it("goes to 404 when the workspace fetch fails", function() {
@@ -123,32 +123,44 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         });
 
         itBehavesLike.aPageWithMultiSelect();
-    });
 
-    describe("search", function() {
-        beforeEach(function() {
-            this.server.completeFetchFor(this.workspace);
-            this.server.completeFetchAllFor(this.page.collection, [
-                backboneFixtures.workfile.sql({fileName: "bar"}),
-                backboneFixtures.workfile.sql({fileName: "foo"})
-            ]);
-        });
+        describe("search", function() {
+            beforeEach(function() {
+                this.page.$("input.search").val("foo").trigger("keyup");
+            });
 
-        it("sets up search correctly", function() {
-            expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Workfile", {count: 2});
-            expect(this.page.$("input.search")).toHaveAttr("placeholder", t("workfile.search_placeholder"));
+            it("shows the Loading text in the count span", function() {
+                expect($(this.page.$(".count"))).toContainTranslation("loading");
+            });
 
-            this.page.$("input.search").val("bar").trigger("keyup");
+            it("re-fetches the collection with the search parameters", function() {
+                expect(this.server.lastFetch().url).toContainQueryParams({namePattern: "foo"});
+            });
 
-            expect(this.page.$("li.item_wrapper:eq(1)")).toHaveClass("hidden");
-            expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Workfile", {count: 1});
-            expect(this.page.mainContent.options.search.eventName).toBe("workfile:search");
-        });
+            context("when the fetch completes", function() {
+                beforeEach(function() {
+                    spyOn(this.page.mainContent, "render").andCallThrough();
+                    spyOn(this.page.mainContent.content, "render").andCallThrough();
+                    spyOn(this.page.mainContent.contentFooter, "render").andCallThrough();
+                    spyOn(this.page.mainContent.contentDetails, "render").andCallThrough();
+                    spyOn(this.page.mainContent.contentDetails, "updatePagination").andCallThrough();
+                    this.server.completeFetchFor(this.page.collection);
+                });
 
-        it("should deselect all on search", function() {
-            spyOnEvent(chorus.PageEvents, "selectNone");
-            this.page.$("input.search").val("bar").trigger("keyup");
-            expect("selectNone").toHaveBeenTriggeredOn(chorus.PageEvents);
+                it("updates the header, footer, and body", function() {
+                    expect(this.page.mainContent.content.render).toHaveBeenCalled();
+                    expect(this.page.mainContent.contentFooter.render).toHaveBeenCalled();
+                    expect(this.page.mainContent.contentDetails.updatePagination).toHaveBeenCalled();
+                });
+
+                it("does not re-render the page or body", function() {
+                    expect(this.page.mainContent.render).not.toHaveBeenCalled();
+                    expect(this.page.mainContent.contentDetails.render).not.toHaveBeenCalled();
+                });
+                it("shows the Loading text in the count span", function() {
+                    expect($(this.page.$(".count"))).not.toMatchTranslation("loading");
+                });
+            });
         });
     });
 
@@ -161,7 +173,7 @@ describe("chorus.pages.WorkfileIndexPage", function() {
         describe("filtering", function() {
             beforeEach(function() {
                 this.page.collection.fileType = undefined;
-                spyOn(this.page.collection, "fetchAll");
+                spyOn(this.page.collection, "fetch");
             });
 
             it("has options for filtering", function() {
@@ -176,13 +188,13 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             it("can filter the list by 'all'", function() {
                 this.page.$("li[data-type=] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("");
-                expect(this.page.collection.fetchAll).toHaveBeenCalled();
+                expect(this.page.collection.fetch).toHaveBeenCalled();
             });
 
             it("can filter the list by 'SQL'", function() {
                 this.page.$("li[data-type=SQL] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("SQL");
-                expect(this.page.collection.fetchAll).toHaveBeenCalled();
+                expect(this.page.collection.fetch).toHaveBeenCalled();
             });
 
             context("when workflows are enabled", function () {
@@ -191,45 +203,45 @@ describe("chorus.pages.WorkfileIndexPage", function() {
                     this.page = new chorus.pages.WorkfileIndexPage(this.workspace.id);
                     this.server.completeFetchFor(this.workspace);
                     this.server.completeFetchFor(this.page.collection);
-                    spyOn(this.page.collection, "fetchAll");
+                    spyOn(this.page.collection, "fetch");
                 });
 
                 it("can filter the list by 'WORK_FLOW'", function() {
                     this.page.$("li[data-type=WORK_FLOW] a").click();
                     expect(this.page.collection.attributes.fileType).toBe("WORK_FLOW");
-                    expect(this.page.collection.fetchAll).toHaveBeenCalled();
+                    expect(this.page.collection.fetch).toHaveBeenCalled();
                 });
             });
 
             it("can filter the list by 'CODE'", function() {
                 this.page.$("li[data-type=CODE] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("CODE");
-                expect(this.page.collection.fetchAll).toHaveBeenCalled();
+                expect(this.page.collection.fetch).toHaveBeenCalled();
             });
 
             it("can filter the list by 'TEXT'", function() {
                 this.page.$("li[data-type=TEXT] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("TEXT");
-                expect(this.page.collection.fetchAll).toHaveBeenCalled();
+                expect(this.page.collection.fetch).toHaveBeenCalled();
             });
 
             it("can filter the list by 'IMAGE'", function() {
                 this.page.$("li[data-type=IMAGE] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("IMAGE");
-                expect(this.page.collection.fetchAll).toHaveBeenCalled();
+                expect(this.page.collection.fetch).toHaveBeenCalled();
             });
 
             it("can filter the list by 'OTHER'", function() {
                 this.page.$("li[data-type=OTHER] a").click();
                 expect(this.page.collection.attributes.fileType).toBe("OTHER");
-                expect(this.page.collection.fetchAll).toHaveBeenCalled();
+                expect(this.page.collection.fetch).toHaveBeenCalled();
             });
         });
 
         describe("sorting", function() {
             beforeEach(function() {
                 this.page.collection.order = undefined;
-                spyOn(this.page.collection, "fetchAll");
+                spyOn(this.page.collection, "fetch");
             });
 
             it("has options for sorting", function() {
@@ -240,13 +252,13 @@ describe("chorus.pages.WorkfileIndexPage", function() {
             it("can sort the list alphabetically ascending", function() {
                 this.page.$("li[data-type=alpha] a").click();
                 expect(this.page.collection.order).toBe("fileName");
-                expect(this.page.collection.fetchAll).toHaveBeenCalled();
+                expect(this.page.collection.fetch).toHaveBeenCalled();
             });
 
             it("can sort the list by date (hopefully descending)", function() {
                 this.page.$("li[data-type=date] a").click();
                 expect(this.page.collection.order).toBe("userModifiedAt");
-                expect(this.page.collection.fetchAll).toHaveBeenCalled();
+                expect(this.page.collection.fetch).toHaveBeenCalled();
             });
         });
     });

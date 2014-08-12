@@ -1,5 +1,6 @@
 chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
-    chorus.Mixins.DataSourceCredentials.page
+    chorus.Mixins.DataSourceCredentials.page,
+    chorus.Mixins.ListSearch
 ).extend({
     constructorName: 'SchemaDatasetIndexPage',
     helpId: "schema",
@@ -36,11 +37,7 @@ chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
             this.model = dataset;
         });
 
-        this.listenTo(this.collection, 'searched', function() {
-            this.mainContent.content.render();
-            this.mainContent.contentFooter.render();
-            this.mainContent.contentDetails.updatePagination();
-        });
+        this.setupOnSearched();
 
         this.breadcrumbs.requiredResources.add(this.schema);
     },
@@ -56,11 +53,6 @@ chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
     },
 
     schemaLoaded: function() {
-        var onTextChangeFunction = _.debounce(_.bind(function(e) {
-            this.collection.search($(e.target).val());
-            this.mainContent.contentDetails.startLoading(".count");
-        }, this), 300);
-
         this.mainContent.teardown();
 
         this.mainContent = new chorus.views.MainContentList({
@@ -69,7 +61,7 @@ chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
             title: this.schema.canonicalName(),
             search: {
                 placeholder: t("schema.search"),
-                onTextChange: onTextChangeFunction
+                onTextChange: this.debouncedCollectionSearch()
             },
 
             contentDetailsOptions: { multiSelect: true }

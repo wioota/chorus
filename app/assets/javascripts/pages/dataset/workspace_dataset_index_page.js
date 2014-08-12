@@ -1,4 +1,6 @@
-chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
+chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.include(
+    chorus.Mixins.ListSearch
+).extend({
     constructorName: "WorkspaceDatasetIndexPage",
     helpId: "datasets",
 
@@ -17,16 +19,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             this.collection.fetch();
         });
 
-        this.listenTo(this.collection, 'searched', function() {
-            this.mainContent.content.render();
-            this.mainContent.contentFooter.render();
-            this.mainContent.contentDetails.updatePagination();
-        });
-
-        var onTextChangeFunction = _.debounce(_.bind(function(e) {
-            this.mainContent.contentDetails.startLoading(".count");
-            this.collection.search($(e.target).val());
-        }, this), 300);
+        this.setupOnSearched();
 
         this.buildSidebar();
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "datasets"});
@@ -39,7 +32,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.extend({
             contentDetailsOptions: { multiSelect: true },
             search: {
                 placeholder: t("workspace.search"),
-                onTextChange: onTextChangeFunction
+                onTextChange: this.debouncedCollectionSearch()
             },
             linkMenus: {
                 type: {

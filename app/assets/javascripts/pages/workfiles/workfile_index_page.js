@@ -1,4 +1,6 @@
-chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
+chorus.pages.WorkfileIndexPage = chorus.pages.Base.include(
+    chorus.Mixins.ListSearch
+).extend({
     constructorName: 'WorkfileIndexPage',
     helpId: "workfiles",
 
@@ -6,7 +8,9 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
         this.collection = new chorus.collections.WorkfileSet([], {workspaceId: workspaceId});
         this.collection.fileType = "";
         this.collection.sortAsc("fileName");
-        this.collection.fetchAll();
+        this.collection.fetch();
+
+        this.setupOnSearched();
 
         this.subNav = new chorus.views.SubNav({workspace: this.workspace, tab: "workfiles"});
         this.mainContent = new chorus.views.MainContentList({
@@ -33,7 +37,7 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
             },
             search: {
                 placeholder: t("workfile.search_placeholder"),
-                eventName: "workfile:search"
+                onTextChange: this.debouncedCollectionSearch()
             }
         });
 
@@ -50,13 +54,13 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.extend({
 
         this.mainContent.contentHeader.bind("choice:filter", function(choice) {
             this.collection.attributes.fileType = choice;
-            this.collection.fetchAll();
+            this.collection.fetch();
         }, this);
 
         this.mainContent.contentHeader.bind("choice:sort", function(choice) {
             var field = choice === "alpha" ? "fileName" : "userModifiedAt";
             this.collection.sortAsc(field);
-            this.collection.fetchAll();
+            this.collection.fetch();
         }, this);
 
         this.requiredResources.add(this.workspace);
