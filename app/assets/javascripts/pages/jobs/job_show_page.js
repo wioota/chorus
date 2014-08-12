@@ -40,19 +40,30 @@ chorus.pages.JobsShowPage = chorus.pages.Base.extend({
         this.subscribePageEvent("job_task:selected", this.jobTaskSelected);
 
         if (this.collection.length > 0) {
-            this.mainContent = new chorus.views.MainContentList({
-                modelClass: "JobTask",
-                contentHeader: new chorus.views.JobShowContentHeader({model: this.job}),
-                collection: this.collection,
-                contentDetails: this.contentDetails()
-            });
+            this.mainContent = this.buildMainContentList();
         } else {
+            this.listenToOnce(this.job, 'invalidated', this.switchToList);
+
             this.mainContent = new chorus.views.MainContentView({
                 content: new chorus.views.JobQuickstart({model: this.job}),
                 contentHeader: new chorus.views.JobShowContentHeader({model: this.job}),
                 contentDetails: this.contentDetails()
             });
         }
+    },
+
+    switchToList: function() {
+        this.mainContent.teardown(true);
+        this.mainContent = this.buildMainContentList();
+    },
+
+    buildMainContentList: function() {
+        return new chorus.views.MainContentList({
+            modelClass: "JobTask",
+            contentHeader: new chorus.views.JobShowContentHeader({model: this.job}),
+            collection: this.collection,
+            contentDetails: this.contentDetails()
+        });
     },
 
     contentDetails: function () {

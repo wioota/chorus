@@ -24,6 +24,16 @@ describe("chorus.pages.JobsShowPage", function () {
         it("creates quickstart content", function () {
             expect(this.page.mainContent.content).toBeA(chorus.views.JobQuickstart);
         });
+
+        context("when 'invalidated' is triggered on the job", function() {
+            beforeEach(function() {
+                this.page.model.trigger('invalidated');
+            });
+
+            it("switches out main content for the list view", function() {
+                expect(this.page.mainContent.content).toBeA(chorus.views.PageItemList);
+            });
+        });
     });
 
     context("after the fetch completes with tasks", function () {
@@ -170,6 +180,5 @@ describe("chorus.pages.JobsShowPage", function () {
             });
         });
     });
-
 
 });
