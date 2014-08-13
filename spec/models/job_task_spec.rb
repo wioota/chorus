@@ -54,9 +54,9 @@ describe JobTask do
 
     before do
       @job = FactoryGirl.create(:job, workspace: workspace)
-      @task1 = FactoryGirl.create(:isdt, index: 1, job: @job)
-      @task2 = FactoryGirl.create(:isdt, index: 2, job: @job)
-      @task3 = FactoryGirl.create(:isdt, index: 3, job: @job)
+      @task1 = FactoryGirl.create(:run_sql_workfile_task, index: 1, job: @job)
+      @task2 = FactoryGirl.create(:run_sql_workfile_task, index: 2, job: @job)
+      @task3 = FactoryGirl.create(:run_sql_workfile_task, index: 3, job: @job)
     end
 
     it 'compacts indices' do

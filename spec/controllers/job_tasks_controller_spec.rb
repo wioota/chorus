@@ -69,6 +69,18 @@ describe JobTasksController do
         post :create, params
         response.code.should == '201'
       end
+
+      context 'when the workspace does not have a sandbox' do
+        before do
+          job.workspace.sandbox.delete
+          post :create, params
+        end
+
+        it 'returns 422' do
+          response.should be_unprocessable
+          decoded_errors.fields.base.should have_key(:EMPTY_SANDBOX)
+        end
+      end
     end
 
     context 'run sql tasks' do

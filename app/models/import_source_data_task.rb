@@ -1,5 +1,6 @@
 class ImportSourceDataTask < JobTask
   validate :destination_name_is_unique
+  validate :sandbox_exists
 
   belongs_to :payload, :class_name => 'ImportTemplate', :autosave => true
   belongs_to :current_import, :class_name => 'Import', :foreign_key => :killable_id
@@ -55,6 +56,10 @@ class ImportSourceDataTask < JobTask
   end
 
   def destination_already_exists?
-    workspace.sandbox.datasets.find_by_name(payload.destination_name)
+    workspace.sandbox && workspace.sandbox.datasets.find_by_name(payload.destination_name)
+  end
+
+  def sandbox_exists
+    errors.add(:base, :EMPTY_SANDBOX) unless workspace.sandbox.present?
   end
 end

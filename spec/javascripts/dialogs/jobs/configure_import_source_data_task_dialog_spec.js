@@ -20,6 +20,8 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
     context("when initialized without a model", function () {
         beforeEach(function () {
             this.job = backboneFixtures.job();
+            chorus.page = {};
+            this.workspace = chorus.page.workspace = this.job.workspace();
             this.dialog = new chorus.dialogs.ConfigureImportSourceDataTask({job: this.job});
             this.dialog.render();
         });
@@ -62,7 +64,7 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
 
                 it("uses the workspace source tables", function () {
                     var collection = this.modalSpy.lastModal().collection;
-                    expect(collection).toEqual(this.job.workspace().importSourceDatasets());
+                    expect(collection).toEqual(this.workspace.importSourceDatasets());
                 });
 
                 context("after selecting a dataset", function () {
@@ -135,7 +137,7 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
 
                     it("uses the workspace sandbox tables", function () {
                         var collection = this.modalStub.lastModal().collection;
-                        expect(collection).toEqual(this.job.workspace().sandboxTables({allImportDestinations: true}));
+                        expect(collection).toEqual(this.workspace.sandboxTables({allImportDestinations: true}));
                         expect(collection.attributes.allImportDestinations).toBeTruthy();
                     });
 
@@ -331,7 +333,10 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
 
     context("when initialized with a task", function () {
         beforeEach(function () {
-            this.task = backboneFixtures.job().tasks().at(0);
+            this.job = backboneFixtures.job();
+            chorus.page = {};
+            this.workspace = chorus.page.workspace = this.job.workspace();
+            this.task = this.job.tasks().at(0);
             this.dialog = new chorus.dialogs.ConfigureImportSourceDataTask({model: this.task});
             this.dialog.render();
         });
@@ -430,6 +435,21 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
                     expect(this.dialog.closeModal).toHaveBeenCalled();
                 });
             });
+        });
+    });
+
+    context("when the workspace has no sandbox", function() {
+        beforeEach(function() {
+            this.job = backboneFixtures.job();
+            chorus.page = {};
+            this.workspace = chorus.page.workspace = this.job.workspace();
+            spyOn(this.workspace, 'sandbox').and.returnValue(undefined);
+            this.dialog = new chorus.dialogs.ConfigureImportSourceDataTask({job: this.job});
+            this.dialog.render();
+        });
+
+        it("displays a 'no sandbox' error", function() {
+            expect(this.dialog.$('.errors')).toContainTranslation("field_error.EMPTY_SANDBOX");
         });
     });
 });

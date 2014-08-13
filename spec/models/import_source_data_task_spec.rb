@@ -89,6 +89,33 @@ describe ImportSourceDataTask do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
+
+    context 'when the workspace does not have a sandbox' do
+      before do
+        mock(job.workspace).sandbox { nil }
+      end
+
+      let(:import_data) do
+        {
+            :source_id => source_dataset.id,
+            :destination_id => '2',
+            :row_limit => '500',
+            :truncate => false
+        }
+      end
+      let(:planned_job_task) do
+        {
+            :action => 'import_source_data',
+            :is_new_table => false,
+        }.merge!(import_data)
+      end
+
+      it 'does not validate' do
+        expect {
+          JobTask.assemble!(planned_job_task, job)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
   end
 
   describe '#perform' do

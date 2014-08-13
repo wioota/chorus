@@ -20,7 +20,7 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
 
     setup: function () {
         this.job = this.options.job || this.model.job();
-        this.workspace = this.job.workspace();
+        this.workspace = chorus.page.workspace;
         if (this.model) {
             this.sourceTableHasBeenPicked = true;
             if (this.model.get('destinationId')) {
@@ -30,6 +30,11 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
             this.model = this.buildATask();
         }
         this.resource = this.model;
+
+        if (!this.workspace.sandbox()) {
+            this.resource.serverErrors = {"fields":{"base":{"EMPTY_SANDBOX":{}}}};
+            this.showErrors();
+        }
 
         this.disableFormUnlessValid({
             formSelector: "form",
@@ -76,7 +81,7 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
 
     buildATask: function () {
         return new chorus.models.JobTask({
-            job: { id: this.options.job.get("id"), workspace: { id: this.workspace.get("id") } }
+            job: { id: this.job.get("id"), workspace: { id: this.workspace.get("id") } }
         });
     },
 
@@ -186,7 +191,7 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
 
     launchDatasetPickerDialog: function (e, source_or_destination) {
         e.preventDefault();
-        if (this.saving) {
+        if (this.saving || !this.workspace.sandbox()) {
             return;
         }
 

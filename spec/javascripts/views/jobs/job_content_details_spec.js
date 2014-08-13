@@ -52,6 +52,11 @@ describe("chorus.views.JobContentDetails", function () {
         });
 
         context("clicking on 'Add Import Source Data'", function () {
+            beforeEach(function() {
+                chorus.page = {};
+                chorus.page.workspace = this.job.workspace();
+            });
+
             it("launches the CreateImportSourceDataTask dialog", function () {
                 expect(this.modalSpy).not.toHaveModal(chorus.dialogs.ConfigureImportSourceDataTask);
                 expect(this.qtipElement.find('.import_source_data')).toContainTranslation('job_task.action.import_source_data');

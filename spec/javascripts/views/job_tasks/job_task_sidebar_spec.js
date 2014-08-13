@@ -34,6 +34,8 @@ describe("chorus.views.JobTaskSidebar", function () {
 
             context("when an Import task is selected", function () {
                 beforeEach(function () {
+                    chorus.page = {};
+                    chorus.page.workspace = this.job.workspace();
                     this.task.set('action', 'import_source_data');
                 });
 

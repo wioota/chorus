@@ -3,7 +3,6 @@ jasmine.sharedExamples.aDialogLauncher = function(linkHtmlClass, dialogClass) {
         beforeEach(function() {
             this.modalSpy.reset();
             this.view = this.page || this.view || this.dialog;
-            chorus.page = this.view;
             $('#jasmine_content').append(this.view.$el);
             this.view.$(linkHtmlClass).click();
         });
