@@ -1,9 +1,11 @@
 chorus.collections.SchemaDatasetSet = chorus.collections.LastFetchWins.include(
-    chorus.Mixins.DataSourceCredentials.model
+    chorus.Mixins.DataSourceCredentials.model,
+    chorus.Mixins.CollectionFetchingSearch
 ).extend({
     constructorName: 'SchemaDatasetSet',
-    model:chorus.models.DynamicDataset,
+    model: chorus.models.DynamicDataset,
     urlTemplate: "schemas/{{schemaId}}/datasets",
+    searchAttr: "filter",
 
     urlParams: function() {
         if (this.attributes) {
@@ -16,11 +18,5 @@ chorus.collections.SchemaDatasetSet = chorus.collections.LastFetchWins.include(
             }
             return paramsList;
         }
-    },
-
-    search: function(term) {
-        var self = this;
-        self.attributes.filter = term;
-        self.fetch({silent: true, success: function() { self.trigger('searched'); }});
     }
 });

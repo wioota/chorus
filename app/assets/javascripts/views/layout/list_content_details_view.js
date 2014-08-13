@@ -61,9 +61,6 @@ chorus.views.ListContentDetails = chorus.views.Base.include(
             },
             this.options.search)
         );
-        if (this.collection.attributes.namePattern) {
-            this.$("input.search:text").val(this.collection.attributes.namePattern).trigger('keyup');
-        }
     },
 
     startLoading: function(selector) {
@@ -107,6 +104,7 @@ chorus.views.ListContentDetails = chorus.views.Base.include(
             hideCounts: this.options.hideCounts,
             buttons: this.options.buttons,
             search: this.options.search,
+            searchTerm: this.collection && this.collection.attributes && this.collection.attributes[this.collection.searchAttr],
             workspaceId: this.collection && this.collection.attributes && this.collection.attributes.workspaceId,
             multiSelect: this.options.multiSelect
         };

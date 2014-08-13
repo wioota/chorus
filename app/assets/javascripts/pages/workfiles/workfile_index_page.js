@@ -1,5 +1,5 @@
 chorus.pages.WorkfileIndexPage = chorus.pages.Base.include(
-    chorus.Mixins.ListSearch
+    chorus.Mixins.FetchingListSearch
 ).extend({
     constructorName: 'WorkfileIndexPage',
     helpId: "workfiles",

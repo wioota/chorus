@@ -1,6 +1,6 @@
 chorus.pages.SchemaDatasetIndexPage = chorus.pages.Base.include(
     chorus.Mixins.DataSourceCredentials.page,
-    chorus.Mixins.ListSearch
+    chorus.Mixins.FetchingListSearch
 ).extend({
     constructorName: 'SchemaDatasetIndexPage',
     helpId: "schema",

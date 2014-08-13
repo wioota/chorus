@@ -1,4 +1,4 @@
-chorus.Mixins.ListSearch = {
+chorus.Mixins.FetchingListSearch = {
     debouncedCollectionSearch: function() {
         return  _.debounce(_.bind(function(e) {
             this.mainContent.contentDetails.startLoading(".count");
@@ -12,5 +12,13 @@ chorus.Mixins.ListSearch = {
             this.mainContent.contentFooter.render();
             this.mainContent.contentDetails.updatePagination();
         });
+    }
+};
+
+chorus.Mixins.CollectionFetchingSearch = {
+    search: function(term) {
+        var self = this;
+        self.attributes[this.searchAttr] = term;
+        self.fetch({silent: true, success: function() { self.trigger('searched'); }});
     }
 };

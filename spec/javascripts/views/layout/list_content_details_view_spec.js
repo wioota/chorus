@@ -392,13 +392,17 @@ describe("chorus.views.ListContentDetails", function() {
             expect(this.view.$("input.search:text")).not.toExist();
         });
 
-        it("sets the value of the search bar if the collection has a namePattern already", function() {
-            this.collection.attributes.namePattern = "foo";
-            this.view.render();
+        context("when the collection already has a value for its searchAttr", function() {
+            beforeEach(function() {
+                this.collection.searchAttr = "namePattern";
+                this.collection.attributes.namePattern = "foo";
+                this.view.render();
+            });
 
-            expect(this.view.$("input.search:text").val()).toEqual('foo');
+            it("sets the value in the search input", function() {
+                expect(this.view.$("input.search:text").val()).toEqual('foo');
+            });
         });
-
     });
 
     describe("#startLoading", function() {

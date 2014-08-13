@@ -1,16 +1,17 @@
-chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend({
-
-    model: chorus.models.DynamicDataset,
+chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.include(
+    chorus.Mixins.CollectionFetchingSearch
+).extend({
     constructorName: "WorkspaceDatasetSet",
+    showUrlTemplate: "workspaces/{{workspaceId}}/datasets",
+    urlTemplate: "workspaces/{{workspaceId}}/datasets",
+    model: chorus.models.DynamicDataset,
+    searchAttr: "namePattern",
 
     setup: function() {
         if(this.attributes.unsorted) {
             this.comparator = undefined;
         }
     },
-
-    showUrlTemplate: "workspaces/{{workspaceId}}/datasets",
-    urlTemplate: "workspaces/{{workspaceId}}/datasets",
 
     save: function() {
         var ids = _.pluck(this.models, 'id');
@@ -41,12 +42,6 @@ chorus.collections.WorkspaceDatasetSet = chorus.collections.LastFetchWins.extend
 
     comparator: function(dataset) {
         return dataset.get("objectName").replace('_', '').toLowerCase();
-    },
-
-    search: function(term) {
-        var self = this;
-        self.attributes.namePattern = term;
-        self.fetch({silent: true, success: function() { self.trigger('searched'); }});
     },
 
     hasFilter: function() {

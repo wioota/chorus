@@ -1,5 +1,5 @@
 chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.include(
-    chorus.Mixins.ListSearch
+    chorus.Mixins.FetchingListSearch
 ).extend({
     constructorName: "WorkspaceDatasetIndexPage",
     helpId: "datasets",
