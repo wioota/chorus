@@ -9,6 +9,12 @@ chorus.pages.DashboardPage = chorus.pages.Base.extend({
 
     setupSubHeader: function() {
         var model = new chorus.models.Base({name: t("header.home")});
-        this.subHeader = new chorus.views.SubHeader({model: model});
+        var klazz = chorus.views.SubHeader.extend({
+            templateName: "dashboard/sub_header",
+            additionalContext: function() {
+                return { editUrl: "#/users/" + chorus.session.user().id + "/dashboard_edit" };
+            }
+        });
+        this.subHeader = new klazz({model: model});
     }
 });

@@ -18,6 +18,9 @@
     height: $subheader-height;
     line-height: $subheader-height;
     padding-top: $header-height;
-    padding-left: 17px;
     border-bottom: $border-canon;
+    > :first-child {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
 }

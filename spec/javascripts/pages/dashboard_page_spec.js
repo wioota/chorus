@@ -10,6 +10,11 @@ describe("chorus.pages.DashboardPage", function() {
             expect(this.page.$(".page_sub_header")).toContainTranslation("header.home");
         });
 
+        it("links to the dashboard edit page", function() {
+            this.page.render();
+            expect(this.page.$("a.container").attr("href")).toBe("#/users/" + chorus.session.user().id + "/dashboard_edit");
+        });
+
         it("creates a module dashboard view", function() {
             expect(this.page.mainContent).toBeA(chorus.views.ModularDashboard);
         });
