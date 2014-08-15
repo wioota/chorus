@@ -17,6 +17,8 @@ class DashboardConfig
   end
 
   def update(modules)
+    raise ApiValidationError.new(:base, :ONE_OR_MORE_REQUIRED) unless modules.present?
+
     User.transaction do
       user.dashboard_items.destroy_all
       modules.each_with_index do |name, i|

@@ -69,6 +69,24 @@ describe UserDashboardsController do
       it 'returns 422' do
         response.should be_unprocessable
       end
+
+      context 'when the new config has zero items' do
+        let(:modules) { [] }
+
+        it 'returns 422' do
+          response.should be_unprocessable
+          decoded_errors[:fields][:base].should have_key(:ONE_OR_MORE_REQUIRED)
+        end
+      end
+
+      context 'when modules is nil' do
+        let(:modules) { nil }
+
+        it 'returns 422' do
+          response.should be_unprocessable
+          decoded_errors[:fields][:base].should have_key(:ONE_OR_MORE_REQUIRED)
+        end
+      end
     end
 
     it 'uses authorization' do

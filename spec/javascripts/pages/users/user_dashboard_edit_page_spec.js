@@ -13,6 +13,17 @@ describe("chorus.pages.UserDashboardEditPage", function() {
             expect(this.page.mainContent).toBeA(chorus.views.UserDashboardEditView);
             expect(this.page.mainContent.model).toBe(this.page.model);
         });
+
+        context("when the resource is forbidden", function() {
+            beforeEach(function() {
+                spyOn(Backbone.history, "loadUrl");
+                this.server.lastFetchFor(this.page.model).failForbidden();
+            });
+
+            it("navigates to the forbidden page", function() {
+                expect(Backbone.history.loadUrl).toHaveBeenCalledWith("/unauthorized");
+            });
+        });
     });
 
     describe("#render", function() {

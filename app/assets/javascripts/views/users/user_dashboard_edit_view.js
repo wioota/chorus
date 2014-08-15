@@ -12,9 +12,16 @@ chorus.views.UserDashboardEditView = chorus.views.Base.extend({
             containment: ".sortable_container"
         });
 
+        this.toggleSubmitState();
+
         this.$(".sortable_container .module_list").on(
             "sortover sortout",
             _.bind(this.toggleDropTarget, this)
+        );
+
+        this.$(".selected_modules").on(
+            "sortremove sortreceive",
+            _.bind(this.toggleSubmitState, this)
         );
     },
 
@@ -56,5 +63,10 @@ chorus.views.UserDashboardEditView = chorus.views.Base.extend({
 
     toggleDropTarget: function(event) {
         this.$(event.currentTarget).toggleClass("drop_target");
+    },
+
+    toggleSubmitState: function() {
+        var disabled = this.fieldValues().length < 1;
+        this.$("button.submit").prop("disabled", disabled);
     }
 });

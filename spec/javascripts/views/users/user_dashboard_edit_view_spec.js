@@ -53,6 +53,29 @@ describe("chorus.views.UserDashboardEditView", function() {
             expect(this.view.$(".available_modules ul")).toHaveClass("ui-sortable");
         });
 
+        context("when there are no modules in the display list", function() {
+            beforeEach(function() {
+                this.model.set("modules", []);
+                this.view.render();
+                this.view.$(".selected_modules").trigger("sortremove");
+            });
+
+            it("disables submit", function() {
+                expect(this.view.$("button.submit")).toBeDisabled();
+            });
+
+            context("adding an element to the list", function() {
+                beforeEach(function() {
+                    this.view.$(".selected_modules ul").append("<li id='TestModule'></li>");
+                    this.view.$(".selected_modules").trigger("sortreceive");
+                });
+
+                it("re-enables the submit button", function() {
+                    expect(this.view.$("button.submit")).toBeEnabled();
+                });
+            });
+        });
+
         describe("submitting the changes", function() {
             beforeEach(function() {
                 this.view.$("form").submit();
@@ -68,6 +91,17 @@ describe("chorus.views.UserDashboardEditView", function() {
                     spyOn(chorus.router, "navigate");
                     this.server.completeCreateFor(this.view.model);
                     expect(chorus.router.navigate).toHaveBeenCalledWith("/");
+                });
+            });
+
+            context("when the save fails", function() {
+                beforeEach(function() {
+                    this.server.lastCreate().failUnprocessableEntity({fields: {base: {ONE_OR_MORE_REQUIRED:{}}}});
+                });
+
+                it("displays the errors", function() {
+                    expect(this.view.$(".errors")).not.toHaveClass("hidden");
+                    expect(this.view.$(".errors")).toContainTranslation("field_error.ONE_OR_MORE_REQUIRED");
                 });
             });
         });

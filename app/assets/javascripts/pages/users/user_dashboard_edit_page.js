@@ -7,6 +7,7 @@ chorus.pages.UserDashboardEditPage = chorus.pages.Base.extend({
     },
 
     setup: function() {
+        this.handleFetchErrorsFor(this.model);
         this.model.fetch();
         this.mainContent = new chorus.views.UserDashboardEditView({model: this.model});
     },

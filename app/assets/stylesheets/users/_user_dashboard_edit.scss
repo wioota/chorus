@@ -1,5 +1,6 @@
 @import "_common";
 @import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
 
 .user_dashboard_edit {
 
@@ -51,8 +52,12 @@
         }
     }
 
+    .ui-sortable-helper {
+        @include single-box-shadow($charcoal, 5px, 5px, 15px);
+    }
+
     .drop_target {
-        box-shadow: 0 0 5px $brand-dark;
+        @include single-box-shadow($brand-dark, 0, 0, 5px);
     }
 
     .selected_modules {
