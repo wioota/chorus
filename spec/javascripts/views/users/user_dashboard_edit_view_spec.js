@@ -44,7 +44,10 @@ describe("chorus.views.UserDashboardEditView", function() {
             this.view.render();
 
             expect($.fn.sortable).toHaveBeenCalledOnSelector(".sortable");
-            expect($.fn.sortable).toHaveBeenCalledWith({connectWith: ".sortable"});
+            expect($.fn.sortable).toHaveBeenCalledWith({
+                connectWith: ".sortable",
+                containment: ".sortable_container"
+            });
 
             expect(this.view.$(".selected_modules ul")).toHaveClass("ui-sortable");
             expect(this.view.$(".available_modules ul")).toHaveClass("ui-sortable");
