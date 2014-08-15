@@ -51,6 +51,10 @@
         }
     }
 
+    .drop_target {
+        box-shadow: 0 0 5px $brand-dark;
+    }
+
     .selected_modules {
         ul {
             background-color: $accent-shade;

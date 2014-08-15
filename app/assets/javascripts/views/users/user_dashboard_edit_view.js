@@ -7,7 +7,15 @@ chorus.views.UserDashboardEditView = chorus.views.Base.extend({
     },
 
     postRender: function() {
-        this.$(".sortable").sortable({ connectWith: ".sortable" });
+        this.$(".sortable").sortable({
+            connectWith: ".sortable",
+            containment: ".sortable_container"
+        });
+
+        this.$(".sortable_container .module_list").on(
+            "sortover sortout",
+            _.bind(this.toggleDropTarget, this)
+        );
     },
 
     save: function(e) {
@@ -44,5 +52,9 @@ chorus.views.UserDashboardEditView = chorus.views.Base.extend({
                 descKey: "dashboard." + _.underscored(name)  + ".description"
             };
         });
+    },
+
+    toggleDropTarget: function(event) {
+        this.$(event.currentTarget).toggleClass("drop_target");
     }
 });
