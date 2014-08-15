@@ -28,8 +28,8 @@ chorus.views.UserDashboardEditView = chorus.views.Base.extend({
     save: function(e) {
         e && e.preventDefault();
 
-        this.model.set("modules", this.fieldValues());
-        this.model.save({}, {
+        this.model.save({modules: this.fieldValues()}, {
+            silent: true,
             success: function() { chorus.router.navigate('/'); }
         });
     },
