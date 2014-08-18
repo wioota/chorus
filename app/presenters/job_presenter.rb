@@ -28,7 +28,7 @@ class JobPresenter < Presenter
   end
 
   def tasks
-    {:tasks => model.job_tasks.map { |task| present(task) }}
+    { :tasks => present(model.job_tasks) }
   end
 
   private

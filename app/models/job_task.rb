@@ -34,8 +34,12 @@ class JobTask < ActiveRecord::Base
     raise NotImplementedError
   end
 
+  def valid_payload?
+    payload.present?
+  end
+
   def derived_name
-    valid_payload? && build_task_name
+    (valid_payload? && build_task_name) || '[invalid task]'
   end
 
   private
@@ -54,9 +58,5 @@ class JobTask < ActiveRecord::Base
 
   def idle!
     update_attributes!(:status => nil)
-  end
-
-  def valid_payload?
-    true
   end
 end

@@ -97,5 +97,16 @@ describe RunSqlWorkfileTask do
     it 'includes the file_name' do
       task.derived_name.should include(task.payload.file_name)
     end
+
+    context 'when the payload has been deleted' do
+      before do
+        task.payload.destroy
+        task.reload
+      end
+
+      it 'is [invalid]' do
+        task.derived_name.should == '[invalid task]'
+      end
+    end
   end
 end

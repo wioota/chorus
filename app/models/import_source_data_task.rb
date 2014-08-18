@@ -35,8 +35,12 @@ class ImportSourceDataTask < JobTask
   end
 
   def kill
-    current_import.mark_as_canceled!("Canceled by User") if current_import
+    current_import.mark_as_canceled!('Canceled by User') if current_import
     update_attribute(:status, JobTask::CANCELED)
+  end
+
+  def valid_payload?
+    super && payload.source.present?
   end
 
   private

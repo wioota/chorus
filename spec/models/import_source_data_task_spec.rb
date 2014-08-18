@@ -211,10 +211,21 @@ describe ImportSourceDataTask do
     end
   end
 
-  describe "#derived_name" do
+  describe '#derived_name' do
     let(:task) { job_tasks(:isdt) }
-    it "includes source dataset's name" do
+    it 'includes the name of the source dataset name' do
       task.derived_name.should include(task.payload.source.name)
+    end
+
+    context 'when the payload source has been deleted' do
+      before do
+        task.payload.source.touch :deleted_at
+        task.reload
+      end
+
+      it 'is [invalid]' do
+        task.derived_name.should == '[invalid task]'
+      end
     end
   end
 

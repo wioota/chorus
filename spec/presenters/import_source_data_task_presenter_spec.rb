@@ -28,5 +28,16 @@ describe ImportSourceDataTaskPresenter, :type => :view do
     it "presents 'truncate' as a boolean, not a string" do
       hash[:truncate].should be_instance_of(TrueClass)
     end
+
+    context 'when the payload source dataset has been deleted' do
+      before do
+        job_task.payload.source.destroy
+        job_task.reload
+      end
+
+      it 'presents an invalid task' do
+        hash[:name].should == '[invalid task]'
+      end
+    end
   end
 end
