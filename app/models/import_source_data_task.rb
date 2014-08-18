@@ -10,7 +10,7 @@ class ImportSourceDataTask < JobTask
   end
 
   def perform
-    result = ImportSourceDataTaskResult.new(:started_at => Time.current, :name => build_task_name)
+    result = ImportSourceDataTaskResult.new(:started_at => Time.current, :name => derived_name)
     raise StandardError.new('Canceled by User') if canceled?
 
     import_data
@@ -34,16 +34,16 @@ class ImportSourceDataTask < JobTask
     super
   end
 
-  def build_task_name
-    "Import from #{payload.source.name}"
-  end
-
   def kill
     current_import.mark_as_canceled!("Canceled by User") if current_import
     update_attribute(:status, JobTask::CANCELED)
   end
 
   private
+
+  def build_task_name
+    "Import from #{payload.source.name}"
+  end
 
   def canceled?
     reload.status == JobTask::CANCELED

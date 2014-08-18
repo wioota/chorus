@@ -179,7 +179,7 @@ describe ImportSourceDataTask do
         stub(isdt).set_destination_id!
         result = isdt.perform
         result.status.should == JobTaskResult::SUCCESS
-        result.name.should == isdt.build_task_name
+        result.name.should == isdt.derived_name
       end
     end
 
@@ -188,7 +188,7 @@ describe ImportSourceDataTask do
         stub(ImportExecutor).run { raise StandardError.new 'some msg' }
         result = isdt.perform
         result.status.should == JobTaskResult::FAILURE
-        result.name.should == isdt.build_task_name
+        result.name.should == isdt.derived_name
         result.message.should == 'some msg'
       end
     end
@@ -204,17 +204,17 @@ describe ImportSourceDataTask do
 
           result = isdt.perform
           result.status.should == JobTaskResult::FAILURE
-          result.name.should == isdt.build_task_name
+          result.name.should == isdt.derived_name
           result.message.should == 'Canceled by User'
         end
       end
     end
   end
 
-  describe "#build_task_name" do
+  describe "#derived_name" do
     let(:task) { job_tasks(:isdt) }
     it "includes source dataset's name" do
-      task.build_task_name.should include(task.payload.source.name)
+      task.derived_name.should include(task.payload.source.name)
     end
   end
 

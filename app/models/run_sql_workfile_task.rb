@@ -3,7 +3,7 @@ class RunSqlWorkfileTask < JobTask
   belongs_to :payload, :class_name => 'ChorusWorkfile'
 
   def perform
-    result = ImportSourceDataTaskResult.new(:started_at => Time.current, :name => build_task_name)
+    result = ImportSourceDataTaskResult.new(:started_at => Time.current, :name => derived_name)
 
     query = CancelableQuery.new(account, 'exe_id', job.owner)
     query.execute(sql, :limit => 0, :include_public_schema_in_search_path => true)
@@ -19,16 +19,16 @@ class RunSqlWorkfileTask < JobTask
     self.payload = workspace.workfiles.with_file_type('sql').find params[:workfile_id]
   end
 
-  def build_task_name
-    "Run #{payload.file_name}"
-  end
-
   def update_attributes(params)
     attach_payload(params) if params[:workfile_id]
     super
   end
 
   private
+
+  def build_task_name
+    "Run #{payload.file_name}"
+  end
 
   def account
     payload.execution_schema.connect_as(job.owner)

@@ -92,10 +92,10 @@ describe RunSqlWorkfileTask do
     end
   end
 
-  describe '#build_task_name' do
+  describe '#derived_name' do
     let(:task) { job_tasks(:rswt) }
     it 'includes the file_name' do
-      task.build_task_name.should include(task.payload.file_name)
+      task.derived_name.should include(task.payload.file_name)
     end
   end
 end

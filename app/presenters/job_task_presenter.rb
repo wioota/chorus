@@ -6,7 +6,7 @@ class JobTaskPresenter < Presenter
       :job => present(model.job, succinct: true),
       :action => model.action,
       :index => model.index,
-      :name => model.build_task_name,
+      :name => model.derived_name,
       :is_deleted => model.deleted?
     }
   end

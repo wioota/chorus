@@ -34,11 +34,15 @@ class JobTask < ActiveRecord::Base
     raise NotImplementedError
   end
 
-  def build_task_name
-    raise NotImplementedError
+  def derived_name
+    valid_payload? && build_task_name
   end
 
   private
+
+  def build_task_name
+    raise NotImplementedError
+  end
 
   def provide_index
     self.index = job.next_task_index
@@ -50,5 +54,9 @@ class JobTask < ActiveRecord::Base
 
   def idle!
     update_attributes!(:status => nil)
+  end
+
+  def valid_payload?
+    true
   end
 end

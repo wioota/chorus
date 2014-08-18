@@ -3,7 +3,7 @@ class RunWorkFlowTask < JobTask
   belongs_to :payload, :class_name => 'AlpineWorkfile'
 
   def perform
-    result = RunWorkFlowTaskResult.create(:started_at => Time.current, :name => build_task_name)
+    result = RunWorkFlowTaskResult.create(:started_at => Time.current, :name => derived_name)
 
     run_workflow
 
@@ -19,10 +19,6 @@ class RunWorkFlowTask < JobTask
 
   def attach_payload(params)
     self.payload = AlpineWorkfile.find params[:workfile_id]
-  end
-
-  def build_task_name
-    "Run #{payload.file_name}"
   end
 
   def update_attributes(params)
@@ -42,6 +38,10 @@ class RunWorkFlowTask < JobTask
   end
 
   private
+
+  def build_task_name
+    "Run #{payload.file_name}"
+  end
 
   def run_workflow
     killable_id = Alpine::API.run_work_flow_task(self)
