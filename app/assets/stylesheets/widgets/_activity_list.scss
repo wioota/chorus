@@ -29,6 +29,15 @@ $system-action-color: #7C7D7D;
     .more_items {
         font-size: 12px;
         padding: $activity-gutter $big-gutter;
+        text-align: center;
+
+        a {
+            display: inline-block;
+            width: 100%;
+            @include panel-button(30px);
+
+            max-width: $page-min-width / 2;
+        }
     }
 
     .no_items {

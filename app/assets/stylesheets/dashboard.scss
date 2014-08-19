@@ -38,6 +38,11 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         line-height: $title-height;
     }
 
+    .activity_list {
+        max-height: 450px;
+        overflow-y: scroll;
+    }
+
     &.dashboard_site_snapshot {
         ul {
             text-align: center;
@@ -86,21 +91,12 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
             display: inline-block;
 
             $size: 28px;
-            line-height: $size;
-            height: $size;
+            @include panel-button($size);
             width: $size;
-
-            border: $border-canon;
-            @include border-radius(3px);
-            text-align: center;
 
             i {
                 color: $color-text3;
                 font-size: 14px;
-            }
-
-            &:hover {
-                background-color: lighten($gray, 35%);
             }
         }
     }
