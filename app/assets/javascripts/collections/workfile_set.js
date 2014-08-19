@@ -1,4 +1,4 @@
-chorus.collections.WorkfileSet = chorus.collections.Base.include(
+chorus.collections.WorkfileSet = chorus.collections.LastFetchWins.include(
     chorus.Mixins.CollectionFetchingSearch
 ).extend({
     constructorName: "WorkfileSet",

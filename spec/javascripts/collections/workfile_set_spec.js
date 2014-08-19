@@ -4,6 +4,10 @@ describe("chorus.collections.WorkfileSet", function () {
         this.collection = new chorus.collections.WorkfileSet([], {workspaceId: 1234});
     });
 
+    it("extends chorus.collections.LastFetchWins", function() {
+        expect(this.collection).toBeA(chorus.collections.LastFetchWins);
+    });
+
     describe("#fetch", function () {
         describe("without filtering", function () {
             it("creates the right URL", function () {
