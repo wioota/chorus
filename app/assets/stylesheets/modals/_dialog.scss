@@ -1,13 +1,15 @@
 .dialog {
     .dialog_header {
-        min-height: 54px;
         border-bottom: 1px solid $border-color;
-        background-color: $dialog-background-color;
+        background-color: $dialog-header-background;
         word-break: break-all;
+        height: 35px;
+        line-height: 35px;
 
         h1 {
-            @include heading-normal;
-            line-height: 54px;
+            font-size: 14px;
+            color: rgb(88, 89, 95);
+            text-transform: uppercase;
             vertical-align: middle;
             margin: 0 $dialog-padding;
             padding-right: 25px;
@@ -20,7 +22,6 @@
 
     .dialog_content {
         background-color: $body-background-color;
-        padding: 10px $dialog-padding;
 
         line-height: 16px;
 

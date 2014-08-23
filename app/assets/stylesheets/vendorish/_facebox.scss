@@ -6,6 +6,7 @@
     text-align: left;
     overflow-y: auto;
     overflow-x: hidden;
+    border-radius: 3px;
 
     .popup {
         position: relative;
@@ -31,10 +32,10 @@
     .header {
         .close {
             position: absolute;
-            top: 18px;
+            top: 6px;
             right: 15px;
             padding: 2px;
-            background: #fff;
+            color: $color-text4;
         }
     }
 
