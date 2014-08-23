@@ -93,7 +93,7 @@
         <div class="content"> \
         </div> \
         <div class="header"> \
-          <a href="#" class="close"><i class="close_image oi" data-glyph="x"></i></a> \
+          <a href="#" class="close"><img src="/images/facebox/closelabel.png" title="close" class="close_image" /></a> \
         </div> \
       </div> \
     </div>'
@@ -183,6 +183,7 @@
     })
 
     $('#facebox .close').click($.facebox.close)
+    $('#facebox .close_image').attr('src', $.facebox.settings.closeImage)
   }
 
   // getPageScroll() by quirksmode.com
