@@ -9,7 +9,7 @@ describe("chorus.dialogs.HdfsImportDialog", function () {
         this.entry = backboneFixtures.hdfsDir();
         this.hdfsDataSource = this.entry.getHdfsDataSource();
         this.dialog = new chorus.dialogs.HdfsImportDialog({
-            hdfsEntry: this.entry
+            pageModel: this.entry
         });
         this.dialog.launchModal();
     });

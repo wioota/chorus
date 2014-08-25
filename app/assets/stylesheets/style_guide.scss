@@ -1,6 +1,9 @@
 @import "_common";
 
 #page[data-page=StyleGuide]  {
+    .popup .view_guts {
+        border: $border-canon;
+    }
     .dark_text_color { color : $color-text2 }
     .secondary_text_color { color : $color-text3 }
     .weak_text_color { color : $color-text4 }

@@ -4,16 +4,11 @@ $cell-width: 150px;
       height: 300px;
     }
 
-    .dialog_content {
-        padding-left: 2px;
-        padding-right: 2px;
-    }
-
     .directions {
         @include font-normal-alpha;
         display: inline-block;
-        margin-left: 15px;
-        margin-bottom: 5px;
+        margin-bottom: 15px;
+
         input {
             display: inline-block;
             width: 401px;
@@ -66,7 +61,7 @@ $cell-width: 150px;
     }
 
     .path_types {
-        padding: 0 15px;
+        padding-bottom: 15px;
 
         input#pattern {
             margin-left: 15px;
@@ -190,8 +185,7 @@ $cell-width: 150px;
     }
 
     .form_controls {
-        padding-right: 10px;
-        padding-bottom: 5px;
+        margin-top: 0px;
     }
 }
 

@@ -117,6 +117,6 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
 
     buildPrimaryActionPanel: function() {
         var actions = [ {name: 'add_data', target: chorus.dialogs.HdfsImportDialog} ];
-        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({actions: actions});
+        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({actions: actions, pageModel: this.hdfsEntry});
     }
 });

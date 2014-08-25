@@ -2,8 +2,6 @@ $list-item-height: 39px;
 
 .shuttle_widget {
     background-color: $body-background-color;
-    border-bottom: $border-canon;
-    border-top: $border-canon;
 
     .shuttle_header {
         border-bottom: $border-canon;
@@ -156,11 +154,7 @@ $list-item-height: 39px;
     }
 }
 
-.dialog.workspace_edit_members .dialog_content{
-    padding: 0;
-    .form_controls {
-        padding: 0 20px 20px;
-    }
-
+.dialog.workspace_edit_members .dialog_content .form_controls {
+     margin-top: 0px;
 }
 

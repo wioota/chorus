@@ -1,13 +1,20 @@
+.popup .girdle {
+    padding: $dialog-padding $dialog-padding 0;
+    border: none;
+}
+
 .dialog {
     .dialog_header {
-        min-height: 54px;
         border-bottom: 1px solid $border-color;
-        background-color: $dialog-background-color;
+        background-color: $dialog-header-background;
         word-break: break-all;
+        height: 35px;
+        line-height: 35px;
 
         h1 {
-            @include heading-normal;
-            line-height: 54px;
+            font-size: 14px;
+            color: rgb(88, 89, 95);
+            text-transform: uppercase;
             vertical-align: middle;
             margin: 0 $dialog-padding;
             padding-right: 25px;
@@ -20,7 +27,6 @@
 
     .dialog_content {
         background-color: $body-background-color;
-        padding: 10px $dialog-padding;
 
         line-height: 16px;
 
@@ -42,8 +48,8 @@
         word-break: break-word;
     }
 
-    fieldset {
-        border: 1px solid $border-color;
+    fieldset.in_a_box {
+        border: none;
         padding: 0 $dialog-padding $dialog-padding;
 
         legend label {
@@ -76,10 +82,6 @@
     }
 
     &.with_sub_header {
-        .dialog_content {
-            padding: 1px 0;
-        }
-
         .sub_header {
             padding: 0 15px;
             border-bottom: $border-canon;
@@ -93,11 +95,7 @@
             padding: 20px;
         }
 
-        .form_controls {
-            padding: $dialog-padding;
-            border-top: $border-canon;
-            margin: 0;
-        }
+        .form_controls { margin: 0; }
     }
 
   .additional_options {

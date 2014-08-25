@@ -1,22 +1,15 @@
 .dataset_preview.dialog {
     &.dialog {
-        .dialog_content {
-            padding: 0;
-        }
-
         h1 {
             @include ellipsis;
         }
     }
 
     .form_controls {
-        margin-right: $dialog-padding;
-        padding-bottom: 10px;
+        margin-top: 0px;
     }
 
     .results_console {
-        border-bottom: $border-canon;
-
         .execution {
             h1.title {
                 display: none;

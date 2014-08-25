@@ -1,14 +1,25 @@
 .edit_tags {
+    .dialog_content .tags_input {
 
-    .dialog_content {
-        height: 225px;
+        border: none;
+        padding: 0px;
 
-        .tags_input .text-wrap {
+        .text-core .text-wrap {
             overflow-y: visible;
+            input {
+                margin: 3px;
+            }
             .text-tags {
                 height: 150px;
                 overflow-y: scroll;
+                .text-tag {
+                    margin: 3px;
+                }
             }
         }
+
+    }
+    .form_controls {
+        margin-top: 0px;
     }
 }

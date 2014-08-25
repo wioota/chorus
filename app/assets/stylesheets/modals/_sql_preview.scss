@@ -2,15 +2,12 @@
     min-height: 120px;
 
     .dialog_content {
-        padding: 0;
-
         .form_controls {
-            padding: 5px;
+            margin-top: 0px;
         }
     }
 
     .sql {
-        padding-top: 5px;
         min-height: $texteditor-min-height;
         max-height: $texteditor-min-height;
         overflow-y: auto;
@@ -18,7 +15,7 @@
     }
 
     .CodeMirror {
-        width: 99%;
+        width: 100%;
         overflow-y: hidden;
         overflow-x: hidden;
         position: relative;

@@ -16,8 +16,10 @@ $pumpkin: #f7771b;
 // These colors were mapped to names via www.color-blindness.com/color-name-hue.
 $pacific-blue: rgb(0, 160, 229);
 $alice-blue: rgb(240, 247, 254);
+$pattens-blue: rgb(240, 245, 250);
 $bright-turquoise: rgb(21, 214, 203);
 $light-gray: rgb(234, 238, 241);
+$lavender: rgb(248, 251, 253);
 $charcoal: #464646;
 
 // Tints & Shades of Brand Colors
@@ -46,11 +48,12 @@ $list-checked-color: $accent-shade;
 $list-striping-color: $accent-tint;
 $body-background-color: white;
 $shaded-background-color: $light-gray;
-$subheader-background-color: rgb(240, 245, 250);
+$subheader-background-color: $pattens-blue;
+$dialog-header-background: $lavender;
 
 // Border colors
 $border-color: $light-gray;
-$border-color-dark: rgb(215, 227, 236);
+$border-color-dark: darken($border-color, 5%);
 
 // Text colors
 $color-text1: darken($charcoal, 10%);
@@ -83,7 +86,6 @@ $shadow-canon: 1px 2px 2px 0px $border-color;
 
 /* applied color rules - USE these in component files! */
 // Background colors
-$dialog-background-color: white;
 $data-grid-background-color: #EAEEF2;
 $progress-bar-background-color : #D8DEE6;
 $selected-row-hover-background-color: #DCE2E8;
@@ -102,8 +104,6 @@ $chart-fill-color: #4A83C3;
 $dataset-number-background-color: #788DA5;
 
 // Border colors
-$border-color: $light-gray;
-$border-color-dark: darken($border-color, 5%);
 $content-details-action-link-border-color: #98B675;
 $results-console-border-color: #88A8D3;
 $type-ahead-result-border-color: #A5A6A8;

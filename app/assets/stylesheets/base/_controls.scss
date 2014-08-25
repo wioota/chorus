@@ -1,10 +1,23 @@
-.form_controls {
-    margin-top: 25px;
+.popup .form_controls {
+    height: 50px;
+    background-color: $dialog-header-background;
+    border-top: $border-canon;
 
+    .links,
     button {
-        float: right;
-        margin-left: 14px;
+
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
     }
+
+    .links { margin-left: 14px; float: left; }
+}
+
+.form_controls {
+    margin-top: 15px;
+
+    button { float: right; margin-right: 14px;}
 
     label {
         line-height: $button-height;
@@ -37,4 +50,3 @@
         }
     }
 }
-

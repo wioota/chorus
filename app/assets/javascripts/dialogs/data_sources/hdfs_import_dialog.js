@@ -5,7 +5,7 @@ chorus.dialogs.HdfsImportDialog = chorus.dialogs.Upload.extend({
 
     makeModel: function() {
         this._super("makeModel", arguments);
-        this.hdfsEntry = this.options.hdfsEntry;
+        this.hdfsEntry = this.options.pageModel;
     },
 
     maxFileSize: function() {
@@ -14,7 +14,6 @@ chorus.dialogs.HdfsImportDialog = chorus.dialogs.Upload.extend({
 
     uploadSuccess: function(e, data) {
         this.upload.set(this.upload.parse(data.result));
-
         this.hdfsImport = new chorus.models.HdfsImport({
             uploadId: this.upload.id,
             hdfsEntryId: this.hdfsEntry.id,

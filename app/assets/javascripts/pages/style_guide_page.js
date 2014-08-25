@@ -920,7 +920,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
         this.renderViews(this.components, '#components');
         this.renderViews(this.fontStyles, "#fonts");
-        this.renderViews(this.dialogs, '#dialogs');
+        this.renderViews(this.dialogs, '#dialogs', 'popup');
         this.renderViews(this.contentDetails, "#content_details", "content_details");
 
         this.renderViews(this.views, '#views');
