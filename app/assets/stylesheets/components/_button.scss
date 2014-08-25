@@ -1,3 +1,60 @@
+@mixin button-canon {
+    text-overflow: ellipsis;
+    font-size: 12px;
+    min-width: 86px;
+    border-radius: 3px;
+
+    &:disabled, &:disabled:hover {
+        color: rgb(198,205,213);
+        opacity: 0.7;
+    }
+}
+
+@mixin primary-button {
+    @include button-canon;
+
+    background-image: linear-gradient(0deg, rgb(233,234,238)0%, rgb(0,160,229)0%, rgb(36,173,233)100%);
+    color: rgb(250,252,253);
+    border: 1px solid rgb(0,140,200);
+    box-shadow: inset 0px 1px 1px 0px rgba(255,255,255,0.192);
+
+    &:disabled, &:disabled:hover {
+        background-image: linear-gradient(0deg, rgb(233,234,238)0%, rgb(243,244,247)100%);
+        border: 1px solid rgb(215,223,231);
+    }
+
+    &:hover {
+        background-image: linear-gradient(0deg, rgb(38,174,233)0%, rgb(67,184,236)99%);
+    }
+
+    &:active {
+        background-image: linear-gradient(0deg, rgb(36,173,233)0%, rgb(0,160,229)100%, rgb(233,234,238)100%);
+        box-shadow: inset 0px 1px 1px 0px rgba(10,117,163,0.118);
+    }
+}
+
+@mixin secondary-button {
+    @include button-canon;
+
+    background-image: linear-gradient(0deg, rgb(233,234,238)0%, rgb(243,244,247)100%);
+    color: rgb(117,117,117);
+    border: 1px solid rgb(215,223,231);
+    box-shadow: inset 0px 1px 1px 0px rgba(255,255,255,0.192);
+
+    &:disabled, &:disabled:hover {
+        background-image: linear-gradient(0deg, rgb(243,244,247)0%, rgb(250,251,254)100%);
+    }
+
+    &:hover {
+        background-image: linear-gradient(0deg, rgb(241,242,245)0%, rgb(250,251,254)100%);
+    }
+
+    &:active {
+        background-image: linear-gradient(0deg, rgb(243,244,247)0%, rgb(233,234,238)100%);
+        box-shadow: inset 0px 1px 1px 0px rgba(10,117,163,0.118);
+    }
+}
+
 a.button, button, input[type=submit] {
     -webkit-appearance: initial;
     display: inline-block;
@@ -17,10 +74,18 @@ a.button, button, input[type=submit] {
 }
 
 button.modalish, .button_modalish {
-    color: $default-link-color;
-    border: 1px solid $button-border-color;
-    background: $button-background-color;
-    font-size: 16px;
+    @include secondary-button;
+
+    &.cancel, &.close_dialog {
+        color: $default-link-color;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    &.submit, &.save {
+        @include primary-button;
+    }
 
     &:disabled {
         color: $low-light-type;
@@ -29,7 +94,6 @@ button.modalish, .button_modalish {
 
 .button_action {
     border: 1px solid $button-border-color;
-    @include border-radius(30px);
     background: none;
     font-size: inherit;
 
