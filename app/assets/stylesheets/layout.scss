@@ -20,7 +20,6 @@
 }
 
 #guts {
-    padding: 0 0 $guts-padding-bottom $guts-padding;
     @include after-clearfix;
     z-index: $guts-z-index;
 }

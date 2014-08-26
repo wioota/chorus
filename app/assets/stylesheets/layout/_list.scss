@@ -225,8 +225,7 @@
 
             &.selected, &.checked {
                 background: $list-checked-color;
-                border: $border-width solid $border-color-dark;
-
+                border-color: $border-color-dark;
             }
         }
     }
