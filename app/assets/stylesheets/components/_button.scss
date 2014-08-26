@@ -1,3 +1,16 @@
+// These are the button colors from the Workflow IDE.
+$border-blue: rgb(0,140,200);
+$another-blue: rgb(38,174,233);
+$third-blue: rgb(67,184,236);
+$another-shade-of-gray: rgb(215,223,231);
+$bone-offwhite: rgb(233,234,238);
+$bone-white: rgb(243,244,247);
+$warm-bones: rgb(241,242,245);
+$nearly-white: rgb(250,252,253);
+$wet-concrete: rgb(117,117,117);
+$dry-concrete: rgb(198,205,213);
+$button-shade: rgba(10,117,163,0.118);
+
 @mixin button-canon {
     text-overflow: ellipsis;
     font-size: 12px;
@@ -5,7 +18,7 @@
     border-radius: 3px;
 
     &:disabled, &:disabled:hover {
-        color: rgb(198,205,213);
+        color: $dry-concrete;
         opacity: 0.7;
     }
 }
@@ -13,45 +26,45 @@
 @mixin primary-button {
     @include button-canon;
 
-    background-image: linear-gradient(0deg, rgb(233,234,238)0%, rgb(0,160,229)0%, rgb(36,173,233)100%);
-    color: rgb(250,252,253);
-    border: 1px solid rgb(0,140,200);
+    background-image: linear-gradient(0deg, $bone-offwhite 0%, $brand 0%, $another-blue 100%);
+    color: $nearly-white;
+    border: 1px solid $border-blue;
     box-shadow: inset 0px 1px 1px 0px rgba(255,255,255,0.192);
 
     &:disabled, &:disabled:hover {
-        background-image: linear-gradient(0deg, rgb(233,234,238)0%, rgb(243,244,247)100%);
-        border: 1px solid rgb(215,223,231);
+        background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
+        border: 1px solid $another-shade-of-gray;
     }
 
     &:hover {
-        background-image: linear-gradient(0deg, rgb(38,174,233)0%, rgb(67,184,236)99%);
+        background-image: linear-gradient(0deg, $another-blue  0%, $third-blue 99%);
     }
 
     &:active {
-        background-image: linear-gradient(0deg, rgb(36,173,233)0%, rgb(0,160,229)100%, rgb(233,234,238)100%);
-        box-shadow: inset 0px 1px 1px 0px rgba(10,117,163,0.118);
+        background-image: linear-gradient(0deg, $another-blue 0%, $brand 100%, $bone-offwhite 100%);
+        box-shadow: inset 0px 1px 1px 0px $button-shade;
     }
 }
 
 @mixin secondary-button {
     @include button-canon;
 
-    background-image: linear-gradient(0deg, rgb(233,234,238)0%, rgb(243,244,247)100%);
-    color: rgb(117,117,117);
-    border: 1px solid rgb(215,223,231);
+    background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
+    color: $wet-concrete;
+    border: 1px solid $another-shade-of-gray;
     box-shadow: inset 0px 1px 1px 0px rgba(255,255,255,0.192);
 
     &:disabled, &:disabled:hover {
-        background-image: linear-gradient(0deg, rgb(243,244,247)0%, rgb(250,251,254)100%);
+        background-image: linear-gradient(0deg, $bone-white 0%, $nearly-white 100%);
     }
 
     &:hover {
-        background-image: linear-gradient(0deg, rgb(241,242,245)0%, rgb(250,251,254)100%);
+        background-image: linear-gradient(0deg, $warm-bones 0%, $nearly-white 100%);
     }
 
     &:active {
-        background-image: linear-gradient(0deg, rgb(243,244,247)0%, rgb(233,234,238)100%);
-        box-shadow: inset 0px 1px 1px 0px rgba(10,117,163,0.118);
+        background-image: linear-gradient(0deg, $bone-white 0%, $bone-offwhite 100%);
+        box-shadow: inset 0px 1px 1px 0px $button-shade;
     }
 }
 
