@@ -96,7 +96,7 @@ button.modalish, .button_modalish {
         box-shadow: none;
     }
 
-    &.submit, &.save {
+    &[type='submit'], &.submit, &.save {
         @include primary-button;
     }
 

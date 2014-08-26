@@ -14,13 +14,15 @@ $pumpkin: #f7771b;
 
 // Brand New Colors
 // These colors were mapped to names via www.color-blindness.com/color-name-hue.
-$pacific-blue: rgb(0, 160, 229);
-$alice-blue: rgb(240, 247, 254);
-$pattens-blue: rgb(240, 245, 250);
-$bright-turquoise: rgb(21, 214, 203);
-$light-gray: rgb(234, 238, 241);
-$lavender: rgb(248, 251, 253);
-$charcoal: #464646;
+$pacific-blue:      rgb(0, 160, 229);
+$bright-turquoise:  rgb(21, 214, 203);
+$light-gray:        rgb(234, 238, 241);
+$pattens-blue:      rgb(240, 245, 250);
+$alice-blue:        rgb(240, 247, 254);
+$lavender:          rgb(248, 251, 253);
+$charcoal:          #464646;
+$light-sky-blue:    rgb(148, 215, 244);
+$sky-blue:          rgb(143,194,238);
 
 // Tints & Shades of Brand Colors
 // Brand
@@ -50,6 +52,7 @@ $body-background-color: white;
 $shaded-background-color: $light-gray;
 $subheader-background-color: $pattens-blue;
 $dialog-header-background: $lavender;
+$login-background: $sky-blue;
 
 // Border colors
 $border-color: $light-gray;
@@ -62,7 +65,7 @@ $color-text3: lighten($charcoal, 10%);
 $color-text4: lighten(rgb(88, 89, 95), 20%);
 $link-color: $brand;
 $disabled-text: rgb(147, 154, 159);
-$caret-color: rgb(148, 215, 244);
+$caret-color: $light-sky-blue;
 
 // Font weights
 $semibold: 600;
