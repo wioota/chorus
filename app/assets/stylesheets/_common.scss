@@ -22,7 +22,7 @@ $alice-blue:        rgb(240, 247, 254);
 $lavender:          rgb(248, 251, 253);
 $charcoal:          #464646;
 $light-sky-blue:    rgb(148, 215, 244);
-$sky-blue:          rgb(143,194,238);
+$bluer-lavender:    rgb(225,237,250);
 
 // Tints & Shades of Brand Colors
 // Brand
@@ -52,7 +52,7 @@ $body-background-color: white;
 $shaded-background-color: $light-gray;
 $subheader-background-color: $pattens-blue;
 $dialog-header-background: $lavender;
-$login-background: $sky-blue;
+$login-background: $bluer-lavender;
 
 // Border colors
 $border-color: $light-gray;
@@ -83,6 +83,7 @@ $border-width: 1px;
 //Specials
 $border-canon: $border-width solid $border-color;
 $dark-border-canon: $border-width solid $border-color-dark;
+$strong-border-canon: 5px solid $color-text3;
 $shadow-canon: 1px 2px 2px 0px $border-color;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

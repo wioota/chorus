@@ -1,25 +1,30 @@
 @import "_common";
 
-$login-width : 500px;
-$vertical-padding: 100px;
-$image-fudge: 10px;
+
 
 div.login {
+    $card-height: 420px;
+    $card-width : 620px;
+    $card-top: 150px;
+    $image-fudge: 10px;
+
     background: $login-background;
     height: 100%;
 
     .card {
+        border: $strong-border-canon;
+
         position: relative;
         left: 50%;
         transform: translateX(-50%);
 
         background-color: $body-background-color;
         border-radius: 5px;
-        top: $vertical-padding;
+        top: $card-top;
 
-        padding-top: $vertical-padding - $image-fudge;
-        height: $login-width - $vertical-padding;
-        width: $login-width;
+        padding-top: 50px;
+        height: $card-height - 50px;
+        width: $card-width;
         overflow: auto;
 
         form {
@@ -42,25 +47,25 @@ div.login {
                 margin-left: auto;
                 margin-right: auto;
                 margin-bottom: $image-fudge;
-                height: $vertical-padding / 2;
+                height: 50px;
             }
         }
     }
 
     footer {
         position: absolute;
-        top: $login-width +  $vertical-padding;
+        top: $card-height + $card-top + 10px;
         left: 50%;
         transform: translateX(-50%);
 
-        width : $login-width;
+        width : $card-width;
         color: $color-text1;
         font-size : 12px;
         text-align: center;
 
         .logos {
             @include after-clearfix;
-            width: $login-width;
+            width: $card-width;
             margin: 25px 0;
 
             .greenplum { float: left; }
