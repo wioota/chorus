@@ -34,13 +34,7 @@ chorus.pages.MilestonesIndexPage = chorus.pages.Base.extend({
     listConfig: function () {
         return {
             modelClass: "Milestone",
-            collection: this.collection,
-            contentDetailsOptions: { multiSelect: true },
-            linkMenus: {
-            },
-            search: {
-
-            }
+            collection: this.collection
         };
     },
 

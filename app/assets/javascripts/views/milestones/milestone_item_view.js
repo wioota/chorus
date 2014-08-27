@@ -12,6 +12,7 @@ chorus.views.MilestoneItem = chorus.views.Base.extend({
 
     additionalContext: function () {
         return {
+            checkable: false,
             stateKey: 'workspace.project.milestones.states.' + this.model.get('state'),
             iconUrl: '/images/milestones/milestone_' + (this.model.get('state') === 'planned' ? 'incomplete' : 'complete')  + '.png'
         };
