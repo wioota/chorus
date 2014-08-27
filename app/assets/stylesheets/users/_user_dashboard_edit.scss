@@ -4,50 +4,51 @@
 
 .user_dashboard_edit {
 
-    .description {
-        @include font-normal-alpha;
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-
     .sub_title {
-        @include heading-sidebar;
-        padding-bottom: 5px;
+        padding-top: 20px;
+        @include heading-normal;
     }
 
     .sub_description {
-        @include font-secondary-content;
         padding-bottom: 20px;
     }
 
-    .header {
-        @include heading-normal;
-        padding: 5px;
+    .sortable_container {
+        margin-bottom: 50px;
     }
+
+    .form_controls {}
 
     .sortable {
         min-height: 300px;
-        padding: 10px;
+        padding: 20px;
 
         li {
-            height: 60px;
-            padding-left: 10px;
+            min-height: 45px;
+            padding: 10px;
             margin-bottom: 10px;
             background-color: white;
-            border: 1px solid $brand-dark;
+            border: $border-canon;
 
-            @include border-radius(3px);
+            @include border-radius(2px);
             @include grab_cursor;
 
             .name {
-                @include font-primary-link;
-                padding: 3px 0;
+                @include secondary-text-semibold;
             }
 
-            .module_description {}
+            .module_description {
+                @include secondary-text-normal;
+            }
 
             &:last-child {
                 margin-bottom: 0;
+            }
+
+            &.ui-sortable-placeholder {
+                visibility: visible !important;
+                border: dashed $border-width $brand;
+                background: transparent;
             }
         }
     }
@@ -60,12 +61,34 @@
         @include single-box-shadow($brand-dark, 0, 0, 5px);
     }
 
+    .module_list {
+        ul, .header {
+            @include border-radius(3px);
+        }
+
+        .header {
+            height: 35px;
+            line-height: 35px;
+            padding-left: 20px;
+            padding-right: 20px;
+            @include dashboard-module-title;
+            @include border-bottom-radius(0);
+        }
+
+        .note {
+            @include font-secondary-content;
+            color: $color-text4;
+            text-align: center;
+            padding: 20px;
+        }
+    }
+
     .selected_modules {
         ul {
             background-color: $accent-shade;
         }
         .header {
-            background-color: darken($accent-shade, 20%);
+            background-color: $brand;
         }
     }
 

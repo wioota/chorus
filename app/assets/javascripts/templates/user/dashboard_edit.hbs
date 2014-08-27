@@ -1,8 +1,5 @@
 <form action="#">
     <div class="line">
-        <div class="col description">{{t "user.dashboard_edit.description"}}</div>
-    </div>
-    <div class="line">
         <div class="col sub_title">{{t "user.dashboard_edit.sub_title"}}</div>
     </div>
     <div class="line">
@@ -10,8 +7,8 @@
     </div>
     {{> errorDiv}}
     <div class="line sortable_container">
-        {{dashboardModuleList modules "selected_modules" "user.dashboard_edit.displayed"}}
-        {{dashboardModuleList availableModules "available_modules" "user.dashboard_edit.available"}}
+        {{dashboardModuleList modules "selected_modules" "user.dashboard_edit.displayed" "user.dashboard_edit.displayed_note"}}
+        {{dashboardModuleList availableModules "available_modules" "user.dashboard_edit.available" null}}
     </div>
     <div class="form_controls">
            <span class="left">

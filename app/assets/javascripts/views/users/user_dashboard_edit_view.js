@@ -35,7 +35,7 @@ chorus.views.UserDashboardEditView = chorus.views.Base.extend({
     },
 
     fieldValues: function() {
-        return _.map(this.$(".selected_modules li"), function(el) {
+        return _.map(this.$(".selected_modules ul.sortable > li"), function(el) {
             return el.id;
         });
     },

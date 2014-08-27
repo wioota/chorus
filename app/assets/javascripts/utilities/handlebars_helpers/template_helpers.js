@@ -110,11 +110,12 @@ chorus.handlebarsHelpers.template = {
         return new Handlebars.SafeString(list);
     },
 
-    dashboardModuleList: function(modules, className, translationKey) {
+    dashboardModuleList: function(modules, className, translationKey, footnoteKey) {
         var ctx = {
             modules: modules,
             className: className,
-            translationKey: translationKey
+            translationKey: translationKey,
+            footnoteKey: footnoteKey
         };
         return Handlebars.helpers.renderTemplate("user/dashboard_edit_list", ctx);
     }
