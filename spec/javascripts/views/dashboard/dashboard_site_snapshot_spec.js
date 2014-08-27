@@ -23,7 +23,8 @@ describe("chorus.views.DashboardSiteSnapshot", function() {
                 _.each(this.siteSnapshotAttrs.data, function(one) {
                     expect(this.view.$("." + one.model)).toContainTranslation("dashboard.site_snapshot." + one.model, {count:one.total});
                     expect(this.view.$("." + one.model)).toContainText(one.total);
-                    expect(this.view.$("." + one.model)).toContainTranslation("dashboard.site_snapshot.increment", {inc:one.increment});
+                    var ctx = {count: one.increment, operator: one.increment > 0 ? "+" : ""};
+                    expect(this.view.$("." + one.model)).toContainTranslation("dashboard.site_snapshot.increment", ctx);
                 }, this);
             });
         });

@@ -13,9 +13,9 @@ chorus.views.DashboardSiteSnapshot = chorus.views.Base.extend({
         return {
             dataItems: _.map(this.model.get("data"), function(item) {
                 item.translation = "dashboard.site_snapshot." + item.model;
+                item.operator = item.increment > 0 ? "+" : "";
                 return item;
             })
         };
     }
-
 });

@@ -10,7 +10,7 @@ module Dashboard
     end
 
     def fetch!
-      @result = [Workfile, Workspace, User, AssociatedDataset].map do |model|
+      @result = [Workspace, AssociatedDataset, Workfile, User].map do |model|
         {
             :model => model.to_s.underscore,
             :total => model.count,

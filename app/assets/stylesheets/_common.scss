@@ -395,8 +395,15 @@ $action-bar-secondary-background-color: $light-blue;
 @mixin dashboard-huge {
     @include debugging-mixin;
     font-size: 56px;
-    font-weight: $light;
+    line-height: 56px;
+    letter-spacing: 0;
     color: $color-text2;
+}
+
+@mixin dashboard-snapshot-model {
+    @include debugging-mixin;
+    font-size: 14px;
+    line-height: 14px;
 }
 
 @mixin dashboard-module-title {

@@ -50,27 +50,37 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
 
             li {
                 display: inline-block;
+                margin-right: 10px;
+                &:last-child { margin-right: 0; }
 
                 .square {
-                    width: 200px;
+                    width: 230px;
+                    height: 160px;
 
                     .total {
+                        padding-top: 20px;
+                        padding-bottom: 10px;
                         @include dashboard-huge;
                     }
 
                     .model {
-                        @include dashboard-module-title;
-                        padding-bottom: 3px;
+                        @include dashboard-snapshot-model;
+                        padding-bottom: 25px;
                     }
 
                     .increment {
                         @include secondary-text-small;
                     }
 
-                    &.workfile .total { color: rgb(249, 93, 41); }
-                    &.workspace .total { color: rgb(64, 149, 34); }
-                    &.user .total { color: rgb(36, 148, 235); }
-                    &.associated_dataset .total { color: rgb(153, 35, 114); }
+                    $amber: rgb(242, 171, 13);
+                    $green: rgb(86, 174, 0);
+                    $blue: rgb(0, 144, 240);
+                    $purple: rgb(158, 27, 116);
+
+                    &.workspace .total { color: $amber; }
+                    &.associated_dataset .total { color: $green; }
+                    &.workfile .total { color: $blue; }
+                    &.user .total { color: $purple; }
                 }
             }
         }
