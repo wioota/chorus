@@ -305,6 +305,25 @@ describe("chorus.views.WorkFlowExecutionLocationPicker", function() {
             });
         });
 
+        context("when a gpdb database is preselected", function() {
+            beforeEach(function() {
+                var dataSource = backboneFixtures.gpdbDataSource();
+                this.database = backboneFixtures.database();
+                this.view = new chorus.views.WorkFlowExecutionLocationPicker({
+                    dataSource: dataSource,
+                    database: this.database
+                });
+            });
+
+            it("shows the database picker", function() {
+                expect(this.view.getPickerSubview("database").$el).not.toHaveClass("hidden");
+            });
+
+            it("sets the database view selection", function() {
+                expect(this.view.getPickerSubview("database").selection).toBe(this.database);
+            });
+        });
+
         describe("#ready", function() {
             beforeEach(function() {
                 this.view = new chorus.views.WorkFlowExecutionLocationPicker();

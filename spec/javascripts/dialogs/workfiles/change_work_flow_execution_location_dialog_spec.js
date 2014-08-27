@@ -15,11 +15,11 @@ describe("chorus.dialogs.ChangeWorkFlowExecutionLocation", function() {
         });
 
         it("has a Save Search Path button", function () {
-            expect(this.dialog.$("button.submit").text().trim()).toMatchTranslation("work_flows.change_execution_location.save");
+            expect(this.dialog.$("button.submit")).toContainTranslation("work_flows.change_execution_location.save");
         });
 
         it("has a Cancel button", function () {
-            expect(this.dialog.$("button.cancel").text().trim()).toMatchTranslation("actions.cancel");
+            expect(this.dialog.$("button.cancel")).toContainTranslation("actions.cancel");
         });
     });
 
