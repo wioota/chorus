@@ -44,18 +44,23 @@
         height: 25px;
         @include after-clearfix;
     }
+}
 
-    .list_header {
-        @include toggle-menus;
+.list_header {
+    @include toggle-menus;
 
-        .title {
-            img {
-                float: left;
-            }
-            h1 {
-                padding-left: 5px;
-            }
+    .title {
+        img {
+            float: left;
         }
+        h1 {
+            padding-left: 5px;
+        }
+    }
+
+    select, .ui-selectmenu-button .ui-button {
+        display: block;
+        min-width: 215px;
     }
 }
 

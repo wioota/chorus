@@ -12,7 +12,6 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
     describe("#render", function() {
         beforeEach(function() {
             this.server.completeFetchFor(this.workspace.activities());
-            this.server.completeFetchFor(this.view.activityListHeader.insightsCount, [], {}, { records: 5 });
             this.view.render();
         });
 
@@ -61,7 +60,6 @@ describe("chorus.views.WorkspaceSummaryContentHeader", function() {
         it("updates the activity list header", function() {
             this.view.model.set({name: "super workspace"});
             this.view.model.trigger("saved");
-            this.server.completeFetchFor(this.view.activityListHeader.insightsCount, [], {}, { records: 5 });
 
             expect(this.view.$(".activity_list_header .workspace_title")).toContainText("super workspace");
         });

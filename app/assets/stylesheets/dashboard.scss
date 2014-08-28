@@ -98,9 +98,15 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
     }
 
     .module_header {
-        @include toggle-menus;
-        height: $title-height;
+        min-height: $title-height;
         line-height: $title-height;
+
+        &.activity_list_header {
+            .menus {
+                float: none;
+                padding-top: 5px;
+            }
+        }
     }
 }
 

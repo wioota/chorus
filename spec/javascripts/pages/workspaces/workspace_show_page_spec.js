@@ -119,7 +119,6 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                 var workspace = backboneFixtures.workspace({id: 4, summary: "this is a summary", name: this.workspaceName});
                 this.server.completeFetchFor(this.page.model, workspace);
                 this.server.completeFetchFor(this.page.model.activities(), [backboneFixtures.activity.noteOnWorkfileCreated(), backboneFixtures.activity.insightOnGreenplumDataSource()]);
-                this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightsCount, [], {}, { records: 5 });
                 this.page.render();
             });
 
@@ -206,7 +205,7 @@ describe("chorus.pages.WorkspaceShowPage", function() {
             describe("clicking the insight/activity links", function() {
                 beforeEach(function() {
                     this.server.reset();
-                    this.page.mainContent.contentHeader.$("a.insights").click();
+                    this.page.mainContent.contentHeader.$(".activities_filter").val("only_insights").change();
                 });
 
                 it("fetches the insights", function() {
@@ -222,7 +221,6 @@ describe("chorus.pages.WorkspaceShowPage", function() {
                 beforeEach(function() {
                     this.page.model.set({name: "bar", "public": false});
                     this.page.model.trigger("saved");
-                    this.server.completeFetchFor(this.page.mainContent.contentHeader.activityListHeader.insightsCount, [], {}, { records: 5 });
                 });
 
                 it("updates the title", function() {
