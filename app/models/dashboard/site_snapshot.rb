@@ -1,24 +1,17 @@
 module Dashboard
-  class SiteSnapshot
-    ENTITY_TYPE = 'site_snapshot'
+  class SiteSnapshot < DataModule
     INCREMENT_TIME = 7.days.ago
 
-    attr_accessor :result
+    private
 
-    def entity_type
-      ENTITY_TYPE
-    end
-
-    def fetch!
-      @result = [Workspace, AssociatedDataset, Workfile, User].map do |model|
+    def fetch_results
+      [Workspace, AssociatedDataset, Workfile, User].map do |model|
         {
             :model => model.to_s.underscore,
             :total => model.count,
             :increment => changed_count(model)
         }
       end
-
-      self
     end
 
     private
