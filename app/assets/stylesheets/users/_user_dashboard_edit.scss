@@ -85,7 +85,7 @@
 
     .selected_modules {
         ul {
-            background-color: $accent-shade;
+            background-color: $accent;
         }
         .header {
             background-color: $brand;
@@ -94,10 +94,10 @@
 
     .available_modules {
         ul {
-            background-color: $light-gray;
+            background-color: $greyish-blue;
         }
         .header {
-            background-color: darken($light-gray, 20%);
+            background-color: $greyish-yellow;
         }
     }
 
