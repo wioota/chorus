@@ -61,9 +61,44 @@ describe("chorus.pages.DataSourceIndexPage", function() {
             this.page.render();
         });
 
-        itBehavesLike.aPageWithPrimaryActions([
-            {name: 'add_data_source', target: chorus.dialogs.DataSourcesNew}
-        ]);
+        context("when data source creation is not restricted", function() {
+            beforeEach(function() {
+                spyOn(chorus.models.Config.instance(), 'restrictDataSourceCreation').and.returnValue(false);
+                this.page.render();
+            });
+
+            itBehavesLike.aPageWithPrimaryActions([
+                {name: 'add_data_source', target: chorus.dialogs.DataSourcesNew}
+            ]);
+        });
+
+        context("when data source creation is restricted", function() {
+            beforeEach(function() {
+                spyOn(chorus.models.Config.instance(), 'restrictDataSourceCreation').and.returnValue(true);
+            });
+
+            context("when the user is an admin", function() {
+                beforeEach(function() {
+                    setLoggedInUser({ admin: true });
+                    this.page.render();
+                });
+
+                itBehavesLike.aPageWithPrimaryActions([
+                    {name: 'add_data_source', target: chorus.dialogs.DataSourcesNew}
+                ]);
+            });
+
+            context("when the user is not an admin", function() {
+                beforeEach(function() {
+                    setLoggedInUser({ admin: false });
+                    this.page.render();
+                });
+
+                it("does not show the create link", function() {
+                    expect(this.page.$(".add_data_source")).not.toExist();
+                });
+            });
+        });
 
         it("sets the page model when a 'data_source:selected' event is triggered", function() {
             var dataSource = backboneFixtures.gpdbDataSource();

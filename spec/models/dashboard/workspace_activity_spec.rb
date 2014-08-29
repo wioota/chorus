@@ -10,7 +10,6 @@ describe Dashboard::WorkspaceActivity do
 
     it 'has the correct keys' do
       elem = result.first
-      p elem
       elem.should have_key('event_count')
       elem.should have_key('workspace_id')
       elem.should have_key('week_part')

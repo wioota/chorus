@@ -87,5 +87,10 @@ describe ChorusConfigPresenter, :type => :view do
     it 'presents the license' do
       hash[:license].should == (LicensePresenter.new(License.instance, view).presentation_hash)
     end
+
+    it 'includes data source creation restrictions' do
+      stub(config).restrict_data_source_creation? { true }
+      hash[:restrict_data_source_creation].should be_true
+    end
   end
 end

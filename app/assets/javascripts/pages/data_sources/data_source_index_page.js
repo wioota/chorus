@@ -42,9 +42,14 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
     },
 
     preRender: function () {
-        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({actions: [
-            {name: 'add_data_source', target: chorus.dialogs.DataSourcesNew}
-        ], pageModel: {}});
+        var actions = [];
+
+        var notRestricted = !chorus.models.Config.instance().restrictDataSourceCreation();
+        if (notRestricted || chorus.session.user().get("admin")) {
+            actions.push({name: 'add_data_source', target: chorus.dialogs.DataSourcesNew});
+        }
+
+        this.primaryActionPanel = new chorus.views.PrimaryActionPanel({actions: actions, pageModel: {}});
     },
 
     setModel:function (dataSource) {

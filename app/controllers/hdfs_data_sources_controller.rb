@@ -4,6 +4,7 @@ require 'hdfs_data_source_access'
 class HdfsDataSourcesController < ApplicationController
 
   before_filter :demo_mode_filter, :only => [:create, :update, :destroy]
+  before_filter :require_data_source_create, :only => [:create]
 
   def create
     data_source = Hdfs::DataSourceRegistrar.create!(params[:hdfs_data_source], current_user)

@@ -5,6 +5,7 @@ class DataSourcesController < ApplicationController
 
   before_filter :find_data_source, :only => [:show, :update, :destroy]
   before_filter :demo_mode_filter, :only => [:create, :update, :destroy]
+  before_filter :require_data_source_create, :only => [:create]
 
   def index
     succinct = params[:succinct] == 'true'

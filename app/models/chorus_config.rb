@@ -135,6 +135,10 @@ class ChorusConfig
     @schema_blacklists ||= initialize_schema_blacklists
   end
 
+  def restrict_data_source_creation?
+    !!self['models.data_source.restrict_creation']
+  end
+
   private
 
   def initialize_hdfs_versions

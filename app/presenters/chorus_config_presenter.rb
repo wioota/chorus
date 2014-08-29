@@ -18,7 +18,8 @@ class ChorusConfigPresenter < Presenter
         :oracle_configured => model.oracle_configured?,
         :hdfs_versions => model.hdfs_versions,
         :time_zones => model.time_zones,
-        :license => present(License.instance, options)
+        :license => present(License.instance, options),
+        :restrict_data_source_creation => model.restrict_data_source_creation?
     }
   end
 end

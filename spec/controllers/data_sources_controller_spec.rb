@@ -331,6 +331,32 @@ describe DataSourcesController do
         decoded_errors.fields.entity_type.should have_key :INVALID
       end
     end
+
+    describe 'restrictions' do
+      let(:entity_type) { 'gpdb_data_source' }
+      before do
+        log_in users(:the_collaborator)
+        stub(ChorusConfig.instance).restrict_data_source_creation? { !creatable }
+      end
+
+      context 'when data source creation is restricted' do
+        let(:creatable) { false }
+
+        it 'forbids a non-admin user' do
+          post :create, valid_attributes
+          response.should be_forbidden
+        end
+      end
+
+      context 'when data source creation is not restricted' do
+        let(:creatable) { true }
+
+        it 'allows a non-admin user' do
+          post :create, valid_attributes
+          response.should_not be_forbidden
+        end
+      end
+    end
   end
 
   describe "destroy" do

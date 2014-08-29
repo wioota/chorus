@@ -30,6 +30,30 @@ describe HdfsDataSourcesController do
         mock(QC.default_queue).enqueue_if_not_queued("HdfsDataSource.refresh", numeric)
         post :create
       end
+
+      describe 'restrictions' do
+        before do
+          stub(ChorusConfig.instance).restrict_data_source_creation? { !creatable }
+        end
+
+        context 'when data source creation is restricted' do
+          let(:creatable) { false }
+
+          it 'forbids a non-admin user' do
+            post :create
+            response.should be_forbidden
+          end
+        end
+
+        context 'when data source creation is not restricted' do
+          let(:creatable) { true }
+
+          it 'allows a non-admin user' do
+            post :create
+            response.should_not be_forbidden
+          end
+        end
+      end
     end
 
     context "for a high availability data source" do

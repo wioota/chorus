@@ -219,4 +219,8 @@ class ApplicationController < ActionController::Base
   def require_full_search
     render_not_licensed if License.instance.limit_search?
   end
+
+  def require_data_source_create
+    require_admin if ChorusConfig.instance.restrict_data_source_creation?
+  end
 end

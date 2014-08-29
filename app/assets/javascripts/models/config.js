@@ -14,6 +14,10 @@ chorus.models.Config = chorus.models.Base.extend({
         return this.get("fileSizesMbCsvImports");
     },
 
+    restrictDataSourceCreation: function() {
+        return this.get("restrictDataSourceCreation");
+    },
+
     license: function() {
         if (!this._license) {
             this._license = new chorus.models.License(this.get("license"));

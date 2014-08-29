@@ -473,4 +473,26 @@ describe ChorusConfig do
       config.jdbc_schema_blacklists[:not_my_key].should == Set.new
     end
   end
+
+  describe '#restrict_data_source_creation?' do
+    before do
+      config.config = { 'models' => { 'data_source' => { 'restrict_creation' => restricted } } }
+    end
+
+    context 'when restricted' do
+      let(:restricted) { true }
+
+      it 'is true' do
+        config.restrict_data_source_creation?.should be_true
+      end
+    end
+
+    context 'when not restricted' do
+      let(:restricted) { false }
+
+      it 'is false' do
+        config.restrict_data_source_creation?.should be_false
+      end
+    end
+  end
 end
