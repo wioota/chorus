@@ -95,6 +95,8 @@ button.modalish, .button_modalish {
         border: none;
         background: transparent;
         box-shadow: none;
+
+        &:disabled { background: transparent; }
     }
 
     &[type='submit'], &.submit, &.save {
