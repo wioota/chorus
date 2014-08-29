@@ -15,7 +15,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
         });
 
         it("displays correct title", function() {
-            expect(this.view.$("legend").text().trim()).toMatchTranslation("dataset.chorusview.sidebar.title");
+            expect(this.view.$("legend").text().trim()).toMatchTranslation("dataset.content_details.derive");
         });
 
         it("adds a reference to the parent to the preview SQL link's data", function() {
