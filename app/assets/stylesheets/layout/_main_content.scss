@@ -10,6 +10,20 @@
     border-bottom: $border-canon;
     @include border-top-radius(3px);
 
+    .tags_input {
+        border: none;
+        .text-core .text-wrap .text-tags {
+            cursor: inherit;
+            .text-tag div.text-button {
+                padding-right: 1px;
+            }
+        }
+
+        .text-remove, .transition-border, #tag_editor {
+            display: none;
+        }
+    }
+
     h1 {
         @include ellipsis;
         padding-top: 16px;
