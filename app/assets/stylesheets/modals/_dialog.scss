@@ -14,7 +14,7 @@
         h1 {
             font-size: 14px;
             color: rgb(88, 89, 95);
-            text-transform: uppercase;
+            @include uppercase;
             vertical-align: middle;
             margin: 0 $dialog-padding;
             padding-right: 25px;

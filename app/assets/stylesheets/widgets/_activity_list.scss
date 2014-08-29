@@ -80,7 +80,7 @@ $system-action-color: #7C7D7D;
                 display: inline-block;
                 padding: 2px 8px 2px 8px;
                 vertical-align: top;
-                text-transform: uppercase;
+                @include uppercase;
             }
 
             .right {

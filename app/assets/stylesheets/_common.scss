@@ -337,12 +337,17 @@ $action-bar-secondary-background-color: $light-blue;
     color: $color-text1;
 }
 
+@mixin uppercase {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 @mixin list-section-heading {
     @include debugging-mixin;
     font-size: 12px;
     font-weight: $semibold;
     color: $disabled-text;
-    text-transform: uppercase;
+    @include uppercase;
 }
 
 @mixin list-item-details-area {
@@ -411,8 +416,7 @@ $action-bar-secondary-background-color: $light-blue;
     @include debugging-mixin;
     font-size: 14px;
     color: $color-text2;
-    text-transform: uppercase;
-    letter-spacing: .6pt;
+    @include uppercase;
 }
 
 @mixin after-clearfix($which: both) {
@@ -493,7 +497,7 @@ $action-bar-secondary-background-color: $light-blue;
 }
 
 @mixin lozenge($padding, $min-width, $height) {
-    text-transform: uppercase;
+    @include uppercase;
     height: $height;
     line-height: $height;
     font-weight: $semibold;
@@ -534,7 +538,7 @@ $action-bar-secondary-background-color: $light-blue;
         border-bottom: $border-canon;
         display: block;
         @include secondary-text-small-semibold;
-        text-transform: uppercase;
+        @include uppercase;
         padding: 10px;
     }
 
