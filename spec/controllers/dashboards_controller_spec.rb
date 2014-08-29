@@ -44,5 +44,25 @@ describe DashboardsController do
         get :show, params
       end
     end
+
+    context 'with entity_type workspace_activity' do
+      let(:entity_type) { 'workspace_activity' }
+
+      it 'returns 200' do
+        response.should be_ok
+      end
+
+      it 'includes the entity_type' do
+        decoded_response.entity_type.should == entity_type
+      end
+
+      it 'does something' do
+        decoded_response.data.should_not be_nil
+      end
+
+      generate_fixture 'dashboard/workspaceActivity.json' do
+        get :show, params
+      end
+    end
   end
 end

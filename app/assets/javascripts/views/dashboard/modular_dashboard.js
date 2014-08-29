@@ -11,14 +11,24 @@ chorus.views.ModularDashboard = chorus.views.Base.extend({
     },
 
     preRender: function() {
-        _.each(this.model.get("modules"), function (moduleName, i) {
-            this["module"+i] = new chorus.views["Dashboard" + moduleName]({content: moduleName});
+        _.each(this.validModules(), function(moduleName, i) {
+            this["module" + i] = new chorus.views["Dashboard" + moduleName]({content: moduleName});
         }, this);
     },
 
     setupSubviews: function () {
-        _.each(this.model.get("modules"), function (moduleName, i) {
-            this.subviews['.module_'+i] = 'module'+i;
+        _.each(this.validModules(true), function (moduleName, i) { this.subviews['.module_'+i] = 'module'+i; }, this);
+    },
+
+    additionalContext: function() {
+        return { modules: this.validModules() };
+    },
+
+    validModules: function(warn) {
+        return _.filter(this.model.get("modules"), function(moduleName, i) {
+            var valid = chorus.views["Dashboard" + moduleName];
+            warn && (valid || chorus.toast("bad_dashboard_module", {moduleName: moduleName, toastOpts: {type: "error"}}));
+            return valid;
         }, this);
     }
 });

@@ -108,6 +108,9 @@ window.BackboneFixtureDefinitions = {
         children: {
             siteSnapshot: {
                 model: 'DashboardData'
+            },
+            workspaceActivity: {
+                model: 'DashboardData'
             }
         }
     },

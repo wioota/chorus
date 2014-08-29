@@ -2,6 +2,7 @@ module Dashboard
   def self.build(params)
     case params[:entity_type]
       when 'site_snapshot' then SiteSnapshot
+      when 'workspace_activity' then WorkspaceActivity
       else raise ApiValidationError.new(:entity_type, :invalid)
     end.new(params)
   end

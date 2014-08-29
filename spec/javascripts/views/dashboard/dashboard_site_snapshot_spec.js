@@ -14,7 +14,7 @@ describe("chorus.views.DashboardSiteSnapshot", function() {
                 this.server.lastFetch().respondJson(200, this.siteSnapshotAttrs);
             });
 
-            it("has a title", function() {
+            it("has the title", function() {
                 expect(this.view.$('.title')).toContainTranslation("dashboard.site_snapshot.name");
             });
 
