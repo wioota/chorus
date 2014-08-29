@@ -1,0 +1,19 @@
+require 'spec_helper'
+
+describe Dashboard::WorkspaceActivity do
+
+  let(:user) { users(:the_collaborator) }
+  let(:model) { described_class.new({:user => user}).fetch! }
+
+  describe '#result' do
+    let(:result) { model.result }
+
+    it 'has the correct keys' do
+      elem = result.first
+      p elem
+      elem.should have_key('event_count')
+      elem.should have_key('workspace_id')
+      elem.should have_key('week_part')
+    end
+  end
+end
