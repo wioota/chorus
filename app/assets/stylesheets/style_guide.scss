@@ -1,6 +1,11 @@
 @import "_common";
 
 #page[data-page=StyleGuide]  {
+    .sub_nav {
+        padding-top: 0px;
+        position: initial
+    }
+
     .popup .view_guts {
         border: $border-canon;
     }
