@@ -8,7 +8,7 @@ module LoginHelpers
     page.should have_selector("form.login")
     fill_in 'username', :with => user.username
     fill_in 'password', :with => password
-    click_button "Login"
+    click_button "Sign In"
 
     page.find(".header .username").should have_content(user.first_name)
   end
