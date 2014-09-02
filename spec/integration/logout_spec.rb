@@ -9,7 +9,7 @@ describe "Logout" do
     within '.menu.popup_username' do
       find("a", :text => "Sign Out", :visible => true).click
     end
-    page.should have_content("Login")
+    page.should have_content("Sign In")
     current_route.should == "login"
   end
 end
