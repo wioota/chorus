@@ -1,12 +1,12 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "Insights" do
-   it "clicks on the insights link on the home page" do
-    login(users(:owner))
-    within ".activity_list_header" do
-      click_link "Insights"
-      find('.title').should have_content('Insights'.upcase)
-    end
+   it 'clicks on the insights link on the home page' do
+      login(users(:owner))
+      within '.activity_list_header' do
+        select_item('select.activities_filter', 'only_insights')
+        find('.title').should have_content('Insights'.upcase)
+      end
   end
 
   it "creates an insight" do
