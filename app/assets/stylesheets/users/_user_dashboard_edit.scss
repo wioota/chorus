@@ -6,7 +6,7 @@
 
     .sub_title {
         padding-top: 20px;
-        @include heading-normal;
+        @include section-heading;
     }
 
     .sub_description {
@@ -54,11 +54,7 @@
     }
 
     .ui-sortable-helper {
-        @include single-box-shadow($charcoal, 5px, 5px, 15px);
-    }
-
-    .drop_target {
-        @include single-box-shadow($brand-dark, 0, 0, 5px);
+        @include single-box-shadow(rgba($bright-grey, 0.5), 3px, 3px, 3px, 0px);
     }
 
     .module_list {
@@ -71,7 +67,7 @@
             line-height: 35px;
             padding-left: 20px;
             padding-right: 20px;
-            @include dashboard-module-title;
+            @include dnd-list-header;
             @include border-bottom-radius(0);
         }
 
@@ -94,7 +90,7 @@
 
     .available_modules {
         ul {
-            background-color: $greyish-blue;
+            background-color: $light-grey-yellow;
         }
         .header {
             background-color: $greyish-yellow;

@@ -21,6 +21,8 @@ $pattens-blue:      rgb(240, 245, 250);
 $alice-blue:        rgb(240, 247, 254);
 $greyish-blue:      rgb(248, 251, 253);
 $greyish-yellow:    rgb(204, 204, 200);
+$light-grey-yellow: rgb(243, 243, 242);
+$bright-grey:       rgb(88, 89, 95);
 $charcoal:          #464646;
 $light-sky-blue:    rgb(148, 215, 244);
 $bluer-lavender:    rgb(225,237,250);
@@ -63,7 +65,7 @@ $border-color-dark: darken($border-color, 5%);
 $color-text1: darken($charcoal, 10%);
 $color-text2: $charcoal;
 $color-text3: lighten($charcoal, 10%);
-$color-text4: lighten(rgb(88, 89, 95), 20%);
+$color-text4: lighten($bright-grey, 20%);
 $link-color: $brand;
 $disabled-text: rgb(147, 154, 159);
 $caret-color: $light-sky-blue;
@@ -260,6 +262,13 @@ $action-bar-secondary-background-color: $light-blue;
     color: black;
 }
 
+@mixin section-heading {
+    @include debugging-mixin;
+    font-size: 18px;
+    font-weight: $semibold;
+    color: $bright-grey;
+}
+
 @mixin heading-sidebar {
     @include debugging-mixin;
     @include ellipsis;
@@ -414,6 +423,14 @@ $action-bar-secondary-background-color: $light-blue;
     @include debugging-mixin;
     font-size: 14px;
     color: $color-text2;
+    @include uppercase;
+}
+
+@mixin dnd-list-header {
+    @include debugging-mixin;
+    font-size: 12px;
+    color: $color-text2;
+    font-weight: $semibold;
     @include uppercase;
 }
 
