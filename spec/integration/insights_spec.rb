@@ -18,7 +18,7 @@ describe "Insights" do
     workspace_name = workspaces(:public).name
     find("#page_sub_header").should have_content(workspace_name)
 
-    click_link "Add an insight"
+    click_link "Add an Insight"
 
     within_modal do
       set_cleditor_value("body", "This is adding an Insight")

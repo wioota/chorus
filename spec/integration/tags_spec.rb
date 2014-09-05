@@ -17,10 +17,10 @@ describe 'listing all tags' do
 
   it "renames a specific tag" do
     find('li', :text => 'foo').click
-    click_on "Rename tag"
+    click_on "Rename Tag"
     within_modal do
       find("input").set("hello")
-      click_on "Rename tag"
+      click_on "Rename Tag"
     end
 
     find('li', :text => 'hello').should have_link("hello")

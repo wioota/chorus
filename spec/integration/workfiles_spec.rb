@@ -30,10 +30,13 @@ describe "Workfiles" do
 
       click_link "Work Files"
       click_link workfile.file_name
-      click_link "Delete work file"
+
+      within '.workfile_sidebar .actions > ul' do
+        click_link 'Delete'
+      end
 
       within_modal do
-        click_button "Delete work file"
+        click_button 'Delete'
       end
       page.should_not have_content(workfile.file_name)
       Workfile.find_by_id(workfile.id).should be_nil

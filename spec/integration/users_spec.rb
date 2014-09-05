@@ -22,7 +22,7 @@ describe "Users" do
       fill_in 'title', :with => "dev"
       fill_in 'dept', :with => "chorus"
       fill_in 'notes', :with => "This is a test user."
-      click_button "Add This User"
+      click_button "Add this Person"
 
       within ".main_content" do
         click_link "James Bond"
@@ -49,7 +49,7 @@ describe "Users" do
       within ".content .list" do
         click_link("#{admin.first_name} #{admin.last_name}")
       end
-      click_link "Change password"
+      click_link "Change Password"
       page.should have_content("Change Password")
 
       within_modal do
@@ -70,7 +70,7 @@ describe "Users" do
         click_link "#{user.first_name} #{user.last_name}"
       end
       click_link "Edit Profile"
-      check "Make this user an administrator"
+      check "Make this person an administrator"
       click_button "Save Changes"
       find('a', :text => "Edit Profile")
 
@@ -90,7 +90,7 @@ describe "Users" do
       within ".content .list" do
         click_link "#{user.first_name} #{user.last_name}"
       end
-      click_link "Delete User"
+      click_link "Delete Person"
       click_button "Delete User"
       within ".content .list" do
         page.should_not have_content("#{user.first_name} #{user.last_name}")

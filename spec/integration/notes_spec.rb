@@ -14,7 +14,7 @@ describe "Notes" do
       within ".data_source ul" do
         first("li", :text => data_source.name).click
       end
-      click_link "Add a note"
+      click_link "Add a Note"
 
       within_modal do
         set_cleditor_value("body", "Note on the data source")
@@ -29,7 +29,7 @@ describe "Notes" do
     it "creates the note" do
       workspace = workspaces(:public_with_no_collaborators)
       visit("#/workspaces/#{workspace.id}")
-      click_link "Add a note"
+      click_link "Add a Note"
 
       within_modal do
         set_cleditor_value("body", "Note on the workspace")
@@ -47,7 +47,7 @@ describe "Notes" do
       within ".hdfs_data_source ul" do
         find("li", :text => hdfs_data_source.name).click
       end
-      click_link "Add a note"
+      click_link "Add a Note"
 
       within_modal do
         set_cleditor_value("body", "Note on the hadoop data source")
@@ -66,7 +66,7 @@ describe "Notes" do
       within ".selectable.list" do
         find("li", :text => workfile.file_name).click
       end
-      click_link "Add a note"
+      click_link "Add a Note"
 
       within_modal do
         set_cleditor_value("body", "Note on a workfile")
@@ -86,7 +86,7 @@ describe "Notes" do
         within ".selectable.list" do
           find("li", :text => workfile.file_name).click
         end
-        click_link "Add a note"
+        click_link "Add a Note"
 
         within_modal do
           set_cleditor_value("body", "Note on a workfile")
