@@ -91,7 +91,7 @@ describe "Users" do
         click_link "#{user.first_name} #{user.last_name}"
       end
       click_link "Delete Person"
-      click_button "Delete User"
+      click_button "Delete profile"
       within ".content .list" do
         page.should_not have_content("#{user.first_name} #{user.last_name}")
       end
