@@ -62,7 +62,7 @@ data_sources:
       account:
         db_username: "dbc"
         db_password: "dbc"
-    - host: "jdbc:mariadb://192.168.51.50"
+    - host: "jdbc:mariadb://192.168.51.50/?sessionVariables=sql_mode=ANSI_QUOTES"
       account:
         db_username: "root"
         db_password: "secret"

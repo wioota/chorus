@@ -402,21 +402,6 @@ describe JdbcConnection do
 
     end
 
-    describe '#visualization_sql_generator' do
-      # move to visualization specs when implemented
-      context 'for sql server' do
-        before do
-          mock(data_source).url.any_number_of_times { 'jdbc:sqlserver://the_host/somemore' }
-        end
-
-        it 'provides a sql generator that raises on unimplemented visualizations' do
-          sql_gen = connection.visualization_sql_generator
-          expect { sql_gen.histogram_min_max_sql({}) }.to raise_error(Visualization::NotImplemented)
-          expect { sql_gen.heatmap_min_max_sql({}) }.to raise_error(Visualization::NotImplemented)
-        end
-      end
-    end
-
     describe '::DatabaseError' do
       let(:message) { 'A message' }
       let(:sequel_exception) {
@@ -685,4 +670,37 @@ describe JdbcConnection do
     end
   end
 
+  describe '#visualization_sql_generator' do
+    # move to visualization specs when implemented
+
+    let(:options) { { :logger => Rails.logger } }
+    let(:data_source) { data_sources(:jdbc) }
+    let(:connection) { JdbcConnection.new(data_source, {}, options) }
+
+    context 'for sql server' do
+      before do
+        mock(data_source).url.any_number_of_times { 'jdbc:sqlserver://the_host/somemore' }
+      end
+
+      it 'provides a sql generator that raises on unimplemented visualizations' do
+        sql_gen = connection.visualization_sql_generator
+        expect { sql_gen.histogram_min_max_sql({}) }.to raise_error(Visualization::NotImplemented)
+        expect { sql_gen.heatmap_min_max_sql({}) }.to raise_error(Visualization::NotImplemented)
+      end
+    end
+
+    context 'for mariadb' do
+      before do
+        mock(data_source).url.any_number_of_times { 'jdbc:mariadb://the_host/somemore' }
+      end
+
+      it 'provides a sql generator that raises on unimplemented visualizations' do
+        sql_gen = connection.visualization_sql_generator
+        expect { sql_gen.timeseries_row_sql({}) }.to raise_error(Visualization::NotImplemented)
+        expect { sql_gen.boxplot_row_sql({}) }.to raise_error(Visualization::NotImplemented)
+        expect { sql_gen.histogram_min_max_sql({}) }.to raise_error(Visualization::NotImplemented)
+        expect { sql_gen.heatmap_min_max_sql({}) }.to raise_error(Visualization::NotImplemented)
+      end
+    end
+  end
 end

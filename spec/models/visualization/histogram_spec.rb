@@ -103,6 +103,14 @@ describe Visualization::Histogram do
       it_behaves_like 'a histogram visualization'
     end
 
+    #context 'for mariadb', :mariadb_integration do
+    #  let(:data_source_account) { MariadbIntegration.real_account }
+    #  let(:schema) { MariadbIntegration.real_schema }
+    #  let(:dataset) { schema.find_or_initialize_dataset(table_name) }
+    #
+    #  it_behaves_like 'a histogram visualization'
+    #end
+
     context 'for oracle', :oracle_integration do
       let(:data_source_account) { OracleIntegration.real_account }
       let(:schema) { OracleIntegration.real_schema }

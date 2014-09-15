@@ -1,12 +1,18 @@
 module Visualization
-  module SqlServerSql
+  module MariadbSql
+
     def self.extend_object(obj)
       super
-      obj.limit_type = :top
+      obj.limit_type = :limit
     end
 
-    # sql server does not support width_bucket and needs a special
-    # implementation for heatmap and histogram
+    # mariadb does not support windowing functions
+    def boxplot_row_sql(o)
+      raise NotImplemented
+    end
+
+    # mariadb server does not support width_bucket and does not support windowing functions which
+    # is the work-around for width_bucket
     def heatmap_min_max_sql(o)
       raise NotImplemented
     end
@@ -23,7 +29,7 @@ module Visualization
       raise NotImplemented
     end
 
-    # sql server does not support trunc or date_trunc
+    # mariadb does not support trunc or date_trunc
     # and needs special implementation
     def timeseries_row_sql(o)
       raise NotImplemented

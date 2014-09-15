@@ -1,5 +1,11 @@
 module Visualization
   module TeradataSql
+    def self.extend_object(obj)
+      super
+      obj.limit_type = :top
+      obj.numeric_cast = 'numeric(32)'
+    end
+
     def boxplot_row_sql(o)
       dataset, values, category, buckets, filters = fetch_opts(o, :dataset, :values, :category, :buckets, :filters)
 

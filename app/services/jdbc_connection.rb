@@ -143,14 +143,21 @@ class JdbcConnection < DataSourceConnection
   end
 
   def visualization_sql_generator
-    params = { :limit => :top, :numeric_cast => 'numeric(32)' }
-    sql_gen = Visualization::SqlGenerator.new(params).extend(Visualization::JdbcSql)
-    sql_gen.extend(Visualization::TeradataSql) if /jdbc:teradata:/ =~ db_url
-    sql_gen.extend(Visualization::SqlServerSql) if /jdbc:sqlserver:/ =~ db_url
+    sql_gen = Visualization::SqlGenerator.new({}).extend(Visualization::JdbcSql)
+    sql_gen.extend(visualization_override) if visualization_override
     sql_gen
   end
 
   private
+
+  def visualization_override
+    @visualization_override ||= case db_url
+      when /jdbc:teradata:/ then Visualization::TeradataSql
+      when /jdbc:sqlserver:/ then Visualization::SqlServerSql
+      when /jdbc:mariadb:/ then Visualization::MariadbSql
+      else nil
+     end
+  end
 
   JDBC_TYPES = {
       :tables => %w(TABLE),
