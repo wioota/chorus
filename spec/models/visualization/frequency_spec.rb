@@ -37,7 +37,7 @@ describe Visualization::Frequency do
     it_behaves_like 'a frequency visualization'
   end
 
-  context 'for mariadb', :maria_integration do
+  context 'for mariadb', :mariadb_integration do
     let(:data_source_account) { MariadbIntegration.real_account }
     let(:schema) { MariadbIntegration.real_schema }
     let(:dataset) { schema.find_or_initialize_dataset(table_name) }
