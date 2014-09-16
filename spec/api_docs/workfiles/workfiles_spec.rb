@@ -138,6 +138,20 @@ resource "Workfiles" do
     end
   end
 
+  delete '/workspaces/:workspace_id/workfiles' do
+    parameter :workspace_id, 'Id of the workspace from which the workfiles will be deleted'
+    parameter :'workfile_ids[]', 'Workfile Id to delete, can be specified multiple times'
+
+    required_parameters :workspace_id, :'workfile_ids[]'
+
+    let(:workspace_id) { workspace.to_param }
+    let(:'workfile_ids[]') { workspace.workfiles.limit(2).pluck(:id) }
+
+    example_request 'Disassociate a list of non-sandbox datasets with the workspace' do
+      status.should == 200
+    end
+  end
+
   post "/workfiles/:workfile_id/executions" do
     parameter :workfile_id, "Workfile Id"
     parameter :check_id, "A client-generated identifier which can be used to cancel this execution later"
