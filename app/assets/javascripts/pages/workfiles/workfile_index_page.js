@@ -49,7 +49,8 @@ chorus.pages.WorkfileIndexPage = chorus.pages.Base.include(
 
         this.multiSelectSidebarMenu = new chorus.views.MultipleSelectionSidebarMenu({
             selectEvent: "workfile:checked",
-            actionProvider: [{name: "edit_tags", target: chorus.dialogs.EditTags}]
+            actionProvider: [{name: "edit_tags", target: chorus.dialogs.EditTags},
+                             {name: "delete", target: chorus.alerts.WorkfileDeleteMultiple}]
         });
 
         this.mainContent.contentHeader.bind("choice:filter", function(choice) {

@@ -83,7 +83,11 @@ Chorus::Application.routes.draw do
     resources :members, :only => [:index, :create]
     resource :image, :only => [:create, :show], :controller => :workspace_images
     resource :sandbox, :only => [:create]
-    resources :workfiles, :only => [:create, :index]
+    resources :workfiles, :only => [:create, :index] do
+      collection do
+        delete :index, action: :destroy_multiple
+      end
+    end
     resources :jobs, :only => [:index, :create, :show, :update, :destroy] do
       resources :job_tasks, :only => [:create, :update, :destroy]
     end

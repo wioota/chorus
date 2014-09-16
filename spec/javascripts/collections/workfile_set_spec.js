@@ -1,7 +1,10 @@
 describe("chorus.collections.WorkfileSet", function () {
     beforeEach(function () {
         this.workspace = new chorus.models.Workspace({id: 1234});
-        this.collection = new chorus.collections.WorkfileSet([], {workspaceId: 1234});
+        this.collection = new chorus.collections.WorkfileSet([
+            backboneFixtures.workfile.sql({workspace: {id: this.workspace.id}}),
+            backboneFixtures.workfile.sql({workspace: {id: this.workspace.id}})
+        ], {workspaceId: this.workspace.id});
     });
 
     it("extends chorus.collections.LastFetchWins", function() {
@@ -52,6 +55,20 @@ describe("chorus.collections.WorkfileSet", function () {
             this.collection.search("search term");
             this.server.completeFetchFor(this.collection, []);
             expect(eventListener).toHaveBeenCalled();
+        });
+    });
+
+    describe("#destroy", function () {
+        beforeEach(function() {
+            this.workfileIds = this.collection.pluck('id');
+            this.collection.destroy();
+        });
+
+        it("deletes the models in bulk", function() {
+            var req = this.server.lastDestroy();
+
+            expect(req.url).toHaveUrlPath("/workspaces/" + this.workspace.id + "/workfiles");
+            expect(req.json()['workfile_ids']).toEqual(this.workfileIds);
         });
     });
 });

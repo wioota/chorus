@@ -12,5 +12,10 @@ chorus.collections.WorkfileSet = chorus.collections.LastFetchWins.include(
             namePattern: this.attributes.namePattern,
             fileType: this.attributes.fileType
         };
+    },
+
+    destroy: function() {
+        var ids = _.pluck(this.models, 'id');
+        new chorus.models.BulkDestroyer({collection: this}).destroy({workfileIds: ids});
     }
 });

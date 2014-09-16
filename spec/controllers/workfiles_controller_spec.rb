@@ -772,6 +772,34 @@ describe WorkfilesController do
     end
   end
 
+  describe 'destroy_multiple' do
+    before do
+      workspace.members << member
+      log_in member
+    end
+
+    it 'uses authorization' do
+      mock(subject).authorize! :can_edit_sub_objects, workspace
+      delete :destroy_multiple, :workspace_id => workspace.id
+    end
+
+    it 'deletes multiple associations' do
+      workspace.workfiles.count.should > 0
+      delete :destroy_multiple, :workspace_id => workspace.id, :workfile_ids => workspace.workfiles.map(&:id)
+      response.code.should == '200'
+
+      workspace.workfiles.reload.count.should == 0
+    end
+
+    it 'preserves existing associations' do
+      workfile_ids = workspace.workfiles.map(&:id)
+      delete :destroy_multiple, :workspace_id => workspace.id, :workfile_ids => workfile_ids.first(2)
+      response.code.should == '200'
+
+      workspace.workfiles.reload.count.should == workfile_ids.count - 2
+    end
+  end
+
   describe '#run' do
     let(:workfile) { workfiles(:alpine_flow) }
     let(:run_process_id) { 'fakeprocessid' }

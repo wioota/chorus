@@ -1,6 +1,11 @@
 describe("chorus.alerts.DatasetDisassociateMultiple", function() {
     beforeEach(function() {
-        this.collection = backboneFixtures.workspace().datasets();
+        this.collection = new chorus.collections.WorkspaceDatasetSet([
+            backboneFixtures.workspaceDataset.datasetTable({id: 0}),
+            backboneFixtures.workspaceDataset.datasetTable({id: 1}),
+            backboneFixtures.workspaceDataset.datasetTable({id: 3})
+        ], {workspaceId: 1234});
+
         this.alert = new chorus.alerts.DatasetDisassociateMultiple({ collection : this.collection });
         stubModals();
         this.alert.launchModal();
@@ -25,7 +30,7 @@ describe("chorus.alerts.DatasetDisassociateMultiple", function() {
         beforeEach(function() {
             spyOn(chorus.router, "navigate");
             spyOn(chorus, 'toast');
-            this.collection.destroy();
+            this.alert.$("button.submit").click();
             this.server.lastDestroy().succeed();
         });
 

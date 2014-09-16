@@ -5,10 +5,9 @@ class WorkfilesController < ApplicationController
   include DataSourceAuth
 
   before_filter :convert_form_encoded_arrays, :only => [:create, :update]
-  before_filter :authorize_edit_workfile, :only => [:update, :destroy, :run, :stop]
+  before_filter :authorize_edit_workfile, :only => [:update, :destroy,  :run, :stop]
 
   def index
-    workspace = Workspace.find(params[:workspace_id])
     authorize! :show, workspace
 
     workfiles = workspace.filtered_workfiles(params)
@@ -28,7 +27,6 @@ class WorkfilesController < ApplicationController
   end
 
   def create
-    workspace = Workspace.find(params[:workspace_id])
     authorize! :can_edit_sub_objects, workspace
 
     workfile = Workfile.build_for(params[:workfile].merge(:workspace => workspace, :owner => current_user))
@@ -56,6 +54,13 @@ class WorkfilesController < ApplicationController
     render :json => {}
   end
 
+  def destroy_multiple
+    authorize! :can_edit_sub_objects, workspace
+    workfiles = workspace.workfiles.where(:id => params[:workfile_ids])
+    workfiles.destroy_all
+
+    render :json => {}
+  end
 
   def run
     workfile.run_now(current_user)
@@ -74,6 +79,10 @@ class WorkfilesController < ApplicationController
 
   def workfile
     @workfile ||= Workfile.find(params[:id])
+  end
+
+  def workspace
+    @workspace ||= Workspace.find(params[:workspace_id])
   end
 
   def authorize_edit_workfile

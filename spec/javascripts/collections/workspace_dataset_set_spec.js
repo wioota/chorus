@@ -141,4 +141,18 @@ describe("chorus.collections.WorkspaceDatasetSet", function() {
             });
         });
     });
+
+    describe("#destroy", function () {
+        beforeEach(function() {
+            this.datasetIds = this.collection.pluck('id');
+            this.collection.destroy();
+        });
+
+        it("deletes the models in bulk", function() {
+            var req = this.server.lastDestroy();
+
+            expect(req.url).toHaveUrlPath("/workspaces/10000/datasets");
+            expect(req.json()['dataset_ids']).toEqual(this.datasetIds);
+        });
+    });
 });
