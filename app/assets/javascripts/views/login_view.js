@@ -8,7 +8,7 @@ chorus.views.Login = chorus.views.Base.extend({
     persistent:true,
     warning: null,
 
-    setup:function () {
+    setup: function () {
         this.status = new chorus.models.Status();
         this.status.fetch();
         this.onceLoaded(this.status, this.processStatus);
@@ -24,15 +24,12 @@ chorus.views.Login = chorus.views.Base.extend({
         };
     },
 
-    postRender : function() {
-        this.$(".legal .version").load("/VERSION" + "?buster=" + chorus.cachebuster(), function(response) {
-            $(this).text(response.slice(0, 19));
-            $(this).attr('title', "Version " + response);
-        });
+    postRender: function() {
+ 
         _.defer(_.bind(function() { this.$("input[name='username']").focus(); }, this));
     },
 
-    onLogin : function () {
+    onLogin: function () {
         var targetDestination;
 
         if (chorus.session && chorus.session.shouldResume()) {
@@ -44,7 +41,7 @@ chorus.views.Login = chorus.views.Base.extend({
         chorus.router.navigate(targetDestination);
     },
 
-    submitLoginForm:function submitLoginForm(e) {
+    submitLoginForm: function submitLoginForm(e) {
         e.preventDefault();
 
         this.model.clear({ silent:true });
