@@ -6,5 +6,8 @@ module Sequel
     DATABASE_SETUP[:vertica] = proc do |db|
       com.vertica.jdbc.Driver
     end
+    DATABASE_SETUP[:mariadb] = proc do |db|
+      org.mariadb.jdbc.Driver
+    end
   end
 end
