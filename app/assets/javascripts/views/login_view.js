@@ -25,25 +25,21 @@ chorus.views.Login = chorus.views.Base.extend({
     },
 
     postRender: function() {
- 
         _.defer(_.bind(function() { this.$("input[name='username']").focus(); }, this));
     },
 
     onLogin: function () {
         var targetDestination;
-
         if (chorus.session && chorus.session.shouldResume()) {
             targetDestination = chorus.session.resumePath();
         } else {
             targetDestination = "/";
         }
-
         chorus.router.navigate(targetDestination);
     },
 
     submitLoginForm: function submitLoginForm(e) {
         e.preventDefault();
-
         this.model.clear({ silent:true });
         delete this.model.id;
         this.model.set({
