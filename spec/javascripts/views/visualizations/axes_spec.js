@@ -144,7 +144,7 @@ describe("chorus.views.visualizations.Axes", function() {
                 });
 
                 it("is above the padding", function() {
-                    var innerHeightPlusBoundingBoxError = this.height - this.paddingY + 5;
+                    var innerHeightPlusBoundingBoxError = this.height - this.paddingY + 10;
                     expect(bottomY(this.axisLabel)).toBeLessThanOrEqualTo(innerHeightPlusBoundingBoxError);
                 });
             });
