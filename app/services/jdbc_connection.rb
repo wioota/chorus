@@ -61,6 +61,7 @@ class JdbcConnection < DataSourceConnection
 
   def initialize(data_source, account, options)
     super
+    Sequel.extension(:additional_jdbc_drivers)
     self.extend(MariaOverrides) if /jdbc:mariadb:/ =~ db_url
   end
 
