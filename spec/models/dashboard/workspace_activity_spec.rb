@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Dashboard::WorkspaceActivity do
-
   let(:user) { users(:the_collaborator) }
   let(:model) { described_class.new({:user => user}).fetch! }
 
@@ -12,7 +11,7 @@ describe Dashboard::WorkspaceActivity do
       elem = result.first
       elem.should have_key('event_count')
       elem.should have_key('workspace_id')
-      elem.should have_key('week_part')
+      elem.should have_key('date_part')
     end
   end
 end
