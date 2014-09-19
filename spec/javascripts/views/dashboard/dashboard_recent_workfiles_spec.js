@@ -20,15 +20,16 @@ describe("chorus.views.DashboardRecentWorkfiles", function() {
 
             it("displays the recent workfiles data", function() {
                 expect(this.view.$('li').length).toBe(5);
-                _.each(this.recentWorkfilesAttrs.data, function(element) {
-                    var workfile = new chorus.models.Workfile(element.workfile);
-                    expect(this.view.$("#workfile_" + element.workfile.id + " .image img").attr("src")).toBe(workfile.iconUrl());
-                    expect(this.view.$("#workfile_" + element.workfile.id + " .workfile_link").attr("href")).toBe(workfile.showUrl());
-                    expect(this.view.$("#workfile_" + element.workfile.id + " .workfile_link")).toContainText(element.workfile.fileName);
-                    expect(this.view.$("#workfile_" + element.workfile.id + " .workspace_image").attr("src")).toBe(workfile.workspace().defaultIconUrl("small"));
-                    expect(this.view.$("#workfile_" + element.workfile.id + " .workspace_link")).toContainText(element.workfile.workspace.name);
-                    expect(this.view.$("#workfile_" + element.workfile.id + " .workspace_link").attr("href")).toBe(workfile.workspace().showUrl());
-                    expect(this.view.$("#workfile_" + element.workfile.id + " .time_edited")).toContainText(Handlebars.helpers.relativeTimestamp(element.lastOpened));
+                _.each(this.view.$('li'), function(element, index) {
+                    var dataIndex = this.recentWorkfilesAttrs.data[index];
+                    var workfile = new chorus.models.Workfile(dataIndex.workfile);
+                    expect($(element).find(".image img").attr("src")).toBe(workfile.iconUrl());
+                    expect($(element).find(".workfile_link").attr("href")).toBe(workfile.showUrl());
+                    expect($(element).find(".workfile_link")).toContainText(dataIndex.workfile.fileName);
+                    expect($(element).find(".workspace_image").attr("src")).toBe(workfile.workspace().defaultIconUrl("small"));
+                    expect($(element).find(".workspace_link")).toContainText(dataIndex.workfile.workspace.name);
+                    expect($(element).find(".workspace_link").attr("href")).toBe(workfile.workspace().showUrl());
+                    expect($(element).find(".time_edited")).toContainText(Handlebars.helpers.relativeTimestamp(dataIndex.lastOpened));
                 }, this);
             });
         });
