@@ -3,14 +3,14 @@ chorus.alerts.WorkfileDeleteMultiple = chorus.alerts.ModelDelete.extend({
 
     makeModel: function () {
         this.model = this.collection;
-        this.num_deleted = this.collection.length;
+        this.count = this.collection.length;
         this._super("makeModel");
     },
 
     setup: function() {
         this._super("setup");
 
-        this.text = t("workfile.delete.many.text");
+        this.text = t("workfile.delete.many.text", {count: this.count});
         this.title = t("workfile.delete.many.title");
         this.ok = t("workfile.delete.button");
         this.deleteMessage = "workfile.delete.many.toast";
@@ -19,7 +19,7 @@ chorus.alerts.WorkfileDeleteMultiple = chorus.alerts.ModelDelete.extend({
 
     deleteMessageParams:function () {
         return {
-            count: this.num_deleted
+            count: this.count
         };
     }
 });
