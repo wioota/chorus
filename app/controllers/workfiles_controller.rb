@@ -23,6 +23,8 @@ class WorkfilesController < ApplicationController
       workfile.attempt_data_source_connection
     end
 
+    log_workfile_opened_event(workfile, current_user)
+
     present workfile, :presenter_options => {:contents => true, :workfile_as_latest_version => true}
   end
 
@@ -100,5 +102,9 @@ class WorkfilesController < ApplicationController
 
   def render_run_failed
     present_errors({:record => :RUN_FAILED}, :status => :unprocessable_entity)
+  end
+
+  def log_workfile_opened_event(workfile, user)
+    OpenWorkfileEvent.create!(:workfile => workfile, :user => user)
   end
 end
