@@ -111,6 +111,9 @@ window.BackboneFixtureDefinitions = {
             },
             workspaceActivity: {
                 model: 'DashboardData'
+            },
+            recentWorkfiles: {
+                model: 'DashboardData'
             }
         }
     },

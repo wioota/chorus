@@ -3,6 +3,7 @@ module Dashboard
     case params[:entity_type]
       when 'site_snapshot' then SiteSnapshot
       when 'workspace_activity' then WorkspaceActivity
+      when 'recent_workfiles' then RecentWorkfiles
       else raise ApiValidationError.new(:entity_type, :invalid)
     end.new(params)
   end

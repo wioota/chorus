@@ -1,6 +1,6 @@
 class DashboardItem < ActiveRecord::Base
 
-  ALLOWED_MODULES = %w(SiteSnapshot WorkspaceActivity ActivityStream ProjectCardList)
+  ALLOWED_MODULES = %w(SiteSnapshot WorkspaceActivity ActivityStream ProjectCardList RecentWorkfiles)
   DEFAULT_MODULES = ALLOWED_MODULES.first(3)
 
   attr_accessible :name, :location

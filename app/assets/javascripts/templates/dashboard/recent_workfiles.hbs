@@ -1,0 +1,24 @@
+<div class="title">{{t "dashboard.recent_workfiles.name"}}</div>
+<ul class="list selectable">
+    {{#each models}}
+        <li id="workfile_{{id}}">
+            <div class="image">
+                <img src="{{iconUrl}}"/>
+            </div>
+            <div class="file_name">
+                <div>
+                    <a class="workfile_link" href='{{showUrl}}'>{{fileName}}</a>
+                </div>
+                <div>
+                    <img class="workspace_image" src="{{workspaceIconUrl}}"/>
+                    <span>
+                        <a class="workspace_link" href='{{workspaceShowUrl}}'>{{workspace.name}}</a>
+                    </span>
+                </div>
+            </div>
+            <div class="time_edited">
+                {{relativeTimestamp lastOpened}}
+            </div>
+        </li>
+    {{/each}}
+</ul>
