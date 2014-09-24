@@ -52,7 +52,7 @@ $notification-token-width: $header-margin * 2;
                 background-color: $brand-tint;
             }
             a.label {
-                color: white;
+                color: #FFFFFF;
                 text-decoration: none;
                 display: block;
 
@@ -62,7 +62,7 @@ $notification-token-width: $header-margin * 2;
                 span {
                     display: inline-block;
                     i {
-                        margin-left: 10px;
+                        margin-left: 5px;
                         color: $caret-color;
                     }
                 }
