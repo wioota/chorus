@@ -112,7 +112,9 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
             }
 
             .workfile_link {
-                font-size: 18px;
+                @include font-primary-link;
+                max-width: 100%;
+                padding: 0 0 3px 0;
             }
 
             .workspace_image {
@@ -121,12 +123,16 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
                 padding-right: 10px;
             }
 
+            .workspace_link {
+                @include font-secondary-link;
+            }
+
             .time_edited {
                 float: right;
                 padding-right: 200px;
                 vertical-align: top;
                 padding-top: 15px;
-                color:#949a9e;
+                @include secondary-text-small;
             }
         }
     }

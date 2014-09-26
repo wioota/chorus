@@ -12,7 +12,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
         this.vis = {
             // Properties about data provided by server
             dataSettings: {
-                date_format: d3.time.format.iso
+                date_format: d3.time.format("%Y-%m-%d %H:%M:%S") // d3.time.format.iso
             },
 
             // Data to be rendered.
@@ -33,7 +33,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                             top:    20,
                             right:  30,
                             bottom: 30,
-                            left:   40
+                            left:   20
                         },
                         get height () {
                             return 340 - this.margin.top - this.margin.bottom;
@@ -41,9 +41,8 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                         get width () {
                             return 960 - this.margin.left - this.margin.right;
                         },
-                        // Function designating the area fill colors desired.
-                        // See "categorical colors" in https://github.com/mbostock/d3/wiki/Ordinal-Scales
-                        fillColors: d3.scale.category20c()
+                        fillColors: ['#B343BB', '#2A8C82', '#999989', '#CFCF15', '#393BBD',
+                                     '#FF9C1A', '#91C531', '#DC2C2C', '#666666', '#DE592C']
                     }
                 },
                 // Tooltip shown in the chart upon mouseover
@@ -61,22 +60,23 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
     postRender: function() {
         // Load raw data used in visualization:
         // Our data looks like a flat array of objects. Example:
-        /*   {
-         "data": [{
-         "date_part": "2014-09-18 00:00:00",
-         "workspace_id": 1,
-         "event_count": 0
-         }, {
-         "date_part": "2014-09-18 00:00:00",
-         "workspace_id": 2,
-         "event_count": 0
-         }]
-         }
+        /*   { "data": [{
+                 "date_part": "2014-09-18 00:00:00",
+                 "workspace_id": 1,
+                 "event_count": 0
+             }, {
+                 "date_part": "2014-09-18 00:00:00",
+                 "workspace_id": 2,
+                 "event_count": 0
+             }]
+            }
          */
         var data = this.vis.data = _.each(
             this.model.get("data"),
             function(pt) {
-                pt.datePart = this.vis.dataSettings.date_format.parse(pt.datePart);
+                if (typeof pt.datePart === 'string' || pt.datePart instanceof String) {
+                    pt.datePart = this.vis.dataSettings.date_format.parse(pt.datePart);
+                }
             },
             this);
 
@@ -85,24 +85,30 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             .key(function(d) {
                 return d.workspaceId;
             });
+        // Sort the workspaces such that the most active appears on the top
+        var processed_data = event_counts_by_workspace_id.entries(data)
+            .sort(function(a,b) {
+                return (a.values[0].rank > b.values[0].rank)? 1 : (a.rank === b.rank)? 0 : -1;
+            });
 
         // Entities in the visualization:
         var chart = this.vis.entities.chart,
-            tooltip = this.vis.entities.tooltip,
-            canvas = this.vis.canvas;
+            tooltip = this.vis.entities.tooltip;
 
         // Set up scaling functions and the axes
         var xScale  = d3.time.scale().range([0, chart.properties.width]),
             yScale = d3.scale.linear().range([chart.properties.height, 0]);
 
+        var date_format = d3.time.format("%b %d");
+        var today = date_format(new Date());
         var xAxis = d3.svg.axis()
                 .scale(xScale)
                 .orient("bottom")
-                .ticks(d3.time.weeks),
-            yAxis = d3.svg.axis()
-                .scale(yScale)
-                .orient("left")
-                .ticks(4);
+                .ticks(d3.time.days)
+                .tickFormat(function(d) {
+                    var ts = date_format(d);
+                    return (ts === today)? 'Today' : ts;
+                });
 
         // Our chart will contain a "stack layout": https://github.com/mbostock/d3/wiki/Stack-Layout
         var stackLayout = d3.layout.stack()
@@ -112,7 +118,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             .x(function(d) { return d.datePart; })
             // Count on y-axis
             .y(function(d) { return d.eventCount; });
-        var layers = stackLayout(event_counts_by_workspace_id.entries(data));
+        var layers = stackLayout(processed_data);
 
         // Function yielding the areas to fill in
         var areaFcn = d3.svg.area()
@@ -129,32 +135,47 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
         xScale.domain(d3.extent(data, function(d) { return d.datePart; }));
         yScale.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
 
+        var colorFillFcn = d3.scale.ordinal()
+            .domain(_.range(chart.properties.fillColors.length))
+            .range(chart.properties.fillColors);
+
         //// Rendering:
-        // Attach dom elements for entities
-        // and fix canvas dimensions to the chart size
         var $el = this.$(".chart");
         $el.html("").addClass("visualization");
         chart.domElement = $el;
         tooltip.domElememt = this.$(".tooltip");
 
-        canvas = d3.select($el[0])
-            .append("svg")
-            .attr("width", chart.properties.width + chart.properties.margin.left + chart.properties.margin.right)
-            .attr("height", chart.properties.height + chart.properties.margin.top + chart.properties.margin.bottom)
+        var w = chart.properties.width + chart.properties.margin.left + chart.properties.margin.right;
+        var h = chart.properties.height + chart.properties.margin.top + chart.properties.margin.bottom;
+
+        var svg = d3.select($el[0]).append("svg");
+        var canvas = this.vis.canvas = svg
+            .attr("preserveAspectRatio", "xMidYMid")
+            .attr("width", w)
+            .attr("height", h)
+            .attr("viewbox", "0 0 " + w +  " " + h)
             .append("g")
             .attr("transform", "translate(" + chart.properties.margin.left + "," + chart.properties.margin.top + ")");
+
+        // Clip interpolation layers beneath x-axis
+        canvas.append("defs").append("svg:clipPath")
+            .attr("id", "clip")
+            .append("svg:rect")
+            .attr("x", "0")
+            .attr("y", "0")
+            .attr("width", chart.properties.width)
+            .attr("height", chart.properties.height);
 
         canvas.selectAll(".layer")
             .data(layers)
             .enter()
             .append("path")
             .attr("class", "layer")
-            .attr("d", function(d) {
-                return areaFcn(d.values);
-            })
+            .attr("d", function(d) { return areaFcn(d.values); })
             .style("fill", function(d, i) {
-                return chart.properties.fillColors(i);
+                return colorFillFcn(i);
             })
+            .attr("clip-path", "url(#clip)")
             .on('mouseover', _.bind(this.mouseover, this))
             .on('mouseout', _.bind(this.mouseout, this));
 
@@ -162,10 +183,6 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             .attr("class", "x axis")
             .attr("transform", "translate(0," + chart.properties.height + ")")
             .call(xAxis);
-
-        canvas.append("g")
-            .attr("class", "y axis")
-            .call(yAxis);
     },
 
     mouseover: function(data, index) {
