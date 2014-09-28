@@ -9,10 +9,11 @@ describe Dashboard::WorkspaceActivity do
 
     it 'has the correct keys' do
       elem = result.first
-      elem.should have_key('event_count')
-      elem.should have_key('workspace_id')
-      elem.should have_key('date_part')
-      elem.should have_key('rank')
+      puts elem.to_yaml
+      elem.should have_key(:event_count)
+      elem.should have_key(:workspace_id)
+      elem.should have_key(:date_part)
+      elem.should have_key(:rank)
     end
   end
 end
