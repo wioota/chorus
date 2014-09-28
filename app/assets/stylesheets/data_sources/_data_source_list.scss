@@ -1,7 +1,7 @@
 .data_source_list {
 
     li {
-        background-color: white !important;
+        background-color: #FFFFFF !important;
     }
 
     &.data_source_provider .details{
@@ -32,7 +32,11 @@
     img.state, img.provider {
         vertical-align: middle;
     }
-
+    img.state {
+        position: relative;
+        top: -3px;
+    }
+    
     .data_source_details {
         margin-left: 60px;
     }
