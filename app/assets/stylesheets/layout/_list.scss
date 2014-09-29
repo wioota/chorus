@@ -127,7 +127,24 @@
                 .up_arrow, .down_arrow {
                     cursor: pointer;
                     display: inline-block;
+
+                    border: 3px solid #606060;
+                    border-radius: 20px;
+                    background-color: #F0F0F0;
+                    
+                    margin-left: 5px;
+                    
+                    &:hover {
+                        background-color: #C0E0F6;
+                    }
                 }
+                .arrow_disabled {
+                    border-color: #C0C0C0 !important;
+                    background-color: #DDD !important;
+                    &:hover {
+                         background-color: inherit;
+                    }
+                }   
             }
         }
 
