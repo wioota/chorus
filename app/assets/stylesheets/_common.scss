@@ -28,6 +28,8 @@ $light-grey-yellow: rgb(243, 243, 242);
 $light-gray:        rgb(234, 238, 241);
 $shadow-gray:		darken($light-gray, 7%);
 $charcoal:          #464646;
+$black:             #000000;
+
 
 //transparent variants
 $shadow-color:		rgba($shadow-gray, .7);
@@ -205,11 +207,10 @@ $list-horizontal-divider: 1px solid $border-color;
 $list-vertical-divider: 1px solid $border-color;
 $list-selectable-hover-color: rgba(0,0,0,0.1);
 $list-selectable-selected-color: white;
-$list-breadcrumb-divider: "\e02f";
+$list-breadcrumb-divider: "\e036";
 $list-breadcrumb-spacing: 5px;
-$list-breadcrumb-size: 10px;
+$list-breadcrumb-size: 9px;
 $list-border-color-highlighted: $green;
-
 
 /* whitespace */
 
@@ -268,7 +269,7 @@ $action-bar-secondary-background-color: $light-blue;
     @include debugging-mixin;
     font-size: 24px;
     font-weight: $semibold;
-    color: black;
+    color: $black;
 }
 
 @mixin section-heading {
@@ -305,14 +306,14 @@ $action-bar-secondary-background-color: $light-blue;
     @include debugging-mixin;
     font-size: 13px;
     font-weight: normal;
-    color: black;
+    color: $black;
 }
 
 @mixin font-normal-delta {
     @include debugging-mixin;
     font-size: 14px;
     font-weight: normal;
-    color: black;
+    color: $black;
 }
 
 @mixin font-secondary-content {
@@ -589,7 +590,7 @@ $action-bar-secondary-background-color: $light-blue;
 
         a {
             &.active {
-                color: black;
+                color: $black;
                 border-bottom: none;
             }
         }
