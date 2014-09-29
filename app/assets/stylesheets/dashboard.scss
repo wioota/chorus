@@ -157,9 +157,9 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
             background-color: $shaded-background-color;
             display: inline-block;
 
-            $size: 28px;
-            @include panel-button($size);
-            width: $size;
+            $height: 28px;
+            width: 40px;
+            @include panel-button($height);
 
             i {
                 color: $color-text3;
