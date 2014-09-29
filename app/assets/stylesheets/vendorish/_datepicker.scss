@@ -86,11 +86,14 @@
     /* 
     Change the font-size to suit your needs. The following line is for the demo
     that has a 14px font-size defined on the body tag.
-
     All other rules are "em" based and inherit from the font-size set here.
     */
-    font:900 0.8em/1em "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Verdana, Arial, "Lucida Grande", sans-serif;
-    background:transparent;
+
+    font-weight: 500;
+    font-size: 14px;
+    line-height: normal;
+    
+/*     background:transparent; */
     -webkit-user-select:none;
        -moz-user-select:none;
         -ms-user-select:none;
