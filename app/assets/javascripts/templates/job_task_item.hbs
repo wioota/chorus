@@ -19,12 +19,16 @@
     </div>
 
     <div class="arrows">
-        {{#unless firstItem}}
+        {{#if firstItem}}
+            <img src="/images/jobs/arrow-up-disabled.png" class="up_arrow arrow_disabled" title=""/>            
+        {{else}}
             <img src="/images/jobs/arrow-up.png" class="up_arrow" title="Move Up"/>
-        {{/unless}}
+        {{/if}}
 
-        {{#unless lastItem}}
+        {{#if lastItem}}
+            <img src="/images/jobs/arrow-down-disabled.png" class="down_arrow arrow_disabled" title=""/>
+        {{else}}
             <img src="/images/jobs/arrow-down.png" class="down_arrow" title="Move Down"/>
-        {{/unless}}
+        {{/if}}
     </div>
 </div>
