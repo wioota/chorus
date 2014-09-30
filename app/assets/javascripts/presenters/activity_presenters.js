@@ -15,7 +15,7 @@
             if (this.isFailure()) {
                 return "/images/message_error_med.png";
             } else if (this.model.isSuccessfulImport()) {
-                return "/images/import_icon.png";
+                return "/images/data_import.png";
             } else {
                 return this.model.author().fetchImageUrl({ size: "icon" });
             }
