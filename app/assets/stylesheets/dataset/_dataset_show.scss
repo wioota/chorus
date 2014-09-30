@@ -88,7 +88,7 @@
 
     .letter {
         display: inline;
-        color: white;
+        color: #FFFFFF;
         font-size: 14px;
         line-height: 19px;
         font-weight: normal;
@@ -98,4 +98,6 @@
 
 .stale_dataset_icon {
   position: absolute;
+  width: 20px;
+  height: 20px;
 }
