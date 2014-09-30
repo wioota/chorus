@@ -43,22 +43,35 @@ describe("chorus.views.JobTaskItem", function () {
     });
 
     describe("ordering arrows", function() {
-        it("has a down arrow as the first item in the list", function() {
+    
+        it("has a disabled up arrow as the first image for the first item in the list", function() {
+            this.model = this.collection.at(0);
+            this.view.model = this.model;
+            this.view.render();
+            expect(this.view.$('.up_arrow.arrow_disabled')).toExist();
+        });
+            
+        it("has a down arrow as the other image for the first item in the list", function() {
             this.model = this.collection.at(0);
             this.view.model = this.model;
             this.view.render();
             expect(this.view.$('.down_arrow')).toExist();
-            expect(this.view.$('.up_arrow')).not.toExist();
         });
 
-        it("has an up arrow as the last item in the list", function() {
+        it("has a working up arrow as the first image for the last item in the list", function() {
             this.model = this.collection.at(this.collection.length - 1);
             this.view.model = this.model;
             this.view.render();
-            expect(this.view.$('.down_arrow')).not.toExist();
             expect(this.view.$('.up_arrow')).toExist();
         });
 
+        it("has a disabled down arrow as the other image for the last item in the list", function() {
+            this.model = this.collection.at(this.collection.length - 1);
+            this.view.model = this.model;
+            this.view.render();
+            expect(this.view.$('.down_arrow.arrow_disabled')).toExist();
+        });
+        
         context("when the item is in the middle of the collection", function() {
             beforeEach(function() {
                 this.model = this.collection.at(1);
