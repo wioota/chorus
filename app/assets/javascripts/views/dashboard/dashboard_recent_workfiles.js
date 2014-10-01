@@ -32,7 +32,7 @@ chorus.views.DashboardRecentWorkfiles = chorus.views.DashboardModule.extend({
 
     additionalContext: function () {
         return {
-            modelLoaded: !(this.model.get("data") === undefined),
+            modelLoaded: this.model.get("data") !== undefined,
             hasModels: this.model.get("data") ? this.model.get("data").length > 0 : false
         };
     },
