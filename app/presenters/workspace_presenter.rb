@@ -9,7 +9,13 @@ class WorkspacePresenter < Presenter
       :summary => sanitize(model.summary),
       :archived_at => model.archived_at,
       :permission => model.permissions_for(current_user),
-      :public => model.public
+      :public => model.public,
+      :datasets_count => model.dataset_count(current_user),
+      :members_count => model.members.count,
+      :workfiles_count => model.workfiles.count,
+      :insights_count => model.owned_notes.where(:insight => true).count,
+      :recent_insights_count => model.owned_notes.where(:insight => true).recent.count,
+      :recent_comments_count => model.comments.recent.count
     }
 
     unless succinct?

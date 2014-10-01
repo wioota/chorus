@@ -3,26 +3,34 @@
         <span title="{{name}}">{{name}}</span>
     </a>
 </div>
-
-{{#if summary}}
-    <div class='info_icon'>
-        <i class='oi icon' data-glyph="copywriting" title="{{summary}}"></i>
+<div>
+    <div class="data_row first">
+        <div class="left_side">
+            <div class="number">{{insightsCount}}</div>
+            <div class="element">{{pluralize insightsCount 'dashboard.project_card_list.insight'}}</div>
+        </div>
+        <div class="right_side">
+            <div class="number">{{workfilesCount}}</div>
+            <div class="element">{{pluralize workfilesCount 'dashboard.project_card_list.workfile'}}</div>
+        </div>
     </div>
-{{/if}}
-
-<div class='status'/>
+    <div class="data_row last">
+        <div class="left_side">
+            <div class="number">{{datasetsCount}}</div>
+            <div class="element">{{pluralize datasetsCount 'dashboard.project_card_list.dataset'}}</div>
+        </div>
+        <div class="right_side">
+            <div class="number">{{membersCount}}</div>
+            <div class="element">{{pluralize membersCount 'dashboard.project_card_list.member'}}</div>
+        </div>
+    </div>
+</div>
 
 <div class='insight_zone'>
-    {{#if latestInsight}}
-        <div class='activity'></div>
-    {{else}}
-        <div class='activity space_filler'>
-            <div class='text low_light'>{{t 'project_card.insight.space_filler_text'}}</div>
-        </div>
-    {{/if}}
+    <div class="main_row">
+        {{recentCommentsCount}} {{pluralize recentCommentsCount 'dashboard.project_card_list.comment'}} {{t 'dashboard.project_card_list.and'}} {{recentInsightsCount}} {{pluralize recentInsightsCount 'dashboard.project_card_list.insight'}}
+    </div>
+    <div class="sub_row">
+        {{t 'dashboard.project_card_list.recent'}}
+    </div>
 </div>
-{{#if latestInsight}}
-    <a href="{{allInsightsRoute}}" class='all_insights'>
-        {{t 'project_card.insight.all_insights'}}
-    </a>
-{{/if}}
