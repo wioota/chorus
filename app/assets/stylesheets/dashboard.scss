@@ -97,41 +97,69 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
     }
 
     &.dashboard_recent_workfiles {
-        ul li {
-            div {
-                display: inline-block;
+        #recent_workfiles_main_content {
+            min-height: 140px;
+
+            ul li {
                 div {
-                    display: block;
+                    display: inline-block;
+                    div {
+                        display: block;
+                    }
+                }
+
+                .file_name {
+                    padding: 3px 0 0 10px;
+                    width: 350px;
+                }
+
+                .workfile_link {
+                    @include font-primary-link;
+                    max-width: 100%;
+                    padding: 0 0 3px 0;
+                }
+
+                .workspace_image {
+                    vertical-align: bottom;
+                    width: 20px;
+                    padding-right: 10px;
+                }
+
+                .workspace_link {
+                    @include font-secondary-link;
+                }
+
+                .time_edited {
+                    float: right;
+                    padding-right: 200px;
+                    vertical-align: top;
+                    padding-top: 15px;
+                    @include secondary-text-small;
                 }
             }
+        }
 
-            .file_name {
-                padding: 3px 0 0 10px;
-                width: 350px;
+        #recent_workfiles_configuration {
+            display:none;
+
+            .mask {
+                position: absolute;
+                top: -10px;
+                left: -10px;
+                background-color: rgba(0,0,0,.75);
+                padding-bottom: 2px;
+                padding-right: 20px;
+                width: 100%;
             }
 
-            .workfile_link {
-                @include font-primary-link;
-                max-width: 100%;
-                padding: 0 0 3px 0;
+            .config_content {
+                background-color: white;
+                margin: 10px;
+                padding: 10px;
             }
 
-            .workspace_image {
-                vertical-align: bottom;
-                width: 20px;
-                padding-right: 10px;
-            }
-
-            .workspace_link {
-                @include font-secondary-link;
-            }
-
-            .time_edited {
-                float: right;
-                padding-right: 200px;
-                vertical-align: top;
+            .button_row {
                 padding-top: 15px;
-                @include secondary-text-small;
             }
         }
     }
@@ -149,21 +177,33 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
     }
 }
 
-.dashboard_sub_header {
+.module_sub_header {
+    padding-bottom: 7px;
+}
+
+.dashboard_sub_header, .dashboard_module {
     .right {
         float: right;
         .button {
             background-color: $shaded-background-color;
             display: inline-block;
-
-            $height: 28px;
-            width: 40px;
-            @include panel-button($height);
+            cursor: pointer;
 
             i {
                 color: $color-text3;
                 font-size: 14px;
             }
+        }
+
+        .configure {
+            $height: 28px;
+            width: 40px;
+            @include panel-button($height);
+        }
+
+        .clear_list {
+            width: 80px;
+            @include panel-button(28px);
         }
     }
 }

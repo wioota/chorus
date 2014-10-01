@@ -7,7 +7,7 @@ class DashboardConfig
   end
 
   def dashboard_items
-    items = user.dashboard_items.order(:location).map &:name
+    items = user.dashboard_items.where('location > -1').order(:location).map &:name
 
     if items.empty?
       items = DashboardItem::DEFAULT_MODULES
@@ -21,9 +21,19 @@ class DashboardConfig
 
     User.transaction do
       user.dashboard_items.destroy_all
+      available_modules = DashboardItem::ALLOWED_MODULES - modules
       modules.each_with_index do |name, i|
         user.dashboard_items.create!(:name => name, :location => i)
       end
+      available_modules.each_with_index do |name|
+        user.dashboard_items.create!(:name => name, :location => -1)
+      end
+    end
+  end
+
+  def set_options(module_name, option_string)
+    User.transaction do
+      user.dashboard_items.where(:name => module_name).update_all(:options => option_string)
     end
   end
 end
