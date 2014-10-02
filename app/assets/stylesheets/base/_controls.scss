@@ -1,3 +1,11 @@
+@mixin vertical-align {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
 .popup .form_controls {
     height: 50px;
     background-color: $dialog-header-background;
@@ -5,10 +13,7 @@
 
     .links,
     button {
-
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
+         @include vertical-align;
     }
 
     .links { margin-left: 14px; float: left; }
