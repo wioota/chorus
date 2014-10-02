@@ -28,12 +28,12 @@ chorus.views.ProjectListHeader = chorus.views.Base.extend({
 
         this.filterClass = e.target.classList[0];
         if(this.mostActive) {
-            if(this.filterClass == 'members_only' || this.filterClass == 'all') {
+            if(this.filterClass === 'members_only' || this.filterClass === 'all') {
                 this.list.fillOutContent('', this.filterClass);
             }
         }
         else {
-            if(this.filterClass == 'most_active') {
+            if(this.filterClass === 'most_active') {
                 this.list.fillOutContent('most_active', 'most_active');
             }
             else {
