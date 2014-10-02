@@ -1,12 +1,22 @@
 chorus.views.DashboardProjectList = chorus.views.Base.extend({
     constructorName: "DashboardProjectListView",
     templateName: "dashboard/project_list",
-    noFilter: false,
 
-    setup: function () {
+    setup: function (params) {
         this.projectCards = [];
-        this.listenTo(this.collection, 'filter:members_only', function () { this.triggerRender(false); }, this);
-        this.listenTo(this.collection, 'filter:all',          function () { this.triggerRender(true); }, this);
+        if(params.state === 'most_active') {
+            this.mostActive = true;
+            this.noFilter = true;
+        }
+        else {
+            params.mostActive = false;
+            if(this.state === 'all') {
+                this.noFilter = true;
+            }
+            else {
+                this.noFilter = false;
+            }
+        }
     },
 
     preRender: function () {

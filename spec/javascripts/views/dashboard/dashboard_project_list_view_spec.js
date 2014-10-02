@@ -95,6 +95,7 @@ describe("chorus.views.DashboardProjectList", function() {
             });
         });
 
+        /*
         describe("filtering", function () {
             context("when filter:members_only is triggered on the collection", function () {
                 beforeEach(function () {
@@ -126,5 +127,6 @@ describe("chorus.views.DashboardProjectList", function() {
                 });
             });
         });
+        */
     });
 });
