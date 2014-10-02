@@ -1,8 +1,15 @@
 @mixin action_bar_icon($name) {
     .#{$name}.action_bar_icon {
-        background-image: url("/images/visualizations/create_icons/#{$name}_off.png");
+        background-image: url("/images/visualizations/#{$name}.png");
+        opacity: 0.6;
+        
+        &:hover {
+            opacity: .8;
+        }
+
         &.selected {
-            background-image: url("/images/visualizations/create_icons/#{$name}_on.png");
+/*             background-image: url("/images/visualizations/#{$name}.png"); */
+            opacity: 1;
         }
     }
 }
