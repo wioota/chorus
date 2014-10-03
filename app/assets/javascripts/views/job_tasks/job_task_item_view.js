@@ -8,9 +8,12 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
     },
 
     iconMap: {
-        run_work_flow: "/images/jobs/afm-task.png",
-        run_sql_workfile: "/images/workfiles/large/sql.png",
-        import_source_data: "/images/jobs/data_import.png"
+//          run_work_flow: "/images/jobs/afm-task.png",
+            run_work_flow: "/images/jobs/task-afm.svg",
+//          run_sql_workfile: "/images/workfiles/large/sql.png",
+            run_sql_workfile: "/images/jobs/task-sql.svg",
+//          import_source_data: "/images/jobs/data_import.png"
+            import_source_data: "/images/jobs/task-data_import.svg"
     },
 
     additionalContext: function () {
