@@ -9,8 +9,8 @@ class Mailer < ActionMailer::Base
 
     attachments[as_png('logo')] = logo(License.instance)
     attachments[as_png(RunWorkFlowTaskResult.name)] = File.read(Rails.root.join('public', 'images', 'workfiles', 'icon', 'afm.png'))
-    attachments[as_png(ImportSourceDataTaskResult.name)] = File.read(Rails.root.join('public', 'images', 'jobs', 'data_import.png'))
-
+    attachments[as_png(ImportSourceDataTaskResult.name)] = File.read(Rails.root.join('public', 'images', 'jobs', 'task-data_import.svg'))
+    
     safe_deliver mail(:to => user.email, :subject => event.header)
   end
 

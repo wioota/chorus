@@ -23,7 +23,7 @@ describe("chorus.views.JobItem", function () {
         });
 
         it("includes the enabled job icon", function() {
-            expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job.png");
+            expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job.svg");
         });
     });
 
@@ -51,7 +51,7 @@ describe("chorus.views.JobItem", function () {
             });
 
             it("includes the enabled job icon", function() {
-                expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job.png");
+                expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job.svg");
             });
         });
 
@@ -77,7 +77,8 @@ describe("chorus.views.JobItem", function () {
                 });
 
                 it("includes the disabled job icon", function() {
-                    expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job-disabled.png");
+//                     expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job-disabled.png");
+                    expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/job-disabled.svg");
                 });
             });
         });

@@ -38,13 +38,12 @@ chorus.views.JobItem = chorus.views.Base.extend({
     },
 
     iconUrl: function () {
-        var icon = (this.model.get('enabled') || this.model.runsOnDemand()) ? 'job.png' : 'job-disabled.png';
+        var icon = (this.model.get('enabled') || this.model.runsOnDemand()) ? 'job.svg' : 'job-disabled.svg';
         return "/images/jobs/" + icon;
     },
 
     launchLastRunJobResultDetails: function (e) {
         e && e.preventDefault();
         new chorus.dialogs.JobResultDetail({job: this.model}).launchModal();
-
     }
 });

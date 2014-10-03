@@ -72,6 +72,11 @@
         }
 
         .job_item {
+        
+            .image {
+                width: 34px;
+            }
+            
             .frequency, .next_run, .last_run {
                 display: inline-block;                
             }
