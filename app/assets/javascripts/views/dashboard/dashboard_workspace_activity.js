@@ -2,11 +2,38 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
     constructorName: "DashboardWorkspaceActivity",
     templateName:"dashboard/workspace_activity",
     entityType: "workspace_activity",
-
+    events: {
+        "change .date_group_filter": "onFilterChange"
+    },
     setup: function() {
+        this.date_options = {
+            'day_7': {
+                dateGroup: 'day',
+                dateParts: 7,
+                tickFcn: d3.time.days
+            },
+            'week_4': {
+                dateGroup: 'week',
+                dateParts: 4,
+                tickFcn: d3.time.weeks
+            },
+            'week_12': {
+                dateGroup: 'week',
+                dateParts: 12,
+                tickFcn: d3.time.weeks
+            }
+        };
+
         this.model = new chorus.models.DashboardData({});
         this.requiredResources.add(this.model);
-        this.model.urlParams = { entityType: this.entityType };
+
+        this.cur_date_opt = 'day_7';
+        this.model.urlParams = {
+            entityType: this.entityType,
+            dateGroup: 'day',
+            dateParts: 7
+        };
+        this.tickFcn = d3.time.days;
         this.model.fetch();
 
         this.vis = {
@@ -45,10 +72,8 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                                      '#FF9C1A', '#91C531', '#DC2C2C', '#666666', '#DE592C']
                     }
                 },
-                // Tooltip shown in the chart upon mouseover
-                tooltip: {
-                    // Reference to the domElement
-                    domElement: null,
+                // hovercard shown in the chart upon mouseover
+                hovercard: {
                     // Params we'll use during rendering
                     properties: {
                     }
@@ -56,29 +81,43 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             }
         };
     },
-
+    onFilterChange: function(e) {
+        e && e.preventDefault();
+        this.cur_date_opt = this.selectElement().val();
+        var opt = this.date_options[this.cur_date_opt];
+        this.model.urlParams = {
+            entityType: this.entityType,
+            dateGroup: opt.dateGroup,
+            dateParts: opt.dateParts
+        };
+        this.tickFcn = opt.tickFcn;
+        this.model.fetch();
+    },
+    selectElement: function() {
+        return this.$("select.date_group_filter");
+    },
     postRender: function() {
+        // Bind date filter selection
+        _.defer(_.bind(function () {
+            chorus.styleSelect(this.selectElement());
+        }, this));
+        this.selectElement().val(this.cur_date_opt);
+
         // Load raw data used in visualization:
-        // Our data looks like a flat array of objects. Example:
-        /*   { "data": [{
-                 "date_part": "2014-09-18 00:00:00",
-                 "workspace_id": 1,
-                 "event_count": 0
-             }, {
-                 "date_part": "2014-09-18 00:00:00",
-                 "workspace_id": 2,
-                 "event_count": 0
-             }]
-            }
-         */
+        var workspaces = this.model.get("data").workspaces;
         var data = this.vis.data = _.each(
-            this.model.get("data"),
+            this.model.get("data").events,
             function(pt) {
                 if (typeof pt.datePart === 'string' || pt.datePart instanceof String) {
                     pt.datePart = this.vis.dataSettings.date_format.parse(pt.datePart);
                 }
             },
             this);
+
+        if (data.length === 0) {
+            this.$(".chart").html("There has not been any activity to report.");
+            return;
+        }
 
         // We use "nest" to transform it into d3-style dictionary, with key: workspaceId, values: data rows having workspaceId.
         var event_counts_by_workspace_id = d3.nest()
@@ -92,8 +131,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             });
 
         // Entities in the visualization:
-        var chart = this.vis.entities.chart,
-            tooltip = this.vis.entities.tooltip;
+        var chart = this.vis.entities.chart;
 
         // Set up scaling functions and the axes
         var xScale  = d3.time.scale().range([0, chart.properties.width]),
@@ -104,7 +142,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
         var xAxis = d3.svg.axis()
                 .scale(xScale)
                 .orient("bottom")
-                .ticks(d3.time.days)
+                .ticks(this.tickFcn)
                 .tickFormat(function(d) {
                     var ts = date_format(d);
                     return (ts === today)? 'Today' : ts;
@@ -143,7 +181,6 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
         var $el = this.$(".chart");
         $el.html("").addClass("visualization");
         chart.domElement = $el;
-        tooltip.domElememt = this.$(".tooltip");
 
         var w = chart.properties.width + chart.properties.margin.left + chart.properties.margin.right;
         var h = chart.properties.height + chart.properties.margin.top + chart.properties.margin.bottom;
@@ -162,9 +199,9 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             .attr("id", "clip")
             .append("svg:rect")
             .attr("x", "0")
-            .attr("y", "0")
+            .attr("y", -chart.properties.margin.top)
             .attr("width", chart.properties.width)
-            .attr("height", chart.properties.height);
+            .attr("height", chart.properties.height + chart.properties.margin.top);
 
         canvas.selectAll(".layer")
             .data(layers)
@@ -176,21 +213,43 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                 return colorFillFcn(i);
             })
             .attr("clip-path", "url(#clip)")
-            .on('mouseover', _.bind(this.mouseover, this))
-            .on('mouseout', _.bind(this.mouseout, this));
+            .each(function(s) {
+                var wid = workspaces.map(function(e) { return e.workspaceId; }).indexOf(1*s.key);
+
+                $(this).qtip({
+                    content: {
+                        title: {
+                            text: '<a href="#workspaces/' + workspaces[wid].workspaceId + '/quickstart">' + workspaces[wid].name + '</a>',
+                            button: true
+                        },
+                        text: workspaces[wid].summary || " "
+                    },
+                    hide: {
+                        event: 'mouseout',
+                        delay: 500,
+                        fixed: true
+                    },
+                    show: {
+                        solo: true
+                    },
+                    position: {
+                        target: 'mouse',
+                        adjust: {
+                            mouse: false
+                        },
+                        at: 'topLeft',
+                        my: 'bottomCenter'
+                    },
+                    style: {
+                        classes: 'hovercard'
+                    }
+                });
+            });
 
         canvas.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + chart.properties.height + ")")
             .call(xAxis);
-    },
-
-    mouseover: function(data, index) {
-        this._log('mouseover', data.key);
-    },
-
-    mouseout: function(data, index) {
-        this._log('mouseout', data.key);
     },
 
     _log: function(type, msg) {
