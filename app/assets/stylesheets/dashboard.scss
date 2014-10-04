@@ -20,6 +20,53 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
     }
 }
 
+.hovercard {
+  width: 300px !important;
+  max-width: 300px !important;
+  min-height: 110px !important;
+
+  background: #ffffff;
+  border-radius: 2px;
+  border: 1px solid #cccccc;
+
+  box-shadow: 2px 2px 2px 0px rgba(51, 52, 55, 0.25);
+  -moz-box-shadow: 2px 2px 2px 0px rgba(51, 52, 55, 0.25);
+  -webkit-box-shadow: 2px 2px 2px 0px rgba(51, 52, 55, 0.25);
+
+  .ui-tooltip-titlebar {
+    a {
+      font: 18px source-sans-pro;
+    }
+    text-align: left;
+    background-color: #ffffff;
+    border: 0;
+    padding: 18px 20px 0 20px;
+
+    .ui-tooltip-icon {
+      border: 0;
+      background: #ffffff;
+      //color: #000000;
+      right: 5px;
+      top: 10px;
+
+      .ui-icon-close {
+        width: 15px;
+        height: 15px;
+        font: normal 15px sans-serif;
+      }
+    }
+  }
+
+  .ui-tooltip-content {
+    padding: 5px 20px 20px 20px;
+    font: 12px source-sans-pro;
+    font-weight: lighter;
+    color: #555555;
+    background-color: #ffffff;
+    border: 0;
+  }
+}
+
 .dashboard_module {
     $dashboard-module-title-height: 35px;
     $dashboard-module-padding: 10px;
