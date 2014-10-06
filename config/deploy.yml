@@ -65,7 +65,7 @@ qasmoke:
 
 branch:
   host: qabranch.alpinenow.local
-  install_path: /usr/local/chorus
+  install_path: ~/chorusrails-deploy-new
   postgres_build: 2
   kill_workers: true
   kill_alpine: true

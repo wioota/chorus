@@ -35,6 +35,15 @@
             }
         },
 
+        imageSrc: function() {
+            if (this.model.get("workfile").versionInfo) {
+                return this.model.get("workfile").versionInfo.iconUrl;
+            }
+            else {
+                return null;
+            }
+        },
+
         canBePromotedToInsight: function() {
             return this.model.canBePromotedToInsight();
         },
@@ -54,6 +63,15 @@
 
         hasCommitMessage: function() {
             return this.model.hasCommitMessage();
+        },
+
+        isWorkfileImage: function() {
+            if(this.model.get("workfile")) {
+                return this.model.get("workfile").fileType === "image";
+            }
+            else {
+                return false;
+            }
         },
 
         isPublished: function() {

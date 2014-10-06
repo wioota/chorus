@@ -24,6 +24,15 @@
                 {{/if}}
             {{/if}}
         {{/if}}
+        {{#if isWorkfileImage}}
+            {{#if imageSrc}}
+                <div>
+                    <a class="image_link dialog" href="#">
+                        <span class="image"><img src="{{imageSrc}}" /></span>
+                    </a>
+                </div>
+            {{/if}}
+        {{/if}}
         <ul class='attachments'>
         {{#eachFunctionResult attachments}}
             <li>

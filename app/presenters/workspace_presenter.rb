@@ -15,7 +15,8 @@ class WorkspacePresenter < Presenter
       :workfiles_count => model.workfiles.count,
       :insights_count => model.owned_notes.where(:insight => true).count,
       :recent_insights_count => model.owned_notes.where(:insight => true).recent.count,
-      :recent_comments_count => model.comments.recent.count
+      :recent_comments_count => model.owned_notes.recent.count,
+      :has_recent_comments => model.owned_notes.recent.count > 0
     }
 
     unless succinct?

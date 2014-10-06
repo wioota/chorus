@@ -12,7 +12,8 @@ chorus.views.Activity = chorus.views.Base.extend({
         'click a.delete_note': 'launchDeleteNoteConfirmAlert',
         'click a.delete_notification': 'launchNotificationDeleteAlert',
         'click a.edit_note': 'launchEditNoteDialog',
-        'click a.comment': 'launchCommentDialog'
+        'click a.comment': 'launchCommentDialog',
+        'click a.image_link': 'launchImageDialog'
     },
 
     subviews: {
@@ -121,6 +122,12 @@ chorus.views.Activity = chorus.views.Base.extend({
     launchCommentDialog: function(e) {
         e.preventDefault();
         var dialog = new chorus.dialogs.Comment({pageModel: this.model, eventId: this.model.id});
+        dialog.launchModal();
+    },
+
+    launchImageDialog: function(e) {
+        e.preventDefault();
+        var dialog = new chorus.dialogs.ShowImage({activity: this.model, originalModule: this.parentView.parentView});
         dialog.launchModal();
     },
 
