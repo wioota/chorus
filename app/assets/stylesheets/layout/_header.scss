@@ -141,7 +141,6 @@ $notification-token-width: $header-margin * 2;
                 }
 
                 &.advisor_now a img {
-                    max-height: $header-height / 4;
                     margin-bottom: 0px;
                     padding-right: 15px;
                 }
@@ -313,7 +312,6 @@ $notification-token-width: $header-margin * 2;
                 font-weight: $semibold;
             }
         }
-
     }
 }
 
