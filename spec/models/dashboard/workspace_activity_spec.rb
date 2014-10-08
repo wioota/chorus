@@ -31,6 +31,10 @@ describe Dashboard::WorkspaceActivity do
         ev.should have_key(:date_part)
         ev.should have_key(:rank)
 
+        @result.should have_key(:labels)
+        l = @result[:labels].first
+        l.should be_a(String)
+
         # Expect there to be (num workspaces)*(num date parts + 1) events
         r1 = @result[:events].length % @result[:workspaces].length
         r1.should eq(0)

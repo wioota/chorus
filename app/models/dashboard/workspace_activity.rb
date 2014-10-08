@@ -8,12 +8,14 @@ module Dashboard
         'day' => {
             default: 7,
             allowed: (1..31),
-            history_fcn: lambda { |d| d.days.ago.localtime.at_beginning_of_day }
+            history_fcn: lambda { |d| d.days.ago.localtime.at_beginning_of_day },
+            label_fcn: lambda { |d| d.strftime('%b %-d') }
         },
         'week' => {
             default: 4,
             allowed: (1..52),
-            history_fcn: lambda { |d| d.weeks.ago.localtime.at_beginning_of_week }
+            history_fcn: lambda { |d| d.weeks.ago.localtime.at_beginning_of_week },
+            label_fcn: lambda { |d| d.strftime('%b %-d') + ' - ' + (d + 1.week - 1.day).strftime('%b %-d') }
         }
       }
 
@@ -69,7 +71,7 @@ module Dashboard
         top_workspace_ids << w.workspace_id
       end
 
-      # Get event counts grouped by day and workspace
+      # Get event counts grouped by @date_group and workspace
       events_by_datepart_workspace = Events::Base
         .group(:workspace_id, "date_trunc('" + @date_group + "', created_at)")
         .where('workspace_id IN (:workspace_ids)',
@@ -79,10 +81,19 @@ module Dashboard
                :start_date => @start_date)
       .count
 
-      # Fill in gaps
+      # Fill in gaps and construct axis labels
+      labels = []
       (0..@date_parts).each do |d|
-        fmt_d = @rules[@date_group][:history_fcn].call(d).strftime('%F 00:00:00')
+        label = @rules[@date_group][:label_fcn].call(@rules[@date_group][:history_fcn].call(d))
+        if (d == 0 && @date_group == 'day')
+          labels << 'Today'
+        elsif (d == 0 && @date_group == 'week')
+          labels << 'This week'
+        else
+          labels << label
+        end
 
+        fmt_d = @rules[@date_group][:history_fcn].call(d).strftime('%F 00:00:00')
         top_workspace_ids.each do |id|
           events_by_datepart_workspace[[id, fmt_d]] ||= 0
         end
@@ -90,18 +101,19 @@ module Dashboard
 
       # Sort by date
       events_by_datepart_workspace = events_by_datepart_workspace.sort_by { |k,v| Date.strptime(k.last, '%F %T') }
-
-      # Put into json structure expected by d3 frontend js
-      res = events_by_datepart_workspace.map do |t, v|
-        {date_part: t.last,
-         workspace_id: t.first,
-         event_count: v,
-         rank: top_workspace_ids.find_index(t.first)}
+      evs = events_by_datepart_workspace.map do |t, v|
+        {
+          date_part: t.last,
+          workspace_id: t.first,
+          event_count: v,
+          rank: top_workspace_ids.find_index(t.first)
+        }
       end
 
       return {
         workspaces: top_workspaces,
-        events: res
+        events: evs,
+        labels: labels.reverse
       }
     end
   end

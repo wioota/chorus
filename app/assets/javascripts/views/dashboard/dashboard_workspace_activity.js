@@ -58,9 +58,9 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                     properties: {
                         margin: {
                             top:    20,
-                            right:  30,
-                            bottom: 30,
-                            left:   20
+                            right:  40,
+                            bottom: 40,
+                            left:   40
                         },
                         get height () {
                             return 340 - this.margin.top - this.margin.bottom;
@@ -105,6 +105,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
 
         // Load raw data used in visualization:
         var workspaces = this.model.get("data").workspaces;
+        var tickLabels = this.model.get("data").labels;
         var data = this.vis.data = _.each(
             this.model.get("data").events,
             function(pt) {
@@ -137,15 +138,14 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
         var xScale  = d3.time.scale().range([0, chart.properties.width]),
             yScale = d3.scale.linear().range([chart.properties.height, 0]);
 
-        var date_format = d3.time.format("%b %d");
-        var today = date_format(new Date());
         var xAxis = d3.svg.axis()
                 .scale(xScale)
                 .orient("bottom")
                 .ticks(this.tickFcn)
+                .tickValues(_.uniq(_.map(data, function(d) {return d.datePart;})))
                 .tickFormat(function(d) {
-                    var ts = date_format(d);
-                    return (ts === today)? 'Today' : ts;
+                    var ind = Math.floor((tickLabels.length - 1)*xScale(d)/chart.properties.width);
+                    return tickLabels[ind];
                 });
 
         // Our chart will contain a "stack layout": https://github.com/mbostock/d3/wiki/Stack-Layout
@@ -249,9 +249,36 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
         canvas.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + chart.properties.height + ")")
-            .call(xAxis);
+            .call(xAxis)
+            .selectAll("text")
+            .call(this.wrap, chart.properties.width / (tickLabels.length + 4));
     },
+    wrap: function (text, width) {
+        text.each(function() {
+            var text = d3.select(this),
+                words = text.text().split(/\s+/).reverse(),
+                word,
+                line = [],
+                lineNumber = 0,
+                lineHeight = 1.1, // ems
+                y = text.attr("y"),
+                dy = parseFloat(text.attr("dy")),
+                tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+            word = words.pop();
+            while (word) {
+                line.push(word);
+                tspan.text(line.join(" "));
+                if (tspan.node().getComputedTextLength() > width) {
+                    line.pop();
+                    tspan.text(line.join(" "));
+                    line = [word];
+                    tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                }
 
+                word = words.pop();
+            }
+        });
+    },
     _log: function(type, msg) {
         chorus.isDevMode() && chorus.toast("=> " + type + ": " + msg, { skipTranslation: true });
     }
