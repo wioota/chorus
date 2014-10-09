@@ -24,17 +24,28 @@ $card-border-radius: 3px;
             width: 308px
         }
 
-        @media (min-width: 1025px) and (max-width: 1750px) {
-            width: 23.75%;
+        @media (min-width: 1025px) and (max-width: 1650px) {
+            width: 23.7555%;
             min-width: 20%;
         }
 
-        @media (min-width: 1751px) {
+        @media (min-width: 1651px) {
             width: 19.0%;
             min-width: 17%;
             max-width: 25%;
         }
-
+        &:hover {
+            .name_row {
+                background-color: #AACCF5;
+            }
+            .metrics_row {
+                background-color: #F9FFF2;
+            }
+            .insight_row {
+             background-color: #F9FFF2;
+            }
+        }
+      
         position: relative;
         vertical-align: top;
         display: inline-block;
@@ -53,8 +64,6 @@ $card-border-radius: 3px;
             border-bottom: lightgray 1px solid;
             border-top-left-radius: $card-border-radius;
             border-top-right-radius: $card-border-radius;
-            
-            &:hover {}
         }
 
         .project_name {
@@ -99,7 +108,6 @@ $card-border-radius: 3px;
 
         .insight_row {
             padding: 10px 10px 15px 10px;
-/*             background-color: #FFFFFF; */
             color: $color-text2;
             .main_row {
                 @include dashboardcard-heading;
