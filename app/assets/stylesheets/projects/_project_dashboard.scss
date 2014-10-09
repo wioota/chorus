@@ -6,7 +6,6 @@ $card-border-radius: 3px;
     @include debugging-mixin;
     font-size: 16px;
     font-weight: $semibold;
-/*     color: $bright-grey; */
 }
 
 .project_list {
@@ -124,7 +123,6 @@ $card-border-radius: 3px;
             .has_recent_comments + .sub_row {
                 color: $color-text2;
             }
-
         }
     }
 }
