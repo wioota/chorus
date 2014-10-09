@@ -58,26 +58,26 @@ describe("chorus.views.DashboardProjectList", function() {
 
         describe("data row section", function () {
             it("displays the statistics of each workspace", function() {
-                expect(this.view.$(".data_row.first .left_side .number").eq(0).text()).toBe("1");
-                expect(this.view.$(".data_row.first .left_side .number").eq(1).text()).toBe("2");
+                expect(this.view.$(".data_row.first .left_side .number .insight_link").eq(0).text()).toBe("1");
+                expect(this.view.$(".data_row.first .left_side .number .insight_link").eq(1).text()).toBe("2");
 
                 expect(this.view.$(".data_row.first .left_side .element").eq(0).text()).toBe("Insight");
                 expect(this.view.$(".data_row.first .left_side .element").eq(1).text()).toBe("Insights");
 
-                expect(this.view.$(".data_row.first .right_side .number").eq(0).text()).toBe("1");
-                expect(this.view.$(".data_row.first .right_side .number").eq(1).text()).toBe("2");
+                expect(this.view.$(".data_row.first .right_side .number .workfile_link").eq(0).text()).toBe("1");
+                expect(this.view.$(".data_row.first .right_side .number .workfile_link").eq(1).text()).toBe("2");
 
                 expect(this.view.$(".data_row.first .right_side .element").eq(0).text()).toBe("Workfile");
                 expect(this.view.$(".data_row.first .right_side .element").eq(1).text()).toBe("Workfiles");
 
-                expect(this.view.$(".data_row.last .left_side .number").eq(0).text()).toBe("1");
-                expect(this.view.$(".data_row.last .left_side .number").eq(1).text()).toBe("2");
+                expect(this.view.$(".data_row.last .left_side .number .dataset_list").eq(0).text()).toBe("1");
+                expect(this.view.$(".data_row.last .left_side .number .dataset_list").eq(1).text()).toBe("2");
 
                 expect(this.view.$(".data_row.last .left_side .element").eq(0).text()).toBe("Dataset");
                 expect(this.view.$(".data_row.last .left_side .element").eq(1).text()).toBe("Datasets");
 
-                expect(this.view.$(".data_row.last .right_side .number").eq(0).text()).toBe("1");
-                expect(this.view.$(".data_row.last .right_side .number").eq(1).text()).toBe("2");
+                expect(this.view.$(".data_row.last .right_side .number .member_list").eq(0).text()).toBe("1");
+                expect(this.view.$(".data_row.last .right_side .number .member_list").eq(1).text()).toBe("2");
 
                 expect(this.view.$(".data_row.last .right_side .element").eq(0).text()).toBe("Member");
                 expect(this.view.$(".data_row.last .right_side .element").eq(1).text()).toBe("Members");
