@@ -49,7 +49,7 @@ chorus.views.ProjectCard = chorus.views.Base.extend({
             return { left: 0, top: top };
         };
 
-        var li = this.$(".insight_zone");
+        var li = this.$(".insight_row");
         li.find(".has_recent_comments").qtip({
             content: el,
             show: {
