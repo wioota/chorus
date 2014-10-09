@@ -86,12 +86,12 @@ describe("chorus.views.DashboardProjectList", function() {
 
         describe("latest insight section", function () {
             it("shows the counts for latest comments and insights", function () {
-                expect(this.view.$(".insight_zone .main_row").eq(0).text().trim()).toBe("1 Comment and 1 Insight");
-                expect(this.view.$(".insight_zone .main_row").eq(1).text().trim()).toBe("2 Comments and 2 Insights");
+                expect(this.view.$(".insight_row .main_row").eq(0).text().trim()).toBe("1 Comment and 1 Insight");
+                expect(this.view.$(".insight_row .main_row").eq(1).text().trim()).toBe("2 Comments and 2 Insights");
             });
 
             it("shows the counts for latest comments and insights", function () {
-                expect(this.view.$(".insight_zone .sub_row").eq(0).text().trim()).toBe("in the last 7 days");
+                expect(this.view.$(".insight_row .sub_row").eq(0).text().trim()).toBe("in the last 7 days");
             });
         });
 
