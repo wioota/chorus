@@ -35,7 +35,8 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
 
   .ui-tooltip-titlebar {
     a {
-      font: 18px source-sans-pro;
+      font-size: 18px;
+      font-family: "Source Sans Pro",Helvetica,Arial,Verdana,sans-serif;
     }
     text-align: left;
     background-color: #ffffff;
@@ -45,7 +46,6 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
     .ui-tooltip-icon {
       border: 0;
       background: #ffffff;
-      //color: #000000;
       right: 5px;
       top: 10px;
 
@@ -59,7 +59,8 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
 
   .ui-tooltip-content {
     padding: 5px 20px 20px 20px;
-    font: 12px source-sans-pro;
+    font-size: 12px;
+    font-family: "Source Sans Pro",Helvetica,Arial,Verdana,sans-serif;
     font-weight: lighter;
     color: #555555;
     background-color: #ffffff;
