@@ -34,15 +34,16 @@ $card-border-radius: 3px;
             min-width: 17%;
             max-width: 25%;
         }
+
         &:hover {
             .name_row {
                 background-color: #AACCF5;
             }
             .metrics_row {
-                background-color: #F9FFF2;
+                background-color: #FBFAF7;
             }
             .insight_row {
-             background-color: #F9FFF2;
+                background-color: #FBFAF7;
             }
         }
       
