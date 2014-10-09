@@ -50,15 +50,17 @@ module Dashboard
       # Get the top workspace ids since start_date
       top_workspaces = []
       top_workspace_ids = []
+      created_at_adjusted = "(date_trunc('day', events.created_at at time zone 'UTC') at time zone '#{Time.now.zone}')"
+
       Events::Base
         .select('workspace_id, workspaces.name, ' +
                 'workspaces.summary, count(*) as event_count')
         .joins(:workspace)
         .group('workspace_id, workspaces.name, workspaces.summary')
         .where('workspace_id IS NOT NULL')
-        .where('events.created_at >= :start_date ' +
-               'and events.created_at < date_trunc(\'day\', DATE \'tomorrow\')',
-               :start_date => @start_date)
+        .where("#{created_at_adjusted} >= :start_date and #{created_at_adjusted} <= :end_date",
+               :start_date => @start_date,
+               :end_date => Time.now)
         .order('event_count desc')
         .limit(@num_workspaces)
       .each do |w|
@@ -73,12 +75,12 @@ module Dashboard
 
       # Get event counts grouped by @date_group and workspace
       events_by_datepart_workspace = Events::Base
-        .group(:workspace_id, "date_trunc('" + @date_group + "', created_at)")
+        .group(:workspace_id, "(date_trunc('#{@date_group}', #{created_at_adjusted}))")
         .where('workspace_id IN (:workspace_ids)',
                :workspace_ids => top_workspace_ids)
-        .where('created_at >= :start_date ' +
-               'and events.created_at < date_trunc(\'day\', DATE \'tomorrow\')',
-               :start_date => @start_date)
+        .where("#{created_at_adjusted} >= :start_date and #{created_at_adjusted} <= :end_date",
+               :start_date => @start_date,
+               :end_date => Time.now)
       .count
 
       # Fill in gaps and construct axis labels
@@ -103,7 +105,7 @@ module Dashboard
       events_by_datepart_workspace = events_by_datepart_workspace.sort_by { |k,v| Date.strptime(k.last, '%F %T') }
       evs = events_by_datepart_workspace.map do |t, v|
         {
-          date_part: t.last,
+          date_part: t.last[0..."YYYY-MM-DD".length],
           workspace_id: t.first,
           event_count: v,
           rank: top_workspace_ids.find_index(t.first)

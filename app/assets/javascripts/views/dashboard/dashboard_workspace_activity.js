@@ -39,7 +39,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
         this.vis = {
             // Properties about data provided by server
             dataSettings: {
-                date_format: d3.time.format("%Y-%m-%d %H:%M:%S") // d3.time.format.iso
+                date_format: d3.time.format("%Y-%m-%d") // d3.time.format.iso
             },
 
             // Data to be rendered.
