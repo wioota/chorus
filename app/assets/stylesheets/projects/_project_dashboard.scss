@@ -2,7 +2,7 @@
 
 $card-border-radius: 3px;
 
-@mixin dashboard-section-heading {
+@mixin dashboardcard-heading {
     @include debugging-mixin;
     font-size: 16px;
     font-weight: $semibold;
@@ -54,8 +54,7 @@ $card-border-radius: 3px;
             border-top-left-radius: $card-border-radius;
             border-top-right-radius: $card-border-radius;
             
-            &:hover {
-            }
+            &:hover {}
         }
 
         .project_name {
@@ -81,7 +80,7 @@ $card-border-radius: 3px;
             }
             .number {
                 a {
-                    @include dashboard-section-heading;
+                    @include dashboardcard-heading;
                 }
             }
             .element {
@@ -100,14 +99,23 @@ $card-border-radius: 3px;
 
         .insight_row {
             padding: 10px 10px 15px 10px;
-            background-color: #FFFFFF;
+/*             background-color: #FFFFFF; */
+            color: $color-text2;
             .main_row {
-                @include dashboard-section-heading;
-                
+                @include dashboardcard-heading;
+            }
+            .no_comments_or_anything {
+                font-size: 14px;
+                font-weight: normal;
+                color: $color-text4;
             }
             .sub_row {
                 @include secondary-text-small;
             }
+            .has_recent_comments + .sub_row {
+                color: $color-text2;
+            }
+
         }
     }
 }
