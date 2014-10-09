@@ -3,6 +3,7 @@
         <span title="{{name}}">{{name}}</span>
     </a>
 </div>
+
 <div class="metrics_row">
     <div class="data_row first">
         <div class="left_side">
@@ -33,7 +34,6 @@
         {{else}}
             no_comments_or_anything
         {{/if}}
-        
         ">
         {{recentCommentsCount}} {{pluralize recentCommentsCount 'dashboard.project_card_list.comment'}} {{t 'dashboard.project_card_list.and'}} {{recentInsightsCount}} {{pluralize recentInsightsCount 'dashboard.project_card_list.insight'}}
     </div>
