@@ -215,14 +215,15 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             .attr("clip-path", "url(#clip)")
             .each(function(s) {
                 var wid = workspaces.map(function(e) { return e.workspaceId; }).indexOf(1*s.key);
-
+                var hovercard_text = workspaces[wid].summary || " ";
+                hovercard_text += '<div class="footer"><p>Activity Metric: ' + workspaces[wid].eventCount + '</p></div>';
                 $(this).qtip({
                     content: {
                         title: {
                             text: '<a href="#workspaces/' + workspaces[wid].workspaceId + '/quickstart">' + workspaces[wid].name + '</a>',
                             button: true
                         },
-                        text: workspaces[wid].summary || " "
+                        text: hovercard_text
                     },
                     hide: {
                         event: 'mouseout',
