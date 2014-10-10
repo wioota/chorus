@@ -1,7 +1,27 @@
-<div class='name_row'>
-    <a class="project_name" href="{{showUrl}}">
-        <span title="{{name}}">{{name}}</span>
-    </a>
+<div class="name_row">
+
+    <div class="layer_name">
+        <a class="project_name" href="{{showUrl}}"><span title="{{name}}">{{name}}</span></a>
+    </div>
+    
+    {{#unless limitMilestones}}
+    
+        {{#if hasMilestones}}
+        <!-- Only display if there is some sort of milestone progress -->
+        <div class="layer_ambient_progress">
+
+            <span class="progress_label"
+                title="{{milestoneCompletedCount}} of {{milestoneCount}} {{pluralize milestoneCount 'dashboard.project_card_list.milestone'}} {{dashboard.project_card_list.milestone_completed}}">
+                {{t 'workspace.project.progress.label'}}
+                <a href="{{milestonesUrl}}">{{milestoneCompletedCount}}/{{milestoneCount}}</a>
+            </span>
+            <div class="progress_bar card_{{projectStatus}}" style="width:{{milestoneProgress}}%;"></div>
+        </div>
+        {{/if}}
+    
+    {{/unless}}
+
+    
 </div>
 
 <div class="metrics_row">

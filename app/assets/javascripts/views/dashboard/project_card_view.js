@@ -88,7 +88,8 @@ chorus.views.ProjectCard = chorus.views.Base.extend({
             workfilesUrl: this.model.workfilesUrl(),
             datasetsUrl: this.model.datasetsUrl(),
             latestInsight: this.model.latestInsight() && new chorus.presenters.Activity(this.model.latestInsight()),
-            allInsightsRoute: this.model.showUrl() + '?filter=insights'
+            allInsightsRoute: this.model.showUrl() + '?filter=insights',
+            milestoneProgress: this.model.milestoneProgress()
         };
     },
 

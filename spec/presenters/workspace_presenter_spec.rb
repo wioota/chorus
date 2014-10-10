@@ -155,6 +155,7 @@ describe WorkspacePresenter, :type => :view do
             :recent_insights_count,
             :recent_comments_count,
             :has_recent_comments,
+            :has_milestones,
             :owner,
             :is_project,
             :is_member,
