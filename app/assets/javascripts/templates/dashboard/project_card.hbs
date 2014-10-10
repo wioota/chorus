@@ -11,14 +11,13 @@
         <div class="layer_ambient_progress">
 
             <span class="progress_label"
-                title="{{milestoneCompletedCount}} of {{milestoneCount}} {{pluralize milestoneCount 'dashboard.project_card_list.milestone'}} {{dashboard.project_card_list.milestone_completed}}">
-                {{t 'workspace.project.progress.label'}}
-                <a href="{{milestonesUrl}}">{{milestoneCompletedCount}}/{{milestoneCount}}</a>
+                title="{{milestoneCompletedCount}} of {{milestoneCount}} {{pluralize milestoneCount 'dashboard.project_card_list.milestone'}} {{t 'dashboard.project_card_list.milestone_completed'}}">
+                <a href="{{milestonesUrl}}"> {{t 'workspace.project.progress.label'}} {{milestoneCompletedCount}}/{{milestoneCount}}</a>
             </span>
             <div class="progress_bar card_{{projectStatus}}" style="width:{{milestoneProgress}}%;"></div>
         </div>
         {{/if}}
-    
+
     {{/unless}}
 
     

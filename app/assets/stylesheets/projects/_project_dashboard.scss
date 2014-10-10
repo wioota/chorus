@@ -36,13 +36,17 @@ $card-border-radius: 3px;
 
         &:hover {
             .name_row {
-                background-color: #AACCF5;
+                background-color: #B0D0F5;
+                
+                .progress_label {
+                    display: inline-block;
+                }
             }
             .metrics_row {
-                background-color: #FBFAF9;
+                background-color: #FBFBF9;
             }
             .insight_row {
-                background-color: #FBFAF9;
+                background-color: #FBFBF9;
             }
         }
       
@@ -60,8 +64,6 @@ $card-border-radius: 3px;
 
         .name_row {
             height: 45px;
-            
-/*             padding: 10px 10px 13px 10px; */
             background-color: $greyish-blue;
             border-bottom: lightgray 1px solid;
             border-top-left-radius: $card-border-radius;
@@ -69,25 +71,23 @@ $card-border-radius: 3px;
         }
 
         .layer_name {
-            z-index: 999;      
-/*             position: relative; */
+            z-index: 999;
             position: absolute;
             top: 10px;
             left: 10px;
         }
         
         .project_name {
+            display: block;
             font-size: 18px;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
-            display: block;
         }
 
-
         .layer_ambient_progress {
-            z-index: 1;
             position: relative;
+            z-index: 1;
             top: 0px;
             left: 0px;
             width: 100%;
@@ -96,29 +96,37 @@ $card-border-radius: 3px;
             .progress_bar {
                 display: inline-block;
                 height: 100%;
+                min-width: 1px;
                 background-color: rgba(200,240,240,0.6);
 
-                &.card_on_track          { background-color: rgba($ok,0.15); }
-                &.card_needs_attention   { background-color: rgba($needs-attention,0.15); }
-                &.card_at_risk           { background-color: rgba($alert,0.15); }
+                &.card_on_track,
+                &.card_needs_attention,
+                &.card_at_risk  { 
+                
+                    background-color: rgba(100,100,170,0.15);
+                
+                    &:hover {
+                        background-color: rgba(100,100,170,0.3);
+                    }
+                }
+
+
             }
         }
    
 
         .progress_label {
+            display: none;
             position: relative;
             z-index: 10;
             right: 10px;
             top: 25px;
             @include secondary-text-small;
-            font-size: 11px;
-            color: #a0a0a0;
-            
             float: right;
-                cursor: pointer;
+            cursor: pointer;
             
             a {
-                @include secondary-text-small;            
+                @include secondary-text-small;
             }
         }
 
