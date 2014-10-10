@@ -142,7 +142,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                 .scale(xScale)
                 .orient("bottom")
                 .ticks(this.tickFcn)
-                .tickValues(_.uniq(_.map(data, function(d) {return d.datePart;})))
+                .tickValues(_.uniq(_.map(data, function(d) {return d.datePart;}), function (d) { return JSON.stringify(d); }))
                 .tickFormat(function(d) {
                     var ind = Math.floor((tickLabels.length - 1)*xScale(d)/chart.properties.width);
                     return tickLabels[ind];
