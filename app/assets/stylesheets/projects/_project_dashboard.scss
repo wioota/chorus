@@ -39,10 +39,10 @@ $card-border-radius: 3px;
                 background-color: #AACCF5;
             }
             .metrics_row {
-                background-color: #FBFAF7;
+                background-color: #FBFAF9;
             }
             .insight_row {
-                background-color: #FBFAF7;
+                background-color: #FBFAF9;
             }
         }
       
@@ -98,9 +98,9 @@ $card-border-radius: 3px;
                 height: 100%;
                 background-color: rgba(200,240,240,0.6);
 
-                &.card_on_track          { background-color: $ok; }
-                &.card_needs_attention   { background-color: $needs-attention; }
-                &.card_at_risk           { background-color: $alert; }
+                &.card_on_track          { background-color: rgba($ok,0.15); }
+                &.card_needs_attention   { background-color: rgba($needs-attention,0.15); }
+                &.card_at_risk           { background-color: rgba($alert,0.15); }
             }
         }
    
@@ -157,6 +157,7 @@ $card-border-radius: 3px;
         }
 
         .insight_row {
+            height: 35px;
             padding: 10px 10px 15px 10px;
             color: $color-text2;
             .main_row {
