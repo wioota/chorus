@@ -104,10 +104,12 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
         this.selectElement().val(this.cur_date_opt);
 
         // Load raw data used in visualization:
-        var workspaces = this.model.get("data").workspaces;
-        var tickLabels = this.model.get("data").labels;
+        var fetchedData = this.model.get("data");
+
+        var workspaces = fetchedData.workspaces;
+        var tickLabels = fetchedData.labels;
         var data = this.vis.data = _.each(
-            this.model.get("data").events,
+            fetchedData.events,
             function(pt) {
                 if (typeof pt.datePart === 'string' || pt.datePart instanceof String) {
                     pt.datePart = this.vis.dataSettings.date_format.parse(pt.datePart);
@@ -115,7 +117,8 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             },
             this);
 
-        if (data.length === 0) {
+        if (fetchedData === null || workspaces === null || tickLabels === null || data === null ||
+            workspaces.length === 0 || tickLabels.length === 0 || data.length === 0) {
             this.$(".chart").html("There has not been any activity to report.");
             return;
         }
