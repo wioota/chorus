@@ -379,13 +379,13 @@ describe ChorusConfig do
 
       it 'returns the hdfs versions' do
         config.hdfs_versions.should =~ [
-            'Apache Hadoop 1.2',
-            'Apache Hadoop 2.5',
+            #'Apache Hadoop 1.2',
+            #'Apache Hadoop 2.5',
             'Cloudera CDH4',
             'Cloudera CDH5',
             'Hortonworks HDP 2.1',
             'MapR',
-            'Pivotal HD 1.0',
+            #'Pivotal HD 1.0',
             'Pivotal HD 1.1',
             'Pivotal HD 2.0'
         ]
