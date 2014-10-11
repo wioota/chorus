@@ -15,7 +15,7 @@ chorus.dialogs.ShowImage = chorus.dialogs.Base.extend({
     setup: function(options) {
         this.activity = options.activity;
         this.originalModule = options.originalModule;
-        this.attachment = options.attachment
+        this.attachment = options.attachment;
         if(this.attachment) {
             this.title = this.attachment.name();
             this.model = new chorus.models.Attachment(this.attachment);
