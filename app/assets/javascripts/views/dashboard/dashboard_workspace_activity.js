@@ -223,8 +223,8 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             .attr("clip-path", "url(#clip)")
             .each(function(s) {
                 var wid = workspaces.map(function(e) { return e.workspaceId; }).indexOf(1*s.key);
-                var hovercard_text = workspaces[wid].summary || " ";
-                hovercard_text += '<div class="footer"><p>Activity Metric: ' + workspaces[wid].eventCount + '</p></div>';
+                var hovercard_text = workspaces[wid].summary || "";
+                hovercard_text += '<div class="activity_metric_row"><p>Activity Metric: ' + workspaces[wid].eventCount + '</p></div>';
                 $(this).qtip({
                     content: {
                         title: {
@@ -236,10 +236,18 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                     hide: {
                         event: 'mouseout',
                         delay: 500,
-                        fixed: true
+                        fixed: true,
+                        effect: {
+                            type: 'fade',
+                            length: 42
+                        }
                     },
                     show: {
-                        solo: true
+                        solo: true, 
+                        effect: {
+                            type: 'fade',
+                            length: 79
+                        }        
                     },
                     position: {
                         target: 'mouse',
@@ -250,7 +258,11 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                         my: 'bottomCenter'
                     },
                     style: {
-                        classes: 'hovercard'
+                        classes: "tooltip-white hovercard",
+                        tip: {
+                            width: 15,
+                            height: 20
+                        }
                     }
                 });
             });
