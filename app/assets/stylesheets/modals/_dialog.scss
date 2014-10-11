@@ -159,6 +159,10 @@ div.dialog {
     .content_space {
         padding: 10px;
 
+        img {
+            max-width: 1200px;
+        }
+
         .interactions_row {
             padding-left: 10px;
             a {

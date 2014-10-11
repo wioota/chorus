@@ -66,8 +66,8 @@
         },
 
         isWorkfileImage: function() {
-            if(this.model.get("workfile")) {
-                return this.model.get("workfile").fileType === "image";
+            if(this.model.workfile()) {
+                return this.model.workfile().get("fileType") === "image";
             }
             else {
                 return false;

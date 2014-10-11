@@ -5,6 +5,7 @@ chorus.dialogs.ShowImage = chorus.dialogs.Base.extend({
 
     events: {
         "click .add_note" : "launchNotesNewDialog",
+        "click .add_comment" : "launchCommentNewDialog",
         "click .copy": "launchCopyWorkfileDialog",
         "click .edit_tags": "startEditingTags",
         "click .rename": "launchRenameDialog",
@@ -14,17 +15,40 @@ chorus.dialogs.ShowImage = chorus.dialogs.Base.extend({
     setup: function(options) {
         this.activity = options.activity;
         this.originalModule = options.originalModule;
-        this.title = this.activity.get("workfile").fileName;
-        this.model = new chorus.models.Workfile(this.activity.get("workfile"));
+        this.attachment = options.attachment
+        if(this.attachment) {
+            this.title = this.attachment.name();
+            this.model = new chorus.models.Attachment(this.attachment);
+        }
+        else {
+            this.title = this.activity.get("workfile").fileName;
+            this.model = new chorus.models.Workfile(this.activity.get("workfile"));
+        }
+    },
+
+    postRender: function() {
+        this.$('.main_image').load(_.bind(function(){
+            this.centerHorizontally();
+        }, this));
     },
 
     additionalContext:function () {
+        var imageUrl;
+        var showFullOptions = true;
+        if(this.attachment) {
+            imageUrl = this.model.contentUrl();
+            showFullOptions = false;
+        }
+        else {
+            imageUrl = this.activity.get("workfile").versionInfo.contentUrl;
+        }
         return {
-            imageUrl: this.activity.get("workfile").versionInfo.contentUrl,
+            imageUrl: imageUrl,
             downloadUrl: this.model.downloadUrl(),
             workspaceIconUrl: this.model.workspace().defaultIconUrl('small'),
             workspaceShowUrl: this.model.workspace().showUrl(),
-            workspaceName: this.model.workspace().name()
+            workspaceName: this.model.workspace().name(),
+            showFullOptions: showFullOptions
         };
     },
 
@@ -60,6 +84,16 @@ chorus.dialogs.ShowImage = chorus.dialogs.Base.extend({
             entityType: "workfile",
             workspaceId: this.model.workspace().id,
             allowWorkspaceAttachments: true
+        });
+        dialog.launchNewModal();
+        this.attachCloseModalEvent();
+    },
+
+    launchCommentNewDialog: function(e) {
+        e && e.preventDefault();
+        var dialog = new chorus.dialogs.Comment({
+            pageModel: this.activity,
+            eventId: this.activity.id
         });
         dialog.launchNewModal();
         this.attachCloseModalEvent();
