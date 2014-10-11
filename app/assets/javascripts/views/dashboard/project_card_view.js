@@ -54,7 +54,11 @@ chorus.views.ProjectCard = chorus.views.Base.extend({
             content: el,
             show: {
                 event: 'mouseover',
-                solo: true
+                solo: true,
+                effect: {
+                    type: 'fade',
+                    length: 60
+                }
             },
             hide: {
                 delay: 500,

@@ -67,7 +67,8 @@ $card-border-radius: 3px;
         }
 
         .project_name {
-            font-size: 18px;
+            @include font-primary-link;
+/*             font-size: 18px; */
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
