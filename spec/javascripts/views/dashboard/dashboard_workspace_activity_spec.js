@@ -56,7 +56,7 @@ describe("chorus.views.DashboardWorkspaceActivity", function() {
             expect(this.qtip).toContainText(layer_ws.summary);
 
             // Expect workspace title to be a link to the workspace
-            expect(this.qtip).toContainHtml('<a href="#workspaces/' + layer_ws.workspaceId + '/quickstart">'  + layer_ws.name + '</a>');
+            expect(this.qtip).toContainHtml('<a href="#workspaces/' + layer_ws.workspaceId + '>'  + layer_ws.name + '</a>');
         });
     });
 
