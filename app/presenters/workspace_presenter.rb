@@ -16,7 +16,8 @@ class WorkspacePresenter < Presenter
       :insights_count => model.owned_notes.where(:insight => true).count,
       :recent_insights_count => model.owned_notes.where(:insight => true).recent.count,
       :recent_comments_count => model.owned_notes.recent.count,
-      :has_recent_comments => model.owned_notes.recent.count > 0
+      :has_recent_comments => model.owned_notes.recent.count > 0,
+      :has_milestones => model.milestones_count > 0
     }
 
     unless succinct?
