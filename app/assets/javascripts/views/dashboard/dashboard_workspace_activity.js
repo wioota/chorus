@@ -251,14 +251,14 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                         fixed: true,
                         effect: {
                             type: 'fade',
-                            length: 31
+                            length: 32
                         }
                     },
                     show: {
                         solo: true, 
                         effect: {
                             type: 'fade',
-                            length: 179
+                            length: 170
                         }        
                     },
                     position: {
