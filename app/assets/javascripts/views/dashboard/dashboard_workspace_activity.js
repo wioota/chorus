@@ -219,19 +219,33 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             .attr("clip-path", "url(#clip)")
             .each(function(s) {
                 var wid = workspaces.map(function(e) { return e.workspaceId; }).indexOf(1*s.key);
-                var hovercard_text = workspaces[wid].summary || "";
-                hovercard_text += '<div class="activity_metric_row"><p>' + t("dashboard.workspace_activity.metric") + workspaces[wid].eventCount + '</p></div>';
+                
+                var hovercard_name = workspaces[wid].name;
+                var hovercard_name_html = '<div class="name_row"><a href="#workspaces/' + workspaces[wid].workspaceId + '">' + hovercard_name + '</a></div>';
+                
+//                 var hovercard_text = workspaces[wid].summary || "";
+                var hovercard_summary = workspaces[wid].summary || "";
+                var hovercard_summary_html = '<div class="summary_row"><p>' + hovercard_summary + '</p></div>';
+                
+                var hovercard_activityMetric = workspaces[wid].eventCount;
+                var hovercard_activityMetric_html = '<div class="activity_metric_row"><p>' + t("dashboard.workspace_activity.metric") + hovercard_activityMetric + '</p></div>';
+                
+//                 hovercard_text += '<div class="activity_metric_row"><p>' + t("dashboard.workspace_activity.metric") + workspaces[wid].eventCount + '</p></div>';
+                hovercard_html = hovercard_name_html + hovercard_summary_html + hovercard_activityMetric_html;
+                
                 $(this).qtip({
                     content: {
-                        title: {
-                            text: '<a href="#workspaces/' + workspaces[wid].workspaceId + '">' + workspaces[wid].name + '</a>',
-                            button: true
-                        },
-                        text: hovercard_text
+//                         title: {
+//                             text: '<a href="#workspaces/' + workspaces[wid].workspaceId + '">' + workspaces[wid].name + '</a>',
+//                             button: true
+//                         },
+//                         text: hovercard_text
+                        button: true,
+                        text: hovercard_html
                     },
                     hide: {
                         event: 'mouseout',
-                        delay: 500,
+                        delay: 400,
                         fixed: true,
                         effect: {
                             type: 'fade',
@@ -242,7 +256,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                         solo: true, 
                         effect: {
                             type: 'fade',
-                            length: 79
+                            length: 979
                         }        
                     },
                     position: {
