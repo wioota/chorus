@@ -33,7 +33,8 @@
 }
 
 .tooltip-white {
-    @include tooltip($color-text1, #FFFFFF, #CCCCCC);
+    /* @include tooltip($color-text1, #FFFFFF, #CCCCCC); */
+    @include tooltip($color-text1, #FFFFFF, $border-color);
 }
 
 .tooltip-error {
