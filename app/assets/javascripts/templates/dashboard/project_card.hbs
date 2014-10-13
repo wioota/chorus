@@ -3,8 +3,6 @@
         <a class="project_name" href="{{showUrl}}"><span title="{{name}}">{{name}}</span></a>
     </div>
 
-    {{#unless limitMilestones}}
-    
         {{#if hasMilestones}}
         <!-- Only display if there is some milestone progress -->
         <div class="layer_ambient_progress">
@@ -15,8 +13,6 @@
             <div class="progress_bar card" style="width:{{milestoneProgress}}%"></div>
         </div>
         {{/if}}
-
-    {{/unless}}
 
 </div>
 
