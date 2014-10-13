@@ -1,6 +1,14 @@
 @import "compass/utilities/general/clearfix";
+@import "compass/css3";
 
 $card-border-radius: 3px;
+$card-namelayer_background: $greyish-blue;
+$card-namelayer_background_highlight: darken($greyish-blue, 6%);
+
+$card-progressbar: rgba( desaturate( darken($greyish-blue, 10%), 7% ), 0.6);
+$card-progressbar_highlight: rgba( desaturate(darken($greyish-blue, 17%), 12%), 0.75);
+$card-progressbar_zero: rgba(#C0C0C0, 0.5);
+
 
 @mixin dashboardcard-heading {
     @include debugging-mixin;
@@ -35,26 +43,41 @@ $card-border-radius: 3px;
         }
 
         &:hover {
+            /* extended set of highlights on hover */
+            border-color: $border-color-darkest;
             .name_row {
-                background-color: #B0D0F5;
-                
+                background-color: $card-namelayer_background_highlight;
+                @include transition-duration(0.7s);
+                @include transition-timing-function(cubic-bezier(0,0,0,1));
+
                 .progress_label {
                     display: inline-block;
                 }
             }
-            .metrics_row {
-                background-color: #FBFBF9;
+
+            .layer_ambient_progress {
+
+                div[style="width:0%"] {
+                    border-color: $color-text4;
+                    background-color: transparent;
+                }
+                .card {
+                    background-color: $card-progressbar_highlight;
+                    @include transition-duration(0.8s);
+                    @include transition-timing-function(cubic-bezier(0,0,0,1));
+                }
             }
-            .insight_row {
-                background-color: #FBFBF9;
+                        
+            .metrics_row, .insight_row {
+                background-color: #FBFCF8;
             }
         }
-      
+
         position: relative;
         vertical-align: top;
         display: inline-block;
         margin: 0px 0px 10px 10px;
-        border: lightgray 1px solid;
+        border: $border-canon;
         -moz-border-radius: $card-border-radius;
         border-radius: $card-border-radius;
         
@@ -65,7 +88,6 @@ $card-border-radius: 3px;
         .name_row {
             height: 45px;
             background-color: $greyish-blue;
-            border-bottom: lightgray 1px solid;
             border-top-left-radius: $card-border-radius;
             border-top-right-radius: $card-border-radius;
         }
@@ -96,33 +118,34 @@ $card-border-radius: 3px;
             .progress_bar {
                 display: inline-block;
                 height: 100%;
-                min-width: 1px;
-                background-color: rgba(200,240,240,0.6);
+            }
 
-                &.card_on_track,
-                &.card_needs_attention,
-                &.card_at_risk  { 
-                
-                    background-color: rgba(100,100,170,0.15);
-                
-                    &:hover {
-                        background-color: rgba(100,100,170,0.3);
-                    }
-                }
-
-
+            /* special case  of progress bar: when there are milestones but 0% progress */
+            div.progress_bar[style="width:0%"] {
+                border-right: 5px dotted $card-progressbar_zero;
+                background-color: transparent;
+            }
+            
+            /* normal cases of progress bar: progress > 0% */
+            .card {
+                background-color: $card-progressbar;
+            }
+            
+            &.card_on_track,
+            &.card_needs_attention,
+            &.card_at_risk  { 
+                background-color: rgba(100,100,170,0.15);
             }
         }
    
-
         .progress_label {
             display: none;
             position: relative;
+            float: right;
             z-index: 10;
             right: 10px;
             top: 25px;
             @include secondary-text-small;
-            float: right;
             cursor: pointer;
             
             a {
@@ -130,11 +153,9 @@ $card-border-radius: 3px;
             }
         }
 
-
-
         .metrics_row {
             padding: 10px 10px 15px 10px;            
-            border-bottom: lightgray 1px solid;
+            border-bottom: $light-gray 1px solid;
         }
 
         .data_row {
@@ -155,30 +176,28 @@ $card-border-radius: 3px;
                 line-height: 14px;
                 margin-bottom: 6px;
             }
+        }
 
-            &.last {}
-        }
-        
-        a.all_insights {
-            display: block;
-            margin-top: 4px;
-        }
 
         .insight_row {
             height: 35px;
             padding: 10px 10px 15px 10px;
             color: $color-text2;
+            
             .main_row {
                 @include dashboardcard-heading;
             }
+            
             .no_comments_or_anything {
                 font-size: 14px;
                 font-weight: normal;
                 color: $color-text4;
             }
+            
             .sub_row {
                 @include secondary-text-small;
             }
+            
             .has_recent_comments + .sub_row {
                 color: $color-text2;
             }
