@@ -125,6 +125,9 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
 
         if (fetchedData === null || workspaces === null || tickLabels === null || data === null ||
             workspaces.length === 0 || tickLabels.length === 0 || data.length === 0) {
+
+            this.$(".chart").html( t("dashboard.workspace_activity.no_activity.text") );
+
             return;
         }
 
@@ -224,11 +227,11 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             .each(function(s) {
                 var wid = workspaces.map(function(e) { return e.workspaceId; }).indexOf(1*s.key);
                 var hovercard_text = workspaces[wid].summary || "";
-                hovercard_text += '<div class="activity_metric_row"><p>Activity Metric: ' + workspaces[wid].eventCount + '</p></div>';
+                hovercard_text += '<div class="activity_metric_row"><p>' + t("dashboard.workspace_activity.metric") + workspaces[wid].eventCount + '</p></div>';
                 $(this).qtip({
                     content: {
                         title: {
-                            text: '<a href="#workspaces/' + workspaces[wid].workspaceId + '/quickstart">' + workspaces[wid].name + '</a>',
+                            text: '<a href="#workspaces/' + workspaces[wid].workspaceId + '">' + workspaces[wid].name + '</a>',
                             button: true
                         },
                         text: hovercard_text
@@ -239,7 +242,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                         fixed: true,
                         effect: {
                             type: 'fade',
-                            length: 42
+                            length: 31
                         }
                     },
                     show: {
@@ -260,8 +263,8 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                     style: {
                         classes: "tooltip-white hovercard",
                         tip: {
-                            width: 15,
-                            height: 20
+                            width: 10,
+                            height: 15
                         }
                     }
                 });
