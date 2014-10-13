@@ -54,11 +54,7 @@ chorus.views.ProjectCard = chorus.views.Base.extend({
             content: el,
             show: {
                 event: 'mouseover',
-                solo: true,
-                effect: {
-                    type: 'fade',
-                    length: 60
-                }
+                solo: true
             },
             hide: {
                 delay: 500,
@@ -93,8 +89,7 @@ chorus.views.ProjectCard = chorus.views.Base.extend({
             datasetsUrl: this.model.datasetsUrl(),
             latestInsight: this.model.latestInsight() && new chorus.presenters.Activity(this.model.latestInsight()),
             allInsightsRoute: this.model.showUrl() + '?filter=insights',
-            milestoneProgress: this.model.milestoneProgress(),
-            milestonesUrl: this.model.milestonesUrl()
+            milestoneProgress: this.model.milestoneProgress()
         };
     },
 
@@ -125,10 +120,5 @@ chorus.views.ProjectCard = chorus.views.Base.extend({
                 }
             }
         });
-    },
-
-    milestonesUrl: function () {
-        return this.showUrl() + "/milestones";
     }
-    
 });
