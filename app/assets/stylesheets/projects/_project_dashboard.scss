@@ -45,11 +45,9 @@ $card-progressbar_zero: rgba(#C0C0C0, 0.5);
         &:hover {
             /* extended set of highlights on hover */
             border-color: $border-color-darkest;
-            .name_row {
+            .name_row {     
                 background-color: $card-namelayer_background_highlight;
-                @include transition-duration(0.7s);
-                @include transition-timing-function(cubic-bezier(0,0,0,1));
-
+                
                 .progress_label {
                     display: inline-block;
                 }
@@ -58,18 +56,24 @@ $card-progressbar_zero: rgba(#C0C0C0, 0.5);
             .layer_ambient_progress {
 
                 div[style="width:0%"] {
-                    border-color: $color-text4;
+                    border-color: $card-progressbar_highlight;
                     background-color: transparent;
                 }
                 .card {
                     background-color: $card-progressbar_highlight;
-                    @include transition-duration(0.8s);
-                    @include transition-timing-function(cubic-bezier(0,0,0,1));
                 }
             }
                         
             .metrics_row, .insight_row {
                 background-color: #F0F5FF;
+            }
+            
+            .name_row *,
+            .layer_ambient_progress .card,
+            .metrics_row,
+            .insight_row {
+                @include transition-duration(1s);
+                @include transition-timing-function(cubic-bezier(0,0,0,1));
             }
         }
 
@@ -80,23 +84,28 @@ $card-progressbar_zero: rgba(#C0C0C0, 0.5);
         border: $border-canon;
         -moz-border-radius: $card-border-radius;
         border-radius: $card-border-radius;
-        
+
         li {
             display: block;
         }
 
         .name_row {
-            height: 45px;
+            height: 47px;
             background-color: $greyish-blue;
             border-top-left-radius: $card-border-radius;
+            -moz-border-radius-topleft: $card-border-radius;
             border-top-right-radius: $card-border-radius;
+            -moz-border-radius-topleft: $card-border-radius;
+            overflow: hidden;
         }
 
         .layer_name {
-            z-index: 999;
             position: absolute;
-            top: 10px;
+            z-index: 999;
+            top: 9px;
             left: 10px;
+            /* nearly the whole width in order to effect ellipsis */
+            width: 95%;
         }
         
         .project_name {
@@ -116,13 +125,12 @@ $card-progressbar_zero: rgba(#C0C0C0, 0.5);
             height: 100%;
             
             .progress_bar {
-                display: inline-block;
                 height: 100%;
             }
 
             /* special case  of progress bar: when there are milestones but 0% progress */
             div.progress_bar[style="width:0%"] {
-                border-right: 5px dotted $card-progressbar_zero;
+                border-right: 5px dotted $card-progressbar;
                 background-color: transparent;
             }
             
@@ -134,7 +142,7 @@ $card-progressbar_zero: rgba(#C0C0C0, 0.5);
             &.card_on_track,
             &.card_needs_attention,
             &.card_at_risk  { 
-                background-color: rgba(100,100,170,0.15);
+            /* background-color: rgba(100,100,170,0.15); */
             }
         }
    
@@ -144,7 +152,7 @@ $card-progressbar_zero: rgba(#C0C0C0, 0.5);
             float: right;
             z-index: 10;
             right: 10px;
-            top: 25px;
+            top: 30px;
             @include secondary-text-small;
             cursor: pointer;
             
@@ -154,7 +162,7 @@ $card-progressbar_zero: rgba(#C0C0C0, 0.5);
         }
 
         .metrics_row {
-            padding: 10px 10px 15px 10px;            
+            padding: 10px 10px 13px 10px;            
             border-bottom: $light-gray 1px solid;
         }
 
@@ -178,10 +186,9 @@ $card-progressbar_zero: rgba(#C0C0C0, 0.5);
             }
         }
 
-
         .insight_row {
             height: 35px;
-            padding: 10px 10px 15px 10px;
+            padding: 10px 10px 13px 10px;
             color: $color-text2;
             
             .main_row {
