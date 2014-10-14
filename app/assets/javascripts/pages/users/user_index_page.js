@@ -1,5 +1,6 @@
 chorus.pages.UserIndexPage = chorus.pages.Base.extend({
     constructorName: 'UserIndexPage',
+    hasSubHeader: true,
     helpId: "users",
 
     setup:function () {
@@ -47,6 +48,14 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
         this.subscribePageEvent("user:selected", this.setModel);
     },
 
+    setupSubHeader: function() {
+        var model = new chorus.models.Base({name: t("header.users_list")});
+        var subversive = chorus.views.SubHeader.extend({
+            templateName: "landingpage/sub_header",
+        });
+        this.subHeader = new subversive({model: model});
+    },
+    
     setModel:function(user) {
         this.model = user;
     },
