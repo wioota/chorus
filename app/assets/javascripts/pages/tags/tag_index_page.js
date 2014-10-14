@@ -1,7 +1,7 @@
 chorus.pages.TagIndexPage = chorus.pages.Base.extend({
     crumbs:[
-        { label:t("breadcrumbs.home"), url:"#/" },
-        { label:t("breadcrumbs.tags") }
+//         { label:t("breadcrumbs.home"), url:"#/" },
+//         { label:t("breadcrumbs.tags") }
     ],
 
     setup: function() {
