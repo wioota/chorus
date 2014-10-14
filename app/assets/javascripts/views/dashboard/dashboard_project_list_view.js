@@ -9,8 +9,8 @@ chorus.views.DashboardProjectList = chorus.views.Base.extend({
             this.noFilter = true;
         }
         else {
-            params.mostActive = false;
-            if(this.state === 'all') {
+            this.mostActive = false;
+            if(params.state === 'all') {
                 this.noFilter = true;
             }
             else {

@@ -139,8 +139,10 @@ $notification-error-light: #ffd6d6;
 $notification: $bright-turquoise;
 
 // Dimensions
+
 $sidebar-width: 265px;
 $sidebar-padding-x: 16px;
+
 $sidebar-padding-left : 15px;
 $sidebar-padding-top : 10px;
 $page-min-width : 1024px;
@@ -283,7 +285,6 @@ $action-bar-secondary-background-color: $light-blue;
     font-weight: $normal;
     color: $color-text3;
 }
-
 
 @mixin section-heading {
     @include debugging-mixin;
@@ -556,13 +557,13 @@ $action-bar-secondary-background-color: $light-blue;
 }
 
 @mixin sidebar-panel {
-
-    $border-radius: 3px;
     
     /* calc the sidebar width. sidebar-width should be the content width with right margin, not including left margin */
     $sidebar-panel-width: $sidebar-width - $page-margin-right;
 
+    $border-radius: $default-border-radius;
     margin-top: $sidebar-padding-top;
+
     width: $sidebar-panel-width;
     border: $border-canon;
     @include border-radius($border-radius);
@@ -633,7 +634,7 @@ $action-bar-secondary-background-color: $light-blue;
 
     background-color: $shaded-background-color;
     border: $border-canon;
-    @include border-radius(3px);
+    @include border-radius($default-border-radius);
 
     &:hover {
         background-color: lighten($gray, 35%);

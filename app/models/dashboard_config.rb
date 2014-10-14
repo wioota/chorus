@@ -20,13 +20,16 @@ class DashboardConfig
     raise ApiValidationError.new(:base, :ONE_OR_MORE_REQUIRED) unless modules.present?
 
     User.transaction do
-      user.dashboard_items.destroy_all
       available_modules = DashboardItem::ALLOWED_MODULES - modules
       modules.each_with_index do |name, i|
-        user.dashboard_items.create!(:name => name, :location => i)
+        option_string = user.dashboard_items.select(:options).where(:name => name).map(&:options).join(',')
+        user.dashboard_items.where(:name => name).destroy_all
+        user.dashboard_items.create!(:name => name, :location => i, :options => option_string)
       end
       available_modules.each_with_index do |name|
-        user.dashboard_items.create!(:name => name, :location => -1)
+        option_string = user.dashboard_items.select(:options).where(:name => name).map(&:options).join(',')
+        user.dashboard_items.where(:name => name).destroy_all
+        user.dashboard_items.create!(:name => name, :location => -1, :options => option_string)
       end
     end
   end
