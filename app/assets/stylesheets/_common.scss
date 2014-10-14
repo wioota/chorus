@@ -89,6 +89,11 @@ $subnav-height: 45px;
 $workspace-header-height: $subnav-height + $subheader-height + $header-height;
 $summary-line-height: 19px;
 $border-width: 1px;
+$default-border-radius: 3px;
+
+$page-margin-left: 25px;
+$page-margin-right: 25px;
+
 
 //Specials
 $border-canon: $border-width solid $border-color;
@@ -136,6 +141,7 @@ $notification: $bright-turquoise;
 // Dimensions
 $sidebar-width : 266px;
 $sidebar-padding-x : 16px;
+$sidebar-padding-left : 15px;
 $sidebar-padding-top : 10px;
 $page-min-width : 1024px;
 $padding-x : 10px;
@@ -270,6 +276,12 @@ $action-bar-secondary-background-color: $light-blue;
     font-size: 24px;
     font-weight: $semibold;
     color: black;
+}
+
+@mixin subheading-normal {
+    font-size: 20px;
+    font-weight: $normal;
+    color: $color-text3;
 }
 
 @mixin section-heading {
@@ -543,8 +555,10 @@ $action-bar-secondary-background-color: $light-blue;
 }
 
 @mixin sidebar-panel {
+
+    $border-radius: $default-border-radius;
     margin-top: $sidebar-padding-top;
-    $border-radius: 3px;
+
     $sidebar-panel-width: $sidebar-width - 16px;
     width: $sidebar-panel-width;
     border: $border-canon;
@@ -616,7 +630,7 @@ $action-bar-secondary-background-color: $light-blue;
 
     background-color: $shaded-background-color;
     border: $border-canon;
-    @include border-radius(3px);
+    @include border-radius($default-border-radius);
 
     &:hover {
         background-color: lighten($gray, 35%);
