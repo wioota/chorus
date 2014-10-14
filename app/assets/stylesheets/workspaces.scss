@@ -17,10 +17,11 @@
     background: $subheader-background-color;
     height: $subheader-height;
     line-height: $subheader-height;
-    padding-top: $header-height;
+/*     padding-top: $header-height; */
+    margin-top: $header-height;
     border-bottom: $border-canon;
     > :first-child {
-        padding-left: 25px;
-        padding-right: 25px;
+        padding-left: $page-margin-left;
+        padding-right: $page-margin-left;
     }
 }

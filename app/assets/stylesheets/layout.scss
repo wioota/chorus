@@ -32,7 +32,7 @@
 }
 
 #left {
-    margin-right: $sidebar-width + ($sidebar-padding-x);
+    margin-right: $sidebar-width + ($sidebar-padding-left);
 }
 
 //hax for position fixed header and sidebar
@@ -46,7 +46,7 @@
 
     .breadcrumbs {
         padding-top: 50px;
-        margin-right: $sidebar-width + ($sidebar-padding-x);
+        margin-right: $sidebar-width + ($sidebar-padding-left);
     }
 
     #sidebar_wrapper {
@@ -56,7 +56,7 @@
         top: $header-height;
         bottom: 0;
         padding: 0;
-        width: $sidebar-width + ($sidebar-padding-x);
+        width: $sidebar-width + ($sidebar-padding-left);
 
         .jump_to_top {
             div.triangle_up {
