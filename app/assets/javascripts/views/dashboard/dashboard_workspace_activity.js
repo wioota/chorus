@@ -229,9 +229,9 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                 
 				// generate the content of the hovercard.
 				// ...this should be in a template...
-                //var hovercard_name = workspaces[wid].name;
+
                 // name
-                var hovercard_name_html = '<div class="name_row"><a href="#workspaces/' + workspaces[wid].workspaceId + '">' + workspaces[wid].name + '</a></div>';
+                var hovercard_name_html = '<div class="name_row"><a class="project_name" href="#workspaces/' + workspaces[wid].workspaceId + '" title="'+ workspaces[wid].name + '">' + workspaces[wid].name + '</a></div>';
 
 				// workspace description, if there is one 
                 var hovercard_summary_html = workspaces[wid].summary ? '<div class="summary_row" id="colorFillFcn(wid)"><p>' + workspaces[wid].summary + '</p></div>' : "";
