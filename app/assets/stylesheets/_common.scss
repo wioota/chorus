@@ -307,15 +307,23 @@ $action-bar-secondary-background-color: $light-blue;
     @include debugging-mixin;
     font-size: 13px;
     font-weight: normal;
-    color: black;
+    color: #000000;
 }
 
 @mixin font-normal-delta {
     @include debugging-mixin;
     font-size: 14px;
     font-weight: normal;
-    color: black;
+    color: #000000;
 }
+
+@mixin font-normal-gamma {
+    @include debugging-mixin;
+    font-size: 14px;
+    font-weight: $semibold;
+	color: $color-text1;
+}
+
 
 @mixin font-secondary-content {
     @include debugging-mixin;
