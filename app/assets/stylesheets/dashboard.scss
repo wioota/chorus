@@ -297,7 +297,6 @@ $padding-bottom-canon: 15px;
 			padding: $padding-top-canon $padding-side-canon $padding-bottom-canon $padding-side-canon;
 			background-color: $greyish-blue;
 			border-bottom: 1px solid #FFFFFF;
-            
             a {
                 @include font-primary-link;
                 line-height: normal;

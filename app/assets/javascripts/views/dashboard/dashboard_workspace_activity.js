@@ -233,7 +233,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
 
 				// workspace description, if there is one 
                 var hovercard_summary_html = workspaces[wid].summary ? '<div class="summary_row" id="colorFillFcn(wid)"><p>' + workspaces[wid].summary + '</p></div>' : "";
-                
+
                 // metric value
                 var hovercard_activityMetric = workspaces[wid].eventCount;
                 var hovercard_activityMetric_html = '<div class="activity_metric_row"><p title="' + t("dashboard.workspace_activity.metric_tip") + '">' + t("dashboard.workspace_activity.metric") + " " + hovercard_activityMetric + '</p></div>';
