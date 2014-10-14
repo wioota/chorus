@@ -10,9 +10,10 @@ describe("chorus.pages.TagIndexPage", function() {
             this.page.render();
         });
 
-        it("displays the Tags breadcrumb", function() {
-            expect(this.page.$('.breadcrumbs')).toContainTranslation("breadcrumbs.home");
-            expect(this.page.$('.breadcrumbs')).toContainTranslation("breadcrumbs.tags");
+        it("doesnt display any Tags breadcrumbs", function() {
+            expectItemDoesNotExist(this.page, this.page.$('.breadcrumbs'));
+//             expect(this.page.$('.breadcrumbs')).toContainTranslation("breadcrumbs.home");
+//             expect(this.page.$('.breadcrumbs')).toContainTranslation("breadcrumbs.tags");
         });
     });
 
