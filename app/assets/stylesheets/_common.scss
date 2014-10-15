@@ -343,7 +343,7 @@ $action-bar-secondary-background-color: $light-blue;
 @mixin font-primary-link {
     color: $brand;
     font-size: 18px;
-    font-weight: $light;
+    font-weight: normal;
 }
 
 @mixin font-action-link {
