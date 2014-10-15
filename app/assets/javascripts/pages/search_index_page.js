@@ -1,7 +1,7 @@
 chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
     crumbs: [
-        { label: t("breadcrumbs.home"), url: "#/" },
-        { label: t("breadcrumbs.search_results") }
+        // { label: t("breadcrumbs.home"), url: "#/" },
+        // { label: t("breadcrumbs.search_results") }
     ],
     helpId: "search",
 

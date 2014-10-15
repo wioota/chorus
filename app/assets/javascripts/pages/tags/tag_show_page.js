@@ -2,9 +2,9 @@ chorus.pages.TagShowPage = chorus.pages.SearchIndexPage.extend({
 
     crumbs: function() {
         return [
-            { label: t("breadcrumbs.home"), url: "#/" },
-            { label: t("breadcrumbs.tags"), url: "#/tags" },
-            { label: this.tagModel.name() }
+            // { label: t("breadcrumbs.home"), url: "#/" },
+            // { label: t("breadcrumbs.tags"), url: "#/tags" },
+            // { label: this.tagModel.name() }
         ];
     },
 
