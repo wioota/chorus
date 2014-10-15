@@ -44,7 +44,13 @@
         z-index: $header-z-index;
         min-width: $page-min-width;
     }
-
+    > .page_sub_header {
+    	z-index: $header-z-index - 1;
+    }
+    > .sub_nav {
+    	z-index: $header-z-index - 2;
+    }
+    
     .breadcrumbs {
         padding-top: 50px;
         margin-right: $sidebar-width + ($sidebar-padding-left);

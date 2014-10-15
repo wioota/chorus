@@ -173,7 +173,9 @@ $data-grid-column-header-z-index: 2;
 $data-grid-body-z-index: 20;
 $data-grid-head-z-index: $data-grid-body-z-index + 1;
 
-$header-z-index: 15000;
+$header-z-index: 1000;
+$sub-header-z-index: $header-z-index - s1;
+
 $menu-z-index: $header-z-index + 1;
 
 $dialog-overlay-z-index: $menu-z-index + 1;
