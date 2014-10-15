@@ -30,6 +30,10 @@
 		top: 18px;
 		
 		@include subheading-normal;
+		
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
     }
 
     .subheader_breadcrumbs {
