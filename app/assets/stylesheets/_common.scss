@@ -88,7 +88,7 @@ $subheader-height: 60px;
 $subnav-height: 45px;
 $workspace-header-height: $subnav-height + $subheader-height + $header-height;
 $summary-line-height: 19px;
-$border-width: 1px;
+$default-border-width: 1px;
 $default-border-radius: 3px;
 
 $page-margin-left: 25px;
@@ -96,8 +96,8 @@ $page-margin-right: 25px;
 
 
 //Specials
-$border-canon: $border-width solid $border-color;
-$dark-border-canon: $border-width solid $border-color-dark;
+$border-canon: $default-border-width solid $border-color;
+$dark-border-canon: $default-border-width solid $border-color-dark;
 $strong-border-canon: 5px solid $color-text3;
 
 $shadow-canon: 1px 2px 2px 0px $shadow-color;
