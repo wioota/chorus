@@ -1,17 +1,24 @@
 
-
 input.chorus_search {
-    @include border-radius(12px);
+    @include border-radius(5px);
     font-size: 14px;
-    padding: 2px 22px 0px 29px;
+    padding: 2px 20px 2px 29px;
     background: url("/images/search-icon.png") no-repeat 9px 3px;
+	background-color: #E0E0E7;
+    
     outline: none;
-    background-color: white;
-    border-color: $border-color;
+/*     background-color: white; */
+/*     border-color: $border-color; */
+    border: none;
     margin: 0;
     line-height: 18px;
-    vertical-align: top;
+/*     vertical-align: top; */
+
+	transition-duration: 0.7s;
+	transition-timing-function: cubic-bezier(0, 0, 0, 1);
+
 }
+
 
 .chorus_search_container {
     position: relative;
