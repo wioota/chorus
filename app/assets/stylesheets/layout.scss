@@ -33,6 +33,7 @@
 
 #left {
     margin-right: $sidebar-width + ($sidebar-padding-left);
+    margin-left: $page-margin-left;
 }
 
 //hax for position fixed header and sidebar
