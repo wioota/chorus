@@ -141,7 +141,7 @@ $notification: $bright-turquoise;
 // Dimensions
 
 $sidebar-width: 265px;
-$sidebar-padding-x: 16px;
+/* $sidebar-padding-x: 16px; */
 
 $sidebar-padding-left : 15px;
 $sidebar-padding-top : 10px;
@@ -150,7 +150,7 @@ $padding-x : 10px;
 $padding-y : 8px;
 $margin-x : 10px;
 $guts-padding: 7px;
-$guts-padding-bottom: 15px;
+$guts-padding-bottom: 45px;
 $user-detail-image-width: 150px;
 $icon-image-width : 35px;
 $icon-image-height : 35px;
@@ -559,7 +559,8 @@ $action-bar-secondary-background-color: $light-blue;
 @mixin sidebar-panel {
     
     /* calc the sidebar width. sidebar-width should be the content width with right margin, not including left margin */
-    $sidebar-panel-width: $sidebar-width - $page-margin-right;
+	/* also account for the border: 1px * 2 */
+    $sidebar-panel-width: $sidebar-width - $page-margin-right - 2px;
 
     $border-radius: $default-border-radius;
     margin-top: $sidebar-padding-top;
