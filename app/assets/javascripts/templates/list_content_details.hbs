@@ -1,5 +1,8 @@
 {{#if multiSelect}}
-    {{> multipleSelectionHeader}}
+<!-- 	    {{> multipleSelectionHeader}} -->
+	<div class="multiselect">
+		<input type="checkbox" name="select_all" class="select_all" autocomplete="off" />
+	</div>
 {{/if}}
 
 <div class="button_holder"></div>
@@ -22,20 +25,26 @@
     </div>
 {{/if}}
 
-{{#if search}}
-    {{#unless multiSelect}}
-        <span class="explore">{{t "actions.explore" }}</span>
+{{#if loaded}}
+    {{#unless hideCounts}}
+        <div class="count"></div>
     {{/unless}}
+ {{/if}}
+    
+{{#if search}}
+<!--     {{#unless multiSelect}} -->
+<!--         <span class="explore">{{t "actions.explore" }}</span> -->
+<!--     {{/unless}} -->
 
     {{#if search.placeholder}}
         <input type="text" class="search" placeholder="{{search.placeholder}}" value="{{searchTerm}}"/>
     {{/if}}
 {{/if}}
 
-{{#if loaded}}
-    {{#unless hideCounts}}
-        <div class="count"></div>
-    {{/unless}}
-{{else}}
-    <div class="loading_section">{{t "loading"}}</div>
-{{/if}}
+<!-- {{#if loaded}} -->
+<!--     {{#unless hideCounts}} -->
+<!--         <div class="count"></div> -->
+<!--     {{/unless}} -->
+<!-- {{else}} -->
+<!--     <div class="loading_section">{{t "loading"}}</div> -->
+<!-- {{/if}} -->
