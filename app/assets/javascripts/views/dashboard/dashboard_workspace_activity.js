@@ -81,6 +81,12 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             }
         };
     },
+    additionalContext: function () {
+        return {
+            modelLoaded: this.model.get("data") !== undefined,
+            hasModels: this.model.get("data") ? this.model.get("data").events && this.model.get("data").events.length > 0 : false
+        };
+    },
     onFilterChange: function(e) {
         e && e.preventDefault();
         this.cur_date_opt = this.selectElement().val();
@@ -119,7 +125,6 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
 
         if (fetchedData === null || workspaces === null || tickLabels === null || data === null ||
             workspaces.length === 0 || tickLabels.length === 0 || data.length === 0) {
-            this.$(".chart").html("There has not been any activity to report.");
             return;
         }
 

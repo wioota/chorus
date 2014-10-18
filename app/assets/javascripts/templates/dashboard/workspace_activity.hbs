@@ -7,5 +7,14 @@
     </select>
 </div>
 <div>
-    <div class="chart"></div>
+    {{#if hasModels}}
+        <div class="chart"></div>
+    {{else}}
+        <div class="no_activity">
+            {{t "dashboard.workspace_activity.no_activity.text" }}
+        </div>
+        <div class="text_tip">
+            <p>{{t "dashboard.workspace_activity.no_activity.text_tip.text" }}</p>
+        </div>
+    {{/if}}
 </div>

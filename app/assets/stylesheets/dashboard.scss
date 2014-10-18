@@ -114,6 +114,31 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         overflow-y: scroll;
     }
 
+    .no_activity {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        color: #595959;
+        font-family: "Source Sans Pro",Helvetica,Arial,Verdana,sans-serif;
+        font-size: 14pt;
+        font-weight: regular;
+        line-height: normal;
+        letter-spacing: normal;
+    }
+
+    .text_tip {
+        padding: 15px 10px 20px 10px;
+        min-height: 60px;
+        vertical-align: middle;
+        border: none;
+        border-radius: 3px;
+        background-color: #F0F0E9;
+        color: #595959;
+        font-family: "Source Sans Pro",Helvetica,Arial,Verdana,sans-serif;
+        font-size: 12pt;
+        font-weight: regular;
+        line-height: normal;
+        letter-spacing: normal;
+    }
 /* ****** */
 /* widget: site snapshot */
 
