@@ -67,9 +67,11 @@ describe("chorus.views.DashboardWorkspaceActivity", function() {
             this.view.render();
         });
 
-        it("displays no activity message", function () {
+        it("displays no activity message and text tip", function () {
             expect(this.view.vis.entities.chart.domElement).toBe(null);
-            expect(this.view.$(".chart")).toContainTranslation("dashboard.workspace_activity.no_activity.text");
+            expect(this.view.$(".no_activity")).toContainTranslation("dashboard.workspace_activity.no_activity.text");
+            expect(this.view.$(".text_tip")).toContainTranslation("dashboard.workspace_activity.no_activity.text_tip.text");
+            expect(this.view.$(".text_tip a")).toContainTranslation("dashboard.workspace_activity.no_activity.text_tip.link.text");
         });
     });
 });
