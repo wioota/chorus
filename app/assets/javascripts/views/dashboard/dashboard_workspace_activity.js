@@ -125,6 +125,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
 
         if (fetchedData === null || workspaces === null || tickLabels === null || data === null ||
             workspaces.length === 0 || tickLabels.length === 0 || data.length === 0) {
+                this.$(".chart").html( t("dashboard.workspace_activity.no_activity.text") );
             return;
         }
 
@@ -223,23 +224,42 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
             .attr("clip-path", "url(#clip)")
             .each(function(s) {
                 var wid = workspaces.map(function(e) { return e.workspaceId; }).indexOf(1*s.key);
-                var hovercard_text = workspaces[wid].summary || " ";
-                hovercard_text += '<div class="footer"><p>Activity Metric: ' + workspaces[wid].eventCount + '</p></div>';
+
+				// generate the content of the hovercard.
+				// ...this should be in a template...
+
+                // name
+                var hovercard_name_html = '<div class="name_row"><a class="project_name" href="#workspaces/' + workspaces[wid].workspaceId + '" title="'+ workspaces[wid].name + '">' + workspaces[wid].name + '</a></div>';
+
+				// workspace description, if there is one 
+                var hovercard_summary_html = workspaces[wid].summary ? '<div class="summary_row" id="colorFillFcn(wid)"><p>' + workspaces[wid].summary + '</p></div>' : "";
+
+                // metric value
+                var hovercard_activityMetric = workspaces[wid].eventCount;
+                var hovercard_activityMetric_html = '<div class="activity_metric_row"><p title="' + t("dashboard.workspace_activity.metric_tip") + '">' + t("dashboard.workspace_activity.metric") + " " + hovercard_activityMetric + '</p></div>';
+
+                hovercard_html = hovercard_name_html + hovercard_summary_html + hovercard_activityMetric_html;
+
                 $(this).qtip({
                     content: {
-                        title: {
-                            text: '<a href="#workspaces/' + workspaces[wid].workspaceId + '/quickstart">' + workspaces[wid].name + '</a>',
-                            button: true
-                        },
-                        text: hovercard_text
+                        button: true,
+                        text: hovercard_html
                     },
                     hide: {
                         event: 'mouseout',
-                        delay: 500,
-                        fixed: true
+                        delay: 400,
+                        fixed: true,
+                        effect: {
+                            type: 'fade',
+                            length: 32
+                        }
                     },
                     show: {
-                        solo: true
+                        solo: true, 
+                        effect: {
+                            type: 'fade',
+                            length: 170
+                        }        
                     },
                     position: {
                         target: 'mouse',
@@ -250,7 +270,11 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
                         my: 'bottomCenter'
                     },
                     style: {
-                        classes: 'hovercard'
+                        classes: "tooltip-white hovercard",
+                        tip: {
+                            width: 12,
+                            height: 15
+                        }
                     }
                 });
             });
