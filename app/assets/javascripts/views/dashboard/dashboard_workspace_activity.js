@@ -125,7 +125,7 @@ chorus.views.DashboardWorkspaceActivity = chorus.views.Base.extend({
 
         if (fetchedData === null || workspaces === null || tickLabels === null || data === null ||
             workspaces.length === 0 || tickLabels.length === 0 || data.length === 0) {
-            this.$(".chart").html( t("dashboard.workspace_activity.no_activity.text") );
+                this.$(".chart").html( t("dashboard.workspace_activity.no_activity.text") );
             return;
         }
 
