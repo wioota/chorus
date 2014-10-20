@@ -73,6 +73,7 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         line-height: normal;
         letter-spacing: normal;
     }
+
 /* ****** */
 /* widget: site snapshot */
 
@@ -246,8 +247,9 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
     }
 }
 
+/* rules for the recent activity hovering list that is part of the workspace cards */
 .tooltip {
-    width: 350px;
+        
     li.comment {
         .insight_ribbon {
             top: -18px;
@@ -259,39 +261,23 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
 }
 
 /* workspace chart: card of workspace details that displays on hover */
-
-$metric-row-height: 30px;
 $padding-side-canon: 10px;
 $padding-top-canon: 10px;
-$padding-bottom-canon: 15px;
+$padding-bottom-canon: 10px;
   
 .hovercard {
     width: 300px;
-
-    border-radius: 3px;
     box-shadow: $shadow-canon;
     
 	p {
 		margin: 0;
 	}
 
-	.ui-tooltip-titlebar {
-			/* .ui-tooltip-icon { */
-			/* background: transparent; */
-			/* right: 5px; */
-			/* top: 10px; */
-
-					/* .ui-icon-close { */
-					/* width: 15px; */
-					/* height: 15px; */
-					/* } */
-			/* } */
-	}
-
 	.ui-tooltip-content {
 		/* override defaults */
 		padding: 0;
     	background-color: #FFFFFF;
+    	border-radius: 3px;
          
         .name_row {
 			padding: $padding-top-canon $padding-side-canon $padding-bottom-canon $padding-side-canon;
@@ -313,8 +299,8 @@ $padding-bottom-canon: 15px;
         }
 
         .activity_metric_row {
-			padding: $padding-top-canon $padding-side-canon $padding-bottom-canon $padding-side-canon;
-            background-color: #A0E4DD;
+			padding: $padding-top-canon $padding-side-canon $padding-bottom-canon + 5 $padding-side-canon;
+            border-top: 2px dotted $border-color-darkest;
             @include font-normal-gamma;
         }
 	}
