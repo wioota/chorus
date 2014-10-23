@@ -4,6 +4,8 @@ $media-gutter: 10px;
 
 $system-action-color: #7C7D7D;
 
+$refresh-activity-gutter: $activity-gutter - 5;
+
 .media, .media > .bd {
     overflow: hidden;
 }
@@ -51,7 +53,7 @@ $system-action-color: #7C7D7D;
     }
 
     .activity_item {
-        padding: $activity-gutter;
+        padding: $refresh-activity-gutter $refresh-activity-gutter $activity-gutter $refresh-activity-gutter;
         position: relative;
         overflow: visible;
     }
