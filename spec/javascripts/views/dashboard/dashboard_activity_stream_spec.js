@@ -27,11 +27,11 @@ describe("chorus.views.DashboardActivityStream", function() {
             this.headerView = this.view.contentHeader;
         });
 
-        it("is an ActivityListHeader view", function() {
+        it("is a DashboardModuleActivityListHeaderView view", function() {
             expect(this.headerView).toBeA(chorus.views.DashboardModuleActivityListHeaderView);
         });
 
-        it("has the right titles for both 'all' and 'insights' modes", function() {
+        it("has the right title", function() {
             expect(this.headerView.options.allTitle).toMatchTranslation("dashboard.title.activity");
         });
     });
@@ -42,7 +42,7 @@ describe("chorus.views.DashboardActivityStream", function() {
         });
 
         it("has an activity list", function() {
-            expect(this.view.$(".activity_list")).toExist();
+            expect(this.view.$(".dashboard_activity_list")).toExist();
         });
     });
 });
