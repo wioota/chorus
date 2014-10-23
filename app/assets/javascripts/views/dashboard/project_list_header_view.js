@@ -1,6 +1,6 @@
 chorus.views.ProjectListHeader = chorus.views.Base.extend({
     constructorName: "ProjectListHeaderView",
-    templateName: "project_list_content_header",
+    templateName: "project_list_header",
     additionalClass: 'list_header',
 
     events: {
