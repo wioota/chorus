@@ -2,7 +2,7 @@
 // NO LONGER IN USE
 // applies to an older version of chorus
 
-Xdescribe("chorus.views.Dashboard", function(){
+describe("chorus.views.Dashboard", function(){
     beforeEach(function(){
         chorus.session = backboneFixtures.session();
         this.workspaceSet = backboneFixtures.workspaceSet();
