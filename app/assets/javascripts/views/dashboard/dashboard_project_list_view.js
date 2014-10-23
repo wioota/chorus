@@ -49,6 +49,5 @@ chorus.views.DashboardProjectList = chorus.views.Base.extend({
 
     filter: function (project) {
         return this.noFilter || project.get('isMember');
-    }
-    
+    } 
 });
