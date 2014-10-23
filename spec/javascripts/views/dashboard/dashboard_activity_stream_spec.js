@@ -27,8 +27,8 @@ describe("chorus.views.DashboardActivityStream", function() {
             this.headerView = this.view.contentHeader;
         });
 
-        it("is a DashboardModuleActivityListHeaderView view", function() {
-            expect(this.headerView).toBeA(chorus.views.DashboardModuleActivityListHeaderView);
+        it("is a DashboardModuleActivityListHeader view", function() {
+            expect(this.headerView).toBeA(chorus.views.DashboardModuleActivityListHeader);
         });
 
         it("has the right title", function() {
