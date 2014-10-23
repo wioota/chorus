@@ -28,7 +28,7 @@ $system-action-color: #7C7D7D;
 
     .more_items {
         font-size: 12px;
-        padding: $activity-gutter $big-gutter;
+        padding: $activity-gutter 0;
         text-align: center;
 
         a {
@@ -207,7 +207,10 @@ li .activity_content,
     font-size: 16px;
 }
 
-.activity_list.workspace_detail, .activity_list.dashboard, .recent_comments_list, .notification_list {
+.activity_list.workspace_detail, 
+.activity_list.dashboard, 
+.recent_comments_list, 
+.notification_list {
     .comments {
         margin-left: ($icon-image-width + (2 * $activity-gutter));
     }
@@ -241,14 +244,6 @@ li .activity_content,
                 }
             }
         }
-    }
-}
-
-.activity_list.dashboard {
-    padding-top: $activity-gutter;
-
-    .heading {
-        display: none;
     }
 }
 
