@@ -1,6 +1,6 @@
 module Chorus
   module VERSION #:nodoc:
-    MAJOR         = 4
+    MAJOR         = 5
     MINOR         = 0
     SERVICE_PACK  = 0
     PATCH         = 0
