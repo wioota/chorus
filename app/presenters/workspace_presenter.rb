@@ -1,6 +1,9 @@
 class WorkspacePresenter < Presenter
 
   def to_hash
+
+    model_owned_notes_recent_count = model.owned_notes.recent.count
+
     results = {
       :id => model.id,
       :name => model.name,
@@ -15,8 +18,8 @@ class WorkspacePresenter < Presenter
       :workfiles_count => model.workfiles.count,
       :insights_count => model.owned_notes.where(:insight => true).count,
       :recent_insights_count => model.owned_notes.where(:insight => true).recent.count,
-      :recent_comments_count => model.owned_notes.recent.count,
-      :has_recent_comments => model.owned_notes.recent.count > 0,
+      :recent_comments_count => model_owned_notes_recent_count,
+      :has_recent_comments => model_owned_notes_recent_count > 0,
       :has_milestones => model.milestones_count > 0
     }
 

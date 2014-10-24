@@ -30,9 +30,16 @@ chorus.views.DashboardProjectList = chorus.views.Base.extend({
     },
 
     postRender: function () {
-        _.each(this.projectCards, function(view) {
-            this.$el.append(view.render().el);
-        }, this);
+    
+        // revision inspired by http://ozkatz.github.io/avoiding-common-backbonejs-pitfalls.html
+        if (this.projectCards.length) {
+            var container = document.createDocumentFragment();
+            // render each subview, appending to our root element
+            _.each(this.projectCards, function(view) {
+                    container.appendChild(view.render().el);
+             });
+            this.$el.append(container);
+        }
     },
 
     triggerRender: function (bool) {
@@ -42,5 +49,5 @@ chorus.views.DashboardProjectList = chorus.views.Base.extend({
 
     filter: function (project) {
         return this.noFilter || project.get('isMember');
-    }
+    } 
 });

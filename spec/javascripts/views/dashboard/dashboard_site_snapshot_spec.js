@@ -19,7 +19,7 @@ describe("chorus.views.DashboardSiteSnapshot", function() {
             });
 
             it("displays the snapshot data", function() {
-                expect(this.view.$('.square').length).toBe(4);
+                expect(this.view.$('.squareish').length).toBe(4);
                 _.each(this.siteSnapshotAttrs.data, function(one) {
                     expect(this.view.$("." + one.model)).toContainTranslation("dashboard.site_snapshot." + one.model, {count:one.total});
                     expect(this.view.$("." + one.model)).toContainText(one.total);

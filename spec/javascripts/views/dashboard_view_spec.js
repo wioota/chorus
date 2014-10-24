@@ -1,4 +1,8 @@
-xdescribe("chorus.views.Dashboard", function(){
+// oct 2014
+// NO LONGER IN USE
+// applies to an older version of chorus
+
+describe("chorus.views.Dashboard", function(){
     beforeEach(function(){
         chorus.session = backboneFixtures.session();
         this.workspaceSet = backboneFixtures.workspaceSet();
@@ -106,7 +110,7 @@ xdescribe("chorus.views.Dashboard", function(){
 
         describe("the project list", function() {
             it("renders the project list with the right title", function() {
-                expect(this.view.$(".project_list .content_header h1").text()).toMatchTranslation("header.my_projects");
+                expect(this.view.$(".project_list_header .title").text()).toMatchTranslation("dashboard.project_card_list.name");
             });
 
             it("has a ProjectListHeader view", function () {
