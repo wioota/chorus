@@ -14,7 +14,7 @@ describe("chorus.collections.WorkfileSet", function () {
     describe("#fetch", function () {
         describe("without filtering", function () {
             it("creates the right URL", function () {
-                expect(this.collection.url()).toBe("/workspaces/1234/workfiles?page=1&per_page=50");
+                expect(this.collection.url()).toBe("/workspaces/1234/workfiles?page=1&per_page=20");
             });
         });
         describe("with filtering", function () {
@@ -22,7 +22,7 @@ describe("chorus.collections.WorkfileSet", function () {
                 this.collection.attributes.fileType = "sql";
             });
             it("it has correct Url", function () {
-                expect(this.collection.url()).toBe("/workspaces/1234/workfiles?file_type=sql&page=1&per_page=50");
+                expect(this.collection.url()).toBe("/workspaces/1234/workfiles?file_type=sql&page=1&per_page=20");
             });
         });
         describe("with sorting", function () {
@@ -31,7 +31,7 @@ describe("chorus.collections.WorkfileSet", function () {
                 this.collection.sortAsc("name");
             });
             it("it has correct Url", function () {
-                expect(this.collection.url()).toBe("/workspaces/1234/workfiles?file_type=sql&page=1&per_page=50&order=name");
+                expect(this.collection.url()).toBe("/workspaces/1234/workfiles?file_type=sql&page=1&per_page=20&order=name");
             });
         });
     });
