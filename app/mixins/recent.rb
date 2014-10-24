@@ -5,7 +5,7 @@ module Recent
 
   module ClassMethods
     def recent
-      where(["#{self.table_name}.created_at > ?", 7.days.ago])
+      where(["#{self.table_name}.created_at > ?", 7.days.ago.change(:sec => 0)])
     end
   end
 end
