@@ -152,6 +152,9 @@ $sidebar-padding-top : 10px;
 $page-min-width : 1024px;
 $padding-x : 10px;
 $padding-y : 8px;
+
+$default-padding-vertical: 10px;
+$default-padding-horizontal: 5px;
 $margin-x : 10px;
 $guts-padding: 7px;
 $guts-padding-bottom: 15px;
@@ -195,7 +198,10 @@ $medium-font: 14px;
 $small-font: 12px;
 $smallest-font: 10px;
 
-$fontsize-workspace-name: 16px;
+// fontsize for the page header element. eg. name of item
+$page_header-fontsize: 20.5px;
+// fontsize for the primary item name in lists. e.g. workspace, workfile, datasource, etc.
+$listitem_name-fontsize: 16px;
 
 ///////////////////////////////////////////////////////
 // TODO: Reconcile these with above values

@@ -11,6 +11,9 @@
 
     .item_information {
         margin-left: 55px;
-        margin-right: 5px;
+        max-width:85%;
     }
+}
+.item_information {
+    word-wrap:break-word;
 }

@@ -40,7 +40,7 @@
             
             @include font-primary-link;
             display: inline-block;
-            max-width: 69%;
+            max-width: 85%;
             word-break: break-all;
             span {
                 max-width: none;
@@ -53,8 +53,9 @@
             overflow: hidden;
             padding-left: $padding-x;
             vertical-align: top;
-            zoom: 1;
-
+/*             zoom: 1; */
+            word-wrap:break-word;
+            
             .summary {
                 padding-bottom: 3px;
             }
@@ -98,7 +99,7 @@
                 color: $color-text4;
                 position: absolute;
                 right: 20px;
-                top: 20px;
+                top: 10px;
             }
         }
 
@@ -229,8 +230,6 @@
             }
         }
     }
-
-
 }
 
 .item_tag_list {

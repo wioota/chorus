@@ -32,7 +32,8 @@ $notification-token-width: $header-margin * 2;
             display: table-cell;
             vertical-align: middle;
             padding-left: 15px;
-
+            padding-right: 10px;
+                        
             sub { @include secondary-text-small; }
         }
     }
@@ -210,6 +211,7 @@ $notification-token-width: $header-margin * 2;
                     height: 17px;
                 }
             }
+
         }
 
         .menu.type_ahead_result {
@@ -223,6 +225,10 @@ $notification-token-width: $header-margin * 2;
             right: $sidebar-width + $padding-x + 75px;
             width: $expanded-search-width;
 
+            word-break: break-all;
+            .name {
+                line-height: normal;
+            }                        
             li.result {
                 @include full-item-link(60px);
             }

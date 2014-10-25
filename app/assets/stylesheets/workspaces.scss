@@ -9,18 +9,3 @@
 @import "workspaces/_workspace_sidebar";
 @import "widgets/quickstart";
 @import "workspaces/_workspace_summary_content_header";
-
-.page_sub_header {
-    position: fixed;
-    font-size: $subheader-height / 3;
-    color: $color-text3;
-    background: $subheader-background-color;
-    height: $subheader-height;
-    line-height: $subheader-height;
-    padding-top: $header-height;
-    border-bottom: $border-canon;
-    > :first-child {
-        padding-left: 25px;
-        padding-right: 25px;
-    }
-}
