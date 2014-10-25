@@ -123,7 +123,8 @@ chorus.models.Job = chorus.models.Base.extend({
     },
 
     ableToRun: function () {
-        return this.get("status") === "idle" && (typeof this.get("tasks") !== 'undefined') && this.get("tasks").length > 0;
+        var task_set = this.get("tasks");
+        return this.get("status") === "idle" && (typeof task_set !== 'undefined') && task_set.length > 0 && _.filter(task_set, function(t) { return t.isValid === false; }, this).length === 0;
     },
 
     lastRunLinkKey: function () {

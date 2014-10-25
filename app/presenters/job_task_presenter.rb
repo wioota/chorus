@@ -7,7 +7,8 @@ class JobTaskPresenter < Presenter
       :action => model.action,
       :index => model.index,
       :name => model.derived_name,
-      :is_deleted => model.deleted?
+      :is_deleted => model.deleted?,
+      :is_valid => model.valid_payload?
     }
   end
 end
