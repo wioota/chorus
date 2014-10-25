@@ -50,7 +50,11 @@ body .ui-draggable-dragging {
     }
 
     .image {
-        text-align: center;
+        margin-top: $sidebar-padding-top;
+        
+        .workspace_image {
+            border: $border-canon;
+        }
     }
 
     .pairs {
