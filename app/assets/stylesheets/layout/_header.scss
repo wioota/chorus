@@ -32,7 +32,6 @@ $notification-token-width: $header-margin * 2;
             display: table-cell;
             vertical-align: middle;
             padding-left: 15px;
-            padding-right: 10px;
                         
             sub { @include secondary-text-small; }
         }
@@ -234,6 +233,9 @@ $notification-token-width: $header-margin * 2;
             }
             li.search_all {
                 @include full-item-link(40px);
+            }
+            div {
+                padding-right: 10px;
             }
         }
 
