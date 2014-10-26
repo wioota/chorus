@@ -35,6 +35,7 @@ class WorkfileDownloadController < ApplicationController
               :disposition => 'attachment',
               :type => download_workfile.contents_content_type,
               :filename => filename_for_download(download_workfile.contents_file_name)
+    ActiveRecord::Base.connection.close
   end
 
   def workfile
