@@ -18,5 +18,6 @@ class AttachmentsController < ApplicationController
     attachment = Attachment.find(params[:id])
     authorize! :show, attachment.note
     send_file(attachment.contents.path(params[:style]), :type => attachment.contents_content_type, :disposition => 'inline')
+    ActiveRecord::Base.connection.close
   end
 end
