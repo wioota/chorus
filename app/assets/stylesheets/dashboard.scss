@@ -298,7 +298,7 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
        
             background-color: #FFFFFF;
             @include border-radius($default-border-radius);
-            border: 1px solid $charcoal;
+            border: 1px solid #999;
         }
 
         .button_row {     
