@@ -18,9 +18,11 @@
     > :first-child {
         padding-left: $page-margin-left;
         padding-right: $page-margin-right;
-        
+    }
+    
+    .div span {
         @include ellipsis;
         /* if it gets this long, thats about long enough in the header */
-        width:90%;
+        /*         width:90%; */
     }
 }
