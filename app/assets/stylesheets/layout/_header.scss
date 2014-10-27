@@ -211,7 +211,6 @@ $notification-token-width: $header-margin * 2;
                     height: 17px;
                 }
             }
-
         }
 
         .menu.type_ahead_result {
@@ -227,8 +226,7 @@ $notification-token-width: $header-margin * 2;
             width: $expanded-search-width;
 
             word-break: break-all;
-            
-            
+
             .name {
                 line-height: normal;
             }                        
