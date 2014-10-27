@@ -20,9 +20,10 @@
         padding-right: $page-margin-right;
     }
     
-    .div span {
+    span#sub_header_pagetitle {
+        display: inline-block;
         @include ellipsis;
         /* if it gets this long, thats about long enough in the header */
-        /*         width:90%; */
-    }
+        width:95%;
+        }
 }
