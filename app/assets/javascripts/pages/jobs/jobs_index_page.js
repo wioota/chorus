@@ -1,4 +1,6 @@
-chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
+chorus.pages.JobsIndexPage = chorus.pages.Base.include(
+        chorus.Mixins.FetchingListSearch
+    ).extend({
     constructorName: 'JobsIndexPage',
 
     setup: function (workspaceId) {
@@ -8,6 +10,7 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
         this.collection.sortAsc("name");
         this.handleFetchErrorsFor(this.collection);
         this.collection.fetch();
+        this.setupOnSearched();
         this.onceLoaded(this.collection, this.pollForJobs);
 
         this.mainContent = new chorus.views.MainContentList(this.listConfig());
@@ -48,6 +51,7 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
         return {
             modelClass: "Job",
             collection: this.collection,
+            model: this.workspace,
             contentDetailsOptions: { multiSelect: true },
             linkMenus: {
                 sort: {
@@ -61,7 +65,8 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
             },
             search: {
                 placeholder: t("job.search_placeholder"),
-                eventName: "job:search"
+                eventName: "job:search",
+                onTextChange: this.debouncedCollectionSearch()
             }
         };
     },
@@ -80,7 +85,15 @@ chorus.pages.JobsIndexPage = chorus.pages.Base.extend({
     pollForJobs: function () {
         this.collectionFetchPollerID && clearInterval(this.collectionFetchPollerID);
 
-        var fetchCollection = _.bind(function () { this.collection.fetch(); }, this);
+        var fetchCollection = _.bind(function () {
+            this.lastSearchValue = $('.chorus_search').val();
+            this.collection.fetch({
+                success: _.bind(function() {
+                    $('.chorus_search').val(this.lastSearchValue);
+                    $('.chorus_search').trigger('onTextChange');
+                }, this)
+            });
+        }, this);
         this.collectionFetchPollerID = setInterval(fetchCollection, 15000);
     },
 

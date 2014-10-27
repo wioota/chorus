@@ -11,7 +11,7 @@ chorus.views.ProjectListHeader = chorus.views.Base.extend({
         this.projectCardListModel = new chorus.models.ProjectCardList();
         this.projectCardListModel.fetch({
             success: _.bind(function() {
-                var value = this.projectCardListModel.get('option');
+                var value = this.projectCardListModel.get('option') || 'most_active';
                 this.list.fillOutContent(value);
             }, this)
         });

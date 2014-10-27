@@ -8,6 +8,8 @@ class JobsController < ApplicationController
 
     jobs = workspace.jobs.order_by(params[:order]).includes(Job.eager_load_associations)
 
+    jobs = jobs.where("jobs.name LIKE ?", "%#{params[:name_pattern]}%") if params[:name_pattern]
+
     present paginate(jobs), :presenter_options => {:list_view => true}
   end
 
