@@ -419,7 +419,7 @@ describe("chorus.views.Header", function() {
                         });
 
                         it("displays the alpine help link", function () {
-                            expect(this.view.$("a.helpLink")).toHaveAttr('href', 'http://alpine.atlassian.net/wiki/display/CD/Chorus+Documentation+Home');
+                            expect(this.view.$("a.helpLink")).toContainTranslation("help.link_address.alpine");
                             expect(this.view.$("a.helpLink")).toHaveAttr('target', '_blank');
                         });
                     });
@@ -431,7 +431,7 @@ describe("chorus.views.Header", function() {
                         });
 
                         it("displays the non-alpine help link", function () {
-                            expect(this.view.$("a.helpLink")).toHaveAttr('href', 'http://alpine.atlassian.net/wiki/display/CD/Chorus+Documentation+Home?pivotal=true');
+                            expect(this.view.$("a.helpLink")).toContainTranslation("help.link_address.pivotal");
                             expect(this.view.$("a.helpLink")).toHaveAttr('target', '_blank');
                         });
                     });
