@@ -28,8 +28,13 @@ $bright-grey:       rgb(88, 89, 95);
 $greyish-yellow:    rgb(204, 204, 200);
 $light-grey-yellow: rgb(243, 243, 241);
 $light-gray:        rgb(234, 238, 241);
+
+// neutral greys
+$neutral-light-grey: #E0E0E0;
+
 $shadow-gray:		darken($light-gray, 11%);
 $charcoal:          #464646;
+
 
 //transparent variants
 $shadow-color:		rgba($shadow-gray, .7);
