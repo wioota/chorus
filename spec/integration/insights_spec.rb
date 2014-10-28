@@ -5,7 +5,7 @@ describe "Insights" do
       login(users(:owner))
       within '.dashboard_activity_list_header' do
         select_item('select.activities_filter', 'only_insights')
-        find('.title').should have_content('Insights'.upcase)
+        find('.title').should have_content('Recent Activity'.upcase)
       end
   end
 
