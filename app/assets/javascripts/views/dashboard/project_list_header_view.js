@@ -11,14 +11,15 @@ chorus.views.ProjectListHeader = chorus.views.Base.extend({
         this.projectCardListModel = new chorus.models.ProjectCardList();
         this.projectCardListModel.fetch({
             success: _.bind(function() {
-                var value = this.projectCardListModel.get('option') || 'most_active';
-                this.list.fillOutContent(value);
+                this.filterValue = this.projectCardListModel.get('option') || 'most_active';
+                this.list.fillOutContent(this.filterValue);
             }, this)
         });
     },
 
     postRender: function(e) {
         _.defer(_.bind(function () {
+            this.$("select.workspace_filter").val(this.filterValue);
             chorus.styleSelect(this.$("select.workspace_filter"));
         }, this));
     },
@@ -27,6 +28,7 @@ chorus.views.ProjectListHeader = chorus.views.Base.extend({
         e && e.preventDefault();
 
         var filterClass = this.$("select.workspace_filter").val();
+        this.filterValue = filterClass;
         if(this.projectlist.mostActive) {
             if(filterClass === 'members_only' || filterClass === 'all') {
                 this.list.fillOutContent(filterClass);
@@ -40,7 +42,6 @@ chorus.views.ProjectListHeader = chorus.views.Base.extend({
                 this.projectlist.triggerRender(filterClass === 'all');
             }
         }
-        this.$("select.workspace_filter").val(filterClass);
         this.projectCardListModel.save({optionValue: filterClass});
     }
 });
