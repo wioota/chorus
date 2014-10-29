@@ -9,7 +9,7 @@ chorus.Mixins.ActionPanel = {
     },
 
     templateValues: function (action) {
-        return { name: action.name, message: t('actions.' + action.name) };
+        return { name: action.name, message: t('actions.' + action.name), disabled: action.disabled, altMessage: t('actions.' + action.altMessage) };
     },
 
     launcherFunction: function (target) {

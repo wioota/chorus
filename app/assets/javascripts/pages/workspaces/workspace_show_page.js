@@ -35,6 +35,7 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
         ];
 
         var addSandbox      = {name: 'create_a_sandbox', target: chorus.dialogs.SandboxNew};
+        var disabledSandbox      = {name: 'create_a_sandbox',target: chorus.dialogs.SandboxNew, disabled: true, altMessage: 'sandbox_not_available'};
         var deleteWorkspace = {name: 'delete_workspace', target: chorus.alerts.WorkspaceDelete};
         var editMembers     = {name: 'edit_workspace_members', target: chorus.dialogs.WorkspaceEditMembers};
         var kaggle          = {name: 'find_kaggle_contributors', target: this.model.showUrl() + "/kaggle"};
@@ -42,8 +43,7 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
 
         active && _.each(memberActions, function (action) { actions.push(action); });
 
-        sandbox || (active && !this.sidebar.additionalContext().limitSandboxes && actions.push(addSandbox));
-
+        sandbox || (active && (!this.sidebar.additionalContext().limitSandboxes ? actions.push(addSandbox) : actions.push(disabledSandbox)));
         active && admin &&      actions.push(editMembers);
         admin &&                actions.push(deleteWorkspace);
         canKaggle &&            actions.push(kaggle);

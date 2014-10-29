@@ -3,7 +3,11 @@
         <ul>
             {{#each actions}}
                 <li class="action">
-                    <a href="#" class="{{name}}">{{message}}</a>
+                    {{#if disabled}}
+                        <span class="disabled" title="{{altMessage}}">{{message}}</span>
+                    {{else}}
+                        <a href="#" class="{{name}}">{{message}}</a>
+                    {{/if}}
                 </li>
             {{/each}}
         </ul>
