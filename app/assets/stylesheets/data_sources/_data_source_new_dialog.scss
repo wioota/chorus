@@ -26,6 +26,9 @@
     }
 
     div.data_sources_form {
+    
+/*     	same variables as data_source_edit_dialog */
+/*     	todo: refactor these out to a common class instead of duplicating */
         $fieldset-width : $default-dialog-width - 2 * $dialog-padding;
         $hostname_width : 375px;
         $account_width : 240px;
@@ -70,8 +73,7 @@
 
         label.db_password, input.db_password,
         label[name=schemaName], input[name=schemaName],
-        .group_list, .gnip_password
-        {
+        .group_list, .gnip_password {
             width: $fieldset-width - $account_width - $dialog-padding - 2px;
             margin-left: $input-spacing;
         }
