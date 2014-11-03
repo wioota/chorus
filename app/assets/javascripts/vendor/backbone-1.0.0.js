@@ -1134,21 +1134,21 @@
       emulateJSON: Backbone.emulateJSON
     });
 
-    // Default JSON-request options.
+    // Default JSON-request options
     var params = {type: type, dataType: 'json'};
 
-    // Ensure that we have a URL.
+    // Ensure that we have a URL
     if (!options.url) {
       params.url = _.result(model, 'url') || urlError();
     }
 
-    // Ensure that we have the appropriate request data.
+    // Ensure that we have the appropriate request data
     if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
       params.contentType = 'application/json';
       params.data = JSON.stringify(options.attrs || model.toJSON(options));
     }
 
-    // For older servers, emulate JSON by encoding the request into an HTML-form.
+    // For older servers, emulate JSON by encoding the request into an HTML-form
     if (options.emulateJSON) {
       params.contentType = 'application/x-www-form-urlencoded';
       params.data = params.data ? {model: params.data} : {};
@@ -1166,7 +1166,7 @@
       };
     }
 
-    // Don't process data on a non-GET request.
+    // Don't process data on a non-GET request
     if (params.type !== 'GET' && !options.emulateJSON) {
       params.processData = false;
     }
@@ -1181,13 +1181,13 @@
       };
     }
 
-    // Make the request, allowing the user to override any Ajax options.
+    // Make the request, allowing the user to override any Ajax options
     var xhr = options.xhr = Backbone.ajax(_.extend(params, options));
     model.trigger('request', model, xhr, options);
     return xhr;
   };
 
-  // Map from CRUD to HTTP for our default `Backbone.sync` implementation.
+  // Map from CRUD to HTTP for our default `Backbone.sync` implementation
   var methodMap = {
     'create': 'POST',
     'update': 'PUT',
@@ -1196,8 +1196,8 @@
     'read':   'GET'
   };
 
-  // Set the default implementation of `Backbone.ajax` to proxy through to `$`.
-  // Override this if you'd like to use a different library.
+  // Set the default implementation of `Backbone.ajax` to proxy through to `$`
+  // Override this if you'd like to use a different library
   Backbone.ajax = function() {
     return Backbone.$.ajax.apply(Backbone.$, arguments);
   };
@@ -1206,7 +1206,7 @@
   // ---------------
 
   // Routers map faux-URLs to actions, and fire events when routes are
-  // matched. Creating a new one sets its `routes` hash, if not set statically.
+  // matched. Creating a new one sets its `routes` hash, if not set statically
   var Router = Backbone.Router = function(options) {
     options || (options = {});
     if (options.routes) this.routes = options.routes;
@@ -1215,7 +1215,7 @@
   };
 
   // Cached regular expressions for matching named param parts and splatted
-  // parts of route strings.
+  // parts of route strings
   var optionalParam = /\((.*?)\)/g;
   var namedParam    = /(\(\?)?:\w+/g;
   var splatParam    = /\*\w+/g;
