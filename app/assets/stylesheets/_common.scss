@@ -302,6 +302,10 @@ $lozenge-color-normal: #F1F5F8;
 $lozenge-color-hover: #DDE6F3;
 $lozenge-color-selected: $brand-dark;
 
+$lozenge-color-normal-dark: darken($lozenge-color-normal, 7%);
+$lozenge-color-hover-dark: darken($lozenge-color-hover, 7%);
+$lozenge-color-selected-dark: $brand-dark;
+
 
 ///////////////////////////////////////////////////////
 // Mixins
@@ -527,13 +531,13 @@ $lozenge-color-selected: $brand-dark;
 
 @mixin after-clearfix($which: both) {
     &:after {
-            content: ".";
-            display: block;
-            height: 0;
-            font-size: 0;
-            clear: $which;
-            visibility: hidden;
-        }
+        content: ".";
+        display: block;
+        height: 0;
+        font-size: 0;
+        clear: $which;
+        visibility: hidden;
+    }
 }
 
 @mixin borderbox {
@@ -591,7 +595,7 @@ $lozenge-color-selected: $brand-dark;
 
 @mixin pill-tab($min-width, $height: $default-lozenge-height) {
     &:hover .lozenge {
-        background: $lozenge-color-hover;
+        //background: $lozenge-color-hover;
         text-decoration: none;
     }
     .lozenge {
@@ -603,12 +607,29 @@ $lozenge-color-selected: $brand-dark;
 
     &.selected {
         &:hover .lozenge {
-            background: $lozenge-color-selected;
+            //background: $lozenge-color-selected;
         }
 
         .lozenge {
-            background: $lozenge-color-selected;
+            //background: $lozenge-color-selected;
             color: #FFFFFF;
+        }
+    }
+}
+
+@mixin pill-tab-colors ($normal, $hover, $selected) {
+    .lozenge {
+        background-color: $normal;
+    }
+    &:hover .lozenge {
+        background: $hover;
+    }
+    &.selected {
+        &:hover .lozenge {
+            background: $selected;
+        }
+        .lozenge {
+            background: $selected;
         }
     }
 }
@@ -626,6 +647,7 @@ $lozenge-color-selected: $brand-dark;
     min-width: $min-width;
 }
 
+
 @mixin grab_cursor {
     cursor: -moz-grab;
     cursor: -o-grab;
@@ -635,7 +657,6 @@ $lozenge-color-selected: $brand-dark;
 }
 
 @mixin sidebar-panel {
-
     $border-radius: $default-border-radius;
     margin-top: $sidebar-padding-top;
 
@@ -664,8 +685,8 @@ $lozenge-color-selected: $brand-dark;
     ul {
         padding-bottom: 10px;
     }
-
 }
+
 @mixin dark-sidebar-panel {
     @include sidebar-panel;
 
