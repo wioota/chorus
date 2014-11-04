@@ -14,7 +14,7 @@
     
     border-bottom: $border-canon;
     
-    /* first child within the subheader is the div > span that contains the subheader text */
+    // first child within the subheader is the div > span that contains the subheader text
     > :first-child {
         padding-left: $page-margin-left;
         padding-right: $page-margin-right;
@@ -23,7 +23,7 @@
     span#sub_header_pagetitle {
         display: inline-block;
         @include ellipsis;
-        /* if it gets this long, thats about long enough in the header */
+        // if it gets this long, thats about long enough in the header
         width:95%;
-        }
+    }
 }

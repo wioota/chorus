@@ -61,17 +61,17 @@ chorus.pages.Base = chorus.pages.Bare.extend({
 
     subviews: {
         "#header": "header",
+		"#page_sub_header": "subHeader",
+		"#breadcrumbs": "breadcrumbs",
+        "#sub_nav": "subNav"
         "#main_content": "mainContent",
-        "#breadcrumbs": "breadcrumbs",
-        "#page_sub_header": "subHeader",
         "#sidebar .primary_action_panel": "primaryActionPanel",
         "#sidebar .multiple_selection": "multiSelectSidebarMenu",
         "#sidebar .sidebar_content.primary": "sidebar",
         "#sidebar .sidebar_content.secondary": "secondarySidebar",
-        "#sub_nav": "subNav"
     },
 
-    //Load a workspace for a page into page.workspace.  fetch and set as a requiredResource based on options.
+    //Load a workspace for a page into page.workspace. fetch and set as a requiredResource based on options.
     loadWorkspace: function(workspaceId, options) {
         var optionsWithDefaults = _.extend({
             fetch: true,
@@ -88,15 +88,15 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         }
     },
 
+    hasSubHeader: function() {
+        return !!this.workspaceId;
+    },
+
     setupBreadcrumbs: function () {
         var page = this;
         this.breadcrumbs = new chorus.views.BreadcrumbsView({
             breadcrumbs: _.isFunction(page.crumbs) ? _.bind(page.crumbs, page) : page.crumbs
         });
-    },
-
-    hasSubHeader: function() {
-        return !!this.workspaceId;
     },
 
     setupSubHeader: function () {
@@ -108,6 +108,8 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         this.header = this.header || new chorus.views.Header();
         this.header.workspaceId = this.workspaceId;
 
-        _.result(this, "hasSubHeader") ? this.setupSubHeader() : this.setupBreadcrumbs();
+        //_.result(this, "hasSubHeader") ? this.setupSubHeader() : this.setupBreadcrumbs();
+        this.setupSubHeader();
+        
     }
 });

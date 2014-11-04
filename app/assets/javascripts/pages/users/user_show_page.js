@@ -1,5 +1,7 @@
 chorus.pages.UserShowPage = chorus.pages.Base.extend({
     helpId: "user",
+    hasSubHeader: true,
+    hasBreadcrumbs: false,
 
     setup: function() {
         this.listenTo(this.model, "loaded", this.setupMainContent);

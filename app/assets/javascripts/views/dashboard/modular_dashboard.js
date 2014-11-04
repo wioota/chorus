@@ -32,4 +32,3 @@ chorus.views.ModularDashboard = chorus.views.Base.extend({
         }, this);
     }
 });
-
