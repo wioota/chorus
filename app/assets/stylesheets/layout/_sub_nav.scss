@@ -23,13 +23,12 @@ $sub_nav-lozenge-height: 23px;
 
         @include pill-tab-colors($lozenge-color-normal, $lozenge-color-hover, $lozenge-color-selected);
     }
-    /* specials for subnav */
-    /* 
-    .lozenge {
-        background-color: $lozenge-color-normal;
-    }
-    */
- 
-
+//   specials for subnav */
+//
+//    .lozenge {
+//        background-color: $lozenge-color-normal;
+//    }
+//    
+//
     @include after-clearfix;
 }
