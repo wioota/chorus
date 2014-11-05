@@ -1,4 +1,4 @@
-consoleIterateValues = function (obj) {
+function consoleIterateValues (obj) {
     var keys = Object.keys(obj);
 
     for (var i = 0; i < keys.length; i++) {
@@ -87,6 +87,22 @@ Backbone.sync = function(method, model, options) {
     } else {
         var xhr = Backbone.ajax(_.extend(params, options));
         model.trigger('request', model, xhr, options);
+
+          
+        console.log ("BExtensions | xhr->");
+        consoleIterateValues(xhr);        
+        console.log ("end xhr ---");      
+
+        console.log ("BExtensions | options ->");
+        consoleIterateValues(options);
+        console.log ("end options ---");
+        console.log ("   ");
+        
+//       console.log ("BExtensions | model->");
+//       consoleIterateValues(model);        
+//        console.log ("end model ---");
+//        console.log ("   ");
+
         return xhr;
     }
 };
