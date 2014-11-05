@@ -29,10 +29,9 @@ $tab_control-lozenge-height: 21px;
             padding: $pill-padding-vertical $pill-padding-horizontal;
             cursor: pointer;
             @include pill-tab($tab_control-lozenge-min-width, $tab_control-lozenge-height);
-        }
 
-        // specials for these sidebar tabs        
-        @include pill-tab-colors ($lozenge-color-normal-dark, $lozenge-color-hover-dark, $lozenge-color-selected-dark);
-            
+			// specials for these sidebar tabs
+			@include pill-tab-colors ($lozenge-color-normal-dark, $lozenge-color-hover-dark, $lozenge-color-selected-dark);
+        }            
     }
 }
