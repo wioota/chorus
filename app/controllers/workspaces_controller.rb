@@ -15,13 +15,38 @@ class WorkspacesController < ApplicationController
     succinct = params[:succinct] == 'true'
 
     if params[:get_options] == 'most_active'
-      available_workspaces = workspaces.select('*').map(&:id)
-      top_workspace_ids = Events::Base.select('workspace_id, count(*) as event_count').group(:workspace_id).where('workspace_id IN (' + available_workspaces.join(',') + ')').order('event_count desc').limit(10).map(&:workspace_id)
-      present paginate(workspaces.select('*').where('id IN (' + top_workspace_ids.join(',') + ')').includes(succinct ? [:owner] : Workspace.eager_load_associations).order("lower(name) ASC, id")),
-          :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true', :succinct => succinct}
+      available_workspaces = workspaces.map(&:id)
+      results = []
+
+      if (available_workspaces.nil? || available_workspaces.count == 0 )
+        present paginate(results),
+                :presenter_options => {}
+      else
+        top_workspace_ids = Events::Base.select('workspace_id, count(*) as event_count')
+                                        .group(:workspace_id)
+                                        .where('workspace_id IN (' + available_workspaces.join(',') + ')')
+                                        .order('event_count desc')
+                                        .limit(10)
+                            .map(&:workspace_id)
+
+        results = workspaces.where('id IN (' + top_workspace_ids.join(',') + ')')
+                            .includes(succinct ? [:owner] : Workspace.eager_load_associations)
+                            .order("lower(name) ASC, id")
+
+        present paginate(results),
+            :presenter_options => {
+                :show_latest_comments => (params[:show_latest_comments] == 'true'),
+                :succinct => succinct
+            }
+      end
     else
-      present paginate(workspaces.includes(succinct ? [:owner] : Workspace.eager_load_associations).order("lower(name) ASC, id")),
-              :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true', :succinct => succinct}
+      results = workspaces.includes(succinct ? [:owner] : Workspace.eager_load_associations)
+                          .order("lower(name) ASC, id")
+      present paginate(results),
+              :presenter_options => {
+                  :show_latest_comments => (params[:show_latest_comments] == 'true'),
+                  :succinct => succinct
+              }
     end
   end
 
