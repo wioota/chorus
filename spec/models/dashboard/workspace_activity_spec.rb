@@ -23,6 +23,7 @@ describe Dashboard::WorkspaceActivity do
         ws.should have_key(:name)
         ws.should have_key(:summary)
         ws.should have_key(:event_count)
+        ws.should have_key(:is_accessible)
 
         @result.should have_key(:events)
         ev = @result[:events].first
