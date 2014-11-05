@@ -1,3 +1,12 @@
+consoleIterateValues = function (obj) {
+    var keys = Object.keys(obj);
+
+    for (var i = 0; i < keys.length; i++) {
+        var val = obj[keys[i]];
+        console.log ( i + "->" + val);
+    }
+};
+
 var methodMap = {
     'create': 'POST',
     'update': 'PUT',
@@ -80,6 +89,7 @@ Backbone.sync = function(method, model, options) {
         return xhr;
     }
 };
+
 
 // This function overrides loadUrl from Backbone to strip off a trailing
 // slash.
