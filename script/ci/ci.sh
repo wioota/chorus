@@ -30,6 +30,9 @@ fi
 
 set -e
 
+echo "----------"
+echo "setup.sh"
+echo "----------"
 . script/ci/setup.sh
 
 targets=${@}
@@ -91,6 +94,9 @@ if $run_fixtures ; then
     ln -sf .rspec-ci .rspec
     echo "--- rake jasmine:fixtures"
     b/rake jasmine:fixtures 2>&1
+    
+    echo "--- END rake jasmine:fixtures"
+ 
     FIXTURES_RESULT=$?
 else
     FIXTURES_RESULT=0
