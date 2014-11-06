@@ -3,7 +3,7 @@ describe("chorus.pages.StyleGuidePage", function() {
         this.page = new chorus.pages.StyleGuidePage();
     });
 
-    it("has a SiteElementsView", function () {
-        expect(this.page.mainContent.content).toBeA(chorus.pages.StyleGuidePage.SiteElementsView);
-    });
+    //it("has a SiteElementsView", function () {
+    //    expect(this.page.mainContent.content).toBeA(chorus.pages.StyleGuidePage.SiteElementsView);
+    //});
 });
