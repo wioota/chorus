@@ -1,5 +1,10 @@
 #!/bin/bash
 
+echo "starting ci.sh..."
+echo " "
+echo "hostname: $HOSTNAME"
+echo " "
+
 if [[ -z "$RAILS_ENV" ]]; then
   export RAILS_ENV=test
 fi
@@ -84,6 +89,7 @@ fi
 if $run_fixtures ; then
     echo "Building fixtures"
     ln -sf .rspec-ci .rspec
+    echo "--- rake jasmine:fixtures"
     b/rake jasmine:fixtures 2>&1
     FIXTURES_RESULT=$?
 else
