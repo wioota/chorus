@@ -6,7 +6,7 @@ function consoleIterateValues (obj) {
         var val = obj[keys[i]];
         console.log ( i + "->" + val);
     }
-};
+}
 
 var methodMap = {
     'create': 'POST',
