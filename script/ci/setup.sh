@@ -10,6 +10,7 @@ fi
 eval "$(rbenv init - --no-rehash)"
 rbenv shell `cat .rbenv-version`
 
+gem list bundler | grep bundler && gem update bundler
 gem list bundler | grep bundler || gem install bundler
 bundle install --binstubs=b/ || (echo "bundler failed!!!!!!!!" && exit 1)
 
