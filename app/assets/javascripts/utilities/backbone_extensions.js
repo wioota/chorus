@@ -1,5 +1,5 @@
 // debugging routine
-consoleIterateValues = function (obj) {
+function consoleIterateValues (obj) {
     var keys = Object.keys(obj);
 
     for (var i = 0; i < keys.length; i++) {
@@ -8,13 +8,13 @@ consoleIterateValues = function (obj) {
     }
 };
 
-
 var methodMap = {
     'create': 'POST',
     'update': 'PUT',
     'delete': 'DELETE',
     'read'  : 'GET'
 };
+
 
 // override for default backbone.sync routine
 Backbone.sync = function(method, model, options) {
@@ -33,6 +33,7 @@ Backbone.sync = function(method, model, options) {
 
     console.log ("BExtensions | type1 ->" + type);
     
+
     // Default options, unless specified
     _.defaults(options || (options = {}), {
       emulateHTTP: Backbone.emulateHTTP,
@@ -85,6 +86,7 @@ Backbone.sync = function(method, model, options) {
         xhr.setRequestHeader('X-HTTP-Method-Override', type);
         if (beforeSend) return beforeSend.apply(this, arguments);
       };
+
     }
 
     // Don't process data on a non-GET request
@@ -109,11 +111,13 @@ Backbone.sync = function(method, model, options) {
         console.log ("BExtensions | else");
 
         var xhr = Backbone.ajax(_.extend(params, options));
+        console.log ("B.Extensions | else 2");
         model.trigger('request', model, xhr, options);
           
 //        console.log ("BExtensions | xhr->");
 //        consoleIterateValues(xhr);        
 //        console.log ("end xhr ---");      
+
 
         console.log ("BExtensions | options ->");
         consoleIterateValues(options);
@@ -130,7 +134,9 @@ Backbone.sync = function(method, model, options) {
 };
 
 
-// This function overrides loadUrl from Backbone to strip off a trailing slash
+
+// This function overrides loadUrl from Backbone to strip off a trailing
+// slash.
 //
 // http://localhost/users/ => http://localhost/users
 // http://localhost/users/1/ => http://localhost/users/1

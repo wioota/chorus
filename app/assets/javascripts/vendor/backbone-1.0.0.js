@@ -1130,7 +1130,6 @@
 
     console.log ("Backbone ->" + type);
     
-    
     // Default options, unless specified
     _.defaults(options || (options = {}), {
       emulateHTTP: Backbone.emulateHTTP,
