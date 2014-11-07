@@ -21,17 +21,17 @@ Backbone.sync = function(method, model, options) {
     var originalOptions = _.clone(options || {});
     method = (options && options.method) || method;
 
-    console.log ("BExtensions | originalOptions ->" + originalOptions);
+    console.log ("Bextensions | originalOptions ->" + originalOptions);
     consoleIterateValues(originalOptions);
     console.log ("end originalOptions ---"); 
-    console.log ("BExtensions | options.method ->" + options.method);
+    console.log ("Bextensions | options.method ->" + options.method);
     console.log ("end options.method ---");
-    console.log ("BExtensions | method ->" + method);
+    console.log ("Bextensions | method ->" + method);
     console.log ("end method ---");
     
     var type = methodMap[method];
 
-    console.log ("BExtensions | type1 ->" + type);
+    console.log ("Bextensions | type1 ->" + type);
     
 
     // Default options, unless specified
@@ -70,7 +70,7 @@ Backbone.sync = function(method, model, options) {
     if (options.emulateJSON) {
       params.contentType = 'application/x-www-form-urlencoded';
       params.data = params.data ? {model: params.data} : {};
-      // console.log ("BExtensions | in options.emulateHTTP data ->" + params.data);
+      // console.log ("Bextensions | in options.emulateHTTP data ->" + params.data);
     }
 
     // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
@@ -78,7 +78,7 @@ Backbone.sync = function(method, model, options) {
     if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
       params.type = 'POST';
 
-//       console.log ("BExtensions | in options.emulateHTTP post ->" + params.type);
+//       console.log ("Bextensions | in options.emulateHTTP post ->" + params.type);
 
       if (options.emulateJSON) params.data._method = type;
       var beforeSend = options.beforeSend;
@@ -94,37 +94,37 @@ Backbone.sync = function(method, model, options) {
         params.processData = false;
     }
 
-    console.log ("BExtensions | (2)");
+    console.log ("Bextensions | (2)");
         
     // Make the request, allowing the user to override any Ajax options
     if (this.uploadObj && method === "create") {
-        console.log ("B.Extensions | it is create");
+        console.log ("Bextensions | it is create");
         
         var uploadOptions = $(this.uploadObj.form).find("input[type=file]").data("fileupload").options;
         _.each(['success', 'error', 'url', 'type', 'dataType'], function(fieldName) {
             uploadOptions[fieldName] = params[fieldName];
         });
         uploadOptions.formData = json;
-        console.log ("BExtensions | uploadOptions.formData ->" + uploadOptions.formData);
+        console.log ("Bextensions | uploadOptions.formData ->" + uploadOptions.formData);
         return this.uploadObj.submit();
     } else {
-        console.log ("BExtensions | else");
+        console.log ("Bextensions | else");
 
         var xhr = Backbone.ajax(_.extend(params, options));
-        console.log ("B.Extensions | else 2");
+        console.log ("Bextensions | else 2");
         model.trigger('request', model, xhr, options);
           
-//        console.log ("BExtensions | xhr->");
+//        console.log ("Bextensions | xhr->");
 //        consoleIterateValues(xhr);        
 //        console.log ("end xhr ---");      
 
 
-        console.log ("BExtensions | options ->");
+        console.log ("Bextensions | options ->");
         consoleIterateValues(options);
         console.log ("end options ---");
         console.log ("   ");
 
-//       console.log ("BExtensions | model->");
+//       console.log ("Bextensions | model->");
 //       consoleIterateValues(model);        
 //        console.log ("end model ---");
 //        console.log ("   ");
@@ -162,6 +162,8 @@ Backbone.History.prototype.loadUrl = function(fragmentOverride) {
 Backbone.Model = (function(Model) {
     var modelOptions = ['urlRoot', 'collection'];
 
+    console.log ("Bextensions > Backbone.Model");
+        
     return Model.extend({
         constructor: function(attributes, options) {
             var defaults; // jshint ignore:line
