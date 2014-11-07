@@ -8,6 +8,8 @@ namespace :services do
 
       rails_environment = ENV['RAILS_ENV'] || 'development'
 
+        put "SOLR- RAILS_ENV: ['RAILS_ENV']
+
       solr_config = nil
       File.open(path) do |file|
         yaml_contents = ERB.new(file.read).result
