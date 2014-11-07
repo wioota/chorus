@@ -42,7 +42,8 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
 
         active && _.each(memberActions, function (action) { actions.push(action); });
 
-        sandbox || (active &&   actions.push(addSandbox));
+        sandbox || (active && !this.sidebar.additionalContext().limitSandboxes && actions.push(addSandbox));
+
         active && admin &&      actions.push(editMembers);
         admin &&                actions.push(deleteWorkspace);
         canKaggle &&            actions.push(kaggle);
