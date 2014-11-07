@@ -1,3 +1,5 @@
+$default-dialog-height: 40px;
+
 .popup .girdle {
     padding: $dialog-padding $dialog-padding 0;
     border: none;
@@ -5,11 +7,11 @@
 
 .dialog {
     .dialog_header {
-        border-bottom: 1px solid $border-color;
+        border-bottom: $border-canon;
         background-color: $dialog-header-background;
         word-break: break-all;
-        height: 40px;
-        line-height: 40px;
+        height: $default-dialog-height;
+        line-height: $default-dialog-height;
 
         h1 {
             font-size: 14px;
@@ -17,7 +19,6 @@
             @include uppercase;
             vertical-align: middle;
             margin: 0 $dialog-padding;
-            padding-right: 25px;
         }
     }
 
@@ -27,7 +28,6 @@
 
     .dialog_content {
         background-color: $body-background-color;
-
         line-height: 16px;
 
         .menus {
@@ -42,6 +42,11 @@
                 display: inline-block;
             }
         }
+    }
+    
+    .content {
+        margin-top: 0;
+        margin-bottom: 20px;
     }
 
     .errors {

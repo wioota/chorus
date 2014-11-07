@@ -36,7 +36,6 @@ group :assets do
   gem 'yui-compressor'
   gem 'turbo-sprockets-rails3'
 
-
 #jquery-rails 2.1.4 ==> jquery 1.8.3
 gem 'jquery-rails', '2.1.4'
 
