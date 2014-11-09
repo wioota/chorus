@@ -13,7 +13,6 @@
 //= require handlebars
 //= require_tree ./templates
 //= require jquery
-//= require jquery-migrate-min
 //= require vendor/underscore-1.6.0
 //= require vendor/backbone-1.0.0
 //= require vendor/jquery.ui.core
