@@ -9,7 +9,7 @@ gem 'cocaine', '0.2.1' # cocaine is a paperclip dependency but new versions of c
 gem 'queue_classic', :github => 'Chorus/queue_classic'
 gem 'clockwork',     :require => false
 gem 'allowy'
-gem 'sunspot_rails'
+gem 'sunspot_rails', '~> 2.0.0'
 gem 'jetpack', :github => 'Chorus/jetpack', :branch => '6c9253195b+chorus', :require => false
 gem 'nokogiri'
 gem 'sequel', '~> 4.0', :require => 'sequel/no_core_ext'
@@ -19,7 +19,7 @@ gem 'logger-syslog'
 gem 'newrelic_rpm'
 gem 'premailer-rails'
 gem 'messengerjs-rails'
-gem 'codemirror-rails'
+gem 'codemirror-rails', '3.23'
 gem 'honor_codes', '~> 0.1.0'
 
 platform :jruby do
@@ -82,8 +82,7 @@ group :development, :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
   gem 'ci_reporter', '>= 1.8.2'
   gem 'faker'
   gem 'fakeweb'
-  #gem 'sunspot_solr', :github => 'taktsoft/sunspot', :ref => '78717a33894271d012682dbe8902458badb0ca63' # https://github.com/sunspot/sunspot/pull/267
-  gem 'sunspot_solr'
+  gem 'sunspot_solr', :github => 'taktsoft/sunspot', :ref => '78717a33894271d012682dbe8902458badb0ca63' # https://github.com/sunspot/sunspot/pull/267
   gem 'backbone_fixtures_rails', :github => 'charleshansen/backbone_fixtures_rails'
   gem 'rspec_api_documentation', :github => 'Chorus/rspec_api_documentation', :require => false
 end
