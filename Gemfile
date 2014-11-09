@@ -19,7 +19,7 @@ gem 'logger-syslog'
 gem 'newrelic_rpm'
 gem 'premailer-rails'
 gem 'messengerjs-rails'
-gem 'codemirror-rails', '3.23'
+gem 'codemirror-rails'
 gem 'honor_codes', '~> 0.1.0'
 
 platform :jruby do
