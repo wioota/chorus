@@ -1,7 +1,7 @@
 unless Rails.env.production?
   namespace :jasmine do
     desc 'Regenerate JSON fixtures for jasmine tests'
-    puts "*** rake: BEGIN fixtures: Regenerate JSON fixtures for jasmine tests"
+    puts "*** fixtures.rake: BEGIN fixtures: Regenerate JSON fixtures for jasmine tests"
     
     RSpec::Core::RakeTask.new(:fixtures) do |t|
       system("rm -rf spec/javascripts/fixtures/backbone/*")
@@ -13,5 +13,4 @@ unless Rails.env.production?
   end
 end
 
-puts "*** rake: END fixtures: Regenerate JSON fixtures for jasmine tests"
-    
+puts "*** fixtures.rake: END fixtures: Regenerate JSON fixtures for jasmine tests"
