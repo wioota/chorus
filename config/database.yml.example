@@ -18,7 +18,7 @@ default: &default
   #   debug5, debug4, debug3, debug2, debug1,
   #   log, notice, warning, error, fatal, and panic
   # The server defaults to notice.
-  #min_messages: warning
+  min_messages: log
 
 development:
   database: chorus_rails_development
