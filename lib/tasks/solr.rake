@@ -8,7 +8,7 @@ namespace :services do
 
       rails_environment = ENV['RAILS_ENV'] || 'development'
 
-        put "solr.rake: SOLR- RAILS_ENV: {rails_environment}"
+        puts "solr.rake: SOLR- RAILS_ENV: {rails_environment}"
 
       solr_config = nil
       File.open(path) do |file|
