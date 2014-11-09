@@ -19,11 +19,11 @@ window.Chorus = function chorus$Global() {
 
     self.initialize = function() {
         // Check and prompt for Chrome Frame install if applicable
-        if (!window.jasmine && BrowserDetect.browser === "Explorer" && BrowserDetect.version <= "8") {
-            CFInstall.check({
-                mode: "overlay"
-            });
-        }
+//         if (!window.jasmine && BrowserDetect.browser === "Explorer" && BrowserDetect.version <= "8") {
+//             CFInstall.check({
+//                 mode: "overlay"
+//             });
+//         }
         self.PageEvents = _.extend({}, Backbone.Events);
         self.session = new chorus.models.Session();
         self.router = new chorus.Router(self);
@@ -78,9 +78,7 @@ window.Chorus = function chorus$Global() {
 
     self.requireLogin = function requireLogin() {
         delete self.session._user;
-
         self.session.rememberPathBeforeLoggedOut();
-
         self.router.navigate("/login");
     };
 
@@ -316,10 +314,8 @@ window.Chorus = function chorus$Global() {
 
     self.pageParams = function () {
         if (window.location.hash.search("\\?") === -1) { return {}; }
-
         var path = window.location.hash.substring(window.location.hash.search("\\?")+1);
         var decoded = decodeURI(path).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"');
-
         return JSON.parse('{"' + decoded + '"}');
     };
 };
