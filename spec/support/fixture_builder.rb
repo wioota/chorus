@@ -1,3 +1,5 @@
+puts "-- BEGIN: fixture.builder"
+
 require_relative './database_integration/greenplum_integration'
 require_relative './database_integration/hawq_integration'
 require_relative './database_integration/oracle_integration'
@@ -31,6 +33,8 @@ FixtureBuilder.configure do |fbuilder|
 
   fbuilder.fixture_builder_file = Rails.root + "tmp/fixture_builder_#{GreenplumIntegration.hostname}_#{Rails.env}.yml"
 
+puts "-- fixture.builder: factory..."
+puts "-- fixture.builder: file: #{fbuilder.fixture_builder_file}"
   # now declare objects
   fbuilder.factory do
     extend CurrentUserHelpers
@@ -634,32 +638,35 @@ FixtureBuilder.configure do |fbuilder|
     RR.reset
 
     if ENV['GPDB_HOST']
+        puts "-- fixture.builder: GPDB_HOST: #{ENV['GPDB_HOST']}"
       chorus_gpdb40 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.data_source_config("chorus-gpdb40").merge(:name => "chorus_gpdb40", :owner => admin))
+               puts "-- fixture.builder: A2"
       chorus_gpdb41 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.data_source_config("chorus-gpdb41").merge(:name => "chorus_gpdb41", :owner => admin))
+                   puts "-- fixture.builder: A3"
       chorus_gpdb42 = FactoryGirl.create(:gpdb_data_source, GreenplumIntegration.data_source_config(GreenplumIntegration.hostname).merge(:name => GreenplumIntegration.hostname, :owner => admin))
-
+         puts "-- fixture.builder: B"
       @chorus_gpdb42_test_superuser = chorus_gpdb42.account_for_user(admin)
 
       FactoryGirl.create(:data_source_account, GreenplumIntegration.account_config(GreenplumIntegration.hostname).merge(:owner => the_collaborator, :data_source => chorus_gpdb42))
       FactoryGirl.create(:data_source_account, GreenplumIntegration.account_config(GreenplumIntegration.hostname).merge(:owner => owner, :data_source => chorus_gpdb42))
-
+         puts "-- fixture.builder: C"
       GreenplumIntegration.refresh_chorus
       chorus_gpdb42.refresh_databases(:skip_schema_refresh => true)
       Schema.refresh(@chorus_gpdb42_test_superuser, chorus_gpdb42.databases.find_by_name(GreenplumIntegration.database_name), :refresh_all => true)
-
+         puts "-- fixture.builder: D"
       test_database = GpdbDatabase.find_by_name_and_data_source_id(GreenplumIntegration.database_name, GreenplumIntegration.real_data_source)
       test_schema = test_database.schemas.find_by_name('test_schema')
 
       real_workspace = owner.owned_workspaces.create!({:name => "Real", :summary => "A real workspace with a sandbox on local-greenplum", :sandbox => test_schema, :public => true}, :without_protection => true)
       fbuilder.name :real, real_workspace
-
+         puts "-- fixture.builder: E"
       @executable_chorus_view = FactoryGirl.create(:chorus_view, :name => "CHORUS_VIEW", :schema => test_schema, :query => "select * from test_schema.base_table1;", :workspace => public_workspace)
       @gpdb_workspace = FactoryGirl.create(:workspace, :name => "Workspace with a real GPDB sandbox", :owner => owner, :sandbox => test_schema)
       @convert_chorus_view = FactoryGirl.create(:chorus_view, :name => "convert_to_database", :schema => test_schema, :query => "select * from test_schema.base_table1;", :workspace => @gpdb_workspace)
 
       test_schema2 = test_database.schemas.find_by_name('test_schema2')
       @gpdb_workspace.source_datasets << test_schema2.active_tables_and_views.first
-
+         puts "-- fixture.builder: F"
       real_chorus_view = FactoryGirl.create(:chorus_view,
                                                :name => "real_chorus_view",
                                                :schema => test_schema,
@@ -668,6 +675,7 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     if ENV['PG_HOST']
+        puts "-- fixture.builder: PG_HOST: ENV['PG_HOST']"
       chorus_pg = FactoryGirl.create(:pg_data_source, PostgresIntegration.data_source_config.merge(:owner => admin))
       FactoryGirl.create(:data_source_account, :db_username => PostgresIntegration.username, :db_password => PostgresIntegration.password, :owner => owner, :data_source => chorus_pg)
       PostgresIntegration.setup
@@ -675,6 +683,7 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     if ENV['HADOOP_HOST']
+        puts "-- fixture.builder: HADOOP_HOST: ENV['HADOOP_HOST']"
       puts :hdfs_data_source
       puts HdfsIntegration.data_source_config['host']
       puts HdfsIntegration.data_source_config['port']
@@ -682,6 +691,7 @@ FixtureBuilder.configure do |fbuilder|
     end
 
     if ENV['ORACLE_HOST'] && OracleIntegration.has_jar_file?
+        puts "-- fixture.builder: ORACLE_HOST: ENV['ORACLE_HOST']"
       real_oracle_data_source = FactoryGirl.create(:oracle_data_source, :owner => owner, :host => OracleIntegration.hostname, :port => OracleIntegration.port, :db_name => OracleIntegration.db_name, :db_username => OracleIntegration.username, :db_password => OracleIntegration.password)
       OracleIntegration.setup_test_schemas
       FactoryGirl.create(:oracle_schema, :name => OracleIntegration.schema_name, :data_source => real_oracle_data_source)
