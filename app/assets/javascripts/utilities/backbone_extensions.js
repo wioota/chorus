@@ -22,16 +22,16 @@ Backbone.sync = function(method, model, options) {
     method = (options && options.method) || method;
 
     console.log ("Bextensions | originalOptions ->" + originalOptions);
-    consoleIterateValues(originalOptions);
-    console.log ("end originalOptions ---"); 
-    console.log ("Bextensions | options.method ->" + options.method);
-    console.log ("end options.method ---");
-    console.log ("Bextensions | method ->" + method);
-    console.log ("end method ---");
+//    consoleIterateValues(originalOptions);
+//    console.log ("end originalOptions ---"); 
+//    console.log ("Bextensions | options.method ->" + options.method);
+//    console.log ("end options.method ---");
+//    console.log ("Bextensions | method ->" + method);
+//    console.log ("end method ---");
     
     var type = methodMap[method];
 
-    console.log ("Bextensions | type1 ->" + type);
+//    console.log ("Bextensions | type1 ->" + type);
     
 
     // Default options, unless specified
