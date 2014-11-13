@@ -412,6 +412,16 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
 			padding: $padding-top-canon $padding-side-canon $padding-bottom-canon $padding-side-canon;
 			background-color: $greyish-blue;
 
+            .inactive {
+              @include font-primary-link;
+              color: $disabled-text;
+              line-height: normal;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
+              display: block;
+            }
+
             a {
                 @include font-primary-link;
                 line-height: normal;

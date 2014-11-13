@@ -52,6 +52,7 @@ module Dashboard
       top_workspace_ids = []
       created_at_adjusted = "(date_trunc('day', events.created_at at time zone 'UTC') at time zone '#{Time.now.zone}')"
 
+      access_checker = WorkspacesController.new
       Events::Base
         .select('workspace_id, workspaces.name, ' +
                 'workspaces.summary, count(*) as event_count')
@@ -68,7 +69,8 @@ module Dashboard
           workspace_id: w.workspace_id,
           name: w.name,
           summary: w.summary,
-          event_count: w.event_count
+          event_count: w.event_count,
+          is_accessible: (access_checker.can? :show, Workspace.find(w.workspace_id))
         }
         top_workspace_ids << w.workspace_id
       end
