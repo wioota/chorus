@@ -46,13 +46,20 @@ module Dashboard
       @start_date = @rules[@date_group][:history_fcn].call(@date_parts)
     end
 
+    def access_checker
+      if @access_checker.nil?
+        @access_checker = WorkspacesController.new
+      end
+
+      @access_checker
+    end
+
     def fetch_results
       # Get the top workspace ids since start_date
       top_workspaces = []
       top_workspace_ids = []
       created_at_adjusted = "(date_trunc('day', events.created_at at time zone 'UTC') at time zone '#{Time.now.zone}')"
 
-      access_checker = WorkspacesController.new
       Events::Base
         .select('workspace_id, workspaces.name, ' +
                 'workspaces.summary, count(*) as event_count')
