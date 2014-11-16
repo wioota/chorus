@@ -37,7 +37,9 @@ if [[ "$unamestr" == 'Darwin' ]]; then
 
 else
     os_friendly_name='Linux'
-   ./configure --with-pcre="../dependencies/pcre-$PCRE_VER" --with-zlib="../dependencies/zlib-$ZLIB_VER" --with-openssl="../dependencies/openssl-$OPENSSL_VER" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0" --with-ld-opt="-static-libgcc -Wl,-Bstatic -lc" --with-http_gzip_static_module --with-http_ssl_module --with-ipv6
+   #./configure --with-pcre="../dependencies/pcre-$PCRE_VER" --with-zlib="../dependencies/zlib-$ZLIB_VER" --with-openssl="../dependencies/openssl-$OPENSSL_VER" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0" --with-ld-opt="-static-libgcc -Wl,-Bstatic -lc" --with-http_gzip_static_module --with-http_ssl_module --with-ipv6
+    ./configure --with-pcre="../dependencies/pcre-$PCRE_VER" --with-zlib="../dependencies/zlib-$ZLIB_VER" --with-openssl="../dependencies/openssl-$OPENSSL_VER" --prefix="./nginx_data" --with-cc-opt="-DNGX_HAVE_ACCEPT4=0" --with-ld-opt="-static-libgcc -static-libstdc++ -lc" --with-http_gzip_static_module --with-http_ssl_module --with-ipv6
+    
 fi
 
 make
