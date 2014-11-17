@@ -29,69 +29,69 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 +function (window, jasmine, $) { "use strict";
 
-  jasmine.spiedEventsKey = function (selector, eventName) {
-    return [$(selector).selector, eventName].toString()
-  }
-
-  jasmine.getFixtures = function () {
-    return jasmine.currentFixtures_ = jasmine.currentFixtures_ || new jasmine.Fixtures()
-  }
-
-  jasmine.getStyleFixtures = function () {
-    return jasmine.currentStyleFixtures_ = jasmine.currentStyleFixtures_ || new jasmine.StyleFixtures()
-  }
-
-  jasmine.Fixtures = function () {
-    this.containerId = 'jasmine-fixtures'
-    this.fixturesCache_ = {}
-    this.fixturesPath = 'spec/javascripts/fixtures'
-  }
-
-  jasmine.Fixtures.prototype.set = function (html) {
-    this.cleanUp()
-    return this.createContainer_(html)
-  }
-
-  jasmine.Fixtures.prototype.appendSet= function (html) {
-    this.addToContainer_(html)
-  }
-
-  jasmine.Fixtures.prototype.preload = function () {
-    this.read.apply(this, arguments)
-  }
-
-  jasmine.Fixtures.prototype.load = function () {
-    this.cleanUp()
-    this.createContainer_(this.read.apply(this, arguments))
-  }
-
-  jasmine.Fixtures.prototype.appendLoad = function () {
-    this.addToContainer_(this.read.apply(this, arguments))
-  }
-
-  jasmine.Fixtures.prototype.read = function () {
-    var htmlChunks = []
-      , fixtureUrls = arguments
-
-    for(var urlCount = fixtureUrls.length, urlIndex = 0; urlIndex < urlCount; urlIndex++) {
-      htmlChunks.push(this.getFixtureHtml_(fixtureUrls[urlIndex]))
+    jasmine.spiedEventsKey = function (selector, eventName) {
+        return [$(selector).selector, eventName].toString()
     }
 
-    return htmlChunks.join('')
-  }
+    jasmine.getFixtures = function () {
+        return jasmine.currentFixtures_ = jasmine.currentFixtures_ || new jasmine.Fixtures()
+    }
 
-  jasmine.Fixtures.prototype.clearCache = function () {
-    this.fixturesCache_ = {}
-  }
+    jasmine.getStyleFixtures = function () {
+        return jasmine.currentStyleFixtures_ = jasmine.currentStyleFixtures_ || new jasmine.StyleFixtures()
+    }
 
-  jasmine.Fixtures.prototype.cleanUp = function () {
-    $('#' + this.containerId).remove()
-  }
+    jasmine.Fixtures = function () {
+        this.containerId = 'jasmine-fixtures'
+        this.fixturesCache_ = {}
+        this.fixturesPath = 'spec/javascripts/fixtures'
+    }
 
-  jasmine.Fixtures.prototype.sandbox = function (attributes) {
-    var attributesToSet = attributes || {}
-    return $('<div id="sandbox" />').attr(attributesToSet)
-  }
+    jasmine.Fixtures.prototype.set = function (html) {
+        this.cleanUp()
+        return this.createContainer_(html)
+    }
+
+    jasmine.Fixtures.prototype.appendSet= function (html) {
+        this.addToContainer_(html)
+    }
+
+    jasmine.Fixtures.prototype.preload = function () {
+        this.read.apply(this, arguments)
+    }
+
+    jasmine.Fixtures.prototype.load = function () {
+        this.cleanUp()
+        this.createContainer_(this.read.apply(this, arguments))
+    }
+
+    jasmine.Fixtures.prototype.appendLoad = function () {
+        this.addToContainer_(this.read.apply(this, arguments))
+    }
+
+    jasmine.Fixtures.prototype.read = function () {
+        var htmlChunks = []
+            , fixtureUrls = arguments
+
+        for(var urlCount = fixtureUrls.length, urlIndex = 0; urlIndex < urlCount; urlIndex++) {
+            htmlChunks.push(this.getFixtureHtml_(fixtureUrls[urlIndex]))
+        }
+
+        return htmlChunks.join('')
+    }
+
+    jasmine.Fixtures.prototype.clearCache = function () {
+        this.fixturesCache_ = {}
+    }
+
+    jasmine.Fixtures.prototype.cleanUp = function () {
+        $('#' + this.containerId).remove()
+    }
+
+    jasmine.Fixtures.prototype.sandbox = function (attributes) {
+        var attributesToSet = attributes || {}
+        return $('<div id="sandbox" />').attr(attributesToSet)
+    }
 
   jasmine.Fixtures.prototype.createContainer_ = function (html) {
     var container = $('<div>')
@@ -102,20 +102,20 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     return container
   }
 
-  jasmine.Fixtures.prototype.addToContainer_ = function (html){
-    var container = $(document.body).find('#'+this.containerId).append(html)
+    jasmine.Fixtures.prototype.addToContainer_ = function (html){
+        var container = $(document.body).find('#'+this.containerId).append(html)
 
-    if (!container.length) {
-      this.createContainer_(html)
+        if (!container.length) {
+            this.createContainer_(html)
+        }
     }
-  }
 
-  jasmine.Fixtures.prototype.getFixtureHtml_ = function (url) {
-    if (typeof this.fixturesCache_[url] === 'undefined') {
-      this.loadFixtureIntoCache_(url)
+    jasmine.Fixtures.prototype.getFixtureHtml_ = function (url) {
+        if (typeof this.fixturesCache_[url] === 'undefined') {
+            this.loadFixtureIntoCache_(url)
+        }
+        return this.fixturesCache_[url]
     }
-    return this.fixturesCache_[url]
-  }
 
   jasmine.Fixtures.prototype.loadFixtureIntoCache_ = function (relativeUrl) {
     var self = this
@@ -152,42 +152,42 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       self.fixturesCache_[relativeUrl] = htmlText;
   }
 
-  jasmine.Fixtures.prototype.makeFixtureUrl_ = function (relativeUrl){
-    return this.fixturesPath.match('/$') ? this.fixturesPath + relativeUrl : this.fixturesPath + '/' + relativeUrl
-  }
+    jasmine.Fixtures.prototype.makeFixtureUrl_ = function (relativeUrl){
+        return this.fixturesPath.match('/$') ? this.fixturesPath + relativeUrl : this.fixturesPath + '/' + relativeUrl
+    }
 
-  jasmine.Fixtures.prototype.proxyCallTo_ = function (methodName, passedArguments) {
-    return this[methodName].apply(this, passedArguments)
-  }
+    jasmine.Fixtures.prototype.proxyCallTo_ = function (methodName, passedArguments) {
+        return this[methodName].apply(this, passedArguments)
+    }
 
 
-  jasmine.StyleFixtures = function () {
-    this.fixturesCache_ = {}
-    this.fixturesNodes_ = []
-    this.fixturesPath = 'spec/javascripts/fixtures'
-  }
+    jasmine.StyleFixtures = function () {
+        this.fixturesCache_ = {}
+        this.fixturesNodes_ = []
+        this.fixturesPath = 'spec/javascripts/fixtures'
+    }
 
-  jasmine.StyleFixtures.prototype.set = function (css) {
-    this.cleanUp()
-    this.createStyle_(css)
-  }
+    jasmine.StyleFixtures.prototype.set = function (css) {
+        this.cleanUp()
+        this.createStyle_(css)
+    }
 
-  jasmine.StyleFixtures.prototype.appendSet = function (css) {
-    this.createStyle_(css)
-  }
+    jasmine.StyleFixtures.prototype.appendSet = function (css) {
+        this.createStyle_(css)
+    }
 
-  jasmine.StyleFixtures.prototype.preload = function () {
-    this.read_.apply(this, arguments)
-  }
+    jasmine.StyleFixtures.prototype.preload = function () {
+        this.read_.apply(this, arguments)
+    }
 
-  jasmine.StyleFixtures.prototype.load = function () {
-    this.cleanUp()
-    this.createStyle_(this.read_.apply(this, arguments))
-  }
+    jasmine.StyleFixtures.prototype.load = function () {
+        this.cleanUp()
+        this.createStyle_(this.read_.apply(this, arguments))
+    }
 
-  jasmine.StyleFixtures.prototype.appendLoad = function () {
-    this.createStyle_(this.read_.apply(this, arguments))
-  }
+    jasmine.StyleFixtures.prototype.appendLoad = function () {
+        this.createStyle_(this.read_.apply(this, arguments))
+    }
 
   jasmine.StyleFixtures.prototype.cleanUp = function () {
     while(this.fixturesNodes_.length) {
@@ -745,69 +745,69 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     })
   })
 
-  afterEach(function () {
-    jasmine.getFixtures().cleanUp()
-    jasmine.getStyleFixtures().cleanUp()
-    jasmine.jQuery.events.cleanUp()
-  })
+    afterEach(function () {
+        jasmine.getFixtures().cleanUp()
+        jasmine.getStyleFixtures().cleanUp()
+        jasmine.jQuery.events.cleanUp()
+    })
 
-  window.readFixtures = function () {
-    return jasmine.getFixtures().proxyCallTo_('read', arguments)
-  }
+    window.readFixtures = function () {
+        return jasmine.getFixtures().proxyCallTo_('read', arguments)
+    }
 
-  window.preloadFixtures = function () {
-    jasmine.getFixtures().proxyCallTo_('preload', arguments)
-  }
+    window.preloadFixtures = function () {
+        jasmine.getFixtures().proxyCallTo_('preload', arguments)
+    }
 
-  window.loadFixtures = function () {
-    jasmine.getFixtures().proxyCallTo_('load', arguments)
-  }
+    window.loadFixtures = function () {
+       jasmine.getFixtures().proxyCallTo_('load', arguments)
+    }
 
-  window.appendLoadFixtures = function () {
-    jasmine.getFixtures().proxyCallTo_('appendLoad', arguments)
-  }
+    window.appendLoadFixtures = function () {
+       jasmine.getFixtures().proxyCallTo_('appendLoad', arguments)
+    }
 
-  window.setFixtures = function (html) {
-    return jasmine.getFixtures().proxyCallTo_('set', arguments)
-  }
+    window.setFixtures = function (html) {
+       return jasmine.getFixtures().proxyCallTo_('set', arguments)
+    }
 
-  window.appendSetFixtures = function () {
-    jasmine.getFixtures().proxyCallTo_('appendSet', arguments)
-  }
+    window.appendSetFixtures = function () {
+      jasmine.getFixtures().proxyCallTo_('appendSet', arguments)
+    }
 
-  window.sandbox = function (attributes) {
-    return jasmine.getFixtures().sandbox(attributes)
-  }
+    window.sandbox = function (attributes) {
+      return jasmine.getFixtures().sandbox(attributes)
+    }
 
-  window.spyOnEvent = function (selector, eventName) {
-    return jasmine.jQuery.events.spyOn(selector, eventName)
-  }
+    window.spyOnEvent = function (selector, eventName) {
+      return jasmine.jQuery.events.spyOn(selector, eventName)
+    }
 
-  window.preloadStyleFixtures = function () {
+    window.preloadStyleFixtures = function () {
     jasmine.getStyleFixtures().proxyCallTo_('preload', arguments)
-  }
+      }
 
-  window.loadStyleFixtures = function () {
-    jasmine.getStyleFixtures().proxyCallTo_('load', arguments)
-  }
+    window.loadStyleFixtures = function () {
+       jasmine.getStyleFixtures().proxyCallTo_('load', arguments)
+    }
 
-  window.appendLoadStyleFixtures = function () {
-    jasmine.getStyleFixtures().proxyCallTo_('appendLoad', arguments)
-  }
+    window.appendLoadStyleFixtures = function () {
+       jasmine.getStyleFixtures().proxyCallTo_('appendLoad', arguments)
+    }
 
-  window.setStyleFixtures = function (html) {
-    jasmine.getStyleFixtures().proxyCallTo_('set', arguments)
-  }
+    window.setStyleFixtures = function (html) {
+       jasmine.getStyleFixtures().proxyCallTo_('set', arguments)
+    }
 
-  window.appendSetStyleFixtures = function (html) {
-    jasmine.getStyleFixtures().proxyCallTo_('appendSet', arguments)
-  }
+    window.appendSetStyleFixtures = function (html) {
+       jasmine.getStyleFixtures().proxyCallTo_('appendSet', arguments)
+    }
 
-  window.loadJSONFixtures = function () {
-    return jasmine.getJSONFixtures().proxyCallTo_('load', arguments)
-  }
+    window.loadJSONFixtures = function () {
+        return jasmine.getJSONFixtures().proxyCallTo_('load', arguments)
+    }
 
-  window.getJSONFixture = function (url) {
-    return jasmine.getJSONFixtures().proxyCallTo_('read', arguments)[url]
-  }
+    window.getJSONFixture = function (url) {
+      return jasmine.getJSONFixtures().proxyCallTo_('read', arguments)[url]
+    }
 }(window, window.jasmine, window.jQuery);
