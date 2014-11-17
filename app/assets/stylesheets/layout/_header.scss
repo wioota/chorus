@@ -1,3 +1,4 @@
+@import "_browser_support";
 @import "compass/css3";
 
 $header-margin: 30px;
@@ -18,9 +19,6 @@ $notification-token-width: $header-margin * 2;
         background-color: $list-hover-color;
     }
 
-    &.underline {
-        border-bottom: $border-canon;
-    }
     a {
         height: $height;
         width: 100%;
@@ -32,12 +30,16 @@ $notification-token-width: $header-margin * 2;
             display: table-cell;
             vertical-align: middle;
             padding-left: 15px;
-
+                        
             sub { @include secondary-text-small; }
         }
     }
 }
 
+.underline {
+    border-bottom: $border-canon;
+}
+    
 .logged_in_layout {
     > .header {
 
@@ -214,8 +216,9 @@ $notification-token-width: $header-margin * 2;
 
         .menu.type_ahead_result {
             em {
-                font-weight: bold;
-                color: $color-text2
+                font-weight: $semibold;
+                color: $color-text2;
+                line-height: normal;
             }
             position: absolute;
             top: 38px;
@@ -223,11 +226,21 @@ $notification-token-width: $header-margin * 2;
             right: $sidebar-width + $padding-x + 75px;
             width: $expanded-search-width;
 
+            word-break: break-all;
+
+            .name {
+                line-height: normal;
+            }                        
             li.result {
                 @include full-item-link(60px);
             }
             li.search_all {
                 @include full-item-link(40px);
+                padding-top:5px;
+                padding-bottom: 5px;
+            }   
+            div {
+                padding-right: 10px;
             }
         }
 

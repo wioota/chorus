@@ -18,12 +18,10 @@
   vertical-align: middle;
 }
 
-.date-picker
-{
+.date-picker {
     -webkit-transition:opacity .05s ease-in-out;
     -moz-transition:opacity .05s ease-in-out;
     -ms-transition:opacity .05s ease-in-out;
-    -o-transition:opacity .05s ease-in-out;
     transition:opacity .05s ease-in-out;
 
     .date-picker-table {

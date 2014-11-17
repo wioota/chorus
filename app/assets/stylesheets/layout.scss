@@ -5,6 +5,7 @@
 @import "compass/css3/box-shadow";
 @import "layout/_breadcrumbs";
 @import "layout/_header";
+@import "layout/_page_sub_header";
 @import "layout/_list";
 @import "layout/_list_content_details";
 @import "layout/_main_content";
@@ -19,7 +20,8 @@
     height: 100%;
 }
 
-#page > div {
+/* comfortable spacing at bottom of page EXCEPT for iframe situation */
+#page > div:not(.header_iframe_layout) {
     margin-bottom: $page-margin-bottom;
 }
 

@@ -144,7 +144,6 @@ class ChorusConfig
   def initialize_hdfs_versions
     versions = []
     pivotal_versions = [
-        'Pivotal HD 1.1',
         'Pivotal HD 2.0'
     ]
     other_versions = [

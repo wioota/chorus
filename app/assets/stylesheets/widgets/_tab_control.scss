@@ -8,7 +8,7 @@
 .tab_control {
     @include sidebar-panel;
     .tabs {
-        $pill-padding: 2px;
+        $pill-padding: 0px;
 
         text-align: center;
         padding: 0 $pill-padding;
@@ -21,7 +21,7 @@
             padding: 0 $pill-padding;
             cursor: pointer;
             display: inline;
-            @include pill-tab(50px);
+            @include pill-tab(40px);
         }
     }
 

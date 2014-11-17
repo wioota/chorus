@@ -123,7 +123,19 @@ chorus.models.Job = chorus.models.Base.extend({
     },
 
     ableToRun: function () {
-        return this.get("status") === "idle" && (typeof this.get("tasks") !== 'undefined') && this.get("tasks").length > 0;
+        // TODO: Consider if there's a better way than asyncronously fetching this model each time this is invoked.
+        // If there's a task list then validate that there's at least one item
+        // and each is valid.
+        if (typeof this._tasks === 'undefined') {
+            this.fetch({async: false});
+        }
+        var task_set = this.get("tasks");
+        if (typeof task_set !== 'undefined') {
+            return this.get("status") === "idle" && task_set.length > 0 && _.filter(task_set, function(t) { return t.isValid === false; }, this).length === 0;
+        } else
+
+        // Else this job just needs to not be running.
+        return this.get("status") === "idle";
     },
 
     lastRunLinkKey: function () {

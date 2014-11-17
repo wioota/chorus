@@ -96,6 +96,36 @@ describe("chorus.models.Job", function () {
             });
         });
 
+        context("when there is an invalid task", function () {
+            beforeEach(function() {
+                this.model = backboneFixtures.job();
+                _.each(this.model.get("tasks"), function (t) {
+                    t.isValid =  false;
+                });
+            });
+
+            it("is never true", function () {
+                var res =_.filter(['enqueued', 'running', 'stopping', 'idle'], function(status) {
+                    this.model.set('status', status);
+                    return this.model.ableToRun();
+                }, this);
+                expect(res).toEqual([]);
+            });
+        });
+
+        context("when viewing the index page (task list is not defined)", function() {
+            beforeEach(function() {
+                this.model.set('tasks', undefined);
+            });
+
+            it("is true iff status is idle", function () {
+                var res =_.filter(['enqueued', 'running', 'stopping', 'idle'], function(status) {
+                    this.model.set('status', status);
+                    return this.model.ableToRun();
+                }, this);
+                expect(res).toEqual(['idle']);
+            });
+        });
     });
 
     describe("#isRunning", function () {

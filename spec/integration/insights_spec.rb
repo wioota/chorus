@@ -3,9 +3,9 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe "Insights" do
    it 'clicks on the insights link on the home page' do
       login(users(:owner))
-      within '.menus' do
+      within '.dashboard_activity_list_header' do
         select_item('select.activities_filter', 'only_insights')
-        find('.title').should have_content('Insights'.upcase)
+        find('.title').should have_content('Recent Activity'.upcase)
       end
   end
 

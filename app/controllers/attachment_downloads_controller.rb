@@ -11,5 +11,6 @@ class AttachmentDownloadsController < ApplicationController
 
   def download_file(attachment)
     send_file attachment.contents.path, :disposition => 'attachment'
+    ActiveRecord::Base.connection.close
   end
 end

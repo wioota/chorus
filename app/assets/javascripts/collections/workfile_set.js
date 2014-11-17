@@ -6,6 +6,7 @@ chorus.collections.WorkfileSet = chorus.collections.LastFetchWins.include(
     urlTemplate: "workspaces/{{workspaceId}}/workfiles",
     showUrlTemplate: "workspaces/{{workspaceId}}/workfiles",
     searchAttr: "namePattern",
+    per_page: 20,
 
     urlParams: function() {
         return {
