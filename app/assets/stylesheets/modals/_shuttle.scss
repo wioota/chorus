@@ -121,15 +121,16 @@ $list-item-height: 39px;
                 }
 
                 &.added {
-                    .checkmark {
-                        display: inherit;
-                    }
-                    a {
-                        display: none;
-                    }
-                    .was_added {
-                        display: inline;
-                    }
+                    display: none;
+/*                     .checkmark { */
+/*                         display: inherit; */
+/*                     } */
+/*                     a { */
+/*                         display: none; */
+/*                     } */
+/*                     .was_added { */
+/*                         display: inline; */
+/*                     } */
                 }
 
                 a {
