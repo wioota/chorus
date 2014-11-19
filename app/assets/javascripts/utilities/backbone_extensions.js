@@ -179,5 +179,3 @@ Backbone.Model = (function(Model) {
     });
 
 })(Backbone);
-
-
