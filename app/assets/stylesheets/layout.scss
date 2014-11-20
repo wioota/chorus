@@ -20,9 +20,10 @@
     height: 100%;
 }
 
-/* comfortable spacing at bottom of page EXCEPT for iframe situation */
-#page > div.logged_in_layout {
+/* comfortable spacing at bottom of page EXCEPT for special cases */
+#page > div[data-template="logged_in_layout"] {
     margin-bottom: $page-margin-bottom;
+    background-color: #FAA !important;
 }
 
 #guts {
