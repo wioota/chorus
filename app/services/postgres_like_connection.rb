@@ -151,6 +151,7 @@ class PostgresLikeConnection < DataSourceConnection
       WHERE
         schemas.nspname NOT LIKE 'pg_%'
         AND schemas.nspname NOT IN ('information_schema', 'gp_toolkit', 'gpperfmon')
+        AND has_schema_privilege(schemas.nspname, 'usage')
       ORDER BY lower(schemas.nspname)
     SQL
   end

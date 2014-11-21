@@ -66,6 +66,7 @@ class GreenplumConnection < PostgresLikeConnection
       query = query.select_append do |o|
         o.`(%Q{('#{quote_identifier(schema_name)}."' || relations.relname || '"')::regclass})
       end
+pa "*********\n"*10
       query = query.join(:pg_namespace, :oid => :relnamespace)
       query = query.left_outer_join(:pg_partition_rule, :parchildrelid => :relations__oid, :relations__relhassubclass => 'f')
       query = query.where(:pg_namespace__nspname => schema_name)
@@ -73,6 +74,7 @@ class GreenplumConnection < PostgresLikeConnection
       query = query.where(:relations__relstorage => ['h','a']) if options[:tables_only]
       query = query.where(%Q|"relations"."relhassubclass" = 't' OR "pg_partition_rule"."parchildrelid" is null|)
       query = query.where(%Q|"relations"."oid" NOT IN (SELECT "parchildrelid" FROM "pg_partition_rule")|)
+      query = query.where(%Q{has_table_privilege('#{quote_identifier(schema_name)}."' || relations.relname || '"', 'select')})
 
       if options[:name_filter]
         query = query.where("\"relname\" ILIKE '%#{::DataSourceConnection.escape_like_string(options[:name_filter])}%' ESCAPE '#{::DataSourceConnection::LIKE_ESCAPE_CHARACTER}'")
