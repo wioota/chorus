@@ -8,7 +8,7 @@
         position: relative;
 
         &:last-child {
-            border-bottom: none;
+/*             border-bottom: none; */
         }
 
         .image {
@@ -35,16 +35,19 @@
         }
 
         .name {
-            padding-top: 2px;
+/*             padding-top: 2px; */
             padding-bottom: 5px;
             
-            @include font-primary-link;
+			@include font-primary;
             display: inline-block;
             max-width: 85%;
             word-break: break-all;
             span {
                 max-width: none;
             }
+        }
+        a.name {
+            @include font-primary-link;        
         }
 
         .item_information {
@@ -114,10 +117,10 @@
         .job_task_item {
             .index {
                 float: left;
-                margin-left: 5px;
-                margin-top: 12px;
-                margin-right: 4px;
-                font-weight: $semibold;
+                margin-left: 1px;
+/*                 margin-top: 12px; */
+                margin-right: 10px;
+				@include font-primary;
             }
 
             .arrows{

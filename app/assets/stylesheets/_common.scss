@@ -31,7 +31,7 @@ $light-gray:        rgb(234, 238, 241);
 $shadow-gray:		darken($light-gray, 11%);
 $charcoal:          #464646;
 $black:             #000000;
-
+$core-white:		#FFFFFF;
 
 //transparent variants
 $shadow-color:		rgba($shadow-gray, .7);
@@ -222,9 +222,11 @@ $ridiculously-large-z-index: 9999999999999;
 $font-family: "Source Sans Pro",Helvetica,Arial,Verdana,sans-serif;
 
 // Font weights
-$semibold: 600;
 $light: 300;
 // "normal" defaults to 400
+$semibold: 600;
+$bold: 700;
+
 
 
 // Font size
@@ -391,7 +393,6 @@ $lozenge-color-selected-dark: $brand-dark;
 	color: $color-text1;
 }
 
-
 @mixin font-secondary-content {
     @include debugging-mixin;
     font-size: 12px;
@@ -403,10 +404,14 @@ $lozenge-color-selected-dark: $brand-dark;
 /* used for the name of items in list */
 /* workspaces, files, etc. */
 
-@mixin font-primary-link {
-    color: $brand;
+@mixin font-primary {
     font-size: 18px;
     font-weight: normal;
+}
+
+@mixin font-primary-link {
+    color: $brand;
+    @include font-primary;
 }
 
 @mixin font-action-link {
@@ -455,11 +460,21 @@ $lozenge-color-selected-dark: $brand-dark;
     color: $color-text3;
 }
 
+@mixin insight-ribbon {
+    @include debugging-mixin;
+
+    font-size: 12px;
+    font-weight: $bold;
+	color: $core-white;
+}
+
+
 @mixin database-column-type {
     @include debugging-mixin;
-    font-size: 11px;
-    font-weight: $semibold;
-    color: #FFFFFF;
+
+    font-size: 12px;
+    font-weight: normal;
+	color: $color-text2;
 }
 
 @mixin secondary-text-normal {
