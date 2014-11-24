@@ -372,6 +372,17 @@ class ChorusInstaller
     get_destination_path
     get_data_path
 
+    # create Alpine.conf file for Alpine installation (if applicable)
+    if alpine_exists?
+      log "Alpine setup: Need to determine which Agents to enable..."
+      # [ask for user input]
+      # two modes: first, ask for number in [1,6] == agent ID of haddop distribution
+      #            second, anything outside the range (ask for 0...) will go to Y/N 
+      #             on each hadoop distribution
+      #
+      # use this input (list of agent IDs to enable) to create alpine.conf file
+    end
+
     dump_environment
 
     determine_postgres_installer
