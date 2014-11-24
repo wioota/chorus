@@ -69,7 +69,7 @@ $notification-token-width: $header-margin * 2;
                 span {
                     display: inline-block;
                     i {
-                        margin-left: 5px;
+                        margin-left: $margin-caret;
                         color: $caret-color;
                     }
                 }
@@ -126,7 +126,6 @@ $notification-token-width: $header-margin * 2;
                 }
 
                 &.active .caret::before {
-                
                     /* rotate when expanding the menu */
                     /* & translate the caret's origin (centerpoint) for rotation so that it displays correctly */
                     /* dimensions are unique to the OI caret glyph */
