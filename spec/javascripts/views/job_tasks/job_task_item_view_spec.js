@@ -51,28 +51,28 @@ describe("chorus.views.JobTaskItem", function () {
             this.model = this.collection.at(0);
             this.view.model = this.model;
             this.view.render();
-            expect(this.view.$('.up_arrow.arrow_disabled')).toExist();
+            expect(this.view.$('.move_up_arrow.arrow_disabled')).toExist();
         });
             
         it("has a down arrow as the other image for the first item in the list", function() {
             this.model = this.collection.at(0);
             this.view.model = this.model;
             this.view.render();
-            expect(this.view.$('.down_arrow')).toExist();
+            expect(this.view.$('.move_down_arrow')).toExist();
         });
 
         it("has a working up arrow as the first image for the last item in the list", function() {
             this.model = this.collection.at(this.collection.length - 1);
             this.view.model = this.model;
             this.view.render();
-            expect(this.view.$('.up_arrow')).toExist();
+            expect(this.view.$('.move_up_arrow')).toExist();
         });
 
         it("has a disabled down arrow as the other image for the last item in the list", function() {
             this.model = this.collection.at(this.collection.length - 1);
             this.view.model = this.model;
             this.view.render();
-            expect(this.view.$('.down_arrow.arrow_disabled')).toExist();
+            expect(this.view.$('.move_down_arrow.arrow_disabled')).toExist();
         });
         
         context("when the item is in the middle of the collection", function() {
@@ -83,8 +83,8 @@ describe("chorus.views.JobTaskItem", function () {
             });
 
             it("has both an up and down arrow as an", function() {
-                expect(this.view.$('.down_arrow')).toExist();
-                expect(this.view.$('.up_arrow')).toExist();
+                expect(this.view.$('.move_down_arrow')).toExist();
+                expect(this.view.$('.move_up_arrow')).toExist();
             });
 
             function itReordersTheList() {
@@ -96,7 +96,7 @@ describe("chorus.views.JobTaskItem", function () {
 
             context("when the down arrow is clicked", function() {
                 beforeEach(function() {
-                    this.view.$('.down_arrow').click();
+                    this.view.$('.move_down_arrow').click();
                     this.ids = this.collection.chain().pluck('id').invoke('toString').value();
                     chorus.arrayHelpers.swap(this.ids, 1, 2);
                 });
@@ -106,7 +106,7 @@ describe("chorus.views.JobTaskItem", function () {
 
             context("when the up arrow is clicked", function() {
                 beforeEach(function() {
-                    this.view.$('.up_arrow').click();
+                    this.view.$('.move_up_arrow').click();
                     this.ids = this.collection.chain().pluck('id').invoke('toString').value();
 
                     chorus.arrayHelpers.swap(this.ids, 1, 0);

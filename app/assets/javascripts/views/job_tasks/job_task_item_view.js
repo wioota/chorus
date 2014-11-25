@@ -3,8 +3,8 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
     templateName:"job_task_item",
 
     events: {
-        "click .down_arrow": "moveJobTaskDown",
-        "click .up_arrow"  : "moveJobTaskUp"
+        "click .move_down_arrow": "moveJobTaskDown",
+        "click .move_up_arrow"  : "moveJobTaskUp"
     },
 
     iconMap: {

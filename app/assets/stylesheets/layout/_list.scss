@@ -118,7 +118,6 @@
             .index {
                 float: left;
                 margin-left: 1px;
-/*                 margin-top: 12px; */
                 margin-right: 10px;
 				@include font-primary;
             }
@@ -127,7 +126,7 @@
                 position: absolute;
                 right: 20px;
                 top: 15px;
-                .up_arrow, .down_arrow {
+                .move_up_arrow, .move_down_arrow {
                     cursor: pointer;
                     display: inline-block;
 
