@@ -529,7 +529,7 @@ class ChorusInstaller
 
   def secure_sensitive_files
     files = %W(
-      #{destination_path}/shared/secret.token
+    #{destination_path}/shared/secret.token
       #{destination_path}/shared/secret.key
       #{destination_path}/shared/chorus.properties
       #{destination_path}/shared/chorus.license
@@ -624,7 +624,7 @@ class ChorusInstaller
     link_to_current_alpine_release
 
     # write alpine_conf
-    File.open("#{destination_path}/shared/configuration/alpine.conf", 'w'){ |f| f.write(alpine_conf) }
+    File.open("#{destination_path}/shared/configuration/alpine.conf", 'w') { |f| f.write(alpine_conf) }
   end
 
   def extract_alpine(alpine_installer)
@@ -697,8 +697,10 @@ class ChorusInstaller
   def eula_by_brand
     file_name = ENV['PIVOTALLABEL'] ? 'emc' : 'alp'
     case file_name
-      when 'alp' then ALP_EULA
-      when 'emc' then EMC_EULA
+      when 'alp' then
+        ALP_EULA
+      when 'emc' then
+        EMC_EULA
       else #nil
     end
   end
