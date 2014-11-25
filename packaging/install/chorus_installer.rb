@@ -373,13 +373,13 @@ class ChorusInstaller
     # in order corresponding to agent id. hadoopDists(i) == name for agent (i+1)
     hadoop_dists = Array['Pivotal HD 2.0', 'CDH4', 'MapR 3.0.0', 'CDH5', 'Hortonworks HDP2.1', 'Apache 2.5']
 
-    puts 'Please enter a number from [1,6] to indicate which Hadoop version you want to use. This will enable the corresponding agent in Alpine.'
+    log "Please enter a number from [1,6] to indicate which Hadoop version you want to use.\nThis will enable the corresponding agent in Alpine."
     i = 1
     for dist in hadoop_dists
       puts "\t"+i.to_s+' : '+dist
       i += 1
     end
-    puts 'If you want to use some combination of these 6 distributions, then enter in 0 to respond with Y/N questions'
+    log 'If you want to use some combination of these 6 distributions, then enter in 0 to respond with Y/N questions'
 
     alpine_conf = ''
     user_num = get_int_input
@@ -387,7 +387,7 @@ class ChorusInstaller
 
       agent_id = 1
       hadoop_dists.each { |dist|
-        puts 'Enable agent for '+dist+'? [y/n]'
+        log 'Enable agent for '+dist+'? [y/n]'
         alpine_conf += agent_id.to_s+'.enabeled='+(get_bool_input ? "true\n" : "false\n")
         agent_id += 1
       }
@@ -404,7 +404,7 @@ class ChorusInstaller
   def get_int_input
     user_num = 0
     loop do
-      puts 'Input a number from [0,6]'
+      log 'Input a number from [0,6]'
       input = gets.chomp
       user_num = input.to_i
       break if user_num >= 0 && user_num <= 6 && user_num.to_s == input
@@ -416,7 +416,7 @@ class ChorusInstaller
   def get_bool_input
     yn = ''
     loop do
-      puts 'Input a Y or N (case insensitive)'
+      log 'Input a Y or N (case insensitive)'
       yn = gets.chomp.downcase
       break if yn == 'y' || yn == 'n'
     end
