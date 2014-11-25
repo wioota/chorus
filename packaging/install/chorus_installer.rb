@@ -230,7 +230,7 @@ class ChorusInstaller
     return if upgrade_existing?
     @logger.debug("generating chorus_psql files")
     File.open("#{destination_path}/.pgpass", 'w') do |file|
-      file.puts "*:*:*:#{database_user}:#{database_password}"
+      file.puts "*:*:*:#{database_user}:#{database_password} "
     end
     FileUtils.chmod(0400, "#{destination_path}/.pgpass")
 
@@ -366,6 +366,66 @@ class ChorusInstaller
     @io.require_confirmation :accept_terms
   end
 
+  # Asks the user to specify which Hadoop distribution(s) they are using and creates alpine.conf
+  # text to control Agent launches. Used in Alpine installation only.
+  def prompt_alpine_agent_enable
+
+    # in order corresponding to agent id. hadoopDists(i) == name for agent (i+1)
+    hadoopDists = Array['Pivotal HD 2.0', 'CDH4', 'MapR 3.0.0', 'CDH5', 'Hortonworks HDP2.1', 'Apache 2.5']
+
+    log 'Please enter a number from [1,6] to indicate which Hadoop version you want to use. This will enable the corresponding agent in Alpine.'
+    i = 1
+    for dist in hadoopDists
+      log '\t '+i.to_s+' : '+dist
+      i += 1
+    end
+    log 'If you want to use some combination of these 6 distributions, then enter in 0 to respond with Y/N questions'
+
+    userNum = get_int_input
+
+    alpineConf = ''
+    if userNum === 0
+
+      agentID = 1
+      hadoopDists.each { |dist|
+        log 'Enable agent for '+dist+'? [y/n]'
+        enable = get_bool_input
+        alpineConf = agentID.to_s+'.enabeled='+(enable ? 'true\n' : 'false\n')
+        agentID += 1
+      }
+
+    else
+      (1..6).each { |agentID|
+        alpineConf += agentID.to_s+'.enabeled='+(agentID == userNum ? 'true\n' : 'false\n')
+      }
+    end
+
+    alpineConf
+  end
+
+  # Gets user input for an int in [0,6], loops until user does this.
+  def get_int_input
+    userNum = 0
+    loop do
+      log 'Input a number from [0,6]'
+      input = gets.chomp
+      userNum = input.to_i
+      break if userNum >= 0 && userNum <= 6 && userNum.to_s == input
+    end
+    userNum
+  end
+
+  # true if user inputs 'y' false if user inputs 'n', loops until user does this.
+  def get_bool_input
+    yn = ''
+    loop do
+      log 'Input a Y or N (case insensitive)'
+      yn = gets.chomp.downcase
+      break if yn == 'y' || yn == 'n'
+    end
+    yn == 'y'
+  end
+
   def install
     prompt_for_eula
     validate_localhost
@@ -373,14 +433,10 @@ class ChorusInstaller
     get_data_path
 
     # create Alpine.conf file for Alpine installation (if applicable)
+    alpineConf = ''
     if alpine_exists?
       log "Alpine setup: Need to determine which Agents to enable..."
-      # [ask for user input]
-      # two modes: first, ask for number in [1,6] == agent ID of haddop distribution
-      #            second, anything outside the range (ask for 0...) will go to Y/N 
-      #             on each hadoop distribution
-      #
-      # use this input (list of agent IDs to enable) to create alpine.conf file
+      alpineConf = prompt_alpine_agent_enable
     end
 
     dump_environment
@@ -433,7 +489,7 @@ class ChorusInstaller
 
     if alpine_exists?
       log 'Setting up alpine...' do
-        configure_alpine
+        configure_alpine(alpineConf)
       end
     end
 
@@ -555,7 +611,7 @@ class ChorusInstaller
     Dir["#{alpine_source_path}/*.sh"].size > 0
   end
 
-  def configure_alpine
+  def configure_alpine(alpine_conf)
     alpine_legacy_migration
     log "Extracting #{alpine_installer} to #{alpine_release_path}"
     extract_alpine(alpine_installer)
@@ -569,6 +625,10 @@ class ChorusInstaller
     end
 
     link_to_current_alpine_release
+
+    # write alpine_conf
+    File.open("#{destination_path}/shared/configuration/alpine.conf", 'w'){ |f| f.write(alpine_conf) }
+
   end
 
   def extract_alpine(alpine_installer)
