@@ -69,7 +69,7 @@ $notification-token-width: $header-margin * 2;
                 span {
                     display: inline-block;
                     i {
-                        margin-left: $margin-caret;
+                        margin-left: $caret-margin;
                         color: $caret-color;
                     }
                 }

@@ -181,7 +181,7 @@ $texteditor-min-height: 300px;
 $default-dialog-width: 500px;
 
 
-$margin-caret: 5px;		// space between the text and the caret glyph
+$caret-margin: 5px;		// space between the text and the caret glyph
 
 
 // z-indices
@@ -584,21 +584,63 @@ $lozenge-color-selected-dark: $brand-dark;
 /*     background-repeat: no-repeat; */
 }
 
+/* caret for menus */
+/* pointing: DOWN  */
 @mixin menu-triangle-glyph {
 	&:hover::after {
     	text-decoration: none !important;	
 	}
 	&::after {
 		display: inline-block;
-	position: relative;
-	left: $margin-caret;
-	/* color: $link-color; */
-	font-family: FontAwesome;
-    content:"\f0d7";
+		position: relative;
+		left: $caret-margin;
+		font-family: FontAwesome;
+		content: "\f0d7";
 	}
 }
 
+/* generates caret with FA */
+@mixin triangle-glyph($pointing_direction) {
+	
+	&::after {
+		display: inline-block;
+		position: relative;
+		font-family: FontAwesome;
+		left: $caret-margin;
+		
+		@include caret-glyph($pointing_direction);
+		
+/* 		@if $pointing_direction == up { */
+/* 			content: "\f0d8"; */
+/* 		} @else if $pointing_direction == down { */
+/* 			content: "\f0d7"; */
+/* 		} @else if $pointing_direction == right { */
+/* 			content: "\f0da"; */
+/* 		} @else if $pointing_direction == left { */
+/* 			content: "\f0d9"; */
+/* 		} */
 
+	}
+}
+
+/* outputs the FA glyph content for the 'caret' */
+@mixin caret-glyph($pointing_direction) {
+
+	@if $pointing_direction == up {
+		content: "\f0d8";
+	} @else if $pointing_direction == down {
+		content: "\f0d7";
+	} @else if $pointing_direction == right {
+		content: "\f0da";
+	} @else if $pointing_direction == left {
+		content: "\f0d9";
+	}
+
+}
+
+
+
+/* generates a caret with css */
 @mixin triangle($pointing_direction, $color, $width, $height) {
     width: 0;
    	height: 0;
