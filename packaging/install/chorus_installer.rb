@@ -371,48 +371,45 @@ class ChorusInstaller
   def prompt_alpine_agent_enable
 
     # in order corresponding to agent id. hadoopDists(i) == name for agent (i+1)
-    hadoopDists = Array['Pivotal HD 2.0', 'CDH4', 'MapR 3.0.0', 'CDH5', 'Hortonworks HDP2.1', 'Apache 2.5']
+    hadoop_dists = Array['Pivotal HD 2.0', 'CDH4', 'MapR 3.0.0', 'CDH5', 'Hortonworks HDP2.1', 'Apache 2.5']
 
     log 'Please enter a number from [1,6] to indicate which Hadoop version you want to use. This will enable the corresponding agent in Alpine.'
     i = 1
-    for dist in hadoopDists
+    for dist in hadoop_dists
       log '\t '+i.to_s+' : '+dist
       i += 1
     end
     log 'If you want to use some combination of these 6 distributions, then enter in 0 to respond with Y/N questions'
 
-    userNum = get_int_input
+    alpine_conf = ''
+    user_num = get_int_input
+    if user_num === 0
 
-    alpineConf = ''
-    if userNum === 0
-
-      agentID = 1
-      hadoopDists.each { |dist|
+      agent_id = 1
+      hadoop_dists.each { |dist|
         log 'Enable agent for '+dist+'? [y/n]'
-        enable = get_bool_input
-        alpineConf = agentID.to_s+'.enabeled='+(enable ? 'true\n' : 'false\n')
-        agentID += 1
+        alpine_conf = agentID.to_s+'.enabeled='+(get_bool_input ? 'true\n' : 'false\n')
+        agent_id += 1
       }
 
     else
-      (1..6).each { |agentID|
-        alpineConf += agentID.to_s+'.enabeled='+(agentID == userNum ? 'true\n' : 'false\n')
+      (1..6).each { |agent_id|
+        alpine_conf += agent_id.to_s+'.enabeled='+(agent_id == user_num ? 'true\n' : 'false\n')
       }
     end
-
-    alpineConf
+    alpine_conf
   end
 
   # Gets user input for an int in [0,6], loops until user does this.
   def get_int_input
-    userNum = 0
+    user_num = 0
     loop do
       log 'Input a number from [0,6]'
       input = gets.chomp
-      userNum = input.to_i
-      break if userNum >= 0 && userNum <= 6 && userNum.to_s == input
+      user_num = input.to_i
+      break if user_num >= 0 && user_num <= 6 && user_num.to_s == input
     end
-    userNum
+    user_num
   end
 
   # true if user inputs 'y' false if user inputs 'n', loops until user does this.
@@ -433,10 +430,10 @@ class ChorusInstaller
     get_data_path
 
     # create Alpine.conf file for Alpine installation (if applicable)
-    alpineConf = ''
+    alpine_conf = ''
     if alpine_exists?
-      log "Alpine setup: Need to determine which Agents to enable..."
-      alpineConf = prompt_alpine_agent_enable
+      log 'Alpine setup: Need to determine which Agents to enable...'
+      alpine_conf = prompt_alpine_agent_enable
     end
 
     dump_environment
@@ -489,7 +486,7 @@ class ChorusInstaller
 
     if alpine_exists?
       log 'Setting up alpine...' do
-        configure_alpine(alpineConf)
+        configure_alpine(alpine_conf)
       end
     end
 
@@ -628,7 +625,6 @@ class ChorusInstaller
 
     # write alpine_conf
     File.open("#{destination_path}/shared/configuration/alpine.conf", 'w'){ |f| f.write(alpine_conf) }
-
   end
 
   def extract_alpine(alpine_installer)
