@@ -447,6 +447,7 @@ $lozenge-color-selected-dark: $brand-dark;
 @mixin uppercase {
     text-transform: uppercase;
     letter-spacing: 1px;
+    word-spacing: 0.135em;
 }
 
 @mixin list-section-heading {
