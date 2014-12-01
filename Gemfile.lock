@@ -173,7 +173,7 @@ GEM
       rspec (~> 2.0)
       rspec-instafail (~> 0.2.0)
       ruby-progressbar (~> 1.0)
-    handlebars_assets (0.14.1)
+    handlebars_assets (0.16)
       execjs (>= 1.2.9)
       sprockets (>= 2.0.3)
       tilt
