@@ -62,16 +62,16 @@ chorus.pages.Base = chorus.pages.Bare.extend({
     subviews: {
         "#header": "header",
         "#main_content": "mainContent",
-        "#breadcrumbs": "breadcrumbs",
         "#page_sub_header": "subHeader",
+        "#breadcrumbs": "breadcrumbs",
+        "#sub_nav": "subNav",
         "#sidebar .primary_action_panel": "primaryActionPanel",
         "#sidebar .multiple_selection": "multiSelectSidebarMenu",
         "#sidebar .sidebar_content.primary": "sidebar",
-        "#sidebar .sidebar_content.secondary": "secondarySidebar",
-        "#sub_nav": "subNav"
+        "#sidebar .sidebar_content.secondary": "secondarySidebar"
     },
 
-    //Load a workspace for a page into page.workspace.  fetch and set as a requiredResource based on options.
+    // Load a workspace for a page into page.workspace, fetch and set as a requiredResource based on options
     loadWorkspace: function(workspaceId, options) {
         var optionsWithDefaults = _.extend({
             fetch: true,
@@ -88,14 +88,36 @@ chorus.pages.Base = chorus.pages.Bare.extend({
         }
     },
 
+/* jshint ignore:start */
     setupBreadcrumbs: function () {
         var page = this;
-        this.breadcrumbs = new chorus.views.BreadcrumbsView({
-            breadcrumbs: _.isFunction(page.crumbs) ? _.bind(page.crumbs, page) : page.crumbs
-        });
+
+        if (!!page.crumbs) {
+
+             console.log ("pages.js>setupBreadcrumbs 1 - > " + !!page.crumbs);
+            this.breadcrumbs = new chorus.views.BreadcrumbsView({
+                breadcrumbs: _.isFunction(page.crumbs) ? _.bind(page.crumbs, page) : page.crumbs
+            });
+        } else {
+            console.log ("pages.js>setupBreadcrumbs 2 - > " + !!page.crumbs);
+        }
     },
+/* jshint ignore:end */
+
+
+/* jshint ignore:start */
+//     whether or not this page has any breadcrumbs defined
+    hasBreadcrumbs: function() {
+        var page = this;
+        console.log ("pages.js>hasBreadcrumbs - > " + page.crumbs);
+        return _.isUndefined(page.crumbs) ? false: true;
+    },
+/* jshint ignore:end */
 
     hasSubHeader: function() {
+//         console.log ("pages.js>hasSubHeader - > " + !!this.workspaceId + " | " + this.workspaceId);
+        // currently this hack allows for the page subheader only on places where workspaceId has a value
+        // so wont work on people page, etc.
         return !!this.workspaceId;
     },
 
