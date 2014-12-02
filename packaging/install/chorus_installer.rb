@@ -610,6 +610,7 @@ class ChorusInstaller
 
   def configure_alpine(alpine_conf)
     alpine_legacy_migration
+
     log "Extracting #{alpine_installer} to #{alpine_release_path}"
     extract_alpine(alpine_installer)
 
