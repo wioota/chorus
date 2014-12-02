@@ -336,7 +336,7 @@ $lozenge-color-selected-dark: $brand-dark;
     @include debugging-mixin;
     font-size: 24px;
     font-weight: $semibold;
-    color: $color-text1;
+    /* color: $color-text1; */
 }
 
 @mixin subheading-normal {
