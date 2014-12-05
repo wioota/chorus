@@ -6,6 +6,7 @@ module UsedPortsValidator
   end
 
   def self.run(ports_to_check)
+    log "-"*20
     log "Checking for ports in use..."
 
     conflicting_ports = []
@@ -13,13 +14,13 @@ module UsedPortsValidator
       begin
         r = TCPServer.new('localhost', p)
         r.close
-        log "Success: Network port #{p} not in use"
       rescue Errno::EADDRINUSE
-        log "Problem: Network port #{p} is in use"
+        log "  \e[#{5;31}mProblem: \e[#{0}mNetwork port #{p} is in use"
         conflicting_ports << p
       end
     end
 
+    log "-"*20
     return conflicting_ports.empty?
   end
 end

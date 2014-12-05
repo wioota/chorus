@@ -25,4 +25,6 @@ namespace :validations do
 
     exit(1) unless ports_valid
   end
+
+  task :all => [:data_source, :check_ports]
 end

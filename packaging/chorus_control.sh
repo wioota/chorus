@@ -221,6 +221,7 @@ function usage () {
   echo "  $script stop    [services]         stop services"
   echo "  $script restart [services]         stop and start services"
   echo "  $script monitor [services]         monitor and restart services as needed"
+  echo "  $script check                      sanity tests for services to run"
   echo "  $script backup  [-d dir] [-r days] backup Chorus data"
   echo "  $script restore [file]             restore Chorus data"
   echo
@@ -236,6 +237,7 @@ function usage () {
   echo "  $script stop                       stop all services"
   echo "  $script restart                    restart all services"
   echo "  $script monitor                    monitor all services"
+  echo "  $script check                      sanity test system"
   echo
   echo "  $script start postgres solr        start specific services"
   echo "  $script stop scheduler workers     stop specific services"
@@ -249,6 +251,11 @@ function usage () {
   return 1
 }
 
+function check () {
+    echo "Running system check..."
+    RAILS_ENV=$RAILS_ENV JRUBY_OPTS=$JRUBY_OPTS rake validations:all
+    exit_control 0
+}
 
 case $command in
     start )
@@ -269,6 +276,9 @@ case $command in
        ;;
     restore )
        restore ${@}
+       ;;
+    check )
+       check
        ;;
     * )
        usage

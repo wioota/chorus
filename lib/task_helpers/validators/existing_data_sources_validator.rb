@@ -4,6 +4,7 @@ module ExistingDataSourcesValidator
   end
 
   def self.run(data_source_types)
+    log "-"*20
     log "Searching for duplicate data source names..."
 
     existing_data_source_types = data_source_types.select { |data_source|
@@ -18,6 +19,7 @@ module ExistingDataSourcesValidator
       log "Duplicate data source names found: #{invalid_data_sources.uniq.join(", ")}"
       return false
     end
+    log "-"*20
   end
 
   private
