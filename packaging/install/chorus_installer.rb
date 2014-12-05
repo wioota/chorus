@@ -370,7 +370,7 @@ class ChorusInstaller
   # text to control Agent launches. Used in Alpine installation only.
   def prompt_alpine_agent_enable
 
-    # in order corresponding to agent id. hadoopDists(i) == name for agent (i+1)
+    # in order corresponding to agent id. hadoop_dists(i) == name for agent (i+1)
     hadoop_dists = Array['Pivotal HD 2.0', 'CDH4', 'MapR 3.0.0', 'CDH5', 'Hortonworks HDP2.1', 'Apache 2.5']
 
     log "Please enter a number from [1,6] to indicate which Hadoop version you want to use.\nThis will enable the corresponding agent in Alpine."
