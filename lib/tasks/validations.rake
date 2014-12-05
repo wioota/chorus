@@ -1,4 +1,5 @@
-require_relative '../task_helpers/existing_data_sources_validator'
+require_relative '../task_helpers/validators/existing_data_sources_validator'
+require_relative '../task_helpers/validators/used_ports_validator'
 
 namespace :validations do
   desc 'Check Data Sources'
@@ -15,5 +16,13 @@ namespace :validations do
     ])
 
     exit(1) unless data_valid
+  end
+
+  desc 'Check Used Network Ports'
+  task :check_ports do
+    required_ports = [3000, 5432, 8080]
+    ports_valid = UsedPortsValidator.run(required_ports)
+
+    exit(1) unless ports_valid
   end
 end
