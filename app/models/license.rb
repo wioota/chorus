@@ -8,11 +8,15 @@ class License
   LEVEL_BASECAMP = 'basecamp'
   LEVEL_SUMMIT = 'summit'
 
+  attr_reader :path
+
   def initialize(lic=nil)
     unless lic
+
       path = (File.exists?(license_path) ? license_path : default_license_path)
       lic = HonorCodes.interpret(path)[:license].symbolize_keys
     end
+    @path = license_path
     @license = lic
   end
 
@@ -70,6 +74,10 @@ class License
 
   def limit_sandboxes?
     explorer?
+  end
+
+  def exists?
+    File.exists?(license_path)
   end
 
   def expires?

@@ -1,5 +1,6 @@
 require_relative '../task_helpers/validators/existing_data_sources_validator'
 require_relative '../task_helpers/validators/used_ports_validator'
+require_relative '../task_helpers/validators/chorus_license_validator'
 
 namespace :validations do
   desc 'Check Data Sources'
@@ -26,5 +27,12 @@ namespace :validations do
     exit(1) unless ports_valid
   end
 
-  task :all => [:data_source, :check_ports]
+  desc 'Check Chorus license validity'
+  task :chorus_license do
+    chorus_license = License.new
+    license_valid = ChorusLicenseValidator.run(chorus_license)
+    exit(1) unless license_valid
+  end
+
+  task :all => [:data_source, :check_ports, :chorus_license]
 end
