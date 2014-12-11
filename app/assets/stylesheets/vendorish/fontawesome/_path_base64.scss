@@ -5,6 +5,8 @@
 @font-face {
     font-family: 'FontAwesome';
     src: url('#{$fa-font-path}/fontawesome-webfont.eot?v=#{$fa-version}') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
