@@ -16,6 +16,7 @@ class EventsController < ApplicationController
 
     @uevents = events.includes(Events::Base.activity_stream_eager_load_associations)
     @events = @uevents.order('events.id DESC')
+    @user = current_user
 
   end
 
