@@ -1,4 +1,5 @@
 class EventsController < ApplicationController
+
   def index
     events = case params[:entity_type]
              when 'dashboard'
@@ -13,9 +14,9 @@ class EventsController < ApplicationController
                model.events
              end
 
-    events = events.includes(Events::Base.activity_stream_eager_load_associations)
+    @uevents = events.includes(Events::Base.activity_stream_eager_load_associations)
+    @events = @uevents.order('events.id DESC')
 
-    present paginate(events.order('events.id DESC')), :presenter_options => {:activity_stream => true, :succinct => true, :workfile_as_latest_version => true}
   end
 
   def show
