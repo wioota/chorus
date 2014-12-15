@@ -144,7 +144,7 @@ class ChorusConfig
   def initialize_hdfs_versions
     versions = []
     pivotal_versions = [
-        'Pivotal HD 2.0'
+        'Pivotal HD 2'
     ]
     other_versions = [
         'Cloudera CDH4',
