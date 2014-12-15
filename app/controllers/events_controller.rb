@@ -18,6 +18,7 @@ class EventsController < ApplicationController
     @events = @uevents.order('events.id DESC')
     @user = current_user
 
+    #present paginate(events.order('events.id DESC')), :presenter_options => {:activity_stream => true, :succinct => true, :workfile_as_latest_version => true}
   end
 
   def show
