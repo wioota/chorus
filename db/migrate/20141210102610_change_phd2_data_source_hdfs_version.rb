@@ -1,4 +1,4 @@
-class ChangeHdfsDataSourceHdfsVersion < ActiveRecord::Migration
+class ChangePhd2DataSourceHdfsVersion < ActiveRecord::Migration
 
   class HdfsDataSource < ActiveRecord::Base; end
 
