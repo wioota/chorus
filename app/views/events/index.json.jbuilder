@@ -12,7 +12,7 @@ json.response do
         json.attachments nil
         json.comments do
           json.array! event.comments do |comment|
-            json.partial! 'shared/comment', comment: comment
+            json.partial! 'shared/comment', comment: comment, user: comment.author
           end
         end
         json.is_insight event.insight
