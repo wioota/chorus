@@ -16,6 +16,6 @@ json.set! title do
     else
       json.entity_type user.image_content_type
     end
-    json.complete_json true
   end
+    json.complete_json true
 end

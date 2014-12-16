@@ -1,17 +1,16 @@
 json.workspace do
   json.id workspace.id
   json.name workspace.name
-  if workspace.is_deleted?
-    json.is_deleted true
-  else
-    json.is_deleted false
-  end
+  json.is_deleted workspace.deleted?
+  # TODO: Where should I get the entity_type parameter? (Prakash 12/15/14)
   json.entity_type "workspace"
   json.summary workspace.summary
   json.archived_at workspace.archived_at
   json.permission workspace.permissions_for(current_user)
   json.public workspace.public
   #json.datasets_count workspace.dataset_count(current_user)
+  # temporarily setting datasets_count to 0
+  json.datasets_count 0
   json.members_count workspace.members.size
   json.workfiles_count workspace.workfiles.size
   json.insights_count workspace.owned_notes.where(:insight => true).count

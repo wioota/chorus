@@ -290,14 +290,14 @@ class Workspace < ActiveRecord::Base
 
   #Added by Prakash Teli 12/12/14
   def latest_comments_hash
-    recent_notes = owned_notes.recent
-    recent_comments = comments.recent
+
+    recent_notes = owned_notes.recent.order("updated_at desc").limit(3)
+    recent_comments = comments.recent.order("updated_at desc").limit(3)
 
     recent_insights = recent_notes.where(:insight => true)
 
-    recent_notes_and_comments = recent_notes.order("updated_at desc").limit(5) + recent_comments.order("updated_at desc").limit(5)
-
-    latest_5 = recent_notes_and_comments.sort_by(&:updated_at).last(5)
+    #recent_notes_and_comments = recent_notes.order("updated_at desc").limit(5) + recent_comments.order("updated_at desc").limit(5)
+    #latest_5 = recent_notes_and_comments.sort_by(&:updated_at).last(5)
 
     # TODO: Providing the "number_of_insights", "number_of_comments" below in addition to
     #       the recent_insights_count and recent_comment_counts above with the same intention
@@ -305,7 +305,9 @@ class Workspace < ActiveRecord::Base
     {
         :number_of_insights => recent_insights.size,
         :number_of_comments => recent_notes.size + recent_comments.size - recent_insights.size,
-        :latest_comment_list => latest_5,
+        :latest_comment_list => recent_comments,
+        :latest_notes_list => recent_notes,
+        :latest_insight => owned_notes.order("updated_at desc").where(:insight => true).first,
         #:latest_comment_list => present(latest_5),
         #:latest_insight => present(model.owned_notes.order("updated_at desc").where(:insight => true).first)
     }

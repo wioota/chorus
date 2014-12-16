@@ -19,4 +19,9 @@ class Comment < ActiveRecord::Base
   def author
     User.unscoped.find(author_id)
   end
+
+  def actor
+    author
+  end
+
 end
