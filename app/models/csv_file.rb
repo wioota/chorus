@@ -6,9 +6,9 @@ class CsvFile < ActiveRecord::Base
   serialize :column_names
   serialize :types
 
-  belongs_to :workspace, :touch => true, :counter_cache =>  true
-  belongs_to :user, :touch => true, :counter_cache =>  true
-  belongs_to :import, :touch => true, :counter_cache =>  true
+  belongs_to :workspace, :touch => true #:counter_cache =>  true
+  belongs_to :user, :touch => true #:counter_cache =>  true
+  belongs_to :import, :touch => true #:counter_cache =>  true
 
   has_attached_file :contents, :path => ":rails_root/system/:class/:id/:basename.:extension"
 
