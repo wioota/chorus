@@ -1,4 +1,4 @@
-//old compass values to turn off or on support for specific browser agents
+//compass values to turn off/on support for specific browser agents
 
 $legacy-support-for-ie6: false;
 $legacy-support-for-ie7: false;
@@ -12,4 +12,5 @@ $experimental-support-for-opera: false;
 $experimental-support-for-webkit: false;
 
 //newer compass1.x values to turn off or on support for specific browser agents
-//$browser-minimum-versions: ("chrome": "32", "firefox": "22", "ie": "10", "safari": "7", "opera": null);
+//$browser-minimum-versions: ("chrome": "32", "firefox": "25", "ie": "9", "safari": "7", "opera": null);
+

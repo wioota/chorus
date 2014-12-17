@@ -61,8 +61,7 @@
 
         label.db_username, input.db_username,
         label[name=databaseName], input[name=databaseName],
-        .username, .group_list, .gnip_username
-        {
+        .username, .group_list, .gnip_username {
             width: $account-width;
         }
 
