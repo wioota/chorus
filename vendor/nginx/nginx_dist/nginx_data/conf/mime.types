@@ -26,7 +26,7 @@ types {
     application/font-woff                 woff;
     application/vnd.ms-fontobject         eot;
     application/font-sfnt                 otf;
-    application/font-sfnt                 ttf;
+    font/truetype                         ttf;
     application/java-archive              jar war ear;
     application/json                      json;
     application/mac-binhex40              hqx;
