@@ -365,7 +365,7 @@ describe ChorusConfig do
 
       it 'returns the hdfs versions' do
         config.hdfs_versions.should =~ [
-            'Pivotal HD 2.0'
+            'Pivotal HD 2'
         ]
       end
     end
@@ -381,7 +381,7 @@ describe ChorusConfig do
             'Cloudera CDH5',
             'Hortonworks HDP 2.1',
             'MapR',
-            'Pivotal HD 2.0'
+            'Pivotal HD 2'
         ]
       end
     end
