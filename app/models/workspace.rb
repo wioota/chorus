@@ -13,8 +13,8 @@ class Workspace < ActiveRecord::Base
                     :url => "/:class/:id/image?style=:style",
                     :default_url => "", :styles => {:icon => "50x50>"}
 
-  belongs_to :archiver, :class_name => 'User'
-  belongs_to :owner, :class_name => 'User'
+  belongs_to :archiver, :class_name => 'User', :touch => true
+  belongs_to :owner, :class_name => 'User', :touch => true
   has_many :jobs, :dependent => :destroy
   has_many :milestones, :dependent => :destroy
   has_many :memberships, :inverse_of => :workspace
