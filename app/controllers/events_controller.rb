@@ -14,11 +14,10 @@ class EventsController < ApplicationController
                model.events
              end
 
-    @uevents = events.includes(Events::Base.activity_stream_eager_load_associations)
-    @events = @uevents.order('events.id DESC')
-    @user = current_user
+    events = events.includes(Events::Base.activity_stream_eager_load_associations)
 
-    #present paginate(events.order('events.id DESC')), :presenter_options => {:activity_stream => true, :succinct => true, :workfile_as_latest_version => true}
+    present paginate(events.order('events.id DESC')), :presenter_options => {:activity_stream => true, :succinct => true, :workfile_as_latest_version => true}
+
   end
 
   def show
