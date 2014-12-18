@@ -266,6 +266,37 @@ $notification-token-width: $header-margin * 2;
                 text-align: center;
                 &.remainder { height: 100vh; }
             }
+            
+            /*  color for svg glyphs in the primary nav bar */
+            #primary {
+                svg {
+                    fill: #FFF;
+                }
+            }
+            
+            #primary-home { 
+                @extend #primary;
+                svg {
+                    width: 19px;
+                    height: 20px;
+                }
+            }
+            #primary-workspaces {
+                font-size: 19px;
+            }
+            #primary-data {
+                font-size: 19px;
+            }
+            #primary-users {
+                @extend #primary;
+                svg {
+                    width: 29px;
+                    height: 30px;
+                }
+            }
+            #primary-tags {
+                font-size: 19px;
+            }
         }
 
         .menu.popup_username {
