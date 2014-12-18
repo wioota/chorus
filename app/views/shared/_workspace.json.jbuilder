@@ -10,7 +10,7 @@ json.workspace do
   json.public workspace.public
   #json.datasets_count workspace.dataset_count(current_user)
   # temporarily setting datasets_count to 0
-  json.datasets_count 0
+  json.datasets_count workspace.associated_datasets.size
   json.members_count workspace.members.size
   json.workfiles_count workspace.workfiles.size
   json.insights_count workspace.owned_notes.where(:insight => true).count
