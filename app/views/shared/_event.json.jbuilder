@@ -5,7 +5,9 @@ json.timestamp event.updated_at
 if event.workspace != nil
   json.partial! 'shared/workspace', workspace: event.workspace
 end
-json.body "insight details goes here. Need to figure out how."
+if event.additional_data && event.additional_data["body"]
+  json.body event.additional_data["body"]
+end
 json.action_type event.action
 json.attachments nil
 json.comments do

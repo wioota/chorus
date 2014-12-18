@@ -16,6 +16,8 @@ json.set! title do
     else
       json.entity_type user.image_content_type
     end
-  end
     json.complete_json true
+  end
+  json.entity_type "user"
+  json.is_deleted false
 end
