@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemaMeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.sourceforge.net/xmlschema/2008/08/26/schemaspy.meta.xsd">
+  <comments>
+    Chorus Database Schema
+  </comments>
+  <tables>
+    <table name="workfiles">
+      <column name="workspace_id">
+        <foreignKey table="workspaces" column="id"/>
+      </column>
+    </table>
+
+    <table name="jobs">
+      <column name="workspace_id">
+        <foreignKey table="workspaces" column="id"/>
+      </column>
+    </table>
+    <table name="associated_datasets">
+      <column name="workspace_id">
+        <foreignKey table="workspaces" column="id"/>
+      </column>
+    </table>
+    <table name="workspaces">
+      <column name="owner_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="workspaces">
+      <column name="archiver_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="milestones">
+      <column name="workspace_id">
+        <foreignKey table="workspaces" column="id" />
+      </column>
+    </table>
+    <table name="memberships">
+      <column name="workspace_id">
+        <foreignKey table="workspaces" column="id" />
+      </column>
+    </table>
+    <table name="activities">
+      <column name="entity_id">
+        <foreignKey table="workspaces" column="id" />
+      </column>
+    </table>
+    <table name="events">
+      <column name="workspace_id">
+        <foreignKey table="workspaces" column="id" />
+      </column>
+    </table>
+    <table name="activities">
+      <column name="event_id">
+        <foreignKey table="events" column="id" />
+      </column>
+    </table>
+    <table name="notifications">
+      <column name="event_id">
+        <foreignKey table="events" column="id" />
+      </column>
+    </table>
+    <table name="comments">
+      <column name="event_id">
+        <foreignKey table="events" column="id" />
+      </column>
+    </table>
+    <table name="attachments">
+      <column name="note_id">
+        <foreignKey table="events" column="id" />
+      </column>
+    </table>
+    <table name="notes_workfiles">
+      <column name="note_id">
+        <foreignKey table="events" column="id" />
+      </column>
+    </table>
+    <table name="notes_workfiles">
+      <column name="workfile_id">
+        <foreignKey table="workfiles" column="id" />
+      </column>
+    </table>
+    <table name="notes_workfiles">
+      <column name="note_id">
+        <foreignKey table="events" column="id" />
+      </column>
+    </table>
+    <table name="notes_work_flow_results">
+      <column name="note_id">
+        <foreignKey table="events" column="id" />
+      </column>
+    </table>
+    <table name="datasets_notes">
+      <column name="note_id">
+        <foreignKey table="events" column="id" />
+      </column>
+    </table>
+    <table name="datasets_notes">
+      <column name="dataset_id">
+        <foreignKey table="datasets" column="id" />
+      </column>
+    </table>
+    <table name="csv_files">
+      <column name="workspace_id">
+        <foreignKey table="workspaces" column="id" />
+      </column>
+    </table>
+    <table name="datasets">
+      <column name="workspace_id">
+        <foreignKey table="workspaces" column="id" />
+      </column>
+    </table>
+    <table name="imports">
+      <column name="workspace_id">
+        <foreignKey table="workspaces" column="id" />
+      </column>
+    </table>
+    <table name="data_sources">
+      <column name="owner_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="hdfs_data_sources">
+      <column name="owner_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="gnip_data_sources">
+      <column name="owner_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="data_source_accounts">
+      <column name="owner_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="dashboard_items">
+      <column name="user_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="memberships">
+      <column name="user_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="jobs">
+      <column name="owner_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="activities">
+      <column name="entity_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="notifications">
+      <column name="recipient_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="comments">
+      <column name="author_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="open_workfile_events">
+      <column name="user_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="open_workfile_events">
+      <column name="workfile_id">
+        <foreignKey table="workfiles" column="id" />
+      </column>
+    </table>
+    <table name="job_results">
+      <column name="job_id">
+        <foreignKey table="jobs" column="id" />
+      </column>
+    </table>
+    <table name="job_subscriptions">
+      <column name="job_id">
+        <foreignKey table="jobs" column="id" />
+      </column>
+    </table>
+    <table name="job_subscriptions">
+      <column name="user_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="job_subscriptions">
+      <column name="user_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="job_tasks">
+      <column name="job_id">
+        <foreignKey table="jobs" column="id" />
+      </column>
+    </table>
+    <table name="job_task_results">
+      <column name="job_result_id">
+        <foreignKey table="job_results" column="id" />
+      </column>
+    </table>
+    <table name="hdfs_entries">
+      <column name="hdfs_data_source_id">
+        <foreignKey table="hdfs_data_sources" column="id" />
+      </column>
+    </table>
+    <table name="hdfs_imports">
+      <column name="hdfs_entry_id">
+        <foreignKey table="hdfs_entries" column="id" />
+      </column>
+    </table>
+    <table name="workfile_versions">
+      <column name="workfile_id">
+        <foreignKey table="workfiles" column="id" />
+      </column>
+    </table>
+    <table name="workfile_execution_locations">
+      <column name="workfile_id">
+        <foreignKey table="workfiles" column="id" />
+      </column>
+    </table>
+    <table name="workfile_drafts">
+      <column name="workfile_id">
+        <foreignKey table="workfiles" column="id" />
+      </column>
+    </table>
+    <table name="uploads">
+      <column name="user_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="tableau_workbook_publications">
+      <column name="workspace_id">
+        <foreignKey table="workspaces" column="id" />
+      </column>
+    </table>
+    <table name="databases">
+      <column name="data_source_id">
+        <foreignKey table="data_sources" column="id" />
+      </column>
+    </table>
+    <table name="taggings">
+      <column name="tagger_id">
+        <foreignKey table="users" column="id" />
+      </column>
+    </table>
+    <table name="taggings">
+      <column name="tag_id">
+        <foreignKey table="tags" column="id" />
+      </column>
+    </table>
+    <table name="data_source_account_permissions">
+      <column name="data_source_account_id">
+        <foreignKey table="data_source_accounts" column="id" />
+      </column>
+    </table>
+    <table name="data_source_accounts">
+      <column name="data_source_id">
+        <foreignKey table="data_sources" column="id" />
+      </column>
+    </table>
+
+  </tables>
+</schemaMeta>

@@ -29,25 +29,30 @@ class WorkspacesController < ApplicationController
                                         .limit(10)
                             .map(&:workspace_id)
 
-        results = workspaces.where('id IN (' + top_workspace_ids.join(',') + ')')
+        @workspaces = workspaces.where('id IN (' + top_workspace_ids.join(',') + ')')
                             .includes(succinct ? [:owner] : Workspace.eager_load_associations)
                             .order("lower(name) ASC, id")
 
-        present paginate(results),
-            :presenter_options => {
-                :show_latest_comments => (params[:show_latest_comments] == 'true'),
-                :succinct => succinct
-            }
+        #present paginate(@workspaces),
+        #    :presenter_options => {
+        #        :show_latest_comments => (params[:show_latest_comments] == 'true'),
+        #       :succinct => succinct
+        # }
+
       end
     else
-      results = workspaces.includes(succinct ? [:owner] : Workspace.eager_load_associations)
+
+      @workspaces = workspaces.includes(succinct ? [:owner] : Workspace.eager_load_associations)
                           .order("lower(name) ASC, id")
-      present paginate(results),
-              :presenter_options => {
-                  :show_latest_comments => (params[:show_latest_comments] == 'true'),
-                  :succinct => succinct
-              }
+
+      # present paginate(@workspaces),
+      #        :presenter_options => {
+      #            :show_latest_comments => (params[:show_latest_comments] == 'true'),
+      #            :succinct => succinct
+      #        }
+
     end
+
   end
 
   def create

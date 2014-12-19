@@ -22,6 +22,9 @@ gem 'messengerjs-rails'
 gem 'codemirror-rails', '3.23'
 gem 'honor_codes', '~> 0.1.0'
 
+gem 'jbuilder'
+
+
 platform :jruby do
   gem 'jruby-openssl', :require => false
   gem 'activerecord-jdbcpostgresql-adapter'
@@ -71,6 +74,7 @@ group :development, :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
   gem 'ci_reporter', '>= 1.8.2'
   gem 'faker'
   gem 'fakeweb'
+  gem 'quiet_assets'
   gem 'sunspot_solr', :github => 'taktsoft/sunspot', :ref => '78717a33894271d012682dbe8902458badb0ca63' # https://github.com/sunspot/sunspot/pull/267
   gem 'backbone_fixtures_rails', :github => 'charleshansen/backbone_fixtures_rails'
   gem 'rspec_api_documentation', :github => 'Chorus/rspec_api_documentation', :require => false

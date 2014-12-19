@@ -13,8 +13,8 @@ class Workspace < ActiveRecord::Base
                     :url => "/:class/:id/image?style=:style",
                     :default_url => "", :styles => {:icon => "50x50>"}
 
-  belongs_to :archiver, :class_name => 'User'
-  belongs_to :owner, :class_name => 'User'
+  belongs_to :archiver, :class_name => 'User', :touch => true
+  belongs_to :owner, :class_name => 'User', :touch => true
   has_many :jobs, :dependent => :destroy
   has_many :milestones, :dependent => :destroy
   has_many :memberships, :inverse_of => :workspace
@@ -264,6 +264,10 @@ class Workspace < ActiveRecord::Base
     end
   end
 
+  def is_deleted?
+    deleted_at != nil ? true : false
+  end
+
   def visible_to?(user)
     public? || member?(user)
   end
@@ -283,6 +287,33 @@ class Workspace < ActiveRecord::Base
       end
     end
   end
+
+  #Added by Prakash Teli 12/12/14
+  def latest_comments_hash
+
+    recent_notes = owned_notes.recent.order("updated_at desc").limit(3)
+    recent_comments = comments.recent.order("updated_at desc").limit(3)
+
+    recent_insights = recent_notes.where(:insight => true)
+
+    #recent_notes_and_comments = recent_notes.order("updated_at desc").limit(5) + recent_comments.order("updated_at desc").limit(5)
+    #latest_5 = recent_notes_and_comments.sort_by(&:updated_at).last(5)
+
+    # TODO: Providing the "number_of_insights", "number_of_comments" below in addition to
+    #       the recent_insights_count and recent_comment_counts above with the same intention
+    #       but slightly different implementation. Needs to be refactored.
+    {
+        :number_of_insights => recent_insights.size,
+        :number_of_comments => recent_notes.size + recent_comments.size - recent_insights.size,
+        :latest_comment_list => recent_comments,
+        :latest_notes_list => recent_notes,
+        :latest_insight => owned_notes.order("updated_at desc").where(:insight => true).first,
+        #:latest_comment_list => present(latest_5),
+        #:latest_insight => present(model.owned_notes.order("updated_at desc").where(:insight => true).first)
+    }
+
+  end
+
 
   private
 
