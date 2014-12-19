@@ -10,8 +10,6 @@ json.response do
       json.archived_at workspace.archived_at
       json.permission workspace.permissions_for(current_user)
       json.public workspace.public
-      #json.datasets_count workspace.dataset_count(current_user)
-      # temporarily setting datasets_count to 0
       json.datasets_count  workspace.dataset_count(current_user)
       json.members_count workspace.members.size
       json.workfiles_count workspace.workfiles.size
