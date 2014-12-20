@@ -5,8 +5,8 @@ class Comment < ActiveRecord::Base
   include SharedSearch
 
   attr_accessible :author_id, :body, :event_id
-  belongs_to :event, :class_name => 'Events::Base', :touch => true #:counter_cache =>  true
-  belongs_to :author, :class_name => 'User', :touch => true #:counter_cache =>  true
+  belongs_to :event, :class_name => 'Events::Base', :touch => true
+  belongs_to :author, :class_name => 'User', :touch => true
 
   validates_presence_of :author_id, :body, :event_id
 
