@@ -32,28 +32,15 @@ class WorkspacesController < ApplicationController
         @workspaces = workspaces.where('id IN (' + top_workspace_ids.join(',') + ')')
                             .includes(succinct ? [:owner] : Workspace.eager_load_associations)
                             .order("lower(name) ASC, id")
-
-        #present paginate(@workspaces),
-        #    :presenter_options => {
-        #        :show_latest_comments => (params[:show_latest_comments] == 'true'),
-        #       :succinct => succinct
-        # }
-
       end
+
     else
 
       @workspaces = workspaces.includes(succinct ? [:owner] : Workspace.eager_load_associations)
                           .order("lower(name) ASC, id")
-
-      # present paginate(@workspaces),
-      #        :presenter_options => {
-      #            :show_latest_comments => (params[:show_latest_comments] == 'true'),
-      #            :succinct => succinct
-      #        }
-
-      @workspaces = paginate @workspaces
     end
 
+    @workspaces = paginate @workspaces
   end
 
   def create

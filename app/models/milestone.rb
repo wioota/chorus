@@ -2,6 +2,7 @@ class Milestone < ActiveRecord::Base
   STATES = ['planned', 'achieved']
 
   belongs_to :workspace, :touch => true
+
   attr_accessible :name, :state, :target_date
 
   validates_presence_of :name, :state, :target_date, :workspace

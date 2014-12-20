@@ -18,6 +18,7 @@ class Workfile < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User', :touch => true
   belongs_to :execution_location, :polymorphic => true, :touch => true
 
+
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
   has_many :comments, :through => :events
