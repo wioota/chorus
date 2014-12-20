@@ -51,6 +51,7 @@ class WorkspacesController < ApplicationController
       #            :succinct => succinct
       #        }
 
+      @workspaces = paginate @workspaces
     end
 
   end
