@@ -18,10 +18,15 @@
     font-family: 'Icons';
     display: inline-block;
     speak: none;
-    line-height: 1;
+    
     vertical-align: baseline;
-    font-weight: normal;
     font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    font-size: 14px;
+    font-size: inherit;
+
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -60,3 +65,5 @@
     transform: scale(-1, -1);
   }
 }
+
+

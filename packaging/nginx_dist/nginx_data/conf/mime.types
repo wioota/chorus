@@ -1,11 +1,9 @@
-
 types {
     text/html                             html htm shtml;
     text/css                              css;
     text/xml                              xml;
     image/gif                             gif;
     image/jpeg                            jpeg jpg;
-    application/x-javascript              js;
     application/javascript                js;
     application/atom+xml                  atom;
     application/rss+xml                   rss;
@@ -28,7 +26,7 @@ types {
     application/font-woff                 woff;
     application/vnd.ms-fontobject         eot;
     application/font-sfnt                 otf;
-    application/font-sfnt                 ttf;
+    font/truetype                         ttf;
     application/java-archive              jar war ear;
     application/json                      json;
     application/mac-binhex40              hqx;
