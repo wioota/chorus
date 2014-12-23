@@ -262,10 +262,14 @@ $list-horizontal-divider: 1px solid $border-color;
 $list-vertical-divider: 1px solid $border-color;
 $list-selectable-hover-color: rgba(0,0,0,0.1);
 $list-selectable-selected-color: #FFFFFF;
-$list-breadcrumb-divider: "\e02f";
-$list-breadcrumb-spacing: 5px;
-$list-breadcrumb-size: 9px;
 $list-border-color-highlighted: $green;
+
+/* breadcrumb specs */
+$list-breadcrumb-fontfamily: "FontAwesome";
+$list-breadcrumb-divider: "\f0da";
+$list-breadcrumb-spacingleft: 1px;
+$list-breadcrumb-spacingright: 5px;
+$list-breadcrumb-size: 13px;
 
 /* whitespace */
 
@@ -712,7 +716,7 @@ $lozenge-color-selected-dark: $brand-dark;
 @mixin lozenge($padding, $min-width, $height) {
     @include uppercase;
     height: $height;
-    line-height: $height - 1;
+    line-height: $height;
     font-weight: $semibold;
     display: inline-block;
     padding: $padding;
