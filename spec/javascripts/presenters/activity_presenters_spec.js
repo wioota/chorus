@@ -22,7 +22,7 @@ describe("chorus.presenters.Activity", function() {
     function itHasTheErrorIcon() {
         describe("the icon", function() {
             it("shows the error icon", function() {
-                expect(this.presenter.iconSrc()).toBe("/images/message_error_med.png");
+                expect(this.presenter.iconSrc()).toBe("/images/messaging/message_error_med.png");
             });
 
             it("links to the user's profile", function() {

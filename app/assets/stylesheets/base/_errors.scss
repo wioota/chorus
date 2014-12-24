@@ -1,4 +1,7 @@
-.errors, .sql_errors, .dataset_errors, .warning {
+.errors,
+.sql_errors,
+.dataset_errors,
+.warning {
     @include after-clearfix;
     background-color: $error-background-color;
     vertical-align: middle;
@@ -33,9 +36,12 @@
     background-color: $needs-attention;
 }
 
-input.has_error, textarea.has_error, .text-core .text-wrap textarea.has_error, .text-core .text-wrap input.has_error {
+input.has_error,
+textarea.has_error,
+.text-core .text-wrap textarea.has_error,
+.text-core .text-wrap input.has_error {
     border: 2px solid $error-background-color;
-    background-image: url("/images/error-exclamation.png");
+    background-image: url("/images/messaging/error-exclamation.png");
     background-repeat: no-repeat;
     background-position: 99%;
     padding-right: 20px;
@@ -43,7 +49,7 @@ input.has_error, textarea.has_error, .text-core .text-wrap textarea.has_error, .
 
 .cleditorMain.has_error {
     border: 2px solid $error-background-color !important;
-    background-image: url("/images/error-exclamation.png");
+    background-image: url("/images/messaging/error-exclamation.png");
     background-repeat: no-repeat;
     background-position: 99%;
     padding-right: 20px;
@@ -58,7 +64,7 @@ input.has_error, textarea.has_error, .text-core .text-wrap textarea.has_error, .
     color: white;
 }
 
-.ie9, .ie8, .ie7, .ie6 {
+.ie9, .ie8, .ie7 {
     textarea.has_error {
         background-position: 93%;
     }
