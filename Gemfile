@@ -66,7 +66,7 @@ end
 group :development, :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
   gem 'foreman', '>= 0.62',      :require => false
   gem 'rake',                    :require => false
-  gem 'rspec',                   :require => 'rspec/core/rake_task'
+  gem 'rspec', '2.14.1'                   :require => 'rspec/core/rake_task'
   gem 'jasmine', :github => 'pivotal/jasmine-gem'
   gem 'jasmine-core', :github => 'pivotal/jasmine'
   gem 'sunspot_matchers'
