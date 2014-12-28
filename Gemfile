@@ -21,8 +21,10 @@ gem 'premailer-rails'
 gem 'messengerjs-rails'
 gem 'codemirror-rails', '3.23'
 gem 'honor_codes', '~> 0.1.0'
-
+# Gem to generate JSON data output using Rails View
 gem 'jbuilder'
+# Gem that allows you to call view renders from anywhere (model, lib, rake, etc.)
+gem 'render_anywhere'
 
 
 platform :jruby do
