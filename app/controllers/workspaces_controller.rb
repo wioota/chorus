@@ -33,7 +33,7 @@ class WorkspacesController < ApplicationController
                             .includes(succinct ? [:owner] : Workspace.eager_load_associations)
                             .order("lower(name) ASC, id")
 
-        #present paginate(@workspaces),
+          #present paginate(@workspaces),
         #    :presenter_options => {
         #        :show_latest_comments => (params[:show_latest_comments] == 'true'),
         #       :succinct => succinct
