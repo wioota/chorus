@@ -1,0 +1,46 @@
+.workspace_summary_content {
+    background-color: #99D;
+
+    .truncated_summary {
+/*         display: inline-block; */
+
+    }
+
+    .project_status {
+        margin-right: 10px;
+        float: right;
+    }
+
+}
+
+#workspace_content_recentActivity_header {
+    background-color: #ECC;
+    clear: both;
+
+        .menus {
+            float: none;
+            padding-bottom: 5px;
+            margin-top: 5px;
+        }   
+}
+
+
+/*     .activity_list_header { */
+/*         .workspace_title { */
+/*             @include heading-normal; */
+/*             padding-top: 10px; */
+/*         } */
+/*  */
+/*         .menus { */
+/*             float: none; */
+/*             padding-bottom: 5px; */
+/*             margin-top: 5px; */
+/*         } */
+/*  */
+/*         h1 { */
+/*             padding-top: 0px; */
+/*             padding-left: 0px; */
+/*         } */
+/*          */
+/*     } */
+/*  */

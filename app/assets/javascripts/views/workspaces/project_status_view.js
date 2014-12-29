@@ -3,7 +3,7 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
     templateName: "project_status",
 
     events: {
-        "click .edit_project_status": 'launchEditProjectStatusDialog'
+        "click .edit_project_status": "launchEditProjectStatusDialog"
     },
 
     setup: function () {
@@ -13,7 +13,9 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
         }
     },
 
-    postRender: function () { this.styleTooltip(); },
+    postRender: function () {
+        this.styleTooltip();
+    },
 
     additionalContext: function () {
         return {
@@ -31,7 +33,6 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
         e && e.preventDefault();
         new chorus.dialogs.EditProjectStatus({ model: this.model }).launchModal();
     },
-
 
     styleTooltip: function () {
         // reassign the offset function so that when qtip calls it, qtip correctly positions the tooltips
@@ -58,7 +59,6 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
                     width: 15,
                     height: 20
                 }
-
             }
         };
 

@@ -6,13 +6,13 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
         this.subNav = new chorus.views.SubNav({workspace: this.model, tab: "summary"});
         this.sidebar = new chorus.views.WorkspaceShowSidebar({model: this.model});
 
-        this.mainContent = new chorus.views.MainContentView({
+        this.mainContent = new chorus.views.MainContentView ({
             model: this.model,
-            content: new chorus.views.WorkspaceShow({model: this.model }),
+            content: new chorus.views.WorkspaceShow({model: this.model}),
             contentHeader: new chorus.views.WorkspaceSummaryContentHeader({model: this.model})
         });
 
-        this.listenTo(this.model, 'saved', this.render);
+        this.listenTo(this.model, "saved", this.render);
     },
 
     preRender: function () {
@@ -39,7 +39,6 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
         var editMembers     = {name: 'edit_workspace_members', target: chorus.dialogs.WorkspaceEditMembers};
         var kaggle          = {name: 'find_kaggle_contributors', target: this.model.showUrl() + "/kaggle"};
 
-
         active && _.each(memberActions, function (action) { actions.push(action); });
 
         sandbox || (active && !this.sidebar.additionalContext().limitSandboxes && actions.push(addSandbox));
@@ -63,10 +62,9 @@ chorus.pages.WorkspaceShowPage = chorus.pages.Base.extend({
                 this.model.get("hasAddedWorkfile") === false ||
                 this.model.get("hasAddedSandbox") === false ||
                 this.model.get("hasChangedSettings") === false)) {
-
-                chorus.router.navigate("/workspaces/" + this.workspaceId + "/quickstart");
-                return;
-            }
+                    chorus.router.navigate("/workspaces/" + this.workspaceId + "/quickstart");
+                    return;
+                }
         }
     }
 });

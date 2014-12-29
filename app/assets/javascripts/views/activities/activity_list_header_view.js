@@ -8,9 +8,9 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         "change .activities_filter": "onFilterChange"
     },
 
-    subviews: {
-        '.tag_box': 'tagBox'
-    },
+//     subviews: {
+//         '.tag_box': 'tagBox'
+//     },
 
     setup: function() {
         if(!this.collection) {
@@ -19,11 +19,10 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
 
         this.allTitle = this.options.allTitle;
         this.insightsTitle = this.options.insightsTitle;
-        this.tagBox = this.options.tagBox;
+//         this.tagBox = this.options.tagBox;
     },
 
     postRender: function() {
-
         _.defer(_.bind(function () {
             chorus.styleSelect(this.selectElement());
         }, this));
@@ -33,9 +32,10 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
 
     additionalContext: function() {
         return {
-            title: this.pickTitle(),
-            iconUrl: this.model && this.model.defaultIconUrl(),
-            tagBox: this.tagBox
+            title: this.pickTitle()
+//             ,
+//             iconUrl: this.model && this.model.defaultIconUrl(),
+//             tagBox: this.tagBox
         };
     },
 

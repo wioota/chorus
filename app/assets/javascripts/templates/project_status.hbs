@@ -1,32 +1,49 @@
-<div class='facts'>
-    <span class="label">{{t "workspace.owner"}}:</span>
-    <a class="owner" title="{{ownerName}}" href="{{ownerShowUrl}}">{{ownerName}}</a>
-
-    <div class='status_link'>
-        <span class="label">{{t 'workspace.project.status.label'}}</span>
-        <a class="edit_project_status {{projectStatus}}" href="#">{{t projectStatusKey}}</a>
-        {{#if latestStatusChangeActivity}}
+<table>
+    <tr>
+        <td>
+            <span class="label">{{t "workspace.owner"}}:</span>
+        </td>
+        <td>
+             <a class="owner" title="{{ownerName}}" href="{{ownerShowUrl}}">{{ownerName}}</a>
+        </td>
+    </tr>
+    <tr class="status_link">
+        <td>
+            <span class="label">{{t 'workspace.project.status.label'}}</span>
+        </td>
+        <td>
+            <a class="edit_project_status {{projectStatus}}" href="#">{{t projectStatusKey}}</a>
+            {{#if latestStatusChangeActivity}}
             <i class='oi oi-flip-horizontal status_reason' data-glyph="comment-square"/>
-        {{/if}}
-    </div>
-</div>
+            {{/if}}
+        </td>
+    </tr>
 
 {{#unless limitMilestones}}
-<div class="milestones">
-    <div class='target_date'>
-        <span class="label">Target:</span>
-        {{#if projectTargetDate}}
-            {{relativeTimestamp projectTargetDate}}
-        {{else}}
-            {{t 'workspace.project.target.none_set'}}
-        {{/if}}
-    </div>
+    <tr class="milestones">
+        <td>
+            <span class="label">Target:</span>
+        </td>
+        <td>
+            {{#if projectTargetDate}}
+                {{relativeTimestamp projectTargetDate}}
+            {{else}}
+                {{t 'workspace.project.target.none_set'}}
+            {{/if}}
+        </td>
+    </tr>
 
-
-    <span class="label">{{t 'workspace.project.progress.label'}}</span>
-    <div class='progress_container'>
-        <div class="progress {{projectStatus}}" style="width: {{milestoneProgress}}%;"></div>
-    </div>
-    <a class='ratio' href="{{milestonesUrl}}">{{milestoneCompletedCount}} / {{milestoneCount}}</a>
-</div>
+    <tr>
+        <td>
+            <span class="label">{{t 'workspace.project.progress.label'}}</span>
+        </td>
+        <td>
+            <div class="progress_container">
+                <div class="progress {{projectStatus}}" style="width: {{milestoneProgress}}%;"></div>
+            </div>
+            <a class="ratio" href="{{milestonesUrl}}">{{milestoneCompletedCount}} / {{milestoneCount}}</a>
+        </td>
+    </tr>
 {{/unless}}
+
+</table>

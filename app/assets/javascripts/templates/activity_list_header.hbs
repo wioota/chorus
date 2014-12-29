@@ -1,6 +1,7 @@
+<!-- 
 <div class="title">
     {{#if iconUrl}}
-        <img src="{{iconUrl}}"/>
+        <img src="{{iconUrl}}" alt="" />
     {{/if}}
     <div class="item_information">
         <div class="workspace_title" title="{{title}}">{{title}}</div>
@@ -9,9 +10,16 @@
         {{/if}}
     </div>
 </div>
-<div class="menus">
-    <select class="activities_filter">
-        <option value="all_activity">{{t "filter.all_activity"}}</option>
-        <option value="only_insights">{{t "filter.only_insights"}}</option>
-    </select>
+-->
+
+<div id="workspace_content_recentActivity_header">
+    <div>
+        {{t "workspace.activity_recent"}}
+    </div>
+    <div class="menus">
+        <select class="activities_filter">
+            <option value="all_activity">{{t "filter.all_activity"}}</option>
+            <option value="only_insights">{{t "filter.only_insights"}}</option>
+        </select>
+    </div>
 </div>

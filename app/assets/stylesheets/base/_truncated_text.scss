@@ -25,7 +25,7 @@
                 li {
                     padding: 0;
                     margin-left: 40px;
-                    border: none;
+/*                     border: none; */ /* redundant */
                     line-height: $summary-line-height;
 
                     &:hover {
@@ -50,8 +50,7 @@
     }
 
     .links {
-        .more {
-        }
+        .more {}
 
         .less {
             display: none;
