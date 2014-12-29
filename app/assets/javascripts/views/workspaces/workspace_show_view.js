@@ -4,6 +4,8 @@ chorus.views.WorkspaceShow = chorus.views.Base.extend({
     useLoadingSection: true,
 
     subviews: {
+        ".workspace_summary_content": "workspaceSummaryContent",
+        ".activity_list_header": "activityListHeader",
         ".activity_list": "activityList"
     },
 
@@ -17,5 +19,18 @@ chorus.views.WorkspaceShow = chorus.views.Base.extend({
             additionalClass: "workspace_detail",
             displayStyle: "without_workspace"
         });
+    },
+
+    resourcesLoaded : function() {
+        this.projectStatus = new chorus.views.ProjectStatus({model:this.model});
+                
+        this.activityListHeader = new chorus.views.ActivityListHeader({
+            model: this.model,
+            allTitle: this.model.get("name"),
+            insightsTitle: this.model.get("name"),
+        });
+
+
     }
+    
 });
