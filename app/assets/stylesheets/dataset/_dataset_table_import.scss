@@ -182,7 +182,6 @@ $cell-width: 150px;
 
           .arrow {
             display: inline-block;
-/*             @include triangle-css(down, $link-color, 6px, 6px); */
 		    @include triangle-glyph(down);
 		    color: $link-color;
           }
@@ -239,11 +238,24 @@ $cell-width: 150px;
         height: 10px;
         margin: 0 3px;
 
+/*         .check { */
+/*             background-image: url("/images/check.png"); */
+/*             display: inline-block; */
+/*             width: 10px; */
+/*             height: 10px; */
+/*         } */
         .check {
-            background-image: url("/images/check.png");
             display: inline-block;
-            width: 10px;
-            height: 10px;
+    
+            position: absolute;
+            top: 10px;
+            left: -12px;
+
+            &::after {
+                font-family: FontAwesome;
+                 /* glyph: check */
+                content: "\f00c";
+            }
         }
     }
 
