@@ -26,6 +26,7 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend ({
     },
 
     resourcesLoaded : function() {
+
 //             model: this.model;
 //             tagBox: new chorus.views.TagBox ({
 //                 model: this.model,
