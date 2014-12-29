@@ -1,7 +1,10 @@
+require 'render_anywhere'
+
 class Workspace < ActiveRecord::Base
   include SoftDelete
   include TaggableBehavior
   include Notable
+  include RenderAnywhere
 
   PROJECT_STATUSES = [:on_track, :needs_attention, :at_risk]
 
@@ -54,6 +57,9 @@ class Workspace < ActiveRecord::Base
   scope :active, where(:archived_at => nil)
 
   after_update :solr_reindex_later, :if => :public_changed?
+  # PT 12/19/14 This will auto-refresh the JSON data object for workspace
+  after_update :refresh_cache
+
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable_model do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
@@ -75,6 +81,13 @@ class Workspace < ActiveRecord::Base
      :owner,
      {:sandbox => {:scoped_parent => {:data_source => [:tags, {:owner => :tags}]}}}
     ]
+  end
+
+  def refresh_cache
+    Chorus.log_debug "Refreshing cache for workspace with ID = #{self.id}"
+
+    json_data = render :partial => 'shared/workspace', :layout => false, :locals => {:workspace => self, :user => self.owner}
+    Rails.cache.write ["jbuilder/#{self.owner.id}", self], JSON.parse(json_data)
   end
 
   def solr_reindex_later

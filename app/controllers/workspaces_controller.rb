@@ -53,6 +53,8 @@ class WorkspacesController < ApplicationController
 
     end
 
+    @workspaces = paginate(@workspaces)
+
   end
 
   def create

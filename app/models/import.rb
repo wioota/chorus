@@ -4,8 +4,8 @@ class Import < ActiveRecord::Base
   attr_accessible :to_table, :new_table, :sample_count, :truncate, :user
   attr_accessible :file_name # only for CSV files
 
-  belongs_to :source, :polymorphic => true #, :touch => true  :counter_cache =>  true
-  belongs_to :user, :touch => true #:counter_cache =>  true
+  belongs_to :source, :polymorphic => true
+  belongs_to :user, :touch => true
 
   validates :to_table, :presence => true
   validates :user, :presence => true
