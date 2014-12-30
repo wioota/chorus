@@ -29,6 +29,7 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend ({
 //         this.render();
 //     },
 
+
     resourcesLoaded : function() {
 
         this.truncatedSummary = new chorus.views.TruncatedText({model:this.model, attribute:"summary", attributeIsHtmlSafe: true, extraLine: true});
