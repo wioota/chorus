@@ -13,11 +13,6 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
 //         this.requiredResources.push(this.model);
 //         this.listenTo(this.model, "saved", this.updateHeaderAndActivityList);
 
-
-//         this.tagBox = new chorus.views.TagBox({
-//             model: this.model,
-//             workspaceIdForTagLink: this.model.workspace().id
-//         });
 		this.tagBox = new chorus.views.TagBox({
 			model: this.model,
 			workspaceIdForTagLink: this.model.id
@@ -38,9 +33,7 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
 //         this.render();
 //     },
 
-
     resourcesLoaded : function() {
-
         this.truncatedSummary = new chorus.views.TruncatedText({model:this.model, attribute:"summary", attributeIsHtmlSafe: true, extraLine: true});
 
     },

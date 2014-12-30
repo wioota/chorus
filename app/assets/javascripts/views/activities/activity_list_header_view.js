@@ -10,6 +10,11 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
 
 
     setup: function() {
+
+    	/* jshint ignore:start */
+        console.log ("ActivityListHeader > setup");
+        /* jshint ignore:end */
+        
         if(!this.collection) {
             this.collection = this.model.activities();
         }
@@ -27,14 +32,9 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
 
     },
 
-    additionalContext: function() {
-        return {
-//             title: this.pickTitle()
-//             ,
-//             iconUrl: this.model && this.model.defaultIconUrl(),
-//             tagBox: this.tagBox
-        };
-    },
+//     additionalContext: function() {
+//         return {};
+//     },
 
     pickTitle: function() {
         return this.collection.attributes.insights ? this.insightsTitle : this.allTitle;

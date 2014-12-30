@@ -10,17 +10,19 @@ chorus.views.WorkspaceSummaryContent = chorus.views.Base.extend ({
     },
 
     setup: function() {
-        this.projectStatus = new chorus.views.ProjectStatus({model:this.model});
         
         /* jshint ignore:start */
-        alert ("WorkspaceSummaryContentView");
+        console.log ("WorkspaceSummaryContentView > setup");
         /* jshint ignore:end */
        
+		this.truncatedSummary = new chorus.views.TruncatedText ({model:this.model, attribute:"summary", attributeIsHtmlSafe: true, extraLine: true});
+        this.projectStatus = new chorus.views.ProjectStatus({model:this.model});
+        
     },
 
     additionalContext: function() {
         /* jshint ignore:start */
-        alert ("WorkspaceSummaryContentView");
+        console.log ("WorkspaceSummaryContentView > additional context");
         /* jshint ignore:end */
     
 //         return {
@@ -34,7 +36,6 @@ chorus.views.WorkspaceSummaryContent = chorus.views.Base.extend ({
     },
 
     postRender: function() {
-    	        alert ("postrender WorkspaceSummaryContentView");
         if(this.model.get("summary")) {
             this.$(".truncated_summary").removeClass("hidden");
         } else {

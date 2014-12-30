@@ -10,7 +10,16 @@ chorus.views.WorkspaceShow = chorus.views.Base.extend({
     },
 
     setup:function () {
-        this.projectStatus = new chorus.views.ProjectStatus({model:this.model});
+    
+    	/* jshint ignore:start */
+        console.log ("WorkspaceShowView > setup");
+        /* jshint ignore:end */
+        
+//         this.projectStatus = new chorus.views.ProjectStatus({model:this.model});
+        
+        this.workspaceSummaryContent = new chorus.views.WorkspaceSummaryContent({
+        	 model: this.model,
+        });
         
         this.collection = this.model.activities({insights: chorus.pageParams().filter === 'insights'});
         this.collection.fetch();
