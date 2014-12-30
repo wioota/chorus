@@ -4,7 +4,11 @@ chorus.views.TagBox = chorus.views.Base.extend({
 //     subviews: {'.tags_input': 'tagsInput'},
 
     setup: function() {
-    	alert ("tagbox");
+        
+        /* jshint ignore:start */
+		console.log ("tag_box_view.js > tagbox: setup");
+        /* jshint ignore:end */
+
         this.requiredResources.add(this.model);
         this.tags = this.model.tags();
         this.tagsInput = new chorus.views.TagsInput({tags: this.tags, taggable: this.model});

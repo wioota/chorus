@@ -1,4 +1,4 @@
-chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend ({
+chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend({
     constructorName: "WorkspaceSummaryContentHeaderView",
     templateName: "workspace_summary_content_header",
     additionalClass: 'taggable_header',
@@ -13,7 +13,16 @@ chorus.views.WorkspaceSummaryContentHeader = chorus.views.Base.extend ({
 //         this.requiredResources.push(this.model);
 //         this.listenTo(this.model, "saved", this.updateHeaderAndActivityList);
 
-        this.tagBox = this.options.tagBox;
+
+//         this.tagBox = new chorus.views.TagBox({
+//             model: this.model,
+//             workspaceIdForTagLink: this.model.workspace().id
+//         });
+		this.tagBox = new chorus.views.TagBox({
+			model: this.model,
+			workspaceIdForTagLink: this.model.id
+		})
+            
     },
 
     additionalContext: function() {
