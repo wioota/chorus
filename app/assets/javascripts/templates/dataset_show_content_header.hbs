@@ -7,9 +7,11 @@
     {{usedInTableau tableauWorkbooks dataset}}
 </div>
 {{#if imageUrl}}
-    <img class="icon" {{#if imageTitle}}title="{{imageTitle}}"{{/if}} src="{{imageUrl}}"/>
+    <img class="icon" {{#if imageTitle}}title="{{imageTitle}}"{{/if}} src="{{imageUrl}}" alt="" />
 {{/if}}
 <div class='item_information'>
     <h1 title="{{title}}">{{title}}</h1>
+    {{#if tagBox}}
     <div class="tag_box"></div>
+    {{/if}}
 </div>

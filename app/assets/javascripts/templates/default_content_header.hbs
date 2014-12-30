@@ -3,11 +3,20 @@
     <div class="found_in">{{datasetLocation sandbox "workspace.sandbox_schema"}}</div>
   {{/if}}
 </div>
+
 <div class="menus">
 </div>
+
+<!-- if there is an image icon, display that -->
+<!-- or if there is an icon glyph value (imageValue), use that -->
 {{#if imageUrl}}
     <img class="icon" {{#if imageTitle}}title="{{imageTitle}}"{{/if}} src="{{imageUrl}}"/>
+{{else}}
+	{{#if imageValue}}
+	<span class="fa {{imageValue}} icon"></span>
+	{{/if}}
 {{/if}}
+
 <h1 title="{{title}}">{{title}}</h1>
 {{#if showTagBox}}
   <div class="tag_box"></div>

@@ -10,6 +10,7 @@ chorus.pages.TagIndexPage = chorus.pages.Base.extend({
 
         this.mainContent = new chorus.views.MainContentList({
             modelClass: "Tag",
+// 			imageValue: "fa-tags",
             collection: tags
         });
 

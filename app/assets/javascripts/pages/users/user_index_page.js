@@ -10,6 +10,7 @@ chorus.pages.UserIndexPage = chorus.pages.Base.extend({
         this.mainContent = new chorus.views.MainContentList({
             modelClass:"User",
             title: t("header.users_list"),
+//             imageValue: "fa-group",
             collection:this.collection,
             linkMenus:{
                 sort:{

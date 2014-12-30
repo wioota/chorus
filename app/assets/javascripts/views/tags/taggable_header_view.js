@@ -7,6 +7,8 @@ chorus.views.TaggableHeader = chorus.views.Base.extend({
     },
 
     setup: function () {
+    	alert ("chorus.views.TaggableHeader");
+    	
         this.tagBox = new chorus.views.TagBox({
             model: this.model
         });
