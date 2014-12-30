@@ -349,7 +349,12 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         width: 28px;
         @include panel-button($height-button-widgetshell);
     }
-    
+     
+     .loading_text {
+        margin-left: 0px;
+    }
+}
+       
     .module_header {
         min-height: $title-height + $dashboard-module-padding;
         line-height: $title-height;
@@ -368,10 +373,6 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         }
     }
 
-    .loading_text {
-        margin-left: 0px;
-    }
-}
     
 
 /* rules for the recent activity hovering list that is part of the workspace cards */
