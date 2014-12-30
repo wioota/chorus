@@ -36,7 +36,14 @@
         float: left;
         padding-right: 5px;
     }
-
+	span {
+		&.icon {
+			font-size: 32px;
+			margin-top: 10px;
+			margin-right: 10px;
+		}
+	}
+	
     .menus {
         float: right;
         text-align : right;
