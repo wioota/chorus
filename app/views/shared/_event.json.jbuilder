@@ -39,3 +39,4 @@ end
 json.promotion_time event.promotion_time
 json.is_published event.published
 json.complete_json true
+

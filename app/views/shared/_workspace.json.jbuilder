@@ -17,3 +17,4 @@ json.workspace do
   json.has_recent_comments workspace.owned_notes.recent.count > 0
   json.has_milestones workspace.milestones_count > 0
 end
+
