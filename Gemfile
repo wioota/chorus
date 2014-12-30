@@ -29,7 +29,7 @@ gem 'render_anywhere'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false
-  gem 'activerecord-jdbcpostgresql-adapter'
+  gem 'activerecord-jdbcpostgresql-adapter', '1.3.7'
 end
 
 group :assets do

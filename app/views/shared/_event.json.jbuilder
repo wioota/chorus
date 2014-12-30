@@ -3,7 +3,7 @@ json.partial! 'shared/user', user: user, title: 'actor'
 json.action 'NOTE'
 json.timestamp event.updated_at
 if event.workspace != nil
-  json.partial! 'shared/workspace', workspace: event.workspace
+  json.partial! 'shared/workspace', workspace: event.workspace, user: user
 end
 if event.additional_data && event.additional_data["body"]
   json.body event.additional_data["body"]
