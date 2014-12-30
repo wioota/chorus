@@ -5,8 +5,8 @@ chorus.views.WorkspaceSummaryContent = chorus.views.Base.extend ({
     
     subviews: {
         ".truncated_summary": "truncatedSummary",
-        ".project_status": "projectStatus"
-
+        ".project_status": "projectStatusView",
+        ".workspace_summary_overview": "workspaceSummaryOverview"
     },
 
     setup: function() {
@@ -16,8 +16,8 @@ chorus.views.WorkspaceSummaryContent = chorus.views.Base.extend ({
         /* jshint ignore:end */
        
 		this.truncatedSummary = new chorus.views.TruncatedText ({model:this.model, attribute:"summary", attributeIsHtmlSafe: true, extraLine: true});
-        this.projectStatus = new chorus.views.ProjectStatus({model:this.model});
-        
+        this.projectStatusView = new chorus.views.ProjectStatus({model:this.model});
+        this.workspaceSummaryOverview = new chorus.views.WorkspaceSummaryOverview({model:this.model});
     },
 
     additionalContext: function() {
@@ -32,7 +32,6 @@ chorus.views.WorkspaceSummaryContent = chorus.views.Base.extend ({
     resourcesLoaded: function() {
         this.truncatedSummary = new chorus.views.TruncatedText ({model:this.model, attribute:"summary", attributeIsHtmlSafe: true, extraLine: true});
         this.projectStatus = new chorus.views.ProjectStatus({model:this.model});
-
     },
 
     postRender: function() {

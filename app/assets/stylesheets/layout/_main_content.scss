@@ -7,7 +7,7 @@
 /*     background: white; */
     min-height: 36px;
     padding: 10px $padding-x 5px;
-    border-bottom: $border-canon;
+/*     border-bottom: $border-canon; */
 /*     @include border-top-radius(3px); */
 
     .tags_input {
@@ -71,10 +71,17 @@
     }
 }
 
+.section_heading {
+    @include section-heading;
+
+}
+
+
+
+
 .content_details {
     border-bottom: $border-canon;
 }
-
 
 .content_footer {
     height: auto;

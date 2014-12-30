@@ -1,6 +1,6 @@
-chorus.views.ProjectStatus = chorus.views.Base.extend({
-    constructorName: "ProjectStatusView",
-    templateName: "project_status",
+chorus.views.WorkspaceSummaryOverview = chorus.views.Base.extend({
+    constructorName: "WorkspaceSummaryOverview",
+    templateName: "workspace_summary_overview",
 
     events: {
         "click .edit_project_status": "launchEditProjectStatusDialog"

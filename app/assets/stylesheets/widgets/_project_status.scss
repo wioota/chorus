@@ -42,11 +42,13 @@
 /*     } */
 
     .progress_container {
+        position: relative;
+        top:2px;
         display: inline-block;
         width: 120px;
         height: 11px;
         border: 1px solid $color-text3;
-        margin-top: 3px;
+        @include border-radius (2px);
 
         .progress {
             height: 100%;
