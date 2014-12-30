@@ -8,9 +8,6 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         "change .activities_filter": "onFilterChange"
     },
 
-//     subviews: {
-//         '.tag_box': 'tagBox'
-//     },
 
     setup: function() {
         if(!this.collection) {
@@ -19,7 +16,6 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
 
         this.allTitle = this.options.allTitle;
         this.insightsTitle = this.options.insightsTitle;
-//         this.tagBox = this.options.tagBox;
     },
 
     postRender: function() {
@@ -28,11 +24,12 @@ chorus.views.ActivityListHeader = chorus.views.Base.extend({
         }, this));
         var value = this.collection.attributes.insights ? "only_insights" : "all_activity";
         this.selectElement().val(value);
+
     },
 
     additionalContext: function() {
         return {
-            title: this.pickTitle()
+//             title: this.pickTitle()
 //             ,
 //             iconUrl: this.model && this.model.defaultIconUrl(),
 //             tagBox: this.tagBox

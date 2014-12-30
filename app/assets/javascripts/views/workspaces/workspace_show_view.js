@@ -10,6 +10,8 @@ chorus.views.WorkspaceShow = chorus.views.Base.extend({
     },
 
     setup:function () {
+        this.projectStatus = new chorus.views.ProjectStatus({model:this.model});
+        
         this.collection = this.model.activities({insights: chorus.pageParams().filter === 'insights'});
         this.collection.fetch();
         this.requiredResources.add(this.collection);
@@ -22,14 +24,12 @@ chorus.views.WorkspaceShow = chorus.views.Base.extend({
     },
 
     resourcesLoaded : function() {
-        this.projectStatus = new chorus.views.ProjectStatus({model:this.model});
-                
+
         this.activityListHeader = new chorus.views.ActivityListHeader({
             model: this.model,
             allTitle: this.model.get("name"),
             insightsTitle: this.model.get("name"),
         });
-
 
     }
     
