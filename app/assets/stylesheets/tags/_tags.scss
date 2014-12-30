@@ -1,6 +1,6 @@
 .tags_input {
     border: 1px solid $border-color;
-    background-color: #FFFFFF;
+/*     background-color: #FFFFFF; */
     padding: 3px;
     padding-bottom: 0;
 
@@ -37,7 +37,7 @@
                 line-height: 16px;
             }
 
-            .text-tags .text-tag {
+            .text-tag {
                 display: inline-block;
                 max-width: 100%;
 
@@ -76,7 +76,7 @@
                         right: 1px;
                         line-height: 19px;
                         padding: 0 4px;
-                        font-size: 10px;
+                        /* font-size: 10px; */
                     }
                 }
             }

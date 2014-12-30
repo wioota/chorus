@@ -1,7 +1,7 @@
 chorus.views.TagBox = chorus.views.Base.extend({
     templateName: "tag_box",
     constructorName: "TagBoxView",
-//     subviews: {'.tags_input': 'tagsInput'},
+    subviews: {'.tags_input': 'tagsInput'},
 
     setup: function() {
         
