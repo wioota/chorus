@@ -29,7 +29,7 @@ gem 'render_anywhere'
 
 platform :jruby do
   gem 'jruby-openssl', :require => false
-  gem 'activerecord-jdbcpostgresql-adapter'
+  gem 'activerecord-jdbcpostgresql-adapter', '1.3.7'
 end
 
 group :assets do
@@ -68,7 +68,7 @@ end
 group :development, :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :ci_next do
   gem 'foreman', '>= 0.62',      :require => false
   gem 'rake',                    :require => false
-  gem 'rspec',                   :require => 'rspec/core/rake_task'
+  gem 'rspec', '2.14.1',                :require => 'rspec/core/rake_task'
   gem 'jasmine', :github => 'pivotal/jasmine-gem'
   gem 'jasmine-core', :github => 'pivotal/jasmine'
   gem 'sunspot_matchers'
