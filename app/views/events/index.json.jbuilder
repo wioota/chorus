@@ -1,7 +1,7 @@
 
 json.response do
     json.array! @events do |event|
-      json.cache! [current_user.id, event], expires_in: 2.days do
+      json.cache! [current_user.id, event], expires_in: 6.months do
         json.id event.id
         json.partial! 'shared/user', user: event.actor, title: 'actor'
         case event.action
