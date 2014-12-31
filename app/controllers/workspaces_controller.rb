@@ -54,7 +54,7 @@ class WorkspacesController < ApplicationController
     end
 
     @workspaces = paginate(@workspaces)
-
+    render :index, :formats => [:json]
   end
 
   def create
