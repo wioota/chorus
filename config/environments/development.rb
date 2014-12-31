@@ -11,7 +11,7 @@ Chorus::Application.configure do
 
   config.log_level = :debug
 
-  config.cache_store = :file_store, Rails.root.to_s + "/tmp/cache/"
+  config.cache_store = :file_store, Rails.root.to_s + "/tmp/cache/chorus"
 
 
   # Show full error reports and disable caching
