@@ -11,7 +11,7 @@ Chorus::Application.configure do
 
   config.log_level = :debug
 
-  config.cache_store = :file_store, Rails.root.to_s + "/public/cache/"
+  config.cache_store = :file_store, Rails.root.to_s + "/tmp/cache/"
 
 
   # Show full error reports and disable caching
@@ -33,7 +33,7 @@ Chorus::Application.configure do
   config.assets.compress = true
 
   # Expands the lines which load the assets
-  config.assets.debug = true
+  config.assets.debug = false
 
   # Give paperclip path to ImageMagick tools
   Paperclip.options[:command_path] = "/usr/local/bin/"
