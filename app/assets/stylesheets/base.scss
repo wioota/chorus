@@ -18,7 +18,7 @@
 @import "vendorish/_textext";
 
 @import "vendorish/_font_awesome";
-/* @import "vendorish/_open-iconic"; */
+/* @import "vendorish/_open-iconic"; */ /* to be deleted when final */
 
 @import "vendorish/_slick.grid";
 @import "vendorish/_slick-default-theme";
@@ -39,3 +39,5 @@
 @import "base/_toast";
 
 @import "base/_media";
+
+@import "base/_forms";
