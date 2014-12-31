@@ -184,7 +184,7 @@ $refresh-activity-gutter: $activity-gutter - 5;
             position: relative;
             top: -1px;
             color: $shadow-gray;
-            margin: 0 3px;
+            margin: 0 $separator-space;
         }
     }
 

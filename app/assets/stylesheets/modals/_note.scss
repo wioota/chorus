@@ -1,7 +1,14 @@
-.notes_new, .edit_note, .dialog.comment {
+$label-width: 72px;
 
+
+.notes_new,
+.edit_note,
+.dialog.comment {
+
+    font-size: 12px;
+    
     textarea {
-        min-width : 350px;
+        min-width: 350px;
         min-height: 75px;
         resize: none;
     }
@@ -9,7 +16,7 @@
     a {
         font-size: 12px;
         font-weight: $semibold;
-        line-height: 16px;
+        /* line-height: 16px; */
     }
 
     .toolbar {
@@ -29,18 +36,6 @@
             margin-bottom: 2px;
         }
 
-        .label {
-            color: $color-text2;
-            font-weight: $semibold;
-            width: 72px;
-            display: inline-block;
-        }
-
-        .separator {
-            color: $link-color;
-            margin: 0 2px;
-        }
-
         .attachment_links {
             &.disabled {
                 input {
@@ -54,24 +49,41 @@
         }
     }
 
-    .file_details, .dataset_details {
+    .label {
+        color: $color-text2;
+        font-weight: $semibold;
+        width: $label-width;
+        display: inline-block;
+    }
+    .separator {
+        color: $color-text3;
+        margin: 0 $separator-space;
+    }
+
+    .file_details,
+    .dataset_details {
+
         line-height: 32px;
+/*         border-top: $border-canon; */
+        
+/*         &:last-child { */
+/*              border-bottom: $border-canon; */
+/*         } */
+        
         img {
             vertical-align: middle;
-            max-height: 35px;
+            max-height: 30px;
             max-width: 35px;
         }
 
         .image {
-            height: 35px;
+            height: 30px;
             width: 35px;
             display: inline-block;
         }
 
-        .remove {
-            float: right;
-            line-height: 32px;
-        }
+
+        
         .progress_bar {
             display: inline-block;
             background-color: $progress-bar-background-color;
@@ -103,9 +115,10 @@
         font-weight: $semibold;
     }
 
-    .options_text, .options_area {
-        font-size: 12px;
-        margin: 8px 8px;
+    .options_text,
+    .options_area {
+        /* font-size: 12px; */
+        margin: 10px 0;
     }
 
     .options_text {
@@ -117,24 +130,22 @@
     }
 
     .row {
-        margin-bottom: 10px;
-
+        margin-bottom: 5px;
+        
         a.workfile {
             vertical-align: bottom;
         }
     }
 
     .link_menu {
-        padding-left: 8px;
+        /* padding-left: 8px; */
     }
 
 
 	.recipients_menu {}
 	
     .notification_recipient {
-        margin-left: 5px;
-        margin-right: 8px;
-        margin-top: 8px;
+        margin-top: 5px;
 
         .add_user {
             font-size: 12px;
@@ -142,7 +153,7 @@
         }
 
         .user_lists {
-            margin-left: 80px;
+            margin-left: $label-width;
 
             .dropdown {
                 margin-top: 10px;
@@ -151,24 +162,25 @@
         }
 
         .picked_users {
+            line-height: 20px;
             .name {
                 @include ellipsis;
                 max-width: 200px;
                 display: inline-block;
-            }
-
-            .remove {
-                float: right;
-            }
-
-            .name, .remove {
-                line-height: 20px;
                 vertical-align: middle;
             }
+
         }
 
         select {
             width: 200px;
         }
     }
+    
+    .remove {
+        float: right;
+        font-size: 14px;
+        line-height: 20px;
+    }
+        
 }

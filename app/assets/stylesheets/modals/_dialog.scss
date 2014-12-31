@@ -1,6 +1,12 @@
+/* .girdle wraps the content of the dialog popup */
+/* and sets the overall margins */
 .popup .girdle {
     padding: $dialog-padding $dialog-padding 0;
     border: none;
+    
+    /* development: to delete */
+    border: 1px dotted #C33;
+    /* END development: to delete */
 }
 
 .dialog {
@@ -10,16 +16,16 @@
         word-break: break-all;
         height: 40px;
         line-height: 40px;
+    }
 
-        h1 {
-            font-size: 14px;
-            color: rgb(88, 89, 95);
-            @include uppercase;
-            vertical-align: middle;
-            margin: 0 $dialog-padding;
-            padding-right: 25px;
-            @include ellipsis;
-        }
+    h1 {
+        font-size: 14px;
+        color: rgb(88, 89, 95);
+        @include uppercase;
+        vertical-align: middle;
+        margin: 0 $dialog-padding;
+        padding-right: 25px;
+        @include ellipsis;
     }
 
     h2 {
@@ -51,7 +57,7 @@
 
     fieldset.in_a_box {
         border: none;
-        padding: 0 $dialog-padding $dialog-padding;
+        padding: 0 0 $dialog-padding 0;
 
         legend label {
             font-size: 14px;
@@ -186,8 +192,8 @@ div.dialog {
 }
 
 .dialog .full_dialog_horizontal {
-  display: block;
-  width: $default-dialog-width - 35px;
+    display: block;
+    width: $default-dialog-width - 35px;
 }
 
 legend.subtitle {
@@ -199,4 +205,9 @@ legend.subtitle {
         float: left;
         padding-right: 10px;
     }
+}
+
+.legend_for_required {
+    margin-top: 15px;
+    font-size: 12px;
 }
