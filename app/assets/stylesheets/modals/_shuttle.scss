@@ -3,40 +3,56 @@ $shuttle-list-item-height: 40px;
 .shuttle_widget {
     background-color: $body-background-color;
 
-    .shuttle_header {
+    .subheader {
         border-bottom: $border-canon;
         position: relative;
-        height: 33px;
+        height: 35px;
 
-        .search_container {
+        .shuttle_left, 
+        .shuttle_right {
+            position: absolute;
+            width: 50%;
+            vertical-align: middle;
+            line-height: 25px;
+        }
+        
+        .shuttle_left {
             left: 0;
             border-right: $border-canon;
-
-            .chorus_search_container {
-                width: 70%;
-            }
         }
-
-        .summary {
+        
+        .shuttle_right {
             left: 50%;
         }
 
-         .search_container, .summary {
-            position: absolute;
-            width: 50%;
-            height: 100%;
-            vertical-align: middle;
-            line-height: 25px;
-
-            > div {
-                padding: 4px 8px;
-            }
-
-            a {
-               float: right;
-            }
+        .search_container {
+            padding-right: 15px;
+        }
+        .summary {
+            padding-left: 15px;
         }
 
+        a {
+            float: right;
+            font-weight: $semibold;
+        }            
+
+        .chorus_search_container {
+            display:inline-block;
+            width: 70%;
+        }
+
+/*         > div { */
+/*             padding: 4px 0; */
+/*         } */
+
+/*     } */
+        
+        .object_name,
+        .selected_count {
+            font-weight: $semibold;
+        }
+        
         .object_name {
             color: $color-text3;
         }
@@ -45,9 +61,6 @@ $shuttle-list-item-height: 40px;
             padding-left: 5px;
         }
 
-        a {
-            font-weight: $semibold;
-        }
     }
 
     .shuttle_body {
@@ -93,7 +106,8 @@ $shuttle-list-item-height: 40px;
         li {
             height: $shuttle-list-item-height;
             border-bottom: $border-canon;
-            padding: 0 8px;
+            /* padding: 0 8px; */
+            padding: 0;
             line-height: $shuttle-list-item-height - 3px;
 
             .name {
@@ -102,15 +116,18 @@ $shuttle-list-item-height: 40px;
                 @include ellipsis;
                 padding-left: 10px;
                 display: inline-block;
-                max-width: 60%;
+                max-width: 65%;
             }
         }
 
+/* available = left-side of the 2column list */
         &.available {
             left: 0;
             border-right: $border-canon;
 
             li {
+                padding-right: 10px;
+
                 .checkmark {
                     display: none;
                     position: absolute;
@@ -142,11 +159,14 @@ $shuttle-list-item-height: 40px;
                 }
             }
         }
-
+        
+/* selected = right-side of the 2column list */
         &.selected {
             left: 50%;
 
             li {
+                padding-left: 10px;
+                
                 display: none;
                 &.added {
                     display: block;
@@ -156,6 +176,6 @@ $shuttle-list-item-height: 40px;
     }
 }
 
-.dialog.workspace_edit_members .dialog_content .form_controls {
-     margin-top: 0px;
-}
+/* .dialog.workspace_edit_members .dialog_content .form_controls { */
+/*      margin-top: 0px; */
+/* } */
