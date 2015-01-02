@@ -125,7 +125,7 @@ $ie-header-color: #c7c7c7;
 $tab-gradient-color : #D5E0EB;
 $activity-stream-comment-background-color: #DFE5EB;
 $progress-bar-full-background-color : #AE0020;
-$error-background-color: #B61B1D;
+$error-background-color: $fire-engine-red;
 $search-highlight-color: #FFFF00;
 $content-details-create-background-color: #49A942;
 $content-details-chart-icon-selected-background-color: #42AA3D;
@@ -148,6 +148,9 @@ $type-ahead-result-border-color: #A5A6A8;
 $error-text-color: #FFFFFF;
 $error-color: #FFFFFF;
 $content-header-link-color: $color-text4;
+
+$required-marker-color: $alert;
+
 
 // Notification colors
 $notification-error-dark: #d43a0b;
@@ -174,11 +177,14 @@ $icon-image-height : 35px;
 $large-image-width : 45px;
 $large-image-height : 45px;
 $activity-gutter: 15px;
-$dialog-padding : 15px;
+
 $breadcrumbs-height: 32px;
 $help-pill-width: 34px;
 $texteditor-min-height: 300px;
+
 $default-dialog-width: 500px;
+/* $dialog-padding= interior padding from edge for dialog content */
+$dialog-padding : 15px;
 
 $separator-space: 4px;
 
@@ -230,7 +236,6 @@ $light: 300;
 // "normal" defaults to 400
 $semibold: 600;
 $bold: 700;
-
 
 
 // Font size
