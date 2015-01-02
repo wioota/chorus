@@ -1,12 +1,12 @@
 .results_console {
     .execution {
-        height: 32px;
+        height: 30px;
         clear: both;
-        line-height: 31px;
+        line-height: 30px;
         vertical-align: middle;
-        padding: 0 $padding-x;
-        background: white;
-        border-bottom: $border-canon;
+        padding: 0;
+        background: $core-white;
+/*         border-bottom: $border-canon; */
 
         h1 {
             @include results-console;
@@ -147,7 +147,7 @@
     }
 
     .minimized .data_grid {
-        height: 200px;
+        height: 300px;
     }
 
     .collapsed .data_grid {
