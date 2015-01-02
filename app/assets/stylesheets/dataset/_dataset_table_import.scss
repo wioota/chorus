@@ -189,9 +189,10 @@ $cell-width: 150px;
       }
     }
 
-    .form_controls {
-        margin-top: 0px;
-    }
+/* to be deleted when final */
+/*     .form_controls { */
+/*         margin-top: 0px; */
+/*     } */
 }
 
 .existing_table_import_csv.table_import_csv {
@@ -238,6 +239,7 @@ $cell-width: 150px;
         height: 10px;
         margin: 0 3px;
 
+/* to be deleted when final */
 /*         .check { */
 /*             background-image: url("/images/check.png"); */
 /*             display: inline-block; */
