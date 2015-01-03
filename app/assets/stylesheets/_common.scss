@@ -51,10 +51,11 @@ $accent-tint: rgb(250, 252, 253);
 $accent-shade: rgb(231, 243, 253);
 //$accent-dark: unused;
 
-// Semantic Colors
+// Semantic colors AKA Messaging
 $ok: $fiji-green;
-$alert: $fire-engine-red;
+$error: $fire-engine-red;
 $needs-attention: $pumpkin;
+$alert: $pumpkin;
 
 
 // Background colors
@@ -125,7 +126,9 @@ $ie-header-color: #c7c7c7;
 $tab-gradient-color : #D5E0EB;
 $activity-stream-comment-background-color: #DFE5EB;
 $progress-bar-full-background-color : #AE0020;
-$error-background-color: $fire-engine-red;
+
+
+
 $search-highlight-color: #FFFF00;
 $content-details-create-background-color: #49A942;
 $content-details-chart-icon-selected-background-color: #42AA3D;
@@ -145,17 +148,27 @@ $results-console-border-color: #88A8D3;
 $type-ahead-result-border-color: #A5A6A8;
 
 // Text colors
-$error-text-color: #FFFFFF;
-$error-color: #FFFFFF;
+
 $content-header-link-color: $color-text4;
 
-$required-marker-color: $alert;
+$required-marker-color: $error;
 
 
-// Notification colors
+// Notification colors 
+// AKA Messaging
+$error-background-color: $fire-engine-red;
+$error-color: #FFFFFF;
+$error-text-color: #FFFFFF;
+
 $notification-error-dark: #d43a0b;
 $notification-error-light: #ffd6d6;
 $notification: $bright-turquoise;
+
+$alert-color: $needs-attention;
+$alert-background-color: $needs-attention;
+$alert-marker-color: #B24E11;
+$alert-text-color: $core-white;
+
 
 // Dimensions
 $sidebar-width : 266px;
