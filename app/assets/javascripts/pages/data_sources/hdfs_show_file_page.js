@@ -71,7 +71,7 @@ chorus.pages.HdfsShowFilePage = chorus.pages.Base.extend({
     ellipsizePath: function() {
         var folders = this.path.split('/');
         if (folders.length > 3) {
-            return "/" + folders[1] + "/.../" + folders[folders.length - 1];
+            return "/" + folders[1] + "/…/" + folders[folders.length - 1];
         } else {
             return this.path;
         }
