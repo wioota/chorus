@@ -27,7 +27,9 @@ types {
     application/vnd.ms-fontobject         eot;
     application/font-sfnt                 otf;
     application/font-sfnt                 ttf;
+
     application/java-archive              jar war ear;
+    application/json                      json;
     application/mac-binhex40              hqx;
     application/msword                    doc;
     application/pdf                       pdf;
