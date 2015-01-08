@@ -228,12 +228,12 @@ function usage () {
   echo "$script is a utility to start, stop, restart, or monitor the Chorus services."
   echo
   echo Usage:
-  echo "  $script start   [services]                    start services"
-  echo "  $script stop    [-t max_wait_time] [services] stop services"
-  echo "  $script restart [services]                    stop and start services"
-  echo "  $script monitor [services]                    monitor and restart services as needed"
-  echo "  $script backup  [-d dir] [-r days]            backup Chorus data"
-  echo "  $script restore [file]                        restore Chorus data"
+  echo "  $script start   [services]                       start services"
+  echo "  $script stop    [-t max_wait_time] [services]    stop services"
+  echo "  $script restart [-t max_wait_time] [services]    stop and start services"
+  echo "  $script monitor [services]                       monitor and restart services as needed"
+  echo "  $script backup  [-d dir] [-r days]               backup Chorus data"
+  echo "  $script restore [file]                           restore Chorus data"
   echo
   if [ "$ALPINE_HOME" != "" ]; then
     echo "The following services are available: postgres, workers, scheduler, solr, webserver, alpine."
