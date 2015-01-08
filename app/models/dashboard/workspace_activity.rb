@@ -62,11 +62,10 @@ module Dashboard
 
       Events::Base
         .select('workspace_id, workspaces.name, ' +
-                'workspaces.summary, count(*) as event_count')
+                'workspaces.summary, workspaces.deleted_at, count(*) as event_count')
         .joins(:workspace)
-        .group('workspace_id, workspaces.name, workspaces.summary')
+        .group('workspace_id, workspaces.name, workspaces.summary, workspaces.deleted_at')
         .where('workspace_id IS NOT NULL')
-        .where('workspaces.deleted_at IS NULL')
         .where("#{created_at_adjusted} >= :start_date and #{created_at_adjusted} <= :end_date",
                :start_date => @start_date,
                :end_date => Time.now)
@@ -78,7 +77,7 @@ module Dashboard
           name: w.name,
           summary: w.summary,
           event_count: w.event_count,
-          is_accessible: (access_checker.can? :show, Workspace.find(w.workspace_id))
+          is_accessible: !w.deleted_at.nil? ? false : (access_checker.can? :show, Workspace.find(w.workspace_id))
         }
         top_workspace_ids << w.workspace_id
       end
