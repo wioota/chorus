@@ -61,7 +61,7 @@ class WorkspacesController < ApplicationController
     # append pagination to it. There is a problem with using top level array in Jbuilder that does not allow
     # appending other elements to the top level array.
 
-    response = render_to_string :partial => 'index', :formats => [:json]
+    response = render_to_string :index, :formats => [:json]
     json = JSON.parse(response)
     if @workspaces.respond_to? :current_page
       json[:pagination] = {
