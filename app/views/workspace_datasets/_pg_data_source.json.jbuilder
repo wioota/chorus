@@ -1,1 +1,0 @@
-json.partial! 'gpdb_datasource', data_source: data_source, options: options
