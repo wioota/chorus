@@ -136,7 +136,6 @@ jasmine.sharedExamples.aSidebarWithAGreenplumPostgresOrOracleDataSourceSelected 
         context('when the current user is NOT an admin or owner of the data source', function() {
             context('when the user does not have an account for the data source', function() {
                 it("shows the 'no access' text and icon", function() {
-
                     expect(this.view.$(".account_info .fa-lock").toExist());
                     expect(this.view.$(".account_info").text().trim()).toMatchTranslation("data_sources.sidebar.no_access");
                 });
