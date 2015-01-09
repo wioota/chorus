@@ -1,4 +1,3 @@
-<form>
 <div class="girdle">
     <fieldset class="in_a_box">
         <form>
@@ -6,14 +5,15 @@
             <div class="standalone_mode hidden"></div>
         </form>
     </fieldset>
-    <div>
+    <div class="plm">
         <input id="sandbox_show_sandbox_datasets" class="show_sandbox_datasets" type="checkbox" checked="checked"/>
         <label for="sandbox_show_sandbox_datasets">{{t "actions.sandbox.show_sandbox_datasets_by_default"}}</label>
     </div>
-    {{> legendRequired}}
-    
+    <div>
+        <br/>
+        <label class="required"></label>
+        <label>{{t "validation.required_field"}}</label>
+    </div>
 </div>
-<!-- END girdle -->
 
 {{formControlsWithDisabledSubmit "sandbox.create_sandbox"}}
-</form>

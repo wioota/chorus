@@ -1,25 +1,23 @@
 .collection_list {
+    $list-item-height: 39px;
 
-$list-item-height: 40px;
-$dialog-list-item-left-padding: 15px;
-$dialog-list-item-right-padding: 15px;
-
-    max-height: (($list-item-height + $default-border-width) * 10) + $list-item-height;
+    max-height: (($list-item-height + $default-border-width) * 8) + $list-item-height;
     overflow: auto;
 
     ul {
         li {
             height: $list-item-height;
             border-bottom: $border-canon;
-            padding: 0 $dialog-list-item-right-padding 0 $dialog-list-item-left-padding;
+            padding: 0 8px;
             line-height: $list-item-height;
-/*             vertical-align: middle; */ /* to be deleted when final */
+            vertical-align: middle;
             @include ellipsis;
 
             img {
                 max-width: $icon-image-width;
                 max-height: $icon-image-height;
                 vertical-align: middle;
+                padding-right: 4px;
             }
 
             .name {

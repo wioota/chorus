@@ -5,15 +5,12 @@
     bottom: 7px;
 }
 
-.schema_picker,
-.database_picker,
-.location_picker {
-
-$select_width: 375px;
-    
+.schema_picker, .database_picker, .location_picker {
     a {
-        font-size: $small-font;
+        font-size: 13px;
     }
+
+    $select_width: 375px;
 
     .execution_location_picker {
         position: relative;

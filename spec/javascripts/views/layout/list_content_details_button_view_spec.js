@@ -1,16 +1,10 @@
 describe("chorus.views.ListContentDetailsButtonView", function(){
-
-  
-// 	var createActionText = getTranslation("actions.create_workspace");
-	var createActionText = t("actions.create_workspace");
-
-
     beforeEach(function() {
         this.view = new chorus.views.ListContentDetailsButtonView({});
         this.view.options.buttons = [
             {
                 view: "WorkspacesNew",
-                text: createActionText,
+                text: "Create a Workspace",
                 dataAttributes: [
                     {
                         name: "foo",
@@ -28,7 +22,7 @@ describe("chorus.views.ListContentDetailsButtonView", function(){
 
     it("renders a button for each member of the buttons array", function(){
         expect(this.view.$('button[data-dialog="WorkspacesNew"]')).toExist();
-        expect(this.view.$('button[data-dialog="WorkspacesNew"]').text()).toBe(createActionText);
+        expect(this.view.$('button[data-dialog="WorkspacesNew"]').text()).toBe("Create a Workspace");
         expect(this.view.$('button[data-dialog="WorkspacesNew"]')).toHaveData("foo", "bar");
 
         expect(this.view.$("a.button[href='#/foo']")).toExist();

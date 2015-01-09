@@ -38,9 +38,15 @@
 
     .version_list {
         font-size: 12px;
+        margin-left: 3px;
+        span {
+            color : $link-color;
+            color: $link-color;
+        }
 
-        span { /* color: $link-color; */ }
-
+        img {
+           margin: 2px;
+        }
     }
 }
 
@@ -97,45 +103,35 @@
           position: absolute;
           right: 0;
           top: 0;
-          @include font-secondary-link;
         }
     }
 }
 
-
-
-.schema_menu {
+ul.schema_menu {
     overflow: auto;
     max-height: 300px;
 
-/* alert */
-/* for some reason, this ul/li list was made different than the others in the app */
-/* such as those used for filters on a page of items. */
-/* needs to be reconciled so that they all work the same way */
-
-
     li {
-        margin-left: 10px;
-        
-        .checkmark {
-/*          background-repeat: no-repeat; */
-/*          background-image: url("/images/check.png"); */
-            display: inline-block;
-            float: left;
-            position: relative;
-            left: -21px;
-            width: 0;
+        margin: 2px 4px 0px 8px;
 
-			font-size: 16px;
-			color: #606060;
-        
+        .check {
+            background-repeat: no-repeat;
+            background-image: url("/images/check.png");
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-right: 2px;
+            margin-left: -14px;
+            position: relative;
+            top: 1px;
+
             &.hidden {
                 visibility: hidden;
             }
         }
 
-/*         a { */
-/*             cursor: pointer; */
-/*         } */
+        a {
+            cursor: pointer;
+        }
     }
 }

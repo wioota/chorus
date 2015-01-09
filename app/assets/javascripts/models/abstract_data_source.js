@@ -32,8 +32,7 @@ chorus.models.AbstractDataSource = chorus.models.Base.extend({
     },
 
     stateIconUrl: function() {
-//         var filename = this.isOnline() ? 'green.png' : 'yellow.png'; // to be deleted when final
-        var filename = this.isOnline() ? 'green.svg' : 'yellow.svg';
+        var filename = this.isOnline() ? 'green.png' : 'yellow.png';
         return this._imagePrefix + filename;
     },
 

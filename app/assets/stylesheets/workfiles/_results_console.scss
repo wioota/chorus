@@ -1,12 +1,12 @@
 .results_console {
     .execution {
-        height: 30px;
+        height: 32px;
         clear: both;
-        line-height: 30px;
+        line-height: 31px;
         vertical-align: middle;
-        padding: 0;
-        background: $core-white;
-/*         border-bottom: $border-canon; */
+        padding: 0 $padding-x;
+        background: white;
+        border-bottom: $border-canon;
 
         h1 {
             @include results-console;
@@ -24,7 +24,7 @@
             margin-left: 10px;
 
             .separator {
-                margin: 0 $separator-space;
+                margin: 0 5px;
             }
             &.collapsed {
                 .separator.collapsable {
@@ -45,10 +45,11 @@
                 .spinner {
                   display: inline-block;
                   width: 25px;
-                }
-                div[aria-role=progressbar] {
+
+                  div[aria-role=progressbar] {
                       left: 13px;
                       top: -3px;
+                  }
                 }
 
                 .task_loading {
@@ -74,7 +75,8 @@
 
     .separator {
         color: $color-text3;
-        margin: 0 $separator-space;
+        padding-left: $padding-x;
+        padding-right: $padding-x;
     }
 
     .result_table {
@@ -111,43 +113,37 @@
         border-top: none;
         margin-top: -4px;
 
-/*         text-align: center; */
+        text-align: center;
         vertical-align: middle;
 
         .arrow {
             display: inline-block;
-			position: relative;
-			
-			/* adjust position to 1/2 of glyph width */
-			left: -4px;
+            margin-bottom: 2px;
         }
 
         .up {
-            @include triangle-glyph(up);
-
-/*             width:0px; */
-/*             height:0px; */
-/*             border-left:5px solid transparent;  /* left arrow slant */ 
-/*             border-right:5px solid transparent; /* right arrow slant */ 
-/*             border-bottom:5px solid $color-text4; /* bottom, add background color here */ 
-/*             font-size:0px; */
-/*             line-height:0px; */
+            width:0px;
+            height:0px;
+            border-left:5px solid transparent;  /* left arrow slant */
+            border-right:5px solid transparent; /* right arrow slant */
+            border-bottom:5px solid $color-text4; /* bottom, add background color here */
+            font-size:0px;
+            line-height:0px;
         }
 
         .down {
-			@include triangle-glyph(down);
-/*             width:0px; */
-/*             height:0px; */
-/*             border-left:5px solid transparent; */
-/*             border-right:5px solid transparent; */
-/*             border-top:5px solid $color-text4; */
-/*             font-size:0px; */
-/*             line-height:0px; */
+            width:0px;
+            height:0px;
+            border-left:5px solid transparent;
+            border-right:5px solid transparent;
+            border-top:5px solid $color-text4;
+            font-size:0px;
+            line-height:0px;
         }
     }
 
     .minimized .data_grid {
-        height: 300px;
+        height: 200px;
     }
 
     .collapsed .data_grid {

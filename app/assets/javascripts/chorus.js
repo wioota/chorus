@@ -221,20 +221,16 @@ window.Chorus = function chorus$Global() {
         input.unbind("textchange.filter").bind("textchange.filter", textChangeFunction);
         input.addClass("chorus_search");
         input.each(function(i, el) {
-            self.addSearchFieldModifications(el);
+            self.addClearButton(el);
         });
     };
 
-// **************
-// - magnifying glass at beginning of field
-// - clear element at end of field
-
-    self.addSearchFieldModifications = function(input) {
+    self.addClearButton = function(input) {
         if ($(input).parent().is(".chorus_search_container")) return;
 
         var $input = $(input);
         var clearLink = $("<a href='#'/>")
-            .append('<span class="fa fa-times search_clear"></span>')
+            .append("<i class='oi search_clear' data-glyph='x'></i>")
             .addClass("chorus_search_clear hidden")
             .bind('click', function(e) {
                 e.preventDefault();
@@ -244,13 +240,10 @@ window.Chorus = function chorus$Global() {
         $input.unbind("textchange.clear_link").bind("textchange.clear_link", function() {
             clearLink.toggleClass("hidden", $input.val().length === 0);
         });
-
-        var magnifyGlassWrap = $("<span class='search_magnifying_glass'></span>");
         var container = $("<div class='chorus_search_container'></div>");
-
-        magnifyGlassWrap.insertAfter($input);
-        magnifyGlassWrap.append($input).append(clearLink);
-        magnifyGlassWrap.wrapAll(container);
+        container.css({ display: $input.css("display") });
+        container.insertAfter($input);
+        container.append($input).append(clearLink);
     };
 
     self.hotKeyMeta = BrowserDetect.OS === "Mac" ? "ctrl" : "alt";

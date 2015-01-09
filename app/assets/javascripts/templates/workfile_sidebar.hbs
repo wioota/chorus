@@ -1,7 +1,10 @@
 {{#if resource}}
     <div class="info">
         {{#if showVersions}}
-			<a class="version_list" href="#"><span class="chosen">{{t "workfile.version_title" versionNum=versionInfo.versionNum}}</span></a>
+          <a class="version_list" href="#">
+            <span class="chosen">{{t "workfile.version_title" versionNum=versionInfo.versionNum}}</span>
+            <img src="/images/blue-menu-triangle.png"/>
+          </a>
         {{/if}}
     </div>
     <div class="actions">

@@ -1,17 +1,15 @@
 .data_grid {
-    $header-line-height: 30px;
+    $header-line-height: 32px;
     $line-height: 40px;
     $cell-width: 100px;
     $short-name-width: 90px;
     $column-horizontal-padding: 10px;
-
-
     overflow: hidden;
+
     position: relative;
 
     background: $data-grid-background-color;
-    border: $dark-border-canon;
-    
+
     .thead {
         position: absolute;
         top: 0;

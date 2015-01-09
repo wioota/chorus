@@ -8,7 +8,7 @@
         position: relative;
 
         &:last-child {
-/*             border-bottom: none; */
+            border-bottom: none;
         }
 
         .image {
@@ -38,16 +38,13 @@
             padding-top: 2px;
             padding-bottom: 5px;
             
-			@include font-primary;
+            @include font-primary-link;
             display: inline-block;
             max-width: 85%;
             word-break: break-all;
             span {
                 max-width: none;
             }
-        }
-        a.name {
-            @include font-primary-link;        
         }
 
         .item_information {
@@ -115,7 +112,7 @@
                 margin-left: 5px;
                 margin-top: 12px;
                 margin-right: 4px;
-                @include font-primary;
+                font-weight: $semibold;
             }
 
             .arrows{
@@ -138,7 +135,7 @@
         }
 
         .details {
-            /* font-size: 13px; */
+            font-size: 13px;
         }
 
         .details_area {

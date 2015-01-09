@@ -1,5 +1,3 @@
-$remove-circle-color: $charcoal;
-
 .filter_wizard {
 
     .filter_content {
@@ -41,10 +39,9 @@ $remove-circle-color: $charcoal;
     border-bottom: 0;
 
     .remove {
-/*         display: inline-block; */
-/*         margin-top: 4px; */
-/*         vertical-align: top; */
-	    color: $remove-circle-color;
+        display: inline-block;
+        margin-top: 4px;
+        vertical-align: top;
     }
 
     select, .ui-selectmenu-button .ui-button {

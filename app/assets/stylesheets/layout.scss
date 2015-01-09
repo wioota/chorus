@@ -1,5 +1,3 @@
-@import "_browser_support";
-
 @import "_common";
 @import "compass/css3/images";
 @import "compass/css3/border-radius";
@@ -22,8 +20,8 @@
     height: 100%;
 }
 
-/* comfortable spacing at bottom of page EXCEPT for iframe situation */
-#page > div:not(.header_iframe_layout) {
+/* comfortable spacing at bottom of page EXCEPT for special cases */
+#page > div[data-template="logged_in_layout"] {
     margin-bottom: $page-margin-bottom;
 }
 
@@ -43,21 +41,13 @@
     margin-right: $sidebar-width + ($sidebar-padding-x);
 }
 
-/* hax for position fixed header and sidebar */
+//hax for position fixed header and sidebar
 .logged_in_layout {
     > .header, .page_sub_header, .sub_nav {
         position: fixed;
         width: 100%;
-        min-width: $page-min-width;
-    }
-    > .header {
         z-index: $header-z-index;
-    }
-    > .page_sub_header {
-        z-index: $header-z-index - 1; 
-    }
-    .sub_nav {
-        z-index: $header-z-index - 1;
+        min-width: $page-min-width;
     }
 
     .breadcrumbs {
@@ -76,25 +66,23 @@
 
         .jump_to_top {
             div.triangle_up {
-/*                 @include triangle(up, black, 10px, 6px); */
-                @include triangle-glyph(up);
-                color: #000000;
-/*                 font-size: 0px; */
-                margin: 3px auto 0;
+                @include triangle(up, black, 10px, 5px);
+                font-size: 0px;
+                margin: 2px auto 0;
             }
 
-            background: #AAAAAA;
-            height: 15px;
+            background: #AAA;
+            height: 10px;
             line-height: 10px;
             width: 100%;
             @include opacity(0);
             position: absolute;
             top: 0px;
-//             vertical-align: middle;
+            vertical-align: middle;
             &.clickable {
                 @include opacity(0.5);
                 &:hover {
-                    @include opacity(.95);
+                    @include opacity(1);
                 }
             }
         }

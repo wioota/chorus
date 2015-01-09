@@ -1,7 +1,7 @@
 @import "_common";
 
 .date-picker {
-    z-index: $import-date-picker-z-index;
+    z-index: 20001;
 }
 
 .titled-input-group {

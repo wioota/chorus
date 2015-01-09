@@ -1,11 +1,7 @@
 .pick_items {
-
-$picklist_image_rightMargin: 5px;
-
-
-/*     .sub_header .chorus_search_container { */
-/*         padding: 5px 0; */
-/*     } */
+    .sub_header .chorus_search_container {
+        padding: 5px 0;
+    }
 
     .list_content_details {
         width: auto;
@@ -23,12 +19,12 @@ $picklist_image_rightMargin: 5px;
                 &.selected {
                     background-color: $picklist-selected-background-color;
 
-                    a {
-                        color: #FFFFFF;
-                    }
+                  a {
+                    color: white;
+                  }
 
-                    .name {
-                        color: #FFFFFF;
+                  .name {
+                        color: white;
                     }
                 }
 
@@ -50,7 +46,6 @@ $picklist_image_rightMargin: 5px;
                 .image {
                     width: $icon-image-width;
                     display: inline-block;
-                    margin-right: $picklist_image_rightMargin;
                 }
             }
         }
