@@ -87,5 +87,4 @@ group :development do
   gem 'mizuno'
   gem 'bullet'
   gem 'capistrano', '2.15.5'
-  gem 'newrelic_rpm'
 end
