@@ -1,0 +1,90 @@
+---
+default:
+  adapter: jdbcpostgresql
+  encoding: unicode
+  username: postgres_chorus
+  password:
+  port: 8543
+  min_messages: warning
+  host: 127.0.0.1
+  pool: 5
+development:
+  database: chorus_rails_development
+  adapter: jdbcpostgresql
+  encoding: unicode
+  username: postgres_chorus
+  password:
+  port: 8543
+  min_messages: warning
+  host: 127.0.0.1
+  pool: 40
+test:
+  database: chorus_rails_test
+  adapter: jdbcpostgresql
+  encoding: unicode
+  username: postgres_chorus
+  password:
+  port: 8543
+  min_messages: warning
+  host: 127.0.0.1
+  pool: 5
+ci_jasmine:
+  database: chorus_rails_ci_jasmine
+  adapter: jdbcpostgresql
+  encoding: unicode
+  username: postgres_chorus
+  password:
+  port: 8543
+  min_messages: warning
+  host: 127.0.0.1
+  pool: 5
+ci_legacy:
+  database: chorus_rails_ci_legacy
+  adapter: jdbcpostgresql
+  encoding: unicode
+  username: postgres_chorus
+  password:
+  port: 8543
+  min_messages: warning
+  host: 127.0.0.1
+  pool: 5
+ci_next:
+  database: chorus_rails_ci_next
+  adapter: jdbcpostgresql
+  encoding: unicode
+  username: postgres_chorus
+  password:
+  port: 8543
+  min_messages: warning
+  host: 127.0.0.1
+  pool: 5
+integration:
+  database: chorus_rails_integration
+  adapter: jdbcpostgresql
+  encoding: unicode
+  username: postgres_chorus
+  password:
+  port: 8543
+  min_messages: warning
+  host: 127.0.0.1
+  pool: 5
+production:
+  database: chorus
+  adapter: jdbcpostgresql
+  encoding: unicode
+  username: postgres_chorus
+  password:
+  port: 8543
+  min_messages: warning
+  host: 127.0.0.1
+  pool: 5
+packaging:
+  database: chorus_rails_packaging
+  adapter: jdbcpostgresql
+  encoding: unicode
+  username: postgres_chorus
+  password:
+  port: 8543
+  min_messages: warning
+  host: 127.0.0.1
+  pool: 5

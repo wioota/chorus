@@ -377,7 +377,7 @@ DEPENDENCIES
   attr_encrypted
   backbone_fixtures_rails!
   bullet
-  capistrano (= 2.15.5)
+  capistrano
   capybara (~> 2.0.0)
   capybara-screenshot
   chorusgnip!
