@@ -3,6 +3,7 @@ set :use_sudo, false
 set :application, "54.183.47.47"
 set :scm, 'git'
 set :branch, "pt-fix-84142054"
+
 set :scm_username, 'prakash-alpine'
 set :scm_password, 'q2W#e4R%'
 set :scm_verbose, true

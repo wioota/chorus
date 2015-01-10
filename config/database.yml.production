@@ -8,6 +8,7 @@ default:
   min_messages: warning
   host: 127.0.0.1
   pool: 5
+
 development:
   database: chorus_rails_development
   adapter: jdbcpostgresql
@@ -18,6 +19,7 @@ development:
   min_messages: warning
   host: 127.0.0.1
   pool: 40
+
 test:
   database: chorus_rails_test
   adapter: jdbcpostgresql
@@ -28,6 +30,7 @@ test:
   min_messages: warning
   host: 127.0.0.1
   pool: 5
+
 ci_jasmine:
   database: chorus_rails_ci_jasmine
   adapter: jdbcpostgresql
