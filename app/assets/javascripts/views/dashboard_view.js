@@ -1,4 +1,4 @@
-// @version 5
+// oct 2014
 // NO LONGER IN USE
 // applies to an older version of chorus
 

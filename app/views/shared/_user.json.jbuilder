@@ -8,8 +8,8 @@ json.set! title do
       json.original '/images/default-user-icon.png'
       json.icon  '/images/default-user-icon.png'
     else
-      json.original user.image_file_name
-      json.icon user.image_file_name
+      json.original user.image.url(:original)
+      json.icon user.image.url(:icon)
     end
     if user.image_content_type == nil
       json.entity_type 'image'

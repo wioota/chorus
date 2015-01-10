@@ -4,7 +4,7 @@ $link-padding: 15px;
     overflow: hidden;
 
     div {
-        display: inline-block;
+        display: inline;
     }
 
     .pagination {
@@ -43,12 +43,12 @@ $link-padding: 15px;
     }
 
     .explore {
-        margin-left: 50px;
+        margin-left: 8px;
     }
 
     .chorus_search_container {
         width: 40%;
-        max-width: 40%;
-        margin: 0 5px 0 10px;
+        margin: 0 8px;
+        display: inline-block;
     }
 }

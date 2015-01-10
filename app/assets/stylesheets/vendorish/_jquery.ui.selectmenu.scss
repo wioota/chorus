@@ -56,31 +56,31 @@
 }
 
 .ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
-  -moz-border-radius-topleft: 4px;
-  -webkit-border-top-left-radius: 4px;
-/*   -khtml-border-top-left-radius: 4px; */
-  border-top-left-radius: 4px;
+  -moz-border-radius-topleft: 4px /*{cornerRadius}*/;
+  -webkit-border-top-left-radius: 4px /*{cornerRadius}*/;
+  -khtml-border-top-left-radius: 4px /*{cornerRadius}*/;
+  border-top-left-radius: 4px /*{cornerRadius}*/;
 }
 
 .ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
-  -moz-border-radius-topright: 4px;
-  -webkit-border-top-right-radius: 4px;
-/*   -khtml-border-top-right-radius: 4px; */
-  border-top-right-radius: 4px;
+  -moz-border-radius-topright: 4px /*{cornerRadius}*/;
+  -webkit-border-top-right-radius: 4px /*{cornerRadius}*/;
+  -khtml-border-top-right-radius: 4px /*{cornerRadius}*/;
+  border-top-right-radius: 4px /*{cornerRadius}*/;
 }
 
 .ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
-  -moz-border-radius-bottomleft: 4px;
-  -webkit-border-bottom-left-radius: 4px;
-/*   -khtml-border-bottom-left-radius: 4px; */
-  border-bottom-left-radius: 4px;
+  -moz-border-radius-bottomleft: 4px /*{cornerRadius}*/;
+  -webkit-border-bottom-left-radius: 4px /*{cornerRadius}*/;
+  -khtml-border-bottom-left-radius: 4px /*{cornerRadius}*/;
+  border-bottom-left-radius: 4px /*{cornerRadius}*/;
 }
 
 .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
-  -moz-border-radius-bottomright: 4px;
-  -webkit-border-bottom-right-radius: 4px;
-/*   -khtml-border-bottom-right-radius: 4px; */
-  border-bottom-right-radius: 4px;
+  -moz-border-radius-bottomright: 4px /*{cornerRadius}*/;
+  -webkit-border-bottom-right-radius: 4px /*{cornerRadius}*/;
+  -khtml-border-bottom-right-radius: 4px /*{cornerRadius}*/;
+  border-bottom-right-radius: 4px /*{cornerRadius}*/;
 }
 
 /* Interaction states
@@ -95,6 +95,7 @@
     color: white;
   }
 }
+
 
 .ui-selectmenu-button {
 
@@ -111,7 +112,7 @@
     background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eeeeee), color-stop(0.5, white));
     background-image: -webkit-linear-gradient(center bottom, #eeeeee 0%, white 50%);
     background-image: -moz-linear-gradient(center bottom, #eeeeee 0%, white 50%);
-/*     background-image: -o-linear-gradient(top, #eeeeee 0%, #ffffff 50%); */
+    background-image: -o-linear-gradient(top, #eeeeee 0%, #ffffff 50%);
     background-image: -ms-linear-gradient(top, #eeeeee 0%, #ffffff 50%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#eeeeee', endColorstr = '#ffffff', GradientType = 0);
     background-image: linear-gradient(top, #eeeeee 0%, #ffffff 50%);
@@ -123,7 +124,7 @@
     background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, white), color-stop(0.5, #eeeeee));
     background-image: -webkit-linear-gradient(center bottom, white 0%, #eeeeee 50%);
     background-image: -moz-linear-gradient(center bottom, white 0%, #eeeeee 50%);
-/*     background-image: -o-linear-gradient(bottom, white 0%, #eeeeee 50%); */
+    background-image: -o-linear-gradient(bottom, white 0%, #eeeeee 50%);
     background-image: -ms-linear-gradient(top, #ffffff 0%, #eeeeee 50%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#ffffff', endColorstr = '#eeeeee', GradientType = 0);
     background-image: linear-gradient(top, #ffffff 0%, #eeeeee 50%);
@@ -134,7 +135,7 @@
   }
   .ui-icon {
     top: 2px;
-    background: url(/images/general/select-sprite.png) no-repeat 0 1px;
+    background: url(/images/select-sprite.png) no-repeat 0 1px;
     width: 18px;
     height: 26px;
     position: absolute;
@@ -193,8 +194,8 @@
 }
 
 .ui-selectmenu-menu li a {
-  color: #000000;
-  padding: 3px 10px;
+  color: black;
+  padding: 2px 5px 2px 1em;
 }
 
 .ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled {
@@ -252,11 +253,11 @@ a.ui-selectmenu-disabled {
 }
 
 /* IE6 workaround (dotted transparent borders) */
-/* * html .ui-selectmenu-menu li { */
-/*   border-color: pink; */
-/*   filter: chroma(color = pink); */
-/*   width: 100%; */
-/* } */
+* html .ui-selectmenu-menu li {
+  border-color: pink;
+  filter: chroma(color = pink);
+  width: 100%;
+}
 
 * html .ui-selectmenu-menu li a {
   position: relative

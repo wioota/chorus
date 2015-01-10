@@ -63,7 +63,7 @@ chorus.views.Header = chorus.views.Base.extend({
 
     postRender: function() {
         this.$(".search input").unbind("textchange").bind("textchange", _.bind(_.throttle(this.displayResult, 500), this));
-        chorus.addSearchFieldModifications(this.$(".search input"));
+        chorus.addClearButton(this.$(".search input"));
 
         if (chorus.isDevMode()) {
             this.addFastUserToggle();

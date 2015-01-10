@@ -2,8 +2,7 @@
 {{#if isOnlineOrOffline}}
 <div class="account_info">
     {{#if shared}}
-<!--         <img src="/images/data_sources/shared.png"/> --> <!-- to be deleted when final -->
-        <img src="/images/data_sources/shared.svg" alt="" />
+        <img src="/images/data_sources/shared_icon.png"/>
         {{t "data_sources.sidebar.is_shared_account"}}
         {{#if userCanEditPermissions}}
             <a href="#" class="dialog" data-dialog="DataSourcePermissions">{{t "data_sources.sidebar.edit"}}</a>
@@ -11,25 +10,18 @@
     {{else}}
         {{#if userCanEditPermissions}}
             <div class="edit_individual_accounts">
-                <!-- <img src="/images/data_sources/individual.png"/> --><!-- to be deleted when final -->
-                <img src="/images/data_sources/individual.svg" alt="" />
+                <img src="/images/data_sources/individual.png"/>
                 <span class="individual_accounts_count">{{t "data_sources.sidebar.there_are_x_individual_accounts" count=dataSourceAccountsCount}}</span>
                  <a href="#" class="dialog" data-dialog="DataSourcePermissions">{{t "data_sources.sidebar.edit"}}</a>
             </div>
         {{else}}
             <div class="individual_account">
                 {{#if userHasAccount}}
-                    <div class="datasource_access_panel has_access">
-                    <div class="panelcontent">
-                        <i class="fa fa-unlock"></i> {{t "data_sources.sidebar.access"}}
-                    </div>
-                     </div>
+                    <img src="/images/data_sources/access.png"/>
+                    {{t "data_sources.sidebar.access"}}
                 {{else}}
-                    <div class="datasource_access_panel no_access">
-                    <div class="panelcontent">
-                        <i class="fa fa-lock"></i> {{t "data_sources.sidebar.no_access"}}
-                    </div>
-                    </div>
+                    <img src="/images/data_sources/no_access.png"/>
+                    {{t "data_sources.sidebar.no_access"}}
                 {{/if}}
             </div>
         {{/if}}

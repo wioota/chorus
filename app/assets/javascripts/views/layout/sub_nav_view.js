@@ -9,6 +9,7 @@ chorus.views.SubNav = chorus.views.Base.extend({
 
     postRender:function () {
         this.$("li").removeClass("selected");
+
         var selected = this.$("li." + this.options.tab);
         selected.addClass("selected");
     },

@@ -18,12 +18,14 @@ chorus.views.TabControl = chorus.views.Base.extend({
 
     clickTab: function(evt) {
         this.setSelectedTab($(evt.target).closest('.tab'));
+
         chorus.page && chorus.page.trigger('resized');
     },
 
     setSelectedTab: function(tab) {
         this.$(".tabs li").removeClass("selected");
         tab.addClass("selected");
+
         this.selectedTabName = tab.data('name');
         this.toggleTabbedArea();
         this.trigger("selected:" + tab.data("name"));
@@ -35,7 +37,7 @@ chorus.views.TabControl = chorus.views.Base.extend({
             var view = this[tabName];
             if (view) {
                 this.registerSubView(view);
-                this.$(".tabbed_content_area").append(view.render().el);
+                this.$(".tabbed_area").append(view.render().el);
                 view.delegateEvents();
             }
         }, this);

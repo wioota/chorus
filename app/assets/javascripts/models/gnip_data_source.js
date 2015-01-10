@@ -19,7 +19,7 @@ chorus.models.GnipDataSource = chorus.models.AbstractDataSource.extend({
     },
 
     stateIconUrl: function() {
-        return this._imagePrefix + 'green.svg';
+        return this._imagePrefix + 'green.png';
     },
 
     declareValidations: function(newAttrs) {

@@ -1,7 +1,7 @@
 .data_source_list {
 
     li {
-        background-color: #FFFFFF !important;
+        background-color: white !important;
     }
 
     &.data_source_provider .details{
@@ -18,24 +18,19 @@
     }
 
     .list.selectable input[type=checkbox] {
-        margin-top: 10px;
-        /* margin-left: 0px */
+        margin-top: 9px;
     }
 
-    .datasource_images {
-        position: relative;
-    }
-        
-    img.state {
-        position: absolute;
-        left: 26px;
-        width: 12px;
-        height: auto;
+    .images {
+        float: left;
     }
 
     img.provider {
-        float: left;
-        padding-right: 5px;
+        padding-right: 10px;
+    }
+
+    img.state, img.provider {
+        vertical-align: middle;
     }
 
     .data_source_details {

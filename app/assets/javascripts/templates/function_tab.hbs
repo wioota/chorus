@@ -15,7 +15,8 @@
                         {{#each models}}
                             <li data-cid="{{cid}}" data-fullname="{{fullName}}" data-name="{{name}}">
                                 <span class="spacer_left"/>
-                                <img src="images/function.svg"/>
+                                <img src="images/function.png">
+
                                 <div class="name list_item_text" title="{{hintText}}">{{name}}</div>
                                 <span class="spacer_right"/>
                             </li>
@@ -30,13 +31,9 @@
                 <ul class="schema_menu">
                     {{#each schemas}}
                         <li>
-                            
                             {{#if isCurrent}}
-                                <div class="checkmark">
-                            	    <span class="fa fa-check"></span>
-                            	</div>
+                                <div class="check"></div>
                             {{/if}}
-
                             <a class="schema" data-id="{{id}}">{{name}}</a>
                         </li>
                     {{/each}}

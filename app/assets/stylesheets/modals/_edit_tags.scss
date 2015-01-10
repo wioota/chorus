@@ -1,33 +1,25 @@
 .edit_tags {
-    .dialog_content {
-        .tags_input {
+    .dialog_content .tags_input {
 
-            border: none;
-            padding: 0px;
+        border: none;
+        padding: 0px;
 
-            .text-core {
-                .text-wrap {
-                    overflow-y: auto;
-            
-                    input {
-                        margin: 3px;
-                    }
-                }
+        .text-core .text-wrap {
+            overflow-y: visible;
+            input {
+                margin: 3px;
             }
             .text-tags {
                 height: 150px;
-                overflow-y: auto;
-            
+                overflow-y: scroll;
                 .text-tag {
                     margin: 3px;
                 }
             }
         }
+
     }
-
-/* to be deleted when final */
-/*     .form_controls { */
-/*         margin-top: 0px; */
-/*     } */
-
+    .form_controls {
+        margin-top: 0px;
+    }
 }
