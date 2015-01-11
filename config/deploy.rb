@@ -16,8 +16,8 @@ set :shared, '../shared/chorus'
 # via the :deploy_to variable:
 # set :deploy_to, "/var/www/#{application}"
 
-set :deploy_to, "/home/#{user}/chorus"
-# set :deploy_to, "/home/#{user}/firstfuel.com"
+#set :deploy_to, "/home/#{user}/chorus"
+set :deploy_to, "/usr/local/chorus"
 
 #set :deploy_via, :export
 #set :deploy_via, :copy
@@ -49,6 +49,7 @@ default_run_options[:pty] = true  # Forgo errors when deploying from windows
 set :chmod755, "app config db lib public vendor script script/* public/disp*"
 
 
+
 #desc "Task to symlink public and vendor folders"
 #  task symlink_shared do
 #    run "ln -nfs #{shared_path}/public #{release_path}/public"
@@ -60,6 +61,7 @@ set :chmod755, "app config db lib public vendor script script/* public/disp*"
 desc "Tasks to execute after code update"
 after 'deploy:update_code', :roles => [:app, :db, :web] do
   # symlink public & vendor folders from shared
+  run "chown -R chorus:chorus #{release_path}"
   #run "cp #{shared_path}/public/*.* #{release_path}/public"
   #run "cp #{shared_path}/public/dispatch.fcgi.production #{release_path}/public/dispatch.fcgi"
   #run "cp #{shared_path}/public/dispatch.cgi.production #{release_path}/public/dispatch.cgi"
@@ -77,6 +79,15 @@ after 'deploy:update_code', :roles => [:app, :db, :web] do
   #run "cp #{release_path}/app/views/layouts/application.rhtml.production #{release_path}/app/views/layouts/application.rhtml"
   #run "cp #{release_path}/config/gmaps_api_key.yml.production #{release_path}/config/gmaps_api_key.yml"
   #run "cp #{shared_path}/public/.htaccess #{release_path}/public/."
+  run "ln -nfs #{shared_path}/demo_data #{release_path}/demo_data"
+  run "ln -nfs #{shared_path}/postgres-db #{release_path}/db"
+  run "rm -rf #{release_path}/tmp"
+  run "ln -nfs #{shared_path}/tmp #{release_path}/tmp"
+  run "rm -rf #{release_path}/log"
+  run "ln -nfs #{shared_path}/log #{release_path}/log"
+  run "rm -rf #{release_path}/system"
+  run "ln -nfs #{shared_path}/system #{release_path}/system"
+
   #run "ln -nfs #{shared_path}/public/images #{release_path}/public/images"
   #run "ln -nfs #{shared_path}/public/assets #{release_path}/public/assets"
   #run "ln -nfs #{shared_path}/vendor/assets #{release_path}/vendor/assets"
