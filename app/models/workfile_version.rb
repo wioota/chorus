@@ -107,6 +107,14 @@ class WorkfileVersion < ActiveRecord::Base
     end
   end
 
+  def partial_file?
+    contents_file_size > max_presentable_content_size
+  end
+
+  def max_presentable_content_size
+    (1.megabyte/8).to_i
+  end
+
   private
 
   def latest_version?
