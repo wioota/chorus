@@ -2,7 +2,7 @@ class ChorusWorkfilePresenter < WorkfilePresenter
 
   def to_hash
     require 'pry'
-    binding.pry
+    #binding.pry
     if options[:workfile_as_latest_version] && model.latest_workfile_version
       version_options = options.dup
       version_options.delete :workfile_as_latest_version
