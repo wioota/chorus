@@ -30,7 +30,7 @@ class WorkfilesController < ApplicationController
     @workfile = workfile
     @options =  {:presenter_options => {:contents => true, :workfile_as_latest_version => true, :should_render => false }}
     # binding.pry
-    present( workfile, :presenter_options => {:contents => true, :workfile_as_latest_version => true, :should_render => false })
+    #present( workfile, :presenter_options => {:contents => true, :workfile_as_latest_version => true, :should_render => false })
     render :show, :formats => [:json]
   end
 
