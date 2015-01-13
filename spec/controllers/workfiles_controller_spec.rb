@@ -113,6 +113,8 @@ describe WorkfilesController do
   end
 
   describe "#show" do
+
+
     context "for a private workspace" do
       context "as a workspace member" do
         before do
@@ -126,11 +128,9 @@ describe WorkfilesController do
         end
 
         it "presents the latest version of a workfile" do
-          mock_present do |model, _, options|
-            model.should == private_workfile
-            options[:contents].should be_present
-            options[:workfile_as_latest_version].should be_true
-          end
+
+          require 'pry'
+          #binding.pry
 
           get :show, {:id => private_workfile}
         end
@@ -207,16 +207,20 @@ describe WorkfilesController do
     end
 
     describe "jasmine fixtures" do
+      render_views # this is so rspec render's the jbuilder templates
       before do
         log_in admin
       end
 
       def self.generate_workfile_fixture(fixture_name, json_filename)
+        require 'pry'
+        #binding.pry
         generate_fixture "workfile/#{json_filename}" do
           fixture = workfiles(fixture_name)
           get :show, :id => fixture.id
         end
       end
+
 
       generate_workfile_fixture(:"sql.sql", "sql.json")
       generate_workfile_fixture(:"text.txt", "text.json")

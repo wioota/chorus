@@ -1,4 +1,6 @@
 
+require 'pry'
+# binding.pry if workfile.id == 1000018
 recent_comments = Array.wrap(workfile.recent_comment)
 json.id workfile.id
 json.workspace do
@@ -16,9 +18,9 @@ json.entity_subtype workfile.entity_subtype
 json.user_modified_at workfile.user_modified_at
 json.status workfile.status
 json.partial! 'shared/user', user: workfile.owner, title: 'owner', options: options
-json.has_draft workfile.has_draft(current_user)
-json.execution_schema Presenter.present(workfile.execution_schema, options.merge(:succinct => options[:list_view]))
+json.has_draft workfile.has_draft(current_user) if workfile.respond_to?(:has_draft)
+json.execution_schema Presenter.present(workfile.execution_schema, options.merge(:succinct => options[:list_view])) if workfile.respond_to?(:execution_schema)
 json.version_info do
-  json.partial! 'workfile_versions/workfile_version', workfile_version: workfile.latest_workfile_version, options: options
+  json.partial! 'workfile_versions/workfile_version', workfile_version: workfile.latest_workfile_version, options: options if workfile.latest_workfile_version
 end
 json.complete_json true
