@@ -162,6 +162,10 @@ class Workfile < ActiveRecord::Base
     event
   end
 
+  def recent_comment
+    [most_recent_notes.last, most_recent_comments.last].compact.sort_by(&:created_at).last
+  end
+
   private
 
   def init_file_name

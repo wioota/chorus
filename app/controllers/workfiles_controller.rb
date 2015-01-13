@@ -25,7 +25,13 @@ class WorkfilesController < ApplicationController
 
     log_workfile_opened_event(workfile, current_user)
 
-    present workfile, :presenter_options => {:contents => true, :workfile_as_latest_version => true}
+    require 'pry'
+    #binding.pry
+    @workfile = workfile
+    @options =  {:presenter_options => {:contents => true, :workfile_as_latest_version => true, :should_render => false }}
+    # binding.pry
+    present( workfile, :presenter_options => {:contents => true, :workfile_as_latest_version => true, :should_render => false })
+    render :show, :formats => [:json]
   end
 
   def create
@@ -50,6 +56,7 @@ class WorkfilesController < ApplicationController
 
     workfile.assign_attributes(params[:workfile])
     workfile.update_from_params!(params[:workfile])
+
 
     present workfile, :presenter_options => {:include_execution_schema => true}
   end

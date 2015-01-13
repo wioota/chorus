@@ -9,6 +9,8 @@ class Presenter
 
   def self.present_model(model, view_context, options)
     presenter_class = get_presenter_class(model, options)
+    require 'pry'
+    binding.pry
     presenter_class.new(model, view_context, options).presentation_hash
   end
 

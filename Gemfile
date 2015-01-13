@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.18'
 
 gem 'will_paginate'
+gem 'pry'
+gem 'pry-nav'
 gem 'net-ldap',      :require => false
 gem 'paperclip', '3.0.4'
 gem 'cocaine', '0.2.1' # cocaine is a paperclip dependency but new versions of cocaine cause trouble. remove this line after upgrading paperclip.
