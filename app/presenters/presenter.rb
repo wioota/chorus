@@ -1,3 +1,5 @@
+require 'json'
+
 class Presenter
   def self.present(model_or_collection, view_context, options={})
     if model_or_collection.is_a?(ActiveRecord::Relation) || model_or_collection.is_a?(Enumerable)
@@ -7,9 +9,47 @@ class Presenter
     end
   end
 
+  def self.cache_model(model, view_context, options, user)
+    presenter_class = get_presenter_class(model, options)
+
+    if (options[:cached] == true && model.respond_to?(:id))
+      if Rails.cache.exist?(["#{model.class.name}/jbuilder/#{user.id}", model])
+        Chorus.log_debug "-- Fetching data from cache for #{model.class.name}  --"
+        hash = Rails.cache.fetch(["#{model.class.name}/jbuilder/#{user.id}", model])
+        return hash
+      else
+        Chorus.log_debug "-- Storing data to cache for #{model.class.name}  --"
+        hash = presenter_class.new(model, view_context, options).presentation_hash
+        Rails.cache.write ["#{model.class.name}/jbuilder/#{user.id}", model], hash
+        return hash
+      end
+    else
+      return presenter_class.new(model, view_context, options).presentation_hash
+    end
+  end
+
   def self.present_model(model, view_context, options)
     presenter_class = get_presenter_class(model, options)
-    presenter_class.new(model, view_context, options).presentation_hash
+    if Thread.current[:user] != nil
+      current_user = Thread.current[:user]
+    else
+      Thread.current[:user] = options[:user]
+      current_user = options[:user]
+    end
+    if (options[:cached] == true && model.respond_to?(:id))
+      if Rails.cache.exist?(["#{options[:namespace]}/#{current_user.id}", model])
+        Chorus.log_debug "-- Fetching data from cache for #{model.class.name}  --"
+         hash = Rails.cache.fetch(["#{options[:namespace]}/#{current_user.id}", model])
+        return hash
+      else
+        Chorus.log_debug "-- Storing data to cache for #{model.class.name}  --"
+        hash = presenter_class.new(model, view_context, options).presentation_hash
+        Rails.cache.write ["#{options[:namespace]}/#{current_user.id}", model], hash
+        return hash
+      end
+    else
+      return presenter_class.new(model, view_context, options).presentation_hash
+    end
   end
 
   def self.present_collection(collection, view_context, options)

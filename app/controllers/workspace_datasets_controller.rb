@@ -8,9 +8,23 @@ class WorkspaceDatasetsController < ApplicationController
     params[:name_filter] = params[:name_pattern]
     params[:total_entries] = workspace.dataset_count(current_user, params)
 
-    datasets = workspace.datasets(current_user, params).includes(Dataset.eager_load_associations).list_order
+    @datasets = workspace.datasets(current_user, params).includes(Dataset.eager_load_associations).list_order
+    @options =  { :workspace => workspace , :user => current_user, :rendering_activities => true, :show_latest_comments => false}
 
-    present paginate(datasets), :presenter_options => { :workspace => workspace }
+    present paginate(@datasets), :presenter_options => { :workspace => workspace }
+
+    # response = render_to_string :index, :formats => [:json]
+    # json = JSON.parse(response)
+    # if @workspaces.respond_to? :current_page
+    #   json[:pagination] = {
+    #       :page => @workspaces.current_page,
+    #       :per_page => @workspaces.per_page,
+    #       :records => @workspaces.total_entries,
+    #       :total => @workspaces.per_page > 0 ? @workspaces.total_pages : nil
+    #   }
+    # end
+    #
+    # render :json => json
   end
 
   def create

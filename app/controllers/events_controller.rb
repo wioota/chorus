@@ -13,9 +13,25 @@ class EventsController < ApplicationController
                model.events
              end
 
-    events = events.includes(Events::Base.activity_stream_eager_load_associations)
+    @events = events.includes(Events::Base.activity_stream_eager_load_associations)
+    #@options =  { :workspace => workspace , :user => current_user, :rendering_activities => true, :show_latest_comments => false}
 
-    present paginate(events.order('events.id DESC')), :presenter_options => {:activity_stream => true, :succinct => true, :workfile_as_latest_version => true}
+    present paginate(events.order('events.id DESC')), :presenter_options => {:activity_stream => true, :succinct => true,
+                                                      :workfile_as_latest_version => true, :cached => true, :namespace => 'activities'}
+
+    # response = render_to_string :index, :formats => [:json]
+    # json = JSON.parse(response)
+    # if @events.respond_to? :current_page
+    # json[:pagination] = {
+    #      :page => @events.current_page,
+    #      :per_page => @events.per_page,
+    #      :records => @events.total_entries,
+    #      :total => @events.per_page > 0 ? @events.total_pages : nil
+    # }
+    # end
+    #
+    # render :json => json
+
   end
 
   def show

@@ -83,7 +83,8 @@ class EventPresenter < Presenter
       if key == 'error_objects'
         value = ErrorPresenter.new(value).as_json
       else
-        value = value.is_a?(String) ? sanitize(value) : value
+        value = value
+        #value = value.is_a?(String) ? sanitize(value) : value
       end
       [key, value]
     end
