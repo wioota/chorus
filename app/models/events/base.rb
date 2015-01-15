@@ -49,6 +49,18 @@ module Events
     belongs_to :workspace, :touch => true
     belongs_to :promoted_by, :class_name => 'User', :touch => true
 
+    # PT 1/15/15 This will auto-refresh the JSON data object for workspace
+    after_save :refresh_cache
+    after_update :refresh_cache
+
+    # Upon creating or updating an event, refresh the JSON object in cache.
+    def refresh_cache
+      Chorus.log_debug "Refreshing cache for event for #{self.class.name} with ID = #{self.id}"
+      options = {:activity_stream => true, :succinct => true,
+                 :workfile_as_latest_version => true, :cached => true, :namespace => 'activities'}
+      Presenter.present(self, nil, options)
+    end
+
     [:actor, :workspace, :target1, :target2, :target3, :promoted_by].each do |method|
       define_method("#{method}_with_deleted") do
         original_method = :"#{method}_without_deleted"
