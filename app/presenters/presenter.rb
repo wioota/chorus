@@ -36,13 +36,15 @@ class Presenter
       Thread.current[:user] = options[:user]
       current_user = options[:user]
     end
-    if (options[:cached] == true && model.respond_to?(:id))
+
+
+    if (options[:cached] == true && model != nil && model.respond_to?(:id))
       if Rails.cache.exist?(["#{options[:namespace]}/#{current_user.id}", model])
-        Chorus.log_debug "-- Fetching data from cache for #{model.class.name}  --"
+        Chorus.log_debug "-- Fetching data from cache for #{model.class.name} with ID = #{model.id}  --"
          hash = Rails.cache.fetch(["#{options[:namespace]}/#{current_user.id}", model])
         return hash
       else
-        Chorus.log_debug "-- Storing data to cache for #{model.class.name}  --"
+        Chorus.log_debug "-- Storing data to cache for #{model.class.name} with ID = #{model.id} --"
         hash = presenter_class.new(model, view_context, options).presentation_hash
         Rails.cache.write ["#{options[:namespace]}/#{current_user.id}", model], hash
         return hash

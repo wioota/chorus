@@ -36,6 +36,7 @@ class Workfile < ActiveRecord::Base
   before_validation :init_file_name, :on => :create
 
   before_update :ensure_proper_content_type
+  after_save :refresh_cache
 
   def ensure_proper_content_type
     file_is_an_image = self.content_type == 'image'
@@ -51,6 +52,14 @@ class Workfile < ActiveRecord::Base
   after_create :create_workfile_created_event, :if => :current_user
   after_create :update_has_added_workfile_on_workspace
   after_create { touch(:user_modified_at) }
+
+
+  def refresh_cache
+    Chorus.log_debug "-- Refreshing cache for #{self.class.name} with ID = #{self.id} --"
+    options = {:workfile_as_latest_version => true, :list_view => true, :cached => true, :namespace => "workspace:workfiles"}
+    workfile = Workfile.includes(Workfile.eager_load_associations).where("id = ?", self.id)
+    Presenter.present(workfile, nil, options)
+  end
 
   delegate :member_ids, :public, :to => :workspace
 

@@ -39,7 +39,7 @@ class InsightsController < ApplicationController
 
   def index
     params[:entity_type] ||= 'dashboard'
-    present paginate(get_insights), :presenter_options => {:activity_stream => true}
+    present paginate(get_insights), :presenter_options => {:activity_stream => true, :cached => true, :namespace => "workspace:insights"}
   end
 
   private
