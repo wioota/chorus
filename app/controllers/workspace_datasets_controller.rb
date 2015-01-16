@@ -11,20 +11,9 @@ class WorkspaceDatasetsController < ApplicationController
     @datasets = workspace.datasets(current_user, params).includes(Dataset.eager_load_associations).list_order
     @options =  { :workspace => workspace , :user => current_user, :rendering_activities => true, :show_latest_comments => false}
 
-    present paginate(@datasets), :presenter_options => { :workspace => workspace }
-
-    # response = render_to_string :index, :formats => [:json]
-    # json = JSON.parse(response)
-    # if @workspaces.respond_to? :current_page
-    #   json[:pagination] = {
-    #       :page => @workspaces.current_page,
-    #       :per_page => @workspaces.per_page,
-    #       :records => @workspaces.total_entries,
-    #       :total => @workspaces.per_page > 0 ? @workspaces.total_pages : nil
-    #   }
-    # end
-    #
-    # render :json => json
+    #Added caching options to speed up page load time. Prakash 1/15/15
+    present paginate(@datasets), :presenter_options => { :workspace => workspace, :cached => true, :namespace => "workspace:datasets" }
+    
   end
 
   def create

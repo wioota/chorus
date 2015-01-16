@@ -36,6 +36,7 @@ class Dataset < ActiveRecord::Base
                            ]
 
   after_destroy :cancel_imports
+  after_update :delete_cache
 
   attr_accessor :highlighted_attributes, :search_result_notes, :skip_search_index
   attr_accessible :name
@@ -44,6 +45,23 @@ class Dataset < ActiveRecord::Base
 
   def needs_schema?
     true
+  end
+
+  def delete_cache
+    Chorus.log_debug "-- Clearing cache for #{self.class.name} with ID = #{self.id} --"
+    result = Rails.cache.delete(["workspace:datasets", "#{current_user.id}", self])
+    if result == true
+      Chorus.log_debug "-- SUCCESS - Clearing cache for #{self.class.name} with ID = #{self.id} --"
+    else
+      Chorus.log_debug "-- FAILED - Clearing cache for #{self.class.name} with ID = #{self.id} --"
+    end
+  end
+
+  def refresh_cache
+    Chorus.log_debug "-- Refreshing cache for #{self.class.name} with ID = #{self.id} --"
+    options = {:workspace => self.workspace, :cached => true, :namespace =>  "workspace:datasets"}
+    dataset = Dataset.includes(Dataset.eager_load_associations).where("id = ?", self.id)
+    Presenter.present(dataset, nil, options)
   end
 
   def self.eager_load_associations
@@ -62,6 +80,7 @@ class Dataset < ActiveRecord::Base
         {:scoped_schema => :scoped_parent}
     ]
   end
+
 
   def self.add_search_permissions(current_user, search)
     search.build do

@@ -9,25 +9,6 @@ class Presenter
     end
   end
 
-  def self.cache_model(model, view_context, options, user)
-    presenter_class = get_presenter_class(model, options)
-
-    if (options[:cached] == true && model.respond_to?(:id))
-      if Rails.cache.exist?(["#{model.class.name}/jbuilder/#{user.id}", model])
-        Chorus.log_debug "-- Fetching data from cache for #{model.class.name}  --"
-        hash = Rails.cache.fetch(["#{model.class.name}/jbuilder/#{user.id}", model])
-        return hash
-      else
-        Chorus.log_debug "-- Storing data to cache for #{model.class.name}  --"
-        hash = presenter_class.new(model, view_context, options).presentation_hash
-        Rails.cache.write ["#{model.class.name}/jbuilder/#{user.id}", model], hash
-        return hash
-      end
-    else
-      return presenter_class.new(model, view_context, options).presentation_hash
-    end
-  end
-
   def self.present_model(model, view_context, options)
     presenter_class = get_presenter_class(model, options)
     if Thread.current[:user] != nil
@@ -37,16 +18,21 @@ class Presenter
       current_user = options[:user]
     end
 
-
     if (options[:cached] == true && model != nil && model.respond_to?(:id))
-      if Rails.cache.exist?(["#{options[:namespace]}/#{current_user.id}", model])
+      if model.respond_to?(:updated_at)
+        cache_key = "#{options[:namespace]}/Users/#{current_user.id}/#{model.class.name}/#{model.id}-#{(model.updated_at.to_f * 1000).round(0)}"
+      else
+        cache_key = "#{options[:namespace]}/Users/#{current_user.id}/#{model.class.name}/#{model.id}"
+      end
+      Chorus.log_debug "-- Cache key for #{model.class.name} is #{cache_key}  --"
+      if Rails.cache.exist?(cache_key)
         Chorus.log_debug "-- Fetching data from cache for #{model.class.name} with ID = #{model.id}  --"
-         hash = Rails.cache.fetch(["#{options[:namespace]}/#{current_user.id}", model])
+        hash = Rails.cache.fetch(cache_key)
         return hash
       else
         Chorus.log_debug "-- Storing data to cache for #{model.class.name} with ID = #{model.id} --"
         hash = presenter_class.new(model, view_context, options).presentation_hash
-        Rails.cache.write ["#{options[:namespace]}/#{current_user.id}", model], hash
+        Rails.cache.write cache_key, hash
         return hash
       end
     else

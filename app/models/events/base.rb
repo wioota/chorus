@@ -48,6 +48,8 @@ module Events
     belongs_to :target3, :polymorphic => true
     belongs_to :workspace, :touch => true
     belongs_to :promoted_by, :class_name => 'User', :touch => true
+    belongs_to :dataset, :touch => true
+
 
     # PT 1/15/15 This will auto-refresh the JSON data object for workspace
     after_save :refresh_cache
