@@ -37,7 +37,7 @@ class WorkspacesController < ApplicationController
         present paginate(@workspaces),
            :presenter_options => {
                :show_latest_comments => (params[:show_latest_comments] == 'true'),
-              :succinct => succinct, :cached => true, :namespace => 'workspaces'
+              :succinct => succinct, :cached => true, :namespace => 'dashboard:workspaces'
         }
 
       end
@@ -85,7 +85,7 @@ class WorkspacesController < ApplicationController
   def show
     workspace = Workspace.find(params[:id])
     authorize! :show, workspace
-    present workspace, :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true'}
+    present workspace, :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true',:cached => true, :namespace => 'workspaces' }
   end
 
   def update
