@@ -1,5 +1,23 @@
-namespace :caching do
-  desc "THis task will iterate throgh the workspaces in the database and add them to the cache so that users will not experience long delay while loading workspaces on the page"
+namespace :chorus do
+
+  desc "Run all caching tasks for chorus application"
+  task :caching, [:type] => :environment do |task, args|
+    #print "arg = #{args[:type]}\n"
+    #print "arg = #{args.extras}\n"
+    print "\n================ Caching #{args[:type]} START ==================\n"
+    Rake::Task["chorus:#{args[:type]}"].reenable
+    Rake::Task["chorus:#{args[:type]}"].invoke
+    print "================ Caching #{args[:type]} FINISH =================\n\n"
+    args.extras.each do |arg|
+      print "\n================ Caching #{arg} START ==================\n"
+      Rake::Task["chorus:#{arg}"].reenable
+      Rake::Task["chorus:#{arg}"].invoke
+      print "================ Caching #{arg} FINISH =================\n\n"
+    end
+  end
+
+  desc "This task will iterate throgh the workspaces in the database and add them to the cache so that users will not experience long delay \
+while loading workspaces on the page"
   task :workspaces => :environment do
     users = User.all
     users.each do | user|

@@ -11,12 +11,11 @@ class Presenter
 
   def self.present_model(model, view_context, options)
     presenter_class = get_presenter_class(model, options)
-    if Thread.current[:user] != nil
-      current_user = Thread.current[:user]
-    else
+    if options[:user] != nil
       Thread.current[:user] = options[:user]
-      current_user = options[:user]
     end
+
+    current_user = Thread.current[:user]
 
     if (options[:cached] == true && model != nil && model.respond_to?(:id))
       if model.respond_to?(:updated_at)
