@@ -86,7 +86,7 @@ class Workspace < ActiveRecord::Base
   def refresh_cache
     Chorus.log_debug "-- Refreshing cache for #{self.class.name} with ID = #{self.id} --"
     options = {
-        :show_latest_comments => true, :succinct => succinct, :cached => true, :namespace => 'dashboard:workspaces'
+        :show_latest_comments => true, :succinct => true, :cached => true, :namespace => 'dashboard:workspaces'
     }
     workspace =Workspace.includes(Workspace.eager_load_associations).where("id = ?", self.id)
     Presenter.present(workspace, nil, options)
