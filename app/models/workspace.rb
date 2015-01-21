@@ -84,11 +84,14 @@ class Workspace < ActiveRecord::Base
   end
 
   def refresh_cache
-    Chorus.log_debug "Refreshing cache for workspace with ID = #{self.id}"
-
-    json_data = render :partial => 'workspaces/workspace', :layout => false, :locals => {:workspace => self, :user => self.owner, :options => {}}
-    Rails.cache.write ["jbuilder/#{self.owner.id}", self], JSON.parse(json_data)
+    Chorus.log_debug "-- Refreshing cache for #{self.class.name} with ID = #{self.id} --"
+    options = {
+        :show_latest_comments => true, :succinct => succinct, :cached => true, :namespace => 'dashboard:workspaces'
+    }
+    workspace =Workspace.includes(Workspace.eager_load_associations).where("id = ?", self.id)
+    Presenter.present(workspace, nil, options)
   end
+
 
   def solr_reindex_later
     QC.enqueue_if_not_queued('Workspace.reindex_workspace', id)

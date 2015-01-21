@@ -136,6 +136,12 @@ namespace :app do
     #upload "./app/views",  "/usr/local/chorus/current/app/views", :via=> :scp, :recursive => true
 
     system "rsync -ru -e 'ssh -i /Users/pmteli/.ssh/adl-performance.pem' --exclude='.DS_Store' ./app/controllers #{user}@#{application}:/usr/local/chorus/current/app"
+    system "rsync -ru -e 'ssh -i /Users/pmteli/.ssh/adl-performance.pem' --exclude='.DS_Store' ./app/models #{user}@#{application}:/usr/local/chorus/current/app"
+    system "rsync -ru -e 'ssh -i /Users/pmteli/.ssh/adl-performance.pem' --exclude='.DS_Store' ./app/views #{user}@#{application}:/usr/local/chorus/current/app"
+    system "rsync -ru -e 'ssh -i /Users/pmteli/.ssh/adl-performance.pem' --exclude='.DS_Store' ./app/helpers #{user}@#{application}:/usr/local/chorus/current/app"
+    system "rsync -ru -e 'ssh -i /Users/pmteli/.ssh/adl-performance.pem' --exclude='.DS_Store' ./app/mixins #{user}@#{application}:/usr/local/chorus/current/app"
+    system "rsync -ru -e 'ssh -i /Users/pmteli/.ssh/adl-performance.pem' --exclude='.DS_Store' ./app/services #{user}@#{application}:/usr/local/chorus/current/app"
+    system "rsync -ru -e 'ssh -i /Users/pmteli/.ssh/adl-performance.pem' --exclude='.DS_Store' ./app/validators #{user}@#{application}:/usr/local/chorus/current/app"
     run "chown -R chorus:chorus /usr/local/chorus/current/app"
     system "rsync -ru -e 'ssh -i /Users/pmteli/.ssh/adl-performance.pem' --exclude='.DS_Store' ./app/presenters #{user}@#{application}:/usr/local/chorus/current/app"
     system "rsync -ru -e 'ssh -i /Users/pmteli/.ssh/adl-performance.pem' --exclude='.DS_Store' ./lib/tasks #{user}@#{application}:/usr/local/chorus/current/lib"
