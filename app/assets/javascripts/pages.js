@@ -62,16 +62,16 @@ chorus.pages.Base = chorus.pages.Bare.extend({
     subviews: {
         "#header": "header",
         "#main_content": "mainContent",
-        "#breadcrumbs": "breadcrumbs",
         "#page_sub_header": "subHeader",
+        "#breadcrumbs": "breadcrumbs",
+        "#sub_nav": "subNav",
         "#sidebar .primary_action_panel": "primaryActionPanel",
         "#sidebar .multiple_selection": "multiSelectSidebarMenu",
         "#sidebar .sidebar_content.primary": "sidebar",
-        "#sidebar .sidebar_content.secondary": "secondarySidebar",
-        "#sub_nav": "subNav"
+        "#sidebar .sidebar_content.secondary": "secondarySidebar"
     },
 
-    //Load a workspace for a page into page.workspace.  fetch and set as a requiredResource based on options.
+    // Load a workspace for a page into page.workspace, fetch and set as a requiredResource based on options
     loadWorkspace: function(workspaceId, options) {
         var optionsWithDefaults = _.extend({
             fetch: true,
@@ -96,6 +96,9 @@ chorus.pages.Base = chorus.pages.Bare.extend({
     },
 
     hasSubHeader: function() {
+//         console.log ("pages.js>hasSubHeader - > " + !!this.workspaceId + " | " + this.workspaceId);
+        // currently this hack allows for the page subheader only on places where workspaceId has a value
+        // so wont work on people page, etc.
         return !!this.workspaceId;
     },
 

@@ -13,9 +13,9 @@
 
         iconSrc: function() {
             if (this.isFailure()) {
-                return "/images/message_error_med.png";
+                return "/images/messaging/message_error_med.png";
             } else if (this.model.isSuccessfulImport()) {
-                return "/images/import_icon.png";
+                return "/images/jobs/task-import.png";
             } else {
                 return this.model.author().fetchImageUrl({ size: "icon" });
             }
@@ -659,7 +659,7 @@
             return self.model.get("destinationTable");
         },
 
-        // this is the one that returns a Dataset
+        // this is the one that returns Dataset
         destObjectOrNameInSchema: function(self) {
             var dataset = self.model["dataset"]();
             if (dataset.get("id")){
