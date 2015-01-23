@@ -52,7 +52,7 @@ module Events
 
 
     # PT 1/15/15 This will auto-refresh the JSON data object for workspace
-    after_save :refresh_cache
+    #after_save :refresh_cache
     before_save :delete_cache
 
     # Upon creating or updating an event, refresh the JSON object in cache.
