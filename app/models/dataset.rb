@@ -48,13 +48,8 @@ class Dataset < ActiveRecord::Base
   end
 
   def delete_cache
-    Chorus.log_debug "-- Clearing cache for #{self.class.name} with ID = #{self.id} --"
-    result = Rails.cache.delete(["workspace:datasets", "#{current_user.id}", self])
-    if result == true
-      Chorus.log_debug "-- SUCCESS - Clearing cache for #{self.class.name} with ID = #{self.id} --"
-    else
-      Chorus.log_debug "-- FAILED - Clearing cache for #{self.class.name} with ID = #{self.id} --"
-    end
+    Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with ID = #{self.id} --"
+    Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
   end
 
   def refresh_cache

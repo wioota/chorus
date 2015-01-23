@@ -58,7 +58,8 @@ class Workspace < ActiveRecord::Base
 
   after_update :solr_reindex_later, :if => :public_changed?
   # PT 12/19/14 This will auto-refresh the JSON data object for workspace
-  after_update :refresh_cache
+  #after_update :refresh_cache
+  after_update :delete_cache
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable_model do
@@ -81,6 +82,11 @@ class Workspace < ActiveRecord::Base
      :owner,
      {:sandbox => {:scoped_parent => {:data_source => [:tags, {:owner => :tags}]}}}
     ]
+  end
+
+  def delete_cache
+    Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with ID = #{self.id} --"
+    Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
   end
 
   def refresh_cache

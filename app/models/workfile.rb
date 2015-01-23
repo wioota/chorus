@@ -41,6 +41,8 @@ class Workfile < ActiveRecord::Base
   def delete_cache
     Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with ID = #{self.id} --"
     Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
+    Chorus.log_debug "-- BEFORE SAVE: Clearing cache for WorkfileVersion with ID = #{self.latest_workfile_version.id} --"
+    self.latest_workfile_version.delete_cache
   end
 
   def ensure_proper_content_type

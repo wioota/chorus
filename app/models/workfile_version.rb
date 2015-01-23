@@ -7,16 +7,23 @@ class WorkfileVersion < ActiveRecord::Base
                     :restricted_characters => nil #retain original filename
 
   belongs_to :workfile, :class_name => 'ChorusWorkfile', :touch => true
-  belongs_to :owner, :class_name => 'User'
-  belongs_to :modifier, :class_name => 'User'
+  belongs_to :owner, :class_name => 'User',  :touch => true
+  belongs_to :modifier, :class_name => 'User', :touch => true
   before_post_process :check_file_type
 
   before_save :fix_workfile_association, :on => :create
+  before_save :delete_cache
   before_validation :init_version_number, :on => :create
 
   after_save do
     workfile.solr_index
     workfile.touch(:user_modified_at)
+  end
+
+
+  def delete_cache
+    Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with ID = #{self.id} --"
+    Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
   end
 
   after_validation :clean_content_errors
