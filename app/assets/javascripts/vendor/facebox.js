@@ -93,13 +93,11 @@
         <div class="content"> \
         </div> \
         <div class="header"> \
-          <a href="#" class="close"><span class="fa fa-times close_image"></span></i></a> \
+          <a href="#" class="close"><i class="close_image oi" data-glyph="x"></i></a> \
         </div> \
       </div> \
     </div>'
     },
-
-// <i class="close_image oi" data-glyph="x">
 
     loading: function() {
       init()

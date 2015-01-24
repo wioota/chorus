@@ -1,11 +1,10 @@
 #main_content {
-/*     border: $border-canon; */
-    border-right: $border-canon;
-/*     @include border-radius(3px); */
+    border: $border-canon;
+    @include border-radius(3px);
 }
 
 .content_header {
-    background: #FFFFFF;
+    background: white;
     min-height: 36px;
     padding: 12px $padding-x 5px;
     border-bottom: $border-canon;
@@ -20,9 +19,7 @@
             }
         }
 
-        .text-remove,
-/*         .tag-remove, */
-        .transition-border, #tag_editor {
+        .text-remove, .transition-border, #tag_editor {
             display: none;
         }
     }

@@ -5,7 +5,6 @@ Chorus::Application.configure do
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
-  config.reload_classes_only_on_change = false
 
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
@@ -16,7 +15,7 @@ Chorus::Application.configure do
 
   # Show full error reports and disable caching
   config.consider_all_requests_local = false
-  config.action_controller.perform_caching = false
+  config.action_controller.perform_caching = true
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
@@ -29,12 +28,11 @@ Chorus::Application.configure do
   #config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   # Do not compress assets
-  config.assets.compress = false
-#  config.assets.compress = true
+#  config.assets.compress = false
+  config.assets.compress = true
 
   # Expands the lines which load the assets
-  config.assets.debug = false
-  config.serve_static_assets = false
+  config.assets.debug = false 
 
   # Give paperclip path to ImageMagick tools
   Paperclip.options[:command_path] = "/usr/local/bin/"

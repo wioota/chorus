@@ -5,12 +5,11 @@ div.login {
     $card-padding-top: 50px;
     $card-width : 620px;
     $card-top: 150px;
-    $card-border-radius: 5px;
     $image-fudge: 10px;
 
     background: $login-background;
     height: 100%;
-
+    
     .errors {
         margin-left: auto;
         margin-right: auto;   
@@ -27,9 +26,9 @@ div.login {
         margin-left: auto;
         margin-right: auto;
 
-        border: $login-card-border-canon;
+        border: $strong-border-canon;
         background-color: $body-background-color;
-        border-radius: $card-border-radius;
+        border-radius: 5px;
 
         height: $card-height - $card-padding-top;
         width: $card-width;
@@ -49,32 +48,27 @@ div.login {
                 margin: 5px 0px;
             }
 
-            button {
-                font-size: 16px;
-                height: 36px;
-                width: 100%;
-                margin: 0px;
+            button { font-size: 16px; height: 40px; width: 100%; margin: 0px;}
+
+            .logo.alpine {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: $image-fudge;
+                height: 50px;
+            }
+
+            .logo.pivotal {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: $image-fudge;
             }
         }
-
-        .logo.alpine {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: $image-fudge;
-            height: 50px;
-        }
-
-        .logo.pivotal {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: $image-fudge;
-        }
-
     }
 
-    .login_footer {        
+    .login_footer {
+        
         margin-left: auto;
         margin-right: auto;
 
@@ -102,6 +96,7 @@ div.login {
                     display: inline-block;
 
                     &.version {}
+
                     &.copyright {}
                 }
             }

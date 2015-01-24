@@ -5,7 +5,7 @@ chorus.views.DataTabDataset = chorus.views.Base.extend({
 
     events: {
         "click .name a": "nameClicked",
-        "click .toggle_display": "toggleVisibility"
+        "click .toggle_visibility": "toggleVisibility"
     },
 
     postRender: function() {
@@ -44,29 +44,14 @@ chorus.views.DataTabDataset = chorus.views.Base.extend({
         }
 
         this.columnsVisible = !this.columnsVisible;
-		this.updateArrow();
+        this.updateArrowIcon();
     },
 
-//    updateArrowIcon: function() {
-//        var imageUrl = this.columnsVisible ? '/images/close.gif' : '/images/expand.gif';
-//        this.$('img:eq(0)').attr('src', imageUrl);
-//    },
-    
-    updateArrow: function() {
-    	// uses font-glyphs for the expand/collapse caret
-    	// so toggle on change
-    	var openCaret = 'fa-caret-down';
-    	var closedCaret = 'fa-caret-right';
-		var el =  this.$('.toggle_display');
-        if (this.columnsVisible) {
-        	el.addClass(openCaret);
-        	el.removeClass(closedCaret);
-        } else {
-         	el.addClass(closedCaret);
-        	el.removeClass(openCaret);
-        }
+    updateArrowIcon: function() {
+        var imageUrl = this.columnsVisible ? '/images/close.gif' : '/images/expand.gif';
+        this.$('img:eq(0)').attr('src', imageUrl);
     },
-    
+
     buildColumnList: function() {
         return new chorus.views.DataTabDatasetColumnList({
             el: this.$(".column_list"),
