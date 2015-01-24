@@ -26,10 +26,11 @@
         color: rgb(88, 89, 95);
         @include uppercase;
         vertical-align: middle;
-        margin: 0   ;
+        margin: 0;
         padding-right: 25px;
         @include ellipsis;
     }
+
 
     h2 {
         font-size: $medium-font;
@@ -90,14 +91,13 @@
 
     &.with_sub_header {
         .sub_header {
-            padding: 0 0 5px 0;
+            padding: 5px 15px;
             border-bottom: $border-canon;
         }
 
-/* retiring this class */ /* to be removed when final */
-/*         .sub_content { */
-/*             padding: 10px $dialog-padding; */
-/*         } */
+        .sub_content {
+            padding: 10px $dialog-padding;
+        }
 
         .loading_section {
             padding: 20px;
@@ -142,6 +142,7 @@
     }
 }
 
+/* replace and delete this one with the one following it for more simplicity*/
 .icon-add,
 .icon-remove {
     &.fa {
@@ -149,7 +150,14 @@
     }
 }
 
+.add,
+.remove {
+    &.fa {
+        font-size: 16px;
+    }
+}
 
+/* *** */
 
 /* dialog widths */
 div.dialog {
@@ -166,7 +174,7 @@ div.dialog {
   width: 570px;
 }
 
-.dialog.edit_workspace_dialog {
+.dialog.workspace_edit_dialog {
      width: 580px;
 }
 

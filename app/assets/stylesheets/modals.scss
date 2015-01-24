@@ -4,9 +4,8 @@
 
 @import "vendorish/_facebox"; //keep facebox first
 
-@import "modals/dialog";
-
 @import "modals/alert";
+@import "modals/dialog";
 @import "modals/change_password_dialog";
 @import "modals/collection_list";
 @import "modals/configure_job";

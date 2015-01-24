@@ -36,6 +36,18 @@ $label-width: 72px;
             margin-bottom: 2px;
         }
 
+        .label {
+            color: $color-text2;
+            font-weight: $semibold;
+            width: 72px;
+            display: inline-block;
+        }
+
+        .separator {
+            color: $link-color;
+            margin: 0 $separator-space;
+        }
+
         .attachment_links {
             &.disabled {
                 input {

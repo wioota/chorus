@@ -21,7 +21,7 @@
                     <span class="timestamp">{{relativeTimestamp timestamp}}</span>
                     {{#ifAdminOr isOwner}}
                         <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" data-comment-id="{{id}}" href="#">
-                            <i class='oi glyph-trash' data-glyph="trash" title='{{t "actions.delete"}}'></i>
+                            <span class="fa fa-trash" title='{{t "actions.delete"}}'></i>
                             {{t "actions.delete"}}
                         </a>
                     {{/ifAdminOr}}

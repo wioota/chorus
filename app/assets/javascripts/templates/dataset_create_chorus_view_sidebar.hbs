@@ -21,7 +21,7 @@
                     =
                     <span class="aliased_name"><span class="letter">{{destinationColumn.dataset.aliasedName}}</span></span>
                     <span class="column" title="{{destinationColumn.attributes.name}}">{{destinationColumn.attributes.name}}</span>
-                    <i class='oi glyph-trash' data-glyph="trash" title='{{t "actions.delete"}}'></i>
+                    <span class="fa fa-trash deleteIcon" title='{{t "actions.delete"}}'></span>    
                 </div>
             {{/each}}
         </div>
@@ -39,7 +39,6 @@
                 <li data-cid='{{cid}}'>
                     <div class="sidebar_row">
                         <a href="#" class="remove">{{t "dataset.chorusview.sidebar.remove"}}</a>
-
                         <div class="name" title="{{attributes.name}}">{{attributes.name}}</div>
                     </div>
                 </li>
@@ -63,7 +62,6 @@
                     <li data-cid='{{cid}}'>
                         <div class="sidebar_row">
                             <a href="#" class="remove">{{t "dataset.chorusview.sidebar.remove"}}</a>
-
                             <div class="name" title="{{attributes.name}}">{{attributes.name}}</div>
                         </div>
                     </li>

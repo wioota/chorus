@@ -9,6 +9,11 @@
     /* padding-top: $header-height; */
     margin-top: $header-height;
 
+/* OLDER SPECIFICATIONS= */
+/*     position: fixed; */
+/*     height: $subheader-height; */
+/*     padding-top: $header-height; */
+
     color: $color-text3;
     background: $subheader-background-color;
     
@@ -27,6 +32,6 @@
         display: inline-block;
         @include ellipsis;
         /* if it gets this long, thats about long enough in the header */
-        width:95%;
+        width:93%;
     }
 }
