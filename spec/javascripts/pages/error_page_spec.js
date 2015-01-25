@@ -26,7 +26,7 @@ describe("chorus.pages.ErrorPage", function() {
         expect(this.page.$('.link_home')).toContainTranslation("application.message.choicenext.link.home");
     });
 
-    it("navigates to the homepage on clicking the button", function() {
+    it("navigates to the homepage by clicking the link to home", function() {
         this.page.$('.link_home').click();
         expect(chorus.router.navigate).toHaveBeenCalledWith("#");
     });

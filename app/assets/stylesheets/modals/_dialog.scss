@@ -91,13 +91,15 @@
 
     &.with_sub_header {
         .sub_header {
-            padding: 5px 15px;
+            padding: 0 0 5px 0;
             border-bottom: $border-canon;
         }
 
-        .sub_content {
-            padding: 10px $dialog-padding;
-        }
+/* retiring this class */ /* to be removed when final */
+/*         .sub_content { */
+/*             padding: 10px $dialog-padding; */
+/*         } */
+
 
         .loading_section {
             padding: 20px;

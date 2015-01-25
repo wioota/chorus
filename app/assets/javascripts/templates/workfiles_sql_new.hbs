@@ -1,6 +1,8 @@
-<form action="">
+<form action="#">
+
     <div class="girdle">
-        <input type="text" name="fileName" placeholder="Name" tabindex="1" maxlength="60" class="sql"></input>.sql
+        <label for="fileNameField">{{t "workfiles.new_dialog.name_label"}}</label>
+        <input type="text" name="fileName" id="fileNameField" placeholder="{{t 'workfiles.new.filename_placeholder'}}" tabindex="1" maxlength="60" class="sql"></input>.sql
     </div>
     <!-- END girdle -->
     

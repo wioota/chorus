@@ -176,9 +176,11 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$("a.minimize").addClass("hidden");
         this.$("a.maximize").removeClass("hidden");
         this.$(".controls").removeClass("collapsed");
+
         this.$(".result_table").removeClass("collapsed");
         this.$(".result_table").removeClass("maximized");
         this.$(".result_table").addClass("minimized");
+
         this.$(".bottom_gutter").removeClass("hidden");
         this.$(".arrow").removeClass("down");
         this.$(".arrow").addClass("up");
@@ -191,6 +193,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$("a.maximize").addClass("hidden");
         this.$("a.minimize").removeClass("hidden");
         this.$(".controls").removeClass("collapsed");
+
         this.$(".result_table").removeClass("collapsed");
         this.$(".result_table").removeClass("minimized");
         this.$(".result_table").addClass("maximized");
@@ -209,6 +212,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         this.$("a.maximize").addClass("hidden");
         this.$("a.minimize").addClass("hidden");
         this.$(".controls").addClass("collapsed");
+
         this.$(".result_table").addClass("collapsed");
         this.$(".result_table").removeClass("minimized");
         this.$(".result_table").removeClass("maximized");

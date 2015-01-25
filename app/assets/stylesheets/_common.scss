@@ -56,8 +56,8 @@ $accent-shade: rgb(227, 241, 252);  /* #E3F1FC */
 $ok: $fiji-green;
 $informational: $pacific-blue;
 $error: $fire-engine-red;
-$alert: $fire-engine-red;
 $needs-attention: $pumpkin;
+/* $alert: $fire-engine-red; */
 $alert: $pumpkin;
 
 
@@ -157,12 +157,12 @@ $content-header-link-color: $color-text4;
 $required-marker-color: $error;
 
 
-// Notification colors 
-// AKA Messaging
-$error-background-color: $fire-engine-red;
-$error-color: #FFFFFF;
-$error-text-color: #FFFFFF;
-$error-tooltiptext-color: #FFFFFF;
+// MESSAGING colors 
+// AKA Notifications
+/* $error-background-color: #EF9A8F; */
+$error-background-color: #F4DCD8;
+$error-text-color: #661111;
+$error-tooltiptext-color: $core-white;
 $error-icon-color: #991111;
 
 $notification: $bright-turquoise;
@@ -171,14 +171,20 @@ $notification-error-light: #ffd6d6;
 
 $alert-color: $needs-attention;
 $alert-background-color: $needs-attention;
-$alert-marker-color: #B24E11;
+$alert-icon-color: #B24E11;
 $alert-text-color: $core-white;
 
+$warning-color: $needs-attention;
+$warning-background-color: $needs-attention;
+$warning-icon-color: #B24E11;
+/* $warning-text-color: $core-white; */
 
-$alert-color: $needs-attention;
-$alert-background-color: $needs-attention;
-$alert-marker-color: #B24E11;
-$alert-text-color: $core-white;
+$informational-color: $needs-attention;
+$informational-background-color: $needs-attention;
+
+$success-color: $ok;
+$success-background-color: $ok;
+$success-icon-color: $ok;
 
 
 // Dimensions
@@ -202,7 +208,8 @@ $icon-image-width : 35px;
 $icon-image-height : 35px;
 /* regular size icons, such as for workfiles */
 $large-image-width : 45px;
-$large-image-height : 45px;
+$large-image-height : 50px;
+
 $activity-gutter: 15px;
 
 $breadcrumbs-height: 32px;
@@ -734,7 +741,6 @@ $lozenge-color-selected-dark: $brand-dark;
         &:hover .lozenge {
             //background: $lozenge-color-selected;
         }
-
         .lozenge {
             //background: $lozenge-color-selected;
             color: #FFFFFF;
