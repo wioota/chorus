@@ -23,11 +23,11 @@ describe("chorus.pages.ErrorPage", function() {
     });
 
     it("has the translations for the option to go to home", function() {
-        expect(this.page.$('link_home')).toContainTranslation("application.message.choicenext.link.home");
+        expect(this.page.$('.link_home')).toContainTranslation("application.message.choicenext.link.home");
     });
 
     it("navigates to the homepage on clicking the button", function() {
-        this.page.$('link_home').click();
+        this.page.$('.link_home').click();
         expect(chorus.router.navigate).toHaveBeenCalledWith("#");
     });
 });
