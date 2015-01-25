@@ -126,7 +126,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         });
     });
 
-    describe("show_options", function() {
+    describe("> show_options", function() {
 //         it("shows the options area and hides the options_text when clicked", function() {
 //             expect(this.dialog.$('.options_area')).toBeHidden();
 //             expect(this.dialog.$('.options_text')).not.toHaveClass('hidden');
@@ -147,11 +147,11 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             expect(this.dialog.$("a.add_dataset")).not.toExist();
         });
 
-        it("prevents default on click", function() {
-            var eventSpy = jasmine.createSpyObj("event", ['preventDefault']);
-            this.dialog.showOptions(eventSpy);
-            expect(eventSpy.preventDefault).toHaveBeenCalled();
-        });
+//         it("> prevents default on click", function() {
+//             var eventSpy = jasmine.createSpyObj("event", ['preventDefault']);
+//             this.dialog.showOptions(eventSpy);
+//             expect(eventSpy.preventDefault).toHaveBeenCalled();
+//         });
 
         describe("> when the 'attach workfile' link is clicked", function() {
             beforeEach(function() {
