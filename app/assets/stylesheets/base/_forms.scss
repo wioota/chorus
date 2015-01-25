@@ -3,12 +3,14 @@
 
 /* general rules for forms in the application */
 
+/* widget displaying "* = required" */
 .legend_for_required {
     margin-top: 15px;
     font-size: $small-font;
 }
 
 
+/* grouping of options in form */
 fieldset {
     margin: 0 0 0 0;
     padding: 5px 10px 5px 10px;
@@ -19,5 +21,18 @@ fieldset {
         font-weight: $semibold;
         font-size: $medium-font;
     
+    }
+}
+
+
+.form_row {
+    line-height: 30px;
+    vertical-align: middle;
+}
+
+
+.row {
+    &:first-child {
+        marging-top: -5px;
     }
 }
