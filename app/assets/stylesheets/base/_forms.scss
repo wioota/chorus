@@ -1,8 +1,23 @@
 @import "_common";
+@import "compass/css3/border-radius";
 
 /* general rules for forms in the application */
 
 .legend_for_required {
     margin-top: 15px;
     font-size: $small-font;
+}
+
+
+fieldset {
+    margin: 0 0 0 0;
+    padding: 5px 10px 5px 10px;
+    
+    @include border-radius(2px);
+    
+    legend {
+        font-weight: $semibold;
+        font-size: $medium-font;
+    
+    }
 }
