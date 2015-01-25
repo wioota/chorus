@@ -15,7 +15,7 @@
             if (this.isFailure()) {
                 return "/images/messaging/message_error_med.png";
             } else if (this.model.isSuccessfulImport()) {
-                return "/images/jobs/task-data_import.svg";
+                return "/images/jobs/task-import.svg";
 
             } else {
                 return this.model.author().fetchImageUrl({ size: "icon" });

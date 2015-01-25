@@ -38,7 +38,7 @@ describe("chorus.presenters.Activity", function() {
     function itHasTheImportIcon() {
         describe("the icon", function() {
             it("shows the error icon", function() {
-                expect(this.presenter.iconSrc()).toBe("/images/jobs/task-import.png");
+                expect(this.presenter.iconSrc()).toBe("/images/jobs/task-import.svg");
             });
 
             it("links to dataset", function() {
