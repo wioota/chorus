@@ -1,11 +1,11 @@
-$label-width: 72px;
+$label-width: 82px;
 
 
 .notes_new,
 .edit_note,
 .dialog.comment {
 
-    font-size: 12px;
+    font-size: $small-font;
     
     textarea {
         min-width: 350px;
@@ -36,17 +36,17 @@ $label-width: 72px;
             margin-bottom: 2px;
         }
 
-        .label {
-            color: $color-text2;
-            font-weight: $semibold;
-            width: 72px;
-            display: inline-block;
-        }
+/*         .label { */
+/*             color: $color-text2; */
+/*             font-weight: $semibold; */
+/*             width: $label-width; */
+/*             display: inline-block; */
+/*         } */
 
-        .separator {
-            color: $link-color;
-            margin: 0 $separator-space;
-        }
+/*         .separator { */
+/*             color: $link-color; */
+/*             margin: 0 $separator-space; */
+/*         } */
 
         .attachment_links {
             &.disabled {
@@ -72,18 +72,24 @@ $label-width: 72px;
         margin: 0 $separator-space;
     }
 
+    .remove {
+        float: right;
+        font-size: $medium-font;
+    }
+    
     .file_details,
     .dataset_details {
-
-        line-height: 32px;
-/*         border-top: $border-canon; */
+        margin-left: $label-width;
+        line-height: 30px;
+        border-top: $border-canon;
         
-/*         &:last-child { */
-/*              border-bottom: $border-canon; */
-/*         } */
+        &:last-child {
+             border-bottom: $border-canon;
+             margin-bottom: 5px;
+        }
         
         img {
-            vertical-align: middle;
+/*             vertical-align: middle; */
             max-height: 30px;
             max-width: 35px;
         }
@@ -94,8 +100,6 @@ $label-width: 72px;
             display: inline-block;
         }
 
-
-        
         .progress_bar {
             display: inline-block;
             background-color: $progress-bar-background-color;
@@ -117,11 +121,18 @@ $label-width: 72px;
             float : right;
             color: $color-text4
         }
+        
+        .remove {
+            line-height: 30px;
+        }
+        
+        
+        
     }
 
     .name {
         display: inline-block;
-        width: 170px;
+        width: 200px;
         @include ellipsis;
         color: $color-text2;
         font-weight: $semibold;
@@ -133,6 +144,10 @@ $label-width: 72px;
         margin: 10px 0;
     }
 
+    .options_section {
+        margin-bottom: 5px; 
+    }
+    
     .options_text {
         color: $color-text3;
 
@@ -142,16 +157,16 @@ $label-width: 72px;
     }
 
     .row {
-        margin-bottom: 5px;
+/*         margin-bottom: 5px; */
         
         a.workfile {
             vertical-align: bottom;
         }
     }
 
-    .link_menu {
+/*     .link_menu { */
         /* padding-left: 8px; */
-    }
+/*     } */
 
 
 	.recipients_menu {}
@@ -174,25 +189,19 @@ $label-width: 72px;
         }
 
         .picked_users {
-            line-height: 20px;
+            line-height: 22px;
             .name {
-                @include ellipsis;
-                max-width: 200px;
-                display: inline-block;
+/*                 @include ellipsis; */
+/*                 max-width: 200px; */
+/*                 display: inline-block; */
                 vertical-align: middle;
             }
-
         }
 
         select {
             width: 200px;
         }
     }
-    
-    .remove {
-        float: right;
-        font-size: 14px;
-        line-height: 20px;
-    }
-        
+
+
 }

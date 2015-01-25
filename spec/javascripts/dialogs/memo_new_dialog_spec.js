@@ -39,11 +39,16 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             expect(this.dialog.$("textarea[name=body]").val()).toBe("cats");
         });
 
-        it("has the 'Show options' link", function() {
+//         it("has the 'Show options' link", function() {
+//             expect(this.dialog.$('a.show_options').length).toBe(1);
+//             expect(this.dialog.$('a.show_options').text()).toMatchTranslation('notes.new_dialog.show_options');
+//         });
+
+        it("has options", function() {
             expect(this.dialog.$('a.show_options').length).toBe(1);
             expect(this.dialog.$('a.show_options').text()).toMatchTranslation('notes.new_dialog.show_options');
         });
-
+        
         it("should have a notification recipients subview", function() {
             expect(this.dialog.$(this.dialog.notifications.el)).toExist();
             expect(this.dialog.notifications).toBeA(chorus.views.NotificationRecipient);
@@ -53,9 +58,9 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             expect(this.dialog.$(".recipients_menu")).not.toHaveClass("hidden");
         });
 
-        it("hides the notification content area by default", function() {
-            expect(this.dialog.$(".notification_recipients")).toHaveClass("hidden");
-        });
+//         it("hides the notification content area by default", function() {
+//             expect(this.dialog.$(".notification_recipients")).toHaveClass("hidden");
+//         });
 
         it("makes a cl editor with toolbar", function() {
             expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", { width : 'auto', height: 150, controls : 'bold italic | bullets numbering | link unlink' } );

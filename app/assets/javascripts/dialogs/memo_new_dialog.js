@@ -7,12 +7,12 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     persistent: true,
     events: {
         "submit form": "save",
-        "click .show_options": "showOptions",
+        //"click .show_options": "showOptions",
         "click .remove": "removeAttachment",
         "click .add_workfile": "launchWorkfileDialog",
         "click .add_dataset": "launchDatasetDialog",
-        "click .cancel_upload": "cancelUpload",
-        "click .file-wrapper": "launchDesktopFileDialog"
+        "click .file-wrapper": "launchDesktopFileDialog",
+        "click .cancel_upload": "cancelUpload"
     },
 
     setup: function() {
@@ -24,17 +24,8 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.config = chorus.models.Config.instance();
     },
 
-    onSelectRecipients: function(selection) {
-        var shouldHide = (selection === "none");
-        this.$(".notification_recipients").toggleClass("hidden", shouldHide);
-
-        if (!shouldHide) {
-            this.notifications.render();
-        }
-        this.$(".recipients_menu .chosen").text(t("notification_recipient."+selection));
-    },
-
     postRender: function() {
+        // construct the chorus menu for selecting nobody / some people
         var menu = new chorus.views.Menu({
             launchElement: this.$("a.recipients_menu"),
             items: [
@@ -71,6 +62,16 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         this.workspaceId = this.model.get("workspaceId");
         this.model.datasets = new chorus.collections.WorkspaceDatasetSet();
         this.model.workfiles = new chorus.collections.WorkfileSet();
+    },
+
+    onSelectRecipients: function(selection) {
+        var shouldHide = (selection === "none");
+        this.$(".notification_recipients").toggleClass("hidden", shouldHide);
+
+        if (!shouldHide) {
+            this.notifications.render();
+        }
+        this.$(".recipients_menu .chosen").text(t("notification_recipient."+selection));
     },
 
     cancelUpload: function() {
@@ -182,11 +183,11 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         };
     },
 
-    showOptions: function(e) {
-        e && e.preventDefault();
-        this.$(".options_text").addClass("hidden");
-        this.$(".options_area").removeClass("hidden");
-    },
+//     showOptions: function(e) {
+//         e && e.preventDefault();
+//         this.$(".options_text").addClass("hidden");
+//         this.$(".options_area").removeClass("hidden");
+//     },
 
     launchDesktopFileDialog: function(e) {
         this.clearErrors();
@@ -279,10 +280,18 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         }, this);
     },
 
+    showAttachmentRow: function() {
+        var attachmentRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment").toString());
+        this.$(".attached_files").append(attachmentRow);
+        this.$(".attached_files").toggleClass("hidden", false);
+        return attachmentRow;
+    },
+    
     showDataset: function(dataset) {
-        var datasetDetailsRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment").toString());
-        this.$(".options_area").append(datasetDetailsRow);
-
+        //var datasetDetailsRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment").toString());
+        //this.$(".options_area").append(datasetDetailsRow);
+        var datasetDetailsRow = this.showAttachmentRow();
+        
         var iconSrc = dataset.iconUrl({size: 'icon'});
         datasetDetailsRow.find('img.icon').attr('src', iconSrc);
         datasetDetailsRow.find('span.name').text(dataset.get("objectName")).attr('title', dataset.get("objectName"));
@@ -292,8 +301,10 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     },
 
     showFile: function(file, filename, iconSrc, uploadModel) {
-        var fileDetailsRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment").toString());
-        this.$(".options_area").append(fileDetailsRow);
+        //var fileDetailsRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment").toString());
+        // this.$(".options_area").append(fileDetailsRow);
+        //this.$(".attached_files").append(fileDetailsRow);
+        var fileDetailsRow = this.showAttachmentRow();
 
         fileDetailsRow.find('img.icon').attr('src', iconSrc);
         fileDetailsRow.find('span.name').text(filename).attr('title', filename);
