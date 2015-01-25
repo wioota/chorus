@@ -44,10 +44,10 @@ describe("chorus.dialogs.MemoNewDialog", function() {
 //             expect(this.dialog.$('a.show_options').text()).toMatchTranslation('notes.new_dialog.show_options');
 //         });
 
-        it("has options", function() {
-            expect(this.dialog.$('a.show_options').length).toBe(1);
-            expect(this.dialog.$('a.show_options').text()).toMatchTranslation('notes.new_dialog.show_options');
-        });
+//         it("has options", function() {
+//             expect(this.dialog.$('a.show_options').length).toBe(1);
+//             expect(this.dialog.$('a.show_options').text()).toMatchTranslation('notes.new_dialog.show_options');
+//         });
         
         it("should have a notification recipients subview", function() {
             expect(this.dialog.$(this.dialog.notifications.el)).toExist();
@@ -127,13 +127,13 @@ describe("chorus.dialogs.MemoNewDialog", function() {
     });
 
     describe("show_options", function() {
-        it("shows the options area and hides the options_text when clicked", function() {
-            expect(this.dialog.$('.options_area')).toBeHidden();
-            expect(this.dialog.$('.options_text')).not.toHaveClass('hidden');
-            this.dialog.$("a.show_options").click();
-            expect(this.dialog.$('.options_text')).toBeHidden();
-            expect(this.dialog.$('.options_area')).not.toHaveClass('hidden');
-        });
+//         it("shows the options area and hides the options_text when clicked", function() {
+//             expect(this.dialog.$('.options_area')).toBeHidden();
+//             expect(this.dialog.$('.options_text')).not.toHaveClass('hidden');
+//             this.dialog.$("a.show_options").click();
+//             expect(this.dialog.$('.options_text')).toBeHidden();
+//             expect(this.dialog.$('.options_area')).not.toHaveClass('hidden');
+//         });
 
         it("renders the attachment links when the allowWorkspaceAttachments option is truthy", function() {
             expect(this.dialog.$("a.add_workfile")).toExist();
