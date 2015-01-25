@@ -15,7 +15,7 @@ chorus.models.HdfsDataset = chorus.models.WorkspaceDataset.extend({
 
     iconUrl: function(options) {
         var size = (options && options.size) || "large";
-        return "/images/hdfs_dataset_" + size + ".png";
+        return "/images/data_sets/hdfs_dataset_" + size + ".png";
     },
 
     showUrlTemplate: "workspaces/{{workspace.id}}/hadoop_datasets/{{id}}",
