@@ -19,23 +19,26 @@ chorus.dialogs.VisualizationNotesNew = chorus.dialogs.MemoNew.extend({
     postRender: function() {
         this._super("postRender", arguments);
 
-        this.showOptions();
+        //this.showOptions();
         this.showVisualizationData();
     },
 
     showVisualizationData: function() {
-        var $row = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment").toString());
-        this.$(".options_area").append($row);
+        var $attachmentRow = $(Handlebars.helpers.renderTemplate("notes_new_file_attachment").toString());
+        this.$(".attached_files").append($attachmentRow);
 
         var visualization = this.options.attachVisualization;
 
         var iconSrc = "images/workfiles/icon/img.png";
-        $row.find('img.icon').attr('src', iconSrc);
-        $row.find('span.name').text(visualization.fileName).attr('title', visualization.fileName);
-        $row.data("visualization", visualization);
-        $row.find(".removeWidget").addClass("hidden");
-        $row.removeClass("hidden");
-        $row.addClass("visualization file_details");
+        $attachmentRow.find('img.icon').attr('src', iconSrc);
+        $attachmentRow.find('span.name').text(visualization.fileName).attr('title', visualization.fileName);
+        $attachmentRow.data("visualization", visualization);
+
+        //$attachmentRow.find(".removeWidget").addClass("hidden");
+        $attachmentRow.find(".removeWidget").remove();
+
+        $attachmentRow.removeClass("hidden");
+        $attachmentRow.addClass("visualization file_details");
     },
 
     modelSaved: function() {

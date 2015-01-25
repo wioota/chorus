@@ -166,9 +166,9 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     makeSvgData: function() {
         var svg = this.$(".chart_area.visualization svg")[0];
-        if (BrowserDetect.browser !== "Explorer") {
-            svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-        }
+//         if (BrowserDetect.browser !== "Explorer") {
+//             svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+//         }
         return new XMLSerializer().serializeToString(svg);
     },
 
