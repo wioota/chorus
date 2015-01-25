@@ -36,3 +36,22 @@ fieldset {
         marging-top: -5px;
     }
 }
+
+/* section of buttons at bottom of form */
+.form_controls {
+    padding-right: $dialog-padding;
+    padding-left:  $dialog-padding;
+
+    button { 
+        /* TODO revise all button to be sequenced in list as they will appear */
+        float: right; 
+        margin-right: 10px;
+    }
+
+    label {
+        line-height: $button-height;
+    }
+
+    @include after-clearfix;
+}
+
