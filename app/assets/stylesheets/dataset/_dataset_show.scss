@@ -1,3 +1,6 @@
+@import "_browser_support";
+@import "compass/css3/transform";
+
 .dataset_show {
     .content_header {
         .has_import {
@@ -69,7 +72,6 @@
                     margin-bottom: 5px;
                     padding-left: 13px;
                     display: inline-block;
-
                 }
 
                 &.cancel {
@@ -80,7 +82,9 @@
     }
 }
 
-.aliased_name, .ui-selectmenu-menu li .aliased_name, .ui-selectmenu-status .aliased_name {
+.aliased_name, 
+.ui-selectmenu-menu li .aliased_name, 
+.ui-selectmenu-status .aliased_name {
     background-color: $dataset-number-background-color;
     display: inline-block;
     @include border-radius(5px);
@@ -89,7 +93,7 @@
 
     .letter {
         display: inline;
-        color: white;
+        color: #FFFFFF;
         font-size: 14px;
         line-height: 19px;
         font-weight: normal;
@@ -97,6 +101,16 @@
     }
 }
 
-.stale_dataset_icon {
-  position: absolute;
+.stale_dataset_marker {
+    position: absolute;
+    left: 32px;
+    color: #C64D2D;
+    font-size: 13px;
+    .fa-times {
+        top: -5px;
+    }
+    &:hover {
+        @include transform(scale(1.1,1.1));
+        color: #DD3311;
+    }
 }

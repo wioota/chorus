@@ -1,6 +1,14 @@
+/* general dialog styles */
+
+/* .girdle wraps the content of the dialog popup */
+/* and sets the overall margins for the content area */
 .popup .girdle {
-    padding: $dialog-padding $dialog-padding 0;
+    padding: 10px $dialog-padding 0 $dialog-padding;
     border: none;
+    
+    /* development: to delete */
+/*     border: 1px dotted #C33; */
+    /* END development: to delete */
 }
 
 .dialog {
@@ -10,16 +18,19 @@
         word-break: break-all;
         height: 40px;
         line-height: 40px;
-
-        h1 {
-            font-size: 14px;
-            color: rgb(88, 89, 95);
-            @include uppercase;
-            vertical-align: middle;
-            margin: 0 $dialog-padding;
-            padding-right: 25px;
-        }
+/*         padding: 0 $dialog-padding; */
     }
+
+    h1 {
+        font-size: 14px;
+        color: rgb(88, 89, 95);
+        @include uppercase;
+        vertical-align: middle;
+        margin: 0 $dialog-padding;
+        padding-right: 25px;
+        @include ellipsis;
+    }
+
 
     h2 {
         font-size: $medium-font;
@@ -42,6 +53,17 @@
                 display: inline-block;
             }
         }
+
+        legend.subtitle {
+            padding: 10px 10px 10px 0px;
+            width: 100%;
+            @include font-normal-alpha;
+
+            .text {
+                float: left;
+                padding-right: 10px;
+            }
+        }
     }
 
     .errors {
@@ -50,7 +72,7 @@
 
     fieldset.in_a_box {
         border: none;
-        padding: 0 $dialog-padding $dialog-padding;
+        padding: 0 0 $dialog-padding 0;
 
         legend label {
             font-size: 14px;
@@ -67,23 +89,9 @@
         }
     }
 
-    .sub_header {
-        padding : 0;
-        line-height: 34px;
-        vertical-align: middle;
-
-        .sort_menu {
-            float: right;
-        }
-    }
-
-    label {
-        @include dialog-label;
-    }
-
     &.with_sub_header {
         .sub_header {
-            padding: 0 15px;
+            padding: 5px 15px;
             border-bottom: $border-canon;
         }
 
@@ -95,27 +103,64 @@
             padding: 20px;
         }
 
-        .form_controls { margin: 0; }
+        /* .form_controls { margin: 0; } */
     }
 
-  .additional_options {
-    float: right;
-    font-size: 13px;
-  }
+    .sub_header {
+        padding : 0;
+        line-height: 34px;
+        vertical-align: middle;
 
-  .display_box {
-     margin-top: 10px;
-     padding: 10px;
-     overflow-y: auto;
-     overflow-x: hidden;
-     max-height: 100px;
-     border: 1px solid $border-color;
-     @include font-normal-delta;
-     margin-left: 14px;
-     margin-right: 14px;
-  }
+        .sort_menu {
+            float: right;
+        }
+    }
+
+    .chorus_search_container {
+        display: block;
+    }
+
+    label {
+        @include dialog-label;
+    }
+
+    .additional_options {
+        float: right;
+        font-size: 13px;
+    }
+
+    .display_box {
+         margin-top: 10px;
+         padding: 10px;
+         overflow-y: auto;
+         overflow-x: hidden;
+         max-height: 100px;
+         border: 1px solid $border-color;
+         @include font-normal-delta;
+         margin-left: 14px;
+         margin-right: 14px;
+    }
 }
 
+
+/* replace and delete this one with the one following it for more simplicity*/
+.icon-add,
+.icon-remove {
+    &.fa {
+        font-size: 16px;
+    }
+}
+
+.add,
+.remove {
+    &.fa {
+        font-size: 16px;
+    }
+}
+
+/* *** */
+
+/* dialog widths */
 div.dialog {
     width: $default-dialog-width;
 
@@ -124,16 +169,17 @@ div.dialog {
     }
 }
 
-/*Custom Dialogs*/
+/*Custom Dialog widths */
 
 .dialog.data_source_permissions {
   width: 570px;
 }
 
-.dialog.edit_workspace_dialog {
+.dialog.workspace_edit_dialog {
      width: 580px;
- }
+}
 
+/* to do: work out what should be in show_image.scss and what should be here */
 .dialog.show_image {
     width: 100%;
     min-width: 600px;
@@ -181,17 +227,6 @@ div.dialog {
 }
 
 .dialog .full_dialog_horizontal {
-  display: block;
-  width: $default-dialog-width - 35px;
-}
-
-legend.subtitle {
-    padding: 10px 10px 10px 0px;
-    width: 100%;
-    @include font-normal-alpha;
-
-    .text {
-        float: left;
-        padding-right: 10px;
-    }
+    display: block;
+    width: $default-dialog-width - 35px;
 }
