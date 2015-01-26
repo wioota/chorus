@@ -13,7 +13,7 @@ class EventsController < ApplicationController
                model.events
              end
 
-    @events = events.includes(Events::Base.activity_stream_eager_load_associations)
+    events = events.includes(Events::Base.activity_stream_eager_load_associations)
     #@options =  { :workspace => workspace , :user => current_user, :rendering_activities => true, :show_latest_comments => false}
 
     present paginate(events.order('events.id DESC')), :presenter_options => {:activity_stream => true, :succinct => true,
