@@ -346,12 +346,12 @@ describe PostgresConnection, :postgres_integration do
           SQL
         end
         let(:expected) { db.fetch(datasets_sql, :schema => schema_name).all }
-        let(:subject) { connection.datasets(:default_tables_only => true) }
+        let(:subject) { connection.datasets(:tables_only => true) }
 
         it_should_behave_like 'a well-behaved database query'
 
         it 'does not include external tables' do
-          connection.datasets(:default_tables_only => true).select {|dataset| dataset[:name] =~ /external/}.should be_empty
+          connection.datasets(:tables_only => true).select {|dataset| dataset[:name] =~ /external/}.should be_empty
         end
       end
 
