@@ -18,9 +18,11 @@
 
 
 #dialog_header {
+    height: 40px;
+
     background-color: $dialog-header-background;
     border-bottom: 1px solid $border-color;
-    height: 40px;
+
     line-height: 40px;
     /*  padding: 0 $dialog-padding; */
     
@@ -32,7 +34,6 @@
     
 
     }
-
 }
 
 
