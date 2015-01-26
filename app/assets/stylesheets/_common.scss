@@ -653,7 +653,7 @@ $lozenge-color-selected-dark: $brand-dark;
 		position: relative;
 		left: $caret-margin;
 		font-family: FontAwesome;
-		content: "\f0d7";
+		content: "\f0d7"; /* fa-caret-down */
 	}
 }
 
@@ -663,21 +663,10 @@ $lozenge-color-selected-dark: $brand-dark;
 	&::after {
 		display: inline-block;
 		position: relative;
-		font-family: FontAwesome;
 		left: $caret-margin;
+		font-family: FontAwesome;
 		
 		@include caret-glyph($pointing_direction);
-		
-/* 		@if $pointing_direction == up { */
-/* 			content: "\f0d8"; */
-/* 		} @else if $pointing_direction == down { */
-/* 			content: "\f0d7"; */
-/* 		} @else if $pointing_direction == right { */
-/* 			content: "\f0da"; */
-/* 		} @else if $pointing_direction == left { */
-/* 			content: "\f0d9"; */
-/* 		} */
-
 	}
 }
 
