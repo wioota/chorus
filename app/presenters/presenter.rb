@@ -1,4 +1,5 @@
 require 'json'
+include ActionView::Helpers::SanitizeHelper
 
 class Presenter
   def self.present(model_or_collection, view_context, options={})
