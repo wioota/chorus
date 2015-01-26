@@ -82,7 +82,7 @@ describe SchemaImport do
     let(:sandbox) { import.schema }
     let(:import) do
       imp = imports(:oracle)
-      imp.update_attribute(:to_table, datasets(:table).name)
+      imp.update_attribute(:to_table, datasets(:default_table).name)
       imp
     end
 

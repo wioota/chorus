@@ -9,7 +9,7 @@ resource "Schemas" do
   let(:db_schema) { schemas(:default)}
   let(:id) { db_schema.to_param }
   let(:schema_id) { db_schema.to_param }
-  let(:table) { datasets(:table) }
+  let(:table) { datasets(:default_table) }
   let(:view) { datasets(:view) }
 
   before do

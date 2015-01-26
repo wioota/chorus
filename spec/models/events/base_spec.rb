@@ -8,7 +8,7 @@ describe Events::Base do
       user1 = users(:owner)
       user2 = FactoryGirl.create(:user)
       user3 = FactoryGirl.create(:user)
-      dataset = datasets(:table)
+      dataset = datasets(:default_table)
       hdfs_entry = HdfsEntry.create({:hdfs_data_source_id => 1234, :path => "/path/file.txt"})
       workspace = workspaces(:public)
 

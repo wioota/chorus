@@ -263,7 +263,7 @@ describe OracleConnection, :oracle_integration do
           SQL
         }
         let(:expected) { db.fetch(dataset_list_sql).all }
-        let(:subject) { connection.datasets(:tables_only => true) }
+        let(:subject) { connection.datasets(:default_tables_only => true) }
 
         it_should_behave_like "a well-behaved database query"
       end

@@ -10,7 +10,7 @@ describe StatisticsController do
   describe "#show" do
     let(:schema) { schemas(:default) }
     let(:data_source_account) { schema.database.data_source.owner_account }
-    let!(:table) { datasets(:table) }
+    let!(:table) { datasets(:default_table) }
 
     let(:statistics) {
       DatasetStatistics.new(

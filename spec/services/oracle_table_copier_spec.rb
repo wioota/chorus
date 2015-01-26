@@ -127,7 +127,7 @@ describe OracleTableCopier do
 
   describe "cancel" do
     let(:import) do
-      imports(:oracle).tap { |imp| imp.update_attribute(:to_table, datasets(:table).name) }
+      imports(:oracle).tap { |imp| imp.update_attribute(:to_table, datasets(:default_table).name) }
     end
 
     it "cancels the CancelableQuery" do

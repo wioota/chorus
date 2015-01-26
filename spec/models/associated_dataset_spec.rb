@@ -44,7 +44,7 @@ describe AssociatedDataset do
         workspace.show_sandbox_datasets = false
       end
 
-      let(:dataset) { datasets(:table)}
+      let(:dataset) { datasets(:default_table)}
 
       it "allows associations of sandbox datasets" do
         workspace.sandbox.should == dataset.schema
@@ -58,7 +58,7 @@ describe AssociatedDataset do
         workspace.show_sandbox_datasets = true
       end
 
-      let(:dataset) { datasets(:table)}
+      let(:dataset) { datasets(:default_table)}
 
 
       it "does not allow associations of sandbox datasets" do

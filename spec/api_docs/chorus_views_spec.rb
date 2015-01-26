@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Chorus Views" do
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
   let(:owner) { users(:owner) }
   let(:workspace) { workspaces(:public) }
   let(:dataset_id) { dataset.id }
