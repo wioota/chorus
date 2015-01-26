@@ -184,19 +184,26 @@ div.dialog {
     width: $default-dialog-width;
 
     &.dialog_wide {
-      width:940px;
+        width: $default-dialog-width-wide;
     }
 }
 
+
 /*Custom Dialog widths */
 
-.dialog.data_source_permissions {
-  width: 570px;
+.dialog {
+
+    &.data_source_permissions {
+    /*   width: 570px; */
+        width: $default-dialog-width-medium;
+    }
+
+    &.workspace_edit_dialog {
+    /*      width: 580px; */
+        width: $default-dialog-width-medium;
+    }
 }
 
-.dialog.workspace_edit_dialog {
-     width: 580px;
-}
 
 /* to do: work out what should be in show_image.scss and what should be here */
 .dialog.show_image {
