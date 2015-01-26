@@ -40,7 +40,7 @@
     .dialog_header {}
 
     h1 {
-        font-size: 14px;
+        font-size: $medium-font;
         color: rgb(88, 89, 95);
         @include uppercase;
         vertical-align: middle;
