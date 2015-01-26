@@ -16,7 +16,7 @@ describe Dataset do
 
     let!(:model) { dataset }
   end
-  it_should_behave_like "taggable models", [:datasets, :table]
+  it_should_behave_like "taggable models", [:datasets, :default_table]
 
   describe "associations" do
     it { should belong_to(:scoped_schema).class_name('Schema') }
