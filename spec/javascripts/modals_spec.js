@@ -57,7 +57,7 @@ describe("chorus.Modal", function() {
             });
         });
 
-        describe("when there is no existing chorus.modal", function() {
+        describe("> when there is no existing chorus.modal", function() {
             beforeEach(function() {
                 delete chorus.modal;
                 //Modal is abstract, so we need to give it a template to render
@@ -102,12 +102,17 @@ describe("chorus.Modal", function() {
 
                 it("with no arguments uses window.height", function() {
                     this.modal.resize();
-                    // calculate modal height by total window height - 2 * top.position
+                    // calculate modal height by total window height - (2 * top.position)
                     var windowHeight = $(window).height() - 80 + "px";
 
-                    var lastCall = $.fn.css.lastCall();
-                    expect(lastCall.args).toEqual(["max-height", windowHeight]);
-                    expect(lastCall.object.selector).toBe("#facebox .popup");
+//                     var lastCall = $.fn.css.lastCall();
+                    var spyCall = $.fn.css.firstCall();
+//                     var wasAPreviousCall = $.fn.css.calledWith("max-height");
+                    
+//                     expect(lastCall.args).toEqual(["max-height", windowHeight]);
+                    expect(spyCall.args).toEqual(["max-height", windowHeight]);
+//                     expect(lastCall.object.selector).toBe("#facebox .popup");
+                    expect(spyCall.object.selector).toBe("#facebox .popup");
                 });
 
                 it("has a max-height smaller than the window's height by twice the dialog's distance from the top of the window", function() {
