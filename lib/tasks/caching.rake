@@ -4,28 +4,50 @@ namespace :chorus do
   task :caching, [:type] => :environment do |task, args|
     #print "arg = #{args[:type]}\n"
     #print "arg = #{args.extras}\n"
-    print "\n================ Caching #{args[:type]} START ==================\n"
-    Rake::Task["chorus:#{args[:type]}"].reenable
-    Rake::Task["chorus:#{args[:type]}"].invoke
-    print "================ Caching #{args[:type]} FINISH =================\n\n"
-    args.extras.each do |arg|
-      print "\n================ Caching #{arg} START ==================\n"
-      Rake::Task["chorus:#{arg}"].reenable
-      Rake::Task["chorus:#{arg}"].invoke
-      print "================ Caching #{arg} FINISH =================\n\n"
+    if args[:type] == nil || args[:type] == 'all'
+      print "\n================ Caching workspaces START ==================\n"
+      Rake::Task["chorus:workspaces"].reenable
+      Rake::Task["chorus:workspaces"].invoke
+      print "================ Caching workspaces FINISH =================\n\n"
+      print "\n================ Caching activities START ==================\n"
+      Rake::Task["chorus:activities"].reenable
+      Rake::Task["chorus:activities"].invoke
+      print "================ Caching activities FINISH =================\n\n"
+      print "\n================ Caching datasets START ==================\n"
+      Rake::Task["chorus:datasets"].reenable
+      Rake::Task["chorus:datasets"].invoke
+      print "================ Caching datasets FINISH =================\n\n"
+      print "\n================ Caching workfiles START ==================\n"
+      Rake::Task["chorus:workfiles"].reenable
+      Rake::Task["chorus:workfiles"].invoke
+      print "================ Caching workfiles FINISH =================\n\n"
+    else
+      print "\n================ Caching  #{args[:type]}  START ==================\n"
+      Rake::Task["chorus:#{args[:type]}"].reenable
+      Rake::Task["chorus:#{args[:type]}"].invoke
+      print "================ Caching #{args[:type]} FINISH =================\n\n"
+      args.extras.each do |arg|
+        print "\n================ Caching #{arg} START ==================\n"
+        Rake::Task["chorus:#{arg}"].reenable
+        Rake::Task["chorus:#{arg}"].invoke
+        print "================ Caching #{arg} FINISH =================\n\n"
+      end
     end
   end
 
-  desc "This task will iterate throgh the workspaces in the database and add them to the cache so that users will not experience long delay \
+  desc "This task will iterate through the workspaces in the database and add them to the cache so that users will not experience long delay \
 while loading workspaces on the page"
   task :workspaces => :environment do
     users = User.all
     users.each do | user|
-      options = {:user => user,:succinct => true, :show_latest_comments => true, :cached => true, :namespace => "dashboard:workspaces"}
+      options = {:user => user,:succinct => true, :show_latest_comments => true, :cached => true, :namespace => "home:workspaces"}
       workspaces = Workspace.workspaces_for(user)
       workspaces = workspaces.includes(Workspace.eager_load_associations).order("lower(name) ASC, id")
       print "Caching workspaces for #{user.username} "
       workspaces.each do |workspace|
+        options = {:user => user,:succinct => true, :show_latest_comments => true, :cached => true, :namespace => "home:workspaces"}
+        Presenter.present(workspace, nil, options)
+        options = {:user => user,:succinct => false, :show_latest_comments => true, :cached => true, :namespace => "workspaces:workspaces"}
         Presenter.present(workspace, nil, options)
         #workspace.refresh_cache
         print "."
@@ -35,7 +57,8 @@ while loading workspaces on the page"
     end
   end
 
-  desc "TODO"
+  desc "This task will iterate through the activity stream for each user in the database and add them to the cache so that users will not experience long delay \
+while loading activity stream on the page"
   task :activities => :environment do
     users = User.all
     users.each do | user|
@@ -51,10 +74,10 @@ while loading workspaces on the page"
     end
   end
 
-  desc "TODO"
 
 
-
+  desc "This task will iterate through the datasets in the database and add them to the cache so that users will not experience long delay \
+while loading datasets on the page"
   task :datasets => :environment do
     users = User.all
     params = {}
@@ -77,7 +100,8 @@ while loading workspaces on the page"
     end
   end
 
-  desc "TODO"
+  desc "This task will iterate through the workfiles in the database and add them to the cache so that users will not experience long delay \
+while loading workfiles on the page"
   task :workfiles => :environment do
     users = User.all
     params = {}
