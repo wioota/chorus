@@ -294,7 +294,7 @@ describe Search do
     let(:hadoop_dataset) { datasets(:searchquery_hadoop) }
     let(:typeahead_dataset) { datasets(:typeahead_gpdb_table) }
     let(:shared_dataset) { datasets(:searchquery_shared_table) }
-    let(:chorus_view) { datasets(:searchquery_chorus_view) }
+    let(:chorus_view) { datasets(:searchquery_chorus_view_1) }
 
     before do
       stub(DatasetColumn).columns_for.with_any_args { [] } # don't ask databases for columns in test
