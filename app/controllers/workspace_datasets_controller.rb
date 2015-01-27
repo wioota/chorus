@@ -12,7 +12,7 @@ class WorkspaceDatasetsController < ApplicationController
     @options =  { :workspace => workspace , :user => current_user, :rendering_activities => true, :show_latest_comments => false}
 
     #Added caching options to speed up page load time. Prakash 1/15/15
-    present paginate(@datasets), :presenter_options => { :workspace => workspace, :cached => true, :namespace => "workspace:datasets" }
+    present paginate(@datasets), :presenter_options => { :workspace => workspace, :cached => false, :namespace => "workspace:datasets" }
     
   end
 
