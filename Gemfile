@@ -80,6 +80,8 @@ group :development, :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
   gem 'sunspot_solr', :github => 'taktsoft/sunspot', :ref => '78717a33894271d012682dbe8902458badb0ca63' # https://github.com/sunspot/sunspot/pull/267
   gem 'backbone_fixtures_rails', :github => 'charleshansen/backbone_fixtures_rails'
   gem 'rspec_api_documentation', :github => 'Chorus/rspec_api_documentation', :require => false
+  gem 'pry' # Drop in to an extended Rails console by creating a 'binding.pry' breakpoint
+  gem 'pry-nav' # Adds debugger functionality to Pry
 end
 
 group :development do
