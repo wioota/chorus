@@ -10,6 +10,8 @@ $header-margin-right: $page-margin-right;
 $expanded-search-width: 450px;
 $notification-token-width: $header-margin * 2;
 
+$branding-opacity: 0.93;
+
 @mixin full-item-link($height) {
     &:hover, &.selected {
         background-color: $list-hover-color;
@@ -89,10 +91,16 @@ $notification-token-width: $header-margin * 2;
 
             .token {
                 float: left;
+                
+                /* main branding logo */
                 &.logo {
                     width: 90px;
                     padding: 0px 10px;
-
+                    opacity: $branding-opacity;
+                    
+                    &:hover {
+                        opacity: 1;
+                    }
                     a img {
                         vertical-align: middle;
                     }
@@ -155,13 +163,18 @@ $notification-token-width: $header-margin * 2;
                     }
                 }
 
-                &.advisor_now a img {
+                &.advisorNow a img {
                     position: relative;
                     width: 83px;
                     top: 6px;
                     
                     margin-bottom: 0px;
                     padding-right: 15px;
+                    opacity: $branding-opacity;
+                    
+                    &:hover {
+                        opacity: 1;
+                    }
                 }
             }
         }
