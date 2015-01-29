@@ -518,7 +518,6 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin database-column-type {
     @include debugging-mixin;
-
     font-size: 12px;
     font-weight: normal;
 	color: $color-text2;

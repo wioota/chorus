@@ -22,7 +22,7 @@
     height: 100%;
 }
 
-/* comfortable spacing at bottom of page EXCEPT for iframe situation */
+// comfortable spacing at bottom of page EXCEPT for iframe situation
 #page > div:not(.header_iframe_layout) {
     margin-bottom: $page-margin-bottom;
 }
