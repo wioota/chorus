@@ -287,7 +287,7 @@ describe("chorus.views.Header", function() {
                 });
 
                 it("does not display the advisorNow link", function () {
-                    expect(this.view.$(".advisor_now")).not.toExist();
+                    expect(this.view.$(".advisorNow")).not.toExist();
                 });
             });
 
