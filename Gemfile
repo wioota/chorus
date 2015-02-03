@@ -74,7 +74,7 @@ group :development, :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
   gem 'jasmine', :github => 'pivotal/jasmine-gem'
   gem 'jasmine-core', :github => 'pivotal/jasmine'
   gem 'sunspot_matchers'
-  gem 'fixture_builder', :github => 'andrewlngdn/fixture_builder'
+  gem 'fixture_builder'
   gem 'ci_reporter', '>= 1.8.2'
   gem 'faker'
   gem 'fakeweb'
