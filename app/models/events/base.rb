@@ -60,8 +60,10 @@ module Events
     def delete_cache
       #Fix for 87339340. Avoid searching for cache if the record is newly created and does have an ID before saving to database.z
       if self.id != nil
+        cache_key = "activities/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
         Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with ID = #{self.id} --"
-        Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
+        Rails.cache.delete(cache_key)
+        #Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
       end
     end
 
