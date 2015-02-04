@@ -40,7 +40,7 @@ class Workfile < ActiveRecord::Base
 
   def delete_cache
     #Fix for 87339340. Avoid searching for cache if the record is newly created and does have an ID before saving to database.
-    if self.id != nil
+    if self.id != nil && current_user != nil
       cache_key = "workspace:workfiles/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
       Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with cache key = #{cache_key} --"
       Rails.cache.delete(cache_key)
