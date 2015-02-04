@@ -49,6 +49,7 @@ module Events
     belongs_to :workspace, :touch => true
     belongs_to :promoted_by, :class_name => 'User', :touch => true
     belongs_to :dataset, :touch => true
+    belongs_to :workfile, :touch => true
 
 
     # PT 1/15/15 This will auto-refresh the JSON data object for workspace
@@ -57,8 +58,11 @@ module Events
 
     # Upon creating or updating an event, refresh the JSON object in cache.
     def delete_cache
-      Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with ID = #{self.id} --"
-      Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
+      #Fix for 87339340. Avoid searching for cache if the record is newly created and does have an ID before saving to database.z
+      if self.id != nil
+        Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with ID = #{self.id} --"
+        Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
+      end
     end
 
     [:actor, :workspace, :target1, :target2, :target3, :promoted_by].each do |method|

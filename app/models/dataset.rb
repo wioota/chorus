@@ -48,8 +48,11 @@ class Dataset < ActiveRecord::Base
   end
 
   def delete_cache
-    Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with ID = #{self.id} --"
-    Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
+    #Fix for 87339340. Avoid searching for cache if the record is newly created and does have an ID before saving to database.
+    if self.id != nil
+      Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with ID = #{self.id} --"
+      Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
+    end
   end
 
   def refresh_cache
