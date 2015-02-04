@@ -85,7 +85,6 @@ while loading datasets on the page"
     users = User.all
     params = {}
     users.each do | user|
-      binding.pry if user.username == "alfredo_gomez"
       workspaces = Workspace.workspaces_for(user)
       workspaces = workspaces.includes(Workspace.eager_load_associations).order("lower(name) ASC, id")
       print "Caching datasets for #{user.username} "
