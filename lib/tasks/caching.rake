@@ -4,33 +4,36 @@ namespace :chorus do
   task :caching, [:type] => :environment do |task, args|
     #print "arg = #{args[:type]}\n"
     #print "arg = #{args.extras}\n"
-    if args[:type] == nil || args[:type] == 'all'
-      print "\n================ Caching workspaces START ==================\n"
-      Rake::Task["chorus:workspaces"].reenable
-      Rake::Task["chorus:workspaces"].invoke
-      print "================ Caching workspaces FINISH =================\n\n"
-      print "\n================ Caching activities START ==================\n"
-      Rake::Task["chorus:activities"].reenable
-      Rake::Task["chorus:activities"].invoke
-      print "================ Caching activities FINISH =================\n\n"
-      print "\n================ Caching datasets START ==================\n"
-      Rake::Task["chorus:datasets"].reenable
-      Rake::Task["chorus:datasets"].invoke
-      print "================ Caching datasets FINISH =================\n\n"
-      print "\n================ Caching workfiles START ==================\n"
-      Rake::Task["chorus:workfiles"].reenable
-      Rake::Task["chorus:workfiles"].invoke
-      print "================ Caching workfiles FINISH =================\n\n"
-    else
-      print "\n================ Caching  #{args[:type]}  START ==================\n"
-      Rake::Task["chorus:#{args[:type]}"].reenable
-      Rake::Task["chorus:#{args[:type]}"].invoke
-      print "================ Caching #{args[:type]} FINISH =================\n\n"
-      args.extras.each do |arg|
-        print "\n================ Caching #{arg} START ==================\n"
-        Rake::Task["chorus:#{arg}"].reenable
-        Rake::Task["chorus:#{arg}"].invoke
-        print "================ Caching #{arg} FINISH =================\n\n"
+
+    ChorusConfig.instance.with_temporary_config( { :login_timeout => 0 } ) do
+      if args[:type] == nil || args[:type] == 'all'
+        print "\n================ Caching workspaces START ==================\n"
+        Rake::Task["chorus:workspaces"].reenable
+        Rake::Task["chorus:workspaces"].invoke
+        print "================ Caching workspaces FINISH =================\n\n"
+        print "\n================ Caching activities START ==================\n"
+        Rake::Task["chorus:activities"].reenable
+        Rake::Task["chorus:activities"].invoke
+        print "================ Caching activities FINISH =================\n\n"
+        print "\n================ Caching datasets START ==================\n"
+        Rake::Task["chorus:datasets"].reenable
+        Rake::Task["chorus:datasets"].invoke
+        print "================ Caching datasets FINISH =================\n\n"
+        print "\n================ Caching workfiles START ==================\n"
+        Rake::Task["chorus:workfiles"].reenable
+        Rake::Task["chorus:workfiles"].invoke
+        print "================ Caching workfiles FINISH =================\n\n"
+      else
+        print "\n================ Caching  #{args[:type]}  START ==================\n"
+        Rake::Task["chorus:#{args[:type]}"].reenable
+        Rake::Task["chorus:#{args[:type]}"].invoke
+        print "================ Caching #{args[:type]} FINISH =================\n\n"
+        args.extras.each do |arg|
+          print "\n================ Caching #{arg} START ==================\n"
+          Rake::Task["chorus:#{arg}"].reenable
+          Rake::Task["chorus:#{arg}"].invoke
+          print "================ Caching #{arg} FINISH =================\n\n"
+        end
       end
     end
   end
@@ -82,6 +85,7 @@ while loading datasets on the page"
     users = User.all
     params = {}
     users.each do | user|
+      binding.pry if user.username == "alfredo_gomez"
       workspaces = Workspace.workspaces_for(user)
       workspaces = workspaces.includes(Workspace.eager_load_associations).order("lower(name) ASC, id")
       print "Caching datasets for #{user.username} "
