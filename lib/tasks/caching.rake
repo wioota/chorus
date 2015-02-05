@@ -5,7 +5,7 @@ namespace :chorus do
     #print "arg = #{args[:type]}\n"
     #print "arg = #{args.extras}\n"
 
-    ChorusConfig.instance.with_temporary_config( { :login_timeout => 0 } ) do
+    ChorusConfig.instance.with_temporary_config( { :database_login_timeout => 1} ) do
       if args[:type] == nil || args[:type] == 'all'
         print "\n================ Caching workspaces START ==================\n"
         Rake::Task["chorus:workspaces"].reenable
