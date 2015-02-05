@@ -491,4 +491,25 @@ describe ChorusConfig do
       end
     end
   end
+
+
+  describe 'with_temporary_config' do
+    before do
+      config.config = { 'option' => 'default' }
+    end
+
+    it 'should change the configuration inside the block' do
+      config.with_temporary_config({ 'option' => 'temporary' }) do
+        config['option'].should == 'temporary'
+      end
+    end
+
+    it 'should revert the configuration when the block ends' do
+      config.with_temporary_config({ 'option' => 'temporary' }) do
+        # do nothing
+      end
+      config['option'].should == 'default'
+    end
+
+  end
 end
