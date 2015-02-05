@@ -13,7 +13,7 @@ describe "Event types" do
   let(:workfile) { workfiles(:public) }
   let(:workspace) { workfile.workspace }
   let(:dataset) { datasets(:view) }
-  let(:destination_dataset) { datasets(:table) }
+  let(:destination_dataset) { datasets(:default_table) }
   let(:hdfs_entry) { hdfs_data_source.hdfs_entries.create!(:path => "/any/path/should/work.csv")}
 
   let(:chorus_view) { datasets(:chorus_view) }

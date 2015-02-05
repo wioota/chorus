@@ -12,7 +12,7 @@ describe TableauWorkbooksController do
   end
 
   describe '#create' do
-    let(:dataset) { datasets(:table) }
+    let(:dataset) { datasets(:default_table) }
     let(:workspace) { workspaces(:public)}
     let(:name) { 'myTableauWorkbook' }
     let(:params) { extra_options.merge( {
@@ -30,7 +30,7 @@ describe TableauWorkbooksController do
     end
 
     context 'when the dataset is a table' do
-      let(:dataset) { datasets(:table) }
+      let(:dataset) { datasets(:default_table) }
 
       it 'instantiates the workbook with the table name' do
         mock.proxy(TableauWorkbook).new(hash_including(:db_relname => dataset.name))

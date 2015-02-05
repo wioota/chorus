@@ -66,7 +66,7 @@ describe GpdbDatabase do
     it { should have_many(:schemas).class_name('GpdbSchema') }
 
     it "has many datasets" do
-      databases(:default).datasets.should include(datasets(:table))
+      databases(:default).datasets.should include(datasets(:default_table))
     end
   end
 

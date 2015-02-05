@@ -5,7 +5,7 @@ describe GpdbDataset do
   let(:account) { gpdb_data_source.owner_account }
   let(:schema) { schemas(:default) }
   let(:other_schema) { schemas(:other_schema) }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
   let(:source_table) { datasets(:source_table) }
   let(:dataset_view) { datasets(:view) }
 
@@ -47,7 +47,7 @@ describe GpdbDataset do
   end
 
   describe "#destroy" do
-    let(:dataset) { datasets(:table) }
+    let(:dataset) { datasets(:default_table) }
 
     before do
       any_instance_of(GreenplumConnection) do |data_source|
@@ -141,7 +141,7 @@ describe GpdbDataset do
     end
 
     context "when the dataset is not associated with a workspace" do
-      let(:dataset) { datasets(:table) }
+      let(:dataset) { datasets(:default_table) }
 
       context "but the workspace's sandbox contains the dataset" do
       let(:workspace) do

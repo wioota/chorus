@@ -12,7 +12,7 @@ describe Events::Note do
   let(:workspace) { workspaces(:public) }
   let(:workfile) { workfiles(:public) }
   let(:tableau_workfile) { workfiles(:tableau) }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
   let(:hdfs_entry) do
     hdfs_data_source.hdfs_entries.create!(:path => '/data/test.csv',
                                          :modified_at => "2010-10-24 22:00:00")

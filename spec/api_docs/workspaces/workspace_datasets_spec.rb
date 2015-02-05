@@ -48,7 +48,7 @@ resource "Workspaces" do
 
     required_parameters :workspace_id, :id
 
-    let(:id) { datasets(:table).id }
+    let(:id) { datasets(:default_table).id }
 
     example_request "Get details for a dataset" do
       status.should == 200
@@ -67,7 +67,7 @@ resource "Workspaces" do
     end
 
     let(:view) { datasets(:view) }
-    let(:table) { datasets(:table) }
+    let(:table) { datasets(:default_table) }
 
     example "Associate a list of non-sandbox datasets with the workspace" do
       do_request(:dataset_ids => [table.to_param, view.to_param])

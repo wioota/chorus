@@ -10,7 +10,7 @@ class Attachment < ActiveRecord::Base
 
   before_post_process :contents_are_image?
 
-  belongs_to :note, :class_name => 'Events::Base', :conditions => "events.action ILIKE 'Events::Note%'"
+  belongs_to :note, :class_name => 'Events::Base', :conditions => "events.action ILIKE 'Events::Note%'", :touch => true
 
   validates_attachment_size :contents, :less_than => ChorusConfig.instance['file_sizes_mb']['attachment'].megabytes, :message => :file_size_exceeded
 

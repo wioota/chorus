@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ImportSourceDataTask do
   let(:job) { jobs(:default) }
-  let(:source_dataset) { datasets(:table) }
+  let(:source_dataset) { datasets(:default_table) }
 
   describe '#truncate' do
     let(:planned_job_task) do
@@ -149,7 +149,7 @@ describe ImportSourceDataTask do
       let(:isdt) { FactoryGirl.create(:import_source_data_task_into_new_table) }
 
       context 'and the import completes successfully' do
-        let(:dataset) { datasets(:table) }
+        let(:dataset) { datasets(:default_table) }
 
         it 'changes the destination id to the newly created dataset id' do
           stub(ImportExecutor).run {true}

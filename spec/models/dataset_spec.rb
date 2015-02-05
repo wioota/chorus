@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Dataset do
   let(:schema) { schemas(:default) }
   let(:other_schema) { schemas(:other_schema) }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
 
   it_behaves_like "a notable model" do
     let!(:note) do
@@ -16,7 +16,7 @@ describe Dataset do
 
     let!(:model) { dataset }
   end
-  it_should_behave_like "taggable models", [:datasets, :table]
+  it_should_behave_like "taggable models", [:datasets, :default_table]
 
   describe "associations" do
     it { should belong_to(:scoped_schema).class_name('Schema') }
@@ -159,13 +159,13 @@ describe Dataset do
 
   describe "#all_rows_sql" do
     it "returns the correct sql" do
-      dataset = datasets(:table)
+      dataset = datasets(:default_table)
       dataset.all_rows_sql.strip.should == %Q{SELECT * FROM "#{dataset.name}"}
     end
 
     context "with a limit" do
       it "uses the limit" do
-        dataset = datasets(:table)
+        dataset = datasets(:default_table)
         dataset.all_rows_sql(10).should match "LIMIT 10"
       end
     end
@@ -173,7 +173,7 @@ describe Dataset do
 
   describe ".find_and_verify_in_source" do
     let(:user) { users(:owner) }
-    let(:dataset) { datasets(:table) }
+    let(:dataset) { datasets(:default_table) }
 
     before do
       stub(Dataset).find(dataset.id) { dataset }
@@ -226,7 +226,7 @@ describe Dataset do
 
   describe "destroy" do
     context "with imports" do
-      let(:dataset) { datasets(:table) }
+      let(:dataset) { datasets(:default_table) }
 
       it "cancels the import" do
         unfinished_imports = dataset.imports.unfinished
@@ -252,7 +252,7 @@ describe Dataset do
     end
   end
 
-  it_should_behave_like "taggable models", [:datasets, :table]
+  it_should_behave_like "taggable models", [:datasets, :default_table]
 
   it_behaves_like 'a soft deletable model' do
     let(:model) { dataset }

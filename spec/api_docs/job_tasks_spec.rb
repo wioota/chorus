@@ -17,7 +17,7 @@ resource 'JobTask' do
     let(:workspace_id) { jobs(:default).workspace.id }
     let(:job_id) { jobs(:default).id }
     let(:action) { 'import_source_data' }
-    let(:source_id) { datasets(:table).id }
+    let(:source_id) { datasets(:default_table).id }
     let(:destination_name) { 'create_me' }
     let(:truncate) { 'false' }
     let(:row_limit) { '1000' }

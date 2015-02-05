@@ -26,7 +26,7 @@ describe DatasetStatistics do
   describe ".build_for" do
     context 'for a greenplum datasource' do
       let(:account) { users(:owner) }
-      let(:dataset) { datasets(:table) }
+      let(:dataset) { datasets(:default_table) }
       let!(:schema) { dataset.schema }
       let(:fake_statistics) {
         {

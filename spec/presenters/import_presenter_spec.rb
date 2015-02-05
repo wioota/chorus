@@ -23,8 +23,8 @@ describe ImportPresenter, :type => :view do
     end
 
     it "presents the destination dataset if it exists" do
-      import.destination_dataset = datasets(:table)
-      import.destination_dataset.should == datasets(:table)
+      import.destination_dataset = datasets(:default_table)
+      import.destination_dataset.should == datasets(:default_table)
 
       hash[:destination_dataset].should have_key(:id)
       hash[:destination_dataset].should have_key(:object_name)
@@ -37,7 +37,7 @@ describe ImportPresenter, :type => :view do
     end
 
     it "presents the destination dataset with a name and a nil id if it has been deleted" do
-      dataset = datasets(:table)
+      dataset = datasets(:default_table)
       stub(dataset).cancel_imports
       dataset.destroy
       dataset.id.should_not be_nil

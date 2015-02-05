@@ -5,7 +5,7 @@ describe Events::GnipStreamImportCreated do
   extend EventHelpers
   let(:workspace) { workspaces(:public) }
   let(:actor) { users(:default) }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
   let(:gnip_data_source) { gnip_data_sources(:default) }
 
   subject do
