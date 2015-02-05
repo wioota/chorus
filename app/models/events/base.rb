@@ -54,7 +54,7 @@ module Events
 
     # PT 1/15/15 This will auto-refresh the JSON data object for workspace
     #after_save :refresh_cache
-    before_save :delete_cache
+    after_save :delete_cache
 
     # Upon creating or updating an event, refresh the JSON object in cache.
     def delete_cache
@@ -62,7 +62,7 @@ module Events
         cache_key = "activities/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
         Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with ID = #{self.id} --"
         Rails.cache.delete(cache_key)
-        #Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
+        return true # Prevent a missing key from the callback chain
       end
     end
 

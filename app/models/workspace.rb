@@ -58,7 +58,7 @@ class Workspace < ActiveRecord::Base
 
   after_update :solr_reindex_later, :if => :public_changed?
   # PT 12/19/14 This will auto-refresh the JSON data object for workspace
-  before_save :delete_cache
+  after_save :delete_cache
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable_model do
@@ -92,6 +92,7 @@ class Workspace < ActiveRecord::Base
       cache_key = "workspaces:workspaces/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
       Rails.cache.delete(cache_key)
       #Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
+      return true
     end
   end
 

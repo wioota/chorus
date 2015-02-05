@@ -36,7 +36,7 @@ class Dataset < ActiveRecord::Base
                            ]
 
   after_destroy :cancel_imports
-  before_save :delete_cache
+  after_save :delete_cache
 
   attr_accessor :highlighted_attributes, :search_result_notes, :skip_search_index
   attr_accessible :name
@@ -55,6 +55,7 @@ class Dataset < ActiveRecord::Base
       Rails.cache.delete(cache_key)
       #Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
     end
+    return true
   end
 
   def refresh_cache

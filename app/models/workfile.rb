@@ -36,7 +36,7 @@ class Workfile < ActiveRecord::Base
   before_validation :init_file_name, :on => :create
 
   before_update :ensure_proper_content_type
-  before_save :delete_cache
+  after_save :delete_cache
 
   def delete_cache
     #Fix for 87339340. Avoid searching for cache if the record is newly created and does have an ID before saving to database.
@@ -50,6 +50,7 @@ class Workfile < ActiveRecord::Base
         self.latest_workfile_version.delete_cache
       end
     end
+    return true
   end
 
   def ensure_proper_content_type
