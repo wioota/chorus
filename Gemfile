@@ -88,4 +88,5 @@ group :development do
   gem 'license_finder', '~> 0.8.1', :require => false
   gem 'mizuno'
   gem 'bullet'
+  gem 'capistrano', '2.15.5'
 end

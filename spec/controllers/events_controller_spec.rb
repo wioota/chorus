@@ -207,7 +207,7 @@ describe EventsController do
       end
 
       context "for a gpdb_table" do
-        let(:object) { datasets(:table) }
+        let(:object) { datasets(:default_table) }
 
         it "presents the gpdb_table's activities" do
           log_in(users(:owner))
@@ -264,7 +264,7 @@ describe EventsController do
       end
 
       context "for the current user's home page" do
-        let(:object) { datasets(:table) }
+        let(:object) { datasets(:default_table) }
 
         before do
           mock(Events::Base).for_dashboard_of(current_user) { fake_relation [event] }

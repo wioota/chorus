@@ -7,7 +7,7 @@ describe "Import Console" do
   let(:workspace) { dataset.workspace }
   let(:deleted_workspace) { FactoryGirl.create :workspace, :sandbox => workspace.sandbox, :owner => user, :name => "deleted workspace" }
 
-  let(:deleted_table) {datasets(:table)}
+  let(:deleted_table) {datasets(:default_table)}
   let(:other_table) {datasets(:other_table)}
 
   before do

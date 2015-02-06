@@ -154,7 +154,7 @@ FixtureBuilder.configure do |fbuilder|
     default_database = FactoryGirl.create(:gpdb_database, :data_source => owners_data_source, :name => 'default')
     default_schema = FactoryGirl.create(:gpdb_schema, :name => 'default', :database => default_database)
     FactoryGirl.create(:gpdb_schema, :name => "public", :database => default_database)
-    default_table = FactoryGirl.create(:gpdb_table, :name => "table", :schema => default_schema)
+    default_table = FactoryGirl.create(:gpdb_table, :name => "default_table", :schema => default_schema)
     FactoryGirl.create(:gpdb_view, :name => "view", :schema => default_schema)
 
     other_schema = FactoryGirl.create(:gpdb_schema, :name => "other_schema", :database => default_database)

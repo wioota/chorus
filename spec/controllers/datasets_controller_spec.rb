@@ -4,7 +4,7 @@ describe DatasetsController do
   let(:user) { schema.data_source.owner }
   let(:data_source_account) { schema.data_source.account_for_user!(user) }
   let(:schema) { schemas(:default) }
-  let(:table) { datasets(:table) }
+  let(:table) { datasets(:default_table) }
 
   before do
     log_in user
@@ -73,7 +73,7 @@ describe DatasetsController do
     end
 
     context "for a greenplum schema" do
-      let(:dataset1) { datasets(:table) }
+      let(:dataset1) { datasets(:default_table) }
       let(:dataset2) { datasets(:view) }
       let(:dataset3) { datasets(:other_table) }
 

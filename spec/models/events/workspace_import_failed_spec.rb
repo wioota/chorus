@@ -7,7 +7,7 @@ describe Events::WorkspaceImportFailed do
 
   let(:workspace) { workspaces(:public) }
   let(:actor) { workspace.owner }
-  let(:destination_dataset) { datasets(:table) }
+  let(:destination_dataset) { datasets(:default_table) }
   let(:source_dataset) {datasets(:other_table)}
   let!(:workspace_association) { workspace.source_datasets << source_dataset }
   subject do

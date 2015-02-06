@@ -6,7 +6,7 @@ describe Events::SchemaImportSuccess do
 
   let(:actor) { users(:owner) }
   let(:source_dataset) { datasets(:oracle_table) }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
 
   subject do
     Events::SchemaImportSuccess.add(

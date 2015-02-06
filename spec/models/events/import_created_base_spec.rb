@@ -4,7 +4,7 @@ describe Events::ImportCreatedBase do
   let(:source_dataset) { datasets(:other_table) }
   let(:workspace) { workspaces(:public) }
   let(:actor) { users(:default) }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
   let(:event) do
     Events::WorkspaceImportCreated.add(
       :actor => actor,
