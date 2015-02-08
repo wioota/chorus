@@ -31,9 +31,9 @@ describe("chorus.pages.UserEditPage", function() {
             expect(this.view.$(".content_header h1").text().trim()).toBe(this.user.displayName());
         });
 
-        it("displays the word 'details' in the details-header", function() {
-            expect(this.view.$(".content_details").text().trim()).toBe(t("users.details"));
-        });
+//         it("displays the word 'details' in the details-header", function() {
+//             expect(this.view.$(".content_details").text().trim()).toBe(t("users.details"));
+//         });
 
         it("does not have the 'edit profile' link in the sidebar", function() {
             expect(this.view.$("a.edit_user")).not.toExist();

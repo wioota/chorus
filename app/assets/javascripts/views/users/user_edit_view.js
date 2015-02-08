@@ -12,13 +12,13 @@
         },
 
         subviews:{
-            '.edit_photo':"imageUpload"
+            '.profile_image':"imageUpload"
         },
 
         setup:function () {
             this.listenTo(this.model, "saved", userSuccessfullySaved);
             this.listenTo(this.model, "image:change", function() { this.model.trigger("invalidated"); });
-            this.imageUpload = new chorus.views.ImageUpload({ model:this.model, changeImageKey:"users.edit_photo" });
+            this.imageUpload = new chorus.views.ImageUpload({ model:this.model, changeImageKey:"user.profile_change_avatar_image", addImageKey:"user.profile_add_avatar_image" });
         },
 
         additionalContext:function () {

@@ -39,9 +39,9 @@ describe("chorus.pages.UserShow", function() {
             expect(this.page.$(".content_header h1").text().trim()).toBe("EDC Admin");
         });
 
-        it("displays the word 'details' in the details-header", function() {
-            expect(this.page.$(".content_details").text().trim()).toBe(t("users.details"));
-        });
+//         it("displays the word 'details' in the details-header", function() {
+//             expect(this.page.$(".content_details").text().trim()).toBe(t("users.details"));
+//         });
 
         it("displays a tag box", function() {
             expect(this.page.$(".content_header .tag_box")).toExist();
