@@ -57,23 +57,24 @@ module Paperclip
       # Remove the [0] for the first frame - no animations supported (ImageMagick will use this for GIFs)
       img = javax.imageio.ImageIO.read(java.io.File.new(local_options[:source].gsub("[0]","")))
 
-        srcHeight = Java::OrgImgscalr::img.getHeight()
-        H = srcHeight.to_i
-        srcWidth = Java::OrgImgscalr::img.getWidth()
-        W = srcWidth.to_i
+        srcHeight = img.getHeight()
+        #H = srcHeight.to_i
+        srcWidth = img.getWidth()
+        #W = srcWidth.to_i
         
         #figure out if image is in PORTRAIT or LANDSCAPE
-        if H > W
+        if srcHeight > srcWidth
             #PORTRAIT
             srcOrient = "PORTRAIT"
-        elsif H < W
+        elsif srcHeight < srcWidth
             #LANDSCAPE
             srcOrient = "LANDSCAPE"
         else
             #EQUAL ALREADY
             srcOrient = "EQUAL"
         end
-        Rails.logger.warn "***IMG 2"
+        Rails.logger.warn "***IMG ***"
+        Rails.logger.warn "#{srcOrient}"
         
       output_file = java.io.File.new(local_options[:dest])
 
