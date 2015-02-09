@@ -1,7 +1,7 @@
 class WorkfileVersion < ActiveRecord::Base
   attr_accessible :commit_message, :owner, :modifier, :contents, :version_num, :as => [:default, :create]
   has_attached_file :contents,
-                    :styles => {:icon => "50x50>"},
+                    :styles => {:icon => "50x50^"},
                     :path => ":rails_root/system/:class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",
                     :restricted_characters => nil #retain original filename

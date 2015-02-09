@@ -14,7 +14,7 @@ class Workspace < ActiveRecord::Base
 
   has_attached_file :image, :path => ":rails_root/system/:class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",
-                    :default_url => "", :styles => {:icon => "50x50>"}
+                    :default_url => "", :styles => {:icon => "50x50^"}
 
   belongs_to :archiver, :class_name => 'User', :touch => true
   belongs_to :owner, :class_name => 'User', :touch => true
