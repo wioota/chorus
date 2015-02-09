@@ -51,15 +51,51 @@ module Paperclip
 
   class Processor
     def convert(arguments = "", local_options = {})
+    
+         Rails.logger.warn "*** PAPERCLIP EXTENSIONS Processor ***"
+         
       # Remove the [0] for the first frame - no animations supported (ImageMagick will use this for GIFs)
       img = javax.imageio.ImageIO.read(java.io.File.new(local_options[:source].gsub("[0]","")))
 
+        srcHeight = Java::OrgImgscalr::img.getHeight()
+        H = srcHeight.to_i
+        srcWidth = Java::OrgImgscalr::img.getWidth()
+        W = srcWidth.to_i
+        
+        #figure out if image is in PORTRAIT or LANDSCAPE
+        if H > W
+            #PORTRAIT
+            srcOrient = "PORTRAIT"
+        elsif H < W
+            #LANDSCAPE
+            srcOrient = "LANDSCAPE"
+        else
+            #EQUAL ALREADY
+            srcOrient = "EQUAL"
+        end
+        Rails.logger.warn "***IMG 2"
+        
       output_file = java.io.File.new(local_options[:dest])
 
-      m = arguments.match /-resize \"(\d+)x(\d+)>\"/
+      m = arguments.match /-resize \"(\d+)x(\d+)^\"/
+
       if m && m[1] && m[2]
-        img = Java::OrgImgscalr::Scalr.resize(img, m[1].to_i, m[2].to_i, nil)
+        case srcOrient
+            when "PORTRAIT"
+                Rails.logger.warn "*** IMG> PORTRAIT \n"
+                img = Java::OrgImgscalr::Scalr.resize(img, Method.ULTRA_QUALITY, Mode.FIT_EXACT, m[1].to_i, m[2].to_i, nil)
+                img = Java::OrgImgscalr::Scalr.crop(img, 0,0, 30,30)
+            when "LANDSCAPE"
+                Rails.logger.warn "*** IMG> LANDSCAPE \n"
+                img = Java::OrgImgscalr::Scalr.resize(img, Method.ULTRA_QUALITY, Mode.FIT_EXACT, m[1].to_i, m[2].to_i, nil)
+                img = Java::OrgImgscalr::Scalr.crop(img, 0,0,35,35)
+            else   
+                Rails.logger.warn "*** IMG> EQUAL \n"
+                img = Java::OrgImgscalr::Scalr.resize(img, Method.ULTRA_QUALITY, Mode.FIT_EXACT, m[1].to_i, m[2].to_i, nil)
+                img = Java::OrgImgscalr::Scalr.crop(img, 0,0,45,45)
+        end
       end
+      
       javax.imageio.ImageIO.write(img, "png", output_file)
     end
 

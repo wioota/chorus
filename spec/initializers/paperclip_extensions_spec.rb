@@ -40,7 +40,7 @@ describe Paperclip do
 
       p = Paperclip::Processor.new(t)
       o = Tempfile.new("output_image")
-      p.convert(':source -resize "50x50>" :dest', {:source => t.path, :dest => o.path})
+      p.convert(':source -resize "50x50^" :dest', {:source => t.path, :dest => o.path})
 
       g = Paperclip::Geometry.from_file(o)
       g.width.should == 50
@@ -55,7 +55,7 @@ describe Paperclip do
 
       p = Paperclip::Processor.new(t)
       o = Tempfile.new("output_image")
-      p.convert(':source -resize "50x50>" :dest', {:source => t.path, :dest => o.path})
+      p.convert(':source -resize "50x50^" :dest', {:source => t.path, :dest => o.path})
 
       g = Paperclip::Geometry.from_file(o)
       g.width.should == 50
@@ -70,7 +70,7 @@ describe Paperclip do
 
       p = Paperclip::Processor.new(t)
       o = Tempfile.new("output_image")
-      p.convert(':source -resize "24x24>" :dest', {:source => t.path, :dest => o.path})
+      p.convert(':source -resize "24x24^" :dest', {:source => t.path, :dest => o.path})
 
       g = Paperclip::Geometry.from_file(o)
       g.width.should == 17
