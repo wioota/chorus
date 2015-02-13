@@ -293,7 +293,7 @@ describe Workspace do
 
       context "with associated datasets and options contain a database id" do
         let!(:chorus_view) { FactoryGirl.create(:chorus_view, :workspace => workspace, :schema => dataset1.schema) }
-        let(:dataset1) { datasets(:table) }
+        let(:dataset1) { datasets(:default_table) }
         let(:dataset2) { datasets(:searchquery_table) }
 
         before do
@@ -339,7 +339,7 @@ describe Workspace do
 
       context 'when the workspace has associated datasets' do
         let!(:chorus_view) { FactoryGirl.create(:chorus_view, :workspace => workspace, :schema => dataset1.schema) }
-        let(:dataset1) { datasets(:table) }
+        let(:dataset1) { datasets(:default_table) }
         let(:dataset2) { datasets(:searchquery_table) }
 
         before do

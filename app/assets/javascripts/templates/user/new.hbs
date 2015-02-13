@@ -1,7 +1,10 @@
+<!-- TEMPLATE -->
+<!-- new user profile -->
+
 {{> errorDiv}}
 {{#ifAdmin}}
 <form action="/users" method="post">
-    <div class="edit_photo">
+    <div class="profile_image">
         <img src="/images/general/default-user.png" class="profile" title="{{t 'user.profile.avatar.title'}}"/>
     </div>
     <div class="fields">
@@ -62,7 +65,7 @@
 
         <div class="row">
                <span class="left">
-                   <label>Title</label>
+                   <label>{{t "users.title"}}</label>
                    <input type="text" name="title" maxlength="256" value="{{title}}"/>
                </span>
 
@@ -74,7 +77,7 @@
 
         <div class="row">
                <span class="notes">
-                   <label>Notes</label>
+                   <label>{{t "user.profile_description"}}</label>
                    <textarea rows="4" cols="1" name="notes" maxlength="4096">{{notes}}</textarea>
                </span>
         </div>

@@ -36,6 +36,7 @@ class Dataset < ActiveRecord::Base
                            ]
 
   after_destroy :cancel_imports
+  after_save :delete_cache
 
   attr_accessor :highlighted_attributes, :search_result_notes, :skip_search_index
   attr_accessible :name
@@ -44,6 +45,24 @@ class Dataset < ActiveRecord::Base
 
   def needs_schema?
     true
+  end
+
+  def delete_cache
+    #Fix for 87339340. Avoid searching for cache if the record is newly created and does have an ID before saving to database.
+    if self.id != nil && current_user != nil
+      cache_key = "workspace:datasets/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
+      Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with cache key = #{cache_key} --"
+      Rails.cache.delete(cache_key)
+      #Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
+    end
+    return true
+  end
+
+  def refresh_cache
+    Chorus.log_debug "-- Refreshing cache for #{self.class.name} with ID = #{self.id} --"
+    options = {:workspace => self.workspace, :cached => true, :namespace =>  "workspace:datasets"}
+    dataset = Dataset.includes(Dataset.eager_load_associations).where("id = ?", self.id)
+    Presenter.present(dataset, nil, options)
   end
 
   def self.eager_load_associations
@@ -62,6 +81,7 @@ class Dataset < ActiveRecord::Base
         {:scoped_schema => :scoped_parent}
     ]
   end
+
 
   def self.add_search_permissions(current_user, search)
     search.build do

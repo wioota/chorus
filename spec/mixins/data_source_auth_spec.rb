@@ -15,7 +15,7 @@ describe DataSourceAuth do
     end
 
     context "when the resource's data_source has an account_for_user" do
-      let(:resource) { datasets(:table) }
+      let(:resource) { datasets(:default_table) }
 
       it 'returns the account' do
         account_for_current_user(resource).should == resource.data_source.account_for_user!(current_user)

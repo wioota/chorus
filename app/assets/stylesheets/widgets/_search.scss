@@ -6,14 +6,15 @@ input {
 
 input.chorus_search {
     margin: 0;
+
     padding: 2px 20px 2px 25px;
-/*     background: url("/images/search-icon.png") no-repeat 9px 3px; */
     outline: none;
     background-color: #FBFBFB;
     @include border-radius(5px);    
     border-color: $border-color;
     border-top-color: #FFFFFF;
     border-left-color: #FFFFFF;
+
     font-size: 14px;
     line-height: 18px;
     vertical-align: top;
@@ -51,3 +52,4 @@ a.chorus_search_clear {
 /*         color: $gray; */
 /*     } */
 }
+

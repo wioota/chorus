@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe VisualizationsController do
   let(:user) { users(:owner) }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
   let(:data_source_account) { dataset.schema.database.data_source.owner_account }
 
   before do

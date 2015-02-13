@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 resource "Datasets" do
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
   let(:owner) { users(:owner) }
 
   let(:owner_account) { dataset.data_source.owner_account }

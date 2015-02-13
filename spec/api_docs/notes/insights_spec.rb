@@ -5,7 +5,7 @@ resource "Notes" do
   let(:note) { Events::NoteOnDataSource.where(insight: false).last }
   let(:insightful_note) { Events::NoteOnDataSource.where(insight: true).last }
   let(:workspace) { workspaces(:public) }
-  let(:note_on_workspace) { Events::NoteOnWorkspace.first }
+  let(:note_on_workspace) { events(:note_on_workspace) }
 
   before do
     log_in user

@@ -429,6 +429,7 @@ describe GreenplumConnection, :greenplum_integration do
         it_should_behave_like "a well-behaved database query"
 
         it "does not include external tables" do
+
           connection.datasets(:tables_only => true).select {|dataset| dataset[:name] =~ /external/}.should be_empty
         end
       end
