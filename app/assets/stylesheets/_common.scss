@@ -163,8 +163,8 @@ $required-marker-color: $error;
 
 // Notification colors 
 // AKA Messaging
+// used for various alerts and errors encountered while doing stuff
 $error-background-color: $fire-engine-red;
-$error-color: #FFFFFF;
 $error-text-color: #FFFFFF;
 $error-tooltiptext-color: #FFFFFF;
 $error-icon-color: #991111;
@@ -177,6 +177,14 @@ $alert-color: $needs-attention;
 $alert-background-color: $needs-attention;
 $alert-marker-color: #B24E11;
 $alert-text-color: $core-white;
+
+// HARD ERRORS
+// 404-like
+$hardError-background-color: $fire-engine-red;
+$hardError-text-color: #EEEEEE;
+$hardError-icon-color: #EEEEEE;
+
+
 
 
 // Dimensions

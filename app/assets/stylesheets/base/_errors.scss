@@ -15,8 +15,8 @@
         
         li {
             padding: 10px 10px 10px 16px;
-            color: $error-color;
-            font-size: 14px;
+            color: $error-text-color;
+            font-size: $medium-font;
 
         }
     }
@@ -26,8 +26,8 @@
         display: inline-block;
         float: right;
         margin: 0 10px;
-        font-size: 14px;
-        color: white;
+        font-size: $medium-font;
+        color: $core-white;
         padding-top: 10px;
     }
 }
@@ -61,7 +61,7 @@ textarea.has_error,
 
 .error_detail {
     background: red;
-    color: white;
+    color: $core-white;
 }
 
 .ie9, .ie8, .ie7 {

@@ -1,24 +1,43 @@
 @import "_common";
+@import "compass/css3/border-radius";
 
 /* used for the 404-like errors in the app */
-/* goes with error.hbs */
+/* goes with error.hbs. */
+/* different from ordinary errors and alerts */
 
 .error_box {
-   
     position: relative;
     top: 140px;
 
-    border: $border-canon;
-    
     width: $default-dialog-width;
-    
     margin-left: auto;
     margin-right: auto;
+    padding: $dialog-padding;
 
-    .title {
-        padding: 10px;
-        background-color: $error-background-color;
-        color: $error-color;
+    border: $border-canon; 
+    background-color: $core-white;
+
+    font-size: $medium-font;
+    font-weight: $semibold;
+    color: $default-font-color;
+    
+    .heading {
+        padding: 10px 10px 15px 20px;
+        background-color: $hardError-background-color;
+        @include border-radius(1px);
+        
+        color: $hardError-text-color;
+        
+        &::before {
+            display: inline-block;
+            position: relative;
+            left: -10px;
+            top: 3px;
+            color: $hardError-icon-color;
+            font-size: 22px;
+            font-family: FontAwesome;
+            content: "\f06a";  /* fa-exclamation-circle */
+        }
     }
 
     .content{
@@ -27,16 +46,13 @@
         }
     }
 
-    .controls {
-        padding: 25px;
+    .text_tip {
+        margin-top: 30px;
+        border: 1px solid #e3e3e1;
+    }
 
-        button {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            font-size: 12px;
-            font-weight: $semibold;
-        }
+    .choices {
+        margin-top: 15px;
     }
 
 }
