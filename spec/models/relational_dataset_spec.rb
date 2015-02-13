@@ -35,7 +35,7 @@ describe RelationalDataset do
 
     describe "workspace_ids" do
       let(:workspace) { workspaces(:search_public) }
-      let(:chorus_view) { datasets(:searchquery_chorus_view) }
+      let(:chorus_view) { datasets(:a_searchquery_chorus_view) }
 
       it "includes the id of all associated workspaces" do
         chorus_view.found_in_workspace_id.should include(workspace.id)

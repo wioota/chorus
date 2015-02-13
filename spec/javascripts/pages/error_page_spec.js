@@ -22,8 +22,8 @@ describe("chorus.pages.ErrorPage", function() {
         expect(this.page.$('.content')).toContainText(this.page.pageOptions.message);
     });
 
-    it("has the translations for the option to go to home", function() {
-        expect(this.page.$('.link_home')).toContainTranslation("application.message.choicenext.link.home");
+    it("has the translations for the link to home", function() {
+        expect(this.page.$('.link_home')).toContainTranslation("application.errormessage.choicenext.link.home");
     });
 
     it("navigates to the homepage by clicking the link to home", function() {

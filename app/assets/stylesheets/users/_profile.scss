@@ -39,6 +39,8 @@
 img.profile {
     @include profile_image;
     border-radius: 5px;
+    
+    object-fit: cover;
 }
 
 .icon img.profile,

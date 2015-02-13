@@ -1,9 +1,15 @@
 <div class="spinner_container">
-    <img  class="hidden" {{#if hasImage}}src="{{imageUrl}}" {{/if}}/>
+    <img class="hidden profile" {{#if hasImage}}src="{{imageUrl}}" {{/if}}/>
 </div>
 <div class="file-wrapper">
     {{#if editable}}
-        <a class="action">{{#if hasImage}}{{t changeImageKey}}{{else}}{{t addImageKey}}{{/if}}</a>
+        <a class="action">
+            {{#if hasImage}}
+                {{t changeImageKey}}
+            {{else}}
+                {{t addImageKey}}
+            {{/if}}
+        </a>
     {{/if}}
     <input id="image_upload_input" class="file-input" type="file"
            {{#unless editable}}

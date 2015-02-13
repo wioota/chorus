@@ -29,6 +29,11 @@ $greyish-yellow:    rgb(204, 204, 200);
 $light-grey-yellow: rgb(243, 243, 241);
 $light-gray:        rgb(234, 238, 241);
 $shadow-gray:		darken($light-gray, 11%);
+
+
+// neutral greys
+$neutral-light-grey: #E0E0E0;
+
 $charcoal:          #464646;
 $black:             #000000;
 $core-white:		#FFFFFF;
@@ -157,9 +162,12 @@ $content-header-link-color: $color-text4;
 $required-marker-color: $error;
 
 
+<<<<<<< HEAD
 // MESSAGING colors 
 // AKA Notifications
+// used for various alerts and errors encountered while doing stuff
 /* $error-background-color: #EF9A8F; */
+/* $error-background-color: $fire-engine-red; */
 $error-background-color: #F4DCD8;
 $error-text-color: #661111;
 $error-tooltiptext-color: $core-white;
@@ -186,6 +194,13 @@ $success-color: $ok;
 $success-background-color: $ok;
 $success-icon-color: $ok;
 
+// HARD ERRORS
+// 404-like
+$hardError-background-color: $fire-engine-red;
+$hardError-text-color: #EEEEEE;
+$hardError-icon-color: #EEEEEE;
+
+
 
 // Dimensions
 $sidebar-width : 266px;
@@ -201,6 +216,8 @@ $default-padding-horizontal: 5px;
 $margin-x : 10px;
 $guts-padding: 7px;
 $guts-padding-bottom: 15px;
+
+// default sizing for the user profile image
 $user-detail-image-width: 150px;
 
 /* small size icons, such as for workfiles */
@@ -533,7 +550,6 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin database-column-type {
     @include debugging-mixin;
-
     font-size: 12px;
     font-weight: normal;
 	color: $color-text2;

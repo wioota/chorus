@@ -1,0 +1,21 @@
+production:
+  adapter: jdbcpostgresql
+  encoding: unicode
+  database: chorus
+  username: postgres_chorus
+  password: 33bf1e143b8bc205571fccd70b4bc034
+  min_messages: warning
+  host: 127.0.0.1
+  port: 8543
+  pool: 40
+
+development:
+  adapter: jdbcpostgresql
+  encoding: unicode
+  database: chorus
+  username: postgres_chorus
+  password: 33bf1e143b8bc205571fccd70b4bc034
+  min_messages: warning
+  host: 127.0.0.1
+  port: 8543
+  pool: 40

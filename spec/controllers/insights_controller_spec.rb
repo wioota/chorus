@@ -303,10 +303,10 @@ describe InsightsController do
         :promotion_time => Time.current(),
         :promoted_by => user) }
 
-    it "presents the insights" do
+    it "presents the insights with caching" do
       mock_present do |models, ignored, options|
         models.should include(insight)
-        options.should == {:activity_stream => true}
+        options.should == {:activity_stream => true, :cached => true, :namespace => "workspace:insights"}
       end
       get :index, :entity_type => 'dashboard'
       response.code.should == "200"

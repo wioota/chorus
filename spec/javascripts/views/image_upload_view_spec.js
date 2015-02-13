@@ -40,7 +40,7 @@ describe("chorus.views.ImageUpload", function() {
             });
 
             it("displays the link with the 'add image' text", function() {
-                expect(this.view.$("a.action").text()).toMatchTranslation(this.view.addImageKey);
+                expect(this.view.$("a.action").text()).toContainTranslation(this.view.addImageKey);
             });
 
             it("does assign a 'src' attribute to the image", function() {
@@ -59,7 +59,7 @@ describe("chorus.views.ImageUpload", function() {
             });
 
             it("displays the link with the 'change image' text", function() {
-                expect(this.view.$("a.action").text()).toMatchTranslation(this.view.changeImageKey);
+                expect(this.view.$("a.action").text()).toContainTranslation(this.view.changeImageKey);
             });
 
             it("displays an image with the model's fetchImageUrl", function() {

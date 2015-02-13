@@ -18,7 +18,7 @@ describe TableCopier do
   context "stubbed db" do
     let(:user) { "some guy" }
     let(:account) { "some guy's account" }
-    let(:source_dataset) { datasets(:table) }
+    let(:source_dataset) { datasets(:default_table) }
     let(:destination_schema) { schemas(:default) }
     let(:destination_table_name) { "hello" }
     let(:destination_connection) { Object.new }
@@ -130,7 +130,7 @@ describe TableCopier do
 
   describe "cancel" do
     let(:import) do
-      imports(:one).tap { |imp| imp.update_attribute(:to_table, datasets(:table).name) }
+      imports(:one).tap { |imp| imp.update_attribute(:to_table, datasets(:default_table).name) }
     end
 
     it "cancels the CancelableQuery" do
