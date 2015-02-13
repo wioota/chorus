@@ -1,4 +1,5 @@
 @import "_common";
+@import "compass/css3/border-radius";
 
 /* used for the 404-like errors in the app */
 /* goes with error.hbs */
@@ -15,7 +16,6 @@
 
     border: $border-canon; 
     background-color: $core-white;
-    border: $border-canon;
 
     font-size: $medium-font;
     font-weight: $semibold;
@@ -25,6 +25,8 @@
     .heading {
         padding: 10px 10px 15px 20px;
         background-color: $error-background-color;
+        @include border-radius(1px);
+        
         color: $error-text-color;
         
         &::before {
@@ -37,7 +39,6 @@
             font-family: FontAwesome;
             content: "\f06a";   /* fa-exclamation-circle */
         }
-            
     }
 
     .content{
