@@ -3,6 +3,8 @@ require 'net/ldap'
 module LdapClient
   LdapNotEnabled = Class.new(StandardError)
   LdapNotCorrectlyConfigured = Class.new(StandardError)
+  LdapCouldNotBindWithUser = Class.new(StandardError)
+  LdapCouldNotFindMember = Class.new(StandardError)
   extend self
 
   def enabled?
@@ -32,7 +34,7 @@ module LdapClient
     end
   end
 
-  # used to login to Chorus as an LDAP user. Ugly if-structure for backwards-compatibility
+  # used to login to Chorus as an LDAP user. First if-block is for backwards-compatibility
   def authenticate(username, password)
     ldap = client
 
@@ -50,11 +52,20 @@ module LdapClient
         :password => password
       )
 
-      if user_entries && user_dn_in_user_group?(user_entries.first.dn)
-        return user_entries.first
-      else
-        return nil
+      if !user_entries
+        raise LdapCouldNotBindWithUser.new(
+                  "Could not authenticate with user #{username} in #{config['user_search_base']} using filter #{config['user_search_filter']}"
+              )
       end
+
+      if config['group_search_base'].present? && !user_dn_in_user_group?(user_entries.first.dn)
+        raise LdapCouldNotFindMember.new(
+                  "Could not find membership for #{user_entries.first.dn} "\
+                  "in group base #{config['group_search_base']} with filter #{config['group_search_filter']}"
+              )
+      end
+
+      user_entries.first
     end
   end
 
@@ -62,27 +73,26 @@ module LdapClient
     ldap = client
 
     group_search_base = config['group_search_base']
-    group_search_filter = config['group_search_filter']
+    group_search_filter = config['group_search_filter'] # TODO: try to use group_search_filter, revert to
 
     user_groups = config['user_groups'].split(',').map(&:strip)
 
     if ldap.bind
 
       user_groups.each do |group_cn| # search for each group name in the LDAP tree
-
         filter = Net::LDAP::Filter.eq 'cn', group_cn
         results = ldap.search :base => group_search_base, :filter => filter
 
         results.each do |group| # if we find a group, see if our user_dn is a member of that group
-
           return true if group[:member].any?{|dn| dn.include?(user_dn)}
         end
       end
 
+      return false
     else
+      error = ldap.get_operation_result
       Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
       raise LdapNotCorrectlyConfigured.new(error.message)
-      # throw error: Could not bind with LDAP server with the credentials supplied in the chorus.properties file
     end
   end
 
