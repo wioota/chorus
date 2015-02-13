@@ -2,10 +2,10 @@
 @import "compass/css3/border-radius";
 
 /* used for the 404-like errors in the app */
-/* goes with error.hbs */
+/* goes with error.hbs. */
+/* different from ordinary errors and alerts */
 
 .error_box {
-   
     position: relative;
     top: 140px;
 
@@ -19,25 +19,24 @@
 
     font-size: $medium-font;
     font-weight: $semibold;
-    line-height: 16px;
     color: $default-font-color;
     
     .heading {
         padding: 10px 10px 15px 20px;
-        background-color: $error-background-color;
+        background-color: $hardError-background-color;
         @include border-radius(1px);
         
-        color: $error-text-color;
+        color: $hardError-text-color;
         
         &::before {
             display: inline-block;
             position: relative;
             left: -10px;
             top: 3px;
-            color: $error-icon-color;
+            color: $hardError-icon-color;
             font-size: 22px;
             font-family: FontAwesome;
-            content: "\f06a";   /* fa-exclamation-circle */
+            content: "\f06a";  /* fa-exclamation-circle */
         }
     }
 
@@ -49,7 +48,7 @@
 
     .text_tip {
         margin-top: 30px;
-         border: 1px solid #e3e3e1;
+        border: 1px solid #e3e3e1;
     }
 
     .choices {
