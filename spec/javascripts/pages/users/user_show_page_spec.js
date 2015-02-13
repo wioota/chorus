@@ -48,10 +48,12 @@ describe("chorus.pages.UserShow", function() {
         });
 
         context("breadcrumbs", function() {
+
 //             it("links to home for the first crumb", function() {
 //                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");
 //                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).text()).toBe(t("breadcrumbs.home"));
 //             });
+
 
             it("links to /users for the #1 crumb", function() {
                 expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/users");

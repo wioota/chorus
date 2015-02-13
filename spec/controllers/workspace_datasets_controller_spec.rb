@@ -7,7 +7,7 @@ describe WorkspaceDatasetsController do
     let(:user) { users(:the_collaborator) }
     let(:workspace) { workspaces(:public) }
     let(:gpdb_view) { datasets(:view) }
-    let(:gpdb_table) { datasets(:table) }
+    let(:gpdb_table) { datasets(:default_table) }
     let(:other_table) { datasets(:other_table) }
     let(:source_table) { datasets(:source_table) }
     let(:source_view) { datasets(:source_view) }

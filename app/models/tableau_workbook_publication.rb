@@ -1,9 +1,9 @@
 class TableauWorkbookPublication < ActiveRecord::Base
   attr_accessible :dataset_id, :name, :workspace_id, :project_name
 
-  belongs_to :dataset
-  belongs_to :workspace
-  belongs_to :linked_tableau_workfile
+  belongs_to :dataset, :touch => true
+  belongs_to :workspace, :touch => true
+  belongs_to :linked_tableau_workfile, :touch => true
 
   after_create :create_created_event
 

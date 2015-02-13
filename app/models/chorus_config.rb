@@ -26,6 +26,15 @@ class ChorusConfig
     nil
   end
 
+
+   def with_temporary_config(new_config_hash)
+     old_config = @config.deep_dup
+     @config.deep_merge! new_config_hash.stringify_keys
+     yield
+   ensure
+     @config = old_config
+   end
+
   def hdfs_versions
     @available_hdfs_versions ||= initialize_hdfs_versions
   end

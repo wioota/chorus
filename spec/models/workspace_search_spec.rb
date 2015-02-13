@@ -74,7 +74,7 @@ describe WorkspaceSearch do
     let(:workspace) { workspaces(:search_public) }
     let(:workfile) { workfiles(:search_public) }
     let(:matching_table) { datasets(:searchquery_table) }
-    let(:matching_view) { datasets(:searchquery_chorus_view) }
+    let(:matching_view) { datasets(:a_searchquery_chorus_view) }
     let(:typeahead_dataset) { datasets(:typeahead_gpdb_table) }
     let(:hdfs_dataset) { datasets(:searchquery_hadoop) }
     before do

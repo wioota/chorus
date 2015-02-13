@@ -233,6 +233,6 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
     ellipsize: function (name) {
         if (!name) return "";
         var length = 15;
-        return (name.length < length) ? name : name.slice(0, length-3).trim() + "...";
+        return (name.length < length) ? name : name.slice(0, length-3).trim() + "…";
     }
 });

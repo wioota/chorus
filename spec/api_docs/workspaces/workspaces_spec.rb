@@ -12,7 +12,7 @@ resource "Workspaces" do
   let(:database_id) { database.id }
   let(:sandbox) { dataset.schema }
   let(:sandbox_id) { sandbox.id }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
   let(:dataset_id) { dataset.to_param }
 
   before do

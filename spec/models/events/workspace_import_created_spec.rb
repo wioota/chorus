@@ -6,7 +6,7 @@ describe Events::WorkspaceImportCreated do
   let(:source_dataset) { datasets(:other_table) }
   let(:workspace) { workspaces(:public) }
   let(:actor) { users(:default) }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
   let!(:workspace_association) { workspace.source_datasets << source_dataset }
   subject do
     Events::WorkspaceImportCreated.add(
@@ -31,7 +31,7 @@ describe Events::WorkspaceImportCreated do
                          :workspace => workspaces(:public),
                          :to_table => "new_table_for_import",
                          :created_at => '2012-09-03 23:00:00-07',
-                         :source => datasets(:table))
+                         :source => datasets(:default_table))
       import.save!(:validate => false)
       import
     end

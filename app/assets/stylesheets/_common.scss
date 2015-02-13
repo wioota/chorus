@@ -29,6 +29,11 @@ $greyish-yellow:    rgb(204, 204, 200);
 $light-grey-yellow: rgb(243, 243, 241);
 $light-gray:        rgb(234, 238, 241);
 $shadow-gray:		darken($light-gray, 11%);
+
+
+// neutral greys
+$neutral-light-grey: #E0E0E0;
+
 $charcoal:          #464646;
 $black:             #000000;
 $core-white:		#FFFFFF;
@@ -201,6 +206,8 @@ $default-padding-horizontal: 5px;
 $margin-x : 10px;
 $guts-padding: 7px;
 $guts-padding-bottom: 15px;
+
+// default sizing for the user profile image
 $user-detail-image-width: 150px;
 
 /* small size icons, such as for workfiles */
@@ -533,7 +540,6 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin database-column-type {
     @include debugging-mixin;
-
     font-size: 12px;
     font-weight: normal;
 	color: $color-text2;

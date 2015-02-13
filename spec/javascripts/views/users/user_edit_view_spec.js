@@ -165,7 +165,7 @@ describe("chorus.views.userEdit", function() {
             });
 
             it("shows the correct action text on image upload", function() {
-                expect(this.view.$(".image_upload a.action").text()).toMatchTranslation("users.edit_photo");
+                expect(this.view.$(".image_upload a.action").text()).toContainTranslation("user.profile_change_avatar_image");
             });
         });
 

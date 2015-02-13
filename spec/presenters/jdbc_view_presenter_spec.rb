@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe JdbcViewPresenter, :type => :view do
-  let(:table) { datasets(:table) }
+  let(:table) { datasets(:default_table) }
   let(:presenter) { JdbcViewPresenter.new(table, view) }
 
   before(:each) do

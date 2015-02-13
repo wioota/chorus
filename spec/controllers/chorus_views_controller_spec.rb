@@ -7,7 +7,7 @@ describe ChorusViewsController, :greenplum_integration do
   let(:database) { GreenplumIntegration.real_database }
   let(:schema) { database.schemas.find_by_name('test_schema') }
   let(:workspace) { workspaces(:public) }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
   let(:workfile) { workfiles(:public) }
 
   before do

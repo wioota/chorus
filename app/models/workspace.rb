@@ -58,7 +58,7 @@ class Workspace < ActiveRecord::Base
 
   after_update :solr_reindex_later, :if => :public_changed?
   # PT 12/19/14 This will auto-refresh the JSON data object for workspace
-  after_update :refresh_cache
+  after_save :delete_cache
 
   attr_accessor :highlighted_attributes, :search_result_notes
   searchable_model do
@@ -83,12 +83,19 @@ class Workspace < ActiveRecord::Base
     ]
   end
 
-  def refresh_cache
-    Chorus.log_debug "Refreshing cache for workspace with ID = #{self.id}"
-
-    json_data = render :partial => 'workspaces/workspace', :layout => false, :locals => {:workspace => self, :user => self.owner, :options => {}}
-    Rails.cache.write ["jbuilder/#{self.owner.id}", self], JSON.parse(json_data)
+  def delete_cache
+    #Fix for 87339340. Avoid searching for cache if the record is newly created and does have an ID before saving to database.
+    if self.id != nil && current_user != nil
+      cache_key = "home:workspaces/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
+      Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with cache key = #{cache_key} --"
+      Rails.cache.delete(cache_key)
+      cache_key = "workspaces:workspaces/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
+      Rails.cache.delete(cache_key)
+      #Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
+      return true
+    end
   end
+
 
   def solr_reindex_later
     QC.enqueue_if_not_queued('Workspace.reindex_workspace', id)
