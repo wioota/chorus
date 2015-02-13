@@ -23,7 +23,7 @@ describe("chorus.pages.ErrorPage", function() {
     });
 
     it("has the translations for the link to home", function() {
-        expect(this.page.$('.link_home')).toContainTranslation("application.errormessage.choicenext.link.home");
+        expect(this.page.$('.link_home')).toContainTranslation("application.error_message.choicenext.link.home");
     });
 
     it("navigates to the homepage by clicking the link to home", function() {
