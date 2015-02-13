@@ -37,7 +37,6 @@ describe("chorus.pages.UserEditPage", function() {
 
         context("breadcrumbs", function() {
 
-
             it("links to /users for the #1 crumb", function() {
                 expect(this.view.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/users");
                 expect(this.view.$("#breadcrumbs .breadcrumb a").eq(0).text()).toBe(t("breadcrumbs.users"));
