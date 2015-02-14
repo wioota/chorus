@@ -1,3 +1,50 @@
+/* ********** */
+/* errors, messages, etc in dialogs          */
+/* also alerts - which are messaging dialogs */
+/* ********** */
+
+$alert-border-radius: 3px;
+
+$alert-icon-large: 22px;
+$alert-icon-medium: 16px;
+$alert-icon-small: 12px;
+
+
+@mixin alert-error-icon {
+    font-family: FontAwesome;
+    content: "\f06a";   /* fa-exclamation-circle */
+}
+
+@mixin alert-warning-icon {
+    font-family: FontAwesome;
+    content: "\f071";   /* fa-exclamation-triangle */
+}
+
+@mixin alert-success-icon {
+    font-family: FontAwesome;
+    content: "\f058";   /* fa-check-circle */
+}
+
+@mixin alert-informational-icon {
+    font-family: FontAwesome;
+    content: "\f06a";   /* fa-exclamation-circle */
+}
+
+
+@mixin alert-marker {
+	&::after {
+		display: inline-block;
+		width: 0;
+		height: 0;
+		position: relative;
+		right: 19px;
+		top: 1px;
+		color: $alert-icon-color;
+		font-size: $alert-icon-medium;
+		@include alert-error-icon;
+	}
+}
+
 .errors,
 .sql_errors,
 .dataset_errors,
@@ -36,6 +83,13 @@
     background-color: $needs-attention;
 }
 
+/* user input: named error BUT in meaning is as alert */
+
+/* TODO */
+/* need to figure out how to use the FA glyph for all form fields */
+/* cant seem to find a way to use it as the background */
+/* so how then... */
+
 input.has_error,
 textarea.has_error,
 .text-core .text-wrap textarea.has_error,
@@ -53,7 +107,7 @@ textarea.has_error,
 
     border: 2px solid $error-background-color !important;
     @include border-radius(1px);
-
+    
     background-image: url("/images/messaging/error-exclamation.png");
     background-repeat: no-repeat;
     background-position: 99%;
