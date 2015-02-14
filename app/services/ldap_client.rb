@@ -38,7 +38,7 @@ module LdapClient
   def authenticate(username, password)
     ldap = client
 
-    if config['user_search_base'].nil? #old way...TODO: ask prakash the best way to check this
+    if !LdapConfig.exists?
 
       ldap = client
       ldap.auth make_dn(username), password
@@ -57,6 +57,7 @@ module LdapClient
                   "Could not authenticate with user #{username} in #{config['user_search_base']} using filter #{config['user_search_filter']}"
               )
       end
+
 
       if config['group_search_base'].present? && !user_dn_in_user_group?(user_entries.first.dn)
         raise LdapCouldNotFindMember.new(
@@ -134,6 +135,10 @@ module LdapClient
   end
 
   def config
-    ChorusConfig.instance['ldap'] || {}
+    if LdapConfig.exists?
+      LdapConfig.instance['ldap'] || {}
+    else
+      ChorusConfig.instance['ldap'] || {}
+    end
   end
 end
