@@ -84,8 +84,9 @@
         background-color: $progress-bar-full-background-color;
     }
 
-    .sub_content {
-        overflow: auto;
-        max-height: 380px;
-    }
+/* retiring this class */ /* TODO to be removed when final */
+/*     .sub_content { */
+/*         overflow: auto; */
+/*         max-height: 380px; */
+/*     } */
 }

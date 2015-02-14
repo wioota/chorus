@@ -1,13 +1,18 @@
+@import "compass/css3/box-sizing";
+
 /* general dialog styles */
 
 /* .girdle wraps the content of the dialog popup */
 /* and sets the overall margins for the content area */
 .popup .girdle {
-    padding: 10px $dialog-padding 0 $dialog-padding;
+    padding: 10px $dialog-padding $dialog-padding $dialog-padding;
     border: none;
-    
+
+    @include box-sizing(border-box);
+    overflow-y: auto;
+
     /* development: to delete */
-/*     border: 1px dotted #C33; */
+    border: 1px dotted #C33;
     /* END development: to delete */
 }
 
@@ -26,7 +31,7 @@
         color: rgb(88, 89, 95);
         @include uppercase;
         vertical-align: middle;
-        margin: 0 $dialog-padding;
+        margin: 0;
         padding-right: 25px;
         @include ellipsis;
     }
@@ -95,9 +100,11 @@
             border-bottom: $border-canon;
         }
 
-        .sub_content {
-            padding: 10px $dialog-padding;
-        }
+/* retiring this class */ /* to be removed when final */
+/*         .sub_content { */
+/*             padding: 10px $dialog-padding; */
+/*         } */
+
 
         .loading_section {
             padding: 20px;

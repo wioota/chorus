@@ -9,8 +9,11 @@
 /* * */
 /* .form_controls= the 'footer' section at bottom of dialogs with the buttons */
 /* * */
-.popup .form_controls {
+.popup #dialog_bottom {
     height: 50px;
+}
+
+.popup .form_controls {
     background-color: $dialog-header-background;
     border-top: $border-canon;
 
@@ -19,7 +22,10 @@
          @include vertical-align;
     }
 
-    .links { margin-left: 14px; float: left; }
+    .links {
+        margin-left: 14px;
+        float: left;
+    }
 }
 
 .form_controls {

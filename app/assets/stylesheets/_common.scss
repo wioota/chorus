@@ -178,12 +178,23 @@ $alert-background-color: $needs-attention;
 $alert-marker-color: #B24E11;
 $alert-text-color: $core-white;
 
+$warning-color: $needs-attention;
+$warning-background-color: $needs-attention;
+$warning-icon-color: #B24E11;
+/* $warning-text-color: $core-white; */
+
+$informational-color: $needs-attention;
+$informational-background-color: $needs-attention;
+
+$success-color: $ok;
+$success-background-color: $ok;
+$success-icon-color: $ok;
+
 // HARD ERRORS
 // 404-like
 $hardError-background-color: $fire-engine-red;
 $hardError-text-color: #EEEEEE;
 $hardError-icon-color: #EEEEEE;
-
 
 
 
@@ -741,7 +752,6 @@ $lozenge-color-selected-dark: $brand-dark;
         &:hover .lozenge {
             //background: $lozenge-color-selected;
         }
-
         .lozenge {
             //background: $lozenge-color-selected;
             color: #FFFFFF;

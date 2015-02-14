@@ -41,6 +41,8 @@ textarea.has_error,
 .text-core .text-wrap textarea.has_error,
 .text-core .text-wrap input.has_error {
     border: 2px solid $error-background-color;
+    @include border-radius(1px);
+
     background-image: url("/images/messaging/error-exclamation.png");
     background-repeat: no-repeat;
     background-position: 99%;
@@ -48,7 +50,10 @@ textarea.has_error,
 }
 
 .cleditorMain.has_error {
+
     border: 2px solid $error-background-color !important;
+    @include border-radius(1px);
+
     background-image: url("/images/messaging/error-exclamation.png");
     background-repeat: no-repeat;
     background-position: 99%;
