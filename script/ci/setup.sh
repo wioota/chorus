@@ -8,7 +8,8 @@ fi
 
 ./install-ruby.sh
 eval "$(rbenv init - --no-rehash)"
-rbenv shell `cat .rbenv-version`
+#rbenv shell `cat .rbenv-version`
+rbenv shell `cat .ruby-version`
 
 gem list bundler | grep bundler || gem install bundler
 bundle install --binstubs=b/ || (echo "bundler failed!!!!!!!!" && exit 1)

@@ -102,6 +102,7 @@ describe("chorus.Modal", function() {
 
                 it("with no arguments, uses window.height and sets interior Height", function() {
                     this.modal.resize();
+
                     // calculate modal height by total window height - (2 * top.position)
                     // top position defined to = 40px
                     var windowHeight = $(window).height() - 80 + "px";

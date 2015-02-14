@@ -158,17 +158,16 @@ $type-ahead-result-border-color: #A5A6A8;
 // Text colors
 
 $content-header-link-color: $color-text4;
-
 $required-marker-color: $error;
 
 
-<<<<<<< HEAD
-// MESSAGING colors 
-// AKA Notifications
+// Notification colors 
+// AKA Messaging
 // used for various alerts and errors encountered while doing stuff
 /* $error-background-color: #EF9A8F; */
 /* $error-background-color: $fire-engine-red; */
 $error-background-color: #F4DCD8;
+/* $error-text-color: #FFFFFF; */
 $error-text-color: #661111;
 $error-tooltiptext-color: $core-white;
 $error-icon-color: #991111;
