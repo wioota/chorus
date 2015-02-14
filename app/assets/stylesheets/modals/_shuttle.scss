@@ -61,6 +61,7 @@ $shuttle-list-item-height: 40px;
         .selected_count {
             padding-left: 5px;
         }
+
     }
 
     .fa-stack .fa-check {
@@ -73,13 +74,13 @@ $shuttle-list-item-height: 40px;
     }
 
     a {
-        font-size: 12px;
+        font-size: $small-font;
     }
 
     .was_added {
         color: $color-text3;
         float: right;
-        font-size: 12px;
+        font-size: $small-font;
     }
 
     li a {
@@ -111,7 +112,6 @@ $shuttle-list-item-height: 40px;
         li {
             height: $shuttle-list-item-height;
             border-bottom: $border-canon;
-            /* padding: 0 8px; */
             padding: 0;
             line-height: $shuttle-list-item-height - 3px;
 
@@ -187,7 +187,3 @@ $shuttle-list-item-height: 40px;
         }
     }
 }
-
-/* .dialog.workspace_edit_members .dialog_content .form_controls { */
-/*      margin-top: 0px; */
-/* } */
