@@ -80,11 +80,12 @@ module LdapClient
     if ldap.bind
 
       user_groups.each do |group_cn| # search for each group name in the LDAP tree
+
         filter = Net::LDAP::Filter.eq 'cn', group_cn
         results = ldap.search :base => group_search_base, :filter => filter
 
         results.each do |group| # if we find a group, see if our user_dn is a member of that group
-          return true if group[:member].any?{|dn| dn.include?(user_dn)}
+          return true if group[:member].any?{|dn| dn.casecmp(user_dn)}
         end
       end
 
