@@ -3,7 +3,7 @@ chorus.Mixins.ClEditor = {
         
         // which controls should be available in the textarea
 //         var controls = ["bold", "italic", "bullets", "numbers", "link", "unlink"];
-        
+//        
         // instead of using the CLeditor built in toolbar, make a different toolbar of links
 //         $container.find(controlSelector).empty();
 //         _.each(controls, function(control, i) {
@@ -14,6 +14,7 @@ chorus.Mixins.ClEditor = {
 //             }
 //             $container.find("a." + control).unbind("click").bind("click", _.bind(this["onClickToolbar"+ _.capitalize(control)], $container));
 //         }, this);
+
         // END alt toolbar
         
         options = options || {};
