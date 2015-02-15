@@ -1,6 +1,8 @@
 chorus.Mixins.ClEditor = {
     makeEditor: function($container, controlSelector, inputName, options) {
         var controls = ["bold", "italic", "bullets", "numbers", "link", "unlink"];
+        
+        // instead of using the CLeditor built in toolbar, make a different toolbar of links
         $container.find(controlSelector).empty();
         _.each(controls, function(control, i) {
             var $controlContainer = $container.find(controlSelector);
@@ -10,7 +12,8 @@ chorus.Mixins.ClEditor = {
             }
             $container.find("a." + control).unbind("click").bind("click", _.bind(this["onClickToolbar"+ _.capitalize(control)], $container));
         }, this);
-
+        // END alt toolbar
+        
         options = options || {};
         var editorOptions = _.extend(options, {controls: "bold italic | bullets numbering | link unlink"});
         var editor = $container.find("textarea[name='"+ inputName +"']").cleditor(editorOptions)[0];
