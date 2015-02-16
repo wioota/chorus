@@ -5,7 +5,19 @@
 .legend_for_required {
     position: relative;
     top: 10px;
-/*     margin-top: 15px; */
+    /* margin-top: 15px; */
     font-size: $small-font;
-    color: #777;
+    color: #666;
+}
+
+
+.girdle {
+
+    /* default style for all form labels */
+    label {
+        display: inline-block;
+        margin-top: 8px;
+        margin-bottom: 1px;
+    }
+    
 }
