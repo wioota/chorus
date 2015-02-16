@@ -164,9 +164,10 @@ $required-marker-color: $error;
 // Notification colors 
 // AKA Messaging
 // used for various alerts and errors encountered while doing stuff
-$error-background-color: $fire-engine-red;
-$error-text-color: #FFFFFF;
-$error-tooltiptext-color: #FFFFFF;
+/* $error-background-color: #EF9A8F; */
+$error-background-color: #F4DCD8;
+$error-text-color: #661111;
+$error-tooltiptext-color: $core-white;
 $error-icon-color: #991111;
 
 $notification: $bright-turquoise;

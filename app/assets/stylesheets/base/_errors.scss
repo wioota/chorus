@@ -64,6 +64,7 @@ $alert-icon-small: 12px;
             padding: 10px 10px 10px 16px;
             color: $error-text-color;
             font-size: $medium-font;
+            vertical-align: top;
 
         }
     }
@@ -78,6 +79,18 @@ $alert-icon-small: 12px;
         padding-top: 10px;
     }
 }
+/*     .action { */
+/*         font-weight: normal; */
+/*         display: inline-block; */
+/*         float: right; */
+/*         margin: 0 10px; */
+/*         font-size: $medium-font; */
+/*         color: white; */
+/*         padding-top: 10px; */
+/*     } */
+
+
+.error_block {}
 
 .warning {
     background-color: $needs-attention;
@@ -105,7 +118,7 @@ textarea.has_error,
 
 .cleditorMain.has_error {
 
-    border: 2px solid $error-background-color !important;
+    border: 2px solid $alert-background-color !important;
     @include border-radius(1px);
     
     background-image: url("/images/messaging/error-exclamation.png");
