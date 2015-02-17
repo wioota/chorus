@@ -208,7 +208,7 @@ describe("chorus.models.Dataset", function() {
                     _.each(subMap, function(filename, objectType) {
 
                         var model = backboneFixtures.dataset({ entitySubtype: type, objectType: objectType});
-                        expect(model.iconUrl({ size: "medium" })).toBe("/images/" + filename);
+                        expect(model.iconUrl({ size: "medium" })).toBe("/images/data_sets/" + filename);
 
                     });
                 });
@@ -221,7 +221,7 @@ describe("chorus.models.Dataset", function() {
                     _.each(subMap, function(filename, objectType) {
 
                         var model = backboneFixtures.dataset({ entitySubtype: type, objectType: objectType});
-                        expect(model.iconUrl({ size: "large" })).toBe("/images/" + filename);
+                        expect(model.iconUrl({ size: "large" })).toBe("/images/data_sets/" + filename);
 
                     });
                 });
@@ -234,7 +234,7 @@ describe("chorus.models.Dataset", function() {
                     _.each(subMap, function(filename, objectType) {
 
                         var model = backboneFixtures.dataset({ entitySubtype: type, objectType: objectType});
-                        expect(model.iconUrl()).toBe("/images/" + filename);
+                        expect(model.iconUrl()).toBe("/images/data_sets/" + filename);
 
                     });
                 });

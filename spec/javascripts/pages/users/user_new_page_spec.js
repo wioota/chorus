@@ -19,10 +19,10 @@ describe("chorus.pages.UserNewPage", function() {
         });
 
         it("has the correct breadcrumbs", function() {
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toHaveHref("#/");
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toContainTranslation("breadcrumbs.home");
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1)).toHaveHref("#/users");
-            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(1)).toContainTranslation("breadcrumbs.users");
+//             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toHaveHref("#/");
+//             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toContainTranslation("breadcrumbs.home");
+            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toHaveHref("#/users");
+            expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toContainTranslation("breadcrumbs.users");
             expect(this.page.$("#breadcrumbs .breadcrumb .slug")).toContainTranslation("breadcrumbs.new_user");
         });
 

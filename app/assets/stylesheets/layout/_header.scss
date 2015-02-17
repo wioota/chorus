@@ -140,7 +140,6 @@ $branding-opacity: 0.93;
                 }
 
                 &.active .caret::before {
-
                     /* when activating the menu, switch thecaret */
                     content:  "\f0d8";  // =  fa-caret-up
                 }
