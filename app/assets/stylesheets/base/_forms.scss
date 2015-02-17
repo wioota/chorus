@@ -10,13 +10,17 @@
     color: #666;
 }
 
-
 .girdle {
-
-    /* default style for all form labels = label on line above form element */
     label {
-        display: block;
         margin-top: 8px;
         margin-bottom: 1px;
+    }
+}
+
+.form_pair {
+
+    /* default for all form labels = label on line above form element */
+    label {
+        display: block;
     }
 }
