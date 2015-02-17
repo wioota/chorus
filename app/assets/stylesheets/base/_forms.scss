@@ -13,11 +13,10 @@
 
 .girdle {
 
-    /* default style for all form labels */
+    /* default style for all form labels = label on line above form element */
     label {
-        display: inline-block;
+        display: block;
         margin-top: 8px;
         margin-bottom: 1px;
     }
-    
 }
