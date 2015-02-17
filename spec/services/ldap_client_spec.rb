@@ -146,6 +146,7 @@ ldap:
   user_search_base: ou=Users,dc=example,dc=com
   user_groups: FirstGroup,SecondGroup
   group_search_base: ou=Groups,dc=example,dc=com
+  group_search_filter: (memberOf={0})
   attribute:
     uid: sAMAccountName
     ou: department
@@ -333,16 +334,18 @@ describe LdapClient do
             mock(ldap).bind { true }
           end
           stub(LdapClient).enabled? { true }
+          stub(LdapConfig).exists? { false }
 
           LdapClient.authenticate("testguy", "secret").should be_true
         end
       end
     end
 
-    context "when LDAP config has a user_search_group" do
+    context "when using the group LDAP authentication" do
       before do
         stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_GROUP_SEARCH_YML)['ldap']}
         stub(LdapClient).enabled? { true }
+        stub(LdapConfig).exists? { true }
       end
 
        it "trys to bind with the server with the correct user_search_base, filter, and password" do
@@ -355,8 +358,7 @@ describe LdapClient do
              [ OpenStruct.new({ :dn => "example_entry" }) ]
            end
          end
-
-         stub(LdapClient).user_dn_in_user_group? { true }
+         stub(LdapClient).user_in_user_group? { true }
          LdapClient.authenticate("example_user_dn", "secret")
        end
 
@@ -364,14 +366,14 @@ describe LdapClient do
         any_instance_of(Net::LDAP) do |ldap|
           stub(ldap).bind { true }
           mock(ldap).search.with_any_args.times(2) do |*args|
-            args[0][:base].should == "ou=Groups,dc=example,dc=com"
-            args[0][:filter].to_s.should =~ /FirstGroup|SecondGroup/
+            args[0][:base].should =~ /ou=Groups,dc=example,dc=com|uid=example_user,dc=example,dc=com/
+            args[0][:filter].to_s.should =~ /\(\|\(memberOf=uid=example,dc=com\)\)|\(cn=(FirstGroup|SecondGroup)/
 
-            [{ :member => ["uid=example,dc=com"] }]
+            [ OpenStruct.new({ :member => ["uid=example,dc=com"], :dn => "uid=example,dc=com" }) ]
           end
         end
 
-        LdapClient.user_dn_in_user_group?("example_user")
+        LdapClient.user_in_user_group?(OpenStruct.new( { :dn => "uid=example_user,dc=example,dc=com" }))
       end
 
       it "throws an error when LDAP can't bind to the server" do
@@ -379,7 +381,7 @@ describe LdapClient do
           stub(ldap).bind { false }
         end
 
-        expect { LdapClient.user_dn_in_user_group?("example_user") }.to raise_error(LdapClient::LdapNotCorrectlyConfigured)
+        expect { LdapClient.user_in_user_group?("example_user") }.to raise_error(LdapClient::LdapNotCorrectlyConfigured)
       end
 
       it "throws a bind error when it can't bind with the correct user" do
@@ -396,7 +398,7 @@ describe LdapClient do
             [ OpenStruct.new({ :dn => "example_entry" }) ]
           }
         end
-        stub(LdapClient).user_dn_in_user_group? { false }
+        stub(LdapClient).user_in_user_group? { false }
 
         expect { LdapClient.authenticate("example_user", "password") }.to raise_error(LdapClient::LdapCouldNotFindMember)
       end
