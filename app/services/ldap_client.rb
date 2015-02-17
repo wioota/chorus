@@ -58,8 +58,7 @@ module LdapClient
               )
       end
 
-
-      if config['group_search_base'].present? && !user_dn_in_user_group?(user_entries.first.dn)
+      if config['group_search_base'].present? && !user_in_user_group?(user_entries.first)
         raise LdapCouldNotFindMember.new(
                   "Could not find membership for #{user_entries.first.dn} "\
                   "in group base #{config['group_search_base']} with filter #{config['group_search_filter']}"
@@ -70,24 +69,47 @@ module LdapClient
     end
   end
 
-  def user_dn_in_user_group?(user_dn)
+  # looks for Group DN in User entry
+  def reverse_membership_lookup(user_entry, group_entries, ldap)
+    group_search_filter = config['group_search_filter']
+
+    # The inject block builds up a string of membership filters which are OR'd together to make the filter
+    membership_filters = group_entries.inject("") { |result, group_entry| result + "#{group_search_filter.gsub("{0}", group_entry.dn)}" }
+    complete_filter = "(|#{membership_filters})"
+
+    results = ldap.search :base => user_entry.dn, :filter => complete_filter
+    return results.present?
+  end
+
+  # looks for User DN in Group entries
+  def full_membership_lookup(user_entry, group_entries, ldap)
+    group_search_filter = config['group_search_filter']
+
+    group_entries.each do |group_entry| # if we find a group, see if our user_dn is a member of that group
+      filter = "#{group_search_filter.gsub('{0}', user_entry.dn)}"
+      results = ldap.search :base => group_entry.dn, :filter => filter
+      return true if results.present?
+    end
+    return false
+  end
+
+  # This method must support both reverse membership lookups and
+  # full membership lookups in order to support different implementations
+  # of LDAP
+  def user_in_user_group?(user_entry)
     ldap = client
-
     group_search_base = config['group_search_base']
-    group_search_filter = config['group_search_filter'] # TODO: try to use group_search_filter, revert to
-
-    user_groups = config['user_groups'].split(',').map(&:strip)
+    user_group_names = config['user_groups'].split(',').map(&:strip)
 
     if ldap.bind
 
-      user_groups.each do |group_cn| # search for each group name in the LDAP tree
-
+      user_group_names.each do |group_cn| # search for each group name in the LDAP tree
         filter = Net::LDAP::Filter.eq 'cn', group_cn
-        results = ldap.search :base => group_search_base, :filter => filter
 
-        results.each do |group| # if we find a group, see if our user_dn is a member of that group
-          return true if group[:member].any?{|dn| dn.casecmp(user_dn)}
-        end
+        # There may be many groups with the same CN but different DNs. We need to check them all
+        group_entries = ldap.search :base => group_search_base, :filter => filter
+
+        return reverse_membership_lookup(user_entry, group_entries, ldap) || full_membership_lookup(user_entry, group_entries, ldap)
       end
 
       return false
