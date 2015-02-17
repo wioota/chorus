@@ -160,14 +160,14 @@ $content-header-link-color: $color-text4;
 $required-marker-color: $error;
 
 
-// Notification colors 
-// AKA Messaging
-// used for various alerts and errors encountered while doing stuff
+// NOTIFICATION COLORS
+// AKA MESSAGING
+// used for various alerts and errors encountered in tasks
 /* $error-background-color: #EF9A8F; */
 $error-background-color: #F4DCD8;
 /* $error-text-color: #FFFFFF; */
 $error-text-color: #661111;
-$error-tooltiptext-color: $core-white;
+$error-tooltip-text-color: $core-white;
 $error-icon-color: #991111;
 
 $notification: $bright-turquoise;
@@ -184,12 +184,16 @@ $warning-background-color: $needs-attention;
 $warning-icon-color: #B24E11;
 /* $warning-text-color: $core-white; */
 
-$informational-color: $needs-attention;
-$informational-background-color: $needs-attention;
+$informational-color: $pacific-blue;
+$informational-background-color: $pacific-blue;
+$informational-icon-color: #B24E11;
+$informational-text-color: #333;
 
 $success-color: $ok;
 $success-background-color: $ok;
 $success-icon-color: $ok;
+
+$normal-tooltip-text-color: $core-white;
 
 // HARD ERRORS
 // 404-like
