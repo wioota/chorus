@@ -11,7 +11,7 @@
 
     Messenger.options = {
         extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
-        theme: 'future',
+        theme: 'flat',
         messageDefaults: {
             hideAfter: 3,
             showCloseButton: true,
@@ -21,8 +21,7 @@
 
     _.mixin(_.str.exports());
 
-    // make _.include use the method from underscore_string if
-    // its argument is a string.
+    // make _.include use the method from underscore_string if its argument is a string
     var collectionIncludeMethod = _.include;
     _.include = _.contains = function(collectionOrString) {
         if (_.isString(collectionOrString)) {
@@ -32,7 +31,7 @@
         }
     };
 
-    // set up string.trim if it doesn't exist.
+    // set up string.trim if it doesn't exist
     if (!_.isFunction(String.prototype.trim)) {
         String.prototype.trim = function() {
             return _.trim(this);
