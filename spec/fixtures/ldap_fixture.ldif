@@ -1,0 +1,233 @@
+dn: ou=Users,dc=example,dc=COM
+objectClass: organizationalUnit
+objectClass: top
+ou: Users 
+
+dn: OU=Groups,OU=Users,dc=example,dc=COM
+objectClass: organizationalUnit
+objectClass: top
+ou: Groups
+
+dn: cn=groupOne,OU=Groups,OU=Users,dc=example,dc=COM
+objectClass: groupOfNames
+cn: groupOne
+member: uid=aabrams,OU=Users,dc=example,dc=COM
+member: uid=cbrunato,OU=Users,dc=example,dc=COM
+member: uid=kmartinson,OU=Users,dc=example,dc=COM
+member: uid=rmason,OU=Users,dc=example,dc=COM
+member: uid=jkerby,OU=Users,dc=example,dc=COM
+member: uid=rturner,OU=Users,dc=example,dc=COM
+
+dn: cn=groupTwo,OU=Groups,OU=Users,dc=example,dc=COM
+objectClass: groupOfNames
+cn: groupTwo
+member: uid=guser1,OU=Users,dc=example,dc=COM
+member: uid=guser2,OU=Users,dc=example,dc=COM
+
+dn: uid=ouser1,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Outside User1
+sn: User1
+description: Grouped people are only authenticated if their group is specified
+employeeNumber: 20
+givenName: Grouped
+telephoneNumber: 254-323-1920
+telephoneNumber: 902-451-7619
+uid: ouser1
+mail: ouser1@example.com
+userPassword: secret
+
+dn: uid=guser1,OU=Users,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Grouped Person1
+sn: Person1
+description: Grouped people are only authenticated if their group is specified
+employeeNumber: 20
+givenName: Grouped
+telephoneNumber: 254-323-1920
+telephoneNumber: 902-451-7619
+uid: guser1
+mail: guser1@example.com
+userPassword: secret
+
+dn: uid=guser2,OU=Users,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Grouped Person2
+sn: Person2
+description: Grouped people are only authenticated if their group is specified
+employeeNumber: 21
+givenName: Grouped
+telephoneNumber: 254-323-1920
+telephoneNumber: 902-451-7619
+uid: guser2
+mail: guser2@example.com
+userPassword: secret
+
+dn: uid=uperson1,OU=Users,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Ungrouped Person1
+sn: Person1
+description: Ungrouped people are not supposed to be authenticated by group
+employeeNumber: 10
+givenName: Unintersting
+telephoneNumber: 254-323-1920
+telephoneNumber: 902-451-7619
+uid: uperson1
+mail: uperson1@example.com
+userPassword: secret
+
+dn: uid=uperson2,OU=Users,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Ungrouped Person2
+sn: Person2
+description: Ungrouped people are not supposed to be authenticated by group
+employeeNumber: 11
+givenName: Unintersting
+telephoneNumber: 254-323-1920
+telephoneNumber: 902-451-7619
+uid: uperson2
+mail: uperson2@example.com
+userPassword: secret
+
+dn: uid=uperson3,OU=Users,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Ungrouped Person3
+sn: Person3
+description: Ungrouped people are not supposed to be authenticated by group
+employeeNumber: 10
+givenName: Unintersting
+telephoneNumber: 254-323-1920
+telephoneNumber: 902-451-7619
+uid: uperson3
+mail: uperson3@example.com
+userPassword: secret
+
+dn: uid=uperson4,OU=Users,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Ungrouped Person4
+sn: Person4
+description: Ungrouped people are not supposed to be authenticated by group
+employeeNumber: 10
+givenName: Unintersting
+telephoneNumber: 254-323-1920
+telephoneNumber: 902-451-7619
+uid: uperson4
+mail: uperson4@example.com
+userPassword: secret
+
+dn: uid=aabrams,OU=Users,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Adan Abrams
+sn: Abrams
+description: 19741108000000Z
+employeeNumber: 1
+givenName: Adan
+telephoneNumber: 254-323-1920
+telephoneNumber: 902-451-7619
+uid: aabrams 
+mail: aabrams@example.com
+userPassword: secret
+
+dn: uid=cbrunato,OU=Users,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Chuck Brunato
+sn: Brunato
+description: 19650324000000Z
+employeeNumber: 2
+givenName: Chuck
+telephoneNumber: 169-637-3314
+telephoneNumber: 907-547-9114
+uid: cbrunato
+mail: cbrunato@example.com
+userPassword: secret
+
+dn: uid=kmartinson,OU=Users,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Kristie Martinson
+sn: Martinson
+description: 19650324000000Z
+employeeNumber: 3
+givenName: Kristie
+telephoneNumber: 169-637-3314
+telephoneNumber: 907-547-9114
+uid: kmartinson
+mail: kmartinson@example.com
+userPassword: secret
+
+dn: uid=rmason,OU=Users,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Ryan Mason
+sn: Mason 
+description: 19650324000000Z
+employeeNumber: 4
+givenName: Ryan
+telephoneNumber: 169-637-3314
+telephoneNumber: 907-547-9114
+uid: rmason
+mail: rmason@example.com
+userPassword: secret
+
+dn: uid=jkerby,OU=Users,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Joann Kerby
+sn: Kerby
+description: 19650324000000Z
+employeeNumber: 5
+givenName: Joann
+telephoneNumber: 169-637-3314
+telephoneNumber: 907-547-9114
+uid: jkerby
+mail: jkerby@example.com
+userPassword: secret
+
+dn: uid=rturner,OU=Users,dc=example,dc=COM
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Richard Turner
+sn: Turner
+description: 19650324000000Z
+employeeNumber: 6
+givenName: Richard
+telephoneNumber: 169-637-3314
+telephoneNumber: 907-547-9114
+uid: rturner
+mail: rturner@example.com
+userPassword: secret
