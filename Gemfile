@@ -82,6 +82,7 @@ group :development, :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
   gem 'rspec_api_documentation', :github => 'Chorus/rspec_api_documentation', :require => false
   gem 'pry' # Drop in to an extended Rails console by creating a 'binding.pry' breakpoint
   gem 'pry-nav' # Adds debugger functionality to Pry
+  gem 'ladle'
 end
 
 group :development do
