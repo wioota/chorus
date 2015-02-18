@@ -215,6 +215,38 @@ ldap:
 
 YAML
 
+LADLE_LDAP_WITH_GROUPS_YML = <<YAML
+ldap:
+  enable: true
+  host: localhost
+  port: 3897
+  bind:
+    username: uid=admin,ou=system
+    password: secret
+  group:
+    names: groupOne, groupTwo
+    search_base: ou=groups,ou=users,dc=example,dc=com
+    filter: (member={0})
+  user:
+    search_base: ou=users,dc=example,dc=com
+    filter: (uid={0})
+
+YAML
+
+LADLE_LDAP_WITHOUT_GROUPS_YML = <<YAML
+ldap:
+  enable: true
+  host: localhost
+  port: 3897
+  bind:
+    username: uid=admin,ou=system
+    password: secret
+  user:
+    search_base: ou=users,dc=example,dc=com
+    filter: (uid={0})
+
+YAML
+
 describe LdapClient do
   describe "enabled?" do
     context "when the enable flag is false" do
@@ -482,21 +514,66 @@ describe LdapClient do
     end
   end
 
+
+  # All these methods test against data that is in spec/fixtures/ldap_fixtures.ldif
+  # If you want to inspect the state of the server, uncomment the binding.pry line
+  # that's after the server start, and use ApacheDS to connect to the config port
   describe "with a local ApacheDS ldap server" do
+
     before(:all) do
-      @ldap_server = Ladle::Server.new().start
+      ldif_path = Rails.root.join('spec', 'fixtures', 'ldap_fixture.ldif').to_s
+      @ldap_server = Ladle::Server.new(
+        :ldif => ldif_path,
+        :domain => "dc=example,dc=COM",
+        :port => 3897
+      ).start
+
+      # binding.pry
+
+      stub(LdapConfig).exists? { true }
     end
 
     after(:all) do
       @ldap_server.stop if @ldap_server
     end
 
-    it "" do end
-    it "" do end
-    it "" do end
-    it "" do end
-    it "" do end
-    it "" do end
+    context "without group membership" do
+
+      before(:each) do
+        stub(LdapClient).config { YAML.load(LADLE_LDAP_WITHOUT_GROUPS_YML)['ldap'] }
+      end
+
+      it "should authenticate a user with correct auth who's in the user search_base" do
+        expect { LdapClient.authenticate("jkerby", "secret") }.not_to raise_error
+
+        dn = LdapClient.authenticate("jkerby", "secret").dn.downcase
+        expect(dn).to eq("uid=jkerby,ou=Users,dc=example,dc=COM".downcase)
+
+      end
+
+      it "shouldn't authenticate a user who isn't in the search_base" do
+        expect { LdapClient.authenticate("ouser1", "secret")}.to raise_error
+      end
+
+      it "shouldn't authenticate a user with incorrect credentials" do
+        expect { LdapClient.authenticate("jkerby", "bad password") }.to raise_error
+      end
+    end
+
+    context "with group membership" do
+
+      before(:each) do
+        stub(LdapClient).config { YAML.load(LADLE_LDAP_WITH_GROUPS_YML)['ldap'] }
+      end
+
+      it "should authenticate a user in the group under the group search_base" do
+        expect { LdapClient.authenticate("guser1", "secret") }.not_to raise_error
+      end
+
+      it "shouldn't authenticate a user who isn't in the given search base" do
+        expect { LdapClient.authenticate("uperson1", "secret") }.to raise_error
+      end
+    end
 
   end
 end
