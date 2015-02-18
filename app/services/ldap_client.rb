@@ -46,6 +46,12 @@ module LdapClient
 
     else
 
+      if !ldap.bind
+        error = ldap.get_operation_result
+        Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
+        raise LdapNotCorrectlyConfigured.new(error.message)
+      end
+
       user_entries = ldap.bind_as(
         :base => config['user']['search_base'],
         :filter => config['user']['filter'].gsub('{0}', username),
@@ -101,23 +107,16 @@ module LdapClient
     group_search_base = config['group']['search_base']
     user_group_names = config['group']['names'].split(',').map(&:strip)
 
-    if ldap.bind
+    user_group_names.each do |group_cn| # search for each group name in the LDAP tree
+      filter = Net::LDAP::Filter.eq 'cn', group_cn
 
-      user_group_names.each do |group_cn| # search for each group name in the LDAP tree
-        filter = Net::LDAP::Filter.eq 'cn', group_cn
+      # There may be many groups with the same CN but different DNs. We need to check them all
+      group_entries = ldap.search :base => group_search_base, :filter => filter
 
-        # There may be many groups with the same CN but different DNs. We need to check them all
-        group_entries = ldap.search :base => group_search_base, :filter => filter
-
-        return reverse_membership_lookup(user_entry, group_entries, ldap) || full_membership_lookup(user_entry, group_entries, ldap)
-      end
-
-      return false
-    else
-      error = ldap.get_operation_result
-      Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
-      raise LdapNotCorrectlyConfigured.new(error.message)
+      return reverse_membership_lookup(user_entry, group_entries, ldap) || full_membership_lookup(user_entry, group_entries, ldap)
     end
+
+    return false
   end
 
   def client
