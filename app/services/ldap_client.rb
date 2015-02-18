@@ -120,24 +120,6 @@ module LdapClient
     end
   end
 
-  def create_users
-    ldap = client
-    ldap.search(:base => "ou=" + config["attribute"]["ou"] + "," + config["base"]) do |entry| # add a config option for this
-      create_user_from_entry entry
-    end
-  end
-
-  def create_user_from_entry(entry)
-    User.create! ( {
-        :username =>   entry[config['attribute']['uid']].first,
-        :dept =>       entry[config['attribute']['ou']].first,
-        :first_name => entry[config['attribute']['gn']].first,
-        :last_name =>  entry[config['attribute']['sn']].first,
-        :email =>      entry[config['attribute']['mail']].first,
-        :title =>      entry[config['attribute']['title']].first
-    })
-  end
-
   def client
     raise LdapNotEnabled.new unless enabled?
 
