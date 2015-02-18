@@ -3,7 +3,8 @@
     
         {{uploadWidgetFor "workfile[versions_attributes][0][contents]"}}
         <div class="comment hidden">
-            <input type="text" name="workfile[description]" placeholder='{{t "workfiles.import_placeholder"}}' tabindex="1" maxlength="256"/>
+            <label for="workfileDescriptionField" class="optional">{{t "workfiles.import_label"}}</label>
+            <input type="text" id="workfileDescriptionField" name="workfile[description]" placeholder='{{t "workfiles.import_placeholder"}}' tabindex="1" maxlength="256"/>
         </div>
         <div class="work_flow_detail hidden">
             {{formInfoBlock "work_flows.new_dialog.info"}}
