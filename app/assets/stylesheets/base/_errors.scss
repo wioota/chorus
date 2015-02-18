@@ -45,39 +45,85 @@ $alert-icon-small: 12px;
 	}
 }
 
+/* colored border for fields that have an error */
+@mixin error-input-border {
+    border: 2px solid $alert-background-color;
+}
+
+/* exclamation icon marker for fields that have an error */
+@mixin error-background-icon {
+    background-image: url("/images/messaging/error-exclamation.svg");
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+    padding-right: 20px;
+}
+
+
 .errors,
 .sql_errors,
 .dataset_errors,
 .warning {
     @include after-clearfix;
-    background-color: $error-background-color;
-    vertical-align: middle;
-    font-weight: normal;
-    line-height: 16px;
 
+    font-weight: normal;
+
+    .message-block {
+
+        /* ***** */
+        /* if "> errorDiv" is not within .girdle, then need to match side margins of .girdle */
+        /* otherwise, only top and bottom */
+        /* ***** */
+
+        margin: 10px $dialog-padding 10px $dialog-padding;
+        border: 1px solid $error-icon-color;
+        @include border-radius ($alert-border-radius);
+        background-color: $error-background-color;   
+    }
+    
     ul {
-        float: left;
+        /* position: relative; */
         text-align: left;
-        max-width: 85%;
-        
+
+
+/* reference numbers to be made into mixin */
+/* dialog */
+/* text */
+/* > margin-left: 35 */
+/* icon */
+/* > margin-left: -25 ( -1 * (textmargin - 10)) */
+/* > size: medium */
+/*  */
+/* in-page */
+/* text */
+/* > margin-left: 40 */
+/* icon */
+/* > margin-left: -30 ( -1 * (textmargin - 10)) */
+/* > size: large */
+
+
+
         li {
-            padding: 10px 10px 10px 16px;
+            position: relative;
+            padding: 10px 10px 13px 0px;
+            margin-left: 35px;
             color: $error-text-color;
             font-size: $medium-font;
             vertical-align: top;
 
+            &::before {
+                display: inline-block;
+                width: 0;
+                height: 0;
+                position: relative;
+                left: -25px;
+                top: 2px;
+                color: $error-icon-color;
+                font-size: $alert-icon-large;
+                @include alert-error-icon;
+            }
         }
     }
 
-    .action {
-        font-weight: normal;
-        display: inline-block;
-        float: right;
-        margin: 0 10px;
-        font-size: $medium-font;
-        color: $core-white;
-        padding-top: 10px;
-    }
 }
 /*     .action { */
 /*         font-weight: normal; */
@@ -98,33 +144,31 @@ $alert-icon-small: 12px;
 
 /* user input: named error BUT in meaning is as alert */
 
-/* TODO */
-/* need to figure out how to use the FA glyph for all form fields */
-/* cant seem to find a way to use it as the background */
-/* so how then... */
+/* input elements wont take ::after  */
+/* so background image is necessary */
 
 input.has_error,
 textarea.has_error,
 .text-core .text-wrap textarea.has_error,
 .text-core .text-wrap input.has_error {
-    border: 2px solid $error-background-color;
+    @include error-input-border;
     @include border-radius(1px);
+    
+    @include error-background-icon;
+    background-position: 99% 50%;
 
-    background-image: url("/images/messaging/error-exclamation.png");
-    background-repeat: no-repeat;
-    background-position: 99%;
-    padding-right: 20px;
+}
+
+.inputError {
+    @include alert-marker;
 }
 
 .cleditorMain.has_error {
-
-    border: 2px solid $alert-background-color !important;
+    @include error-input-border;
     @include border-radius(1px);
-    
-    background-image: url("/images/messaging/error-exclamation.png");
-    background-repeat: no-repeat;
-    background-position: 99%;
-    padding-right: 20px;
+
+    @include error-background-icon;
+    background-position: 99% 2%;
 
     iframe body {
         margin-right: 20px;

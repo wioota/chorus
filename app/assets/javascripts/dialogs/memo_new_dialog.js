@@ -11,8 +11,8 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         "click .remove": "removeAttachment",
         "click .add_workfile": "launchWorkfileDialog",
         "click .add_dataset": "launchDatasetDialog",
-        "click .cancel_upload": "cancelUpload",
-        "click .file-wrapper": "launchDesktopFileDialog"
+        "click .file-wrapper": "launchDesktopFileDialog",
+        "click .cancel_upload": "cancelUpload"
     },
 
     setup: function() {
