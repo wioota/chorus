@@ -64,7 +64,7 @@ module LdapClient
               )
       end
 
-      if config['group']['search_base'].present? && !user_in_user_group?(user_entries.first)
+      if config['group'].present? && !user_in_user_group?(user_entries.first)
         raise LdapCouldNotFindMember.new(
                   "Could not find membership for #{user_entries.first.dn} "\
                   "in group base #{config['group']['search_base']} with filter #{config['group']['filter']}"
@@ -113,7 +113,9 @@ module LdapClient
       # There may be many groups with the same CN but different DNs. We need to check them all
       group_entries = ldap.search :base => group_search_base, :filter => filter
 
-      return reverse_membership_lookup(user_entry, group_entries, ldap) || full_membership_lookup(user_entry, group_entries, ldap)
+       if reverse_membership_lookup(user_entry, group_entries, ldap) || full_membership_lookup(user_entry, group_entries, ldap)
+         return true
+       end
     end
 
     return false
@@ -122,11 +124,23 @@ module LdapClient
   def client
     raise LdapNotEnabled.new unless enabled?
 
-    ldap_args = {:host => config['host'], :port => config['port'], :base => "DC=alpinenow,DC=local", :auth => {:method => :anonymous}}
-    if config['bind'].present?
-      ldap_args[:auth] = {:method => :simple, :username => config['bind']['username'], :password => config['bind']['password']}
+    if LdapConfig.exists? # Using new config structure
+
+      ldap_args = {:host => config['host'], :port => config['port'], :auth => {:method => :anonymous}}
+      if config['bind'].present?
+        ldap_args[:auth] = {:method => :simple, :username => config['bind']['username'], :password => config['bind']['password']}
+      end
+      ldap_args[:encryption] = :start_tls if config['start_tls'].present?
+
+    else # supporting old config structure for backwards compatibility
+
+      ldap_args = {:host => config['host'], :port => config['port'], :base => config['base'], :auth => {:method => :anonymous}}
+      if config['user_dn'].present?
+        ldap_args[:auth] = {:method => :simple, :username => config['user_dn'], :password => config['password']}
+      end
+      ldap_args[:encryption] = :start_tls if config['start_tls'].present?
     end
-    ldap_args[:encryption] = :start_tls if config['start_tls'].present?
+
 
     Net::LDAP.new ldap_args
   end
