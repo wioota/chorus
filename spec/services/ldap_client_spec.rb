@@ -360,6 +360,7 @@ describe LdapClient do
 
              [ OpenStruct.new({ :dn => "example_entry" }) ]
            end
+           stub(ldap).bind { true }
          end
          stub(LdapClient).user_in_user_group? { true }
          LdapClient.authenticate("example_user_dn", "secret")
@@ -384,12 +385,13 @@ describe LdapClient do
           stub(ldap).bind { false }
         end
 
-        expect { LdapClient.user_in_user_group?("example_user") }.to raise_error(LdapClient::LdapNotCorrectlyConfigured)
+        expect { LdapClient.authenticate("example_user", "password") }.to raise_error(LdapClient::LdapNotCorrectlyConfigured)
       end
 
       it "throws a bind error when it can't bind with the correct user" do
         any_instance_of(Net::LDAP) do |ldap|
           stub(ldap).bind_as { false }
+          stub(ldap).bind { true }
         end
 
         expect { LdapClient.authenticate("example_user", "password") }.to raise_error(LdapClient::LdapCouldNotBindWithUser)
@@ -400,8 +402,10 @@ describe LdapClient do
           stub(ldap).bind_as {
             [ OpenStruct.new({ :dn => "example_entry" }) ]
           }
+          stub(ldap).bind { true }
         end
         stub(LdapClient).user_in_user_group? { false }
+
 
         expect { LdapClient.authenticate("example_user", "password") }.to raise_error(LdapClient::LdapCouldNotFindMember)
       end
@@ -476,5 +480,23 @@ describe LdapClient do
         LdapClient.client
       end
     end
+  end
+
+  describe "with a local ApacheDS ldap server" do
+    before(:all) do
+      @ldap_server = Ladle::Server.new().start
+    end
+
+    after(:all) do
+      @ldap_server.stop if @ldap_server
+    end
+
+    it "" do end
+    it "" do end
+    it "" do end
+    it "" do end
+    it "" do end
+    it "" do end
+
   end
 end
