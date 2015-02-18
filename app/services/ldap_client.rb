@@ -47,21 +47,21 @@ module LdapClient
     else
 
       user_entries = ldap.bind_as(
-        :base => config['user_search_base'],
-        :filter => config['user_search_filter'].gsub('{0}', username),
+        :base => config['user']['search_base'],
+        :filter => config['user']['filter'].gsub('{0}', username),
         :password => password
       )
 
       if !user_entries
         raise LdapCouldNotBindWithUser.new(
-                  "Could not authenticate with user #{username} in #{config['user_search_base']} using filter #{config['user_search_filter']}"
+                  "Could not authenticate with user #{username} in #{config['user']['search_base']} using filter #{config['user']['filter']}"
               )
       end
 
-      if config['group_search_base'].present? && !user_in_user_group?(user_entries.first)
+      if config['group']['search_base'].present? && !user_in_user_group?(user_entries.first)
         raise LdapCouldNotFindMember.new(
                   "Could not find membership for #{user_entries.first.dn} "\
-                  "in group base #{config['group_search_base']} with filter #{config['group_search_filter']}"
+                  "in group base #{config['group']['search_base']} with filter #{config['group']['filter']}"
               )
       end
 
@@ -71,7 +71,7 @@ module LdapClient
 
   # looks for Group DN in User entry
   def reverse_membership_lookup(user_entry, group_entries, ldap)
-    group_search_filter = config['group_search_filter']
+    group_search_filter = config['group']['filter']
 
     # The inject block builds up a string of membership filters which are OR'd together to make the filter
     membership_filters = group_entries.inject("") { |result, group_entry| result + "#{group_search_filter.gsub("{0}", group_entry.dn)}" }
@@ -83,7 +83,7 @@ module LdapClient
 
   # looks for User DN in Group entries
   def full_membership_lookup(user_entry, group_entries, ldap)
-    group_search_filter = config['group_search_filter']
+    group_search_filter = config['group']['filter']
 
     group_entries.each do |group_entry| # if we find a group, see if our user_dn is a member of that group
       filter = "#{group_search_filter.gsub('{0}', user_entry.dn)}"
@@ -98,8 +98,8 @@ module LdapClient
   # of LDAP
   def user_in_user_group?(user_entry)
     ldap = client
-    group_search_base = config['group_search_base']
-    user_group_names = config['user_groups'].split(',').map(&:strip)
+    group_search_base = config['group']['search_base']
+    user_group_names = config['group']['names'].split(',').map(&:strip)
 
     if ldap.bind
 
@@ -141,9 +141,9 @@ module LdapClient
   def client
     raise LdapNotEnabled.new unless enabled?
 
-    ldap_args = {:host => config['host'], :port => config['port'], :base => config['base'], :auth => {:method => :anonymous}}
-    if config['user_dn'].present?
-      ldap_args[:auth] = {:method => :simple, :username => config['user_dn'], :password => config['password']}
+    ldap_args = {:host => config['host'], :port => config['port'], :base => "DC=alpinenow,DC=local", :auth => {:method => :anonymous}}
+    if config['bind'].present?
+      ldap_args[:auth] = {:method => :simple, :username => config['bind']['username'], :password => config['bind']['password']}
     end
     ldap_args[:encryption] = :start_tls if config['start_tls'].present?
 

@@ -129,24 +129,26 @@ CUSTOMIZED_LDAP_GROUP_SEARCH_YML = <<YAML
 session_timeout_minutes: 120
 instance_poll_interval_minutes: 1
 ldap:
-  host: 10.32.88.212
   enable: true
+  url: 10.32.88.212:389
   port: 389
   start_tls: true
+  bind:
+    username: example_user_dn
+    password: secret
+  user:
+    search_base: ou=Users,dc=example,dc=com
+    filter: (uid={0})
+  group:
+    names: FirstGroup,SecondGroup
+    search_base: ou=Groups,dc=example,dc=com
+    filter: (memberOf={0})
   connect_timeout: 10000
   bind_timeout: 10000
   search:
     timeout: 20000
     size_limit: 200
-  base: DC=greenplum,DC=com
-  user_dn: example_user_dn
-  password: secret
   dn_template: greenplum\\{0}
-  user_search_filter: (uid={0})
-  user_search_base: ou=Users,dc=example,dc=com
-  user_groups: FirstGroup,SecondGroup
-  group_search_base: ou=Groups,dc=example,dc=com
-  group_search_filter: (memberOf={0})
   attribute:
     uid: sAMAccountName
     ou: department
@@ -171,8 +173,9 @@ ldap:
     timeout: 20000
     size_limit: 200
   base: DC=greenplum,DC=com
-  user_dn: greenplum\\chorus
-  password: secret
+  bind:
+    username: greenplum\\chorus
+    password: secret
   dn_template: greenplum\\{0}
   attribute:
     uid: sAMAccountName
@@ -429,15 +432,15 @@ describe LdapClient do
       end
     end
 
-    context "when we user_dn and password are specified" do
+    context "when the bind.username and bind.password are specified" do
       before do
         stub(LdapClient).config { YAML.load(LDAP_WITH_AUTH_CHORUS_YML)['ldap'] }
-        LdapClient.config["user_dn"].should_not be_blank
-        LdapClient.config["password"].should_not be_blank
+        LdapClient.config["bind"]["username"].should_not be_blank
+        LdapClient.config["bind"]["password"].should_not be_blank
       end
 
       it "uses simple auth" do
-        mock(Net::LDAP).new(hash_including(:auth => {:method => :simple, :username => LdapClient.config["user_dn"], :password => LdapClient.config["password"]}))
+        mock(Net::LDAP).new(hash_including(:auth => {:method => :simple, :username => LdapClient.config["bind"]["username"], :password => LdapClient.config["bind"]["password"]}))
         LdapClient.client
       end
     end
