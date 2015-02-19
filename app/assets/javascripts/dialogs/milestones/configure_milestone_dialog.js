@@ -6,7 +6,7 @@ chorus.dialogs.ConfigureMilestone = chorus.dialogs.Base.include(chorus.Mixins.Di
         return this.model.isNew() ? t('milestone.dialog.title') : t('milestone.dialog.edit.title');
     },
 
-    message: 'milestone.dialog.toast',
+    message: 'milestone.dialog_create.toast',
 
     submitTranslation: function () {
         return this.model.isNew() ? "milestone.dialog.submit" : "milestone.dialog.edit.submit";
@@ -38,7 +38,6 @@ chorus.dialogs.ConfigureMilestone = chorus.dialogs.Base.include(chorus.Mixins.Di
         var fieldValues = this.fieldValues();
         if (!fieldValues.name || fieldValues.name.length === 0) { return false; }
         if (!this.targetDatePicker.getDate().isValid()) { return false; }
-
         return true;
     },
 
@@ -50,7 +49,7 @@ chorus.dialogs.ConfigureMilestone = chorus.dialogs.Base.include(chorus.Mixins.Di
     },
 
     modelSaved: function () {
-        chorus.toast(this.message);
+        chorus.toast(this.message, this.createMessageParams() );
         chorus.page.collection.trigger('invalidated');
         this.closeModal();
     },
@@ -70,5 +69,10 @@ chorus.dialogs.ConfigureMilestone = chorus.dialogs.Base.include(chorus.Mixins.Di
 
     additionalContext: function () {
         return { submitTranslation: this.submitTranslation() };
+    },
+
+    createMessageParams: function () {
+        return { milestoneName: this.model.name() };
     }
+    
 });

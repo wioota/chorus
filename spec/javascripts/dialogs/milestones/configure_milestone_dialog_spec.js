@@ -59,7 +59,7 @@ describe("chorus.dialogs.ConfigureMilestone", function () {
                 });
 
                 it("should create a toast", function () {
-                    expect(chorus.toast).toHaveBeenCalledWith('milestone.dialog.toast');
+                    expect(chorus.toast).toHaveBeenCalledWith('milestone.dialog_create.toast');
                 });
 
                 it("should trigger 'invalidate' on the page's collection", function () {

@@ -41,7 +41,7 @@
 //= require messenger-theme-flat
 //= require environment
 //= require csrf
-//= require bootstrap
+//= require application_misc
 //= require chorus
 //= require_tree ./utilities
 //= require_tree ./mixins

@@ -13,7 +13,8 @@
         extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
         theme: 'flat',
         messageDefaults: {
-            hideAfter: 3,
+            // # of seconds the message is displayed to the user before disappearing
+            hideAfter: 5,
             showCloseButton: true,
             hideOnNavigate: false
         }
