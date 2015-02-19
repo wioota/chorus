@@ -157,16 +157,17 @@ $type-ahead-result-border-color: #A5A6A8;
 // Text colors
 
 $content-header-link-color: $color-text4;
-
 $required-marker-color: $error;
 
 
-// Notification colors 
-// AKA Messaging
-$error-background-color: $fire-engine-red;
-$error-color: #FFFFFF;
-$error-text-color: #FFFFFF;
-$error-tooltiptext-color: #FFFFFF;
+// NOTIFICATION COLORS
+// AKA MESSAGING
+// used for various alerts and errors encountered in tasks
+/* $error-background-color: #EF9A8F; */
+$error-background-color: #F4DCD8;
+/* $error-text-color: #FFFFFF; */
+$error-text-color: #661111;
+$error-tooltip-text-color: $core-white;
 $error-icon-color: #991111;
 
 $notification: $bright-turquoise;
@@ -175,8 +176,31 @@ $notification-error-light: #ffd6d6;
 
 $alert-color: $needs-attention;
 $alert-background-color: $needs-attention;
-$alert-marker-color: #B24E11;
+$alert-icon-color: #B24E11;
 $alert-text-color: $core-white;
+
+$warning-color: $needs-attention;
+$warning-background-color: $needs-attention;
+$warning-icon-color: #B24E11;
+/* $warning-text-color: $core-white; */
+
+$informational-color: $pacific-blue;
+$informational-background-color: $pacific-blue;
+$informational-icon-color: #B24E11;
+$informational-text-color: #333;
+
+$success-color: $ok;
+$success-background-color: $ok;
+$success-icon-color: $ok;
+
+$normal-tooltip-text-color: $core-white;
+
+// HARD ERRORS
+// 404-like
+$hardError-background-color: $fire-engine-red;
+$hardError-text-color: #EEEEEE;
+$hardError-icon-color: #EEEEEE;
+
 
 
 // Dimensions
@@ -210,6 +234,7 @@ $help-pill-width: 34px;
 $texteditor-min-height: 300px;
 
 $default-dialog-width: 500px;
+$default-dialog-width-medium: 600px;
 $default-dialog-width-wide: 940px;
 /* $dialog-padding= interior padding from edge for dialog content */
 $dialog-padding : 15px;
@@ -228,7 +253,6 @@ $selectlist-width-large:  300px;
 $input-width-small:  120px;
 $input-width-medium: 250px;
 $input-width-large:  350px;
-
 
 
 // z-indices
@@ -279,6 +303,7 @@ $bold: 700;
 
 
 // Font size
+// normal size should be medium
 $medium-font: 14px;
 $small-font: 12px;
 $smallest-font: 10px;
@@ -645,7 +670,7 @@ $lozenge-color-selected-dark: $brand-dark;
 		position: relative;
 		left: $caret-margin;
 		font-family: FontAwesome;
-		content: "\f0d7";
+		content: "\f0d7"; /* fa-caret-down */
 	}
 }
 
@@ -655,21 +680,10 @@ $lozenge-color-selected-dark: $brand-dark;
 	&::after {
 		display: inline-block;
 		position: relative;
-		font-family: FontAwesome;
 		left: $caret-margin;
+		font-family: FontAwesome;
 		
 		@include caret-glyph($pointing_direction);
-		
-/* 		@if $pointing_direction == up { */
-/* 			content: "\f0d8"; */
-/* 		} @else if $pointing_direction == down { */
-/* 			content: "\f0d7"; */
-/* 		} @else if $pointing_direction == right { */
-/* 			content: "\f0da"; */
-/* 		} @else if $pointing_direction == left { */
-/* 			content: "\f0d9"; */
-/* 		} */
-
 	}
 }
 
@@ -733,7 +747,6 @@ $lozenge-color-selected-dark: $brand-dark;
         &:hover .lozenge {
             //background: $lozenge-color-selected;
         }
-
         .lozenge {
             //background: $lozenge-color-selected;
             color: #FFFFFF;

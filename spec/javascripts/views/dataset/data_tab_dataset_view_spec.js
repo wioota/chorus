@@ -12,10 +12,10 @@ describe("chorus.views.DataTabDataset", function() {
     });
 
     it("renders the appropriate icon", function() {
-        expect(this.view.$("img:eq(0)")).toHaveAttr("src", "/images/sandbox_table_small.png");
+        expect(this.view.$("img:eq(0)")).toHaveAttr("src", "/images/data_sets/sandbox_table_small.png");
         this.view.model.set("objectType", "VIEW");
         this.view.render();
-        expect(this.view.$("img:eq(0)")).toHaveAttr("src", "/images/sandbox_view_small.png");
+        expect(this.view.$("img:eq(0)")).toHaveAttr("src", "/images/data_sets/sandbox_view_small.png");
     });
 
     it("renders the name of the dataset", function() {

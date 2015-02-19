@@ -48,12 +48,11 @@ chorus.Modal = chorus.views.Base.extend({
         var girdleHeight = $(".girdle").height();
         var girdleVerticalPadding = $(".girdle").innerHeight() - girdleHeight;
 
-        var maxContentHeight = popupHeight - (headerHeight + bottomHeight);
-        maxContentHeight = maxContentHeight- girdleVerticalPadding;
+        var maxInteriorHeight = popupHeight - (headerHeight + bottomHeight);
+        maxInteriorHeight = maxInteriorHeight- girdleVerticalPadding;
         
-        var $dialogMainContent = $("#dialog_content .girdle");
-        $dialogMainContent.css("max-height", maxContentHeight + "px");
-
+        var $dialogInteriorContent = $("#dialog_content .girdle");
+        $dialogInteriorContent.css("max-height", maxInteriorHeight + "px");
     },
 
     preRender: function() {

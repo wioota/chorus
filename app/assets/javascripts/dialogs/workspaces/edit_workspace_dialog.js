@@ -72,7 +72,7 @@ chorus.dialogs.EditWorkspace = chorus.dialogs.Base.include(
             this.$("select.owner").val(this.model.owner().get("id"));
 
             _.defer(_.bind(function() {
-                var clEditor = this.makeEditor($(this.el), ".toolbar", "summary");
+                var clEditor = this.makeEditor($(this.el), ".toolbar", "summary", { width: 'auto', height: 210 });
                 if(!canUpdateName) {
                     clEditor.disable(true);
                 }

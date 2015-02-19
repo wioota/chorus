@@ -57,7 +57,7 @@ describe("chorus.Modal", function() {
             });
         });
 
-        describe("when there is no existing chorus.modal", function() {
+        describe("> when there is no existing chorus.modal", function() {
             beforeEach(function() {
                 delete chorus.modal;
                 //Modal is abstract, so we need to give it a template to render
@@ -100,7 +100,7 @@ describe("chorus.Modal", function() {
                 });
 
 
-                it("with no arguments uses window.height", function() {
+                it("with no arguments, uses window.height and sets interior Height", function() {
                     this.modal.resize();
 
                     // calculate modal height by total window height - (2 * top.position)

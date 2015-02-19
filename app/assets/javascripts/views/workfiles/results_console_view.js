@@ -30,7 +30,6 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
                 if (view.options.verticalDialogPosition) {
                     verticalDialogPosition = view.options.verticalDialogPosition;
                 }
-
                 return verticalDialogPosition + this.bottomGutterHeight() + this.footerSize();
             },
 

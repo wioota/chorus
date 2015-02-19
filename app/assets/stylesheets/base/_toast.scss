@@ -15,3 +15,25 @@ ul.messenger-theme-future {
     @include background(linear-gradient(top, $notification-error-light, $notification-error-dark));
   }
 }
+
+ul.messenger-theme-flat {
+  .messenger-message.alert-info .messenger-message-inner:before {
+    @include background(linear-gradient(top, $body-background-color, $link-color));
+  }
+
+  .messenger-message.alert-error .messenger-message-inner:before {
+    @include background(linear-gradient(top, $notification-error-light, $notification-error-dark));
+  }
+}
+
+
+ul.messenger-theme-chorus {
+  .messenger-message.alert-info .messenger-message-inner:before {
+    @include background(linear-gradient(top, $body-background-color, $link-color));
+    background-color: #777;
+  }
+
+  .messenger-message.alert-error .messenger-message-inner:before {
+    @include background(linear-gradient(top, $notification-error-light, $notification-error-dark));
+  }
+}

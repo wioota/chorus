@@ -1,6 +1,5 @@
 chorus.pages.UserNewPage = chorus.pages.Base.extend({
     crumbs:[
-        { label:t("breadcrumbs.home"), url:"#/" },
         { label:t("breadcrumbs.users"), url:"#/users" },
         { label:t("breadcrumbs.new_user") }
     ],

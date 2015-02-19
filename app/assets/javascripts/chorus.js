@@ -243,10 +243,9 @@ window.Chorus = function chorus$Global() {
 
         var magnifyGlassWrap = $("<span class='search_magnifying_glass'></span>");
         var container = $("<div class='chorus_search_container'></div>");
-
-         magnifyGlassWrap.insertAfter($input);
-         magnifyGlassWrap.append($input).append(clearLink);
-         magnifyGlassWrap.wrapAll(container);
+        magnifyGlassWrap.insertAfter($input);
+        magnifyGlassWrap.append($input).append(clearLink);
+        magnifyGlassWrap.wrapAll(container);
     };
 
 //   self.addClearButton = function(input) {

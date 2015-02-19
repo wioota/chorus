@@ -15,6 +15,7 @@
 //= require jquery
 //= require vendor/underscore-1.6.0
 //= require vendor/backbone-1.0.0
+//= require vendor/backbone.router.title.helper
 //= require vendor/jquery.ui.core
 //= require vendor/jquery.ui.widget
 //= require vendor/jquery.ui.mouse
@@ -37,10 +38,10 @@
 //= require vendor/datepicker_lang
 //= require_tree ./vendor
 //= require messenger
-//= require messenger-theme-future
+//= require messenger-theme-flat
 //= require environment
 //= require csrf
-//= require bootstrap
+//= require application_misc
 //= require chorus
 //= require_tree ./utilities
 //= require_tree ./mixins
