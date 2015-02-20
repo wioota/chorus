@@ -38,42 +38,55 @@ module LdapClient
 
     users = []
 
-    filter = Net::LDAP::Filter.eq 'cn', groupname
-    group_search_base = config['group']['search_base']
-    #user_group_names = config['group']['names'].split(',').map(&:strip)
-    group_entries = client.search :base => group_search_base, :filter => filter
+    begin
+      filter = Net::LDAP::Filter.eq 'cn', groupname
+      if config['group']['search_base'] == nil
+        puts 'You must specify a  valid search base in ldap.group.search_base property of ldap.properties file'
+        return
+      end
+      group_search_base = config['group']['search_base']
+      group_entries = client.search :base => group_search_base, :filter => filter
+      if group_entries == nil || group_entries.size == 0
+        puts 'No members are found in LDAP group #{groupname}'
+        return
+      end
+      group_entries.each do |entry|
+        #get member list from group
+        members = entry.member
 
-    group_entries.each do |entry|
-      #get member list from group
-      members = entry.member
+        members.each do |member|
+          #puts "#{member}"
+          # use DN as search base to fetch attributes for a given
+          results = client.search :base => member
 
-      members.each do |member|
-        filter = Net::LDAP::Filter.eq 'dn', member
-        # use DN as search base to fetch attributes for a given
-        results = client.search :base => member
+          results.map do |result|
+            entry = {}
+            entry[:username] =   result[config['attribute']['uid']].first
+            entry[:dept] =       result[config['attribute']['ou']].first
+            entry[:first_name] = result[config['attribute']['gn']].first
+            entry[:last_name] =  result[config['attribute']['sn']].first
+            entry[:email] =      result[config['attribute']['mail']].first
+            entry[:title] =      result[config['attribute']['title']].first
+            entry[:auth_method] = 'ldap'
+            entry[:ldap_group_id] = groupname
+            entry[:admin] = false
+            entry[:developer] = true
 
-        results.map do |result|
-          entry = {}
-          entry[:username] =   result[config['attribute']['uid']].first
-          entry[:dept] =       result[config['attribute']['ou']].first
-          entry[:first_name] = result[config['attribute']['gn']].first
-          entry[:last_name] =  result[config['attribute']['sn']].first
-          entry[:email] =      result[config['attribute']['mail']].first
-          entry[:title] =      result[config['attribute']['title']].first
-          entry[:auth_method] = 'ldap'
-          entry[:ldap_group_id] = groupname
-          entry[:admin] = false
-          entry[:developer] = true
+            users << entry
 
-          users << entry
+          end
 
         end
 
       end
 
-    end
+      return users
 
-    return users
+    rescue => e
+      puts 'Error executing rake task ldap:import_users'
+      puts "#{e.class} :  #{e.message}"
+      raise e
+    end
 
   end
 
@@ -118,21 +131,58 @@ module LdapClient
     end
   end
 
+  # Fetch list of users from a specified LDAP group and add them to Chorus users table. In order to authenticate with LDAP
+  # we are required to create those users in Chorus database.
 
   def add_users_to_chorus(groupname)
 
-    params =  {"session"=>{"username"=>"guser1", "password"=>"[FILTERED]"}, "iebuster"=>"1424381175519"}
-    session_object = Session.create!(params["session"])
-    groups = config['group']['names'].split(',').map(&:strip)
-    groups.each do |group|
-      users = fetch_members(group)
-      users.each do |user|
-        u = User.new(user)
-        u.save!
+    license = License.instance
+    dev_licenses = license[:developers]
+    dev_licenses = 2
+    #puts "developer licenses = #{dev_licenses}"
+
+    begin
+      dev_users = User.where({:auth_method => 'ldap', :developer => true}).count
+      if dev_licenses != -1 && dev_users >= dev_licenses
+        puts "You have reached the limit of #{dev_licenses} developer licenses. Please delete existing user(s) before adding new users.\n OR Contact Alpine support to increase the number of licenses."
+        return
       end
+      if config['group']['names'] == nil
+        puts 'You must specify a  valid group name in ldap.group.names property of ldap.properties file'
+        return
+      end
+      groups = config['group']['names'].split(',').map(&:strip)
+      if groups == nil || groups.size ==0
+        puts 'You must specify a  valid group name in ldap.group.names property of ldap.properties file'
+        return
+      end
+      groups.each do |group|
+        users = fetch_members(group)
+        if users == nil || users.size == 0
+          puts "No members are found in LDAP group #{group}"
+          return
+        end
+        users.each do |user|
+          if User.find_by_username(user[:username])
+            u = User.find_by_username(user[:username])
+            puts "Updating user #{user[:username]} to Chorus"
+            u.update_attributes!(user)
+          else
+            if dev_licenses != -1 && dev_users >= dev_licenses
+              puts "You have reached the limit of #{dev_licenses} developers licenses. Please delete existing user(s) before adding new users.\n OR Contact Alpine support to increase the number of licenses."
+              return
+            end
+            puts "Adding user #{user[:username]} to Chorus"
+            #puts user.inspect
+            u = User.new(user)
+            u.save!
+            dev_users = dev_users+1
+          end
+        end
+      end
+    rescue => e
+      raise e
     end
-
-
   end
 
 
