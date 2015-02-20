@@ -8,6 +8,7 @@ class LdapConfig
     set_root_dir(root_dir)
     ldap_config = {}
     @config = Properties.load_file(config_file_path) if File.exists?(config_file_path)
+    check_configuration_validity
   end
 
   def self.exists?
@@ -61,4 +62,54 @@ class LdapConfig
   def set_root_dir(root_dir)
     @root_dir = root_dir || Rails.root
   end
+
+  def check_configuration_validity
+
+    # will raise error if one of these properties is missing
+    required_properties = [
+        'enable',
+        'host',
+        'port',
+        { 'bind' => ['username', 'password' ] },
+        { 'user' => ['search_base', 'filter'] }
+    ]
+
+
+    mutually_dependent_properties = [
+        { 'group' => ['names', 'search_base', 'filter'] }
+    ]
+
+    required_properties.each do |prop|
+      if prop.is_a? String
+        raise LdapClient::LdapNotCorrectlyConfigured.new("Missing value for property ldap.#{prop} in ldap.properties file") unless @config["ldap"][prop].present?
+      end
+
+      if prop.is_a? Hash
+        attribute = prop.keys.first
+        nested_props = prop.values.first
+        nested_props.each do |nested_prop|
+          raise LdapClient::LdapNotCorrectlyConfigured.new("Missing value for property ldap.#{attribute}.#{nested_prop} in ldap.properties file") unless @config["ldap"][attribute][nested_prop].present?
+        end
+      end
+    end
+
+    mutually_dependent_properties.each do |prop|
+      if prop.is_a? Hash
+        attribute = prop.keys.first
+        nested_props = prop.values.first
+
+        # If the whole group is missing, it's ok.
+        return if @config['ldap'][attribute].nil?
+
+        # Otherwise, make sure all of the properties exist
+        is_valid = nested_props.all? do |nested_prop|
+          @config['ldap'][attribute].key?(nested_prop) && @config["ldap"][attribute][nested_prop].present?
+        end
+
+        all_props_string = nested_props.inject("") {|result, nested_prop| "#{result} #{attribute}.#{nested_prop}"}
+        raise LdapClient::LdapNotCorrectlyConfigured.new("You must provide an entry and value for the following properties: #{all_props_string}") unless is_valid
+      end
+    end
+  end
+
 end
