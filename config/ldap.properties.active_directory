@@ -32,7 +32,7 @@ Group Filter for Active Directory. This will work only for Active Directory
 # Search base for user authentication
 ldap.user.search_base = OU=CorpUsers,DC=www,DC=example,DC=com
 #Search filter for user authentication. This will work only for Active Directory
-ldap.user.filter = (uid={0})
+ldap.user.filter = (sAMAccountName={0})
 
 # Mappings of Chorus user properties to LDAP user attributes.
 ldap.attribute.uid = uid
