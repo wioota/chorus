@@ -6,6 +6,10 @@ describe SessionsController do
     let(:user) { users(:admin) }
     let(:params) { {:username => user.username, :password => FixtureBuilder.password} }
 
+    before(:each) do
+        stub(LdapClient).enabled? { false } # We should have a separate test config to avoid stuff like this
+    end
+
     describe "with the correct credentials" do
       it "succeeds" do
         post :create, params

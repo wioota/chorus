@@ -294,6 +294,7 @@ describe LdapClient do
         let(:entries) { [] }
 
         it "should return an empty array" do
+          stub(LdapConfig).exists? { false }
           LdapClient.search("testguy").should be_empty
         end
       end
@@ -302,7 +303,10 @@ describe LdapClient do
         let(:entries) { [Net::LDAP::Entry.from_single_ldif_string(SEARCH_LDAP_TESTGUY),
                          Net::LDAP::Entry.from_single_ldif_string(SEARCH_LDAP_OTHERGUY)] }
 
-        before { stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] } }
+        before {
+          stub(LdapClient).config { YAML.load(CUSTOMIZED_LDAP_CHORUS_YML)['ldap'] }
+          stub(LdapConfig).exists? { false }
+        }
 
         it "maps the customized fields to our standardized fields" do
           results = LdapClient.search("testguy")
@@ -328,6 +332,7 @@ describe LdapClient do
         let(:entries) { nil }
 
         before do
+          stub(LdapConfig).exists? { false }
           any_instance_of(Net::LDAP) do |ldap|
             stub(ldap).get_operation_result { OpenStruct.new(:code => 49, :message => 'Invalid Credentials') }
           end
@@ -344,6 +349,7 @@ describe LdapClient do
     context "when LDAP is disabled" do
       before do
         stub(LdapClient).enabled? { false }
+        stub(LdapConfig).exists? { false }
       end
 
       it "should raise an error" do
@@ -525,7 +531,8 @@ describe LdapClient do
       @ldap_server = Ladle::Server.new(
         :ldif => ldif_path,
         :domain => "dc=example,dc=COM",
-        :port => 3897
+        :port => 3897,
+        :quiet => true
       ).start
 
       # binding.pry
