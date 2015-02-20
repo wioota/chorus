@@ -1,8 +1,8 @@
 namespace :ldap do
 
   desc 'This task will import the users from a LDAP group into Chorus database. It will use the LDAP configuration from the ldap.properties file'
-  ENV['SKIP_SOLR'] = 'true'
   task :import_users, [:group] => :environment do |task, args|
+    ENV['SKIP_SOLR'] = 'true'
     #print "arg = #{args[:group]}\n"
     #print "arg = #{args.extras}\n"
     begin
@@ -12,6 +12,7 @@ namespace :ldap do
       puts "#{e.class} :  #{e.message}"
     end
 
+    ENV['SKIP_SOLR'] = nil
   end
 
 end

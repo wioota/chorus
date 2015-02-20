@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
 
   DEFAULT_SORT_ORDER = VALID_SORT_ORDERS[:first_name]
 
-  attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes, :subscribed_to_emails, :auth_method, :ldap_group_id
+  attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes, :subscribed_to_emails, :auth_method, :ldap_group_id, :developer
   attr_accessor :password
 
   has_many :gpdb_data_sources, :foreign_key => :owner_id
