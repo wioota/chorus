@@ -1,0 +1,83 @@
+# LDAP Settings for Active Directory
+
+# Set this property to true to enable LDAP authentication. Default is false.
+ldap.enable = false
+
+# Host and port for accessing LDAP server.
+ldap.host = localhost
+ldap.port = 10389
+
+# Set this property to use Transport Level Security (TLS) for accessing LDAP server. Default is false.
+ldap.start_tls = false
+
+#LDAP root for search and query
+ldap.base = DC=www,DC=example,DC=com
+
+# username and password used for binding to LDAP server
+ldap.bind.username = uid=admin,ou=system
+ldap.bind.password = q2W#e4R%
+
+# List of LDAP group names that are used for verifying group membership.
+# NOTE: For release 5.3, only one group is supported.
+ldap.group.names = OtherGroup
+
+#-----  Uncomment following two properties to enable group membership authentication ------#
+# Search base for looking up members in the groups above
+ldap.group.search_base = DC=www,DC=example,DC=com
+
+Group Filter for Active Directory. This will work only for Active Directory
+ldap.group.filter = (member={0})
+#------------------------------------------------------------------------------------------#
+
+# Search base for user authentication
+ldap.user.search_base = OU=CorpUsers,DC=www,DC=example,DC=com
+#Search filter for user authentication. This will work only for Active Directory
+ldap.user.filter = (sAMAccountName={0})
+
+# Mappings of Chorus user properties to LDAP user attributes.
+ldap.attribute.uid = uid
+ldap.attribute.ou = department
+ldap.attribute.gn = givenName
+ldap.attribute.sn = sn
+ldap.attribute.mail = mail
+ldap.attribute.title = title
+
+
+
+# LDAP Settings
+
+ldap.enable = true
+
+ldap.host = localhost
+ldap.port = 10389
+
+ldap.start_tls = false
+
+ldap.base = DC=DMN1,DC=FMR,DC=com
+# ldap.bind.username = CN=Administrator,CN=Users,DC=alpinenow,DC=local
+
+ldap.bind.username = uid=admin,ou=system
+ldap.bind.password = q2W#e4R%
+
+ldap.group.names = OtherGroup
+ldap.group.search_base = DC=DMN1,DC=FMR,DC=COM
+
+Group Filter for Apache DS & Active Directory.
+ldap.group.filter = (member={0})
+
+Group Filter for Active Directory. This will work only for AD
+#ldap.group.filter = (memberOf={0})
+
+
+ldap.user.search_base = OU=CorpUsers,DC=DMN1,DC=FMR,DC=COM
+#ldap.user.filter = (sAMAccountName={0})
+ldap.user.filter = (uid={0})
+
+ldap.dn_template = greenplum\{0}
+
+ldap.attribute.uid = uid
+ldap.attribute.ou = department
+ldap.attribute.gn = givenName
+ldap.attribute.sn = sn
+ldap.attribute.mail = mail
+ldap.attribute.title = title

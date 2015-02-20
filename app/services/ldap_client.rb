@@ -34,6 +34,49 @@ module LdapClient
     end
   end
 
+  def fetch_members(groupname)
+
+    users = []
+
+    filter = Net::LDAP::Filter.eq 'cn', groupname
+    group_search_base = config['group']['search_base']
+    #user_group_names = config['group']['names'].split(',').map(&:strip)
+    group_entries = client.search :base => group_search_base, :filter => filter
+
+    group_entries.each do |entry|
+      #get member list from group
+      members = entry.member
+
+      members.each do |member|
+        filter = Net::LDAP::Filter.eq 'dn', member
+        # use DN as search base to fetch attributes for a given
+        results = client.search :base => member
+
+        results.map do |result|
+          entry = {}
+          entry[:username] =   result[config['attribute']['uid']].first
+          entry[:dept] =       result[config['attribute']['ou']].first
+          entry[:first_name] = result[config['attribute']['gn']].first
+          entry[:last_name] =  result[config['attribute']['sn']].first
+          entry[:email] =      result[config['attribute']['mail']].first
+          entry[:title] =      result[config['attribute']['title']].first
+          entry[:auth_method] = 'ldap'
+          entry[:ldap_group_id] = groupname
+          entry[:admin] = false
+          entry[:developer] = true
+
+          users << entry
+
+        end
+
+      end
+
+    end
+
+    return users
+
+  end
+
   # used to login to Chorus as an LDAP user. First if-block is for backwards-compatibility
   def authenticate(username, password)
     ldap = client
@@ -74,6 +117,24 @@ module LdapClient
       user_entries.first
     end
   end
+
+
+  def add_users_to_chorus(groupname)
+
+    params =  {"session"=>{"username"=>"guser1", "password"=>"[FILTERED]"}, "iebuster"=>"1424381175519"}
+    session_object = Session.create!(params["session"])
+    groups = config['group']['names'].split(',').map(&:strip)
+    groups.each do |group|
+      users = fetch_members(group)
+      users.each do |user|
+        u = User.new(user)
+        u.save!
+      end
+    end
+
+
+  end
+
 
   # looks for Group DN in User entry
   def reverse_membership_lookup(user_entry, group_entries, ldap)
