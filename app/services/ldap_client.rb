@@ -187,7 +187,7 @@ module LdapClient
 
     if LdapConfig.exists? # Using new config structure
 
-      ldap_args = {:host => config['host'], :port => config['port'], :auth => {:method => :anonymous}}
+      ldap_args = {:host => config['host'], :port => config['port'], :base => config['base'], :auth => {:method => :anonymous}}
       if config['bind'].present?
         ldap_args[:auth] = {:method => :simple, :username => config['bind']['username'], :password => config['bind']['password']}
       end
