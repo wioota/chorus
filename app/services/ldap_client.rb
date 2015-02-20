@@ -13,8 +13,14 @@ module LdapClient
 
   # used to prefill a user create form
   def search(username)
-    filter = Net::LDAP::Filter.eq(config['attribute']['uid'], username)
-    results = client.search :filter => filter
+
+    if LdapConfig.exists?
+      filter = config['user']['filter'].gsub('{0}', username)
+      results = client.search :filter => filter
+    else
+      filter = Net::LDAP::Filter.eq(config['attribute']['uid'], username)
+      results = client.search :filter => filter
+    end
 
     unless results
       error = client.get_operation_result
@@ -23,14 +29,20 @@ module LdapClient
     end
 
     results.map do |result|
-      {
+      user_hash = {
         :username =>   result[config['attribute']['uid']].first,
         :dept =>       result[config['attribute']['ou']].first,
         :first_name => result[config['attribute']['gn']].first,
         :last_name =>  result[config['attribute']['sn']].first,
         :email =>      result[config['attribute']['mail']].first,
-        :title =>      result[config['attribute']['title']].first
+        :title =>      result[config['attribute']['title']].first,
+        :auth_method => 'ldap'
       }
+
+      user_group_names = config['group']['names'].split(',').map(&:strip).first if config['group']
+      user_hash[:ldap_group_id] =  user_group_names if user_group_names.present?
+
+      user_hash
     end
   end
 

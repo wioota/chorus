@@ -317,14 +317,16 @@ describe LdapClient do
                                    :title => "Big Kahuna",
                                    :dept => "Greenery",
                                    :email => "testguy@example.com",
-                                   :username => "testguy"}
+                                   :username => "testguy",
+                                   :auth_method => "ldap"}
           results.last.should be_a(Hash)
           results.last.should == {:first_name => "Other",
                                   :last_name => "Guy",
                                   :title => "Big Kahuna",
                                   :dept => "Greenery",
                                   :email => "otherguy@example.com",
-                                  :username => "testguy"}
+                                  :username => "testguy",
+                                  :auth_method => "ldap"}
         end
       end
 
