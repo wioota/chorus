@@ -1,8 +1,14 @@
 <form action="#">
 
     <div class="girdle">
-        <label for="fileNameField">{{t "workfiles.new_dialog.name_label"}}</label>
-        <input type="text" name="fileName" id="fileNameField" placeholder="{{t 'workfiles.new.filename_placeholder'}}" tabindex="1" maxlength="60" class="sql"></input>.sql
+    
+        <div class="form_pair">
+            <label for="fileNameField" class="required">{{t "workfiles.new_dialog.name_label"}}</label>
+            <input type="text" name="fileName" id="fileNameField" placeholder="{{t 'workfiles.new.filename_placeholder'}}" tabindex="1" maxlength="60" class="sql"></input>.sql
+        </div>
+
+    {{> legendRequired}}
+    
     </div>
     <!-- END girdle -->
     
