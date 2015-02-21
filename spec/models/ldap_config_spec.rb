@@ -101,6 +101,43 @@ describe LdapConfig do
       expect{ config }.not_to raise_error
     end
 
+    it "should not raise an error if the enable is false" do
+
+      File.open(Rails.root.join('config/ldap.properties').to_s, 'w') do |file|
+        new_config = <<-EOF
+          ldap.enable = false
+
+          ldap.host = localhost
+          ldap.port = 389
+
+          ldap.start_tls = false
+
+          ldap.base = DC=alpinenow,DC=local
+          ldap.bind.username = CN=Administrator,CN=Users,DC=alpinenow,DC=local
+          ldap.bind.password = (password goes here)
+
+          ldap.group.names = testGroup, otherTestGroup
+          ldap.group.search_base = DC=alpinenow,DC=local
+          ldap.group.filter = (memberOf={0})
+
+          ldap.user.search_base = CN=Users,DC=alpinenow,DC=local
+          ldap.user.filter = (sAMAccountName={0})
+
+          ldap.dn_template = greenplum\{0}
+
+          ldap.attribute.uid = uid
+          ldap.attribute.ou = department
+          ldap.attribute.gn = givenName
+          ldap.attribute.sn = sn
+          ldap.attribute.mail = mail
+          ldap.attribute.title = title
+        EOF
+        file << new_config
+      end
+
+      expect{ config }.not_to raise_error
+        end
+
     it "should not raise an error if the configuration is correct" do
 
       File.open(Rails.root.join('config/ldap.properties').to_s, 'w') do |file|
