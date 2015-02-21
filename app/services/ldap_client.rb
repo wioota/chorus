@@ -82,7 +82,6 @@ module LdapClient
             entry[:auth_method] = 'ldap'
             entry[:ldap_group_id] = groupname
             entry[:admin] = false
-            entry[:developer] = true
 
             users << entry
 
@@ -187,6 +186,7 @@ module LdapClient
             puts "Adding user #{user[:username]} to Chorus"
             #puts user.inspect
             u = User.new(user)
+            u.developer = true
             u.save!
             dev_users = dev_users+1
           end
