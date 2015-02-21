@@ -55,7 +55,11 @@ class ChorusConfig
   end
 
   def tableau_sites
-    self['tableau.sites'].map { |s| { 'name' => s } }
+    if !self['tableau.sites'].nil?
+      return self['tableau.sites'].map { |s| { 'name' => s } }
+    else
+      return []
+    end
   end
 
   def gnip_configured?
