@@ -43,6 +43,8 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
             this.dialog.$("input[name='name']").val("foo");
             this.dialog.$("input[name='tableau_username']").val("fooname");
             this.dialog.$("input[name='tableau_password']").val("foopass");
+            this.dialog.$("input[name='tableau_project_name']").val("fooproject");
+            this.dialog.$("select[name='tableau_site_name']").val("foosite");
             this.dialog.$("form").submit();
         });
 

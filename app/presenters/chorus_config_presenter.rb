@@ -4,6 +4,7 @@ class ChorusConfigPresenter < Presenter
         :external_auth_enabled => LdapClient.enabled?,
         :gpfdist_configured => model.gpfdist_configured?,
         :tableau_configured => model.tableau_configured?,
+        :tableau_sites => model.tableau_sites,
         :file_sizes_mb_workfiles => model['file_sizes_mb.workfiles'],
         :file_sizes_mb_csv_imports => model['file_sizes_mb.csv_imports'],
         :file_sizes_mb_user_icon => model['file_sizes_mb.user_icon'],
