@@ -24,7 +24,6 @@ chorus.pages.UserShowPage = chorus.pages.Base.extend({
             model: this.model,
             content: new chorus.views.UserShow({model: this.model}),
             contentHeader: new chorus.views.DisplayNameHeader({ model: this.model, showTagBox: true }),
-//             contentDetails: new chorus.views.StaticTemplate("plain_action_bar", {text: t("users.details")})
         });
         this.setupSidebar();
         this.render();

@@ -124,7 +124,6 @@
 
             .ui-icon {
                 /* adjust the caret to point up */
-                /* background-position: -18px 1px; */
                 @include triangle-glyph(up);
             }
       }
