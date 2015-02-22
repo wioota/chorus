@@ -12,14 +12,12 @@
     overflow-y: auto;
 
     /* development: to delete */
-    border: 1px dotted #C33;
+    border: 1px dotted #A44;
     /* END development: to delete */
 }
 
-
 #dialog_header {
     height: 40px;
-
     background-color: $dialog-header-background;
     border-bottom: 1px solid $border-color;
 
@@ -29,10 +27,7 @@
 }
 
 #dialog_content {
-    .girdle {
-    
-
-    }
+    .girdle {}
 }
 
 
@@ -41,7 +36,7 @@
 
     h1 {
         font-size: $medium-font;
-        color: rgb(88, 89, 95);
+        color: $color-text3;
         @include uppercase;
         vertical-align: middle;
         margin: 0;

@@ -54,6 +54,14 @@ class ChorusConfig
     !!(self['tableau.enabled'] && self['tableau.url'] && self['tableau.port'])
   end
 
+  def tableau_sites
+    if !self['tableau.sites'].nil?
+      return self['tableau.sites'].map { |s| { 'name' => s } }
+    else
+      return []
+    end
+  end
+
   def gnip_configured?
     !!self['gnip.enabled']
   end

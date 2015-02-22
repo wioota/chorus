@@ -161,15 +161,14 @@ $content-header-link-color: $color-text4;
 $required-marker-color: $error;
 
 
-// Notification colors 
-// AKA Messaging
-// used for various alerts and errors encountered while doing stuff
+// NOTIFICATIONS aka MESSAGING
+// COLORS
+// used for various alerts and errors encountered in tasks
 /* $error-background-color: #EF9A8F; */
-/* $error-background-color: $fire-engine-red; */
 $error-background-color: #F4DCD8;
 /* $error-text-color: #FFFFFF; */
 $error-text-color: #661111;
-$error-tooltiptext-color: $core-white;
+$error-tooltip-text-color: $core-white;
 $error-icon-color: #991111;
 
 $notification: $bright-turquoise;
@@ -186,18 +185,32 @@ $warning-background-color: $needs-attention;
 $warning-icon-color: #B24E11;
 /* $warning-text-color: $core-white; */
 
-$informational-color: $needs-attention;
-$informational-background-color: $needs-attention;
+$informational-color: $pacific-blue;
+$informational-background-color: $pacific-blue;
+$informational-icon-color: #B24E11;
+$informational-text-color: #333;
 
 $success-color: $ok;
 $success-background-color: $ok;
 $success-icon-color: $ok;
 
-// HARD ERRORS
+$normal-tooltip-text-color: $core-white;
+
+// hard errors
 // 404-like
 $hardError-background-color: $fire-engine-red;
 $hardError-text-color: #EEEEEE;
 $hardError-icon-color: #EEEEEE;
+
+
+// NOTIFICATIONS aka MESSAGING
+// SIZING & DIMENSIONS
+
+$alert-border-radius: 3px;
+$alert-icon-large: 22px;
+$alert-icon-medium: 16px;
+$alert-icon-small: 12px;
+
 
 
 
@@ -825,7 +838,6 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin dark-sidebar-panel {
     @include sidebar-panel;
-
     background: $accent;
 
     label {
@@ -858,6 +870,26 @@ $lozenge-color-selected-dark: $brand-dark;
         }
     }
 }
+
+// NOTIFICATIONS aka MESSAGING
+// MIXINS, CONTENT
+
+@mixin alert-error-icon {
+    content: "\f06a";   /* fa-exclamation-circle */
+}
+
+@mixin alert-warning-icon {
+    content: "\f071";   /* fa-exclamation-triangle */
+}
+
+@mixin alert-success-icon {
+    content: "\f058";   /* fa-check-circle */
+}
+
+@mixin alert-informational-icon {
+    content: "\f06a";   /* fa-exclamation-circle */
+}
+
 
 // Do not put any css rules into this file.  This file is only for declaration of variables and mixins
 //

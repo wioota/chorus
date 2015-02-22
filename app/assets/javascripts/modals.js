@@ -53,7 +53,6 @@ chorus.Modal = chorus.views.Base.extend({
         
         var $dialogInteriorContent = $("#dialog_content .girdle");
         $dialogInteriorContent.css("max-height", maxInteriorHeight + "px");
-
     },
 
     preRender: function() {

@@ -16,9 +16,12 @@ class TableauPublisher
 
   def publish_workbook(dataset, workspace, params)
     Workfile.transaction do
-      workbook = build_workbook(dataset, params[:tableau_workbook][:name],
+      workbook = build_workbook(dataset,
+                                params[:tableau_workbook][:name],
                                 params[:tableau_workbook][:tableau_username],
-                                params[:tableau_workbook][:tableau_password])
+                                params[:tableau_workbook][:tableau_password],
+                                params[:tableau_workbook][:tableau_site_name],
+                                params[:tableau_workbook][:tableau_project_name])
 
       workfile = build_workfile(params, workspace)
 
@@ -46,7 +49,8 @@ class TableauPublisher
         :name => params[:tableau_workbook][:name],
         :dataset_id => dataset.id,
         :workspace_id => params[:workspace_id],
-        :project_name => "Default"
+        :site_name => params[:tableau_workbook][:tableau_site_name],
+        :project_name => params[:tableau_workbook][:tableau_project_name]
     )
   end
 
@@ -61,9 +65,11 @@ class TableauPublisher
     workfile
   end
 
-  def build_workbook(dataset, workbook_name, username, password)
+  def build_workbook(dataset, workbook_name, username, password, site_name, project_name)
     login_params = {
         :name => workbook_name,
+        :site => site_name,
+        :project => project_name,
         :server => ChorusConfig.instance['tableau.url'],
         :port => ChorusConfig.instance['tableau.port'],
         :tableau_username => username,
@@ -73,7 +79,8 @@ class TableauPublisher
         :db_host => dataset.data_source.host,
         :db_port => dataset.data_source.port,
         :db_database => dataset.schema.database.name,
-        :db_schema => dataset.schema.name}
+        :db_schema => dataset.schema.name
+    }
 
     if dataset.is_a?(ChorusView)
       TableauWorkbook.new(login_params.merge!(:query => dataset.query))
