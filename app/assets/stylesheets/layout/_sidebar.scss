@@ -60,7 +60,7 @@ body .ui-draggable-dragging {
     }
 
     .pairs {
-        font-size: 14px;
+        font-size: $default-font-size;
         line-height: 18px;
 
         .pair {
@@ -91,7 +91,7 @@ body .ui-draggable-dragging {
         }
 
         .dialog {
-            font-size: 12px;
+            font-size: $small-font;
             font-weight: $semibold;
             margin-left: 10px;
         }
@@ -99,9 +99,9 @@ body .ui-draggable-dragging {
 
     .notice {
         a {
-            font-size: 12px;
+            font-size: $small-font;
         }
-        font-size: 12px;
+        font-size: $small-font;
         color: $color-text2;
         padding: $dialog-padding;
         background-color: $activity-stream-comment-background-color;
@@ -122,7 +122,7 @@ body .ui-draggable-dragging {
 
         .tabbed_content_area {
             .context {
-                font-size: 14px;
+                font-size: $default-font-size;
 
                 span {
                     vertical-align: bottom;
@@ -138,7 +138,7 @@ body .ui-draggable-dragging {
             }
 
             .back {
-                font-size: 12px;
+                font-size: $small-font;
                 font-weight: $semibold;
             }
 
@@ -196,7 +196,7 @@ body .ui-draggable-dragging {
         .list_item_text {
             margin-top: 2px;
             margin-bottom: 2px;
-            font-size: 14px;
+            font-size: $default-font-size;
             display: inline-block;
             max-width: 75%;
             vertical-align: middle;

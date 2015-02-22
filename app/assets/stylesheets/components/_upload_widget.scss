@@ -27,7 +27,7 @@ $image-height : 35px;
       padding-bottom: 1px;
       vertical-align: top;
       a {
-        font-size: 12px;
+        font-size: $small-font;
         font-weight: $semibold;
         margin-left: 10px;
       }
@@ -38,7 +38,7 @@ $image-height : 35px;
       display: inline-block;
       max-width: 315px;
       color: $color-text3;
-      font-size: 14px;
+      font-size: $default-font-size;
     }
 
     input[type=file] {

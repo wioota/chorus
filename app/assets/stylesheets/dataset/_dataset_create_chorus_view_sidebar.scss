@@ -20,7 +20,7 @@
             @include ellipsis;
             width: 57px;
             display: inline-block;
-            font-size: 14px;
+            font-size: $default-font-size;
             line-height: 19px;
             font-weight: normal;
             color: black;
@@ -60,7 +60,7 @@
             .name {
                 @include ellipsis;
                 max-width: 115px;
-                font-size: 14px;
+                font-size: $default-font-size;
                 line-height: 19px;
                 color: $color-text1;
                 font-weight: $semibold;
@@ -90,7 +90,7 @@
     .columns {
         .name {
             display: inline-block;
-            font-size: 14px;
+            font-size: $default-font-size;
             font-weight: normal;
             color: black;
             max-width: 124px;
