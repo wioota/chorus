@@ -21,7 +21,6 @@ describe("chorus.views.JobTaskItem", function () {
         expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/task-afm.png");
 
         this.model.set('action', 'run_sql_workfile');
-//         expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/large/sql.png");
         expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/task-sql.png");
         
         this.model.set('action', 'import_source_data');
