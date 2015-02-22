@@ -160,8 +160,8 @@ $content-header-link-color: $color-text4;
 $required-marker-color: $error;
 
 
-// NOTIFICATION COLORS
-// AKA MESSAGING
+// NOTIFICATIONS aka MESSAGING
+// COLORS
 // used for various alerts and errors encountered in tasks
 /* $error-background-color: #EF9A8F; */
 $error-background-color: #F4DCD8;
@@ -195,11 +195,21 @@ $success-icon-color: $ok;
 
 $normal-tooltip-text-color: $core-white;
 
-// HARD ERRORS
+// hard errors
 // 404-like
 $hardError-background-color: $fire-engine-red;
 $hardError-text-color: #EEEEEE;
 $hardError-icon-color: #EEEEEE;
+
+
+// NOTIFICATIONS aka MESSAGING
+// SIZING & DIMENSIONS
+
+$alert-border-radius: 3px;
+$alert-icon-large: 22px;
+$alert-icon-medium: 16px;
+$alert-icon-small: 12px;
+
 
 
 
@@ -826,7 +836,6 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin dark-sidebar-panel {
     @include sidebar-panel;
-
     background: $accent;
 
     label {
@@ -859,6 +868,26 @@ $lozenge-color-selected-dark: $brand-dark;
         }
     }
 }
+
+// NOTIFICATIONS aka MESSAGING
+// MIXINS, CONTENT
+
+@mixin alert-error-icon {
+    content: "\f06a";   /* fa-exclamation-circle */
+}
+
+@mixin alert-warning-icon {
+    content: "\f071";   /* fa-exclamation-triangle */
+}
+
+@mixin alert-success-icon {
+    content: "\f058";   /* fa-check-circle */
+}
+
+@mixin alert-informational-icon {
+    content: "\f06a";   /* fa-exclamation-circle */
+}
+
 
 // Do not put any css rules into this file.  This file is only for declaration of variables and mixins
 //
