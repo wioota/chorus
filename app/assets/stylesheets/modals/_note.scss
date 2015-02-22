@@ -163,14 +163,6 @@ $label-width: 82px;
                 @include ellipsis;
                 max-width: 200px;
                 display: inline-block;
-            }
-
-            .remove {
-                float: right;
-            }
-
-            .name, .remove {
-                line-height: 20px;
                 vertical-align: middle;
             }
         }
