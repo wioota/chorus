@@ -63,12 +63,13 @@ div.login {
             }
         }
 	}
+	
 	.logo.alpine {
 		display: block;
 		margin-left: auto;
 		margin-right: auto;
 		margin-bottom: $image-fudge;
-		height: 50px;
+		width:120px;
 	}
 
 	.logo.pivotal {
@@ -77,7 +78,6 @@ div.login {
 		margin-right: auto;
 		margin-bottom: $image-fudge;
 	}
-
 
     .login_footer {        
         margin-left: auto;

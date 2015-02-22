@@ -9,7 +9,7 @@
                 <button class="edit button_action">{{t "dataset.content_details.edit"}}</button>
             {{/if}}
             {{#if showPublish}}
-                <button class="publish button_action">Publish to Tableau</button>
+                <button class="publish button_action">{{t "dataset.content_details.publish_to_tableau"}}</button>
             {{/if}}
             {{#if showDerive}}
                 <button class="derive button_action">{{t "dataset.content_details.derive"}}</button>
@@ -87,9 +87,8 @@
             <button class="preview button_action">{{t "dataset.data_preview"}}</button>
         </div>
         <div class="col cols-16">
-            <span class="explore">{{t "actions.explore"}}</span>
-            <input class="search" placeholder="{{t "dataset.search"}}"/>
-            <span class="count">{{t "dataset.column_count" count=models.length}}</span>
+			<span class="count">{{t "dataset.column_count" count=models.length}}</span>
+			<input class="search" placeholder="{{t "dataset.search"}}"/>
         </div>
     </div>
 </div>

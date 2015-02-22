@@ -74,13 +74,13 @@ $shuttle-list-item-height: 40px;
     }
 
     a {
-        font-size: 12px;
+        font-size: $small-font;
     }
 
     .was_added {
         color: $color-text3;
         float: right;
-        font-size: 12px;
+        font-size: $small-font;
     }
 
     li a {
@@ -112,7 +112,6 @@ $shuttle-list-item-height: 40px;
         li {
             height: $shuttle-list-item-height;
             border-bottom: $border-canon;
-            /* padding: 0 8px; */
             padding: 0;
             line-height: $shuttle-list-item-height - 3px;
 
@@ -145,23 +144,23 @@ $shuttle-list-item-height: 40px;
 
                 &.added {
                     /* css to 'remove' a user from the available list when added */
-                    /* display: none; */
+                    display: none;
 
                    /*  when above is enabled, remove the following 4 */
-                    .checkmark {
-                        display: inherit;
-                    }
-                    a {
-                        display: none;
-                    }
-                    .was_added {
-                        display: inline;
-                    }
+/*                     .checkmark { */
+/*                         display: inherit; */
+/*                     } */
+/*                     a { */
+/*                         display: none; */
+/*                     } */
+/*                     .was_added { */
+/*                         display: inline; */
+/*                     } */
                 }
 
-                a {
-                    display: inline;
-                }
+/*                 a { */
+/*                     display: inline; */
+/*                 } */
 
                 .was_added {
                     display: none;
@@ -188,7 +187,3 @@ $shuttle-list-item-height: 40px;
         }
     }
 }
-
-/* .dialog.workspace_edit_members .dialog_content .form_controls { */
-/*      margin-top: 0px; */
-/* } */

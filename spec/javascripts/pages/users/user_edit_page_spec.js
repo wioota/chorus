@@ -31,31 +31,24 @@ describe("chorus.pages.UserEditPage", function() {
             expect(this.view.$(".content_header h1").text().trim()).toBe(this.user.displayName());
         });
 
-        it("displays the word 'details' in the details-header", function() {
-            expect(this.view.$(".content_details").text().trim()).toBe(t("users.details"));
-        });
-
         it("does not have the 'edit profile' link in the sidebar", function() {
             expect(this.view.$("a.edit_user")).not.toExist();
         });
 
         context("breadcrumbs", function() {
-            it("links to home for the first crumb", function() {
-                expect(this.view.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/");
-                expect(this.view.$("#breadcrumbs .breadcrumb a").eq(0).text()).toBe(t("breadcrumbs.home"));
+
+
+            it("links to /users for the #1 crumb", function() {
+                expect(this.view.$("#breadcrumbs .breadcrumb a").eq(0).attr("href")).toBe("#/users");
+                expect(this.view.$("#breadcrumbs .breadcrumb a").eq(0).text()).toBe(t("breadcrumbs.users"));
             });
 
-            it("links to /users for the second crumb", function() {
-                expect(this.view.$("#breadcrumbs .breadcrumb a").eq(1).attr("href")).toBe("#/users");
-                expect(this.view.$("#breadcrumbs .breadcrumb a").eq(1).text()).toBe(t("breadcrumbs.users"));
+            it("links to user show for the #2 crumb", function() {
+                expect(this.view.$("#breadcrumbs .breadcrumb a").eq(1).attr("href")).toBe(this.view.model.showUrl());
+                expect(this.view.$("#breadcrumbs .breadcrumb a").eq(1).text()).toBe(t("breadcrumbs.user_profile"));
             });
 
-            it("links to user show for the third crumb", function() {
-                expect(this.view.$("#breadcrumbs .breadcrumb a").eq(2).attr("href")).toBe(this.view.model.showUrl());
-                expect(this.view.$("#breadcrumbs .breadcrumb a").eq(2).text()).toBe(t("breadcrumbs.user_profile"));
-            });
-
-            it("displays edit user for the fourth crumb", function() {
+            it("displays edit user for the last crumb", function() {
                 expect(this.view.$("#breadcrumbs .breadcrumb .slug").text()).toBe(t("breadcrumbs.user_edit"));
             });
         });

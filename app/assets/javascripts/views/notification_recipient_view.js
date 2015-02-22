@@ -41,6 +41,7 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
         e && e.preventDefault();
 
         // element clicked is the remove icon, so need to step up to the <li>
+        // this is dependent on the html/dom constructed
         var $li = $(e.target).parent().parent();
         var user = this.selectedUsers.get($li.data("id"));
 

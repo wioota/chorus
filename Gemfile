@@ -80,10 +80,14 @@ group :development, :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
   gem 'sunspot_solr', :github => 'taktsoft/sunspot', :ref => '78717a33894271d012682dbe8902458badb0ca63' # https://github.com/sunspot/sunspot/pull/267
   gem 'backbone_fixtures_rails', :github => 'charleshansen/backbone_fixtures_rails'
   gem 'rspec_api_documentation', :github => 'Chorus/rspec_api_documentation', :require => false
+  gem 'pry' # Drop in to an extended Rails console by creating a 'binding.pry' breakpoint
+  gem 'pry-nav' # Adds debugger functionality to Pry
 end
 
 group :development do
+  # gem 'tabcmd_gem', :path => "~/alpine/chorus-tableau" # otherwise is set in Gemfile-packaging
   gem 'license_finder', '~> 0.8.1', :require => false
   gem 'mizuno'
   gem 'bullet'
+  gem 'capistrano', '2.15.5'
 end

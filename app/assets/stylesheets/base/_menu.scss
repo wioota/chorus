@@ -1,16 +1,12 @@
 @mixin checkmark {
-
-    /*      background-repeat: no-repeat; */
-    /*      background-image: url("/images/check.png"); */
     display: inline-block;
-    
     position: absolute;
     top: 10px;
     left: -12px;
 
     &::after {
         font-family: FontAwesome;
-        content: "\f00c";
+        content: "\f00c"; /* fa-check */
     }
 }
 

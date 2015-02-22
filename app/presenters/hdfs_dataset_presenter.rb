@@ -2,7 +2,7 @@ class HdfsDatasetPresenter < DatasetPresenter
   def succinct_hash
     super.merge({
         :file_mask => model.file_mask,
-        :hdfs_data_source => model.hdfs_data_source,
+        :hdfs_data_source => Presenter.present(model.hdfs_data_source, @view_context, options),
         :object_type => 'MASK'
     })
   end

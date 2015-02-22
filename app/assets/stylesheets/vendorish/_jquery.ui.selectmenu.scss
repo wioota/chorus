@@ -26,7 +26,7 @@
   display: none;
 }
 
-.ui-selectmenu-menu  ul.ui-menu {
+.ui-selectmenu-menu ul.ui-menu {
   overflow: auto;
   overflow-y: auto;
   overflow-x: hidden;
@@ -42,11 +42,11 @@
   border: 0;
 }
 
-.ui-selectmenu-button span.ui-icon {
-  right: 4px;
-  position: absolute;
-  top: 1px;
-}
+/* .ui-selectmenu-button span.ui-icon { */
+/*   right: 4px; */
+/*   position: absolute; */
+/*   top: 1px; */
+/* } */
 
 .ui-selectmenu-button span.ui-selectmenu-text {
   text-align: left;
@@ -92,7 +92,7 @@
 .ui-menu-item:hover {
   background: #1C93DF;
   a {
-    color: white;
+    color: $core-white;
   }
 }
 
@@ -151,7 +151,7 @@
   z-index: $select-menu-z-index !important;
 }
 
-.ui-selectmenu-menu  ul {
+.ui-selectmenu-menu ul {
   padding: 2px;
   margin: 0;
   list-style: none;
@@ -159,7 +159,7 @@
   overflow: auto;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: white;
+  background-color: $core-white;
   max-height: 250px;
   border: 1px solid #AAA;
 }
@@ -214,7 +214,8 @@ a.ui-selectmenu-disabled {
   margin-left: 5px;
 }
 
-.ui-selectmenu-menu li .ui-icon, .ui-selectmenu-text .ui-icon {
+.ui-selectmenu-menu li .ui-icon,
+.ui-selectmenu-text .ui-icon {
   position: absolute;
   top: 1em;
   margin-top: -8px;

@@ -21,7 +21,7 @@ describe ImportConsole::ImportsHelper do
       end
 
       context "when the dataset is not a chorus view" do
-        let(:dataset) { datasets(:table) }
+        let(:dataset) { datasets(:default_table) }
 
         it "includes datasets in the url" do
           dummy.link_to_workspace_table(workspace, dataset).should include("datasets")
@@ -31,7 +31,7 @@ describe ImportConsole::ImportsHelper do
 
     context "when passing in a schema" do
       let (:schema) { schemas(:public) }
-      let (:dataset) { datasets(:table) }
+      let (:dataset) { datasets(:default_table) }
 
       it "returns an URL to the dataset without schema/workspace in it" do
         dummy.link_to_table(dataset).should == "/#/datasets/#{dataset.id}"
@@ -56,7 +56,7 @@ describe ImportConsole::ImportsHelper do
       let(:import) { imports(:one) }
 
       context "if a destination table is present" do
-        let (:dataset) { datasets(:table) }
+        let (:dataset) { datasets(:default_table) }
 
         it "returns the correct link" do
           dummy.link_to_destination(import_manager).should == "a_table_link"
@@ -76,7 +76,7 @@ describe ImportConsole::ImportsHelper do
       let(:import) { imports(:oracle) }
 
       context "if a destination table is present" do
-        let (:dataset) { datasets(:table) }
+        let (:dataset) { datasets(:default_table) }
 
         it "returns the correct link" do
           dummy.link_to_destination(import_manager).should == "a_table_link"

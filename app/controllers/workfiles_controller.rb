@@ -12,7 +12,9 @@ class WorkfilesController < ApplicationController
 
     workfiles = workspace.filtered_workfiles(params)
 
-    present paginate(workfiles), :presenter_options => {:workfile_as_latest_version => true, :list_view => true}
+    #present paginate(workfiles), :presenter_options => {:workfile_as_latest_version => true, :list_view => true}
+    present paginate(workfiles), :presenter_options => {:workfile_as_latest_version => true, :list_view => true, :cached => true, :namespace => "workspace:workfiles"}
+
   end
 
   def show

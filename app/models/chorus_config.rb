@@ -26,6 +26,15 @@ class ChorusConfig
     nil
   end
 
+
+   def with_temporary_config(new_config_hash)
+     old_config = @config.deep_dup
+     @config.deep_merge! new_config_hash.stringify_keys
+     yield
+   ensure
+     @config = old_config
+   end
+
   def hdfs_versions
     @available_hdfs_versions ||= initialize_hdfs_versions
   end
@@ -43,6 +52,14 @@ class ChorusConfig
 
   def tableau_configured?
     !!(self['tableau.enabled'] && self['tableau.url'] && self['tableau.port'])
+  end
+
+  def tableau_sites
+    if !self['tableau.sites'].nil?
+      return self['tableau.sites'].map { |s| { 'name' => s } }
+    else
+      return []
+    end
   end
 
   def gnip_configured?

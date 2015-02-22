@@ -23,7 +23,7 @@
 }
 
 /* comfortable spacing at bottom of page EXCEPT for iframe situation */
-#page > div:not(.header_iframe_layout) {
+#page > div[data-template="logged_in_layout"] {
     margin-bottom: $page-margin-bottom;
 }
 

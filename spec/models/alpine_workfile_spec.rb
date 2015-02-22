@@ -12,7 +12,7 @@ describe AlpineWorkfile do
     }
   end
   let(:params) do
-    valid_params.merge(:dataset_ids => [datasets(:table).id])
+    valid_params.merge(:dataset_ids => [datasets(:default_table).id])
   end
   let(:model) { Workfile.build_for(params).tap { |file| file.save } }
 
@@ -174,7 +174,7 @@ describe AlpineWorkfile do
   describe "new" do
     context "when passed datasets" do
       context "in a DB" do
-        let(:datasetA) { datasets(:table) }
+        let(:datasetA) { datasets(:default_table) }
         let(:datasetB) { datasets(:other_table) }
         let(:params) { valid_params.merge({:dataset_ids => [datasetA.id, datasetB.id]}) }
 
@@ -275,7 +275,7 @@ describe AlpineWorkfile do
 
   describe '#live_dataset_ids' do
     let(:workfile) { workfiles(:multiple_dataset_workflow) }
-    let(:table) { datasets(:table) }
+    let(:table) { datasets(:default_table) }
     let(:hdfs_set) { datasets(:hadoop) }
     let(:oracle_set) { datasets(:oracle_table) }
     let(:jdbc_set) { datasets(:jdbc_table) }

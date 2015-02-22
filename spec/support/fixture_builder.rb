@@ -154,7 +154,7 @@ FixtureBuilder.configure do |fbuilder|
     default_database = FactoryGirl.create(:gpdb_database, :data_source => owners_data_source, :name => 'default')
     default_schema = FactoryGirl.create(:gpdb_schema, :name => 'default', :database => default_database)
     FactoryGirl.create(:gpdb_schema, :name => "public", :database => default_database)
-    default_table = FactoryGirl.create(:gpdb_table, :name => "table", :schema => default_schema)
+    default_table = FactoryGirl.create(:gpdb_table, :name => "default_table", :schema => default_schema)
     FactoryGirl.create(:gpdb_view, :name => "view", :schema => default_schema)
 
     other_schema = FactoryGirl.create(:gpdb_schema, :name => "other_schema", :database => default_database)
@@ -277,7 +277,7 @@ FixtureBuilder.configure do |fbuilder|
     chorus_view = FactoryGirl.create(:chorus_view, :name => "chorus_view", :schema => default_schema, :query => "select * from a_table", :workspace => public_workspace)
     private_chorus_view = FactoryGirl.create(:chorus_view, :name => "private_chorus_view", :schema => default_schema, :query => "select * from a_table", :workspace => private_workspace)
     # Search Chorus Views
-    search_chorus_view = FactoryGirl.create(:chorus_view, :name => "searchquery_chorus_view", :schema => searchquery_schema, :query => "select searchquery from a_table", :workspace => search_public_workspace)
+    search_chorus_view = FactoryGirl.create(:chorus_view, :name => "a_searchquery_chorus_view", :schema => searchquery_schema, :query => "select searchquery from a_table", :workspace => search_public_workspace)
     searchquery_chorus_view_private = FactoryGirl.create(:chorus_view, :name => "searchquery_chorus_view_private", :schema => searchquery_schema, :query => "select searchquery from a_table", :workspace => search_private_workspace)
 
     # Tableau publications

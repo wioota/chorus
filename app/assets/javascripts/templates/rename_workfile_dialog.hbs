@@ -1,7 +1,13 @@
 <form>
     <div class="girdle">
-        <input value="{{fileName}}" name="fileName" tabindex="1" maxlength="60" {{#isSql}}class="sql"{{/isSql}}/>
-        {{#isSql}}.sql{{/isSql}}
+        <div class="form_pair">
+            <label for="fileNameField" class="required">{{t "workfile.rename_dialog.filename.label"}}</label>
+            <input id="fileNameField" value="{{fileName}}" name="fileName" tabindex="1" maxlength="60" class="{{#isSql}}sql{{/isSql}}"/>
+                {{#isSql}}.sql{{/isSql}}
+        </div>
+        
+        {{> legendRequired}}
+        
     </div>
     <!-- END girdle -->
     

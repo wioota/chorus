@@ -87,7 +87,7 @@ describe WorkspaceImport do
     let(:sandbox) { import.schema }
     let(:import) do
       imp = imports(:now)
-      imp.update_attribute(:to_table, datasets(:table).name)
+      imp.update_attribute(:to_table, datasets(:default_table).name)
       imp
     end
 
@@ -140,7 +140,7 @@ describe WorkspaceImport do
       let(:workspace) { workspaces(:public) }
 
       context 'when the source is in the same database' do
-        let(:source_dataset) { datasets(:table) }
+        let(:source_dataset) { datasets(:default_table) }
         it('is TableCopier') { copier_class.should == TableCopier }
       end
 
@@ -169,7 +169,7 @@ describe WorkspaceImport do
       end
 
       context 'when the source is in a greenplum database' do
-        let(:source_dataset) { datasets(:table) }
+        let(:source_dataset) { datasets(:default_table) }
         it('is MultiPgTableCopier') { copier_class.should == MultiPgTableCopier }
       end
 
@@ -189,7 +189,7 @@ describe WorkspaceImport do
 
   describe "associating dataset to workspace" do
     let(:workspace) { import.workspace }
-    let(:destination) { datasets(:table) }
+    let(:destination) { datasets(:default_table) }
 
     before do
       stub(import).mark_as_success

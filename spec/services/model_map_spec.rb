@@ -29,7 +29,7 @@ describe ModelMap do
     end
 
     it "works for datasets" do
-      model = datasets(:table)
+      model = datasets(:default_table)
       ModelMap.model_from_params("dataset", model.id).should == model
     end
 

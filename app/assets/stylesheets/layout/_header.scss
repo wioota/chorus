@@ -10,6 +10,11 @@ $header-margin-right: $page-margin-right;
 $expanded-search-width: 450px;
 $notification-token-width: $header-margin * 2;
 
+$branding-opacity: 0.93;
+
+$menu-item-height-default: 40px;
+
+
 @mixin full-item-link($height) {
     &:hover, &.selected {
         background-color: $list-hover-color;
@@ -29,6 +34,28 @@ $notification-token-width: $header-margin * 2;
                         
             sub { @include secondary-text-small; }
         }
+    }
+}
+
+// WIP
+// dupe of full-item-link, but factoring out the <div>
+// and simplifying
+
+@mixin username-item-link($height) {
+    &:hover, &.selected {
+        background-color: $list-hover-color;
+    }
+
+    a {
+        height: $height;
+        width: 100%;
+
+        text-decoration: none;
+
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: 15px;
+        line-height: $height;
     }
 }
 
@@ -89,10 +116,16 @@ $notification-token-width: $header-margin * 2;
 
             .token {
                 float: left;
+                
+                /* main branding logo */
                 &.logo {
                     width: 90px;
                     padding: 0px 10px;
-
+                    opacity: $branding-opacity;
+                    
+                    &:hover {
+                        opacity: 1;
+                    }
                     a img {
                         vertical-align: middle;
                     }
@@ -132,7 +165,6 @@ $notification-token-width: $header-margin * 2;
                 }
 
                 &.active .caret::before {
-
                     /* when activating the menu, switch thecaret */
                     content:  "\f0d8";  // =  fa-caret-up
                 }
@@ -155,9 +187,18 @@ $notification-token-width: $header-margin * 2;
                     }
                 }
 
-                &.advisor_now a img {
+                &.advisorNow a img {
+                    position: relative;
+                    width: 83px;
+                    top: 6px;
+                    
                     margin-bottom: 0px;
                     padding-right: 15px;
+                    opacity: $branding-opacity;
+                    
+                    &:hover {
+                        opacity: 1;
+                    }
                 }
             }
         }
@@ -249,7 +290,7 @@ $notification-token-width: $header-margin * 2;
                 @include full-item-link(60px);
             }
             li.search_all {
-                @include full-item-link(40px);
+                @include full-item-link($menu-item-height-default);
                 padding-top:5px;
                 padding-bottom: 5px;
             }   
@@ -316,12 +357,12 @@ $notification-token-width: $header-margin * 2;
 
         .menu.popup_username {
             line-height: 24px;
-            /* add 1 for 1px border around popup */
+            /* account for 1px border around popup */
             right: $header-margin-right - 1;
             width: $header-margin * 6;
 
             li {
-                @include full-item-link(40px)
+                @include username-item-link($menu-item-height-default)
             }
         }
 

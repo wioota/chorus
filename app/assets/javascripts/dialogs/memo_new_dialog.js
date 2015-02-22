@@ -11,8 +11,8 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         "click .remove": "removeAttachment",
         "click .add_workfile": "launchWorkfileDialog",
         "click .add_dataset": "launchDatasetDialog",
-        "click .cancel_upload": "cancelUpload",
-        "click .file-wrapper": "launchDesktopFileDialog"
+        "click .file-wrapper": "launchDesktopFileDialog",
+        "click .cancel_upload": "cancelUpload"
     },
 
     setup: function() {
@@ -54,7 +54,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         });
 
         _.defer(_.bind(function() {
-            this.makeEditor($(this.el), ".toolbar", "body", { width: 'auto', height: 150 });
+            this.makeEditor($(this.el), ".toolbar", "body", { width: 'auto', height: 200 });
         }, this));
     },
 

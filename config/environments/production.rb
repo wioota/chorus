@@ -45,6 +45,7 @@ Chorus::Application.configure do
   # config.cache_store = :mem_cache_store
   # Enable caching in production. Prakash 12/29/14
   config.cache_store = :file_store, Rails.root.to_s + "/tmp/cache/chorus"
+  #config.cache_store = :memory_store, { size: 500.megabytes }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"

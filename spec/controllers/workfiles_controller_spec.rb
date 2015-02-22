@@ -465,7 +465,7 @@ describe WorkfilesController do
       end
 
       context "and a list of datasets have been chosen" do
-        let(:dataset_ids) { [datasets(:table).id, datasets(:other_table).id].map(&:to_s) }
+        let(:dataset_ids) { [datasets(:default_table).id, datasets(:other_table).id].map(&:to_s) }
         let(:params) do
           {
             :workspace_id => workspace.to_param,
@@ -481,7 +481,7 @@ describe WorkfilesController do
           mock_present do |model|
             model.should be_a AlpineWorkfile
             model.file_name.should == 'something'
-            model.execution_locations.should =~ [datasets(:table).database]
+            model.execution_locations.should =~ [datasets(:default_table).database]
             model.additional_data['dataset_ids'].should =~ dataset_ids
             model.workspace.should == workspace
           end

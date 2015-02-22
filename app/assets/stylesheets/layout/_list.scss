@@ -35,7 +35,7 @@
         }
 
         .name {
-            padding-top: 2px;
+/*             padding-top: 2px; */
             padding-bottom: 5px;
             
 			@include font-primary;
@@ -75,6 +75,10 @@
         }
 
         .job_item {
+            .image {
+                width: 34px;
+            }
+
             .frequency, .next_run, .last_run {
                 display: inline-block;                
             }
@@ -112,20 +116,37 @@
         .job_task_item {
             .index {
                 float: left;
-                margin-left: 5px;
-                margin-top: 12px;
-                margin-right: 4px;
-                @include font-primary;
+                margin-left: 1px;
+                margin-right: 10px;
+				@include font-primary;
             }
 
             .arrows{
                 position: absolute;
                 right: 20px;
                 top: 15px;
-                .up_arrow, .down_arrow {
+                .move_up_arrow,
+                .move_down_arrow {
                     cursor: pointer;
                     display: inline-block;
+
+                    border: 3px solid #606060;
+                    border-radius: 20px;
+                    background-color: #F0F0F0;
+                    
+                    margin-left: 5px;
+                    
+                    &:hover {
+                        background-color: #C0E0F6;
+                    }
                 }
+                .arrow_disabled {
+                    border-color: #C0C0C0 !important;
+                    background-color: #DDD !important;
+                    &:hover {
+                         background-color: inherit;
+                    }
+                }   
             }
         }
 
@@ -144,7 +165,7 @@
         .details_area {
             @include list-item-details-area;
             .small {
-                font-size: 12px
+                font-size: $small-font;
             }
         }
 
@@ -173,7 +194,7 @@
         }
 
         .timestamp {
-            font-size: 12px;
+            font-size: $small-font;
             font-style: italic;
         }
 

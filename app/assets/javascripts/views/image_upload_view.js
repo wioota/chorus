@@ -36,24 +36,24 @@ chorus.views.ImageUpload = chorus.views.Base.extend({
             self.uploadObj = data;
             if (self.spinnerSmall) {
                 self.spinner = new Spinner({
-                    lines: 14,
+                    lines: 13,
                     length: 8,
                     width: 3,
                     radius: 10,
                     color: '#000',
-                    speed: 1,
-                    trail: 75,
+                    speed: 0.5,
+                    trail: 71,
                     shadow: false
                 }).spin(self.$(".spinner_container")[0]);
             } else {
                 self.spinner = new Spinner({
-                    lines: 30,
+                    lines: 27,
                     length: 40,
                     width: 6,
                     radius: 25,
                     color: '#000',
                     speed: 0.5,
-                    trail: 75,
+                    trail: 71,
                     shadow: false
                 }).spin(self.$(".spinner_container")[0]);
             }

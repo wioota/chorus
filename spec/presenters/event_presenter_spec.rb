@@ -28,7 +28,7 @@ describe EventPresenter, :type => :view do
       let(:options) { {:activity_stream => true, :succinct => true } }
 
       context "SourceTableCreated" do
-        let(:dataset) { datasets(:table) }
+        let(:dataset) { datasets(:default_table) }
         let(:event) { FactoryGirl.create(:source_table_created_event, :dataset => dataset) }
 
         it "does not render datasets with their schemas or associated workspaces" do
@@ -140,7 +140,7 @@ describe EventPresenter, :type => :view do
       context "with an attachment" do
         let(:event) { FactoryGirl.create(:note_on_workfile) }
         let(:attachment) { Attachment.first }
-        let(:dataset) { datasets(:table) }
+        let(:dataset) { datasets(:default_table) }
         let(:workfile) { workfiles(:public) }
         let(:note_work_flow_result) { NotesWorkFlowResult.new({:result_id => "0.1234321"}) }
 

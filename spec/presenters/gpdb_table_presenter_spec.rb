@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GpdbTablePresenter, :type => :view do
-  let(:table) { datasets(:table) }
+  let(:table) { datasets(:default_table) }
   let(:presenter) { GpdbTablePresenter.new(table, view) }
 
   before(:each) do

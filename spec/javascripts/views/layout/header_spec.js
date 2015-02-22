@@ -287,7 +287,7 @@ describe("chorus.views.Header", function() {
                 });
 
                 it("does not display the advisorNow link", function () {
-                    expect(this.view.$(".advisor_now")).not.toExist();
+                    expect(this.view.$(".advisorNow")).not.toExist();
                 });
             });
 
@@ -306,9 +306,9 @@ describe("chorus.views.Header", function() {
                         email: user.get("email"),
                         org_id: 'my_org'
                     });
-                    expect(this.view.$(".advisor_now a")).toExist();
-                    expect(this.view.$(".advisor_now a")).toHaveAttr("target", "_blank");
-                    expect(this.view.$(".advisor_now a")).toHaveAttr("href", url);
+                    expect(this.view.$(".advisorNow a")).toExist();
+                    expect(this.view.$(".advisorNow a")).toHaveAttr("target", "_blank");
+                    expect(this.view.$(".advisorNow a")).toHaveAttr("href", url);
                 });
             });
         });

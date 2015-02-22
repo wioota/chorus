@@ -25,7 +25,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
 
     postRender: function() {
         _.defer(_.bind(function() {
-            this.makeEditor($(this.el), ".toolbar", "body", { width: 'auto', height: 150 });
+            this.makeEditor($(this.el), ".toolbar", "body", { width: 'auto', height: 200 });
         }, this));
     },
 
