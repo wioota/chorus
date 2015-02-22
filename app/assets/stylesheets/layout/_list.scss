@@ -80,6 +80,10 @@
                 width: 34px;
             }
             
+            .image {
+                width: 34px;
+            }
+
             .frequency, .next_run, .last_run {
                 display: inline-block;                
             }
@@ -126,7 +130,9 @@
                 position: absolute;
                 right: 20px;
                 top: 15px;
-                .move_up_arrow, .move_down_arrow {
+
+                .move_up_arrow,
+                .move_down_arrow {
                     cursor: pointer;
                     display: inline-block;
 
@@ -165,7 +171,7 @@
         .details_area {
             @include list-item-details-area;
             .small {
-                font-size: 12px
+                font-size: $small-font;
             }
         }
 
@@ -194,7 +200,7 @@
         }
 
         .timestamp {
-            font-size: 12px;
+            font-size: $small-font;
             font-style: italic;
         }
 

@@ -15,6 +15,7 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
             run_sql_workfile: "/images/jobs/task-sql.svg",
 //          import_source_data: "/images/jobs/task-import.png"
             import_source_data: "/images/jobs/task-import.svg"
+
     },
 
     additionalContext: function () {

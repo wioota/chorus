@@ -5,7 +5,11 @@
 }
 .cleditorMain,
 .cleditorPopup,
-.cleditorMain * {-moz-box-sizing:content-box; -webkit-box-sizing:content-box; box-sizing:content-box}
+.cleditorMain * {
+    -moz-box-sizing:content-box;
+    -webkit-box-sizing:content-box; 
+    box-sizing:content-box;
+}
 
 .cleditorMain iframe {border:none; margin:0; padding:0}
 .cleditorMain textarea {
@@ -15,16 +19,39 @@
     overflow-y:scroll;
     font-size:10pt;
     resize:none;
-    outline:none /* webkit grip focus */
+    outline:none; /* webkit grip focus */
 }
 .cleditorToolbar {
-    display: none;
-    /* background: url('/images/cleditor/toolbar.gif') repeat */
+    /*  display: none; */
+    background-color: #DDDDD9;
+    border-bottom: 1px solid #BBB;
 }
 .cleditorGroup {float:left; height:26px}
-.cleditorButton {float:left; width:24px; height:24px; margin:1px 0 1px 0; background: url('/images/cleditor/buttons.gif')}
-.cleditorDisabled {opacity:0.3; filter:alpha(opacity=30)}
-.cleditorDivider {float:left; width:1px; height:23px; margin:1px 0 1px 0; background:#CCC}
+
+.cleditorButton {
+    float:left;
+    width:24px;
+    height:24px;
+    margin:1px 0 1px 0;
+    background: url('/images/cleditor/buttons.gif')
+//     @include border-radius($toolbar-button-borderradius);
+//     background: url('/images/cleditor/buttons@2x.png');
+//     background-size: 930px 24px;
+}
+
+.cleditorDisabled {
+    opacity:0.3;
+    filter:alpha(opacity=30)
+}
+
+.cleditorDivider {
+    float:left;
+    width:1px;
+    height:23px;
+    margin:1px 0 1px 0;
+    background:#CCC;
+}
+
 .cleditorPopup {
     border:solid 1px #999;
     background-color:$core-white;
@@ -51,18 +78,18 @@
 .cleditorColor div {float:left; width:14px; height:14px; margin:0 1px 1px 0}
 .cleditorPrompt {
     background-color:#F6F7F9;
-    padding:4px;
-    font-size:8.5pt 
+    padding: 10px;
+    font-size: 12px;
 }
 .cleditorPrompt input,
 .cleditorPrompt textarea {
-    font-size: 8.5pt;
+    font-size: 12px;
 }
 
 .cleditorMsg {background-color:#FDFCEE; width:150px; padding:4px; font-size:8.5pt}
 
-.cleditorPopup,
-.cleditorMain textarea,
-.cleditorPrompt textarea {
-    font-family: Arial, Verdana, san-serif;
-}
+// .cleditorPopup,
+// .cleditorMain textarea,
+// .cleditorPrompt textarea {
+//     font-family: Arial, Verdana, san-serif;
+// }

@@ -24,6 +24,7 @@ describe("chorus.views.JobTaskItem", function () {
         this.model.set('action', 'run_sql_workfile');
 //         expect(this.view.$("img")).toHaveAttr("src", "/images/workfiles/large/sql.png");
         expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/task-sql.svg");
+
         
         this.model.set('action', 'import_source_data');
 //         expect(this.view.$("img")).toHaveAttr("src", "/images/jobs/import.png");
@@ -65,6 +66,7 @@ describe("chorus.views.JobTaskItem", function () {
             this.model = this.collection.at(this.collection.length - 1);
             this.view.model = this.model;
             this.view.render();
+
             expect(this.view.$('.move_up_arrow')).toExist();
         });
 
