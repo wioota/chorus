@@ -3,7 +3,8 @@ chorus.pages.Error = chorus.pages.Bare.extend({
     additionalClass: "logged_in_layout",
 
     events: {
-        "click button.submit": "navigateToHome"
+        "click .link_home": "navigateToHome",
+        "click .link_backwards": "navigateBack"
     },
 
     subviews: {
@@ -17,7 +18,10 @@ chorus.pages.Error = chorus.pages.Bare.extend({
     navigateToHome: function() {
         chorus.router.navigate("#");
     },
-
+    navigateBack: function() {
+        history.go(-1);
+    },
+    
     context: function() {
         return _.extend({
             title: this.title,

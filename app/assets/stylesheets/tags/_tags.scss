@@ -4,6 +4,15 @@
 
 $tag-border-radius: 2px;
 
+.tag_item {
+
+    .tag_icon {
+        position: relative;
+        top: 11px;
+        font-size: 28px;
+    }
+}
+
 .tags_input {
     border: 1px solid $border-color;
     background-color: #FFFFFF;
@@ -20,7 +29,7 @@ $tag-border-radius: 2px;
                 display: inline-block;
                 width: 200px;
                 border: 0;
-                margin: 0 0 0 5px;
+/*                 margin: 0 0 0 5px; */
                 padding: 0;
                 vertical-align: top;
                 min-height: 20px;

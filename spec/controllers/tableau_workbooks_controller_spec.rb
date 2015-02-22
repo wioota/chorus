@@ -12,7 +12,7 @@ describe TableauWorkbooksController do
   end
 
   describe '#create' do
-    let(:dataset) { datasets(:table) }
+    let(:dataset) { datasets(:default_table) }
     let(:workspace) { workspaces(:public)}
     let(:name) { 'myTableauWorkbook' }
     let(:params) { extra_options.merge( {
@@ -20,7 +20,9 @@ describe TableauWorkbooksController do
                       :workspace_id => workspace.id,
                       :name => name,
                       :tableau_username => 'chorusadmin',
-                      :tableau_password => 'secret'})
+                      :tableau_password => 'secret',
+                      :tableau_site_name => 'myCustomSite',
+                      :tableau_project_name => 'Default'})
                  }
 
     let(:extra_options) { {} }
@@ -30,7 +32,7 @@ describe TableauWorkbooksController do
     end
 
     context 'when the dataset is a table' do
-      let(:dataset) { datasets(:table) }
+      let(:dataset) { datasets(:default_table) }
 
       it 'instantiates the workbook with the table name' do
         mock.proxy(TableauWorkbook).new(hash_including(:db_relname => dataset.name))
@@ -71,6 +73,7 @@ describe TableauWorkbooksController do
       the_event.dataset.should == dataset
       the_event.workspace.should == workspace
       the_event.workbook_name.should == 'myTableauWorkbook'
+      the_event.site_name.should == 'myCustomSite'
     end
 
     it 'creates a tableau publication when the save succeeds' do

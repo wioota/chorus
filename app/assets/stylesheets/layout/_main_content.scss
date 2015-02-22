@@ -31,6 +31,8 @@
         @include ellipsis;
         padding-top: 16px;
         padding-bottom: 7px;
+        margin-right: 25%;
+        
         @include heading-normal;
     }
 
@@ -86,5 +88,5 @@
 
   height: 16px;
   width:16px;
-  background-image: url("/images/tableau_icon.png");
+  background-image: url("/images/general/tableau_icon.png");
 }

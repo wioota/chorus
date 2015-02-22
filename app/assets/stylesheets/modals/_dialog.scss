@@ -1,30 +1,49 @@
+@import "compass/css3/box-sizing";
+
 /* general dialog styles */
 
 /* .girdle wraps the content of the dialog popup */
 /* and sets the overall margins for the content area */
 .popup .girdle {
-    padding: 10px $dialog-padding 0 $dialog-padding;
+    padding: 10px $dialog-padding $dialog-padding $dialog-padding;
     border: none;
+
+    @include box-sizing(border-box);
+    overflow-y: auto;
+
+    /* development: to delete */
+    border: 1px dotted #A44;
+    /* END development: to delete */
 }
 
-.dialog {
-    .dialog_header {
-        border-bottom: 1px solid $border-color;
-        background-color: $dialog-header-background;
-        word-break: break-all;
-        height: 40px;
-        line-height: 40px;
+#dialog_header {
+    height: 40px;
+    background-color: $dialog-header-background;
+    border-bottom: 1px solid $border-color;
 
-        h1 {
-            font-size: 14px;
-            color: rgb(88, 89, 95);
-            @include uppercase;
-            vertical-align: middle;
-            margin: 0 $dialog-padding;
-            padding-right: 25px;
-            @include ellipsis;
-        }
+    line-height: 40px;
+    padding: 0 $dialog-padding;
+    word-break: break-all;
+}
+
+#dialog_content {
+    .girdle {}
+}
+
+
+.dialog {
+    .dialog_header {}
+
+    h1 {
+        font-size: $medium-font;
+        color: $color-text3;
+        @include uppercase;
+        vertical-align: middle;
+        margin: 0;
+        padding-right: 25px;
+        @include ellipsis;
     }
+
 
     h2 {
         font-size: $medium-font;
@@ -85,13 +104,15 @@
 
     &.with_sub_header {
         .sub_header {
-            padding: 5px 15px;
+            padding: 0 0 5px 0;
             border-bottom: $border-canon;
         }
 
-        .sub_content {
-            padding: 10px $dialog-padding;
-        }
+/* retiring this class */ /* to be removed when final */
+/*         .sub_content { */
+/*             padding: 10px $dialog-padding; */
+/*         } */
+
 
         .loading_section {
             padding: 20px;
@@ -136,6 +157,7 @@
     }
 }
 
+/* replace and delete this one with the one following it for more simplicity*/
 .icon-add,
 .icon-remove {
     &.fa {
@@ -143,36 +165,45 @@
     }
 }
 
+.add,
+.remove {
+    &.fa {
+        font-size: 16px;
+    }
+}
 
+/* *** */
 
 /* dialog widths */
 div.dialog {
     width: $default-dialog-width;
 
     &.dialog_wide {
-      width:940px;
+        width: $default-dialog-width-wide;
     }
 }
 
+
 /*Custom Dialog widths */
 
-.dialog.data_source_permissions {
-  width: 570px;
+.dialog {
+
+    &.data_source_permissions {
+    /*   width: 570px; */
+        width: $default-dialog-width-medium;
+    }
+
+    &.workspace_edit_dialog {
+    /*      width: 580px; */
+        width: $default-dialog-width-medium;
+    }
 }
 
-.dialog.edit_workspace_dialog {
-     width: 580px;
-}
 
 /* to do: work out what should be in show_image.scss and what should be here */
 .dialog.show_image {
     width: 100%;
     min-width: 600px;
-
-    .dialog_header {
-        height: 35px;
-        border: none;
-    }
 
     .workspace_row {
         background-color: $dialog-header-background;

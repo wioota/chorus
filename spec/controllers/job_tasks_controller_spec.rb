@@ -4,7 +4,7 @@ describe JobTasksController do
   let(:workspace) { workspaces(:public) }
   let(:job) { jobs(:default) }
   let(:user) { users(:owner) }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
 
   before do
     log_in user

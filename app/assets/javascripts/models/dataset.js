@@ -154,7 +154,7 @@ chorus.models.Dataset = chorus.models.Base.include(
     iconUrl: function(options) {
         var size = (options && options.size) || "large";
         var name = this.constructor.iconMap[this.get("entitySubtype")][this.get("objectType")];
-        return "/images/" + name + "_" + size + ".png";
+        return "/images/data_sets/" + name + "_" + size + ".png";
     },
 
     lastComment: function() {

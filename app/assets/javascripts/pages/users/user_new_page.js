@@ -1,6 +1,5 @@
 chorus.pages.UserNewPage = chorus.pages.Base.extend({
     crumbs:[
-        { label:t("breadcrumbs.home"), url:"#/" },
         { label:t("breadcrumbs.users"), url:"#/users" },
         { label:t("breadcrumbs.new_user") }
     ],
@@ -16,7 +15,6 @@ chorus.pages.UserNewPage = chorus.pages.Base.extend({
             model:this.model,
             content: content,
             contentHeader:new chorus.views.StaticTemplate("default_content_header", {title:t("users.new_user")}),
-            contentDetails:new chorus.views.StaticTemplate("plain_text", {text:t("users.details")})
         });
     }
 });

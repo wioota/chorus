@@ -8,9 +8,9 @@ chorus.dialogs.Base = chorus.Modal.extend({
 
         this.preRender();
 
-        var header = $("<div class='dialog_header'/>");
-        var content = $("<div class='dialog_content'/>");
-        var errors = $("<div class='errors hidden'/>");
+        var header = $("<div id='dialog_header' class='dialog_header'/>");
+        var content = $("<div id='dialog_content' class='dialog_content'/>");
+        var errors = $("<div id='dialog_errors' class='errors hidden'/>");
 
         this.events = this.events || {};
 
@@ -28,6 +28,18 @@ chorus.dialogs.Base = chorus.Modal.extend({
             addClass(this.className).
             addClass("dialog").
             addClass(this.additionalClass || "");
+            
+// new
+//         $(this.el).
+//             empty().
+//             append(header).
+//             append(content).
+//             addClass(this.className).
+//             addClass("dialog").
+//             addClass(this.additionalClass || "");
+// intending to move the errors into the girdle node.
+
+
         this.delegateEvents();
         this.renderSubviews();
         this.renderHelps();

@@ -3,7 +3,7 @@ require 'fakefs/spec_helpers'
 
 describe ImportExecutor do
   let(:user) { users(:owner) }
-  let(:source_dataset) { datasets(:table) }
+  let(:source_dataset) { datasets(:default_table) }
   let(:destination) { workspaces(:public) }
   let(:sandbox) { destination.sandbox }
   let(:destination_table_name) { import.to_table }

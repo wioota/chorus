@@ -3,7 +3,7 @@ require 'spec_helper'
 describe PreviewsController do
   ignore_authorization!
 
-  let(:gpdb_table) { datasets(:table) }
+  let(:gpdb_table) { datasets(:default_table) }
   let(:gpdb_data_source) { gpdb_table.data_source }
   let(:user) { users(:the_collaborator) }
   let(:account) { gpdb_data_source.account_for_user!(user) }

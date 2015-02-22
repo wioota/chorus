@@ -1,12 +1,18 @@
 @import "_common";
 
+$default-image-width: 920px;
+$default-image-height: 340px;
+
+$default-stroke-chart-thin: 0.4;
+$default-stroke-chart-tick: .25;
+
 svg.chart {
-    background: white;
-    height: 340px;
-    width: 925px;
+    background: #FFFFFF;
+    height: $default-image-height;
+    width: $default-image-width;
 
     line {
-        stroke-width: 0.4;
+        stroke-width: $default-stroke-chart-thin;
         stroke: #444;
     }
 
@@ -16,12 +22,12 @@ svg.chart {
 
     .ytick, .xtick {
         stroke-dasharray: 1;
-        stroke-width: 0.25;
+        stroke-width: $default-stroke-chart-tick;
         stroke: #aaa;
     }
 
     .axis_edge line {
-        stroke-width: 0.40;
+        stroke-width: $default-stroke-chart-thin;
         stroke: #444;
     }
 
@@ -33,7 +39,7 @@ svg.chart {
 
     .xaxis, .yaxis, .axis {
         line {
-            stroke-width: 0.40;
+            stroke-width: $default-stroke-chart-thin;
             stroke: #444;
         }
 
@@ -55,7 +61,7 @@ svg.chart {
         }
 
         .midline, .whisker, .median {
-            stroke: black;
+            stroke: #000000;
             stroke-width: 1.0;
         }
     }
@@ -82,7 +88,7 @@ svg.chart {
     &.heatmap {
         rect.bin {
             stroke-width: 1;
-            stroke: white;
+            stroke: #FFFFFF;
         }
     }
 }

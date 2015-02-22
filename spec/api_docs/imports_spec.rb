@@ -6,7 +6,7 @@ resource 'Imports' do
   let(:id) { workspace_id }
   let(:user) { workspace.owner }
 
-  let(:dataset_id) { datasets(:table).id }
+  let(:dataset_id) { datasets(:default_table).id }
 
   before do
     log_in user
@@ -131,7 +131,7 @@ resource 'Imports' do
   get "/datasets/:dataset_id/importability" do
     parameter :dataset_id, "ID of dataset"
     required_parameters :dataset_id
-    let(:dataset_id) { datasets(:table).to_param }
+    let(:dataset_id) { datasets(:default_table).to_param }
 
     example_request 'Check importability of dataset', { :format => :json } do
       status.should == 200

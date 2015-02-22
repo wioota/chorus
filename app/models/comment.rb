@@ -8,6 +8,8 @@ class Comment < ActiveRecord::Base
 
   belongs_to :event, :class_name => 'Events::Base', :touch => true
   belongs_to :author, :class_name => 'User', :touch => true
+  belongs_to :dataset, :touch => true
+
 
   validates_presence_of :author_id, :body, :event_id
 

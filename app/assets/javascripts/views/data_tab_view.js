@@ -14,8 +14,7 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
 
     postRender: function() {
         this._super('postRender', arguments);
-
-        chorus.search({
+        chorus.search ({
             list: this.$('ul'),
             input: this.$('input.search'),
             onTextChange: _.debounce(_.bind(this.searchTextChanged, this), 400)
@@ -88,7 +87,7 @@ chorus.views.DataTab = chorus.views.DatabaseSidebarList.extend({
         this.focusSchema = schema;
     },
 
-    displayLoadingSection: function () {
+    displayLoadingSection: function() {
         return this.schema && !(this.collection && (this.collection.loaded || this.collection.serverErrors));
     }
 });

@@ -1,6 +1,8 @@
 class Tag < ActiveRecord::Base
   has_many :taggables, :through => :taggings
   has_many :taggings
+  belongs_to :workfile, :touch => true
+  belongs_to :dataset, :touch => true
 
   attr_accessible :name
   attr_accessor :highlighted_attributes, :search_result_notes

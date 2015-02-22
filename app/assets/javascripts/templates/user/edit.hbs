@@ -1,7 +1,10 @@
+<!-- TEMPLATE -->
+<!-- edit user profile -->
+
 {{> errorDiv}}
 {{#if permission}}
 <form action="/users/{{username}}" method="put">
-    <div class="edit_photo"></div>
+    <div class="profile_image"></div>
     <div class="fields">
 
         <div class="row">
@@ -18,7 +21,7 @@
 
         <div class="row">
                <span class="left">
-                   <label class="required">{{t "users.username"}}</label>
+                   <label>{{t "users.username"}}</label>
                    <span name="username">{{username}}</span>
                </span>
 
@@ -58,7 +61,7 @@
 
         <div class="row">
                <span class="notes">
-                   <label>{{t "users.notes"}}</label>
+                   <label>{{t "user.profile_description"}}</label>
                    <textarea rows="4" cols="1" name="notes" maxlength="4096">{{notes}}</textarea>
                </span>
         </div>

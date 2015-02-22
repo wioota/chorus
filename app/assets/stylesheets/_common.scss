@@ -19,8 +19,8 @@ $pacific-blue:      rgb(0, 160, 229);
 $bright-turquoise:  rgb(21, 214, 203);
 $pattens-blue:      rgb(240, 245, 250);
 $alice-blue:        rgb(240, 247, 254);
-$greyish-blue:      rgb(221, 236, 250);
-$greyish-blue-v2:   rgb(248, 251, 253);
+$greyish-blue:      rgb(221, 236, 250);  /* #DDECFA latest version*/
+$greyish-blue-v2:   rgb(248, 251, 253);  /* #F8FBFD older version */
 $light-sky-blue:    rgb(148, 215, 244);
 $bluer-lavender:    rgb(222,234,249);
 
@@ -29,6 +29,11 @@ $greyish-yellow:    rgb(204, 204, 200);
 $light-grey-yellow: rgb(243, 243, 241);
 $light-gray:        rgb(234, 238, 241);
 $shadow-gray:		darken($light-gray, 11%);
+
+
+// neutral greys
+$neutral-light-grey: #E0E0E0;
+
 $charcoal:          #464646;
 $black:             #000000;
 $core-white:		#FFFFFF;
@@ -54,6 +59,7 @@ $accent-shade: rgb(227, 241, 252);  /* #E3F1FC */
 
 // Semantic colors AKA Messaging
 $ok: $fiji-green;
+$informational: $pacific-blue;
 $error: $fire-engine-red;
 $alert: $fire-engine-red;
 $needs-attention: $pumpkin;
@@ -104,7 +110,7 @@ $page-margin-bottom: 60px;
 $summary-line-height: 19px;
 
 
-// GLOBAL BORDERs
+// GLOBAL BORDERS
 $default-border-width: 1px;
 $default-border-radius: 3px;
 
@@ -151,24 +157,60 @@ $type-ahead-result-border-color: #A5A6A8;
 // Text colors
 
 $content-header-link-color: $color-text4;
-
 $required-marker-color: $error;
 
 
-// Notification colors 
-// AKA Messaging
-$error-background-color: $fire-engine-red;
-$error-color: #FFFFFF;
-$error-text-color: #FFFFFF;
+// NOTIFICATIONS aka MESSAGING
+// COLORS
+// used for various alerts and errors encountered in tasks
+/* $error-background-color: #EF9A8F; */
+$error-background-color: #F4DCD8;
+/* $error-text-color: #FFFFFF; */
+$error-text-color: #661111;
+$error-tooltip-text-color: $core-white;
+$error-icon-color: #991111;
 
+$notification: $bright-turquoise;
 $notification-error-dark: #d43a0b;
 $notification-error-light: #ffd6d6;
-$notification: $bright-turquoise;
 
 $alert-color: $needs-attention;
 $alert-background-color: $needs-attention;
-$alert-marker-color: #B24E11;
+$alert-icon-color: #B24E11;
 $alert-text-color: $core-white;
+
+$warning-color: $needs-attention;
+$warning-background-color: $needs-attention;
+$warning-icon-color: #B24E11;
+/* $warning-text-color: $core-white; */
+
+$informational-color: $pacific-blue;
+$informational-background-color: $pacific-blue;
+$informational-icon-color: #B24E11;
+$informational-text-color: #333;
+
+$success-color: $ok;
+$success-background-color: $ok;
+$success-icon-color: $ok;
+
+$normal-tooltip-text-color: $core-white;
+
+// hard errors
+// 404-like
+$hardError-background-color: $fire-engine-red;
+$hardError-text-color: #EEEEEE;
+$hardError-icon-color: #EEEEEE;
+
+
+// NOTIFICATIONS aka MESSAGING
+// SIZING & DIMENSIONS
+
+$alert-border-radius: 3px;
+$alert-icon-large: 22px;
+$alert-icon-medium: 16px;
+$alert-icon-small: 12px;
+
+
 
 
 // Dimensions
@@ -185,9 +227,14 @@ $default-padding-horizontal: 5px;
 $margin-x : 10px;
 $guts-padding: 7px;
 $guts-padding-bottom: 15px;
+
+// default sizing for the user profile image
 $user-detail-image-width: 150px;
+
+/* small size icons, such as for workfiles */
 $icon-image-width : 35px;
 $icon-image-height : 35px;
+/* regular size icons, such as for workfiles */
 $large-image-width : 45px;
 $large-image-height : 45px;
 $activity-gutter: 15px;
@@ -197,12 +244,25 @@ $help-pill-width: 34px;
 $texteditor-min-height: 300px;
 
 $default-dialog-width: 500px;
+$default-dialog-width-medium: 600px;
+$default-dialog-width-wide: 940px;
 /* $dialog-padding= interior padding from edge for dialog content */
 $dialog-padding : 15px;
 
 $separator-space: 4px;
 
 $caret-margin: 5px;		// space between the text and the caret glyph
+
+
+// General application sizes
+
+$selectlist-width-small:  100px;
+$selectlist-width-medium: 210px;
+$selectlist-width-large:  300px;
+
+$input-width-small:  120px;
+$input-width-medium: 250px;
+$input-width-large:  350px;
 
 
 // z-indices
@@ -253,6 +313,7 @@ $bold: 700;
 
 
 // Font size
+// normal size should be medium
 $medium-font: 14px;
 $small-font: 12px;
 $smallest-font: 10px;
@@ -499,7 +560,6 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin database-column-type {
     @include debugging-mixin;
-
     font-size: 12px;
     font-weight: normal;
 	color: $color-text2;
@@ -620,7 +680,7 @@ $lozenge-color-selected-dark: $brand-dark;
 		position: relative;
 		left: $caret-margin;
 		font-family: FontAwesome;
-		content: "\f0d7";
+		content: "\f0d7"; /* fa-caret-down */
 	}
 }
 
@@ -630,21 +690,10 @@ $lozenge-color-selected-dark: $brand-dark;
 	&::after {
 		display: inline-block;
 		position: relative;
-		font-family: FontAwesome;
 		left: $caret-margin;
+		font-family: FontAwesome;
 		
 		@include caret-glyph($pointing_direction);
-		
-/* 		@if $pointing_direction == up { */
-/* 			content: "\f0d8"; */
-/* 		} @else if $pointing_direction == down { */
-/* 			content: "\f0d7"; */
-/* 		} @else if $pointing_direction == right { */
-/* 			content: "\f0da"; */
-/* 		} @else if $pointing_direction == left { */
-/* 			content: "\f0d9"; */
-/* 		} */
-
 	}
 }
 
@@ -708,7 +757,6 @@ $lozenge-color-selected-dark: $brand-dark;
         &:hover .lozenge {
             //background: $lozenge-color-selected;
         }
-
         .lozenge {
             //background: $lozenge-color-selected;
             color: #FFFFFF;
@@ -788,7 +836,6 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin dark-sidebar-panel {
     @include sidebar-panel;
-
     background: $accent;
 
     label {
@@ -821,6 +868,26 @@ $lozenge-color-selected-dark: $brand-dark;
         }
     }
 }
+
+// NOTIFICATIONS aka MESSAGING
+// MIXINS, CONTENT
+
+@mixin alert-error-icon {
+    content: "\f06a";   /* fa-exclamation-circle */
+}
+
+@mixin alert-warning-icon {
+    content: "\f071";   /* fa-exclamation-triangle */
+}
+
+@mixin alert-success-icon {
+    content: "\f058";   /* fa-check-circle */
+}
+
+@mixin alert-informational-icon {
+    content: "\f06a";   /* fa-exclamation-circle */
+}
+
 
 // Do not put any css rules into this file.  This file is only for declaration of variables and mixins
 //

@@ -60,7 +60,7 @@ describe Schema do
     let(:connection) { Object.new }
     let(:options) { {} }
     let(:account) { "foo" }
-    let(:dataset) { datasets(:table) }
+    let(:dataset) { datasets(:default_table) }
     let(:schema) { dataset.schema }
 
     before do
@@ -96,7 +96,7 @@ describe Schema do
 
       it "returns the list of datasets" do
         datasets = schema.refresh_datasets(account)
-        datasets.map(&:name).should match_array(['table', 'new_table', 'new_view'])
+        datasets.map(&:name).should match_array(['default_table', 'new_table', 'new_view'])
       end
 
       it "sets the refreshed_at timestamp" do

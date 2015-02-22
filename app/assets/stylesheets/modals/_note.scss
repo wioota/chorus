@@ -1,11 +1,11 @@
-$label-width: 72px;
+$label-width: 82px;
 
 
 .notes_new,
 .edit_note,
 .dialog.comment {
 
-    font-size: 12px;
+    font-size: $small-font;
     
     textarea {
         min-width: 350px;
@@ -45,7 +45,7 @@ $label-width: 72px;
 
         .separator {
             color: $link-color;
-            margin: 0 2px;
+            margin: 0 $separator-space;
         }
 
         .attachment_links {
@@ -88,7 +88,7 @@ $label-width: 72px;
             margin-top: 7px;
             position: relative;
             span {
-                background-image: url(/images/misc/loading_animation.gif);
+                background-image: url(/images/general/loading_animation.gif);
                 position: absolute;
                 display: inline-block;
                 left: 0;
@@ -104,7 +104,7 @@ $label-width: 72px;
 
     .name {
         display: inline-block;
-        width: 170px;
+        width: 200px;
         @include ellipsis;
         color: $color-text2;
         font-weight: $semibold;
@@ -149,7 +149,7 @@ $label-width: 72px;
         }
 
         .user_lists {
-            margin-left: 80px;
+            margin-left: $label-width;
 
             .dropdown {
                 margin-top: 10px;
@@ -158,18 +158,11 @@ $label-width: 72px;
         }
 
         .picked_users {
+            line-height: 20px;
             .name {
                 @include ellipsis;
                 max-width: 200px;
                 display: inline-block;
-            }
-
-            .remove {
-                float: right;
-            }
-
-            .name, .remove {
-                line-height: 20px;
                 vertical-align: middle;
             }
         }

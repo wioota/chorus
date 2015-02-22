@@ -128,7 +128,7 @@ chorus.views.Activity = chorus.views.Base.extend({
 
     launchImageDialog: function(e) {
         e.preventDefault();
-        var dialog = new chorus.dialogs.ShowImage({activity: this.model, originalModule: this.parentView.parentView});
+        var dialog = new chorus.dialogs.ShowImage({activity: this.model, originalModule: this.parentView.parentView, workspace: this.model.get("workspace")});
         dialog.launchModal();
     },
 
@@ -141,7 +141,7 @@ chorus.views.Activity = chorus.views.Base.extend({
                 attachment = this.model.attachments()[x];
             }
         }
-        var dialog = new chorus.dialogs.ShowImage({activity: this.model, originalModule: this.parentView.parentView, attachment: attachment});
+        var dialog = new chorus.dialogs.ShowImage({activity: this.model, originalModule: this.parentView.parentView, attachment: attachment, workspace: this.model.get("workspace")});
         dialog.launchModal();
     },
 

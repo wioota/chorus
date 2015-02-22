@@ -38,7 +38,7 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
         this.$("textarea").val(this.activity.get("body"));
 
         _.defer(_.bind(function() {
-            this.makeEditor($(this.el), ".toolbar", "body", { width: 'auto', height: 150 });
+            this.makeEditor($(this.el), ".toolbar", "body", { width: 'auto', height: 200 });
         }, this));
     },
 

@@ -13,7 +13,10 @@ class WorkspacesController < ApplicationController
 
     workspaces = workspaces.active if params[:active]
     succinct = params[:succinct] == 'true'
+    # Prakash 1/22. Needed to separate namespaces for home page and workspaces page. The JSON data
+    # generated for two pages is different. This needs to be fixed in future.
 
+    @namespace = succinct ? 'home:workspaces' : 'workspaces:workspaces'
     if params[:get_options] == 'most_active'
       available_workspaces = workspaces.map(&:id)
       results = []
@@ -32,47 +35,26 @@ class WorkspacesController < ApplicationController
         @workspaces = workspaces.where('id IN (' + top_workspace_ids.join(',') + ')')
                             .includes(succinct ? [:owner] : Workspace.eager_load_associations)
                             .order("lower(name) ASC, id")
-        @options = {:succinct => succinct, :show_latest_comments => (params[:show_latest_comments] == 'true')}
 
-        #present paginate(@workspaces),
-        #    :presenter_options => {
-        #        :show_latest_comments => (params[:show_latest_comments] == 'true'),
-        #       :succinct => succinct
-        # }
+        present paginate(@workspaces),
+           :presenter_options => {
+               :show_latest_comments => (params[:show_latest_comments] == 'true'),
+              :succinct => succinct, :cached => true, :namespace => @namespace
+        }
 
       end
     else
 
       @workspaces = workspaces.includes(succinct ? [:owner] : Workspace.eager_load_associations)
                           .order("lower(name) ASC, id")
-      @options = {:succinct => succinct, :show_latest_comments => (params[:show_latest_comments] == 'true')}
 
-      # present paginate(@workspaces),
-      #        :presenter_options => {
-      #            :show_latest_comments => (params[:show_latest_comments] == 'true'),
-      #            :succinct => succinct
-      #        }
+      present paginate(@workspaces),
+             :presenter_options => {
+                 :show_latest_comments => (params[:show_latest_comments] == 'true'),
+                 :succinct => succinct, :cached => true, :namespace => @namespace
+             }
 
     end
-
-    @workspaces = paginate(@workspaces)
-    # Fix for 85557406. Pagination not working on Workspace page in chorus.
-    # In order to append pagination to JSON object, I had to render the workspace array into a string and then
-    # append pagination to it. There is a problem with using top level array in Jbuilder that does not allow
-    # appending other elements to the top level array.
-
-    response = render_to_string :index, :formats => [:json]
-    json = JSON.parse(response)
-    if @workspaces.respond_to? :current_page
-      json[:pagination] = {
-          :page => @workspaces.current_page,
-          :per_page => @workspaces.per_page,
-          :records => @workspaces.total_entries,
-          :total => @workspaces.per_page > 0 ? @workspaces.total_pages : nil
-      }
-    end
-
-    render :json => json
 
   end
 
@@ -85,7 +67,8 @@ class WorkspacesController < ApplicationController
   def show
     workspace = Workspace.find(params[:id])
     authorize! :show, workspace
-    present workspace, :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true'}
+    # use the cached version of "workspaces:workspaces" namespace.
+    present workspace, :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true',:cached => true, :namespace => 'workspaces:workspaces' }
   end
 
   def update

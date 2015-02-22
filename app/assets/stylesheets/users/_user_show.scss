@@ -7,28 +7,28 @@ $column-padding-x : $padding-x;
 $column-padding-y : $padding-x;
 
 .user_show {
-  padding-left: $left-column-width;   /* LC width */
-  padding-right: $right-column-width;  /* RC width */
-  overflow: hidden;
+    padding-left: $left-column-width;   /* LC width */
+    padding-right: $right-column-width;  /* RC width */
+    overflow: hidden;
 
-  .user_info {
-    width: 100%;
-    .titleAndDepartment, .email, .badges, .notes {
-      padding-bottom: 20px;
+    .user_info {
+        width: 100%;
+        .titleAndDepartment, .email, .badges, .notes {
+            padding-bottom: 20px;
+        }
     }
-  }
 
-  .edit_photo {
-    width: $left-column-width - (2 * $column-padding-x);          /* LC width */
-    right: $left-column-width;          /* LC width */
-    padding-left:  $column-padding-x;
-    padding-right: $column-padding-x;
-    margin-left: -100%;
+    .profile_image {
+        width: $left-column-width - (2 * $column-padding-x); /* LC width */
+        right: $left-column-width;          /* LC width */
+        padding-left:  $column-padding-x;
+        padding-right: $column-padding-x;
+        margin-left: -100%;
 
-    img {
-        width: $user-detail-image-width;
+        img {
+            width: $user-detail-image-width;
+        }
     }
-  }
 
   .workspaces {
     background: $shaded-background-color;
