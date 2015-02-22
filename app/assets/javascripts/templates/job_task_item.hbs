@@ -16,12 +16,16 @@
     </div>
 
     <div class="arrows">
-        {{#unless firstItem}}
-            <img src="/images/jobs/arrow-up.png" class="up_arrow"/>
-        {{/unless}}
+        {{#if firstItem}}
+            <img src="/images/jobs/arrow-up-disabled.png" class="move_up_arrow arrow_disabled" title=""/>            
+        {{else}}
+            <img src="/images/jobs/arrow-up.png" class="move_up_arrow" title="Move Up"/>
+        {{/if}}
 
-        {{#unless lastItem}}
-            <img src="/images/jobs/arrow-down.png" class="down_arrow"/>
-        {{/unless}}
+        {{#if lastItem}}
+            <img src="/images/jobs/arrow-down-disabled.png" class="move_down_arrow arrow_disabled" title=""/>
+        {{else}}
+            <img src="/images/jobs/arrow-down.png" class="move_down_arrow" title="Move Down"/>
+        {{/if}}
     </div>
 </div>
