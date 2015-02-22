@@ -36,7 +36,7 @@ describe("chorus.pages.JobsShowPage", function () {
         });
     });
 
-    context("after the fetch completes with tasks", function () {
+    context("> after the fetch completes with tasks", function () {
         beforeEach(function() {
             this.server.completeFetchFor(this.model);
         });
@@ -152,7 +152,7 @@ describe("chorus.pages.JobsShowPage", function () {
         describe("when the job tasks are reordered", function () {
             beforeEach(function () {
                 spyOn(this.page.mainContent.content, 'render');
-                this.page.$('.arrows:eq(0) .down_arrow').click();
+                this.page.$('.arrows:eq(0) .move_down_arrow').click();
 
                 var responseModel = this.model.clone();
                 responseModel.attributes.tasks[0].name = 'Shenanigans';
