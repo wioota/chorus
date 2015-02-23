@@ -149,8 +149,6 @@ module LdapClient
 
     license = License.instance
     dev_licenses = license[:developers]
-    dev_licenses = 2
-    #puts "developer licenses = #{dev_licenses}"
 
     begin
       dev_users = User.where({:auth_method => 'ldap', :developer => true}).count
