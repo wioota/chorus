@@ -65,7 +65,7 @@ class LdapConfig
 
   def check_configuration_validity
 
-    return if @config['ldap']['enable'] = false
+    return if @config['ldap']['enable'].nil? || @config['ldap']['enable'] == false
 
     # will raise error if one of these properties is missing
     required_properties = [
