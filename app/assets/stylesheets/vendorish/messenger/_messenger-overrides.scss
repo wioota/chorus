@@ -27,7 +27,7 @@ ul.messenger-theme-flat {
 }
 
 
-ul.messenger-theme-chorus {
+ul.messenger-theme-alpine {
   .messenger-message.alert-info .messenger-message-inner:before {
     @include background(linear-gradient(top, $body-background-color, $link-color));
     background-color: #777;
