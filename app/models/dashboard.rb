@@ -4,6 +4,7 @@ module Dashboard
       when 'site_snapshot' then SiteSnapshot
       when 'workspace_activity' then WorkspaceActivity
       when 'recent_workfiles' then RecentWorkfiles
+      when 'recent_workspaces' then RecentWorkspaces
       else raise ApiValidationError.new(:entity_type, :invalid)
     end.new(params)
   end
