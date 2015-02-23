@@ -150,7 +150,7 @@ https://github.com/jherdman/javascript-relative-time-helpers
 
 -----------------------------------------------------------------
 
-Messenger
+Messenger 1.4.1
 Copyright (c) 2013 HubSpot, Inc.
 
 Licensed under the MIT license:
