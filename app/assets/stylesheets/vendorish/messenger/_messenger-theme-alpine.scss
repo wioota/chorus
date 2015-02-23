@@ -7,20 +7,19 @@
     user-select: none;
 }
 
-$defaultThemeBorderRadius: 3px;
+$defaultThemeBorderRadius: $alert-border-radius;
 
 ul.messenger-theme-alpine {
     @include border-radius($defaultThemeBorderRadius);
     @include unselectable;
-    background: #404040;
+    // background: #404040;
 
     &.messenger-empty {
         display: none;
     }
 
     .messenger-message {
-//     @include box-shadow(inset 0px 1px rgba(255, 255, 255, 0.13), inset 48px 0px 0px #292929);
-        @include border-radius(0px);
+        // @include border-radius(0px);
         position: relative;
         border: 0px;
         margin-bottom: 0px;
@@ -28,7 +27,7 @@ ul.messenger-theme-alpine {
         background: transparent;
         color: #f0f0f0;
         font-weight: 500;
-        padding: 10px 30px 13px 65px;
+        padding: 10px 30px 12px 35px;
         
         .messenger-close {
             position: absolute;
@@ -57,29 +56,31 @@ ul.messenger-theme-alpine {
         .messenger-actions {
             float: none;
             margin-top: 10px;
-      a {
-        @include border-radius(4px);
-        text-decoration: none;
-        color: #aaaaaa;
-        background: #2e2e2e;
-        display: inline-block;
-        padding: 10px;
-        margin-right: 10px;
-        padding: 4px 11px 6px;
-        text-transform: capitalize;
-        &:hover {
-          color: #f0f0f0;
-          background: #2e2e2e;
+
+            a {
+                @include border-radius(4px);
+                text-decoration: none;
+                color: #AAA;
+                background: #2e2e2e;
+                display: inline-block;
+                padding: 10px;
+                margin-right: 10px;
+                padding: 4px 11px 6px;
+                // text-transform: capitalize;
+                &:hover {
+                    color: #f0f0f0;
+                    background: #2e2e2e;
+                }
+                &:active {
+                    background: #292929;
+                    color: #aaaaaa;
+                }
+            }
+            .messenger-phrase {
+                display: none;
+            }
         }
-        &:active {
-          background: #292929;
-          color: #aaaaaa;
-        }
-      }
-      .messenger-phrase {
-        display: none;
-      }
-    }
+
         .messenger {
             @include border-radius(50%);
             position: absolute;
@@ -92,30 +93,59 @@ ul.messenger-theme-alpine {
             width: 13px;
             z-index: 20;
         }
-        &.alert-success {
-            color: #468847;
-            background-color: #dff0d8;
-            border-color: #d6e9c6;
+
+        .messenger-message-inner::before {
+            position: absolute;
+            left: 10px;
+            top: 12px;
+            content: "";
+            font-family: FontAwesome;
+            font-size: $alert-icon-medium;
+            text-decoration: none !important;
         }
-        &.alert-info {
-            color: #3a87ad;
-            background-color: #d9edf7;
-            border-color: #bce8f1;
-        }
-        
         &.alert-error,
         &.alert-danger {
             color: #b94a48;
             background-color: #f2dede;
             border-color: #eed3d7;
+
+            .messenger-message-inner::before {
+                @include alert-error-icon;
+            }
         }
         &.alert-warning {
             color: #c09853;
             background-color: #fcf8e3;
             border-color: #fbeed5;
-        }
 
+            .messenger-message-inner::before {
+                @include alert-warning-icon;
+            }
+        }
+        &.alert-success {
+            color: #468847;
+
+            background-color: #dff0d8;
+            
+            border-color: #d6e9c6;
+
+            .messenger-message-inner::before {
+                @include alert-success-icon;
+            }
+        }
+        &.alert-info {
+            // color: #3a87ad;
+            color: $informational-text-color;
+            // background-color: #d9edf7;
+            background-color: $informational-background-color;
+            border-color: #bce8f1;
+
+            .messenger-message-inner::before {
+                @include alert-informational-icon;
+            }
+        }
   }
+
 
   .messenger-message-slot {
     &.messenger-last .messenger-message {
