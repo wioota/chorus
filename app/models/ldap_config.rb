@@ -65,6 +65,8 @@ class LdapConfig
 
   def check_configuration_validity
 
+    return if @config['ldap']['enable'].nil? || @config['ldap']['enable'] == false
+
     # will raise error if one of these properties is missing
     required_properties = [
         'enable',
@@ -81,14 +83,14 @@ class LdapConfig
 
     required_properties.each do |prop|
       if prop.is_a? String
-        raise LdapClient::LdapNotCorrectlyConfigured.new("Missing value for property ldap.#{prop} in ldap.properties file") unless @config["ldap"][prop].present?
+        raise LdapClient::LdapNotCorrectlyConfigured.new("Missing value for property ldap.#{prop} in ldap.properties file") if @config["ldap"][prop].nil?
       end
 
       if prop.is_a? Hash
         attribute = prop.keys.first
         nested_props = prop.values.first
         nested_props.each do |nested_prop|
-          raise LdapClient::LdapNotCorrectlyConfigured.new("Missing value for property ldap.#{attribute}.#{nested_prop} in ldap.properties file") unless @config["ldap"][attribute][nested_prop].present?
+          raise LdapClient::LdapNotCorrectlyConfigured.new("Missing value for property ldap.#{attribute}.#{nested_prop} in ldap.properties file") if @config["ldap"][attribute][nested_prop].nil?
         end
       end
     end
@@ -103,7 +105,7 @@ class LdapConfig
 
         # Otherwise, make sure all of the properties exist
         is_valid = nested_props.all? do |nested_prop|
-          @config['ldap'][attribute].key?(nested_prop) && @config["ldap"][attribute][nested_prop].present?
+          @config['ldap'][attribute].key?(nested_prop) && !@config["ldap"][attribute][nested_prop].nil?
         end
 
         all_props_string = nested_props.inject("") {|result, nested_prop| "#{result} #{attribute}.#{nested_prop}"}

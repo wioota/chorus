@@ -73,7 +73,7 @@ module LdapClient
 
           results.map do |result|
             entry = {}
-            entry[:username] =   result[config['attribute']['uid']].first
+            entry[:username] =   result[config['attribute']['uid']].first.strip
             entry[:dept] =       result[config['attribute']['ou']].first
             entry[:first_name] = result[config['attribute']['gn']].first
             entry[:last_name] =  result[config['attribute']['sn']].first
@@ -82,7 +82,6 @@ module LdapClient
             entry[:auth_method] = 'ldap'
             entry[:ldap_group_id] = groupname
             entry[:admin] = false
-            entry[:developer] = true
 
             users << entry
 
@@ -185,6 +184,7 @@ module LdapClient
             puts "Adding user #{user[:username]} to Chorus"
             #puts user.inspect
             u = User.new(user)
+            u.developer = true
             u.save!
             dev_users = dev_users+1
           end
