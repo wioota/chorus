@@ -9,6 +9,12 @@
 
 $defaultThemeBorderRadius: $alert-border-radius;
 
+ul.messenger {
+  &.messenger-fixed {
+    z-index: $toast-z-index;
+  }
+}
+
 ul.messenger-theme-alpine {
     @include border-radius($defaultThemeBorderRadius);
 
@@ -24,24 +30,29 @@ ul.messenger-theme-alpine {
         position: relative;
         border: 0px;
         margin-bottom: 0px;
-        font-size: $default-font-size;
-        background: transparent;
-        color: #f0f0f0;
-        font-weight: 500;
         padding: 10px 35px 12px 35px;
-        
+
+        font-size: $default-font-size;
+//         background: transparent;
+//         color: #444;
+        font-weight: 500;
+
+        box-shadow: 2px 2px 3px 0px rgba(150, 161, 169, 0.7);
+
         .messenger-close {
             position: absolute;
             top: 0px;
             right: 0px;
             display: block;
+
+            padding: 8px 10px 7px 7px;
             
-            color: #888888;
+            color: #777;
             // opacity: 1;
-            font-weight: bold;
+            font-weight: $bold;
             font-size: 20px;
             line-height: 20px;
-            padding: 8px 10px 7px 7px;
+
             cursor: pointer;
             background: transparent;
             border: 0;
@@ -105,7 +116,7 @@ ul.messenger-theme-alpine {
             text-decoration: none !important;
         }
         &.alert {
-        	border-style: dotted;
+        	border-style: solid;
         	border-width: 1px;
         }
         
@@ -154,15 +165,15 @@ ul.messenger-theme-alpine {
   .messenger-message-slot {
     &.messenger-last .messenger-message {
       @include border-radius($defaultThemeBorderRadius $defaultThemeBorderRadius 0px 0px);
-			//       @include box-shadow(inset 48px 0px 0px #292929);
+// 			box-shadow: 2px 2px 3px 0px rgba(200, 211, 219, 0.7);
     }
     &.messenger-first .messenger-message {
       @include border-radius(0px 0px $defaultThemeBorderRadius $defaultThemeBorderRadius);
-			//       @include box-shadow(inset 0px 1px rgba(255, 255, 255, 0.13), inset 48px 0px 0px #292929);
+// 	    			box-shadow: 2px 2px 3px 0px rgba(200, 211, 219, 0.7);
     }
     &.messenger-first.messenger-last .messenger-message {
       @include border-radius($defaultThemeBorderRadius);
-			//       @include box-shadow(inset 48px 0px 0px #292929);
+// 						box-shadow: 2px 2px 3px 0px rgba(200, 211, 219, 0.7);
     }
   }
 
