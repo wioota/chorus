@@ -20,7 +20,9 @@ describe TableauWorkbooksController do
                       :workspace_id => workspace.id,
                       :name => name,
                       :tableau_username => 'chorusadmin',
-                      :tableau_password => 'secret'})
+                      :tableau_password => 'secret',
+                      :tableau_site_name => 'myCustomSite',
+                      :tableau_project_name => 'Default'})
                  }
 
     let(:extra_options) { {} }
@@ -71,6 +73,7 @@ describe TableauWorkbooksController do
       the_event.dataset.should == dataset
       the_event.workspace.should == workspace
       the_event.workbook_name.should == 'myTableauWorkbook'
+      the_event.site_name.should == 'myCustomSite'
     end
 
     it 'creates a tableau publication when the save succeeds' do

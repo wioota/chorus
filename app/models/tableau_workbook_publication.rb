@@ -1,5 +1,5 @@
 class TableauWorkbookPublication < ActiveRecord::Base
-  attr_accessible :dataset_id, :name, :workspace_id, :project_name
+  attr_accessible :dataset_id, :name, :workspace_id, :site_name, :project_name
 
   belongs_to :dataset, :touch => true
   belongs_to :workspace, :touch => true
@@ -19,6 +19,7 @@ class TableauWorkbookPublication < ActiveRecord::Base
     base_url = ChorusConfig.instance['tableau.url']
     port = ChorusConfig.instance['tableau.port']
     base_url += ":#{port}" if port && port != 80
+    base_url += "/t/#{site_name}" if !site_name.nil? && site_name != 'Default'
     base_url
   end
 
@@ -31,6 +32,7 @@ class TableauWorkbookPublication < ActiveRecord::Base
         :workspace => workspace,
         :workbook_url => workbook_url,
         :project_name => project_name,
+        :site_name => site_name,
         :project_url => project_url
     )
   end

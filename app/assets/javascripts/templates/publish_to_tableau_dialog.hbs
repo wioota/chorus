@@ -15,6 +15,17 @@
         </div>
 
         <div>
+            <label class="sitename" name="tableau_site_name">{{t "tableau.dialog.site_name"}}</label>
+            <label class="projectname" name="tableau_project_name">{{t "tableau.dialog.project_name"}}</label>
+            <select class="sitename" id="tableau_site_name" name="tableau_site_name">
+                {{#each tableauSites}}
+                    <option value="{{name}}">{{name}}</option>
+                {{/each}}
+            </select>
+            <input class="projectname" id="tableau_project_name" value="{{project_name}}" type="text" name="tableau_project_name" tabindex="1" maxlength="64" placeholder="{{t "tableau.dialog.blank_is_default"}}"/>
+        </div>
+
+        <div>
             <input class="workfile" id="create_work_file" type="checkbox" checked="checked"
                    name="create_work_file"/><label
                 for="create_work_file">{{t "actions.create_tableau_workfile"}}</label>

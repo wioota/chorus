@@ -1,10 +1,11 @@
 GIT
   remote: gemserver@chorus-gemserver:tableau
-  revision: dca1d6539d2539186a89ebda265d76a0acac6680
+  revision: 8ba8ef1eeb8de22a8b8762fa7c33092c5e271831
   branch: master
   specs:
-    tabcmd_gem (0.0.1)
+    tabcmd_gem (0.0.2)
       highline
+      nokogiri
       rchardet19
 
 GIT
