@@ -12,6 +12,31 @@
     color: #707070;
 }
 
+/* grouping of options in form */
+fieldset {
+    margin: 0 0 0 0;
+    padding: 5px 10px 5px 10px;
+    
+    @include border-radius(2px);
+    
+    legend {
+        font-weight: $semibold;
+        font-size: $medium-font;
+    
+    }
+}
+
+.form_row {
+    line-height: 30px;
+    vertical-align: middle;
+}
+
+
+.row {
+    &:first-child {
+        marging-top: -5px;
+    }
+}
 
 /* section of buttons at bottom of form */
 .form_controls {
@@ -30,7 +55,6 @@
 
     @include after-clearfix;
 }
-
 
 .girdle {
     label {

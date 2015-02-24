@@ -58,8 +58,8 @@ describe("chorus.dialogs.ConfigureMilestone", function () {
                     expect(this.dialog.closeModal).toHaveBeenCalled();
                 });
 
-                it("should create a toast", function () {
-                    expect(chorus.toast).toHaveBeenCalledWith('milestone.dialog_create.toast', { milestoneName:this.milestonePlan.name });
+                it("should create a SUCCESS toast", function () {
+                    expect(chorus.toast).toHaveBeenCalledWith('milestone.dialog_create.toast', { milestoneName: this.milestonePlan.name, toastOpts: {type: "success"} } );
                 });
 
                 it("should trigger 'invalidate' on the page's collection", function () {
