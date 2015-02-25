@@ -43,6 +43,9 @@ class UsersController < ApplicationController
       User.new userJson
     end
     present users
+
+  rescue LdapClient::LdapCouldNotFindMember => e
+    render_not_found(e)
   end
 
   private
