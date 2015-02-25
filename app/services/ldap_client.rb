@@ -28,6 +28,12 @@ module LdapClient
       raise LdapNotCorrectlyConfigured.new(error.message)
     end
 
+    if results.empty?
+      raise LdapCouldNotFindMember.new("Could not find user with filter #{filter.to_s}")
+    end
+
+    handle_group_membership(results.first)
+
     results.map do |result|
       user_hash = {
         :username =>   result[config['attribute']['uid']].first,
@@ -45,6 +51,8 @@ module LdapClient
       user_hash
     end
   end
+
+
 
   def fetch_members(groupname)
 
@@ -131,12 +139,7 @@ module LdapClient
               )
       end
 
-      if config['group'].present? && !user_in_user_group?(user_entries.first)
-        raise LdapCouldNotFindMember.new(
-                  "Could not find membership for #{user_entries.first.dn} "\
-                  "in group base #{config['group']['search_base']} with filter #{config['group']['filter']}"
-              )
-      end
+      handle_group_membership(user_entries.first)
 
       user_entries.first
     end
@@ -267,6 +270,15 @@ module LdapClient
   end
 
   private
+
+  def handle_group_membership(entry)
+    if config['group'].present? && !user_in_user_group?(entry)
+      raise LdapCouldNotFindMember.new(
+                "Could not find membership for #{entry.dn} "\
+                  "in group base #{config['group']['search_base']} with filter #{config['group']['filter']}"
+            )
+    end
+  end
 
   def make_dn(username)
     config['dn_template'].gsub('{0}', username)
