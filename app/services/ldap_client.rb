@@ -274,7 +274,8 @@ module LdapClient
   def handle_group_membership(entry)
     if config['group'].present? && !user_in_user_group?(entry)
       raise LdapCouldNotFindMember.new(
-              "No entry found for user #{entry.dn} in LDAP group #{config['group']['names']}. Please contact your system administrator"
+                "Could not find membership for #{entry.dn} "\
+                  "in group base #{config['group']['search_base']} with filter #{config['group']['filter']}"
             )
     end
   end
