@@ -19,6 +19,8 @@ ldap.bind.password = q2W#e4R%
 
 
 #-----  Uncomment following properties to enable group membership authentication ------#
+# Note that all three entries must either be commented or uncommented
+
 # List of LDAP group names that are used for verifying group membership.
 # NOTE: For release 5.3, only one group is supported.
 #ldap.group.names = OtherGroup
