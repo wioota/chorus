@@ -14,6 +14,8 @@ module LdapClient
   # used to prefill a user create form
   def search(username)
 
+    return [] if username.nil?
+
     if LdapConfig.exists?
       filter = config['user']['filter'].gsub('{0}', username)
       results = client.search :filter => filter
@@ -28,11 +30,7 @@ module LdapClient
       raise LdapNotCorrectlyConfigured.new(error.message)
     end
 
-    if results.empty?
-      raise LdapCouldNotFindMember.new("Could not find user with filter #{filter.to_s}")
-    end
-
-    handle_group_membership(results.first)
+    handle_group_membership(results.first) unless results.empty?
 
     results.map do |result|
       user_hash = {
