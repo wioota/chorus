@@ -179,19 +179,21 @@ $alert-background-color: $needs-attention;
 $alert-icon-color: #B24E11;
 $alert-text-color: $core-white;
 
-$warning-color: $needs-attention;
+//$warning-color: $needs-attention;  //used?
 $warning-background-color: $needs-attention;
 $warning-icon-color: #B24E11;
 /* $warning-text-color: $core-white; */
 
-$informational-color: $pacific-blue;
-$informational-background-color: $pacific-blue;
+//$informational-color: $pacific-blue;  // used?
+$informational-background-color: #DAEDFE;
 $informational-icon-color: #B24E11;
-$informational-text-color: #333;
+//$informational-text-color: #333;
+$informational-text-color: #002244;
 
 $success-color: $ok;
 $success-background-color: $ok;
 $success-icon-color: $ok;
+$success-text-color: $ok;
 
 $normal-tooltip-text-color: $core-white;
 
