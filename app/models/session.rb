@@ -31,9 +31,14 @@ class Session < ActiveRecord::Base
     return if errors.present?
 
     if LdapClient.enabled? && !(username =~ /^(chorus|edc)admin$/)
-      authenticated = LdapClient.authenticate(username, password)
-      self.user = User.find_by_username(username) if authenticated
-      errors.add(:base, :generic, :message => "User authenticated with LDAP but is not a Chorus user") unless user
+
+      if LdapClient.authenticate(username, password)
+        self.user = User.find_by_username(username)
+        errors.add(:base, :generic, :message => "User authenticated with LDAP but is not a Chorus user") unless user
+      else
+        errors.add(:username_or_password, :invalid)
+      end
+
     else
       self.user = User.authenticate(username, password)
       errors.add(:username_or_password, :invalid) unless user
