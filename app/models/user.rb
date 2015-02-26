@@ -48,6 +48,7 @@ class User < ActiveRecord::Base
   validates_length_of :username, :first_name, :last_name, :email, :title, :dept, :maximum => 256
   validates_length_of :notes, :maximum => 4096
   validates_attachment_size :image, :less_than => ChorusConfig.instance['file_sizes_mb']['user_icon'].megabytes, :message => :file_size_exceeded
+  validate :confirm_ldap_user, :if => lambda { LdapClient.enabled? }, :on => :create
 
   validates_with UserCountValidator, :on => :create
   validates_with DeveloperCountValidator, AdminCountValidator
@@ -156,5 +157,17 @@ class User < ActiveRecord::Base
     self.password = unencrypted_password
     self.legacy_password_digest = nil
     save!
+  end
+
+  def confirm_ldap_user
+    begin
+      results = LdapClient.search(username)
+      if results.empty?
+        errors.add(:base, :generic, {:message => "No entry found for user #{username} in LDAP directory server. Please contact your
+system administrator"})
+      end
+    rescue LdapClient::LdapNotCorrectlyConfigured => e
+      errors.add(:base, :generic, {:message => e.message})
+    end
   end
 end
