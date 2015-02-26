@@ -17,11 +17,14 @@ ldap.base = DC=www,DC=example,DC=com
 ldap.bind.username = uid=admin,ou=system
 ldap.bind.password = q2W#e4R%
 
-# List of LDAP group names that are used for verifying group membership.
-# NOTE: For release 5.3, only one group is supported.
-ldap.group.names = OtherGroup
 
 #-----  Uncomment following two properties to enable group membership authentication ------#
+# Note that all three entries must either be commented or uncommented
+
+# List of LDAP group names that are used for verifying group membership.
+# NOTE: For release 5.3, only one group is supported.
+#ldap.group.names = OtherGroup
+
 # Search base for looking up members in the groups above.
 #ldap.group.search_base = DC=www,DC=example,DC=com
 
