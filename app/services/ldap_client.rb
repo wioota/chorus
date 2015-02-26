@@ -30,7 +30,11 @@ module LdapClient
       raise LdapNotCorrectlyConfigured.new(error.message)
     end
 
-    handle_group_membership(results.first) unless results.empty?
+    begin
+      handle_group_membership(results.first) unless results.empty?
+    rescue LdapClient::LdapCouldNotFindMember
+      results = [] # unfortunate workaround to get frontend to show correct error message
+    end
 
     results.map do |result|
       user_hash = {
@@ -199,6 +203,7 @@ module LdapClient
 
   # looks for Group DN in User entry
   def reverse_membership_lookup(user_entry, group_entries, ldap)
+    return false if group_entries.empty?
     group_search_filter = config['group']['filter']
 
     # The inject block builds up a string of membership filters which are OR'd together to make the filter
@@ -211,6 +216,7 @@ module LdapClient
 
   # looks for User DN in Group entries
   def full_membership_lookup(user_entry, group_entries, ldap)
+    return false if group_entries.empty?
     group_search_filter = config['group']['filter']
 
     group_entries.each do |group_entry| # if we find a group, see if our user_dn is a member of that group
