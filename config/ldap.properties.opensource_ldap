@@ -17,15 +17,14 @@ ldap.base = DC=www,DC=example,DC=com
 ldap.bind.username = uid=admin,ou=system
 ldap.bind.password = q2W#e4R%
 
+#-----  Uncomment all three of the following properties to enable group membership authentication ------#
+# Note that all three entries must either be commented or uncommented
 
-#-----  Uncomment following properties to enable group membership authentication ------#
 # List of LDAP group names that are used for verifying group membership.
 # NOTE: For release 5.3, only one group is supported.
-
-#ldap.group.names = OtherGroup
+# ldap.group.names = exampleGroup
 
 # Search base for looking up members in the groups above.
-
 #ldap.group.search_base = DC=www,DC=example,DC=com
 
 # Group Filter for Active Directory. This will work open-source LDAP(v3) compatible servers.
