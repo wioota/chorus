@@ -14,6 +14,8 @@ module LdapClient
   # used to prefill a user create form
   def search(username)
 
+    return [] if username.nil?
+
     if LdapConfig.exists?
       filter = config['user']['filter'].gsub('{0}', username)
       results = client.search :filter => filter
@@ -22,17 +24,17 @@ module LdapClient
       results = client.search :filter => filter
     end
 
+    if results.empty?
+      raise LdapCouldNotFindMember.new("Could not find user with filter #{filter.to_s}")
+    end
+    
     unless results
       error = client.get_operation_result
       Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
       raise LdapNotCorrectlyConfigured.new(error.message)
     end
 
-    if results.empty?
-      raise LdapCouldNotFindMember.new("Could not find user with filter #{filter.to_s}")
-    end
-
-    handle_group_membership(results.first)
+    handle_group_membership(results.first) unless results.empty?
 
     results.map do |result|
       user_hash = {
@@ -274,8 +276,7 @@ module LdapClient
   def handle_group_membership(entry)
     if config['group'].present? && !user_in_user_group?(entry)
       raise LdapCouldNotFindMember.new(
-                "Could not find membership for #{entry.dn} "\
-                  "in group base #{config['group']['search_base']} with filter #{config['group']['filter']}"
+              "No entry found for user #{entry.dn} in LDAP group #{config['group']['names']}. Please contact your system administrator"
             )
     end
   end
