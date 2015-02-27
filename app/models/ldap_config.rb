@@ -12,7 +12,7 @@ class LdapConfig
   end
 
   def self.exists?
-    File.exists?(config_file_path)
+    File.exists?(config_file_path) && @config && @config['ldap'] && @config['ldap']['enable'].present?
   end
 
   def [](key_string)

@@ -70,7 +70,6 @@ GREENPLUM_IP
 
 # Ignore app configuration
 /config/chorus.properties
-/config/ldap.properties
 /config/chorus.license
 /config/database.yml
 
