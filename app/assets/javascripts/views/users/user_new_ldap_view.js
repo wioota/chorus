@@ -11,8 +11,8 @@
 
         events : {
             "submit form": "formSubmitted",
-            "click a.check_username": "checkUsernameClicked",
-            "click button.cancel": "goBack"
+            "click button.cancel": "goBack",
+            "click button#check_username": "checkUsernameClicked"
         },
 
         setup: function() {

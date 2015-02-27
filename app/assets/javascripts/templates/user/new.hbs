@@ -7,48 +7,18 @@
     <div class="profile_image">
         <img src="/images/general/default-user.png" class="profile" title="{{t 'user.profile.avatar.title'}}"/>
     </div>
+
     <div class="fields">
 
-        <div class="row">
-               <span class="left">
-                   <label class="required">{{t "users.first_name"}}</label>
-                   <input type="text" name="firstName" maxlength="256" value="{{firstName}}"/>
-               </span>
-
-               <span class="right">
-                   <label class="required">{{t "users.last_name"}}</label>
-                   <input type="text" name="lastName" maxlength="256" value="{{lastName}}"/>
-               </span>
-        </div>
+        <fieldset>
+        <legend>{{t "user.profile.group_acct_info.title"}}</legend>
+        
 
         <div class="row">
-               <span class="left">
-                   <label class="required">{{t "users.username"}}</label>
-                   <input type="text" name="username" maxlength="256" value="{{username}}"/>
-               </span>
-
-               <span class="right admin">
-                   <label class="placeholder"></label>
-                   <label>
-                       <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}}checked{{/if}}/>
-                       {{t "users.make_admin"}}
-                   </label>
-               </span>
-        </div>
-
-        <div class="row">
-               <span class="left">
-                   <label class="required">{{t "users.email"}}</label>
-                   <input type="text" name="email" maxlength="256" value="{{email}}"/>
-               </span>
-
-               <span class="right admin">
-                   <label class="placeholder"></label>
-                   <label>
-                       <input type="checkbox" name="developer" id="developer-checkbox" {{#if developer}}checked{{/if}}/>
-                       {{t "users.make_developer"}}
-                   </label>
-               </span>
+           <span class="left">
+               <label class="required">{{t "users.username"}}</label>
+               <input type="text" name="username" maxlength="256" value="{{username}}"/>
+           </span>
         </div>
 
         <div class="row">
@@ -61,6 +31,55 @@
                    <label class="required">{{t "users.confirm_password"}}</label>
                    <input type="password" name="passwordConfirmation" maxlength="256" value="{{passwordConfirmation}}" autocomplete="off"/>
                </span>
+        </div>
+        
+        </fieldset>
+
+        
+        <fieldset>
+        <legend>{{t "user.profile.group_app_roles.title"}}</legend>
+
+            <span class="left admin">
+               <!-- <label class="placeholder"></label> -->
+                <label>
+                       <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}}checked{{/if}}/>
+                       <label class="checkbox-label" for="admin-checkbox">{{t "users.make_admin"}}</label>
+                </label>
+            </span>
+           
+            
+             <span class="left admin">
+                <!-- <label class="placeholder"></label> -->
+                 <label>
+                    <input type="checkbox" name="developer" id="developer-checkbox" {{#if developer}}checked{{/if}}/>
+                    <label class="checkbox-label" for="developer-checkbox">{{t "users.make_developer"}}</label>
+                </label>
+            </span>
+
+        </fieldset>
+        
+
+        <fieldset>
+        <legend>{{t "user.profile.group_personal_info.title"}}</legend>
+            
+        <div class="row">
+            <span class="left">
+                <label class="required">{{t "users.first_name"}}</label>
+                <input type="text" name="firstName" maxlength="256" value="{{firstName}}"/>
+            </span>
+
+            <span class="right">
+                <label class="required">{{t "users.last_name"}}</label>
+                <input type="text" name="lastName" maxlength="256" value="{{lastName}}"/>
+            </span>
+        </div>
+
+        <div class="row">
+            <span class="left">
+                <label class="required">{{t "users.email"}}</label>
+                <input type="text" name="email" maxlength="256" value="{{email}}"/>
+            </span>
+
         </div>
 
         <div class="row">
@@ -76,20 +95,22 @@
         </div>
 
         <div class="row">
-               <span class="notes">
+               <span class="fullwidth notes">
                    <label>{{t "user.profile_description"}}</label>
                    <textarea rows="4" cols="1" name="notes" maxlength="4096">{{notes}}</textarea>
                </span>
         </div>
-
+        
+        </fieldset>
+         
         <div class="row form_controls">
-               <span class="left">
-                   <button type="submit" class="submit modalish">{{t "users.button.add"}}</button>
-                   <button type="button" class="cancel modalish">{{t "actions.cancel"}}</button>
-               </span>
+            <button type="submit" class="submit modalish">{{t "users.add_new.button"}}</button>
+            <button type="button" class="cancel modalish">{{t "actions.cancel"}}</button>
         </div>
     </div>
 </form>
+
 {{else}}
+<!-- TODO THIS NEEDS to be handled in an acceptable manner -->
 <p class="aint_admin">{{t "users.not_admin"}}</p>
 {{/ifAdmin}}

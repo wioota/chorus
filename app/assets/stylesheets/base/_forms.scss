@@ -34,11 +34,13 @@ fieldset {
 
 .row {
     &:first-child {
-        marging-top: -5px;
+        margin-top: -5px;
     }
 }
 
 /* section of buttons at bottom of form */
+
+// TODO needs to distinguish FORM PAGE from FORM DIALOG
 .form_controls {
     padding-right: $dialog-padding;
     padding-left:  $dialog-padding;
