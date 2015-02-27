@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module LoginHelpers
   def current_route
     URI.parse(current_url).fragment

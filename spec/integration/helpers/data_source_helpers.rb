@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module DataSourceHelpers
   def select_and_do_within_data_source(value)
     page.should have_xpath('//select[@id="data_sources"]/option[4]')
