@@ -124,10 +124,11 @@ ul.messenger-theme-alpine {
         &.alert-danger {
             color: #b94a48;
             background-color: #f2dede;
-            border-color: #eed3d7;
+            border-color: $alert-border-color;
 
             .messenger-message-inner::before {
                 @include alert-error-icon;
+                color: $alert-icon-color;
             }
         }
         &.alert-warning {
@@ -137,17 +138,17 @@ ul.messenger-theme-alpine {
 
             .messenger-message-inner::before {
                 @include alert-warning-icon;
+                
             }
         }
         &.alert-success {
-            color: #468847;
-            color: $success-text-color;
-            background-color: #dff0d8;
-            background-color: $success-background-color;
-            border-color: #d6e9c6;
+            color: $success-text-color;  // #468844;
+            background-color: $success-background-color;  // #dff0d8
+            border-color: $success-border-color;  // #d6e9c6;
 
             .messenger-message-inner::before {
                 @include alert-success-icon;
+                color: $success-icon-color; 
             }
         }
         &.alert-info {
@@ -159,6 +160,7 @@ ul.messenger-theme-alpine {
 
             .messenger-message-inner::before {
                 @include alert-informational-icon;
+                color: $informational-icon-color;
             }
         }
   }
