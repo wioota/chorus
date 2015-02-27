@@ -44,7 +44,7 @@ describe("chorus.dialogs.RenameTag", function() {
             });
 
             it("displays a toast message", function() {
-                expect(chorus.toast).toHaveBeenCalledWith("tag.rename", {name: "new-tag-name"});
+                expect(chorus.toast).toHaveBeenCalledWith("tag.rename.toast.success", {name: "new-tag-name"});
             });
         });
 
