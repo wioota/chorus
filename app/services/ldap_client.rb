@@ -63,7 +63,7 @@ module LdapClient
     begin
       filter = Net::LDAP::Filter.eq 'cn', groupname
       if config['group']['search_base'] == nil
-        puts 'You must specify a  valid search base in ldap.group.search_base property of ldap.properties file'
+        puts 'You must specify a valid search base in ldap.group.search_base property of ldap.properties file'
         return
       end
       group_search_base = config['group']['search_base']
@@ -177,21 +177,31 @@ module LdapClient
           return
         end
         users.each do |user|
-          if User.find_by_username(user[:username])
-            u = User.find_by_username(user[:username])
-            puts "Updating user #{user[:username]} to Chorus"
-            u.update_attributes!(user)
-          else
-            if dev_licenses != -1 && dev_users >= dev_licenses
-              puts "You have reached the limit of #{dev_licenses} developers licenses. Please delete existing user(s) before adding new users.\n OR Contact Alpine support to increase the number of licenses."
-              return
+
+          begin
+
+            if User.find_by_username(user[:username])
+              u = User.find_by_username(user[:username])
+              puts "Updating user #{user[:username]} to Chorus"
+              u.update_attributes!(user)
+            else
+              if dev_licenses != -1 && dev_users >= dev_licenses
+                puts "You have reached the limit of #{dev_licenses} developers licenses. Please delete existing user(s) before adding new users.\n OR Contact Alpine support to increase the number of licenses."
+                return
+              end
+              puts "Adding user #{user[:username]} to Chorus"
+              #puts user.inspect
+              u = User.new(user)
+              u.developer = true
+              u.save!
+              dev_users = dev_users+1
             end
-            puts "Adding user #{user[:username]} to Chorus"
-            #puts user.inspect
-            u = User.new(user)
-            u.developer = true
-            u.save!
-            dev_users = dev_users+1
+
+          rescue ActiveRecord::RecordInvalid => e
+            puts "\nUnable to add user #{user[:username]}"
+            puts "Check attribute names in ldap.properties"
+            puts e.message
+            puts
           end
         end
       end
