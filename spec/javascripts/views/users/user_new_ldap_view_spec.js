@@ -86,19 +86,19 @@ describe("chorus.views.UserNewLdap", function() {
                 });
             });
 
-            it("has a link to check whether the user is in the ldap database", function() {
-                expect(this.view.$("a.check_username")).toExist();
-                expect(this.view.$("a.check_username").text()).toMatchTranslation("users.ldap.check_username");
+            it("can check whether the user is in the ldap database", function() {
+                expect(this.view.$("button#check_username")).toExist();
+                expect(this.view.$("button#check_username").text()).toMatchTranslation("users.ldap.check_username");
             });
 
             it("doesn't re-render when the model fails to save", function() {
                 expect(this.view.persistent).toBeTruthy();
             });
 
-            describe("clicking the 'check username' link", function() {
+            describe("clicking 'check username' ", function() {
                 beforeEach(function() {
                     this.view.$("input[name='username']").val("john_henry");
-                    this.view.$("a.check_username").trigger("click");
+                    this.view.$("button#check_username").trigger("click");
 
                     this.ldapUsers = new chorus.collections.LdapUserSet([], { username: "john_henry" });
                 });
@@ -191,7 +191,7 @@ describe("chorus.views.UserNewLdap", function() {
                     describe("check another user name", function() {
                         beforeEach(function() {
                                     this.view.$("input[name=username]").val("max");
-                                    this.view.$("a.check_username").click();
+                                    this.view.$("button#check_username").click();
                                 });
 
                         it("clears the existing error", function() {
