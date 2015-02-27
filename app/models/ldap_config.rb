@@ -109,7 +109,7 @@ class LdapConfig
         end
 
         all_props_string = nested_props.inject("") {|result, nested_prop| "#{result} #{attribute}.#{nested_prop}"}
-        raise LdapClient::LdapNotCorrectlyConfigured.new("You must provide an entry and value for the following properties: #{all_props_string}") unless is_valid
+        raise LdapClient::LdapNotCorrectlyConfigured.new("One or more of these LDAP settings are mis-configured: (#{all_props_string}). Please contact your system administrator.") unless is_valid
       end
     end
   end

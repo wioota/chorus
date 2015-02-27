@@ -14,6 +14,8 @@ module LdapClient
   # used to prefill a user create form
   def search(username)
 
+    return [] if username.nil?
+
     if LdapConfig.exists?
       filter = config['user']['filter'].gsub('{0}', username)
       results = client.search :filter => filter
@@ -26,6 +28,12 @@ module LdapClient
       error = client.get_operation_result
       Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
       raise LdapNotCorrectlyConfigured.new(error.message)
+    end
+
+    begin
+      handle_group_membership(results.first) unless results.empty?
+    rescue LdapClient::LdapCouldNotFindMember
+      results = [] # unfortunate workaround to get frontend to show correct error message
     end
 
     results.map do |result|
@@ -46,6 +54,8 @@ module LdapClient
     end
   end
 
+
+
   def fetch_members(groupname)
 
     users = []
@@ -53,7 +63,7 @@ module LdapClient
     begin
       filter = Net::LDAP::Filter.eq 'cn', groupname
       if config['group']['search_base'] == nil
-        puts 'You must specify a  valid search base in ldap.group.search_base property of ldap.properties file'
+        puts 'You must specify a valid search base in ldap.group.search_base property of ldap.properties file'
         return
       end
       group_search_base = config['group']['search_base']
@@ -131,12 +141,7 @@ module LdapClient
               )
       end
 
-      if config['group'].present? && !user_in_user_group?(user_entries.first)
-        raise LdapCouldNotFindMember.new(
-                  "Could not find membership for #{user_entries.first.dn} "\
-                  "in group base #{config['group']['search_base']} with filter #{config['group']['filter']}"
-              )
-      end
+      handle_group_membership(user_entries.first)
 
       user_entries.first
     end
@@ -172,21 +177,31 @@ module LdapClient
           return
         end
         users.each do |user|
-          if User.find_by_username(user[:username])
-            u = User.find_by_username(user[:username])
-            puts "Updating user #{user[:username]} to Chorus"
-            u.update_attributes!(user)
-          else
-            if dev_licenses != -1 && dev_users >= dev_licenses
-              puts "You have reached the limit of #{dev_licenses} developers licenses. Please delete existing user(s) before adding new users.\n OR Contact Alpine support to increase the number of licenses."
-              return
+
+          begin
+
+            if User.find_by_username(user[:username])
+              u = User.find_by_username(user[:username])
+              puts "Updating user #{user[:username]} to Chorus"
+              u.update_attributes!(user)
+            else
+              if dev_licenses != -1 && dev_users >= dev_licenses
+                puts "You have reached the limit of #{dev_licenses} developers licenses. Please delete existing user(s) before adding new users.\n OR Contact Alpine support to increase the number of licenses."
+                return
+              end
+              puts "Adding user #{user[:username]} to Chorus"
+              #puts user.inspect
+              u = User.new(user)
+              u.developer = true
+              u.save!
+              dev_users = dev_users+1
             end
-            puts "Adding user #{user[:username]} to Chorus"
-            #puts user.inspect
-            u = User.new(user)
-            u.developer = true
-            u.save!
-            dev_users = dev_users+1
+
+          rescue ActiveRecord::RecordInvalid => e
+            puts "\nUnable to add user #{user[:username]}"
+            puts "Check attribute names in ldap.properties"
+            puts e.message
+            puts
           end
         end
       end
@@ -198,6 +213,7 @@ module LdapClient
 
   # looks for Group DN in User entry
   def reverse_membership_lookup(user_entry, group_entries, ldap)
+    return false if group_entries.empty?
     group_search_filter = config['group']['filter']
 
     # The inject block builds up a string of membership filters which are OR'd together to make the filter
@@ -210,6 +226,7 @@ module LdapClient
 
   # looks for User DN in Group entries
   def full_membership_lookup(user_entry, group_entries, ldap)
+    return false if group_entries.empty?
     group_search_filter = config['group']['filter']
 
     group_entries.each do |group_entry| # if we find a group, see if our user_dn is a member of that group
@@ -267,6 +284,14 @@ module LdapClient
   end
 
   private
+
+  def handle_group_membership(entry)
+    if config['group'].present? && !user_in_user_group?(entry)
+      raise LdapCouldNotFindMember.new(
+              "No entry found for user #{entry.dn} in LDAP group #{config['group']['names']}. Please contact your system administrator"
+            )
+    end
+  end
 
   def make_dn(username)
     config['dn_template'].gsub('{0}', username)

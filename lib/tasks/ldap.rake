@@ -5,6 +5,11 @@ namespace :ldap do
     ENV['SKIP_SOLR'] = 'true'
     #print "arg = #{args[:group]}\n"
     #print "arg = #{args.extras}\n"
+    if !LdapConfig.exists?
+      puts 'You must use the new implementation of LDAP support and have an ldap.config in order to use this rake task'
+      next
+    end
+
     begin
       LdapClient.add_users_to_chorus(args[:group])
     rescue => e
