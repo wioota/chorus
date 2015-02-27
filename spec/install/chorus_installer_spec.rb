@@ -1,3 +1,4 @@
+require 'pry'
 require 'minimal_spec_helper'
 require_relative '../../packaging/install/chorus_installer'
 require_relative 'stub_executor'
@@ -420,6 +421,7 @@ describe ChorusInstaller do
       context "when chorus.properties doesn't exist in shared path" do
         it "creates chorus.properties file in shared path" do
           File.exists?('/usr/local/chorus/shared/chorus.properties').should be_false
+
           installer.copy_config_files
 
           File.exists?('/usr/local/chorus/shared/chorus.properties').should be_true
@@ -609,6 +611,7 @@ describe ChorusInstaller do
         /usr/local/chorus/shared/secret.key
         /usr/local/chorus/shared/chorus.properties
         /usr/local/chorus/shared/chorus.license
+        /usr/local/chorus/shared/ldap.properties
       }
     }
     before do
@@ -1307,5 +1310,7 @@ describe ChorusInstaller do
     FileUtils.touch './chorus_installation/config/chorus.properties.example'
     FileUtils.touch './chorus_installation/config/chorus.defaults.properties'
     FileUtils.touch './chorus_installation/config/chorus.license.default'
+    FileUtils.touch './chorus_installation/config/ldap.properties.active_directory'
+    FileUtils.touch './chorus_installation/config/ldap.properties.opensource_ldap'
   end
 end

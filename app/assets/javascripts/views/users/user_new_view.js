@@ -3,7 +3,7 @@ chorus.views.UserNew = chorus.views.Base.extend({
 
     events:{
         "submit form":'submitNewUser',
-        "click button.cancel":"goBack"
+        "click button.cancel": "goBack"
     },
 
     persistent:true,
