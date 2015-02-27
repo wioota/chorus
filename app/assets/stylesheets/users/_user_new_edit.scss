@@ -11,8 +11,7 @@
         position: relative;
     }
 
-
-    .profile_image {
+    .edit_photo {
         width: 180px;
         float: left;
 
@@ -48,7 +47,8 @@
         margin-left: 180px;
 
         input, textarea {
-            padding-right: 25px;  //space for the alert marker
+            margin-top: 6px;
+            padding-right: 25px;
             &[type=checkbox] {
                 margin: 0;
                 display: inline-block;
@@ -67,8 +67,8 @@
 
         &.checkbox-label {
             display: inline-block;
-            line-height:30px;
-            height: 30px;
+            line-height: 42px;
+            height: 42px;
             vertical-align: middle;
             margin-left: 3px;
         }
