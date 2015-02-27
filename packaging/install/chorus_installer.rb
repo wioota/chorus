@@ -253,7 +253,7 @@ class ChorusInstaller
   def link_shared_files
     @logger.debug("Linking shared configuration files")
     FileUtils.ln_sf("#{destination_path}/shared/chorus.properties", "#{release_path}/config/chorus.properties")
-    FileUtils.ln_sf("#{destination_path}/shared/ldap.properties", "#{release_path}/config/ldap.properties")
+    #FileUtils.ln_sf("#{destination_path}/shared/ldap.properties", "#{release_path}/config/ldap.properties")
     FileUtils.ln_sf("#{destination_path}/shared/chorus.license", "#{release_path}/config/chorus.license")
     FileUtils.ln_sf("#{destination_path}/shared/database.yml", "#{release_path}/config/database.yml")
     FileUtils.ln_sf("#{destination_path}/shared/sunspot.yml", "#{release_path}/config/sunspot.yml")
@@ -471,7 +471,6 @@ class ChorusInstaller
       #{destination_path}/shared/secret.token
       #{destination_path}/shared/secret.key
       #{destination_path}/shared/chorus.properties
-      #{destination_path}/shared/ldap.properties
       #{destination_path}/shared/chorus.license
     )
 
