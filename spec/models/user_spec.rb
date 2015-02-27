@@ -157,6 +157,8 @@ describe User do
 
       it "does not validate usernames when ldap is enabled" do
         stub(LdapClient).enabled? { true }
+        stub(LdapClient).search { ["search result"] }
+
         FactoryGirl.build(:user, :username => "Pivotal User").should be_valid
       end
 
@@ -172,6 +174,7 @@ describe User do
         end
 
         it "is not required for any user" do
+          stub(LdapClient).search { ["search result"] }
           user = FactoryGirl.build(:user, :password => nil, :password_digest => nil)
           user.should be_valid
         end
