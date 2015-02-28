@@ -52,6 +52,6 @@ chorus.dialogs.VisualizationNotesNew = chorus.dialogs.MemoNew.extend({
     },
 
     svgSaved: function() {
-        chorus.toast("dataset.visualization.note_from_chart.toast", {datasetName: this.options.entityName, toastOpts: {type: "success"} } );
+        chorus.toast("dataset.visualization.note_from_chart.toast", {datasetName: this.options.entityName, toastOpts: {type: "success"}} );
     }
 });

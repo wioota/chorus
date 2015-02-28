@@ -75,7 +75,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
                 });
 
                 it("pops toast", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith("dataset.visualization.note_from_chart.toast", {datasetName: this.options.entityName, toastOpts: {type: "success"}} );
+                    expect(chorus.toast).toHaveBeenCalledWith("dataset.visualization.note_from_chart.toast", {datasetName: "my dataset", toastOpts: {type: "success"}} );
                 });
             });
 
