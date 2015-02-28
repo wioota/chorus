@@ -1,13 +1,15 @@
 @import "compass/utilities/general/clearfix";
 @import "compass/css3";
 
+$defaultThemeBorderRadius: $alert-border-radius;
+
 @mixin unselectable {
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
 }
 
-$defaultThemeBorderRadius: $alert-border-radius;
+// **********
 
 ul.messenger {
   &.messenger-fixed {
@@ -19,14 +21,12 @@ ul.messenger-theme-alpine {
     @include border-radius($defaultThemeBorderRadius);
 
     @include unselectable;
-    // background: #404040;
 
     &.messenger-empty {
         display: none;
     }
 
     .messenger-message {
-        // @include border-radius(0px);
         position: relative;
         border: 0px;
         margin-bottom: 0px;
@@ -34,7 +34,6 @@ ul.messenger-theme-alpine {
 
         font-size: $default-font-size;
 //         background: transparent;
-//         color: #444;
         font-weight: 500;
 
         box-shadow: 2px 2px 3px 0px rgba(150, 161, 169, 0.7);
@@ -78,7 +77,6 @@ ul.messenger-theme-alpine {
                 padding: 10px;
                 margin-right: 10px;
                 padding: 4px 11px 6px;
-                // text-transform: capitalize;
                 &:hover {
                     color: #f0f0f0;
                     background: #2e2e2e;
@@ -156,29 +154,33 @@ ul.messenger-theme-alpine {
             color: $informational-text-color;
             // background-color: #d9edf7;
             background-color: $informational-background-color;
-            border-color: #bce8f1;
+            border-color: $informational-border-color;
 
             .messenger-message-inner::before {
                 @include alert-informational-icon;
                 color: $informational-icon-color;
             }
         }
-  }
-
-
-  .messenger-message-slot {
-    &.messenger-last .messenger-message {
-      @include border-radius($defaultThemeBorderRadius $defaultThemeBorderRadius 0px 0px);
-// 			box-shadow: 2px 2px 3px 0px rgba(200, 211, 219, 0.7);
     }
-    &.messenger-first .messenger-message {
-      @include border-radius(0px 0px $defaultThemeBorderRadius $defaultThemeBorderRadius);
-// 	    			box-shadow: 2px 2px 3px 0px rgba(200, 211, 219, 0.7);
-    }
-    &.messenger-first.messenger-last .messenger-message {
-      @include border-radius($defaultThemeBorderRadius);
-// 						box-shadow: 2px 2px 3px 0px rgba(200, 211, 219, 0.7);
-    }
-  }
 
+    // when there are multiple toasts displayed, fit them together
+    .messenger-message-slot {
+        &.messenger-last .messenger-message {
+            // for toast at top of stack, turn off bottom radius and bottom border
+            @include border-radius($defaultThemeBorderRadius $defaultThemeBorderRadius 0px 0px);
+            border-bottom: 0;
+        }
+        &.messenger-first .messenger-message {
+            // for toast at bottom of stack, turn off top radius
+            @include border-radius(0px 0px $defaultThemeBorderRadius $defaultThemeBorderRadius);
+        }
+        &.messenger-first.messenger-last .messenger-message {
+            // single toast; all borders
+            @include border-radius($defaultThemeBorderRadius);
+        }
+        .messenger-message {
+            // for ones in the middle, turn off bottom radius
+            border-bottom: 0;
+        }
+    }
 }
