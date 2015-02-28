@@ -1,11 +1,12 @@
 chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
     constructorName: 'ConfigureJobDialog',
     templateName: 'configure_job_dialog',
+    
     title: function () {
         return this.model.isNew() ? t('job.dialog.title') : t('job.dialog.edit.title');
     },
-    message: function () {
-        return this.model.isNew() ? 'job.dialog.toast' : 'job.dialog.edit.toast';
+    toastMessage: function () {
+        return this.isCreating ? 'job.dialog.create.toast' : 'job.dialog.edit.toast';
     },
     submitTranslation: function () {
         return this.model.isNew() ? "job.dialog.submit" : "job.dialog.edit.submit";
@@ -35,7 +36,7 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
     },
 
     modelSaved: function () {
-        chorus.toast(this.message());
+        chorus.toast(this.toastMessage(), {toastOpts: {type: "success"}} );
         this.model.trigger('invalidated');
         this.closeModal();
 
@@ -45,6 +46,9 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
     },
 
     setup: function () {
+        // boolean just to hold state of new or existing
+        this.isCreating = this.model.isNew() ? true : false;
+
         this.setupDatePickers();
 
         this.disableFormUnlessValid({
