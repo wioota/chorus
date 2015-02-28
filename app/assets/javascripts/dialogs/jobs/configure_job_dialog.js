@@ -26,6 +26,23 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
         "click a.select_failure_recipients": 'launchFailureRecipientSelectionDialog'
     },
 
+    setup: function () {
+        // boolean just to hold state of new or existing
+        this.isCreating = this.model.isNew() ? true : false;
+
+        this.setupDatePickers();
+
+        this.disableFormUnlessValid({
+            formSelector: "form",
+            inputSelector: "input",
+            checkInput: _.bind(this.checkInput, this)
+        });
+
+        this.listenTo(this.getModel(), "saved", this.modelSaved);
+        this.listenTo(this.getModel(), 'saveFailed', this.saveFailed);
+        this.toggleSubmitDisabled();
+    },
+
     makeModel: function () {
         if (this.model) {
             this.originalModel = this.model;
@@ -43,23 +60,6 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
         if (this.creating) {
             chorus.router.navigate(this.model.showUrl());
         }
-    },
-
-    setup: function () {
-        // boolean just to hold state of new or existing
-        this.isCreating = this.model.isNew() ? true : false;
-
-        this.setupDatePickers();
-
-        this.disableFormUnlessValid({
-            formSelector: "form",
-            inputSelector: "input",
-            checkInput: _.bind(this.checkInput, this)
-        });
-
-        this.listenTo(this.getModel(), "saved", this.modelSaved);
-        this.listenTo(this.getModel(), 'saveFailed', this.saveFailed);
-        this.toggleSubmitDisabled();
     },
 
     setupDatePickers: function () {
