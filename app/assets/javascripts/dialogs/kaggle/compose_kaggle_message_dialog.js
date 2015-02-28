@@ -93,7 +93,7 @@ chorus.dialogs.ComposeKaggleMessage = chorus.dialogs.Base.extend({
 
     saved: function () {
         this.closeModal();
-        chorus.toast('kaggle.compose.success');
+        chorus.toast("kaggle.compose.success.toast", {toastOpts: {type: "success"}} );
     },
 
     showMore: function(e) {
