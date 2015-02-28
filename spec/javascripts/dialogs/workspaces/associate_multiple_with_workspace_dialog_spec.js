@@ -49,8 +49,9 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
             });
 
             it("displays a toast message", function() {
-                expect(chorus.toast).toHaveBeenCalledWith(
-                    "dataset.associate.toast.other", { count: 3, workspaceNameTarget: "cadabra" }
+                expect(chorus.toast).toHaveBeenCalledWith (
+                    "dataset.associate_multiple.toast",
+                    {count: 3,  workspaceNameTarget: "cadabra", toastOpts: {type: "success"}}
                 );
             });
 

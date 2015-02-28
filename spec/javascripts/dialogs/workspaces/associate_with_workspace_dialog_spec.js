@@ -140,7 +140,10 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 });
 
                 it("pops toast", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith("dataset.associate.toast.one", {datasetTitle: this.model.get("objectName"), workspaceNameTarget: this.workspace.get("name")});
+                    expect(chorus.toast).toHaveBeenCalledWith (
+                        "dataset.associate_one.toast",
+                        {datasetTitle: this.model.get("objectName"), workspaceNameTarget: this.workspace.get("name"), toastOpts: {type: "success"}}
+                        );
                 });
 
                 it("does not navigate", function() {
