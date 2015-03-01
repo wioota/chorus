@@ -3,8 +3,8 @@
 
 // Grand Old Colors
 /* basic color rules - DO NOT use these in component files, they should only be used in config sections! */
-$light-green: #B3D988;
-$light-blue: #c4dceb;
+$light-green:       #B3D988;
+$light-blue: #C4DCEB;
 $blue: #2c95dd;
 $green: #98B675;
 $gray-blue: #B2C7D6;
@@ -370,7 +370,9 @@ $guttersV: $baseLineHeight/2em*1rem; // set top and bottom margins to half the b
 $spacingHelpers: ($emRatio*$baseLineHeight/3, $emRatio*$baseLineHeight/2, $emRatio*$baseLineHeight); //TODO: convert to px;
 
 // BUTTONS
-$button-height : 26px;
+$button-height: 30px;
+$button-padding-sides: 14px;
+
 $button-border-color: $border-color;
 $button-background-color : #FFFFFF;
 
@@ -873,19 +875,19 @@ $lozenge-color-selected-dark: $brand-dark;
 // MIXINS, CONTENT
 
 @mixin alert-error-icon {
-    content: "\f06a";   /* fa-exclamation-circle */
+    content: "\f06a";  /* fa-exclamation-circle */
 }
 
 @mixin alert-warning-icon {
-    content: "\f071";   /* fa-exclamation-triangle */
+    content: "\f071";  /* fa-exclamation-triangle */
 }
 
 @mixin alert-success-icon {
-    content: "\f058";   /* fa-check-circle */
+    content: "\f058";  /* fa-check-circle */
 }
 
 @mixin alert-informational-icon {
-    content: "\f06a";   /* fa-exclamation-circle */
+    content: "\f06a";  /* fa-exclamation-circle */
 }
 
 
