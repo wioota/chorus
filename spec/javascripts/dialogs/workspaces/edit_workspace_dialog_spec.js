@@ -560,7 +560,7 @@ describe("chorus.dialogs.EditWorkspace", function() {
                         });
 
                         it(": displays the success message (toast)", function() {
-                            expect(chorus.toast).toHaveBeenCalled();
+                            expect("chorus.toast").toHaveBeenCalled();
                         });
                         
                         it("closes the dialog", function() {
