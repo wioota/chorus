@@ -91,7 +91,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     saved: function() {
         this.closeModal();
-        chorus.toast("dataset.import.started", {toastOpts: {type: "info"} });
+        chorus.toast("dataset.import.started", {toastOpts: {type: "info"}});
         chorus.PageEvents.trigger("csv_import:started");
     },
 

@@ -47,7 +47,6 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
             chorus.PageEvents.trigger(this.selectEvent, this.collection);
             expect(actionProviderSpy).toHaveBeenCalledWith(this.collection);
         });
-
     });
 
     context("when two models are selected", function() {
