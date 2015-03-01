@@ -368,7 +368,9 @@ $guttersV: $baseLineHeight/2em*1rem; // set top and bottom margins to half the b
 $spacingHelpers: ($emRatio*$baseLineHeight/3, $emRatio*$baseLineHeight/2, $emRatio*$baseLineHeight); //TODO: convert to px;
 
 // BUTTONS
-$button-height : 26px;
+$button-height: 30px;
+$button-padding-sides: 14px;
+
 $button-border-color: $border-color;
 $button-background-color : #FFFFFF;
 
@@ -871,19 +873,19 @@ $lozenge-color-selected-dark: $brand-dark;
 // MIXINS, CONTENT
 
 @mixin alert-error-icon {
-    content: "\f06a";   /* fa-exclamation-circle */
+    content: "\f06a";  /* fa-exclamation-circle */
 }
 
 @mixin alert-warning-icon {
-    content: "\f071";   /* fa-exclamation-triangle */
+    content: "\f071";  /* fa-exclamation-triangle */
 }
 
 @mixin alert-success-icon {
-    content: "\f058";   /* fa-check-circle */
+    content: "\f058";  /* fa-check-circle */
 }
 
 @mixin alert-informational-icon {
-    content: "\f06a";   /* fa-exclamation-circle */
+    content: "\f06a";  /* fa-exclamation-circle */
 }
 
 
