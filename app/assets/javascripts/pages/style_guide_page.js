@@ -453,7 +453,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
     buildContentDetails: function() {
         var views = {
-            "User Details": new chorus.views.StaticTemplate("plain_text", {text: t("users.details")}),
 
             "Dataset Details": new chorus.views.DatasetContentDetails({
                 dataset: this.models.dataset,
