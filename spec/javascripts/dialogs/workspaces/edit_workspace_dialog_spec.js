@@ -559,6 +559,10 @@ describe("chorus.dialogs.EditWorkspace", function() {
                             this.server.completeUpdateFor(this.dialog.pageModel);
                         });
 
+                        it(": displays the success message (toast)", function() {
+                            expect(chorus.toast).toHaveBeenCalled();
+                        });
+                        
                         it("closes the dialog", function() {
                             expect("close.facebox").toHaveBeenTriggeredOn($(document));
                         });
