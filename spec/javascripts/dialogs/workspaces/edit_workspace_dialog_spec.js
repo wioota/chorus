@@ -556,11 +556,12 @@ describe("chorus.dialogs.EditWorkspace", function() {
                     context("the server responds with success", function() {
                         beforeEach(function() {
                             spyOnEvent(this.dialog.pageModel, "invalidated");
+                            spyOn(chorus, "toast");
                             this.server.completeUpdateFor(this.dialog.pageModel);
                         });
 
                         it(": displays the success message (toast)", function() {
-                            expect("chorus.toast").toHaveBeenCalled();
+                            expect(chorus.toast).toHaveBeenCalled();
                         });
                         
                         it("closes the dialog", function() {
