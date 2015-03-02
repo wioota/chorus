@@ -30,9 +30,7 @@ describe("chorus.pages.UserNewPage", function() {
             expect(this.page.$(".content_header")).toContainTranslation("users.new_user");
         });
 
-        it("has the correct subtitle", function() {
-            expect(this.page.$(".content_details")).toContainTranslation("users.details");
-        });
+
 
         context("when external auth is enabled", function() {
             beforeEach(function() {
