@@ -26,12 +26,12 @@ module LdapClient
 
     unless results
       error = client.get_operation_result
-      Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
-      raise LdapNotCorrectlyConfigured.new(error.message)
+      Rails.logger.error "LDAP Error: settings are mis-configured"
+      raise LdapNotCorrectlyConfigured.new("LDAP settings are mis-configured. Please contact your System Administrator")
     end
 
     begin
-      handle_group_membership(results.first) unless results.empty?
+      handle_group_membership(results.first, username) unless results.empty?
     rescue LdapClient::LdapCouldNotFindMember
       results = [] # unfortunate workaround to get frontend to show correct error message
     end
@@ -137,11 +137,11 @@ module LdapClient
 
       if !user_entries
         raise LdapCouldNotBindWithUser.new(
-                  "Could not authenticate with user #{username} in #{config['user']['search_base']} using filter #{config['user']['filter']}"
+                  "Could not authenticate with user #{username} in #{config['user']['search_base']}"
               )
       end
 
-      handle_group_membership(user_entries.first)
+      handle_group_membership(user_entries.first, username)
 
       user_entries.first
     end
@@ -213,7 +213,7 @@ module LdapClient
 
   # looks for Group DN in User entry
   def reverse_membership_lookup(user_entry, group_entries, ldap)
-    return false if group_entries.empty?
+    return false if group_entries.nil? || group_entries.empty?
     group_search_filter = config['group']['filter']
 
     # The inject block builds up a string of membership filters which are OR'd together to make the filter
@@ -226,7 +226,7 @@ module LdapClient
 
   # looks for User DN in Group entries
   def full_membership_lookup(user_entry, group_entries, ldap)
-    return false if group_entries.empty?
+    return false if group_entries.nil? || group_entries.empty?
     group_search_filter = config['group']['filter']
 
     group_entries.each do |group_entry| # if we find a group, see if our user_dn is a member of that group
@@ -285,10 +285,10 @@ module LdapClient
 
   private
 
-  def handle_group_membership(entry)
+  def handle_group_membership(entry, username)
     if config['group'].present? && !user_in_user_group?(entry)
       raise LdapCouldNotFindMember.new(
-              "No entry found for user #{entry.dn} in LDAP group #{config['group']['names']}. Please contact your system administrator"
+              "No entry found for user #{username} in LDAP group #{config['group']['names']}. Please contact your system administrator"
             )
     end
   end

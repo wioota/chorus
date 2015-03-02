@@ -160,14 +160,12 @@ class User < ActiveRecord::Base
   end
 
   def confirm_ldap_user
-    begin
-      results = LdapClient.search(username)
-      if results.empty?
-        errors.add(:base, :generic, {:message => "No entry found for user #{username} in LDAP directory server. Please contact your
-system administrator"})
-      end
-    rescue LdapClient::LdapNotCorrectlyConfigured => e
-      errors.add(:base, :generic, {:message => e.message})
+    results = LdapClient.search(username)
+    if results.empty?
+      raise LdapClient::LdapCouldNotBindWithUser.new(
+              "No entry found for user #{username} in LDAP directory server. Please contact your
+system administrator"
+            )
     end
   end
 end
