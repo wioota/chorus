@@ -1,3 +1,5 @@
+include JdbcOverrides
+
 class JdbcConnection < DataSourceConnection
   class DatabaseError < Error
 
@@ -20,49 +22,16 @@ class JdbcConnection < DataSourceConnection
     end
   end
 
-  module MariaOverrides
-    def schemas
-      with_connection do |connection|
-        ss = []
-        connection.process_metadata(:getCatalogs) do |h|
-          ss << h[:table_cat] unless @schema_blacklist.include?(h[:table_cat])
-        end
-        ss
-      end
-    end
-
-    def metadata_for_dataset(dataset_name)
-      column_count = with_connection do |connection|
-        columns_enum(connection, dataset_name).count
-      end
-      {:column_count => column_count}
-    end
-
-    def column_info(dataset_name, setup_sql)
-      with_connection do |connection|
-        columns_enum(connection, dataset_name).map do |col|
-          { :attname => col[:column_name], :format_type => col[:type_name] }
-        end
-      end
-    end
-
-    private
-
-    def columns_enum(connection, dataset_name)
-      connection.to_enum(:process_metadata, :getColumns, schema_name, nil, dataset_name, nil)
-    end
-
-    def metadata_get_tables(types, opts, &block)
-      with_connection do |connection|
-        connection.process_metadata(:getTables, opts[:schema], nil, opts[:table_name], types.to_java(:string), &block)
-      end
-    end
-  end
-
   def initialize(data_source, account, options)
     super
     Sequel.extension(:additional_jdbc_drivers)
-    self.extend(MariaOverrides) if /jdbc:mariadb:/ =~ db_url
+
+    @overrides_module = JdbcOverrides::overrides_by_db_url(db_url)
+    self.extend(@overrides_module::ConnectionOverrides) if !@overrides_module.nil?
+  end
+
+  def overrides_module
+    @overrides_module
   end
 
   def db_url
@@ -145,20 +114,12 @@ class JdbcConnection < DataSourceConnection
 
   def visualization_sql_generator
     sql_gen = Visualization::SqlGenerator.new({}).extend(Visualization::JdbcSql)
-    sql_gen.extend(visualization_override) if visualization_override
+
+    sql_gen.extend(@overrides_module::VisualizationOverrides) if !@overrides_module.nil?
     sql_gen
   end
 
   private
-
-  def visualization_override
-    @visualization_override ||= case db_url
-      when /jdbc:teradata:/ then Visualization::TeradataSql
-      when /jdbc:sqlserver:/ then Visualization::SqlServerSql
-      when /jdbc:mariadb:/ then Visualization::MariadbSql
-      else nil
-     end
-  end
 
   JDBC_TYPES = {
       :tables => %w(TABLE),
