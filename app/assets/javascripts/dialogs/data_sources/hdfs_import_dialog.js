@@ -26,7 +26,7 @@ chorus.dialogs.HdfsImportDialog = chorus.dialogs.Upload.extend({
     },
 
     saved: function() {
-        chorus.toast("hdfs.import.started", {toastOpts: {type: "info"} });
+        chorus.toast("hdfs.import.started", {toastOpts: {type: "info"}});
         this.closeModal();
     },
 
