@@ -5,16 +5,16 @@ describe("chorus.pages.TagIndexPage", function() {
         this.tagSet = new chorus.collections.TagSet();
     });
 
-    describe("breadcrumbs", function() {
-        beforeEach(function() {
-            this.page.render();
-        });
-
-        it("displays the Tags breadcrumb", function() {
-            expect(this.page.$('.breadcrumbs')).toContainTranslation("breadcrumbs.home");
-            expect(this.page.$('.breadcrumbs')).toContainTranslation("breadcrumbs.tags");
-        });
-    });
+//     describe("breadcrumbs", function() {
+//         beforeEach(function() {
+//             this.page.render();
+//         });
+// 
+//         it("displays the Tags breadcrumb", function() {
+//             expect(this.page.$('.breadcrumbs')).toContainTranslation("breadcrumbs.home");
+//             expect(this.page.$('.breadcrumbs')).toContainTranslation("breadcrumbs.tags");
+//         });
+//     });
 
     describe("#render", function() {
         beforeEach(function() {
