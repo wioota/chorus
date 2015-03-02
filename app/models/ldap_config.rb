@@ -12,7 +12,8 @@ class LdapConfig
   end
 
   def self.exists?
-    File.exists?(config_file_path) && @config && @config['ldap'] && @config['ldap']['enable'].present?
+    config = self.instance
+    File.exists?(config_file_path) && config && config['ldap'] && config['ldap']['enable'].present?
   end
 
   def [](key_string)
@@ -65,7 +66,7 @@ class LdapConfig
 
   def check_configuration_validity
 
-    return if @config['ldap']['enable'].nil? || @config['ldap']['enable'] == false
+    return if @cofig.nil? || @config['ldap'].nil? || @config['ldap']['enable'].nil? || @config['ldap']['enable'] == false
 
     # will raise error if one of these properties is missing
     required_properties = [
