@@ -1,3 +1,6 @@
+<!-- TEMPLATE -->
+<!-- display the user profile -->
+
 <div class="user_info">
     {{#ifAny title department}}
       <div class="titleAndDepartment">
@@ -19,7 +22,7 @@
 </div>
 
 <div class="edit_photo">
-    <img src="{{imageUrl}}" class="profile"/>
+    <img src="{{imageUrl}}" class="profile" title="{{t 'user.profile.avatar.title'}}"/>
 </div>
 
 <div class="workspaces {{#unless workspaces.models.length}} hidden {{/unless}}">
