@@ -41,7 +41,9 @@
             var username = this.$("input[name=username]").val();
             this.collection = new chorus.collections.LdapUserSet([], { username: username });
 
-            this.collection.fetch();
+            this.collection.fetch({
+                error: this.showLdapServerError
+            });
 
             this.listenTo(this.collection, "reset", function() {
                 if (this.collection.models.length > 0) {
@@ -59,6 +61,12 @@
             this.$("input[name='email']").val(model.get("email"));
             this.$("input[name='title']").val(model.get("title"));
             this.$("input[name='dept']").val(model.get("dept"));
+        },
+
+        showLdapServerError: function(collection, response, options){
+            var error_json = JSON.parse(response.responseText);
+            var alert = new chorus.alerts.Error({ body: error_json.errors.message, title: "LDAP configuration error" })
+            alert.launchModal()
         },
 
         noLdapUserFound: function() {
