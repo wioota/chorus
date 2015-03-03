@@ -94,4 +94,3 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
         });
     }
 });
-
