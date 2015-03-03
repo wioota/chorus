@@ -133,9 +133,10 @@ describe("chorus.router", function() {
         });
 
         it("closes the current modal", function() {
-            this.chorus.modal = new chorus.dialogs.ChangePassword({
-                    model: this.chorus.session.user()
-                }),
+//             this.chorus.modal = new chorus.dialogs.ChangePassword({
+//                     model: this.chorus.session.user()
+//                 }),
+            this.chorus.modal = new chorus.dialogs.Comment();
 
             spyOn(this.chorus.modal, "closeModal");
             this.chorus.router.navigate("/");
