@@ -17,6 +17,9 @@ chorus.alerts.CollectionDelete = chorus.alerts.Confirm.extend({
 
     collectionDeleted: function() {
         this.closeModal();
+        this.closeModal(true);
+        // add "info" style toast
+        this.deleteMessageParams.toastOpts = {type:"info"};
         chorus.toast(this.deleteMessage, this.deleteMessageParams());
         chorus.PageEvents.trigger(this.collection.entityType + ":deleted", this.collection);
         if (this.redirectUrl) {
