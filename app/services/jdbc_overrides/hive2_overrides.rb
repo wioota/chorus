@@ -1,5 +1,7 @@
 module JdbcOverrides
   module Hive2
+    class QueryError < StandardError; end
+
     module ConnectionOverrides
       def prepare_and_execute_statement(query, options={}, cancelable_query = nil)
         with_jdbc_connection(options) do |jdbc_conn|
@@ -21,7 +23,7 @@ module JdbcOverrides
             # jdbc_conn.commit if options[:limit]
             result
           rescue Exception => e
-            raise QueryError, "The query could not be completed. Error: #{e.message}"
+            raise PostgresLikeConnection::QueryError, "The query could not be completed. Error: #{e.message}"
           end
         end
       end
