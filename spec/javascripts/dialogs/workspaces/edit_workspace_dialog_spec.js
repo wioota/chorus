@@ -112,7 +112,7 @@ describe("chorus.dialogs.EditWorkspace", function() {
         });
 
         it("makes a cl editor with toolbar", function() {
-            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "summary");
+            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "summary", { width : 'auto', height : 200, controls : 'bold italic | bullets numbering | link unlink' });
         });
 
         describe("sandbox location", function() {

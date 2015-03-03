@@ -18,7 +18,6 @@ chorus.pages.UserEditPage = chorus.pages.Base.extend({
             model: this.model,
             content: new chorus.views.UserEdit({model: this.model}),
             contentHeader: new chorus.views.DisplayNameHeader({ model: this.model }),
-            // contentDetails: new chorus.views.StaticTemplate("plain_text", {text: t("users.details")})
         });
 
         this.sidebar = new chorus.views.UserSidebar({ model: this.model, editMode: true });

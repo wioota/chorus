@@ -29,12 +29,20 @@
     }
 }
 
-
 .controls,
 .form_controls {
     button {
         display: inline-block;
         
+        /* general rule to float left a form button at bottom */
+        &.left {
+            float: left;
+        }
+        &.left:first-child {
+            padding-left: 0;
+        }
+        
+
         div[aria-role=progressbar] {
             top: -4px;
             left: 17px;

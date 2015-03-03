@@ -36,7 +36,7 @@ describe("chorus.pages.JobsShowPage", function () {
         });
     });
 
-    context("after the fetch completes with tasks", function () {
+    context("> after the fetch completes with tasks", function () {
         beforeEach(function() {
             this.server.completeFetchFor(this.model);
         });

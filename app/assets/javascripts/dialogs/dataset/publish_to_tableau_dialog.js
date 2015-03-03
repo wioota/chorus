@@ -13,17 +13,26 @@ chorus.dialogs.PublishToTableau = chorus.dialogs.Base.include(chorus.Mixins.Dial
             inputSelector: "input",
             formSelector: "form"
         });
+
+        this.tableauSites = chorus.models.Config.instance().get('tableauSites');
     },
 
     create: function(e) {
         var attrs = {};
 
-        _.each(["name", "tableau_username", "tableau_password"], function(name) {
+        _.each(["name", "tableau_username", "tableau_password", "tableau_project_name"], function(name) {
             var input = this.$("input[name=" + name + "]");
             if (input.length) {
                 attrs[name] = input.val().trim();
             }
         }, this);
+
+        if (!this.$("select[name='tableau_site_name']").val() || (this.tableauSites && this.tableauSites.length === 1)) {
+            attrs['tableau_site_name'] = 'Default';
+        } else {
+            attrs['tableau_site_name'] = this.$("select[name='tableau_site_name']").val().trim();
+        }
+
         attrs['createWorkFile'] = this.$("input[name='create_work_file']").is(':checked');
         this.$("button.submit").startLoading('actions.publishing');
         this.$("button.cancel").prop("disabled", true);
@@ -40,5 +49,12 @@ chorus.dialogs.PublishToTableau = chorus.dialogs.Base.include(chorus.Mixins.Dial
         this.closeModal();
         this.dataset.tableauWorkbooks().add(this.model);
         this.dataset.trigger("change");
+    },
+
+    additionalContext: function(ctx) {
+        return {
+            hasMultipleTableauSites: this.tableauSites && this.tableauSites.length > 1,
+            tableauSites: this.tableauSites
+        };
     }
 });

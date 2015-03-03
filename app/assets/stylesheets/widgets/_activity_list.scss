@@ -123,6 +123,7 @@ $refresh-activity-gutter: $activity-gutter - 5;
     ul.attachments {
         img {
             vertical-align: middle;
+            cursor: pointer;
         }
 
         li {

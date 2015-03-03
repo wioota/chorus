@@ -12,7 +12,9 @@ describe("chorus.models.TableauWorkbook", function () {
             this.model.set({
                 name: "name",
                 tableau_username: "tableau_username",
-                tableau_password: "tableau_password"
+                tableau_password: "tableau_password",
+                tableau_site_name: "Default",
+                tableau_project_name: ""
             });
         });
 

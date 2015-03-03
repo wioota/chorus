@@ -18,6 +18,8 @@ resource "Tableau" do
     parameter :workspace_id, "Id of the workspace containing the dataset"
     parameter :tableau_username, "Username to connect to the Tableau server"
     parameter :tableau_password, "Password to connect to the Tableau server"
+    parameter :tableau_site_name, "Site name to publish into in the Tableau server"
+    parameter :tableau_project_name, "Project name to publish into in the Tableau server"
 
     required_parameters :name
     required_parameters :dataset_id
@@ -30,7 +32,9 @@ resource "Tableau" do
     let(:name) { 'MyTableauWorkbook'}
     let(:tableau_username) { "username" }
     let(:tableau_password) { "password" }
-
+    let(:tableau_site_name) { "Default" }
+    let(:tableau_project_name) { "Default" }
+    
     example_request "Create a tableau workbook" do
       status.should == 201
     end

@@ -16,6 +16,7 @@ chorus.dialogs.ShowImage = chorus.dialogs.Base.extend({
         this.activity = options.activity;
         this.originalModule = options.originalModule;
         this.attachment = options.attachment;
+        this.workspace = new chorus.models.Workspace(options.workspace);
         if(this.attachment) {
             this.title = this.attachment.name();
             this.model = new chorus.models.Attachment(this.attachment);
@@ -45,9 +46,9 @@ chorus.dialogs.ShowImage = chorus.dialogs.Base.extend({
         return {
             imageUrl: imageUrl,
             downloadUrl: this.model.downloadUrl(),
-            workspaceIconUrl: this.model.workspace().defaultIconUrl('small'),
-            workspaceShowUrl: this.model.workspace().showUrl(),
-            workspaceName: this.model.workspace().name(),
+            workspaceIconUrl: this.workspace.defaultIconUrl('small'),
+            workspaceShowUrl: this.workspace.showUrl(),
+            workspaceName: this.workspace.name(),
             showFullOptions: showFullOptions
         };
     },
@@ -56,7 +57,7 @@ chorus.dialogs.ShowImage = chorus.dialogs.Base.extend({
         e && e.preventDefault();
         var alert = new chorus.alerts.WorkfileDelete({
             workfileId: this.model.id,
-            workspaceId: this.model.workspace().id,
+            workspaceId: this.workspace.id,
             workfileName: this.model.get("fileName")
         });
         alert.redirectUrl = null;
@@ -81,7 +82,7 @@ chorus.dialogs.ShowImage = chorus.dialogs.Base.extend({
             pageModel: this.model,
             entityId: this.model.id,
             entityType: "workfile",
-            workspaceId: this.model.workspace().id,
+            workspaceId: this.workspace.id,
             allowWorkspaceAttachments: true
         });
         this.openNewModalWithEvent(dialog);
@@ -100,7 +101,7 @@ chorus.dialogs.ShowImage = chorus.dialogs.Base.extend({
         e && e.preventDefault();
         var dialog = new chorus.dialogs.CopyWorkfile({
             workfileId: this.model.id,
-            workspaceId: this.model.workspace().id,
+            workspaceId: this.workspace.id,
             activeOnly: true
         });
         this.openNewModalWithEvent(dialog);
@@ -121,7 +122,7 @@ chorus.dialogs.ShowImage = chorus.dialogs.Base.extend({
 
     openNewModalWithEvent: function(dialog) {
         this.closeModal();
-        _.defer(dialog.launchModal());
+        _.defer(_.bind(dialog.launchModal, dialog));
         this.attachCloseModalEvent();
     }
 

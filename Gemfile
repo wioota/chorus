@@ -85,6 +85,7 @@ group :development, :test, :integration, :packaging, :ci_jasmine, :ci_legacy, :c
 end
 
 group :development do
+  # gem 'tabcmd_gem', :path => "~/alpine/chorus-tableau" # otherwise is set in Gemfile-packaging
   gem 'license_finder', '~> 0.8.1', :require => false
   gem 'mizuno'
   gem 'bullet'

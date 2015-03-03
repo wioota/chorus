@@ -19,17 +19,18 @@ $label-width: 82px;
         /* line-height: 16px; */
     }
 
-    .toolbar {
-        color: $link-color;
-        text-align: right;
-        font-size: 12px;
-        margin-bottom: 5px;
-
-        a {
-            font-size: 12px;
-            padding: 0px 2px;
-        }
-    }
+// TODO delete when graphic toolbar is final
+//     .toolbar {
+//         color: $link-color;
+//         text-align: right;
+//         font-size: 12px;
+//         margin-bottom: 5px;
+// 
+//         a {
+//             font-size: 12px;
+//             padding: 0px 2px;
+//         }
+//     }
 
     .options_area {
         .file-wrapper {
@@ -202,6 +203,5 @@ $label-width: 82px;
             width: 200px;
         }
     }
-
 
 }

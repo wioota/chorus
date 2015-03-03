@@ -7,9 +7,9 @@
 .legend_for_required {
     position: relative;
     top: 10px;
-/*     margin-top: 15px; */
+    /* margin-top: 15px; */
     font-size: $small-font;
-    color: #777;
+    color: #707070;
 }
 
 
@@ -27,12 +27,10 @@ fieldset {
     }
 }
 
-
 .form_row {
     line-height: 30px;
     vertical-align: middle;
 }
-
 
 .row {
     &:first-child {
@@ -56,4 +54,19 @@ fieldset {
     }
 
     @include after-clearfix;
+}
+
+.girdle {
+    label {
+        margin-top: 8px;
+        margin-bottom: 1px;
+    }
+}
+
+.form_pair {
+
+    /* default for all form labels = label on line above form element */
+    label {
+        display: block;
+    }
 }
