@@ -40,7 +40,6 @@ module JdbcOverrides
         "#{sql}"
       end
 
-
     end
 
     module DatasetOverrides
@@ -55,8 +54,8 @@ module JdbcOverrides
       end
     end
 
-    module VisualizationOverrides
-      include Visualization::Hive2Sql
+    def self.VisualizationOverrides
+      return Visualization::Hive2Sql
     end
   end
 end
