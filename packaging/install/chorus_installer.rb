@@ -207,6 +207,7 @@ class ChorusInstaller
     FileUtils.cp("#{chorus_installation_path}/config/ldap.properties.active_directory", "#{destination_path}/shared/ldap.properties.active_directory")
     FileUtils.cp("#{chorus_installation_path}/config/ldap.properties.opensource_ldap", "#{destination_path}/shared/ldap.properties.opensource_ldap")
     copy_if_not_exist("#{chorus_installation_path}/config/chorus.defaults.properties", "#{destination_path}/shared/chorus.properties")
+    copy_if_not_exist("#{chorus_installation_path}/config/ldap.properties", "#{destination_path}/shared/ldap.properties")
     FileUtils.cp("#{chorus_installation_path}/config/chorus.license.default", "#{destination_path}/shared/chorus.license.default")
     copy_if_not_exist("#{chorus_installation_path}/config/chorus.license.default", "#{destination_path}/shared/chorus.license")
   end
