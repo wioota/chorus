@@ -17,23 +17,33 @@ chorus.presenters.DatasetSidebar = chorus.presenters.Base.extend({
         return this.deleteKey("deleteTextKey");
     },
 
+    deleteTextTooltipKey: function() {
+       return this.deleteKey("deleteTextTooltipKey");
+    },
+
     deleteKey: function(target) {
         var keyTable = {
             "CHORUS_VIEW": {
                 deleteMsgKey: "chorus_view",
-                deleteTextKey: "actions.delete"
+                deleteTextKey: "actions.delete",
+                deleteTextTooltipKey: "actions.remove_association.chorus_view.tooltip"
             },
             "SOURCE_TABLE_VIEW":{
                 deleteMsgKey: "view",
-                deleteTextKey: "actions.delete_association"
+                //deleteTextKey: "actions.delete_association"
+                deleteTextKey: "actions.remove_association",
+                deleteTextTooltipKey: "actions.remove_association.src_table_view.tooltip"
             },
             "SOURCE_TABLE":{
                 deleteMsgKey: "table",
-                deleteTextKey: "actions.delete_association"
+                //deleteTextKey: "actions.delete_association"
+                deleteTextKey: "actions.remove_association",
+                deleteTextTooltipKey: "actions.remove_association.src_table.tooltip"
             },
             "HDFS": {
                 deleteMsgKey: "hdfs_dataset",
-                deleteTextKey: "actions.delete"
+                deleteTextKey: "actions.delete",
+                deleteTextTooltipKey: "actions.remove_association.hdfs.tooltip"
             }
         };
 

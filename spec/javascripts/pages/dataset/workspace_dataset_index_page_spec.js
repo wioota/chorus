@@ -258,7 +258,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
                     });
 
                     it("displays the disassociate workspace link", function () {
-                        expect(this.page.$(".multiple_selection a.disassociate_dataset")).toContainTranslation("actions.disassociate_dataset");
+                        expect(this.page.$(".multiple_selection a.disassociate_dataset")).toContainTranslation("actions.delete_associations");
                     });
 
                     context("when the disassociate link is clicked", function () {

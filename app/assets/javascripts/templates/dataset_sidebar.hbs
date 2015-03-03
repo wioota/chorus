@@ -115,7 +115,7 @@
             {{/unless}}
 
             {{#unless workspaceArchived}}
-                {{#if isDeleteable}}<li><a href="#" class="delete_dataset alert" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey functionCallContext=this}}</a></li>{{/if}}
+                {{#if isDeleteable}}<li><a href="#" class="delete_dataset alert" data-key-prefix="{{deleteMsgKey}}" title="{{t deleteTextTooltipKey}}">{{t deleteTextKey functionCallContext=this}}</a></li>{{/if}}
             {{/unless}}
         </ul>
     </div>

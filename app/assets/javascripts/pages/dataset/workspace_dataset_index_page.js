@@ -132,7 +132,7 @@ chorus.pages.WorkspaceDatasetIndexPage = chorus.pages.Base.include(
     sidebarMultiselectActions: function (collection) {
         var actions                 = [ { name:"edit_tags", target: chorus.dialogs.EditTags} ];
         var newWorkFlow             = { name: "new_work_flow", target: chorus.dialogs.WorkFlowNewForDatasetList};
-        var disassociateDatasets    = { name: "disassociate_dataset", target: chorus.alerts.DatasetDisassociateMultiple};
+        var disassociateDatasets    = { name: "remove_associations", target: chorus.alerts.DatasetDisassociateMultiple};
 
         var onlySourceTablesSelected    = collection.all(function (dataset) { return dataset.get('entitySubtype') === 'SOURCE_TABLE'; });
 
