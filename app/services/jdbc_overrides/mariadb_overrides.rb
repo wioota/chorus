@@ -45,8 +45,8 @@ module JdbcOverrides
     module DatasetOverrides
     end
 
-    module VisualizationOverrides
-      include Visualization::MariadbSql
+    def self.VisualizationOverrides
+      return Visualization::MariadbSql
     end
   end
 end
