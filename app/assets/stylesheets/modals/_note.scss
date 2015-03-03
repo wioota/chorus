@@ -14,9 +14,8 @@ $label-width: 82px;
     }
 
     a {
-        font-size: 12px;
+        font-size: $small-font;
         font-weight: $semibold;
-        /* line-height: 16px; */
     }
 
 // TODO delete when graphic toolbar is final
@@ -31,6 +30,17 @@ $label-width: 82px;
 //             padding: 0px 2px;
 //         }
 //     }
+    .toolbar {
+        color: $link-color;
+        text-align: right;
+        font-size: $small-font;
+        margin-bottom: 5px;
+
+        a {
+            font-size: $small-font;
+            padding: 0px 2px;
+        }
+    }
 
     .options_area {
         .file-wrapper {
@@ -141,8 +151,10 @@ $label-width: 82px;
 
     .options_text,
     .options_area {
-        /* font-size: 12px; */
+        /* font-size: $small-font */
         margin: 10px 0;
+        //font-size: $small-font;
+        //margin: 8px 8px;
     }
 
     .options_section {
@@ -176,7 +188,7 @@ $label-width: 82px;
         margin-top: 5px;
 
         .add_user {
-            font-size: 12px;
+            font-size: $small-font;
             font-weight: $semibold;
         }
 
@@ -202,6 +214,12 @@ $label-width: 82px;
         select {
             width: 200px;
         }
+    }
+
+    .remove {
+        float: right;
+        font-size: $default-font-size;
+        line-height: 20px;
     }
 
 }

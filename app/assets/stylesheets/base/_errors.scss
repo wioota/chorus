@@ -130,12 +130,12 @@ textarea.has_error,
     @include border-radius(1px);
 
     @include error-background-icon;
-    background-position: 99% 50%;
 
 /*     background-image: url("/images/messaging/error-exclamation.png"); */
 /*     background-repeat: no-repeat; */
 /*     background-position: 99%; */
 /*     padding-right: 20px; */
+    background-position: 99.5% 50%;
 }
 
 .inputError {

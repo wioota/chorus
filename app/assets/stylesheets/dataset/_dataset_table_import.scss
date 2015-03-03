@@ -1,5 +1,12 @@
 $cell-width: 150px;
 
+// colors for different data types displayed in the headers and elsewhere in app
+// TODO: should be expanded across app and made common
+$datatype-text-backgroundcolor: #8989BA;
+$datatype-integer-backgroundcolor: #55A3EE;
+$datatype-date_time-backgroundcolor: #61D0F4;
+
+
 .table_import_csv.dialog {
     .grid {
       height: 300px;
@@ -136,21 +143,23 @@ $cell-width: 150px;
             position: absolute;
             right: 10px;
             top: 5px;
-/*             @include triangle-css(down, white, 8px, 8px); */
             @include triangle-glyph(down);
             color: $core-white;
         }
 
         &.integer, &.double_precision {
-          background: url(/images/datatypes/label_sm_datatype_dkblue2.png) repeat;
+//           background: url(/images/datatypes/label_sm_datatype_dkblue2.png) repeat;
+            background-color: $datatype-integer-backgroundcolor;
         }
 
         &.text {
-          background: url(/images/datatypes/label_sm_datatype_purple2.png) repeat;
+//           background: url(/images/datatypes/label_sm_datatype_purple2.png) repeat;
+          background-color: $datatype-text-backgroundcolor;
         }
 
         &.date, &.time, &.date_time, &.timestamp {
-          background: url(/images/datatypes/label_sm_datatype_ltblue2.png) repeat;
+//           background: url(/images/datatypes/label_sm_datatype_ltblue2.png) repeat;
+            background-color: $datatype-date_time-backgroundcolor;
         }
 
         .popup_filter {
@@ -163,7 +172,7 @@ $cell-width: 150px;
 
         a {
           @include ellipsis;
-          font-size: 12px;
+          font-size: $small-font;
           font-weight: $semibold;
           max-width: $cell-width - 68px;
           margin-left: 3px;
@@ -171,7 +180,6 @@ $cell-width: 150px;
             color: #cc0000;
 
             .arrow {
-/*               @include triangle-css(down, #cc0000, 6px, 6px); */
               @include triangle-glyph(down);
               color: #CC0000;
             }

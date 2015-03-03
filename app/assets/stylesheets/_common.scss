@@ -3,8 +3,8 @@
 
 // Grand Old Colors
 /* basic color rules - DO NOT use these in component files, they should only be used in config sections! */
-$light-green: #B3D988;
-$light-blue: #c4dceb;
+$light-green:       #B3D988;
+$light-blue: #C4DCEB;
 $blue: #2c95dd;
 $green: #98B675;
 $gray-blue: #B2C7D6;
@@ -318,6 +318,7 @@ $bold: 700;
 $medium-font: 14px;
 $small-font: 12px;
 $smallest-font: 10px;
+$default-font-size: $medium-font;
 
 // fontsize for the page (sub) header element. eg. name of item
 $page_header-fontsize: 20.5px;
@@ -325,9 +326,8 @@ $page_header-fontsize: 20.5px;
 // fontsize for the primary item name in lists. e.g. workspace, workfile, datasource, etc.
 $listitem_name-fontsize: 16px;
 
-
 $default-font-color: $color-text3;
-$default-font-size: 14px;
+
 $low-light-type: $gray;
 $mid-light-type: #5f5f5f;
 
@@ -371,7 +371,9 @@ $guttersV: $baseLineHeight/2em*1rem; // set top and bottom margins to half the b
 $spacingHelpers: ($emRatio*$baseLineHeight/3, $emRatio*$baseLineHeight/2, $emRatio*$baseLineHeight); //TODO: convert to px;
 
 // BUTTONS
-$button-height : 26px;
+$button-height: 30px;
+$button-padding-sides: 14px;
+
 $button-border-color: $border-color;
 $button-background-color : #FFFFFF;
 
@@ -874,19 +876,19 @@ $lozenge-color-selected-dark: $brand-dark;
 // MIXINS, CONTENT
 
 @mixin alert-error-icon {
-    content: "\f06a";   /* fa-exclamation-circle */
+    content: "\f06a";  /* fa-exclamation-circle */
 }
 
 @mixin alert-warning-icon {
-    content: "\f071";   /* fa-exclamation-triangle */
+    content: "\f071";  /* fa-exclamation-triangle */
 }
 
 @mixin alert-success-icon {
-    content: "\f058";   /* fa-check-circle */
+    content: "\f058";  /* fa-check-circle */
 }
 
 @mixin alert-informational-icon {
-    content: "\f06a";   /* fa-exclamation-circle */
+    content: "\f06a";  /* fa-exclamation-circle */
 }
 
 

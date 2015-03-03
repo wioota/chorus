@@ -161,7 +161,7 @@ $menu-item-height-default: 40px;
                 float: right;
 
                 .caret {
-                    font-size: 14px;
+                    font-size: $default-font-size;
                 }
 
                 &.active .caret::before {
@@ -219,7 +219,7 @@ $menu-item-height-default: 40px;
                 z-index: 1;
 
                 &.search_clear {
-                    font-size: 14px;
+                    font-size: $default-font-size;
                     position: relative;
                     top: 2px;
                 }
@@ -417,7 +417,7 @@ $menu-item-height-default: 40px;
                 padding: 10px 0;
                 display: block;
                 text-align: center;
-                font-size: 12px;
+                font-size: $small-font;
                 font-weight: $semibold;
             }
         }

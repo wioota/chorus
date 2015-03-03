@@ -8,7 +8,7 @@
         }
 
         .author{
-            font-size: 14px;
+            font-size: $default-font-size;
             font-weight: $semibold;
         }
     }
@@ -21,7 +21,7 @@
         padding: $activity-gutter;
         padding-top: 0;
         a {
-            font-size: 12px;
+            font-size: $small-font;
 
             &.less {
                 display: none;

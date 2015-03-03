@@ -19,8 +19,6 @@ describe("chorus.pages.UserNewPage", function() {
         });
 
         it("has the correct breadcrumbs", function() {
-//             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toHaveHref("#/");
-//             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toContainTranslation("breadcrumbs.home");
             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toHaveHref("#/users");
             expect(this.page.$("#breadcrumbs .breadcrumb a").eq(0)).toContainTranslation("breadcrumbs.users");
             expect(this.page.$("#breadcrumbs .breadcrumb .slug")).toContainTranslation("breadcrumbs.new_user");
@@ -29,10 +27,6 @@ describe("chorus.pages.UserNewPage", function() {
         it("has the correct title", function() {
             expect(this.page.$(".content_header")).toContainTranslation("users.new_user");
         });
-
-//         it("has the correct subtitle", function() {
-//             expect(this.page.$(".content_details")).toContainTranslation("users.details");
-//         });
 
         context("when external auth is enabled", function() {
             beforeEach(function() {

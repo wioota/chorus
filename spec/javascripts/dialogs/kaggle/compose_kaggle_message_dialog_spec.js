@@ -206,7 +206,7 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
 
             it("shows a toast message if saved successfully", function () {
                 this.dialog.model.trigger("saved");
-                expect(chorus.toast).toHaveBeenCalledWith('kaggle.compose.success');
+                expect(chorus.toast).toHaveBeenCalledWith("kaggle.compose.success.toast", {toastOpts: {type: "success"}} );
             });
 
             context("when the dialog has errors", function () {
@@ -216,13 +216,6 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
                     expect(_.isEmpty(this.dialog.model.serverErrors)).toBeTruthy();
                 });
 
-// TODO to be deleted when final
-//                 it("clears any errors on the model when the close_errors bar is closed", function () {
-//                     this.dialog.model.serverErrors = { name:"wrong name" };
-//                     this.dialog.showErrors();
-//                     this.dialog.$("a.close_errors").click();
-//                     expect(_.isEmpty(this.dialog.model.serverErrors)).toBeTruthy();
-//                 });
             });
 
             describe("when the save fails", function () {

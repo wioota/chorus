@@ -22,7 +22,7 @@ describe "Users" do
       fill_in 'title', :with => "dev"
       fill_in 'dept', :with => "chorus"
       fill_in 'notes', :with => "This is a test user."
-      click_button "Add this Person"
+      click_button "Add Person"
 
       within ".main_content" do
         click_link "James Bond"
