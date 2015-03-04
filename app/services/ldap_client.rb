@@ -126,7 +126,7 @@ module LdapClient
       if !ldap.bind
         error = ldap.get_operation_result
         Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
-        raise LdapNotCorrectlyConfigured.new(error.message)
+        raise LdapNotCorrectlyConfigured.new("An error occured when trying to connect with the LDAP server. Please contact your system administrator.")
       end
 
       user_entries = ldap.bind_as(
