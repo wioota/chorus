@@ -43,13 +43,13 @@ class ChorusExecutor:
         self.previous_chorus_control("stop")
 
     def start_postgres(self):
-        logger.info("starting postgres...")
+        logger.info("Starting postgres...")
         stdout, stderr = self.chorus_control("start postgres")
         if "postgres failed" in stdout:
             raise PSQLException(stdout)
 
     def stop_postgres(self):
-        logger.info("stopping postgres")
+        logger.info("Stopping postgres")
         stdout, stderr = self.chorus_control("stop postgres")
         if "postgres failed" in stdout:
             raise PSQLException(stdout)
@@ -57,7 +57,9 @@ class ChorusExecutor:
     def initdb(self, data_path, database_user):
         command = "initdb --locale=en_US.UTF-8 -D %s/db --auth=md5 --pwfile=%s/postgres/pwfile --username=%s" % \
                 (data_path, self.release_path, database_user)
-        self.run(command)
+        stdout, stderr = self.run(command)
+        if "exists but is not empty" in stderr:
+            logger.warning(stderr)
 
     def rake(self, command):
         command = "cd %s && RAILS_ENV=production bin/ruby -S bin/rake %s --trace" % \
