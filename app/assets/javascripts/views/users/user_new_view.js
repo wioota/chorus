@@ -19,7 +19,7 @@ chorus.views.UserNew = chorus.views.Base.extend({
     postRender: function() {
         this.$("textarea").limitMaxlength();
     },
-        
+
     submitNewUser:function submitNewUser(e) {
         e.preventDefault();
         if(this.saving) {return;}
