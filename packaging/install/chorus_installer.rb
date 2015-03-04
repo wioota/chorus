@@ -474,6 +474,7 @@ class ChorusInstaller
       #{destination_path}/shared/chorus.properties
       #{destination_path}/shared/ldap.properties
       #{destination_path}/shared/chorus.license
+      #{destination_path}/shared/ldap.properties
     )
 
     files.each do |file|
