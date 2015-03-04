@@ -21,6 +21,7 @@ chorus.alerts.CollectionDelete = chorus.alerts.Confirm.extend({
         // add toast "info" style
         var toastOpts = {toastOpts: {type: "info"}};
         var messageParams = this.deleteMessageParams();
+         messageParams = (messageParams === undefined) ? {} : messageParams;
         _.extend(messageParams, toastOpts);
         
         //chorus.toast(this.deleteMessage, _.extend(this.deleteMessageParams(), toastOpts));

@@ -30,9 +30,17 @@ chorus.alerts.ModelDelete = chorus.alerts.Confirm.extend({
 
         // add toast "info" style
         var toastOpts = {toastOpts: {type: "info"}};
-        var messageParams = this.deleteMessageParams();
-        _.extend(messageParams, toastOpts);
+        //console.log ("md1: " + _.keys (toastOpts) + " / " + _.values (toastOpts));
         
+        var messageParams = this.deleteMessageParams();
+        //console.log ("md2: " + _.keys (messageParams) + " / " + _.values (messageParams));
+        
+        messageParams = (messageParams === undefined) ? {} : messageParams;
+        //console.log ("md3: " + _.keys (messageParams) + " / " + _.values (messageParams));
+        
+        _.extend(messageParams, toastOpts);
+        //console.log ("md4: " + _.keys (messageParams) + " / " + _.values (messageParams));
+
         //chorus.toast(this.deleteMessage, _.extend(this.deleteMessageParams(), toastOpts));
         chorus.toast(this.deleteMessage, messageParams);
 

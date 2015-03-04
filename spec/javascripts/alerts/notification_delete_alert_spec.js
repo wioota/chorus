@@ -49,7 +49,7 @@ describe("chorus.alerts.NotificationDeleteAlert", function() {
                 });
 
                 it("should display a toast", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith("notification.delete.success", undefined);
+                    expect(chorus.toast).toHaveBeenCalledWith("notification.delete.success", {toastOpts: {type: 'info'}});
                 });
             });
         });

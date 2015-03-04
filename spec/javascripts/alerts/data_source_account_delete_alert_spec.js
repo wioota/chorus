@@ -23,7 +23,7 @@ describe("chorus.alerts.DataSourceAccountDelete", function() {
         });
 
         it("displays a toast message", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("data_sources.account.delete.toast", undefined);
+            expect(chorus.toast).toHaveBeenCalledWith("data_sources.account.delete.toast", {toastOpts: {type : 'info' }});
             expect(chorus.toast.calls.count()).toBe(1);
         });
     });
