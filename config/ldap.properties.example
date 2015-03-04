@@ -1,6 +1,7 @@
 # This is a placeholder LDAP properties file. Uncommenting the 'ldap.enable' line in this
 # file will tell Chorus to use the new LDAP authentication scheme, and the settings in
-# chorus.properties will be ignored.
+# chorus.properties will be ignored. This file must also be named 'ldap.properties' for
+# the settings to be read by Chorus.
 #
 # A value is needed for every line except those noted otherwise.
 
