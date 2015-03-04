@@ -30,10 +30,11 @@ chorus.alerts.ModelDelete = chorus.alerts.Confirm.extend({
 
         // add toast "info" style
         var toastOpts = {toastOpts: {type: "info"}};
-        var messageParams = _.extend(this.deleteMessageParams(), toastOpts);
+        var messageParams = this.deleteMessageParams();
+        _.extend(messageParams, toastOpts);
         
         //chorus.toast(this.deleteMessage, _.extend(this.deleteMessageParams(), toastOpts));
-        chorus.toast(this.deleteMessage, messageParams());
+        chorus.toast(this.deleteMessage, messageParams);
 
         if(this.model.entityType) {
             chorus.PageEvents.trigger(this.model.entityType + ":deleted", this.model);
