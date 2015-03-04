@@ -311,6 +311,24 @@ describe User do
         @another_user.password_digest.should_not equal(@user.password_digest)
       end
     end
+
+    describe "when ldap is enabled" do
+      before do
+        stub(LdapClient).enabled? { true }
+      end
+
+      it "should raise an error when the user is not in the LDAP server" do
+        stub(LdapClient).search.with_any_args { [] }
+        args = { :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com" }
+        expect { User.create(args) }.to raise_error(LdapClient::LdapCouldNotBindWithUser)
+      end
+
+      it "should succeed when the user is found in the LDAP server" do
+        stub(LdapClient).search.with_any_args { [:result] }
+        args = { :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com" }
+        expect { User.create(args) }.not_to raise_error
+      end
+    end
   end
 
   describe "#destroy" do
