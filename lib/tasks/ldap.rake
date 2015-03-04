@@ -6,7 +6,7 @@ namespace :ldap do
     #print "arg = #{args[:group]}\n"
     #print "arg = #{args.extras}\n"
     if !LdapConfig.exists?
-      puts 'You must use the new implementation of LDAP support and have an ldap.config in order to use this rake task'
+      puts 'You must configure your ldap.properties file in order to use this rake task.'
       next
     end
 

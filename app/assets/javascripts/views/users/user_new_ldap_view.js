@@ -27,7 +27,16 @@
         checkUsernameClicked: function(e) {
             e.preventDefault();
             this.clearErrors();
+            this.disableCheckUsernameButton();
             this.checkUsername(this.ldapUsersFetched);
+        },
+
+        disableCheckUsernameButton: function(){
+            this.$("button#check_username").prop("disabled", true);
+        },
+
+        enableCheckUsernameButton: function() {
+            this.$("button#check_username").prop("disabled", false);
         },
 
         formSubmitted: function(e) {
@@ -42,7 +51,8 @@
             this.collection = new chorus.collections.LdapUserSet([], { username: username });
 
             this.collection.fetch({
-                error: this.showLdapServerError
+                error: this.showLdapServerError,
+                complete: this.enableCheckUsernameButton.bind(this)
             });
 
             this.listenTo(this.collection, "reset", function() {

@@ -220,6 +220,7 @@ ldap:
   enable: true
   host: localhost
   port: 3897
+  base: dc=example,dc=com
   bind:
     username: uid=admin,ou=system
     password: secret
@@ -230,7 +231,13 @@ ldap:
   user:
     search_base: ou=users,dc=example,dc=com
     filter: (uid={0})
-
+  attribute:
+    uid: uid
+    ou:
+    gn: givenName
+    sn: sn
+    mail: mail
+    title:
 YAML
 
 LADLE_LDAP_WITHOUT_GROUPS_YML = <<YAML
@@ -343,7 +350,7 @@ describe LdapClient do
         it "should throw an error" do
           expect {
             LdapClient.search("testguy")
-          }.to raise_error(LdapClient::LdapNotCorrectlyConfigured, "Invalid Credentials")
+          }.to raise_error(LdapClient::LdapNotCorrectlyConfigured, "LDAP settings are mis-configured. Please contact your System Administrator")
         end
       end
     end
@@ -479,6 +486,7 @@ describe LdapClient do
     context "when the bind.username and bind.password are specified" do
       before do
         stub(LdapClient).config { YAML.load(LDAP_WITH_AUTH_CHORUS_YML)['ldap'] }
+        stub(LdapConfig).exists? { true }
         LdapClient.config["bind"]["username"].should_not be_blank
         LdapClient.config["bind"]["password"].should_not be_blank
       end
@@ -550,6 +558,7 @@ describe LdapClient do
 
       before(:each) do
         stub(LdapClient).config { YAML.load(LADLE_LDAP_WITHOUT_GROUPS_YML)['ldap'] }
+        stub(LdapConfig).exists? { true }
       end
 
       it "should authenticate a user with correct auth who's in the user search_base" do
@@ -573,6 +582,7 @@ describe LdapClient do
 
       before(:each) do
         stub(LdapClient).config { YAML.load(LADLE_LDAP_WITH_GROUPS_YML)['ldap'] }
+        stub(LdapConfig).exists? { true }
       end
 
       it "should authenticate a user in the group under the group search_base" do
@@ -581,6 +591,14 @@ describe LdapClient do
 
       it "shouldn't authenticate a user who isn't in the given search base" do
         expect { LdapClient.authenticate("uperson1", "secret") }.to raise_error
+      end
+
+      it "shouldn't find someone outside of the group when using search" do
+        expect( LdapClient.search("ouser1") ).to be_empty
+      end
+
+      it "should find someone inside the group when doing a search" do
+        expect( LdapClient.search("guser1") ).to be
       end
     end
 

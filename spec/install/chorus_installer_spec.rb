@@ -736,6 +736,10 @@ describe ChorusInstaller do
       File.readlink('/usr/local/chorus/releases/2.2.0.0/config/chorus.properties').should == '/usr/local/chorus/shared/chorus.properties'
     end
 
+    it "linkes the ldap.properties.example file as ldap.properties" do
+      File.readlink('/usr/local/chorus/releases/2.2.0.0/config/ldap.properties').should == '/usr/local/chorus/shared/ldap.properties'
+    end
+
     it "links the chorus.license file" do
       File.readlink('/usr/local/chorus/releases/2.2.0.0/config/chorus.license').should == '/usr/local/chorus/shared/chorus.license'
     end
@@ -1310,6 +1314,7 @@ describe ChorusInstaller do
     FileUtils.touch './chorus_installation/config/chorus.properties.example'
     FileUtils.touch './chorus_installation/config/chorus.defaults.properties'
     FileUtils.touch './chorus_installation/config/chorus.license.default'
+    FileUtils.touch './chorus_installation/config/ldap.properties.example'
     FileUtils.touch './chorus_installation/config/ldap.properties.active_directory'
     FileUtils.touch './chorus_installation/config/ldap.properties.opensource_ldap'
   end
