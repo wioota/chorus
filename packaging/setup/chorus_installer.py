@@ -1,4 +1,6 @@
 import sys, os
+import shutil
+import glob
 import hashlib
 import hmac
 import base64
@@ -42,7 +44,10 @@ class ChorusInstaller:
     """
     def __init__(self):
         self.release_path = os.path.join(options.chorus_path, 'releases/%s' % get_version())
-
+        self.database_username = None
+        self.database_password = None
+        self.alpine_installer = None
+        self.alpine_release_path = None
         if os.path.exists(failover_file):
            os.remove(failover_file)
 
@@ -198,11 +203,34 @@ class ChorusInstaller:
         logger.info("Stopping Chorus...")
         executor.stop_previous_release()
 
-    def link_current_to_release(self):
-        current = os.path.join(options.chorus_path, "current")
+    def is_alpine_exits(self):
+        alpine_dir = os.path.join(self.release_path, "vendor/alpine")
+        alpine_sources = [ f for f in glob.glob(os.path.join(alpine_dir, "alpine*.sh")) ]
+        if len(alpine_sources) <= 0:
+            return False
+        else:
+            alpine_sources.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+            self.alpine_installer = alpine_sources[0]
+            alpine_version = os.path.basename(self.alpine_installer.rstrip(".sh"))
+            self.alpine_release_path = os.path.join(options.chorus_path, "alpine-releases/%s" % alpine_version)
+            return True
+
+    def configure_alpine(self):
+        logger.info("Extracting %s to %s" % (self.alpine_installer, self.alpine_release_path))
+        executor.run("sh %s --target %s --noexec" % (self.alpine_installer, self.alpine_release_path))
+        logger.info("Configuring alpine")
+        logger.debug("Preparing Alpine Data Repository")
+        alpine_data_repo = os.path.join(options.chorus_path, "shared/ALPINE_DATA_REPOSITORY")
+        if os.path.exists(alpine_data_repo):
+            logger.debug("Alpine Data Repository existed, skipped")
+        else:
+            shutil.copytree(os.path.join(self.alpine_release_path, "ALPINE_DATA_REPOSITORY"), alpine_data_repo)
+
+    def link_current_to_release(self, link_name, rel_path):
+        current = os.path.join(options.chorus_path, link_name)
         if os.path.lexists(current):
             os.unlink(current)
-        os.symlink(self.release_path, current)
+        os.symlink(rel_path, current)
 
     def setup(self):
         if not io.require_confirmation("Do you want to set up the chorus, "
@@ -233,4 +261,12 @@ class ChorusInstaller:
             self.generate_chorus_rails_console_file()
             self.setup_database()
             #self.enqueue_solr_reindex()
-            self.link_current_to_release()
+        self.link_current_to_release("current", self.release_path)
+        if self.is_alpine_exits():
+            if io.require_confirmation("Do you want to install alpine?"):
+                logger.info("Setting up alpine...")
+                self.configure_alpine()
+                self.link_current_to_release("alpine-current", self.alpine_release_path)
+            else:
+                logger.info("alpine is not installed")
+
