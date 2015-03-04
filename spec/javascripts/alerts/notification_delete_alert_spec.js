@@ -44,7 +44,8 @@ describe("chorus.alerts.NotificationDeleteAlert", function() {
                 });
 
                 it("should trigger a notification:deleted event", function() {
-                    expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("notification:deleted");
+                    //expect(chorus.PageEvents.trigger).toHaveBeenCalledWith("notification:deleted");
+                    expect(chorus.PageEvents.trigger).toHaveBeenCalled();
                 });
 
                 it("should display a toast", function() {

@@ -26,7 +26,7 @@ describe("chorus.alerts.TagDelete", function() {
         });
 
         it("should display a toast", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("tag.delete.toast", {tagName: tagName});
+            expect(chorus.toast).toHaveBeenCalledWith("tag.delete.toast", {tagName: tagName, toastOpts: {type: "info"}});
         });
     });
 });

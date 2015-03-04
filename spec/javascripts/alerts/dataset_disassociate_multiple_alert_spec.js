@@ -35,7 +35,7 @@ describe("chorus.alerts.DatasetDisassociateMultiple", function() {
         });
 
         it("displays a toast message", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("dataset_delete.many.toast", {count: this.collection.length});
+            expect(chorus.toast).toHaveBeenCalledWith("dataset_delete.many.toast", {count: this.collection.length, toastOpts: {type: 'info'}});
         });
 
         it("navigates to the dataset list page", function() {

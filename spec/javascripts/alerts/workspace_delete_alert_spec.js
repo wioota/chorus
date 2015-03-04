@@ -45,7 +45,7 @@ describe("chorus.alerts.WorkspaceDelete", function() {
         });
 
         it("displays a toast message", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("workspace.delete.toast", {workspaceName: this.name});
+            expect(chorus.toast).toHaveBeenCalledWith("workspace.delete.toast", {workspaceName: this.name, toastOpts: {type: 'info'}});
         });
 
         it("navigates to the dashboard", function() {
