@@ -170,57 +170,47 @@ module LdapClient
   # we are required to create those users in Chorus database.
 
   def add_users_to_chorus(groupname)
-
-    license = License.instance
-    dev_licenses = license[:developers]
+    binding.pry
 
     begin
-      dev_users = User.where({:auth_method => 'ldap', :developer => true}).count
-      if dev_licenses != -1 && dev_users >= dev_licenses
-        puts "You have reached the limit of #{dev_licenses} developer licenses. Please delete existing user(s) before adding new users.\n OR Contact Alpine support to increase the number of licenses."
-        return
-      end
+
       if config['group'].nil? || config['group']['names'].nil?
-        puts 'You must specify a  valid group name in ldap.group.names property of ldap.properties file'
+        puts 'You must specify a valid group name in ldap.group.names property of ldap.properties file'
         return
       end
+
       groups = config['group']['names'].split(',').map(&:strip)
       if groups == nil || groups.size ==0
-        puts 'You must specify a  valid group name in ldap.group.names property of ldap.properties file'
+        puts 'You must specify a valid group name in ldap.group.names property of ldap.properties file'
         return
       end
+
       groups.each do |group|
         users = fetch_members(group)
+
         if users == nil || users.size == 0
           puts "No members are found in LDAP group #{group}"
           return
         end
+
         users.each do |user|
-            if User.find_by_username(user[:username])
-              u = User.find_by_username(user[:username])
-              puts "Updating user #{user[:username]} to Chorus"
-              u.update_attributes(user)
-            else
+          if User.find_by_username(user[:username])
+            u = User.find_by_username(user[:username])
+            puts "Updating user #{user[:username]} to Chorus"
+            u.update_attributes(user)
+          else
 
-              if dev_licenses != -1 && dev_users >= dev_licenses
-                puts "You have reached the limit of #{dev_licenses} developers licenses. Please delete existing user(s) before adding new users.\n OR Contact Alpine support to increase the number of licenses."
-                return
-              end
+            puts "Adding user #{user[:username]} to Chorus"
+            u = User.new(user)
+            u.save
+          end
 
-              puts "Adding user #{user[:username]} to Chorus"
-              u = User.new(user)
-              u.developer = true
-              u.save
-            end
-
-            if u.valid?
-              dev_users = dev_users + 1 unless User.find_by_username(user[:username])
-            else
-              puts "Unable to add user #{user[:username]}"
-              u.errors.messages.each{|attr, errors| errors.each{|e| puts "#{attr} can't be #{e.first}" } }
-              puts "Make sure that the user.attribute entries correspond with the proper LDAP attributes in ldap.properties"
-              puts
-            end
+          unless u.valid?
+            puts "Unable to add user #{user[:username]}"
+            u.errors.messages.each{|attr, errors| errors.each{|e| puts "#{attr} can't be #{e.first}" } }
+            puts "Make sure that the user.attribute entries correspond with the proper LDAP attributes in ldap.properties"
+            puts
+          end
         end
       end
     rescue => e
