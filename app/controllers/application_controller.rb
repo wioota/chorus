@@ -37,6 +37,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'Net::LDAP::LdapError', :with => :render_service_unavailable_error
   rescue_from 'LdapClient::LdapNotCorrectlyConfigured', :with => :render_service_unavailable_error
   rescue_from 'LdapClient::LdapCouldNotBindWithUser', :with => :render_service_unavailable_error
+  rescue_from 'LdapClient::LdapSSLError', :with => :render_service_unavailable_error
 
   helper_method :current_user
 

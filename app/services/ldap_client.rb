@@ -5,6 +5,7 @@ module LdapClient
   LdapNotCorrectlyConfigured = Class.new(StandardError)
   LdapCouldNotBindWithUser = Class.new(StandardError)
   LdapCouldNotFindMember = Class.new(StandardError)
+  LdapSSLError = Class.new(StandardError)
   extend self
 
   def enabled?
@@ -18,10 +19,16 @@ module LdapClient
 
     if LdapConfig.exists?
       filter = config['user']['filter'].gsub('{0}', username)
-      results = client.search :filter => filter
     else
       filter = Net::LDAP::Filter.eq(config['attribute']['uid'], username)
+    end
+
+    begin
       results = client.search :filter => filter
+    rescue OpenSSL::SSL::SSLError => e
+      Rails.logger.error "An SSL error occured when connecting to LDAP server: #{e}"
+      Rails.logger.error "Make sure your ldap.properties match your LDAP server settings"
+      raise LdapSSLError.new("An SSL error occured when trying to make a connection to the LDAP server. Please contact your system administrator")
     end
 
     unless results
@@ -53,8 +60,6 @@ module LdapClient
       user_hash
     end
   end
-
-
 
   def fetch_members(groupname)
 
@@ -111,19 +116,28 @@ module LdapClient
 
   end
 
+  def can_bind?(ldap_client)
+    begin
+      return ldap_client.bind
+    rescue OpenSSL::SSL::SSLError => e
+      Rails.logger.error "An SSL error occured when connecting to LDAP server: #{e}"
+      Rails.logger.error "Make sure your ldap.properties match your LDAP server settings"
+      raise LdapSSLError.new("An SSL error occured when trying to make a connection to the LDAP server. Please contact your system administrator")
+    end
+  end
+
   # used to login to Chorus as an LDAP user. First if-block is for backwards-compatibility
   def authenticate(username, password)
     ldap = client
 
     if !LdapConfig.exists?
 
-      ldap = client
       ldap.auth make_dn(username), password
-      return ldap.bind
+      return can_bind?(ldap)
 
     else
 
-      if !ldap.bind
+      unless can_bind?(ldap)
         error = ldap.get_operation_result
         Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
         raise LdapNotCorrectlyConfigured.new("An error occured when trying to connect with the LDAP server. Please contact your system administrator.")
