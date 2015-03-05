@@ -52,7 +52,7 @@ describe Session do
         stub(LdapClient).authenticate(user.username, 'a_password') { false }
 
         session = Session.new(:username => user.username, :password => 'a_password')
-        session.should have_error_on(:base)
+        session.should have_error_on(:username_or_password, :invalid)
       end
 
       context "admin logging in" do
