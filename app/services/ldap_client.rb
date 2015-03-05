@@ -170,7 +170,6 @@ module LdapClient
   # we are required to create those users in Chorus database.
 
   def add_users_to_chorus(groupname)
-    binding.pry
 
     begin
 
