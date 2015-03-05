@@ -27,6 +27,12 @@ module JdbcOverrides
           end
         end
       end
+
+      def disconnect
+        # Hive2 doesn't implement close() on the connection.
+        #@connection.disconnect if @connection
+        @connection = nil
+      end
     end
 
     module CancelableQueryOverrides
