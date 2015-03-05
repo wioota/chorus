@@ -88,7 +88,7 @@ module LdapClient
 
           results.map do |result|
             entry = {}
-            entry[:username] =   result[config['attribute']['uid']].first.strip
+            entry[:username] =   result[config['attribute']['uid']].first.strip unless result[config['attribute']['uid']].first.nil?
             entry[:dept] =       result[config['attribute']['ou']].first
             entry[:first_name] = result[config['attribute']['gn']].first
             entry[:last_name] =  result[config['attribute']['sn']].first
@@ -108,6 +108,10 @@ module LdapClient
 
       return users
 
+    rescue OpenSSL::SSL::SSLError => e
+      puts "An SSL error occured when connecting to LDAP server: #{e}"
+      puts "Make sure your ldap.properties match your LDAP server settings"
+      raise e
     rescue => e
       puts 'Error executing rake task ldap:import_users'
       puts "#{e.class} :  #{e.message}"
@@ -175,7 +179,7 @@ module LdapClient
         puts "You have reached the limit of #{dev_licenses} developer licenses. Please delete existing user(s) before adding new users.\n OR Contact Alpine support to increase the number of licenses."
         return
       end
-      if config['group']['names'] == nil
+      if config['group'].nil? || config['group']['names'].nil?
         puts 'You must specify a  valid group name in ldap.group.names property of ldap.properties file'
         return
       end
@@ -191,32 +195,31 @@ module LdapClient
           return
         end
         users.each do |user|
-
-          begin
-
             if User.find_by_username(user[:username])
               u = User.find_by_username(user[:username])
               puts "Updating user #{user[:username]} to Chorus"
-              u.update_attributes!(user)
+              u.update_attributes(user)
             else
+
               if dev_licenses != -1 && dev_users >= dev_licenses
                 puts "You have reached the limit of #{dev_licenses} developers licenses. Please delete existing user(s) before adding new users.\n OR Contact Alpine support to increase the number of licenses."
                 return
               end
+
               puts "Adding user #{user[:username]} to Chorus"
-              #puts user.inspect
               u = User.new(user)
               u.developer = true
-              u.save!
-              dev_users = dev_users+1
+              u.save
             end
 
-          rescue ActiveRecord::RecordInvalid => e
-            puts "\nUnable to add user #{user[:username]}"
-            puts "Check attribute names in ldap.properties"
-            puts e.message
-            puts
-          end
+            if u.valid?
+              dev_users = dev_users + 1 unless User.find_by_username(user[:username])
+            else
+              puts "Unable to add user #{user[:username]}"
+              u.errors.messages.each{|attr, errors| errors.each{|e| puts "#{attr} can't be #{e.first}" } }
+              puts "Make sure that the user.attribute entries correspond with the proper LDAP attributes in ldap.properties"
+              puts
+            end
         end
       end
     rescue => e
