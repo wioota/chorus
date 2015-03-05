@@ -122,6 +122,9 @@ ldap:
     cn: cn
     mail: userprincipalname
     title: title
+  user:
+    filter: (uid={0})
+
 
 YAML
 
@@ -526,6 +529,28 @@ describe LdapClient do
         end
 
         LdapClient.client
+      end
+
+
+      it 'throws an LdapSSLError when start_tls is enabled in ldap.properties but not on server' do
+        any_instance_of(Net::LDAP) do |ldap|
+          stub(ldap).bind { raise OpenSSL::SSL::SSLError }
+          stub(ldap).search { raise OpenSSL::SSL::SSLError }
+        end
+
+        expect{ LdapClient.authenticate("user", "pass") }.to raise_error(LdapClient::LdapSSLError)
+        expect{ LdapClient.search("stuff") }. to raise_error(LdapClient::LdapSSLError)
+      end
+
+      it 'throws an LdapSSLError when start_tls is enabled in ldap.properties but not on server with new LDAP config' do
+        stub(LdapConfig).exists? { true }
+        any_instance_of(Net::LDAP) do |ldap|
+          stub(ldap).bind { raise OpenSSL::SSL::SSLError }
+          stub(ldap).search { raise OpenSSL::SSL::SSLError }
+        end
+
+        expect{ LdapClient.search("stuff") }. to raise_error(LdapClient::LdapSSLError)
+        expect{ LdapClient.authenticate("user", "pass") }.to raise_error(LdapClient::LdapSSLError)
       end
     end
   end
