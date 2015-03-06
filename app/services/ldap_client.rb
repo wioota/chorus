@@ -156,7 +156,7 @@ module LdapClient
       if !user_entries
         Rails.logger.error "Could not authenticate with user #{username} in user search base #{config['user']['search_base']}"
         raise LdapCouldNotBindWithUser.new(
-                  "No entry found for user #{username} in LDAP directory server. Please contact your system administrator to add your credentials to LDAP server"
+                  "Could not authenticate with user #{username} in LDAP directory server. Please contact your system administrator to add your credentials to LDAP server"
               )
       end
 
