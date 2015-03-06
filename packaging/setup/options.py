@@ -1,7 +1,11 @@
 from optparse import OptionParser
 import os, sys
 def get_options(args):
-    parser = OptionParser()
+    usage = "usage: %prog setup | health_check | configure [options]\n" \
+            + "\tsetup: setup the chorus and alpine if exist\n" \
+            + "\thealth_check: check the system health for chorus and alpine\n" \
+            + "\tconfigure: configure the chorus property and alpine property\n"
+    parser = OptionParser(usage=usage)
 
     parser.add_option('--chorus_path', action="store", dest="chorus_path",
                       help="provide the chorus installation path [default: %default]", default="/usr/local/chorus")
@@ -14,7 +18,10 @@ def get_options(args):
     parser.add_option('-v', '--verbose', action="store_true", dest="verbose",
                       help="product debug output [default: %default]", default=False)
     options, args = parser.parse_args(args)
-    return options
+    if len(args) != 2 or args[1] not in ["setup", "health_check", "configure"]:
+        parser.print_help()
+        quit()
+    return options, args[1]
 
 
 def get_version():
@@ -23,4 +30,4 @@ def get_version():
         version = f.read().strip()
     return version
 
-options = get_options(sys.argv)
+options, arg = get_options(sys.argv)
