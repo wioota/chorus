@@ -290,6 +290,11 @@ elif [[ ${OS_VERSION} == "SuSE" && ${VERSION_ID} == "11" ]]; then
 else
 	log "postgres not installed, no version match the operation system"
 fi
+log "Linking current release to %{appdir}/current"
+rm -rf %{appdir}/current
+error_exit
+su - chorus -c "ln -sfn %{releases} %{appdir}/current"
+error_exit
 echo " 
 *********************************************************
 * successfully install chorus in %{appdir}:*
