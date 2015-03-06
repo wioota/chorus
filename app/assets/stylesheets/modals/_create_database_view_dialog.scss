@@ -3,11 +3,12 @@
     .target_location {
         @include ellipsis;
         padding-bottom: 10px;
+        font-weight: $semibold;
     }
 
-    .target_location_valuefefdsa {
-        font-size: 13px;
-        font-weight: $semibold;
-        font-color: $color-text2;
-    }
+//     .target_location_value {
+//         font-size: 13px;
+//         font-weight: $semibold;
+//         font-color: $color-text2;
+//     }
 }

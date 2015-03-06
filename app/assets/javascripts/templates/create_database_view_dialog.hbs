@@ -1,11 +1,12 @@
 <form action="#">
+
     <div class="girdle">
         <div class="target_location">
-            {{t "create_database_view.target"}}
-            <span class="target_location_value" title="{{canonicalName}}">{{canonicalName}}</span>
+            <label>{{t "create_database_view.target"}}</label>
+            <span title="{{canonicalName}}">{{canonicalName}}</span>
         </div>
-
-        <input id="create_database_view_name" placeholder="{{t "create_database_view.name"}}" type="text" name="name"
+        <label for="create_database_view_name">{{t "create_database_view.name.label"}}</label>
+        <input id="create_database_view_name" placeholder="{{t "create_database_view.name.placeholder"}}" type="text" name="name"
                tabindex="1" maxlength="64"/>
     </div>
     <!-- END girdle -->
