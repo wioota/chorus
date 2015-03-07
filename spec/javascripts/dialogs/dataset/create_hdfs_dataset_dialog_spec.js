@@ -96,7 +96,7 @@ describe("chorus.dialogs.CreateHdfsDataset", function() {
                 });
 
                 it("gives a toast", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith('create_hdfs_dataset_dialog.toast');
+                    expect(chorus.toast).toHaveBeenCalledWith('create_hdfs_dataset_dialog.toast', this.messageParams);
                 });
 
                 it("navigates to the HdfsDatasetShowPage for the dataset", function() {
