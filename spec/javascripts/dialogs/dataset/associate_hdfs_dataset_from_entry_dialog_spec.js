@@ -78,7 +78,7 @@ describe("chorus.dialogs.AssociateHdfsDatasetFromEntry", function() {
                 });
 
                 it("gives a toast", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith('associate_hdfs_dataset_from_entry.toast');
+                    expect(chorus.toast).toHaveBeenCalledWith('associate_hdfs_dataset_from_entry.toast', {toastOpts: {type: "success"}});
                 });
             });
 

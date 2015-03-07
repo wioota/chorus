@@ -14,7 +14,6 @@ chorus.dialogs.HdfsDatasetAttributes = chorus.dialogs.Base.include(chorus.Mixins
         });
 
         this.events["change select"] = this.toggleSubmitDisabled;
-
         this.listenToModel();
     },
 
@@ -24,7 +23,15 @@ chorus.dialogs.HdfsDatasetAttributes = chorus.dialogs.Base.include(chorus.Mixins
     },
 
     modelSaved: function () {
-        chorus.toast(this.message);
+
+        // add toast "success" style
+        var toastOpts = {toastOpts: {type: "success"}};
+        // construct the toast params
+        var messageParams = this.toastMessageParams();
+        messageParams = (messageParams === undefined) ? {} : messageParams;
+        _.extend(messageParams, toastOpts);
+        chorus.toast(this.toastMessage, messageParams);
+
         this.model.trigger('invalidated');
         this.closeModal();
     },
@@ -47,7 +54,6 @@ chorus.dialogs.HdfsDatasetAttributes = chorus.dialogs.Base.include(chorus.Mixins
             (this.$("input.file_mask").val().trim().length > 0) &&
             this.checkDataSource();
     },
-
 
     create: function () {
         this.$("button.submit").startLoading('actions.saving');
