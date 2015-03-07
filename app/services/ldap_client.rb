@@ -5,6 +5,7 @@ module LdapClient
   LdapNotCorrectlyConfigured = Class.new(StandardError)
   LdapCouldNotBindWithUser = Class.new(StandardError)
   LdapCouldNotFindMember = Class.new(StandardError)
+  LdapSSLError = Class.new(StandardError)
   extend self
 
   def enabled?
@@ -18,10 +19,16 @@ module LdapClient
 
     if LdapConfig.exists?
       filter = config['user']['filter'].gsub('{0}', username)
-      results = client.search :filter => filter
     else
       filter = Net::LDAP::Filter.eq(config['attribute']['uid'], username)
+    end
+
+    begin
       results = client.search :filter => filter
+    rescue OpenSSL::SSL::SSLError => e
+      Rails.logger.error "An SSL error occured when connecting to LDAP server: #{e}"
+      Rails.logger.error "Make sure your ldap.properties match your LDAP server settings"
+      raise LdapSSLError.new("An SSL error occurred when trying to make a connection to the LDAP server. Please contact your system administrator")
     end
 
     unless results
@@ -54,8 +61,6 @@ module LdapClient
     end
   end
 
-
-
   def fetch_members(groupname)
 
     users = []
@@ -83,7 +88,7 @@ module LdapClient
 
           results.map do |result|
             entry = {}
-            entry[:username] =   result[config['attribute']['uid']].first.strip
+            entry[:username] =   result[config['attribute']['uid']].first.strip unless result[config['attribute']['uid']].first.nil?
             entry[:dept] =       result[config['attribute']['ou']].first
             entry[:first_name] = result[config['attribute']['gn']].first
             entry[:last_name] =  result[config['attribute']['sn']].first
@@ -103,6 +108,10 @@ module LdapClient
 
       return users
 
+    rescue OpenSSL::SSL::SSLError => e
+      puts "An SSL error occured when connecting to LDAP server: #{e}"
+      puts "Make sure your ldap.properties match your LDAP server settings"
+      raise e
     rescue => e
       puts 'Error executing rake task ldap:import_users'
       puts "#{e.class} :  #{e.message}"
@@ -111,22 +120,31 @@ module LdapClient
 
   end
 
+  def can_bind?(ldap_client)
+    begin
+      return ldap_client.bind
+    rescue OpenSSL::SSL::SSLError => e
+      Rails.logger.error "An SSL error occured when connecting to LDAP server: #{e}"
+      Rails.logger.error "Make sure your ldap.properties match your LDAP server settings"
+      raise LdapSSLError.new("An SSL error occured when trying to make a connection to the LDAP server. Please contact your system administrator")
+    end
+  end
+
   # used to login to Chorus as an LDAP user. First if-block is for backwards-compatibility
   def authenticate(username, password)
     ldap = client
 
     if !LdapConfig.exists?
 
-      ldap = client
       ldap.auth make_dn(username), password
-      return ldap.bind
+      return can_bind?(ldap)
 
     else
 
-      if !ldap.bind
+      unless can_bind?(ldap)
         error = ldap.get_operation_result
         Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
-        raise LdapNotCorrectlyConfigured.new(error.message)
+        raise LdapNotCorrectlyConfigured.new("An error occured when trying to connect with the LDAP server. Please contact your system administrator.")
       end
 
       user_entries = ldap.bind_as(
@@ -136,8 +154,9 @@ module LdapClient
       )
 
       if !user_entries
+        Rails.logger.error "Could not authenticate with user #{username} in user search base #{config['user']['search_base']}"
         raise LdapCouldNotBindWithUser.new(
-                  "Could not authenticate with user #{username} in #{config['user']['search_base']}"
+                  "Could not authenticate with user #{username} in LDAP directory server. Please contact your system administrator to add your credentials to LDAP server"
               )
       end
 
@@ -152,61 +171,67 @@ module LdapClient
 
   def add_users_to_chorus(groupname)
 
-    license = License.instance
-    dev_licenses = license[:developers]
-
     begin
-      dev_users = User.where({:auth_method => 'ldap', :developer => true}).count
-      if dev_licenses != -1 && dev_users >= dev_licenses
-        puts "You have reached the limit of #{dev_licenses} developer licenses. Please delete existing user(s) before adding new users.\n OR Contact Alpine support to increase the number of licenses."
+
+      if config['group'].nil? || config['group']['names'].nil?
+        puts 'You must specify a valid group name in ldap.group.names property of ldap.properties file'
         return
       end
-      if config['group']['names'] == nil
-        puts 'You must specify a  valid group name in ldap.group.names property of ldap.properties file'
-        return
-      end
+
       groups = config['group']['names'].split(',').map(&:strip)
       if groups == nil || groups.size ==0
-        puts 'You must specify a  valid group name in ldap.group.names property of ldap.properties file'
+        puts 'You must specify a valid group name in ldap.group.names property of ldap.properties file'
         return
       end
+
       groups.each do |group|
         users = fetch_members(group)
+
         if users == nil || users.size == 0
           puts "No members are found in LDAP group #{group}"
           return
         end
+
         users.each do |user|
+          if User.find_by_username(user[:username])
+            u = User.find_by_username(user[:username])
+            puts "Updating user #{user[:username]} to Chorus"
+            u.update_attributes(user)
+          else
 
-          begin
+            puts "Adding user #{user[:username]} to Chorus"
+            u = User.new(user)
+            u.save
+          end
 
-            if User.find_by_username(user[:username])
-              u = User.find_by_username(user[:username])
-              puts "Updating user #{user[:username]} to Chorus"
-              u.update_attributes!(user)
-            else
-              if dev_licenses != -1 && dev_users >= dev_licenses
-                puts "You have reached the limit of #{dev_licenses} developers licenses. Please delete existing user(s) before adding new users.\n OR Contact Alpine support to increase the number of licenses."
-                return
-              end
-              puts "Adding user #{user[:username]} to Chorus"
-              #puts user.inspect
-              u = User.new(user)
-              u.developer = true
-              u.save!
-              dev_users = dev_users+1
-            end
-
-          rescue ActiveRecord::RecordInvalid => e
-            puts "\nUnable to add user #{user[:username]}"
-            puts "Check attribute names in ldap.properties"
-            puts e.message
+          unless u.valid?
+            puts "Unable to add user #{user[:username]}"
+            print_validation_errors(u.errors.messages)
             puts
           end
         end
       end
     rescue => e
       raise e
+    end
+  end
+
+  def print_validation_errors(error_hash)
+    error_hash.each do |attr, errors|
+
+      errors.each do |error|
+
+        if error.first == :license_limit_exceeded
+          puts "\nLicense level exceeded."
+          abort
+        elsif attr == :user
+          puts "#{error.first.to_s.gsub('_', ' ')}"
+        else
+          puts "#{attr} can't be #{error.first}"
+        end
+      end
+
+      puts "Check the user.attribute entries in the ldap.properties file\n" if [:email, :first_name, :last_name, :username].include?(attr)
     end
   end
 
