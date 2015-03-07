@@ -534,7 +534,9 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                         spyOn(chorus, 'toast');
                         this.server.lastCreate().succeed();
                         expect(chorus.toast).toHaveBeenCalledWith('data_sources.add.toast',
-                            {dataSourceName: this.dialog.model.name()});
+                            {dataSourceName: this.dialog.model.name(),
+                            toastOpts: {type: "success"}
+                            });
                     });
 
                     it("publishes the 'data_source:added' page event with the new data_source's id", function() {
