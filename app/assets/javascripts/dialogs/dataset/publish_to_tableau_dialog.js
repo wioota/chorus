@@ -40,11 +40,11 @@ chorus.dialogs.PublishToTableau = chorus.dialogs.Base.include(chorus.Mixins.Dial
     },
 
     saveSuccess: function() {
-        chorus.toast("tableau.published",
-            {
+        chorus.toast("tableau.published.toast", {
                 objectType: this.model.get('dataset').humanType(),
                 objectName: this.model.get('dataset').shortName(20),
-                name: this.model.shortName(20)
+                name: this.model.shortName(20),
+                toastOpts: {type: "success"}
             });
         this.closeModal();
         this.dataset.tableauWorkbooks().add(this.model);
