@@ -28,7 +28,7 @@ module LdapClient
     rescue OpenSSL::SSL::SSLError => e
       Rails.logger.error "An SSL error occured when connecting to LDAP server: #{e}"
       Rails.logger.error "Make sure your ldap.properties match your LDAP server settings"
-      raise LdapSSLError.new("An SSL error occured when trying to make a connection to the LDAP server. Please contact your system administrator")
+      raise LdapSSLError.new("An SSL error occurred when trying to make a connection to the LDAP server. Please contact your system administrator")
     end
 
     unless results
@@ -206,14 +206,32 @@ module LdapClient
 
           unless u.valid?
             puts "Unable to add user #{user[:username]}"
-            u.errors.messages.each{|attr, errors| errors.each{|e| puts "#{attr} can't be #{e.first}" } }
-            puts "Make sure that the user.attribute entries correspond with the proper LDAP attributes in ldap.properties"
+            print_validation_errors(u.errors.messages)
             puts
           end
         end
       end
     rescue => e
       raise e
+    end
+  end
+
+  def print_validation_errors(error_hash)
+    error_hash.each do |attr, errors|
+
+      errors.each do |error|
+
+        if error.first == :license_limit_exceeded
+          puts "\nLicense level exceeded."
+          abort
+        elsif attr == :user
+          puts "#{error.first.to_s.gsub('_', ' ')}"
+        else
+          puts "#{attr} can't be #{error.first}"
+        end
+      end
+
+      puts "Check the user.attribute entries in the ldap.properties file\n" if [:email, :first_name, :last_name, :username].include?(attr)
     end
   end
 
