@@ -3,7 +3,7 @@
 chorus.dialogs.EditHdfsDataset = chorus.dialogs.HdfsDatasetAttributes.extend({
     constructorName: "EditHdfsDatasetDialog",
     title: t("edit_hdfs_dataset.title"),
-    message: "edit_hdfs_dataset.toast",
+    toastMessage: "edit_hdfs_dataset.toast",
 
     findModel: function () {
         return this.options.model;

@@ -2,7 +2,7 @@
 
 chorus.dialogs.CreateHdfsDataset = chorus.dialogs.HdfsDatasetAttributes.extend({
     title: t("create_hdfs_dataset_dialog.title"),
-    message: "create_hdfs_dataset_dialog.toast",
+    toastMessage: "create_hdfs_dataset_dialog.toast",
 
     findModel: function () {
         this.workspace = this.options.pageModel;
