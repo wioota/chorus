@@ -11,7 +11,7 @@ describe("chorus.alerts.DataSourceDelete", function() {
         });
 
         it("displays a toast message", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("data_sources.delete.toast", {dataSourceName: this.dataSource.name()});
+            expect(chorus.toast).toHaveBeenCalledWith("data_sources.delete.toast", {dataSourceName: this.dataSource.name(), toastOpts: {type: "info"}});
         });
     });
 

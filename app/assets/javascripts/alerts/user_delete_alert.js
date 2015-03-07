@@ -1,12 +1,18 @@
 chorus.alerts.UserDelete = chorus.alerts.ModelDelete.extend({
     constructorName: "UserDelete",
 
-    redirectUrl:"/users",
-    text:t("user.delete.text"),
-    title:t("user.delete.title"),
-    ok:t("user.delete.button"),
-    deleteMessage:"user.delete.toast",
+    redirectUrl: "/users",
+    text: t("user.delete.text"),
+    title: t("user.delete.title"),
+    ok: t("user.delete.button"),
+    deleteMessage: "user.delete.toast",
 
+    deleteMessageParams: function() {
+        return {
+            fullName: this.model.displayName()
+        };
+    },
+    
     deleteModel: function(e) {
         chorus.page.stopListening(this.model, "unprocessableEntity");
         e.preventDefault();

@@ -9,7 +9,7 @@ chorus.alerts.MultipleJobDelete = chorus.alerts.CollectionDelete.extend({
     },
 
     deleteMessageParams:function () {
-        return { count: this.count, plurality: this.count > 1 ? 's' : '' };
+        return {count: this.count, plurality: this.count > 1 ? 's' : ''};
     },
 
     makeModel:function () {
