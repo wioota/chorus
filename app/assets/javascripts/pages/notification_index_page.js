@@ -1,9 +1,6 @@
 chorus.pages.NotificationIndexPage = chorus.pages.Base.extend({
     constructorName: "NotificationIndexPage",
-    crumbs: [
-//         { label: t("breadcrumbs.home"), url: "#/" },
-//         { label: t("breadcrumbs.notifications") }
-    ],
+    crumbs: [],
 
     setup: function() {
         this.collection = new chorus.collections.NotificationSet([]);
