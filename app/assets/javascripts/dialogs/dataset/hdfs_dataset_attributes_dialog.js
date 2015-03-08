@@ -21,14 +21,16 @@ chorus.dialogs.HdfsDatasetAttributes = chorus.dialogs.Base.include(chorus.Mixins
         this.listenTo(this.model, "saved", this.modelSaved);
         this.listenTo(this.model, "saveFailed", this.saveFailed);
     },
-
+    
+    messageParams: $.noop,
+     
     modelSaved: function () {
 
         // toast "success" style
         var toastOpts = {toastOpts: {type: "success"}};
         // construct the toast params
-        var messageParams = this.toastMessageParams();
-        messageParams = (messageParams === undefined) ? {} : messageParams;
+        //var messageParams = this.toastMessageParams();
+        var messageParams = (this.toastMessageParams() === undefined) ? {} : this.toastMessageParams();
         _.extend(messageParams, toastOpts);
         chorus.toast(this.toastMessage, messageParams);
 
