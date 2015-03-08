@@ -41,25 +41,25 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
                 
                 // construct message to user                
 
-                // if file is copied to a different workspace, then the workspace name should be a link to that workspace
+                // A. construct link to file copy
+                var copiedWorkfile = new chorus.models.Workfile(workfile.parse(data));
+                var copiedFileLink = copiedWorkfile.showLink();
+                
+                // B. construct info to destination workspace
                 var workspaceTarget;
                 var workspaceTargetName = self.selectedItem().get("name");
                 var workspaceTargetID   = self.selectedItem().get("id");
                 var workspaceCurrentID  = workfile.workspace().get("id");
 
-                // construct target workspace
-                // link if different workspace else name if same
+                // if file is copied to a different workspace, then the workspace name should be a link to that workspace
+                // else if same workspace just workspace name
                 if (workspaceTargetID !== workspaceCurrentID) {
                     workspaceTarget = self.selectedItem().showLink();
                 } else {
                     workspaceTarget = workspaceTargetName;
                 }
 
-                // construct link to file copy
-                var copiedWorkfile = new chorus.models.Workfile(workfile.parse(data));
-                var copiedFileLink = copiedWorkfile.showLink();
-
-                chorus.toast("workfile.copy_dialog.toast", {workfileLink: copiedFileLink, workspaceTarget: workspaceTarget, toastOpts: {type: "success"}});
+                chorus.toast("workfile.copy_success.toast", {workfileLink: copiedFileLink, workspaceTarget: workspaceTarget, toastOpts: {type: "success"}});
             },
 
             error: function(xhr) {

@@ -88,9 +88,13 @@ describe("chorus.dialogs.CopyWorkfile", function() {
                 });
 
                 it("pops toast", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith("workfile.copy_dialog.toast", {
-                        workfileLink: this.workfile.get("fileName"),
-                        workspaceTarget: this.workspace.get("name"),
+                    var copiedFileValue = this.workfile.showLink();
+                    //this.workfile.get("fileName"),
+                    var workspaceTargetValue = this.workspace.showLink();
+                    //this.workspace.get("name"),
+                    expect(chorus.toast).toHaveBeenCalledWith("workfile.copy_success.toast", {
+                        workfileLink: copiedFileValue,
+                        workspaceTarget: workspaceTargetValue,
                         toastOpts: {type: "success"}
                     });
                 });
