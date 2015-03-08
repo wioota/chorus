@@ -6,10 +6,7 @@ chorus.dialogs.EditHdfsDataset = chorus.dialogs.HdfsDatasetAttributes.extend({
     toastMessage: "edit_hdfs_dataset.toast",
 
     toastMessageParams: function () {
-        return {
-            dataset: this.model.name(),
-            workspace: ''
-            };
+        return {};
     },
 
     findModel: function () {
