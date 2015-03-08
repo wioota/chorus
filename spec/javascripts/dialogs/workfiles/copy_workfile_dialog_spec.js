@@ -89,8 +89,9 @@ describe("chorus.dialogs.CopyWorkfile", function() {
 
                 it("pops toast", function() {
                     expect(chorus.toast).toHaveBeenCalledWith("workfile.copy_dialog.toast", {
-                        workfileTitle: this.workfile.get("fileName"),
-                        workspaceNameTarget: this.workspace.get("name")
+                        workfileLink: this.workfile.get("fileName"),
+                        workspaceTarget: this.workspace.get("name"),
+                        toastOpts: {type: "success"}
                     });
                 });
 

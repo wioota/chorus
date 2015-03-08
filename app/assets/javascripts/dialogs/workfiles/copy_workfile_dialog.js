@@ -12,8 +12,8 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
         this.requiredResources.add(this.workfile);
         this.requiredResources.add(this.collection);
         this.workfile.fetch();
-
         this._super("setup", arguments);
+        
     },
 
     resourcesLoaded: function() {
@@ -23,15 +23,14 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
     submit: function() {
         var self = this;
         var workfile = this.workfile;
-
         var params = {
             workspace_id: this.selectedItem().get("id")
         };
-
         var description = workfile.get("description");
         if (description) {
             params.description = description;
         }
+
         $.ajax({
             url: "/workfiles/" + this.workfile.get("id") + "/copy",
             type: "POST",
@@ -39,8 +38,28 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
             data: params,
             success: function(data) {
                 self.closeModal(true);
+                
+                // construct message to user                
+
+                // if file is copied to a different workspace, then the workspace name should be a link to that workspace
+                var workspaceTarget;
+                var workspaceTargetName = self.selectedItem().get("name");
+                var workspaceTargetID   = self.selectedItem().get("id");
+                var workspaceCurrentID  = workfile.workspace().get("id");
+
+                // construct target workspace
+                // link if different workspace else name if same
+                if (workspaceTargetID !== workspaceCurrentID) {
+                    workspaceTarget = self.selectedItem().showLink();
+                } else {
+                    workspaceTarget = workspaceTargetName;
+                }
+
+                // construct link to file copy
                 var copiedWorkfile = new chorus.models.Workfile(workfile.parse(data));
-                chorus.toast("workfile.copy_dialog.toast", {workfileTitle: copiedWorkfile.get("fileName"), workspaceNameTarget: self.selectedItem().get("name")});
+                var copiedFileLink = copiedWorkfile.showLink();
+
+                chorus.toast("workfile.copy_dialog.toast", {workfileLink: copiedFileLink, workspaceTarget: workspaceTarget, toastOpts: {type: "success"}});
             },
 
             error: function(xhr) {
