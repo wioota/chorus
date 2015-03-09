@@ -100,7 +100,7 @@ chorus.pages.HdfsEntryIndexPage = chorus.pages.Base.include(
             $content.append($("<li></li>").append(link));
         });
 
-        this.menu(this.$(".breadcrumb").eq(2), {
+        this.menu(this.$(".breadcrumb").eq(1), {
             content: $content,
 
             qtipArgs: {
