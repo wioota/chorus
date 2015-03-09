@@ -36,7 +36,7 @@ $refresh-activity-gutter: $activity-gutter - 5;
 }
 
 .more_items {
-    font-size: 12px;
+    font-size: $small-font;
     padding: $padding-top-canon 0 $padding-bottom-canon 0;
     text-align: center;
 
@@ -60,7 +60,7 @@ $refresh-activity-gutter: $activity-gutter - 5;
 
         .fa.failure {
             position: relative;
-            font-size:34px;
+            font-size: 34px;
             top: 4px;
             left: 2px;
             color: $error-icon-color;
@@ -68,12 +68,11 @@ $refresh-activity-gutter: $activity-gutter - 5;
 
         .fa.success {
             position: relative;
-            font-size:34px;
+            font-size: 34px;
             top: 4px;
             left: 2px;
             color: $success-icon-color;
         }
-
 
     }
 }
@@ -132,7 +131,7 @@ $refresh-activity-gutter: $activity-gutter - 5;
     }
 
     .name {
-        font-size: 12px;
+        font-size: $small-font;
         font-weight: $semibold;
     }
 
@@ -142,10 +141,11 @@ $refresh-activity-gutter: $activity-gutter - 5;
         word-wrap: break-word;
     }
 
-    .activity_header, .comment_header {
+    .activity_header,
+    .comment_header {
         word-wrap: break-word;
         @include secondary-text-normal;
-        line-height: 20px;
+        // line-height: 20px;
         
         .author { 
             font-weight: $semibold;
@@ -191,10 +191,10 @@ $refresh-activity-gutter: $activity-gutter - 5;
 
     .links {
         padding: 5px 0 0 0;
-        font-size: 12px;
+        font-size: $small-font;
 
         a {
-            font-size: 12px;
+            font-size: $small-font;
         }
 
         .separator {

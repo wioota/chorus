@@ -37,10 +37,10 @@ $image-width: 230px;
     .toolbar {
         float: right;
         margin-right: 5px;
-        font-size: 12px;
+        font-size: $small-font;
 
         a {
-            font-size: 12px;
+            font-size: $small-font;
             padding: 0px 2px;
         }
     }

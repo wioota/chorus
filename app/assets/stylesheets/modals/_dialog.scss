@@ -1,11 +1,16 @@
 @import "compass/css3/box-sizing";
 
+
+$dialog-girdle-padding-top: 10px;
+
+
+
 /* general dialog styles */
 
 /* .girdle wraps the content of the dialog popup */
 /* and sets the overall margins for the content area */
 .popup .girdle {
-    padding: 10px $dialog-padding $dialog-padding $dialog-padding;
+    padding: $dialog-girdle-padding-top $dialog-padding $dialog-padding $dialog-padding;
     border: none;
 
     @include box-sizing(border-box);
@@ -14,6 +19,18 @@
     /* development: to delete */
     border: 1px dotted #A44;
     /* END development: to delete */
+    
+    
+    .action_bar {
+        // counteract the dialog padding
+        margin-top: -$dialog-girdle-padding-top;
+        margin-left: -$dialog-padding;
+        margin-right: -$dialog-padding;
+
+    }
+    
+    
+    
 }
 
 #dialog_header {
@@ -88,7 +105,7 @@
         padding: 0 0 $dialog-padding 0;
 
         legend label {
-            font-size: 14px;
+            font-size: $default-font-size;
             font-weight: normal;
             color: $color-text1;
         }

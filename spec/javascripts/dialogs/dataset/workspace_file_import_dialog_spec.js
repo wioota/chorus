@@ -25,7 +25,7 @@ describe("chorus.dialogs.WorkspaceFileImport", function() {
     it("has a file picker", function() {
         expect(this.dialog.$("input[type=file]")).toExist();
         expect(this.dialog.$(".file-wrapper button")).not.toHaveClass("hidden");
-        expect(this.dialog.$(".file-wrapper button").text()).toMatchTranslation("dataset.import.select_file");
+        expect(this.dialog.$(".file-wrapper button").text()).toMatchTranslation("dataset.import.select_file.button");
     });
 
     it("has the right title", function() {

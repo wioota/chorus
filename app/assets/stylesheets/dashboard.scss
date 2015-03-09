@@ -187,7 +187,7 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
             .clear_list {
                 width: 75px;
                 @include panel-button($height-button-widgetshell);
-                font-size: 12px;
+                font-size: $small-font;
             }
 
             ul li {
@@ -321,7 +321,7 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         /* covers the glyphs used; i.e the cog */
         i {
             color: $color-text3;
-            font-size: 12px;
+            font-size: $small-font;
             line-height: $height-button-widgetshell;
         }
 

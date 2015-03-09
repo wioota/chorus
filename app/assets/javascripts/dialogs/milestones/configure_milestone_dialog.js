@@ -6,7 +6,7 @@ chorus.dialogs.ConfigureMilestone = chorus.dialogs.Base.include(chorus.Mixins.Di
         return this.model.isNew() ? t('milestone.dialog.title') : t('milestone.dialog.edit.title');
     },
 
-    message: 'milestone.dialog_create.toast',
+    toast_message: 'milestone.dialog_create.toast',
 
     submitTranslation: function () {
         return this.model.isNew() ? "milestone.dialog.submit" : "milestone.dialog.edit.submit";
@@ -49,7 +49,9 @@ chorus.dialogs.ConfigureMilestone = chorus.dialogs.Base.include(chorus.Mixins.Di
     },
 
     modelSaved: function () {
-        chorus.toast(this.message, this.createMessageParams() );
+    	// construct createMessageParams object to include
+    	// the milestone name for the toast message, and also the toast type
+        chorus.toast(this.toast_message, { milestoneName: this.model.name(), toastOpts: {type: "success"} } );
         chorus.page.collection.trigger('invalidated');
         this.closeModal();
     },
@@ -69,10 +71,7 @@ chorus.dialogs.ConfigureMilestone = chorus.dialogs.Base.include(chorus.Mixins.Di
 
     additionalContext: function () {
         return { submitTranslation: this.submitTranslation() };
-    },
-
-    createMessageParams: function () {
-        return { milestoneName: this.model.name() };
     }
-    
+
+
 });

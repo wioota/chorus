@@ -1,32 +1,37 @@
 // shared button definitions and mixins
-
 // DO NOT PUT ANY CSS RULES INTO THIS FILE
 
-
+@import "_browser_support";
+@import "compass/css3/opacity";
+@import "compass/css3/border-radius";
 
 // These are the button colors from the Workflow IDE.
-$border-blue: rgb(0,140,200);
-$another-blue: rgb(38,174,233);
-$third-blue: rgb(67,184,236);
+$border-blue:           rgb(0,140,200);
+$another-blue:          rgb(38,174,233);
+$third-blue:            rgb(67,184,236);
 $another-shade-of-gray: rgb(215,223,231);
-$bone-offwhite: rgb(233,234,238);
-$bone-white: rgb(243,244,247);
-$warm-bones: rgb(241,242,245);
-$nearly-white: rgb(250,252,253);
-$wet-concrete: rgb(117,117,117);
-$dry-concrete: rgb(198,205,213);
-$button-shade: rgba(10,117,163,0.118);
+$bone-offwhite:         rgb(233,234,238);
+$bone-white:            rgb(243,244,247);
+$warm-bones:            rgb(241,242,245);
+$nearly-white:          rgb(250,252,253);
+$wet-concrete:          rgb(117,117,117);
+$dry-concrete:          rgb(197,203,211);
+$button-shade:          rgba(10,117,163,0.13);
+
+$button-margin-x: 10px;
+$default-button-height: $button-height;
+
 
 @mixin button-canon {
     text-overflow: ellipsis;
-    font-size: 14px;
+    font-size: $default-font-size;
     min-width: 86px;
-    border-radius: 3px;
-    height: 30px;
+    @include border-radius($default-border-radius);
+    height: $default-button-height;
 
     &:disabled {
         color: $dry-concrete;
-        opacity: 0.7;
+        opacity: 1;
     }
 }
 
@@ -38,7 +43,8 @@ $button-shade: rgba(10,117,163,0.118);
 
     &:disabled, &:disabled:hover {
         background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
-        border: 1px solid $another-shade-of-gray;
+        //border: 1px solid $another-shade-of-gray;
+        border: 1px solid $dry-concrete;
     }
 
     &:hover {
@@ -50,7 +56,6 @@ $button-shade: rgba(10,117,163,0.118);
         box-shadow: inset 0px 1px 1px 0px $button-shade;
     }
 }
-
 
 @mixin button-secondary-coloring {
     background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
@@ -68,6 +73,27 @@ $button-shade: rgba(10,117,163,0.118);
 
     &:active {
         background-image: linear-gradient(0deg, $bone-white 0%, $bone-offwhite 100%);
+        box-shadow: inset 0px 1px 1px 0px $button-shade;
+    }
+}
+
+@mixin button-actionary-coloring {
+    //background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
+    background: linear-gradient(0deg, rgba($bone-offwhite, 0.7) 0%, rgba($bone-white, 0.8) 100%);
+    
+    color: $wet-concrete;
+    border: 1px solid $another-shade-of-gray;
+
+    &:disabled, &:disabled:hover {
+       // background-image: linear-gradient(0deg, $bone-white 0%, $nearly-white 100%);
+    }
+
+    &:hover {
+       background: linear-gradient(0deg, rgba($bone-offwhite, 0.9) 0%, rgba($bone-white, 0.9) 100%);
+    }
+
+    &:active {
+       // background-image: linear-gradient(0deg, $bone-white 0%, $bone-offwhite 100%);
         box-shadow: inset 0px 1px 1px 0px $button-shade;
     }
 }
@@ -95,24 +121,30 @@ $button-shade: rgba(10,117,163,0.118);
 
 @mixin primary-button {
     @include button-canon;
-    @include button-primary-coloring; 
+    @include button-primary-coloring;
 }
 
 @mixin secondary-button {
     @include button-canon;
-    @include button-secondary-coloring;    
+    @include button-secondary-coloring;
+}
+
+@mixin actionary-button {
+    // buttons that are used when it is actually an action
+    // publish, preview, visualize, etc.
+    @include button-canon;
+    font-size: 13px;
+    @include button-actionary-coloring;
 }
 
 @mixin configure-button {
     // that are NOT submit or form buttons, 
     // but used as configuration or action elements in the app
-    
-    @include button-dashboard-coloring;   
+    @include button-dashboard-coloring;
 }
 
 @mixin panel-button($height) {
     text-align: center;
-
     line-height: $height;
     height: $height;
 

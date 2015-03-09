@@ -1,17 +1,21 @@
 <form class="edit_project_status">
     <div class="girdle">
-        <label name='projectStatus'>Status</label>
+        <label name="projectStatus'">Status</label>
         <select name="projectStatus">
             {{#each options}}
-                <option value='{{value}}' {{#if selected}}selected{{/if}}>{{t nameKey}}</option>
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{t nameKey}}</option>
             {{/each}}
         </select>
         <div class="reason_container">
-            <label name='reason' class='required'>Reason</label>
-            <input name='reason' type='text'/>
+            <label for="reasonField" name="reason" class="required">Reason</label>
+            <input name="reason" id="reasonField" type="text"/>
         </div>
+
+    {{> legendRequired}}
+
     </div>
+
     <!-- END girdle -->
     
-    {{formControlsWithDisabledSubmit "workspace.project.update_status"}}
+    {{formControlsWithDisabledSubmit "workspace.project.update_status.button"}}
 </form>

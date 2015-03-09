@@ -22,7 +22,7 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
             });
 
             it("shows a toast message", function() {
-                expect(chorus.toast).toHaveBeenCalledWith(this.alert.deleteMessage, undefined);
+                expect(chorus.toast).toHaveBeenCalledWith(this.alert.deleteMessage, {toastOpts: {type : 'info' }});
             });
         });
 

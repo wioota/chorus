@@ -2,15 +2,16 @@
 @import "_common";
 @import "_button_common";
 
-
-a.button, button, input[type=submit] {
+a.button,
+button,
+input[type=submit] {
     -webkit-appearance: initial;
     display: inline-block;
     color: $default-font-color;
-    line-height: $button-height;
+    line-height: $button-height -2;
     vertical-align: middle;
     margin: 0;
-    padding: 0 14px;
+    padding: 0 $button-padding-sides;
     vertical-align: middle;
     cursor: pointer;
     outline-color: $button-border-color;
@@ -21,24 +22,32 @@ a.button, button, input[type=submit] {
     }
 }
 
-button.modalish, .button_modalish {
+button.modalish,
+.button_modalish {
     @include secondary-button;
 
-    &.cancel, &.close_dialog {
+    &.cancel,
+    &.close_dialog {
+        // turn off all the visual
         color: $default-link-color;
         border: none;
         background: transparent;
         box-shadow: none;
 
-        &:disabled { background: transparent; }
+        &:disabled {
+            background: transparent;
+        }
     }
     
-    /* override min-width for the cancel button/link so that it is closer to the other buttons */
+    /* overrides for the cancel button "link" so that it is closer to the other buttons */
     &.cancel {
-        min-width: 70px;
+        min-width: 75px;
+        margin-right: 0px;
     }
 
-    &[type='submit'], &.submit, &.save {
+    &[type='submit'], 
+    &.submit, 
+    &.save {
         @include primary-button;
     }
 
@@ -48,12 +57,6 @@ button.modalish, .button_modalish {
 }
 
 .button_action {
-    border: 1px solid $button-border-color;
-    background: none;
-    font-size: inherit;
-    border-radius: 3px;
+    @include actionary-button;
 
-    &:disabled {
-        @include opacity(0.5);
-    }
 }

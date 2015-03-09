@@ -130,8 +130,7 @@ textarea.has_error,
     @include border-radius(1px);
     
     @include error-background-icon;
-    background-position: 99% 50%;
-
+    background-position: 99.5% 50%;
 }
 
 .inputError {

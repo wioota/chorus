@@ -1,6 +1,6 @@
 .alert.function_info {
     .function_return_type {
-        font-size: 12px;
+        font-size: $small-font;
         color: $black;
     }
 
@@ -11,7 +11,7 @@
     }
 
     .function_arguments {
-        font-size: 12px;
+        font-size: $small-font;
         display: block;
         color: $black;
     }

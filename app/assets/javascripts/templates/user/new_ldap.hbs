@@ -1,25 +1,56 @@
+<!-- TEMPLATE -->
+<!-- new user profile LDAP ENABLED -->
+
 {{> errorDiv}}
 {{#ifAdmin}}
 <form action="/users" method="post">
-    <div class="edit_photo">
-        <img src="/images/general/default-user.png" class="profile"/>
+    <div class="profile_image">
+        <img src="/images/general/default-user.png" class="profile" title="{{t 'user.profile.avatar.title'}}"/>
     </div>
+
     <div class="fields">
+
+        <fieldset>
+        <legend>{{t "user.profile.group_acct_info.title"}}</legend>
+        
 
         <div class="row">
             <span class="left">
-                <a class="check_username" href="#">{{t "users.ldap.check_username"}}</a>
                 <label class="required">{{t "users.username"}}</label>
                 <input type="text" name="username" maxlength="256" value="{{username}}"/>
-            </span>
-
-            <span class="right admin">
-                <label class="placeholder"></label>
-                <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}}checked{{/if}}/>
-                <label for="admin-checkbox">{{t "users.make_admin"}}</label>
+                <button id="check_username" class="modalish">{{t "users.ldap.check_username"}}</button>
             </span>
         </div>
+        
+        </fieldset>
 
+
+        <fieldset>
+        <legend>{{t "user.profile.group_app_roles.title"}}</legend>
+
+            <span class="left admin">
+               <!-- <label class="placeholder"></label> -->
+                <label>
+                       <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}}checked{{/if}}/>
+                       <label class="checkbox-label" for="admin-checkbox">{{t "users.make_admin"}}</label>
+                </label>
+            </span>
+           
+            
+             <span class="left admin">
+                <!-- <label class="placeholder"></label> -->
+                 <label>
+                    <input type="checkbox" name="developer" id="developer-checkbox" {{#if developer}}checked{{/if}}/>
+                    <label class="checkbox-label" for="developer-checkbox">{{t "users.make_developer"}}</label>
+                </label>
+            </span>
+
+        </fieldset>
+
+
+        <fieldset>
+        <legend>{{t "user.profile.group_personal_info.title"}}</legend>
+            
         <div class="row">
             <span class="left">
                 <label class="required">{{t "users.first_name"}}</label>
@@ -38,40 +69,36 @@
                 <input type="text" name="email" maxlength="256" value="{{email}}"/>
             </span>
 
-            <span class="right admin">
-                <label class="placeholder"></label>
-                <input type="checkbox" name="developer" id="developer-checkbox" {{#if developer}}checked{{/if}}/>
-                <label for="developer-checkbox">{{t "users.make_developer"}}</label>
-            </span>
         </div>
 
         <div class="row">
-            <span class="left">
-                <label>Title</label>
-                <input type="text" name="title" maxlength="256" value="{{title}}"/>
-            </span>
+               <span class="left">
+                   <label>{{t "users.title"}}</label>
+                   <input type="text" name="title" maxlength="256" value="{{title}}"/>
+               </span>
 
-            <span class="right">
-                <label>{{t "users.department"}}</label>
-                <input type="text" name="dept" maxlength="256" value="{{dept}}"/>
-            </span>
-        </div>
-
-        <div class="row">
-               <span class="notes">
-                   <label>Notes</label>
-                   <textarea rows="4" cols="1" name="notes" maxlength="4096">{{notes}}</textarea>
+               <span class="right">
+                   <label>{{t "users.department"}}</label>
+                   <input type="text" name="dept" maxlength="256" value="{{dept}}"/>
                </span>
         </div>
 
-        <div class="row controls">
-            <span class="left">
-                <button type="submit" class="submit button_modalish">{{t "users.button.add"}}</button>
-                <button type="button" class="cancel button_modalish">{{t "actions.cancel"}}</button>
-            </span>
+        <div class="row">
+               <span class="fullwidth notes">
+                   <label>{{t "user.profile_description"}}</label>
+                   <textarea rows="4" cols="1" name="notes" maxlength="4096">{{notes}}</textarea>
+               </span>
+        </div>
+        
+        </fieldset>
+         
+        <div class="row form_controls">
+            <button type="submit" class="submit modalish">{{t "users.add_new.button"}}</button>
+            <button type="button" class="cancel modalish">{{t "actions.cancel"}}</button>
         </div>
     </div>
 </form>
+
 {{else}}
 <p class="aint_admin">{{t "users.not_admin"}}</p>
 {{/ifAdmin}}

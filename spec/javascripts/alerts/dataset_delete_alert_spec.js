@@ -61,7 +61,7 @@ describe("chorus.alerts.DatasetDelete", function() {
         });
 
         it("displays a toast message", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("dataset_delete.chorus_view.toast", {datasetName: this.name});
+            expect(chorus.toast).toHaveBeenCalledWith("dataset_delete.chorus_view.toast", {datasetName: this.name, toastOpts: {type: "info"}});
         });
 
         it("navigates to the dataset list page", function() {
