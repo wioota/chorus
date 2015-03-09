@@ -49,8 +49,8 @@ fi
 eval "$(rbenv init - --no-rehash)"
 #rbenv shell `cat .rbenv-version`
 rbenv shell `cat .ruby-version`
-cd $WORKSPACE
 gem list bundler | grep bundler || gem install bundler
+echo `pwd`
 bundle install --binstubs=b/ || (echo "bundler failed!!!!!!!!" && exit 1)
 
 mkdir -p tmp/pids
