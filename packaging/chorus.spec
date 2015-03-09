@@ -51,7 +51,7 @@ eval "$(rbenv init - --no-rehash)"
 rbenv shell `cat .ruby-version`
 gem list bundler | grep bundler || gem install bundler
 echo `pwd`
-bundle install --gemfile $WORKSPACE/Gemfile-packaging --binstubs=b/ || (echo "bundler failed!!!!!!!!" && exit 1)
+bundle install --gemfile=$WORKSPACE/Gemfile-packaging --binstubs=b/ || (echo "bundler failed!!!!!!!!" && exit 1)
 
 mkdir -p tmp/pids
 rm -f tmp/fixture_builder*.yml tmp/instance_integration_file_versions*.yml tmp/GPDB_HOST_STALE
