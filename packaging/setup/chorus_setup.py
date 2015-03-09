@@ -288,14 +288,9 @@ class ChorusSetup:
             self.generate_chorus_rails_console_file()
             self.setup_database()
             #self.enqueue_solr_reindex()
-        self.link_current_to_release("current", self.release_path)
         if self.is_alpine_exits():
-            if io.require_confirmation("Do you want to install alpine?"):
-                logger.info("Setting up alpine...")
+            if io.require_confirmation("Do you want to extract alpine?"):
                 self.configure_alpine()
-                self.link_current_to_release("alpine-current", self.alpine_release_path)
-            else:
-                logger.info("alpine is not installed")
-
+                self.link_current_to_release("alpine-current", options.alpine_release_path)
         if io.require_confirmation("Do you want to change default configure?", default="no"):
             configure.config()

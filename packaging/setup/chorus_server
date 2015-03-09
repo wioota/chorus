@@ -21,9 +21,8 @@ def main():
             print "Completely Setup"
             if upgrade:
                 print "Confirm custom configuration settings as directed in the upgrade guide before restarting Chorus."
-                print "*To start Chorus, run the following commands:"
-                print "*source %s/chorus_path.sh" % options.chorus_path
-                print "*chorus_control.sh start"
+            print "*To start Chorus, run the following commands:"
+            print "*chorus_control.sh start"
         elif arg == "health_check":
             health_check()
         else:

@@ -8,14 +8,14 @@ License:	GPL
 URL:		https://github.com/Chorus/chorus
 Source0:	%{name}.logrotate
 #BuildArch: 	noarch
-BuildRoot:	%{_tmppath}/%{name}-%{version}.$BUILD_NUMBER-%{release}
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
 Prefix:		/usr/local
 #BuildRequires:	
 Requires:	logrotate
 Autoreq :	no
 
 %define appdir	%{prefix}/%{name}
-%define releases	%{appdir}/releases/%{version}.$BUILD_NUMBER-%{release}
+%define releases	%{appdir}/releases/%{version}-%{release}
 %define shared		%{appdir}/shared
 %define data	/data/%{name}
 %description
@@ -145,7 +145,7 @@ function log() {
   echo "$1" 2>&1 |tee -a %{appdir}/install.log
 }
 function error_exit() {
-  if [[ !"$?" = "0" ]]; then
+  if [[ !`echo "$?"` = "0" ]]; then
 	echo "error happend! erase the rpm"
 	rpm -e %{name}-%{version}-%{release}
 	exit -1
@@ -297,7 +297,7 @@ su - chorus -c "ln -sfn %{releases} %{appdir}/current"
 error_exit
 echo " 
 *********************************************************
-* successfully install chorus in %{appdir}:*
+* successfully install chorus in %{appdir}:	*
 * data dir is in %{data}				*
 * please change to chorus user(running su - chorus)	* 
 * and running chorus_server setup to setup chorus	*
