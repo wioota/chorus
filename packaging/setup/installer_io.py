@@ -40,7 +40,7 @@ class InstallerIO:
             if default is not None and choice == '':
                 return valid[default]
             elif choice.lower() in valid:
-                return valid[choice]
+                return valid[choice.lower()]
             else:
                 print "Please respond with 'yes' or 'no' (or 'y' or 'n')"
 

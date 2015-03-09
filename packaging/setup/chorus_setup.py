@@ -294,3 +294,11 @@ class ChorusSetup:
                 self.link_current_to_release("alpine-current", options.alpine_release_path)
         if io.require_confirmation("Do you want to change default configure?", default="no"):
             configure.config()
+
+        print "Completely Setup"
+        if upgrade:
+            print "Confirm custom configuration settings as directed in the upgrade guide before restarting Chorus."
+        print "*To start Chorus, run the following commands:"
+        print "*chorus_control.sh start"
+
+chorus_set = ChorusSetup()

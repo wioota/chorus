@@ -1,37 +1,4 @@
 #!/usr/bin/env python
-import os, sys
-import signal
-from options import options, arg
-from chorus_setup import ChorusSetup, failover, upgrade
-from chorus_executor import PSQLException
-from health_check import health_check
-from configure import configure
-from log import logger
-
-def exit_gracefully(signum, frame):
-    print "\nSetup aborted, Cancelled by user"
-    failover()
-    sys.exit(1)
-def main():
-    try:
-        signal.signal(signal.SIGINT, exit_gracefully)
-        if arg == "setup":
-            chorus = ChorusSetup()
-            chorus.setup()
-            print "Completely Setup"
-            if upgrade:
-                print "Confirm custom configuration settings as directed in the upgrade guide before restarting Chorus."
-            print "*To start Chorus, run the following commands:"
-            print "*chorus_control.sh start"
-        elif arg == "health_check":
-            health_check()
-        else:
-            configure.config()
-    except Exception as e:
-        logger.error("Exception Occured, see install.log for details")
-        logger.debug(e)
-        failover()
-
+from main import main
 if __name__ == "__main__":
     main()
-
