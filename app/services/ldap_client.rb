@@ -26,7 +26,7 @@ module LdapClient
     begin
       results = client.search :filter => filter
     rescue OpenSSL::SSL::SSLError => e
-      Rails.logger.error "An SSL error occured when connecting to LDAP server: #{e}"
+      Rails.logger.error "An SSL error occurred when connecting to LDAP server: #{e}"
       Rails.logger.error "Make sure your ldap.properties match your LDAP server settings"
       raise LdapSSLError.new("An SSL error occurred when trying to make a connection to the LDAP server. Please contact your system administrator")
     end
@@ -109,7 +109,7 @@ module LdapClient
       return users
 
     rescue OpenSSL::SSL::SSLError => e
-      puts "An SSL error occured when connecting to LDAP server: #{e}"
+      puts "An SSL error occurred when connecting to LDAP server: #{e}"
       puts "Make sure your ldap.properties match your LDAP server settings"
       raise e
     rescue => e
@@ -124,7 +124,7 @@ module LdapClient
     begin
       return ldap_client.bind
     rescue OpenSSL::SSL::SSLError => e
-      Rails.logger.error "An SSL error occured when connecting to LDAP server: #{e}"
+      Rails.logger.error "An SSL error occurred when connecting to LDAP server: #{e}"
       Rails.logger.error "Make sure your ldap.properties match your LDAP server settings"
       raise LdapSSLError.new("An SSL error occured when trying to make a connection to the LDAP server. Please contact your system administrator")
     end
