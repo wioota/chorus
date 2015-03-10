@@ -103,6 +103,8 @@ cp -R vendor/ $RPM_BUILD_ROOT/%{releases}
 cp -R WEB-INF/ $RPM_BUILD_ROOT/%{releases}
 cp -R Gemfile $RPM_BUILD_ROOT/%{releases}
 cp -R Gemfile.lock $RPM_BUILD_ROOT/%{releases}
+cp -R Gemfile-packaging $RPM_BUILD_ROOT/%{releases}
+cp -R Gemfile-packaging.lock $RPM_BUILD_ROOT/%{releases}
 cp -R README.md $RPM_BUILD_ROOT/%{releases}
 cp -R Rakefile $RPM_BUILD_ROOT/%{releases}
 cp -R config.ru $RPM_BUILD_ROOT/%{releases}
