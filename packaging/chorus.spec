@@ -144,7 +144,7 @@ if [[ !($OS_VERSION == "RedHat" && ($VERSION_ID == "5" || $VERSION_ID == "6"))
 fi
 %post
 function log() {
-  echo "$1" 2>&1 |tee -a %{appdir}/install.log
+  su - chorus -c "echo '$1' 2>&1 |tee -a %{appdir}/install.log"
 }
 function error_exit() {
   if [[ !`echo "$?"` = "0" ]]; then
