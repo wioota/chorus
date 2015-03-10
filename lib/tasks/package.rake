@@ -18,7 +18,7 @@ namespace :package do
 
   desc 'Generate binary installer'
   task :installer => :prepare_app do
-    PackageMaker.make_installer
+#    PackageMaker.make_installer
   end
 
   task :prepare_hdfs_jar do
