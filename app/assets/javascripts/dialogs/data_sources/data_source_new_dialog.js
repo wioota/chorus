@@ -122,7 +122,6 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
     },
 
     fieldValues: function() {
-        debugger;
         var updates = {};
         var className = this.$("select.data_sources option:selected").attr("name");
         var inputSource = this.$("." + className);
