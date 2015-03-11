@@ -47,7 +47,9 @@
 
         label[name=host], input[name=host],
         label[name=database], input[name=database],
-        label[name=jobTrackerHost], input[name=jobTrackerHost] {
+        label[name=jobTrackerHost], input[name=jobTrackerHost],
+        label[name=hiveKerberosPrincipal], input[name=hiveKerberosPrincipal],
+        label[name=hiveKerberosKeytabLocation], input[name=hiveKerberosKeytabLocation]{
             width: $hostname-width;
         }
 
@@ -60,7 +62,7 @@
         label.db_username, input.db_username,
         label[name=databaseName], input[name=databaseName],
         .username, .group_list, .gnip_username {
-            width: $account-width;
+            width: $account_width;
         }
 
         label[name=size], input[name=size] {
