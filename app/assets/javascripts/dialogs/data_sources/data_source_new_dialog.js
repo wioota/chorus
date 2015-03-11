@@ -9,6 +9,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         "click a.close_errors": "clearServerErrors",
         "submit form": "createDataSource",
         "change input[name=high_availability]": 'toggleHighAvailability',
+        "change input[name=hiveKerberos]": 'toggleKerberos',
         "click a.connection_parameters": "launchConnectionParametersDialog"
     },
 
@@ -68,6 +69,20 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         }
     },
 
+    toggleKerberos: function(e) {
+        e && e.preventDefault();
+
+        if (this.$('input[name=hiveKerberos]').prop('checked')) {
+            this.$('[name=hiveKerberosPrincipal]').removeClass('hidden');
+            this.$('[name=hiveKerberosKeytabLocation]').removeClass('hidden');
+            this.$('[name=dbPassword]').addClass('hidden');
+        } else {
+            this.$('[name=hiveKerberosPrincipal]').addClass('hidden');
+            this.$('[name=hiveKerberosKeytabLocation]').addClass('hidden');
+            this.$('[name=dbPassword]').removeClass('hidden');
+        }
+    },
+
     launchConnectionParametersDialog: function (e) {
         e && e.preventDefault();
 
@@ -99,12 +114,15 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
             return chorus.models.JdbcDataSource;
         } else if (dataSourceType === "register_existing_postgres") {
             return chorus.models.PgDataSource;
+        } else if (dataSourceType === "register_existing_jdbc_hive") {
+            return chorus.models.JdbcHiveDataSource;
         } else {
             return chorus.models.GpdbDataSource;
         }
     },
 
     fieldValues: function() {
+        debugger;
         var updates = {};
         var className = this.$("select.data_sources option:selected").attr("name");
         var inputSource = this.$("." + className);
@@ -118,6 +136,14 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         updates.shared = !!inputSource.find("input[name=shared]").prop("checked");
         updates.highAvailability = !!inputSource.find("input[name=high_availability]").prop("checked");
         updates.connectionParameters = this.model.get('connectionParameters');
+        updates.hiveKerberos = !!inputSource.find("input[name=hiveKerberos]").prop("checked");
+        if (updates.hiveKerberos) {
+            updates.dbPassword = 'default';
+        }
+        if (updates.hdfsVersion) {
+            updates.hiveHadoopVersion = updates.hdfsVersion;
+            delete updates.hdfsVersion;
+        }
         return updates;
     },
 

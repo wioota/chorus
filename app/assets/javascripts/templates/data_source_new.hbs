@@ -9,6 +9,7 @@
             <option name="register_existing_hdfs" value="register_existing_hdfs">{{t "datasource.hdfs"}}</option>
             <option name="register_existing_greenplum" value="register_existing_hawq" hawq="true">{{t "datasource.hawq"}}</option>
             <option name="register_existing_jdbc" value="register_existing_jdbc">{{t "datasource.jdbc"}}</option>
+            <option name="register_existing_jdbc_hive" value="register_existing_jdbc_hive">{{t "datasource.jdbc_hive"}}</option>
             {{#if gnipConfigured}}<option name="register_existing_gnip" value="register_existing_gnip">{{t "datasource.gnip"}}</option>{{/if}}
         </select>
 
@@ -116,6 +117,34 @@
             <input type="checkbox" name="shared" id="register_jdbc_shared" tabindex="1"/>
             <label for="register_jdbc_shared">{{t "data_sources.dialog.is_community_account"}}
             	<span class="fa fa-question-circle help" data-text='{{t "data_sources.new_dialog.is_community_account.help_text"}}'></span>
+            </label>
+        </div>
+
+        <div class="data_sources_form collapsed register_existing_jdbc_hive">
+            {{formInfoBlock "data_sources.new_dialog.register_existing_jdbc_help_text"}}
+
+            <label class="required">{{t "data_sources.dialog.data_source_name"}}</label>
+            <input type="text" name="name" maxlength="64" tabindex="1"/>
+
+            <label>{{t "data_sources.dialog.description"}}</label>
+            <textarea rows="3" name="description" tabindex="1"/>
+
+            {{jdbcDataSourceFields}}
+            <br/>
+            {{hdfsVersionsSelect}}
+            <br/>
+            <label class="required db_username" name="dbUsername">{{t "data_sources.dialog.database_account"}}</label>
+            <label class="required db_password" name="dbPassword">{{t "data_sources.dialog.database_password"}}</label>
+            <input class="db_username" type="text" name="dbUsername" maxlength="256" tabindex="1"/>
+            <input class="db_password" type="password" name="dbPassword" maxlength="256" accept="" autocomplete="off" tabindex="1"/>
+            <br/>
+
+            {{jdbcHiveDataSourceFields}}
+            <br/>
+
+            <input type="checkbox" name="shared" id="register_jdbc_shared" tabindex="1"/>
+            <label for="register_jdbc_shared">{{t "data_sources.dialog.is_community_account"}}
+                <span class="fa fa-question-circle help" data-text='{{t "data_sources.new_dialog.is_community_account.help_text"}}'></span>
             </label>
         </div>
 

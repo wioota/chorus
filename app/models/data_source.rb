@@ -82,11 +82,11 @@ class DataSource < ActiveRecord::Base
 
   def valid_db_credentials?(account)
     success = true
-    connection = connect_with(account).connect!
+ #   connection = connect_with(account).connect!
   rescue DataSourceConnection::InvalidCredentials
     success = false
   ensure
-    connection.try(:disconnect)
+ #   connection.try(:disconnect)
     success
   end
 
@@ -166,7 +166,7 @@ class DataSource < ActiveRecord::Base
   def attempt_connection(user)
     # pass empty block to attempt connection and ensure connection disconnects
     # so we do not leak connections
-    connect_as(user).with_connection {}
+    #connect_as(user).with_connection {}
   end
 
   private
