@@ -128,7 +128,7 @@ module LdapClient
     rescue OpenSSL::SSL::SSLError => e
       Rails.logger.error "An SSL error occurred when connecting to LDAP server: #{e}"
       Rails.logger.error "Make sure your ldap.properties match your LDAP server settings"
-      raise LdapSSLError.new("An SSL error occured when trying to make a connection to the LDAP server. Please contact your system administrator")
+      raise LdapSSLError.new("An SSL error occurred when trying to make a connection to the LDAP server. Please contact your system administrator")
     end
   end
 
@@ -146,7 +146,7 @@ module LdapClient
       unless can_bind?(ldap)
         error = ldap.get_operation_result
         Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
-        raise LdapNotCorrectlyConfigured.new("An error occured when trying to connect with the LDAP server. Please contact your system administrator.")
+        raise LdapNotCorrectlyConfigured.new("An error occurred when trying to connect with the LDAP server. Please contact your system administrator.")
       end
 
       user_entries = ldap.bind_as(
