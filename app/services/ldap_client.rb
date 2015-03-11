@@ -19,12 +19,14 @@ module LdapClient
 
     if LdapConfig.exists?
       filter = config['user']['filter'].gsub('{0}', username)
+      base = config['user']['search_base']
     else
       filter = Net::LDAP::Filter.eq(config['attribute']['uid'], username)
+      base = config['base']
     end
 
     begin
-      results = client.search :filter => filter
+      results = client.search :filter => filter, :base => base
     rescue OpenSSL::SSL::SSLError => e
       Rails.logger.error "An SSL error occurred when connecting to LDAP server: #{e}"
       Rails.logger.error "Make sure your ldap.properties match your LDAP server settings"
