@@ -1,4 +1,5 @@
 import sys
+import re
 from options import options
 class InstallerIO:
     """
@@ -43,5 +44,24 @@ class InstallerIO:
                 return valid[choice.lower()]
             else:
                 print "Please respond with 'yes' or 'no' (or 'y' or 'n')"
+    def require_selection(self, msg, legal_choices, default=None):
+        while True:
+            sys.stdout.write(msg + ":")
+            if not self.silent:
+                choice = raw_input()
+            else:
+                return default
+            if choice == "" or choice is None:
+                return default
+            choices = choice.strip().split(",")
+            if self._is_legal(choices, legal_choices):
+                return sorted(map(int, choices))
+            else:
+                print "Please input number in %s if multiple, use ',' to seperate" % str(legal_choices)
+    def _is_legal(self, strs, choices):
+        for s in strs:
+            if not s.isdigit() or not int(s) in choices:
+                return False
+        return True
 
 io = InstallerIO(options.silent)

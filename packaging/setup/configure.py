@@ -1,6 +1,9 @@
 import os
+import re
 from options import options
 from installer_io import io
+from log import logger
+
 class Configure:
     def __init__(self):
         pass
@@ -10,35 +13,37 @@ class Configure:
         return False
 
     def config_alpine_conf(self):
-        agents = io.require_selection("which alpine agent you want to enable? \
-                                      By default, will enable all:\n"
-                                      + "1. PHD2.0\n"
-                                      + "2. CDH4\n"
-                                      + "3. MAPR3\n"
-                                      + "4. CDH5\n"
-                                      + "5. HDP2.1\n"
-                                      + "6. MapR4\n", default="all")
-        if agents is None:
-            logger.debug("all agents are enabled")
-            return
-        dic = {1:"PHD2.0", 2:"CDH4", 3:"MAPR3", 4:"CDH5", 5:"HDP2.1", 6:"MapR4"}
         contents = ""
         alpine_conf = os.path.join(options.chorus_path, "shared/ALPINE_DATA_REPOSITORY/configuration/alpine.conf")
         with open(alpine_conf, "r") as f:
-            index = 0
-            for line in f:
-                if "enabled" in line:
-                    if dic[agents[index]] in line:
-                        line = "\t\t%d.enabled=true\t# %s" % (agents[index], dic[agents[index]])
-                        if index + 1 < len(agents)
-                            index += 1
-                    else:
-                        line = line.replace("true", "false")
-                contents += line
+            contents = f.read()
+        content = re.match(r"(.*)( .*agent.*})(.*})", contents, re.DOTALL).groups()[1]
+        dic = {}
+        idx = 1
+        for line in content.split("\n"):
+            if "enabled" in line:
+                dic[idx] = line.split("#")[-1].strip()
+                idx += 1
+        agents_str = "\n".join( str(e) + ". " + dic[e] for e in dic.keys()) + "\n"\
+                + "input the number(multiple agents using ',' to seperate)"
+
+        agents = io.require_selection("which alpine agent you want to enable? By default, will enable all:\n"
+                                      + agents_str, range(1, idx), default=range(1, idx))
+
+        replace = ""
+        idx = 1
+        for line in content.split("\n"):
+            line = line.lstrip().lstrip("#")
+            if "enabled" in line:
+                line = "\t%d.enabled=%s\t# %s" % (idx, str(idx in agents).lower(), dic[idx])
+                idx += 1
+            replace += line + "\n"
+        contents = contents.replace(content, replace)
         with open(alpine_conf, "w") as f:
             f.write(contents)
-
+        logger.info(str([dic[agent] for agent in agents]) + " is enabled.")
+        logger.info("For more advanced configuration, change %s manually" % alpine_conf)
     def config(self):
-        pass
+        self.config_alpine_conf()
 
 configure = Configure()
