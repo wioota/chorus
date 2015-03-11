@@ -139,7 +139,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         if (updates.hiveKerberos) {
             updates.dbPassword = 'default';
         }
-        if (updates.hdfsVersion) {
+        if (updates.hive && updates.hdfsVersion) {
             updates.hiveHadoopVersion = updates.hdfsVersion;
             delete updates.hdfsVersion;
         }
