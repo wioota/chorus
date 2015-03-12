@@ -562,7 +562,7 @@ $lozenge-color-selected-dark: $brand-dark;
     @include debugging-mixin;
     font-size: 12px;
     font-weight: normal;
-	color: $color-text2;
+	color: $core-white;
 }
 
 @mixin secondary-text-normal {
