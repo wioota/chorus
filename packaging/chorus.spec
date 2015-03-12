@@ -181,9 +181,9 @@ if [[ ! -f %{shared}/chorus.properties ]]; then
 	su - chorus -c "chmod 0600 %{shared}/chorus.properties"
 	error_exit
 fi
-su - chorus -c "cp %{releases}/config/chorus.defaults.properties  %{shared}/chorus.properties.example"
+su - chorus -c "cp -rf %{releases}/config/chorus.defaults.properties  %{shared}/chorus.properties.example"
 error_exit
-su - chorus -c "cp %{releases}/config/chorus.license.default  %{shared}/chorus.license.default"
+su - chorus -c "cp -rf %{releases}/config/chorus.license.default  %{shared}/chorus.license.default"
 error_exit
 
 if [[ ! -f %{shared}/chorus.license ]]; then
@@ -192,6 +192,18 @@ if [[ ! -f %{shared}/chorus.license ]]; then
 	su - chorus -c "chmod 0600 %{shared}/chorus.license" 
 	error_exit
 fi
+
+su - chorus -c "cp -rf %{releases}/config/ldap.properties.active_directory %{shared}/ldap.properties.active_directory"
+error_exit
+su - chorus -c "cp -rf %{releases}/config/ldap.properties.opensource_ldap %{shared}/ldap.properties.opensource_ldap"
+error_exit
+if [[ ! -f %{shared}/ldap.properties ]]; then
+	su - chorus -c "cp %{releases}/config/ldap.properties.example %{shared}/ldap.properties"
+	error_exit
+	su - chorus -c "chmod 0600 %{shared}/ldap.properties" 
+	error_exit
+fi	
+
 log "Linking shared configuration files to %{releases}/config"
 su - chorus -c "ln -sf %{shared}/chorus.properties %{releases}/config/chorus.properties"
 error_exit
@@ -200,6 +212,8 @@ error_exit
 su - chorus -c "ln -sf %{shared}/database.yml %{releases}/config/database.yml"
 error_exit
 su - chorus -c "ln -sf %{shared}/sunspot.yml %{releases}/config/sunspot.yml"
+error_exit
+su - chorus -c "ln -sf %{shared}/ldap.properties %{releases}/config/ldap.properties"
 error_exit
 rm -rf %{releases}/demo_data
 error_exit
