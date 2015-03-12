@@ -40,8 +40,8 @@ class ChorusExecutor:
         self.previous_chorus_control("start")
 
     def stop_previous_release(self):
-        #self.previous_chorus_control("stop")
-        self.run("killall chorus")
+        self.previous_chorus_control("stop")
+        #self.run("killall chorus")
     def start_postgres(self):
         logger.info("Starting postgres...")
         stdout, stderr = self.chorus_control("start postgres")

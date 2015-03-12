@@ -58,6 +58,21 @@ class InstallerIO:
                 return sorted(map(int, choices))
             else:
                 print "Please input number in %s if multiple, use ',' to seperate" % str(legal_choices)
+
+    def require_menu(self, msg, legal_choices, default=6):
+        while True:
+            sys.stdout.write(msg + ":")
+            if not self.silent:
+                choice = raw_input()
+            else:
+                return default
+            if choice == "" or choice is None:
+                return default
+            if choice.isdigit() and int(choice) in legal_choices:
+                return int(choice)
+            else:
+                print "Please input number in %s." % str(legal_choices)
+
     def _is_legal(self, strs, choices):
         for s in strs:
             if not s.isdigit() or not int(s) in choices:
