@@ -3,11 +3,12 @@ import re
 import rpm
 from options import options
 from installer_io import io
+from chorus_executor import executor
 from log import logger
 
 class Configure:
     def __init__(self):
-        self.method = {1:self.enable_alpine_agent}
+        self.method = {1:self.enable_alpine_agent, 2:self.enable_https, 3:self.configure_kerberos, 4:self.configure_ldap}
         ts = rpm.TransactionSet()
         mi = ts.dbMatch('name', 'chorus')
         self.chorus_version = None
@@ -59,7 +60,8 @@ class Configure:
         alpine_conf = os.path.join(options.chorus_path, "shared/ALPINE_DATA_REPOSITORY/configuration/alpine.conf")
         with open(alpine_conf, "r") as f:
             contents = f.read()
-        content = re.match(r"(.*)( .*agent.*})(.*})", contents, re.DOTALL).groups()[1]
+
+        content = re.findall(r"(#?\s*agent.*{.*?})", contents, re.DOTALL)[0]
         dic = {}
         idx = 1
         for line in content.split("\n"):
@@ -70,8 +72,8 @@ class Configure:
                 + "input the number(multiple agents using ',' to seperate)"
 
         agents = io.require_selection("which alpine agent you want to enable(The choice you don't choose will be disabled)?\n"\
-                                      + "By default, will enable all:\n"
-                                      + agents_str, range(1, idx), default=range(1, idx))
+                                      + "By default, will enable CDH5:\n"
+                                      + agents_str, range(1, idx), default=[4])
 
         replace = ""
         idx = 1
@@ -86,6 +88,42 @@ class Configure:
             f.write(contents)
         logger.info(str([dic[agent] for agent in agents]) + " is enabled.")
         logger.info("For more advanced configuration, change %s manually" % alpine_conf)
+
+    def enable_https(self):
+        server_key = os.path.join(os.path.join(options.chorus_path, "shared/server.key"))
+        server_csr = os.path.join(os.path.join(options.chorus_path, "shared/server.csr"))
+        executor.run("openssl genrsa -des3 -out %s 1024" % server_key)
+        os.system("openssl req -new -key %s -out %s" % (server_key, server_csr))
+        server_key_org = os.path.join(os.path.join(options.chorus_path, "shared/server.key.org"))
+        executor.run("cp %s %s" % (server_key, server_key_org))
+        executor.run("openssl rsa -in %s -out %s" % (server_key_org, server_key))
+        server_crt = os.path.join(os.path.join(options.chorus_path, "shared/server.crt"))
+        executor.run("openssl x509 -req -days 365 -in %s -signkey %s -out %s" % \
+                     (server_csr, server_key, server_crt))
+
+        port = io.prompt_int("Which port you want to use for https?", default=8443)
+
+        with open(os.path.join(options.chorus_path, "shared/chorus.properties"), "a") as f:
+            f.write("ssl.enabled= true\n"\
+                    + "ssl_server_port= %d\n" % port\
+                    + "ssl_certificate= %s\n" % server_crt\
+                    + "ssl_certificate_key= %s" % server_key)
+        contents = ""
+        alpine_conf = os.path.join(options.chorus_path, "shared/ALPINE_DATA_REPOSITORY/configuration/alpine.conf")
+        with open(alpine_conf, "r") as f:
+            contents = f.read()
+        content = re.findall(r"chorus *{(.*?)}", contents, re.DOTALL)[0]
+        replace = "active = true\n" + "scheme = HTTPS\n" + "port = %d\n" % port
+        contents = contents.replace(content, replace)
+        with open(alpine_conf, "w") as f:
+            f.write(contents)
+        logger.info("https has been configured successfully on port %d" % port)
+
+    def configure_ldap(self):
+        os.system("${EDITOR:-vi} " + os.path.join(options.chorus_path, "shared/ldap.properties"))
+
+    def configure_kerberos(self):
+        pass
 
     def config(self):
         print "**************************************************"
@@ -114,5 +152,6 @@ class Configure:
                 continue
             else:
                 break
-        logger.info("Run chorus_control.sh restart to affect the change of configuration.")
+        logger.info("Run \"chorus_control.sh restart\" to affect the change of configuration.")
+
 configure = Configure()

@@ -21,6 +21,22 @@ class InstallerIO:
             else:
                 return inputs
 
+    def prompt_int(self, msg, default=None):
+        while True:
+            sys.stdout.write(msg + "[default=%s]:" % str(default))
+            if not self.silent:
+                inputs = raw_input()
+            else:
+                return default
+            if inputs == "" or inputs is None:
+                return default
+
+            if not inputs.isdigit():
+                print "please input a number"
+                continue
+            else:
+                return int(inputs)
+
     def require_confirmation(self, msg, default="yes"):
         valid = {"yes": True, "y": True, "ye": True, "no": False, "n": False}
         if default is None:
