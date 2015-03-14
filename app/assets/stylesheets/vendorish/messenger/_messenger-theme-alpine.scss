@@ -18,13 +18,12 @@ ul.messenger {
 }
 
 ul.messenger-theme-alpine {
+    @include unselectable;
     @include border-radius($defaultThemeBorderRadius);
 
-    @include unselectable;
-
-    &.messenger-empty {
-        display: none;
-    }
+//     &.messenger-empty {
+//         display: none;
+//     }
 
     .messenger-message {
         position: relative;
@@ -33,7 +32,6 @@ ul.messenger-theme-alpine {
         padding: 10px 35px 12px 35px;
 
         font-size: $default-font-size;
-//         background: transparent;
         font-weight: 500;
 
         box-shadow: 2px 2px 3px 0px rgba(150, 161, 169, 0.7);
@@ -47,7 +45,6 @@ ul.messenger-theme-alpine {
             padding: 8px 10px 7px 7px;
             
             color: #777;
-            // opacity: 1;
             font-weight: $bold;
             font-size: 20px;
             line-height: 20px;
@@ -69,7 +66,6 @@ ul.messenger-theme-alpine {
             margin-top: 10px;
 
             a {
-                // @include border-radius(4px);
                 text-decoration: none;
                 // color: #AAA;
                 background: #2e2e2e;
@@ -162,18 +158,18 @@ ul.messenger-theme-alpine {
         }
     }
 
-    // when there are multiple toasts displayed, fit them together
+    // when there are multiple toasts displayed...
     .messenger-message-slot {
         &.messenger-last .messenger-message {
-            // for toast at top of stack, turn off bottom radius and bottom border
+            // for toast displayed, turn off bottom
             @include border-radius($defaultThemeBorderRadius $defaultThemeBorderRadius 0px 0px);
         }
         &.messenger-first .messenger-message {
-            // for toast at bottom of stack, turn off top radius
+            // for toast that was the first to display, turn off top
             @include border-radius(0px 0px $defaultThemeBorderRadius $defaultThemeBorderRadius);
         }
         &.messenger-first.messenger-last .messenger-message {
-            // single toast; all borders
+            // default for toast: all borders
             @include border-radius($defaultThemeBorderRadius);
         }
     }

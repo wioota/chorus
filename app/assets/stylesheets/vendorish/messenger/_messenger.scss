@@ -1,3 +1,5 @@
+// general dimensions and specifications for the toast messenger
+
 @import "compass/utilities/general/clearfix";
 @import "compass/css3";
 
@@ -43,12 +45,12 @@ ul.messenger {
     }
 
     &.messenger-fixed {
-//         position: fixed;
-//         z-index: 10000;
+//      position: fixed;
+//      z-index: 10000;
 //     .messenger-message {
-//         min-width: 0;
-//         @include box-sizing(border-box);
-//     }
+//      min-width: 0;
+//      @include box-sizing(border-box);
+//  }
         .message .messenger-actions {
             float: left;
         }
@@ -79,15 +81,15 @@ ul.messenger {
             }
         }
 
-    &.messenger-on-right,
-    &.messenger-on-left {
-        width: $default-toast-width;
+        &.messenger-on-right,
+        &.messenger-on-left {
+            width: $default-toast-width;
 
-        .messenger-actions {
-            float: left;
+            .messenger-actions {
+                float: left;
+            }
         }
     }
-  }
 
 //   .messenger-spinner {
 //     display: none;
@@ -95,5 +97,4 @@ ul.messenger {
     .messenger-clickable {
         cursor: pointer;
     }
-
 }
