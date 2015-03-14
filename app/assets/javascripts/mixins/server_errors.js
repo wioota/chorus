@@ -22,7 +22,7 @@ chorus.Mixins.ServerErrors = {
                 });
             });
         } else if (this.serverErrors.record) {
-            fullKey = "record_error." + this.serverErrors.record;
+            fullKey = "record_error." + this.serverErrors.record + ".text";
 
             if (I18n.lookup(fullKey)) {
                 output = [t(fullKey, this.serverErrors)];
