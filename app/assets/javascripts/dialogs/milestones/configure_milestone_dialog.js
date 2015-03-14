@@ -51,7 +51,7 @@ chorus.dialogs.ConfigureMilestone = chorus.dialogs.Base.include(chorus.Mixins.Di
     modelSaved: function () {
     	// construct createMessageParams object to include
     	// milestone name for the toast message, and the toast type
-        chorus.toast(this.toast_message, { milestoneName: this.model.name(), toastOpts: {type: "success"}} );
+        chorus.toast(this.toast_message, {milestoneName: this.model.name(), toastOpts: {type: "success"}});
         chorus.page.collection.trigger('invalidated');
         this.closeModal();
     },

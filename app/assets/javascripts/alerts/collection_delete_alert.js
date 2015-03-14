@@ -23,8 +23,7 @@ chorus.alerts.CollectionDelete = chorus.alerts.Confirm.extend({
         var messageParams = this.deleteMessageParams();
          messageParams = (messageParams === undefined) ? {} : messageParams;
         _.extend(messageParams, toastOpts);
-        
-        //chorus.toast(this.deleteMessage, _.extend(this.deleteMessageParams(), toastOpts));
+
         chorus.toast(this.deleteMessage, messageParams);
 
         chorus.PageEvents.trigger(this.collection.entityType + ":deleted", this.collection);

@@ -29,7 +29,6 @@ chorus.dialogs.HdfsDatasetAttributes = chorus.dialogs.Base.include(chorus.Mixins
         // toast "success" style
         var toastOpts = {toastOpts: {type: "success"}};
         // construct the toast params
-        //var messageParams = this.toastMessageParams();
         var messageParams = (this.toastMessageParams() === undefined) ? {} : this.toastMessageParams();
         _.extend(messageParams, toastOpts);
         chorus.toast(this.toastMessage, messageParams);

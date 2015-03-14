@@ -111,7 +111,7 @@ chorus.dialogs.EditWorkspace = chorus.dialogs.Base.include(
         },
 
         saved: function() {
-            chorus.toast("workspace.settings.edit_success.toast", {toastOpts: {type: "success"}} );
+            chorus.toast("workspace.settings.edit_success.toast", {toastOpts: {type: "success"}});
             this.model.trigger("invalidated");
             this.closeModal();
         }

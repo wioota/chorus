@@ -164,10 +164,7 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
     },
 
     modelSaved: function () {
-        chorus.toast (
-            "create_job_task_dialog.toast", 
-            {toastOpts: {type: "success"}}
-            );
+        chorus.toast ("create_job_task_dialog.toast", {toastOpts: {type: "success"}});
         this.job.trigger('invalidated');
         this.closeModal();
     },

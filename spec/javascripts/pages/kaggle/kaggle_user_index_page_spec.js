@@ -24,7 +24,7 @@ describe("chorus.pages.KaggleUserIndexPage", function() {
 
         it("redirects to the unprocessable entity page", function() {
             expect(Backbone.history.loadUrl).toHaveBeenCalledWith('/unprocessableEntity');
-            expect(chorus.pageOptions.title).toMatchTranslation('record_error.KAGGLE_API_UNREACHABLE_title');
+            expect(chorus.pageOptions.title).toMatchTranslation('record_error.KAGGLE_API_UNREACHABLE.title');
             expect(chorus.pageOptions.text).toMatchTranslation('record_error.KAGGLE_API_UNREACHABLE');
         });
     });

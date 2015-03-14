@@ -73,10 +73,7 @@ chorus.dialogs.ConfigureWorkfileTask = chorus.dialogs.PickItems.include(chorus.M
     },
 
     modelSaved: function () {
-        chorus.toast (
-            "create_job_task_dialog.toast", 
-            {toastOpts: {type: "success"}}
-            );
+        chorus.toast ("create_job_task_dialog.toast", {toastOpts: {type: "success"}});
         this.model.trigger('invalidated');
         this.job.trigger('invalidated');
         this.closeModal();
