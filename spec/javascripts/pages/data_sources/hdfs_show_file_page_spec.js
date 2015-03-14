@@ -29,9 +29,6 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         it("shows the breadcrumbs", function() {
             expect(this.page.model.loaded).toBeTruthy();
 
-//             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-//             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
-
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/data_sources");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.data_sources");
 
