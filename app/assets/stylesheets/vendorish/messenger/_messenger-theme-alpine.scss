@@ -145,8 +145,17 @@ ul.messenger-theme-alpine {
                 color: $success-icon-color; 
             }
         }
+        &.alert-deletion {
+            color: $informational-text-color;  //
+            background-color: $informational-background-color; //
+            border-color: $informational-border-color;  //
+
+            .messenger-message-inner::before {
+                @include alert-success-icon;
+                color: $informational-icon-color;
+            }
+        }
         &.alert-info {
-            // color: #3a87ad;
             color: $informational-text-color;
             background-color: $informational-background-color;
             border-color: $informational-border-color;

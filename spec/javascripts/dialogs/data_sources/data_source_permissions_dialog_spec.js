@@ -262,7 +262,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                         });
 
                         it("displays a toast message", function() {
-                            expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_removed.toast", {toastOpts: {type: "info"}});
+                            expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_removed.toast", {toastOpts: {type: "deletion"}});
                         });
 
                         it("clears shared account information from the data source model in the dialog", function() {

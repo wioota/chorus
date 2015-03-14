@@ -270,7 +270,7 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         var localGroup = _.extend({}, Backbone.Events);
         function displaySuccessToast() {
             this.dataSource.set({shared: false});
-            chorus.toast("data_sources.shared_account_removed.toast", {toastOpts: {type: "info"}});
+            chorus.toast("data_sources.shared_account_removed.toast", {toastOpts: {type: "deletion"}});
             this.render();
             localGroup.stopListening();
         }
