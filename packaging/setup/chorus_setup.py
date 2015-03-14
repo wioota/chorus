@@ -41,13 +41,15 @@ class ChorusSetup:
     chorus installer
     """
     def __init__(self):
-        self.release_path = os.path.join(options.chorus_path, 'releases/%s' % get_version())
         self.database_username = None
         self.database_password = None
         self.alpine_installer = None
         self.alpine_release_path = None
         if os.path.exists(failover_file):
            os.remove(failover_file)
+
+    def set_release_path(self):
+        self.release_path = os.path.join(options.chorus_path, 'releases/%s' % get_version())
 
     def _eula_by_brand(self):
         filename = ""
@@ -224,35 +226,6 @@ class ChorusSetup:
         else:
             shutil.copytree(os.path.join(self.alpine_release_path, "ALPINE_DATA_REPOSITORY"), alpine_data_repo)
 
-        #agents = io.require_selection("which alpine agent you want to enable? \
-        #                              By default, will enable all:\n"
-        #                              + "1. PHD2.0\n"
-        #                              + "2. CDH4\n"
-        #                              + "3. MAPR3\n"
-        #                              + "4. CDH5\n"
-        #                              + "5. HDP2.1\n"
-        #                              + "6. MapR4\n", default="all")
-        #if agents is None:
-        #    logger.debug("alll agents are enabled")
-        #    return
-        #dic = {1:"PHD2.0", 2:"CDH4", 3:"MAPR3", 4:"CDH5", 5:"HDP2.1", 6:"MapR4"}
-        #contents = ""
-        #alpine_conf = os.path.join(options.chorus_path, "shared/ALPINE_DATA_REPOSITORY/configuration/alpine.conf")
-        #with open(alpine_conf, "r") as f:
-        #    index = 0
-        #    for line in f:
-        #        if "enabled" in line:
-        #            if dic[agents[index]] in line:
-        #                line = "\t\t%d.enabled=true\t# %s" % (agents[index], dic[agents[index]])
-        #                if index + 1 < len(agents)
-        #                    index += 1
-        #            else:
-        #                line = line.replace("true", "false")
-        #        contents += line
-        #with open(alpine_conf, "w") as f:
-        #    f.write(contents)
-
-
     def link_current_to_release(self, link_name, rel_path):
         current = os.path.join(options.chorus_path, link_name)
         if os.path.lexists(current):
@@ -260,6 +233,7 @@ class ChorusSetup:
         os.symlink(rel_path, current)
 
     def setup(self):
+        self.set_release_path()
         if not io.require_confirmation("Do you want to set up the chorus, "
                                             + "please make sure you have installed chorus before setting up?"):
             logger.fatal("Setup aborted, Cancelled by user")
@@ -298,7 +272,9 @@ class ChorusSetup:
         print "Completely Setup"
         if upgrade:
             print "Confirm custom configuration settings as directed in the upgrade guide before restarting Chorus."
-        print "*To start Chorus, run the following commands:"
-        print "*chorus_control.sh start"
+        print "*" * 60
+        print "To start Chorus, run the following commands:"
+        print "chorus_control.sh start"
+        print "*" * 60
 
 chorus_set = ChorusSetup()

@@ -1,13 +1,21 @@
 import os
 import subprocess
+import shlex
 from log import logger
 from options import options, get_version
 class PSQLException(Exception):
     pass
 
+class RAKEException(Exception):
+    pass
+
 class ChorusExecutor:
     def __init__(self):
         self.release_path = os.path.join(options.chorus_path, 'releases/%s' % get_version())
+
+    def call(self, command):
+        logger.debug(command)
+        return subprocess.call(shlex.split(command))
 
     def run(self, command, postgres_bin_path=None):
         if postgres_bin_path is None:
@@ -21,6 +29,7 @@ class ChorusExecutor:
         if stderr:
             logger.debug(stderr)
         return stdout, stderr
+
     def chorus_control(self, command):
        command = "CHORUS_HOME=%s %s %s/packaging/chorus_control.sh %s" % \
                (self.release_path, self.alpine_env(), self.release_path, command)
@@ -64,6 +73,8 @@ class ChorusExecutor:
     def rake(self, command):
         command = "cd %s && RAILS_ENV=production bin/ruby -S bin/rake %s --trace" % \
                 (self.release_path, command)
-        self.run(command)
+        stdout, stderr = self.run(command)
+        if "rake aborted" in stderr:
+            raise RAKEEXception(stderr)
 
 executor = ChorusExecutor()

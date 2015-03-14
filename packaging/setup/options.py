@@ -28,8 +28,14 @@ def get_options(args):
 
 def get_version():
     version = ""
-    with open(os.path.join(options.chorus_path, "version_build"), "r") as f:
-        version = f.read().strip()
+    try:
+        with open(os.path.join(options.chorus_path, "version_build"), "r") as f:
+            version = f.read().strip()
+    except IOError as e:
+        from log import logger
+        logger.error(e)
+        logger.error("Exception Occured, see %s/install.log for details" % options.chorus_path.rstrip("/"))
+        quit()
     return version
 
 options, arg = get_options(sys.argv)

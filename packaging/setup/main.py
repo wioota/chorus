@@ -17,6 +17,7 @@ def main():
         signal.signal(signal.SIGINT, exit_gracefully)
         handler[arg]()
     except Exception as e:
-        logger.error(traceback.format_exc())
+        logger.error(e)
         logger.error("Exception Occured, see %s/install.log for details" % options.chorus_path.rstrip("/"))
+        logger.debug(traceback.format_exc())
         failover()
