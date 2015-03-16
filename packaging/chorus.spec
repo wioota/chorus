@@ -156,167 +156,17 @@ function error_exit() {
 log "add chorus user if not exits"
 useradd chorus >> %{appdir}/install.log 2>&1
 groupadd chorus >> %{appdir}/install.log 2>&1
-log "construct shared structure in %{shared}"
-su - chorus -c "mkdir -p %{shared}"
-error_exit
-su - chorus -c "mkdir -p %{shared}/demo_data"
-error_exit
-su - chorus -c "mkdir -p %{shared}/libraries"
-error_exit
-su - chorus -c "mkdir -p %{shared}/solr"
-error_exit
-su - chorus -c "mkdir -p %{shared}/tmp"
-error_exit
-if [[ ! -f %{shared}/database.yml ]]; then
-	su - chorus -c "cp %{releases}/packaging/database.yml.example  %{shared}/database.yml"
-	error_exit
-fi
-if [[ ! -f %{shared}/sunspot.yml ]]; then
-	su - chorus -c "cp %{releases}/packaging/sunspot.yml.example  %{shared}/sunspot.yml"
-	error_exit
-fi
-if [[ ! -f %{shared}/chorus.properties ]]; then
-	su - chorus -c "cp %{releases}/config/chorus.defaults.properties  %{shared}/chorus.properties"
-	error_exit
-	su - chorus -c "chmod 0600 %{shared}/chorus.properties"
-	error_exit
-fi
-su - chorus -c "cp -rf %{releases}/config/chorus.defaults.properties  %{shared}/chorus.properties.example"
-error_exit
-su - chorus -c "cp -rf %{releases}/config/chorus.license.default  %{shared}/chorus.license.default"
-error_exit
-
-if [[ ! -f %{shared}/chorus.license ]]; then
-	su - chorus -c "cp %{releases}/config/chorus.license.default  %{shared}/chorus.license"
-	error_exit
-	su - chorus -c "chmod 0600 %{shared}/chorus.license" 
-	error_exit
-fi
-
-su - chorus -c "cp -rf %{releases}/config/ldap.properties.active_directory %{shared}/ldap.properties.active_directory"
-error_exit
-su - chorus -c "cp -rf %{releases}/config/ldap.properties.opensource_ldap %{shared}/ldap.properties.opensource_ldap"
-error_exit
-if [[ ! -f %{shared}/ldap.properties ]]; then
-	su - chorus -c "cp %{releases}/config/ldap.properties.example %{shared}/ldap.properties"
-	error_exit
-	su - chorus -c "chmod 0600 %{shared}/ldap.properties" 
-	error_exit
-fi	
-
-log "Linking shared configuration files to %{releases}/config"
-su - chorus -c "ln -sf %{shared}/chorus.properties %{releases}/config/chorus.properties"
-error_exit
-su - chorus -c "ln -sf %{shared}/chorus.license %{releases}/config/chorus.license"
-error_exit
-su - chorus -c "ln -sf %{shared}/database.yml %{releases}/config/database.yml"
-error_exit
-su - chorus -c "ln -sf %{shared}/sunspot.yml %{releases}/config/sunspot.yml"
-error_exit
-su - chorus -c "ln -sf %{shared}/ldap.properties %{releases}/config/ldap.properties"
-error_exit
-rm -rf %{releases}/demo_data
-error_exit
-su - chorus -c "ln -sfn %{shared}/demo_data %{releases}/demo_data"
-error_exit
-log "Linking data folders to %{shared}"
-rm -rf %{shared}/db
-error_exit
-rm -rf %{shared}/log
-error_exit
-rm -rf %{shared}/solr/data
-error_exit
-rm -rf %{shared}/system
-error_exit
-su - chorus -c "chmod 700 %{data}/db"
-error_exit
-su - chorus -c "ln -sfn %{data}/db %{shared}/db"
-error_exit
-su - chorus -c "ln -sfn %{data}/log %{shared}/log"
-error_exit
-su - chorus -c "ln -sfn %{data}/solr/data %{shared}/solr/data"
-error_exit
-su - chorus -c "ln -sfn %{data}/system %{shared}/system"
-error_exit
-log "Linking shared data folders to %{releases}"
-rm -rf %{releases}/log
-rm -rf %{releases}/postgres-db
-rm -rf %{releases}/solr/data
-rm -rf %{releases}/tmp
-su - chorus -c "ln -sfn %{shared}/log %{releases}/log"
-error_exit
-su - chorus -c "ln -sfn %{shared}/db %{releases}/postgres-db"
-error_exit
-su - chorus -c "ln -sfn %{shared}/solr/data %{releases}/solr/data"
-error_exit
-su - chorus -c "ln -sfn %{shared}/tmp %{releases}/tmp"
-error_exit
-log "Linking nginx logs to %{releases}/vendor/nginx/nginx_dist/nginx_data/logs"
-su - chorus -c "mkdir -p %{shared}/log/nginx"
-error_exit
-rm -rf %{releases}/vendor/nginx/nginx_dist/nginx_data/logs
-error_exit
-su - chorus -c "ln -sfn %{shared}/log/nginx %{releases}/vendor/nginx/nginx_dist/nginx_data/logs"
-error_exit
-rm -rf %{releases}/system
-error_exit
-su - chorus -c "ln -sfn %{shared}/system %{releases}/system"
-error_exit
 log "Linking version_build to %{appdir}/version_build"
 su - chorus -c "ln -sf %{releases}/version_build %{appdir}/version_build"
 error_exit
-log "Linking chorus_control.sh and chorus_server to %{appdir}"
-su - chorus -c "ln -sf %{releases}/packaging/chorus_control.sh %{appdir}/chorus_control.sh"
-error_exit
-su - chorus -c "ln -sf %{releases}/packaging/setup/chorus_server %{appdir}/chorus_server"
-error_exit
-log "Generating chorus_path.sh to %{appdir}"
-su - chorus -c "echo 'export CHORUS_HOME=%{prefix}/%{name}' > %{appdir}/chorus_path.sh"
-error_exit
-su - chorus -c "echo 'export PATH=\$PATH:\$CHORUS_HOME' >> %{appdir}/chorus_path.sh"
-error_exit
-su - chorus -c "echo 'export PGPASSFILE=\$CHORUS_HOME/.pgpass' >> %{appdir}/chorus_path.sh"
-error_exit
-log "source chorus_path.sh in ~/.bash_profile.sh"
-su - chorus -c "echo 'source %{appdir}/chorus_path.sh' >> ~/.bash_profile"
-error_exit
-su - chorus -c "chmod -R 0555 %{releases}/public"
-error_exit
-log "extract postgres database"
-
-if [[ (-f /etc/redhat-release) && (`uname -a | grep x86_64` != "") ]]; then
-    OS_VERSION="RedHat"
-    VERSION_ID=`cat /etc/redhat-release |awk '{print $3}'|cut -d'.' -f1-1`
-elif [[ (-f /etc/SuSE-release) && (`cat /etc/SuSE-release | grep x86_64` != "") ]]; then
-    OS_VERSION="SuSE"
-    VERSION_ID=`cat /etc/SuSE-release|grep SUSE|awk '{print $5}'`
-fi
-if [[ ${OS_VERSION} == "RedHat" && ${VERSION_ID} == "5" ]]; then
-	su - chorus -c "tar -xzf %{releases}/packaging/postgres/postgres-redhat5.5-9.2.4.tar.gz -C %{releases}"
-	error_exit
-	log "postgres-redhat5.5-9.2.4 extracted in %{releases}/postgres"
-elif [[ ${OS_VERSION} == "RedHat" && ${VERSION_ID} == "6" ]]; then
-	su - chorus -c "tar -xzf %{releases}/packaging/postgres/postgres-redhat6.2-9.2.4.tar.gz -C %{releases}"
-	error_exit
-	log "postgres-redhat6.2-9.2.4 extracted in %{releases}/postgres"
-elif [[ ${OS_VERSION} == "SuSE" && ${VERSION_ID} == "11" ]]; then
-	su - chorus -c	"tar -xzf %{releases}/packaging/postgres/postgres-suse11-9.2.4.tar.gz -C %{releases}"
-	error_exit
-	log "postgres-suse11-9.2.4 extracted in %{releases}/postgres"
-else
-	log "postgres not installed, no version match the operation system"
-fi
-log "Linking current release to %{appdir}/current"
-rm -rf %{appdir}/current
-error_exit
-su - chorus -c "ln -sfn %{releases} %{appdir}/current"
+su - chorus -c "%{releases}/packaging/setup/chorus_server setup --chorus_path=%{appdir} --data_path=%{data} -s"
 error_exit
 echo " 
 *********************************************************
 * successfully install chorus in %{appdir}:	*
 * data dir is in %{data}				*
 * please change to chorus user(running su - chorus)	* 
-* and running chorus_server setup to setup chorus	*
+* and running chorus_control.sh start to start chorus	*
 *********************************************************"
 %files
 %defattr(-,chorus,chorus,-)
