@@ -146,7 +146,10 @@ class ChorusSetup:
     def _ln_sf(self, src, dst):
         logger.debug("Link %s to %s" % (src, dst))
         if os.path.lexists(dst):
-            os.unlink(dst)
+            if os.path.isdir(dst) and not os.path.islink(dst):
+                shutil.rmtree(dst)
+            else:
+                os.remove(dst)
         os.symlink(src, dst)
 
     def _mkdir_p(self, path):
