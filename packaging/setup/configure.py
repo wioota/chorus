@@ -10,7 +10,9 @@ from log import logger
 
 class Configure:
     def __init__(self):
-        self.method = self._load_configure()
+        pass
+
+    def _version_detect(self):
         ts = rpm.TransactionSet()
         mi = ts.dbMatch('name', 'chorus')
         self.chorus_version = None
@@ -21,12 +23,14 @@ class Configure:
         for h in mi:
             self.alpine_version = h['name'] + "-" + h['version']
 
-    def _load_configure(self):
+    def _load_configure_func(self):
         dic = {}
         idx = 1
         for importer, modname, ispkg in pkgutil.iter_modules(config_lib.__path__):
             module = __import__("config_lib." + modname, fromlist="config_lib")
             for function in inspect.getmembers(module, inspect.isfunction):
+                if not inspect.getmodule(function[1]) == module:
+                    continue
                 dic[idx] = function
                 idx += 1
         return dic
@@ -62,6 +66,7 @@ class Configure:
         return os.path.exists(os.path.join(options.chorus_path, "alpine-current/" + pid_name))
 
     def config(self):
+        self._version_detect()
         print "*" * 60
         header = ""
         if self.chorus_version is None:
@@ -77,6 +82,9 @@ class Configure:
         print "*" * 60
         if self.chorus_version is None:
             return
+
+        self.method = self._load_configure_func()
+        print self.method
         while True:
             lens = len(self.method) + 1
             menu = "\n".join(str(e) + ". " + self.method[e][0] for e in self.method.keys()) + "\n%d. exit\n" % lens

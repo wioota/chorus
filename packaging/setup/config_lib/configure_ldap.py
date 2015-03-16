@@ -1,7 +1,7 @@
 import os
 import sys
 sys.path.append("..")
-from options import options
 def configure_ldap():
+    from options import options
     os.system("${EDITOR:-vi} " + os.path.join(options.chorus_path, "shared/ldap.properties"))
 

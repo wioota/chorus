@@ -30,6 +30,10 @@ class ChorusExecutor:
             logger.debug(stderr)
         return stdout, stderr
 
+    def extract_postgres(self, package_name):
+        self.run("tar xzfv %s -C %s" % (os.path.join(self.release_path, "packaging/postgres/" + package_name),\
+                                        self.release_path))
+
     def chorus_control(self, command):
        command = "CHORUS_HOME=%s %s %s/packaging/chorus_control.sh %s" % \
                (self.release_path, self.alpine_env(), self.release_path, command)
@@ -75,6 +79,6 @@ class ChorusExecutor:
                 (self.release_path, command)
         stdout, stderr = self.run(command)
         if "rake aborted" in stderr:
-            raise RAKEEXception(stderr)
+            raise RAKEException(stderr)
 
 executor = ChorusExecutor()
