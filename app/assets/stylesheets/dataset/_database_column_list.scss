@@ -15,105 +15,105 @@
 
             .type {
                 position: absolute;
-                right: 0;
+                // right: 0;
                 top: 10px;
+                left: 80%;
                 z-index: 1;
 /*                 line-height: 11px; */
 /*                 height: 22px; */
-/*                 vertical-align: middle; */
+
 
                 .type_name {
                     @include database-column-type;
-
                     vertical-align: top;
 /*                     display: inline-block; */
 
 					margin-right: 20px;
                 }
 
-                .left {
-/*                     width: 9px; */
+//                 .left {
+//                     width: 9px; */
 /*                     height: 22px; */
 /*                     display: inline-block; */
-                }
+//                 }
 
-                .right {
+//                 .right {
 /*                     width: 6px; */
 /*                     height: 22px; */
 /*                     display: inline-block; */
-                }
+//                 }
 
                 &.numeric {
-                    .left{
+//                     .left{
 /*                         background: url(/images/ribbons/label_datatype_dkblue1.png) no-repeat; */
-                    }
-                    .type_name {
+//                     }
+//                     .type_name {
 /*                         background: url(/images/ribbons/label_datatype_dkblue2.png) repeat; */
-                    }
-                    .right {
+//                     }
+//                     .right {
 /*                         background: url(/images/ribbons/label_datatype_dkblue3.png) no-repeat; */
-                    }
+//                     }
                 }
 
                 &.string {
-                    .left{
+//                     .left{
 /*                         background: url(/images/ribbons/label_datatype_purple1.png) no-repeat; */
-                    }
-                    .type_name {
+//                     }
+//                     .type_name {
 /*                         background: url(/images/ribbons/label_datatype_purple2.png) repeat; */
-                    }
-                    .right {
+//                     }
+//                     .right {
 /*                         background: url(/images/ribbons/label_datatype_purple3.png) no-repeat; */
-                    }
+//                     }
                 }
 
                 &.boolean {
-                    .left{
+//                     .left{
 /*                         background: url(/images/ribbons/label_datatype_black1.png) no-repeat; */
-                    }
-                    .type_name {
+//                     }
+//                     .type_name {
 /*                         background: url(/images/ribbons/label_datatype_black2.png) repeat; */
-                    }
-                    .right {
+//                     }
+//                     .right {
 /*                         background: url(/images/ribbons/label_datatype_black3.png) no-repeat; */
-                    }
+//                     }
                 }
 
                 &.binary {
-                    .left{
+//                     .left{
 /*                         background: url(/images/ribbons/label_datatype_green1.png) no-repeat; */
-                    }
-                    .type_name {
+//                     }
+//                     .type_name {
 /*                         background: url(/images/ribbons/label_datatype_green2.png) repeat; */
-                    }
-                    .right {
+//                     }
+//                     .right {
 /*                         background: url(/images/ribbons/label_datatype_green3.png) no-repeat; */
-                    }
+//                     }
                 }
 
                 &.date, &.time, &.date_time {
-                    .left{
+//                     .left{
 /*                         background: url(/images/ribbons/label_datatype_ltblue1.png) no-repeat; */
-                    }
-                    .type_name {
+//                     }
+//                     .type_name {
 /*                         background: url(/images/ribbons/label_datatype_ltblue2.png) repeat; */
-                    }
-                    .right {
+//                     }
+//                     .right {
 /*                         background: url(/images/ribbons/label_datatype_ltblue3.png) no-repeat; */
-                    }
+//                     }
                 }
 
                 &.other {
-                    .left{
+//                     .left{
 /*                         background: url(/images/ribbons/label_datatype_white1.png) no-repeat; */
-                    }
-                    .type_name {
+//                     }
+//                     .type_name {
 /*                         color: $color-text2; */
 /*                         background: url(/images/ribbons/label_datatype_white2.png) repeat; */
-                    }
-                    .right {
+//                     }
+//                     .right {
 /*                         background: url(/images/ribbons/label_datatype_white3.png) no-repeat; */
-                    }
+//                     }
                 }
             }
 
