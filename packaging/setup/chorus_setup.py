@@ -351,7 +351,7 @@ class ChorusSetup:
     def source_chorus_path(self):
         logger.info("source %s/chorus_path.sh" % options.chorus_path)
         with open(os.path.join(os.path.expanduser("~"), ".bash_profile"), "a") as f:
-            f.write("source %s/chorus_path.sh" % options.chorus_path)
+            f.write("source %s/chorus_path.sh\n" % options.chorus_path)
 
     def setup(self):
         self.set_path()
