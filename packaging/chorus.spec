@@ -161,6 +161,9 @@ su - chorus -c "ln -sf %{releases}/version_build %{appdir}/version_build"
 error_exit
 su - chorus -c "%{releases}/packaging/setup/chorus_server setup --chorus_path=%{appdir} --data_path=%{data} -s"
 error_exit
+log "source chorus_path.sh in ~/.bash_profile.sh"
+su - chorus -c "echo 'source %{appdir}/chorus_path.sh' >> ~/.bash_profile"
+error_exit
 echo " 
 *********************************************************
 * successfully install chorus in %{appdir}:	*
