@@ -397,7 +397,7 @@ class ChorusSetup:
                 self.configure_alpine()
                 self.link_current_to_release("alpine-current", options.alpine_release_path)
         self.link_current_to_release("current", self.release_path)
-        self.source_chorus_path()
+        #self.source_chorus_path()
         if io.require_confirmation("Do you want to change default configure?", default="no"):
             configure.config()
 
