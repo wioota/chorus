@@ -263,6 +263,8 @@ describe User do
     it { should have_many(:activities) }
     it { should have_many(:events) }
     it { should have_many(:dashboard_items).dependent(:destroy) }
+    it { should have_and_belong_to_many(:groups) }
+    it { should have_and_belong_to_many(:roles) }
   end
 
   describe ".admin_count" do
