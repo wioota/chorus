@@ -24,10 +24,6 @@ module LdapClient
       results = client.search :filter => filter
     end
 
-    if results.empty?
-      raise LdapCouldNotFindMember.new("Could not find user with filter #{filter.to_s}")
-    end
-    
     unless results
       error = client.get_operation_result
       Rails.logger.error "LDAP Error: Code: #{error.code} Message: #{error.message}"
