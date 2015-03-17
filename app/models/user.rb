@@ -35,6 +35,9 @@ class User < ActiveRecord::Base
 
   has_many :comments
 
+  has_and_belongs_to_many :groups
+  has_and_belongs_to_many :roles
+
   has_attached_file :image, :path => ":rails_root/system/:class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",
                     :default_url => '/images/general/default-user.png', :styles => {:icon => "50x50>"}
