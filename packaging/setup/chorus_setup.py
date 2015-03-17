@@ -100,7 +100,7 @@ class ChorusSetup:
 
     def link_data_folder(self):
         logger.info("Linking data folders to %s" % options.data_path)
-        os.chmod(os.path.join(options.data_path), 0700)
+        os.chmod(os.path.join(options.data_path, "db"), 0700)
         self._ln_sf(os.path.join(options.data_path, "db"), \
                    os.path.join(self.shared, "db"))
         self._ln_sf(os.path.join(options.data_path, "log"), \
