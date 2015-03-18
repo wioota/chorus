@@ -1,7 +1,7 @@
 Name:		chorus
-Version:	%{?version}	
+Version:	%{?version}
 Release:	%{?release}
-Summary:	spec file for chorus-apine	
+Summary:	spec file for chorus-apine
 
 Group:		Alpine Data Labs
 License:	GPL
@@ -10,7 +10,7 @@ Source0:	%{name}.logrotate
 #BuildArch: 	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
 Prefix:		/usr/local
-#BuildRequires:	
+#BuildRequires:
 Requires:	logrotate
 Autoreq :	no
 
@@ -75,7 +75,7 @@ fi
 rm -fr .bundle
 
 IGNORE_DIRTY=true RAILS_ENV=packaging bundle exec rake package:installer --trace
-popd	
+popd
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{appdir}
@@ -109,7 +109,7 @@ cp -R README.md $RPM_BUILD_ROOT/%{releases}
 cp -R Rakefile $RPM_BUILD_ROOT/%{releases}
 cp -R config.ru $RPM_BUILD_ROOT/%{releases}
 cp -R version.rb $RPM_BUILD_ROOT/%{releases}
-echo %{version}-%{release} > $RPM_BUILD_ROOT/%{releases}/version_build 
+echo %{version}-%{release} > $RPM_BUILD_ROOT/%{releases}/version_build
 cp -R .bundle/ $RPM_BUILD_ROOT/%{releases}
 
 rm -rf $RPM_BUILD_ROOT/%{releases}/config/secret.key
@@ -143,8 +143,8 @@ if [[ !($OS_VERSION == "RedHat" && ($VERSION_ID == "5" || $VERSION_ID == "6"))
 	exit -1
 fi
 echo "add chorus user if not exits"
-useradd chorus >> %{appdir}/install.log 2>&1
-groupadd chorus >> %{appdir}/install.log 2>&1
+useradd chorus > /dev/null 2>&1
+groupadd chorus > /dev/null 2>&1
 %post
 function log() {
   su - chorus -c "echo '$1' 2>&1 |tee -a %{appdir}/install.log"
@@ -164,11 +164,11 @@ error_exit
 log "source chorus_path.sh in ~/.bash_profile.sh"
 su - chorus -c "echo 'source %{appdir}/chorus_path.sh' >> ~/.bash_profile"
 error_exit
-echo " 
+echo "
 *********************************************************
 * successfully install chorus in %{appdir}:	*
 * data dir is in %{data}				*
-* please change to chorus user(running su - chorus)	* 
+* please change to chorus user(running su - chorus)	*
 * and running chorus_control.sh start to start chorus	*
 *********************************************************"
 %files
