@@ -143,8 +143,9 @@ if [[ !($OS_VERSION == "RedHat" && ($VERSION_ID == "5" || $VERSION_ID == "6"))
 	exit -1
 fi
 echo "add chorus user if not exits"
-useradd chorus > /dev/null 2>&1
-groupadd chorus > /dev/null 2>&1
+if ! id -u chorus > /dev/null 2>&1; then
+	useradd chorus > /dev/null 2>&1
+fi
 %post
 function log() {
   su - chorus -c "echo '$1' 2>&1 |tee -a %{appdir}/install.log"
