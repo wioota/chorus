@@ -18,6 +18,8 @@ class InstallerIO:
                 return default
             if default is None and inputs == '':
                 continue
+	    elif inputs == '':
+		return default
             else:
                 return inputs
 
