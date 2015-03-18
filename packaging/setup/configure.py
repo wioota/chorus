@@ -5,9 +5,10 @@ import pkgutil
 import inspect
 import config_lib
 from options import options
-from installer_io import io
+from installer_io import InstallerIO
 from log import logger
 
+io = InstallerIO(options.silent)
 class Configure:
     def __init__(self):
         pass

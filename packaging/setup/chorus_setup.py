@@ -8,10 +8,12 @@ import base64
 import platform
 from options import options, get_version
 from log import logger
-from installer_io import io
-from chorus_executor import executor
+from installer_io import InstallerIO
+from chorus_executor import ChorusExecutor
 from health_check import health_check
 from configure import configure
+io = InstallerIO(options.silent)
+executor = ChorusExecutor(options.chorus_path)
 
 CHORUS_PSQL = "\
 if [ \"$CHORUS_HOME\" = \"\" ]; then\n\
@@ -51,7 +53,7 @@ class ChorusSetup:
            os.remove(failover_file)
 
     def set_path(self):
-        self.release_path = os.path.join(options.chorus_path, 'releases/%s' % get_version())
+        self.release_path = os.path.join(options.chorus_path, 'releases/%s' % get_version(options.chorus_path))
         self.shared = os.path.join(options.chorus_path, "shared")
 
     def construct_shared_structure(self):

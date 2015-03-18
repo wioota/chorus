@@ -9,7 +9,7 @@ def get_options(args):
     parser = OptionParser(usage=usage)
 
     parser.add_option('--chorus_path', action="store", dest="chorus_path",
-                      help="provide the chorus installation path [default: %default]", default="/usr/local/chorus")
+                      help="provide the chorus path [default: %default]", default="/usr/local/chorus")
     parser.add_option('--data_path', action="store", dest="data_path",
                       help="provide the chorus data path [default: %default]", default="/data/chorus")
     parser.add_option('--disable_spec', action="store_true", dest="disable_spec",
@@ -23,19 +23,19 @@ def get_options(args):
         print "please specify the command"
         parser.print_help()
         quit()
+    if not os.path.exists(options.chorus_path):
+        print "[error] %s not exists" % options.chorus_path
+        quit()
+    elif not os.path.exists(options.data_path):
+        print "[error] %s not exists" % options.data_path
+        quit()
     return options, args[1]
 
 
-def get_version():
+def get_version(chorus_path):
     version = ""
-    try:
-        with open(os.path.join(options.chorus_path, "version_build"), "r") as f:
-            version = f.read().strip()
-    except IOError as e:
-        from log import logger
-        logger.error(e)
-        logger.error("Exception Occured, see %s/install.log for details" % options.chorus_path.rstrip("/"))
-        quit()
+    with open(os.path.join(chorus_path, "version_build"), "r") as f:
+        version = f.read().strip()
     return version
 
 options, arg = get_options(sys.argv)

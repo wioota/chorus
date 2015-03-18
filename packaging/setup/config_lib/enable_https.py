@@ -3,10 +3,12 @@ import sys
 import re
 sys.path.append("..")
 def enable_https():
-    from installer_io import io
-    from chorus_executor import executor
+    from installer_io import InstallIO
+    from chorus_executor import ChorusExecutor
     from options import options
     from log import logger
+    io = InstallerIO(options.silent)
+    executor = ChorusExecutor(options.chorus_path)
     server_key = os.path.join(os.path.join(options.chorus_path, "shared/server.key"))
     server_csr = os.path.join(os.path.join(options.chorus_path, "shared/server.csr"))
     executor.run("openssl genrsa -des3 -out %s 1024" % server_key)

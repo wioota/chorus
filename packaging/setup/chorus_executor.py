@@ -2,7 +2,7 @@ import os
 import subprocess
 import shlex
 from log import logger
-from options import options, get_version
+from options import get_version
 class PSQLException(Exception):
     pass
 
@@ -10,8 +10,9 @@ class RAKEException(Exception):
     pass
 
 class ChorusExecutor:
-    def __init__(self):
-        self.release_path = os.path.join(options.chorus_path, 'releases/%s' % get_version())
+    def __init__(self, chorus_path="/usr/local/chorus"):
+        self.chorus_path = chorus_path
+        self.release_path = os.path.join(chorus_path, 'releases/%s' % get_version(chorus_path))
 
     def call(self, command):
         logger.debug(command)
@@ -41,13 +42,13 @@ class ChorusExecutor:
 
     def previous_chorus_control(self, command):
         command = "CHORUS_HOME=%s %s %s %s" % \
-                (os.path.join(options.chorus_path, "current"), self.alpine_env(),\
-                os.path.join(options.chorus_path, "chorus_control.sh"), command)
-        self.run(command, os.path.join(options.chorus_path, "current"))
+                (os.path.join(self.chorus_path, "current"), self.alpine_env(),\
+                os.path.join(self.chorus_path, "chorus_control.sh"), command)
+        self.run(command, os.path.join(self.chorus_path, "current"))
 
     def alpine_env(self):
         return "ALPINE_HOME=%s/alpine-current ALPINE_DATA_REPOSITORY=%s/shared/ALPINE_DATA_REPOSITORY" % \
-                (options.chorus_path, options.chorus_path)
+                (self.chorus_path, self.chorus_path)
 
     def start_previous_release(self):
         self.previous_chorus_control("start")
@@ -81,4 +82,3 @@ class ChorusExecutor:
         if "rake aborted" in stderr:
             raise RAKEException(stderr)
 
-executor = ChorusExecutor()

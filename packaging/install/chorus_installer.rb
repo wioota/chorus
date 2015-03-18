@@ -34,7 +34,6 @@ class ChorusInstaller
     @version_detector = options[:version_detector]
     @logger = options[:logger]
     @old_release_cleaner = options[:old_release_cleaner]
-    @io = options[:io]
     @log_stack = []
     @log_buffer = []
     @install_mode = :fresh

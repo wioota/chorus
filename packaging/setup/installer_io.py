@@ -1,6 +1,6 @@
 import sys
 import re
-from options import options
+
 class InstallerIO:
     """
         chorus installer io class
@@ -94,5 +94,3 @@ class InstallerIO:
             if not s.isdigit() or not int(s) in choices:
                 return False
         return True
-
-io = InstallerIO(options.silent)
