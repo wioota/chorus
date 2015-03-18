@@ -567,7 +567,8 @@ describe LdapClient do
         :ldif => ldif_path,
         :domain => "dc=example,dc=COM",
         :port => 3897,
-        :quiet => true
+        :quiet => true,
+        :tmpdir => Rails.root.join('tmp')
       ).start
 
       # binding.pry
