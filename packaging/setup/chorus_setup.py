@@ -195,8 +195,8 @@ class ChorusSetup:
         if not os.path.exists(key_file):
             passphrase = io.prompt("Enter optional passphrase to generate "
                                     + "a recoverable secret key for encrypting passwords."
-                                    + "By default, a random key will be generated", default=True)
-            if passphrase is None or passphrase.strip() == '':
+                                    + "By default, a random key will be generated", default='')
+            if passphrase.strip() == '':
                 passphrase = os.urandom(32)
             secret_key = base64.b64encode(hmac.new(passphrase, digestmod=hashlib.sha256).digest())
             with open(key_file, 'w') as f:
