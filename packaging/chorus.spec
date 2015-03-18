@@ -142,6 +142,9 @@ if [[ !($OS_VERSION == "RedHat" && ($VERSION_ID == "5" || $VERSION_ID == "6"))
 	echo "Operation System not supported, only support RedHat 5~6 and SuSE 11 x86_64"
 	exit -1
 fi
+echo "add chorus user if not exits"
+useradd chorus >> %{appdir}/install.log 2>&1
+groupadd chorus >> %{appdir}/install.log 2>&1
 %post
 function log() {
   su - chorus -c "echo '$1' 2>&1 |tee -a %{appdir}/install.log"
@@ -153,14 +156,11 @@ function error_exit() {
 	exit -1
   fi
 }
-log "add chorus user if not exits"
-useradd chorus >> %{appdir}/install.log 2>&1
-groupadd chorus >> %{appdir}/install.log 2>&1
 log "Linking version_build to %{appdir}/version_build"
 su - chorus -c "ln -sf %{releases}/version_build %{appdir}/version_build"
 error_exit
-su - chorus -c "%{releases}/packaging/setup/chorus_server setup --chorus_path=%{appdir} --data_path=%{data} -s"
-error_exit
+#su - chorus -c "%{releases}/packaging/setup/chorus_server setup --chorus_path=%{appdir} --data_path=%{data} -s"
+#error_exit
 log "source chorus_path.sh in ~/.bash_profile.sh"
 su - chorus -c "echo 'source %{appdir}/chorus_path.sh' >> ~/.bash_profile"
 error_exit
