@@ -8,15 +8,15 @@ class InstallerIO:
     def __init__(self, silent=False):
         self.silent = silent
 
-    def prompt(self, msg, default=False):
+    def prompt(self, msg, default=None):
         while True:
             sys.stdout.write(msg + ":")
             if not self.silent:
                 inputs = raw_input()
             else:
                 print
-                return None
-            if not default and inputs == '':
+                return default
+            if default is None and inputs == '':
                 continue
             else:
                 return inputs
