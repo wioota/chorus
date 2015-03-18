@@ -167,10 +167,11 @@ su - chorus -c "echo 'source %{appdir}/chorus_path.sh' >> ~/.bash_profile"
 error_exit
 echo "
 *********************************************************
-* successfully install chorus in %{appdir}:	*
-* data dir is in %{data}				*
-* please change to chorus user(running su - chorus)	*
-* and running chorus_control.sh start to start chorus	*
+ successfully install chorus in %{appdir}:
+ data dir is in %{data}
+ please change to chorus user(running su - chorus)
+ please run chorus_server setup
+ and running chorus_control.sh start to start chorus
 *********************************************************"
 %files
 %defattr(-,chorus,chorus,-)
