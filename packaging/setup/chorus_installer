@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 import os
 from installer_io import InstallerIO
-from options import get_version
-io = installer_io.InstallerIO()
+io = InstallerIO()
 
 def run(self, command):
-    logger.debug(command)
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
     if stdout:
-        logger.debug(stdout)
+        print stdout
     if stderr:
-        logger.debug(stderr)
+        print stderr
 
     return p.returncode, stdout, stderr
 
@@ -24,11 +22,15 @@ def install():
     run("mkdir -p %s" % chorus_path)
     run("mkdir -p %s" % data_path)
     installation_path = os.path.join(os.path.dirname(__file__), ".")
+    version = ""
+    with open(os.path.join(installation_path, "version_build"), "r") as f:
+        version = f.read().strip()
+
     run("cp -rf %s %s" % (os.path.join(installation_path, "version_build"), chorus_path))
-    release_path = os.path.join(chorus_path, "releases/%s" % get_version(chorus_path))
+    release_path = os.path.join(chorus_path, "releases/%s" % version)
     run("cp -rf %s %s" % (installation_path, release_path))
-    run ("chown -R %s" % chorus_path)
-    run ("chown -R %s" % data_path)
+    run("chown -R %s" % chorus_path)
+    run("chown -R %s" % data_path)
     run("su - %s -c \"packaging/setup/chorus_server setup --chorus_path=%s --data_path=%s\"" % (user, chorus_path, data_path))
 
 try:
