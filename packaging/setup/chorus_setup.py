@@ -400,11 +400,11 @@ class ChorusSetup:
             self.generate_chorus_rails_console_file()
             self.setup_database()
             #self.enqueue_solr_reindex()
+        self.link_current_to_release("current", self.release_path)
         if self.is_alpine_exits():
             if io.require_confirmation("Do you want to extract alpine?"):
                 self.configure_alpine()
                 self.link_current_to_release("alpine-current", self.alpine_release_path)
-        self.link_current_to_release("current", self.release_path)
         #self.source_chorus_path()
         if io.require_confirmation("Do you want to change default configure?", default="no"):
             configure.config()
@@ -414,6 +414,7 @@ class ChorusSetup:
             print "Confirm custom configuration settings as directed in the upgrade guide before restarting Chorus."
         print "*" * 60
         print "To start Chorus, run the following commands:"
+        print "source %s/chorus_path.sh" % options.chorus_path
         print "chorus_control.sh start"
         print "*" * 60
 
