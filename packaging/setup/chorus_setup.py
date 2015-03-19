@@ -402,7 +402,11 @@ class ChorusSetup:
             #self.enqueue_solr_reindex()
         self.link_current_to_release("current", self.release_path)
         if self.is_alpine_exits():
-            if io.require_confirmation("Do you want to extract alpine?"):
+            msg = "Do you want to extract alpine?"
+            if os.path.exists(self.alpine_release_path):
+                msg = "%s already exists in your machine, do you want to overwrite it?" % \
+                        os.path.basename(self.alpine_release_path.rstrip("/") + "/")
+            if io.require_confirmation(msg):
                 self.configure_alpine()
                 self.link_current_to_release("alpine-current", self.alpine_release_path)
         #self.source_chorus_path()
