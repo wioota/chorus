@@ -4,7 +4,7 @@
         <input type="text" name="name" maxlength="64" value="{{name}}" tabindex="1"/>
 
         {{#if hdfsDataSource}}
-            {{hdfsVersionsSelect false}}
+            {{hdfsVersionsSelect false false}}
         {{/if}}
 
         <label>{{t "data_sources.dialog.description"}}</label>
@@ -25,6 +25,15 @@
 
         {{#if jdbcDataSource}}
             {{jdbcDataSourceFields this}}
+        {{/if}}
+
+        {{#if jdbcHiveDataSource}}
+            {{jdbcDataSourceFields this}}
+            <br/>
+            {{hdfsVersionsSelect true true}}
+            <br/>
+            {{jdbcHiveDataSourceFields this}}
+            <br/>
         {{/if}}
 
         {{#if gnipDataSource}}

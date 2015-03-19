@@ -131,7 +131,7 @@
 
             {{jdbcDataSourceFields}}
             <br/>
-            {{hdfsVersionsSelect}}
+            {{hdfsVersionsSelect true true}}
             <br/>
             <label class="required db_username" name="dbUsername">{{t "data_sources.dialog.database_account"}}</label>
             <label class="required db_password" name="dbPassword">{{t "data_sources.dialog.database_password"}}</label>
@@ -157,7 +157,7 @@
             <label class="required">{{t "data_sources.dialog.data_source_name"}}</label>
             <input type="text" name="name" maxlength="64" tabindex="1"/>
 
-            {{hdfsVersionsSelect}}
+            {{hdfsVersionsSelect true false}}
 
             <label>{{t "data_sources.dialog.description"}}</label>
             <textarea rows="3" name="description" tabindex="1"></textarea>

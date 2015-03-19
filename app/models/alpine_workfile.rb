@@ -118,8 +118,6 @@ class AlpineWorkfile < Workfile
                    HdfsDataSource.find location[:id]
                  when 'oracle_data_source', 'jdbc_data_source', 'jdbc_hive_data_source' then
                    DataSource.where(:type => %w(OracleDataSource JdbcDataSource JdbcHiveDataSource)).find location[:id]
-                 #when 'jdbc_hive_data_source'
-                 #  JdbcHiveDataSource.find location[:id]
                  else #nil
                end
 

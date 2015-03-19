@@ -8,8 +8,10 @@ class JdbcDataset < RelationalDataset
   def inject_overrides
     if @om.nil?
       @om = JdbcOverrides::overrides_by_db_url(data_source.url)
-      self.extend(@om::DatasetOverrides) if !@om::DatasetOverrides.nil?
-      return true
+      if !(@om.nil? || @om::DatasetOverrides.nil?)
+        self.extend(@om::DatasetOverrides)
+        return true
+      end
     end
 
     false

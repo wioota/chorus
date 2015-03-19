@@ -75,10 +75,12 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         if (this.$('input[name=hiveKerberos]').prop('checked')) {
             this.$('[name=hiveKerberosPrincipal]').removeClass('hidden');
             this.$('[name=hiveKerberosKeytabLocation]').removeClass('hidden');
+            this.$('[name=dbUsername]').addClass('hidden');
             this.$('[name=dbPassword]').addClass('hidden');
         } else {
             this.$('[name=hiveKerberosPrincipal]').addClass('hidden');
             this.$('[name=hiveKerberosKeytabLocation]').addClass('hidden');
+            this.$('[name=dbUsername]').removeClass('hidden');
             this.$('[name=dbPassword]').removeClass('hidden');
         }
     },
@@ -137,6 +139,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         updates.connectionParameters = this.model.get('connectionParameters');
         updates.hiveKerberos = !!inputSource.find("input[name=hiveKerberos]").prop("checked");
         if (updates.hiveKerberos) {
+            updates.dbUsername = 'default';
             updates.dbPassword = 'default';
         }
         if (updates.hive && updates.hdfsVersion) {

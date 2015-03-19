@@ -4,9 +4,8 @@ module JdbcHive
     def self.create!(data_source_attributes, owner)
       data_source = JdbcHiveDataSource.new(data_source_attributes)
       data_source.owner = owner
-      #verify_accessibility!(data_source)
       data_source.save!
-     # Events::JdbcHiveDataSourceCreated.by(owner).add(:gnip_data_source => data_source)
+      Events::DataSourceCreated.by(owner).add(:data_source => data_source)
       data_source
     end
 

@@ -4,7 +4,7 @@ chorus.models.JdbcHiveDataSource = chorus.models.DataSource.extend({
     nameAttribute: 'name',
     entityType: "jdbc_hive_data_source",
 
-    showUrlTemplate: "jdbc_hive_data_sources/{{id}}/schemas",
+    showUrlTemplate: "data_sources/{{id}}/schemas",
 
     parameterWrapper: "jdbc_hive_data_source",
 
@@ -36,15 +36,20 @@ chorus.models.JdbcHiveDataSource = chorus.models.DataSource.extend({
 
         this.require("host", newAttrs);
         this.require("hiveHadoopVersion", newAttrs);
-        if (this.isNew()) {
-            this.require("dbUsername", newAttrs);
+
+        if(newAttrs.hiveKerberos !== true) {
+            newAttrs.hiveKerberos = false;
         }
+
         if (newAttrs.hiveKerberos) {
             this.require("hiveKerberosPrincipal", newAttrs);
             this.require("hiveKerberosKeytabLocation", newAttrs);
         }
         else {
-            this.require("dbPassword", newAttrs);
+            if (this.isNew()) {
+                this.require("dbUsername", newAttrs);
+                this.require("dbPassword", newAttrs);
+            }
         }
     }
 });

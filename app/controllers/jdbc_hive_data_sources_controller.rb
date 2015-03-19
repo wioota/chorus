@@ -19,7 +19,7 @@ class JdbcHiveDataSourcesController < ApplicationController
   end
 
   def update
-    gnip_params = params[:gnip_data_source]
+    gnip_params = params[:jdbc_hive_data_source]
     authorize! :owner, JdbcHiveDataSource.find(params[:id])
     data_source = JdbcHive::DataSourceRegistrar.update!(params[:id], gnip_params)
 

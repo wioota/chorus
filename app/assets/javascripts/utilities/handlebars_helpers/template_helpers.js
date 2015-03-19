@@ -69,10 +69,11 @@ chorus.handlebarsHelpers.template = {
         return Handlebars.helpers.renderTemplate("data_sources/hdfs_data_source_fields", context || {});
     },
 
-    hdfsVersionsSelect: function(selectOne) {
+    hdfsVersionsSelect: function(selectOne, hive) {
         selectOne = selectOne === undefined ? true : selectOne;
+        hive = hive === undefined ? false : hive;
         return Handlebars.helpers.renderTemplate("data_sources/hdfs_versions_select", {
-            hdfsVersions: chorus.models.Config.instance().get("hdfsVersions"),
+            hdfsVersions: hive ? chorus.models.Config.instance().get("hiveHdfsVersions") : chorus.models.Config.instance().get("hdfsVersions"),
             selectOne: selectOne
         });
     },
