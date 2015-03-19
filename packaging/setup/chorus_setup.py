@@ -366,7 +366,7 @@ class ChorusSetup:
     def setup(self):
         self.set_path()
         #if not io.require_confirmation("Do you want to set up the chorus, "
-                                            + "please make sure you have installed chorus before setting up?"):
+        #                                    + "please make sure you have installed chorus before setting up?"):
         #    logger.fatal("Setup aborted, Cancelled by user")
         #    quit()
         #if not options.disable_spec:
