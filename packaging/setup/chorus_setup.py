@@ -88,7 +88,7 @@ class ChorusSetup:
     def construct_data_structure(self):
         logger.info("construct data structure in %s" % options.data_path)
         for folder in ["db","system","log","solr/data"]:
-            executor.run("mkdir -p %s" % folder)
+            executor.run("mkdir -p %s" % os.path.join(options.data_path, folder))
 
     def link_shared_config(self):
         logger.info("Linking shared configuration files to %s/config" % self.release_path)
