@@ -85,6 +85,11 @@ class ChorusSetup:
                               os.path.join(self.shared, "ldap.properties"))
         os.chmod(os.path.join(self.shared, "ldap.properties"), 0600)
 
+    def construct_data_structure(self):
+        logger.info("construct data structure in %s" % options.data_path)
+        for folder in ["db","system","log","solr"]:
+            self._mkdir_p(folder)
+
     def link_shared_config(self):
         logger.info("Linking shared configuration files to %s/config" % self.release_path)
         self._ln_sf(os.path.join(self.shared, "chorus.properties"), \
@@ -360,16 +365,17 @@ class ChorusSetup:
 
     def setup(self):
         self.set_path()
-        if not io.require_confirmation("Do you want to set up the chorus, "
+        #if not io.require_confirmation("Do you want to set up the chorus, "
                                             + "please make sure you have installed chorus before setting up?"):
-            logger.fatal("Setup aborted, Cancelled by user")
-            quit()
-        if not options.disable_spec:
-            health_check()
-        self.prompt_for_eula()
+        #    logger.fatal("Setup aborted, Cancelled by user")
+        #    quit()
+        #if not options.disable_spec:
+        #    health_check()
+        #self.prompt_for_eula()
 
         #pre step:
         self.construct_shared_structure()
+        self.construct_data_structure()
         self.link_shared_config()
         self.link_data_folder()
         self.extract_postgres()
