@@ -1,7 +1,5 @@
 import os
 import re
-import rpm
-import pkgutil
 import inspect
 import config_lib
 from options import options
@@ -14,15 +12,15 @@ class Configure:
         pass
 
     def _version_detect(self):
-        ts = rpm.TransactionSet()
-        mi = ts.dbMatch('name', 'chorus')
         self.chorus_version = None
-        for h in mi:
-            self.chorus_version = h['name'] + "-" + h['version']
+        current = os.path.join(options.chorus_path, "current")
+        if os.path.lexists(current):
+            self.chorus_version = os.path.realpath(current)
+
         self.alpine_version = None
-        mi = ts.dbMatch('name', 'alpine')
-        for h in mi:
-            self.alpine_version = h['name'] + "-" + h['version']
+        alpine_current = os.path.join(options.chorus_path, "alpine-current")
+        if os.path.lexists(current):
+            self.alpine_version = os.path.realpath(alpine_current)
 
     def _load_configure_func(self):
         dic = {}
