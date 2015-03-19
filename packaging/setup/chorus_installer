@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 import os
-from installer_io import InstallerIO
-io = InstallerIO()
+import signal
+from setup import installer_io
+io = installer_io.InstallerIO()
+
+def exit_gracefully(signum, frame):
+    print "\ninstall aborted, Cancelled by user"
+    sys.exit(1)
 
 def run(self, command):
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -18,22 +23,28 @@ def install():
     run("useradd chorus")
     chorus_path = io.prompt("Please enter the full path to the Chorus installation directory[default: /usr/local/chorus]", default="/usr/local/chorus")
     data_path = io.prompt("Please enter the full path to the Chorus data directory (recommended 500GB)[default:/data/chorus]", default="/data/chorus")
-
+    print "creating chorus path"
     run("mkdir -p %s" % chorus_path)
+    print "creating chorus data path"
     run("mkdir -p %s" % data_path)
-    installation_path = os.path.join(os.path.dirname(__file__), ".")
+    installation_path = os.path.join(os.path.dirname(__file__), "../..")
     version = ""
     with open(os.path.join(installation_path, "version_build"), "r") as f:
         version = f.read().strip()
 
     run("cp -rf %s %s" % (os.path.join(installation_path, "version_build"), chorus_path))
     release_path = os.path.join(chorus_path, "releases/%s" % version)
+    print "creating release path"
+    run("mkdir -p %s" % release_path)
+    print "copying chorus to %s" % release_path
     run("cp -rf %s %s" % (installation_path, release_path))
-    run("chown -R %s" % chorus_path)
-    run("chown -R %s" % data_path)
-    run("su - %s -c \"packaging/setup/chorus_server setup --chorus_path=%s --data_path=%s\"" % (user, chorus_path, data_path))
+    print "change %s's owner to %s" % (chorus_path, user)
+    run("chown -R %s:%s %s" % (user, user, chorus_path))
+    run("chown -R %s:%s %s" % (user, user, data_path))
+    os.system("su - %s -c \"%s setup --chorus_path=%s --data_path=%s\"" % (user, os.path.join(release_path, "packaging/setup/chorus_installer"), chorus_path, data_path))
 
 try:
+    signal.signal(signal.SIGINT, exit_gracefully)
     install()
 except Exception as e:
     print e

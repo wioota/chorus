@@ -31,11 +31,4 @@ def get_options(args):
         quit()
     return options, args[1]
 
-
-def get_version(chorus_path):
-    version = ""
-    with open(os.path.join(chorus_path, "version_build"), "r") as f:
-        version = f.read().strip()
-    return version
-
 options, arg = get_options(sys.argv)
