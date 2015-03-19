@@ -13,6 +13,9 @@ Chorus::Application.routes.draw do
     resource :dashboard_config, :only => [:show, :create], :controller => :user_dashboards
   end
 
+  # Roles, groups and permissions routes
+  resources :roles
+
   resources :hdfs_data_sources, :only => [:create, :index, :show, :update, :destroy] do
     scope :module => 'hdfs' do
       resources :files, :only => [:show, :index] do
