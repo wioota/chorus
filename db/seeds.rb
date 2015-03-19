@@ -19,6 +19,8 @@ end
 
 Sunspot.session = BlackholeSession.new
 
+# --- USERS ---
+
 unless User.where(:username => "chorusadmin").present?
   puts "Creating chorusadmin user..."
   user = User.new(
@@ -32,3 +34,64 @@ unless User.where(:username => "chorusadmin").present?
   user.admin = true
   user.save!
 end
+
+dev1 = User.create(
+    :username => "developer1",
+    :first_name => "Dev",
+    :last_name => "1",
+    :email => "dev1@example.com",
+    :password => "secret",
+    :password_confirmation => "secret"
+)
+
+dev2 = User.create(
+    :username => "developer2",
+    :firstname => "Dev",
+    :lastname => "2",
+    :email => "dev2@example.com",
+    :password => "secret",
+    :password_confirmation => "secret"
+)
+
+dev3 = User.create(
+    :username => "developer3",
+    :firstname => "Dev",
+    :lastname => "3",
+    :email => "dev3@example.com",
+    :password => "secret",
+    :password_confirmation => "secret"
+)
+
+data1 = User.create(
+    :username => "datascientist1",
+    :first_name => "Data",
+    :last_name => "Scientist",
+    :email => "data1@example.com",
+    :password => "secret",
+    :password_confirmation => "secret"
+)
+
+data2 = User.create(
+    :username => "datascientist2",
+    :first_name => "Data",
+    :last_name => "Scientist",
+    :email => "data2@example.com",
+    :password => "secret",
+    :password_confirmation => "secret"
+)
+
+
+# --- ROLES---
+
+dev_role = Role.create(
+    :name => "Developer",
+    :descroption => "Developer role"
+)
+dev_role.users << [dev1, dev2, dev3]
+
+data_scientist_role = Role.create(
+    :name => "Data Scientist",
+    :description => "Data scientist role"
+)
+data_scientist_role.users << [data1, data2]
+
