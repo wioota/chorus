@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Session do
+  before(:each) do
+    stub(LdapClient).enabled? { false } # We should have a separate test config to avoid stuff like this
+  end
   describe "create" do
     it "sets session_id" do
       user = users(:default)
@@ -49,7 +52,7 @@ describe Session do
         stub(LdapClient).authenticate(user.username, 'a_password') { false }
 
         session = Session.new(:username => user.username, :password => 'a_password')
-        session.should have_error_on(:username_or_password).with_message(:invalid)
+        session.should have_error_on(:username_or_password)
       end
 
       context "admin logging in" do

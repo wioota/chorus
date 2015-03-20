@@ -11,6 +11,7 @@ describe Alpine::API do
   subject { Alpine::API.new config: config, user: user }
 
   before do
+    stub(LdapClient).enabled? { false } # We should have a separate test config to avoid stuff like this
     stub(License.instance).workflow_enabled? { true }
     stub(config).workflow_url { alpine_base_uri }
   end

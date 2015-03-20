@@ -82,7 +82,11 @@ chorus.handlebarsHelpers.template = {
             zones: chorus.models.Config.instance().get("timeZones")
         });
     },
-
+    
+    generalDataSourceFields: function (values) {
+        return Handlebars.helpers.renderTemplate("data_sources/general_data_source_fields", values || {});
+    },
+    
     dbDataSourceFields: function(context) {
         return Handlebars.helpers.renderTemplate("data_sources/db_data_source_fields", context || {});
     },

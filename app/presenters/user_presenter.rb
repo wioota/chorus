@@ -8,7 +8,9 @@ class UserPresenter < Presenter
         :last_name => model.last_name,
         :image => present(model.image),
         :entity_type => model.entity_type_name,
-        :is_deleted => model.deleted?
+        :is_deleted => model.deleted?,
+        :auth_method => model.auth_method,
+        :ldap_group_id => model.ldap_group_id
     }
     unless rendering_activities? || succinct?
       results.merge!(

@@ -1,0 +1,46 @@
+# LDAP Settings for open source LDAP (v3) server (Apache DS)
+
+# Set this property to true to enable LDAP authentication. Default is false.
+ldap.enable = false
+
+# Host and port for accessing LDAP server.
+ldap.host = localhost
+ldap.port = 389
+
+# Set this property to use Transport Level Security (TLS) for accessing LDAP server. Default is false.
+ldap.start_tls = false
+
+#LDAP root for search and query
+ldap.base = DC=www,DC=example,DC=com
+
+# username and password used for binding to LDAP server
+ldap.bind.username = uid=admin,ou=system
+ldap.bind.password = q2W#e4R%
+
+#-----  Uncomment all three of the following properties to enable group membership authentication ------#
+# Note that all three entries must either be commented or uncommented
+
+# List of LDAP group names that are used for verifying group membership.
+# NOTE: For release 5.3, only one group is supported.
+# ldap.group.names = exampleGroup
+
+# Search base for looking up members in the groups above.
+#ldap.group.search_base = DC=www,DC=example,DC=com
+
+# Group Filter for Active Directory. This will work open-source LDAP(v3) compatible servers.
+
+#ldap.group.filter = (member={0})
+#------------------------------------------------------------------------------------------#
+
+# Search base for user authentication
+ldap.user.search_base = OU=CorpUsers,DC=www,DC=example,DC=com
+#Search filter for user authentication. This will work open-source LDAP(v3) compatible servers.
+ldap.user.filter = (uid={0})
+
+# Mappings of Chorus user properties to LDAP user attributes.
+ldap.attribute.uid = uid
+ldap.attribute.ou = department
+ldap.attribute.gn = givenName
+ldap.attribute.sn = sn
+ldap.attribute.mail = mail
+ldap.attribute.title = title
