@@ -411,11 +411,13 @@ class ChorusSetup:
         self.link_current_to_release("current", self.release_path)
 
         if self.is_alpine_exits():
+            default = "yes"
             msg = "Do you want to extract alpine?"
             if os.path.exists(self.alpine_release_path):
                 msg = "%s already exists in your machine, do you want to overwrite it?" % \
                         os.path.basename(self.alpine_release_path.rstrip("/"))
-            if io.require_confirmation(msg, default="no"):
+                default = "no"
+            if io.require_confirmation(msg, default):
                 logger.info("Configuring alpine...")
                 self.configure_alpine()
                 self.link_current_to_release("alpine-current", self.alpine_release_path)
