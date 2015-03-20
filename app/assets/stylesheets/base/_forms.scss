@@ -1,11 +1,78 @@
+/* general rules for forms in the application */
+
+
 @import "_common";
 @import "compass/css3/border-radius";
+@import "_button_common";
 
-/* general rules for forms in the application */
+
 
 /* widget displaying "* = required" */
 .legend_for_required {
-    margin-top: 15px;
-    font-size: $small-font;
-    color: #707070;
+  position: relative;
+  top: 10px;
+  /* margin-top: 15px; */
+  font-size: $small-font;
+  color: #707070;
+}
+
+/* grouping of options in form */
+fieldset {
+  margin: 0 0 0 0;
+  padding: 5px 10px 5px 10px;
+
+  @include border-radius(2px);
+
+  legend {
+    font-weight: $semibold;
+    font-size: $medium-font;
+  }
+}
+
+.form_row {
+  line-height: 30px;
+  vertical-align: middle;
+}
+
+
+.row {
+  &:first-child {
+    margin-top: -5px;
+  }
+}
+
+/* section of buttons at bottom of form */
+
+// TODO needs to distinguish FORM PAGE from FORM DIALOG
+.form_controls {
+  // make padding account for the margin applied to buttons
+  // so that buttons are aligned with overall margins
+  padding-right: $dialog-padding - $button-margin-x;
+  padding-left:  $dialog-padding - $button-margin-x;
+
+  button {
+    float: right;
+    margin-right: $button-margin-x;
+  }
+
+  label {
+    line-height: $button-height;
+  }
+
+  @include after-clearfix;
+}
+
+.girdle {
+  label {
+    margin-top: 8px;
+    margin-bottom: 1px;
+  }
+}
+
+.form_pair {
+
+  /* default for all form labels = label on line above form element */
+  label {
+    display: block;
+  }
 }

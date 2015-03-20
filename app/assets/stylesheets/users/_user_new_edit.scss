@@ -11,7 +11,8 @@
         position: relative;
     }
 
-    .edit_photo {
+
+    .profile_image {
         width: 180px;
         float: left;
 
@@ -67,8 +68,8 @@
 
         &.checkbox-label {
             display: inline-block;
-            line-height: 42px;
-            height: 42px;
+            line-height:30px;
+            height: 30px;
             vertical-align: middle;
             margin-left: 3px;
         }
