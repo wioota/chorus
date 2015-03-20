@@ -87,6 +87,7 @@ FixtureBuilder.configure do |fbuilder|
 
     #Roles, Groups, and Permissions
     role = FactoryGirl.create(:role)
+    group = FactoryGirl.create(:group)
 
     #Data Sources
     gpdb_data_source = FactoryGirl.create(:gpdb_data_source, :name => "searchquery", :description => "Just for searchquery and greenplumsearch", :host => "non.legit.example.com", :port => "5432", :db_name => "postgres", :owner => admin)
