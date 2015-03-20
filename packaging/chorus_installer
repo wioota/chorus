@@ -67,12 +67,12 @@ def install():
     ret, stdout, stderr = run("mkdir -p %s && cp -rf %s %s" % (release_path, installation_path, release_path))
     if ret != 0:
         raise Exception("[ERROR] " + stderr)
-    output("."*60 + "[Done]")
+    print "."*60 + "[Done]"
     output("change %s's owner to %s..." % (chorus_path, user))
     ret, stdout, stderr = run("chown -R %s:%s %s && chown -R %s:%s %s" % (user, user, chorus_path, user, user, data_path))
     if ret != 0:
         raise Exception("[ERROR] " + stderr)
-    output("."*60 + "[Done]")
+    print "."*60 + "[Done]"
     _s = ""
     if silent:
         _s = "-s"
