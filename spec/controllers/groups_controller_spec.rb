@@ -19,7 +19,7 @@ describe GroupsController do
       response.code.should == "200"
     end
 
-    it "returns a list of roles" do
+    it "returns a list of groups" do
       response.decoded_body.length.should == Group.count
     end
   end
@@ -37,7 +37,7 @@ describe GroupsController do
 
     it_behaves_like "an action that requires authentication", :post, :create
 
-    it "should create a role" do
+    it "should create a group" do
       Group.find_by_name(params[:name]).should be_present
     end
   end
@@ -50,19 +50,19 @@ describe GroupsController do
 
   describe '#show' do
 
-    it "succeeds when the role exists" do
+    it "succeeds when the group exists" do
       get :show, :id => a_group.id
       response.should be_success
     end
 
-    it "finds the right role" do
+    it "finds the right group" do
       get :show, :id => a_group.id
       response.decoded_body.id.should == a_group.id
       response.decoded_body.name.should == a_group.name
       response.decoded_body.description.should == a_group.description
     end
 
-    it "fails when the role doesn't exist" do
+    it "fails when the group doesn't exist" do
       get :show, :id => 'garbage_id'
       response.should be_not_found
     end
@@ -94,8 +94,8 @@ describe GroupsController do
   describe '#destroy' do
     let (:new_group) { FactoryGirl.create(:group, :name => "destory me!") }
 
-    it "destroys the role given the proepr id" do
-      old_count = Role.count
+    it "destroys the group given the proper id" do
+      old_count = Group.count
       new_group
 
       Group.count.should == old_count + 1
