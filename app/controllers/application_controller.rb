@@ -34,6 +34,10 @@ class ApplicationController < ActionController::Base
   rescue_from 'SearchExtensions::SolrUnreachable', :with => :render_solr_unreachable_error
   rescue_from 'ModelMap::UnknownEntityType', :with => :render_unprocessable_entity
   rescue_from 'DataSourceConnection::InvalidCredentials', :with => :render_forbidden
+  rescue_from 'Net::LDAP::LdapError', :with => :render_service_unavailable_error
+  rescue_from 'LdapClient::LdapNotCorrectlyConfigured', :with => :render_service_unavailable_error
+  rescue_from 'LdapClient::LdapCouldNotBindWithUser', :with => :render_service_unavailable_error
+  rescue_from 'LdapClient::LdapSSLError', :with => :render_service_unavailable_error
 
   helper_method :current_user
 
@@ -105,6 +109,10 @@ class ApplicationController < ActionController::Base
 
   def render_solr_unreachable_error(e)
     present_errors({:service => :SOLR_UNREACHABLE}, :status => :service_unavailable)
+  end
+
+  def render_service_unavailable_error(e)
+    present_errors({ :message => e.message }, :status => :service_unavailable )
   end
 
   def render_not_found(e)

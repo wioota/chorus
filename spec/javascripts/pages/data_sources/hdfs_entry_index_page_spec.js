@@ -37,8 +37,6 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         });
 
         it("has some breadcrumbs", function() {
-            // expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-            // expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
 
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/data_sources");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.data_sources");

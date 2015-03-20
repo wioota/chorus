@@ -44,11 +44,11 @@ class Workfile < ActiveRecord::Base
       cache_key = "workspace:workfiles/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
       Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with cache key = #{cache_key} --"
       Rails.cache.delete(cache_key)
-      #Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
-      if self.latest_workfile_version != nil
-        Chorus.log_debug "-- BEFORE SAVE: Clearing cache for WorkfileVersion with ID = #{self.latest_workfile_version.id} --"
-        self.latest_workfile_version.delete_cache
-      end
+      # Fix for DEV-8648. Creating a SQL workfile takes a long time. We are not caching workfileVersion objects so there is no need for deleting cache.
+      #if self.latest_workfile_version != nil
+      #  Chorus.log_debug "-- BEFORE SAVE: Clearing cache for WorkfileVersion with ID = #{self.latest_workfile_version.id} --"
+      #  self.latest_workfile_version.delete_cache
+      #end
     end
     return true
   end

@@ -91,9 +91,6 @@ describe("chorus.pages.DatasetShowPage", function () {
 
                 expect(breadcrumbs.length).toBe(4);
 
-//                 expect(breadcrumbs.eq(0).attr("href")).toBe("#/");
-//                 expect(breadcrumbs.eq(0).text()).toBe(t("breadcrumbs.home"));
-
                 expect(breadcrumbs.eq(0).attr("href")).toBe("#/data_sources");
                 expect(breadcrumbs.eq(0).text()).toBe(t("breadcrumbs.data_sources"));
 
@@ -120,9 +117,6 @@ describe("chorus.pages.DatasetShowPage", function () {
                 it("shows everything but the database breadcrumbs", function() {
                     var breadcrumbs = this.page.$("#breadcrumbs .breadcrumb a");
                     expect(breadcrumbs.length).toBe(3);
-
-//                     expect(breadcrumbs.eq(0).attr("href")).toBe("#/");
-//                     expect(breadcrumbs.eq(0).text()).toBe(t("breadcrumbs.home"));
 
                     expect(breadcrumbs.eq(0).attr("href")).toBe("#/data_sources");
                     expect(breadcrumbs.eq(0).text()).toBe(t("breadcrumbs.data_sources"));

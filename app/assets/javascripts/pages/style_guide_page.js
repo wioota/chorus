@@ -504,7 +504,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Breadcrumbs": new chorus.views.BreadcrumbsView({
                 breadcrumbs: [
-                    { label: t("breadcrumbs.home"), url: "#/" },
+                    { label: "Example Home", url: "#/" },
                     { label: t("breadcrumbs.users"), url: "#/users" },
                     { label: t("breadcrumbs.new_user") }
                 ]

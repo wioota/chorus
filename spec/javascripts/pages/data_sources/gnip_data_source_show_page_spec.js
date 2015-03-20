@@ -11,8 +11,6 @@ describe("chorus.pages.GnipDataSourceShowPage", function() {
         });
 
         it("displays the breadcrumbs", function() {
-            // expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-            // expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toBe(t("breadcrumbs.home"));
 
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/data_sources");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toBe(t("breadcrumbs.data_sources"));

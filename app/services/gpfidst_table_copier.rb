@@ -128,12 +128,12 @@ class GpfdistTableCopier < TableCopier
 
   def create_write_pipe_sql
     "CREATE WRITABLE EXTERNAL TEMPORARY TABLE #{write_pipe_name} (#{table_definition})
-     LOCATION ('#{gpfdist_protocol}://#{gpfdist_url}:#{gpfdist_write_port}/#{pipe_name}') FORMAT 'TEXT'"
+     LOCATION ('#{gpfdist_protocol}://#{gpfdist_url}:#{gpfdist_write_port}/#{pipe_name}') FORMAT 'TEXT' ENCODING '#{source_dataset.data_source.connection.encoding}'"
   end
 
   def create_read_pipe_sql
     "CREATE EXTERNAL TEMPORARY TABLE #{read_pipe_name} (#{table_definition})
-     LOCATION ('#{gpfdist_protocol}://#{gpfdist_url}:#{gpfdist_read_port}/#{pipe_name}') FORMAT 'TEXT'"
+     LOCATION ('#{gpfdist_protocol}://#{gpfdist_url}:#{gpfdist_read_port}/#{pipe_name}') FORMAT 'TEXT' ENCODING '#{source_dataset.data_source.connection.encoding}'"
   end
 
   def gpfdist_data_dir
