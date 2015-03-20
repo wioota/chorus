@@ -38,6 +38,9 @@ def run(command):
     stdout, stderr = p.communicate()
     return p.returncode, stdout, stderr
 
+def output(msg):
+    print "INFO : " + msg
+
 def install():
     if not prompt_for_eula():
         print "install aborted, Cancelled by user"
@@ -48,25 +51,32 @@ def install():
         raise Exception("[ERROR] " + stderr)
     chorus_path = io.prompt("Please enter the full path to the Chorus installation directory[default: /usr/local/chorus]", default="/usr/local/chorus")
     data_path = io.prompt("Please enter the full path to the Chorus data directory (recommended 500GB)[default:/data/chorus]", default="/data/chorus")
-    print "creating chorus path"
-    run("mkdir -p %s" % chorus_path)
-    print "creating chorus data path"
-    run("mkdir -p %s" % data_path)
+    output("Puting chorus to chorus and data path...")
+    ret, stdout, stderr = run("mkdir -p %s && mkdir -p" % (chorus_path, data_path))
+    if ret != 0:
+        raise Exception("[ERROR] " + stderr)
     installation_path = os.path.join(os.path.dirname(__file__), "..")
     version = ""
     with open(os.path.join(installation_path, "version_build"), "r") as f:
         version = f.read().strip()
 
-    run("cp -rf %s %s" % (os.path.join(installation_path, "version_build"), chorus_path))
+    ret, stdout, stderr = run("cp -rf %s %s" % (os.path.join(installation_path, "version_build"), chorus_path))
+    if ret != 0:
+        raise Exception("[ERROR] " + stderr)
     release_path = os.path.join(chorus_path, "releases/%s" % version)
-    print "creating release path"
-    run("mkdir -p %s" % release_path)
-    print "copying chorus to %s" % release_path
-    run("cp -rf %s %s" % (installation_path, release_path))
-    print "change %s's owner to %s" % (chorus_path, user)
-    run("chown -R %s:%s %s" % (user, user, chorus_path))
-    run("chown -R %s:%s %s" % (user, user, data_path))
-    os.system("su - %s -c \"%s setup --chorus_path=%s --data_path=%s\"" % (user, os.path.join(release_path, "packaging/setup/chorus_server"), chorus_path, data_path))
+    ret, stdout, stderr = run("mkdir -p %s && cp -rf %s %s" % (release_path, installation_path, release_path))
+    if ret != 0:
+        raise Exception("[ERROR] " + stderr)
+    output("."*60 + "[Done]")
+    output("change %s's owner to %s..." % (chorus_path, user))
+    ret, stdout, stderr = run("chown -R %s:%s %s && chown -R %s:%s %s" % (user, user, chorus_path, user, user, data_path))
+    if ret != 0:
+        raise Exception("[ERROR] " + stderr)
+    output("."*60 + "[Done]")
+    _s = ""
+    if silent:
+        _s = "-s"
+    os.system("su - %s -c \"%s setup %s --chorus_path=%s --data_path=%s\"" % (user, os.path.join(release_path, "packaging/setup/chorus_server"), _s, chorus_path, data_path))
 
 try:
     signal.signal(signal.SIGINT, exit_gracefully)

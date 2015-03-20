@@ -63,13 +63,13 @@ class ChorusExecutor:
         self.previous_chorus_control("stop")
         #self.run("killall chorus")
     def start_postgres(self):
-        logger.info("Starting postgres...")
+        logger.debug("Starting postgres...")
         ret, stdout, stderr = self.chorus_control("start postgres")
         if "postgres failed" in stdout:
             raise PSQLException(stdout)
 
     def stop_postgres(self):
-        logger.info("Stopping postgres")
+        logger.debug("Stopping postgres")
         ret, stdout, stderr = self.chorus_control("stop postgres")
         if "postgres failed" in stdout:
             raise PSQLException(stdout)

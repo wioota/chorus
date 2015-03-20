@@ -31,6 +31,8 @@ fi\n"
 
 failover_file = os.path.join(options.chorus_path, ".failover")
 upgrade = not os.path.exists(failover_file) \
+        and os.path.exists(os.path.join(options.chorus_path, "shared"))\
+        and os.listdir(os.path.join(options.chorus_path, "shared")) != []\
         and os.path.exists(os.path.join(options.data_path, "db")) \
         and os.listdir(os.path.join(options.data_path, "db")) != []
 def failover():
@@ -40,6 +42,10 @@ def failover():
                 f.write("failover")
         except IOError:
             pass
+
+def done():
+    print "." * 60 + "[Done]"
+
 class ChorusSetup:
     """
     chorus installer
@@ -57,7 +63,7 @@ class ChorusSetup:
         self.shared = os.path.join(options.chorus_path, "shared")
 
     def construct_shared_structure(self):
-        logger.info("construct shared structure in %s" % self.shared)
+        logger.debug("Construct shared structure in %s" % self.shared)
         self._mkdir_p(self.shared)
         self._mkdir_p(os.path.join(self.shared, "demo_data"))
         self._mkdir_p(os.path.join(self.shared, "libraries"))
@@ -86,12 +92,12 @@ class ChorusSetup:
         os.chmod(os.path.join(self.shared, "ldap.properties"), 0600)
 
     def construct_data_structure(self):
-        logger.info("construct data structure in %s" % options.data_path)
+        logger.debug("Construct data structure in %s" % options.data_path)
         for folder in ["db","system","log","solr/data"]:
             executor.run("mkdir -p %s" % os.path.join(options.data_path, folder))
 
     def link_shared_config(self):
-        logger.info("Linking shared configuration files to %s/config" % self.release_path)
+        logger.debug("Linking shared configuration files to %s/config" % self.release_path)
         self._ln_sf(os.path.join(self.shared, "chorus.properties"), \
                    os.path.join(self.release_path, "config/chorus.properties"))
         self._ln_sf(os.path.join(self.shared, "chorus.license"), \
@@ -106,7 +112,7 @@ class ChorusSetup:
                    os.path.join(self.release_path, "demo_data"))
 
     def link_data_folder(self):
-        logger.info("Linking data folders to %s" % options.data_path)
+        logger.debug("Linking data folders to %s" % options.data_path)
         os.chmod(os.path.join(options.data_path, "db"), 0700)
         self._ln_sf(os.path.join(options.data_path, "db"), \
                    os.path.join(self.shared, "db"))
@@ -127,7 +133,7 @@ class ChorusSetup:
                    os.path.join(self.release_path, "tmp"))
         self._ln_sf(os.path.join(self.shared, "system"), \
                    os.path.join(self.release_path, "system"))
-        logger.info("Linking nginx logs to %s/vendor/nginx/nginx_dist/nginx_data/logs" % self.release_path)
+        logger.debug("Linking nginx logs to %s/vendor/nginx/nginx_dist/nginx_data/logs" % self.release_path)
         self._mkdir_p(os.path.join(self.shared, "log/nginx"))
         self._ln_sf(os.path.join(self.shared, "log/nginx"), \
                    os.path.join(self.release_path, "vendor/nginx/nginx_dist/nginx_data/logs"))
@@ -139,7 +145,7 @@ class ChorusSetup:
         executor.run("chmod -R 0555 %s", os.path.join(self.release_path, "public"))
 
     def extract_postgres(self):
-        logger.info("extract postgres database to %s", self.release_path)
+        logger.debug("Extract postgres database to %s", self.release_path)
         os_name, version, release = platform.linux_distribution()
         if os_name.lower() in ["redhad", "centos"]  and version.startswith("5"):
             executor.extract_postgres("postgres-redhat5.5-9.2.4.tar.gz")
@@ -210,14 +216,15 @@ class ChorusSetup:
                 f.write(secret_key)
         else:
             logger.debug(key_file + " already existed, skipped")
-
-        logger.info("Secure " + key_file)
+        logger.info("Configuring secret key...")
+        logger.debug("Secure " + key_file)
         os.chmod(key_file, 0600)
         symbolic = os.path.join(self.release_path, "config/secret.key")
         logger.debug("Create symbolic to " + symbolic)
         if os.path.lexists(symbolic):
             os.remove(symbolic)
         os.symlink(key_file, symbolic)
+        done()
 
     def configure_secret_token(self):
         token_file_path = os.path.join(options.chorus_path, "shared")
@@ -228,13 +235,15 @@ class ChorusSetup:
                 f.write(os.urandom(64).encode('hex'))
         else:
             logger.debug(token_file + " already existed, skipped")
-        logger.info("Secure " + token_file)
+        logger.info("Configuring secret key...")
+        logger.debug("Secure " + token_file)
         os.chmod(token_file, 0600)
         symbolic = os.path.join(self.release_path, "config/secret.token")
         logger.debug("Create symbolic to " + symbolic)
         if os.path.lexists(symbolic):
             os.remove(symbolic)
         os.symlink(token_file, symbolic)
+        done()
 
     def generate_paths_file(self):
         file_path = os.path.join(options.chorus_path, "chorus_path.sh")
@@ -296,7 +305,7 @@ class ChorusSetup:
             f.write(content)
 
     def setup_database(self):
-        logger.info("Initializing database...")
+        logger.debug("Initializing database...")
         pwfile = os.path.join(self.release_path, "postgres/pwfile")
         if os.path.exists(pwfile):
             os.chmod(pwfile, 0600)
@@ -308,16 +317,16 @@ class ChorusSetup:
         db_commands = "db:create db:migrate"
         db_commands += " db:seed"
         db_commands += " enqueue:refresh_and_reindex"
-        logger.info("Running rake " + db_commands)
+        logger.debug("Running rake " + db_commands)
         executor.rake(db_commands)
         executor.stop_postgres()
 
     def upgrade_database(self):
         executor.start_postgres()
-        logger.info("Running database migrations...")
+        logger.debug("Running database migrations...")
         db_commands = "db:migrate"
         db_commands += " enqueue:refresh_and_reindex"
-        logger.info("Running rake " + db_commands)
+        logger.debug("Running rake " + db_commands)
         executor.rake(db_commands)
         executor.stop_postgres()
 
@@ -326,7 +335,7 @@ class ChorusSetup:
         executor.rake("validations:data_source")
 
     def stop_previous_release(self):
-        logger.info("Stopping Chorus...")
+        logger.debug("Shutting down previous Chorus install...")
         executor.stop_previous_release()
 
     def is_alpine_exits(self):
@@ -342,9 +351,8 @@ class ChorusSetup:
             return True
 
     def configure_alpine(self):
-        logger.info("Extracting %s to %s" % (self.alpine_installer, self.alpine_release_path))
+        logger.debug("Extracting %s to %s" % (self.alpine_installer, self.alpine_release_path))
         executor.run("sh %s --target %s --noexec" % (self.alpine_installer, self.alpine_release_path))
-        logger.info("Configuring alpine")
         logger.debug("Preparing Alpine Data Repository")
         alpine_data_repo = os.path.join(options.chorus_path, "shared/ALPINE_DATA_REPOSITORY")
         if os.path.exists(alpine_data_repo):
@@ -359,7 +367,7 @@ class ChorusSetup:
         os.symlink(rel_path, current)
 
     def source_chorus_path(self):
-        logger.info("source %s/chorus_path.sh" % options.chorus_path)
+        logger.debug("source %s/chorus_path.sh" % options.chorus_path)
         with open(os.path.join(os.path.expanduser("~"), ".bash_profile"), "a") as f:
             f.write("source %s/chorus_path.sh\n" % options.chorus_path)
 
@@ -374,41 +382,43 @@ class ChorusSetup:
         #self.prompt_for_eula()
 
         #pre step:
+        logger.info("Construct Chorus Directory...")
         self.construct_shared_structure()
         self.construct_data_structure()
         self.link_shared_config()
         self.link_data_folder()
         self.extract_postgres()
+        self.generate_paths_file()
+        done()
 
-        logger.info("Configuring secret key...")
         self.configure_secret_key()
-
-        logger.info("Configuring secret token...")
         self.configure_secret_token()
 
-        self.generate_paths_file()
         if upgrade:
-            logger.info("Updaing database...")
+            logger.info("Updaing postgres database...")
             self.validate_data_sources()
-            logger.info("Shutting down previous Chorus install...")
             self.stop_previous_release()
             self.upgrade_database()
         else:
-            logger.info("Creating database...")
+            logger.info("Creating postgres database...")
             self.create_database_config()
             self.generate_chorus_psql_files()
             self.generate_chorus_rails_console_file()
             self.setup_database()
+        done()
             #self.enqueue_solr_reindex()
         self.link_current_to_release("current", self.release_path)
+
         if self.is_alpine_exits():
             msg = "Do you want to extract alpine?"
             if os.path.exists(self.alpine_release_path):
                 msg = "%s already exists in your machine, do you want to overwrite it?" % \
                         os.path.basename(self.alpine_release_path.rstrip("/"))
-            if io.require_confirmation(msg):
+            if io.require_confirmation(msg, default="no"):
+                logger.info("Configuring alpine...")
                 self.configure_alpine()
                 self.link_current_to_release("alpine-current", self.alpine_release_path)
+                done()
         #self.source_chorus_path()
         if io.require_confirmation("Do you want to change default configure?", default="no"):
             configure.config()

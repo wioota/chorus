@@ -1,4 +1,4 @@
-import os, getpass
+import os, sys, getpass
 import logging
 from options import options
 
