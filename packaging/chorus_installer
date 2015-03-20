@@ -3,6 +3,7 @@ import os
 import sys
 import subprocess
 import signal
+import shutil
 from setup import installer_io
 
 silent = False
@@ -64,6 +65,8 @@ def install():
     if ret != 0:
         raise Exception("[ERROR] " + stderr)
     release_path = os.path.join(chorus_path, "releases/%s" % version)
+    if os.path.exists(release_path):
+        shutil.rmtree(release_path)
     ret, stdout, stderr = run("mkdir -p %s && cp -rf %s %s" % (release_path, installation_path, release_path))
     if ret != 0:
         raise Exception("[ERROR] " + stderr)
