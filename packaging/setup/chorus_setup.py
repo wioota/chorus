@@ -431,9 +431,9 @@ class ChorusSetup:
             print "Confirm custom configuration settings as directed in the upgrade guide before restarting Chorus."
         print "*" * 60
         print "To start Chorus, run the following commands:"
-        print "su - %s" % pwd.getpwuid(os.getuid()).pw_name
-        print "source %s/chorus_path.sh" % options.chorus_path
-        print "and run chorus_control.sh start"
+        print "\"su - %s\"" % pwd.getpwuid(os.getuid()).pw_name
+        print "\"source %s/chorus_path.sh\"" % options.chorus_path
+        print "and run \"chorus_control.sh start\""
         print "*" * 60
 
 chorus_set = ChorusSetup()

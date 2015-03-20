@@ -96,6 +96,8 @@ class Configure:
                 continue
             else:
                 break
-        logger.info("Run \"chorus_control.sh restart\" to affect the change of configuration.")
+        print "*" * 60
+        print "Run \"chorus_control.sh restart\" to affect the change of configuration."
+        print "*" * 60
 
 configure = Configure()

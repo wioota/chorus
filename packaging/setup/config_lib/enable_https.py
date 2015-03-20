@@ -3,7 +3,7 @@ import sys
 import re
 sys.path.append("..")
 def enable_https():
-    from installer_io import InstallIO
+    from installer_io import InstallerIO
     from chorus_executor import ChorusExecutor
     from options import options
     from log import logger
