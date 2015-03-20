@@ -236,7 +236,7 @@ class ChorusSetup:
                 f.write(os.urandom(64).encode('hex'))
         else:
             logger.debug(token_file + " already existed, skipped")
-        logger.info("Configuring secret key...")
+        logger.info("Configuring secret token...")
         logger.debug("Secure " + token_file)
         os.chmod(token_file, 0600)
         symbolic = os.path.join(self.release_path, "config/secret.token")
