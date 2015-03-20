@@ -71,7 +71,7 @@ def install():
     data_path = io.prompt("Please enter the full path to the Chorus data directory (recommended 500GB)[default:/data/chorus]", default="/data/chorus")
     installation_path = os.path.join(os.path.dirname(__file__), "..")
 
-	version = ""
+    version = ""
     with open(os.path.join(installation_path, "version_build"), "r") as f:
         version = f.read().strip()
     pre_version = detect_pre_version(chorus_path)
