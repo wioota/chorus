@@ -1,5 +1,6 @@
 import os
 import re
+import pkgutil
 import inspect
 import config_lib
 from options import options
@@ -83,7 +84,6 @@ class Configure:
             return
 
         self.method = self._load_configure_func()
-        print self.method
         while True:
             lens = len(self.method) + 1
             menu = "\n".join(str(e) + ". " + self.method[e][0] for e in self.method.keys()) + "\n%d. exit\n" % lens

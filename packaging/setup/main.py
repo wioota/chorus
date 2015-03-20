@@ -1,8 +1,8 @@
 import sys
 import signal
-from options import arg, options
+from options import arg, health_args, options
 from chorus_setup import chorus_set, failover
-from health_check import health_check
+from health_check import health_check, hard_require
 from configure import configure
 from log import logger
 import traceback
@@ -14,8 +14,12 @@ def exit_gracefully(signum, frame):
     sys.exit(1)
 def main():
     try:
+        hard_require()
         signal.signal(signal.SIGINT, exit_gracefully)
-        handler[arg]()
+        if arg == "health_check":
+            handler[arg](" ".join(health_args))
+        else:
+            handler[arg]()
     except Exception as e:
         logger.error(e)
         logger.error("Exception Occured, see %s/install.log for details" % options.chorus_path.rstrip("/"))

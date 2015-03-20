@@ -405,7 +405,7 @@ class ChorusSetup:
             msg = "Do you want to extract alpine?"
             if os.path.exists(self.alpine_release_path):
                 msg = "%s already exists in your machine, do you want to overwrite it?" % \
-                        os.path.basename(self.alpine_release_path.rstrip("/") + "/")
+                        os.path.basename(self.alpine_release_path.rstrip("/"))
             if io.require_confirmation(msg):
                 self.configure_alpine()
                 self.link_current_to_release("alpine-current", self.alpine_release_path)
@@ -419,7 +419,7 @@ class ChorusSetup:
         print "*" * 60
         print "To start Chorus, run the following commands:"
         print "source %s/chorus_path.sh" % options.chorus_path
-        print "chorus_control.sh start"
+        print "and run chorus_control.sh start"
         print "*" * 60
 
 chorus_set = ChorusSetup()

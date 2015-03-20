@@ -5,6 +5,7 @@ def get_options(args):
             + "Commands:\n"\
             + "  setup:\t\tsetup the chorus and alpine if exist\n" \
             + "  health_check:\t\tcheck the system health for chorus and alpine\n" \
+            + "  \t\t\trun \"%prog health_check help\" for more info of health check\n"\
             + "  configure:\t\tconfigure the chorus property and alpine property\n"
     parser = OptionParser(usage=usage)
 
@@ -19,7 +20,7 @@ def get_options(args):
     parser.add_option('-v', '--verbose', action="store_true", dest="verbose",
                       help="product debug output [default: %default]", default=False)
     options, args = parser.parse_args(args)
-    if len(args) != 2 or args[1] not in ["setup", "health_check", "configure"]:
+    if len(args) < 2 or args[1] not in ["setup", "health_check", "configure"]:
         print "please specify the command"
         parser.print_help()
         quit()
@@ -29,7 +30,7 @@ def get_options(args):
     elif not os.path.exists(options.data_path):
         print "[error] %s not exists" % options.data_path
         quit()
-    return options, args[1]
+    return options, args[1], args[2:]
 
 def get_version(chorus_path):
     version = ""
@@ -43,4 +44,4 @@ def get_version(chorus_path):
         quit()
     return version
 
-options, arg = get_options(sys.argv)
+options, arg, health_args = get_options(sys.argv)

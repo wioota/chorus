@@ -48,9 +48,9 @@ class ChorusExecutor:
                 (os.path.join(self.chorus_path, "current"), self.alpine_env(),\
                 os.path.join(self.chorus_path, "chorus_control.sh"), command)
         (ret, stdout, stderr) = self.run(command)
-       if ret != 0:
+        if ret != 0:
            raise Exception("chorus_constrol.sh command failed")
-       return (ret, stdout, stderr)
+        return (ret, stdout, stderr)
 
     def alpine_env(self):
         return "ALPINE_HOME=%s/alpine-current ALPINE_DATA_REPOSITORY=%s/shared/ALPINE_DATA_REPOSITORY" % \
