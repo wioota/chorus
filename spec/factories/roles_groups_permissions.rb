@@ -14,4 +14,9 @@ FactoryGirl.define do
     end
   end
 
+  factory :group do
+    name "group"
+    description "This is a generic group"
+  end
+
 end
