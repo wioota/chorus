@@ -52,7 +52,7 @@ def install():
     chorus_path = io.prompt("Please enter the full path to the Chorus installation directory[default: /usr/local/chorus]", default="/usr/local/chorus")
     data_path = io.prompt("Please enter the full path to the Chorus data directory (recommended 500GB)[default:/data/chorus]", default="/data/chorus")
     output("Puting chorus to chorus and data path...")
-    ret, stdout, stderr = run("mkdir -p %s && mkdir -p" % (chorus_path, data_path))
+    ret, stdout, stderr = run("mkdir -p %s && mkdir -p %s" % (chorus_path, data_path))
     if ret != 0:
         raise Exception("[ERROR] " + stderr)
     installation_path = os.path.join(os.path.dirname(__file__), "..")
