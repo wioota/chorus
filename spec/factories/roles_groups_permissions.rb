@@ -19,4 +19,12 @@ FactoryGirl.define do
     description "This is a generic group"
   end
 
+  factory :permission do
+    class_id -1
+    permissions_mask 1
+    after(:build) do |permission|
+      permission.role = create(:role, :name => "role for permission")
+    end
+  end
+
 end
