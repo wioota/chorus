@@ -10,7 +10,7 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
         "change input[name=kerberos]": 'toggleKerberos'
     },
 
-    formFields: ["name", "host", "port", "size", "dbName", "username", "groupList", "streamUrl", "password", "jobTrackerHost", "jobTrackerPort", "hdfsVersion", "hiveKerberos", "hiveKerberosPrincipal", "hiveKerberosKeytabLocation"],
+    formFields: ["name", "host", "port", "size", "dbName", "username", "groupList", "streamUrl", "password", "jobTrackerHost", "jobTrackerPort", "hdfsVersion", "hive", "hiveKerberos", "hiveKerberosPrincipal", "hiveKerberosKeytabLocation"],
 
     makeModel: function() {
         this.sourceModel = this.model;
@@ -62,11 +62,16 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
 
     toggleKerberos: function(e) {
         if(this.$('input[name=hiveKerberos]').length > 0) {
-            this.$('input[name=hiveKerberos]').prop('checked', this.model.get("hiveKerberos"));
+            if(this.model.get("hiveKerberos")) {
+                this.$('input[id=hiveKerberos_kerberos]').prop('checked', true);
+            }
+            else {
+                this.$('input[id=hiveKerberos_nonKerberos]').prop('checked', true);
+            }
             this.$('input[name=hiveKerberos]').prop('disabled', true);
         }
 
-        if (this.$('input[name=hiveKerberos]').prop('checked')) {
+        if (this.$('input[name=hiveKerberos]:checked').val() === 'true')  {
             this.$('[name=hiveKerberosPrincipal]').removeClass('hidden');
             this.$('[name=hiveKerberosKeytabLocation]').removeClass('hidden');
             this.$('[name=hiveKerberosPrincipal]').val(this.model.get('hiveKerberosPrincipal'));
@@ -102,6 +107,10 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
                 attrs[name] = input.val().trim();
             }
         }, this);
+
+        if(attrs.hive) {
+            attrs.hiveKerberos = this.$('input[id=hiveKerberos_kerberos]:checked').val() === 'true';
+        }
 
         attrs.highAvailability = !!this.$("input[name=high_availability]").prop("checked");
         attrs.ssl = !!this.$("input[name=ssl]").prop("checked");

@@ -71,8 +71,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
 
     toggleKerberos: function(e) {
         e && e.preventDefault();
-
-        if (this.$('input[name=hiveKerberos]').prop('checked')) {
+        if (this.$('input[name=hiveKerberos]:checked').val() === 'true') {
             this.$('[name=hiveKerberosPrincipal]').removeClass('hidden');
             this.$('[name=hiveKerberosKeytabLocation]').removeClass('hidden');
             this.$('[name=dbUsername]').addClass('hidden');
@@ -137,7 +136,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         updates.shared = !!inputSource.find("input[name=shared]").prop("checked");
         updates.highAvailability = !!inputSource.find("input[name=high_availability]").prop("checked");
         updates.connectionParameters = this.model.get('connectionParameters');
-        updates.hiveKerberos = !!inputSource.find("input[name=hiveKerberos]").prop("checked");
+        updates.hiveKerberos = inputSource.find("input[name=hiveKerberos]:checked").val() === 'true';
         if (updates.hiveKerberos) {
             updates.dbUsername = 'default';
             updates.dbPassword = 'default';

@@ -16,6 +16,7 @@ class SqlStreamer
     @connection = connection
     @target_is_greenplum = options[:target_is_greenplum]
     @show_headers = options[:show_headers] == false ? false : true
+    @username = Thread.current && Thread.current[:user] ? Thread.current[:user].username : ''
 
     @stream_options = {}
     @stream_options[:limit] = options[:row_limit] if options[:row_limit].to_i > 0
@@ -30,6 +31,7 @@ class SqlStreamer
 
     ClosableEnumerator.new(@cancelable_query) do |y|
       begin
+        @stream_options[:username] = @username
         @connection.stream_sql(@sql, @stream_options, @cancelable_query) do |row|
           no_results = false
 
