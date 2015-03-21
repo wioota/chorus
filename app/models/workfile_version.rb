@@ -13,7 +13,7 @@ class WorkfileVersion < ActiveRecord::Base
 
   before_save :fix_workfile_association, :on => :create
   # Fix for DEV-8648. Creating a SQL workfile takes a long time. We are not caching workfileVersion objects so there is no need for deleting cache.
-  #after_save :delete_cache
+  before_save :delete_cache
   before_validation :init_version_number, :on => :create
 
   after_save do
@@ -22,13 +22,14 @@ class WorkfileVersion < ActiveRecord::Base
   end
 
 
-  # def delete_cache
-  #   if self.id != nil && current_user != nil
-  #     Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with ID = #{self.id} --"
-  #     Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
-  #   end
-  #   return true
-  # end
+  def delete_cache
+     if self.id != nil && current_user != nil
+       cache_key = "workspace:workfiles/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
+       Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with cache key = #{cache_key} --"
+       Rails.cache.delete(cache_key)
+     end
+     return true
+  end
 
   after_validation :clean_content_errors
 
