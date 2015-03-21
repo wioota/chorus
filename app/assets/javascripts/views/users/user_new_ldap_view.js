@@ -75,8 +75,8 @@
 
         showLdapServerError: function(collection, response, options){
             var error_json = JSON.parse(response.responseText);
-            var alert = new chorus.alerts.Error({ body: error_json.errors.message, title: "LDAP configuration error" })
-            alert.launchModal()
+            var alert = new chorus.alerts.Error({ body: error_json.errors.message, title: "LDAP configuration error" });
+            alert.launchModal();
         },
 
         noLdapUserFound: function() {
