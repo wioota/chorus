@@ -4,32 +4,32 @@
 // Grand Old Colors
 /* basic color rules - DO NOT use these in component files, they should only be used in config sections! */
 $light-green:       #B3D988;
-$light-blue: #C4DCEB;
-$blue: #2c95dd;
-$green: #98B675;
-$gray-blue: #B2C7D6;
-$gray: #7D7D7D;
-$fiji-green: #4E7225;
-$fire-engine-red: #B5121B;
-$pumpkin: #f7771b;
+$light-blue:        #C4DCEB;
+$blue:              #2C95DD;
+$green:             #98B675;
+$gray-blue:         #B2C7D6;
+$gray:              #7D7D7D;
+$fiji-green:        #4E7225;
+$fire-engine-red:   #B5121B;
+$pumpkin:           #F7771B;
 
 // Brand New Colors
 // These colors were mapped to names via www.color-blindness.com/color-name-hue
-$pacific-blue:      rgb(0, 160, 229);
-$bright-turquoise:  rgb(21, 214, 203);
-$pattens-blue:      rgb(240, 245, 250);
+$pacific-blue:      rgb(0,  160, 229);   // #00A0E5
+$bright-turquoise:  rgb(21, 214, 203);   // #15D6CB
+$pattens-blue:      rgb(240, 245, 250);  // #F0F5FA
 $alice-blue:        rgb(240, 247, 254);
-$greyish-blue:      rgb(221, 236, 250);  /* #DDECFA latest version*/
-$greyish-blue-v2:   rgb(248, 251, 253);  /* #F8FBFD older version */
+$greyish-blue:      rgb(221, 236, 250);  // #DDECFA latest version
+$greyish-blue-v2:   rgb(248, 251, 253);  // #F8FBFD older version
 $light-sky-blue:    rgb(148, 215, 244);
-$bluer-lavender:    rgb(222,234,249);
+$bluer-lavender:    rgb(222, 234, 249);
 
-$bright-grey:       rgb(88, 89, 95);
+$bright-grey:       rgb(88, 89, 95);        // #58595F
 $greyish-yellow:    rgb(204, 204, 200);
 $light-grey-yellow: rgb(243, 243, 241);
-$light-gray:        rgb(234, 238, 241);
-$shadow-gray:		darken($light-gray, 11%);
-
+$light-gray-blue:   rgb(234, 238, 241);
+$light-gray:        rgb(234, 235, 236);
+$shadow-gray:		darken($light-gray, 21%);
 
 // neutral greys
 $neutral-light-grey: #E0E0E0;
@@ -43,12 +43,11 @@ $shadow-color:		rgba($shadow-gray, .7);
 
 
 // Tints & Shades of Brand Colors
-// Brand
-$brand: $pacific-blue;
-$brand-light: lighten($brand, 14%);
-$brand-tint: lighten($brand, 7%);
-$brand-shade: darken($brand, 7%);
-$brand-dark: darken($brand, 14%);
+$brand:         $pacific-blue;
+$brand-light:   lighten($brand, 14%);
+$brand-tint:    lighten($brand, 7%);
+$brand-shade:   darken($brand, 7%);
+$brand-dark:    darken($brand, 14%);
 
 $accent: $alice-blue;
 //$accent-light: unused;
@@ -58,72 +57,68 @@ $accent-shade: rgb(227, 241, 252);  /* #E3F1FC */
 //$accent-dark: unused;
 
 // Semantic colors AKA Messaging
-$ok: $fiji-green;
-$informational: $pacific-blue;
-$error: $fire-engine-red;
-$alert: $fire-engine-red;
-$needs-attention: $pumpkin;
+$ok:                $fiji-green;
+$informational:     $pacific-blue;
+$error:             $fire-engine-red;
+$alert:             $fire-engine-red;
+$needs-attention:   $pumpkin;
 
 
 // Background colors
-$list-hover-color: $accent;
-$list-checked-color: $accent-shade;
-$list-striping-color: $accent-tint;
-$body-background-color: #FFFFFF;
-$shaded-background-color: $light-gray;
+$list-hover-color:          $accent;
+$list-checked-color:        $accent-shade;
+$list-striping-color:       $accent-tint;
+$body-background-color:     #FFFFFF;
+$shaded-background-color:   $light-gray;
 $subheader-background-color: $pattens-blue;
-$dialog-header-background: $greyish-blue;
-$login-background: $bluer-lavender;
+$dialog-header-background:  $greyish-blue;
+$login-background:          $bluer-lavender;
 
 // Border colors
-$border-color: $light-gray;
-$border-color-dark: darken($border-color, 5%);
-$border-color-darkest: darken($border-color, 15%);
+$border-color:          $light-gray;
+$border-color-dark:     darken($border-color, 5%);
+$border-color-darkest:  darken($border-color, 15%);
 
 // Text colors
-$color-text1: darken($charcoal, 10%);
-$color-text2: $charcoal;
-$color-text3: lighten($charcoal, 10%);
-$color-text4: lighten($bright-grey, 20%);
-$link-color: $brand;
-$disabled-text: rgb(147, 154, 159);
-$caret-color: $light-sky-blue;
+$color-text1:   darken($charcoal, 10%);
+$color-text2:   $charcoal;
+$color-text3:   lighten($charcoal, 10%);
+$color-text4:   lighten($bright-grey, 20%);
+$link-color:    $brand;
+$disabled-text: rgb(147, 154, 159);  //#939799
+$caret-color:   $light-sky-blue;
 
 
 // ********************
 // LAYOUT
-$header-height: 50px;
-$subheader-height: 60px;
-$subnav-height: 45px;
+$header-height:     50px;
+$subheader-height:  60px;
+$subnav-height:     45px;
 $workspace-header-height: $subnav-height + $subheader-height + $header-height;
 
 
 // GLOBAL margin for left and right page margins
-$page-margin-left: 25px;
-$page-margin-right: 25px;
+$page-margin-left:      25px;
+$page-margin-right:     25px;
 
 // GLOBAL margin for bottom of pages
 // = distance between bottom of content and bottom of browser window
-$page-margin-bottom: 60px;
+$page-margin-bottom:    60px;
 
 // dimensions
 $summary-line-height: 19px;
-
 
 // GLOBAL BORDERS
 $default-border-width: 1px;
 $default-border-radius: 3px;
 
-$border-canon: $default-border-width solid $border-color;
-$dark-border-canon: $default-border-width solid $border-color-dark;
-$login-card-border-canon: 5px solid $color-text3;
-
-$shadow-canon: 2px 2px 3px 0px $shadow-color;
-
+$border-canon:              $default-border-width solid $border-color;
+$dark-border-canon:         $default-border-width solid $border-color-dark;
+$login-card-border-canon:   5px solid $color-text3;
+$shadow-canon:              2px 2px 3px 0px $shadow-color;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 // applied color rules - USE these in component files!
 // Background colors
 $data-grid-background-color: #EAEEF2;
@@ -136,80 +131,83 @@ $progress-bar-full-background-color : #AE0020;
 
 
 
-$search-highlight-color: #FFFF00;
-$content-details-create-background-color: #49A942;
+$search-highlight-color:                    #FFFF00;
+$content-details-create-background-color:   #49A942;
 $content-details-chart-icon-selected-background-color: #42AA3D;
-$content-details-action-background-color: #B3D988;
+$content-details-action-background-color:   #B3D988;
 $content-details-chart-icon-hover-background-color: #C3ECA0;
-$picklist-selected-background-color: #3795DD;
-$chart-fill-color: #4A83C3;
-$dataset-number-background-color: #788DA5;
+$picklist-selected-background-color:        #3795DD;
+$chart-fill-color:                          #4A83C3;
+$dataset-number-background-color:           #788DA5;
 
 // standard app lightbox background color and opacity
-$lightbox-overlay-opacity: 0.49;
-$lightbox-overlay-color: rgba(0,0,0,$lightbox-overlay-opacity);
+$lightbox-overlay-opacity:  0.49;
+$lightbox-overlay-color:    rgba(0,0,0, $lightbox-overlay-opacity);
 
 // Border colors
-$content-details-action-link-border-color: #98B675;
-$results-console-border-color: #88A8D3;
-$type-ahead-result-border-color: #A5A6A8;
+$content-details-action-link-border-color:  #98B675;
+$results-console-border-color:              #88A8D3;
+$type-ahead-result-border-color:            #A5A6A8;
 
 // Text colors
-
-$content-header-link-color: $color-text4;
-$required-marker-color: $error;
+$content-header-link-color:     $color-text4;
+$required-marker-color:         $error;
 
 
 // NOTIFICATIONS aka MESSAGING
 // COLORS
 // used for various alerts and errors encountered in tasks
 /* $error-background-color: #EF9A8F; */
-$error-background-color: #F4DCD8;
-/* $error-text-color: #FFFFFF; */
-$error-text-color: #661111;
-$error-tooltip-text-color: $core-white;
-$error-icon-color: #991111;
+$error-background-color:    #F2DEDE;
+$error-border-color:        #BF7C7C;
+$error-text-color:          #661616;
+$error-icon-color:          #881111;
+$error-tooltip-text-color:  $core-white;
 
 $notification: $bright-turquoise;
-$notification-error-dark: #d43a0b;
-$notification-error-light: #ffd6d6;
+$notification-error-dark:   #D43A0B;
+$notification-error-light:  #FFD6D6;
 
 $alert-color: $needs-attention;
-$alert-background-color: $needs-attention;
-$alert-icon-color: #B24E11;
-$alert-text-color: $core-white;
+$alert-background-color:    $needs-attention;
+$alert-border-color:        $needs-attention;
+$alert-icon-color:          #B24E11;
+$alert-text-color:          $core-white;
 
-$warning-color: $needs-attention;
-$warning-background-color: $needs-attention;
-$warning-icon-color: #B24E11;
-/* $warning-text-color: $core-white; */
+//$warning-color: $needs-attention;  //used?
+$warning-background-color:  $needs-attention;
+$warning-icon-color:        #B24E11;
+/* $warning-text-color:     $core-white; */
 
-$informational-color: $pacific-blue;
-$informational-background-color: $pacific-blue;
-$informational-icon-color: #B24E11;
-$informational-text-color: #333;
+//$informational-color: $pacific-blue;  // used?
+$informational-background-color:    #DAEDFE;
+$informational-border-color:        #A3C0E0;
+$informational-icon-color:          #002755;
+//$informational-text-color:        #333;
+$informational-text-color:          #002244;
 
-$success-color: $ok;
-$success-background-color: $ok;
-$success-icon-color: $ok;
+$success-color:             $ok;
+$success-background-color:  #DFF0D8;
+$success-border-color:      #B3C0A0;
+$success-icon-color:        $ok;
+$success-text-color:        #468844;
 
 $normal-tooltip-text-color: $core-white;
 
 // hard errors
 // 404-like
-$hardError-background-color: $fire-engine-red;
-$hardError-text-color: #EEEEEE;
-$hardError-icon-color: #EEEEEE;
+$hardError-background-color:    $fire-engine-red;
+$hardError-text-color:          #EEEEEE;
+$hardError-icon-color:          #EEEEEE;
 
 
 // NOTIFICATIONS aka MESSAGING
 // SIZING & DIMENSIONS
 
-$alert-border-radius: 3px;
-$alert-icon-large: 22px;
-$alert-icon-medium: 16px;
-$alert-icon-small: 12px;
-
+$alert-border-radius:   3px;
+$alert-icon-large:      22px;
+$alert-icon-medium:     16px;
+$alert-icon-small:      12px;
 
 
 
