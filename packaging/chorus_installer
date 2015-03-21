@@ -2,6 +2,7 @@
 import os
 import sys
 import subprocess
+import shlex
 import signal
 import shutil
 from setup import installer_io
@@ -38,6 +39,16 @@ def run(command):
     p = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
     return p.returncode, stdout, stderr
+
+def run_interact(command, user):
+    def demote(user_uid, user_gid):
+        os.setgid(user_gid)
+        os.setuid(user_uid)
+    pw_record = pwd.getpwnam(user)
+    user_uid = pw_record.pw_uid
+    user_gid = pw_record.pw_gid
+    return subprocess.call(shlex.split(cmd), preexec_fn=demote(user_uid, user_gid))
+
 
 def output(msg):
     print "INFO : " + msg
@@ -112,7 +123,7 @@ def install():
     _s = ""
     if silent:
         _s = "-s"
-    os.system("su - %s -c \"%s setup %s --chorus_path=%s --data_path=%s\"" % (user, os.path.join(release_path, "packaging/setup/chorus_server"), _s, chorus_path, data_path))
+    run_interact("%s setup %s --chorus_path=%s --data_path=%s" % (os.path.join(release_path, "packaging/setup/chorus_server"), _s, chorus_path, data_path), user)
 
 try:
     signal.signal(signal.SIGINT, exit_gracefully)
