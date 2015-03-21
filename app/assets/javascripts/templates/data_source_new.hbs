@@ -128,16 +128,22 @@
 
             <label>{{t "data_sources.dialog.description"}}</label>
             <textarea rows="3" name="description" tabindex="1"/>
-
-            {{jdbcDataSourceFields}}
             <br/>
             {{hdfsVersionsSelect true true}}
             <br/>
+            {{jdbcDataSourceFields}}
+            <br/>
+
+            <label class="required">{{t "data_sources.dialog.authentication"}}</label><br/>
+            <input type="radio" id="hiveKerberos_nonKerberos" name="hiveKerberos" value="false" checked="checked"/>&nbsp;
+            <label for="hiveKerberos_nonKerberos">{{t "data_sources.dialog.account_password"}}</label><br/>
+            <input type="radio" id="hiveKerberos_kerberos" name="hiveKerberos" value="true" />&nbsp;
+            <label for="hiveKerberos_kerberos">{{t "data_sources.dialog.kerberos"}}</label><br/>
+
             <label class="required db_username" name="dbUsername">{{t "data_sources.dialog.database_account"}}</label>
             <label class="required db_password" name="dbPassword">{{t "data_sources.dialog.database_password"}}</label>
             <input class="db_username" type="text" name="dbUsername" maxlength="256" tabindex="1"/>
             <input class="db_password" type="password" name="dbPassword" maxlength="256" accept="" autocomplete="off" tabindex="1"/>
-            <br/>
 
             {{jdbcHiveDataSourceFields}}
             <br/>

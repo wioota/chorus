@@ -20,35 +20,40 @@ module JdbcOverrides
           statement.set_max_rows(options[:limit]) if options[:limit]
           result = statement.executeQuery(query)
           JdbcSqlResult.new({:result_set => result})
-          #statement = build_and_configure_statement(connection, options, query)
-          #cancelable_query.store_statement(statement) if cancelable_query
-          #
-          #begin
-          #  set_timeout(options[:timeout], statement) if options[:timeout]
-          #  # If you try to set auto commit at all, hive fails.
-          #  #jdbc_conn.set_auto_commit(false) if options[:limit]
-          #
-          #  if options[:describe_only]
-          #    statement.execute_with_flags(org.postgresql.core::QueryExecutor::QUERY_DESCRIBE_ONLY)
-          #  else
-          #    statement.execute
-          #  end
-          #
-          #  result = query_result(options, statement)
-          #  # jdbc_conn.commit if options[:limit]
-          #  result
-          #rescue Exception => e
-          #  raise PostgresLikeConnection::QueryError, "The query could not be completed. Error: #{e.message}"
-          #end
         end
       end
 
       def connect!
         hive_connection_object = HiveConnection.new()
         @connection ||=  @data_source.hive_kerberos ?
-            hive_connection_object.getHiveKerberosConnection(@data_source.host, Thread.current[:user].username, @data_source.hive_kerberos_principal, @data_source.hive_kerberos_keytab_location, HDFS_VERSIONS[@data_source.hive_hadoop_version]) :
+            hive_connection_object.getHiveKerberosConnection(@data_source.host, Thread.current[:user] ? Thread.current[:user].username : @options[:username], @data_source.hive_kerberos_principal, @data_source.hive_kerberos_keytab_location, HDFS_VERSIONS[@data_source.hive_hadoop_version]) :
             hive_connection_object.getHiveConnection(@data_source.host, @account.db_username, @account.db_password,HDFS_VERSIONS[@data_source.hive_hadoop_version])
 
+      end
+
+      def stream_sql(query, options={}, cancelable_query = nil, &record_handler)
+        if options[:username]
+          @options[:username] = options[:username]
+        end
+        with_connection do |connection|
+
+          statement = connection.createStatement
+          result = statement.executeQuery(query)
+          meta_data = result.getMetaData
+          column_names = (1..meta_data.getColumnCount).map { |i| meta_data.getColumnName(i).to_sym }
+
+          nil_value = options[:quiet_null] ? "" : "null"
+          parser = SqlValueParser.new(result, :nil_value => nil_value)
+
+          while result.next
+            record = {}
+            column_names.each.with_index { |column, i| record[column] = parser.string_value(i) }
+            record_handler.call(record)
+          end
+
+          connection.close
+        end
+        true
       end
 
       def schemas
