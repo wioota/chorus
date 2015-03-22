@@ -5,6 +5,7 @@ import subprocess
 import shlex
 import signal
 import shutil
+import pwd
 from setup import installer_io
 
 silent = False
@@ -123,7 +124,8 @@ def install():
     _s = ""
     if silent:
         _s = "-s"
-    run_interact("%s setup %s --chorus_path=%s --data_path=%s" % (os.path.join(release_path, "packaging/setup/chorus_server"), _s, chorus_path, data_path), user)
+    run_interact("%s setup %s --chorus_path=%s --data_path=%s" % \
+                 (os.path.join(release_path, "packaging/setup/chorus_server"), _s, chorus_path, data_path), user)
 
 try:
     signal.signal(signal.SIGINT, exit_gracefully)
