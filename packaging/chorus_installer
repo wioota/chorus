@@ -48,7 +48,7 @@ def run_interact(command, user):
     pw_record = pwd.getpwnam(user)
     user_uid = pw_record.pw_uid
     user_gid = pw_record.pw_gid
-    return subprocess.call(shlex.split(cmd), preexec_fn=demote(user_uid, user_gid))
+    return subprocess.call(shlex.split(command), preexec_fn=demote(user_uid, user_gid))
 
 
 def output(msg):
