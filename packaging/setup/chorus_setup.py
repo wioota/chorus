@@ -306,7 +306,7 @@ class ChorusSetup:
             f.write(content)
 
     def setup_database(self):
-        logger.info("Initializing database...")
+        logger.info("->Initializing database...")
         pwfile = os.path.join(self.release_path, "postgres/pwfile")
         if os.path.exists(pwfile):
             os.chmod(pwfile, 0600)
@@ -323,7 +323,7 @@ class ChorusSetup:
 
     def upgrade_database(self):
         executor.start_postgres()
-        logger.info("Running database migrations...")
+        logger.info("->Running database migrations...")
         db_commands = "db:migrate"
         db_commands += " enqueue:refresh_and_reindex"
         logger.debug("Running rake " + db_commands)
@@ -331,12 +331,12 @@ class ChorusSetup:
         executor.stop_postgres()
 
     def validate_data_sources(self):
-        logger.info("Running data validation...")
+        logger.info("->Running data validation...")
         executor.start_postgres()
         executor.rake("validations:data_source")
 
     def stop_previous_release(self):
-        logger.info("Shutting down previous Chorus install...")
+        logger.info("->Shutting down previous Chorus install...")
         executor.stop_previous_release()
 
     def is_alpine_exits(self):
