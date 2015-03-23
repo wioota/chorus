@@ -61,6 +61,7 @@ POSTGRES_PID_FILE=$POSTGRES_DATA_DIR/postmaster.pid
 
 eval $($RUBY $CHORUS_HOME/packaging/get_chorus_env_params.rb)
 
+
 ##### Determine which nginx binary to use for this platform #####
 
 unamestr=`uname`

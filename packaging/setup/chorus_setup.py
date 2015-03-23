@@ -395,13 +395,14 @@ class ChorusSetup:
         self.configure_secret_key()
         self.configure_secret_token()
 
+        msg = "(may take 1~2 minuts, please wait)"
         if upgrade:
-            logger.info("Updaing postgres database...")
+            logger.info("Updaing postgres database %s..." % msg)
             self.validate_data_sources()
             self.stop_previous_release()
             self.upgrade_database()
         else:
-            logger.info("Creating postgres database...")
+            logger.info("Creating postgres database %s..." % msg)
             self.create_database_config()
             self.generate_chorus_psql_files()
             self.generate_chorus_rails_console_file()
