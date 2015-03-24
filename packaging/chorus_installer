@@ -6,7 +6,12 @@ import shlex
 import signal
 import shutil
 import pwd
+from setup import color
 from setup import installer_io
+from setup import func_executor
+bold = color.bold
+processify = func_executor.processify
+
 
 silent = False
 if len(sys.argv) == 2 and sys.argv[1]=="-s":
@@ -52,7 +57,7 @@ def run_interact(command, user):
 
 
 def output(msg):
-    print "INFO : " + msg
+    print "INFO : " + bold(msg)
 
 def detect_pre_version(chorus_path):
     current_path = os.path.join(chorus_path, "current")
@@ -71,6 +76,27 @@ def compare_version(cur, pre):
     else:
         return 1
 
+@processify(msg="->Copying Production...")
+def copy_to_dest(installation_path, chorus_path, data_path, release_path):
+    ret, stdout, stderr = run("mkdir -p %s && mkdir -p %s" % (chorus_path, data_path))
+    if ret != 0:
+        raise Exception("[ERROR] " + stderr)
+
+    ret, stdout, stderr = run("cp -rf %s %s" % (os.path.join(installation_path, "version_build"), chorus_path))
+    if ret != 0:
+        raise Exception("[ERROR] " + stderr)
+    if os.path.exists(release_path):
+        shutil.rmtree(release_path)
+    ret, stdout, stderr = run("mkdir -p %s && cp -rf %s %s" % (release_path, installation_path, release_path))
+    if ret != 0:
+        raise Exception("[ERROR] " + stderr)
+
+@processify(msg="->Granting permission...")
+def grant_permission(user, chorus_path, data_path):
+    ret, stdout, stderr = run("chown -R %s:%s %s && chown -R %s:%s %s" % (user, user, chorus_path, user, user, data_path))
+    if ret != 0:
+        raise Exception("[ERROR] " + stderr)
+
 def install():
     if not prompt_for_eula():
         print "Install aborted, Cancelled by user"
@@ -86,6 +112,9 @@ def install():
     version = ""
     with open(os.path.join(installation_path, "version_build"), "r") as f:
         version = f.read().strip()
+
+    release_path = os.path.join(chorus_path, "releases/%s" % version)
+
     pre_version = detect_pre_version(chorus_path)
     cur_version = version.split("-")[0]
     msg = "Installing"
@@ -102,25 +131,11 @@ def install():
             return
 
     output("%s chorus version: %s to chorus and data path..." % (msg, version))
-    ret, stdout, stderr = run("mkdir -p %s && mkdir -p %s" % (chorus_path, data_path))
-    if ret != 0:
-        raise Exception("[ERROR] " + stderr)
+    copy_to_dest(installation_path, chorus_path, data_path, release_path)
 
-    ret, stdout, stderr = run("cp -rf %s %s" % (os.path.join(installation_path, "version_build"), chorus_path))
-    if ret != 0:
-        raise Exception("[ERROR] " + stderr)
-    release_path = os.path.join(chorus_path, "releases/%s" % version)
-    if os.path.exists(release_path):
-        shutil.rmtree(release_path)
-    ret, stdout, stderr = run("mkdir -p %s && cp -rf %s %s" % (release_path, installation_path, release_path))
-    if ret != 0:
-        raise Exception("[ERROR] " + stderr)
-    print "."*60 + "[Done]"
     output("change %s's owner to %s..." % (chorus_path, user))
-    ret, stdout, stderr = run("chown -R %s:%s %s && chown -R %s:%s %s" % (user, user, chorus_path, user, user, data_path))
-    if ret != 0:
-        raise Exception("[ERROR] " + stderr)
-    print "."*60 + "[Done]"
+    grant_permission(user, chorus_path, data_path)
+
     _s = ""
     if silent:
         _s = "-s"

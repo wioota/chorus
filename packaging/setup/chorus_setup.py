@@ -7,14 +7,18 @@ import hashlib
 import hmac
 import base64
 import platform
+from color import bold
 from options import options, get_version
 from log import logger
 from installer_io import InstallerIO
 from chorus_executor import ChorusExecutor
 from health_check import health_check
 from configure import configure
+from func_executor import processify
+
 io = InstallerIO(options.silent)
 executor = ChorusExecutor(options.chorus_path)
+
 
 CHORUS_PSQL = "\
 if [ \"$CHORUS_HOME\" = \"\" ]; then\n\
@@ -43,9 +47,6 @@ def failover():
                 f.write("failover")
         except IOError:
             pass
-
-def done():
-    print "." * 60 + "[Done]"
 
 class ChorusSetup:
     """
@@ -203,13 +204,21 @@ class ChorusSetup:
             logger.fatal("Setup aborted, Cancelled by user")
             quit()
 
-    def configure_secret_key(self):
+    def get_passphrase(self):
         key_file_path = os.path.join(options.chorus_path, "shared")
         key_file = os.path.join(key_file_path, 'secret.key')
         if not os.path.exists(key_file):
             passphrase = io.prompt("Enter optional passphrase to generate "
-                                    + "a recoverable secret key for encrypting passwords."
-                                    + "By default, a random key will be generated", default='')
+                                   + "a recoverable secret key for encrypting passwords."
+                                   + "By default, a random key will be generated", default='')
+            return passphrase
+        return None
+
+    @processify(msg='->Configuring secret key...')
+    def configure_secret_key(self, passphrase):
+        key_file_path = os.path.join(options.chorus_path, "shared")
+        key_file = os.path.join(key_file_path, 'secret.key')
+        if passphrase is not None:
             if passphrase.strip() == '':
                 passphrase = os.urandom(32)
             secret_key = base64.b64encode(hmac.new(passphrase, digestmod=hashlib.sha256).digest())
@@ -217,7 +226,6 @@ class ChorusSetup:
                 f.write(secret_key)
         else:
             logger.debug(key_file + " already existed, skipped")
-        logger.info("Configuring secret key...")
         logger.debug("Secure " + key_file)
         os.chmod(key_file, 0600)
         symbolic = os.path.join(self.release_path, "config/secret.key")
@@ -225,8 +233,8 @@ class ChorusSetup:
         if os.path.lexists(symbolic):
             os.remove(symbolic)
         os.symlink(key_file, symbolic)
-        done()
 
+    @processify(msg="->Configuring secret token...")
     def configure_secret_token(self):
         token_file_path = os.path.join(options.chorus_path, "shared")
         token_file = os.path.join(token_file_path, 'secret.token')
@@ -236,7 +244,7 @@ class ChorusSetup:
                 f.write(os.urandom(64).encode('hex'))
         else:
             logger.debug(token_file + " already existed, skipped")
-        logger.info("Configuring secret token...")
+        logger.debug("Configuring secret token...")
         logger.debug("Secure " + token_file)
         os.chmod(token_file, 0600)
         symbolic = os.path.join(self.release_path, "config/secret.token")
@@ -244,7 +252,6 @@ class ChorusSetup:
         if os.path.lexists(symbolic):
             os.remove(symbolic)
         os.symlink(token_file, symbolic)
-        done()
 
     def generate_paths_file(self):
         file_path = os.path.join(options.chorus_path, "chorus_path.sh")
@@ -305,8 +312,9 @@ class ChorusSetup:
         with open(database_config_file, 'w') as f:
             f.write(content)
 
+    @processify(msg="->Initializing database...")
     def setup_database(self):
-        logger.info("->Initializing database...")
+        logger.debug("->Initializing database...")
         pwfile = os.path.join(self.release_path, "postgres/pwfile")
         if os.path.exists(pwfile):
             os.chmod(pwfile, 0600)
@@ -321,22 +329,25 @@ class ChorusSetup:
         executor.rake(db_commands)
         executor.stop_postgres()
 
+    @processify(msg="->Running database migrations...")
     def upgrade_database(self):
         executor.start_postgres()
-        logger.info("->Running database migrations...")
+        logger.debug("->Running database migrations...")
         db_commands = "db:migrate"
         db_commands += " enqueue:refresh_and_reindex"
         logger.debug("Running rake " + db_commands)
         executor.rake(db_commands)
         executor.stop_postgres()
 
-    def validate_data_sources(self):
-        logger.info("->Running data validation...")
+    @processify(msg="->Running data validation...")
+    def validate_data_sources(msg=""):
+        logger.debug("->Running data validation...")
         executor.start_postgres()
         executor.rake("validations:data_source")
 
+    @processify(msg="->Shutting down previous Chorus install...")
     def stop_previous_release(self):
-        logger.info("->Shutting down previous Chorus install...")
+        logger.debug("->Shutting down previous Chorus install...")
         executor.stop_previous_release()
 
     def is_alpine_exits(self):
@@ -351,6 +362,7 @@ class ChorusSetup:
             self.alpine_release_path = os.path.join(options.chorus_path, "alpine-releases/%s" % alpine_version)
             return True
 
+    @processify(msg="->Extracting alpine...")
     def configure_alpine(self):
         logger.debug("Extracting %s to %s" % (self.alpine_installer, self.alpine_release_path))
         executor.run("sh %s --target %s --noexec" % (self.alpine_installer, self.alpine_release_path))
@@ -383,31 +395,30 @@ class ChorusSetup:
         #self.prompt_for_eula()
 
         #pre step:
-        logger.info("Construct Chorus Directory...")
+        passphrase = self.get_passphrase()
+        logger.info(bold("Construct Chorus and Data Directory:"))
         self.construct_shared_structure()
         self.construct_data_structure()
         self.link_shared_config()
         self.link_data_folder()
         self.extract_postgres()
         self.generate_paths_file()
-        done()
 
-        self.configure_secret_key()
+        self.configure_secret_key(passphrase)
         self.configure_secret_token()
 
         msg = "(may take 1~2 minuts, please wait)"
         if upgrade:
-            logger.info("Updaing postgres database %s..." % msg)
+            logger.info(bold("Updaing postgres database %s:" % msg))
             self.validate_data_sources()
             self.stop_previous_release()
             self.upgrade_database()
         else:
-            logger.info("Creating postgres database %s..." % msg)
+            logger.info(bold("Creating postgres database %s:" % msg))
             self.create_database_config()
             self.generate_chorus_psql_files()
             self.generate_chorus_rails_console_file()
             self.setup_database()
-        done()
             #self.enqueue_solr_reindex()
         self.link_current_to_release("current", self.release_path)
 
@@ -419,10 +430,9 @@ class ChorusSetup:
                         os.path.basename(self.alpine_release_path.rstrip("/"))
                 default = "no"
             if io.require_confirmation(msg, default):
-                logger.info("Configuring alpine...")
+                logger.info(bold("Setting up alpine:"))
                 self.configure_alpine()
                 self.link_current_to_release("alpine-current", self.alpine_release_path)
-                done()
         #self.source_chorus_path()
         if io.require_confirmation("Do you want to change default configure?", default="no"):
             configure.config()
