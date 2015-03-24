@@ -26,7 +26,7 @@ def enable_https():
     port = io.prompt_int("Which port you want to use for https?", default=8443)
 
     with open(os.path.join(options.chorus_path, "shared/chorus.properties"), "a") as f:
-        f.write("ssl.enabled= true\n"\
+        f.write("\nssl.enabled= true\n"\
                 + "ssl_server_port= %d\n" % port\
                 + "ssl_certificate= %s\n" % server_crt\
                 + "ssl_certificate_key= %s" % server_key)
