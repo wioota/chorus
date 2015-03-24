@@ -36,7 +36,7 @@ class Workfile < ActiveRecord::Base
   before_validation :init_file_name, :on => :create
 
   before_update :ensure_proper_content_type
-  after_save :delete_cache
+  before_save :delete_cache
 
   def delete_cache
     #Fix for 87339340. Avoid searching for cache if the record is newly created and does have an ID before saving to database.
@@ -44,7 +44,8 @@ class Workfile < ActiveRecord::Base
       cache_key = "workspace:workfiles/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
       Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with cache key = #{cache_key} --"
       Rails.cache.delete(cache_key)
-      #Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
+      # Fix for DEV-8648. Creating a SQL workfile takes a long time. We are not caching workfileVersion objects so there is no need for deleting cache.
+      # Fix for DEV-8954 When I rename a myfilename.pmml to myfiletest.pmml, the changes does not take place on the front end
       if self.latest_workfile_version != nil
         Chorus.log_debug "-- BEFORE SAVE: Clearing cache for WorkfileVersion with ID = #{self.latest_workfile_version.id} --"
         self.latest_workfile_version.delete_cache

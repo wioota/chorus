@@ -19,7 +19,7 @@
             <input type="text" name="name" maxlength="64" tabindex="1"/>
 
             <label>{{t "data_sources.dialog.description"}}</label>
-            <textarea rows="3" name="description" tabindex="1"/>
+            <textarea rows="3" name="description" maxlength="4095" tabindex="1"/>
 
             {{dbDataSourceFields defaultGpdbFields}}
 
@@ -48,7 +48,7 @@
             <input type="text" name="name" maxlength="64" tabindex="1"/>
 
             <label>{{t "data_sources.dialog.description"}}</label>
-            <textarea rows="3" name="description" tabindex="1"/>
+            <textarea rows="3" name="description" maxlength="4095" tabindex="1"/>
 
             {{dbDataSourceFields defaultGpdbFields}}
 
@@ -77,7 +77,7 @@
             <input type="text" name="name" maxlength="64" tabindex="1"/>
 
             <label>{{t "data_sources.dialog.description"}}</label>
-            <textarea rows="3" name="description" tabindex="1"/>
+            <textarea rows="3" name="description" maxlength="4095" tabindex="1"/>
 
             {{dbDataSourceFields}}
 
@@ -99,7 +99,7 @@
             <input type="text" name="name" maxlength="64" tabindex="1"/>
 
             <label>{{t "data_sources.dialog.description"}}</label>
-            <textarea rows="3" name="description" tabindex="1"/>
+            <textarea rows="3" name="description" maxlength="4095" tabindex="1"/>
 
             {{jdbcDataSourceFields}}
 
@@ -125,7 +125,7 @@
             {{hdfsVersionsSelect}}
 
             <label>{{t "data_sources.dialog.description"}}</label>
-            <textarea rows="3" name="description" tabindex="1"></textarea>
+            <textarea rows="3" name="description" maxlength="4095" tabindex="1"></textarea>
 
             {{hdfsDataSourceFields this}}
         </div>
@@ -138,7 +138,7 @@
                 <input type="text" name="name" maxlength="64" tabindex="1"/>
 
                 <label>{{t "data_sources.dialog.description"}}</label>
-                <textarea rows="3" name="description" tabindex="1"/>
+                <textarea rows="3" name="description" maxlength="4095" tabindex="1"/>
 
                 <label class="required gnip_host" name="host">
                     {{t "data_sources.dialog.gnip_url"}}
