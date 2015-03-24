@@ -1,7 +1,6 @@
 import threading
 import sys
 import time
-from functools import wraps
 from multiprocessing import Process, Queue
 
 def processify(msg=''):
@@ -24,7 +23,7 @@ def processify(msg=''):
             while p.is_alive():
                 sys.stdout.write(".")
                 sys.stdout.flush()
-                time.sleep(1)
+                time.sleep(2)
             ret, error = q.get()
             if error:
                 print
@@ -33,12 +32,11 @@ def processify(msg=''):
             return ret
         return wrapper
     return wrap
+
 @processify(msg='processing...')
 def worker():
     time.sleep(10)
 
 
-#worker()
-#worker()
 
 
