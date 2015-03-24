@@ -312,7 +312,7 @@ class ChorusSetup:
         with open(database_config_file, 'w') as f:
             f.write(content)
 
-    @processify(msg="->Initializing database...", interval=1.5)
+    @processify(msg="->Initializing database...", interval=3)
     def setup_database(self):
         logger.debug("->Initializing database...")
         pwfile = os.path.join(self.release_path, "postgres/pwfile")
@@ -329,7 +329,7 @@ class ChorusSetup:
         executor.rake(db_commands)
         executor.stop_postgres()
 
-    @processify(msg="->Running database migrations...", interval=1.5)
+    @processify(msg="->Running database migrations...", interval=3)
     def upgrade_database(self):
         executor.start_postgres()
         logger.debug("->Running database migrations...")
@@ -339,13 +339,13 @@ class ChorusSetup:
         executor.rake(db_commands)
         executor.stop_postgres()
 
-    @processify(msg="->Running data validation...", interval=1.5)
+    @processify(msg="->Running data validation...", interval=3)
     def validate_data_sources(msg="", interval=1.5):
         logger.debug("->Running data validation...")
         executor.start_postgres()
         executor.rake("validations:data_source")
 
-    @processify(msg="->Shutting down previous Chorus install...", interval=1.5)
+    @processify(msg="->Shutting down previous Chorus install...", interval=3)
     def stop_previous_release(self):
         logger.debug("->Shutting down previous Chorus install...")
         executor.stop_previous_release()
@@ -407,7 +407,7 @@ class ChorusSetup:
         self.configure_secret_key(passphrase)
         self.configure_secret_token()
 
-        msg = "(may take 1~2 minuts, please wait)"
+        msg = "(may take 2~3 minuts)"
         if upgrade:
             logger.info(bold("Updaing postgres database %s:" % msg))
             self.validate_data_sources()
