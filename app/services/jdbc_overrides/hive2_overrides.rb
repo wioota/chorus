@@ -31,10 +31,6 @@ module JdbcOverrides
 
       end
 
-      def version
-        with_connection { |connection| connection.getMetaData.getDatabaseProductVersion }.slice(0,255)
-      end
-
       def stream_sql(query, options={}, cancelable_query = nil, &record_handler)
         if options[:username]
           @options[:username] = options[:username]
