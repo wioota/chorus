@@ -32,12 +32,6 @@
             <br/>
             {{jdbcDataSourceFields this}}
             <br/>
-
-            <label class="required">{{t "data_sources.dialog.authentication"}}</label><br/>
-            <input type="radio" id="hiveKerberos_nonKerberos" name="hiveKerberos" value="false" checked="checked"/>&nbsp;
-            <label for="hiveKerberos_nonKerberos">{{t "data_sources.dialog.account_password"}}</label><br/>
-            <input type="radio" id="hiveKerberos_kerberos" name="hiveKerberos" value="true" />&nbsp;
-            <label for="hiveKerberos_kerberos">{{t "data_sources.dialog.kerberos"}}</label><br/>
             {{jdbcHiveDataSourceFields this}}
             <br/>
         {{/if}}
