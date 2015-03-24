@@ -29,7 +29,7 @@ class JdbcHiveDataSourcesController < ApplicationController
 
   def destroy
     data_source = JdbcHiveDataSource.find(params[:id])
-    authorize! :owner, data_source
+    authorize! :edit, data_source
     data_source.destroy
 
     head :ok
