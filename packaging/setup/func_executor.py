@@ -2,8 +2,8 @@ import threading
 import sys
 import time
 from multiprocessing import Process, Queue
-
-def processify(msg=''):
+from color import fail, done
+def processify(msg='', interval=0.5):
 
     def wrap(func):
         def process_func(q, *args, **kwargs):
@@ -23,12 +23,12 @@ def processify(msg=''):
             while p.is_alive():
                 sys.stdout.write(".")
                 sys.stdout.flush()
-                time.sleep(2)
+                time.sleep(interval)
             ret, error = q.get()
             if error:
-                print
+                print "\r" + "." * 60 + fail()
                 raise Exception(error)
-            print "\r" + "." * 60 + "[Done]"
+            print "\r" + "." * 60 + done()
             return ret
         return wrapper
     return wrap

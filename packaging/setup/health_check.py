@@ -5,6 +5,7 @@ import pkgutil
 import inspect
 import health_lib
 from log import logger
+from color import bold
 from chorus_executor import ChorusExecutor
 executor = ChorusExecutor()
 
@@ -27,6 +28,8 @@ def hard_require():
 def health_check(args=''):
     if args == '' or args == None:
         args = "checkos"
+    if "help" not in args:
+        logger.info(bold("Running \"atk %s\" Command:" % args))
     command = "%s %s" % (os.path.join(os.path.dirname(os.path.abspath(__file__)), "health_lib/atk"), args)
     ret, stdout, stderr = executor.run(command + " 2>&1")
     print stdout

@@ -312,7 +312,7 @@ class ChorusSetup:
         with open(database_config_file, 'w') as f:
             f.write(content)
 
-    @processify(msg="->Initializing database...")
+    @processify(msg="->Initializing database...", interval=1.5)
     def setup_database(self):
         logger.debug("->Initializing database...")
         pwfile = os.path.join(self.release_path, "postgres/pwfile")
@@ -329,7 +329,7 @@ class ChorusSetup:
         executor.rake(db_commands)
         executor.stop_postgres()
 
-    @processify(msg="->Running database migrations...")
+    @processify(msg="->Running database migrations...", interval=1.5)
     def upgrade_database(self):
         executor.start_postgres()
         logger.debug("->Running database migrations...")
@@ -339,13 +339,13 @@ class ChorusSetup:
         executor.rake(db_commands)
         executor.stop_postgres()
 
-    @processify(msg="->Running data validation...")
-    def validate_data_sources(msg=""):
+    @processify(msg="->Running data validation...", interval=1.5)
+    def validate_data_sources(msg="", interval=1.5):
         logger.debug("->Running data validation...")
         executor.start_postgres()
         executor.rake("validations:data_source")
 
-    @processify(msg="->Shutting down previous Chorus install...")
+    @processify(msg="->Shutting down previous Chorus install...", interval=1.5)
     def stop_previous_release(self):
         logger.debug("->Shutting down previous Chorus install...")
         executor.stop_previous_release()
@@ -444,7 +444,7 @@ class ChorusSetup:
         print "To start Chorus, run the following commands:"
         print "\"su - %s\"" % pwd.getpwuid(os.getuid()).pw_name
         print "\"source %s/chorus_path.sh\"" % options.chorus_path
-        print "and run \"chorus_control.sh start\""
+        print "\"chorus_control.sh start\""
         print "*" * 60
 
 chorus_set = ChorusSetup()
