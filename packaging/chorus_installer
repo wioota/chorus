@@ -130,10 +130,10 @@ def install():
             print "%s aborted, Cancelled by user" % msg
             return
 
-    output("%s chorus version: %s to chorus and data path..." % (msg, version))
+    output("%s chorus version: %s to chorus and data path:" % (msg, version))
     copy_to_dest(installation_path, chorus_path, data_path, release_path)
 
-    output("change %s's owner to %s..." % (chorus_path, user))
+    output("change %s's owner to %s:" % (chorus_path, user))
     grant_permission(user, chorus_path, data_path)
 
     _s = ""
