@@ -1,5 +1,6 @@
 class Permission < ActiveRecord::Base
-  attr_accessible :class_id, :permissions_mask
+  attr_accessible :permissions_mask
 
   belongs_to :role
+  belongs_to :chorus_class
 end

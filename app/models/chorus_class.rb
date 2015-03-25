@@ -3,4 +3,5 @@ class ChorusClass < ActiveRecord::Base
 
   has_many :chorus_objects
   has_many :operations
+  has_many :permissions
 end

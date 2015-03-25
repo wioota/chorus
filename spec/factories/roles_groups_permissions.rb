@@ -20,10 +20,10 @@ FactoryGirl.define do
   end
 
   factory :permission do
-    class_id -1
     permissions_mask 1
     after(:build) do |permission|
       permission.role = create(:role, :name => "role for permission")
+      permission.chorus_class = ChorusClass.create(:name => "NoClass")
     end
   end
 
