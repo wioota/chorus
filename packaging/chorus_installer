@@ -104,6 +104,8 @@ def install():
     user = io.prompt("which user do you want to use to install chorus[default: chorus]", default="chorus")
     ret, stdout, stderr = run("useradd chorus")
     if ret not in [0,9]:
+        if ret == 126:
+            stderr += "Please run as the user with root permission\n"
         raise Exception("[ERROR] " + stderr)
     chorus_path = io.prompt("Please enter the full path to the Chorus installation directory[default: /usr/local/chorus]", default="/usr/local/chorus")
     data_path = io.prompt("Please enter the full path to the Chorus data directory (recommended 500GB)[default:/data/chorus]", default="/data/chorus")
