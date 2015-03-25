@@ -3,6 +3,7 @@ module JdbcHive
 
     def self.create!(data_source_attributes, owner)
       data_source = JdbcHiveDataSource.new(data_source_attributes)
+      data_source[:shared] = data_source_attributes[:shared]
       data_source.owner = owner
       data_source.save!
       Events::DataSourceCreated.by(owner).add(:data_source => data_source)
