@@ -17,3 +17,6 @@ def fail():
 
 def done():
     return "[" + GREEN + "Done" + END + "]"
+
+def error(msg):
+    return RED + msg + END

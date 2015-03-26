@@ -5,7 +5,7 @@ from chorus_setup import chorus_set, failover
 from health_check import health_check, hard_require
 from configure import configure
 from log import logger
-from color import bold
+from color import bold, error
 import traceback
 
 handler = {"setup":chorus_set.setup, "health_check":health_check, "configure":configure.config}
@@ -27,6 +27,6 @@ def main():
         else:
             handler[arg]()
     except Exception as e:
-        logger.error(str(e) + "\nException Occured, see %s/install.log for details" % options.chorus_path.rstrip("/"))
+        logger.error(error(str(e) + "\nException Occured, see %s/install.log for details" % options.chorus_path.rstrip("/")))
         logger.debug(traceback.format_exc())
         failover()
