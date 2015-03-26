@@ -125,8 +125,7 @@ class Schema < ActiveRecord::Base
     datasets.not_stale.count
   rescue Exception => e
     Chorus.log_error "----- DATABASE CONNECTION ERROR: Failed to connect to database for #{account.username} :  #{e.message} on #{e.backtrace[0]} ------"
-  ensure
-    return 0
+    datasets.not_stale.count
   end
 
   private
