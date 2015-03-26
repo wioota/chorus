@@ -1,7 +1,9 @@
 import os
 import sys
 import re
+import socket
 import platform
+import xml.etree.ElementTree as ET
 sys.path.append("..")
 from log import logger
 from chorus_executor import ChorusExecutor
@@ -40,4 +42,46 @@ def check_os_system():
             logger.debug("os version %s-%s-%s" % (os_name, version, release))
         else:
             raise Exception("os version %s-%s-%s not supported!" % (os_name, version, release))
+    check()
+
+def check_open_port():
+    from configParser import ConfigParser
+    from options import options
+    def get_ports():
+        config = ConfigParser(os.path.join(options.chorus_path, "shared/chorus.properties"))
+        ports = {}
+        ports["server_port"] = config["server_port"]
+        ports["postgres_port"] = config["postgres_port"]
+        ports["solr_port"] = config["solr_port"]
+        ports["workflow.url"] = config["workflow.url"].split(":")[-1]
+        if config.has_key("ssl.enabled") and config["ssl.enabled"].lower() == "true":
+            ports["ssl_server_port"] = config["ssl_server_port"]
+        tree = ET.parse(os.path.join(options.chorus_path, "current/vendor/jetty/jetty.xml"))
+        root = tree.getroot()
+        for e in root.findall('./Call/Arg/New/Set'):
+            if e.attrib.has_key('name') and e.attrib['name'] == "port":
+                ports["jetty_port"] = e.text
+        return ports
+    @processify(msg="->Checking Open Ports...")
+    def check():
+        try:
+            ports = get_ports()
+            for key in ports:
+                port = int(ports[key])
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                result = sock.connect_ex(("localhost", port))
+                if result == 0:
+                    sock.close()
+                    msg = "%s: %s is Occupied, \n" % (key, ports[key])
+                    if key in ["server_port", "postgres_port", "solr_port", "workflow.url", "ssl_server_port"]:
+                        msg += "Please change the %s in %s\nto a non-occupied port or kill the process that occupied %s" % \
+                                (key, os.path.join(options.chorus_path, "shared/chorus.properties"), ports[key])
+                    elif key in ["jetty_port"]:
+                        msg += "Please change the %s in %s\nto a non-occupied port or kill the process that occupied %s" % \
+                                (key, os.path.join(options.chorus_path, "current/vendor/jetty/jetty.xml"), ports[key])
+                    raise Exception(msg)
+        except socket.gaierror as e:
+            raise Exception(e)
+        except socket.error as e:
+            raise Exception(e)
     check()

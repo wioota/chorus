@@ -12,7 +12,6 @@ from options import options, get_version
 from log import logger
 from installer_io import InstallerIO
 from chorus_executor import ChorusExecutor
-from health_check import health_check
 from configure import configure
 from func_executor import processify
 

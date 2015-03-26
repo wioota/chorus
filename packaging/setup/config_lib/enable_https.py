@@ -7,7 +7,15 @@ def enable_https():
     from chorus_executor import ChorusExecutor
     from options import options
     from log import logger
+    from configParser import ConfigParser
     io = InstallerIO(options.silent)
+
+    config_file = os.path.join(options.chorus_path, "shared/chorus.properties")
+    chorus_config = ConfigParser(config_file)
+    if chorus_config.has_key("ssl.enabled") and chorus_config["ssl.enabled"].lower() == "true":
+        if not io.require_confirmation("ssl already enabled, want to re-configure again?", default="no"):
+            return
+
     executor = ChorusExecutor(options.chorus_path)
     server_key = os.path.join(os.path.join(options.chorus_path, "shared/server.key"))
     server_csr = os.path.join(os.path.join(options.chorus_path, "shared/server.csr"))
@@ -25,13 +33,13 @@ def enable_https():
 
     port = io.prompt_int("Which port you want to use for https?", default=8443)
 
-    with open(os.path.join(options.chorus_path, "shared/chorus.properties"), "a") as f:
-        f.write("\nssl.enabled= true\n"\
-                + "ssl_server_port= %d\n" % port\
-                + "ssl_certificate= %s\n" % server_crt\
-                + "ssl_certificate_key= %s" % server_key)
-        contents = ""
-        alpine_conf = os.path.join(options.chorus_path, "shared/ALPINE_DATA_REPOSITORY/configuration/alpine.conf")
+    chorus_config["ssl.enabled"] = "true"
+    chorus_config["ssl_server_port"] = port
+    chorus_config["ssl_certificate"] = server_crt
+    chorus_config["ssl_certificate_key"] = server_key
+    chorus_config.write(config_file)
+
+    alpine_conf = os.path.join(options.chorus_path, "shared/ALPINE_DATA_REPOSITORY/configuration/alpine.conf")
     with open(alpine_conf, "r") as f:
         contents = f.read()
         content = re.findall(r"chorus *{(.*?)}", contents, re.DOTALL)[0]

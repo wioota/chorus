@@ -15,10 +15,13 @@ def exit_gracefully(signum, frame):
     sys.exit(1)
 def main():
     try:
-        if not options.disable_spec and "help" not in health_args:
+        signal.signal(signal.SIGINT, exit_gracefully)
+
+        if (arg == "setup" and not options.disable_spec) \
+           or (arg == "health_check" and (health_args == [] or "checkos" in health_args)):
             logger.info(bold("System Specification Checking:"))
             hard_require()
-        signal.signal(signal.SIGINT, exit_gracefully)
+
         if arg == "health_check":
             handler[arg](" ".join(health_args))
         else:
