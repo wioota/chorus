@@ -8,6 +8,7 @@ module Hdfs
   PREVIEW_LINE_COUNT = 200
   DirectoryNotFoundError = Class.new(StandardError)
   FileNotFoundError = Class.new(StandardError)
+  PermissionDeniedError = Class.new(StandardError)
 
   JavaHdfs = com.emc.greenplum.hadoop.Hdfs
   JavaHdfs.timeout = 5
@@ -48,6 +49,9 @@ module Hdfs
     def list(path)
       list = java_hdfs.list(path)
       raise DirectoryNotFoundError, "Directory does not exist: #{path}" unless list
+      if list.length > 0 && list[0].path == '!!!ACCESS_DENIED_ERROR!!!'
+        raise PermissionDeniedError
+      end
       list.map do |object|
         {
           'path' => object.path,
@@ -68,6 +72,9 @@ module Hdfs
     def show(path)
       contents = java_hdfs.content(path, PREVIEW_LINE_COUNT)
       raise FileNotFoundError, "File not found on HDFS: #{path}" unless contents
+      if contents == '!!!ACCESS_DENIED_ERROR!!!'
+        raise PermissionDeniedError
+      end
       contents
     end
 

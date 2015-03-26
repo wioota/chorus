@@ -76,11 +76,15 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
             this.$('[name=hiveKerberosKeytabLocation]').removeClass('hidden');
             this.$('[name=dbUsername]').addClass('hidden');
             this.$('[name=dbPassword]').addClass('hidden');
+            this.$('[name=shared]').addClass('hidden');
+            this.$('[for=register_jdbc_shared]').addClass('hidden');
         } else {
             this.$('[name=hiveKerberosPrincipal]').addClass('hidden');
             this.$('[name=hiveKerberosKeytabLocation]').addClass('hidden');
             this.$('[name=dbUsername]').removeClass('hidden');
             this.$('[name=dbPassword]').removeClass('hidden');
+            this.$('[name=shared]').removeClass('hidden');
+            this.$('[for=register_jdbc_shared]').removeClass('hidden');
         }
     },
 
@@ -136,14 +140,17 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         updates.shared = !!inputSource.find("input[name=shared]").prop("checked");
         updates.highAvailability = !!inputSource.find("input[name=high_availability]").prop("checked");
         updates.connectionParameters = this.model.get('connectionParameters');
-        updates.hiveKerberos = inputSource.find("input[name=hiveKerberos]:checked").val() === 'true';
-        if (updates.hiveKerberos) {
-            updates.dbUsername = 'default';
-            updates.dbPassword = 'default';
-        }
-        if (updates.hive && updates.hdfsVersion) {
+        if(updates.hive) {
+            updates.hiveKerberos = inputSource.find("input[name=hiveKerberos]:checked").val() === 'true';
+            if (updates.hiveKerberos) {
+                updates.dbUsername = 'default';
+                updates.dbPassword = 'default';
+                updates.shared = true;
+            }
+
             updates.hiveHadoopVersion = updates.hdfsVersion;
             delete updates.hdfsVersion;
+
         }
         return updates;
     },

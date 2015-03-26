@@ -20,7 +20,8 @@ class JdbcHiveDataSourcesController < ApplicationController
 
   def update
     gnip_params = params[:jdbc_hive_data_source]
-    authorize! :owner, JdbcHiveDataSource.find(params[:id])
+    data_source = JdbcHiveDataSource.find(params[:id])
+    authorize! :edit, data_source
     data_source = JdbcHive::DataSourceRegistrar.update!(params[:id], gnip_params)
 
     present data_source
@@ -28,7 +29,7 @@ class JdbcHiveDataSourcesController < ApplicationController
 
   def destroy
     data_source = JdbcHiveDataSource.find(params[:id])
-    authorize! :owner, data_source
+    authorize! :edit, data_source
     data_source.destroy
 
     head :ok
