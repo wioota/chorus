@@ -28,7 +28,12 @@ module JdbcOverrides
         @connection ||=  @data_source.hive_kerberos ?
             hive_connection_object.getHiveKerberosConnection(@data_source.host, Thread.current[:user] ? Thread.current[:user].username : @options[:username], @data_source.hive_kerberos_principal, @data_source.hive_kerberos_keytab_location, HDFS_VERSIONS[@data_source.hive_hadoop_version]) :
             hive_connection_object.getHiveConnection(@data_source.host, @account.db_username, @account.db_password,HDFS_VERSIONS[@data_source.hive_hadoop_version])
-
+      rescue Exception => e
+        sequel_exception = Sequel::DatabaseError.new(e.cause)
+        sequel_exception.wrapped_exception = e
+        exception = self.class.error_class.new(sequel_exception)
+        exception.error_type
+        raise exception
       end
 
       def version
