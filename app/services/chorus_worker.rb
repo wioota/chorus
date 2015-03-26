@@ -14,9 +14,10 @@ class ChorusWorker < QC::Worker
       cleaner = ::ActiveSupport::BacktraceCleaner.new
       cleaner.add_filter { |line| line.gsub(Rails.root.to_s, '') }
       log :level => :error, :job => job_description(job), :exception => e.message, :backtrace => "\n" + cleaner.clean(e.backtrace).join("\n")
-      stop
+      #reverting back the fix for restarting worker threads. Need to find a different approach
+      #stop
       # restart the worker thread
-      start
+      #start
   end
 
   def stop
