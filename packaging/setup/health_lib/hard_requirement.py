@@ -10,6 +10,18 @@ from chorus_executor import ChorusExecutor
 from func_executor import processify
 executor = ChorusExecutor()
 
+def a_check_os_system():
+    @processify(msg="->Checking OS Version...")
+    def check():
+        os_name, version, release = platform.linux_distribution()
+        if os_name.lower() in ["redhat", "centos"] and re.match(r"^[5|6]", version):
+            logger.debug("os version %s-%s-%s" % (os_name, version, release))
+        elif os_name.lower() == "suse" and version.startswith(11):
+            logger.debug("os version %s-%s-%s" % (os_name, version, release))
+        else:
+            raise Exception("os version %s-%s-%s not supported!" % (os_name, version, release))
+    check()
+
 def b_check_runing_user():
     @processify(msg="->Checking Running User...")
     def check():
@@ -32,23 +44,17 @@ def c_check_java_version():
                 raise Exception("%s\n only support java version > 1.6, please upgrade" % stdout)
     check()
 
-def a_check_os_system():
-    @processify(msg="->Checking OS Version...")
-    def check():
-        os_name, version, release = platform.linux_distribution()
-        if os_name.lower() in ["redhat", "centos"] and re.match(r"^[5|6]", version):
-            logger.debug("os version %s-%s-%s" % (os_name, version, release))
-        elif os_name.lower() == "suse" and version.startswith(11):
-            logger.debug("os version %s-%s-%s" % (os_name, version, release))
-        else:
-            raise Exception("os version %s-%s-%s not supported!" % (os_name, version, release))
-    check()
-
 def d_check_open_port():
     from configParser import ConfigParser
-    from options import options
+    from options import options, get_version
     def get_ports():
-        config = ConfigParser(os.path.join(options.chorus_path, "shared/chorus.properties"))
+        config = None
+        if os.path.exists(os.path.join(options.chorus_path, "shared/chorus.properties")):
+            config = ConfigParser(os.path.join(options.chorus_path, "shared/chorus.properties"))
+        else:
+            config = ConfigParser(os.path.join(options.chorus_path, \
+                                               'releases/%s/config/chorus.defaults.properties' %\
+                                               get_version(options.chorus_path)))
         ports = {}
         ports["server_port"] = config["server_port"]
         ports["postgres_port"] = config["postgres_port"]
@@ -56,7 +62,7 @@ def d_check_open_port():
         ports["workflow.url"] = config["workflow.url"].split(":")[-1]
         if config.has_key("ssl.enabled") and config["ssl.enabled"].lower() == "true":
             ports["ssl_server_port"] = config["ssl_server_port"]
-        tree = ET.parse(os.path.join(options.chorus_path, "current/vendor/jetty/jetty.xml"))
+        tree = ET.parse(os.path.join(options.chorus_path, "releases/%s/vendor/jetty/jetty.xml" % get_version(options.chorus_path)))
         root = tree.getroot()
         for e in root.findall('./Call/Arg/New/Set'):
             if e.attrib.has_key('name') and e.attrib['name'] == "port":
