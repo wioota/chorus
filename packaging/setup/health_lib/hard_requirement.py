@@ -10,14 +10,14 @@ from chorus_executor import ChorusExecutor
 from func_executor import processify
 executor = ChorusExecutor()
 
-def check_runing_user():
+def b_check_runing_user():
     @processify(msg="->Checking Running User...")
     def check():
         if os.getuid() == 0:
             raise Exception("Please don't run this program as root")
     check()
 
-def check_java_version():
+def c_check_java_version():
     @processify(msg="->Checking Java Version...")
     def check():
         ret, stdout, stderr = executor.run("java -version 2>&1")
@@ -32,7 +32,7 @@ def check_java_version():
                 raise Exception("%s\n only support java version > 1.6, please upgrade" % stdout)
     check()
 
-def check_os_system():
+def a_check_os_system():
     @processify(msg="->Checking OS Version...")
     def check():
         os_name, version, release = platform.linux_distribution()
@@ -44,7 +44,7 @@ def check_os_system():
             raise Exception("os version %s-%s-%s not supported!" % (os_name, version, release))
     check()
 
-def check_open_port():
+def d_check_open_port():
     from configParser import ConfigParser
     from options import options
     def get_ports():
