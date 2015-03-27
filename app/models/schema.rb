@@ -90,10 +90,10 @@ class Schema < ActiveRecord::Base
       begin
         dataset.skip_search_index = true if options[:skip_dataset_solr_index]
         if dataset.changed?
-          # dataset.save! seems to automatically throw a connection error if skip_search_index is set to true, so we'll temporarily set it to false and then set it back to whatever it was
-          dataset.skip_search_index = false
-          dataset.save!
-          dataset.skip_search_index = true if options[:skip_dataset_solr_index]
+          begin
+            dataset.save!
+          rescue Errno::ECONNREFUSED
+          end
         elsif options[:force_index]
           dataset.index
         end
