@@ -158,8 +158,8 @@ class DataSource < ActiveRecord::Base
   def update_state_and_version
     self.state = "online"
     self.version = connect_as_owner.version
-  rescue => e
-    Chorus.log_debug "Could not connect while updating state: #{e}: #{e.message} on #{e.backtrace[0]}"
+  rescue Exception => e
+    Chorus.log_error "Could not connect while updating state: #{e}: #{e.message} on #{e.backtrace[0]}"
     self.state = "offline"
   end
 
