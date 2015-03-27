@@ -177,8 +177,8 @@ $shuttle-list-item-height: 40px;
                 padding-left: 10px;
                 
                 /* fix for the girdle border */
-                margin-right: -1 * ($dialog-padding - 5);
-                padding-right: $dialog-padding;
+                margin-right: -1 * ($dialog-padding-leftRight - 5);
+                padding-right: $dialog-padding-leftRight;
                 
                 &.added {
                     display: block;

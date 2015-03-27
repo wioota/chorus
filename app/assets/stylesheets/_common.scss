@@ -163,6 +163,7 @@ $error-border-color:        #BF7C7C;
 $error-text-color:          #661616;
 $error-icon-color:          #881111;
 $error-tooltip-text-color:  $core-white;
+$error-input-border-color:  #AA3333;
 
 $notification: $bright-turquoise;
 $notification-error-dark:   #D43A0B;
@@ -246,6 +247,9 @@ $default-dialog-width-medium: 600px;
 $default-dialog-width-wide: 940px;
 /* $dialog-padding= interior padding from edge for dialog content */
 $dialog-padding: 15px;
+$dialog-padding-leftRight: 15px;
+$dialog-padding-top: 15px;
+$dialog-padding-bottom: 15px;
 
 $separator-space: 4px;
 

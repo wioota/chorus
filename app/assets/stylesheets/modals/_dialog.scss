@@ -10,7 +10,7 @@ $dialog-girdle-padding-top: 10px;
 /* .girdle wraps the content of the dialog popup */
 /* and sets the overall margins for the content area */
 .popup .girdle {
-    padding: $dialog-girdle-padding-top $dialog-padding $dialog-padding $dialog-padding;
+    padding: $dialog-girdle-padding-top $dialog-padding-leftRight $dialog-padding-bottom $dialog-padding-leftRight;
     border: none;
 
     @include box-sizing(border-box);
@@ -24,11 +24,9 @@ $dialog-girdle-padding-top: 10px;
     .action_bar {
         // counteract the dialog padding
         margin-top: -$dialog-girdle-padding-top;
-        margin-left: -$dialog-padding;
-        margin-right: -$dialog-padding;
-
+        margin-left: -$dialog-padding-leftRight;
+        margin-right: -$dialog-padding-leftRight;
     }
-    
     
     
 }
@@ -39,7 +37,7 @@ $dialog-girdle-padding-top: 10px;
     border-bottom: 1px solid $border-color;
 
     line-height: 40px;
-    padding: 0 $dialog-padding;
+    padding: 0 $dialog-padding-leftRight;
     word-break: break-all;
 }
 
@@ -66,8 +64,10 @@ $dialog-girdle-padding-top: 10px;
         font-size: $medium-font;
     }
 
+    background-color: $body-background-color;
+    
     .dialog_content {
-        background-color: $body-background-color;
+        // background-color: $body-background-color;
 
         line-height: 16px;
 
@@ -102,7 +102,7 @@ $dialog-girdle-padding-top: 10px;
 
     fieldset.in_a_box {
         border: none;
-        padding: 0 0 $dialog-padding 0;
+        padding: 0 0 $dialog-padding-bottom 0;
 
         legend label {
             font-size: $default-font-size;
