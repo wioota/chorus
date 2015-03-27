@@ -22,7 +22,7 @@ chorus.models.JdbcHiveDataSource = chorus.models.DataSource.extend({
 
     schemas: function(){
         var collection = new chorus.collections.SchemaSet();
-        collection.urlTemplate = "jdbc_hive_data_sources/"+this.get("id")+"/schemas";
+        collection.urlTemplate = "data_sources/"+this.get("id")+"/schemas";
         return collection;
     },
 
