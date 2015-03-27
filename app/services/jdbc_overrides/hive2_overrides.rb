@@ -93,9 +93,21 @@ module JdbcOverrides
       def metadata_for_dataset(dataset_name)
         with_connection do |connection|
           column_count = 0
-          columns = connection.getMetaData.getColumns('',schema_name,dataset_name,'%')
-          while columns.next
-            column_count += 1
+          # The hive2 jdbc implementation raises: org.apache.thrift.protocol.TProtocolException: Required field 'operationHandle' is unset! Struct:TGetResultSetMetadataReq(operationHandle:null)
+          # for some uncooperative tables. This is a bandaid.
+          begin
+            columns = connection.getMetaData.getColumns('',schema_name,dataset_name,'%')
+            while columns.next
+              column_count += 1
+            end
+          rescue Exception => e
+            puts "--- Hive column info metadata exception ---"
+            puts "Host: #{@data_source.host}"
+            puts "Schema_name: #{schema_name}"
+            puts "Dataset_name: #{dataset_name}"
+            puts "Column_count: #{column_count}"
+            puts e.message
+            puts e.backtrace.inspect
           end
           {:column_count => column_count}
         end
@@ -115,10 +127,22 @@ module JdbcOverrides
       def column_info(dataset_name, setup_sql)
         with_connection do |connection|
           cols = []
-          columns = connection.getMetaData.getColumns('',schema_name,dataset_name,'%')
-          while columns.next
-
-            cols << {:attname => columns.getString(4), :format_type => schema_column_type(columns.getString(6))}
+          # The hive2 jdbc implementation raises: org.apache.thrift.protocol.TProtocolException: Required field 'operationHandle' is unset! Struct:TGetResultSetMetadataReq(operationHandle:null)
+          # for some uncooperative tables. This is a bandaid.
+          begin
+            columns = connection.getMetaData.getColumns('',schema_name,dataset_name,'%')
+            while columns.next
+              cols << {:attname => columns.getString(4), :format_type => schema_column_type(columns.getString(6))}
+            end
+          rescue Exception => e
+            puts "--- Hive column info exception ---"
+            puts "Host: #{@data_source.host}"
+            puts "Schema_name: #{schema_name}"
+            puts "Dataset_name: #{dataset_name}"
+            puts "Columns: #{cols}"
+            puts "Setup_sql: #{setup_sql}"
+            puts e.message
+            puts e.backtrace.inspect
           end
           cols
         end
