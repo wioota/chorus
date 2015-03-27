@@ -90,12 +90,15 @@ class Schema < ActiveRecord::Base
       begin
         dataset.skip_search_index = true if options[:skip_dataset_solr_index]
         if dataset.changed?
+          # dataset.save! seems to automatically throw a connection error if skip_search_index is set to true, so we'll temporarily set it to false and then set it back to whatever it was
+          dataset.skip_search_index = false
           dataset.save!
+          dataset.skip_search_index = true if options[:skip_dataset_solr_index]
         elsif options[:force_index]
           dataset.index
         end
         found_datasets << dataset.id
-      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid, DataSourceConnection::QueryError
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid, DataSourceConnection::QueryError, Errno::ECONNREFUSED
       end
     end
 
@@ -124,7 +127,7 @@ class Schema < ActiveRecord::Base
   rescue DataSourceConnection::Error
     datasets.not_stale.count
   rescue Exception => e
-    Chorus.log_error "----- DATABASE CONNECTION ERROR: Failed to connect to database for #{account.username} :  #{e.message} on #{e.backtrace[0]} ------"
+    Chorus.log_error "----- DATABASE CONNECTION ERROR: Failed to connect to database for #{account.db_username} :  #{e.message} on #{e.backtrace[0]} ------"
     datasets.not_stale.count
   end
 
