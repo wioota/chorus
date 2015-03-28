@@ -6,20 +6,20 @@
 $margin-right-for-error-marker: 20px;
 
 // exclamation icon to preceed error messages
-@mixin alert-marker {
-	&::after {
-		display: inline-block;
-		width: 0;
-		height: 0;
-		position: relative;
-		right: 19px;
-		top: 1px;
-		color: $alert-icon-color;
-		font-size: $alert-icon-medium;
-        font-family: FontAwesome;
-		@include alert-error-icon;
-	}
-}
+// @mixin alert-marker {
+// 	&::after {
+// 		display: inline-block;
+// 		width: 0;
+// 		height: 0;
+// 		position: relative;
+// 		right: 19px;
+// 		top: 1px;
+// 		color: $alert-icon-color;
+// 		font-size: $alert-icon-medium;
+//         font-family: FontAwesome;
+// 		@include alert-error-icon;
+// 	}
+// }
 
 /* colored border for fields that have an error */
 @mixin error-input-border {
@@ -88,10 +88,11 @@ $margin-right-for-error-marker: 20px;
                 margin-top: 5px;
             }
             &:last-child {
-                margin-bottom: 5px;
+//                 margin-bottom: 5px;
+                margin-bottom: 0px;
             }
             ~li {
-                margin-top: -1px;
+                margin-top: -4px;
             }
             
             font-size: $medium-font;
@@ -111,7 +112,7 @@ $margin-right-for-error-marker: 20px;
                 left: -25px;
                 // top: 0px;
                 color: $error-icon-color;
-                font-size: $alert-icon-large;
+                font-size: $alert-icon-medium;
                 font-family: FontAwesome;
                 @include alert-error-icon;
             }
