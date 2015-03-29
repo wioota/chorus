@@ -1,4 +1,4 @@
-chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
+chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend ({
     constructorName: "DataSourcesNew",
     templateName: "data_source_new",
     title: t("data_sources.new_dialog.title"),

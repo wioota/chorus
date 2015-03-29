@@ -1,4 +1,4 @@
-chorus.Modal = chorus.views.Base.extend({
+chorus.Modal = chorus.views.Base.extend ({
     constructorName: "Modal",
     focusSelector: 'input:eq(0)',
     verticalPosition: 40, // distance of dialog from top of window

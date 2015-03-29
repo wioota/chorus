@@ -9,7 +9,7 @@ $dialog-girdle-padding-top: 10px;
 
 /* .girdle wraps the content of the dialog popup */
 /* and sets the overall margins for the content area */
-.popup .girdle {
+.dialog_popup .girdle {
     padding: $dialog-girdle-padding-top $dialog-padding-leftRight $dialog-padding-bottom $dialog-padding-leftRight;
     border: none;
 
@@ -27,7 +27,6 @@ $dialog-girdle-padding-top: 10px;
         margin-left: -$dialog-padding-leftRight;
         margin-right: -$dialog-padding-leftRight;
     }
-    
     
 }
 
@@ -189,8 +188,7 @@ $dialog-girdle-padding-top: 10px;
     }
 }
 
-/* *** */
-
+/* ************* */
 /* dialog widths */
 div.dialog {
     width: $default-dialog-width;
@@ -198,13 +196,14 @@ div.dialog {
     &.dialog_wide {
         width: $default-dialog-width-wide;
     }
+    
+    margin-left: auto;
+    margin-right: auto;
 }
 
-
-/*Custom Dialog widths */
+/* custom widths */
 
 .dialog {
-
     &.data_source_permissions {
     /*   width: 570px; */
         width: $default-dialog-width-medium;
