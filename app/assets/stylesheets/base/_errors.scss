@@ -84,25 +84,27 @@ $margin-right-for-error-marker: 20px;
             padding: 10px 10px 12px 0px;
             padding-left: 35px;
 
-            &:first-child {
-                margin-top: 5px;
-            }
-            &:last-child {
-//                 margin-bottom: 5px;
-                margin-bottom: 0px;
-            }
-            ~li {
-                margin-top: -4px;
-            }
-            
             font-size: $medium-font;
             vertical-align: top;
 
             background-color: $error-background-color;
             color: $error-text-color;
             border: 1px solid;
-            border-radius: $alert-border-radius;
+            // border-radius: $alert-border-radius;
 
+
+            &:first-child {
+                margin-top: 5px;
+                border-radius: $alert-border-radius $alert-border-radius 0 0;
+            }
+            &:last-child {
+//                 margin-bottom: 5px;
+                margin-bottom: 0px;
+                border-radius: 0 0 $alert-border-radius $alert-border-radius ;
+            }
+            ~li {
+                margin-top: -4px;
+            }
 
             &::before {
                 display: inline-block;
