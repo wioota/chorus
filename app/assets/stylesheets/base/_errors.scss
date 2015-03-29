@@ -95,12 +95,14 @@ $margin-right-for-error-marker: 20px;
 
             &:first-child {
                 margin-top: 5px;
-                border-radius: $alert-border-radius $alert-border-radius 0 0;
+                border-top-left-radius: $alert-border-radius;
+                border-top-right-radius: $alert-border-radius;
             }
             &:last-child {
 //                 margin-bottom: 5px;
                 margin-bottom: 0px;
-                border-radius: 0 0 $alert-border-radius $alert-border-radius ;
+                border-bottom-left-radius: $alert-border-radius;
+                border-bottom-right-radius: $alert-border-radius;
             }
             ~li {
                 margin-top: -4px;
@@ -112,7 +114,7 @@ $margin-right-for-error-marker: 20px;
                 height: 0;
                 position: relative;
                 left: -25px;
-                top: 2px;
+                top: 1px;
                 color: $error-icon-color;
                 font-size: $alert-icon-medium;
                 font-family: FontAwesome;
