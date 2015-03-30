@@ -98,7 +98,7 @@ class Schema < ActiveRecord::Base
       rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid, DataSourceConnection::QueryError
         #do nothing
         next
-      rescue Exception => e
+      rescue => e
         Chorus.log_error "----- DATABASE CONNECTION ERROR: Failed to connect to database for :  #{e.message} on #{e.backtrace[0]} ------"
         # do nothing
         next
@@ -123,7 +123,7 @@ class Schema < ActiveRecord::Base
   rescue DataSourceConnection::Error
     touch(:refreshed_at)
     datasets.not_stale
-  rescue Exception => e
+  rescue  => e
     Chorus.log_error "----- SCHEMA CONNECTION ERROR: Failed to connect to schema for :  #{e.message} on #{e.backtrace[0]} ------"
     touch(:refreshed_at)
     datasets.not_stale
@@ -133,7 +133,7 @@ class Schema < ActiveRecord::Base
     connect_with(account).datasets_count options
   rescue DataSourceConnection::Error
     datasets.not_stale.count
-  rescue Exception => e
+  rescue  => e
     Chorus.log_error "----- DATABASE CONNECTION ERROR: Failed to connect to database :  #{e.message} on #{e.backtrace[0]} ------"
     datasets.not_stale.count
   end
