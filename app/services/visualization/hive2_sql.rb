@@ -75,5 +75,9 @@ module Visualization
     def timeseries_row_sql(o)
       raise NotImplemented
     end
+
+    def boxplot_row_sql(o)
+      raise NotImplemented
+    end
   end
 end
