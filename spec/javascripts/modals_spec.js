@@ -104,7 +104,7 @@ describe("chorus.Modal", function() {
 
                     // calculate modal height by total window height - (2 * top.position)
                     // top position defined to = 40px
-                    var windowHeight = $(window).height() - 80 + "px";
+                    var windowHeight = $(window).height() - 70 + "px";
 
                     //var dialogHeaderHeight = 40;
                     //var dialogBottomHeight = 50;
@@ -121,14 +121,12 @@ describe("chorus.Modal", function() {
                 });
 
                 it("has a max-height smaller than the window's height by twice the dialog's distance from the top of the window", function() {
-                    this.modal.resize(0, 100);
-                    expect(cssCalls()).toContain(["max-height", "20px"]);
 
                     this.modal.resize(0, 1000);
-                    expect(cssCalls()).toContain(["max-height", "920px"]);
+                    expect(cssCalls()).toContain(["max-height", "930px"]);
 
                     this.modal.resize(0, 500);
-                    expect(cssCalls()).toContain(["max-height", "420px"]);
+                    expect(cssCalls()).toContain(["max-height", "430px"]);
                 });
             });
 
