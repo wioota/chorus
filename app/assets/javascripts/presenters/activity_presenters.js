@@ -440,12 +440,12 @@
 
         JobSucceeded: {
             links: ["actor", "job", "workspace"],
-            dialogs: [{name: "jobResult", dialogClass: chorus.dialogs.JobResultDetail, linkTranslation: 'job.show_details'}]
+            dialogs: [{name: "jobResult", dialogClass: chorus.dialogs.JobResultDetail, linkTranslation: 'job.show_details.link'}]
         },
 
         JobFailed: {
             links: ["actor", "job", "workspace"],
-            dialogs: [{name: "jobResult", dialogClass: chorus.dialogs.JobResultDetail, linkTranslation: 'job.show_errors'}]
+            dialogs: [{name: "jobResult", dialogClass: chorus.dialogs.JobResultDetail, linkTranslation: 'job.show_details.link'}]
         },
 
         JobDisabled: {

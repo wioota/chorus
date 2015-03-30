@@ -1,0 +1,185 @@
+@import "compass/utilities/general/clearfix";
+@import "compass/css3";
+
+$defaultThemeBorderRadius: $alert-border-radius;
+
+@mixin unselectable {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+// **********
+
+ul.messenger {
+  &.messenger-fixed {
+    z-index: $toast-z-index;
+  }
+}
+
+ul.messenger-theme-alpine {
+    @include unselectable;
+    @include border-radius($defaultThemeBorderRadius);
+
+//     &.messenger-empty {
+//         display: none;
+//     }
+
+    .messenger-message {
+        position: relative;
+        border: 0px;
+        margin-bottom: 0px;
+        padding: 10px 35px 12px 35px;
+
+        font-size: $default-font-size;
+        font-weight: 500;
+
+        box-shadow: 2px 2px 3px 0px rgba(150, 161, 169, 0.7);
+
+        .messenger-close {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            display: block;
+
+            padding: 8px 10px 7px 7px;
+            
+            color: #777;
+            font-weight: $bold;
+            font-size: 20px;
+            line-height: 20px;
+
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+
+            &:hover {
+                color: #444;
+            }
+            &:active {
+                color: #777;
+            }
+        }
+        
+        .messenger-actions {
+            float: none;
+            margin-top: 10px;
+
+            a {
+                text-decoration: none;
+                // color: #AAA;
+                background: #2e2e2e;
+                display: inline-block;
+                padding: 10px;
+                margin-right: 10px;
+                padding: 4px 11px 6px;
+                &:hover {
+                    color: #f0f0f0;
+                    background: #2e2e2e;
+                }
+                &:active {
+                    background: #292929;
+                    color: #aaaaaa;
+                }
+            }
+            .messenger-phrase {
+                display: none;
+            }
+        }
+
+        .messenger {
+            @include border-radius(50%);
+            position: absolute;
+            left: 17px;
+            display: block;
+            content: "";
+            top: 50%;
+            margin-top: -8px;
+            height: 13px;
+            width: 13px;
+            z-index: 20;
+        }
+
+        .messenger-message-inner::before {
+            position: absolute;
+            left: 10px;
+            top: 12px;
+            content: "";
+            font-family: FontAwesome;
+            font-size: $alert-icon-medium;
+            text-decoration: none !important;
+        }
+
+        &.alert {
+        	border-style: solid;
+        	border-width: 1px;
+        }        
+        &.alert-error,
+        &.alert-danger {
+            color: $error-text-color;
+            background-color: $error-background-color;
+            border-color: $error-border-color;
+
+            .messenger-message-inner::before {
+                @include alert-error-icon;
+                color: $error-icon-color;
+            }
+        }
+        &.alert-warning {
+            color: #C09853;
+            background-color: #FCF8E3;
+            border-color: #FBEED5;
+
+            .messenger-message-inner::before {
+                @include alert-warning-icon;
+                color: $alert-icon-color;
+            }
+        }
+        &.alert-success {
+            color: $success-text-color;  // #468844;
+            background-color: $success-background-color;  // #dff0d8
+            border-color: $success-border-color;  // #d6e9c6;
+
+            .messenger-message-inner::before {
+                @include alert-success-icon;
+                color: $success-icon-color; 
+            }
+        }
+        &.alert-deletion {
+            color: $informational-text-color;  //
+            background-color: $informational-background-color; //
+            border-color: $informational-border-color;  //
+
+            .messenger-message-inner::before {
+                @include alert-success-icon;
+                color: $informational-icon-color;
+            }
+        }
+        &.alert-info {
+            color: $informational-text-color;
+            background-color: $informational-background-color;
+            border-color: $informational-border-color;
+
+            .messenger-message-inner::before {
+                @include alert-informational-icon;
+                color: $informational-icon-color;
+            }
+        }
+    }
+
+    // when there are multiple toasts displayed...
+    .messenger-message-slot {
+        &.messenger-last .messenger-message {
+            // for toast displayed, turn off bottom
+            @include border-radius($defaultThemeBorderRadius $defaultThemeBorderRadius 0px 0px);
+        }
+        &.messenger-first .messenger-message {
+            // for toast that was the first to display, turn off top
+            @include border-radius(0px 0px $defaultThemeBorderRadius $defaultThemeBorderRadius);
+        }
+        &.messenger-first.messenger-last .messenger-message {
+            // default for toast: all borders
+            @include border-radius($defaultThemeBorderRadius);
+        }
+    }
+}

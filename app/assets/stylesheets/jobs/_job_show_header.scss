@@ -1,17 +1,22 @@
-.job_show_content_header {
-    .frequency, .next_run, .last_run {
+@import "_common";
+
+.job_information {
+    .label {
+        font-weight: $bold;
+    }   
+    .frequency, .next_run, .last_run, .owner {
         display: inline-block;
     }
-
     .frequency {
-        width: 120px;
+        width: 150px;
     }
-
     .next_run {
-      width: 245px;
+        width: 250px;
     }
-
     .last_run {
-      width: 400px;
+        // width: 400px;
+    }
+    .owner {
+        @include ellipsis;
     }
 }
