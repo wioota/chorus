@@ -1,8 +1,8 @@
 @import "compass/css3/border-radius";
 
 #facebox {
-    // position: fixed;
-    position: absolute;
+    position: fixed;
+//     position: absolute;
     
     top: 0;
 //     left: 0;
@@ -12,12 +12,17 @@
     overflow-x: hidden;
     
     width: 100%;
-
+//     margin-left: 25px;
+//     margin-right: 25px;
+    
     text-align: left;
 //     @include border-radius(3px);
 
     .dialog_popup {
         position: relative;
+        margin-left: 25px;
+        margin-right: 25px;
+
     }
     .content {
         @include after-clearfix();
