@@ -63,7 +63,6 @@ describe("chorus.Modal", function() {
                 //Modal is abstract, so we need to give it a template to render
                 //this is the responsibility of subclasses
                 this.modal.templateName = "plain_text";
-
                 this.modal.launchModal();
             });
 
@@ -87,7 +86,7 @@ describe("chorus.Modal", function() {
                 beforeEach(function() {
                     spyOn($.fn, "height").andReturn(600);
                     spyOn($.fn, "css");
-                    this.faceboxProxy = $("<div id='facebox'><div class='popup'></div></div>");
+                    this.faceboxProxy = $("<div id='facebox'><div class='dialog_popup'></div></div>");
                     this.faceboxOverlayProxy = $("<div id='facebox_overlay'/>");
                     $("#jasmine_content").append(this.faceboxProxy).append(this.faceboxOverlayProxy);
 
@@ -137,12 +136,6 @@ describe("chorus.Modal", function() {
                 beforeEach(function() {
                     spyOn($.fn, "css");
                     this.modal.render();
-                });
-
-                it("re-centers the modal", function() {
-                    var lastCall = $.fn.css.lastCall();
-                    expect(lastCall.args).toEqual(["left", jasmine.any(Number)]);
-                    expect(lastCall.object.selector).toBe("#facebox");
                 });
 
                 it("calls #resize", function() {
