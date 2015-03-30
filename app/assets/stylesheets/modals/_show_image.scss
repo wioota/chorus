@@ -1,43 +1,53 @@
 .dialog.show_image {
 
-    .dialog_header {
-        height: 35px;
-        border: none;
+    #dialog_header {
+        border-bottom: none;
     }
 
+    width: 100%;
+    min-width: 600px;
+    // margin-left: 25px;
+//     margin-right: 25px;
+    
     .workspace_row {
+        height: 25px;
+        padding: 0 $dialog-padding-leftRight;
         background-color: $dialog-header-background;
-        height:25px;
         border-bottom: 1px solid $border-color;
 
         .workspace_image {
             height: 18px;
-            padding-left: 20px;
-            padding-right: 5px;
             float: left;
+            margin-right: 5px;
         }
     }
 
+    .actions_row {
+        height: 25px;
+        padding: 0 $dialog-padding-leftRight;
+        background-color: $accent;
+        line-height: 25px;
+        a {
+            padding-right: 20px;
+        }
+    }
+        
     .content_space {
-        padding: 10px;
+        // padding: 10px;
 
         img {
-            max-width: 1200px;
-        }
-
-        .interactions_row {
-            padding-left: 10px;
-            a {
-                padding-right: 20px;
-            }
+           //  max-width: 1200px;
+            max-width: 90%;
         }
 
         .image_space {
-            text-align: center;
-
-            .main_image {
-                padding:10px;
-            }
+            // text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #main_image {
+            // padding: 10px;
         }
     }
 }
+
