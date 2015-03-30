@@ -17,13 +17,13 @@ class ChorusWorker < QC::Worker
   end
 
   def lock_job
-    log(:level => :debug, :action => "lock_job")
+    log(:level => :debug, :action => "lock_job", :thread_id => Thread.current.object_id)
     attempts = 0
     job = nil
     until job || !running?
       job = @queue.lock(@top_bound)
       if job.nil?
-        log(:level => :debug, :action => "failed_lock", :attempts => attempts)
+        log(:level => :debug, :action => "failed_lock", :thread_id => Thread.current.object_id, :attempts => attempts)
         if attempts < @max_attempts
           seconds = 2**attempts
           wait(seconds)
@@ -33,15 +33,15 @@ class ChorusWorker < QC::Worker
           break
         end
       else
-        log(:level => :debug, :action => "finished_lock", :job => job_description(job))
+        log(:level => :debug, :action => "finished_lock", :thread_id => Thread.current.object_id, :job => job_description(job))
       end
     end
-    log(:level => :info, :action => "shutdown_workers") unless running?
+    log(:level => :info, :action => "shutdown_workers", :thread_id => Thread.current.object_id) unless running?
     job
   end
 
   def wait(seconds)
-    log(:level => :debug, :action => "sleep_wait", :wait => seconds)
+    log(:level => :debug, :action => "sleep_wait", :thread_id => Thread.current.object_id, :wait => seconds)
     timer = 0
     while timer < seconds && running? do
       Kernel.sleep(SLEEP_INCREMENT)
