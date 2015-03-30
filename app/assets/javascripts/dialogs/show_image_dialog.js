@@ -29,7 +29,7 @@ chorus.dialogs.ShowImage = chorus.dialogs.Base.extend({
 
     postRender: function() {
         this.$('.main_image').load(_.bind(function(){
-            this.centerHorizontally();
+            // this.centerHorizontally();
         }, this));
     },
 

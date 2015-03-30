@@ -138,7 +138,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
             }
 
             function recomposeForFileType(showingAlpine) {
-                self.centerHorizontally();
+                // self.centerHorizontally();
                 self.$el.toggleClass('dialog_wide', showingAlpine);
                 self.$('.work_flow_detail').toggleClass("hidden", !showingAlpine);
                 self.$(".comment").toggleClass("hidden", showingAlpine);

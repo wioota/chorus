@@ -29,7 +29,7 @@ chorus.Modal = chorus.views.Base.extend ({
     },
 
     resize: function(windowWidth, windowHeight) {
-        var $popup = $("#facebox .popup");
+        var $popup = $("#facebox .dialog_popup");
         var $facebox = $('#facebox');
         var $window = $(window);
 
@@ -65,12 +65,12 @@ chorus.Modal = chorus.views.Base.extend ({
     },
 
     centerHorizontally: function () {
-        $('#facebox').css('left', $(window).width() / 2 - ($('#facebox .popup').width() / 2));
+//         $('#facebox').css('left', $(window).width() / 2 - ($('#facebox .dialog_popup').width() / 2));
     },
 
     postRender: function() {
         this._super("postRender");
-        this.centerHorizontally();
+        // this.centerHorizontally();
     },
 
     makeModel:function (options) {
