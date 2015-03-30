@@ -78,11 +78,13 @@ module JdbcOverrides
 
       def datasets(options={})
         with_connection do |connection|
+          name_matcher = Regexp.compile(Regexp.escape(options[:name_filter]), Regexp::IGNORECASE) if options[:name_filter]
           res = []
           tables = connection.getMetaData.getTables('',schema_name,'%',nil)
           while tables.next
-
-            res << {:name => tables.getString(3), :type => table_type?(tables.getString(4))}
+            unless name_matcher && name_matcher !~ tables.getString(3)
+              res << {:name => tables.getString(3), :type => table_type?(tables.getString(4))}
+            end
           end
           res
         end
@@ -174,6 +176,8 @@ module JdbcOverrides
             :blob
           when /\Aenum/io
             :enum
+          else
+            :other
         end
       end
     end
