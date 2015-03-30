@@ -1,13 +1,11 @@
 @import "compass/css3/box-sizing";
 
-
 $dialog-girdle-padding-top: 10px;
-
 
 
 /* general dialog styles */
 
-/* .girdle wraps the content of the dialog popup */
+/* .girdle wraps the content of the dialog popup     */
 /* and sets the overall margins for the content area */
 .dialog_popup .girdle {
     padding: $dialog-girdle-padding-top $dialog-padding-leftRight $dialog-padding-bottom $dialog-padding-leftRight;
@@ -22,12 +20,11 @@ $dialog-girdle-padding-top: 10px;
     
     
     .action_bar {
-        // counteract the dialog padding
+        // counteract the dialog padding when it is inside .girdle
         margin-top: -$dialog-girdle-padding-top;
         margin-left: -$dialog-padding-leftRight;
         margin-right: -$dialog-padding-leftRight;
     }
-    
 }
 
 #dialog_header {
@@ -40,6 +37,8 @@ $dialog-girdle-padding-top: 10px;
     word-break: break-all;
 }
 
+// *****
+// TODO check if this is needed. to remove
 #dialog_content {
     .girdle {}
 }
@@ -217,20 +216,16 @@ div.dialog {
 
 
 /* to do: work out what should be in show_image.scss and what should be here */
-.dialog.show_image {
+.XXXdialog.show_image {
     width: 100%;
     min-width: 600px;
 
-    .workspace_row {
-        background-color: $dialog-header-background;
-        height:25px;
-        border-bottom: 1px solid $border-color;
+    .actions_row {
+        background-color: $accent;
 
-        .workspace_image {
-            height: 18px;
-            padding-left: 20px;
-            padding-right: 5px;
-            float: left;
+        // padding-left: 10px;
+        a {
+            padding-right: 20px;
         }
     }
 
@@ -241,12 +236,6 @@ div.dialog {
             max-width: 1200px;
         }
 
-        .interactions_row {
-            padding-left: 10px;
-            a {
-                padding-right: 20px;
-            }
-        }
 
         .image_space {
             text-align: center;
