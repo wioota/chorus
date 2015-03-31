@@ -201,13 +201,13 @@
     $('body').append($.facebox.settings.faceboxHtml)
 
     var preload = [ new Image(), new Image() ];
-    preload[0].src = $.facebox.settings.closeImage;
+//     preload[0].src = $.facebox.settings.closeImage;
     preload[1].src = $.facebox.settings.loadingImage;
 
-    $('#facebox').find('.b:first, .bl').each(function() {
-      preload.push(new Image());
-      preload.slice(-1).src = $(this).css('background-image').replace(/url\((.+)\)/, '$1');
-    })
+//     $('#facebox').find('.b:first, .bl').each(function() {
+//       preload.push(new Image());
+//       preload.slice(-1).src = $(this).css('background-image').replace(/url\((.+)\)/, '$1');
+//     })
 
     $('#facebox .close').click($.facebox.close)
 //       .append('<img src="'
@@ -215,21 +215,21 @@
 //               + '" class="close_image" title="close">')
   }
 
-  // getPageScroll() by quirksmode.com
-  function getPageScroll() {
-    var xScroll, yScroll;
-    if (self.pageYOffset) {
-      yScroll = self.pageYOffset;
-      xScroll = self.pageXOffset;
-    } else if (document.documentElement && document.documentElement.scrollTop) {	 // Explorer 6 Strict
-      yScroll = document.documentElement.scrollTop;
-      xScroll = document.documentElement.scrollLeft;
-    } else if (document.body) {// all other Explorers
-      yScroll = document.body.scrollTop;
-      xScroll = document.body.scrollLeft;
+    // getPageScroll() by quirksmode.com
+    function getPageScroll() {
+        var xScroll, yScroll;
+        if (self.pageYOffset) {
+          yScroll = self.pageYOffset;
+          xScroll = self.pageXOffset;
+        } else if (document.documentElement && document.documentElement.scrollTop) {	 // Explorer 6 Strict
+          yScroll = document.documentElement.scrollTop;
+          xScroll = document.documentElement.scrollLeft;
+        } else if (document.body) {// all other Explorers
+          yScroll = document.body.scrollTop;
+          xScroll = document.body.scrollLeft;
+        }
+        return new Array(xScroll,yScroll);
     }
-    return new Array(xScroll,yScroll);
-  }
 
   // Adapted from getPageSize() by quirksmode.com
   function getPageHeight() {

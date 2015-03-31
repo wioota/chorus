@@ -18,7 +18,8 @@ $dialog-girdle-padding-top: 10px;
     border: 1px dotted #A44;
     /* END development: to delete */
     
-    
+    background-color: $body-background-color;
+
     .action_bar {
         // counteract the dialog padding when it is inside .girdle
         margin-top: -$dialog-girdle-padding-top;
@@ -30,11 +31,17 @@ $dialog-girdle-padding-top: 10px;
 #dialog_header {
     height: 40px;
     background-color: $dialog-header-background;
-    border-bottom: 1px solid $border-color;
+    border-bottom: $border-canon;
 
     line-height: 40px;
     padding: 0 $dialog-padding-leftRight;
     word-break: break-all;
+}
+
+#dialog_bottom {
+    height: 50px;
+    background-color: $dialog-header-background;
+    border-top: $border-canon;
 }
 
 // *****
@@ -45,7 +52,9 @@ $dialog-girdle-padding-top: 10px;
 
 
 .dialog {
-    .dialog_header {}
+//     background-color: $body-background-color;
+//     border-radius: $default-border-radius;    
+
 
     h1 {
         font-size: $medium-font;
@@ -61,8 +70,6 @@ $dialog-girdle-padding-top: 10px;
     h2 {
         font-size: $medium-font;
     }
-
-    background-color: $body-background-color;
     
     .dialog_content {
         // background-color: $body-background-color;

@@ -1,13 +1,29 @@
+@import "compass/css3/box-sizing";
+
+$alert-marker-width: 60px;
+
+/* general alert dialog styles */
+
 .alert {
+
+        width: $default-dialog-width;
+        margin-left: auto;
+        margin-right: auto;
+
     .errors {
-        width: 483px;
-        max-width: 483px;
+//         width: 483px;
+       //  max-width: 483px;
     }
 
     .guts {
-        width: 500px;
-        max-width: 500px;
+//      width: 500px;
+//      max-width: 500px;
+
         background-color: $body-background-color;
+
+    .alert_content {
+        margin-left: $alert-marker-width;
+    }
 
         .content {
 
@@ -59,28 +75,78 @@
         }
     }
 
+    .alert-message,
+    .alert-error,
+    .alert-info,
+    .alert-warning {
+        display: none;
+    }
+
+        
     &.info {
-        img.message {
-            display: none;
-        }
-        img.error {
-            display: none;
-        }
-        img.info {
-            display: inline !important;
+        .alert-info {
+            display: inline-block;
         }
     }
 
     &.error {
-        img.message {
-            display: none;
-        }
-        img.info {
-            display:none;
-        }
-        img.error {
-            display: inline !important;
+        .alert-error {
+            display: inline-block;
         }
     }
 }
 
+#alert_bottom {
+    height: 50px;
+}
+
+.marker {
+
+        
+        // position: absolute;
+        position: relative;
+        float: left;
+
+        width: $alert-marker-width;
+//             left: 10px;
+//             top: 12px;
+        content: "";
+        font-family: FontAwesome;
+        font-size: $alert-icon-large;
+        text-decoration: none !important;
+       
+        
+        .alert-error,
+        .alert-danger {
+            &::before {
+                @include alert-error-icon;
+                color: $error-icon-color;
+            }
+        }
+        .alert-warning {
+            &::before {
+                @include alert-warning-icon;
+                color: $alert-icon-color;
+            }
+        }
+        .alert-success {
+            &::before {
+                @include alert-success-icon;
+                color: $success-icon-color; 
+            }
+        }
+        .alert-deletion {
+
+            &::before {
+                @include alert-success-icon;
+                color: $informational-icon-color;
+            }
+        }
+        .alert-info {
+            &::before {
+                @include alert-informational-icon;
+                color: $informational-icon-color;
+            }
+        }
+
+}

@@ -10,13 +10,7 @@
 /* .form_controls= the 'footer' section at bottom of dialogs with the buttons */
 /* * */
 
-#dialog_bottom {
-    height: 50px;
-}
-
 .dialog_popup .form_controls {
-    background-color: $dialog-header-background;
-    border-top: $border-canon;
 
     .links,
     button {

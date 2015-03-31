@@ -29,9 +29,9 @@ chorus.handlebarsHelpers.template = {
         return Handlebars.helpers.renderTemplate("components/form_controls", { submitText: submitText, cancelText: cancelText, disabled: true});
     },
 
-    infoBlock: function(infoTranslation) {
-        return Handlebars.helpers.renderTemplate("components/info_block", {info: infoTranslation});
-    },
+//     infoBlock: function(infoTranslation) {
+//         return Handlebars.helpers.renderTemplate("components/info_block", {info: infoTranslation});
+//     },
 
     formInfoBlock: function(t) {
         return Handlebars.helpers.renderTemplate("components/form_info_block", {text: t});
