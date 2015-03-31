@@ -15,8 +15,18 @@ processify = func_executor.processify
 
 
 silent = False
-if len(sys.argv) == 2 and sys.argv[1]=="-s":
+default_user = "chorus"
+default_chorus_path = "/usr/local/chorus"
+default_data_path = "/data/chorus"
+if len(sys.argv) >= 2 and sys.argv[1]=="-s":
     silent = True
+if len(sys.argv) >= 3:
+    default_user = sys.argv[2]
+if len(sys.argv) >= 4:
+    default_chorus_path = sys.argv[3]
+if len(sys.argv) >= 5:
+    default_data_path = sys.argv[4]
+
 io = installer_io.InstallerIO(silent)
 
 def exit_gracefully(signum, frame):
@@ -102,14 +112,14 @@ def install():
     if not prompt_for_eula():
         print "Install aborted, Cancelled by user"
         return
-    user = io.prompt("which user do you want to use to install chorus[default: chorus]", default="chorus")
+    user = io.prompt("which user do you want to use to install chorus [default: %s]" % default_user, default=default_user)
     ret, stdout, stderr = run("useradd chorus")
     if ret not in [0,9]:
         if ret == 126:
             stderr += "Please run as the user with root permission\n"
         raise Exception(stderr)
-    chorus_path = io.prompt("Please enter the full path to the Chorus installation directory[default: /usr/local/chorus]", default="/usr/local/chorus")
-    data_path = io.prompt("Please enter the full path to the Chorus data directory (recommended 500GB)[default:/data/chorus]", default="/data/chorus")
+    chorus_path = io.prompt("Please enter the full path to the Chorus installation directory [default: %s]" % default_chorus_path, default=default_chorus_path)
+    data_path = io.prompt("Please enter the full path to the Chorus data directory (recommended 500GB) [default: %s]" % default_data_path, default=default_data_path)
     installation_path = os.path.join(os.path.dirname(__file__), "..")
 
     version = ""
