@@ -13,11 +13,12 @@
 
         iconSrc: function() {
             if (this.isFailure()) {
-                return "/images/messaging/message_error_med.png";
+//                 return "/images/messaging/message_error_med.png";
+                return "/images/messaging/alert-error.svg";
             } else if (this.model.isSuccessfulImport()) {
                 return "/images/jobs/task-import.png";
             } else {
-                return this.model.author().fetchImageUrl({ size: "icon" });
+                return this.model.author().fetchImageUrl({size: "icon"});
             }
         },
 
@@ -79,7 +80,7 @@
         },
 
         attachments: function() {
-            return this.model.attachments().map(function (attachment) { return new chorus.presenters.Attachment(attachment); });
+            return this.model.attachments().map(function (attachment) {return new chorus.presenters.Attachment(attachment); });
         },
 
         canEdit: function() {
@@ -603,7 +604,7 @@
 
         chorusViewSourceType: function(self) {
             var model = chorusViewSourceModel(self);
-            return model.get("fileName") ? "workfile" : t("dataset.entitySubtypes." + chorusViewSourceModel(self).metaType());
+            return model.get("fileName") ? "workfile": t("dataset.entitySubtypes." + chorusViewSourceModel(self).metaType());
         },
 
         updateCredentialsLink: function(self) {
@@ -673,7 +674,7 @@
         },
 
         dialogLink: function (model, linkTranslation) {
-            return Handlebars.helpers.linkTo('#', t(linkTranslation), { 'class': model.constructorName });
+            return Handlebars.helpers.linkTo('#', t(linkTranslation), {'class': model.constructorName });
         },
 
         status: function(self) {
