@@ -6,10 +6,13 @@ $default-table-header-bg: $light-gray;
 $default-table-header-fontweight: $semibold;
 $default-table-header-fontcolor: #666;
 
+$table-footer-bg: #FFDDBB;
+
 .job_result_detail_dialog {
     table {
         margin-top: 20px;
         margin-bottom: 20px;
+        width: 100%;
         
         th {
             width: 20%;
@@ -24,13 +27,29 @@ $default-table-header-fontcolor: #666;
             border: $dark-border-canon;
             padding: $default-table-cell-padding;
         }
+        
+        #job_run_summary {
+            td {
+                border-top-width: 2px;
+                border-top-style: dotted;
+                border-top-color: darken($border-color-dark, 20%);
+                font-weight: $semibold;
+            }
+                
+            &.success {
+                background-color: $success-background-color;
+            }
+            &.failure {
+                background-color: #FAEEDD; // ?$alert-background-color ?
+            }
+        }
     }
 
-    .status {
+    .statusMarker {
         display: inline-block;
         position: relative;
         top: 2px;
-        margin-right: 3px;
+        margin-right: 5px;
         
         font-size: $alert-icon-medium;
         font-family: FontAwesome;

@@ -2,7 +2,7 @@ chorus.dialogs.PublishToTableau = chorus.dialogs.Base.include(chorus.Mixins.Dial
     constructorName: "PublishTableau",
 
     templateName:"publish_to_tableau_dialog",
-    title: 'Publish to Tableau',
+    title: t("tableau.dialog.publish_to_tableau.title"),
 
     setup: function() {
         this.dataset = this.options.dataset;
