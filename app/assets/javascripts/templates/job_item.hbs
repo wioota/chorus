@@ -3,7 +3,6 @@
 </span>
 
 <div class="item_information">
-
     <div class="item_name">
         {{#if url}}
             <a title="{{name}}" class="name" href="{{url}}">{{name}}</a>
@@ -12,42 +11,49 @@
         {{/if}}
     </div>
 
+<div class="job_information">
     <div class="item_metadata">
-        {{#if frequency}}
-            <span class="frequency"><strong>{{frequency}}</strong></span>
-        {{/if}}
+        <div>
+            {{#if frequency}}
+                <span class="frequency">
+                    <span class="label">{{t "job.run_frequency.label"}}</span>
+                    {{frequency}}
+                </span>
+            {{/if}}
 
-        {{#if nextRun}}
-            <span class="next_run">
-                <strong>{{t "job.next_run"}}</strong>
-                {{displayTimestamp nextRun}}
+            {{#if nextRun}}
+                <span class="next_run">
+                    <span class="label">{{t "job.next_run"}}</span>
+                    {{displayTimestamp nextRun}}
+                </span>
+            {{/if}}
+
+            <span class="state">
+                {{#if running}}
+                    <span class='loading_spinner'></span>
+                {{/if}}
+
+                {{t stateKey}}
             </span>
-        {{/if}}
 
-        <span class="last_run">
-            <strong>{{t "job.last_run"}}:</strong>
-            {{#if lastRun}}
-                <a class='last_run_date' href='#'>{{displayTimestamp lastRun}} {{t lastRunLinkKey}}</a>
-            {{else}}
-                -
-            {{/if}}
-        </span>
+            <!-- NOTE -->
+            <!-- There was a template conditional here for 'title' and 'lastComment' -->
+            <!-- now removed because it doesnt appear possible for those attributes to exist on jobs -->
 
-        <span class="state">
-            {{#if running}}
-                <span class='loading_spinner'></span>
-            {{/if}}
+        </div>
+        
+        <div>
+            <span class="last_run">
+                <strong>{{t "job.last_run"}}</strong>
+                {{#if lastRun}}
+                    <a class='last_run_date' href='#' title="{{t 'job.show_details.tip'}}">{{displayTimestamp lastRun}}. <span class="status">{{t lastRunStatusKey}}<span></a>
+                {{else}}
+                    {{t "job.last_run_no_last_run"}}
+                {{/if}}
+            </span>
+        </div>
 
-            {{t stateKey}}
-        </span>
-
-        {{#if title}}
-            <div class="title" title="{{title}}">{{title}}</div>
-        {{/if}}
-        {{#if lastComment}}
-            {{> itemLastComment}}
-        {{/if}}
-
-        {{> itemTags}}
     </div>
+</div>
+
 </div>

@@ -1,3 +1,7 @@
+// @version 5
+// NO LONGER IN USE
+// applies to an older version of chorus
+
 chorus.views.DashboardWorkspaceList = chorus.views.Base.extend({
     constructorName: "DashboardWorkspaceListView",
     templateName: "dashboard/workspace_list",

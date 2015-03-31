@@ -248,7 +248,6 @@ window.Chorus = function chorus$Global() {
         magnifyGlassWrap.wrapAll(container);
     };
 
-
     self.hotKeyMeta = BrowserDetect.OS === "Mac" ? "ctrl" : "alt";
 
     self.hotKeyEvent = function(keyChar) {
