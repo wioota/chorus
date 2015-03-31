@@ -12,13 +12,12 @@ describe("chorus.alerts.PublishInsight", function() {
         it("displays the confirmation message", function() {
             var title = this.alert.$("h1").text().trim();
             expect(title).toMatchTranslation("insight.publish.alert.title");
-            expect(this.alert.$(".content p").text().trim()).toMatchTranslation("insight.publish.alert.body");
+            expect(this.alert.$(".alert_content p").text().trim()).toMatchTranslation("insight.publish.alert.body");
             expect(this.alert.$("button.submit").text().trim()).toMatchTranslation("insight.publish.alert.button");
         });
 
         it("calls the model's publish method when the submit button is clicked", function() {
             this.alert.$("button.submit").click();
-
             expect(this.activity.publish).toHaveBeenCalled();
         });
 
@@ -39,16 +38,14 @@ describe("chorus.alerts.PublishInsight", function() {
         it("displays the confirmation message", function() {
             var title = this.alert.$("h1").text().trim();
             expect(title).toMatchTranslation("insight.unpublish.alert.title");
-            expect(this.alert.$(".content p").text().trim()).toMatchTranslation("insight.unpublish.alert.body");
+            expect(this.alert.$(".alert_content p").text().trim()).toMatchTranslation("insight.unpublish.alert.body");
             expect(this.alert.$("button.submit").text().trim()).toMatchTranslation("insight.unpublish.alert.button");
         });
 
         it("calls the model's unpublish method when the submit button is clicked", function() {
             this.alert.$("button.submit").click();
-
             expect(this.activity.unpublish).toHaveBeenCalled();
         });
     });
-
 
 });
