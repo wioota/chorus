@@ -8,6 +8,11 @@ class Workspace < ActiveRecord::Base
 
   PROJECT_STATUSES = [:on_track, :needs_attention, :at_risk]
 
+  PERMISSIONS = [:show, :update, :destroy]
+
+  # TODO: put in bitmask module
+  PERMISSIONS_INTS = [1, (1 << 1), (1 << 2)]
+
   attr_accessible :name, :public, :summary, :member_ids, :has_added_member, :owner_id, :archiver, :archived,
                   :has_changed_settings, :show_sandbox_datasets, :is_project, :project_status, :project_status_reason,
                   :project_target_date
@@ -64,6 +69,15 @@ class Workspace < ActiveRecord::Base
   searchable_model do
     text :name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
     text :summary, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+  end
+
+  def self.PERMISSIONS
+    PERMISSIONS
+  end
+
+  # TODO: put in bitmask module
+  def self.PERMISSIONS_INTS
+    PERMISSIONS_INTS
   end
 
   def self.reindex_workspace(workspace_id)
@@ -264,6 +278,8 @@ class Workspace < ActiveRecord::Base
       []
     end
     perm << :create_workflow if user.developer? && has_membership
+
+    # return [:admin]  # uncomment this line to expose front-end settings that are normally disabled for some roles
     perm
   end
 
