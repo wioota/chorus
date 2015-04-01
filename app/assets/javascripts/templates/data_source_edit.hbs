@@ -7,7 +7,7 @@
         <textarea name="description" maxlength="4095" rows="3" >{{description}}</textarea>
 
         {{#if hdfsDataSource}}
-            {{hdfsVersionsSelect false}}
+            {{hdfsVersionsSelect false false}}
         {{/if}}
 
         {{#if gpdbPgOrOracle}}
@@ -26,6 +26,15 @@
 
         {{#if jdbcDataSource}}
             {{jdbcDataSourceFields this}}
+        {{/if}}
+
+        {{#if jdbcHiveDataSource}}
+            {{hdfsVersionsSelect true true}}
+            <br/>
+            {{jdbcDataSourceFields this}}
+            <br/>
+            {{jdbcHiveDataSourceFields this}}
+            <br/>
         {{/if}}
 
         {{#if gnipDataSource}}

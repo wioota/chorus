@@ -52,6 +52,7 @@ describe TableauWorkbooksController do
     it 'is authenticated' do
       mock(subject).authorize! :can_edit_sub_objects, workspace
       post :create, params
+      response.code.should == '201'
     end
 
     it 'returns 201 created with data when the save succeeds' do

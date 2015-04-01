@@ -69,10 +69,11 @@ chorus.handlebarsHelpers.template = {
         return Handlebars.helpers.renderTemplate("data_sources/hdfs_data_source_fields", context || {});
     },
 
-    hdfsVersionsSelect: function(selectOne) {
+    hdfsVersionsSelect: function(selectOne, hive) {
         selectOne = selectOne === undefined ? true : selectOne;
+        hive = hive === undefined ? false : hive;
         return Handlebars.helpers.renderTemplate("data_sources/hdfs_versions_select", {
-            hdfsVersions: chorus.models.Config.instance().get("hdfsVersions"),
+            hdfsVersions: hive ? chorus.models.Config.instance().get("hiveHdfsVersions") : chorus.models.Config.instance().get("hdfsVersions"),
             selectOne: selectOne
         });
     },
@@ -93,6 +94,10 @@ chorus.handlebarsHelpers.template = {
 
     jdbcDataSourceFields: function(context) {
         return Handlebars.helpers.renderTemplate("data_sources/jdbc_data_source_fields", context || {});
+    },
+
+    jdbcHiveDataSourceFields: function(context) {
+        return Handlebars.helpers.renderTemplate("data_sources/jdbc_hive_data_source_fields", context || {});
     },
 
     workflowResultLink: function (jobTaskResult) {

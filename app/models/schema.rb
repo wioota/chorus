@@ -90,12 +90,15 @@ class Schema < ActiveRecord::Base
       begin
         dataset.skip_search_index = true if options[:skip_dataset_solr_index]
         if dataset.changed?
-          dataset.save!
+          begin
+            dataset.save!
+          rescue Errno::ECONNREFUSED
+          end
         elsif options[:force_index]
           dataset.index
         end
         found_datasets << dataset.id
-      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid, DataSourceConnection::QueryError
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid, DataSourceConnection::QueryError, Errno::ECONNREFUSED
         #do nothing
         next
       rescue => e

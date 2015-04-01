@@ -39,6 +39,10 @@ class ChorusConfig
     @available_hdfs_versions ||= initialize_hdfs_versions
   end
 
+  def hive_hdfs_versions
+    @available_hive_hdfs_versions ||= initialize_hive_hdfs_versions
+  end
+
   def time_zones
     us_zones = ActiveSupport::TimeZone.us_zones
     other_zones = ActiveSupport::TimeZone.all.reject { |z| us_zones.include?(z) }
@@ -172,6 +176,15 @@ class ChorusConfig
     ]
     versions += pivotal_versions
     versions += other_versions unless License.instance.branding == 'pivotal'
+    versions.sort
+  end
+
+  def initialize_hive_hdfs_versions
+    versions = [
+        'Cloudera CDH5',
+        'Hortonworks HDP 2.1',
+        'MapR4'
+    ]
     versions.sort
   end
 
