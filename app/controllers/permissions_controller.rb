@@ -8,7 +8,14 @@ class PermissionsController < ApplicationController
 
   def create
     role = Role.find(params[:permission][:role_id])
-    permission = role.permissions.create(params[:permission])
+    chorus_class = ChorusClass.find(params[:permission][:chorus_class_id])
+
+    permission = Permission.new(params[:permission])
+    permission.role = role
+    permission.chorus_class = chorus_class
+
+    permission.save
+
     render :json => permission.to_json
   end
 
@@ -25,7 +32,10 @@ class PermissionsController < ApplicationController
   end
 
   def update
+    chorus_class = ChorusClass.find(params[:permission][:chorus_class_id])
     @permission.update_attributes(params[:permission])
+    @permission.chorus_class = chorus_class
+    @permission.save
     render :json => @permission.to_json
   end
 

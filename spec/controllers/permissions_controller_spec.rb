@@ -26,10 +26,11 @@ describe PermissionsController do
 
   describe '#create' do
     let (:a_role) { roles(:role) }
+    let (:a_chorus_class) { ChorusClass.create(:name => "TempClass") }
     let (:params) {
       {
           :role_id => a_role.id,
-          :class_id => "1",
+          :chorus_class_id => a_chorus_class.id,
           :permissions_mask => 1
       }
     }
@@ -59,7 +60,7 @@ describe PermissionsController do
     it "finds the right permission" do
       get :show, :id => a_permission.id
       response.decoded_body.id.should == a_permission.id
-      response.decoded_body.class_id.should == a_permission.class_id
+      response.decoded_body.chorus_class_id.should == a_permission.chorus_class_id
       response.decoded_body.permissions_mask.should == a_permission.permissions_mask
     end
 
@@ -73,27 +74,29 @@ describe PermissionsController do
     let (:old_params ){
       {
           :id => a_permission.id,
-          :class_id => a_permission.class_id,
+          :chorus_class_id => a_permission.chorus_class_id,
           :permissions_mask => a_permission.permissions_mask
       }
     }
 
+    let (:a_different_chorus_class) { ChorusClass.create(:name => "NewClass") }
+
     let (:new_params) {
       {
-          :class_id => "1000",
+          :chorus_class_id => a_different_chorus_class.id,
           :permissions_mask => 10
       }
     }
 
     it "updates the correct attributes" do
       put :update, old_params.merge(:permission => new_params)
-      response.decoded_body.class_id.should == new_params[:class_id]
+      response.decoded_body.chorus_class_id.should == new_params[:chorus_class_id]
       response.decoded_body.permissions_mask.should == new_params[:permissions_mask]
     end
   end
 
   describe '#destroy' do
-    let (:new_permission) { FactoryGirl.create(:permission, :class_id => "666") }
+    let (:new_permission) { FactoryGirl.create(:permission, :chorus_class_id => "666") }
 
     it "destroys the role given the proepr id" do
       old_count = Permission.count
