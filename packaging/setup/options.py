@@ -21,13 +21,13 @@ def get_options(args):
     if len(args) < 2 or args[1] not in ["setup", "health_check", "configure"]:
         print "[error] please specify the command"
         parser.print_help()
-        quit()
+        sys.exit(1)
     if not os.path.exists(options.chorus_path):
         print "[error] %s not exists" % options.chorus_path
-        quit()
+        sys.exit(1)
     elif not os.path.exists(options.data_path):
         print "[error] %s not exists" % options.data_path
-        quit()
+        sys.exit(1)
     return options, args[1], args[2:]
 
 def get_version(chorus_path):
@@ -39,7 +39,7 @@ def get_version(chorus_path):
         from log import logger
         logger.error(e)
         logger.error("Exception Occured, see %s/install.log for details" % chorus_path.rstrip("/"))
-        quit()
+        sys.exit(1)
     return version
 
 options, arg, health_args = get_options(sys.argv)

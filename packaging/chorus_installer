@@ -9,25 +9,26 @@ import pwd
 from setup import color
 from setup import installer_io
 from setup import func_executor
+from optparse import OptionParser
 bold = color.bold
 error = color.error
 processify = func_executor.processify
 
 
-silent = False
-default_user = "chorus"
-default_chorus_path = "/usr/local/chorus"
-default_data_path = "/data/chorus"
-if len(sys.argv) >= 2 and sys.argv[1]=="-s":
-    silent = True
-if len(sys.argv) >= 3:
-    default_user = sys.argv[2]
-if len(sys.argv) >= 4:
-    default_chorus_path = sys.argv[3]
-if len(sys.argv) >= 5:
-    default_data_path = sys.argv[4]
+parser = OptionParser()
+parser.add_option('--chorus_user', action="store", dest="chorus_user",
+                  help="provide the chorus user [default: %default]", default="chorus")
+parser.add_option('--chorus_path', action="store", dest="chorus_path",
+                  help="provide the chorus path [default: %default]", default="/usr/local/chorus")
+parser.add_option('--data_path', action="store", dest="data_path",
+                  help="provide the chorus data path [default: %default]", default="/data/chorus")
+parser.add_option('--disable_spec', action="store_true", dest="disable_spec",
+                  help="disable the spec check [default: %default]", default=False)
+parser.add_option('-s', '--silent', action="store_true", dest="silent",
+                  help="runing script silently [default: %default]", default=False)
+options, args = parser.parse_args(sys.argv)
 
-io = installer_io.InstallerIO(silent)
+io = installer_io.InstallerIO(options.silent)
 
 def exit_gracefully(signum, frame):
     print "\nInstall aborted, Cancelled by user"
@@ -112,14 +113,14 @@ def install():
     if not prompt_for_eula():
         print "Install aborted, Cancelled by user"
         return
-    user = io.prompt("which user do you want to use to install chorus [default: %s]" % default_user, default=default_user)
+    user = io.prompt("which user do you want to use to install chorus [default: %s]" % options.chorus_user, default=options.chorus_user)
     ret, stdout, stderr = run("useradd chorus")
     if ret not in [0,9]:
         if ret == 126:
             stderr += "Please run as the user with root permission\n"
         raise Exception(stderr)
-    chorus_path = io.prompt("Please enter the full path to the Chorus installation directory [default: %s]" % default_chorus_path, default=default_chorus_path)
-    data_path = io.prompt("Please enter the full path to the Chorus data directory (recommended 500GB) [default: %s]" % default_data_path, default=default_data_path)
+    chorus_path = io.prompt("Please enter the full path to the Chorus installation directory [default: %s]" % options.chorus_path, default=options.chorus_path)
+    data_path = io.prompt("Please enter the full path to the Chorus data directory (recommended 500GB) [default: %s]" % options.data_path, default=options.data_path)
     installation_path = os.path.join(os.path.dirname(__file__), "..")
 
     version = ""
@@ -150,10 +151,13 @@ def install():
     grant_permission(user, chorus_path, data_path)
 
     _s = ""
-    if silent:
+    if options.silent:
         _s = "-s"
-    run_interact("%s setup %s --chorus_path=%s --data_path=%s" % \
-                 (os.path.join(release_path, "packaging/setup/chorus_server"), _s, chorus_path, data_path), user)
+    _disable_spec = ""
+    if options.disable_spec:
+        _disable_spec = "--disable_spec"
+    run_interact("%s setup %s --chorus_path=%s --data_path=%s %s" % \
+                 (os.path.join(release_path, "packaging/setup/chorus_server"), _s, chorus_path, data_path, _disable_spec), user)
 
 try:
     signal.signal(signal.SIGINT, exit_gracefully)
