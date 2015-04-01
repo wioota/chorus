@@ -112,6 +112,10 @@ class ApplicationController < ActionController::Base
     present_errors({:service => :SOLR_UNREACHABLE}, :status => :service_unavailable)
   end
 
+  def render_service_unavailable_error(e)
+    present_errors({ :message => e.message }, :status => :service_unavailable )
+  end
+
   def render_not_found(e)
     present_errors({:record => :NOT_FOUND}, :status => :not_found)
   end
