@@ -67,7 +67,7 @@ chorus_objects = [dev_workspace1, pg_data_source, mark_workspace1]
 # --- administrator users and role ---
 admin = FactoryGirl.create(:user, :username => "admin")
 admin_role = FactoryGirl.create(:role, :name => "Admin")
-admin_role.users << [admin]
+admin_role.users << [admin, chorusadmin]
 
 # --- developer users and role ---
 #dev1 = FactoryGirl.create(:user, :username => "dev1")
@@ -84,17 +84,17 @@ dev_role = FactoryGirl.create(:role, :name => "Developer")
 dev_role.users << [dev1, dev2]
 
 # --- collaborator users and role ---
-collab1 = FactoryGirl.create(:user, :username => "collab1")
+collab1 = User.create(
+    :username => "collab1",
+    :first_name => "collab",
+    :last_name => "1",
+    :email => "collab1@example.com",
+    :password => "secret",
+    :password_confirmation => "secret"
+)
 collab2 = FactoryGirl.create(:user, :username => "collab2")
 collab_role = FactoryGirl.create(:role, :name => "Collaborator", :description => "Role for collaborator")
 collab_role.users << [collab1, collab2]
-
-# --- misc group and role ---
-#guser = FactoryGirl.create(:user, :username => "grouped_user")
-#misc_group = FactoryGirl.create(:group, :name => "Generic Group", :description => "A group of different users with different roles")
-#misc_group.users << [dev1, mark1, guser]
-#misc_role = FactoryGirl.create(:role, :name => "Misc Role", :description => "This role is attached to a group")
-#misc_group.roles << misc_role
 
 # --- objects and classes for developer role ---
 chorus_objects.each do |obj|
@@ -104,16 +104,22 @@ chorus_objects.each do |obj|
 end
 
 # --- permissions ---
-cannot_view_workspace = Permission.new
-cannot_view_workspace.permissions_mask = 0
-read_only_workspace = Permission.new
-read_only_workspace.permissions_mask = 1
-edit_workspace = Permission.new
-edit_workspace.permissions_mask = 2
-#admin_role.permissions << edit_workspace
-edit_workspace.role = admin_role
-edit_workspace.role = dev_role
-read_only_workspace.role = collab_role
-#collab_role.permissions << read_only_workspace
-ChorusClass.find_by_name("Workspace").permissions << [read_only_workspace, edit_workspace]
+# Current implementation is clunky because the permissions model has a double 'belongs_to'.
+no_permissions = Permission.new
+no_permissions.permissions_mask = 0
+
+show_workspace = Permission.new
+show_workspace.permissions_mask = 1
+
+show_update_workspace = Permission.new
+show_update_workspace.permissions_mask = 1 | (1 << 1)
+
+show_update_destroy_workspace = Permission.new
+show_update_destroy_workspace.permissions_mask = 1 | (1 << 1) | (1 << 2)
+
+show_workspace.role = collab_role
+show_update_workspace.role = dev_role
+show_update_destroy_workspace.role = admin_role
+ChorusClass.find_by_name("Workspace").permissions << [show_workspace, show_update_workspace, show_update_destroy_workspace]
+
 
