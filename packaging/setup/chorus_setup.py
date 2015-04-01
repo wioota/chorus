@@ -408,7 +408,7 @@ class ChorusSetup:
 
         msg = "(may take 2~3 minuts)"
         if upgrade:
-            logger.info(bold("Updaing postgres database %s:" % msg))
+            logger.info(bold("Updating postgres database %s:" % msg))
             self.validate_data_sources()
             self.stop_previous_release()
             self.upgrade_database()
