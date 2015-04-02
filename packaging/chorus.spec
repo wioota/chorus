@@ -130,18 +130,6 @@ popd
 %clean
 rm -rf "$RPM_BUILD_ROOT"
 %pre
-if [[ (-f /etc/redhat-release) && (`uname -a | grep x86_64` != "") ]]; then
-    OS_VERSION="RedHat"
-    VERSION_ID=`cat /etc/redhat-release |awk '{print $3}'|cut -d'.' -f1-1`
-elif [[ (-f /etc/SuSE-release) && (`cat /etc/SuSE-release | grep x86_64` != "") ]]; then
-    OS_VERSION="SuSE"
-    VERSION_ID=`cat /etc/SuSE-release|grep SUSE|awk '{print $5}'`
-fi
-if [[ !($OS_VERSION == "RedHat" && ($VERSION_ID == "5" || $VERSION_ID == "6"))
-	&& !($OS_VERSION == "SuSE" && $VERSION_ID == "11") ]]; then
-	echo "Operation System not supported, only support RedHat 5~6 and SuSE 11 x86_64"
-	exit -1
-fi
 echo "add chorus user if not exits"
 if ! id -u chorus > /dev/null 2>&1; then
 	useradd chorus > /dev/null 2>&1
@@ -150,18 +138,8 @@ fi
 function log() {
   su - chorus -c "echo '$1' 2>&1 |tee -a %{appdir}/install.log"
 }
-function error_exit() {
-  if [[ !`echo "$?"` = "0" ]]; then
-	echo "error happend! erase the rpm"
-	rpm -e %{name}-%{version}-%{release}
-	exit -1
-  fi
-}
 log "Linking version_build to %{appdir}/version_build"
 su - chorus -c "ln -sf %{releases}/version_build %{appdir}/version_build"
-error_exit
-#su - chorus -c "%{releases}/packaging/setup/chorus_server setup --chorus_path=%{appdir} --data_path=%{data} -s"
-#error_exit
 log "Generating chorus_path.sh to %{appdir}"
 su - chorus -c "echo 'export CHORUS_HOME=%{prefix}/%{name}' > %{appdir}/chorus_path.sh"
 su - chorus -c "echo 'export PATH=\$PATH:\$CHORUS_HOME' >> %{appdir}/chorus_path.sh"
@@ -173,8 +151,8 @@ echo "
  successfully install chorus in %{appdir}:
  data dir is in %{data}
  please change to chorus user(running su - chorus)
- please run chorus_server setup
- and running chorus_control.sh start to start chorus
+ please run chorus_control.sh setup
+ and run chorus_control.sh start to start chorus
 *********************************************************"
 %files
 %defattr(-,chorus,chorus,-)
