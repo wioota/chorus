@@ -59,7 +59,7 @@ MIZUNO_PID_FILE=$CHORUS_HOME/tmp/pids/mizuno.pid
 POSTGRES_DATA_DIR=$CHORUS_HOME/postgres-db
 POSTGRES_PID_FILE=$POSTGRES_DATA_DIR/postmaster.pid
 
-eval $($RUBY $CHORUS_HOME/packaging/get_chorus_env_params.rb)
+eval $($CHORUS_HOME/packaging/get_chorus_env_params)
 
 
 ##### Determine which nginx binary to use for this platform #####
@@ -171,5 +171,5 @@ function checkSensitiveFiles() {
 }
 
 if [ "$RAILS_ENV" = "production" ]; then
-    checkSensitiveFiles
+    #checkSensitiveFiles
 fi

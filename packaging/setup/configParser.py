@@ -26,6 +26,11 @@ class ConfigParser(dict):
             self._config.append(key)
         super(ConfigParser, self).__setitem__(key, value)
 
+    def __getitem__(self, key):
+        if self.has_key(key):
+            return super(ConfigParser, self).__getitem__(key)
+        return ""
+
 if __name__  ==  "__main__":
     config = ConfigParser("/usr/local/chorus/shared/chorus.properties")
     import sys

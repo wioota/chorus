@@ -14,12 +14,12 @@ class Configure:
 
     def _version_detect(self):
         self.chorus_version = None
-        current = os.path.join(options.chorus_path, "current")
+        current = os.path.join(os.path.abspath(os.path.dirname(__file__)), "../../../../current")
         if os.path.lexists(current):
             self.chorus_version = os.path.realpath(current)
 
         self.alpine_version = None
-        alpine_current = os.path.join(options.chorus_path, "alpine-current")
+        alpine_current = os.path.join(os.path.abspath(os.path.dirname(__file__)), "../../../../alpine-current")
         if os.path.lexists(current):
             self.alpine_version = os.path.realpath(alpine_current)
 
