@@ -18,6 +18,8 @@ def get_options(args):
     parser.add_option('-s', '--silent', action="store_true", dest="silent",
                       help="runing script silently [default: %default]", default=False)
     options, args = parser.parse_args(args)
+    if options.chorus_path.rstrip("/").endswith("current"):
+        options.chorus_path = options.chorus_path.rstrip("/").rstrip("/current")
     if len(args) < 2 or args[1] not in ["setup", "health_check", "configure"]:
         print "[error] please specify the command"
         parser.print_help()
