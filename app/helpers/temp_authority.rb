@@ -14,7 +14,7 @@ class TempAuthority
   # 'authorize' finds the permissions for each role the user has
   # on the given class. If a role permission matches the class
   # permission, then the user is authorized for that activity
-  def self.authorize!(user, object, activity_symbol)
+  def self.authorize!(activity_symbol, object, user)
     roles = retrieve_roles(user)
     chorus_class = ChorusClass.find_by_name(object.class.name)
 
@@ -35,7 +35,7 @@ class TempAuthority
   end
 
   private
-
+  
   def self.retrieve_roles(user)
     roles = user.roles
     user.groups.each do |group|

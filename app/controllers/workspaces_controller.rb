@@ -66,7 +66,7 @@ class WorkspacesController < ApplicationController
 
   def show
     workspace = Workspace.find(params[:id])
-    TempAuthority.authorize!(current_user, workspace, :show)
+    TempAuthority.authorize! :show, workspace, current_user
     # authorize! :show, workspace
     # use the cached version of "workspaces:workspaces" namespace.
     present workspace, :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true',:cached => true, :namespace => 'workspaces:workspaces' }
@@ -80,7 +80,7 @@ class WorkspacesController < ApplicationController
     workspace.attributes = attributes
 
     #authorize! :update, workspace
-    TempAuthority.authorize!(current_user, workspace, :update)
+    TempAuthority.authorize! :update, workspace, current_user
     create_workspace_events(workspace) if workspace.valid?
 
     workspace.save!
@@ -90,7 +90,7 @@ class WorkspacesController < ApplicationController
   def destroy
     workspace = Workspace.find(params[:id])
     #authorize!(:destroy, workspace)
-    TempAuthority.authorize!(current_user, workspace, :destroy)
+    TempAuthority.authorize! :destroy, workspace, current_user
     Events::WorkspaceDeleted.by(current_user).add(:workspace => workspace)
     workspace.destroy
 

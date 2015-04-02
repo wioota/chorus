@@ -12,6 +12,11 @@ describe WorkspacesController do
     stub(Alpine::API).delete_work_flow.with_any_args
   end
 
+  # This is similar to the ignore_authorization! call above
+  before :each do
+    stub(TempAuthority).authorize! { nil }
+  end
+
   describe "#index" do
     let(:private_workspace) { workspaces(:private_with_no_collaborators) }
 
@@ -140,7 +145,7 @@ describe WorkspacesController do
 
     context "with a valid workspace id" do
       it "uses authentication" do
-        mock(subject).authorize!(:show, workspace)
+        mock(TempAuthority).authorize!(:show, workspace, owner)
         get :show, :id => workspace.to_param
       end
 
@@ -192,7 +197,7 @@ describe WorkspacesController do
 
     context "when the current user has update authorization" do
       it "uses authentication" do
-        mock(subject).authorize!(:update, workspace)
+        mock(TempAuthority).authorize!(:update, workspace, owner)
         put :update, params
       end
 
@@ -379,7 +384,7 @@ describe WorkspacesController do
     end
 
     it "uses authorization" do
-      mock(subject).authorize!(:destroy, workspace)
+      mock(TempAuthority).authorize!(:destroy, workspace, owner)
       delete :destroy, :id => workspace.to_param
     end
 
