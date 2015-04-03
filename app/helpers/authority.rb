@@ -16,8 +16,9 @@ class Authority
   # permission, then the user is authorized for that activity
   def self.authorize!(activity_symbol, object, user)
     roles = retrieve_roles(user)
-    chorus_class = ChorusClass.find_by_name(object.class.name)
-    actual_class = chorus_class.name.constantize
+    chorus_class = ChorusClass.search_permission_tree(object.class)
+
+    actual_class = object.class.name.constantize
 
     common_permissions = common_permissions_between roles, chorus_class
 
