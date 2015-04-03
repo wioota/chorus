@@ -18,6 +18,7 @@ class ChorusConfigPresenter < Presenter
         :default_preview_row_limit => model['default_preview_row_limit'] || 100,
         :oracle_configured => model.oracle_configured?,
         :hdfs_versions => model.hdfs_versions,
+        :hive_hdfs_versions => model.hive_hdfs_versions,
         :time_zones => model.time_zones,
         :license => present(License.instance, options),
         :restrict_data_source_creation => model.restrict_data_source_creation?

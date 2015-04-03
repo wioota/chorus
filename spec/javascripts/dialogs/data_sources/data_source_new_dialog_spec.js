@@ -41,12 +41,14 @@ describe("chorus.dialogs.DataSourcesNew", function() {
         });
 
         it("has select box for 'Greenplum Database', 'HDFS Cluster', 'Hawq', and 'JDBC'", function() {
-            expect(this.dialog.$("select.data_sources option").length).toBe(6);
+            expect(this.dialog.$("select.data_sources option").length).toBe(7);
             expect(this.dialog.$("select.data_sources option").eq(1).text()).toMatchTranslation("datasource.greenplum");
             expect(this.dialog.$("select.data_sources option").eq(2).text()).toMatchTranslation("datasource.postgres");
             expect(this.dialog.$("select.data_sources option").eq(3).text()).toMatchTranslation("datasource.hdfs");
             expect(this.dialog.$("select.data_sources option").eq(4).text()).toMatchTranslation("datasource.hawq");
             expect(this.dialog.$("select.data_sources option").eq(5).text()).toMatchTranslation("datasource.jdbc");
+            expect(this.dialog.$("select.data_sources option").eq(6).text()).toMatchTranslation("datasource.jdbc_hive");
+
         });
 
         it("starts with no select box selected", function() {

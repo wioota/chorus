@@ -9,7 +9,7 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
         "change input[name=high_availability]": 'toggleHighAvailability'
     },
 
-    formFields: ["name", "host", "port", "size", "dbName", "username", "groupList", "streamUrl", "password", "jobTrackerHost", "jobTrackerPort", "hdfsVersion"],
+    formFields: ["name", "host", "port", "size", "dbName", "username", "groupList", "streamUrl", "password", "jobTrackerHost", "jobTrackerPort", "hdfsVersion", "hiveKerberosPrincipal", "hiveKerberosKeytabLocation"],
 
     makeModel: function() {
         this.sourceModel = this.model;
@@ -24,7 +24,10 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
     },
 
     postRender: function() {
-        this.$(".hdfs_version").val(this.model.get("hdfsVersion"));
+        this.$(".hdfs_version").val(this.model.get("hdfsVersion") || this.model.get("hiveHadoopVersion"));
+        if(this.model.get("hive")) {
+            this.toggleKerberos();
+        }
         _.defer(_.bind(function() {
             chorus.styleSelect(this.$("select.hdfs_version"), { format: function(text, option) {
                 var aliasedName = $(option).attr("name");
@@ -56,6 +59,15 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
         }
     },
 
+    toggleKerberos: function(e) {
+        if (this.model.get("hiveKerberos"))  {
+            this.$('[name=hiveKerberosPrincipal]').removeClass('hidden');
+            this.$('[name=hiveKerberosKeytabLocation]').removeClass('hidden');
+            this.$('[name=hiveKerberosPrincipal]').val(this.model.get('hiveKerberosPrincipal'));
+            this.$('[name=hiveKerberosKeytabLocation]').val(this.model.get('hiveKerberosKeytabLocation'));
+        }
+    },
+
     additionalContext: function() {
         return {
             gpOrPg: this.gpOrPg(),
@@ -63,7 +75,8 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
             jdbcDataSource: this.model.isJdbc(),
             hdfsDataSource: this.model.constructorName === "HdfsDataSource",
             gnipDataSource: this.model.constructorName === "GnipDataSource",
-            parameterCount: {count: this.model.numberOfConnectionParameters()}
+            parameterCount: {count: this.model.numberOfConnectionParameters()},
+            jdbcHiveDataSource: this.model.constructorName === "JdbcHiveDataSource"
         };
     },
 
@@ -83,6 +96,10 @@ chorus.dialogs.DataSourceEdit = chorus.dialogs.Base.extend({
                 attrs[name] = input.val().trim();
             }
         }, this);
+
+        if(this.model.get('hive')) {
+            attrs.hiveKerberos = this.model.get('hiveKerberos');
+        }
 
         attrs.highAvailability = !!this.$("input[name=high_availability]").prop("checked");
         attrs.ssl = !!this.$("input[name=ssl]").prop("checked");

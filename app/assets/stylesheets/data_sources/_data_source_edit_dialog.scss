@@ -18,7 +18,9 @@ $fieldset-width : $default-dialog-width - 2 * $dialog-padding-leftRight;
     }
 
     label[name=host], input[name=host],
-    label[name=jobTrackerHost], input[name=jobTrackerHost] {
+    label[name=jobTrackerHost], input[name=jobTrackerHost],
+    label[name=hiveKerberosPrincipal], input[name=hiveKerberosPrincipal],
+    label[name=hiveKerberosKeytabLocation], input[name=hiveKerberosKeytabLocation]{
         width: $hostname-width;
     }
 
