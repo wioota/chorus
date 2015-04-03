@@ -104,23 +104,12 @@ chorus_objects.each do |obj|
   puts "Adding #{chorus_object} to #{chorus_class}"
 end
 
-# --- permissions ---
-# Current implementation is clunky because the permissions model has a double 'belongs_to'.
-no_permissions = Permission.new
-no_permissions.permissions_mask = Workspace.create_permission_bits_for nil
+# --- PERMISSIONS ---
 
-show_workspace = Permission.new
-show_workspace.permissions_mask = Workspace.create_permission_bits_for [:show]
 
-show_update_workspace = Permission.new
-show_update_workspace.permissions_mask = Workspace.create_permission_bits_for [:show, :update]
+Workspace.create_permissions_for collab_role, [:show]
+Workspace.create_permissions_for dev_role, [:show, :update]
+Workspace.create_permissions_for admin_role, [:show, :update, :destroy]
 
-show_update_destroy_workspace = Permission.new
-show_update_destroy_workspace.permissions_mask = Workspace.create_permission_bits_for [:show, :update, :destroy]
-
-show_workspace.role = collab_role
-show_update_workspace.role = dev_role
-show_update_destroy_workspace.role = admin_role
-ChorusClass.find_by_name("Workspace").permissions << [show_workspace, show_update_workspace, show_update_destroy_workspace]
-
+DataSource.create_permissions_for [dev_role, admin_role], [:edit]
 
