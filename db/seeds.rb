@@ -45,22 +45,23 @@ dev_workspace1 = FactoryGirl.create(:workspace, :name => "Development workspace 
 mark_workspace1 = FactoryGirl.create(:workspace, :name => "Marketing workspace one")
 
 data_source_info = {
-    "name"=>"PG DB",
-     "description"=>"",
-     "host"=>"10.0.0.168",
-     "port"=>"5432",
-     "db_name"=>"postgres",
-     "db_username"=>"miner_demo",
-     "db_password"=>"miner_demo",
-     "ssl"=>false,
-     "shared"=>false,
-     "high_availability"=>false,
-     "hive_kerberos"=>false
+  "name"=>"PG DB",
+   "description"=>"",
+   "host"=>"10.0.0.168",
+   "port"=>"5432",
+   "db_name"=>"postgres",
+   "db_username"=>"miner_demo",
+   "db_password"=>"miner_demo",
+   "ssl"=>false,
+   "shared"=>false,
+   "high_availability"=>false,
+   "hive_kerberos"=>false
 }
 
-pg_data_source= DataSource.create_for_entity_type("pg_data_source", chorusadmin, data_source_info)
-pg_data_source= DataSource.create_for_entity_type("pg_data_source", chorusadmin, data_source_info.merge({"name" => "Other PG DB"}))
-chorus_objects = [dev_workspace1, pg_data_source, mark_workspace1]
+#pg_data_source= DataSource.create_for_entity_type("pg_data_source", chorusadmin, data_source_info)
+#pg_data_source= DataSource.create_for_entity_type("pg_data_source", chorusadmin, data_source_info.merge({"name" => "Other PG DB"}))
+#chorus_objects = [dev_workspace1, pg_data_source, mark_workspace1]
+chorus_objects = [dev_workspace1, mark_workspace1]
 
 # --- ROLES GROUPS PERMISSIONS ---
 
@@ -72,12 +73,12 @@ admin_role.users << [admin, chorusadmin]
 # --- developer users and role ---
 #dev1 = FactoryGirl.create(:user, :username => "dev1")
 dev1 = User.create(
-    :username => "dev1",
-    :first_name => "dev",
-    :last_name => "1",
-    :email => "dev1@example.com",
-    :password => "secret",
-    :password_confrmation => "secret"
+  :username => "dev1",
+  :first_name => "dev",
+  :last_name => "1",
+  :email => "dev1@example.com",
+  :password => "secret",
+  :password_confrmation => "secret"
 )
 dev2 = FactoryGirl.create(:user, :username => "dev2")
 dev_role = FactoryGirl.create(:role, :name => "Developer")
@@ -85,12 +86,12 @@ dev_role.users << [dev1, dev2]
 
 # --- collaborator users and role ---
 collab1 = User.create(
-    :username => "collab1",
-    :first_name => "collab",
-    :last_name => "1",
-    :email => "collab1@example.com",
-    :password => "secret",
-    :password_confirmation => "secret"
+  :username => "collab1",
+  :first_name => "collab",
+  :last_name => "1",
+  :email => "collab1@example.com",
+  :password => "secret",
+  :password_confirmation => "secret"
 )
 collab2 = FactoryGirl.create(:user, :username => "collab2")
 collab_role = FactoryGirl.create(:role, :name => "Collaborator", :description => "Role for collaborator")
@@ -106,16 +107,16 @@ end
 # --- permissions ---
 # Current implementation is clunky because the permissions model has a double 'belongs_to'.
 no_permissions = Permission.new
-no_permissions.permissions_mask = 0
+no_permissions.permissions_mask = Workspace.create_permission_bits_for nil
 
 show_workspace = Permission.new
-show_workspace.permissions_mask = 1
+show_workspace.permissions_mask = Workspace.create_permission_bits_for [:show]
 
 show_update_workspace = Permission.new
-show_update_workspace.permissions_mask = 1 | (1 << 1)
+show_update_workspace.permissions_mask = Workspace.create_permission_bits_for [:show, :update]
 
 show_update_destroy_workspace = Permission.new
-show_update_destroy_workspace.permissions_mask = 1 | (1 << 1) | (1 << 2)
+show_update_destroy_workspace.permissions_mask = Workspace.create_permission_bits_for [:show, :update, :destroy]
 
 show_workspace.role = collab_role
 show_update_workspace.role = dev_role

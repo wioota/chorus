@@ -17,18 +17,16 @@ class TempAuthority
   def self.authorize!(activity_symbol, object, user)
     roles = retrieve_roles(user)
     chorus_class = ChorusClass.find_by_name(object.class.name)
-
     actual_class = chorus_class.name.constantize
 
     common_permissions = common_permissions_between roles, chorus_class
 
-    Chorus.log_debug("Could not find activity_symbol in #{actual_class.name} permissions") if actual_class.PERMISSIONS.index(activity_symbol).nil?
+    Chorus.log_debug("Could not find activity_symbol in #{actual_class.name} permissions") if actual_class::PERMISSIONS.index(activity_symbol).nil?
 
-    permission_int = actual_class.PERMISSIONS_INTS[actual_class.PERMISSIONS.index(activity_symbol)]
+    activity_mask = actual_class.bitmask_for(activity_symbol)
 
     allowed = common_permissions.any? do |permission|
-      # TODO: Put in bitmask module
-      permission.permissions_mask & permission_int == permission_int
+      bit_enabled? permission.permissions_mask, activity_mask
     end
 
     raise Allowy::AccessDenied.new("Unauthorized", activity_symbol, object) unless allowed
@@ -52,6 +50,10 @@ class TempAuthority
       raise Allowy::AccessDenied.new("Role not found", nil, nil)
     end
     common_permissions = all_roles_permissions & chorus_class.permissions
+  end
+
+  def self.bit_enabled?(bits, mask)
+    (bits & mask) == mask
   end
 
 end
