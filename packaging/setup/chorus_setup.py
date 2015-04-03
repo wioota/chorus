@@ -111,7 +111,8 @@ class ChorusSetup:
                    os.path.join(self.release_path, "config/ldap.properties"))
         self._ln_sf(os.path.join(self.shared, "demo_data"), \
                    os.path.join(self.release_path, "demo_data"))
-
+        self._ln_sf(os.path.join(self.shared, "libraries"), \
+                   os.path.join(self.release_path, "lib/libraries"))
     def link_data_folder(self):
         logger.debug("Linking data folders to %s" % options.data_path)
         os.chmod(os.path.join(options.data_path, "db"), 0700)
