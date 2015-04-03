@@ -27,13 +27,15 @@ class DataSourcesController < ApplicationController
   end
 
   def update
-    authorize! :edit, @data_source
+    Authority.authorize! :edit, @data_source, current_user
+    #authorize! :edit, @data_source
     @data_source.update_attributes!(params[:data_source])
     present @data_source
   end
 
   def destroy
-    authorize! :edit, @data_source
+    Authority.authorize! :edit, @data_source, current_user
+    #authorize! :edit, @data_source
     @data_source.destroy
     head :ok
   end

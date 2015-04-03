@@ -3,6 +3,11 @@ class DataSource < ActiveRecord::Base
   include TaggableBehavior
   include Notable
   include CommonDataSourceBehavior
+  include Permissioner
+
+  # DO NOT CHANGE the order of these permissions, you'll accidently change everyone's permissons across the site.
+  # Order: edit
+  PERMISSIONS = [:edit]
 
   attr_accessor :db_username, :db_password
   attr_accessible :name, :description, :host, :port, :ssl, :db_name, :db_username, :db_password, :is_hawq, :as => [:default, :create]

@@ -58,8 +58,8 @@ data_source_info = {
    "hive_kerberos"=>false
 }
 
-#pg_data_source= DataSource.create_for_entity_type("pg_data_source", chorusadmin, data_source_info)
-#pg_data_source= DataSource.create_for_entity_type("pg_data_source", chorusadmin, data_source_info.merge({"name" => "Other PG DB"}))
+pg_data_source= DataSource.create_for_entity_type("pg_data_source", chorusadmin, data_source_info)
+pg_data_source= DataSource.create_for_entity_type("pg_data_source", chorusadmin, data_source_info.merge({"name" => "Other PG DB"}))
 #chorus_objects = [dev_workspace1, pg_data_source, mark_workspace1]
 chorus_objects = [dev_workspace1, mark_workspace1]
 

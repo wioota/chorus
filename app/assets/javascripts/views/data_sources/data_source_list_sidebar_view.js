@@ -115,7 +115,8 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
     },
 
     adminOrOwner: function() {
-        return this.resource.owner().get("id") === chorus.session.user().get("id") || chorus.session.user().get("admin");
+        return true
+        // return this.resource.owner().get("id") === chorus.session.user().get("id") || chorus.session.user().get("admin");
     },
 
     startEditingTags: function(e) {
