@@ -2,10 +2,9 @@ import os
 import sys
 import re
 sys.path.append("..")
-def enable_https():
+def enable_https(options):
     from installer_io import InstallerIO
     from chorus_executor import ChorusExecutor
-    from options import options
     from log import logger
     from configParser import ConfigParser
     io = InstallerIO(options.silent)

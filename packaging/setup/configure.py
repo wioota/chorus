@@ -3,11 +3,9 @@ import re
 import pkgutil
 import inspect
 import config_lib
-from options import options
 from installer_io import InstallerIO
 from log import logger
 
-io = InstallerIO(options.silent)
 class Configure:
     def __init__(self):
         pass
@@ -16,12 +14,12 @@ class Configure:
         self.chorus_version = None
         current = os.path.join(os.path.abspath(os.path.dirname(__file__)), "../../../../current")
         if os.path.lexists(current):
-            self.chorus_version = os.path.realpath(current)
+            self.chorus_version = os.path.basename(os.path.realpath(current))
 
         self.alpine_version = None
         alpine_current = os.path.join(os.path.abspath(os.path.dirname(__file__)), "../../../../alpine-current")
         if os.path.lexists(current):
-            self.alpine_version = os.path.realpath(alpine_current)
+            self.alpine_version = os.path.basename(os.path.realpath(alpine_current))
 
     def _load_configure_func(self):
         dic = {}
@@ -60,25 +58,28 @@ class Configure:
         return service_state
 
     def _chorus_pid_exist(self, pid_name):
-        return os.path.exists(os.path.join(options.chorus_path, "shared/tmp/pids/" + pid_name))
+        return os.path.exists(os.path.join(self.options.chorus_path, "shared/tmp/pids/" + pid_name))
 
     def _alpine_pid_exist(self, pid_name):
-        return os.path.exists(os.path.join(options.chorus_path, "alpine-current/" + pid_name))
+        return os.path.exists(os.path.join(self.options.chorus_path, "alpine-current/" + pid_name))
 
-    def config(self):
+    def config(self, options):
+        self.options = options
+        self.io = InstallerIO(options.silent)
         self._version_detect()
         print "*" * 60
         header = ""
         if self.chorus_version is None:
             print "Chorus Not Detected"
         else:
-            print "Chorus Detected:\t" + self.chorus_version
+            print "Chorus Version:\t" + self.chorus_version
             print "Chorus Service State:\t" + self.get_chorus_state()
         if self.alpine_version is None:
             print "Alpine Not Detected"
         else:
-            print "Alpine Detected:\t" + self.alpine_version
+            print "Alpine Version:\t" + self.alpine_version
             print "Alpine Service State:\t" + self.get_alpine_state()
+        print "CHORUS_HOME:\t%s" % os.getenv("CHORUS_HOME", "not set in ~/.bashrc")
         print "*" * 60
         if self.chorus_version is None:
             return
@@ -87,12 +88,12 @@ class Configure:
         while True:
             lens = len(self.method) + 1
             menu = "\n".join(str(e) + ". " + self.method[e][0] for e in self.method.keys()) + "\n%d. exit\n" % lens
-            selection = io.require_menu("choose the configuration you want to change: (default is exit)\n" \
+            selection = self.io.require_menu("choose the configuration you want to change: (default is exit)\n" \
                                         + menu, range(1, lens + 1), default=lens)
             if selection == lens:
                 break
-            self.method[selection][1]()
-            if io.require_confirmation("continue changing other configuration?", default="no"):
+            self.method[selection][1](options)
+            if self.io.require_confirmation("continue changing other configuration?", default="no"):
                 continue
             else:
                 break

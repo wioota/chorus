@@ -1,8 +1,7 @@
 import os, sys, getpass
 import logging
-from options import options
 
-def getLogger(path):
+def getLogger():
     logger = logging.getLogger(getpass.getuser())
     logger.setLevel(logging.DEBUG)
 
@@ -15,11 +14,11 @@ def getLogger(path):
 
     #create file handler and set level to debug
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s : %(message)s')
-    fileHandler = logging.FileHandler(os.path.join(path, 'install.log'))
+    fileHandler = logging.FileHandler('install.log')
     fileHandler.setLevel(level=logging.DEBUG)
     fileHandler.setFormatter(formatter)
     logger.addHandler(fileHandler)
 
     return logger
 
-logger = getLogger(options.chorus_path)
+logger = getLogger()

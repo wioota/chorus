@@ -6,30 +6,22 @@ import shlex
 import signal
 import shutil
 import pwd
+import glob
 from setup import color
 from setup import installer_io
 from setup import func_executor
-from optparse import OptionParser
+from setup import options
+from setup import log
+from setup.health_check import system_checking
+options, arg, health_args = options.get_options(sys.argv)
+logger = log.logger
 bold = color.bold
 error = color.error
 processify = func_executor.processify
-
-
-parser = OptionParser()
-parser.add_option('--chorus_user', action="store", dest="chorus_user",
-                  help="provide the chorus user [default: %default]", default="chorus")
-parser.add_option('--chorus_path', action="store", dest="chorus_path",
-                  help="provide the chorus path [default: %default]", default="/usr/local/chorus")
-parser.add_option('--data_path', action="store", dest="data_path",
-                  help="provide the chorus data path [default: %default]", default="/data/chorus")
-parser.add_option('--disable_spec', action="store_true", dest="disable_spec",
-                  help="disable the spec check [default: %default]", default=False)
-parser.add_option('-s', '--silent', action="store_true", dest="silent",
-                  help="runing script silently [default: %default]", default=False)
-options, args = parser.parse_args(sys.argv)
-
 io = installer_io.InstallerIO(options.silent)
+fresh_install = False
 
+dot_chorus = os.path.join("/root", ".chorus")
 def exit_gracefully(signum, frame):
     print "\nInstall aborted, Cancelled by user"
     sys.exit(1)
@@ -56,7 +48,15 @@ def prompt_for_eula():
 def run(command):
     p = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
+    if stdout:
+        logger.debug(stdout)
+    if stderr:
+        logger.debug(stderr)
     return p.returncode, stdout, stderr
+
+def call(command):
+    logger.debug(command)
+    return subprocess.call(shlex.split(command))
 
 def run_interact(command, user):
     def demote(user_uid, user_gid):
@@ -65,8 +65,20 @@ def run_interact(command, user):
     pw_record = pwd.getpwnam(user)
     user_uid = pw_record.pw_uid
     user_gid = pw_record.pw_gid
-    return subprocess.call(shlex.split(command), preexec_fn=demote(user_uid, user_gid))
+    user_name = pw_record.pw_name
+    user_home_dir = pw_record.pw_dir
+    env = os.environ.copy()
+    env[ 'HOME'     ] = user_home_dir
+    env[ 'LOGNAME'  ] = user_name
+    env[ 'USER'     ] = user_name
+    return subprocess.call(shlex.split(command), preexec_fn=demote(user_uid, user_gid), env=env)
 
+def is_alpine_exits(installation_path):
+    alpine_dir = os.path.join(installation_path, "vendor/alpine")
+    alpine_sources = [ f for f in glob.glob(os.path.join(alpine_dir, "alpine*.sh")) ]
+    if len(alpine_sources) > 0:
+        return True
+    return False
 
 def output(msg):
     print "INFO : " + bold(msg)
@@ -88,8 +100,15 @@ def compare_version(cur, pre):
     else:
         return 1
 
-@processify(msg="->Copying Production...")
-def copy_to_dest(installation_path, chorus_path, data_path, release_path):
+def grant_permission(user, chorus_path, data_path):
+    logger.debug("change %s's owner to %s:" % (chorus_path, user))
+    run("chown %s:%s install.log" % (user, user))
+    ret, stdout, stderr = run("chown -R %s:%s %s && chown -R %s:%s %s" % (user, user, chorus_path, user, user, data_path))
+    if ret != 0:
+        raise Exception("[ERROR] " + stderr)
+
+@processify(msg="->Installing Chorus...")
+def copy_to_dest(installation_path, chorus_path, data_path, release_path, user):
     ret, stdout, stderr = run("mkdir -p %s && mkdir -p %s" % (chorus_path, data_path))
     if ret != 0:
         raise Exception("[ERROR] " + stderr)
@@ -103,32 +122,44 @@ def copy_to_dest(installation_path, chorus_path, data_path, release_path):
     if ret != 0:
         raise Exception("[ERROR] " + stderr)
 
-@processify(msg="->Granting permission...")
-def grant_permission(user, chorus_path, data_path):
-    ret, stdout, stderr = run("chown -R %s:%s %s && chown -R %s:%s %s" % (user, user, chorus_path, user, user, data_path))
-    if ret != 0:
-        raise Exception("[ERROR] " + stderr)
+    grant_permission(user, chorus_path, data_path)
 
 def install():
-    if not prompt_for_eula():
-        print "Install aborted, Cancelled by user"
-        return
-    user = io.prompt("which user do you want to use to install chorus [default: %s]" % options.chorus_user, default=options.chorus_user)
-    ret, stdout, stderr = run("useradd chorus")
-    if ret not in [0,9]:
-        if ret == 126:
-            stderr += "Please run as the user with root permission\n"
-        raise Exception(stderr)
-    chorus_path = io.prompt("Please enter the full path to the Chorus installation directory [default: %s]" % options.chorus_path, default=options.chorus_path)
-    data_path = io.prompt("Please enter the full path to the Chorus data directory (recommended 500GB) [default: %s]" % options.data_path, default=options.data_path)
-    installation_path = os.path.join(os.path.dirname(__file__), "..")
-
+    installation_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..")
     version = ""
     with open(os.path.join(installation_path, "version_build"), "r") as f:
         version = f.read().strip()
+    if os.path.exists(dot_chorus):
+        with open(dot_chorus, "r") as f:
+            lines = f.readlines()
+            user = lines[0].strip("\n")
+            chorus_path = lines[1].strip("\n")
+            data_path = lines[2].strip("\n")
+        passphrase = None
+        install_alpine = True
+    else:
+        fresh_install = True
+        if not prompt_for_eula():
+            print "Install aborted, Cancelled by user"
+            return
+        user = io.prompt("which user do you want to use to install chorus [default: %s]" % options.chorus_user, default=options.chorus_user)
+        ret, stdout, stderr = run("useradd chorus")
+        if ret not in [0,9]:
+            if ret == 126:
+                stderr += "Please run as the user with root permission\n"
+            raise Exception(stderr)
+        chorus_path = io.prompt("Please enter the full path to the Chorus installation directory [default: %s]" % options.chorus_path, default=options.chorus_path)
 
+        data_path = io.prompt("Please enter the full path to the Chorus data directory [default: %s]" % options.data_path, default=options.data_path)
+
+        passphrase = io.prompt("Enter optional passphrase to generate "
+                               + "a recoverable secret key for encrypting passwords."
+                               + "By default, a random key will be generated", default='')
+
+        install_alpine = False
+        if is_alpine_exits(installation_path):
+            install_alpine = io.require_confirmation("Do you want to install Alpine?", "yes")
     release_path = os.path.join(chorus_path, "releases/%s" % version)
-
     pre_version = detect_pre_version(chorus_path)
     cur_version = version.split("-")[0]
     msg = "Installing"
@@ -147,23 +178,35 @@ def install():
             print "%s aborted, Cancelled by user" % msg
             return
 
-    output("%s chorus version: %s to chorus and data path:" % (msg, version))
-    copy_to_dest(installation_path, chorus_path, data_path, release_path)
+    system_checking(True)
 
-    output("change %s's owner to %s:" % (chorus_path, user))
-    grant_permission(user, chorus_path, data_path)
+    output(bold("%s chorus-%s to chorus and data path:" % (msg, version)))
+    copy_to_dest(installation_path, chorus_path, data_path, release_path, user)
 
+
+    with open(dot_chorus, "w") as f:
+        f.write(user + "\n")
+        f.write(chorus_path + "\n")
+        f.write(data_path)
     _s = ""
     if options.silent:
         _s = "-s"
-    _disable_spec = ""
-    if options.disable_spec:
-        _disable_spec = "--disable_spec"
-    run_interact("%s setup %s --chorus_path=%s --data_path=%s %s" % \
-                 (os.path.join(release_path, "packaging/setup/chorus_server"), _s, chorus_path, data_path, _disable_spec), user)
+    _passphrase = ""
+    if passphrase is not None:
+        _passphrase = "--passphrase=%s" % passphrase
+
+    _chorus_only = "--chorus_only"
+    if install_alpine:
+        _chorus_only = ""
+
+    run_interact("%s setup %s --chorus_path=%s --data_path=%s --disable_spec %s %s" % \
+                 (os.path.join(release_path, "packaging/setup/chorus_server"), _s, chorus_path, data_path, _passphrase, _chorus_only), user)
 
 try:
     signal.signal(signal.SIGINT, exit_gracefully)
     install()
 except Exception as e:
-    print "ERROR: " + error(str(e))
+    if fresh_install and os.path.exists(dot_chorus):
+        os.path.remove(dot_chorus)
+    print "ERROR: " + error(str(e) + "\nException Occured, see install.log for details" )
+    #logger.debug(traceback.format_exc())

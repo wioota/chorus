@@ -3,10 +3,9 @@ import os
 import re
 sys.path.append("..")
 
-def enable_alpine_agent():
+def enable_alpine_agent(options):
     from log import logger
     from installer_io import InstallerIO
-    from options import options
     io = InstallerIO(options.silent)
     contents = ""
     alpine_conf = os.path.join(options.chorus_path, "shared/ALPINE_DATA_REPOSITORY/configuration/alpine.conf")

@@ -42,15 +42,15 @@ class InstallerIO:
     def require_confirmation(self, msg, default="yes"):
         valid = {"yes": True, "y": True, "ye": True, "no": False, "n": False}
         if default is None:
-            prompt = " [y/n] "
+            prompt = " [y/n]"
         elif default == "yes":
-            prompt = " [Y/n] "
+            prompt = " [Y/n]"
         elif default == "no":
-            prompt = " [y/N] "
+            prompt = " [y/N]"
         else:
             raise ValueError("invalid default answer: '%s'" % default)
         while True:
-            sys.stdout.write(msg + " " + prompt)
+            sys.stdout.write(msg + " " + prompt + ":")
             if not self.silent:
                 choice = raw_input()
             else:

@@ -2,7 +2,7 @@ import os
 import subprocess
 import shlex
 from log import logger
-from options import get_version
+from helper import get_version
 class PSQLException(Exception):
     pass
 

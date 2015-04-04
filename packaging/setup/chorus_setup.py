@@ -8,15 +8,13 @@ import hmac
 import base64
 import platform
 from color import bold
-from options import options, get_version
 from log import logger
 from installer_io import InstallerIO
 from chorus_executor import ChorusExecutor
 from configure import configure
+from health_check import health_check
 from func_executor import processify
-
-io = InstallerIO(options.silent)
-executor = ChorusExecutor(options.chorus_path)
+from helper import isUpgrade, get_version
 
 
 CHORUS_PSQL = "\
@@ -33,20 +31,6 @@ else\n\
     RAILS_ENV=production $CHORUS_HOME/current/bin/ruby $CHORUS_HOME/current/script/rails console\n\
 fi\n"
 
-failover_file = os.path.join(options.chorus_path, ".failover")
-upgrade = not os.path.exists(failover_file) \
-        and os.path.exists(os.path.join(options.chorus_path, "shared"))\
-        and os.listdir(os.path.join(options.chorus_path, "shared")) != []\
-        and os.path.exists(os.path.join(options.data_path, "db")) \
-        and os.listdir(os.path.join(options.data_path, "db")) != []
-def failover():
-    if not upgrade:
-        try:
-            with open(os.path.join(options.chorus_path, ".failover"), "w") as f:
-                f.write("failover")
-        except IOError:
-            pass
-
 class ChorusSetup:
     """
     chorus installer
@@ -56,12 +40,18 @@ class ChorusSetup:
         self.database_password = None
         self.alpine_installer = None
         self.alpine_release_path = None
+
+    def set_path(self, options):
+        failover_file = os.path.join(options.chorus_path, ".failover")
         if os.path.exists(failover_file):
            os.remove(failover_file)
-
-    def set_path(self):
-        self.release_path = os.path.join(options.chorus_path, 'releases/%s' % get_version(options.chorus_path))
-        self.shared = os.path.join(options.chorus_path, "shared")
+        self.options = options
+        self.io = InstallerIO(self.options.silent)
+        self.executor = ChorusExecutor(self.options.chorus_path)
+        self.chorus_version = get_version(self.options.chorus_path)
+        self.alpine_version = None
+        self.release_path = os.path.join(self.options.chorus_path, 'releases/%s' % self.chorus_version)
+        self.shared = os.path.join(self.options.chorus_path, "shared")
 
     def construct_shared_structure(self):
         logger.debug("Construct shared structure in %s" % self.shared)
@@ -93,9 +83,9 @@ class ChorusSetup:
         os.chmod(os.path.join(self.shared, "ldap.properties"), 0600)
 
     def construct_data_structure(self):
-        logger.debug("Construct data structure in %s" % options.data_path)
+        logger.debug("Construct data structure in %s" % self.options.data_path)
         for folder in ["db","system","log","solr/data"]:
-            executor.run("mkdir -p %s" % os.path.join(options.data_path, folder))
+            self.executor.run("mkdir -p %s" % os.path.join(self.options.data_path, folder))
 
     def link_shared_config(self):
         logger.debug("Linking shared configuration files to %s/config" % self.release_path)
@@ -114,15 +104,15 @@ class ChorusSetup:
         self._ln_sf(os.path.join(self.shared, "libraries"), \
                    os.path.join(self.release_path, "lib/libraries"))
     def link_data_folder(self):
-        logger.debug("Linking data folders to %s" % options.data_path)
-        os.chmod(os.path.join(options.data_path, "db"), 0700)
-        self._ln_sf(os.path.join(options.data_path, "db"), \
+        logger.debug("Linking data folders to %s" % self.options.data_path)
+        os.chmod(os.path.join(self.options.data_path, "db"), 0700)
+        self._ln_sf(os.path.join(self.options.data_path, "db"), \
                    os.path.join(self.shared, "db"))
-        self._ln_sf(os.path.join(options.data_path, "log"), \
+        self._ln_sf(os.path.join(self.options.data_path, "log"), \
                    os.path.join(self.shared, "log"))
-        self._ln_sf(os.path.join(options.data_path, "solr/data"), \
+        self._ln_sf(os.path.join(self.options.data_path, "solr/data"), \
                    os.path.join(self.shared, "solr/data"))
-        self._ln_sf(os.path.join(options.data_path, "system"), \
+        self._ln_sf(os.path.join(self.options.data_path, "system"), \
                    os.path.join(self.shared, "system"))
 
         self._ln_sf(os.path.join(self.shared, "db"), \
@@ -141,20 +131,20 @@ class ChorusSetup:
                    os.path.join(self.release_path, "vendor/nginx/nginx_dist/nginx_data/logs"))
 
         self._ln_sf(os.path.join(self.release_path, "packaging/chorus_control.sh"), \
-                   os.path.join(options.chorus_path, "chorus_control.sh"))
+                   os.path.join(self.options.chorus_path, "chorus_control.sh"))
         self._ln_sf(os.path.join(self.release_path, "packaging/setup/chorus_server"), \
-                   os.path.join(options.chorus_path, "chorus_server"))
-        executor.run("chmod -R 0555 %s", os.path.join(self.release_path, "public"))
+                   os.path.join(self.options.chorus_path, "chorus_server"))
+        self.executor.run("chmod -R 0555 %s", os.path.join(self.release_path, "public"))
 
     def extract_postgres(self):
         logger.debug("Extract postgres database to %s", self.release_path)
         os_name, version, release = platform.linux_distribution()
         if os_name.lower() in ["redhad", "centos"]  and version.startswith("5"):
-            executor.extract_postgres("postgres-redhat5.5-9.2.4.tar.gz")
+            self.executor.extract_postgres("postgres-redhat5.5-9.2.4.tar.gz")
         elif os_name.lower() in ["redhad", "centos"]  and version.startswith("6"):
-            executor.extract_postgres("postgres-redhat6.2-9.2.4.tar.gz")
+            self.executor.extract_postgres("postgres-redhat6.2-9.2.4.tar.gz")
         elif os_name.lower()  == "susu" and version == "11":
-            executor.extract_postgres("postgres-suse11-9.2.4.tar.gz")
+            self.executor.extract_postgres("postgres-suse11-9.2.4.tar.gz")
         else:
             raise Exception("postgres not installed, no version match the operation system")
 
@@ -199,24 +189,23 @@ class ChorusSetup:
     def prompt_for_eula(self):
         eula = self._eula_by_brand()
         print eula
-        ret = io.require_confirmation("Do you accept the terms above?")
+        ret = self.io.require_confirmation("Do you accept the terms above?")
         if not ret:
             logger.fatal("Setup aborted, Cancelled by user")
             quit()
 
     def get_passphrase(self):
-        key_file_path = os.path.join(options.chorus_path, "shared")
+        key_file_path = os.path.join(self.options.chorus_path, "shared")
         key_file = os.path.join(key_file_path, 'secret.key')
         if not os.path.exists(key_file):
-            passphrase = io.prompt("Enter optional passphrase to generate "
-                                   + "a recoverable secret key for encrypting passwords."
-                                   + "By default, a random key will be generated", default='')
-            return passphrase
+            return self.options.passphrase
+        elif os.path.exists(key_file) and self.options.passphrase != "":
+            return self.options.passphrase
         return None
 
-    @processify(msg='->Configuring secret key...')
+    #@processify(msg='->Configuring secret key...')
     def configure_secret_key(self, passphrase):
-        key_file_path = os.path.join(options.chorus_path, "shared")
+        key_file_path = os.path.join(self.options.chorus_path, "shared")
         key_file = os.path.join(key_file_path, 'secret.key')
         if passphrase is not None:
             if passphrase.strip() == '':
@@ -234,9 +223,9 @@ class ChorusSetup:
             os.remove(symbolic)
         os.symlink(key_file, symbolic)
 
-    @processify(msg="->Configuring secret token...")
+    #@processify(msg="->Configuring secret token...")
     def configure_secret_token(self):
-        token_file_path = os.path.join(options.chorus_path, "shared")
+        token_file_path = os.path.join(self.options.chorus_path, "shared")
         token_file = os.path.join(token_file_path, 'secret.token')
 
         if not os.path.exists(token_file):
@@ -254,15 +243,15 @@ class ChorusSetup:
         os.symlink(token_file, symbolic)
 
     def generate_paths_file(self):
-        file_path = os.path.join(options.chorus_path, "chorus_path.sh")
+        file_path = os.path.join(self.options.chorus_path, "chorus_path.sh")
         logger.debug("Generating paths file: " + file_path)
         with open(file_path, 'w') as f:
-            f.write("export CHORUS_HOME=%s\n" % options.chorus_path)
+            f.write("export CHORUS_HOME=%s\n" % self.options.chorus_path)
             f.write("export PATH=$PATH:$CHORUS_HOME\n")
             f.write("export PGPASSFILE=$CHORUS_HOME/.pgpass")
 
     def generate_chorus_psql_files(self):
-        file_path = os.path.join(options.chorus_path, ".pgpass")
+        file_path = os.path.join(self.options.chorus_path, ".pgpass")
         logger.debug("generating chorus_psql files")
         if os.path.exists(file_path):
             os.chmod(file_path, 0600)
@@ -270,7 +259,7 @@ class ChorusSetup:
             f.write("*:*:*:"+ self.database_username + ":" + self.database_password)
         os.chmod(file_path, 0400)
 
-        file_path = os.path.join(options.chorus_path, "chorus_psql.sh")
+        file_path = os.path.join(self.options.chorus_path, "chorus_psql.sh")
         if os.path.exists(file_path):
             logger.debug(file_path + " existed, skipped")
         else:
@@ -279,7 +268,7 @@ class ChorusSetup:
         os.chmod(file_path, 0500)
 
     def generate_chorus_rails_console_file(self):
-        file_path = os.path.join(options.chorus_path, "chorus_rails_console.sh")
+        file_path = os.path.join(self.options.chorus_path, "chorus_rails_console.sh")
         logger.debug("generating chorus_rails_console file")
         if os.path.exists(file_path):
             logger.debug(file_path + " existed, skipped")
@@ -289,7 +278,7 @@ class ChorusSetup:
         os.chmod(file_path,0700)
 
     def create_database_config(self):
-        database_config_file = os.path.join(options.chorus_path, "shared/database.yml")
+        database_config_file = os.path.join(self.options.chorus_path, "shared/database.yml")
 
         content = ""
         with open(database_config_file, 'r') as f:
@@ -321,34 +310,34 @@ class ChorusSetup:
         with open(pwfile, "w") as f:
             f.write(self.database_password)
         os.chmod(pwfile, 0400)
-        executor.initdb(options.data_path, self.database_username)
-        executor.start_postgres()
+        self.executor.initdb(self.options.data_path, self.database_username)
+        self.executor.start_postgres()
         db_commands = "db:create db:migrate"
         db_commands += " db:seed"
         db_commands += " enqueue:refresh_and_reindex"
-        executor.rake(db_commands)
-        executor.stop_postgres()
+        self.executor.rake(db_commands)
+        self.executor.stop_postgres()
 
     @processify(msg="->Running database migrations...", interval=1.5)
     def upgrade_database(self):
-        executor.start_postgres()
+        self.executor.start_postgres()
         logger.debug("->Running database migrations...")
         db_commands = "db:migrate"
         db_commands += " enqueue:refresh_and_reindex"
         logger.debug("Running rake " + db_commands)
-        executor.rake(db_commands)
-        executor.stop_postgres()
+        self.executor.rake(db_commands)
+        self.executor.stop_postgres()
 
     @processify(msg="->Running data validation...", interval=1.5)
-    def validate_data_sources(msg="", interval=1.5):
+    def validate_data_sources(self, msg="", interval=1.5):
         logger.debug("->Running data validation...")
-        executor.start_postgres()
-        executor.rake("validations:data_source")
+        self.executor.start_postgres()
+        self.executor.rake("validations:data_source")
 
     @processify(msg="->Shutting down previous Chorus install...", interval=1.5)
     def stop_previous_release(self):
         logger.debug("->Shutting down previous Chorus install...")
-        executor.stop_previous_release()
+        self.executor.stop_previous_release()
 
     def is_alpine_exits(self):
         alpine_dir = os.path.join(self.release_path, "vendor/alpine")
@@ -358,45 +347,45 @@ class ChorusSetup:
         else:
             alpine_sources.sort(key=lambda x: os.path.getmtime(x), reverse=True)
             self.alpine_installer = alpine_sources[0]
-            alpine_version = os.path.basename(self.alpine_installer.rstrip(".sh"))
-            self.alpine_release_path = os.path.join(options.chorus_path, "alpine-releases/%s" % alpine_version)
+            self.alpine_version = os.path.basename(self.alpine_installer.rstrip(".sh"))
+            self.alpine_release_path = os.path.join(self.options.chorus_path, "alpine-releases/%s" % self.alpine_version)
             return True
 
-    @processify(msg="->Extracting alpine...")
+    @processify(msg="->Installing alpine...")
     def configure_alpine(self):
         logger.debug("Extracting %s to %s" % (self.alpine_installer, self.alpine_release_path))
-        executor.run("sh %s --target %s --noexec" % (self.alpine_installer, self.alpine_release_path))
+        self.executor.run("sh %s --target %s --noexec" % (self.alpine_installer, self.alpine_release_path))
         logger.debug("Preparing Alpine Data Repository")
-        alpine_data_repo = os.path.join(options.chorus_path, "shared/ALPINE_DATA_REPOSITORY")
+        alpine_data_repo = os.path.join(self.options.chorus_path, "shared/ALPINE_DATA_REPOSITORY")
         if os.path.exists(alpine_data_repo):
             logger.debug("Alpine Data Repository existed, skipped")
         else:
             shutil.copytree(os.path.join(self.alpine_release_path, "ALPINE_DATA_REPOSITORY"), alpine_data_repo)
 
     def link_current_to_release(self, link_name, rel_path):
-        current = os.path.join(options.chorus_path, link_name)
+        current = os.path.join(self.options.chorus_path, link_name)
         if os.path.lexists(current):
             os.unlink(current)
         os.symlink(rel_path, current)
 
     def source_chorus_path(self):
-        logger.debug("source %s/chorus_path.sh" % options.chorus_path)
-        with open(os.path.join(os.path.expanduser("~"), ".bash_profile"), "a") as f:
-            f.write("source %s/chorus_path.sh\n" % options.chorus_path)
+        logger.debug("source %s/chorus_path.sh" % self.options.chorus_path)
+        with open(os.path.join(os.path.expanduser("~"), ".bashrc"), "a") as f:
+            f.write("source %s/chorus_path.sh\n" % self.options.chorus_path)
 
-    def setup(self):
-        self.set_path()
+    def setup(self, options):
+        self.set_path(options)
         #if not io.require_confirmation("Do you want to set up the chorus, "
         #                                    + "please make sure you have installed chorus before setting up?"):
         #    logger.fatal("Setup aborted, Cancelled by user")
         #    quit()
-        #if not options.disable_spec:
+        #if not self.options.disable_spec:
         #    health_check()
         #self.prompt_for_eula()
 
         #pre step:
         passphrase = self.get_passphrase()
-        logger.info(bold("Construct Chorus and Data Directory:"))
+        logger.debug("Construct Chorus and Data Directory:")
         self.construct_shared_structure()
         self.construct_data_structure()
         self.link_shared_config()
@@ -408,13 +397,13 @@ class ChorusSetup:
         self.configure_secret_token()
 
         msg = "(may take 2~3 minuts)"
-        if upgrade:
-            logger.info(bold("Updating postgres database %s:" % msg))
+        if isUpgrade(self.options.chorus_path, self.options.data_path):
+            logger.info(bold("Updating metadata database %s:" % msg))
             self.validate_data_sources()
             self.stop_previous_release()
             self.upgrade_database()
         else:
-            logger.info(bold("Creating postgres database %s:" % msg))
+            logger.info(bold("Creating metadata database %s:" % msg))
             self.create_database_config()
             self.generate_chorus_psql_files()
             self.generate_chorus_rails_console_file()
@@ -422,28 +411,33 @@ class ChorusSetup:
             #self.enqueue_solr_reindex()
         self.link_current_to_release("current", self.release_path)
 
-        if self.is_alpine_exits():
-            default = "yes"
-            msg = "Do you want to extract alpine?"
-            if os.path.exists(self.alpine_release_path):
-                msg = "%s already exists in your machine, do you want to overwrite it?" % \
-                        os.path.basename(self.alpine_release_path.rstrip("/"))
-                default = "no"
-            if io.require_confirmation(msg, default):
-                logger.info(bold("Setting up alpine:"))
-                self.configure_alpine()
-                self.link_current_to_release("alpine-current", self.alpine_release_path)
-        #self.source_chorus_path()
-        if io.require_confirmation("Do you want to change default configure?", default="no"):
-            configure.config()
+        if self.is_alpine_exits() and self.options.chorus_only is False:
+            logger.info(bold("Setting up alpine:"))
+            self.configure_alpine()
+            self.link_current_to_release("alpine-current", self.alpine_release_path)
+        self.source_chorus_path()
+        print "*" * 60
+        print "Alpine Chorus successfully installed:"
+        print "Install Directory: %s" % self.options.chorus_path
+        print "Data Directory: %s" % self.options.data_path
+        print "Chorus Version: %s" % self.chorus_version
+        print "Alpine Version: %s" % self.alpine_version
+        print "*" * 60
+
+        if self.io.require_confirmation("Would you like to run a full health check now?\n" + \
+                                        "A full health check can be run later by executing: chorus_control.sh health_check", default="no"):
+            health_check()
+        if self.io.require_confirmation("Would you like to modify the system settings for Alpine Chorus?\n" + \
+                                        "System settings can be modified later by executing chorus_control.sh configure", default="no"):
+            configure.config(self.options)
 
         print "Completely Setup"
-        if upgrade:
+        if isUpgrade(self.options.chorus_path, self.options.data_path):
             print "Confirm custom configuration settings as directed in the upgrade guide before restarting Chorus."
         print "*" * 60
         print "To start Chorus, run the following commands:"
         print "\"su - %s\"" % pwd.getpwuid(os.getuid()).pw_name
-        print "\"source %s/chorus_path.sh\"" % options.chorus_path
+        #print "\"source %s/chorus_path.sh\"" % self.options.chorus_path
         print "\"chorus_control.sh start\""
         print "*" * 60
 

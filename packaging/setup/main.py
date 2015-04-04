@@ -1,17 +1,19 @@
 import sys
 import signal
-from options import arg, health_args, options
-from chorus_setup import chorus_set, failover
-from health_check import health_check, hard_require
+from options import get_options
+from helper import failover
+from chorus_setup import chorus_set
+from health_check import health_check, system_checking
 from configure import configure
 from log import logger
 from color import bold, error
 import traceback
 
+options, arg, health_args = get_options(sys.argv)
 handler = {"setup":chorus_set.setup, "health_check":health_check, "configure":configure.config}
 def exit_gracefully(signum, frame):
     print "\nSetup aborted, Cancelled by user"
-    failover()
+    failover(options.chorus_path, options.data_path)
     sys.exit(1)
 def main():
     try:
@@ -19,14 +21,13 @@ def main():
 
         if (arg == "setup" and not options.disable_spec) \
            or (arg == "health_check" and (health_args == [] or "checkos" in health_args)):
-            logger.info(bold("System Specification Checking:"))
-            hard_require()
+            system_checking()
 
         if arg == "health_check":
             handler[arg](" ".join(health_args))
         else:
-            handler[arg]()
+            handler[arg](options)
     except Exception as e:
-        logger.error(error(str(e) + "\nException Occured, see %s/install.log for details" % options.chorus_path.rstrip("/")))
+        logger.error(error(str(e) + "\nException Occured, see install.log for details" ))
         logger.debug(traceback.format_exc())
-        failover()
+        failover(options.chorus_path, options.data_path)

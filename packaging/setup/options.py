@@ -9,18 +9,24 @@ def get_options(args):
             + "  configure:\t\tconfigure the chorus property and alpine property\n"
     parser = OptionParser(usage=usage)
 
+    parser.add_option('--chorus_user', action="store", dest="chorus_user",
+                      help="provide the chorus user [default: %default]", default="chorus")
     parser.add_option('--chorus_path', action="store", dest="chorus_path",
                       help="provide the chorus path [default: %default]", default=os.getenv("CHORUS_HOME", "/usr/local/chorus"))
     parser.add_option('--data_path', action="store", dest="data_path",
                       help="provide the chorus data path [default: %default]", default=os.getenv("CHORUS_DATA", "/data/chorus"))
+    parser.add_option('--passphrase', action="store", dest="passphrase",
+                      help="provide the passphrase [default: %default]", default="")
     parser.add_option('--disable_spec', action="store_true", dest="disable_spec",
                       help="disable the spec check [default: %default]", default=False)
+    parser.add_option('--chorus_only', action="store_true", dest="chorus_only",
+                      help="only setup chorus, will not install alpine [default: %default]", default=False)
     parser.add_option('-s', '--silent', action="store_true", dest="silent",
                       help="runing script silently [default: %default]", default=False)
     options, args = parser.parse_args(args)
     if options.chorus_path.rstrip("/").endswith("current"):
         options.chorus_path = options.chorus_path.rstrip("/").rstrip("/current")
-    if len(args) < 2 or args[1] not in ["setup", "health_check", "configure"]:
+    if len(args) < 2 or args[1] not in ["setup", "health_check", "configure", "install"]:
         print "[error] please specify the command"
         parser.print_help()
         sys.exit(1)
@@ -32,16 +38,3 @@ def get_options(args):
         sys.exit(1)
     return options, args[1], args[2:]
 
-def get_version(chorus_path):
-    version = ""
-    try:
-        with open(os.path.join(chorus_path, "version_build"), "r") as f:
-            version = f.read().strip()
-    except IOError as e:
-        from log import logger
-        logger.error(e)
-        logger.error("Exception Occured, see %s/install.log for details" % chorus_path.rstrip("/"))
-        sys.exit(1)
-    return version
-
-options, arg, health_args = get_options(sys.argv)
