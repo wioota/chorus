@@ -7,12 +7,14 @@ import signal
 import shutil
 import pwd
 import glob
+import traceback
 from setup import color
 from setup import installer_io
 from setup import func_executor
 from setup import options
 from setup import log
 from setup.health_check import system_checking
+
 options, arg, health_args = options.get_options(sys.argv)
 logger = log.logger
 bold = color.bold
@@ -102,7 +104,7 @@ def compare_version(cur, pre):
 
 def grant_permission(user, chorus_path, data_path):
     logger.debug("change %s's owner to %s:" % (chorus_path, user))
-    run("chown %s:%s install.log" % (user, user))
+    run("chown %s:%s /tmp/install.log" % (user, user))
     ret, stdout, stderr = run("chown -R %s:%s %s && chown -R %s:%s %s" % (user, user, chorus_path, user, user, data_path))
     if ret != 0:
         raise Exception("[ERROR] " + stderr)
@@ -143,7 +145,7 @@ def install():
         if not prompt_for_eula():
             print "Install aborted, Cancelled by user"
             return
-        user = io.prompt("Specify the system user that will run Alpine Chorus processes [default: chorus]" % options.chorus_user, default=options.chorus_user)
+        user = io.prompt("Specify the system user that will run Alpine Chorus processes [default: %s]" % options.chorus_user, default=options.chorus_user)
         ret, stdout, stderr = run("useradd chorus")
         if ret not in [0,9]:
             if ret == 126:
@@ -180,10 +182,8 @@ def install():
             return
 
     system_checking(True)
-
     output(bold("%s chorus-%s to chorus and data path:" % (msg, version)))
     copy_to_dest(installation_path, chorus_path, data_path, release_path, user)
-
 
     with open(dot_chorus, "w") as f:
         f.write(user + "\n")
@@ -209,5 +209,5 @@ try:
 except Exception as e:
     if fresh_install and os.path.exists(dot_chorus):
         os.path.remove(dot_chorus)
-    print "ERROR: " + error(str(e) + "\nException Occured, see /tmp/install.log for details" )
-    #logger.debug(traceback.format_exc())
+    print "[ERROR]:" + error(str(e) + "\nException Occured, see /tmp/install.log for details")
+    logger.debug(traceback.format_exc())
