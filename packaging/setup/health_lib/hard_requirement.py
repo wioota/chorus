@@ -8,7 +8,6 @@ sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)),".."))
 from log import logger
 from chorus_executor import ChorusExecutor
 from func_executor import processify
-executor = ChorusExecutor()
 
 def a_check_os_system():
     @processify(msg="->Checking OS Version...")
@@ -30,6 +29,7 @@ def b_check_runing_user(install_mode=False):
     check()
 
 def c_check_java_version():
+    executor = ChorusExecutor()
     @processify(msg="->Checking Java Version...")
     def check():
         ret, stdout, stderr = executor.run("java -version 2>&1")

@@ -10,18 +10,23 @@ class RAKEException(Exception):
     pass
 
 class ChorusExecutor:
-    def __init__(self, chorus_path="/usr/local/chorus"):
+    def __init__(self, chorus_path=None):
         self.chorus_path = chorus_path
-        self.release_path = os.path.join(chorus_path, 'releases/%s' % get_version(chorus_path))
+        if chorus_path is None:
+            self.release_path = None
+        else:
+            self.release_path = os.path.join(chorus_path, 'releases/%s' % get_version(chorus_path))
 
     def call(self, command):
         logger.debug(command)
         return subprocess.call(shlex.split(command))
 
     def run(self, command, postgres_bin_path=None):
-        if postgres_bin_path is None:
-            postgres_bin_path = self.release_path
-        command = "PATH=%s/postgres/bin:$PATH && %s" % (postgres_bin_path, command)
+        if self.release_path is not None:
+            if postgres_bin_path is None:
+                postgres_bin_path = self.release_path
+            command = "PATH=%s/postgres/bin:$PATH && %s" % (postgres_bin_path, command)
+
         logger.debug(command)
         p = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = p.communicate()
