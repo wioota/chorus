@@ -44,6 +44,11 @@ def c_check_java_version():
                 raise Exception("%s\n only support java version > 1.6, please upgrade" % stdout)
     check()
 
+def d_check_disk_space():
+    @processify(msg="->Checking disk space...")
+    def check():
+        pass
+    check()
 #def d_check_open_port():
 #    from configParser import ConfigParser
 #    from options import options, get_version
