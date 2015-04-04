@@ -38,6 +38,6 @@ chorus.dialogs.Account = chorus.dialogs.Base.extend({
     },
 
     showSavedToast: function() {
-        chorus.toast("data_sources.account.updated.message", {dataSourceName: this.options.dataSource.name(), toastOpts: {type: "success"}});
+        chorus.toast("data_sources.account.updated.toast", {dataSourceName: this.options.dataSource.name(), toastOpts: {type: "success"}});
     }
 });
