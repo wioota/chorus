@@ -182,4 +182,9 @@ ul.messenger-theme-alpine {
             @include border-radius($defaultThemeBorderRadius);
         }
     }
+    
+    .toast_callout {
+        font-weight: bold;
+    }
+    
 }
