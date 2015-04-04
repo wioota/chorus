@@ -351,17 +351,18 @@ class ChorusSetup:
             self.alpine_release_path = os.path.join(self.options.chorus_path, "alpine-releases/%s" % self.alpine_version)
             return True
 
-    @processify(msg="->Installing alpine...")
     def configure_alpine(self):
-        logger.debug("Extracting %s to %s" % (self.alpine_installer, self.alpine_release_path))
-        self.executor.run("sh %s --target %s --noexec" % (self.alpine_installer, self.alpine_release_path))
-        logger.debug("Preparing Alpine Data Repository")
-        alpine_data_repo = os.path.join(self.options.chorus_path, "shared/ALPINE_DATA_REPOSITORY")
-        if os.path.exists(alpine_data_repo):
-            logger.debug("Alpine Data Repository existed, skipped")
-        else:
-            shutil.copytree(os.path.join(self.alpine_release_path, "ALPINE_DATA_REPOSITORY"), alpine_data_repo)
-
+        @processify(msg="->Installing %s..." % self.alpine_version)
+        def configure():
+            logger.debug("Extracting %s to %s" % (self.alpine_installer, self.alpine_release_path))
+            self.executor.run("sh %s --target %s --noexec" % (self.alpine_installer, self.alpine_release_path))
+            logger.debug("Preparing Alpine Data Repository")
+            alpine_data_repo = os.path.join(self.options.chorus_path, "shared/ALPINE_DATA_REPOSITORY")
+            if os.path.exists(alpine_data_repo):
+                logger.debug("Alpine Data Repository existed, skipped")
+            else:
+                shutil.copytree(os.path.join(self.alpine_release_path, "ALPINE_DATA_REPOSITORY"), alpine_data_repo)
+        configure()
     def link_current_to_release(self, link_name, rel_path):
         current = os.path.join(self.options.chorus_path, link_name)
         if os.path.lexists(current):

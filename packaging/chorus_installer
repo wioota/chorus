@@ -107,21 +107,22 @@ def grant_permission(user, chorus_path, data_path):
     if ret != 0:
         raise Exception("[ERROR] " + stderr)
 
-@processify(msg="->Installing Chorus...")
 def copy_to_dest(installation_path, chorus_path, data_path, release_path, user):
-    ret, stdout, stderr = run("mkdir -p %s && mkdir -p %s" % (chorus_path, data_path))
-    if ret != 0:
-        raise Exception("[ERROR] " + stderr)
+    @processify(msg="->Installing Chorus to %s..." % chorus_path)
+    def copy():
+        ret, stdout, stderr = run("mkdir -p %s && mkdir -p %s" % (chorus_path, data_path))
+        if ret != 0:
+            raise Exception("[ERROR] " + stderr)
 
-    ret, stdout, stderr = run("cp -rf %s %s" % (os.path.join(installation_path, "version_build"), chorus_path))
-    if ret != 0:
-        raise Exception("[ERROR] " + stderr)
-    if os.path.exists(release_path):
-        shutil.rmtree(release_path)
-    ret, stdout, stderr = run("mkdir -p %s && cp -rf %s %s" % (release_path, installation_path, release_path))
-    if ret != 0:
-        raise Exception("[ERROR] " + stderr)
-
+        ret, stdout, stderr = run("cp -rf %s %s" % (os.path.join(installation_path, "version_build"), chorus_path))
+        if ret != 0:
+            raise Exception("[ERROR] " + stderr)
+        if os.path.exists(release_path):
+            shutil.rmtree(release_path)
+        ret, stdout, stderr = run("mkdir -p %s && cp -rf %s %s" % (release_path, installation_path, release_path))
+        if ret != 0:
+            raise Exception("[ERROR] " + stderr)
+    copy()
     grant_permission(user, chorus_path, data_path)
 
 def install():
