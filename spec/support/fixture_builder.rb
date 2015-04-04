@@ -86,9 +86,9 @@ FixtureBuilder.configure do |fbuilder|
 
 
     #Roles, Groups, and Permissions
-    role = FactoryGirl.create(:role)
-    @permission = FactoryGirl.create(:permission)
-    group = FactoryGirl.create(:group)
+    @a_role = FactoryGirl.create(:role)
+    @a_permission = FactoryGirl.create(:permission)
+    @a_group = FactoryGirl.create(:group)
 
 
     #Data Sources

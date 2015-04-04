@@ -5,7 +5,7 @@
 # provides static methods and does not need to be instantiated.
 #
 
-class Authority
+module Authority
 
   # Attempts to match the given activity with the activities
   # allowed by the user's roles. Raises an Allowy::AccessDenied
