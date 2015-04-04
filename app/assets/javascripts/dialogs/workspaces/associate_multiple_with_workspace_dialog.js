@@ -23,11 +23,15 @@ chorus.dialogs.AssociateMultipleWithWorkspace = chorus.dialogs.PickWorkspace.ext
 
     saved: function() {
         this.datasets.each(function(dataset) { dataset.fetch(); });
+        this.closeModal();
+                
+        var workspaceURL = this.selectedItem().showUrl();
+        var workspaceName = this.selectedItem().get("name");
+        var workspaceLink = Handlebars.helpers.linkTo (workspaceURL, workspaceName);
         chorus.toast("dataset.associate_multiple.toast", {
             count: this.datasets.length,
-            workspaceNameTarget: this.selectedItem().get("name"),
+            workspaceNameTarget: workspaceLink,
             toastOpts: {type: "success"}
         });
-        this.closeModal();
     }
 });

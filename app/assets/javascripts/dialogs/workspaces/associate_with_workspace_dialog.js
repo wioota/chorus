@@ -39,6 +39,7 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         this.model.activities().fetch();
         this.model.fetch();
         this.closeModal();
+
         var workspaceURL = this.selectedItem().showUrl();
         var workspaceName = this.selectedItem().get("name");
         var workspaceLink = Handlebars.helpers.linkTo (workspaceURL, workspaceName);

@@ -49,9 +49,10 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
             });
 
             it("displays a toast message", function() {
+                var workspaceLink = Handlebars.helpers.linkTo(this.workspace.showUrl(), this.workspace.get("name") );
                 expect(chorus.toast).toHaveBeenCalledWith (
                     "dataset.associate_multiple.toast",
-                    {count: 3,  workspaceNameTarget: "cadabra", toastOpts: {type: "success"}}
+                    {count: 3,  workspaceNameTarget: workspaceLink, toastOpts: {type: "success"}}
                 );
             });
 

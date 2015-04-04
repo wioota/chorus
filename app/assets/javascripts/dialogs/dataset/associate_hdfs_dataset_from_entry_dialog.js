@@ -7,7 +7,7 @@ chorus.dialogs.AssociateHdfsDatasetFromEntry = chorus.dialogs.HdfsDatasetAttribu
     toastMessageParams: function () {
         return {
             dataset: this.model.name(),
-            workspace: this.workspaceName
+            workspaceLink: Handlebars.helpers.linkTo(this.model.workspace().showUrl(), this.model.workspace().name())
             };
     },
     
