@@ -209,5 +209,5 @@ try:
 except Exception as e:
     if fresh_install and os.path.exists(dot_chorus):
         os.path.remove(dot_chorus)
-    print "ERROR: " + error(str(e) + "\nException Occured, see install.log for details" )
+    print "ERROR: " + error(str(e) + "\nException Occured, see /tmp/install.log for details" )
     #logger.debug(traceback.format_exc())

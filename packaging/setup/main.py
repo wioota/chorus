@@ -28,6 +28,6 @@ def main():
         else:
             handler[arg](options)
     except Exception as e:
-        logger.error(error(str(e) + "\nException Occured, see install.log for details" ))
+        logger.error(error(str(e) + "\nException Occured, see /tmp/install.log for details" ))
         logger.debug(traceback.format_exc())
         failover(options.chorus_path, options.data_path)
