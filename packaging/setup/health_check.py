@@ -7,7 +7,6 @@ import health_lib
 from log import logger
 from color import bold
 from chorus_executor import ChorusExecutor
-executor = ChorusExecutor()
 
 def _load_configure_func():
     dic = {}
@@ -32,6 +31,7 @@ def system_checking(install_mode=False):
 
 def health_check(args=''):
 
+    executor = ChorusExecutor()
     if args == '' or args == None:
         args = "checkos"
     if "help" not in args:
