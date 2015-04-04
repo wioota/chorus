@@ -80,8 +80,10 @@ describe("chorus.dialogs.RenameWorkfile", function() {
 
         context("when the save is successful", function() {
             beforeEach(function() {
+                var anotherFilename = "anotherNameThatMakesPerfectSense";
                 spyOnEvent(chorus.PageEvents, "workfile:rename");
-                this.server.lastUpdate().succeed({fileName: "anotherNameThatMakesPerfectSense"});
+                spyOn(chorus, "toast");
+                this.server.lastUpdate().succeed({fileName: anotherFilename});
             });
 
             it("closes the dialog", function() {
@@ -97,7 +99,7 @@ describe("chorus.dialogs.RenameWorkfile", function() {
             });
 
             it("displays a toast message", function() {
-                expect(chorus.toast).toHaveBeenCalledWith("workfile.rename.success.toast", {name: "newName.sql", toastOpts: {type: "success"}});
+                expect(chorus.toast).toHaveBeenCalledWith("workfile.rename.success.toast", {name: this.anotherFilename, toastOpts: {type: "success"}});
             });
         });
 
