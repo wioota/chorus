@@ -14,7 +14,7 @@ def getLogger():
 
     #create file handler and set level to debug
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s : %(message)s')
-    fileHandler = logging.FileHandler('install.log')
+    fileHandler = logging.FileHandler('/tmp/install.log')
     fileHandler.setLevel(level=logging.DEBUG)
     fileHandler.setFormatter(formatter)
     logger.addHandler(fileHandler)

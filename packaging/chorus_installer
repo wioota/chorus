@@ -143,7 +143,7 @@ def install():
         if not prompt_for_eula():
             print "Install aborted, Cancelled by user"
             return
-        user = io.prompt("which user do you want to use to install chorus [default: %s]" % options.chorus_user, default=options.chorus_user)
+        user = io.prompt("Specify the system user that will run Alpine Chorus processes [default: chorus]" % options.chorus_user, default=options.chorus_user)
         ret, stdout, stderr = run("useradd chorus")
         if ret not in [0,9]:
             if ret == 126:
