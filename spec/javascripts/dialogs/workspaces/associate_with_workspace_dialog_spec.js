@@ -140,9 +140,10 @@ describe("chorus.dialogs.AssociateWithWorkspace", function() {
                 });
 
                 it("pops toast", function() {
+                    var workspaceLink = Handlebars.helpers.linkTo(this.workspace.showUrl(), this.workspace.get("name") );
                     expect(chorus.toast).toHaveBeenCalledWith (
                         "dataset.associate_one.toast",
-                        {datasetTitle: this.model.get("objectName"), workspaceNameTarget: this.workspace.get("name"), toastOpts: {type: "success"}}
+                        {datasetTitle: this.model.get("objectName"), workspaceNameTarget: workspaceLink, toastOpts: {type: "success"}}
                         );
                 });
 
