@@ -30,10 +30,10 @@ def get_options(args):
         print "[error] please specify the command"
         parser.print_help()
         sys.exit(1)
-    if not os.path.exists(options.chorus_path):
+    if not os.path.exists(options.chorus_path) and not args[1] == "install":
         print "[error] %s not exists" % options.chorus_path
         sys.exit(1)
-    elif not os.path.exists(options.data_path):
+    elif not os.path.exists(options.data_path) and not args[1] == "install":
         print "[error] %s not exists" % options.data_path
         sys.exit(1)
     return options, args[1], args[2:]
