@@ -18,7 +18,7 @@ class Configure:
 
         self.alpine_version = None
         alpine_current = os.path.join(os.path.abspath(os.path.dirname(__file__)), "../../../../alpine-current")
-        if os.path.lexists(current):
+        if os.path.lexists(alpine_current):
             self.alpine_version = os.path.basename(os.path.realpath(alpine_current))
 
     def _load_configure_func(self):
