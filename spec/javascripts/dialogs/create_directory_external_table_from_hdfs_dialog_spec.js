@@ -202,7 +202,7 @@ describe("chorus.dialogs.CreateDirectoryExternalTableFromHdfs", function() {
 
                     it("closes the dialog and displays the right toast", function() {
                         expect(this.dialog.closeModal).toHaveBeenCalled();
-                        expect(chorus.toast).toHaveBeenCalledWith("hdfs.create_external.success", {tableName: this.dialog.$("input:text").eq(0).val(), workspaceName: "workspace1"});
+                        expect(chorus.toast).toHaveBeenCalledWith("hdfs.create_external.success.toast", {tableName: this.dialog.$("input:text").eq(0).val(), workspaceName: "workspace1", toastOpts: {type: "success"}});
                     });
 
                     it("triggers csv_import:started", function() {

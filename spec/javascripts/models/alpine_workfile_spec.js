@@ -172,7 +172,7 @@ describe("chorus.models.AlpineWorkfile", function() {
             });
 
             it("toasts that the flow has not started running", function () {
-                expect(chorus.toast).toHaveBeenCalledWith('work_flows.start_running_unprocessable', {toastOpts: {type: 'error'}});
+                expect(chorus.toast).toHaveBeenCalledWith('work_flows.start_running_unprocessable.toast', {toastOpts: {type: 'error'}});
             });
         });
     });
@@ -202,7 +202,7 @@ describe("chorus.models.AlpineWorkfile", function() {
         });
 
         it("warns when there is a workflow limited datasource", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("work_flows.toast.hdfs_read_only");
+            expect(chorus.toast).toHaveBeenCalledWith("work_flows.hdfs_read_only.toast", {toastOpts: {type: "error"}});
         });
     });
 });

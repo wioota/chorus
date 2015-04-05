@@ -2,8 +2,12 @@
 
 chorus.dialogs.CreateHdfsDataset = chorus.dialogs.HdfsDatasetAttributes.extend({
     title: t("create_hdfs_dataset_dialog.title"),
-    message: "create_hdfs_dataset_dialog.toast",
+    toastMessage: "create_hdfs_dataset_dialog.toast",
 
+    toastMessageParams: function () {
+        return {};
+    },
+    
     findModel: function () {
         this.workspace = this.options.pageModel;
         return new chorus.models.HdfsDataset({ workspace: {id: this.workspace.id} });

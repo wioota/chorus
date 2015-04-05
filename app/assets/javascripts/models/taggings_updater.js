@@ -52,7 +52,7 @@ chorus.models.TaggingsUpdater = chorus.models.Base.extend({
 
     taggingsSaveFailed: function(saverWithServerError) {
         var tagName = this.queue[0].get('add') || this.queue[0].get('remove');
-        chorus.toast("tag_update_failed", {tagName: tagName, toastOpts: {type: "error"}});
+        chorus.toast("tag.update_failed.toast", {tagName: tagName, toastOpts: {type: "error"}});
         this.queue = [];
         this.trigger("updateFailed", saverWithServerError);
     }

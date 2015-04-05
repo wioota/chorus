@@ -90,7 +90,7 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
 
         _.every(this.executionLocations(), function(el) {
             if (isReadOnlyHdfs(el)) {
-                chorus.toast("work_flows.toast.hdfs_read_only");
+                chorus.toast("work_flows.hdfs_read_only.toast", {toastOpts: {type: "error"}});
                 return false;
             }
             return true;
@@ -101,7 +101,9 @@ chorus.models.AlpineWorkfile = chorus.models.Workfile.include(
         this.save({}, {
             workflow_action: 'run',
             method: 'create',
-            unprocessableEntity: function() { chorus.toast('work_flows.start_running_unprocessable', {toastOpts: {type: 'error'}}); }
+            unprocessableEntity: function() {
+                chorus.toast('work_flows.start_running_unprocessable.toast', {toastOpts: {type: "error"}});
+            }
         });
     },
 

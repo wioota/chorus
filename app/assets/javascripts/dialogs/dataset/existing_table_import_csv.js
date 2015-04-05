@@ -59,7 +59,7 @@ chorus.dialogs.ExistingTableImportCSV = chorus.dialogs.Base.extend({
 
     saved: function() {
         this.closeModal();
-        chorus.toast("dataset.import.started");
+        chorus.toast("dataset.import.started.toast", {toastOpts: {type: "info"}});
         chorus.PageEvents.trigger("csv_import:started");
         chorus.router.navigate(this.dataset.showUrl());
     },

@@ -58,7 +58,7 @@ chorus.views.NotificationList = chorus.views.Base.extend({
             } catch (err) {
                 chorus.log("error", err, "processing notification", model);
                 if (chorus.isDevMode()) {
-                    chorus.toast("bad_notification", {type: model.get("action"), id: model.id, toastOpts: {type: "error"}});
+                    chorus.toast("bad_notification.toast", {type: model.get("action"), id: model.id, toastOpts: {type: "error"}});
                 }
             }
         }, this);
