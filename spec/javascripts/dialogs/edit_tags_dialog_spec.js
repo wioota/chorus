@@ -18,7 +18,7 @@ describe("chorus.dialogs.EditTags", function() {
     });
 
     it("has the right title", function() {
-        expect(this.dialog.title).toMatchTranslation("edit_tags.title");
+        expect(this.dialog.title).toMatchTranslation("tags.edit.title");
     });
 
     it("displays all the relevant tags", function() {

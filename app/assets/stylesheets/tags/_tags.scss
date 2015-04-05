@@ -2,7 +2,7 @@
 @import "common";
 @import "_browser_support";
 
-$tag-border-radius: 2px;
+$tag-border-radius: 3px;
 
 .tag_item {
 
@@ -58,13 +58,13 @@ $tag-border-radius: 2px;
 
                 div.text-button {
                     background-color: #3096DE;
-                    padding-left: 11px;
+                    padding-left: 12px;
                     padding-right: 20px;
                     padding-bottom: 3px;
                     max-width: 100%;
                     border-top-right-radius: $tag-border-radius;
                     border-bottom-right-radius: $tag-border-radius;
-                    color: #FFF;
+                    color: #EEE;
 
                     .text-label {
                         vertical-align: middle;
@@ -99,12 +99,12 @@ $tag-border-radius: 2px;
                     line-height: 7px;
                     font-size: 12px;
                     
-                    border-radius: 7px;
+                    border-radius: 5px;
                     &::after {
                         content: "x"
                     }
 
-                     &:hover {
+                    &:hover {
                         text-decoration: none;
                         background-color: #40CCFF;
                         @include opacity(1);

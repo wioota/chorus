@@ -1,5 +1,5 @@
 .edit_tags {
-    .dialog_content {
+//     .dialog_content {
         .tags_input {
 
             border: none;
@@ -9,7 +9,7 @@
                 .text-wrap {
                     overflow-y: auto;
                     input {
-                        margin: 3px 3px 3px 0px;
+                        margin: 3px 3px 3px 5px;
                     }
                 }
             }
@@ -18,15 +18,10 @@
                 overflow-y: auto;
             
                 .text-tag {
-                    margin: 3px;
+                    margin: 3px 0px;
                 }
             }
         }
-    }
-
-/* to be deleted when final */
-/*     .form_controls { */
-/*         margin-top: 0px; */
-/*     } */
+//     }
 
 }

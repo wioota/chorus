@@ -1,7 +1,7 @@
 chorus.dialogs.EditTags = chorus.dialogs.Base.extend({
     constructorName: "EditTagsDialog",
     templateName: "edit_tags",
-    title: t("edit_tags.title"),
+    title: t("tags.edit.title"),
     persistent: true,
 
     subviews: {
