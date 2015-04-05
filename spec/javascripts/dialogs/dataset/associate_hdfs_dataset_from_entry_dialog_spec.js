@@ -78,7 +78,8 @@ describe("chorus.dialogs.AssociateHdfsDatasetFromEntry", function() {
                 });
 
                 it("gives a toast", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith('associate_hdfs_dataset_from_entry.toast', {dataset: "", workspace: this.workspace.name(), toastOpts: {type: "success"}});
+                    var workspaceLink = Handlebars.helpers.linkTo(this.workspace.showUrl(), this.workspace.name());
+                    expect(chorus.toast).toHaveBeenCalledWith('associate_hdfs_dataset_from_entry.toast', {dataset: "", workspace: workspaceLink, toastOpts: {type: "success"}});
                 });
             });
 
