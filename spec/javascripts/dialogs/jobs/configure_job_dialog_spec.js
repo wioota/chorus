@@ -30,7 +30,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
         expect(this.dialog.$('button.cancel').text()).toMatchTranslation("actions.cancel");
     });
 
-    context("creating a Job that runs On Demand", function () {
+    context("creating a Job that runs On Demand:", function () {
         beforeEach(function () {
             this.jobPlan.interval_unit = 'on_demand';
         });
@@ -39,7 +39,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
             expect(this.dialog.$('.interval_options')).toHaveClass('hidden');
         });
 
-        context("with valid field values", function () {
+        context("with valid field values: ", function () {
             beforeEach(function () {
                 this.dialog.$('input.name').val(this.jobPlan.name).trigger("keyup");
             });
@@ -91,7 +91,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                     });
 
                     it("should create a toast", function () {
-                        expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                        expect(chorus.toast).toHaveBeenCalledWith(this.dialog.toastMessage(), {toastOpts: {type: "success"}});
                     });
 
                     it("should navigate to the job's show page", function () {
@@ -216,7 +216,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                         });
 
                         it("should create a toast", function () {
-                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.toastMessage(), {toastOpts: {type: "success"}});
                         });
 
                         it("should navigate to the job's show page", function () {
@@ -297,7 +297,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                         });
 
                         it("should create a toast", function () {
-                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.toastMessage(), {toastOpts: {type: "success"}});
                         });
 
                         it("should navigate to the job's show page", function () {
@@ -443,7 +443,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                         });
 
                         it("should create a toast", function () {
-                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.toastMessage(), {toastOpts: {type: "success"}});
                         });
                     });
                 });
@@ -504,7 +504,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                         });
 
                         it("should create a toast", function () {
-                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.toastMessage(), {toastOpts: {type: "success"}});
                         });
                     });
                 });

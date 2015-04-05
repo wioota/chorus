@@ -128,7 +128,7 @@ describe("chorus.views.HdfsEntrySidebar", function() {
                             this.view.$('a.external_table').click();
                             this.server.lastFetchFor(this.hdfsEntry).failUnprocessableEntity(backboneFixtures.hdfsContentsErrorJson().errors);
 
-                            expect(chorus.toast).toHaveBeenCalledWith("record_error.HDFS_CONTENTS_UNAVAILABLE", {toastOpts: {type: 'error'}});
+                            expect(chorus.toast).toHaveBeenCalledWith("record_error.HDFS_CONTENTS_UNAVAILABLE.text", {toastOpts: {type: 'error'}});
                         });
                     });
                 });

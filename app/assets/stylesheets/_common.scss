@@ -10,6 +10,7 @@ $green:             #98B675;
 $gray-blue:         #B2C7D6;
 $gray:              #7D7D7D;
 $fiji-green:        #4E7225;
+
 $fire-engine-red:   #B5121B;
 $pumpkin:           #F7771B;
 
@@ -85,7 +86,8 @@ $color-text2:   $charcoal;
 $color-text3:   lighten($charcoal, 10%);
 $color-text4:   lighten($bright-grey, 20%);
 $link-color:    $brand;
-$disabled-text: rgb(147, 154, 159);  //#939799
+$disabled-text: #939799;
+
 $caret-color:   $light-sky-blue;
 
 
@@ -190,8 +192,8 @@ $informational-text-color:          #002244;
 $success-color:             $ok;
 $success-background-color:  #DFF0D8;
 $success-border-color:      #B3C0A0;
-$success-icon-color:        $ok;
-$success-text-color:        #468844;
+$success-icon-color:        #448025;
+$success-text-color:        #448044;
 
 $normal-tooltip-text-color: $core-white;
 

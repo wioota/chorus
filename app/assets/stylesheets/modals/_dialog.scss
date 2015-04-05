@@ -2,10 +2,9 @@
 
 $dialog-girdle-padding-top: 10px;
 
+/* GENERAL DIALOG STYLES */
 
-/* general dialog styles */
-
-/* .girdle wraps the content of the dialog popup     */
+/* .girdle wraps the content of the dialog popup */
 /* and sets the overall margins for the content area */
 .dialog_popup .girdle {
     padding: $dialog-girdle-padding-top $dialog-padding-leftRight $dialog-padding-bottom $dialog-padding-leftRight;
@@ -69,6 +68,10 @@ $dialog-girdle-padding-top: 10px;
 
     h2 {
         font-size: $medium-font;
+    }
+
+    .message_callout {
+        font-weight: bold;
     }
     
     .dialog_content {

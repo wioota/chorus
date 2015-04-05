@@ -4,7 +4,6 @@ chorus.dialogs.ConfigureWorkfileTask = chorus.dialogs.PickItems.include(chorus.M
     modelClass: 'Workfile',
     pagination: true,
     multiSelection: false,
-    message: 'create_job_task_dialog.toast',
     title: function () {
         return this.model.isNew() ? t('create_job_task_dialog.add_title') : t('create_job_task_dialog.edit_title');
     },
@@ -74,7 +73,7 @@ chorus.dialogs.ConfigureWorkfileTask = chorus.dialogs.PickItems.include(chorus.M
     },
 
     modelSaved: function () {
-        chorus.toast(this.message);
+        chorus.toast ("create_job_task_dialog.toast", {toastOpts: {type: "success"}});
         this.model.trigger('invalidated');
         this.job.trigger('invalidated');
         this.closeModal();

@@ -38,16 +38,16 @@ ul.messenger-theme-alpine {
 
         .messenger-close {
             position: absolute;
-            top: 0px;
+            top: -5px;
             right: 0px;
             display: block;
 
             padding: 8px 10px 7px 7px;
             
-            color: #777;
-            font-weight: $bold;
-            font-size: 20px;
-            line-height: 20px;
+            color: #888;
+            font-weight: $semibold;
+            font-size: 19px;
+            // line-height: 20px;
 
             cursor: pointer;
             background: transparent;
@@ -169,17 +169,28 @@ ul.messenger-theme-alpine {
 
     // when there are multiple toasts displayed...
     .messenger-message-slot {
-        &.messenger-last .messenger-message {
-            // for toast displayed, turn off bottom
-            @include border-radius($defaultThemeBorderRadius $defaultThemeBorderRadius 0px 0px);
-        }
-        &.messenger-first .messenger-message {
-            // for toast that was the first to display, turn off top
-            @include border-radius(0px 0px $defaultThemeBorderRadius $defaultThemeBorderRadius);
-        }
-        &.messenger-first.messenger-last .messenger-message {
-            // default for toast: all borders
+        .messenger-message {
             @include border-radius($defaultThemeBorderRadius);
         }
+        &.messenger-first.messenger-last .messenger-message {
+            // default: all borders
+            @include border-radius($defaultThemeBorderRadius);
+        }
+        &.messenger-last .messenger-message {
+            // for toast that is last = most recent = top of list --> turn off bottom
+//             @include border-top-radius($defaultThemeBorderRadius);
+//             @include border-bottom-radius(0);
+        }
+        &.messenger-first .messenger-message {
+            // for toast that is fist = oldest = bottom of list --> turn off top
+//             @include border-top-radius(0);
+//             @include border-bottom-radius($defaultThemeBorderRadius);
+        }
+
     }
+    
+    .message_callout {
+        font-weight: bold;
+    }
+    
 }

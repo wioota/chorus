@@ -926,10 +926,6 @@ describe("chorus.views.DatasetContentDetails", function() {
             });
             this.view.render();
         });
-
-//         it('renders the page', function() {
-//             expect(this.view.$el).toContainText('Explore'); // hella random text
-//         });
     });
 
     describe('when the statistics have loaded', function() {
@@ -970,7 +966,7 @@ describe("chorus.views.DatasetContentDetails", function() {
         });
 
         it("displays the errors", function() {
-            expect(this.view.$(".errors")).toContainTranslation("record_error.MISSING_DB_OBJECT");
+            expect(this.view.$(".errors")).toContainTranslation("record_error.MISSING_DB_OBJECT.text");
         });
 
         it("doesn't break the definition bar", function() {

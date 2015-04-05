@@ -363,7 +363,7 @@ describe("chorus.Mixins.Fetching", function() {
 
             it("shows a toast message", function() {
                 this.resource.respondToErrors(500);
-                expect(chorus.toast).toHaveBeenCalledWith("server_error", {toastOpts: {}});
+                expect(chorus.toast).toHaveBeenCalledWith("server_error", {toastOpts: {type :'error'}});
             });
         });
     });

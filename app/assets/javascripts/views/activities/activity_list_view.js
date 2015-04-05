@@ -80,7 +80,7 @@ chorus.views.ActivityList = chorus.views.Base.extend({
                 if (chorus.isDevMode()) {
                     var action, id;
                     try {action = model.get("action");  id = model.id;} catch(err2) {}
-                    chorus.toast("bad_activity", {type: action, id: id, toastOpts: {type: "error"}});
+                    chorus.toast("bad_activity.toast", {type: action, id: id, toastOpts: {type: "error"}});
                 }
             }
         }, this);
