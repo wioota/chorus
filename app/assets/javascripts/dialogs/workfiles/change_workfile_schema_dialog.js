@@ -43,7 +43,10 @@ chorus.dialogs.ChangeWorkfileSchema = chorus.dialogs.Base.extend({
 
     saved: function() {
         this.closeModal();
-        chorus.toast("schema_picker.change_workfile_schema.saved_message");
+        chorus.toast("schema_picker.change_workfile_schema.saved.toast", {
+            toastOpts: {type: "success"}
+        });
+        
         chorus.PageEvents.trigger("workfile:changed", this.model);
     },
 

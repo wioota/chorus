@@ -69,9 +69,10 @@ describe("chorus.dialogs.CreateDatabaseView", function() {
                     it("shows a toast", function() {
                         spyOn(chorus, "toast");
                         this.server.completeCreateFor(this.view.model, {id: 'foo', workspace: {id: 25} });
-                        expect(chorus.toast).toHaveBeenCalledWith("create_database_view.toast_success", {
+                        expect(chorus.toast).toHaveBeenCalledWith("create_database_view.success.toast", {
                             viewName: "a_name",
-                            canonicalName: "I.D.S"
+                            canonicalName: "I.D.S",
+                            toastOpts: {type: "success"}
                         });
                     });
 

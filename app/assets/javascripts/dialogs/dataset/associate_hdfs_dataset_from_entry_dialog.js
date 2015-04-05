@@ -1,9 +1,16 @@
 //= require ./hdfs_dataset_attributes_dialog.js
 
-chorus.dialogs.AssociateHdfsDatasetFromEntry = chorus.dialogs.HdfsDatasetAttributes.extend({
+chorus.dialogs.AssociateHdfsDatasetFromEntry = chorus.dialogs.HdfsDatasetAttributes.extend ({
     constructorName: 'AssociateHdfsDatasetFromEntryDialog',
     title: t('associate_hdfs_dataset_from_entry.title'),
-    message: "associate_hdfs_dataset_from_entry.toast",
+    toastMessage: "associate_hdfs_dataset_from_entry.toast",
+    toastMessageParams: function () {
+        return {
+            dataset: this.model.name(),
+            workspaceLink: Handlebars.helpers.linkTo(this.model.workspace().showUrl(), this.model.workspace().displayName() )
+            };
+    },
+    
     events: {
         'click a.workspace_picked': 'launchWorkspacePicker'
     },

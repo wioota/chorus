@@ -1,6 +1,6 @@
 describe("chorus.alerts.DataSourceAccountDelete", function() {
     beforeEach(function() {
-        this.dataSource = backboneFixtures.gpdbDataSource({ id: '456' });
+        this.dataSource = backboneFixtures.gpdbDataSource({id: '456' });
         setLoggedInUser({ id: "1011" });
         this.alert = new chorus.alerts.DataSourceAccountDelete({ dataSource: this.dataSource });
     });
@@ -23,7 +23,7 @@ describe("chorus.alerts.DataSourceAccountDelete", function() {
         });
 
         it("displays a toast message", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("data_sources.account.delete.toast", {toastOpts: {type : 'info' }});
+            expect(chorus.toast).toHaveBeenCalledWith("data_sources.account.delete.toast", {toastOpts: {type : 'deletion'}});
             expect(chorus.toast.calls.count()).toBe(1);
         });
     });

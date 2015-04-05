@@ -73,10 +73,11 @@ describe("chorus.dialogs.PublishToTableauDialog", function () {
 
             it("toasts", function() {
                 expect(chorus.toast).toHaveBeenCalledWith(
-                    "tableau.published", {
+                    "tableau.published.toast", {
                         objectType: "Table",
                         objectName: "myDataset",
-                        name: "foo"
+                        name: "foo",
+                        toastOpts: {type: "success"}
                     }
                 );
             });

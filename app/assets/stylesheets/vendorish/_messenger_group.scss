@@ -1,0 +1,9 @@
+/*! messenger 1.4.1
+ *  http://github.hubspot.com/messenger
+ *  
+ */
+
+// sequence of loading is important
+@import "messenger/_messenger";
+@import "messenger/_messenger-theme-alpine";
+@import "messenger/_messenger-overrides";

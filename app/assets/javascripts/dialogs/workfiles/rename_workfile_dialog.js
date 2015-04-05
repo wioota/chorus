@@ -29,6 +29,7 @@ chorus.dialogs.RenameWorkfile = chorus.dialogs.Base.include(chorus.Mixins.Dialog
 
     saved: function() {
         this.closeModal(true);
+        chorus.toast("workfile.rename.success.toast", {name: this.model.name(), toastOpts: {type: "success"}});
         chorus.PageEvents.trigger('workfile:rename');
     }
 });
