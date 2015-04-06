@@ -5,6 +5,11 @@ describe DataSourcesController do
 
   before { log_in user }
 
+  # ignore authorization unless we're specifically testing for it
+  before :each do
+    stub(Authority).authorize! { nil }
+  end
+
   describe "index" do
     let(:permitted_data_source) { data_sources(:owners) }
     let(:prohibited_data_source) { data_sources(:admins) }
@@ -122,7 +127,7 @@ describe DataSourcesController do
     end
 
     it "uses authorization" do
-      mock(subject).authorize!(:edit, gpdb_data_source)
+      mock(Authority).authorize!(:edit, gpdb_data_source, user)
       put :update, params
     end
 
@@ -368,7 +373,7 @@ describe DataSourcesController do
     end
 
     it "uses authorization" do
-      mock(subject).authorize! :edit, data_source
+      mock(Authority).authorize! :edit, data_source, user
       delete :destroy, :id => data_source.id
     end
   end

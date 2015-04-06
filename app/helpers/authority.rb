@@ -15,6 +15,8 @@ module Authority
   # on the given class. If a role permission matches the class
   # permission, then the user is authorized for that activity
   def self.authorize!(activity_symbol, object, user)
+    return if user == object.owner
+
     roles = retrieve_roles(user)
     chorus_class = ChorusClass.search_permission_tree(object.class)
 
