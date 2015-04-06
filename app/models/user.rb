@@ -68,6 +68,12 @@ class User < ActiveRecord::Base
   end
 
   before_save :update_password_digest, :unless => lambda { password.blank? }
+  after_initialize :defaults
+
+  def defaults
+    collaborator_role = Role.find_or_create_by_name("Collaborator")
+    self.roles << collaborator_role
+  end
 
   def accessible_events(current_user)
     events.where("workspace_id IS NULL

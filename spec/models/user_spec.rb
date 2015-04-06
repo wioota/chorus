@@ -5,6 +5,12 @@ describe User do
     stub(LdapClient).enabled? { false }
   end
 
+  describe "defaults" do
+    it "has the default role" do
+      User.new.roles.should include(Role.find_by_name("Collaborator"))
+    end
+  end
+
   describe ".authenticate" do
     let(:user) { users(:default) }
 
