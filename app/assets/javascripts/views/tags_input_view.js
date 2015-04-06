@@ -14,7 +14,7 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         this.$input = this.$('input');
         this.buildTextExt();
     },
-
+    
     buildTextExt: function() {
         var tagsForTextext = this.tags.map(function(tag) {
             return {name: tag.name(), model: tag};
@@ -61,7 +61,8 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         'setInputData input.tag_editor': 'restoreInvalidTag',
         'focus input.tag_editor': 'resizeTextExt',
         'tagClick input.tag_editor': 'triggerTagClick',
-        'commaKeyUp input.tag_editor': 'handleComma'
+        'commaKeyUp input.tag_editor': 'handleComma',
+        'keyup input.tag_editor': 'resizeInputField'
 
     },
 
@@ -76,6 +77,11 @@ chorus.views.TagsInput = chorus.views.Base.extend({
         this.$input.trigger("getSuggestions");
     },
 
+    resizeInputField: function (e, input) {
+        var scaled = this.$('input').val().length;
+        this.$('input').attr('size', scaled);
+    },
+     
     resizeTextExt: function() {
         this.textext && this.textext.trigger('postInvalidate');
     },
