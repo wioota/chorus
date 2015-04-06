@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe RolesController do
   let(:user) { users(:owner) }
-  let (:a_role) { roles(:role) }
+  let (:a_role) { roles(:a_role) }
 
   before do
     log_in user

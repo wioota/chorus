@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GroupsController do
   let(:user) { users(:owner) }
-  let (:a_group) { groups(:group) }
+  let (:a_group) { groups(:a_group) }
 
   before do
     log_in user

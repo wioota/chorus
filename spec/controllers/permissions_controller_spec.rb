@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe PermissionsController do
   let(:user) { users(:owner) }
-  let (:a_permission) { permissions(:permission) }
+  let (:a_permission) { permissions(:a_permission) }
 
   before do
     log_in user
@@ -25,7 +25,7 @@ describe PermissionsController do
   end
 
   describe '#create' do
-    let (:a_role) { roles(:role) }
+    let (:a_role) { roles(:a_role) }
     let (:a_chorus_class) { ChorusClass.create(:name => "TempClass") }
     let (:params) {
       {
