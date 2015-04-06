@@ -36,7 +36,7 @@ def health_check(args=''):
         args = "checkos"
     if "help" not in args:
         logger.info(bold("Running \"atk %s\" Command:" % args))
-    command = "%s %s" % (os.path.join(os.path.dirname(os.path.abspath(__file__)), "health_lib/atk"), args)
+    command = "source ~/.bashrc && %s %s" % (os.path.join(os.path.dirname(os.path.abspath(__file__)), "health_lib/atk"), args)
     ret, stdout, stderr = executor.run(command + " 2>&1")
     print stdout
     return ret, stdout, stderr
