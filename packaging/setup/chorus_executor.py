@@ -83,8 +83,8 @@ class ChorusExecutor:
         command = "initdb --locale=en_US.UTF-8 -D %s/db --auth=md5 --pwfile=%s/postgres/pwfile --username=%s" % \
                 (data_path, self.release_path, database_user)
         ret, stdout, stderr = self.run(command)
-        if "exists but is not empty" in stderr:
-            logger.warning(stderr)
+        #if "exists but is not empty" in stderr:
+        #    logger.warning(stderr)
 
     def rake(self, command):
         command = "cd %s && RAILS_ENV=production bin/ruby -S bin/rake %s --trace" % \

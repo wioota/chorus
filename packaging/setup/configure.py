@@ -63,7 +63,7 @@ class Configure:
     def _alpine_pid_exist(self, pid_name):
         return os.path.exists(os.path.join(self.options.chorus_path, "alpine-current/" + pid_name))
 
-    def config(self, options):
+    def config(self, options, is_upgrade):
         self.options = options
         self.io = InstallerIO(options.silent)
         self._version_detect()

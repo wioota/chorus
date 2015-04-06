@@ -14,7 +14,7 @@ from chorus_executor import ChorusExecutor
 from configure import configure
 from health_check import health_check
 from func_executor import processify
-from helper import isUpgrade, get_version
+from helper import get_version
 
 
 CHORUS_PSQL = "\
@@ -371,10 +371,14 @@ class ChorusSetup:
 
     def source_chorus_path(self):
         logger.debug("source %s/chorus_path.sh" % self.options.chorus_path)
+        with open(os.path.join(os.path.expanduser("~"), ".bashrc"), "r") as f:
+            content = f.read()
+            if "source %s/chorus_path.sh\n" % self.options.chorus_path in content:
+                return
         with open(os.path.join(os.path.expanduser("~"), ".bashrc"), "a") as f:
             f.write("source %s/chorus_path.sh\n" % self.options.chorus_path)
 
-    def setup(self, options):
+    def setup(self, options, is_upgrade):
         self.set_path(options)
         #if not io.require_confirmation("Do you want to set up the chorus, "
         #                                    + "please make sure you have installed chorus before setting up?"):
@@ -398,7 +402,7 @@ class ChorusSetup:
         self.configure_secret_token()
 
         msg = "(may take 2~3 minuts)"
-        if isUpgrade(self.options.chorus_path, self.options.data_path):
+        if is_upgrade:
             logger.info(bold("Updating metadata database %s:" % msg))
             self.validate_data_sources()
             self.stop_previous_release()
@@ -430,10 +434,10 @@ class ChorusSetup:
             health_check()
         if self.io.require_confirmation("Would you like to modify the system settings for Alpine Chorus?\n" + \
                                         "System settings can be modified later by executing chorus_control.sh configure", default="no"):
-            configure.config(self.options)
+            configure.config(self.options, is_upgrade)
 
-        print "Completely Setup"
-        if isUpgrade(self.options.chorus_path, self.options.data_path):
+        print bold("Setup Complete")
+        if is_upgrade:
             print "Confirm custom configuration settings as directed in the upgrade guide before restarting Chorus."
         print "*" * 60
         print "To start Chorus, run the following commands:"
