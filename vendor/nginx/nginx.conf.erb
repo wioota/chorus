@@ -39,7 +39,7 @@ http {
     client_max_body_size       <%= chorus_config['file_sizes_mb'].values.max %>m;
 
     gzip on;
-    gzip_types text/plain text/xml application/x-javascript text/css application/javascript application/font-woff font/truetype;
+    gzip_types text/plain text/xml text/css application/x-javascript application/javascript application/font-woff application/x-font-woff font/truetype application/x-font-ttf;
     gzip_min_length  500;
     gzip_vary on;
     gzip_proxied no-cache no-store;

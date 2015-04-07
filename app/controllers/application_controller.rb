@@ -35,6 +35,7 @@ class ApplicationController < ActionController::Base
   rescue_from 'ModelMap::UnknownEntityType', :with => :render_unprocessable_entity
   rescue_from 'DataSourceConnection::InvalidCredentials', :with => :render_forbidden
   rescue_from 'Net::LDAP::LdapError', :with => :render_service_unavailable_error
+  rescue_from 'Net::LDAP::Error', :with => :render_service_unavailable_error
   rescue_from 'LdapClient::LdapNotCorrectlyConfigured', :with => :render_service_unavailable_error
   rescue_from 'LdapClient::LdapCouldNotBindWithUser', :with => :render_service_unavailable_error
   rescue_from 'LdapClient::LdapSSLError', :with => :render_service_unavailable_error

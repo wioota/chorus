@@ -17,11 +17,13 @@ The resources on Codrops can be used freely in personal and commercial projects.
 
 -----------------------------------------------------------------
 
-CLEditor WYSIWYG HTML Editor v1.3.0
-Copyright 2010, Chris Landowski, Premium Software, LLC
+CLEditor WYSIWYG HTML Editor v1.4.5
+http://premiumsoftware.net/CLEditor
+requires jQuery v1.4.2 or later
 
-http://premiumsoftware.net/cleditor
+Copyright 2010, Chris Landowski, Premium Software, LLC
 Dual licensed under the MIT or GPL Version 2 licenses.
+ 
 
 -----------------------------------------------------------------
 
@@ -150,7 +152,7 @@ https://github.com/jherdman/javascript-relative-time-helpers
 
 -----------------------------------------------------------------
 
-Messenger
+Messenger 1.4.1
 Copyright (c) 2013 HubSpot, Inc.
 
 Licensed under the MIT license:

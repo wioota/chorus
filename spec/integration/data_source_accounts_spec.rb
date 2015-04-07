@@ -38,6 +38,6 @@ describe "Data Source Accounts" do
 
   it "Updates a Data Source to have a shared account" do
     click_link "Switch to single shared account"
-    click_button "Enable shared account"
+    click_button "Use Shared Account"
   end
 end

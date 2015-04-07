@@ -9,6 +9,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         "click a.close_errors": "clearServerErrors",
         "submit form": "createDataSource",
         "change input[name=high_availability]": 'toggleHighAvailability',
+        "change input[name=hiveKerberos]": 'toggleKerberos',
         "click a.connection_parameters": "launchConnectionParametersDialog"
     },
 
@@ -68,6 +69,25 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         }
     },
 
+    toggleKerberos: function(e) {
+        e && e.preventDefault();
+        if (this.$('input[name=hiveKerberos]:checked').val() === 'true') {
+            this.$('[name=hiveKerberosPrincipal]').removeClass('hidden');
+            this.$('[name=hiveKerberosKeytabLocation]').removeClass('hidden');
+            this.$('[name=dbUsername]').addClass('hidden');
+            this.$('[name=dbPassword]').addClass('hidden');
+            this.$('[name=shared]').addClass('hidden');
+            this.$('[for=register_jdbc_shared]').addClass('hidden');
+        } else {
+            this.$('[name=hiveKerberosPrincipal]').addClass('hidden');
+            this.$('[name=hiveKerberosKeytabLocation]').addClass('hidden');
+            this.$('[name=dbUsername]').removeClass('hidden');
+            this.$('[name=dbPassword]').removeClass('hidden');
+            this.$('[name=shared]').removeClass('hidden');
+            this.$('[for=register_jdbc_shared]').removeClass('hidden');
+        }
+    },
+
     launchConnectionParametersDialog: function (e) {
         e && e.preventDefault();
 
@@ -99,6 +119,8 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
             return chorus.models.JdbcDataSource;
         } else if (dataSourceType === "register_existing_postgres") {
             return chorus.models.PgDataSource;
+        } else if (dataSourceType === "register_existing_jdbc_hive") {
+            return chorus.models.JdbcHiveDataSource;
         } else {
             return chorus.models.GpdbDataSource;
         }
@@ -118,6 +140,18 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
         updates.shared = !!inputSource.find("input[name=shared]").prop("checked");
         updates.highAvailability = !!inputSource.find("input[name=high_availability]").prop("checked");
         updates.connectionParameters = this.model.get('connectionParameters');
+        if(updates.hive) {
+            updates.hiveKerberos = inputSource.find("input[name=hiveKerberos]:checked").val() === 'true';
+            if (updates.hiveKerberos) {
+                updates.dbUsername = 'default';
+                updates.dbPassword = 'default';
+                updates.shared = true;
+            }
+
+            updates.hiveHadoopVersion = updates.hdfsVersion;
+            delete updates.hdfsVersion;
+
+        }
         return updates;
     },
 
@@ -127,7 +161,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
 
     saveSuccess: function () {
         chorus.PageEvents.trigger("data_source:added", this.model);
-        chorus.toast('data_sources.add.toast', {dataSourceName: this.model.name()});
+        chorus.toast('data_sources.add.toast', {dataSourceName: this.model.name(), toastOpts: {type: "success"}});
         this.closeModal();
     }
 });

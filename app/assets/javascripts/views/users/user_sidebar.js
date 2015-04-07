@@ -26,7 +26,12 @@ chorus.views.UserSidebar = chorus.views.Sidebar.extend({
         if (this.model) {
             var currentUserCanEdit = this.model.currentUserCanEdit();
 
+            var sessionUserID = chorus.session.user().get("id");
+            var passwordUserID = this.model.get("id");
+            var isOneself = (sessionUserID === passwordUserID) ? true : false;
+        
             _.extend(ctx, {
+                isViewingSelf: isOneself,
                 displayName: this.model.displayName(),
                 permission: currentUserCanEdit,
                 listMode: this.options.listMode,

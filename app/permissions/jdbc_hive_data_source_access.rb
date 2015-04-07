@@ -1,0 +1,3 @@
+class JdbcHiveDataSourceAccess < JdbcDataSourceAccess; end
+
+

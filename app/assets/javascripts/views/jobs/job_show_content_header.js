@@ -4,7 +4,8 @@ chorus.views.JobShowContentHeader = chorus.views.Base.extend({
 
     additionalContext: function () {
         return {
-            frequency: this.model.frequency() ,
+            frequency: this.model.frequency(),
+            lastRunStatusKey: this.model.lastRunStatusKey(),
             lastRunLinkKey: this.model.lastRunLinkKey(),
             ownerName: this.model.owner().displayName(),
             ownerUrl: this.model.owner().showUrl()

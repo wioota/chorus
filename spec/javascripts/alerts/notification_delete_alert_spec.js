@@ -2,7 +2,7 @@ describe("chorus.alerts.NotificationDeleteAlert", function() {
     beforeEach(function() {
         this.activity = backboneFixtures.activity.noteOnWorkspaceCreated();
         this.activity.set({id: '1234'});
-        this.alert = new chorus.alerts.NotificationDeleteAlert({ activity: this.activity });
+        this.alert = new chorus.alerts.NotificationDeleteAlert({activity: this.activity});
     });
 
     it("makes a notification model", function() {
@@ -49,7 +49,7 @@ describe("chorus.alerts.NotificationDeleteAlert", function() {
                 });
 
                 it("should display a toast", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith("notification.delete.success", {toastOpts: {type: 'info'}});
+                    expect(chorus.toast).toHaveBeenCalledWith("notification.delete.success", {toastOpts: {type: 'deletion'}});
                 });
             });
         });

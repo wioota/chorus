@@ -15,6 +15,7 @@
         <span class="action">{{t actionKey}}</span>
     </div>
 
+    {{#if moreThanOneTask}}
     <div class="arrows">
         {{#if firstItem}}
             <img src="/images/jobs/arrow-up-disabled.png" class="move_up_arrow arrow_disabled" title=""/>            
@@ -28,4 +29,5 @@
             <img src="/images/jobs/arrow-down.png" class="move_down_arrow" title="Move Down"/>
         {{/if}}
     </div>
+    {{/if}}
 </div>
