@@ -1,3 +1,4 @@
+import os
 import sys
 import signal
 from options import get_options
@@ -8,7 +9,7 @@ from configure import configure
 from log import logger
 from color import bold, error
 import traceback
-
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 options, arg, health_args = get_options(sys.argv)
 is_upgrade = is_upgrade(options.chorus_path, options.data_path)
 handler = {"setup":chorus_set.setup, "health_check":health_check, "configure":configure.config}

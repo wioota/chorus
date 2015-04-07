@@ -247,6 +247,7 @@ class ChorusSetup:
         logger.debug("Generating paths file: " + file_path)
         with open(file_path, 'w') as f:
             f.write("export CHORUS_HOME=%s\n" % self.options.chorus_path)
+            f.write("export CHORUS_DATA=%s\n" % self.options.data_path)
             f.write("export PATH=$PATH:$CHORUS_HOME\n")
             f.write("export PGPASSFILE=$CHORUS_HOME/.pgpass")
 

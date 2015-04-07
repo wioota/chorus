@@ -5,7 +5,7 @@ import pkgutil
 import inspect
 import health_lib
 from log import logger
-from color import bold
+from color import bold, warning
 from chorus_executor import ChorusExecutor
 
 def _load_configure_func():
@@ -21,11 +21,14 @@ def _load_configure_func():
         idx += 1
     return dic
 
-def system_checking(install_mode=False):
+def system_checking(install_mode=False, chorus_path=None):
     logger.info(bold("Verifying Minimum System Requirements:"))
     for func in _load_configure_func().values():
         if func[0] == "b_check_running_user":
             func[1](install_mode=install_mode)
+        elif func[0] == "d_check_disk_space":
+            if install_mode:
+                func[1](chorus_path)
         else:
             func[1]()
 
@@ -38,7 +41,11 @@ def health_check(args=''):
         logger.info(bold("Running \"atk %s\" Command:" % args))
     command = "source ~/.bashrc && %s %s" % (os.path.join(os.path.dirname(os.path.abspath(__file__)), "health_lib/atk"), args)
     ret, stdout, stderr = executor.run(command + " 2>&1")
-    print stdout
+    if "Warning" in stdout:
+        logger.warning(stdout)
+        logger.warning(warning("You have warning during health_check which might cause\n"\
+                       + "problem when you use alpine chorus, we recommand you\n"\
+                       + "resolve these problem before using alpine chorus."))
     return ret, stdout, stderr
 
 if __name__ == "__main__":

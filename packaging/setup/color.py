@@ -12,6 +12,8 @@ END = '\033[0m'
 def bold(msg):
     return BOLD + GREEN + msg + END
 
+def warning(msg):
+    return YELLOW + msg + END
 def fail():
     return "[" + RED + "Fail" + END + "]"
 

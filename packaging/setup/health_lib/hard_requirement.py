@@ -4,7 +4,7 @@ import re
 import socket
 import platform
 import xml.etree.ElementTree as ET
-sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)),".."))
+sys.path.append("..")
 from log import logger
 from chorus_executor import ChorusExecutor
 from func_executor import processify
@@ -44,10 +44,14 @@ def c_check_java_version():
                 raise Exception("%s\n only support java version > 1.6, please upgrade" % stdout)
     check()
 
-def d_check_disk_space():
+def d_check_disk_space(dir):
     @processify(msg="->Checking disk space...")
     def check():
-        pass
+        stat= os.statvfs(dir)
+        free_space = stat.f_frsize*stat.f_bavail / (1024 * 1024 * 1024)
+        logger.debug("free space in %s: %d" % (dir, free_space))
+        if free_space < 2:
+            raise Exception("Not enough space left in %s" % dir)
     check()
 #def d_check_open_port():
 #    from configParser import ConfigParser

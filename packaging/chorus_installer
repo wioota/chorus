@@ -14,7 +14,7 @@ from setup import func_executor
 from setup import options
 from setup import log
 from setup.health_check import system_checking
-
+sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), "setup"))
 options, arg, health_args = options.get_options(sys.argv)
 logger = log.logger
 bold = color.bold
@@ -181,7 +181,7 @@ def install():
             print "%s aborted, Cancelled by user" % msg
             return
 
-    system_checking(True)
+    system_checking(True, chorus_path)
     output(bold("%s chorus-%s to chorus and data path:" % (msg, version)))
     copy_to_dest(installation_path, chorus_path, data_path, release_path, user)
 
