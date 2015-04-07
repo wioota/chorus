@@ -51,6 +51,8 @@ class ChorusExecutor:
         user_home_dir = pw_record.pw_dir
         env = {}
         ret, stdout, stderr = self.run("su - chorus -c \"env\"")
+        if ret != 0:
+            raise Exception(stderr)
         for line in stdout.strip().split("\n"):
             env[line.split("=")[0]] = line.split("=")[1]
         return subprocess.call(shlex.split(command), preexec_fn=demote(user_uid, user_gid), env=env)
