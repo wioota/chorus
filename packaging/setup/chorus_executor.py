@@ -38,6 +38,9 @@ class ChorusExecutor:
         return p.returncode, stdout, stderr
 
     def run_as_user(self, command, user):
+        """
+        only can be used as root user (only useful in install mode)
+        """
         def demote(user_uid, user_gid):
             os.setgid(user_gid)
             os.setuid(user_uid)
@@ -46,10 +49,10 @@ class ChorusExecutor:
         user_gid = pw_record.pw_gid
         user_name = pw_record.pw_name
         user_home_dir = pw_record.pw_dir
-        env = os.environ.copy()
-        env[ 'HOME'     ] = user_home_dir
-        env[ 'LOGNAME'  ] = user_name
-        env[ 'USER'     ] = user_name
+        env = {}
+        ret, stdout, stderr = self.run("su - chorus -c \"env\"")
+        for line in stdout.strip().split("\n"):
+            env[line.split("=")[0]] = line.split("=")[1]
         return subprocess.call(shlex.split(command), preexec_fn=demote(user_uid, user_gid), env=env)
 
     def extract_postgres(self, package_name):
