@@ -182,7 +182,10 @@ def install():
             return
 
     system_checking(True, chorus_path)
-    output(bold("%s chorus-%s to chorus and data path:" % (msg, version)))
+    if msg in ["Installing", "Re-install"]:
+        output(bold("%s Chorus %s:" % (msg, version)))
+    else:
+        output(bold("%s Chorus to %s:" % (msg, version)))
     copy_to_dest(installation_path, chorus_path, data_path, release_path, user)
 
     with open(dot_chorus, "w") as f:
