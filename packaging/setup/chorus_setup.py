@@ -372,12 +372,12 @@ class ChorusSetup:
 
     def source_chorus_path(self):
         logger.debug("source %s/chorus_path.sh" % self.options.chorus_path)
+        content = ""
         with open(os.path.join(os.path.expanduser("~"), ".bashrc"), "r") as f:
             content = f.read()
-            if "source %s/chorus_path.sh\n" % self.options.chorus_path in content:
-                return
-        with open(os.path.join(os.path.expanduser("~"), ".bashrc"), "a") as f:
-            f.write("source %s/chorus_path.sh\n" % self.options.chorus_path)
+        if not "source %s/chorus_path.sh" % self.options.chorus_path in content:
+            with open(os.path.join(os.path.expanduser("~"), ".bashrc"), "a") as f:
+                f.write("source %s/chorus_path.sh\n" % self.options.chorus_path)
 
         if os.getenv("CHORUS_HOME") == None:
             os.setenv("CHORUS_HOME", self.options.chorus_path)
