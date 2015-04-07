@@ -305,25 +305,27 @@ $ridiculously-large-z-index: 9999999999999;
 
 $font-family: "Source Sans Pro",Helvetica,Arial,Verdana,sans-serif;
 
-// Font weights
-$light: 300;
+// FONT WEIGHTS
+$light:     300;
 // "normal" defaults to 400
-$semibold: 600;
-$bold: 700;
+$semibold:  600;
+$bold:      700;
 
 
-// Font size
+// FONT SIZES
 // normal size should be medium
-$medium-font: 14px;
-$small-font: 12px;
-$smallest-font: 10px;
-$default-font-size: $medium-font;
+$medium-font:               14px;
+$small-font:                12px;
+$smallest-font:             10px;
+$default-font-size:         $medium-font;
 
 // fontsize for the page (sub) header element. eg. name of item
-$page_header-fontsize: 20.5px;
+$page_header-fontsize:      20.5px;
 
 // fontsize for the primary item name in lists. e.g. workspace, workfile, datasource, etc.
-$listitem_name-fontsize: 16px;
+$listitem_name-fontsize:    16px;
+
+
 
 $default-font-color: $color-text3;
 
@@ -506,7 +508,7 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin font-action-link {
     color: $brand;
-    font-size: 14px;
+    font-size: $medium-font;
 }
 
 @mixin font-secondary-link {
@@ -517,16 +519,16 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin font-menu {
     @include debugging-mixin;
-    font-size: 14px;
-    font-weight: normal;
+    font-size: $medium-font;
     line-height: 14px;
+    font-weight: normal;
     vertical-align: middle;
     color: $color-text1;
 }
 
 @mixin results-console {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     font-weight: $semibold;
     color: $color-text1;
 }
@@ -547,43 +549,41 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin list-item-details-area {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     color: $color-text3;
 }
 
 @mixin insight-ribbon {
     @include debugging-mixin;
-
     font-size: 12px;
     font-weight: $bold;
 	color: $core-white;
 }
 
-
 @mixin database-column-type {
     @include debugging-mixin;
-    font-size: 12px;
+    font-size: $medium-font;
     font-weight: normal;
-	color: $core-white;
+	color: $color-text3;
 }
 
 @mixin secondary-text-normal {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     font-weight: normal;
     color: $color-text3;
 }
 
 @mixin tertiary-text-normal {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     font-weight: normal;
     color: $color-text4;
 }
 
 @mixin secondary-text-semibold {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     font-weight: $semibold;
     color: $color-text3;
 }
@@ -617,12 +617,12 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin dashboard-snapshot-model {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
 }
 
 @mixin dashboard-module-title {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     color: $color-text2;
     @include uppercase;
 }
@@ -799,7 +799,6 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin grab_cursor {
     cursor: -moz-grab;
-    // cursor: -o-grab;
     cursor: -ms-grab;
     cursor: -webkit-grab;
     cursor: grab;
