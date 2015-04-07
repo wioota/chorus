@@ -157,7 +157,7 @@ def install():
 			+"Do you want to %s the chorus to version: %s" % (msg, cur_version), default):
             print "%s aborted, Cancelled by user" % msg
             return
-    if options.disable_spec:
+    if not options.disable_spec:
         system_checking(True, chorus_path)
 
     if msg in ["Installing", "Re-install"]:
