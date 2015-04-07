@@ -380,8 +380,7 @@ class ChorusSetup:
                 f.write("source %s/chorus_path.sh\n" % self.options.chorus_path)
 
         if os.getenv("CHORUS_HOME") == None:
-            os.setenv("CHORUS_HOME", self.options.chorus_path)
-
+            os.environ["CHORUS_HOME"] = self.options.chorus_path
     def setup(self, options, is_upgrade):
         self.set_path(options)
         #if not io.require_confirmation("Do you want to set up the chorus, "
@@ -399,20 +398,21 @@ class ChorusSetup:
         self.construct_data_structure()
         self.link_shared_config()
         self.link_data_folder()
-        self.extract_postgres()
         self.generate_paths_file()
 
         self.configure_secret_key(passphrase)
         self.configure_secret_token()
 
-        msg = "(may take 2~3 minuts)"
+        msg = "Creating"
         if is_upgrade:
-            logger.info(bold("Updating metadata database %s:" % msg))
+            msg = "Updating"
+        logger.info(bold("%s metadata database (may take 2~3 minuts):" % msg))
+        self.extract_postgres()
+        if is_upgrade:
             self.validate_data_sources()
             self.stop_previous_release()
             self.upgrade_database()
         else:
-            logger.info(bold("Creating metadata database %s:" % msg))
             self.create_database_config()
             self.generate_chorus_psql_files()
             self.generate_chorus_rails_console_file()
