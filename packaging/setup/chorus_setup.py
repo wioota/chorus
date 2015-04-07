@@ -379,6 +379,9 @@ class ChorusSetup:
         with open(os.path.join(os.path.expanduser("~"), ".bashrc"), "a") as f:
             f.write("source %s/chorus_path.sh\n" % self.options.chorus_path)
 
+        if os.getenv("CHORUS_HOME") == None:
+            os.setenv("CHORUS_HOME", self.options.chorus_path)
+
     def setup(self, options, is_upgrade):
         self.set_path(options)
         #if not io.require_confirmation("Do you want to set up the chorus, "
