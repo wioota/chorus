@@ -14,7 +14,7 @@ options, arg, health_args = get_options(sys.argv)
 is_upgrade = is_upgrade(options.chorus_path, options.data_path)
 handler = {"setup":chorus_set.setup, "health_check":health_check, "configure":configure.config}
 def exit_gracefully(signum, frame):
-    print "\nSetup aborted, Cancelled by user"
+    #print "\nSetup aborted, Cancelled by user"
     failover(options.chorus_path, options.data_path, is_upgrade)
     sys.exit(1)
 
