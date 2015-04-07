@@ -23,7 +23,7 @@ describe("chorus.views.TagListSidebar", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: true}, chorus);
                 chorus.PageEvents.trigger('tag:selected', this.selectedTag);
-                this.deleteLink = this.view.$(".actions a.delete_tag_link");
+                this.deleteLink = this.view.$(".actions a.action_delete_tag");
             });
 
             it("displays the delete tag link", function() {
@@ -53,7 +53,7 @@ describe("chorus.views.TagListSidebar", function() {
             beforeEach(function() {
                 setLoggedInUser({admin: false}, chorus);
                 chorus.PageEvents.trigger('tag:selected', this.selectedTag);
-                this.deleteLink = this.view.$el.find(".actions a.delete_tag_link");
+                this.deleteLink = this.view.$el.find(".actions a.action_delete_tag");
             });
 
             it("does not display the delete tag link", function() {
@@ -66,7 +66,7 @@ describe("chorus.views.TagListSidebar", function() {
         beforeEach(function() {
             setLoggedInUser({admin: false}, chorus);
             chorus.PageEvents.trigger('tag:selected', this.selectedTag);
-            this.renameLink = this.view.$el.find(".actions a.rename_tag_link");
+            this.renameLink = this.view.$el.find(".actions a.action_rename_tag");
         });
 
         it("does not display the rename tag link", function() {
