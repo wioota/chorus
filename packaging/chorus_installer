@@ -89,9 +89,6 @@ def grant_permission(user, chorus_path, data_path):
 def copy_to_dest(installation_path, chorus_path, data_path, release_path, user):
     @processify(msg="->Installing Chorus to %s..." % chorus_path)
     def copy():
-        ret, stdout, stderr = run("mkdir -p %s && mkdir -p %s" % (chorus_path, data_path))
-        if ret != 0:
-            raise Exception("[ERROR] " + stderr)
 
         ret, stdout, stderr = run("cp -rf %s %s" % (os.path.join(installation_path, "version_build"), chorus_path))
         if ret != 0:
@@ -139,6 +136,9 @@ def install():
         install_alpine = False
         if is_alpine_exits(installation_path):
             install_alpine = io.require_confirmation("Do you want to install Alpine?", "yes")
+    ret, stdout, stderr = run("mkdir -p %s && mkdir -p %s" % (chorus_path, data_path))
+    if ret != 0:
+        raise Exception("[ERROR] " + stderr)
     release_path = os.path.join(chorus_path, "releases/%s" % version)
     pre_version = detect_pre_version(chorus_path)
     cur_version = version.split("-")[0]
