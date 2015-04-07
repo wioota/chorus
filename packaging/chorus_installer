@@ -155,7 +155,7 @@ def install():
             msg = "Re-install"
         if not io.require_confirmation("You already have chorus version: %s installed. \n" % pre_version\
 			+"Do you want to %s the chorus to version: %s" % (msg, cur_version), default):
-            print "%s aborted, Cancelled by user" % msg
+            print "\n%s aborted, Cancelled by user" % msg
             return
     if not options.disable_spec:
         system_checking(True, chorus_path)
