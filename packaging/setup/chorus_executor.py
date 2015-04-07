@@ -1,4 +1,5 @@
 import os
+import pwd
 import subprocess
 import shlex
 from log import logger
@@ -35,6 +36,21 @@ class ChorusExecutor:
         if stderr:
             logger.debug(stderr)
         return p.returncode, stdout, stderr
+
+    def run_as_user(self, command, user):
+        def demote(user_uid, user_gid):
+            os.setgid(user_gid)
+            os.setuid(user_uid)
+        pw_record = pwd.getpwnam(user)
+        user_uid = pw_record.pw_uid
+        user_gid = pw_record.pw_gid
+        user_name = pw_record.pw_name
+        user_home_dir = pw_record.pw_dir
+        env = os.environ.copy()
+        env[ 'HOME'     ] = user_home_dir
+        env[ 'LOGNAME'  ] = user_name
+        env[ 'USER'     ] = user_name
+        return subprocess.call(shlex.split(command), preexec_fn=demote(user_uid, user_gid), env=env)
 
     def extract_postgres(self, package_name):
         self.run("tar xzfv %s -C %s" % (os.path.join(self.release_path, "packaging/postgres/" + package_name),\

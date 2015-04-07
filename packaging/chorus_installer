@@ -11,6 +11,7 @@ import traceback
 from setup import color
 from setup import installer_io
 from setup import func_executor
+from setup import chorus_executor
 from setup import options
 from setup import log
 from setup.health_check import system_checking
@@ -21,6 +22,9 @@ bold = color.bold
 error = color.error
 processify = func_executor.processify
 io = installer_io.InstallerIO(options.silent)
+exe = chorus_executor.ChorusExecutor()
+run = exe.run
+run_as_user = exe.run_as_user
 fresh_install = False
 
 dot_chorus = os.path.join("/root", ".chorus")
@@ -47,34 +51,6 @@ def prompt_for_eula():
         return False
     return True
 
-def run(command):
-    p = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = p.communicate()
-    if stdout:
-        logger.debug(stdout)
-    if stderr:
-        logger.debug(stderr)
-    return p.returncode, stdout, stderr
-
-def call(command):
-    logger.debug(command)
-    return subprocess.call(shlex.split(command))
-
-def run_interact(command, user):
-    def demote(user_uid, user_gid):
-        os.setgid(user_gid)
-        os.setuid(user_uid)
-    pw_record = pwd.getpwnam(user)
-    user_uid = pw_record.pw_uid
-    user_gid = pw_record.pw_gid
-    user_name = pw_record.pw_name
-    user_home_dir = pw_record.pw_dir
-    env = os.environ.copy()
-    env[ 'HOME'     ] = user_home_dir
-    env[ 'LOGNAME'  ] = user_name
-    env[ 'USER'     ] = user_name
-    return subprocess.call(shlex.split(command), preexec_fn=demote(user_uid, user_gid), env=env)
-
 def is_alpine_exits(installation_path):
     alpine_dir = os.path.join(installation_path, "vendor/alpine")
     alpine_sources = [ f for f in glob.glob(os.path.join(alpine_dir, "alpine*.sh")) ]
@@ -92,6 +68,7 @@ def detect_pre_version(chorus_path):
         pre_version = pre_version.split("-")[0]
         return pre_version
     return None
+
 def compare_version(cur, pre):
     cur = int(cur.replace(".", ""))
     pre = int(pre.replace(".", ""))
@@ -203,7 +180,7 @@ def install():
     if install_alpine:
         _chorus_only = ""
 
-    run_interact("%s setup %s --chorus_path=%s --data_path=%s --disable_spec %s %s" % \
+    run_as_user("%s setup %s --chorus_path=%s --data_path=%s --disable_spec %s %s" % \
                  (os.path.join(release_path, "packaging/setup/chorus_server"), _s, chorus_path, data_path, _passphrase, _chorus_only), user)
 
 try:
