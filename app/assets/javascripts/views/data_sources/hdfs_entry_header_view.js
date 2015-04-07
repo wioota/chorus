@@ -21,7 +21,7 @@ chorus.views.HdfsEntryHeader = chorus.views.Base.include(
     setupSubviews: function() {
         if(this.showTags()) {
             this.tagBox = this.tagBox || new chorus.views.TagBox({model: this.dataSource});
-            this.subviews[".tag_box"] = 'tagBox';
+            this.subviews[".tag_box"] = "tagBox";
         }
     },
 
