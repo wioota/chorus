@@ -14,12 +14,11 @@ module Authority
   # 'authorize' finds the permissions for each role the user has
   # on the given class. If a role permission matches the class
   # permission, then the user is authorized for that activity
-  def self.authorize!(activity_symbol, object, user)
-    return if user == object.owner
+  def self.authorize!(activity_symbol, object, user, options = {})
+    return if is_owner?(user, object) || handle_legacy_action(options[:or], object, user)
 
     roles = retrieve_roles(user)
     chorus_class = ChorusClass.search_permission_tree(object.class)
-
     actual_class = object.class.name.constantize
 
     common_permissions = common_permissions_between roles, chorus_class
@@ -36,15 +35,47 @@ module Authority
   end
 
   private
+
+  # This handles legacy authentication actions that are not role-based...
+  # Ideally we can get rid of this when Workspace ''roles'' are implemented...
+  # Basically just a big case switch
+  def self.handle_legacy_action(actions, object, user)
+    actions = Array.wrap(actions)
+    allowed = false
+
+    actions.each do |action|
+      allowed ||= case action
+                    when :current_user_is_workspace_owner
+                      object.is_a?(::Events::NoteOnWorkspace) && (user == object.workspace.owner)
+                    when :current_user_is_in_workspace
+                      object.is_a?(::Workspace) && object.member?(user)
+                    else
+                      false
+                    end
+    end
+    allowed
+  end
+
+  # Most things use the owner association, but some (Notes, Events) use actor
+  def self.is_owner?(user, object)
+    if object.respond_to? :owner
+      object.owner == user
+    elsif object.respond_to? :actor
+      object.actor == user
+    else
+      return false
+    end
+  end
   
   def self.retrieve_roles(user)
-    roles = user.roles
+    roles = user.roles.clone
     user.groups.each do |group|
       roles << g.roles
     end
     roles
   end
 
+  # returns the intersection of all permissions from roles and all permissions for the class
   def self.common_permissions_between(roles, chorus_class)
     all_roles_permissions = roles.inject([]){ |permissions, role| permissions.concat(role.permissions) }
     if chorus_class.permissions.empty? || all_roles_permissions.empty?

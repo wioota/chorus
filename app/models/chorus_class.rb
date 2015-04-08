@@ -22,6 +22,7 @@ class ChorusClass < ActiveRecord::Base
     end
 
     Chorus.log_debug "Couldn't find an ancestor with permissions for the class #{klass}"
+    raise Allowy::AccessDenied.new("No permissions found", nil, nil)
     return
   end
 

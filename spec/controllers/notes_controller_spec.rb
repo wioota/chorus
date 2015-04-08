@@ -28,7 +28,7 @@ describe NotesController do
     end
 
     it "uses authorization" do
-      mock(controller).authorize!(:create_note_on, model)
+      mock(Authority).authorize!(:show, model, user)
       post :create, attributes
     end
 
@@ -70,6 +70,7 @@ describe NotesController do
         let(:workspace) { workspaces(:archived) }
 
         it "responds with an error code" do
+          stub(Authority).authorize! { nil }
           post :create, attributes
           response.code.should == "422"
         end
@@ -173,7 +174,7 @@ describe NotesController do
     end
 
     it "uses the note access to check permissions" do
-      mock(controller).authorize!(:destroy, note)
+      mock(Authority).authorize!(:destroy, note, user, {:or => :current_user_is_workspace_owner})
       delete :destroy, :id => note.id
     end
   end
