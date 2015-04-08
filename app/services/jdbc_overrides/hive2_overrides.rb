@@ -9,6 +9,7 @@ module JdbcOverrides
 
       HDFS_VERSIONS = {
           'Cloudera CDH5' => '4.0.0',
+          'Cloudera CDH5.4' => '4.0.0',
           'Hortonworks HDP 2.1' => '4.0.0',
           'MapR4' => '0.20.2mr'
       }
