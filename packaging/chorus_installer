@@ -112,8 +112,8 @@ def install():
             user = lines[0].strip("\n")
             chorus_path = lines[1].strip("\n")
             data_path = lines[2].strip("\n")
-        passphrase = None
-        install_alpine = True
+            passphrase = lines[3].strip("\n")
+            install_alpine = line[4].strip("\n")
     else:
         fresh_install = True
         if not prompt_for_eula():
@@ -133,9 +133,9 @@ def install():
                                + "a recoverable secret key for encrypting passwords."
                                + "By default, a random key will be generated", default='')
 
-        install_alpine = False
+        install_alpine = "False"
         if is_alpine_exits(installation_path):
-            install_alpine = io.require_confirmation("Do you want to install Alpine?", "yes")
+            install_alpine = str(io.require_confirmation("Do you want to install Alpine?", "yes"))
     ret, stdout, stderr = run("mkdir -p %s && mkdir -p %s" % (chorus_path, data_path))
     if ret != 0:
         raise Exception("[ERROR] " + stderr)
@@ -169,7 +169,9 @@ def install():
     with open(dot_chorus, "w") as f:
         f.write(user + "\n")
         f.write(chorus_path + "\n")
-        f.write(data_path)
+        f.write(data_path + "\n")
+        f.write(passphrase + "\n")
+        f.write(install_alpine)
     _s = ""
     if options.silent:
         _s = "-s"
@@ -177,9 +179,9 @@ def install():
     if passphrase is not None:
         _passphrase = "--passphrase=%s" % passphrase
 
-    _chorus_only = "--chorus_only"
-    if install_alpine:
-        _chorus_only = ""
+    _chorus_only = ""
+    if install_alpine == "False":
+        _chorus_only = "--chorus_only"
 
     run_as_user("%s setup %s --chorus_path=%s --data_path=%s --disable_spec %s %s" % \
                  (os.path.join(release_path, "packaging/setup/chorus_server"), _s, chorus_path, data_path, _passphrase, _chorus_only), user)
