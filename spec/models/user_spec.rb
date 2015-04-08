@@ -9,6 +9,16 @@ describe User do
     it "has the default role" do
       User.new.roles.should include(Role.find_by_name("Collaborator"))
     end
+
+    it "doesn't duplicate roles when pulling record from database" do
+      u = User.new(:username => "single_role")
+      old_roles = u.roles
+      u.save(:validate => false)
+
+      u = User.find_by_username("single_role")
+      new_roles = u.roles
+      old_roles.should eq(new_roles)
+    end
   end
 
   describe ".authenticate" do

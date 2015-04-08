@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
 
   def defaults
     collaborator_role = Role.find_or_create_by_name("Collaborator")
-    self.roles << collaborator_role
+    self.roles << collaborator_role unless self.roles.include? collaborator_role
   end
 
   def accessible_events(current_user)
