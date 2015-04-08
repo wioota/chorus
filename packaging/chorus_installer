@@ -113,7 +113,7 @@ def install():
             chorus_path = lines[1].strip("\n")
             data_path = lines[2].strip("\n")
             passphrase = lines[3].strip("\n")
-            install_alpine = line[4].strip("\n")
+            install_alpine = lines[4].strip("\n")
     else:
         fresh_install = True
         if not prompt_for_eula():
