@@ -367,6 +367,8 @@ class ChorusSetup:
     def link_current_to_release(self, link_name, rel_path):
         current = os.path.join(self.options.chorus_path, link_name)
         if os.path.lexists(current):
+            if not os.path.islink(current):
+                self.shutil.rmtree(current)
             os.unlink(current)
         os.symlink(rel_path, current)
 
