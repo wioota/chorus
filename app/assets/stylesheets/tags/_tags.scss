@@ -110,8 +110,8 @@ $tag-border-radius: 3px;
 
             .text-dropdown {
                 border: 1px solid $type-ahead-result-border-color;
-                font: inherit;
-                font-size: 12px;
+                // font: inherit;
+                font-size: $small-font;
                 font-weight: $semibold;
 
                 .text-list {

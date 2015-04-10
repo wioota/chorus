@@ -76,7 +76,7 @@ describe("chorus.views.TagsInput", function() {
 
         context("when the tag doesn't contain a ,", function() {
             beforeEach(function() {
-                tagName = _.repeat("a", 100);
+                tagName = _.repeat("a", 80);
                 enterTag(view, tagName);
             });
 
@@ -244,7 +244,7 @@ describe("chorus.views.TagsInput", function() {
                 this.server.lastFetch().succeed([{name: 'anotherTag'}]);
             });
 
-            it("show '(Create new)' next to it in the suggestion list", function() {
+            it("shows the text to create new next to it in the suggestion list", function() {
                 expect($(view.el).html()).toContainTranslation("tags.create_new");
             });
 
@@ -264,7 +264,7 @@ describe("chorus.views.TagsInput", function() {
                 this.server.lastFetch().succeed([{name: 's'}]);
             });
 
-            it("doesn't show '(Create new)' next to it in the suggestion list", function() {
+            it("doesn't show the text to create new next to it in the suggestion list", function() {
                 expect($(view.el).html()).toContain("s");
                 expect($(view.el).html()).not.toContainTranslation("tags.create_new");
             });

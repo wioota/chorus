@@ -51,6 +51,7 @@
     padding: 0;
     position: absolute;
     z-index: 3;
+    z-index: 99999999999;
     background: $core-white;
     border: 1px solid #9DACCC;
     width: 100%;
@@ -61,12 +62,14 @@
     overflow-y: auto;
 }
 
-.text-core .text-wrap .text-dropdown.text-position-below {
-    margin-top: 1px;
-}
+.text-core .text-wrap .text-dropdown {
+    &.text-position-below {
+        margin-top: 1px;
+    }
 
-.text-core .text-wrap .text-dropdown.text-position-above {
-    margin-bottom: 1px;
+    &.text-position-above {
+        margin-bottom: 1px;
+    }
 }
 
 .text-core .text-wrap .text-dropdown .text-list .text-suggestion {
@@ -76,7 +79,7 @@
 
 .text-core .text-wrap .text-dropdown .text-list .text-suggestion em {
     font-style: normal;
-    text-decoration: underline;
+//     text-decoration: underline;
 }
 
 .text-core .text-wrap .text-dropdown .text-list .text-suggestion.text-selected {
@@ -136,11 +139,11 @@
 }
 
 
-.text-core .text-wrap .text-tags .text-tag .text-button a.text-remove {
-    &:hover {
-        background-position: 0 -11px;
-    }
-    &:active {
-        background-position: 0 -22px;
-    }
-}
+// .text-core .text-wrap .text-tags .text-tag .text-button a.text-remove {
+//     &:hover {
+//         background-position: 0 -11px;
+//     }
+//     &:active {
+//         background-position: 0 -22px;
+//     }
+// }
