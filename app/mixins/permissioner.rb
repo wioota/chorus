@@ -5,6 +5,33 @@
 module Permissioner
   extend ActiveSupport::Concern
 
+  included do
+    after_create :initialize_default_roles, :if => Proc.new { |obj| obj.class.const_defined? 'OBJECT_LEVEL_ROLES' }
+  end
+
+  module InstanceMethods
+
+    def initialize_default_roles
+      default_roles = self.class::OBJECT_LEVEL_ROLES.map do |role_symbol|
+        Role.create(:name => role_symbol.to_s)
+      end
+      object_roles << default_roles
+    end
+
+    # Ex: Workspace.first.create_permisisons_for(roles, [:edit, :destroy])
+    def add_permissions_for(roles, activity_symbol_array)
+      permissions = self.class.generate_permissions_for roles, activity_symbol_array
+    end
+
+    def object_roles
+      self.save! if new_record?
+      chorus_class = ChorusClass.find_or_create_by_name(self.class.name)
+      chorus_object = ChorusObject.find_or_create_by_chorus_class_id_and_instance_id(chorus_class.id, self.id)
+
+      chorus_object.roles
+    end
+  end
+
   module ClassMethods
 
     # Given an activity, this method returns an integer with that
@@ -34,7 +61,7 @@ module Permissioner
     end
 
     # DataSource.create_permissions_for dev_role, [:edit]
-    def create_permissions_for(roles, activity_symbol_array)
+    def generate_permissions_for(roles, activity_symbol_array)
       klass = self
       roles, activities = Array.wrap(roles), Array.wrap(activity_symbol_array)
       chorus_class = ChorusClass.find_or_create_by_name(self.name)
@@ -49,7 +76,12 @@ module Permissioner
         permission
       end
 
-      chorus_class.permissions << permissions
+      permissions
+    end
+
+    def add_permissions_for(roles, activity_symbol_array)
+      chorus_class = ChorusClass.find_or_create_by_name(self.name)
+      chorus_class.permissions << generate_permissions_for(roles, activity_symbol_array)
     end
 
     # Figure out how to make these private
