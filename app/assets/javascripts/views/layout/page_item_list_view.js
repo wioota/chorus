@@ -9,7 +9,7 @@ chorus.views.PageItemList = chorus.views.Base.extend({
     suppressRenderOnChange: true,
 
     events: {
-        "click  li input[type=checkbox]": "checkboxClicked",
+        "click li input[type=checkbox]": "checkboxClicked",
         "click .item_wrapper": "listItemClicked"
     },
 
