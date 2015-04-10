@@ -1,6 +1,7 @@
 chorus.pages.UserIndexPage = chorus.pages.Base.extend({
     constructorName: 'UserIndexPage',
     helpId: "users",
+    crumbs: null,
 
     setup:function () {
         this.collection = new chorus.collections.UserSet();
