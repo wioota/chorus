@@ -281,6 +281,8 @@ describe User do
     it { should have_many(:dashboard_items).dependent(:destroy) }
     it { should have_and_belong_to_many(:groups) }
     it { should have_and_belong_to_many(:roles) }
+    it { should have_many(:chorus_object_roles) }
+    it { should have_many(:object_roles).through(:chorus_object_roles) }
   end
 
   describe ".admin_count" do

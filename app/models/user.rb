@@ -35,8 +35,12 @@ class User < ActiveRecord::Base
 
   has_many :comments
 
+  # roles, groups, and permissions
   has_and_belongs_to_many :groups
   has_and_belongs_to_many :roles
+  # object_roles allow a User to have different roles for different objects (currently just Workspace)
+  has_many :chorus_object_roles
+  has_many :object_roles, :through => :chorus_object_roles, :source => :role
 
   has_attached_file :image, :path => ":rails_root/system/:class/:id/:style/:basename.:extension",
                     :url => "/:class/:id/image?style=:style",
