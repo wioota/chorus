@@ -1,34 +1,36 @@
-<div class="headerbar">
-    <div class="text type">{{t "visualization.type"}}</div>
+<div class="girdle">
 
-    <div class="chart_icon action_bar_icon frequency"/>
-    <div class="chart_icon action_bar_icon histogram"/>
-    <div class="chart_icon action_bar_icon heatmap"/>
-    <div class="chart_icon action_bar_icon timeseries"/>
-    <div class="chart_icon action_bar_icon boxplot"/>
+    <div class="headerbar">
+        <!-- <div class="text type">{{t "visualization.type"}}</div> -->
 
-    <div class="text label">{{chartType}}</div>
+        <div class="chart_icon action_bar_icon frequency"/>
+        <div class="chart_icon action_bar_icon histogram"/>
+        <div class="chart_icon action_bar_icon heatmap"/>
+        <div class="chart_icon action_bar_icon timeseries"/>
+        <div class="chart_icon action_bar_icon boxplot"/>
 
-    <div class="right">
-        <a href="#" class="show_options">{{t "visualization.show_options" count=filterCount}}</a>
-        <a href="#" class="hide_options hidden">{{t "visualization.hide_options" count=filterCount}}</a>
+        <div class="text label">{{chartType}}</div>
+
+        <div class="right">
+            <a href="#" class="show_options">{{t "visualization.show_options" count=filterCount}}</a>
+            <a href="#" class="hide_options hidden">{{t "visualization.hide_options" count=filterCount}}</a>
+        </div>
     </div>
-</div>
 
-<div class="filter_options hidden">
-</div>
+    <div class="filter_options hidden"></div>
 
-<div class="chart_container">
-    <div class="overlay hidden"><span>{{t "visualization.overlay"}}</span></div>
+    <div class="chart_container">
+        <div class="overlay hidden"><p>{{t "visualization.overlay"}}</p></div>
 
-    <div class="chart_area">
+        <div class="chart_area"></div>
     </div>
-</div>
 
-<div class="tabledata hidden">
-</div>
+    <div class="tabledata hidden"></div>
 
-<div class="form_controls">
+</div>
+<!-- END girdle -->
+    
+<div id="dialog_bottom" class="form_controls">
     <div class="links">
         <a href="#" class="show hidden">{{t "visualization.show_table"}}</a>
         <a href="#" class="hide hidden">{{t "visualization.hide_table"}}</a>
