@@ -9,9 +9,11 @@ chorus.views.visualizations.Heatmap = chorus.views.Base.extend({
         var yLabels = _.uniq(_.pluck(data, 'yLabel'));
 
         var svg = d3.select(this.el).append("svg").
-            attr("class", "chart heatmap").
-            attr("width", 925).
-            attr("height", 340);
+            attr("class", "chart heatmap")
+            //.attr("width", 925)
+            .attr("width", 900)
+            // .attr("height", 340);
+            .attr("height", 350);
 
         this.axes = new chorus.views.visualizations.Axes({
             el: svg,

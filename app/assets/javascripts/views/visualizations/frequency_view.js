@@ -10,11 +10,13 @@ chorus.views.visualizations.Frequency = chorus.views.Base.extend({
         var buckets = _.pluck(data, 'bucket');
 
         var svg = d3.select(this.el).append("svg").
-            attr("class", "chart frequency").
-            attr("width", 925).
-            attr("height", 340);
+            attr("class", "chart frequency")
+            //.attr("width", 925)
+            .attr("width", 900)
+            // .attr("height", 340);
+            .attr("height", 350);
 
-        this.axes = new chorus.views.visualizations.Axes({
+        this.axes = new chorus.views.visualizations.Axes ({
             el: svg,
             minXValue: 0,
             maxXValue: d3.max(data, function(d) { return d.count; }),

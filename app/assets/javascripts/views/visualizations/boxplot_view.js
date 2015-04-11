@@ -12,21 +12,23 @@ chorus.views.visualizations.Boxplot = chorus.views.Base.include(
         var svg = d3.select(this.el)
             .append("svg")
             .attr("class", "chart boxplot")
-            .attr("width", 925)
-            .attr("height", 340);
+            //.attr("width", 925)
+            .attr("width", 900)
+            // .attr("height", 340);
+            .attr("height", 350);
 
 
         var buckets = _.pluck(data, "bucket");
         var percentages = _.pluck(data, "percentage");
-        percentages = _.map(percentages, function(percent){
+        percentages = _.map(percentages, function(percent) {
             return parseInt(percent, 10) + '%';
         });
 
-        var xLabels = _.map(buckets, function(bucket, i){
+        var xLabels = _.map(buckets, function(bucket, i) {
             return this.labelFormat(bucket, 6) + " (" + percentages[i]+ ")";
         }, this);
 
-        var xLongLabels = _.map(buckets, function(bucket, i){
+        var xLongLabels = _.map(buckets, function(bucket, i) {
             return this.labelFormat(bucket, 1000) + " (" + percentages[i]+ ")";
         }, this);
 

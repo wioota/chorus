@@ -11,9 +11,11 @@ chorus.views.visualizations.Histogram = chorus.views.Base.extend({
         var frequencies = _.pluck(data, 'frequency');
 
         var svg = d3.select(this.el).append("svg").
-            attr("class", "chart histogram").
-            attr("width", 925).
-            attr("height", 340);
+            attr("class", "chart histogram")
+            //.attr("width", 925)
+            .attr("width", 900)
+            // .attr("height", 340);
+            .attr("height", 350);
 
 
         this.axes = new chorus.views.visualizations.Axes({
