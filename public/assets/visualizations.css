@@ -1,7 +1,9 @@
 svg.chart {
     background: #FFFFFF;
-    height: 340px;
-    width: 925px;
+    /* width: 925px; */
+    width: 910px;
+    /* height: 340px; */
+    height: 300px;
 }
 
 svg.chart line {
@@ -16,11 +18,11 @@ svg.chart path {
 svg.chart .ytick,svg.chart .xtick {
     stroke-dasharray: 1;
     stroke-width: 0.25;
-    stroke: #aaa;
+    stroke: #AAAAAA;
 }
 
 svg.chart .axis_edge line {
-    stroke-width: 0.40;
+    stroke-width: 0.4;
     stroke: #444;
 }
 
@@ -31,7 +33,7 @@ svg.chart text {
 }
 
 svg.chart .xaxis line,svg.chart .yaxis line,svg.chart .axis line {
-    stroke-width: 0.40;
+    stroke-width: 0.4;
     stroke: #444;
 }
 

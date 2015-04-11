@@ -1,7 +1,7 @@
 @import "_common";
 
-$default-image-width: 920px;
-$default-image-height: 340px;
+$default-image-width: 910px;
+$default-image-height: 350px;
 
 $default-stroke-chart-thin: 0.4;
 $default-stroke-chart-tick: .25;
@@ -23,7 +23,7 @@ svg.chart {
     .ytick, .xtick {
         stroke-dasharray: 1;
         stroke-width: $default-stroke-chart-tick;
-        stroke: #aaa;
+        stroke: #AAA;
     }
 
     .axis_edge line {
@@ -32,18 +32,21 @@ svg.chart {
     }
 
     text {
-        font-size: 12px;
+        font-size: $small-font;
         font-weight: $semibold;
         fill: $color-text2;
     }
 
-    .xaxis, .yaxis, .axis {
+    .xaxis,
+    .yaxis,
+    .axis {
         line {
             stroke-width: $default-stroke-chart-thin;
             stroke: #444;
         }
 
-        .grid, .grid line {
+        .grid,
+        .grid line {
             stroke-dasharray: 1;
             stroke-width: 0.25;
             stroke: #444;
@@ -52,7 +55,7 @@ svg.chart {
 
     &.time_series path {
         stroke-width: 0.6;
-        stroke: black;
+        stroke: #000000;
     }
 
     &.boxplot {
