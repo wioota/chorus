@@ -1,3 +1,13 @@
+$slick-border-color: #C0C0C0;  // aka silver
+
+$slick-cell-padding: 4px;
+$slick-cell-selected-color: #F4F4DD;
+
+$slick-cell-blue: #0000EE;
+$slick-cell-lightblue: #8ECFEF;
+
+// **********
+
 /*
 IMPORTANT:
 In order to preserve the uniform grid appearance, all cell styles need to have padding, margin and border sizes.
@@ -11,7 +21,8 @@ classes should alter those!
   border-left: 0px;
 }
 
-.slick-header-columns, .slick-headerrow-columns {
+.slick-header-columns,
+.slick-headerrow-columns {
   position: relative;
   white-space: nowrap;
   cursor: default;
@@ -22,13 +33,13 @@ classes should alter those!
   position: relative;
   display: inline-block;
   overflow: hidden;
-  -o-text-overflow: ellipsis;
+  // -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
   height: 16px;
   line-height: 16px;
   margin: 0;
   padding: 4px;
-  border-right: 1px solid silver;
+  border-right: 1px solid $slick-border-color;
   border-left: 0px;
   border-top: 0px;
   border-bottom: 0px;
@@ -70,7 +81,7 @@ classes should alter those!
 }
 
 .slick-sortable-placeholder {
-  background: silver;
+  background: $slick-border-color;
 }
 
 .grid-canvas {
@@ -87,10 +98,10 @@ classes should alter those!
 .slick-cell, .slick-headerrow-column {
   position: absolute;
   border: 1px solid transparent;
-  border-right: 1px dotted silver;
-  border-bottom-color: silver;
+  border-right: 1px dotted $slick-border-color;
+  border-bottom-color: $slick-border-color;
   overflow: hidden;
-  -o-text-overflow: ellipsis;
+  // -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
   vertical-align: middle;
   z-index: 1;
@@ -100,19 +111,18 @@ classes should alter those!
   cursor: default;
 }
 
-.slick-group {
-}
+.slick-group {}
 
 .slick-group-toggle {
   display: inline-block;
 }
 
 .slick-cell.highlighted {
-  background: lightskyblue;
-  background: rgba(0, 0, 255, 0.2);
+  background: $slick-cell-lightblue;
+  background: rgba(0, 0, 250, 0.2);
   -webkit-transition: all 0.5s;
   -moz-transition: all 0.5s;
-  -o-transition: all 0.5s;
+  // -o-transition: all 0.5s;
   transition: all 0.5s;
 }
 
@@ -123,8 +133,8 @@ classes should alter those!
 .slick-cell.editable {
   z-index: 11;
   overflow: visible;
-  background: white;
-  border-color: black;
+  background: $core-white;
+  border-color: #000;
   border-style: solid;
 }
 
@@ -134,7 +144,7 @@ classes should alter those!
 
 .slick-reorder-proxy {
   display: inline-block;
-  background: blue;
+  background: $slick-cell-blue;
   opacity: 0.15;
   filter: alpha(opacity = 15);
   cursor: move;
@@ -143,7 +153,7 @@ classes should alter those!
 .slick-reorder-guide {
   display: inline-block;
   height: 2px;
-  background: blue;
+  background: $slick-cell-blue;
   opacity: 0.7;
   filter: alpha(opacity = 70);
 }
@@ -151,5 +161,5 @@ classes should alter those!
 .slick-selection {
   z-index: 10;
   position: absolute;
-  border: 2px dashed black;
+  border: 2px dashed #000;
 }

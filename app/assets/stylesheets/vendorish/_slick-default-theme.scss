@@ -1,3 +1,10 @@
+$slick-border-color: #C0C0C0;  // aka silver
+
+$slick-cell-padding: 4px;
+$slick-cell-selected-color: #F4F4DD;
+
+// **********
+
 /*
 IMPORTANT:
 In order to preserve the uniform grid appearance, all cell styles need to have padding, margin and border sizes.
@@ -6,25 +13,26 @@ classes should alter those!
 */
 
 .slick-header-columns {
-  background: url('../images/header-columns-bg.gif') repeat-x center bottom;
-  border-bottom: 1px solid silver;
+  // background: url('../images/header-columns-bg.gif') repeat-x center bottom;
+  // border-bottom: 1px solid $slick-border-color;
 }
 
 .slick-header-column {
-  background: url('../images/header-columns-bg.gif') repeat-x center bottom;
-  border-right: 1px solid silver;
+  // background: url('../images/header-columns-bg.gif') repeat-x center bottom;
+  border-right: 1px solid $slick-border-color;
 }
 
-.slick-header-column:hover, .slick-header-column-active {
-  background: white url('../images/header-columns-over-bg.gif') repeat-x center bottom;
-}
+// .slick-header-column:hover,
+// .slick-header-column-active {
+//   background: $core-white url('../images/header-columns-over-bg.gif') repeat-x center bottom;
+// }
 
 .slick-headerrow {
-  background: #fafafa;
+  background: #FAFAFA;
 }
 
 .slick-headerrow-column {
-  background: #fafafa;
+  background: #FAFAFA;
   border-bottom: 0;
   height: 100%;
 }
@@ -35,7 +43,7 @@ classes should alter those!
 
 .slick-row {
   position: absolute;
-  background: white;
+  background: $core-white;
   border: 0px;
   line-height: 20px;
 }
@@ -46,12 +54,12 @@ classes should alter those!
 }
 
 .slick-cell {
-  padding-left: 4px;
-  padding-right: 4px;
+  padding-left: $slick-cell-padding;
+  padding-right: $slick-cell-padding;
 }
 
 .slick-group {
-  border-bottom: 2px solid silver;
+  border-bottom: 2px solid $slick-border-color;
 }
 
 .slick-group-toggle {
@@ -69,25 +77,25 @@ classes should alter those!
 }
 
 .slick-group-totals {
-  color: gray;
-  background: white;
+  color: #808080;
+  background: $core-white;
 }
 
 .slick-cell.selected {
-  background-color: beige;
+  background-color: $slick-cell-selected-color;
 }
 
 .slick-cell.active {
-  border-color: gray;
+  border-color: #808080;
   border-style: solid;
 }
 
 .slick-sortable-placeholder {
-  background: silver !important;
+  background: $slick-border-color !important;
 }
 
 .slick-row.odd {
-  background: #fafafa;
+  background: #FAFAFA;
 }
 
 .slick-row.ui-state-active {
@@ -100,5 +108,5 @@ classes should alter those!
 }
 
 .slick-cell.invalid {
-  border-color: red;
+  border-color: #FF0000;
 }
