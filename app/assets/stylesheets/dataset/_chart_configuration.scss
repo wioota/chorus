@@ -8,7 +8,8 @@
     }
     .field {
         display: inline-block;
-        padding-right: 20px;
+        margin-right: 30px;
+        // padding-right: 30px;
         vertical-align: top;
     }
 
@@ -16,7 +17,7 @@
         line-height: 12px;
         display: inline-block;
         width: 225px;
-        .label{
+        .label {
             display: inline-block;
         }
 
@@ -43,7 +44,7 @@
     /* need to override the content-details style*/
         @include border-radius(0px);
         border: 1px solid $border-color;
-        background: white;
+        background: $core-white;
         color: $link-color;
         display: inline-block;
         float: none;
@@ -70,16 +71,16 @@
         a {
             font-size: $small-font;
         }
-        .pointing_l {
-            display: inline-block;
-            border-bottom: 1px solid $color-text3;
-            border-left: 1px solid $color-text3;
-            width: 5px;
-            height: 7px;
-            margin-right: 3px;
-            margin-left: 2px;
-            vertical-align: top;
-        }
+//         .pointing_l {
+//             display: inline-block;
+//             border-bottom: 1px solid $color-text3;
+//             border-left: 1px solid $color-text3;
+//             width: 5px;
+//             height: 7px;
+//             margin-right: 3px;
+//             margin-left: 2px;
+//             vertical-align: top;
+//         }
         .selected_value {
             padding-right: 5px;
         }
@@ -106,7 +107,6 @@ ul.limiter_menu {
         line-height: 16px;
         &:hover {
             text-decoration: underline;
-
         }
     }
 }

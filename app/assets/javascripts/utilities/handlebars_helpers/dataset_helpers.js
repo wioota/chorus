@@ -9,7 +9,8 @@ chorus.handlebarsHelpers.dataset = {
         var className = options.className || '';
 
 //         var markup = "<div class='limiter " + className + "'><span class='pointing_l'></span>" + t(translationKey) + " <a href='#'><span class='selected_value'>" + selected + "</span><span class='triangle'></span></a><div class='limiter_menu_container'><ul class='limiter_menu " + className + "'>";
-        var markup = "<div class='limiter " + className + "'><span class='pointing_l'></span>" + t(translationKey) + " <a href='#'><span class='selected_value'>" + selected + "</span><span class='fa fa-caret-down'></span></a><div class='limiter_menu_container'><ul class='limiter_menu " + className + "'>";
+//        var markup = "<div class='limiter " + className + "'><span class='pointing_l'></span>" + t(translationKey) + " <a href='#'><span class='selected_value'>" + selected + "</span><span class='fa fa-caret-down'></span></a><div class='limiter_menu_container'><ul class='limiter_menu " + className + "'>";
+        var markup = "<div class='limiter " + className + "'>" + t(translationKey) + " <a href='#'><span class='selected_value'>" + selected + "</span><span class='fa fa-caret-down'></span></a><div class='limiter_menu_container'><ul class='limiter_menu " + className + "'>";
         
         _.each(choices, function(thing) {
             markup = markup + '<li>' + thing + '</li>';
