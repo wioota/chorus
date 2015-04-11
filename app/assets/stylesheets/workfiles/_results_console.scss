@@ -82,7 +82,7 @@
     }
 
     .actions {
-        color: white;
+        color: $core-white;
         float: right;
 
         a {
@@ -91,7 +91,7 @@
     }
 
     .bottom_gutter {
-        background: white;
+        background: $core-white;
         height: 20px;
         text-align: center;
         vertical-align: top;
