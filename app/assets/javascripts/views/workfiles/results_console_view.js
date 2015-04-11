@@ -14,7 +14,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
         "click a.download_csv": "saveToDesktop"
     },
 
-    defaultBoundingContainer: function (view) {
+    defaultBoundingContainer: function(view) {
         return {
             getAvailableHeight: function () {
                 return $(window).height() - this.distanceFromTopOfWindow() - this.distanceFromBottomOfWindow();
@@ -70,7 +70,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
     saveToDesktop: function(e) {
         e.preventDefault();
         if(this.showDownloadDialog) {
-            var dialog = new chorus.dialogs.DatasetDownload({ pageModel: this.dataset });
+            var dialog = new chorus.dialogs.DatasetDownload({pageModel: this.dataset});
             dialog.launchModal();
         } else {
             var data = {
@@ -78,7 +78,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
                 filename: this.resource.name() + ".csv",
                 mime_type: "text/csv"
             };
-            chorus.fileDownload("/download_data", { data: data, httpMethod: "POST" });
+            chorus.fileDownload("/download_data", {data: data, httpMethod: "POST"});
         }
     },
 
@@ -116,7 +116,7 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     updateElapsedTime: function() {
         var seconds = Math.round(($.now() - this.executionStartedTime)/1000);
-        this.$(".elapsed_time").text(t("results_console_view.elapsed", { sec: seconds }));
+        this.$(".elapsed_time").text(t("results_console_view.elapsed", {sec: seconds}));
     },
 
     hideSpinner: function() {
@@ -232,13 +232,13 @@ chorus.views.ResultsConsole = chorus.views.Base.extend({
 
     viewErrorDetails: function(e) {
         e.preventDefault();
-        var alert = new chorus.alerts.ExecutionError({ model: this.model });
+        var alert = new chorus.alerts.ExecutionError({model: this.model});
         alert.launchModal();
     },
 
     viewExecutionDetails: function(e) {
         e.preventDefault();
-        var alert = new chorus.alerts.ExecutionMessage({ model: this.model });
+        var alert = new chorus.alerts.ExecutionMessage({model: this.model});
         alert.launchModal();
     },
 
