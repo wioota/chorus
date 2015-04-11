@@ -1,16 +1,14 @@
-chorus.views.HistogramChartConfiguration = chorus.views.ChartConfiguration.extend({
+chorus.views.HistogramChartConfiguration = chorus.views.ChartConfiguration.extend ({
     templateName: "chart_configuration",
     additionalClass: "histogram",
 
-    columnGroups: [
-        {
-            name: "category",
-            type: "numeric",
-            options: {
-                key: "dataset.visualization.sidebar.number_of_bins"
-            }
+    columnGroups: [{
+        name: "category",
+        type: "numeric",
+        options: {
+            key: "dataset.visualization.sidebar.number_of_bins"
         }
-    ],
+    }],
 
     chartOptions: function() {
         return {

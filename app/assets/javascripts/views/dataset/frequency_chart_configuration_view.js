@@ -1,15 +1,13 @@
-chorus.views.FrequencyChartConfiguration = chorus.views.ChartConfiguration.extend({
+chorus.views.FrequencyChartConfiguration = chorus.views.ChartConfiguration.extend ({
     constructorName: "FrequencyChartConfiguration",
     templateName: "chart_configuration",
     additionalClass: "frequency",
 
-    columnGroups: [
-        {
-            type: "all",
-            name: "category",
-            options: true
-        }
-    ],
+    columnGroups: [{
+        type: "all",
+        name: "category",
+        options: true
+    }],
 
     chartOptions: function() {
         return {

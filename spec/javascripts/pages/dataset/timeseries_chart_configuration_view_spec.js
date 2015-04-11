@@ -2,7 +2,7 @@ describe("chorus.views.TimeseriesChartConfiguration", function() {
     describe("#render", function() {
         context("with valid column data", function() {
             beforeEach(function() {
-                this.columns = backboneFixtures.databaseColumnSet([
+                this.columns = backboneFixtures.databaseColumnSet ([
                     {typeCategory: 'REAL_NUMBER', name: "Sandwich"},
                     {typeCategory: 'TIME', name: "Stopwatch"},
                     {typeCategory: 'FOO', name: "A Foo"}

@@ -1,18 +1,15 @@
-chorus.views.BoxplotChartConfiguration = chorus.views.ChartConfiguration.extend({
+chorus.views.BoxplotChartConfiguration = chorus.views.ChartConfiguration.extend ({
     templateName: "chart_configuration",
     additionalClass: "boxplot",
 
-    columnGroups: [
-        {
-            type: "numeric",
-            name: "value"
-        },
-        {
-            type: "all",
-            name: "category",
-            options: true
-        }
-    ],
+    columnGroups: [{
+        type: "numeric",
+        name: "value"
+        },{
+        type: "all",
+        name: "category",
+        options: true
+        }],
 
     postRender: function() {
         this.$(".category option:eq(1)").attr('selected', 'selected');
