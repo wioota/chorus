@@ -22,7 +22,7 @@
     div.data_sources_form.collapsed {
         display: none;
         border: none;
-        padding: 0 $dialog-padding;
+        padding: 0 $dialog-padding-leftRight;
         margin-left: 1px;
         margin-bottom: 0;
     }
@@ -31,13 +31,13 @@
     
 /*     	same variables as data_source_edit_dialog */
 /*     	todo: refactor these out to a common class instead of duplicating */
-        $fieldset-width : $default-dialog-width - 2 * $dialog-padding;
+        $fieldset-width : $default-dialog-width - 2 * $dialog-padding-leftRight;
         $hostname_width : 375px;
         $account_width : 240px;
         $input-spacing : 12px;
         $size_width : 75px;
 
-        margin-bottom: $dialog-padding;
+        margin-bottom: $dialog-padding-bottom;
 
 /*         rule retired with new design */
 /*         to be deleted when final */
