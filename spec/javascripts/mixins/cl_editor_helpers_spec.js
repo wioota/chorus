@@ -16,7 +16,8 @@ describe("chorus.Mixins.clEditor", function() {
     describe("#makeEditor", function() {
         context("without options", function() {
             beforeEach(function() {
-                this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, ".toolbar", "summary");
+                // this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, ".toolbar", "summary");
+                this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "summary");
             });
 
             it("should return a cl editor", function() {
@@ -45,7 +46,8 @@ describe("chorus.Mixins.clEditor", function() {
         context("with options", function() {
             beforeEach(function() {
                 var options = { width: 200 };
-                this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "toolbar", "summary", options);
+                // this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "toolbar", "summary", options);
+                this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "summary", options);
             });
 
             it("should make an editor with the passed options", function() {
@@ -85,7 +87,8 @@ describe("#getNormalizedText", function() {
 
     describe("toolbar helpers", function() {
         beforeEach(function() {
-            this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, ".toolbar", "summary");
+            // this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, ".toolbar", "summary");
+            this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "summary");
         });
 
 // TODO: if there is a way to test the graphic images, then revise to use

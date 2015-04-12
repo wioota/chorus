@@ -1,5 +1,6 @@
 chorus.Mixins.ClEditor = {
-    makeEditor: function($container, controlSelector, inputName, options) {
+    // makeEditor: function($container, controlSelector, inputName, options) {
+     makeEditor: function($container, inputName, options) {
         
         // which controls should be available in the textarea
 //         var controls = ["bold", "italic", "bullets", "numbers", "link", "unlink"];
@@ -25,36 +26,36 @@ chorus.Mixins.ClEditor = {
         return editor;
     },
 
-    onClickToolbarBold: function(e) {
-        e && e.preventDefault();
-        this.find(".cleditorButton[title='Bold']").click();
-    },
+//     onClickToolbarBold: function(e) {
+//         e && e.preventDefault();
+//         this.find(".cleditorButton[title='Bold']").click();
+//     },
 
-    onClickToolbarItalic: function(e) {
-        e && e.preventDefault();
-        this.find(".cleditorButton[title='Italic']").click();
-    },
+//     onClickToolbarItalic: function(e) {
+//         e && e.preventDefault();
+//         this.find(".cleditorButton[title='Italic']").click();
+//     },
 
-    onClickToolbarBullets: function(e) {
-        e && e.preventDefault();
-        this.find(".cleditorButton[title='Bullets']").click();
-    },
+//     onClickToolbarBullets: function(e) {
+//         e && e.preventDefault();
+//         this.find(".cleditorButton[title='Bullets']").click();
+//     },
 
-    onClickToolbarNumbers: function(e) {
-        e && e.preventDefault();
-        this.find(".cleditorButton[title='Numbering']").click();
-    },
+//     onClickToolbarNumbers: function(e) {
+//         e && e.preventDefault();
+//         this.find(".cleditorButton[title='Numbering']").click();
+//     },
 
-    onClickToolbarLink: function(e) {
-        e && e.preventDefault();
-        this.find(".cleditorButton[title='Insert Hyperlink']").click();
-        e.stopImmediatePropagation();
-    },
+//     onClickToolbarLink: function(e) {
+//         e && e.preventDefault();
+//         this.find(".cleditorButton[title='Insert Hyperlink']").click();
+//         e.stopImmediatePropagation();
+//     },
 
-    onClickToolbarUnlink: function(e) {
-        e && e.preventDefault();
-        this.find(".cleditorButton[title='Remove Hyperlink']").click();
-    },
+//     onClickToolbarUnlink: function(e) {
+//         e && e.preventDefault();
+//         this.find(".cleditorButton[title='Remove Hyperlink']").click();
+//     },
 
     getNormalizedText: function($textarea) {
         return $textarea.val()
