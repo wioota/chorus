@@ -15,5 +15,11 @@ chorus.pages.TagIndexPage = chorus.pages.Base.extend({
         this.handleFetchErrorsFor(tags);
         this.listenTo(tags, "loaded", this.render);
         this.listenTo(tags, "remove", this.render);
-    }
+    },
+
+//     buildPrimaryActionPanel: function () {
+//         var isAdmin = chorus.session.user().get("admin");
+//         this.primaryActionPanel = new chorus.views.PrimaryActionPanel({actions: actions});
+//     }
+    
 });

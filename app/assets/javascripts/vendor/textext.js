@@ -2983,7 +2983,7 @@
 			;
 
 		self._previousInputValue = null;
-		dropdown.hide();
+		//dropdown.hide();
 	};
 
 	/**
