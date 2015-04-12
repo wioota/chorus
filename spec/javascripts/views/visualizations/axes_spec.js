@@ -10,8 +10,10 @@ describe("chorus.views.visualizations.Axes", function() {
 
     beforeEach(function() {
         var div = $("<div class='visualization heatmap'></div>")[0];
-        this.width = 925;
-        this.height = 340;
+        // this.width = 925;
+        this.width = 900;
+        // this.height = 340;
+        this.height = 350;
         this.paddingX = 35;
         this.paddingY = 35;
 

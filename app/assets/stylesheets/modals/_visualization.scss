@@ -7,6 +7,15 @@
     }
 }
 
+
+// viz dialog uses the "wide" dialog value
+$visualization-dialog-width: $default-dialog-width-wide;
+
+$chart-width: $visualization-dialog-width - ($dialog-padding * 2);   // subtract girdle from width. 910px
+$chart-height: 350px;
+
+// **********
+
 .visualization {
 
     .dialog_content {
@@ -16,7 +25,7 @@
     .right {
         float: right;
         padding: 10px 10px 0;
-        font-size: 13px;
+        font-size: $small-font;
         font-weight: $semibold;
     }
 
@@ -38,17 +47,18 @@
         }
 
         .type {
-            font-size: 14px;
+            font-size: $medium-font;
             font-weight: $semibold;
             color: $color-text3;
         }
 
         .label {
             @include results-console;
+            color: $color-text3;
         }
 
         .filter {
-            font-size: 12px;
+            font-size: $small-font;
             font-weight: $semibold;
             padding: 0 10px 0 0;
             line-height: 35px;
@@ -77,7 +87,8 @@
     }
 
     .filter_content {
-        line-height: 32px;
+        // line-height: 32px;
+        line-height: 30px;
     }
 
     .form_controls {
@@ -85,7 +96,7 @@
 
         .vertical {
             a {
-                font-size: 12px;
+                font-size: $small-font;
                 font-weight: $semibold;
                 padding-left: 10px;
                 display: inline-block;
@@ -94,38 +105,44 @@
         }
     }
 
-    .chart_container{
-       width: 940px;
-       height: 340px;
+    .chart_container {
+       width: $chart-width;
+       height: $chart-height;
        padding: 0;
        margin: 0;
        position: relative;
     }
 
     .overlay {
-        background-color: #000;
+        background-color: #000000;
         @include opacity(.71);
-        color: #FFF;
-        font-size: 14px;
-        font-weight: $semibold;
+        cursor: pointer;
         position: absolute;
         top: 0;
         right: 0;
         bottom: 0;
         left: 0;
+        border-radius: $default-border-radius;
         text-align: center;
-        padding-top: 131px;
-        cursor: pointer;
+               
+        p {
+            margin-top: $chart-height / 2 - 10;
+            
+            color: $core-white;
+            font-size: $medium-font;
+            font-weight: $semibold;
+        }
+        
         &.disabled {
             cursor: default;
         }
     }
 
     .chart_area {
-        width: 940px;
-        height: 340px;
-        background: white;
+        width: $chart-width;
+        height: $chart-height;
 
+        background: $core-white;
         vertical-align: middle;
         text-align: center;
 
