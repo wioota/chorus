@@ -1,12 +1,12 @@
 chorus.dialogs.Comment = chorus.dialogs.Base.include (
     chorus.Mixins.ClEditor
 ).extend({
-    templateName:"comment",
-    title:t("comments.new_dialog.title"),
-    persistent:true,
+    templateName: "comment",
+    title: t("comments.new_dialog.title"),
+    persistent: true,
 
     events: {
-        "submit form":"save"
+        "submit form": "save"
     },
 
     makeModel:function () {
