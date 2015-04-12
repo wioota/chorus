@@ -10,7 +10,16 @@
 /* .form_controls= the 'footer' section at bottom of dialogs with the buttons */
 /* * */
 
-#dialog_bottom {
+// #dialog_bottom {
+//     height: 50px;
+// }
+
+.dialog .form_controls {
+     height: 50px;
+     background-color: #F99 !important;
+}
+
+.alert .form_controls {
     height: 50px;
 }
 

@@ -37,6 +37,18 @@ $dialog-girdle-padding-top: 10px;
     padding: 0 $dialog-padding;
     word-break: break-all;
 }
+.dialog {
+    .dialog_header {
+        height: 40px;
+        background-color: $dialog-header-background;
+        border-bottom: 1px solid $border-color;
+
+        line-height: 40px;
+        padding: 0 $dialog-padding;
+        word-break: break-all;
+    }
+}
+
 
 #dialog_content {
     .girdle {}
@@ -44,7 +56,6 @@ $dialog-girdle-padding-top: 10px;
 
 
 .dialog {
-    .dialog_header {}
 
     h1 {
         font-size: $medium-font;
