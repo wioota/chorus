@@ -6,7 +6,7 @@ describe("chorus.presenters.Activity", function() {
     function itHasTheActorIcon() {
         describe("the icon", function() {
             it("shows the user's icon", function() {
-                expect(this.presenter.iconSrc()).toBe(this.actor.fetchImageUrl({ size: "icon" }));
+                expect(this.presenter.iconSrc()).toBe(this.actor.fetchImageUrl({size: "icon"}));
             });
 
             it("links to the user's profile", function() {
@@ -275,7 +275,6 @@ describe("chorus.presenters.Activity", function() {
 
             it('when isPublished is true', function () {
                 expect(this.presenter.isPublished()).toBeTruthy();
-
             });
         });
 
@@ -291,7 +290,6 @@ describe("chorus.presenters.Activity", function() {
 
             it('when isPublished is false', function () {
                 expect(this.presenter.isPublished()).toBeFalsy();
-
             });
         });
     });
@@ -651,7 +649,7 @@ describe("chorus.presenters.Activity", function() {
                     actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
                     workfileLink: linkTo(this.workfile.showUrl(), this.workfile.name()),
                     workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name()),
-                    versionLink: linkTo(versionedWorkfile.showUrl(), t("workfile.version_title", { versionNum: this.model.get('versionNum') }))
+                    versionLink: linkTo(versionedWorkfile.showUrl(), t("workfile.version_title", {versionNum: this.model.get('versionNum') }))
                 }
             );
         });
@@ -667,7 +665,7 @@ describe("chorus.presenters.Activity", function() {
                         actorLink: linkTo(this.actor.showUrl(), this.actor.name()),
                         workfileLink: linkTo(this.workfile.showUrl(), this.workfile.name()),
                         workspaceLink: linkTo(this.workspace.showUrl(), this.workspace.name()),
-                        versionLink: linkTo(null, t("workfile.version_title", { versionNum: this.model.get('versionNum') }))
+                        versionLink: linkTo(null, t("workfile.version_title", {versionNum: this.model.get('versionNum') }))
                     }
                 );
             });
@@ -741,7 +739,7 @@ describe("chorus.presenters.Activity", function() {
     context("datasets associated", function() {
         context("when the dataset is from Hadoop", function () {
             beforeEach(function() {
-                this.model = backboneFixtures.activity.sourceTableCreated({ dataset: { entitySubtype: 'HDFS', objectType: 'MASK'} });
+                this.model = backboneFixtures.activity.sourceTableCreated({dataset: {entitySubtype: 'HDFS', objectType: 'MASK'} });
                 this.presenter = new chorus.presenters.Activity(this.model);
                 this.actor = this.model.actor();
             });
@@ -770,7 +768,7 @@ describe("chorus.presenters.Activity", function() {
 
         context("when the dataset is from a SQL DB", function () {
             beforeEach(function() {
-                this.model = backboneFixtures.activity.sourceTableCreated({ dataset: { entitySubtype: 'VIEW', objectType: 'VIEW' } });
+                this.model = backboneFixtures.activity.sourceTableCreated({dataset: {entitySubtype: 'VIEW', objectType: 'VIEW'} });
                 this.presenter = new chorus.presenters.Activity(this.model);
                 this.actor = this.model.actor();
             });
@@ -2204,7 +2202,7 @@ describe("chorus.presenters.Activity", function() {
     context("tableau workbook published", function() {
         beforeEach(function() {
             this.model = backboneFixtures.activity.tableauWorkbookPublished({
-                workspace: { id: 55, name: "paleo_eaters" },
+                workspace: {id: 55, name: "paleo_eaters"},
                 workbookName: "fancy_workbook",
                 workbookUrl: "http://example.com/workbooks/fancy_workbook",
                 projectName: "default",
@@ -2234,7 +2232,7 @@ describe("chorus.presenters.Activity", function() {
     context("tableau workbook published", function() {
         beforeEach(function() {
             this.model = backboneFixtures.activity.tableauWorkfileCreated({
-                workspace: { id: 55, name: "paleo_eaters" },
+                workspace: {id: 55, name: "paleo_eaters"},
                 workbookName: "fancy_workbook"
             });
             this.presenter = new chorus.presenters.Activity(this.model);
