@@ -44,7 +44,7 @@
                           [["Paragraph", "<p>"], ["Header 1", "<h1>"], ["Header 2", "<h2>"],
                           ["Header 3", "<h3>"], ["Header 4", "<h4>"], ["Header 5", "<h5>"],
                           ["Header 6", "<h6>"]],
-            useCSS: true, // use CSS to style HTML when possible (not supported in ie)
+            useCSS:       false, // use CSS to style HTML when possible (not supported in ie)
             docType:      // Document type contained within the editor
                           //'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
                           '<!DOCTYPE html>',
