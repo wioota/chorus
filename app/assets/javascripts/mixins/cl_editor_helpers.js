@@ -3,7 +3,7 @@ chorus.Mixins.ClEditor = {
      makeEditor: function($container, inputName, options) {
         
         // which controls should be available in the textarea
-//         var controls = ["bold", "italic", "bullets", "numbers", "link", "unlink"];
+        //var controls = ["bold", "italic", "bullets", "numbers", "link", "unlink"];
 //        
         // instead of using the CLeditor built in toolbar, make a different toolbar of links
 //         $container.find(controlSelector).empty();
@@ -19,9 +19,10 @@ chorus.Mixins.ClEditor = {
         // END alt toolbar
         
         options = options || {};
+
         // which controls appear in the graphic toolbar
-        // var editorOptions = _.extend(options, {controls: "bold italic | bullets numbering | link unlink", useCSS: false});
         var editorOptions = _.extend(options, {controls: "bold italic | bullets numbering | link unlink"});
+
         var editor = $container.find("textarea[name='"+ inputName +"']").cleditor(editorOptions)[0];
 //         $(editor.doc).find("body").focus();
 //         $(editor.doc).find(inputName).focus();

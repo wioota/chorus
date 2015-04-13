@@ -8,7 +8,7 @@ describe("chorus.Mixins.clEditor", function() {
         $('#jasmine_content').append(this.editorContainer);
 
         _.each(controls, function(control) {
-            spyOn(chorus.Mixins.ClEditor,  "onClickToolbar"+ _.capitalize(control)).andCallThrough();
+            // spyOn(chorus.Mixins.ClEditor,  "onClickToolbar"+ _.capitalize(control)).andCallThrough();
         });
 
     });
