@@ -171,21 +171,18 @@ $refresh-activity-gutter: $activity-gutter - 5;
 
         a.delete_link,
         a.edit_link {
-            @include secondary-text-small;
             display: none;
+
+            @include secondary-text-small;            
             border-left: solid 1px;
             padding-left: 5px;
             margin-left: 5px;
 
-            i {
-                padding-left: 4px;
-                vertical-align: middle;
-            }
+//             i {
+//                 padding-left: 4px;
+//                 vertical-align: middle;
+//             }
 
-            span {
-                padding-left: 3px;
-                vertical-align: middle;
-            }
         }
     }
 
@@ -210,11 +207,19 @@ $refresh-activity-gutter: $activity-gutter - 5;
     }
 }
 
+span.fa {
+    &.fa-trash {
+        padding: 0 3px;
+        // vertical-align: middle;
+    }
+}
+            
 .popup_notifications li,
 li .activity_content,
 .comment_content {
     &:hover {
-        a.edit_link, a.delete_link {
+        a.edit_link,
+        a.delete_link {
             display: inline;
         }
     }
