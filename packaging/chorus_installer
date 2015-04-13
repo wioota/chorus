@@ -1,0 +1,196 @@
+#!/usr/bin/env python
+import os
+import sys
+import subprocess
+import shlex
+import signal
+import shutil
+import pwd
+import glob
+import traceback
+from setup import color
+from setup import installer_io
+from setup import func_executor
+from setup import chorus_executor
+from setup import options
+from setup import log
+from setup.health_check import system_checking
+sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), "setup"))
+options, arg, health_args = options.get_options(sys.argv)
+logger = log.logger
+bold = color.bold
+error = color.error
+processify = func_executor.processify
+io = installer_io.InstallerIO(options.silent)
+exe = chorus_executor.ChorusExecutor()
+run = exe.run
+run_as_user = exe.run_as_user
+fresh_install = False
+
+dot_chorus = os.path.join("/root", ".chorus")
+def exit_gracefully(signum, frame):
+    print "\nInstall aborted, Cancelled by user"
+    sys.exit(1)
+
+def _eula_by_brand():
+    filename = ""
+    if os.getenv('PIVOTALLABEL') is None:
+        filename = 'eula_alpine.txt'
+    else:
+        filename = 'eula_emc.txt'
+    filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "setup/" + filename)
+    with open(filename, 'r') as f:
+        eula = f.read();
+    return eula
+
+def prompt_for_eula():
+    eula = _eula_by_brand()
+    print eula
+    ret = io.require_confirmation("Do you accept the terms above?")
+    if not ret:
+        return False
+    return True
+
+def is_alpine_exits(installation_path):
+    alpine_dir = os.path.join(installation_path, "vendor/alpine")
+    alpine_sources = [ f for f in glob.glob(os.path.join(alpine_dir, "alpine*.sh")) ]
+    if len(alpine_sources) > 0:
+        return True
+    return False
+
+def output(msg):
+    print "INFO : " + bold(msg)
+
+def detect_pre_version(chorus_path):
+    current_path = os.path.join(chorus_path, "current")
+    if os.path.lexists(current_path) and os.path.islink(current_path):
+        pre_version = os.path.basename(os.path.realpath(current_path))
+        pre_version = pre_version.split("-")[0]
+        return pre_version
+    return None
+
+def compare_version(cur, pre):
+    cur = int(cur.replace(".", ""))
+    pre = int(pre.replace(".", ""))
+    if cur == pre:
+        return 0
+    elif cur < pre:
+        return -1
+    else:
+        return 1
+
+def grant_permission(user, chorus_path, data_path):
+    logger.debug("change %s's owner to %s:" % (chorus_path, user))
+    run("chown %s:%s /tmp/install.log" % (user, user))
+    ret, stdout, stderr = run("chown -R %s:%s %s && chown -R %s:%s %s" % (user, user, chorus_path, user, user, data_path))
+    if ret != 0:
+        raise Exception("[ERROR] " + stderr)
+
+def copy_to_dest(installation_path, chorus_path, data_path, release_path, user):
+    @processify(msg="->Installing Chorus to %s..." % chorus_path)
+    def copy():
+
+        ret, stdout, stderr = run("cp -rf %s %s" % (os.path.join(installation_path, "version_build"), chorus_path))
+        if ret != 0:
+            raise Exception("[ERROR] " + stderr)
+        if os.path.exists(release_path):
+            shutil.rmtree(release_path)
+        ret, stdout, stderr = run("mkdir -p %s && cp -rf %s %s" % (release_path, installation_path, release_path))
+        if ret != 0:
+            raise Exception("[ERROR] " + stderr)
+    copy()
+    grant_permission(user, chorus_path, data_path)
+
+def install():
+    installation_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..")
+    version = ""
+    with open(os.path.join(installation_path, "version_build"), "r") as f:
+        version = f.read().strip()
+    if os.path.exists(dot_chorus):
+        with open(dot_chorus, "r") as f:
+            lines = f.readlines()
+            user = lines[0].strip("\n")
+            chorus_path = lines[1].strip("\n")
+            data_path = lines[2].strip("\n")
+            passphrase = lines[3].strip("\n")
+            install_alpine = lines[4].strip("\n")
+    else:
+        fresh_install = True
+        if not prompt_for_eula():
+            print "Install aborted, Cancelled by user"
+            return
+        user = io.prompt("Specify the system user that will run Alpine Chorus processes [default: %s]" % options.chorus_user, default=options.chorus_user)
+        ret, stdout, stderr = run("useradd chorus")
+        if ret not in [0,9]:
+            if ret == 126:
+                stderr += "Please run as the user with root permission\n"
+            raise Exception(stderr)
+        chorus_path = io.prompt("Please enter the full path to the Chorus installation directory [default: %s]" % options.chorus_path, default=options.chorus_path)
+
+        data_path = io.prompt("Please enter the full path to the Chorus data directory [default: %s]" % options.data_path, default=options.data_path)
+
+        passphrase = io.prompt("Enter optional passphrase to generate "
+                               + "a recoverable secret key for encrypting passwords."
+                               + "By default, a random key will be generated", default='')
+
+        install_alpine = "False"
+        if is_alpine_exits(installation_path):
+            install_alpine = str(io.require_confirmation("Do you want to install Alpine?", "yes"))
+    ret, stdout, stderr = run("mkdir -p %s && mkdir -p %s" % (chorus_path, data_path))
+    if ret != 0:
+        raise Exception("[ERROR] " + stderr)
+    release_path = os.path.join(chorus_path, "releases/%s" % version)
+    pre_version = detect_pre_version(chorus_path)
+    cur_version = version.split("-")[0]
+    msg = "Installing"
+    if pre_version is not None:
+        default = "yes"
+        if compare_version(cur_version, pre_version) == 1:
+            msg = "Upgrade"
+        elif compare_version(cur_version, pre_version) == -1:
+            default = "no"
+            msg = "Downgrade"
+        else:
+            default = "no"
+            msg = "Re-install"
+        if not io.require_confirmation("You already have chorus version: %s installed. \n" % pre_version\
+			+"Do you want to %s the chorus to version: %s" % (msg, cur_version), default):
+            print "\n%s aborted, Cancelled by user" % msg
+            return
+    if not options.disable_spec:
+        system_checking(True, chorus_path)
+
+    if msg in ["Installing", "Re-install"]:
+        output(bold("%s Chorus %s:" % (msg, version)))
+    else:
+        output(bold("%s Chorus to %s:" % (msg, version)))
+    copy_to_dest(installation_path, chorus_path, data_path, release_path, user)
+
+    with open(dot_chorus, "w") as f:
+        f.write(user + "\n")
+        f.write(chorus_path + "\n")
+        f.write(data_path + "\n")
+        f.write(passphrase + "\n")
+        f.write(install_alpine)
+    _s = ""
+    if options.silent:
+        _s = "-s"
+    _passphrase = ""
+    if passphrase is not None:
+        _passphrase = "--passphrase=%s" % passphrase
+
+    _chorus_only = ""
+    if install_alpine == "False":
+        _chorus_only = "--chorus_only"
+
+    run_as_user("%s setup %s --chorus_path=%s --data_path=%s --disable_spec %s %s" % \
+                 (os.path.join(release_path, "packaging/setup/chorus_server"), _s, chorus_path, data_path, _passphrase, _chorus_only), user)
+
+try:
+    signal.signal(signal.SIGINT, exit_gracefully)
+    install()
+except Exception as e:
+    if fresh_install and os.path.exists(dot_chorus):
+        os.path.remove(dot_chorus)
+    print "[ERROR]:" + error(str(e) + "\nException Occured, see /tmp/install.log for details")
+    logger.debug(traceback.format_exc())
