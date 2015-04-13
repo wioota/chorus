@@ -5,7 +5,7 @@
             <div class="icon">
                 {{#if isInsight}}
                 <div class="insight_ribbon">
-                    <div class="left"/><div class="center">{{t "activity.insight"}}</div><div class="right"/>
+                    <span class="left"/><span class="center">{{t "activity.insight"}}</span><span class="right"/>
                 </div>
                 {{/if}}
                 <a href="{{iconHref}}">
@@ -21,8 +21,7 @@
                     <span class="timestamp">{{relativeTimestamp timestamp}}</span>
                     {{#ifAdminOr isOwner}}
                         <a class="delete_link alert" data-alert="DeleteNoteConfirmAlert" data-comment-id="{{id}}" href="#">
-                            <span class="fa fa-trash" title='{{t "actions.delete"}}'></i>
-                            {{t "actions.delete"}}
+                            <span class="fa fa-trash delete"></span>{{t "actions.delete"}}
                         </a>
                     {{/ifAdminOr}}
                 </div>
