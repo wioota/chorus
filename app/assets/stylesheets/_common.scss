@@ -517,7 +517,7 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin font-secondary-link {
     color: $brand-dark;
-    font-size: 12px;
+    font-size: $small-font;
     font-weight: $semibold;
 }
 
@@ -559,8 +559,8 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin insight-ribbon {
     @include debugging-mixin;
-    font-size: 12px;
-    font-weight: $bold;
+    font-size: $small-font;
+    font-weight: $semibold;
 	color: $core-white;
 }
 
