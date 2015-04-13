@@ -19,6 +19,8 @@ java_option_without_xms = re.sub(r"-Xms\S+", "", chorus_config["java_options"])
 print "CHORUS_JAVA_OPTIONS_WITHOUT_XMS=\"%s\"" % java_option_without_xms
 jruby_opts = []
 for option in java_option_without_xms.split(" "):
+    if option.strip() == "":
+        continue
     if option in ["-server","-client"]:
         option = "-" + option
     else:
