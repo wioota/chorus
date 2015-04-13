@@ -85,11 +85,11 @@ describe("#getNormalizedText", function() {
     });
 });
 
-    describe("toolbar helpers", function() {
-        beforeEach(function() {
+//     describe("toolbar helpers", function() {
+//         beforeEach(function() {
             // this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, ".toolbar", "summary");
-            this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "summary");
-        });
+//             this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "summary");
+//         });
 
 // TODO: if there is a way to test the graphic images, then revise to use
 // else delete when graphic toolbar is final
@@ -140,4 +140,5 @@ describe("#getNormalizedText", function() {
 //                     expect("click").toHaveBeenTriggeredOn(".cleditorButton[title='Remove Hyperlink']");
 //                 });
 //             });
-    });
+//     });
+// 
