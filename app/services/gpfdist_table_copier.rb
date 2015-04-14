@@ -5,8 +5,8 @@ class GpfdistTableCopier < TableCopier
   def run
     source_connection.connect!
     destination_connection.connect!
+    source_encoding = source_connection.server_encoding
     source_connection.execute(source_dataset.query_setup_sql)
-
     source_count = get_count(source_connection, source_dataset.name)
     @initial_destination_count = destination_count
     count = [source_count, (sample_count || source_count)].min
@@ -19,9 +19,9 @@ class GpfdistTableCopier < TableCopier
 
       reader_finished = false
       writer_finished = false
-      source_connection.execute create_write_pipe_sql
 
-      destination_connection.execute create_read_pipe_sql
+      destination_connection.execute create_read_pipe_sql(source_encoding)
+      source_connection.execute create_write_pipe_sql(source_encoding)
 
       reader = Thread.new { begin
         reader_loop(count)
@@ -55,6 +55,10 @@ class GpfdistTableCopier < TableCopier
     FileUtils.rm pipe_file if pipe_file && File.exists?(pipe_file)
     source_connection.disconnect
     destination_connection.disconnect
+  end
+
+  def gpfdist_timeout
+    10
   end
 
   def semaphore_timeout
@@ -100,7 +104,19 @@ class GpfdistTableCopier < TableCopier
 
   def reader_loop(count)
     while (destination_count - @initial_destination_count) < count
-      destination_connection.copy_table_data(destination_table_fullname, read_pipe_name, '', {:check_id => pipe_name, :user => user})
+      tw = 0
+      while tw < gpfdist_timeout
+        begin
+          destination_connection.copy_table_data(destination_table_fullname, read_pipe_name, '', {:check_id => pipe_name, :user => user})
+          break
+        rescue DataSourceConnection::QueryError => e
+          tw += 1
+          raise e if tw == gpfdist_timeout || !e.message.include?("ERROR: http response code 404 from gpfdist")
+
+          puts "Waiting for gpfdist (#{tw} of #{gpfdist_timeout}s)..."
+          sleep 1
+        end
+      end
     end
   end
 
@@ -126,14 +142,16 @@ class GpfdistTableCopier < TableCopier
 
   private
 
-  def create_write_pipe_sql
+  def create_write_pipe_sql(encoding) # on source
     "CREATE WRITABLE EXTERNAL TEMPORARY TABLE #{write_pipe_name} (#{table_definition})
-     LOCATION ('#{gpfdist_protocol}://#{gpfdist_url}:#{gpfdist_write_port}/#{pipe_name}') FORMAT 'TEXT' ENCODING '#{source_dataset.data_source.connection.encoding}'"
+     LOCATION ('#{gpfdist_protocol}://#{gpfdist_url}:#{gpfdist_write_port}/#{pipe_name}')
+     FORMAT 'TEXT' ENCODING '#{encoding}'"
   end
 
-  def create_read_pipe_sql
+  def create_read_pipe_sql(encoding) # on destination
     "CREATE EXTERNAL TEMPORARY TABLE #{read_pipe_name} (#{table_definition})
-     LOCATION ('#{gpfdist_protocol}://#{gpfdist_url}:#{gpfdist_read_port}/#{pipe_name}') FORMAT 'TEXT' ENCODING '#{source_dataset.data_source.connection.encoding}'"
+     LOCATION ('#{gpfdist_protocol}://#{gpfdist_url}:#{gpfdist_read_port}/#{pipe_name}')
+     FORMAT 'TEXT' ENCODING '#{encoding}'"
   end
 
   def gpfdist_data_dir
