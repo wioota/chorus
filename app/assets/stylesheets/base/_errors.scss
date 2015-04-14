@@ -21,6 +21,7 @@ $margin-right-for-error-marker: 20px;
 // 	}
 // }
 
+
 /* colored border for fields that have an error */
 @mixin error-input-border {
     border: 2px solid $error-input-border-color;
@@ -41,6 +42,9 @@ $margin-right-for-error-marker: 20px;
 .dataset_errors,
 .warning {
     @include after-clearfix;
+
+    background-color: $body-background-color;
+    padding-top: 5px;
 
     font-weight: normal;
 
@@ -80,32 +84,35 @@ $margin-right-for-error-marker: 20px;
 
         li {
             position: relative;
-            margin: 0px $dialog-padding-leftRight;
-            padding: 10px 10px 12px 0px;
+            margin: 0px $dialog-padding-leftRight 5px $dialog-padding-leftRight;
+            padding: 10px 10px 11px 0px;
             padding-left: 35px;
 
-            font-size: $medium-font;
+            font-size: $medium-font - 1;
+
             vertical-align: top;
 
             background-color: $error-background-color;
             color: $error-text-color;
             border: 1px solid;
-            // border-radius: $alert-border-radius;
+            border-radius: $alert-border-radius;
 
 
             &:first-child {
-                margin-top: 5px;
-                border-top-left-radius: $alert-border-radius;
-                border-top-right-radius: $alert-border-radius;
+                // margin-top: 5px;
+                // border-top-left-radius: $alert-border-radius;
+                // border-top-right-radius: $alert-border-radius;
+
             }
             &:last-child {
 //                 margin-bottom: 5px;
                 margin-bottom: 0px;
-                border-bottom-left-radius: $alert-border-radius;
-                border-bottom-right-radius: $alert-border-radius;
+
+                // border-bottom-left-radius: $alert-border-radius;
+                // border-bottom-right-radius: $alert-border-radius;
             }
             ~li {
-                margin-top: -4px;
+               //  margin-top: -4px;
             }
 
             &::before {
@@ -121,9 +128,6 @@ $margin-right-for-error-marker: 20px;
                 @include alert-error-icon;
             }
         }
-        
-        
-        
     }
 }
 
