@@ -8,6 +8,10 @@ describe NotesController do
       log_in user
     end
 
+    before :each do
+      #stub(Authority).authorize! { nil }
+    end
+
     let(:model) { workspaces(:public) }
     let(:entity_type) { model.class.name }
     let(:entity_id) { model.id.to_s }
@@ -28,7 +32,8 @@ describe NotesController do
     end
 
     it "uses authorization" do
-      mock(Authority).authorize!(:show, model, user)
+      #mock(Authority).authorize!(:show, model, user)
+      mock(subject).authorize! :create_note_on, model
       post :create, attributes
     end
 
@@ -61,6 +66,7 @@ describe NotesController do
         let(:workspace) { workspaces(:private) }
 
         it "returns a forbidden status" do
+          #mock(Authority).authorize! :show, workspace, user
           post :create, attributes
           response.code.should == "403"
         end
@@ -174,7 +180,7 @@ describe NotesController do
     end
 
     it "uses the note access to check permissions" do
-      mock(Authority).authorize!(:destroy, note, user, {:or => :current_user_is_workspace_owner})
+      #mock(Authority).authorize!(:destroy, note, user, {:or => :current_user_is_workspace_owner})
       delete :destroy, :id => note.id
     end
   end
