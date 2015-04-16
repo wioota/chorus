@@ -25,6 +25,10 @@ describe Workspace do
     let!(:model) { workspaces(:public_with_no_collaborators) }
   end
 
+  it_behaves_like "a permissioned model" do
+    let!(:model) { workspaces(:public) }
+  end
+
   describe "associations" do
     it { should have_many(:members) }
     it { should have_many(:activities) }

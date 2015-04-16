@@ -7,35 +7,49 @@ module Permissioner
 
   included do
     after_create :initialize_default_roles, :if => Proc.new { |obj| obj.class.const_defined? 'OBJECT_LEVEL_ROLES' }
+    after_create :create_chorus_object
   end
 
-  module InstanceMethods
-
-    def initialize_default_roles
-      default_roles = self.class::OBJECT_LEVEL_ROLES.map do |role_symbol|
-        Role.create(:name => role_symbol.to_s)
-      end
-      object_roles << default_roles
+  def initialize_default_roles
+    default_roles = self.class::OBJECT_LEVEL_ROLES.map do |role_symbol|
+      Role.create(:name => role_symbol.to_s)
     end
-
-    # Ex: Workspace.first.create_permisisons_for(roles, [:edit, :destroy])
-    def add_permissions_for(roles, activity_symbol_array)
-      permissions = self.class.generate_permissions_for roles, activity_symbol_array
-    end
-
-    def object_roles
-      self.save! if new_record?
-      chorus_class = ChorusClass.find_or_create_by_name(self.class.name)
-      chorus_object = ChorusObject.find_or_create_by_chorus_class_id_and_instance_id(chorus_class.id, self.id)
-
-      chorus_object.roles
-    end
+    object_roles << default_roles
   end
 
+  def create_chorus_object
+    chorus_class = ChorusClass.find_or_create_by_name(self.class.name)
+    chorus_object = ChorusObject.find_or_create_by_chorus_class_id_and_instance_id(chorus_class.id, self.id)
+  end
+
+  # Ex: Workspace.first.create_permisisons_for(roles, [:edit, :destroy])
+  def set_permissions_for(roles, activity_symbol_array)
+    permissions = self.class.generate_permissions_for roles, activity_symbol_array
+    permissions.each(&:save!)
+  end
+
+  def object_roles(name=nil)
+    self.save! if new_record?
+    chorus_class = ChorusClass.find_or_create_by_name(self.class.name)
+    chorus_object = ChorusObject.find_or_create_by_chorus_class_id_and_instance_id(chorus_class.id, self.id)
+
+    if name.nil? then chorus_object.roles else chorus_object.roles.find_by_name(name) end
+  end
+
+
+  private
+
+  def chorus_object
+
+  end
+
+
+  # Class-level methods invlove setting class-level permissions/roles (vs object-level)
   module ClassMethods
 
     # Given an activity, this method returns an integer with that
     # bit set
+    # TODO: consider deleting
     def bitmask_for(activity_symbol)
       with_permissions_defined do
         index = self::PERMISSIONS.index(activity_symbol)
