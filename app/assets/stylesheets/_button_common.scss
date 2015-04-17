@@ -43,7 +43,6 @@ $default-button-height: $button-height;
 
     &:disabled, &:disabled:hover {
         background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
-        //border: 1px solid $another-shade-of-gray;
         border: 1px solid $dry-concrete;
     }
 

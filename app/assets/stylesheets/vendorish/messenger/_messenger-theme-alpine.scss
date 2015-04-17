@@ -21,10 +21,6 @@ ul.messenger-theme-alpine {
     @include unselectable;
     @include border-radius($defaultThemeBorderRadius);
 
-//     &.messenger-empty {
-//         display: none;
-//     }
-
     .messenger-message {
         position: relative;
         border: 0px;
@@ -47,7 +43,6 @@ ul.messenger-theme-alpine {
             color: #888;
             font-weight: $semibold;
             font-size: 19px;
-            // line-height: 20px;
 
             cursor: pointer;
             background: transparent;
@@ -67,7 +62,6 @@ ul.messenger-theme-alpine {
 
             a {
                 text-decoration: none;
-                // color: #AAA;
                 background: #2e2e2e;
                 display: inline-block;
                 padding: 10px;
@@ -167,26 +161,16 @@ ul.messenger-theme-alpine {
         }
     }
 
-    // when there are multiple toasts displayed...
+    // when there are multiple toasts displayed
     .messenger-message-slot {
         .messenger-message {
             @include border-radius($defaultThemeBorderRadius);
         }
         &.messenger-first.messenger-last .messenger-message {
-            // default: all borders
             @include border-radius($defaultThemeBorderRadius);
         }
-        &.messenger-last .messenger-message {
-            // for toast that is last = most recent = top of list --> turn off bottom
-//             @include border-top-radius($defaultThemeBorderRadius);
-//             @include border-bottom-radius(0);
-        }
-        &.messenger-first .messenger-message {
-            // for toast that is fist = oldest = bottom of list --> turn off top
-//             @include border-top-radius(0);
-//             @include border-bottom-radius($defaultThemeBorderRadius);
-        }
-
+        &.messenger-last .messenger-message {}
+        &.messenger-first .messenger-message {}
     }
     
     .message_callout {

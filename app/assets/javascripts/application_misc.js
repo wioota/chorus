@@ -16,7 +16,6 @@
             // # of seconds the message is displayed to the user before disappearing
             // set to false to require user action to dismiss
             hideAfter: 6,
-//             hideAfter: false,
             showCloseButton: true,
             hideOnNavigate: false
         }
