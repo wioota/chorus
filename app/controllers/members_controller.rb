@@ -12,7 +12,7 @@ class MembersController < ApplicationController
 
     WorkspaceMembersManager.new(
         workspace,
-        params[:member_ids],
+        { :member => params[:member_ids] },
         current_user
     ).update_membership
 
