@@ -4,7 +4,6 @@ $dialog-girdle-padding-top: 10px;
 
 /* GENERAL DIALOG STYLES */
 
-
 /* .girdle wraps the content of the dialog popup */
 /* and sets the overall margins for the content area */
 .popup .girdle {
@@ -18,23 +17,23 @@ $dialog-girdle-padding-top: 10px;
     border: 1px dotted #A44;
     /* END development: to delete */
     
-    
-    .action_bar {
-        // counteract the dialog padding
-        margin-top: -$dialog-girdle-padding-top;
-        margin-left: -$dialog-padding;
-        margin-right: -$dialog-padding;
-    }
+    background-color: $body-background-color;
 
+    .action_bar {
+        // counteract the dialog padding when it is inside .girdle
+        margin-top: -$dialog-girdle-padding-top;
+        margin-left: -$dialog-padding-leftRight;
+        margin-right: -$dialog-padding-leftRight;
+    }
 }
 
 #dialog_header {
     height: 40px;
     background-color: $dialog-header-background;
-    border-bottom: 1px solid $border-color;
+    border-bottom: $border-canon;
 
     line-height: 40px;
-    padding: 0 $dialog-padding;
+    padding: 0 $dialog-padding-leftRight;
     word-break: break-all;
 }
 
@@ -44,7 +43,9 @@ $dialog-girdle-padding-top: 10px;
 
 
 .dialog {
-    .dialog_header {}
+//     background-color: $body-background-color;
+//     border-radius: $default-border-radius;    
+
 
     h1 {
         font-size: $medium-font;
@@ -66,7 +67,7 @@ $dialog-girdle-padding-top: 10px;
     }
     
     .dialog_content {
-        background-color: $body-background-color;
+        // background-color: $body-background-color;
 
         line-height: 16px;
 
@@ -101,7 +102,7 @@ $dialog-girdle-padding-top: 10px;
 
     fieldset.in_a_box {
         border: none;
-        padding: 0 0 $dialog-padding 0;
+        padding: 0 0 $dialog-padding-bottom 0;
 
         legend label {
             font-size: $default-font-size;
@@ -188,8 +189,7 @@ $dialog-girdle-padding-top: 10px;
     }
 }
 
-/* *** */
-
+/* ************* */
 /* dialog widths */
 div.dialog {
     width: $default-dialog-width;
@@ -203,7 +203,6 @@ div.dialog {
 /*Custom Dialog widths */
 
 .dialog {
-
     &.data_source_permissions {
     /*   width: 570px; */
         width: $default-dialog-width-medium;

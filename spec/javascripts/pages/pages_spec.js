@@ -340,9 +340,9 @@ describe("chorus.pages.Base", function() {
 
         context("from links", function() {
             beforeEach(function() {
-                this.view.sidebar = stubView("<a class='dialog' data-dialog='WorkfilesSqlNew'>Create a Workfile</a>");
+                this.view.sidebar = stubView("<a class='dialog-launch' data-dialog='WorkfilesSqlNew'>Create a Workfile</a>");
                 this.view.render();
-                this.elementToClick = this.view.$("a.dialog");
+                this.elementToClick = this.view.$("a.dialog-launch");
             });
 
             itLaunchesTheModalCorrectly(chorus.dialogs.WorkfilesSqlNew);

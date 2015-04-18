@@ -40,8 +40,9 @@ describe("chorus.dialogs.CommentDialog", function () {
         });
 
         it("makes a cl editor with toolbar", function () {
-            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", { width: 'auto', height:200 });
-            expect(this.dialog.$('.toolbar')).toExist();
+            // expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", { width: 'auto', height:150 });
+            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), "body", { width: 'auto', height:200 });
+            // expect(this.dialog.$('.toolbar')).toExist();
         });
     });
 

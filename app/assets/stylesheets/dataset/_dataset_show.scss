@@ -35,7 +35,7 @@
     $fieldset-margin: 15px;
     fieldset {
         border: 1px solid $border-color;
-        padding: $fieldset-margin $dialog-padding $dialog-padding;
+        padding: $fieldset-margin $dialog-padding-leftRight $dialog-padding-bottom;
         margin-right: $fieldset-margin;
         margin-bottom: $fieldset-margin;
         position: relative;

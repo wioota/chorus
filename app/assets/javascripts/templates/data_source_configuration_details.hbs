@@ -29,19 +29,21 @@
             <div class="value" title="{{size}}">{{size}}GB</div>
         </div>
     {{/if}}
-    {{#if shared}}
-        <div class='pair'>
-            <div class="key">{{t "data_sources.shared_account"}}</div>
-            <div class="value shared_account_info"
-                 title="{{sharedAccountDetails}}">{{sharedAccountDetails}}</div>
-        </div>
-    {{/if}}
+
     {{#if version}}
         <div class='pair'>
             <div class="key">{{t "data_sources.version"}}</div>
             <div class="value" title="{{version}}">{{version}}</div>
         </div>
     {{/if}}
+
+    {{#if shared}}
+        <div class='pair'>
+            <div class="key">{{t "data_sources.shared_account"}}</div>
+            <div class="value shared_account_info" title="{{sharedAccountDetails}}">{{sharedAccountDetails}}</div>
+        </div>
+    {{/if}}
+    
     {{#if ownerName}}
         <div class='pair'>
             <div class="key">{{t "data_sources.permissions.owner"}}</div>
