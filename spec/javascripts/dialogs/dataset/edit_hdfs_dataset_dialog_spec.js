@@ -66,7 +66,7 @@ describe("chorus.dialogs.EditHdfsDataset", function() {
 
                 it("gives a toast", function() {
                     this.server.completeUpdateFor(this.dialog.model);
-                    expect(chorus.toast).toHaveBeenCalledWith('edit_hdfs_dataset.toast');
+                    expect(chorus.toast).toHaveBeenCalled();
                 });
             });
 

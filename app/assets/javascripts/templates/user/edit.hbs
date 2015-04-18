@@ -5,80 +5,106 @@
 {{#if permission}}
 <form action="/users/{{username}}" method="put">
     <div class="profile_image"></div>
+
     <div class="fields">
 
-        <div class="row">
-               <span class="left">
-                   <label class="required">{{t "users.first_name"}}</label>
-                   <input type="text" name="firstName" maxlength="256" value="{{firstName}}"/>
-               </span>
-
-               <span class="right">
-                   <label class="required">{{t "users.last_name"}}</label>
-                   <input type="text" name="lastName" maxlength="256" value="{{lastName}}"/>
-               </span>
-        </div>
+        <fieldset>
+        <legend>{{t "user.profile.group_acct_info.title"}}</legend>
+        
 
         <div class="row">
                <span class="left">
                    <label>{{t "users.username"}}</label>
                    <span name="username">{{username}}</span>
                </span>
+        </div>
 
-            {{#ifAdmin}}
-               <span class="right admin">
-                   <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}} checked="true" {{/if}}>
-                   <label class='checkbox-label' for="admin-checkbox">{{t "users.make_admin"}}</label>
-               </span>
-            {{/ifAdmin}}
+        </fieldset>
+
+{{#ifAdmin}}        
+        <fieldset>
+        <legend>{{t "user.profile.group_app_roles.title"}}</legend>
+           
+            <span class="left admin">
+               <!-- <label class="placeholder"></label> -->
+                <label>
+                       <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}}checked{{/if}}/>
+                       <label class="checkbox-label" for="admin-checkbox">{{t "users.make_admin"}}</label>
+                </label>
+            </span>
+           
+            
+             <span class="left admin">
+                <!-- <label class="placeholder"></label> -->
+                 <label>
+                    <input type="checkbox" name="developer" id="developer-checkbox" {{#if developer}}checked{{/if}}/>
+                    <label class="checkbox-label" for="developer-checkbox">{{t "users.make_developer"}}</label>
+                </label>
+            </span>
+        
+        </fieldset>
+{{/ifAdmin}}     
+
+        <fieldset>
+        <legend>{{t "user.profile.group_personal_info.title"}}</legend>
+            
+        <div class="row">
+            <span class="left">
+                <label class="required">{{t "users.first_name"}}</label>
+                <input type="text" name="firstName" maxlength="256" value="{{firstName}}"/>
+            </span>
+
+            <span class="right">
+                <label class="required">{{t "users.last_name"}}</label>
+                <input type="text" name="lastName" maxlength="256" value="{{lastName}}"/>
+            </span>
         </div>
 
         <div class="row">
-               <span class="left">
-                   <label class="required">{{t "users.email"}}</label>
-                   <input type="text" name="email" maxlength="256" value="{{email}}"/>
-               </span>
+            <span class="left">
+                <label class="required">{{t "users.email"}}</label>
+                <input type="text" name="email" maxlength="256" value="{{email}}"/>
+            </span>
 
-            {{#ifAdmin}}
-                <span class="right admin">
-                   <input type="checkbox" name="developer" id="developer-checkbox" {{#if developer}} checked="true" {{/if}}>
-                   <label class='checkbox-label' for="developer-checkbox">{{t "users.make_developer"}}</label>
-               </span>
-            {{/ifAdmin}}
         </div>
 
         <div class="row">
-               <span class="left">
-                   <label>{{t "users.title"}}</label>
-                   <input type="text" name="title" maxlength="256" value="{{title}}"/>
-               </span>
+            <span class="left">
+                <label>{{t "users.title"}}</label>
+                <input type="text" name="title" maxlength="256" value="{{title}}"/>
+            </span>
 
-               <span class="right">
-                   <label>{{t "users.department"}}</label>
-                   <input type="text" name="dept" maxlength="256" value="{{dept}}"/>
-               </span>
+            <span class="right">
+                <label>{{t "users.department"}}</label>
+                <input type="text" name="dept" maxlength="256" value="{{dept}}"/>
+            </span>
         </div>
 
         <div class="row">
-               <span class="notes">
-                   <label>{{t "user.profile_description"}}</label>
-                   <textarea rows="4" cols="1" name="notes" maxlength="4096">{{notes}}</textarea>
-               </span>
+            <span class="fullwidth notes">
+                <label>{{t "user.profile_description"}}</label>
+                <textarea rows="4" cols="1" name="notes" maxlength="4096">{{notes}}</textarea>
+            </span>
         </div>
-
+        
+        <div class="row">
         <span>
             <input type="checkbox" name="subscribed_to_emails" id="subscribed-to-emails-checkbox" {{#if subscribedToEmails}} checked="true" {{/if}}>
-            <label class='checkbox-label' for="subscribed-to-emails-checkbox">{{t "users.subscribed_to_emails"}}</label>
+            <label class="checkbox-label" for="subscribed-to-emails-checkbox">{{t "users.subscribed_to_emails"}}</label>
         </span>
+        </div>
+      
+        </fieldset>
+
 
         <div class="row form_controls">
-               <span class="left">
-                   <button type="submit" class="submit modalish">{{t "users.button.save_changes"}}</button>
-                   <button type="button" class="cancel modalish">{{t "actions.cancel"}}</button>
-               </span>
+           <button type="submit" class="submit modalish">{{t "users.button.save_changes"}}</button>
+           <button type="button" class="cancel modalish">{{t "actions.cancel"}}</button>
         </div>
     </div>
 </form>
-        {{else}}
+
+{{else}}
+<!-- TODO THIS NEEDS to be handled in an acceptable manner -->
 <p class="aint_admin">{{t "users.edit.no_permission"}}</p>
-        {{/if}}
+{{/if}}

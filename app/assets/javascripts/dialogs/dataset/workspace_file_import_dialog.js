@@ -137,7 +137,7 @@ chorus.dialogs.WorkspaceFileImport = chorus.dialogs.Upload.extend({
             var workfile = new chorus.models.Workfile();
             workfile.set(workfile.parse(data.result), {silent: true});
 
-            chorus.toast("dataset.import.workfile_success", {fileName: workfile.get("fileName")});
+            chorus.toast("dataset.import.workfile_success.toast", {fileName: workfile.get("fileName"), toastOpts: {type: "success"}});
             chorus.router.navigate(workfile.hasOwnPage() ? workfile.showUrl() : workfile.workfilesUrl());
         } else {
             var workingCsvImport = this.csvImport.clone();

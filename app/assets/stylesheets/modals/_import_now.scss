@@ -70,7 +70,7 @@
     }
 
     .select_schema {
-        font-size: 12px;
+        font-size: $small-font;
         font-weight: $semibold;
         color: #5f5f5f;
         border: 1px solid $border-color;
@@ -84,7 +84,7 @@
     }
 
     .change_schema {
-        font-size: 12px;
+        font-size: $small-font;
         font-weight: $semibold;
         margin-left: 10px;
     }

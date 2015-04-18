@@ -1,25 +1,40 @@
+<span class="image">
+    <img src="{{iconUrl}}"/>
+</span>
 <h1 title="{{name}}">{{name}}</h1>
-<div class="item_metadata">
-    {{#if frequency}}
-        <span class="frequency"><strong>{{frequency}}</strong></span>
-    {{/if}}
 
-    {{#if nextRun}}
-        <span class="next_run">
-            <strong>{{t "job.next_run"}}:</strong>
-            {{displayTimestamp nextRun}}
-        </span>
-    {{/if}}
-    <span class="last_run">
-        <strong>{{t "job.last_run"}}:</strong>
-        {{#if lastRun}}
-            <a class='last_run_date' href='#'>{{displayTimestamp lastRun}} {{t lastRunLinkKey}}</a>
-        {{else}}
-            -
+<div class="job_information">
+<div class="item_metadata">
+    <div>
+        {{#if frequency}}
+            <span class="frequency">
+                <span class="label">{{t "job.run_frequency.label"}}</span>
+                {{frequency}}
+            </span>
         {{/if}}
-    </span>
-    <span class="owner pull-right">
-        <strong>{{t "job.owner"}}: </strong>
-        <a href='{{ownerUrl}}'>{{ownerName}}</a>
-    </span>
+
+        {{#if nextRun}}
+            <span class="next_run">
+                <span class="label">{{t "job.next_run"}}</span>
+                {{displayTimestamp nextRun}}
+            </span>
+        {{/if}}
+
+        <span class="owner pull-right">
+            <span class="label">{{t "job.owner"}}</span>
+            <a href='{{ownerUrl}}'>{{ownerName}}</a>
+        </span>
+    </div>
+    
+    <div>
+        <span class="last_run">
+           <span class="label">{{t "job.last_run"}}</span>
+            {{#if lastRun}}
+                <a class="last_run_date" href="#" title="{{t 'job.show_details.tip'}}">{{displayTimestamp lastRun}}. <span class="status">{{t lastRunStatusKey}}</span></a>
+            {{else}}
+                {{t "job.last_run_no_last_run"}}
+            {{/if}}
+        </span>
+    </div>
+</div>
 </div>

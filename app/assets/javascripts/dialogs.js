@@ -1,4 +1,4 @@
-chorus.dialogs.Base = chorus.Modal.extend({
+chorus.dialogs.Base = chorus.Modal.extend ({
     constructorName: "Dialog",
 
     render: function() {

@@ -22,7 +22,7 @@
 
         .column_hint {
             display: inline-block;
-            font-size: 12px;
+            font-size: $small-font;
             font-weight: $semibold;
             color: $color-text4;
             float: right;
@@ -61,14 +61,14 @@
     }
 
     .limiter {
-        font-size: 12px;
+        font-size: $small-font;
         color: $color-text2;
         font-weight: $semibold;
         margin-bottom: 10px;
         line-height: 12px;
 
         a {
-            font-size: 12px;
+            font-size: $small-font;
         }
         .pointing_l {
             display: inline-block;
@@ -102,7 +102,7 @@
 ul.limiter_menu {
     li {
         cursor: pointer;
-        font-size: 14px;
+        font-size: $default-font-size;
         line-height: 16px;
         &:hover {
             text-decoration: underline;

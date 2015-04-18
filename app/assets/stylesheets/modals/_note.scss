@@ -14,22 +14,22 @@ $label-width: 82px;
     }
 
     a {
-        font-size: 12px;
+        font-size: $small-font;
         font-weight: $semibold;
-        /* line-height: 16px; */
     }
 
-    .toolbar {
-        color: $link-color;
-        text-align: right;
-        font-size: 12px;
-        margin-bottom: 5px;
-
-        a {
-            font-size: 12px;
-            padding: 0px 2px;
-        }
-    }
+// TODO delete when graphic toolbar is final
+//     .toolbar {
+//         color: $link-color;
+//         text-align: right;
+//         font-size: 12px;
+//         margin-bottom: 5px;
+// 
+//         a {
+//             font-size: 12px;
+//             padding: 0px 2px;
+//         }
+//     }
 
     .options_area {
         .file-wrapper {
@@ -111,7 +111,7 @@ $label-width: 82px;
     }
 
     .options_text, .options_area {
-        font-size: 12px;
+        font-size: $small-font;
         margin: 8px 8px;
     }
 
@@ -144,7 +144,7 @@ $label-width: 82px;
         margin-top: 8px;
 
         .add_user {
-            font-size: 12px;
+            font-size: $small-font;
             font-weight: $semibold;
         }
 
@@ -174,7 +174,7 @@ $label-width: 82px;
     
     .remove {
         float: right;
-        font-size: 14px;
+        font-size: $default-font-size;
         line-height: 20px;
     }
         

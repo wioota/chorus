@@ -3,26 +3,26 @@
 	margin-right: 25px;
 }
 
+// TODO item_metadata is used in many places. Generalize this class rule
 .item_metadata {
-  line-height: 20px;
-  
-  @include font-secondary-content;
+    line-height: 20px;
 
-  a {
-    @include font-secondary-link;
-    @include ellipsis;
-    max-width: 80%;
-  }
+    @include font-secondary-content;
 
-  .open_other_menu {
+    a {
+        @include font-secondary-link;
+        @include ellipsis;
+        max-width: 70%;
+    }
 
-    @include menu-triangle-glyph;
-	color: $brand-dark;
-  }
+    .open_other_menu {
+        @include menu-triangle-glyph;
+        color: $brand-dark;
+    }
 
-  .other_menu {
-    display: none;
-  }
+    .other_menu {
+        display: none;
+    }
 }
 
 .found_in_other_workspaces_menu {

@@ -36,7 +36,7 @@ describe("chorus.pages.JobsShowPage", function () {
         });
     });
 
-    context("after the fetch completes with tasks", function () {
+    context("> after the fetch completes with tasks", function () {
         beforeEach(function() {
             this.server.completeFetchFor(this.model);
         });
@@ -79,8 +79,8 @@ describe("chorus.pages.JobsShowPage", function () {
                     this.server.completeFetchFor(this.model);
                 });
 
-                it("should include (show errors) in the link", function () {
-                    expect(this.page.$('a.last_run_date')).toContainTranslation('job.show_errors');
+                it("should include link to show details", function () {
+                    expect(this.page.$('a.last_run_date')).toContainTranslation('job.status.job_failed');
                 });
             });
 
@@ -91,8 +91,8 @@ describe("chorus.pages.JobsShowPage", function () {
                     this.server.completeFetchFor(this.model);
                 });
 
-                it("should include (show details) in the link", function () {
-                    expect(this.page.$('a.last_run_date')).toContainTranslation('job.show_details');
+                it("should include link to show details", function () {
+                    expect(this.page.$('a.last_run_date')).toContainTranslation('job.status.job_succeeded');
                 });
             });
         });
@@ -137,14 +137,14 @@ describe("chorus.pages.JobsShowPage", function () {
 
             it("waits for an interval", function () {
                 expect(this.page.model.fetch).not.toHaveBeenCalled();
-                this.clock.tick(30001);
+                this.clock.tick(50001);
                 expect(this.page.model.fetch).toHaveBeenCalled();
             });
 
             it("ceases with teardown", function () {
                 this.page.teardown();
                 this.page.model.fetch.reset();
-                this.clock.tick(300001);
+                this.clock.tick(200001);
                 expect(this.page.model.fetch).not.toHaveBeenCalled();
             });
         });
@@ -152,7 +152,7 @@ describe("chorus.pages.JobsShowPage", function () {
         describe("when the job tasks are reordered", function () {
             beforeEach(function () {
                 spyOn(this.page.mainContent.content, 'render');
-                this.page.$('.arrows:eq(0) .down_arrow').click();
+                this.page.$('.arrows:eq(0) .move_down_arrow').click();
 
                 var responseModel = this.model.clone();
                 responseModel.attributes.tasks[0].name = 'Shenanigans';

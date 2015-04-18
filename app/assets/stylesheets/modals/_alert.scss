@@ -1,3 +1,9 @@
+@import "compass/css3/box-sizing";
+
+$alert-marker-width: 60px;
+
+/* general alert dialog styles */
+
 .alert {
     .errors {
         width: 483px;
@@ -19,7 +25,7 @@
 
                 h1 {
                     color: black;
-                    font-size: 14px;
+                    font-size: $medium-font;
                     font-weight: $semibold;
                     margin-bottom: 10px;
                 }
@@ -53,7 +59,7 @@
             overflow-x: hidden;
             max-height: 300px;
             border: 1px solid $border-color;
-            font-size: 12px;
+            font-size: $small-font;
             font-weight: normal;
             color: black;
         }

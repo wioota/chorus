@@ -11,8 +11,8 @@
 
         events : {
             "submit form": "formSubmitted",
-            "click a.check_username": "checkUsernameClicked",
-            "click button.cancel": "goBack"
+            "click button.cancel": "goBack",
+            "click button#check_username": "checkUsernameClicked"
         },
 
         setup: function() {
@@ -27,7 +27,16 @@
         checkUsernameClicked: function(e) {
             e.preventDefault();
             this.clearErrors();
+            this.disableCheckUsernameButton();
             this.checkUsername(this.ldapUsersFetched);
+        },
+
+        disableCheckUsernameButton: function(){
+            this.$("button#check_username").prop("disabled", true);
+        },
+
+        enableCheckUsernameButton: function() {
+            this.$("button#check_username").prop("disabled", false);
         },
 
         formSubmitted: function(e) {
@@ -41,7 +50,10 @@
             var username = this.$("input[name=username]").val();
             this.collection = new chorus.collections.LdapUserSet([], { username: username });
 
-            this.collection.fetch();
+            this.collection.fetch({
+                error: this.showLdapServerError,
+                complete: this.enableCheckUsernameButton.bind(this)
+            });
 
             this.listenTo(this.collection, "reset", function() {
                 if (this.collection.models.length > 0) {
@@ -59,6 +71,12 @@
             this.$("input[name='email']").val(model.get("email"));
             this.$("input[name='title']").val(model.get("title"));
             this.$("input[name='dept']").val(model.get("dept"));
+        },
+
+        showLdapServerError: function(collection, response, options){
+            var error_json = JSON.parse(response.responseText);
+            var alert = new chorus.alerts.Error({ body: error_json.errors.message, title: "LDAP configuration error" });
+            alert.launchModal();
         },
 
         noLdapUserFound: function() {

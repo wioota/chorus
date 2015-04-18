@@ -5,6 +5,9 @@ describe SessionPresenter, :type => :view do
   let(:session) { Session.create!(:username => user.username, :password => FixtureBuilder.password) }
   let(:options) { {} }
   let(:presenter) { SessionPresenter.new(session, view, options) }
+  before(:each) do
+    stub(LdapClient).enabled? { false } # We should have a separate test config to avoid stuff like this
+  end
 
   describe "#to_hash" do
     let(:hash) { presenter.to_hash }

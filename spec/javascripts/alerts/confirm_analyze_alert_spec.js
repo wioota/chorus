@@ -41,7 +41,7 @@ describe("chorus.alerts.Analyze", function() {
             });
 
             it("should display a toast", function() {
-                expect(chorus.toast).toHaveBeenCalledWith("analyze.alert.toast", {name: this.model.name()});
+				expect(chorus.toast).toHaveBeenCalled();
             });
 
             it("should close the alert", function() {

@@ -62,6 +62,6 @@ chorus.dialogs.ImportGnipStream = chorus.dialogs.Base.extend({
 
     saved: function() {
         this.closeModal();
-        chorus.toast("gnip.import_stream.toast.start_import");
+        chorus.toast("gnip.import_stream.start_import.toast", {toastOpts: {type: "info"}});
     }
 });
