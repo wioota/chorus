@@ -68,6 +68,10 @@ body .ui-draggable-dragging {
             border-bottom: $border-canon;
             margin-right: 10px;
             margin-bottom: 5px;
+            
+            &:last-child {
+            	border-bottom: none;
+            }
         }
 
         .key {

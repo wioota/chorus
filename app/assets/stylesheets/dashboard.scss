@@ -58,11 +58,11 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         cursor: pointer;
 
         /* covers the glyphs used, such as the cog */
-        i {
-            color: $color-text3;
-            font-size: 13px;
-            line-height: $height-button-widgetshell;
-        }
+        // i {
+        //     color: $color-text3;
+        //     font-size: 13px;
+        //     line-height: $height-button-widgetshell;
+        // }
     }
     
     .configure {
@@ -91,10 +91,12 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         .activity_wrapper {
             border-top: $border-canon;
             border-bottom: $border-canon;
-            
+            @include border-top-radius(10px);
+            @include border-bottom-radius(10px);
+
             .activity_frame {
-            max-height: $dashboard-module-minheight * 3;
-            overflow-y: auto;
+                max-height: $dashboard-module-minheight * 3;
+                overflow-y: auto;
             }
         }
         .activities {
@@ -198,42 +200,42 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
                     }
                 }
             }
-                .file_name {
-                    padding: 0 0 0 10px;
-                }
+            .file_name {
+                padding: 0 0 0 10px;
+            }
 
-                .workfile_link {
-                    @include font-primary-link;
-                    padding: 0 0 1px 0;
-                    width: 500px;
-                }
+            .workfile_link {
+                @include font-primary-link;
+                padding: 0 0 1px 0;
+                width: 500px;
+            }
 
-                .workspace_image {
-                    vertical-align: bottom;
-                    width: 18px;
-                    padding-right: 5px;
-                }
+            .workspace_image {
+                vertical-align: bottom;
+                width: 18px;
+                padding-right: 5px;
+            }
 
-                .workspace_link {
-                    @include font-secondary-link;
-                    font-weight: normal;
-                    max-width: 420px;
-                }
-                
-                /* common handling for long names */
-                .workfile_link,
-                .workspace_link {
-                    display: inline-block;
-                    @include ellipsis;
-                }
-                
-                .time_edited {
-                    float: right;
-                    margin-right: 1%;
-                    vertical-align: top;
-                    padding-top: 10px;
-                    @include secondary-text-small;
-                }
+            .workspace_link {
+                @include font-secondary-link;
+                font-weight: normal;
+                max-width: 420px;
+            }
+            
+            /* common handling for long names */
+            .workfile_link,
+            .workspace_link {
+                display: inline-block;
+                @include ellipsis;
+            }
+            
+            .time_edited {
+                float: right;
+                margin-right: 1%;
+                vertical-align: top;
+                padding-top: 10px;
+                @include secondary-text-small;
+            }
         }
 
         .recent_workfiles_list {
@@ -252,6 +254,7 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
 
 .dashboard_module {
 
+    /* BEGIN: widget configuration */
     .widget_configuration {
         display: none;
 
@@ -280,13 +283,14 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
             top: -$dashboard-module-padding;
             left: -$dashboard-module-padding;
 
-            /* ... match padding of normal widget shell content */
+            /* ...match padding of normal widget shell content */
             /* but account for the padding of the border */
             padding: $dashboard-module-padding - 1;
        
-            background-color: #FFFFFF;
+            background-color: $core-white;
             @include border-radius($default-border-radius);
-            border: 1px solid #999;
+            border: 1px solid #AAA;
+            border-bottom: 0;
         }
 
         .button_row {     
@@ -295,8 +299,9 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
             padding-bottom: $dashboard-module-padding / 2;
         }
     }
+    /* END: widget configuration */
 }
-/* END: widget configuration */
+
 
 
 /* ************ */
@@ -319,11 +324,11 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         cursor: pointer;
         
         /* covers the glyphs used; i.e the cog */
-        i {
-            color: $color-text3;
-            font-size: $small-font;
-            line-height: $height-button-widgetshell;
-        }
+        // i {
+        //      color: $color-text3;
+        //      font-size: $small-font;
+        //      line-height: $height-button-widgetshell;
+        // }
 
         /* remove rightside margin on the rightmost button so that it is flush right */
         &:last-child {
@@ -364,7 +369,6 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
 /* rules for the recent activity hovering list that is part of the workspace cards */
 
     .tooltip {
-        /* width: 350px; */
         li.comment {
             .insight_ribbon {
                 top: -18px;
@@ -392,7 +396,7 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
 	.ui-tooltip-content {
 		/* override defaults */
 		padding: 0;
-    	background-color: #FFFFFF;
+    	background-color: $core-white;
     	border-radius: $default-border-radius;
          
         .name_row {
@@ -400,13 +404,13 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
 			background-color: $greyish-blue;
 
             .inactive {
-              @include font-primary-link;
-              color: $disabled-text;
-              line-height: normal;
-              text-overflow: ellipsis;
-              overflow: hidden;
-              white-space: nowrap;
-              display: block;
+                @include font-primary-link;
+                color: $disabled-text;
+                line-height: normal;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                display: block;
             }
 
             a {
@@ -464,5 +468,4 @@ $tip-text-color: $disabled-text;
     a {
         font-size: 13px;
     }
-    p {}
 }
