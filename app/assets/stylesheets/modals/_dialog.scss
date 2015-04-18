@@ -1,11 +1,8 @@
 @import "compass/css3/box-sizing";
 
-
 $dialog-girdle-padding-top: 10px;
 
-
-
-/* general dialog styles */
+/* GENERAL DIALOG STYLES */
 
 /* .girdle wraps the content of the dialog popup */
 /* and sets the overall margins for the content area */
@@ -20,20 +17,20 @@ $dialog-girdle-padding-top: 10px;
     border: 1px dotted #A44;
     /* END development: to delete */
     
-    
+    background-color: $body-background-color;
+
     .action_bar {
-        // counteract the dialog padding
+        // counteract the dialog padding when it is inside .girdle
         margin-top: -$dialog-girdle-padding-top;
         margin-left: -$dialog-padding-leftRight;
         margin-right: -$dialog-padding-leftRight;
     }
-    
 }
 
 #dialog_header {
     height: 40px;
     background-color: $dialog-header-background;
-    border-bottom: 1px solid $border-color;
+    border-bottom: $border-canon;
 
     line-height: 40px;
     padding: 0 $dialog-padding-leftRight;
@@ -46,7 +43,9 @@ $dialog-girdle-padding-top: 10px;
 
 
 .dialog {
-    .dialog_header {}
+//     background-color: $body-background-color;
+//     border-radius: $default-border-radius;    
+
 
     h1 {
         font-size: $medium-font;
@@ -63,7 +62,11 @@ $dialog-girdle-padding-top: 10px;
         font-size: $medium-font;
     }
 
-    background-color: $body-background-color;
+
+    .message_callout {
+        font-weight: bold;
+    }
+
     
     .dialog_content {
         // background-color: $body-background-color;

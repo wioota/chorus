@@ -1,3 +1,5 @@
+$toolbar-button-borderradius: 2px;
+
 .cleditorMain {
     border: 1px solid #999;
     padding: 0 1px 1px;
@@ -30,13 +32,13 @@
 
 .cleditorButton {
     float:left;
-    width:24px;
+    /* width:24px; */
+    width:30px;
     height:24px;
     margin:1px 0 1px 0;
-    background: url('/images/cleditor/buttons.gif')
-//     @include border-radius($toolbar-button-borderradius);
-//     background: url('/images/cleditor/buttons@2x.png');
-//     background-size: 930px 24px;
+    @include border-radius($toolbar-button-borderradius);
+    background: url('/images/cleditor/buttons@2x.png');
+    background-size: 930px 24px;
 }
 
 .cleditorDisabled {

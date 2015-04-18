@@ -76,7 +76,6 @@ describe("chorus.pages.JobsIndexPage", function () {
             this.server.completeFetchFor(this.workspace);
             this.collection = backboneFixtures.jobSet();
             this.server.completeFetchFor(this.page.collection, [this.collection.at(0), this.collection.at(1)]);
-
         });
 
         it("sets up search correctly", function() {

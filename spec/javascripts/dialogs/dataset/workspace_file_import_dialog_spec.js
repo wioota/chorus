@@ -346,7 +346,7 @@ describe("chorus.dialogs.WorkspaceFileImport", function() {
                             });
 
                             it("presents a toast message", function() {
-                                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success", {fileName: "myFile"});
+                                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success.toast", {fileName: "myFile", toastOpts: {type: "success"}});
                             });
 
                             it("navigates to the new workfile page", function() {
@@ -361,7 +361,7 @@ describe("chorus.dialogs.WorkspaceFileImport", function() {
                             });
 
                             it("presents a toast message", function() {
-                                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success", {fileName: "myFile"});
+                                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success.toast", {fileName: "myFile", toastOpts: {type: "success"}});
                             });
 
                             it("navigates to the workfile list page", function() {

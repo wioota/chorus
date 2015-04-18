@@ -1,3 +1,5 @@
+# require_relative '../../app/models/chorus_config'
+
 Chorus::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -40,6 +42,7 @@ Chorus::Application.configure do
   # Only turn it on if you really need concurrent requests
   #config.allow_concurrency = true
   #config.threadsafe!
+  config.eager_load_paths += config.autoload_paths
 
   if ChorusConfig.instance['mail.enabled']
     config.action_mailer.delivery_method = :smtp

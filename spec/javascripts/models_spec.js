@@ -385,7 +385,7 @@ describe("chorus.models.Base", function() {
             });
 
             it("responds to the errors", function() {
-                expect(chorus.toast).toHaveBeenCalledWith("server_error", {toastOpts: {}});
+                expect(chorus.toast).toHaveBeenCalledWith("server_error", {toastOpts: {type: 'error'}});
             });
         });
     });

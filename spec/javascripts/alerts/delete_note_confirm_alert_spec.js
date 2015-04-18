@@ -22,7 +22,7 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
             });
 
             it("shows a toast message", function() {
-                expect(chorus.toast).toHaveBeenCalledWith(this.alert.deleteMessage, {toastOpts: {type : 'info' }});
+                expect(chorus.toast).toHaveBeenCalledWith(this.alert.deleteMessage, {toastOpts: {type : 'deletion'}});
             });
         });
 
@@ -40,7 +40,7 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
             });
 
             it("sets the delete message correctly", function() {
-                expect(this.alert.deleteMessage).toBe("notes.delete.alert.delete_message");
+                expect(this.alert.deleteMessage).toBe("notes.delete.alert.delete_message.toast");
             });
 
             it("should not displays the note's body", function () {
@@ -71,7 +71,7 @@ describe("chorus.alerts.DeleteNoteConfirmAlert", function() {
             });
 
             it("sets the delete message correctly", function() {
-                expect(this.alert.deleteMessage).toBe("insight.delete.alert.delete_message");
+                expect(this.alert.deleteMessage).toBe("insight.delete.alert.delete_message.toast");
             });
         });
     });

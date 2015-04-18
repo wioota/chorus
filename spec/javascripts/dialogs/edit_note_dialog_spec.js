@@ -41,14 +41,14 @@ describe("chorus.dialogs.EditNote", function() {
     });
 
     it("makes a cl editor with toolbar", function() {
-        expect(this.dialog.$('.toolbar')).toExist();
+//         expect(this.dialog.$('.toolbar')).toExist();
         expect(this.dialog.makeEditor).toHaveBeenCalled();
         var editorArgs = this.dialog.makeEditor.lastCall().args;
 
         expect(editorArgs[0]).toBe(this.dialog.el);
-        expect(editorArgs[1]).toBe(".toolbar");
-        expect(editorArgs[2]).toBe("body");
-        expect(editorArgs[3]).toEqual({ width : 'auto', height : 200, controls : 'bold italic | bullets numbering | link unlink' });
+       //  expect(editorArgs[1]).toBe(".toolbar");
+        expect(editorArgs[1]).toBe("body");
+        expect(editorArgs[2]).toEqual({ width : 'auto', height : 200, controls : 'bold italic | bullets numbering | link unlink' });
     });
 
     describe("submitting the form with a blank body", function() {

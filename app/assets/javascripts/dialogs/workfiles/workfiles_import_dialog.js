@@ -177,7 +177,7 @@ chorus.dialogs.WorkfilesImport = chorus.dialogs.Base.extend({
         function uploadFinished(e, json) {
             self.model = new chorus.models.Workfile();
             self.model.set(self.model.parse(JSON.parse(json.result)));
-            chorus.toast('workfiles.uploaded', {fileName: self.model.get("fileName")});
+            chorus.toast("workfiles.uploaded.toast", {fileName: self.model.get("fileName"), toastOpts: {type: "success"}});
             self.closeModal();
             chorus.router.navigate(self.model.showUrl());
         }

@@ -32,10 +32,12 @@ chorus.dialogs.Account = chorus.dialogs.Base.extend({
 
     saved: function() {
         this.closeModal();
-        if(this.options.dataSource) { this.showSavedToast(); }
+        if(this.options.dataSource) {
+            this.showSavedToast();
+        }
     },
 
     showSavedToast: function() {
-        chorus.toast("data_sources.account.updated.toast", {dataSourceName: this.options.dataSource.name()});
+        chorus.toast("data_sources.account.updated.toast", {dataSourceName: this.options.dataSource.name(), toastOpts: {type: "success"}});
     }
 });

@@ -1,13 +1,13 @@
 <div class="girdle">
 
 <div>
-    <div class="line">
-        <div class="col cols-8 started_at"><strong>{{t 'job.result_details.started'}}: </strong>{{displayTimestamp startedAt}}</div>
-        <div class="col cols-8 finished_at"><strong>{{t 'job.result_details.finished'}}: </strong>{{displayTimestamp finishedAt}}</div>
-        <div class="col cols-ext duration"><strong>{{t 'job.result_details.duration'}}: </strong>{{displayDuration finishedAt startedAt}}</div>
-    </div>
 
-    <table class="app_table">
+    <table id="job_run_details_table">
+        <colgroup>
+            <col span="4"></col>
+            <col class="statusColumn"></col>
+        <colgroup>
+
         <thead>
             <tr>
             <th>{{t 'job.result_details.name'}}</th>
@@ -28,8 +28,8 @@
                     {{#if payloadResultId}}
                         {{workflowResultLink this}}
                     {{else}}
-                        <span class="status {{../../statusDisplayClass}}"></span>
-                            {{../../statusDisplayMessage}}
+
+                        <span class="statusMarker {{../../statusDisplayClass}}"></span>{{../../statusDisplayMessage}}
                         {{#if message}}
                             <p class="status_message">
                             {{t 'job.result_details.message_title'}}: {{message}}
@@ -39,7 +39,18 @@
                 </td>
             </tr>
         {{/each}}
+
+            <tr id="job_run_summary" class="{{lastRunStatusStyle}}">
+                <td>{{t "job.result_details.summary_header"}}</td>
+                <td class="job_started_at">{{displayTimestamp startedAt}}</td>
+                <td class="job_finished_at">{{displayTimestamp finishedAt}}</td>
+                <td class="job_duration">{{displayDuration finishedAt startedAt}}</td>
+                <td>
+                    <span class="statusMarker {{lastRunStatusStyle}}"></span>{{t lastRunStatusKey}}
+                </td>
+            </tr>
         </tbody>
+
     </table>
 </div>
 

@@ -38,7 +38,7 @@
 //= require vendor/datepicker_lang
 //= require_tree ./vendor
 //= require messenger
-//= require messenger-theme-flat
+
 //= require environment
 //= require csrf
 //= require application_misc

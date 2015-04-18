@@ -6,7 +6,7 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
         "click .move_down_arrow": "moveJobTaskDown",
         "click .move_up_arrow"  : "moveJobTaskUp"
     },
-
+    
     iconMap: {
          run_work_flow: "/images/jobs/task-afm.png",
 
@@ -28,7 +28,8 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
             actionKey: "job_task.action." + action,
             iconUrl: this.iconUrlForType(action),
             firstItem: collection.indexOf(this.model) === 0,
-            lastItem: collection.indexOf(this.model) === collection.length - 1
+            lastItem: collection.indexOf(this.model) === collection.length - 1,
+            moreThanOneTask: (collection.length > 1)
         };
     },
 

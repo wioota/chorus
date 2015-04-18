@@ -1,12 +1,12 @@
-chorus.dialogs.Comment = chorus.dialogs.Base.include(
+chorus.dialogs.Comment = chorus.dialogs.Base.include (
     chorus.Mixins.ClEditor
 ).extend({
-    templateName:"comment",
-    title:t("comments.new_dialog.title"),
-    persistent:true,
+    templateName: "comment",
+    title: t("comments.new_dialog.title"),
+    persistent: true,
 
     events: {
-        "submit form":"save"
+        "submit form": "save"
     },
 
     makeModel:function () {
@@ -20,12 +20,13 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
     },
 
     additionalContext:function () {
-        return { entityTitle: this.options.entityTitle };
+        return {entityTitle: this.options.entityTitle};
     },
 
     postRender: function() {
         _.defer(_.bind(function() {
-            this.makeEditor($(this.el), ".toolbar", "body", { width: 'auto', height: 200 });
+           //  this.makeEditor($(this.el), ".toolbar", "body", {width: 'auto', height: 200});
+            this.makeEditor($(this.el), "body", {width: 'auto', height: 200});
         }, this));
     },
 
@@ -46,7 +47,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include(
 
     save:function (e) {
         e.preventDefault();
-        this.model.save({ body: this.getNormalizedText(this.$("textarea[name=body]")) });
+        this.model.save({body: this.getNormalizedText(this.$("textarea[name=body]")) });
     },
 
     saved:function () {

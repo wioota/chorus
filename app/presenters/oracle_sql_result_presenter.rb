@@ -2,11 +2,18 @@ class OracleSqlResultPresenter < SqlResultPresenter
   def to_hash
     hash = super
 
-    reformat_values(hash, "date") do |value|
-      DateTime.parse(value).strftime("%-m/%d/%Y")
-    end
-    reformat_values(hash, "timestamp") do |value|
-      DateTime.parse(value).strftime("%-m/%d/%Y%l:%M:%S.%3N %p")
+    # Fix for DEV-8799. 'Server Error' when trying to do a SQL execute on Oracle.
+    # if date or time is wrongly formmatted in database, pass date in raw format.
+
+    begin
+      reformat_values(hash, "date") do |value|
+        DateTime.parse(value).strftime("%-m/%d/%Y")
+      end
+      reformat_values(hash, "timestamp") do |value|
+        DateTime.parse(value).strftime("%-m/%d/%Y%l:%M:%S.%3N %p")
+      end
+    rescue ArgumentError => e
+      Chorus.log_error "Invalid date OR time format: #{e}: #{e.message} on #{e.backtrace[0]}"
     end
 
     hash

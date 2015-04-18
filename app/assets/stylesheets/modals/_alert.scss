@@ -1,3 +1,9 @@
+@import "compass/css3/box-sizing";
+
+$alert-marker-width: 60px;
+
+/* general alert dialog styles */
+
 .alert {
     .errors {
         width: 483px;

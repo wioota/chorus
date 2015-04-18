@@ -45,7 +45,7 @@ chorus.dialogs.CreateExternalTableFromHdfs = chorus.dialogs.NewTableImportCSV.ex
 
     saved: function() {
         this.closeModal();
-        chorus.toast("hdfs.create_external.success", {workspaceName: this.workspaceName, tableName: this.model.get("tableName")});
+        chorus.toast("hdfs.create_external.success.toast", {workspaceName: this.workspaceName, tableName: this.model.get("tableName"), toastOpts: {type: "success"}});
         chorus.PageEvents.trigger("csv_import:started");
     },
 

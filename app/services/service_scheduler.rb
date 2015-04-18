@@ -2,9 +2,27 @@ class ServiceScheduler
   include Clockwork
 
   def initialize
-    every(ChorusConfig.instance['instance_poll_interval_minutes'].minutes, 'DataSourceStatusChecker.check_all') do
-      QC.enqueue_if_not_queued('DataSourceStatusChecker.check_all')
+
+    #fix for DEV-9102. Worker process crashes under heavy load.
+    data_sources = DataSource.where(:deleted_at => nil)
+    data_sources.each do |data_source|
+      Rails.logger.debug "Scheduling database status check for #{data_source.name}"
+      every(ChorusConfig.instance['instance_poll_interval_minutes'].minutes, 'DataSource.check') do
+        QC.enqueue_if_not_queued('DataSource.check_status', data_source.id)
+      end
     end
+
+    data_sources = HdfsDataSource.where(:deleted_at => nil)
+    data_sources.each do |data_source|
+      Rails.logger.debug "Scheduling database status check for #{data_source.name}"
+      every(ChorusConfig.instance['instance_poll_interval_minutes'].minutes, 'HdfsDataSource.check') do
+        QC.enqueue_if_not_queued('HdfsDataSource.check_status', data_source.id)
+      end
+    end
+
+#    every(ChorusConfig.instance['instance_poll_interval_minutes'].minutes, 'DataSourceStatusChecker.check_all') do
+#      QC.enqueue_if_not_queued('DataSourceStatusChecker.check_all')
+#    end
 
     every(ChorusConfig.instance['delete_unimported_csv_files_interval_hours'].hours, 'delete_old_files!') do
       [CsvFile, Upload].each { |clazz| QC.enqueue_if_not_queued("#{clazz}.delete_old_files!") }

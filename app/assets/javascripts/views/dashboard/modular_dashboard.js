@@ -27,7 +27,7 @@ chorus.views.ModularDashboard = chorus.views.Base.extend({
     validModules: function(warn) {
         return _.filter(this.model.get("modules"), function(moduleName, i) {
             var valid = chorus.views["Dashboard" + moduleName];
-            warn && (valid || chorus.toast("bad_dashboard_module", {moduleName: moduleName, toastOpts: {type: "error"}}));
+            warn && (valid || chorus.toast("bad_dashboard_module.toast", {moduleName: moduleName, toastOpts: {type: "error"}}));
             return valid;
         }, this);
     }

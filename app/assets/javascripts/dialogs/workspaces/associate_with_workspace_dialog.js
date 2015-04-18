@@ -39,6 +39,10 @@ chorus.dialogs.AssociateWithWorkspace = chorus.dialogs.PickWorkspace.extend({
         this.model.activities().fetch();
         this.model.fetch();
         this.closeModal();
-        chorus.toast("dataset.associate.toast.one", {datasetTitle: this.model.get("objectName"), workspaceNameTarget: this.selectedItem().get("name")});
+
+        var workspaceURL = this.selectedItem().showUrl();
+        var workspaceName = this.selectedItem().get("name");
+        var workspaceLink = Handlebars.helpers.linkTo (workspaceURL, workspaceName);
+        chorus.toast("dataset.associate_one.toast", {datasetTitle: this.model.get("objectName"), workspaceNameTarget: workspaceLink, toastOpts: {type: "success"}});
     }
 });

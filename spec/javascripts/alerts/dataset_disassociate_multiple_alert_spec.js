@@ -6,7 +6,7 @@ describe("chorus.alerts.DatasetDisassociateMultiple", function() {
             backboneFixtures.workspaceDataset.datasetTable({id: 3})
         ], {workspaceId: 1234});
 
-        this.alert = new chorus.alerts.DatasetDisassociateMultiple({ collection : this.collection });
+        this.alert = new chorus.alerts.DatasetDisassociateMultiple({collection : this.collection});
         stubModals();
         this.alert.launchModal();
     });
@@ -35,7 +35,7 @@ describe("chorus.alerts.DatasetDisassociateMultiple", function() {
         });
 
         it("displays a toast message", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("dataset_delete.many.toast", {count: this.collection.length, toastOpts: {type: 'info'}});
+            expect(chorus.toast).toHaveBeenCalledWith("dataset_delete.many.toast", {count: this.collection.length, toastOpts: {type: 'deletion'}});
         });
 
         it("navigates to the dataset list page", function() {
