@@ -8,10 +8,10 @@ pushd build
 mkdir -p dependencies
 pushd dependencies
 
-NGINX_VER=1.6.2
+NGINX_VER=1.6.3
 PCRE_VER=8.36
 ZLIB_VER=1.2.8
-OPENSSL_VER=0.9.8ze
+OPENSSL_VER=0.9.8zf
 
 wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-$PCRE_VER.tar.gz
 wget http://zlib.net/zlib-$ZLIB_VER.tar.gz
