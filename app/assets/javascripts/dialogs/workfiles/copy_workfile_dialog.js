@@ -5,9 +5,9 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
     submitButtonTranslationKey: "workfile.copy_dialog.copy_file",
 
     setup: function() {
-        this.workfile = new chorus.models.Workfile({
+        this.workfile = new chorus.models.Workfile ({
             id: this.options.workfileId,
-            workspace: { id: this.options.workspaceId }
+            workspace: {id: this.options.workspaceId}
         });
         this.requiredResources.add(this.workfile);
         this.requiredResources.add(this.collection);
@@ -68,5 +68,6 @@ chorus.dialogs.CopyWorkfile = chorus.dialogs.PickWorkspace.extend({
                 self.showErrors();
             }
         });
+        
     }
 });
