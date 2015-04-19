@@ -52,13 +52,6 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         background-color: $shaded-background-color;
         display: inline-block;
         cursor: pointer;
-
-        /* covers the glyphs used, such as the cog */
-        // i {
-        //     color: $color-text3;
-        //     font-size: 13px;
-        //     line-height: $height-button-widgetshell;
-        // }
     }
     
     .configure {
@@ -318,13 +311,6 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         display: inline-block;
         margin-right: 3px;
         cursor: pointer;
-        
-        /* covers the glyphs used; i.e the cog */
-        // i {
-        //      color: $color-text3;
-        //      font-size: $small-font;
-        //      line-height: $height-button-widgetshell;
-        // }
 
         /* remove rightside margin on the rightmost button so that it is flush right */
         &:last-child {
