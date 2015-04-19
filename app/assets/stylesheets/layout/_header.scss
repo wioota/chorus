@@ -10,7 +10,8 @@ $header-margin-right: $page-margin-right;
 $expanded-search-width: 450px;
 $notification-token-width: $header-margin * 2;
 
-$branding-opacity: 0.93;
+// header items display with VERY subtle transparency to allow for hover effect
+$header-item-opacity: 0.93;
 
 $menu-item-height-default: 40px;
 
@@ -59,6 +60,9 @@ $menu-item-height-default: 40px;
     }
 }
 
+// **********
+// **********
+
 .underline {
     border-bottom: $border-canon;
 }
@@ -69,6 +73,41 @@ $menu-item-height-default: 40px;
         height: $header-height;
         background-color: $brand;
         vertical-align: middle;
+
+        // main branding logo
+        .logo {
+            width: 90px;
+            padding: 0px 10px;
+            opacity: $header-item-opacity;
+
+            &:hover {
+                opacity: 1;
+            }
+            a img {
+                vertical-align: middle;
+            }
+
+            img {
+                max-height: 25px;
+            }
+        }
+                
+        // AdvisorNow branding
+        .advisorNow {
+            img {
+                position: relative;
+                width: 83px;
+                top: 6px;
+            
+                margin-bottom: 0px;
+                padding-right: 15px;
+                opacity: $header-item-opacity;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+        }
 
         .menu {
             border: none;
@@ -107,7 +146,7 @@ $menu-item-height-default: 40px;
             	top: 1px;
             	width: 16px;
             	height: 16px;
-            	opacity: 0.94;
+            	opacity: $header-item-opacity;
             	
             	svg {
             	    fill: #FFF;
@@ -116,24 +155,6 @@ $menu-item-height-default: 40px;
 
             .token {
                 float: left;
-                
-                /* main branding logo */
-                &.logo {
-                    width: 90px;
-                    padding: 0px 10px;
-                    opacity: $branding-opacity;
-                    
-                    &:hover {
-                        opacity: 1;
-                    }
-                    a img {
-                        vertical-align: middle;
-                    }
-
-                    img {
-                        max-height: 25px;
-                    }
-                }
 
                 &.drawer {
                     width: $header-height;
@@ -149,7 +170,7 @@ $menu-item-height-default: 40px;
                 }
             }
         }
-
+                
         .right {
             float: right;
 
@@ -165,8 +186,8 @@ $menu-item-height-default: 40px;
                 }
 
                 &.active .caret::before {
-                    /* when activating the menu, switch thecaret */
-                    content:  "\f0d8";  // =  fa-caret-up
+                    /* when activating the menu, switch the caret */
+                    content:  "\f0d8";  // fa-caret-up
                 }
 
                 &.username {
@@ -183,23 +204,10 @@ $menu-item-height-default: 40px;
                         &.empty { background: $brand-dark; }
                         background: $notification;
 
-                        @include lozenge(2px, 30px, $header-height/3 );
+                        @include lozenge(2px, 30px, $header-height/3);
                     }
                 }
 
-                &.advisorNow a img {
-                    position: relative;
-                    width: 83px;
-                    top: 6px;
-                    
-                    margin-bottom: 0px;
-                    padding-right: 15px;
-                    opacity: $branding-opacity;
-                    
-                    &:hover {
-                        opacity: 1;
-                    }
-                }
             }
         }
 
@@ -231,11 +239,13 @@ $menu-item-height-default: 40px;
                 }
 
             }
-            .search_magnifying_glass:before {
-                z-index: 1;
-                color: $brand-light;
-                font-size: 15px;
-                top: 2px;
+            .search_magnifying_glass {
+                &::before {
+                    z-index: 1;
+                    color: $brand-light;
+                    font-size: 15px;
+                    top: 2px;
+                }
             }
             
             input {
@@ -323,15 +333,12 @@ $menu-item-height-default: 40px;
             }
             
             /*  color for svg glyphs in the primary nav bar */
-            #primary {
-                svg {
-                    fill: #FFF;
-                }
+            svg {
+                fill: #FFF;
             }
             
             /* individual sections of the primary nav */
             #primary-home { 
-                @extend #primary;
                 svg {
                     width: 18px;
                     height: 18px;
@@ -344,7 +351,6 @@ $menu-item-height-default: 40px;
                 font-size: 18px;
             }
             #primary-users {
-                @extend #primary;
                 svg {
                     width: 29px;
                     height: 29px;
@@ -372,7 +378,7 @@ $menu-item-height-default: 40px;
             margin-left: -( ($width - $notification-token-width / 2) +1);
             width: $width;
 
-            line-height: 14px;
+            line-height: 17px;
 
             .notification_area {
                 overflow: auto;
