@@ -6,19 +6,15 @@ $debug-browser-support: true;
 @import "compass/css3/border-radius";
 
 
-$padding-side-canon: 10px;
-$padding-top-canon: 10px;
-$padding-bottom-canon: 10px;
 
 /* height of buttons used for dashboard widget shell */
 /* e.g. configure button */
 $height-button-widgetshell: 23px;
 
 $dashboard-module-minheight: 150px;
-
 $dashboard-module-title-height: 35px;
 $dashboard-module-padding: 10px;
-$title-height: $dashboard-module-title-height - $dashboard-module-padding;
+$title-content-height: $dashboard-module-title-height - $dashboard-module-padding;
 
 
 /* PAGE styles */
@@ -343,14 +339,14 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
     }
     
     .module_header {
-        min-height: $title-height + $dashboard-module-padding;
-        line-height: $title-height;
+        min-height: $title-content-height + $dashboard-module-padding;
+        line-height: $title-content-height;
 
         .title {
             display: inline-block;
             @include dashboard-module-title;
-            height: $title-height;
-            line-height: $title-height;
+            height: $title-content-height;
+            line-height: $title-content-height;
         }
         
         .menus {
@@ -400,7 +396,7 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
     	border-radius: $default-border-radius;
          
         .name_row {
-			padding: $padding-top-canon $padding-side-canon $padding-bottom-canon $padding-side-canon;
+			padding: $padding-module-top-canon $padding-module-side-canon $padding-module-bottom-canon $padding-module-side-canon;
 			background-color: $greyish-blue;
 
             .inactive {
@@ -424,11 +420,11 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         }
         
         .summary_row {
-			padding: $padding-top-canon $padding-side-canon $padding-bottom-canon $padding-side-canon;        
+			padding: $padding-module-top-canon $padding-module-side-canon $padding-module-bottom-canon $padding-module-side-canon;        
         }
 
         .activity_metric_row {
-			padding: $padding-top-canon $padding-side-canon $padding-bottom-canon + 5 $padding-side-canon;
+			padding: $padding-module-top-canon $padding-module-side-canon $padding-module-bottom-canon + 5 $padding-module-side-canon;
             border-top: 2px dotted $border-color-darkest;
             @include font-normal-gamma;
         }
