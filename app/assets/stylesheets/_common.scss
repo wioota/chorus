@@ -72,8 +72,12 @@ $list-striping-color:       $accent-tint;
 $body-background-color:     #FFFFFF;
 $shaded-background-color:   $light-gray;
 $subheader-background-color: $pattens-blue;
-$dialog-header-background:  $greyish-blue;
+
 $login-background:          $bluer-lavender;
+
+$dialog-header-background:  $greyish-blue;
+$alert-footer-background:   $greyish-blue;
+
 
 // Border colors
 $border-color:          $light-gray;
@@ -179,7 +183,7 @@ $alert-text-color:          $core-white;
 
 //$warning-color: $needs-attention;  //used?
 $warning-background-color:  $needs-attention;
-$warning-icon-color:        #B24E11;
+$warning-icon-color:        #F7771B;
 /* $warning-text-color:     $core-white; */
 
 //$informational-color: $pacific-blue;  // used?

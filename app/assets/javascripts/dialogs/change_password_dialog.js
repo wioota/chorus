@@ -36,7 +36,7 @@ chorus.dialogs.ChangePassword = chorus.dialogs.Base.extend({
     },
 
     showSavedToast: function() {
-        // conditionalize the toast: 
+        // conditionalize the message: 
         // whether you are changing your own password or another password
         var toastMessage, fullName;
         if (this.changeSelfPassword()) {

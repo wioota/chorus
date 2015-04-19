@@ -1,11 +1,11 @@
-chorus.alerts.WorkspaceDelete = chorus.alerts.ModelDelete.extend({
+chorus.alerts.WorkspaceDelete = chorus.alerts.ModelDelete.extend ({
     constructorName: "WorkspaceDelete",
 
-    text:t("workspace.delete.text"),
-    title:t("workspace.delete.title"),
-    ok:t("workspace.delete.button"),
-    redirectUrl:"/",
-    deleteMessage:"workspace.delete.toast",
+    text: t("workspace.delete.text"),
+    title: t("workspace.delete.title"),
+    ok: t("workspace.delete.button"),
+    redirectUrl: "/",
+    deleteMessage: "workspace.delete.toast",
 
     deleteMessageParams:function () {
         return {
@@ -19,4 +19,3 @@ chorus.alerts.WorkspaceDelete = chorus.alerts.ModelDelete.extend({
         this.workspaceName = this.model.get("name");
     }
 });
-

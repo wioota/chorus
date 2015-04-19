@@ -6,9 +6,9 @@ $alert-marker-width: 60px;
 
 .alert {
 
-        width: $default-dialog-width;
-        margin-left: auto;
-        margin-right: auto;
+    width: $default-dialog-width;
+    margin-left: auto;
+    margin-right: auto;
 
     .errors {
 //         width: 483px;
@@ -23,44 +23,56 @@ $alert-marker-width: 60px;
 
     .alert_content {
         margin-left: $alert-marker-width;
+        
+        @include after-clearfix;
     }
 
-        .content {
 
-            .left {
-                float: left;
-                max-width: 360px;
-                word-wrap: break-word;
-                @include after-clearfix;
+    h1 {
+        font-size: 21px;
+        font-weight: $semibold;
+        margin-bottom: 10px;
+    }
 
-                h1 {
-                    color: black;
-                    font-size: $medium-font;
-                    font-weight: $semibold;
-                    margin-bottom: 10px;
-                }
-
-                p {
-                    @include font-normal-alpha;
-                }
-            }
-
-            .right {
-                float: right;
-                width: 90px;
-
-                img {
-                    float: right;
-
-                    &.info {
-                        display: none;
-                    }
-                    &.error {
-                        display: none;
-                    }
-                }
-            }
-        }
+    p {
+        @include font-normal-alpha;
+    }
+                      
+//         .content {
+//             .left {
+//                 float: left;
+//                 max-width: 360px;
+//                 word-wrap: break-word;
+//                 @include after-clearfix;
+// 
+//                 h1 {
+//                     color: black;
+//                     font-size: $medium-font;
+//                     font-weight: $semibold;
+//                     margin-bottom: 10px;
+//                 }
+// 
+//                 p {
+//                     @include font-normal-alpha;
+//                 }
+//             }
+// 
+//             .right {
+//                 float: right;
+//                 width: 90px;
+// 
+//                 img {
+//                     float: right;
+// 
+//                     &.info {
+//                         display: none;
+//                     }
+//                     &.error {
+//                         display: none;
+//                     }
+//                 }
+//              }
+//         }
 
         .body {
             margin-top: 10px;
@@ -82,13 +94,21 @@ $alert-marker-width: 60px;
         display: none;
     }
 
-        
+    &.message {
+        .alert-message{
+            display: inline-block;
+        }
+    }
     &.info {
         .alert-info {
             display: inline-block;
         }
     }
-
+    &.warning {
+        .alert-warning {
+            display: inline-block;
+        }
+    }
     &.error {
         .alert-error {
             display: inline-block;
@@ -96,57 +116,55 @@ $alert-marker-width: 60px;
     }
 }
 
-#alert_bottom {
+.alert_bottom {
     height: 50px;
+    
+    border-top: $border-canon;
+    background-color: $alert-footer-background;
 }
+
 
 .marker {
 
-        
-        // position: absolute;
-        position: relative;
-        float: left;
+    // position: absolute;
+    position: relative;
+    float: left;
 
-        width: $alert-marker-width;
-//             left: 10px;
-//             top: 12px;
-        content: "";
-        font-family: FontAwesome;
-        font-size: $alert-icon-large;
-        text-decoration: none !important;
-       
-        
-        .alert-error,
-        .alert-danger {
-            &::before {
-                @include alert-error-icon;
-                color: $error-icon-color;
-            }
-        }
-        .alert-warning {
-            &::before {
-                @include alert-warning-icon;
-                color: $alert-icon-color;
-            }
-        }
-        .alert-success {
-            &::before {
-                @include alert-success-icon;
-                color: $success-icon-color; 
-            }
-        }
-        .alert-deletion {
+    width: $alert-marker-width;
+    content: "";
+    font-family: FontAwesome;
+    font-size: $alert-icon-large;
+    text-decoration: none !important;
 
-            &::before {
-                @include alert-success-icon;
-                color: $informational-icon-color;
-            }
+    .alert-error,
+    .alert-danger {
+        &::before {
+            @include alert-error-icon;
+            color: $error-icon-color;
         }
-        .alert-info {
-            &::before {
-                @include alert-informational-icon;
-                color: $informational-icon-color;
-            }
+    }
+    .alert-warning {
+        &::before {
+            @include alert-warning-icon;
+            color: $warning-icon-color;
         }
-
+    }
+    .alert-success {
+        &::before {
+            @include alert-success-icon;
+            color: $success-icon-color; 
+        }
+    }
+//         .alert-deletion {
+//             &::before {
+//                 @include alert-success-icon;
+//                 color: $informational-icon-color;
+//             }
+//         }
+    .alert-info {
+        &::before {
+            @include alert-informational-icon;
+            color: $informational-icon-color;
+        }
+    }
 }

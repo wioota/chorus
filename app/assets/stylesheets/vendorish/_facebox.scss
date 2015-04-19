@@ -7,8 +7,8 @@
     top: 0;
 //     left: 0;
     z-index: $dialog-z-index;
-    /* overflow-y: auto; */
-    overflow-y: hidden;
+    overflow-y: auto;
+    // overflow-y: hidden;
     overflow-x: hidden;
     
     width: 100%;
@@ -16,7 +16,7 @@
 //     margin-right: 25px;
     
     text-align: left;
-//     @include border-radius(3px);
+    @include border-radius(3px);
 
     .dialog_popup {
         position: relative;
@@ -50,10 +50,15 @@
             padding: 2px;
             color: $color-text4;
         }
+        .no-close {
+            display: none;
+        }
     }
 
-    &.alert_facebox .close {
-        display: none;
+    &.alert_facebox {
+        .close {
+            display: none;
+        }
     }
 
     .loading, .image {
