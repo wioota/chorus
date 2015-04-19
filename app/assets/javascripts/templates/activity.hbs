@@ -54,7 +54,7 @@
             {{/if}}
             <span class="timestamp">{{timestamp}}</span>
             {{#if isNotification}}
-                <a class="delete_link alert delete_notification" href="#">
+                <a class="delete_link alert-launch delete_notification" href="#">
                     <span class="fa fa-trash delete"></span>{{t "actions.delete"}}
                 </a>
             {{else}}
@@ -64,7 +64,7 @@
                             <a class="edit_link dialog edit_note" href="#">{{t "actions.edit"}}</a>
                         {{/if}}
                         {{#if canDelete}}
-                            <a class="delete_link alert delete_note" href="#">
+                            <a class="delete_link alert-launch delete_note" href="#">
                                 <span class="fa fa-trash delete"></span>{{t "actions.delete"}}
                             </a>
                         {{/if}}

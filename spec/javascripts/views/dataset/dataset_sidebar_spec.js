@@ -443,7 +443,7 @@ describe("chorus.views.DatasetSidebar", function() {
                 } else {
                     it("does not display a delete link", function() {
                         this.view.render();
-                        expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
+                        expect(this.view.$("a.alert-launch[data-alert=DatasetDelete]")).not.toExist();
                     });
                 }
             }
@@ -887,7 +887,7 @@ describe("chorus.views.DatasetSidebar", function() {
             it("does not display a delete link", function() {
                 spyOn(this.view.resource, 'isDeleteable').andReturn(true);
                 this.view.render();
-                expect(this.view.$("a.alert[data-alert=DatasetDelete]")).not.toExist();
+                expect(this.view.$("a.alert-launch[data-alert=DatasetDelete]")).not.toExist();
             });
 
             it("has a link to associate the dataset with a workspace", function() {
