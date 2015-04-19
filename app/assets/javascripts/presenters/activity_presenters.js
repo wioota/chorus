@@ -101,7 +101,7 @@
 
         iconClass: function() {
             if (this.isFailure()) {
-                return "error";
+                return "error alert-error-image large";
             } else if (this.model.isSuccessfulImport()) {
                 return "icon";
             } else {

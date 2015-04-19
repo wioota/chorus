@@ -2,7 +2,8 @@
 
 $alert-marker-width: 60px;
 
-/* general alert dialog styles */
+/* GENERAL ALERT-DIALOG STYLES */
+/* AND OTHER ALERT MARKERS IN THE APP */
 
 .alert {
 
@@ -125,7 +126,7 @@ $alert-marker-width: 60px;
 
 
 .marker {
-
+    
     // position: absolute;
     position: relative;
     float: left;
@@ -168,3 +169,18 @@ $alert-marker-width: 60px;
         }
     }
 }
+
+// sizings for error icon when iamge file is necessary
+.alert-error-image {
+    &.small {
+        width: $alert-icon-small;
+        height: $alert-icon-small;    
+    }
+    
+    &.large {
+        width: $alert-icon-large;
+        height: $alert-icon-large;
+    }
+}
+
+

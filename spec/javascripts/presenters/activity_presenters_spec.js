@@ -24,7 +24,6 @@ describe("chorus.presenters.Activity", function() {
             it("shows the error icon", function() {
                 //expect(this.presenter.iconSrc()).toBe("/images/messaging/message_error_med.png"); // to FIX
                 expect(this.presenter.iconSrc()).toBe("/images/messaging/alert-error.svg");
-                
             });
 
             it("links to the user's profile", function() {
