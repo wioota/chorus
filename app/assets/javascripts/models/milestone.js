@@ -11,10 +11,30 @@ chorus.models.Milestone = chorus.models.Base.extend({
     },
 
     toggleState: function () {
+        this.listenTo(this, "saved", this.savedToggle);
+
         if (this.get('state') === 'planned') {
             this.save( {state: 'achieved'}, {wait: true} );
         } else {
             this.save( {state: 'planned'}, {wait: true} );
         }
+    },
+
+    savedToggle: function() {
+        var toggleMessage, type;
+        if (this.get('state') === 'planned') {
+            toggleMessage = "milestone.status.restarted.toast";
+            type = "info";
+        } else {
+            toggleMessage = "milestone.status.completed.toast";
+            type = "success";
+        } 
+        chorus.toast(toggleMessage, {name: this.name(), toastOpts: {type: type} });
+        this.onClose();
+    },
+    
+    onClose: function() {
+        this.stopListening();
     }
+
 });
