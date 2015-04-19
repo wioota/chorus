@@ -1,6 +1,6 @@
 chorus.alerts.Error = chorus.alerts.Base.extend({
     constructorName: "Error",
-    cancel:t("actions.close_window"),
+    cancel: t("actions.close_window"),
     additionalClass:"error",
 
     makeModel:function () {
