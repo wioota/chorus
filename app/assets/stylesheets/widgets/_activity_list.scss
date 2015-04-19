@@ -46,7 +46,7 @@ $refresh-activity-gutter: $activity-gutter - 5;
 
 .activity {
     &.unread {
-        background: #ffface;
+        background: #FFFACE;
     }
 
     .activity_item {
@@ -289,6 +289,3 @@ li .activity_content,
         }
     }
 }
-
-
-
