@@ -15,18 +15,31 @@ module Authority
   # on the given class. If a role permission matches the class
   # permission, then the user is authorized for that activity
   def self.authorize!(activity_symbol, object, user, options = {})
-    return if is_owner?(user, object) || handle_legacy_action(options[:or], object, user)
 
+    # retreive user and object information
     roles = retrieve_roles(user)
     chorus_class = ChorusClass.search_permission_tree(object.class)
+    chorus_object = ChorusObject.find_by_chorus_class_id_and_instance_id(chorus_class.id, object.id)
     actual_class = object.class.name.constantize
 
-    common_permissions = common_permissions_between roles, chorus_class
+    # check to see if object and user share scope. Ideally an object and user in different scopes shouldn't even
+    # get to this check, because they cannot interact with an object they can't see
+
+
+    # Is user owner of object?
+    #return if is_owner?(user, object) || handle_legacy_action(options[:or], object, user)
+    return if chorus_object.owner == user
+
+    # retreive and merge permissions
+    common_permissions = common_permissions_between(roles, chorus_class)
+    common_permissions += common_permissions_between(roles, chorus_object)
+    raise Allowy::AccessDenied.new("Unauthorized", activity_symbol, object) unless common_permissions
 
     Chorus.log_debug("Could not find activity_symbol in #{actual_class.name} permissions") if actual_class::PERMISSIONS.index(activity_symbol).nil?
 
     activity_mask = actual_class.bitmask_for(activity_symbol)
 
+    # check to see if this user is allowed to do this action at the object or class level
     allowed = common_permissions.any? do |permission|
       bit_enabled? permission.permissions_mask, activity_mask
     end
@@ -76,12 +89,13 @@ module Authority
   end
 
   # returns the intersection of all permissions from roles and all permissions for the class
-  def self.common_permissions_between(roles, chorus_class)
+  def self.common_permissions_between(roles, chorus_class_or_object)
     all_roles_permissions = roles.inject([]){ |permissions, role| permissions.concat(role.permissions) }
-    if chorus_class.permissions.empty? || all_roles_permissions.empty?
-      Chorus.log_debug("ChorusClass #{chorus_class} does not haver permissions assigned") if chorus_class.permissions.empty?
+    if chorus_class_or_object.permissions.empty? || all_roles_permissions.empty?
+      Chorus.log_debug("ChorusClass #{chorus_class} does not haver permissions assigned") if chorus_class_or_object.permissions.empty?
       Chorus.log_debug("User.roles and group.roles have no permissions assigned") if all_roles_permissions.empty?
-      raise Allowy::AccessDenied.new("Role not found", nil, nil)
+      return nil
+      #raise Allowy::AccessDenied.new("Role not found", nil, nil)
     end
     common_permissions = all_roles_permissions & chorus_class.permissions
   end
