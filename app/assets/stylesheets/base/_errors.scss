@@ -1,6 +1,6 @@
 /* ********** */
-/* errors, messages, etc in dialogs          */
-/* also alerts - which are messaging dialogs */
+/* errors, messages, etc in dialogs         */
+/*                                          */
 /* ********** */
 
 $margin-right-for-error-marker: 20px;
@@ -22,16 +22,16 @@ $margin-right-for-error-marker: 20px;
 // }
 
 
-/* colored border for fields that have an error */
+/* colored border for fields that have error */
 @mixin error-input-border {
     border: 2px solid $error-input-border-color;
 }
 
-/* exclamation icon marker for fields that have an error */
+/* exclamation icon marker for fields that have error */
 /* cant use FA glyph because input fields can only have background images */
 @mixin error-background-icon {
     background-image: url("/images/messaging/error-exclamation.svg");
-    background-size: 18px 18px;
+    background-size: $alert-icon-medium $alert-icon-medium;
     background-repeat: no-repeat;
     padding-right: $margin-right-for-error-marker;
 }
@@ -44,7 +44,6 @@ $margin-right-for-error-marker: 20px;
     @include after-clearfix;
 
     background-color: $body-background-color;
-    padding-top: 5px;
 
     font-weight: normal;
 
@@ -64,7 +63,7 @@ $margin-right-for-error-marker: 20px;
     ul {
         /* position: relative; */
         text-align: left;
-
+        padding-top: 5px;
 
 /* reference numbers to be made into mixin */
 /* dialog */
@@ -97,22 +96,9 @@ $margin-right-for-error-marker: 20px;
             border: 1px solid;
             border-radius: $alert-border-radius;
 
-
-            &:first-child {
-                // margin-top: 5px;
-                // border-top-left-radius: $alert-border-radius;
-                // border-top-right-radius: $alert-border-radius;
-
-            }
+            &:first-child {}
             &:last-child {
-//                 margin-bottom: 5px;
                 margin-bottom: 0px;
-
-                // border-bottom-left-radius: $alert-border-radius;
-                // border-bottom-right-radius: $alert-border-radius;
-            }
-            ~li {
-               //  margin-top: -4px;
             }
 
             &::before {
@@ -145,7 +131,7 @@ $margin-right-for-error-marker: 20px;
 .error_block {}
 
 .warning {
-    background-color: $needs-attention;
+//     background-color: $needs-attention;
 }
 
 /* user input: named error BUT in meaning is as alert */
@@ -161,7 +147,7 @@ textarea.has_error,
     @include border-radius(1px);
     
     @include error-background-icon;
-    background-position: 99.5% 50%;
+    background-position: right 2px bottom 50%;
 }
 
 // .inputError {
