@@ -1,5 +1,8 @@
+# This class holds code that deals with adding/removing users from a workspace
+# and any cleanup/ownership transfers associated with that change
 class WorkspaceMembersManager
 
+  # roles_ids hash looks like { :member => [id1, id2], :manager => [id3, id4] }
   def initialize(workspace, roles_ids, acting_user)
     @workspace = workspace
     @roles_ids = roles_ids
@@ -10,14 +13,14 @@ class WorkspaceMembersManager
     workspace_current_members = @workspace.members.map(&:id)
     new_members = @roles_ids.values.flatten.map(&:to_i) - workspace_current_members
     removed_member_ids = workspace_current_members - @roles_ids.values.flatten.map(&:to_i)
-    @roles_ids.each{|k,v| v.map!(&:to_i)}
+    @roles_ids.each{ |k,v| v.map!(&:to_i) }
 
     @workspace.transaction do
       add_members_with_roles(new_members)
 
-
-      removed_members = removed_member_ids.map{|id| User.find(id)}
+      removed_members = removed_member_ids.map{ |id| User.find(id) }
       @workspace.members.delete(removed_members)
+
       @workspace.update_attributes!(:has_added_member => true)
       transfer_job_ownership(removed_member_ids)
     end

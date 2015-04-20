@@ -4,7 +4,7 @@ describe WorkspaceMembersManager do
   let(:workspace) { workspaces(:public) }
   let(:owner) { workspace.owner }
   let(:member) { users(:the_collaborator) }
-  let(:manager) { WorkspaceMembersManager.new(workspace, [owner.id], owner) }
+  let(:manager) { WorkspaceMembersManager.new(workspace, { :member => [owner.id] }, owner) }
 
   describe '#update_membership' do
     it 'updates the membership' do
