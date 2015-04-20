@@ -27,7 +27,6 @@ $action-bar-height: 32px;
       position: absolute;
       left: 17px;
       bottom: -10px;
-/*       @include triangle-css(down, $content-details-chart-icon-selected-background-color, 16px, 10px); */
       	@include triangle-glyph(down);
       	color: $content-details-chart-icon-selected-background-color;
     }
@@ -75,7 +74,7 @@ $action-bar-height: 32px;
     line-height: $action-bar-height;
   }
   .triangle_right {
-/*     @include triangle-css(right, $content-details-create-background-color, 12px, $action-bar-height); */
+
 	@include triangle-glyph(right);
 	color: $content-details-create-background-color;
 /*     display: inline-block; */
