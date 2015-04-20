@@ -6,7 +6,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend ({
 
     events: {
         "change select.data_sources": "showFieldset",
-        "click a.close_errors": "clearServerErrors",
+        // "click a.close_errors": "clearServerErrors",
         "submit form": "createDataSource",
         "change input[name=high_availability]": 'toggleHighAvailability',
         "change input[name=hiveKerberos]": 'toggleKerberos',
