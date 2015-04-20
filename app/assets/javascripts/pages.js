@@ -29,8 +29,8 @@ chorus.pages.Bare = chorus.views.Bare.extend({
             var undefinedErrorTitle = "unprocessable_entity.unidentified_error.title";
             if(errors.record) {
                 var code = "record_error." + errors.record;
-                var bodytext = code + ".text";
                 var title = I18n.lookup(code + ".title");
+                var bodytext = code + ".text";
                 chorus.pageOptions = {
                     title: title ? title : t(undefinedErrorTitle),
                     text: t(bodytext, errors),
@@ -62,10 +62,10 @@ chorus.pages.Base = chorus.pages.Bare.extend({
 
     subviews: {
         "#header": "header",
-        "#main_content": "mainContent",
         "#page_sub_header": "subHeader",
         "#breadcrumbs": "breadcrumbs",
         "#sub_nav": "subNav",
+        "#main_content": "mainContent",
         "#sidebar .primary_action_panel": "primaryActionPanel",
         "#sidebar .multiple_selection": "multiSelectSidebarMenu",
         "#sidebar .sidebar_content.primary": "sidebar",
