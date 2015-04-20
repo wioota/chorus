@@ -31,6 +31,8 @@ $dialog-girdle-padding-top: 10px;
     height: 40px;
     background-color: $dialog-header-background;
     border-bottom: $border-canon;
+    border-top-left-radius: $default-border-radius;
+    border-top-right-radius: $default-border-radius;
 
     line-height: 40px;
     padding: 0 $dialog-padding-leftRight;
@@ -39,8 +41,12 @@ $dialog-girdle-padding-top: 10px;
 
 #dialog_bottom {
     height: 50px;
-    background-color: $dialog-header-background;
+
     border-top: $border-canon;
+    border-bottom-left-radius: $default-border-radius;
+    border-bottom-right-radius: $default-border-radius;
+
+    background-color: $dialog-header-background;
 }
 
 // *****
