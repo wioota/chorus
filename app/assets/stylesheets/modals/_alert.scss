@@ -22,6 +22,7 @@ $alert-marker-width: 60px;
 //      max-width: 500px;
 
         background-color: $body-background-color;
+        // @include border-radius ($default-border-radius);
 
     .alert_content {
         margin-left: $alert-marker-width;
@@ -124,11 +125,21 @@ $alert-marker-width: 60px;
         }
     }
 }
+.alert_header {
+    height: 3px;
+    
+    @include border-top-radius($default-border-radius);
+
+    background-color: $body-background-color;
+}
+
 
 .alert_bottom {
     height: 50px;
     
     border-top: $border-canon;
+    @include border-bottom-radius($default-border-radius);
+
     background-color: $alert-footer-background;
 }
 
