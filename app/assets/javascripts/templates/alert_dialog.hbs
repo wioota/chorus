@@ -8,6 +8,7 @@
         <div class="marker">
             <span class="alert-message"></span>
             <span class="alert-info"></span>
+            <span class="alert-confirm"></span>
             <span class="alert-warning"></span>
             <span class="alert-error"></span>
         </div>
@@ -16,11 +17,11 @@
         
             <h1>{{title}}</h1>
             
-             <p>{{text}}</p>
+             <p>{{{text}}}</p>
         
             {{#if body}}
                 <div class="alert_body">
-                {{body}}
+                {{{body}}}
                 </div>
             {{/if}}
         

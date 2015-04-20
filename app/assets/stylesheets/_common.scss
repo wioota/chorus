@@ -891,15 +891,15 @@ $lozenge-color-selected-dark: $brand-dark;
 @mixin alert-error-icon {
     content: "\f06a";  /* fa-exclamation-circle */
 }
-
 @mixin alert-warning-icon {
     content: "\f071";  /* fa-exclamation-triangle */
 }
-
 @mixin alert-success-icon {
     content: "\f058";  /* fa-check-circle */
 }
-
+@mixin alert-confirm-icon {
+    content: "\f059";  /* fa-question-circle */
+}
 @mixin alert-informational-icon {
     content: "\f06a";  /* fa-exclamation-circle */
 }

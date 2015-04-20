@@ -5,13 +5,14 @@ $alert-marker-width: 60px;
 /* GENERAL ALERT-DIALOG STYLES */
 /* AND OTHER ALERT MARKERS IN THE APP */
 
-.alert {
+.alert_dialog {
 
     width: $default-dialog-width;
     margin-left: auto;
     margin-right: auto;
 
     .errors {
+        display: none;
 //         width: 483px;
        //  max-width: 483px;
     }
@@ -84,14 +85,16 @@ $alert-marker-width: 60px;
             border: 1px solid $border-color;
             font-size: $small-font;
             font-weight: normal;
-            color: black;
+            // color: black;
         }
     }
 
+
     .alert-message,
-    .alert-error,
     .alert-info,
-    .alert-warning {
+    .alert-confirm,
+    .alert-warning,
+    .alert-error {
         display: none;
     }
 
@@ -102,6 +105,11 @@ $alert-marker-width: 60px;
     }
     &.info {
         .alert-info {
+            display: inline-block;
+        }
+    }
+    &.confirm {
+        .alert-confirm {
             display: inline-block;
         }
     }
@@ -150,18 +158,18 @@ $alert-marker-width: 60px;
             color: $warning-icon-color;
         }
     }
-    .alert-success {
+//     .alert-success {
+//         &::before {
+//             @include alert-success-icon;
+//             color: $success-icon-color; 
+//         }
+//     }
+    .alert-confirm {
         &::before {
-            @include alert-success-icon;
-            color: $success-icon-color; 
+            @include alert-confirm-icon;
+            color: $informational-icon-color;
         }
     }
-//         .alert-deletion {
-//             &::before {
-//                 @include alert-success-icon;
-//                 color: $informational-icon-color;
-//             }
-//         }
     .alert-info {
         &::before {
             @include alert-informational-icon;
