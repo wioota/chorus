@@ -1,6 +1,6 @@
 chorus.alerts.Base = chorus.Modal.extend({
     constructorName: "Alert",
-    templateName: "alert",
+    templateName: "alert_dialog",
 
     events: {
         "click button.cancel": "cancelAlert",

@@ -1,0 +1,58 @@
+<!-- ALERT_DIALOG -->
+<!-- CONFIRMATION -->
+<div class="guts">
+
+{{> errorDiv}}
+
+    <div class="girdle">
+        <div class="marker">
+            <span class="alert-message"></span>
+            <span class="alert-info"></span>
+            <span class="alert-warning"></span>
+            <span class="alert-error"></span>
+        </div>
+        
+        <div class="alert_content">
+        
+            <h1>{{title}}</h1>
+            
+             <p>{{text}}</p>
+        
+            {{#if body}}
+                <div class="alert_body">
+                {{body}}
+                </div>
+            {{/if}}
+        
+        </div>
+
+<!-- 
+        <div class="content">
+            <div class="right">
+                <img class="message" src="/images/messaging/message_icon.png" alt="!"/>
+                <img class="info" src="/images/messaging/message_info.png" alt="info"/>
+                <img class="error" src="/images/messaging/message_error.png" alt="i"/>
+            </div>
+            <div class="left">
+                <h1>{{title}}</h1>
+
+                <p>{{text}}</p>
+            </div>
+        </div>
+ -->
+<!-- 
+        {{#if body}}
+            <div class="body">
+                {{body}}
+            </div>
+        {{/if}}
+ -->
+    </div>
+    <!-- END girdle -->
+
+    <div class="alert_bottom form_controls">
+        <button type="submit" class="submit modalish hidden" tabindex="1">{{ok}}</button>
+        <button type="button" class="cancel modalish" tabindex="2">{{cancel}}</button>
+    </div>
+
+</div>
