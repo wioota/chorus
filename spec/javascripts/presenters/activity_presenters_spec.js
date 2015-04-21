@@ -26,12 +26,12 @@ describe("chorus.presenters.Activity", function() {
                 expect(this.presenter.iconSrc()).toBe("/images/messaging/alert-error.svg");
             });
 
-            it("links to the user's profile", function() {
+            it("has no link", function() {
                 expect(this.presenter.iconHref()).toBeNull();
             });
 
-            it("has the class 'profile'", function() {
-                expect(this.presenter.iconClass()).toBe("error");
+            it("has the class 'error'", function() {
+                expect(this.presenter.iconClass()).toHaveClass("error");
             });
         });
     }
@@ -46,8 +46,8 @@ describe("chorus.presenters.Activity", function() {
                 expect(this.presenter.iconHref()).toBe(this.dataset.showUrl());
             });
 
-            it("has the class 'profile'", function() {
-                expect(this.presenter.iconClass()).toBe("icon");
+            it("has the class 'icon'", function() {
+                expect(this.presenter.iconClass()).toHaveClass("icon");
             });
         });
     }
