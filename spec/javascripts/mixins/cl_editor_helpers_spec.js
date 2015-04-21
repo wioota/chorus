@@ -3,7 +3,6 @@ describe("chorus.Mixins.clEditor", function() {
     
     beforeEach(function() {
         unstubClEditor();
-//         this.editorContainer = $("<div class='container'><div class='toolbar'></div><textarea name='summary'></textarea></div>");
         this.editorContainer = $("<div class='container'><textarea name='summary'></textarea></div>");
         $('#jasmine_content').append(this.editorContainer);
 
@@ -40,7 +39,7 @@ describe("chorus.Mixins.clEditor", function() {
 //                     $('.toolbar a.' + control).click();
 //                     expect(chorus.Mixins.ClEditor[methodName]).toHaveBeenCalled();
 //                 });
-            });
+//             });
         });
 
         context("with options", function() {
@@ -56,14 +55,14 @@ describe("chorus.Mixins.clEditor", function() {
         });
     });
 
-describe("#getNormalizedText", function() {
-    it("does not change text that ends in something besides a 'newline'", function() {
-        var $textarea = $("<textarea/>");
-        $textarea.val("<div>foo</div>");
+    describe("#getNormalizedText", function() {
+        it("does not change text that ends in something besides a 'newline'", function() {
+            var $textarea = $("<textarea/>");
+            $textarea.val("<div>foo</div>");
 
-        expect(chorus.Mixins.ClEditor.getNormalizedText($textarea)).toBe("<div>foo</div>");
+            expect(chorus.Mixins.ClEditor.getNormalizedText($textarea)).toBe("<div>foo</div>");
+        });
     });
-});
 
     it("removes a single trailing 'newline'", function() {
         var $textarea = $("<textarea/>");
