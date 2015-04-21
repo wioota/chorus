@@ -21,9 +21,13 @@ describe("chorus.alerts.Base", function() {
             expect(this.alert.$("p").text()).toBe("How are you?");
         });
 
-        it("displays the icon", function() {
-            expect(this.alert.$("img")).toHaveAttr("src", "/images/messaging/message_icon.png");
+//         it("displays the icon", function() {
+//             expect(this.alert.$("img")).toHaveAttr("src", "/images/messaging/message_icon.png");
+//         });
+        it("displays the image", function() {
+            expect(this.alert.$(".alert-icon .alert-warning")).toExist();
         });
+
 
         it("displays the default cancel text on the cancel button", function() {
             expect(this.alert.$("button.cancel").text()).toMatchTranslation("actions.cancel");

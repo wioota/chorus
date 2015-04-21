@@ -7,9 +7,8 @@ describe("chorus.views.ErrorDetails", function() {
     describe("#render", function() {
         it("renders the text as a link to an ImportFailed alert", function() {
             this.view.render();
-            expect(this.view.$(".details .alert").html()).toMatchTranslation(
-                "activity.view_error_details");
-            expect(this.view.$(".details .alert").attr("data-alert")).toContainText("ImportFailed");
+            expect(this.view.$(".details .alert-launch").html()).toMatchTranslation("activity.view_error_details");
+            expect(this.view.$(".details .alert-launch").attr("data-alert")).toContainText("ImportFailed");
 
         });
     });

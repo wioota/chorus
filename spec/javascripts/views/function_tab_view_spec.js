@@ -139,7 +139,7 @@ describe("chorus.views.FunctionTab", function () {
                     it("has a link that opens a dialog showing the function info", function () {
                         var moreLink = this.functionQtip.find("a.more");
                         expect(moreLink).toHaveClass("alert-launch");
-                        expect(moreLink).toHaveData("alert-launch", "FunctionInfo");
+                        expect(moreLink).toHaveData("FunctionInfo");
                         expect(moreLink.text()).toMatchTranslation("schema.functions.show_more");
                         expect(moreLink).toHaveData("model", this.view.collection.at(0));
                     });

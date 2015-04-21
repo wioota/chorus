@@ -22,7 +22,6 @@ describe("chorus.presenters.Activity", function() {
     function itHasTheErrorIcon() {
         describe("the icon", function() {
             it("shows the error icon", function() {
-                //expect(this.presenter.iconSrc()).toBe("/images/messaging/message_error_med.png"); // to FIX
                 expect(this.presenter.iconSrc()).toBe("/images/messaging/alert-error.svg");
             });
 
@@ -31,7 +30,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("has the class 'error'", function() {
-                expect(this.presenter.iconClass()).toHaveClass("error");
+                expect(this.presenter.iconClass()).toContain("error");
             });
         });
     }
@@ -47,7 +46,7 @@ describe("chorus.presenters.Activity", function() {
             });
 
             it("has the class 'icon'", function() {
-                expect(this.presenter.iconClass()).toHaveClass("icon");
+                expect(this.presenter.iconClass()).toContain("icon");
             });
         });
     }
@@ -912,7 +911,7 @@ describe("chorus.presenters.Activity", function() {
     });
 
     context("hdfs imports", function () {
-        context("successful imports", function () {
+        context("> successful imports", function () {
             beforeEach(function () {
                 this.model = backboneFixtures.activity.hdfsImportSuccess();
                 this.presenter = new chorus.presenters.Activity(this.model);
