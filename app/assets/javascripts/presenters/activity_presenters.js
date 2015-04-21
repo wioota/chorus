@@ -13,7 +13,6 @@
 
         iconSrc: function() {
             if (this.isFailure()) {
-//                 return "/images/messaging/message_error_med.png";
                 return "/images/messaging/alert-error.svg";
             } else if (this.model.isSuccessfulImport()) {
                 return "/images/jobs/task-import.png";
