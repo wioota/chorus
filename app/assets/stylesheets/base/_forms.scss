@@ -72,8 +72,8 @@ fieldset {
 .form_controls {
     // make padding account for the margin applied to buttons
     // so that buttons are aligned with overall margins
-    padding-right: $dialog-padding - $button-margin-x;
-    padding-left:  $dialog-padding - $button-margin-x;
+    padding-right: $dialog-padding-leftRight - $button-margin-x;
+    padding-left:  $dialog-padding-leftRight - $button-margin-x;
 
     button {
         float: right; 

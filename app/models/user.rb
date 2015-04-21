@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
 
   DEFAULT_SORT_ORDER = VALID_SORT_ORDERS[:first_name]
 
-  attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes, :subscribed_to_emails
+  attr_accessible :username, :password, :first_name, :last_name, :email, :title, :dept, :notes, :subscribed_to_emails, :auth_method, :ldap_group_id
   attr_accessor :password
 
   has_many :gpdb_data_sources, :foreign_key => :owner_id
@@ -48,16 +48,20 @@ class User < ActiveRecord::Base
   validates_length_of :username, :first_name, :last_name, :email, :title, :dept, :maximum => 256
   validates_length_of :notes, :maximum => 4096
   validates_attachment_size :image, :less_than => ChorusConfig.instance['file_sizes_mb']['user_icon'].megabytes, :message => :file_size_exceeded
+  validate :confirm_ldap_user, :if => lambda { LdapClient.enabled? }, :on => :create
 
   validates_with UserCountValidator, :on => :create
   validates_with DeveloperCountValidator, AdminCountValidator
 
   attr_accessor :highlighted_attributes, :search_result_notes
-  searchable_model do
-    text :first_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
-    text :last_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
-    text :username, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
-    text :email, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+
+  if ENV['SKIP_SOLR'] != 'true'
+    searchable_model do
+      text :first_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
+      text :last_name, :stored => true, :boost => SOLR_PRIMARY_FIELD_BOOST
+      text :username, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+      text :email, :stored => true, :boost => SOLR_SECONDARY_FIELD_BOOST
+    end
   end
 
   before_save :update_password_digest, :unless => lambda { password.blank? }
@@ -153,5 +157,15 @@ class User < ActiveRecord::Base
     self.password = unencrypted_password
     self.legacy_password_digest = nil
     save!
+  end
+
+  def confirm_ldap_user
+    results = LdapClient.search(username)
+    if results.empty?
+      raise LdapClient::LdapCouldNotBindWithUser.new(
+              "No entry found for user #{username} in LDAP directory server. Please contact your
+system administrator"
+            )
+    end
   end
 end

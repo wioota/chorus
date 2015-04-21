@@ -19,6 +19,7 @@ class Search
       Attachment,
       OracleDataSource,
       JdbcDataSource,
+      JdbcHiveDataSource,
       PgDataSource
   ]
 

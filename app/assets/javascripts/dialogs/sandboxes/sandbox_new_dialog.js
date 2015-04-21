@@ -35,8 +35,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
         this.model = new chorus.models.Sandbox({ workspaceId: this.workspace.id });
     },
 
-    resourcesLoaded: function() {
-    },
+    resourcesLoaded: function() {},
 
     save: function(e) {
         this.$("button.submit").startLoading("sandbox.adding_sandbox");
@@ -61,7 +60,7 @@ chorus.dialogs.SandboxNew = chorus.dialogs.Base.extend({
     },
 
     saved: function() {
-        chorus.toast("sandbox.create.toast");
+        chorus.toast("sandbox.create.toast", {toastOpts: {type: "success"}});
         this.closeModal();
     },
 

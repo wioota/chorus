@@ -1,5 +1,5 @@
 describe("chorus.views.MultipleSelectionSidebar", function() {
-    var dialogConstructor = chorus.dialogs.ChangePassword;
+    var dialogConstructor = chorus.dialogs.Comment;
     var method = 'enable';
     var actionName = 'add_data';
     var methodActionName = 'enable';
@@ -47,10 +47,9 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
             chorus.PageEvents.trigger(this.selectEvent, this.collection);
             expect(actionProviderSpy).toHaveBeenCalledWith(this.collection);
         });
-
     });
 
-    context("when two models are selected", function() {
+    context(": when two models are selected", function() {
         beforeEach(function() {
             var twoModels = [new chorus.models.Base(), new chorus.models.Base()];
             this.collection = new chorus.collections.Base(twoModels);
@@ -72,7 +71,7 @@ describe("chorus.views.MultipleSelectionSidebar", function() {
             expect(this.view.$("li")).toContainTranslation('actions.'+actionName);
         });
 
-        describe("clicking a method action", function () {
+        describe(": clicking a method action", function () {
             beforeEach(function () {
                 chorus.PageEvents.trigger(this.selectEvent, this.collection);
             });

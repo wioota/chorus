@@ -33,6 +33,8 @@ module PostgresLikeDataSourceBehavior
     refresh_schemas options unless options[:skip_schema_refresh]
   rescue PostgresLikeConnection::QueryError => e
     Chorus.log_error "Could not refresh database: #{e.message} on #{e.backtrace[0]}"
+  rescue => e
+    Chorus.log_error "Database refresh failed: #{e.message} on #{e.backtrace[0]}"
   ensure
     (databases.not_stale - found_databases).each(&:mark_stale!) if options[:mark_stale]
   end
@@ -42,7 +44,9 @@ module PostgresLikeDataSourceBehavior
       begin
         Schema.refresh(owner_account, database, options.reverse_merge(:refresh_all => true))
       rescue PostgresLikeConnection::DatabaseError => e
-        Chorus.log_debug "Could not refresh database #{database.name}: #{e.message} #{e.backtrace.to_s}"
+        Chorus.log_error "Could not refresh schema for #{database.name}: #{e.message} #{e.backtrace.to_s}"
+      rescue  => e
+        Chorus.log_error "Database schema refresh failed for #{database.name}: #{e.message} on #{e.backtrace[0]}"
       end
     end
   end

@@ -29,10 +29,11 @@ chorus.pages.Bare = chorus.views.Bare.extend({
             var undefinedErrorTitle = "unprocessable_entity.unidentified_error.title";
             if(errors.record) {
                 var code = "record_error." + errors.record;
-                var title = I18n.lookup(code + "_title");
+                var bodytext = code + ".text";
+                var title = I18n.lookup(code + ".title");
                 chorus.pageOptions = {
                     title: title ? title : t(undefinedErrorTitle),
-                    text: t(code, errors),
+                    text: t(bodytext, errors),
                     message: errors.message
                 };
             } else {

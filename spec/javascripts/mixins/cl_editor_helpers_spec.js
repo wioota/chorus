@@ -8,7 +8,7 @@ describe("chorus.Mixins.clEditor", function() {
         $('#jasmine_content').append(this.editorContainer);
 
         _.each(controls, function(control) {
-            spyOn(chorus.Mixins.ClEditor,  "onClickToolbar"+ _.capitalize(control)).andCallThrough();
+            // spyOn(chorus.Mixins.ClEditor,  "onClickToolbar"+ _.capitalize(control)).andCallThrough();
         });
 
     });
@@ -16,7 +16,8 @@ describe("chorus.Mixins.clEditor", function() {
     describe("#makeEditor", function() {
         context("without options", function() {
             beforeEach(function() {
-                this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, ".toolbar", "summary");
+                // this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, ".toolbar", "summary");
+                this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "summary");
             });
 
             it("should return a cl editor", function() {
@@ -45,7 +46,8 @@ describe("chorus.Mixins.clEditor", function() {
         context("with options", function() {
             beforeEach(function() {
                 var options = { width: 200 };
-                this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "toolbar", "summary", options);
+                // this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "toolbar", "summary", options);
+                this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "summary", options);
             });
 
             it("should make an editor with the passed options", function() {
@@ -61,11 +63,11 @@ describe("#getNormalizedText", function() {
 
         expect(chorus.Mixins.ClEditor.getNormalizedText($textarea)).toBe("<div>foo</div>");
     });
+});
 
     it("removes a single trailing 'newline'", function() {
         var $textarea = $("<textarea/>");
         $textarea.val("Hello<div><br></div>");
-
         expect(chorus.Mixins.ClEditor.getNormalizedText($textarea)).toBe("Hello");
     });
 
@@ -83,10 +85,11 @@ describe("#getNormalizedText", function() {
     });
 });
 
-    describe("toolbar helpers", function() {
-        beforeEach(function() {
-            this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, ".toolbar", "summary");
-        });
+//     describe("toolbar helpers", function() {
+//         beforeEach(function() {
+            // this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, ".toolbar", "summary");
+//             this.editor = chorus.Mixins.ClEditor.makeEditor(this.editorContainer, "summary");
+//         });
 
 // TODO: if there is a way to test the graphic images, then revise to use
 // else delete when graphic toolbar is final
@@ -137,4 +140,6 @@ describe("#getNormalizedText", function() {
 //                     expect("click").toHaveBeenTriggeredOn(".cleditorButton[title='Remove Hyperlink']");
 //                 });
 //             });
-    });
+//     });
+// 
+

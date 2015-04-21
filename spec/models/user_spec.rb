@@ -157,6 +157,8 @@ describe User do
 
       it "does not validate usernames when ldap is enabled" do
         stub(LdapClient).enabled? { true }
+        stub(LdapClient).search { ["search result"] }
+
         FactoryGirl.build(:user, :username => "Pivotal User").should be_valid
       end
 
@@ -172,6 +174,7 @@ describe User do
         end
 
         it "is not required for any user" do
+          stub(LdapClient).search { ["search result"] }
           user = FactoryGirl.build(:user, :password => nil, :password_digest => nil)
           user.should be_valid
         end
@@ -306,6 +309,24 @@ describe User do
         @user = User.create :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
         @another_user = User.create :bogus => 'field', :username => 'hacker_guy', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com"
         @another_user.password_digest.should_not equal(@user.password_digest)
+      end
+    end
+
+    describe "when ldap is enabled" do
+      before do
+        stub(LdapClient).enabled? { true }
+      end
+
+      it "should raise an error when the user is not in the LDAP server" do
+        stub(LdapClient).search.with_any_args { [] }
+        args = { :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com" }
+        expect { User.create(args) }.to raise_error(LdapClient::LdapCouldNotBindWithUser)
+      end
+
+      it "should succeed when the user is found in the LDAP server" do
+        stub(LdapClient).search.with_any_args { [:result] }
+        args = { :bogus => 'field', :username => 'aDmin2', :password => 'secret', :first_name => "Jeau", :last_name => "Bleau", :email => "jb@emc.com" }
+        expect { User.create(args) }.not_to raise_error
       end
     end
   end

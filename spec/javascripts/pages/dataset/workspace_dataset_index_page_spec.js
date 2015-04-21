@@ -115,7 +115,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             });
 
             itHandlesTheWorkspaceResponse(t("dataset.import.need_sandbox", {
-                hereLink: '<a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="9999">' + t("actions.click_here") + '</a>'
+                hereLink: '<a class="dialog-launch" href="#" data-dialog="SandboxNew" data-workspace-id="9999">' + t("actions.click_here") + '</a>'
             }));
         });
 
@@ -126,7 +126,7 @@ describe("chorus.pages.WorkspaceDatasetIndexPage", function() {
             });
 
             itHandlesTheWorkspaceResponse(t("dataset.import.need_sandbox", {
-                hereLink: '<a class="dialog" href="#" data-dialog="SandboxNew" data-workspace-id="9999">' + t("actions.click_here") + '</a>'
+                hereLink: '<a class="dialog-launch" href="#" data-dialog="SandboxNew" data-workspace-id="9999">' + t("actions.click_here") + '</a>'
             }));
         });
 

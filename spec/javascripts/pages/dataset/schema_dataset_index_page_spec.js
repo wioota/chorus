@@ -87,8 +87,6 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
 
         it("has the right breadcrumbs", function() {
             var breadcrumbs = this.page.$("#breadcrumbs .breadcrumb a");
-//             expect(breadcrumbs.eq(0)).toHaveHref("#/");
-//             expect(breadcrumbs.eq(0)).toContainTranslation("breadcrumbs.home");
 
             expect(breadcrumbs.eq(0)).toHaveHref("#/data_sources");
             expect(breadcrumbs.eq(0)).toContainTranslation("breadcrumbs.data_sources");
@@ -112,9 +110,6 @@ describe("chorus.pages.SchemaDatasetIndexPage", function() {
             it ("shows the breadcrumbs without the database", function() {
                 var breadcrumbs = this.page.$("#breadcrumbs .breadcrumb a");
                 expect(breadcrumbs.length).toBe(2);
-
-//                 expect(breadcrumbs.eq(0)).toHaveHref("#/");
-//                 expect(breadcrumbs.eq(0)).toContainTranslation("breadcrumbs.home");
 
                 expect(breadcrumbs.eq(0)).toHaveHref("#/data_sources");
                 expect(breadcrumbs.eq(0)).toContainTranslation("breadcrumbs.data_sources");

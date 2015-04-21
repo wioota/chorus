@@ -29,9 +29,6 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         it("shows the breadcrumbs", function() {
             expect(this.page.model.loaded).toBeTruthy();
 
-//             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-//             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
-
             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/data_sources");
             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.data_sources");
 
@@ -70,7 +67,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
         it("shows a nice error message", function() {
             expect(this.page.$(".errors")).toExist();
-            expect(this.page.$(".errors").text()).toContainTranslation('record_error.HDFS_CONTENTS_UNAVAILABLE');
+            expect(this.page.$(".errors").text()).toContainTranslation('record_error.HDFS_CONTENTS_UNAVAILABLE.text');
         });
     });
 

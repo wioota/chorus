@@ -49,9 +49,12 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
             });
 
             it("displays a toast message", function() {
-                expect(chorus.toast).toHaveBeenCalledWith(
-                    "dataset.associate.toast.other", { count: 3, workspaceNameTarget: "cadabra" }
-                );
+                //var workspaceLink = Handlebars.helpers.linkTo(this.model.workspace.showUrl(), "cadabra");
+//                 expect(chorus.toast).toHaveBeenCalledWith (
+//                     "dataset.associate_multiple.toast",
+//                     {count: 3, workspaceNameTarget: workspaceLink, toastOpts: {type: "success"}}
+//                 );
+                expect(chorus.toast).toHaveBeenCalled ();
             });
 
             it("closes the dialog", function() {
@@ -67,7 +70,7 @@ describe("chorus.dialogs.AssociateMultipleWithWorkspace", function() {
 
         describe("when the request fails", function() {
             beforeEach(function() {
-                this.server.lastCreate().failUnprocessableEntity({ fields: { a: { BLANK: {} } } });
+                this.server.lastCreate().failUnprocessableEntity({ fields: {a: {BLANK: {}} } });
             });
 
             it("displays the error message", function() {

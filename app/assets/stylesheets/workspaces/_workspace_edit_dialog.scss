@@ -34,7 +34,6 @@ $image-width: 230px;
         min-width: 215px;
     }
 
-
 // TODO delete when graphic toolbar is final
 //     .toolbar {
 //         float: right;
@@ -46,16 +45,4 @@ $image-width: 230px;
 //             padding: 0px 2px;
 //         }
 //      }
-
-    .toolbar {
-        float: right;
-        margin-right: 5px;
-        font-size: $small-font;
-
-        a {
-            font-size: $small-font;
-            padding: 0px 2px;
-        }
-    }
-
 }

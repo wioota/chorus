@@ -18,7 +18,7 @@
                 return "/images/jobs/task-import.svg";
 
             } else {
-                return this.model.author().fetchImageUrl({ size: "icon" });
+                return this.model.author().fetchImageUrl({size: "icon"});
             }
         },
 
@@ -80,7 +80,7 @@
         },
 
         attachments: function() {
-            return this.model.attachments().map(function (attachment) { return new chorus.presenters.Attachment(attachment); });
+            return this.model.attachments().map(function (attachment) {return new chorus.presenters.Attachment(attachment); });
         },
 
         canEdit: function() {
@@ -441,12 +441,12 @@
 
         JobSucceeded: {
             links: ["actor", "job", "workspace"],
-            dialogs: [{name: "jobResult", dialogClass: chorus.dialogs.JobResultDetail, linkTranslation: 'job.show_details'}]
+            dialogs: [{name: "jobResult", dialogClass: chorus.dialogs.JobResultDetail, linkTranslation: 'job.show_details.link'}]
         },
 
         JobFailed: {
             links: ["actor", "job", "workspace"],
-            dialogs: [{name: "jobResult", dialogClass: chorus.dialogs.JobResultDetail, linkTranslation: 'job.show_errors'}]
+            dialogs: [{name: "jobResult", dialogClass: chorus.dialogs.JobResultDetail, linkTranslation: 'job.show_details.link'}]
         },
 
         JobDisabled: {
@@ -604,7 +604,7 @@
 
         chorusViewSourceType: function(self) {
             var model = chorusViewSourceModel(self);
-            return model.get("fileName") ? "workfile" : t("dataset.entitySubtypes." + chorusViewSourceModel(self).metaType());
+            return model.get("fileName") ? "workfile": t("dataset.entitySubtypes." + chorusViewSourceModel(self).metaType());
         },
 
         updateCredentialsLink: function(self) {
@@ -674,7 +674,7 @@
         },
 
         dialogLink: function (model, linkTranslation) {
-            return Handlebars.helpers.linkTo('#', t(linkTranslation), { 'class': model.constructorName });
+            return Handlebars.helpers.linkTo('#', t(linkTranslation), {'class': model.constructorName });
         },
 
         status: function(self) {

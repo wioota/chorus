@@ -17,6 +17,7 @@ chorus.views.JobItem = chorus.views.Base.extend({
             url: this.model.showUrl(),
             frequency: this.model.frequency(),
             stateKey: "job.state." + this.jobStateKey(),
+            lastRunStatusKey: this.model.lastRunStatusKey(),
             lastRunLinkKey: this.model.lastRunLinkKey(),
             running: this.model.isRunning()
         };

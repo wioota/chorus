@@ -1,5 +1,7 @@
 require 'java'
 
+# Note (02/27/15): This isn't generic, although it's used for all "preview data" requests
+# it relies upon the postgres "pg_stat_activity" table.
 class CancelableQuery
   attr_reader :check_id
   @@running_statements = java.util.concurrent.ConcurrentHashMap.new(16, 0.75, 1)
@@ -11,6 +13,10 @@ class CancelableQuery
   def initialize(connection, check_id, user)
     @connection = connection
     @check_id = "#{check_id}_#{user.id}"
+
+    if @connection.respond_to?(:overrides_module) && !@connection.overrides_module.nil?
+      self.extend(@connection.overrides_module::CancelableQueryOverrides)
+    end
   end
 
   def execute(sql, options = {})

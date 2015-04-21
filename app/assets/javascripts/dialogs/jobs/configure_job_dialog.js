@@ -1,11 +1,12 @@
 chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
     constructorName: 'ConfigureJobDialog',
     templateName: 'configure_job_dialog',
+    
     title: function () {
         return this.model.isNew() ? t('job.dialog.title') : t('job.dialog.edit.title');
     },
-    message: function () {
-        return this.model.isNew() ? 'job.dialog.toast' : 'job.dialog.edit.toast';
+    toastMessage: function () {
+        return this.isCreating ? 'job.dialog.create.toast' : 'job.dialog.edit.toast';
     },
     submitTranslation: function () {
         return this.model.isNew() ? "job.dialog.submit" : "job.dialog.edit.submit";
@@ -25,26 +26,10 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
         "click a.select_failure_recipients": 'launchFailureRecipientSelectionDialog'
     },
 
-    makeModel: function () {
-        if (this.model) {
-            this.originalModel = this.model;
-            this.model = this.model.clone();
-        }
-        this.creating = !this.model;
-        this.model = this.model || new chorus.models.Job({ workspace: {id: this.options.pageModel.id}, intervalUnit: 'on_demand' });
-    },
-
-    modelSaved: function () {
-        chorus.toast(this.message());
-        this.model.trigger('invalidated');
-        this.closeModal();
-
-        if (this.creating) {
-            chorus.router.navigate(this.model.showUrl());
-        }
-    },
-
     setup: function () {
+        // boolean just to hold state of new or existing
+        this.isCreating = this.model.isNew() ? true : false;
+
         this.setupDatePickers();
 
         this.disableFormUnlessValid({
@@ -56,6 +41,25 @@ chorus.dialogs.ConfigureJob = chorus.dialogs.Base.include(chorus.Mixins.DialogFo
         this.listenTo(this.getModel(), "saved", this.modelSaved);
         this.listenTo(this.getModel(), 'saveFailed', this.saveFailed);
         this.toggleSubmitDisabled();
+    },
+
+    makeModel: function () {
+        if (this.model) {
+            this.originalModel = this.model;
+            this.model = this.model.clone();
+        }
+        this.creating = !this.model;
+        this.model = this.model || new chorus.models.Job({ workspace: {id: this.options.pageModel.id}, intervalUnit: 'on_demand' });
+    },
+
+    modelSaved: function () {
+        chorus.toast(this.toastMessage(), {toastOpts: {type: "success"}} );
+        this.model.trigger('invalidated');
+        this.closeModal();
+
+        if (this.creating) {
+            chorus.router.navigate(this.model.showUrl());
+        }
     },
 
     setupDatePickers: function () {
