@@ -1,7 +1,11 @@
+/* general rules for forms in the application */
+
+
 @import "_common";
 @import "compass/css3/border-radius";
+@import "_button_common";
 
-/* general rules for forms in the application */
+
 
 /* widget displaying "* = required" */
 .legend_for_required {
@@ -11,7 +15,6 @@
     font-size: $small-font;
     color: #707070;
 }
-
 
 /* grouping of options in form */
 fieldset {
@@ -23,10 +26,8 @@ fieldset {
     legend {
         font-weight: $semibold;
         font-size: $medium-font;
-    
     }
 }
-
 
 .form_row {
     line-height: 30px;
@@ -36,19 +37,22 @@ fieldset {
 
 .row {
     &:first-child {
-        marging-top: -5px;
+        margin-top: -5px;
     }
 }
 
 /* section of buttons at bottom of form */
-.form_controls {
-    padding-right: $dialog-padding;
-    padding-left:  $dialog-padding;
 
-    button { 
-        /* TODO revise all button to be sequenced in list as they will appear */
+// TODO needs to distinguish FORM PAGE from FORM DIALOG
+.form_controls {
+    // make padding account for the margin applied to buttons
+    // so that buttons are aligned with overall margins
+    padding-right: $dialog-padding-leftRight - $button-margin-x;
+    padding-left:  $dialog-padding-leftRight - $button-margin-x;
+
+    button {
         float: right; 
-        margin-right: 10px;
+        margin-right: $button-margin-x;
     }
 
     label {

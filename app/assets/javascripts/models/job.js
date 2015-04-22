@@ -138,8 +138,12 @@ chorus.models.Job = chorus.models.Base.extend({
         return this.get("status") === "idle";
     },
 
+    lastRunStatusKey: function () {
+        return this.get("lastRunFailed") ? "job.status.job_failed" : "job.status.job_succeeded";
+    },
+    
     lastRunLinkKey: function () {
-        return this.get('lastRunFailed') ? "job.show_errors" : "job.show_details";
+        return this.get("lastRunFailed") ? "job.show_errors" : "job.show_details";
     },
 
     owner: function() {

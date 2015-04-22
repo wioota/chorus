@@ -31,6 +31,14 @@ class HdfsDataSource < ActiveRecord::Base
     find(id).refresh
   end
 
+  def self.check_status(id)
+    data_source = HdfsDataSource.find(id)
+    data_source.check_status!
+  rescue => e
+    Rails.logger.error  "Unable to check status of DataSource: #{data_source.inspect}"
+    Rails.logger.error "#{e.message} :  #{e.backtrace}"
+  end
+
   def update_state_and_version
     self.state = Hdfs::QueryService.accessible?(self) ? "online" : "offline"
   end

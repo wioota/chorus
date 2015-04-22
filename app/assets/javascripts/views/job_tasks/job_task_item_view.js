@@ -3,14 +3,20 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
     templateName:"job_task_item",
 
     events: {
-        "click .down_arrow": "moveJobTaskDown",
-        "click .up_arrow"  : "moveJobTaskUp"
+        "click .move_down_arrow": "moveJobTaskDown",
+        "click .move_up_arrow"  : "moveJobTaskUp"
     },
-
+    
     iconMap: {
-        run_work_flow: "/images/jobs/task-afm.png",
-        run_sql_workfile: "/images/jobs/task-sql.png",
-        import_source_data: "/images/jobs/task-import.png"
+         run_work_flow: "/images/jobs/task-afm.png",
+
+//             run_work_flow: "/images/jobs/task-afm.svg",
+         run_sql_workfile: "/images/jobs/task-sql.png",
+
+//             run_sql_workfile: "/images/jobs/task-sql.svg",
+         import_source_data: "/images/jobs/task-import.png"
+
+//             import_source_data: "/images/jobs/task-import.svg"
     },
 
     additionalContext: function () {
@@ -22,7 +28,8 @@ chorus.views.JobTaskItem = chorus.views.Base.extend({
             actionKey: "job_task.action." + action,
             iconUrl: this.iconUrlForType(action),
             firstItem: collection.indexOf(this.model) === 0,
-            lastItem: collection.indexOf(this.model) === collection.length - 1
+            lastItem: collection.indexOf(this.model) === collection.length - 1,
+            moreThanOneTask: (collection.length > 1)
         };
     },
 

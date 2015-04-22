@@ -29,16 +29,13 @@ describe("chorus.pages.HdfsShowFilePage", function() {
         it("shows the breadcrumbs", function() {
             expect(this.page.model.loaded).toBeTruthy();
 
-            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-            expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
+            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/data_sources");
+            expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.data_sources");
 
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
-            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.data_sources");
+            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toBe("MyDataSource (2)");
+            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/hdfs_data_sources/1234/browse");
 
-            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("MyDataSource (2)");
-            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe("#/hdfs_data_sources/1234/browse");
-
-            expect(this.page.$(".breadcrumb:eq(3)").text().trim()).toBe("my file.txt");
+            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe("my file.txt");
         });
 
         it("shows the read-only indicator", function() {
@@ -70,7 +67,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
         it("shows a nice error message", function() {
             expect(this.page.$(".errors")).toExist();
-            expect(this.page.$(".errors").text()).toContainTranslation('record_error.HDFS_CONTENTS_UNAVAILABLE');
+            expect(this.page.$(".errors").text()).toContainTranslation('record_error.HDFS_CONTENTS_UNAVAILABLE.text');
         });
     });
 

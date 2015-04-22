@@ -643,7 +643,7 @@ describe("chorus.views.DatasetSidebar", function() {
                         });
 
                         it("does not have an 'import now' link", function() {
-                            expect(this.view.$("a.import_now.dialog")).not.toExist();
+                            expect(this.view.$("a.import_now")).not.toExist();
                         });
                     });
                 });

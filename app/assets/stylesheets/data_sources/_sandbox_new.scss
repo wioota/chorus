@@ -1,7 +1,7 @@
 .dialog.sandbox_new {
 
     fieldset {
-        margin-bottom: $dialog-padding;
+        margin-bottom: $dialog-padding-bottom;
 
         input[name=schemaName],
         input[name=databaseName] {

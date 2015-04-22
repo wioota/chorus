@@ -110,7 +110,7 @@ $more-info-color: #888888;
         border-right: none;
     }
     a {
-        font-size: 12px;
+        font-size: $small-font;
         cursor: pointer;
     }
 }
@@ -155,7 +155,7 @@ $more-info-color: #888888;
   }
 
   .ui-tooltip-content {
-    font-size: 14px;
+    font-size: $default-font-size;
     width: 450px;
   }
 }

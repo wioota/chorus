@@ -1,7 +1,7 @@
 $hostname-width : 375px;
 $account_width : 240px;
 $input-spacing : 12px;
-$fieldset-width : $default-dialog-width - 2 * $dialog-padding;
+$fieldset-width : $default-dialog-width - 2 * $dialog-padding-leftRight;
 
 .data_source_edit {
     input[type=text][disabled=disabled] {
@@ -18,7 +18,9 @@ $fieldset-width : $default-dialog-width - 2 * $dialog-padding;
     }
 
     label[name=host], input[name=host],
-    label[name=jobTrackerHost], input[name=jobTrackerHost] {
+    label[name=jobTrackerHost], input[name=jobTrackerHost],
+    label[name=hiveKerberosPrincipal], input[name=hiveKerberosPrincipal],
+    label[name=hiveKerberosKeytabLocation], input[name=hiveKerberosKeytabLocation]{
         width: $hostname-width;
     }
 
@@ -31,13 +33,13 @@ $fieldset-width : $default-dialog-width - 2 * $dialog-padding;
     }
 
     .group_list, .gnip_password {
-        width: $fieldset-width - $account_width - $dialog-padding - 2px;
+        width: $fieldset-width - $account_width - $dialog-padding-leftRight - 2px;
         margin-left: $input-spacing;
     }
 
     label[name=port], input[name=port],
     label[name=jobTrackerPort], input[name=jobTrackerPort] {
-        width: $fieldset-width - $hostname-width - $dialog-padding - 2px;
+        width: $fieldset-width - $hostname-width - $dialog-padding-leftRight - 2px;
         margin-left: $input-spacing;
     }
 

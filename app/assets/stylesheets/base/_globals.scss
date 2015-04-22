@@ -1,5 +1,5 @@
 i {
-    font-size: 12px;
+    font-size: $small-font;
 }
 
 *:focus {
@@ -12,10 +12,11 @@ a:focus {
 
 a {
     color: $link-color;
-    font-size: 14px;
+    font-size: $default-font-size;
     text-decoration: none;
     cursor: pointer;
 }
+
 
 html, body {
     color: $color-text1;
@@ -26,21 +27,25 @@ html, body {
 
 label {
     text-align: left;
-    font-size: 14px;
+    font-size: $default-font-size;
     color: $color-text3;
 }
 
 input, textarea {
     display: block;
     width: 100%;
-    font-size: 14px;
-    padding: 3px;
+    font-size: $default-font-size;
+    padding: 2px 3px 3px 3px;
     font-family: $font-family;
     @include borderbox;
 }
 
 textarea {
     resize: none;
+
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 input[type=checkbox],
@@ -58,8 +63,7 @@ input[type=checkbox] {
 .required::after {
     content: "*";
     color: $required-marker-color;
-/*     vertical-align: middle; */ /* to be deleted when final */
-    margin-left: 2.5px;
+    margin-left: 2.4px;
     font-size: 1.04em;
 }
 

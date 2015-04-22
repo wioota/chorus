@@ -6,7 +6,7 @@ chorus.dialogs.SqlPreview = chorus.dialogs.Base.extend({
     additionalClass: "dialog_wide",
 
     events: {
-        "click .preview" : "previewData",
+        "click .preview": "previewData",
         "click button.cancel": "cancelTask"
     },
 

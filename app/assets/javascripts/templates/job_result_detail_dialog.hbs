@@ -1,0 +1,60 @@
+<div class="girdle">
+
+<div>
+
+    <table id="job_run_details_table">
+        <colgroup>
+            <col span="4"></col>
+            <col class="statusColumn"></col>
+        <colgroup>
+
+        <thead>
+            <tr>
+            <th>{{t 'job.result_details.name'}}</th>
+            <th>{{t 'job.result_details.started'}}</th>
+            <th>{{t 'job.result_details.finished'}}</th>
+            <th>{{t 'job.result_details.duration'}}</th>
+            <th>{{t 'job.result_details.status'}}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {{#each jobTaskResults}}
+            <tr>
+                <td>{{name}}</td>
+                <td>{{displayTimestamp startedAt}}</td>
+                <td>{{displayTimestamp finishedAt}}</td>
+                <td>{{displayDuration finishedAt startedAt}}</td>
+                <td>
+                    {{#if payloadResultId}}
+                        {{workflowResultLink this}}
+                    {{else}}
+
+                        <span class="statusMarker {{../../statusDisplayClass}}"></span>{{../../statusDisplayMessage}}
+                        {{#if message}}
+                            <p class="status_message">
+                            {{t 'job.result_details.message_title'}}: {{message}}
+                            </p>
+                        {{/if}}
+                    {{/if}}
+                </td>
+            </tr>
+        {{/each}}
+
+            <tr id="job_run_summary" class="{{lastRunStatusStyle}}">
+                <td>{{t "job.result_details.summary_header"}}</td>
+                <td class="job_started_at">{{displayTimestamp startedAt}}</td>
+                <td class="job_finished_at">{{displayTimestamp finishedAt}}</td>
+                <td class="job_duration">{{displayDuration finishedAt startedAt}}</td>
+                <td>
+                    <span class="statusMarker {{lastRunStatusStyle}}"></span>{{t lastRunStatusKey}}
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+
+</div>
+<!-- END girdle -->
+
+{{> closeWindowFormControls }}

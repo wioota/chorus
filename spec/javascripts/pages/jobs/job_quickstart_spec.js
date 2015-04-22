@@ -11,9 +11,9 @@ describe("chorus.views.JobQuickstart", function () {
     });
 
     describe("the quick launchers", function() {
-        itBehavesLike.aDialogLauncher('a.new_import_source_data.dialog', chorus.dialogs.ConfigureImportSourceDataTask);
-        itBehavesLike.aDialogLauncher('a.new_run_work_flow.dialog', chorus.dialogs.ConfigureWorkfileTask);
-        itBehavesLike.aDialogLauncher('a.new_run_sql.dialog', chorus.dialogs.ConfigureWorkfileTask);
+        itBehavesLike.aDialogLauncher('a.new_import_source_data.dialog-launch', chorus.dialogs.ConfigureImportSourceDataTask);
+        itBehavesLike.aDialogLauncher('a.new_run_work_flow.dialog-launch', chorus.dialogs.ConfigureWorkfileTask);
+        itBehavesLike.aDialogLauncher('a.new_run_sql.dialog-launch', chorus.dialogs.ConfigureWorkfileTask);
     });
 
 });

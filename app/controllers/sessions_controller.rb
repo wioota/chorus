@@ -9,6 +9,11 @@ class SessionsController < ApplicationController
     present session_object, :status => :created
   rescue ActiveRecord::RecordInvalid => e
     present_validation_errors e.record.errors, :status => :unauthorized
+  rescue LdapClient::LdapCouldNotBindWithUser,
+         LdapClient::LdapCouldNotFindMember,
+         LdapClient::LdapNotCorrectlyConfigured,
+         Net::LDAP::LdapError=> e
+    present_errors({:message => e.message})
   end
 
   def destroy

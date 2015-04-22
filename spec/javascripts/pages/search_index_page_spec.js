@@ -58,13 +58,6 @@ describe("chorus.pages.SearchIndexPage", function() {
                 expect(this.page.mainContent.contentDetails).toBeUndefined();
             });
 
-            it("has breadcrumbs", function() {
-                expect(this.page.$(".breadcrumbs li:eq(0)")).toContainTranslation('breadcrumbs.home');
-                expect(this.page.$(".breadcrumbs li:eq(0) a").attr("href")).toBe("#/");
-
-                expect(this.page.$(".breadcrumbs li:eq(1) .slug")).toContainTranslation('breadcrumbs.search_results');
-            });
-
             it("has the right title", function() {
                 expect(this.page.$(".default_content_header h1")).toContainTranslation("search.index.title", {query: "50/50"});
             });

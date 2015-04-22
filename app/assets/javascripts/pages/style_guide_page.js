@@ -14,6 +14,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
     buildModels: function() {
         this.models = {};
+
         var tagList = _.range(25).map(function(i) {
             return {name: "Tag Numba " + i};
         });
@@ -35,9 +36,11 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 }
             }
         });
+
         this.models.workspace._sandbox = new chorus.models.Sandbox({database: {id: 1, dataSource: {id: 1, name: 'Data Source', entityType: 'gpdb_data_source'}}});
 
         this.models.privateWorkspace = new chorus.models.Workspace({ name: "Private Workspace", summary: "Lots of secrets here", owner: {firstName: "Not", lastName: "You"}, "public": false, archivedAt: null});
+
         this.models.privateWorkspace.loaded = true;
 
         this.models.archivedWorkspace = new chorus.models.Workspace({
@@ -166,6 +169,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
         });
 
         this.models.workfileWithErrors = this.models.workfile.clone();
+
         this.models.workfileWithErrors.serverErrors = {
             fields: { general: { GENERIC: { field: "general", message: "JDBC::Postgres::Oracle::Connection Really long message that should not wrap in a weird way" }}}
         };
@@ -219,6 +223,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             dept: "Corporation Corp., Inc.",
             notes: "One of our top performers",
             completeJson: true});
+
         this.models.otherUser = new chorus.models.User({ username: "edcadmin", firstName: "Laurie", lastName: "Blakenship", admin: true, id: "InitialUser2", image: { icon: "/images/general/default-user.png"}});
         this.models.thirdUser = new chorus.models.User({ username: "edcadmin", firstName: "George", lastName: "Gorilla", admin: false, id: "InitialUser3", image: { icon: "/images/general/default-user.png"}});
 
@@ -245,9 +250,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
         this.models.searchResult = new chorus.models.SearchResult({
             users: {
                 results: [this.models.user.set({ highlightedAttributes: {
-                    "lastName": [
-                        "<em>Danger</em>"
-                    ]
+                    "lastName": ["<em>Danger</em>"]
                 }})],
                 numFound: 14
             },
@@ -339,7 +342,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 this.models.chorusView.attributes
             ]
         });
-
+ 
         this.models.chartOptions = {type: "boxplot", name: "Foo"};
 
         this.models.datasetFilter = new chorus.models.DatasetFilter({
@@ -376,7 +379,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
         })();
 
 
-
         this.models.csvImport = (function() {
             var numColumns = 2;
             var randCommaSeparatedLineOfLength = function(length){
@@ -395,15 +397,23 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 workspaceId: '90210',
                 contents: csvLines
             });
-        })();
+        }) ();
 
+        chorus.session._user = new chorus.models.User({
+            apiKey: "some-api-key",
+            firstName: "Johnny",
+            lastName: "Danger",
+            admin: true,
+            id: "InitialUser1"
+        });
 
-        chorus.session._user = new chorus.models.User({apiKey: "some-api-key"});
+//         console.log ("style --> end of models");
         return this.models;
     },
 
     buildCollections: function() {
         this.collections = {};
+
         this.collections.tagSet = new chorus.collections.TagSet([this.models.tag, new chorus.models.Tag({name: 'Another Taggy TagTag', count: 10})]);
         this.collections.tagSet.pagination = {page: 1, perPage: 50, records: 124, total: 3};
         this.collections.tagSet.loaded = true;
@@ -449,11 +459,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
         this.collections.kaggleUserSet.loaded = true;
 
         this.collections.datasetFilterSet = new chorus.collections.DatasetFilterSet([this.models.datasetFilter]);
+
+        // console.log ("style --> end of buildCollections");
     },
 
     buildContentDetails: function() {
         var views = {
-            "User Details": new chorus.views.StaticTemplate("plain_text", {text: t("users.details")}),
 
             "Dataset Details": new chorus.views.DatasetContentDetails({
                 dataset: this.models.dataset,
@@ -466,7 +477,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             }),
 
             "Workfile Details": chorus.views.WorkfileContentDetails.buildFor(this.models.workfile),
-
             "Tableau Workfile Details": chorus.views.WorkfileContentDetails.buildFor(this.models.tableauWorkfile),
 
             "Read Only (Binary or Archived) Workfile Details": chorus.views.WorkfileContentDetails.buildFor(this.models.archivedWorkfile),
@@ -478,20 +488,23 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 hdfsDataSources: this.collections.hdfsDataSourceSet,
                 gnipDataSources: this.collections.gnipDataSourceSet
             })
+
         };
 
+        // console.log ("style --> end of buildContentDetails");
         return views;
     },
 
     buildViews: function() {
         return {
+
             "Data Grid": new chorus.views.DataGrid({
                 model: this.models.workfileExecutionTask
             }),
 
             "Breadcrumbs": new chorus.views.BreadcrumbsView({
                 breadcrumbs: [
-                    { label: t("breadcrumbs.home"), url: "#/" },
+                    { label: "Example Home", url: "#/" },
                     { label: t("breadcrumbs.users"), url: "#/users" },
                     { label: t("breadcrumbs.new_user") }
                 ]
@@ -506,7 +519,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Basic Main Content View": new chorus.views.MainContentView({
                 contentHeader: new chorus.views.StaticTemplate("default_content_header", {title: 'Content Header'}),
-                contentDetails: new chorus.views.StaticTemplate("plain_text", {text: 'Content Details'}),
+                // contentDetails: new chorus.views.StaticTemplate("plain_text", {text: 'Content Details'}),
                 content: new chorus.views.StaticTemplate("ipsum")
             }),
 
@@ -752,6 +765,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             "Text Workfile Content": new chorus.views.TextWorkfileContent({
                 model: this.models.workfile
             })
+
         };
     },
 
@@ -773,7 +787,15 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 dataSource: this.models.gpdbDataSource
             }),
 
-            "Change Password": new chorus.dialogs.ChangePassword(),
+// change password dialog wont render anymore
+// without user model
+             "Change Your Password": new chorus.dialogs.ChangePassword({
+                    model: this.models.user
+                }),
+
+              "Change Password": new chorus.dialogs.ChangePassword({
+                    model: this.models.otherUser
+                }),               
 
             "New Note": new chorus.dialogs.NotesNew({pageModel: new chorus.models.Job()}),
 
@@ -810,21 +832,22 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Dataset Download": new chorus.dialogs.DatasetDownload({ pageModel: this.models.dataset}),
 
-            "Visualization": new chorus.dialogs.Visualization({
-                task: this.models.boxplotTask,
-                model: this.models.chorusView,
-                chartOptions: this.models.chartOptions,
-                filters: this.collections.datasetFilterSet,
-                columnSet: this.models.dataset.columns()
-            }),
+// !DATASET filter set
+//             "Visualization": new chorus.dialogs.Visualization({
+//                 task: this.models.boxplotTask,
+//                 model: this.models.chorusView,
+//                 chartOptions: this.models.chartOptions,
+//                 filters: this.collections.datasetFilterSet,
+//                 columnSet: this.models.dataset.columns()
+//             }),
 
-//            "Create External Table From Hdfs": new chorus.dialogs.CreateExternalTableFromHdfs({
-//                model: this.models.hdfsExternalTable,
-//                csvOptions: {
-//                    tableName: this.models.hdfsFile.name(),
-//                    contents: this.models.hdfsFile.get('contents')
-//                }
-//            }),
+           "Create External Table From Hdfs": new chorus.dialogs.CreateExternalTableFromHdfs({
+               model: this.models.hdfsExternalTable,
+               csvOptions: {
+                   tableName: this.models.hdfsFile.name(),
+                   contents: this.models.hdfsFile.get('contents')
+               }
+           }),
 
             "Import Now": new chorus.dialogs.ImportNow({
                 dataset: this.models.dataset
@@ -859,7 +882,7 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Dialog With Errors": new chorus.dialogs.WorkfileNewVersion({ pageModel: this.models.workfileWithErrors }),
 
-            "Import Workfiles": new chorus.dialogs.WorkfilesImport({
+             "Import Workfiles": new chorus.dialogs.WorkfilesImport({
                 workspaceId: 'bar',
                 pageModel: this.models.workfile,
                 pageCollection: this.models.workfileSet
@@ -922,12 +945,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
         this.renderViews(this.fontStyles, "#fonts");
         this.renderViews(this.dialogs, '#dialogs', 'popup');
         this.renderViews(this.contentDetails, "#content_details", "content_details");
-
         this.renderViews(this.views, '#views');
         this.renderViews(this.colorPalette, '#color_palette');
         this.renderErrors();
 
         $(this.$('#tabs')).tabs();
+
         setInterval(this.enableScrolling, 100);
 
         return this;

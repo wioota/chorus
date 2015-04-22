@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 def within_modal(&block)
   modal_selector = "#facebox"
   page.should have_selector(modal_selector)
