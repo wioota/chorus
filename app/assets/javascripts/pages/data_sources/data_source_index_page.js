@@ -27,7 +27,6 @@ chorus.pages.DataSourceIndexPage = chorus.pages.Base.extend({
             contentHeader: new chorus.views.StaticTemplate(
             	"default_content_header", {
             		title:t("data_sources.title_plural")
-            		// imageValue: "fa-database"
             	}),
             contentDetails: new chorus.views.DataSourceIndexContentDetails(options),
             content: new chorus.views.DataSourceIndex(options)

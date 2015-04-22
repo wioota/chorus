@@ -62,8 +62,8 @@ chorus.pages.Base = chorus.pages.Bare.extend({
 
     subviews: {
         "#header": "header",
-        "#main_content": "mainContent",
         "#page_sub_header": "subHeader",
+        "#main_content": "mainContent",
         "#breadcrumbs": "breadcrumbs",
         "#sub_nav": "subNav",
         "#sidebar .primary_action_panel": "primaryActionPanel",
