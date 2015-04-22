@@ -26,7 +26,7 @@ describe("chorus.views.Login", function() {
         });
 
         it("displays a warning if user count is exceeded", function () {
-            expect(this.view.$(".warning")).toContainTranslation('warn.user_count_exceeded');
+            expect(this.view.$(".license_error")).toContainTranslation('warn.user_count_exceeded');
         });
     });
 
