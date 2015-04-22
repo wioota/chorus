@@ -1,60 +1,64 @@
 chorus.dialogs.EditProjectStatus = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
-        constructorName: "ProjectStatus",
-        templateName: "edit_project_status",
-        title: "Edit Project Status",
+    constructorName: "ProjectStatus",
+    templateName: "edit_project_status",
+    title: "Edit Project Status",
 
-        events: {
-            "submit form": "updateStatus",
-            "click .submit": "updateStatus"
-        },
+    statuses: ['on_track', 'needs_attention', 'at_risk'],
 
-        setup: function () {
-            this.listenTo(this.resource, "saved", this.statusSaved);
-            this.listenTo(this.resource, "saveFailed", this.saveFailed);
-            $(document).one('reveal.facebox', _.bind(this.setupSelects, this));
+    events: {
+        "submit form": "updateStatus",
+        "click .submit": "updateStatus"
+    },
 
-            this.disableFormUnlessValid({
-                formSelector: "form",
-                inputSelector: "input",
-                checkInput: _.bind(this.checkInput, this)
-            });
-        },
+    setup: function () {
+        this.listenTo(this.resource, "saved", this.statusSaved);
+        this.listenTo(this.resource, "saveFailed", this.saveFailed);
+        $(document).one('reveal.facebox', _.bind(this.setupSelects, this));
 
-        postRender: function () {
-            this.toggleSubmitDisabled();
-        },
+        this.disableFormUnlessValid({
+            formSelector: "form",
+            inputSelector: "input",
+            checkInput: _.bind(this.checkInput, this)
+        });
+    },
 
-        checkInput: function () {
-            return this.$('input[name=reason]').val().length > 0;
-        },
+    postRender: function () {
+        this.toggleSubmitDisabled();
+    },
 
-        setupSelects: function () {
-            chorus.styleSelect(this.$("select[name='projectStatus']"));
-        },
+    checkInput: function () {
+        return this.$('input[name=reason]').val().length > 0;
+    },
 
-        updateStatus: function (e) {
-            e && e.preventDefault();
+    setupSelects: function () {
+        chorus.styleSelect(this.$("select[name='projectStatus']"));
+    },
 
-            this.$("button.submit").startLoading("actions.creating");
-            this.resource.save({
-                projectStatus: this.$("select[name='projectStatus']").val(),
-                projectStatusReason: this.$("input[name='reason']").val()
-            }, {wait: true});
-        },
+    updateStatus: function (e) {
+        e && e.preventDefault();
 
-        statusSaved: function () { this.closeModal(); },
+        this.$("button.submit").startLoading("actions.creating");
+        this.resource.save({
+            projectStatus: this.$("select[name='projectStatus']").val(),
+            projectStatusReason: this.$("input[name='reason']").val()
+        }, {wait: true});
+    },
 
-        statuses: ['on_track', 'needs_attention', 'at_risk'],
+    statusSaved: function () {
+        this.closeModal();
+        var niceStatusKey = "workspace.project.status." + this.model.get("projectStatus");
+        chorus.toast("workspace.update_status.success.toast", {status: t(niceStatusKey), toastOpts: {type: "success"}});
+    },
 
-        additionalContext: function () {
-            return {
-                options: _.map(this.statuses, function(key) {
-                    return {
-                        value: key,
-                        nameKey: 'workspace.project.status.' + key,
-                        selected: this.model.get('projectStatus') === key
-                    };
-                }, this)
-            };
-        }
-    });
+    additionalContext: function () {
+        return {
+            options: _.map(this.statuses, function(key) {
+                return {
+                    value: key,
+                    nameKey: 'workspace.project.status.' + key,
+                    selected: this.model.get('projectStatus') === key
+                };
+            }, this)
+        };
+    }
+});

@@ -58,8 +58,9 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         });
 
         it("makes a cl editor with toolbar", function() {
-            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", { width : 'auto', height: 200, controls : 'bold italic | bullets numbering | link unlink' } );
-            expect(this.dialog.$('.toolbar')).toExist();
+            // expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "body", { width : 'auto', height: 150, controls : 'bold italic | bullets numbering | link unlink' } );
+            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), "body", { width : 'auto', height: 200, controls : 'bold italic | bullets numbering | link unlink' } );
+//             expect(this.dialog.$('.toolbar')).toExist();
         });
 
         describe("selecting recipients menu", function() {

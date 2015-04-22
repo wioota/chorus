@@ -41,12 +41,14 @@ describe("chorus.dialogs.DataSourcesNew", function() {
         });
 
         it("has select box for 'Greenplum Database', 'HDFS Cluster', 'Hawq', and 'JDBC'", function() {
-            expect(this.dialog.$("select.data_sources option").length).toBe(6);
+            expect(this.dialog.$("select.data_sources option").length).toBe(7);
             expect(this.dialog.$("select.data_sources option").eq(1).text()).toMatchTranslation("datasource.greenplum");
             expect(this.dialog.$("select.data_sources option").eq(2).text()).toMatchTranslation("datasource.postgres");
             expect(this.dialog.$("select.data_sources option").eq(3).text()).toMatchTranslation("datasource.hdfs");
             expect(this.dialog.$("select.data_sources option").eq(4).text()).toMatchTranslation("datasource.hawq");
             expect(this.dialog.$("select.data_sources option").eq(5).text()).toMatchTranslation("datasource.jdbc");
+            expect(this.dialog.$("select.data_sources option").eq(6).text()).toMatchTranslation("datasource.jdbc_hive");
+
         });
 
         it("starts with no select box selected", function() {
@@ -534,7 +536,9 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                         spyOn(chorus, 'toast');
                         this.server.lastCreate().succeed();
                         expect(chorus.toast).toHaveBeenCalledWith('data_sources.add.toast',
-                            {dataSourceName: this.dialog.model.name()});
+                            {dataSourceName: this.dialog.model.name(),
+                            toastOpts: {type: "success"}
+                            });
                     });
 
                     it("publishes the 'data_source:added' page event with the new data_source's id", function() {

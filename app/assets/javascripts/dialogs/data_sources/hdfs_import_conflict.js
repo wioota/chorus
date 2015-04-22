@@ -28,7 +28,7 @@ chorus.dialogs.HdfsImportConflict = chorus.dialogs.Base.include(chorus.Mixins.Di
     },
 
     saved: function () {
-        chorus.toast("hdfs.import.started");
+        chorus.toast("hdfs.import.started.toast", {toastOpts: {type: "info"}});
         this.closeModal();
     },
 

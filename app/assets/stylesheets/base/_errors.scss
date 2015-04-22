@@ -3,6 +3,7 @@
 /* also alerts - which are messaging dialogs */
 /* ********** */
 
+$margin-right-for-error-marker: 20px;
 
 @mixin alert-marker {
 	&::after {
@@ -21,15 +22,16 @@
 
 /* colored border for fields that have an error */
 @mixin error-input-border {
-    border: 2px solid $error-background-color;
+    border: 2px solid $error-input-border-color;
 }
 
 /* exclamation icon marker for fields that have an error */
+/* cant use FA glyph because input fields can only have background images */
 @mixin error-background-icon {
     background-image: url("/images/messaging/error-exclamation.svg");
     background-size: 18px 18px;
     background-repeat: no-repeat;
-    padding-right: 20px;
+    padding-right: $margin-right-for-error-marker;
 }
 
 
@@ -39,16 +41,19 @@
 .warning {
     @include after-clearfix;
 
+    background-color: $body-background-color;
+    padding-top: 5px;
+
     font-weight: normal;
 
     .message-block {
 
         /* ***** */
-        /* if "> errorDiv" is not within .girdle, then need to match side margins of .girdle */
+        /* if "errorDiv" is not within .girdle, then need to match side margins of .girdle */
         /* otherwise, only top and bottom */
         /* ***** */
 
-        margin: 10px $dialog-padding 10px $dialog-padding;
+        margin: 10px $dialog-padding-leftRight 10px $dialog-padding-leftRight;
         border: 1px solid $error-icon-color;
         @include border-radius ($alert-border-radius);
         background-color: $error-background-color;   
@@ -75,14 +80,35 @@
 /* > size: large */
 
 
-
         li {
             position: relative;
-            padding: 10px 10px 13px 0px;
-            margin-left: 35px;
-            color: $error-text-color;
-            font-size: $medium-font;
+            margin: 0px $dialog-padding-leftRight 5px $dialog-padding-leftRight;
+            padding: 10px 10px 11px 0px;
+            padding-left: 35px;
+
+            font-size: $medium-font - 1;
             vertical-align: top;
+
+            background-color: $error-background-color;
+            color: $error-text-color;
+            border: 1px solid;
+            border-radius: $alert-border-radius;
+
+
+            &:first-child {
+                // margin-top: 5px;
+                // border-top-left-radius: $alert-border-radius;
+                // border-top-right-radius: $alert-border-radius;
+            }
+            &:last-child {
+//                 margin-bottom: 5px;
+                margin-bottom: 0px;
+                // border-bottom-left-radius: $alert-border-radius;
+                // border-bottom-right-radius: $alert-border-radius;
+            }
+            ~li {
+               //  margin-top: -4px;
+            }
 
             &::before {
                 display: inline-block;
@@ -92,14 +118,15 @@
                 left: -25px;
                 top: 2px;
                 color: $error-icon-color;
-                font-size: $alert-icon-large;
+                font-size: $alert-icon-medium;
                 font-family: FontAwesome;
                 @include alert-error-icon;
             }
         }
+        
     }
-
 }
+
 /*     .action { */
 /*         font-weight: normal; */
 /*         display: inline-block; */
@@ -130,8 +157,7 @@ textarea.has_error,
     @include border-radius(1px);
     
     @include error-background-icon;
-    background-position: 99% 50%;
-
+    background-position: 99.5% 50%;
 }
 
 .inputError {
@@ -146,7 +172,7 @@ textarea.has_error,
     background-position: 99% 2%;
 
     iframe body {
-        margin-right: 20px;
+        margin-right: $margin-right-for-error-marker;
     }
 }
 

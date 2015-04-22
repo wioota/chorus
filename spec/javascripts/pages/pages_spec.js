@@ -90,8 +90,8 @@ describe("chorus.pages.Base", function() {
 
                 it("has the right translations", function() {
                     this.model.trigger("unprocessableEntity");
-                    expect(chorus.pageOptions.title).toMatchTranslation("record_error.DATA_SOURCE_OVERLOADED_title");
-                    expect(chorus.pageOptions.text).toMatchTranslation("record_error.DATA_SOURCE_OVERLOADED");
+                    expect(chorus.pageOptions.title).toMatchTranslation("record_error.DATA_SOURCE_OVERLOADED.title");
+                    expect(chorus.pageOptions.text).toMatchTranslation("record_error.DATA_SOURCE_OVERLOADED.text");
                     expect(chorus.pageOptions.message).toBe("an informative message");
                     expect(Backbone.history.loadUrl).toHaveBeenCalledWith('/unprocessableEntity');
                 });
@@ -199,8 +199,8 @@ describe("chorus.pages.Base", function() {
                     });
 
                     it("sets the pageOptions to the correct translation", function() {
-                        expect(chorus.pageOptions.text).toMatchTranslation('record_error.TOO_MANY_CONNECTIONS');
-                        expect(chorus.pageOptions.title).toMatchTranslation('record_error.TOO_MANY_CONNECTIONS_title');
+                        expect(chorus.pageOptions.text).toMatchTranslation('record_error.TOO_MANY_CONNECTIONS.text');
+                        expect(chorus.pageOptions.title).toMatchTranslation('record_error.TOO_MANY_CONNECTIONS.title');
                     });
                 });
 
@@ -340,9 +340,9 @@ describe("chorus.pages.Base", function() {
 
         context("from links", function() {
             beforeEach(function() {
-                this.view.sidebar = stubView("<a class='dialog' data-dialog='WorkfilesSqlNew'>Create a Workfile</a>");
+                this.view.sidebar = stubView("<a class='dialog-launch' data-dialog='WorkfilesSqlNew'>Create a Workfile</a>");
                 this.view.render();
-                this.elementToClick = this.view.$("a.dialog");
+                this.elementToClick = this.view.$("a.dialog-launch");
             });
 
             itLaunchesTheModalCorrectly(chorus.dialogs.WorkfilesSqlNew);

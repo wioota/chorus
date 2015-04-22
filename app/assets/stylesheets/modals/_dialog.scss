@@ -1,11 +1,13 @@
 @import "compass/css3/box-sizing";
 
-/* general dialog styles */
+$dialog-girdle-padding-top: 10px;
+
+/* GENERAL DIALOG STYLES */
 
 /* .girdle wraps the content of the dialog popup */
 /* and sets the overall margins for the content area */
 .popup .girdle {
-    padding: 10px $dialog-padding $dialog-padding $dialog-padding;
+    padding: $dialog-girdle-padding-top $dialog-padding $dialog-padding $dialog-padding;
     border: none;
 
     @include box-sizing(border-box);
@@ -14,15 +16,24 @@
     /* development: to delete */
     border: 1px dotted #A44;
     /* END development: to delete */
+    
+    background-color: $body-background-color;
+
+    .action_bar {
+        // counteract the dialog padding when it is inside .girdle
+        margin-top: -$dialog-girdle-padding-top;
+        margin-left: -$dialog-padding-leftRight;
+        margin-right: -$dialog-padding-leftRight;
+    }
 }
 
 #dialog_header {
     height: 40px;
     background-color: $dialog-header-background;
-    border-bottom: 1px solid $border-color;
+    border-bottom: $border-canon;
 
     line-height: 40px;
-    padding: 0 $dialog-padding;
+    padding: 0 $dialog-padding-leftRight;
     word-break: break-all;
 }
 
@@ -32,7 +43,9 @@
 
 
 .dialog {
-    .dialog_header {}
+//     background-color: $body-background-color;
+//     border-radius: $default-border-radius;    
+
 
     h1 {
         font-size: $medium-font;
@@ -49,8 +62,12 @@
         font-size: $medium-font;
     }
 
+    .message_callout {
+        font-weight: bold;
+    }
+    
     .dialog_content {
-        background-color: $body-background-color;
+        // background-color: $body-background-color;
 
         line-height: 16px;
 
@@ -85,7 +102,7 @@
 
     fieldset.in_a_box {
         border: none;
-        padding: 0 0 $dialog-padding 0;
+        padding: 0 0 $dialog-padding-bottom 0;
 
         legend label {
             font-size: $default-font-size;
@@ -172,8 +189,7 @@
     }
 }
 
-/* *** */
-
+/* ************* */
 /* dialog widths */
 div.dialog {
     width: $default-dialog-width;
@@ -187,7 +203,6 @@ div.dialog {
 /*Custom Dialog widths */
 
 .dialog {
-
     &.data_source_permissions {
     /*   width: 570px; */
         width: $default-dialog-width-medium;

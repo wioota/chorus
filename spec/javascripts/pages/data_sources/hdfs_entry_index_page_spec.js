@@ -37,11 +37,9 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         });
 
         it("has some breadcrumbs", function() {
-            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-            expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
 
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
-            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.data_sources");
+            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/data_sources");
+            expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.data_sources");
         });
     });
 
@@ -74,15 +72,15 @@ describe("chorus.pages.HdfsEntryIndexPage", function() {
         });
 
         it("has the right breadcrumbs", function() {
-            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-            expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
+//             expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
+//             expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.home");
 
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
-            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toMatchTranslation("breadcrumbs.data_sources");
+            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/data_sources");
+            expect(this.page.$(".breadcrumb:eq(0)").text().trim()).toMatchTranslation("breadcrumbs.data_sources");
 
-            expect(this.page.$(".breadcrumb:eq(2)").text().trim()).toBe(this.hdfsDataSource.get("name") + " (2)");
+            expect(this.page.$(".breadcrumb:eq(1)").text().trim()).toBe(this.hdfsDataSource.get("name") + " (2)");
 
-            expect(this.page.$(".breadcrumb").length).toBe(3);
+            expect(this.page.$(".breadcrumb").length).toBe(2);
         });
 
         it("has a sidebar", function() {

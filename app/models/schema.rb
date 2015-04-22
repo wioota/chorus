@@ -90,12 +90,21 @@ class Schema < ActiveRecord::Base
       begin
         dataset.skip_search_index = true if options[:skip_dataset_solr_index]
         if dataset.changed?
-          dataset.save!
+          begin
+            dataset.save!
+          rescue Errno::ECONNREFUSED
+          end
         elsif options[:force_index]
           dataset.index
         end
         found_datasets << dataset.id
-      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid, DataSourceConnection::QueryError
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid, DataSourceConnection::QueryError, Errno::ECONNREFUSED
+        #do nothing
+        next
+      rescue => e
+        Chorus.log_error "----- DATABASE CONNECTION ERROR: Failed to connect to database for :  #{e.message} on #{e.backtrace[0]} ------"
+        # do nothing
+        next
       end
     end
 
@@ -117,11 +126,18 @@ class Schema < ActiveRecord::Base
   rescue DataSourceConnection::Error
     touch(:refreshed_at)
     datasets.not_stale
+  rescue  => e
+    Chorus.log_error "----- SCHEMA CONNECTION ERROR: Failed to connect to schema for :  #{e.message} on #{e.backtrace[0]} ------"
+    touch(:refreshed_at)
+    datasets.not_stale
   end
 
   def dataset_count(account, options={})
     connect_with(account).datasets_count options
   rescue DataSourceConnection::Error
+    datasets.not_stale.count
+  rescue  => e
+    Chorus.log_error "----- DATABASE CONNECTION ERROR: Failed to connect to database :  #{e.message} on #{e.backtrace[0]} ------"
     datasets.not_stale.count
   end
 

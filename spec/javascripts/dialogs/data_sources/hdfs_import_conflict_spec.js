@@ -68,7 +68,7 @@ describe("chorus.dialogs.HdfsImportConflict", function() {
 
                 it("closes the dialog and displays a toast", function () {
                     expect(this.dialog.closeModal).toHaveBeenCalled();
-                    expect(chorus.toast).toHaveBeenCalledWith("hdfs.import.started");
+                    expect(chorus.toast).toHaveBeenCalledWith("hdfs.import.started.toast", {toastOpts: {type: "info"}});
                 });
             });
 

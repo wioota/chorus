@@ -4,9 +4,9 @@ chorus.views.JobQuickstart = chorus.views.Base.extend({
     additionalClass: "job_show quickstart",
 
     events: {
-        'click a.new_import_source_data.dialog': 'launchCreateImportSourceDataTaskDialog',
-        'click a.new_run_sql.dialog': 'launchCreateSqlTaskDialog',
-        'click a.new_run_work_flow.dialog': 'launchCreateFlowTaskDialog'
+        'click a.new_import_source_data.dialog-launch': 'launchCreateImportSourceDataTaskDialog',
+        'click a.new_run_sql.dialog-launch': 'launchCreateSqlTaskDialog',
+        'click a.new_run_work_flow.dialog-launch': 'launchCreateFlowTaskDialog'
     },
 
     launchCreateImportSourceDataTaskDialog: function (e) {

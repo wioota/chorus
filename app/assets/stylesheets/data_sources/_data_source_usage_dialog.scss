@@ -5,8 +5,8 @@
         overflow-x: hidden;
         
         /* special case for when scrollbar is invoked */
-        margin-right: -$dialog-padding;
-        padding-right: $dialog-padding;
+        margin-right: -$dialog-padding-leftRight;
+        padding-right: $dialog-padding-leftRight;
         
 
 /*         border-top: $border-canon; */

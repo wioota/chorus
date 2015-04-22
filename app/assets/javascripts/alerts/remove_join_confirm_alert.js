@@ -5,7 +5,7 @@ chorus.alerts.RemoveJoinConfirmAlert = chorus.alerts.Confirm.extend({
     ok: t("dataset.join.remove.ok"),
 
     setup: function() {
-        this.text = t("dataset.join.remove.body", {tableName: this.options.dataset.get("objectName")});
+        this.text = t("dataset.join.remove.text", {tableName: this.options.dataset.get("objectName")});
     },
 
     confirmAlert: function() {

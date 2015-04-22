@@ -28,7 +28,7 @@ describe("chorus.Mixins.ServerErrors", function() {
 
             it("catches errors that are not directly on model fields", function() {
                 this.host.serverErrors = {"record": "NOT_FOUND"};
-                expect(_.first(this.host.serverErrorMessages())).toMatchTranslation('record_error.NOT_FOUND');
+                expect(_.first(this.host.serverErrorMessages())).toMatchTranslation('record_error.NOT_FOUND.text');
             });
 
             it("includes fields on server errors", function() {

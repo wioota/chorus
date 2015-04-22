@@ -6,6 +6,8 @@ chorus.models.DynamicExecutionLocation = function(attributes) {
             return new chorus.models.OracleDataSource(attributes);
         } else if(attributes.entityType === "jdbc_data_source") {
             return new chorus.models.JdbcDataSource(attributes);
+        } else if(attributes.entityType === "jdbc_hive_data_source") {
+            return new chorus.models.JdbcHiveDataSource(attributes);
         }
     }
     return new chorus.models.Database(attributes);

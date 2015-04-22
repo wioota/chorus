@@ -1,8 +1,5 @@
 chorus.pages.SearchIndexPage = chorus.pages.Base.extend({
-    crumbs: [
-        { label: t("breadcrumbs.home"), url: "#/" },
-        { label: t("breadcrumbs.search_results") }
-    ],
+    crumbs: [],
     helpId: "search",
 
     parseSearchParams: function(searchParams) {

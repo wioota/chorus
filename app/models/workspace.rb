@@ -195,6 +195,10 @@ class Workspace < ActiveRecord::Base
         count += sandbox.dataset_count(account, new_options) unless skip_sandbox
       rescue DataSourceConnection::InvalidCredentials
         #do nothing
+      rescue Exception => e
+        #do nothing
+      ensure
+        count
       end
       count
     end

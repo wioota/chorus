@@ -204,7 +204,10 @@ class ChorusInstaller
     copy_if_not_exist("#{chorus_installation_path}/packaging/database.yml.example", "#{destination_path}/shared/database.yml")
     copy_if_not_exist("#{chorus_installation_path}/packaging/sunspot.yml.example", "#{destination_path}/shared/sunspot.yml")
     FileUtils.cp("#{chorus_installation_path}/config/chorus.properties.example", "#{destination_path}/shared/chorus.properties.example")
+    FileUtils.cp("#{chorus_installation_path}/config/ldap.properties.active_directory", "#{destination_path}/shared/ldap.properties.active_directory")
+    FileUtils.cp("#{chorus_installation_path}/config/ldap.properties.opensource_ldap", "#{destination_path}/shared/ldap.properties.opensource_ldap")
     copy_if_not_exist("#{chorus_installation_path}/config/chorus.defaults.properties", "#{destination_path}/shared/chorus.properties")
+    copy_if_not_exist("#{chorus_installation_path}/config/ldap.properties.example", "#{destination_path}/shared/ldap.properties")
     FileUtils.cp("#{chorus_installation_path}/config/chorus.license.default", "#{destination_path}/shared/chorus.license.default")
     copy_if_not_exist("#{chorus_installation_path}/config/chorus.license.default", "#{destination_path}/shared/chorus.license")
   end
@@ -251,6 +254,7 @@ class ChorusInstaller
   def link_shared_files
     @logger.debug("Linking shared configuration files")
     FileUtils.ln_sf("#{destination_path}/shared/chorus.properties", "#{release_path}/config/chorus.properties")
+    FileUtils.ln_sf("#{destination_path}/shared/ldap.properties", "#{release_path}/config/ldap.properties")
     FileUtils.ln_sf("#{destination_path}/shared/chorus.license", "#{release_path}/config/chorus.license")
     FileUtils.ln_sf("#{destination_path}/shared/database.yml", "#{release_path}/config/database.yml")
     FileUtils.ln_sf("#{destination_path}/shared/sunspot.yml", "#{release_path}/config/sunspot.yml")
@@ -468,7 +472,9 @@ class ChorusInstaller
       #{destination_path}/shared/secret.token
       #{destination_path}/shared/secret.key
       #{destination_path}/shared/chorus.properties
+      #{destination_path}/shared/ldap.properties
       #{destination_path}/shared/chorus.license
+      #{destination_path}/shared/ldap.properties
     )
 
     files.each do |file|

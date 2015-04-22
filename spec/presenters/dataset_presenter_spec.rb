@@ -197,7 +197,7 @@ describe DatasetPresenter, :type => :view do
       let(:succinct) { true }
 
       it 'has the correct keys' do
-        hash.keys.should =~ [:id, :object_name, :schema, :associated_workspaces, :entity_subtype, :entity_type, :stale, :is_deleted]
+        hash.keys.should =~ [:id, :object_name, :schema, :associated_workspaces, :entity_subtype, :entity_type, :stale, :stale_at, :is_deleted]
       end
 
       it 'presents the schema' do

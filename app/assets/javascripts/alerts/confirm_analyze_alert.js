@@ -16,7 +16,7 @@ chorus.alerts.Analyze = chorus.alerts.Confirm.extend({
 
     saved: function() {
         chorus.PageEvents.trigger("analyze:running");
-        chorus.toast("analyze.alert.toast", {name: this.model.name()});
+        chorus.toast("analyze.alert.toast", {name: this.model.name(), toastOpts: {type: "info"} });
         this.closeModal();
     }
 });

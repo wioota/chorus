@@ -131,6 +131,14 @@ class DataSource < ActiveRecord::Base
     self
   end
 
+  def self.check_status(id)
+    data_source = DataSource.find(id)
+    data_source.check_status!
+  rescue => e
+    Rails.logger.error  "Unable to check status of DataSource: #{data_source.inspect}"
+    Rails.logger.error "#{e.message} :  #{e.backtrace}"
+  end
+
   def self.refresh(id, options={})
     symbolized_options = options.symbolize_keys
     symbolized_options[:new] = symbolized_options[:new].to_s == "true" if symbolized_options[:new]
@@ -158,8 +166,8 @@ class DataSource < ActiveRecord::Base
   def update_state_and_version
     self.state = "online"
     self.version = connect_as_owner.version
-  rescue => e
-    Chorus.log_debug "Could not connect while updating state: #{e}: #{e.message} on #{e.backtrace[0]}"
+  rescue  => e
+    Chorus.log_error "Could not connect while updating state: #{e}: #{e.message} on #{e.backtrace[0]}"
     self.state = "offline"
   end
 

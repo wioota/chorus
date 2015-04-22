@@ -112,7 +112,8 @@ describe("chorus.dialogs.EditWorkspace", function() {
         });
 
         it("makes a cl editor with toolbar", function() {
-            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "summary", { width : 'auto', height : 210, controls : 'bold italic | bullets numbering | link unlink' });
+            // expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), ".toolbar", "summary", { width : 'auto', height : 200, controls : 'bold italic | bullets numbering | link unlink' });
+            expect(this.dialog.makeEditor).toHaveBeenCalledWith($(this.dialog.el), "summary", { width : 'auto', height : 200, controls : 'bold italic | bullets numbering | link unlink' });
         });
 
         describe("sandbox location", function() {
@@ -556,9 +557,14 @@ describe("chorus.dialogs.EditWorkspace", function() {
                     context("the server responds with success", function() {
                         beforeEach(function() {
                             spyOnEvent(this.dialog.pageModel, "invalidated");
+                            spyOn(chorus, "toast");
                             this.server.completeUpdateFor(this.dialog.pageModel);
                         });
 
+                        it(": displays the success message (toast)", function() {
+                            expect(chorus.toast).toHaveBeenCalled();
+                        });
+                        
                         it("closes the dialog", function() {
                             expect("close.facebox").toHaveBeenTriggeredOn($(document));
                         });

@@ -1,16 +1,75 @@
-.job_result_detail {
-  table {
-    margin-top: 20px;
-    border-collapse: collapse;
-    th {
-      width: 20%;
+// intended to be default table inner-cell padding for entire site.
+// needs to be moved to better location for broad usage.
+
+$default-table-cell-padding: 4px 10px 10px 5px;
+$default-table-header-bg: $light-gray;
+$default-table-header-fontweight: $semibold;
+$default-table-header-fontcolor: #666;
+
+$table-footer-bg: #FFDDBB;
+
+.job_result_detail_dialog {
+    table {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        width: 100%;
+        
+        th {
+            width: 20%;
+            background-color: $default-table-header-bg;
+            font-weight: $default-table-header-fontweight;
+            color: $default-table-header-fontcolor;
+        }
+        tr {
+            vertical-align: top;
+        }
+        th, td {
+            border: $dark-border-canon;
+            padding: $default-table-cell-padding;
+        }
+        
+        #job_run_summary {
+            td {
+                border-top-width: 2px;
+                border-top-style: dotted;
+                border-top-color: darken($border-color-dark, 20%);
+                font-weight: $semibold;
+            }
+                
+            &.success {
+                background-color: $success-background-color;
+            }
+            &.failure {
+                background-color: #FAEEDD; // ?$alert-background-color ?
+            }
+        }
     }
-    th, td {
-      border: 1px solid grey;
-      padding: 10px;
+
+    .statusMarker {
+        display: inline-block;
+        position: relative;
+        top: 2px;
+        margin-right: 5px;
+        
+        font-size: $alert-icon-medium;
+        font-family: FontAwesome;
+         
+        &.success {
+            &::before {
+                color: $success-icon-color;
+                @include alert-success-icon;
+            }
+        }
+
+        &.failure {
+            &::before {
+                color: $error-icon-color;
+                @include alert-error-icon;
+            }
+        }
     }
-    td {
-      padding-right: 25px;
+    .status_message {
+        margin: 6px 0 0 0;
     }
-  }
+
 }

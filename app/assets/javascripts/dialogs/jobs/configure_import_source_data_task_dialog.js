@@ -1,7 +1,6 @@
 chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(chorus.Mixins.DialogFormHelpers).extend({
     constructorName: 'ConfigureImportSourceDataTask',
     templateName: 'configure_import_source_data_task_dialog',
-    message: "create_job_task_dialog.toast",
     focusSelector: null,
     title: function () {
         return this.model.isNew() ? t('create_job_task_dialog.add_title') : t('create_job_task_dialog.edit_title');
@@ -9,7 +8,6 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
     submitButtonTranslationKey: function () {
         return this.model.isNew() ? 'create_job_task_dialog.add' : 'create_job_task_dialog.save';
     },
-
 
     events: {
         "change input:radio": "onExistingTableChosenAsDestination",
@@ -166,7 +164,7 @@ chorus.dialogs.ConfigureImportSourceDataTask = chorus.dialogs.Base.include(choru
     },
 
     modelSaved: function () {
-        chorus.toast(this.message);
+        chorus.toast ("create_job_task_dialog.toast", {toastOpts: {type: "success"}});
         this.job.trigger('invalidated');
         this.closeModal();
     },

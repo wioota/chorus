@@ -13,5 +13,6 @@ chorus.models.DynamicDataSource.typeMap = {
     gnip_data_source: 'GnipDataSource',
     oracle_data_source: 'OracleDataSource',
     pg_data_source: 'PgDataSource',
-    jdbc_data_source: 'JdbcDataSource'
+    jdbc_data_source: 'JdbcDataSource',
+    jdbc_hive_data_source: 'JdbcHiveDataSource'
 };

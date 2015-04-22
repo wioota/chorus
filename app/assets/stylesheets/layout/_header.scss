@@ -3,7 +3,7 @@
 
 $header-margin: 30px;
 
-/* left and right side margins to match general page margins */
+// left and right side margins to match general page margins
 $header-margin-left: $page-margin-left;
 $header-margin-right: $page-margin-right;
 
@@ -117,7 +117,7 @@ $menu-item-height-default: 40px;
             .token {
                 float: left;
                 
-                /* main branding logo */
+                // main branding logo
                 &.logo {
                     width: 90px;
                     padding: 0px 10px;
@@ -165,8 +165,8 @@ $menu-item-height-default: 40px;
                 }
 
                 &.active .caret::before {
-                    /* when activating the menu, switch thecaret */
-                    content:  "\f0d8";  // =  fa-caret-up
+                    // when activating the menu, switch the caret
+                    content: "\f0d8";  // fa-caret-up
                 }
 
                 &.username {
@@ -183,7 +183,7 @@ $menu-item-height-default: 40px;
                         &.empty { background: $brand-dark; }
                         background: $notification;
 
-                        @include lozenge(2px, 30px, $header-height/3 );
+                        @include lozenge(2px, 30px, $header-height/3);
                     }
                 }
 
@@ -304,14 +304,19 @@ $menu-item-height-default: 40px;
             @include transition-duration(0.5s);
             @include transition-timing-function(cubic-bezier(0,0,0,1));
 
-            &.hidden { left: -$drawer-width; display: block !important;}
+            &.hidden {
+                left: - ($drawer-width + 5px);
+                display: block !important;
+            }
 
             width: $drawer-width;
             height: 100vh;
             left: 0px;
             li { 
                 @include full-item-link($header-height);
-                &:hover .knob { background: $brand-shade; }
+                &:hover .knob {
+                    background: $brand-shade;
+                }
             }
             .knob {
                 padding-left: 0px;
@@ -322,14 +327,14 @@ $menu-item-height-default: 40px;
                 &.remainder { height: 100vh; }
             }
             
-            /*  color for svg glyphs in the primary nav bar */
+            //  color for svg glyphs in the primary nav bar
             #primary {
                 svg {
                     fill: #FFF;
                 }
             }
             
-            /* individual sections of the primary nav */
+            // individual sections of the primary nav
             #primary-home { 
                 @extend #primary;
                 svg {
@@ -357,7 +362,7 @@ $menu-item-height-default: 40px;
 
         .menu.popup_username {
             line-height: 24px;
-            /* account for 1px border around popup */
+            // account for 1px border around popup
             right: $header-margin-right - 1;
             width: $header-margin * 6;
 
@@ -368,7 +373,7 @@ $menu-item-height-default: 40px;
 
         .menu.popup_notifications {
             $width: 320px;
-			/* calculate the left margin. add 1 for 1px border */
+			// calculate the left margin. add 1 for 1px border */
             margin-left: -( ($width - $notification-token-width / 2) +1);
             width: $width;
 

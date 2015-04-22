@@ -13,11 +13,8 @@ describe("chorus.pages.TagShowPage", function() {
         it("displays the Tags breadcrumb", function() {
             var breadcrumbs = page.$("#breadcrumbs .breadcrumb a");
 
-            expect(breadcrumbs.eq(0).attr("href")).toBe("#/");
-            expect(breadcrumbs.eq(0).text()).toBe(t("breadcrumbs.home"));
-
-            expect(breadcrumbs.eq(1).attr("href")).toBe("#/tags");
-            expect(breadcrumbs.eq(1).text()).toBe(t("breadcrumbs.tags"));
+            expect(breadcrumbs.eq(0).attr("href")).toBe("#/tags");
+            expect(breadcrumbs.eq(0).text()).toBe(t("breadcrumbs.tags"));
 
             expect(page.$("#breadcrumbs .breadcrumb .slug")).toContainText(tag.name());
         });
