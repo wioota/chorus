@@ -121,8 +121,8 @@ describe("chorus.views.JobItem", function () {
                     this.view.render();
                 });
 
-                it("has (show errors)", function () {
-                    expect(this.view.$('.last_run')).toContainTranslation('job.show_errors');
+                it("has link to details", function () {
+                    expect(this.view.$('.last_run')).toContainTranslation('job.status.job_failed');
                 });
             });
 
@@ -132,8 +132,8 @@ describe("chorus.views.JobItem", function () {
                     this.view.render();
                 });
 
-                it("has (show details)", function () {
-                    expect(this.view.$('.last_run')).toContainTranslation('job.show_details');
+                it("has link to show details", function () {
+                    expect(this.view.$('.last_run')).toContainTranslation('job.status.job_succeeded');
                 });
             });
         });
@@ -144,8 +144,8 @@ describe("chorus.views.JobItem", function () {
                 this.view.render();
             });
 
-            it("shows a dash", function () {
-                expect(this.view.$(".last_run")).toContainText('-');
+            it("shows message that it hasnt run", function () {
+                expect(this.view.$('.last_run')).toContainTranslation('job.last_run_no_last_run');
             });
         });
 
@@ -155,7 +155,7 @@ describe("chorus.views.JobItem", function () {
                 this.view.render();
             });
 
-            it("shows a dash", function () {
+            it("shows nothing", function () {
                 expect(this.view.$(".next_run")).not.toExist();
             });
         });

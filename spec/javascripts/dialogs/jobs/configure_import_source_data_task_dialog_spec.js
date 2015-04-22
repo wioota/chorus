@@ -282,8 +282,8 @@ describe("chorus.dialogs.ConfigureImportSourceDataTask", function () {
                                             expect(this.dialog.closeModal).toHaveBeenCalled();
                                         });
 
-                                        it("should create a toast", function () {
-                                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message);
+                                        it("should create a message", function () {
+                                            expect(chorus.toast).toHaveBeenCalled();
                                         });
 
                                         it("invalidates the job", function () {

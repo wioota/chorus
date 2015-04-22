@@ -11,10 +11,11 @@
 
     Messenger.options = {
         extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
-        theme: 'flat',
+        theme: 'alpine',
         messageDefaults: {
             // # of seconds the message is displayed to the user before disappearing
-            hideAfter: 5,
+            // set to false to require user action to dismiss
+            hideAfter: 6,
             showCloseButton: true,
             hideOnNavigate: false
         }

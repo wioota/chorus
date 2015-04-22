@@ -54,7 +54,8 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         });
 
         _.defer(_.bind(function() {
-            this.makeEditor($(this.el), ".toolbar", "body", { width: 'auto', height: 200 });
+            // this.makeEditor($(this.el), ".toolbar", "body", {width: 'auto', height: 200});
+            this.makeEditor($(this.el), "body", {width: 'auto', height: 200});
         }, this));
     },
 

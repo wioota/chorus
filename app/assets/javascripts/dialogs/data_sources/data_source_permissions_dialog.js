@@ -132,8 +132,8 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         var newOwnerId = user.get("id");
         this.listenTo(this.ownership, "saveFailed", function() { this.showErrors(this.ownership); });
         this.listenTo(this.ownership, "saved", function() {
-            chorus.toast("data_sources.confirm_change_owner.toast");
             this.closeModal();
+            chorus.toast("data_sources.confirm_change_owner.toast", {displayName: user.displayName(), toastOpts: {type: "success"}});
             this.collection.fetch({
                 success: _.bind(function() {
                     this.dataSource.set({ owner: { id: newOwnerId } });
@@ -210,6 +210,8 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         }
     },
 
+    //TODO: currently, when adding a new individual account, there is no confirmation that the add is successful
+    // other than that the list of accounts updates. there should be some 'success' activity
     save: function(event) {
         event.stopPropagation();
         event.preventDefault();
@@ -268,13 +270,13 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         var localGroup = _.extend({}, Backbone.Events);
         function displaySuccessToast() {
             this.dataSource.set({shared: false});
-            chorus.toast("data_sources.shared_account_removed");
+            chorus.toast("data_sources.shared_account_removed.toast", {toastOpts: {type: "deletion"}});
             this.render();
             localGroup.stopListening();
         }
 
         function displayFailureToast() {
-            chorus.toast("data_sources.shared_account_remove_failed");
+            chorus.toast("data_sources.shared_account_remove_failed.toast", {toastOpts: {type: "error"}});
             localGroup.stopListening();
         }
 
@@ -296,7 +298,7 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         var localGroup = _.extend({}, Backbone.Events);
         function success() {
             this.dataSource.set({shared: true});
-            chorus.toast("data_sources.shared_account_added");
+            chorus.toast("data_sources.shared_account_added.toast", {toastOpts: {type: "success"}});
             this.render();
             localGroup.stopListening();
 
@@ -304,7 +306,7 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         }
 
         function displayFailureToast() {
-            chorus.toast("data_sources.shared_account_add_failed");
+            chorus.toast("data_sources.shared_account_add_failed.toast", {toastOpts: {type: "error"}});
             localGroup.stopListening();
         }
 

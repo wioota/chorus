@@ -81,7 +81,7 @@ describe("chorus.dialogs.ChangeWorkfileSchemaDialog", function() {
             });
 
             it("displays toast message", function() {
-                expect(chorus.toast).toHaveBeenCalledWith("schema_picker.change_workfile_schema.saved_message");
+                expect(chorus.toast).toHaveBeenCalledWith("schema_picker.change_workfile_schema.saved.toast", {toastOpts: {type: "success"}});
             });
 
             it("presents the new execution schema", function(){

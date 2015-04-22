@@ -20,12 +20,20 @@ chorus.dialogs.JobResultDetail = chorus.dialogs.Base.extend({
 
     additionalContext: function () {        
         return {
+            lastRunStatusKey: this.job.lastRunStatusKey(),
+            lastRunStatusStyle: this.jobRunStatusStyle(),
             statusDisplayMessage: this.taskStatusMessage,
             statusDisplayClass: this.taskStatusClass
         };
     },
 
-    // jobStatus: map the success | failure status to user-facing text
+    // map success | failure status to css classes
+    jobRunStatusStyle: function () {
+        return this.job.get("lastRunFailed") ? "failure" : "success";
+    },
+    
+    // taskStatus: map the success | failure status to user-facing text
+
     taskStatusMessage: function () {
         var status = this.status;
         if (status === "success" ) {

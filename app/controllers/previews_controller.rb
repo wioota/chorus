@@ -9,7 +9,8 @@ class PreviewsController < ApplicationController
 
     check_id = params[:task][:check_id]
     query = CancelableQuery.new(dataset.connect_as(current_user), check_id, current_user)
-    result = query.execute(dataset.preview_sql, :limit => ChorusConfig.instance['default_preview_row_limit'])
+    result = query.execute(dataset.preview_sql,
+                           :limit => ChorusConfig.instance['default_preview_row_limit'])
     present(result, :status => :created)
   end 
 

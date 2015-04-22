@@ -28,7 +28,7 @@ chorus.views.DataSourceWorkspaceUsagesWidget = chorus.views.Base.extend({
                 var el;
                 var count = this.dataSource.usage().workspaceCount();
                 if(count > 0) {
-                    el = $("<a class='dialog workspace_usage' href='#'></a>");
+                    el = $("<a class='dialog_launch workspace_usage' href='#'></a>");
                 } else {
                     el = $("<span class='disabled workspace_usage'></span>");
                 }

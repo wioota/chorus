@@ -16,15 +16,17 @@
 @import "vendorish/_jscrollpane";
 @import "vendorish/_datepicker";
 @import "vendorish/_textext";
-
 @import "vendorish/_font_awesome";
-
 @import "vendorish/_slick.grid";
 @import "vendorish/_slick-default-theme";
 @import "vendorish/_slick.grid.chorus";
 @import "vendorish/_codemirror.chorus";
 
-// vendorish/_facebox is loaded first in modals for clarity
+// group for the messenger 'toast'. overrides the files in gem: messengerjs
+@import "vendorish/_messenger_group";
+// end: messenger
+
+// note: vendorish/_facebox is loaded first in modals.scss for clarity
 
 @import "base/_dev";
 @import "base/_controls";
@@ -35,7 +37,6 @@
 @import "base/_tags";
 @import "base/_truncated_text";
 @import "base/_tooltips";
-@import "base/_toast";
 
 @import "base/_media";
 

@@ -764,7 +764,10 @@ describe("chorus.dialogs.Visualization", function() {
                             });
 
                             it("shows a toast message", function() {
-                                expect(chorus.toast).toHaveBeenCalledWith("dataset.visualization.toast.workfile_from_chart", {fileName: "Foo-boxplot_2.png"});
+                                expect(chorus.toast).toHaveBeenCalledWith(
+                                    "dataset.visualization.workfile_from_chart.toast", 
+                                    {fileName: "Foo-boxplot_2.png", toastOpts: {type: "success"}}
+                                    );
                             });
                         });
                     });

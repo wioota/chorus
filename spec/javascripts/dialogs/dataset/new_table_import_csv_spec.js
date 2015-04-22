@@ -404,7 +404,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
             it("closes the dialog and displays a toast", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
-                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.started");
+                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.started.toast", {toastOpts: {type: "info"}});
             });
 
             it("triggers csv_import:started", function() {

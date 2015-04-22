@@ -80,7 +80,7 @@ chorus.dialogs.ImportNow = chorus.dialogs.Base.extend({
     },
 
     modelSaved: function() {
-        chorus.toast("import.success");
+        chorus.toast("import.progress.toast", {toastOpts: {type: "info"}});
         this.dataset.trigger('change');
         this.closeModal();
     },
