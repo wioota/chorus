@@ -43,7 +43,7 @@ $margin-right-for-error-marker: 20px;
 .warning {
     @include after-clearfix;
 
-    background-color: $body-background-color;
+    // background-color: $body-background-color;
 
     font-weight: normal;
 
