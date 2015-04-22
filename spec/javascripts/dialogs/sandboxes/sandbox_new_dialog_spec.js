@@ -128,10 +128,9 @@ describe("chorus.dialogs.SandboxNew", function() {
                 });
 
                 it("shows a toast message", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.toast");
+                    expect(chorus.toast).toHaveBeenCalledWith("sandbox.create.toast", {toastOpts: {type: "success"}});
                 });
             });
-
         });
 
         context('with a data source id, database id, and schema name', function() {
@@ -160,7 +159,7 @@ describe("chorus.dialogs.SandboxNew", function() {
             });
         });
 
-        context('with a data source id, database name and schema name, with sandbox datasets shown ', function() {
+        context('with a data source id, database name and schema name, with sandbox datasets shown', function() {
             beforeEach(function() {
                 spyOn(this.dialog.schemaPicker, 'fieldValues').andReturn({
                     dataSource: "4",

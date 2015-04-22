@@ -38,7 +38,8 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
         this.$("textarea").val(this.activity.get("body"));
 
         _.defer(_.bind(function() {
-            this.makeEditor($(this.el), ".toolbar", "body", { width: 'auto', height: 200 });
+            // this.makeEditor($(this.el), ".toolbar", "body", {width: 'auto', height: 200});
+            this.makeEditor($(this.el), "body", {width: 'auto', height: 200});
         }, this));
     },
 
@@ -46,7 +47,7 @@ chorus.dialogs.EditNote = chorus.dialogs.Base.include(
         e && e.preventDefault();
         this.$("button.submit").startLoading("actions.saving");
 
-        var newText = this.getNormalizedText(this.$("textarea"));
+        var newText = this.getNormalizedText(this.$("textarea[name=body]"));
         var cleanText = _.trim($.stripHtml(newText));
 
         if (cleanText === "") {

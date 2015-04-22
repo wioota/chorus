@@ -102,7 +102,7 @@ chorus.views.DataSourceListSidebar = chorus.views.Sidebar.extend({
     postRender: function() {
         this._super("postRender");
         if (this.dataSource) {
-            this.$("a.dialog").data("dataSource", this.dataSource);
+            this.$("a.dialog-launch").data("dataSource", this.dataSource);
         }
     },
 

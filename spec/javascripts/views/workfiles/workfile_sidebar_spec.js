@@ -248,7 +248,7 @@ describe("chorus.views.WorkfileSidebar", function() {
         });
 
         it('shows the editing links', function(){
-            expect(this.view.$('.actions')).toContainTranslation('workfile.rename.button');
+            expect(this.view.$('.actions')).toContainTranslation('actions.rename');
             expect(this.view.$('.actions')).toContainTranslation('workfile.delete.button');
         });
 

@@ -208,7 +208,7 @@ class DataSourceConnection
 
   def build_and_configure_statement(jdbc_conn, options, query)
     statement = jdbc_conn.prepare_statement(query)
-    statement.set_fetch_size(1000)
+    statement.set_fetch_size(options[:limit] ? options[:limit] : 1000)
     statement.set_max_rows(options[:limit]) if options[:limit]
     statement
   end

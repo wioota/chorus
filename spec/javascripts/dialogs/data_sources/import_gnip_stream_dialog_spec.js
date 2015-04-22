@@ -75,7 +75,7 @@ describe("ImportGnipStream", function () {
                         });
 
                         it("display a toast message", function () {
-                            expect(chorus.toast).toHaveBeenCalledWith("gnip.import_stream.toast.start_import");
+                            expect(chorus.toast).toHaveBeenCalled();
                         });
                     });
 

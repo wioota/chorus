@@ -10,9 +10,11 @@ chorus.translation = {
             if (match[0].match(/^\s*#/)) return;
             var keys = match[0].split("."),
                 val = _.rest(match).join("=");
+
             var innerHash = _.reduce(_.initial(keys), function (hash, key) {
                 return hash[key] || (hash[key] = {});
             }, result);
+
             if (!_.isUndefined(innerHash[_.last(keys)]) || !_.isObject(innerHash)) {
                 window.alert("Translation: " + line + " is a collision with an existing translation");
             }
@@ -23,7 +25,7 @@ chorus.translation = {
     },
 
     getMessageFileUrl: function() {
-        return '../../messages/Messages_en.properties?iebuster=' + $.now();
+        return "/messages/Messages_en.properties?iebuster=" + $.now();
     }
 };
 

@@ -1,7 +1,6 @@
 @mixin button-theme($border, $font) {
     button, a.button {
         border-color: $border;
-        //color: $font;
     }
 }
 

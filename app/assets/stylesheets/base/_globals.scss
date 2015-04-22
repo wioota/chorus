@@ -18,7 +18,6 @@ a {
 }
 
 
-
 html, body {
     color: $color-text1;
     background-color: $body-background-color !important;
@@ -43,6 +42,10 @@ input, textarea {
 
 textarea {
     resize: none;
+
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 input[type=checkbox],
@@ -60,8 +63,7 @@ input[type=checkbox] {
 .required::after {
     content: "*";
     color: $required-marker-color;
-/*     vertical-align: middle; */ /* to be deleted when final */
-    margin-left: 2.5px;
+    margin-left: 2.4px;
     font-size: 1.04em;
 }
 

@@ -50,7 +50,7 @@ describe("chorus.views.DataSourceWorkspaceUsagesWidget", function() {
 
             it("should disable the link", function() {
                 expect(this.view.$('.workspace_usage')).toHaveClass('disabled');
-                expect(this.view.$('.workspace_usage').data('dialog')).toBeUndefined();
+                expect(this.view.$('.workspace_usage').data('dialog_launch')).toBeUndefined();
             });
 
             it("should show a count of zero", function() {

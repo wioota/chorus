@@ -35,7 +35,7 @@ describe("chorus.alerts.WorkfileDeleteMultiple", function() {
         });
 
         it("displays a toast message", function() {
-            expect(chorus.toast).toHaveBeenCalledWith("workfile.delete.many.toast", {count: this.collection.length, toastOpts: {type: "info"}});
+            expect(chorus.toast).toHaveBeenCalledWith("workfile.delete.many.toast", {count: this.collection.length, toastOpts: {type: "deletion"}});
         });
 
         it("navigates to the workfile list page", function() {

@@ -243,7 +243,7 @@ describe("chorus.dialogs.ImportNow", function() {
                             });
 
                             it("should display a toast", function() {
-                                expect(chorus.toast).toHaveBeenCalledWith("import.success");
+                                expect(chorus.toast).toHaveBeenCalledWith("import.progress.toast", {toastOpts : {type : 'info'}});
                             });
 
                             it("should close the dialog", function() {

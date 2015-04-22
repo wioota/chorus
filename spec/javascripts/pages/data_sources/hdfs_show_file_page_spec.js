@@ -67,7 +67,7 @@ describe("chorus.pages.HdfsShowFilePage", function() {
 
         it("shows a nice error message", function() {
             expect(this.page.$(".errors")).toExist();
-            expect(this.page.$(".errors").text()).toContainTranslation('record_error.HDFS_CONTENTS_UNAVAILABLE');
+            expect(this.page.$(".errors").text()).toContainTranslation('record_error.HDFS_CONTENTS_UNAVAILABLE.text');
         });
     });
 

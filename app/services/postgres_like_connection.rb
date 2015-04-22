@@ -392,6 +392,12 @@ class PostgresLikeConnection < DataSourceConnection
       with_connection { |connection| connection.from(table_name).count }
     end
 
+    def server_encoding
+      with_connection do |connection|
+        connection.fetch("SELECT current_setting('server_encoding') AS server_encoding;").first[:server_encoding]
+      end
+    end
+
     def copy_csv(java_reader, table_name, column_names, delimiter, has_header)
       with_connection do |connection|
         connection.synchronize do |jdbc_conn|
