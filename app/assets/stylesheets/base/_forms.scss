@@ -1,19 +1,26 @@
-/* general rules for forms in the application */
-
-
 @import "_common";
 @import "compass/css3/border-radius";
 @import "_button_common";
 
 
+/* GENERAL RULES FOR FORMS IN THE APPLICATION */
 
-/* widget displaying "* = required" */
+
+/* widget "* = required" */
 .legend_for_required {
     position: relative;
     top: 10px;
-    /* margin-top: 15px; */
+    margin-top: 5px;
     font-size: $small-font;
     color: #707070;
+}
+
+/* red asterisk for required fields */
+.required::after {
+    margin-left: 2.2px;
+    content: "*";
+    font-size: 1.05em;
+    color: $required-marker-color;
 }
 
 /* grouping of options in form */
@@ -34,15 +41,29 @@ fieldset {
     vertical-align: middle;
 }
 
-
 .row {
     &:first-child {
         margin-top: -5px;
     }
 }
 
-/* section of buttons at bottom of form */
+.girdle {
+    label {
+        margin-top: 8px;
+        margin-bottom: 1px;
+    }
+}
 
+.form_pair {
+
+    /* default for all form labels = label on line above form element */
+    label {
+        display: block;
+    }
+}
+
+
+// BUTTONS AT BOTTOM OF FORM
 // TODO needs to distinguish FORM PAGE from FORM DIALOG
 .form_controls {
     // make padding account for the margin applied to buttons
@@ -62,17 +83,14 @@ fieldset {
     @include after-clearfix;
 }
 
-.girdle {
-    label {
-        margin-top: 8px;
-        margin-bottom: 1px;
-    }
-}
 
-.form_pair {
-
-    /* default for all form labels = label on line above form element */
-    label {
-        display: block;
+// DIFFERENCES when form is in main page
+.logged_in_layout {
+    .form_controls {
+    
+        button {
+            float: none;
+            margin-right: 0;
+        }    
     }
 }

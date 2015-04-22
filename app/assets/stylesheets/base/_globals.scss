@@ -59,14 +59,6 @@ input[type=checkbox] {
     margin: 5px 4px 5px 0;
 }
 
-/* form: red asterisk for required fields */
-.required::after {
-    content: "*";
-    color: $required-marker-color;
-    margin-left: 2.4px;
-    font-size: 1.04em;
-}
-
 .hidden {
     display: none !important;
 }
