@@ -29,10 +29,10 @@ body .ui-draggable-dragging {
     right: 0;
     bottom: 0;
 
-    #help {
-        top: 1px;
-        left: $sidebar-width - $help-pill-width - $guts-padding + $sidebar-padding-x;
-    }
+//    #help {
+//        top: 1px;
+//        left: $sidebar-width - $help-pill-width - $guts-padding + $sidebar-padding-x;
+//    }
 
     .spacer {
         height: $breadcrumbs-height + $padding-y;
@@ -60,7 +60,7 @@ body .ui-draggable-dragging {
     }
 
     .pairs {
-        font-size: 14px;
+        font-size: $default-font-size;
         line-height: 18px;
 
         .pair {
@@ -68,6 +68,10 @@ body .ui-draggable-dragging {
             border-bottom: $border-canon;
             margin-right: 10px;
             margin-bottom: 5px;
+            
+            &:last-child {
+            	border-bottom: none;
+            }
         }
 
         .key {
@@ -91,7 +95,7 @@ body .ui-draggable-dragging {
         }
 
         .dialog {
-            font-size: 12px;
+            font-size: $small-font;
             font-weight: $semibold;
             margin-left: 10px;
         }
@@ -99,9 +103,9 @@ body .ui-draggable-dragging {
 
     .notice {
         a {
-            font-size: 12px;
+            font-size: $small-font;
         }
-        font-size: 12px;
+        font-size: $small-font;
         color: $color-text2;
         padding: $dialog-padding;
         background-color: $activity-stream-comment-background-color;
@@ -120,9 +124,9 @@ body .ui-draggable-dragging {
             @include dark-sidebar-panel;
         }
 
-        .tabbed_area {
+        .tabbed_content_area {
             .context {
-                font-size: 14px;
+                font-size: $default-font-size;
 
                 span {
                     vertical-align: bottom;
@@ -130,14 +134,15 @@ body .ui-draggable-dragging {
 
                 a {
                     @include ellipsis;
-                    @include menu-triangle;
                     max-width: 140px;
                     color: $link-color;
+                    
+                    @include menu-triangle-glyph;
                 }
             }
 
             .back {
-                font-size: 12px;
+                font-size: $small-font;
                 font-weight: $semibold;
             }
 
@@ -146,12 +151,13 @@ body .ui-draggable-dragging {
             }
 
             .context, .back, .none_found {
-                margin: 4px 0px 17px 20px;
+                margin: 4px 0px 15px 10px;
             }
 
             .data_tab_dataset {
-                .toggle_visibility {
+                .toggle_display {
                     position: relative;
+                    width: 10px;
                 }
             }
         }
@@ -194,7 +200,7 @@ body .ui-draggable-dragging {
         .list_item_text {
             margin-top: 2px;
             margin-bottom: 2px;
-            font-size: 14px;
+            font-size: $default-font-size;
             display: inline-block;
             max-width: 75%;
             vertical-align: middle;
@@ -297,6 +303,6 @@ body .ui-draggable-dragging {
     white-space: nowrap;
     ul {
         overflow-x: hidden;
-        padding: 4px 8px;
+        padding: 3px 10px;
     }
 }

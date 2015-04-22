@@ -1,11 +1,10 @@
 @import "_browser_support";
+@import "dashboard";
 
 $text-padding-y: 4px;
 $big-gutter: (2 * $activity-gutter);
 $media-gutter: 10px;
-
 $system-action-color: #7C7D7D;
-
 $refresh-activity-gutter: $activity-gutter - 5;
 
 .media, .media > .bd {
@@ -19,10 +18,6 @@ $refresh-activity-gutter: $activity-gutter - 5;
     height: $icon-image-height + 3px;
 }
 
-/* .media > .icon img { */
-/*     display: block; */
-/* } */
-
 .notification_list, 
 .activity_list {
     a[href=''], a:not([href]) {
@@ -30,22 +25,22 @@ $refresh-activity-gutter: $activity-gutter - 5;
         text-decoration: none;
     }
 
-    .more_items {
-        font-size: 12px;
-        padding: $activity-gutter 0;
-        text-align: center;
-
-        a {
-            display: inline-block;
-            max-width: 50%;
-            width: 100%;
-            @include panel-button(30px);
-        }
-    }
-
     .no_items {
         @include secondary-text-normal;
         padding: 0 $activity-gutter;
+    }
+}
+
+.more_items {
+    font-size: $small-font;
+    padding: $padding-top-canon 0 $padding-bottom-canon 0;
+    text-align: center;
+
+    a {
+        display: inline-block;
+        max-width: 50%;
+        width: 100%;
+        @include panel-button(30px);
     }
 }
 
@@ -55,46 +50,61 @@ $refresh-activity-gutter: $activity-gutter - 5;
     }
 
     .activity_item {
-        padding: $refresh-activity-gutter $refresh-activity-gutter $activity-gutter $refresh-activity-gutter;
+        padding: $refresh-activity-gutter $refresh-activity-gutter ($activity-gutter - 3) $refresh-activity-gutter;
         position: relative;
         overflow: visible;
+
+        .fa.failure {
+            position: relative;
+            font-size: 34px;
+            top: 4px;
+            left: 2px;
+            color: $error-icon-color;
+        }
+
+        .fa.success {
+            position: relative;
+            font-size: 34px;
+            top: 4px;
+            left: 2px;
+            color: $success-icon-color;
+        }
     }
 }
 
 .insight_ribbon {
-        padding: 0;
-        position: absolute;
-        left: -7px;
-        top: -9px;
-        z-index: 10;
-        line-height: 11px;
-        height: 22px;
+	padding: 0;
+	position: absolute;
+	left: -7px;
+	top: -9px;
+	z-index: 10;
+	line-height: 11px;
+	height: 22px;
 
-        .left {
-            background: url(/images/ribbons/label_insight1.png) no-repeat;
-            width: 6px;
-            height: 22px;
-            display: inline-block;
-        }
+	.left {
+		background: url(/images/ribbons/label_insight1.png) no-repeat;
+		width: 6px;
+		height: 22px;
+		display: inline-block;
+	}
 
-        .center {
-            @include database-column-type;
-            background: url(/images/ribbons/label_insight2.png) repeat-x;
-            height: 14px;
-            display: inline-block;
-            padding: 3px 8px 2px 8px;
-            vertical-align: top;
-            @include uppercase;
-        }
+	.center {
+		background: url(/images/ribbons/label_insight2.png) repeat-x;
+		display: inline-block;
+		height: 14px;
+		padding: 3px 8px 2px 8px;
+		vertical-align: top;
+		@include insight-ribbon;
+		@include uppercase;
+	}
 
-        .right {
-            background: url(/images/ribbons/label_insight3.png) no-repeat;
-            width: 12px;
-            height: 22px;
-            display: inline-block;
-        }
-    }
-
+	.right {
+		background: url(/images/ribbons/label_insight3.png) no-repeat;
+		width: 12px;
+		height: 22px;
+		display: inline-block;
+	}
+}
 
 .comment_list {
     .comments {
@@ -107,6 +117,7 @@ $refresh-activity-gutter: $activity-gutter - 5;
     ul.attachments {
         img {
             vertical-align: middle;
+            cursor: pointer;
         }
 
         li {
@@ -115,7 +126,7 @@ $refresh-activity-gutter: $activity-gutter - 5;
     }
 
     .name {
-        font-size: 12px;
+        font-size: $small-font;
         font-weight: $semibold;
     }
 
@@ -125,10 +136,11 @@ $refresh-activity-gutter: $activity-gutter - 5;
         word-wrap: break-word;
     }
 
-    .activity_header, .comment_header {
+    .activity_header,
+    .comment_header {
         word-wrap: break-word;
         @include secondary-text-normal;
-        line-height: 20px;
+        // line-height: 20px;
         
         .author { 
             font-weight: $semibold;
@@ -154,37 +166,29 @@ $refresh-activity-gutter: $activity-gutter - 5;
 
         a.delete_link,
         a.edit_link {
-            @include secondary-text-small;
             display: none;
+
+            @include secondary-text-small;            
             border-left: solid 1px;
             padding-left: 5px;
             margin-left: 5px;
 
-            i {
-                padding-left: 4px;
-                vertical-align: middle;
-            }
-
-            span {
-                padding-left: 3px;
-                vertical-align: middle;
-            }
         }
     }
 
     .links {
         padding: 5px 0 0 0;
-        font-size: 12px;
+        font-size: $small-font;
 
         a {
-            font-size: 12px;
+            font-size: $small-font;
         }
 
         .separator {
             position: relative;
             top: -1px;
             color: $shadow-gray;
-            margin: 0 3px;
+            margin: 0 $separator-space;
         }
     }
 
@@ -193,11 +197,19 @@ $refresh-activity-gutter: $activity-gutter - 5;
     }
 }
 
+span.fa {
+    &.fa-trash {
+        padding: 0 3px;
+        // vertical-align: middle;
+    }
+}
+            
 .popup_notifications li,
 li .activity_content,
 .comment_content {
     &:hover {
-        a.edit_link, a.delete_link {
+        a.edit_link,
+        a.delete_link {
             display: inline;
         }
     }
@@ -210,9 +222,9 @@ li .activity_content,
     font-size: 16px;
 }
 
-.activity_list.workspace_detail, 
-.activity_list.dashboard, 
-.recent_comments_list, 
+.activity_list.workspace_detail,
+.dashboard_activity_list.dashboard,
+.recent_comments_list,
 .notification_list {
     .comments {
         margin-left: ($icon-image-width + (2 * $activity-gutter));
@@ -220,7 +232,7 @@ li .activity_content,
 
     li.activity {
         border-bottom: $border-canon;
-
+        
         &.insight {
             background: #FFFFFF;
             border-bottom: $border-canon;

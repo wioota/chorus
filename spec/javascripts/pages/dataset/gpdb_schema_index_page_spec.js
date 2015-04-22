@@ -41,7 +41,6 @@ describe("chorus.pages.GpdbSchemaIndexPage", function() {
         it("should have set up search correctly", function() {
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Schema", {count: 2});
             expect(this.page.$("input.search")).toHaveAttr("placeholder", t("schema.search_placeholder"));
-            expect(this.page.$(".list_content_details .explore")).toContainTranslation("actions.explore");
 
             this.page.$("input.search").val("bar").trigger("keyup");
 
@@ -51,18 +50,15 @@ describe("chorus.pages.GpdbSchemaIndexPage", function() {
         });
 
         it("should have the correct breadcrumbs", function() {
-            expect(this.page.$(".breadcrumb").length).toBe(4);
+            expect(this.page.$(".breadcrumb").length).toBe(3);
 
-            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-            expect(this.page.$(".breadcrumb:eq(0)")).toContainTranslation("breadcrumbs.home");
+            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/data_sources");
+            expect(this.page.$(".breadcrumb:eq(0)")).toContainTranslation("breadcrumbs.data_sources");
 
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
-            expect(this.page.$(".breadcrumb:eq(1)")).toContainTranslation("breadcrumbs.data_sources");
+            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe(this.database.dataSource().showUrl());
+            expect(this.page.$(".breadcrumb:eq(1)")).toContainText(this.database.dataSource().name());
 
-            expect(this.page.$(".breadcrumb:eq(2) a").attr("href")).toBe(this.database.dataSource().showUrl());
-            expect(this.page.$(".breadcrumb:eq(2)")).toContainText(this.database.dataSource().name());
-
-            expect(this.page.$(".breadcrumb:eq(3)")).toContainText("Foo");
+            expect(this.page.$(".breadcrumb:eq(2)")).toContainText("Foo");
         });
 
         it("has a sidebar", function() {

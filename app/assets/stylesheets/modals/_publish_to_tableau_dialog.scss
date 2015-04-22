@@ -9,13 +9,17 @@
     display: inline-block;
   }
 
-  .username, .password {
+  .username, .password, .sitename, .projectname {
     margin-left: 0px;
     width: $default-dialog-width/2 - 30px;
     display: inline-block;
   }
 
-  .password {
+  .password, .projectname {
     margin-left: 25px;
+  }
+
+  .disabled {
+    color: #a9a9a9;
   }
 }

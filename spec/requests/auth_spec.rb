@@ -4,6 +4,9 @@ describe "resources which require authentication" do
   let!(:user) { users(:default) }
 
   context "after the user has logged in" do
+    before(:each) do
+      stub(LdapClient).enabled? { false } # We should have a separate test config to avoid stuff like this
+    end
     before do
       post "/sessions", :session => {:username => user.username, :password => FixtureBuilder.password}
       response.should be_success
@@ -51,6 +54,7 @@ describe "resources which require authentication" do
 
   context "when user has a bogus session_id" do
     before do
+      stub(LdapClient).enabled? { false } # We should have a separate test config to avoid stuff like this
       post "/sessions", :session => {:username => user.username, :password => FixtureBuilder.password}
       response.should be_success
       Session.last.delete

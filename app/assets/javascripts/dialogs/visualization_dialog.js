@@ -189,7 +189,11 @@ chorus.dialogs.Visualization = chorus.dialogs.Base.extend({
 
     onWorkfileSaved: function() {
         this.$('button.save').stopLoading();
-        chorus.toast("dataset.visualization.toast.workfile_from_chart", {fileName: this.workfile.get("fileName")});
+        chorus.toast("dataset.visualization.workfile_from_chart.toast", {
+            fileName: this.workfile.get("fileName"),
+            toastOpts: {type: "success"}
+        });
+        
     },
 
     additionalContext: function() {

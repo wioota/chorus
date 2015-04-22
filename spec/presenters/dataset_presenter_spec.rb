@@ -69,7 +69,7 @@ describe DatasetPresenter, :type => :view do
     end
 
     context 'for a source dataset' do
-      let(:dataset) { datasets(:table) }
+      let(:dataset) { datasets(:default_table) }
 
       it 'uses calculated accessible_to' do
         stub(presenter).sandbox_table? { false }
@@ -79,7 +79,7 @@ describe DatasetPresenter, :type => :view do
     end
 
     context 'for a sandbox dataset' do
-      let(:dataset) { datasets(:table) }
+      let(:dataset) { datasets(:default_table) }
 
       it 'always returns true' do
         stub(presenter).sandbox_table? { true }
@@ -197,7 +197,7 @@ describe DatasetPresenter, :type => :view do
       let(:succinct) { true }
 
       it 'has the correct keys' do
-        hash.keys.should =~ [:id, :object_name, :schema, :associated_workspaces, :entity_subtype, :entity_type, :stale, :is_deleted]
+        hash.keys.should =~ [:id, :object_name, :schema, :associated_workspaces, :entity_subtype, :entity_type, :stale, :stale_at, :is_deleted]
       end
 
       it 'presents the schema' do
@@ -208,7 +208,7 @@ describe DatasetPresenter, :type => :view do
   end
 
   describe 'complete_json?' do
-    let(:dataset) { datasets(:table) }
+    let(:dataset) { datasets(:default_table) }
 
     context 'when rendering activities' do
       let(:activity_stream) { true }

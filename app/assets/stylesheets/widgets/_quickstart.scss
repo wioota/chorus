@@ -1,3 +1,5 @@
+@import "_browser_support";
+
 .quickstart_header {
     vertical-align: middle;
 
@@ -31,7 +33,7 @@
     }
 
     a.dismiss {
-        font-size: 12px;
+        font-size: $small-font;
         font-weight: $semibold;
         position: absolute;
         right: 10px;

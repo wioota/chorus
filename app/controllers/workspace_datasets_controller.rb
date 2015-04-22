@@ -8,9 +8,13 @@ class WorkspaceDatasetsController < ApplicationController
     params[:name_filter] = params[:name_pattern]
     params[:total_entries] = workspace.dataset_count(current_user, params)
 
-    datasets = workspace.datasets(current_user, params).includes(Dataset.eager_load_associations).list_order
+    @datasets = workspace.datasets(current_user, params).includes(Dataset.eager_load_associations).list_order
+    @options =  { :workspace => workspace , :user => current_user, :rendering_activities => true, :show_latest_comments => false}
 
-    present paginate(datasets), :presenter_options => { :workspace => workspace }
+    #Added caching options to speed up page load time. Prakash 1/15/15
+    namespace = workspace ? "workspace:#{workspace.id}:datasets" : "workspace:datasets"
+    present paginate(@datasets), :presenter_options => { :workspace => workspace, :cached => true, :namespace => namespace }
+    
   end
 
   def create

@@ -1,13 +1,16 @@
+<!-- <form> -->
+<div class="girdle">
+
 <div class='sub_header'>
     <div class="total_usage">{{t "data_sources.usage.total" size=formattedSandboxesSize}}</div>
 </div>
 
-<div class="sub_content">
+<div id="content">
     <ul>
         {{#each workspaces}}
         <li>
             <div class="image_container">
-                <img src="/images/workspaces/workspace_small.png"/>
+                <img class="workspaceIconSmall" src="/images/workspaces/workspace_small.png" title="Workspace" alt=""/>
             </div>
             <div class="details">
                 <a class="workspace_link" href="{{workspacePath id}}">{{name}}</a>
@@ -26,4 +29,9 @@
     </ul>
 </div>
 
+</div>
+<!-- END girdle -->
+
 {{> closeWindowFormControls }}
+
+<!-- </form> -->

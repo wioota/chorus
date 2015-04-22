@@ -1,7 +1,7 @@
 @import "_common";
 
 .date-picker {
-    z-index: 20001;
+    z-index: $import-date-picker-z-index;
 }
 
 .titled-input-group {
@@ -28,7 +28,7 @@
 
     fieldset {
         border: none;
-        padding: 0 15px 0px;
+        padding: 0 0 0 0;
 
         &.disabled {
             border: none;
@@ -70,7 +70,7 @@
     }
 
     .select_schema {
-        font-size: 12px;
+        font-size: $small-font;
         font-weight: $semibold;
         color: #5f5f5f;
         border: 1px solid $border-color;
@@ -84,7 +84,7 @@
     }
 
     .change_schema {
-        font-size: 12px;
+        font-size: $small-font;
         font-weight: $semibold;
         margin-left: 10px;
     }

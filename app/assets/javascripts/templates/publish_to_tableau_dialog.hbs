@@ -11,8 +11,25 @@
             <label class="username required" name="tableau_username">{{t "tableau.dialog.username"}}</label>
             <label class="password required" name="tableau_password">{{t "tableau.dialog.password"}}</label>
             <input class="username" type="text" name="tableau_username" value="" maxlength="255" tabindex="1"/>
-            <input class="password" type="password" name="tableau_password" value="" maxlength="255" tabindex="1"
-                   autocomplete="off"/>
+            <input class="password" type="password" name="tableau_password" value="" maxlength="255" tabindex="1" autocomplete="off"/>
+        </div>
+
+        <div>
+            <label class="sitename" name="tableau_site_name">{{t "tableau.dialog.site_name"}}</label>
+            <label class="projectname" name="tableau_project_name">{{t "tableau.dialog.project_name"}}</label>
+            {{#if tableauSites}}
+                <select class="sitename" id="tableau_site_name" name="tableau_site_name">
+                    {{#each tableauSites}}
+                        <option value="{{name}}">{{name}}</option>
+                    {{/each}}
+                </select>
+            {{else}}
+                <select class="sitename" id="tableau_site_name" name="tableau_site_name" disabled>
+                    <option value="Default" selected>Default</option>
+                </select>
+            {{/if}}
+
+            <input class="projectname" id="tableau_project_name" value="{{project_name}}" type="text" name="tableau_project_name" tabindex="1" maxlength="64" placeholder="{{t "tableau.dialog.blank_is_default"}}"/>
         </div>
 
         <div>
@@ -21,5 +38,7 @@
                 for="create_work_file">{{t "actions.create_tableau_workfile"}}</label>
         </div>
     </div>
+    <!-- END girdle -->
+
     {{formControls "actions.publish_to_tableau"}}
 </form>

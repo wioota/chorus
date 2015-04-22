@@ -1,6 +1,6 @@
 {{#each buttons}}
     {{#if view}}
-        <button type="button" class="dialog button_action" data-dialog="{{view}}"
+        <button type="button" class="dialog-launch button_action" data-dialog="{{view}}"
             {{#each dataAttributes}}
                 data-{{name}}="{{value}}"
             {{/each}}
@@ -9,7 +9,7 @@
             {{/if}}
                 >{{text}}</button>
         {{#if helpText}}
-            <img class="help" src="/images/more-info.png" data-text="{{helpText}}"/>
+			<span class="fa fa-question-circle help" data-text="{{helpText}}"></span>
         {{/if}}
     {{else}}
         {{#if url}}

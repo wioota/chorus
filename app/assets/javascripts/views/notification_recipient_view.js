@@ -4,8 +4,8 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
     useLoadingSection: true,
 
     events: {
-        "change select"    : "onUserSelected",
-        "click a.remove" : "onRemoveUserClicked"
+        "change select"  : "onUserSelected",
+        "click .remove"  : "onRemoveUserClicked"
     },
 
     makeModel: function() {
@@ -40,7 +40,9 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
     onRemoveUserClicked : function(e) {
         e && e.preventDefault();
 
-        var $li = $(e.target).parent();
+        // element clicked is the remove icon, so need to step up to the <li>
+        // this is dependent on the html/dom constructed
+        var $li = $(e.target).parent().parent();
         var user = this.selectedUsers.get($li.data("id"));
 
         this.collection.add(user);
@@ -51,7 +53,8 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
 
     updateAvailableUserList: function() {
         this.$("select").empty();
-        this.$("select").append($("<option value=''>Select a user</option>"));
+        var $tipOption = $("<option value=''></option>").text(t('notification_recipient.members.option'));
+        this.$("select").append($tipOption);
 
         this.collection && this.collection.models.sort(function(a, b) {
             return naturalSort(a.get("firstName").toLowerCase(), b.get("firstName").toLowerCase());
@@ -75,7 +78,10 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
         _.each(this.selectedUsers.models, function(user) {
             var id = user.get("id");
             var $span = $("<span class='name'></span>").text(user.displayName());
-            var $remove = $('<a href="#" class="remove"/>').text(t("notification_recipient.remove"));
+            // generated HTML for remove must match the removewidget template partial
+            var removeTitleText = t ("actions.remove");
+            var removeIconHTML = "<span class='fa fa-times-circle remove' title="+ removeTitleText + "></span>";
+            var $remove = $('<a href="#" class="removeWidget"/>').append(removeIconHTML);
             var $li = $("<li></li>").append($span).append($remove).attr("data-id", id.toString());
 
             this.$(".picked_users").append($li);
@@ -88,4 +94,3 @@ chorus.views.NotificationRecipient = chorus.views.Base.extend({
         });
     }
 });
-

@@ -48,21 +48,17 @@ describe("chorus.pages.DatabaseIndexPage", function() {
         });
 
         it("should have the correct breadcrumbs", function() {
-            expect(this.page.$(".breadcrumb").length).toBe(3);
+            expect(this.page.$(".breadcrumb").length).toBe(2);
 
-            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/");
-            expect(this.page.$(".breadcrumb:eq(0)")).toContainTranslation("breadcrumbs.home");
+            expect(this.page.$(".breadcrumb:eq(0) a").attr("href")).toBe("#/data_sources");
+            expect(this.page.$(".breadcrumb:eq(0)")).toContainTranslation("breadcrumbs.data_sources");
 
-            expect(this.page.$(".breadcrumb:eq(1) a").attr("href")).toBe("#/data_sources");
-            expect(this.page.$(".breadcrumb:eq(1)")).toContainTranslation("breadcrumbs.data_sources");
-
-            expect(this.page.$(".breadcrumb:eq(2)")).toContainText(this.dataSource.get("name"));
+            expect(this.page.$(".breadcrumb:eq(1)")).toContainText(this.dataSource.get("name"));
         });
 
         it("should have set up search correctly", function() {
             expect(this.page.$(".list_content_details .count")).toContainTranslation("entity.name.Database", {count: 2});
             expect(this.page.$("input.search")).toHaveAttr("placeholder", t("database.search_placeholder"));
-            expect(this.page.$(".list_content_details .explore")).toContainTranslation("actions.explore");
 
             this.page.$("input.search").val("bar").trigger("keyup");
 

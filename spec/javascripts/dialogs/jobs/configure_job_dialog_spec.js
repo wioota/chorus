@@ -30,7 +30,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
         expect(this.dialog.$('button.cancel').text()).toMatchTranslation("actions.cancel");
     });
 
-    context("creating a Job that runs On Demand", function () {
+    context("creating a Job that runs On Demand:", function () {
         beforeEach(function () {
             this.jobPlan.interval_unit = 'on_demand';
         });
@@ -39,7 +39,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
             expect(this.dialog.$('.interval_options')).toHaveClass('hidden');
         });
 
-        context("with valid field values", function () {
+        context("with valid field values: ", function () {
             beforeEach(function () {
                 this.dialog.$('input.name').val(this.jobPlan.name).trigger("keyup");
             });
@@ -91,7 +91,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                     });
 
                     it("should create a toast", function () {
-                        expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                        expect(chorus.toast).toHaveBeenCalledWith(this.dialog.toastMessage(), {toastOpts: {type: "success"}});
                     });
 
                     it("should navigate to the job's show page", function () {
@@ -111,8 +111,8 @@ describe("chorus.dialogs.ConfigureJob", function () {
     context("creating a Job that runs on schedule", function () {
         describe("selecting 'on schedule'", function () {
             beforeEach(function () {
-                this.dialog.$('input:radio#onSchedule').prop("checked", true).trigger('change');
-                this.dialog.$('input:radio#onDemand').prop("checked", false).trigger('change');
+                this.dialog.$('input:radio#onScheduleField').prop("checked", true).trigger('change');
+                this.dialog.$('input:radio#onDemandField').prop("checked", false).trigger('change');
             });
 
             it("should show schedule options", function () {
@@ -164,8 +164,8 @@ describe("chorus.dialogs.ConfigureJob", function () {
 
         context("with valid field values", function () {
             beforeEach(function () {
-                this.dialog.$('input:radio#onSchedule').prop("checked", true).trigger("change");
-                this.dialog.$('input:radio#onDemand').prop("checked", false).trigger("change");
+                this.dialog.$('input:radio#onScheduleField').prop("checked", true).trigger("change");
+                this.dialog.$('input:radio#onDemandField').prop("checked", false).trigger("change");
                 var dialog = this.dialog;
                 var jobPlan = this.jobPlan;
                 _.each(_.keys(this.jobPlan), function (prop) {
@@ -216,7 +216,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                         });
 
                         it("should create a toast", function () {
-                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.toastMessage(), {toastOpts: {type: "success"}});
                         });
 
                         it("should navigate to the job's show page", function () {
@@ -297,7 +297,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                         });
 
                         it("should create a toast", function () {
-                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.toastMessage(), {toastOpts: {type: "success"}});
                         });
 
                         it("should navigate to the job's show page", function () {
@@ -390,8 +390,8 @@ describe("chorus.dialogs.ConfigureJob", function () {
 
             context("with valid field values", function () {
                 beforeEach(function () {
-                    this.dialog.$('input:radio#onSchedule').prop("checked", true).trigger("change");
-                    this.dialog.$('input:radio#onDemand').prop("checked", false).trigger("change");
+                    this.dialog.$('input:radio#onScheduleField').prop("checked", true).trigger("change");
+                    this.dialog.$('input:radio#onDemandField').prop("checked", false).trigger("change");
                     var dialog = this.dialog;
                     var jobPlan = this.jobPlan;
                     _.each(_.keys(this.jobPlan), function (prop) {
@@ -443,7 +443,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                         });
 
                         it("should create a toast", function () {
-                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.toastMessage(), {toastOpts: {type: "success"}});
                         });
                     });
                 });
@@ -461,8 +461,8 @@ describe("chorus.dialogs.ConfigureJob", function () {
 
             context("when switching it to onDemand", function () {
                 beforeEach(function () {
-                    this.dialog.$('input:radio#onSchedule').prop("checked", false).trigger("change");
-                    this.dialog.$('input:radio#onDemand').prop("checked", true).trigger("change");
+                    this.dialog.$('input:radio#onScheduleField').prop("checked", false).trigger("change");
+                    this.dialog.$('input:radio#onDemandField').prop("checked", true).trigger("change");
                 });
 
                 it("should enable the submit button", function () {
@@ -504,7 +504,7 @@ describe("chorus.dialogs.ConfigureJob", function () {
                         });
 
                         it("should create a toast", function () {
-                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message());
+                            expect(chorus.toast).toHaveBeenCalledWith(this.dialog.toastMessage(), {toastOpts: {type: "success"}});
                         });
                     });
                 });

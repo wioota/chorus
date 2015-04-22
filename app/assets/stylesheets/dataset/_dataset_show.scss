@@ -1,3 +1,7 @@
+@import "_browser_support";
+@import "compass/css3/transform";
+@import "compass/css3/transition";
+
 .dataset_show {
     .content_header {
         .has_import {
@@ -31,7 +35,7 @@
     $fieldset-margin: 15px;
     fieldset {
         border: 1px solid $border-color;
-        padding: $fieldset-margin $dialog-padding $dialog-padding;
+        padding: $fieldset-margin $dialog-padding-leftRight $dialog-padding-bottom;
         margin-right: $fieldset-margin;
         margin-bottom: $fieldset-margin;
         position: relative;
@@ -69,7 +73,6 @@
                     margin-bottom: 5px;
                     padding-left: 13px;
                     display: inline-block;
-
                 }
 
                 &.cancel {
@@ -80,7 +83,9 @@
     }
 }
 
-.aliased_name, .ui-selectmenu-menu li .aliased_name, .ui-selectmenu-status .aliased_name {
+.aliased_name, 
+.ui-selectmenu-menu li .aliased_name, 
+.ui-selectmenu-status .aliased_name {
     background-color: $dataset-number-background-color;
     display: inline-block;
     @include border-radius(5px);
@@ -89,14 +94,35 @@
 
     .letter {
         display: inline;
-        color: white;
-        font-size: 14px;
+        color: #FFFFFF;
+        font-size: $default-font-size;
         line-height: 19px;
         font-weight: normal;
         font-style: normal;
     }
 }
 
-.stale_dataset_icon {
-  position: absolute;
+.stale_marker {
+    position: absolute;
+    left: 30px;
+    color: $alert-icon-color;
+    font-size: 13px;
+    @include single-transition(all, .1s, ease);
+
+    .fa-question {
+        top: -5px;
+        font-size: 14px;
+    }
+    .fa-circle-o {
+        opacity: 0.2;
+    }
+    .fa-circle {
+        opacity: 0.45;
+        color: lighten($alert-icon-color, 20%);
+    }
+    &:hover {
+        @include transform(scale(1.1));
+        transform-origin: 50% 25%;
+        color: saturate($alert-icon-color, 25%);
+    }
 }

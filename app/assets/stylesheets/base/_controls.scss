@@ -6,8 +6,15 @@
   transform: translateY(-50%);
 }
 
-.popup .form_controls {
+/* * */
+/* .form_controls= the 'footer' section at bottom of dialogs with the buttons */
+/* * */
+
+#dialog_bottom {
     height: 50px;
+}
+
+.popup .form_controls {
     background-color: $dialog-header-background;
     border-top: $border-canon;
 
@@ -16,31 +23,26 @@
          @include vertical-align;
     }
 
-    .links { margin-left: 14px; float: left; }
+    .links {
+        margin-left: 14px;
+        float: left;
+    }
 }
 
+.controls,
 .form_controls {
-    margin-top: 15px;
-
-    button { 
-        float: right; 
-        margin-right: 10px;
-    }
-
-    label {
-        line-height: $button-height;
-
-        &.required:after {
-          margin-right: 4px;
-        }
-    }
-
-    @include after-clearfix;
-}
-
-.controls, .form_controls {
     button {
         display: inline-block;
+        
+        /* general rule to float left a form button at bottom */
+        &.left {
+            float: left;
+        }
+        &.left:first-child {
+            padding-left: 0;
+        }
+        
+
         div[aria-role=progressbar] {
             top: -4px;
             left: 17px;

@@ -1,5 +1,5 @@
 .chart_configuration {
-    padding: 15px;
+    padding: $dialog-padding;
     position: relative;
     background-color: $body-background-color;
 
@@ -22,7 +22,7 @@
 
         .column_hint {
             display: inline-block;
-            font-size: 12px;
+            font-size: $small-font;
             font-weight: $semibold;
             color: $color-text4;
             float: right;
@@ -61,14 +61,14 @@
     }
 
     .limiter {
-        font-size: 12px;
+        font-size: $small-font;
         color: $color-text2;
         font-weight: $semibold;
         margin-bottom: 10px;
         line-height: 12px;
 
         a {
-            font-size: 12px;
+            font-size: $small-font;
         }
         .pointing_l {
             display: inline-block;
@@ -84,9 +84,11 @@
             padding-right: 5px;
         }
         .triangle {
-            display: inline-block;
+/*             display: inline-block; */
             margin-bottom: 2px;
-            @include triangle(down, $link-color, 7px, 4px);
+/*             @include triangle-css(down, $link-color, 7px, 4px); */
+            @include triangle-glyph(down);
+            color: $link-color;
         }
     }
 
@@ -100,7 +102,7 @@
 ul.limiter_menu {
     li {
         cursor: pointer;
-        font-size: 14px;
+        font-size: $default-font-size;
         line-height: 16px;
         &:hover {
             text-decoration: underline;

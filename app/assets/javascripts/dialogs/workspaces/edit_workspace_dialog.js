@@ -3,7 +3,7 @@ chorus.dialogs.EditWorkspace = chorus.dialogs.Base.include(
     ).extend({
         constructorName: "EditWorkspace",
 
-        templateName: "edit_workspace_dialog",
+        templateName: "workspace_edit_dialog",
         title: t("workspace.settings.title"),
         persistent: true,
 
@@ -72,7 +72,8 @@ chorus.dialogs.EditWorkspace = chorus.dialogs.Base.include(
             this.$("select.owner").val(this.model.owner().get("id"));
 
             _.defer(_.bind(function() {
-                var clEditor = this.makeEditor($(this.el), ".toolbar", "summary");
+                // var clEditor = this.makeEditor($(this.el), ".toolbar", "summary", {width: 'auto', height: 210});
+                var clEditor = this.makeEditor($(this.el), "summary", {width: 'auto', height: 200});
                 if(!canUpdateName) {
                     clEditor.disable(true);
                 }
@@ -111,6 +112,7 @@ chorus.dialogs.EditWorkspace = chorus.dialogs.Base.include(
         },
 
         saved: function() {
+            chorus.toast("workspace.settings.edit_success.toast", {toastOpts: {type: "success"}});
             this.model.trigger("invalidated");
             this.closeModal();
         }

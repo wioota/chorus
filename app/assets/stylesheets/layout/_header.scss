@@ -3,16 +3,17 @@
 
 $header-margin: 30px;
 
-/* left and right side margins to match general page margins */
+// left and right side margins to match general page margins
 $header-margin-left: $page-margin-left;
 $header-margin-right: $page-margin-right;
 
 $expanded-search-width: 450px;
 $notification-token-width: $header-margin * 2;
 
-.oi[data-glyph=data-source]:before {
-  content: url(../images/data-source-glyph.svg);
-}
+$branding-opacity: 0.93;
+
+$menu-item-height-default: 40px;
+
 
 @mixin full-item-link($height) {
     &:hover, &.selected {
@@ -33,6 +34,28 @@ $notification-token-width: $header-margin * 2;
                         
             sub { @include secondary-text-small; }
         }
+    }
+}
+
+// WIP
+// dupe of full-item-link, but factoring out the <div>
+// and simplifying
+
+@mixin username-item-link($height) {
+    &:hover, &.selected {
+        background-color: $list-hover-color;
+    }
+
+    a {
+        height: $height;
+        width: 100%;
+
+        text-decoration: none;
+
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: 15px;
+        line-height: $height;
     }
 }
 
@@ -68,8 +91,9 @@ $notification-token-width: $header-margin * 2;
 
                 span {
                     display: inline-block;
-                    i {
-                        margin-left: 5px;
+
+                    .caret {
+                        margin-left: $caret-margin;
                         color: $caret-color;
                     }
                 }
@@ -78,14 +102,30 @@ $notification-token-width: $header-margin * 2;
 
         .left {
             float: left;
-            i { font-size: 16px; }
-            
+            #primary-menu {
+            	position: relative;
+            	top: 1px;
+            	width: 16px;
+            	height: 16px;
+            	opacity: 0.94;
+            	
+            	svg {
+            	    fill: #FFF;
+            	}
+			}
+
             .token {
                 float: left;
+                
+                // main branding logo
                 &.logo {
                     width: 90px;
                     padding: 0px 10px;
-
+                    opacity: $branding-opacity;
+                    
+                    &:hover {
+                        opacity: 1;
+                    }
                     a img {
                         vertical-align: middle;
                     }
@@ -93,7 +133,6 @@ $notification-token-width: $header-margin * 2;
                     img {
                         max-height: 25px;
                     }
-
                 }
 
                 &.drawer {
@@ -122,16 +161,12 @@ $notification-token-width: $header-margin * 2;
                 float: right;
 
                 .caret {
-                    font-size: 10px;
+                    font-size: $default-font-size;
                 }
 
                 &.active .caret::before {
-                
-                    /* rotate when expanding the menu */
-                    /* & translate the caret's origin (centerpoint) for rotation so that it displays correctly */
-                    /* dimensions are unique to the OI caret glyph */
-                    @include rotateX(180deg);
-                    @include transform-origin (50%, 40%);
+                    // when activating the menu, switch the caret
+                    content: "\f0d8";  // fa-caret-up
                 }
 
                 &.username {
@@ -152,9 +187,18 @@ $notification-token-width: $header-margin * 2;
                     }
                 }
 
-                &.advisor_now a img {
+                &.advisorNow a img {
+                    position: relative;
+                    width: 83px;
+                    top: 6px;
+                    
                     margin-bottom: 0px;
                     padding-right: 15px;
+                    opacity: $branding-opacity;
+                    
+                    &:hover {
+                        opacity: 1;
+                    }
                 }
             }
         }
@@ -170,19 +214,30 @@ $notification-token-width: $header-margin * 2;
             margin-top: 10px;
             height: 30px;
 
-            i {
+            span {
                 color: $brand-light;
                 z-index: 1;
 
-                &.search_clear { font-size: 10px; }
+                &.search_clear {
+                    font-size: $default-font-size;
+                    position: relative;
+                    top: 2px;
+                }
                 &.magnifying_glass {
                     position: absolute;
                     left: 168px;
                     top: 16px;
-                    font-size: 15px;
+                    font-size: 16px;
                 }
-            }
 
+            }
+            .search_magnifying_glass:before {
+                z-index: 1;
+                color: $brand-light;
+                font-size: 15px;
+                top: 2px;
+            }
+            
             input {
                 @include placeholder {
                     color: $brand-tint;
@@ -235,7 +290,7 @@ $notification-token-width: $header-margin * 2;
                 @include full-item-link(60px);
             }
             li.search_all {
-                @include full-item-link(40px);
+                @include full-item-link($menu-item-height-default);
                 padding-top:5px;
                 padding-bottom: 5px;
             }   
@@ -249,14 +304,19 @@ $notification-token-width: $header-margin * 2;
             @include transition-duration(0.5s);
             @include transition-timing-function(cubic-bezier(0,0,0,1));
 
-            &.hidden { left: -$drawer-width; display: block !important;}
+            &.hidden {
+                left: - ($drawer-width + 5px);
+                display: block !important;
+            }
 
             width: $drawer-width;
             height: 100vh;
             left: 0px;
             li { 
                 @include full-item-link($header-height);
-                &:hover .knob { background: $brand-shade; }
+                &:hover .knob {
+                    background: $brand-shade;
+                }
             }
             .knob {
                 padding-left: 0px;
@@ -266,22 +326,54 @@ $notification-token-width: $header-margin * 2;
                 text-align: center;
                 &.remainder { height: 100vh; }
             }
+            
+            //  color for svg glyphs in the primary nav bar
+            #primary {
+                svg {
+                    fill: #FFF;
+                }
+            }
+            
+            // individual sections of the primary nav
+            #primary-home { 
+                @extend #primary;
+                svg {
+                    width: 18px;
+                    height: 18px;
+                }
+            }
+            #primary-workspaces {
+                font-size: 18px;
+            }
+            #primary-data {
+                font-size: 18px;
+            }
+            #primary-users {
+                @extend #primary;
+                svg {
+                    width: 29px;
+                    height: 29px;
+                }
+            }
+            #primary-tags {
+                font-size: 18px;
+            }
         }
 
         .menu.popup_username {
             line-height: 24px;
-            /* add 1 for 1px border around popup */
+            // account for 1px border around popup
             right: $header-margin-right - 1;
             width: $header-margin * 6;
 
             li {
-                @include full-item-link(40px)
+                @include username-item-link($menu-item-height-default)
             }
         }
 
         .menu.popup_notifications {
             $width: 320px;
-			/* calculate the left margin. add 1 for 1px border */
+			// calculate the left margin. add 1 for 1px border */
             margin-left: -( ($width - $notification-token-width / 2) +1);
             width: $width;
 
@@ -330,10 +422,9 @@ $notification-token-width: $header-margin * 2;
                 padding: 10px 0;
                 display: block;
                 text-align: center;
-                font-size: 12px;
+                font-size: $small-font;
                 font-weight: $semibold;
             }
         }
     }
 }
-

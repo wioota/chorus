@@ -42,12 +42,29 @@ module Events
     has_many :datasets_notes, :foreign_key => 'note_id', :dependent => :destroy
     has_many :datasets, :through => :datasets_notes
 
-    belongs_to :actor, :class_name => 'User'
+    belongs_to :actor, :class_name => 'User', :touch => true
     belongs_to :target1, :polymorphic => true
     belongs_to :target2, :polymorphic => true
     belongs_to :target3, :polymorphic => true
-    belongs_to :workspace
-    belongs_to :promoted_by, :class_name => 'User'
+    belongs_to :workspace, :touch => true
+    belongs_to :promoted_by, :class_name => 'User', :touch => true
+    belongs_to :dataset, :touch => true
+    belongs_to :workfile, :touch => true
+
+
+    # PT 1/15/15 This will auto-refresh the JSON data object for workspace
+    #after_save :refresh_cache
+    after_save :delete_cache
+
+    # Upon creating or updating an event, refresh the JSON object in cache.
+    def delete_cache
+      if self.id != nil && current_user != nil
+        cache_key = "activities/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
+        Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with ID = #{self.id} --"
+        Rails.cache.delete(cache_key)
+        return true # Prevent a missing key from the callback chain
+      end
+    end
 
     [:actor, :workspace, :target1, :target2, :target3, :promoted_by].each do |method|
       define_method("#{method}_with_deleted") do

@@ -1,3 +1,6 @@
+<!-- TEMPLATE -->
+<!-- display the user profile -->
+
 <div class="user_info">
     {{#ifAny title department}}
       <div class="titleAndDepartment">
@@ -18,15 +21,15 @@
     {{#if notes}}<div class="notes">{{notes}}</div>{{/if}}
 </div>
 
-<div class="edit_photo">
-    <img src="{{imageUrl}}" class="profile"/>
+<div class="profile_image">
+    <img src="{{imageUrl}}" class="profile" title="{{t 'user.profile.avatar.title'}}"/>
 </div>
 
 <div class="workspaces {{#unless workspaces.models.length}} hidden {{/unless}}">
     <h2>{{t "users.workspaces_header"}}</h2>
     <ul>
         {{#each workspaces.models}}
-          <li><img src="/images/workspaces/workspace_small.png"/><a href="#/workspaces/{{id}}" title="{{attributes.name}}">{{attributes.name}}</a></li>
+          <li><img src="/images/workspaces/workspace_small.png" class="workspaceIconSmall" alt=""/><a href="#/workspaces/{{id}}" title="{{attributes.name}}">{{attributes.name}}</a></li>
         {{/each}}
     </ul>
 </div>

@@ -43,7 +43,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
                 expect(this.dialog.$(".options_area")).not.toHaveClass("hidden");
                 expect(this.dialog.$(".options_area .row.file_details.visualization .name")).toHaveText("hello-frequency.png");
                 expect(this.dialog.$(".icon").attr("src")).toBe("images/workfiles/icon/img.png");
-                expect(this.dialog.$("a.remove")).toHaveClass("hidden");
+                expect(this.dialog.$(".removeWidget")).toHaveClass("hidden");
             });
         });
 
@@ -75,9 +75,7 @@ describe("chorus.dialogs.VisualizationNotesNew", function() {
                 });
 
                 it("pops toast", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith("dataset.visualization.toast.note_from_chart", {
-                        datasetName: 'my dataset'
-                    });
+                    expect(chorus.toast).toHaveBeenCalledWith("dataset.visualization.note_from_chart.toast", {datasetName: "my dataset", toastOpts: {type: "success"}});
                 });
             });
 

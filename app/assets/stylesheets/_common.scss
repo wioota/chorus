@@ -3,112 +3,125 @@
 
 // Grand Old Colors
 /* basic color rules - DO NOT use these in component files, they should only be used in config sections! */
-$light-green: #B3D988;
-$light-blue: #c4dceb;
-$blue: #2c95dd;
-$green: #98B675;
-$gray-blue: #B2C7D6;
-$gray: #7D7D7D;
-$fiji-green: #4E7225;
-$fire-engine-red: #B5121B;
-$pumpkin: #f7771b;
+$light-green:       #B3D988;
+$light-blue:        #C4DCEB;
+$blue:              #2C95DD;
+$green:             #98B675;
+$gray-blue:         #B2C7D6;
+$gray:              #7D7D7D;
+$fiji-green:        #4E7225;
+
+$fire-engine-red:   #B5121B;
+$pumpkin:           #F7771B;
 
 // Brand New Colors
 // These colors were mapped to names via www.color-blindness.com/color-name-hue
-$pacific-blue:      rgb(0, 160, 229);
-$bright-turquoise:  rgb(21, 214, 203);
-$pattens-blue:      rgb(240, 245, 250);
+$pacific-blue:      rgb(0,  160, 229);   // #00A0E5
+$bright-turquoise:  rgb(21, 214, 203);   // #15D6CB
+$pattens-blue:      rgb(240, 245, 250);  // #F0F5FA
 $alice-blue:        rgb(240, 247, 254);
-$greyish-blue:      rgb(221, 236, 250);
-$greyish-blue-v2:   rgb(248, 251, 253);
+$greyish-blue:      rgb(221, 236, 250);  // #DDECFA latest version
+$greyish-blue-v2:   rgb(248, 251, 253);  // #F8FBFD older version
 $light-sky-blue:    rgb(148, 215, 244);
-$bluer-lavender:    rgb(225,237,250);
+$bluer-lavender:    rgb(222, 234, 249);
 
-$bright-grey:       rgb(88, 89, 95);
+$bright-grey:       rgb(88, 89, 95);        // #58595F
 $greyish-yellow:    rgb(204, 204, 200);
 $light-grey-yellow: rgb(243, 243, 241);
-$light-gray:        rgb(234, 238, 241);
-$shadow-gray:		darken($light-gray, 11%);
+$light-gray-blue:   rgb(234, 238, 241);
+$light-gray:        rgb(234, 235, 236);
+$shadow-gray:		darken($light-gray, 21%);
+
+// neutral greys
+$neutral-light-grey: #E0E0E0;
+
 $charcoal:          #464646;
+$black:             #000000;
+$core-white:		#FFFFFF;
 
 //transparent variants
-$shadow-color:		rgba($shadow-gray, .7);
+$shadow-color:		rgba($shadow-gray, .7);  //rgba(178, 181, 185, 0.7);
 
 
 // Tints & Shades of Brand Colors
-// Brand
-$brand: $pacific-blue;
-$brand-light: lighten($brand, 14%);
-$brand-tint: lighten($brand, 7%);
-$brand-shade: darken($brand, 7%);
-$brand-dark: darken($brand, 14%);
+$brand:         $pacific-blue;
+$brand-light:   lighten($brand, 14%);
+$brand-tint:    lighten($brand, 7%);
+$brand-shade:   darken($brand, 7%);
+$brand-dark:    darken($brand, 14%);
 
 $accent: $alice-blue;
 //$accent-light: unused;
 $accent-tint: rgb(250, 252, 253);
-$accent-shade: rgb(231, 243, 253);
+/* $accent-shade: rgb(231, 243, 253);*/
+$accent-shade: rgb(227, 241, 252);  /* #E3F1FC */
 //$accent-dark: unused;
 
-// Semantic Colors
-$ok: $fiji-green;
-$alert: $fire-engine-red;
-$needs-attention: $pumpkin;
+// Semantic colors AKA Messaging
+$ok:                $fiji-green;
+$informational:     $pacific-blue;
+$error:             $fire-engine-red;
+$alert:             $fire-engine-red;
+$needs-attention:   $pumpkin;
 
 
 // Background colors
-$list-hover-color: $accent;
-$list-checked-color: $accent-shade;
-$list-striping-color: $accent-tint;
-$body-background-color: white;
-$shaded-background-color: $light-gray;
+$list-hover-color:          $accent;
+$list-checked-color:        $accent-shade;
+$list-striping-color:       $accent-tint;
+$body-background-color:     #FFFFFF;
+$shaded-background-color:   $light-gray;
 $subheader-background-color: $pattens-blue;
-$dialog-header-background: $greyish-blue;
-$login-background: $bluer-lavender;
+$dialog-header-background:  $greyish-blue;
+$login-background:          $bluer-lavender;
 
 // Border colors
-$border-color: $light-gray;
-$border-color-dark: darken($border-color, 5%);
-$border-color-darkest: darken($border-color, 15%);
+$border-color:          $light-gray;
+$border-color-dark:     darken($border-color, 5%);
+$border-color-darkest:  darken($border-color, 15%);
 
 // Text colors
-$color-text1: darken($charcoal, 10%);
-$color-text2: $charcoal;
-$color-text3: lighten($charcoal, 10%);
-$color-text4: lighten($bright-grey, 20%);
-$link-color: $brand;
-$disabled-text: rgb(147, 154, 159);
-$caret-color: $light-sky-blue;
+$color-text1:   darken($charcoal, 10%);
+$color-text2:   $charcoal;
+$color-text3:   lighten($charcoal, 10%);
+$color-text4:   lighten($bright-grey, 20%);
+$link-color:    $brand;
+$disabled-text: #939799;
 
-// Font weights
-$semibold: 600;
-$light: 300;
-// "normal" defaults to 400
+$caret-color:   $light-sky-blue;
 
-//Dimensions
-$header-height: 50px;
-$subheader-height: 60px;
-$subnav-height: 45px;
+
+// ********************
+// LAYOUT
+$header-height:     50px;
+$subheader-height:  60px;
+$subnav-height:     45px;
 $workspace-header-height: $subnav-height + $subheader-height + $header-height;
+
+
+// GLOBAL margin for left and right page margins
+$page-margin-left:      25px;
+$page-margin-right:     25px;
+
+// GLOBAL margin for bottom of pages
+// = distance between bottom of content and bottom of browser window
+$page-margin-bottom:    60px;
+
+// dimensions
 $summary-line-height: 19px;
+
+// GLOBAL BORDERS
 $default-border-width: 1px;
 $default-border-radius: 3px;
 
-/* global margin for left and right sides of all pages */
-$page-margin-left: 25px;
-$page-margin-right: 25px;
-/* global margin for bottom of all pages */
-$page-margin-bottom: 60px;
+$border-canon:              $default-border-width solid $border-color;
+$dark-border-canon:         $default-border-width solid $border-color-dark;
+$login-card-border-canon:   5px solid $color-text3;
+$shadow-canon:              2px 2px 3px 0px $shadow-color;
 
-//Specials
-$border-canon: $default-border-width solid $border-color;
-$dark-border-canon: $default-border-width solid $border-color-dark;
-$strong-border-canon: 5px solid $color-text3;
-
-$shadow-canon: 2px 2px 3px 0px $shadow-color;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/* applied color rules - USE these in component files! */
+// applied color rules - USE these in component files!
 // Background colors
 $data-grid-background-color: #EAEEF2;
 $progress-bar-background-color : #D8DEE6;
@@ -117,34 +130,89 @@ $ie-header-color: #c7c7c7;
 $tab-gradient-color : #D5E0EB;
 $activity-stream-comment-background-color: #DFE5EB;
 $progress-bar-full-background-color : #AE0020;
-$error-background-color: #B61B1D;
-$search-highlight-color: #FFFF00;
-$content-details-create-background-color: #49A942;
+
+
+
+$search-highlight-color:                    #FFFF00;
+$content-details-create-background-color:   #49A942;
 $content-details-chart-icon-selected-background-color: #42AA3D;
-$content-details-action-background-color: #B3D988;
+$content-details-action-background-color:   #B3D988;
 $content-details-chart-icon-hover-background-color: #C3ECA0;
-$picklist-selected-background-color: #3795DD;
-$chart-fill-color: #4A83C3;
-$dataset-number-background-color: #788DA5;
+$picklist-selected-background-color:        #3795DD;
+$chart-fill-color:                          #4A83C3;
+$dataset-number-background-color:           #788DA5;
 
 // standard app lightbox background color and opacity
-$lightbox-overlay-opacity: 0.49;
-$lightbox-overlay-color: rgba(0,0,0,$lightbox-overlay-opacity);
+$lightbox-overlay-opacity:  0.49;
+$lightbox-overlay-color:    rgba(0,0,0, $lightbox-overlay-opacity);
 
 // Border colors
-$content-details-action-link-border-color: #98B675;
-$results-console-border-color: #88A8D3;
-$type-ahead-result-border-color: #A5A6A8;
+$content-details-action-link-border-color:  #98B675;
+$results-console-border-color:              #88A8D3;
+$type-ahead-result-border-color:            #A5A6A8;
 
 // Text colors
-$error-text-color: white;
-$error-color: white;
-$content-header-link-color: $color-text4;
+$content-header-link-color:     $color-text4;
+$required-marker-color:         $error;
 
-// Notification colors
-$notification-error-dark: #d43a0b;
-$notification-error-light: #ffd6d6;
+
+// NOTIFICATIONS aka MESSAGING
+// COLORS
+// used for various alerts and errors encountered in tasks
+/* $error-background-color: #EF9A8F; */
+$error-background-color:    #F2DEDE;
+$error-border-color:        #BF7C7C;
+$error-text-color:          #661616;
+$error-icon-color:          #881111;
+$error-tooltip-text-color:  $core-white;
+$error-input-border-color:  #AA3333;
+
 $notification: $bright-turquoise;
+$notification-error-dark:   #D43A0B;
+$notification-error-light:  #FFD6D6;
+
+$alert-color: $needs-attention;
+$alert-background-color:    $needs-attention;
+$alert-border-color:        $needs-attention;
+$alert-icon-color:          #B24E11;
+$alert-text-color:          $core-white;
+
+//$warning-color: $needs-attention;  //used?
+$warning-background-color:  $needs-attention;
+$warning-icon-color:        #B24E11;
+/* $warning-text-color:     $core-white; */
+
+//$informational-color: $pacific-blue;  // used?
+$informational-background-color:    #DAEDFE;
+$informational-border-color:        #A3C0E0;
+$informational-icon-color:          #002755;
+//$informational-text-color:        #333;
+$informational-text-color:          #002244;
+
+$success-color:             $ok;
+$success-background-color:  #DFF0D8;
+$success-border-color:      #B3C0A0;
+$success-icon-color:        #448025;
+$success-text-color:        #448044;
+
+$normal-tooltip-text-color: $core-white;
+
+// hard errors
+// 404-like
+$hardError-background-color:    $fire-engine-red;
+$hardError-text-color:          #EEEEEE;
+$hardError-icon-color:          #EEEEEE;
+
+
+// NOTIFICATIONS aka MESSAGING
+// SIZING & DIMENSIONS
+
+$alert-border-radius:   3px;
+$alert-icon-large:      36px;
+$alert-icon-medium:     16px;
+$alert-icon-small:      12px;
+
+
 
 // Dimensions
 $sidebar-width : 266px;
@@ -160,19 +228,52 @@ $default-padding-horizontal: 5px;
 $margin-x : 10px;
 $guts-padding: 7px;
 $guts-padding-bottom: 15px;
+
+// default sizing for the user profile image
 $user-detail-image-width: 150px;
+
+/* small size icons, such as for workfiles */
 $icon-image-width : 35px;
 $icon-image-height : 35px;
+/* regular size icons, such as for workfiles */
 $large-image-width : 45px;
 $large-image-height : 45px;
 $activity-gutter: 15px;
-$dialog-padding : 15px;
+
 $breadcrumbs-height: 32px;
 $help-pill-width: 34px;
 $texteditor-min-height: 300px;
+
 $default-dialog-width: 500px;
+$default-dialog-width-medium: 600px;
+$default-dialog-width-wide: 940px;
+/* $dialog-padding= interior padding from edge for dialog content */
+$dialog-padding: 15px;
+$dialog-padding-leftRight: 15px;
+$dialog-padding-top: 15px;
+$dialog-padding-bottom: 15px;
+
+$separator-space: 4px;
+
+$caret-margin: 5px;		// space between the text and the caret glyph
+
+
+// General application sizes
+
+$selectlist-width-small:  100px;
+$selectlist-width-medium: 210px;
+$selectlist-width-large:  300px;
+
+$input-width-small:  120px;
+$input-width-medium: 250px;
+$input-width-large:  350px;
+
 
 // z-indices
+
+$header-z-index: 15000;
+$menu-z-index: $header-z-index + 10;
+
 $guts-z-index: 0;
 $link-menu-z-index: $guts-z-index + 1;
 $editor-top-z-index: 10;
@@ -181,8 +282,6 @@ $data-grid-column-header-z-index: 2;
 $data-grid-body-z-index: 20;
 $data-grid-head-z-index: $data-grid-body-z-index + 1;
 
-$header-z-index: 15000;
-$menu-z-index: $header-z-index + 1;
 
 $dialog-overlay-z-index: $menu-z-index + 1;
 $dialog-z-index: $dialog-overlay-z-index + 1;
@@ -191,27 +290,49 @@ $tooltip-z-index: $dialog-z-index + 1;
 
 $toast-closing-z-index: $tooltip-z-index + 1;
 $toast-z-index: $toast-closing-z-index + 1;
+
 $hidden-z-index: -100;
 $select-menu-z-index: 1000000;
 $drag-z-index: 9999;
 
-// Font size
-$medium-font: 14px;
-$small-font: 12px;
-$smallest-font: 10px;
+$popup_filter-z-index: 9999999; //from dataset_table import
 
-// fontsize for the page header element. eg. name of item
-$page_header-fontsize: 20.5px;
-// fontsize for the primary item name in lists. e.g. workspace, workfile, datasource, etc.
-$listitem_name-fontsize: 16px;
+$import-date-picker-z-index: 20001; // from import_now
+
+
+$ridiculously-large-z-index: 9999999999999;
+
 
 ///////////////////////////////////////////////////////
 // TODO: Reconcile these with above values
-/* Typography */
+// Typography
+
+$font-family: "Source Sans Pro",Helvetica,Arial,Verdana,sans-serif;
+
+// FONT WEIGHTS
+$light:     300;
+// "normal" defaults to 400
+$semibold:  600;
+$bold:      700;
+
+
+// FONT SIZES
+// normal size should be medium
+$medium-font:               14px;
+$small-font:                12px;
+$smallest-font:             10px;
+$default-font-size:         $medium-font;
+
+// fontsize for the page (sub) header element. eg. name of item
+$page_header-fontsize:      20.5px;
+
+// fontsize for the primary item name in lists. e.g. workspace, workfile, datasource, etc.
+$listitem_name-fontsize:    16px;
+
+
 
 $default-font-color: $color-text3;
-$default-font-size: 14px;
-$font-family: "Source Sans Pro",Helvetica,Arial,Verdana,sans-serif;
+
 $low-light-type: $gray;
 $mid-light-type: #5f5f5f;
 
@@ -227,12 +348,15 @@ $low-light-link-color: $gray;
 $list-horizontal-divider: 1px solid $border-color;
 $list-vertical-divider: 1px solid $border-color;
 $list-selectable-hover-color: rgba(0,0,0,0.1);
-$list-selectable-selected-color: white;
-$list-breadcrumb-divider: "\e02f";
-$list-breadcrumb-spacing: 5px;
-$list-breadcrumb-size: 10px;
+$list-selectable-selected-color: #FFFFFF;
 $list-border-color-highlighted: $green;
 
+/* breadcrumb specs */
+$list-breadcrumb-fontfamily: "FontAwesome";
+$list-breadcrumb-divider: "\f0da";
+$list-breadcrumb-spacingleft: 1px;
+$list-breadcrumb-spacingright: 5px;
+$list-breadcrumb-size: 13px;
 
 /* whitespace */
 
@@ -251,10 +375,12 @@ $guttersH: 15px;
 $guttersV: $baseLineHeight/2em*1rem; // set top and bottom margins to half the base line height so that the total takes up one row of vertical rhythm.
 $spacingHelpers: ($emRatio*$baseLineHeight/3, $emRatio*$baseLineHeight/2, $emRatio*$baseLineHeight); //TODO: convert to px;
 
-/* buttons */
-$button-height : 26px;
+// BUTTONS
+$button-height: 30px;
+$button-padding-sides: 14px;
+
 $button-border-color: $border-color;
-$button-background-color : white;
+$button-background-color : #FFFFFF;
 
 $button-border-color-highlighted: $green;
 
@@ -267,8 +393,20 @@ $action-bar-highlighted-background-color: $light-green;
 $action-bar-hovered-item-background-color: #C3ECA0;
 $action-bar-secondary-background-color: $light-blue;
 
-///////////////////////////////////////////////////////
 
+// LOZENGES aka pill
+$default-lozenge-height: 21px;
+
+$lozenge-color-normal: #F1F5F8;
+$lozenge-color-hover: #DDE6F3;
+$lozenge-color-selected: $brand-dark;
+
+$lozenge-color-normal-dark: darken($lozenge-color-normal, 7%);
+$lozenge-color-hover-dark: darken($lozenge-color-hover, 7%);
+$lozenge-color-selected-dark: $brand-dark;
+
+
+///////////////////////////////////////////////////////
 // Mixins
 
 
@@ -291,7 +429,7 @@ $action-bar-secondary-background-color: $light-blue;
     @include debugging-mixin;
     font-size: 24px;
     font-weight: $semibold;
-    color: $color-text1;
+    /* color: $color-text1; */
 }
 
 @mixin subheading-normal {
@@ -351,7 +489,6 @@ $action-bar-secondary-background-color: $light-blue;
 	color: $color-text1;
 }
 
-
 @mixin font-secondary-content {
     @include debugging-mixin;
     font-size: 12px;
@@ -363,35 +500,39 @@ $action-bar-secondary-background-color: $light-blue;
 /* used for the name of items in list */
 /* workspaces, files, etc. */
 
-@mixin font-primary-link {
-    color: $brand;
+@mixin font-primary {
     font-size: 18px;
     font-weight: normal;
 }
 
+@mixin font-primary-link {
+    color: $brand;
+    @include font-primary;
+}
+
 @mixin font-action-link {
     color: $brand;
-    font-size: 14px;
+    font-size: $medium-font;
 }
 
 @mixin font-secondary-link {
     color: $brand-dark;
-    font-size: 12px;
+    font-size: $small-font;
     font-weight: $semibold;
 }
 
 @mixin font-menu {
     @include debugging-mixin;
-    font-size: 14px;
-    font-weight: normal;
+    font-size: $medium-font;
     line-height: 14px;
+    font-weight: normal;
     vertical-align: middle;
     color: $color-text1;
 }
 
 @mixin results-console {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     font-weight: $semibold;
     color: $color-text1;
 }
@@ -399,6 +540,7 @@ $action-bar-secondary-background-color: $light-blue;
 @mixin uppercase {
     text-transform: uppercase;
     letter-spacing: 1px;
+    word-spacing: 0.135em;
 }
 
 @mixin list-section-heading {
@@ -411,34 +553,41 @@ $action-bar-secondary-background-color: $light-blue;
 
 @mixin list-item-details-area {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     color: $color-text3;
+}
+
+@mixin insight-ribbon {
+    @include debugging-mixin;
+    font-size: $small-font;
+    font-weight: $semibold;
+	color: $core-white;
 }
 
 @mixin database-column-type {
     @include debugging-mixin;
-    font-size: 11px;
-    font-weight: $semibold;
-    color: white;
+    font-size: $medium-font;
+    font-weight: normal;
+	color: $color-text3;
 }
 
 @mixin secondary-text-normal {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     font-weight: normal;
     color: $color-text3;
 }
 
 @mixin tertiary-text-normal {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     font-weight: normal;
     color: $color-text4;
 }
 
 @mixin secondary-text-semibold {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     font-weight: $semibold;
     color: $color-text3;
 }
@@ -472,12 +621,12 @@ $action-bar-secondary-background-color: $light-blue;
 
 @mixin dashboard-snapshot-model {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
 }
 
 @mixin dashboard-module-title {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     color: $color-text2;
     @include uppercase;
 }
@@ -492,13 +641,13 @@ $action-bar-secondary-background-color: $light-blue;
 
 @mixin after-clearfix($which: both) {
     &:after {
-            content: ".";
-            display: block;
-            height: 0;
-            font-size: 0;
-            clear: $which;
-            visibility: hidden;
-        }
+        content: ".";
+        display: block;
+        height: 0;
+        font-size: 0;
+        clear: $which;
+        visibility: hidden;
+    }
 }
 
 @mixin borderbox {
@@ -520,12 +669,56 @@ $action-bar-secondary-background-color: $light-blue;
 }
 
 @mixin menu-triangle {
-    padding-right: 10px;
-    background-image: url("/images/blue-menu-triangle.png");
-    background-position: right;
-    background-repeat: no-repeat;
+/*     padding-right: 10px; */
+/*     background-image: url("/images/blue-menu-triangle.png"); */
+/*     background-position: right; */
+/*     background-repeat: no-repeat; */
 }
 
+/* caret for menus */
+/* pointing: DOWN  */
+@mixin menu-triangle-glyph {
+	&:hover::after {
+    	text-decoration: none !important;	
+	}
+	&::after {
+		display: inline-block;
+		position: relative;
+		left: $caret-margin;
+		font-family: FontAwesome;
+		content: "\f0d7"; /* fa-caret-down */
+	}
+}
+
+/* generates caret with FA */
+@mixin triangle-glyph($pointing_direction) {
+	
+	&::after {
+		display: inline-block;
+		position: relative;
+		left: $caret-margin;
+		font-family: FontAwesome;
+		
+		@include caret-glyph($pointing_direction);
+	}
+}
+
+/* outputs the FA glyph content for the 'caret' */
+@mixin caret-glyph($pointing_direction) {
+
+	@if $pointing_direction == up {
+		content: "\f0d8";
+	} @else if $pointing_direction == down {
+		content: "\f0d7";
+	} @else if $pointing_direction == right {
+		content: "\f0da";
+	} @else if $pointing_direction == left {
+		content: "\f0d9";
+	}
+}
+
+
+/* generates a caret with css */
 @mixin triangle($pointing_direction, $color, $width, $height) {
     width: 0;
    	height: 0;
@@ -548,21 +741,48 @@ $action-bar-secondary-background-color: $light-blue;
 	}
 }
 
-@mixin pill-tab($min-width) {
-    &:hover .lozenge { background: $shaded-background-color; }
+/* ********* */
+/* used to generate the pill shapes used in sub nav and right-side nav tabs */
+/* call with: */
+/* min-width: min width of the pill */
+/* height: height of the pill. if none provided, defaults to 21px */
+
+@mixin pill-tab($min-width, $height: $default-lozenge-height) {
+    &:hover .lozenge {
+        //background: $lozenge-color-hover;
+        text-decoration: none;
+    }
     .lozenge {
-        @include lozenge(0, $min-width, 21px);
+        @include lozenge(0, $min-width, $height);
         font-size: 12px;
         color: $color-text2;
         padding: 0 10px;
     }
 
     &.selected {
-        &:hover .lozenge { background: $brand-dark; }
-
+        &:hover .lozenge {
+            //background: $lozenge-color-selected;
+        }
         .lozenge {
-            background: $brand-dark;
-            color: white;
+            //background: $lozenge-color-selected;
+            color: #FFFFFF;
+        }
+    }
+}
+
+@mixin pill-tab-colors ($normal, $hover, $selected) {
+    .lozenge {
+        background-color: $normal;
+    }
+    &:hover .lozenge {
+        background: $hover;
+    }
+    &.selected {
+        &:hover .lozenge {
+            background: $selected;
+        }
+        .lozenge {
+            background: $selected;
         }
     }
 }
@@ -576,20 +796,19 @@ $action-bar-secondary-background-color: $light-blue;
     padding: $padding;
     text-align: center;
 
-    @include border-radius($height);
+    @include border-radius($height - 2);
     min-width: $min-width;
 }
 
+
 @mixin grab_cursor {
     cursor: -moz-grab;
-    cursor: -o-grab;
     cursor: -ms-grab;
     cursor: -webkit-grab;
     cursor: grab;
 }
 
 @mixin sidebar-panel {
-
     $border-radius: $default-border-radius;
     margin-top: $sidebar-padding-top;
 
@@ -618,11 +837,10 @@ $action-bar-secondary-background-color: $light-blue;
     ul {
         padding-bottom: 10px;
     }
-
 }
+
 @mixin dark-sidebar-panel {
     @include sidebar-panel;
-
     background: $accent;
 
     label {
@@ -638,13 +856,13 @@ $action-bar-secondary-background-color: $light-blue;
 
         a {
             &.active {
-                color: black;
+                color: $black;
                 border-bottom: none;
             }
         }
 
         .separator {
-            padding: 0 5px;
+            padding: 0 $separator-space;
             position: relative;
             top: 2px;
             color: $link-color;
@@ -655,6 +873,26 @@ $action-bar-secondary-background-color: $light-blue;
         }
     }
 }
+
+// NOTIFICATIONS aka MESSAGING
+// MIXINS, CONTENT
+
+@mixin alert-error-icon {
+    content: "\f06a";  /* fa-exclamation-circle */
+}
+
+@mixin alert-warning-icon {
+    content: "\f071";  /* fa-exclamation-triangle */
+}
+
+@mixin alert-success-icon {
+    content: "\f058";  /* fa-check-circle */
+}
+
+@mixin alert-informational-icon {
+    content: "\f06a";  /* fa-exclamation-circle */
+}
+
 
 // Do not put any css rules into this file.  This file is only for declaration of variables and mixins
 //

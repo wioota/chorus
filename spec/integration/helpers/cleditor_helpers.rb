@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module CleditorHelpers
   def set_cleditor_value(name, value)
     page.should have_selector("textarea[name=#{name}]")

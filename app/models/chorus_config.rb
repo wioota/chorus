@@ -26,8 +26,21 @@ class ChorusConfig
     nil
   end
 
+
+   def with_temporary_config(new_config_hash)
+     old_config = @config.deep_dup
+     @config.deep_merge! new_config_hash.stringify_keys
+     yield
+   ensure
+     @config = old_config
+   end
+
   def hdfs_versions
     @available_hdfs_versions ||= initialize_hdfs_versions
+  end
+
+  def hive_hdfs_versions
+    @available_hive_hdfs_versions ||= initialize_hive_hdfs_versions
   end
 
   def time_zones
@@ -43,6 +56,14 @@ class ChorusConfig
 
   def tableau_configured?
     !!(self['tableau.enabled'] && self['tableau.url'] && self['tableau.port'])
+  end
+
+  def tableau_sites
+    if !self['tableau.sites'].nil?
+      return self['tableau.sites'].map { |s| { 'name' => s } }
+    else
+      return []
+    end
   end
 
   def gnip_configured?
@@ -144,17 +165,27 @@ class ChorusConfig
   def initialize_hdfs_versions
     versions = []
     pivotal_versions = [
-        'Pivotal HD 2'
+        'Pivotal HD 2',
+        'Pivotal HD 3'
     ]
     other_versions = [
         'Cloudera CDH4',
         'Cloudera CDH5',
-        'Hortonworks HDP 2.1',
+        'Hortonworks HDP 2',
         'MapR',
         'MapR4'
     ]
     versions += pivotal_versions
     versions += other_versions unless License.instance.branding == 'pivotal'
+    versions.sort
+  end
+
+  def initialize_hive_hdfs_versions
+    versions = [
+        'Cloudera CDH5',
+        'Hortonworks HDP 2',
+        'MapR4'
+    ]
     versions.sort
   end
 

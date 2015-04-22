@@ -33,7 +33,7 @@ chorus.dialogs.VisualizationNotesNew = chorus.dialogs.MemoNew.extend({
         $row.find('img.icon').attr('src', iconSrc);
         $row.find('span.name').text(visualization.fileName).attr('title', visualization.fileName);
         $row.data("visualization", visualization);
-        $row.find("a.remove").addClass("hidden");
+        $row.find(".removeWidget").addClass("hidden");
         $row.removeClass("hidden");
         $row.addClass("visualization file_details");
     },
@@ -52,6 +52,6 @@ chorus.dialogs.VisualizationNotesNew = chorus.dialogs.MemoNew.extend({
     },
 
     svgSaved: function() {
-        chorus.toast("dataset.visualization.toast.note_from_chart", {datasetName: this.options.entityName });
+        chorus.toast("dataset.visualization.note_from_chart.toast", {datasetName: this.options.entityName, toastOpts: {type: "success"}});
     }
 });

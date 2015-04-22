@@ -63,7 +63,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
         }
 
         this.$("input.delimiter").prop("checked", false);
-        if(_.contains([",", "\t", ";", " "], this.delimiter)) {
+        if(_.contains([",", "\t", ";", " ", "|"], this.delimiter)) {
             this.$("input.delimiter[value='" + this.delimiter + "']").prop("checked", true);
         } else {
             this.$("input#delimiter_other").prop("checked", true);
@@ -91,7 +91,7 @@ chorus.dialogs.NewTableImportCSV = chorus.dialogs.Base.extend({
 
     saved: function() {
         this.closeModal();
-        chorus.toast("dataset.import.started");
+        chorus.toast("dataset.import.started.toast", {toastOpts: {type: "info"}});
         chorus.PageEvents.trigger("csv_import:started");
     },
 

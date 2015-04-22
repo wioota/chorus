@@ -7,7 +7,7 @@ describe Events::SchemaImportFailed do
 
   let(:actor) { users(:owner) }
   let(:source_dataset) { datasets(:oracle_table) }
-  let(:destination_dataset) { datasets(:table) }
+  let(:destination_dataset) { datasets(:default_table) }
   let(:schema) { schemas(:default) }
 
   subject do

@@ -9,7 +9,7 @@
     color: white;
     padding: 3px 5px;
     @include border-radius(4px);
-    font-size: 12px;
+    font-size: $small-font;
     font-weight: $semibold;
   }
 }

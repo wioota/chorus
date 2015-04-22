@@ -11,8 +11,8 @@ chorus.views.SearchDataSource = chorus.views.SearchItemBase.extend({
             stateUrl: this.model.stateIconUrl(),
             stateText: this.model.stateText(),
             showUrl: this.model.showUrl(),
-            humanSize: I18n.toHumanSize(this.model.get("size")),
-            iconUrl: this.model.providerIconUrl()
+            iconUrl: this.model.providerIconUrl(),
+            humanSize: I18n.toHumanSize(this.model.get("size"))
         });
     }
 });

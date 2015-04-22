@@ -25,7 +25,7 @@ describe("chorus.dialogs.WorkspaceFileImport", function() {
     it("has a file picker", function() {
         expect(this.dialog.$("input[type=file]")).toExist();
         expect(this.dialog.$(".file-wrapper button")).not.toHaveClass("hidden");
-        expect(this.dialog.$(".file-wrapper button").text()).toMatchTranslation("dataset.import.select_file");
+        expect(this.dialog.$(".file-wrapper button").text()).toMatchTranslation("dataset.import.select_file.button");
     });
 
     it("has the right title", function() {
@@ -346,7 +346,7 @@ describe("chorus.dialogs.WorkspaceFileImport", function() {
                             });
 
                             it("presents a toast message", function() {
-                                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success", {fileName: "myFile"});
+                                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success.toast", {fileName: "myFile", toastOpts: {type: "success"}});
                             });
 
                             it("navigates to the new workfile page", function() {
@@ -361,7 +361,7 @@ describe("chorus.dialogs.WorkspaceFileImport", function() {
                             });
 
                             it("presents a toast message", function() {
-                                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success", {fileName: "myFile"});
+                                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.workfile_success.toast", {fileName: "myFile", toastOpts: {type: "success"}});
                             });
 
                             it("navigates to the workfile list page", function() {

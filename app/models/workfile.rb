@@ -14,9 +14,10 @@ class Workfile < ActiveRecord::Base
 
   serialize :additional_data, JsonHashSerializer
 
-  belongs_to :workspace
-  belongs_to :owner, :class_name => 'User'
-  belongs_to :execution_location, :polymorphic => true
+  belongs_to :workspace, :touch => true
+  belongs_to :owner, :class_name => 'User', :touch => true
+  belongs_to :execution_location, :polymorphic => true, :touch => true
+
 
   has_many :activities, :as => :entity
   has_many :events, :through => :activities
@@ -35,6 +36,23 @@ class Workfile < ActiveRecord::Base
   before_validation :init_file_name, :on => :create
 
   before_update :ensure_proper_content_type
+  before_save :delete_cache
+
+  def delete_cache
+    #Fix for 87339340. Avoid searching for cache if the record is newly created and does have an ID before saving to database.
+    if self.id != nil && current_user != nil
+      cache_key = "workspace:workfiles/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
+      Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with cache key = #{cache_key} --"
+      Rails.cache.delete(cache_key)
+      # Fix for DEV-8648. Creating a SQL workfile takes a long time. We are not caching workfileVersion objects so there is no need for deleting cache.
+      # Fix for DEV-8954 When I rename a myfilename.pmml to myfiletest.pmml, the changes does not take place on the front end
+      if self.latest_workfile_version != nil
+        Chorus.log_debug "-- BEFORE SAVE: Clearing cache for WorkfileVersion with ID = #{self.latest_workfile_version.id} --"
+        self.latest_workfile_version.delete_cache
+      end
+    end
+    return true
+  end
 
   def ensure_proper_content_type
     file_is_an_image = self.content_type == 'image'
@@ -50,6 +68,14 @@ class Workfile < ActiveRecord::Base
   after_create :create_workfile_created_event, :if => :current_user
   after_create :update_has_added_workfile_on_workspace
   after_create { touch(:user_modified_at) }
+
+
+  def refresh_cache
+    Chorus.log_debug "-- Refreshing cache for #{self.class.name} with ID = #{self.id} --"
+    options = {:workfile_as_latest_version => true, :list_view => true, :cached => true, :namespace => "workspace:workfiles"}
+    workfile = Workfile.includes(Workfile.eager_load_associations).where("id = ?", self.id)
+    Presenter.present(workfile, nil, options)
+  end
 
   delegate :member_ids, :public, :to => :workspace
 

@@ -83,6 +83,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
     describe("click the 'comma' separator", hasRightSeparator(','));
     describe("click the 'semicolon' separator", hasRightSeparator(';'));
     describe("click the 'space' separator", hasRightSeparator(' '));
+    describe("click the 'pipe' separator", hasRightSeparator('|'));
 
     describe("changing the separator", function() {
         beforeEach(function() {
@@ -403,7 +404,7 @@ describe("chorus.dialogs.NewTableImportCSV", function() {
 
             it("closes the dialog and displays a toast", function() {
                 expect(this.dialog.closeModal).toHaveBeenCalled();
-                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.started");
+                expect(chorus.toast).toHaveBeenCalledWith("dataset.import.started.toast", {toastOpts: {type: "info"}});
             });
 
             it("triggers csv_import:started", function() {

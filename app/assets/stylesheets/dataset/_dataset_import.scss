@@ -7,7 +7,7 @@ $image-width: 35px;
         @include font-menu;
         padding-left: 15px;
         padding-bottom: 5px;
-        font-size: 14px;
+        font-size: $default-font-size;
         font-weight: $semibold;
         color: $color-text2
     }
@@ -32,7 +32,7 @@ $image-width: 35px;
                     padding-left: 20px;
 
                     label {
-                        font-size: 12px;
+                        font-size: $small-font;
                     }
                 }
 

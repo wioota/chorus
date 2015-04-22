@@ -8,7 +8,7 @@ describe JobTask do
   describe '#assemble!' do
     let(:workspace) { workspaces(:empty_workspace) }
     let(:user) { users(:owner) }
-    let(:dataset) { datasets(:table) }
+    let(:dataset) { datasets(:default_table) }
     let(:job) { jobs(:default) }
 
     let(:params) do

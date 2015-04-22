@@ -1,4 +1,5 @@
-.pick_dataset_with_action, .import_datasets_picker_list {
+.pick_dataset_with_action,
+.import_datasets_picker_list {
     .list {
         .text {
             .main {
@@ -8,7 +9,9 @@
     }
 }
 
-.pick_dataset_with_action, .import_datasets_picker_list, .workfile_picker_list {
+.pick_dataset_with_action,
+.import_datasets_picker_list,
+.workfile_picker_list {
     .search {
         padding: 5px 10px;
         border-bottom: $border-canon;
@@ -29,12 +32,12 @@
                 padding-right: 10px;
 
                 a {
-                    font-size: 12px;
+                    font-size: $small-font;
                 }
 
                 .separator {
-                    color: $link-color;
-                    margin: 0 6px;
+                    color: $color-text3;
+                    margin: 0 $separator-space;
                 }
             }
 
@@ -81,7 +84,8 @@
         a {
             font-size: inherit;
             border-bottom: dotted 1px;
-            @include menu-triangle;
+
+			@include menu-triangle-glyph; 
         }
     }
 }
@@ -111,23 +115,24 @@
         overflow-y: auto;
     }
 
-    .list {
-        margin-right: 20px;
-        border-right: 1px solid $border-color-dark;
-    }
+/*     .list { */
+/*         margin-right: 20px; */
+/*         border-right: 1px solid $border-color-dark; */
+/*     } */
 
     .sub_header {
         .chorus_search_container {
             margin-top: 5px;
             float: right;
             width: 250px;
-            display: inline-block;
+/*             display: inline-block; */
         }
 
         .name {
             display: inline-block;
             max-width: 165px;
             @include ellipsis;
+            font-weight: $semibold;
         }
     }
 
@@ -145,11 +150,6 @@
         }
     }
 
-    .form_controls {
-        button.cancel {
-            float: left;
-        }
-    }
 }
 
 .join_schemas.components_menu {

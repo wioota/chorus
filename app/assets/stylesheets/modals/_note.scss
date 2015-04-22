@@ -1,28 +1,35 @@
-.notes_new, .edit_note, .dialog.comment {
+$label-width: 82px;
 
+
+.notes_new,
+.edit_note,
+.dialog.comment {
+
+    font-size: $small-font;
+    
     textarea {
-        min-width : 350px;
+        min-width: 350px;
         min-height: 75px;
         resize: none;
     }
 
     a {
-        font-size: 12px;
+        font-size: $small-font;
         font-weight: $semibold;
-        line-height: 16px;
     }
 
-    .toolbar {
-        color: $link-color;
-        text-align: right;
-        font-size: 12px;
-        margin-bottom: 8px;
-
-        a {
-            font-size: 12px;
-            padding: 0px 2px;
-        }
-    }
+// TODO delete when graphic toolbar is final
+//     .toolbar {
+//         color: $link-color;
+//         text-align: right;
+//         font-size: 12px;
+//         margin-bottom: 5px;
+// 
+//         a {
+//             font-size: 12px;
+//             padding: 0px 2px;
+//         }
+//     }
 
     .options_area {
         .file-wrapper {
@@ -38,7 +45,7 @@
 
         .separator {
             color: $link-color;
-            margin: 0 2px;
+            margin: 0 $separator-space;
         }
 
         .attachment_links {
@@ -81,7 +88,7 @@
             margin-top: 7px;
             position: relative;
             span {
-                background-image: url(/images/loading_animation.gif);
+                background-image: url(/images/general/loading_animation.gif);
                 position: absolute;
                 display: inline-block;
                 left: 0;
@@ -97,14 +104,14 @@
 
     .name {
         display: inline-block;
-        width: 170px;
+        width: 200px;
         @include ellipsis;
         color: $color-text2;
         font-weight: $semibold;
     }
 
     .options_text, .options_area {
-        font-size: 12px;
+        font-size: $small-font;
         margin: 8px 8px;
     }
 
@@ -128,18 +135,21 @@
         padding-left: 8px;
     }
 
+
+	.recipients_menu {}
+	
     .notification_recipient {
         margin-left: 5px;
         margin-right: 8px;
         margin-top: 8px;
 
         .add_user {
-            font-size: 12px;
+            font-size: $small-font;
             font-weight: $semibold;
         }
 
         .user_lists {
-            margin-left: 80px;
+            margin-left: $label-width;
 
             .dropdown {
                 margin-top: 10px;
@@ -148,18 +158,11 @@
         }
 
         .picked_users {
+            line-height: 20px;
             .name {
                 @include ellipsis;
                 max-width: 200px;
                 display: inline-block;
-            }
-
-            .remove {
-                float: right;
-            }
-
-            .name, .remove {
-                line-height: 20px;
                 vertical-align: middle;
             }
         }
@@ -168,4 +171,11 @@
             width: 200px;
         }
     }
+    
+    .remove {
+        float: right;
+        font-size: $default-font-size;
+        line-height: 20px;
+    }
+        
 }

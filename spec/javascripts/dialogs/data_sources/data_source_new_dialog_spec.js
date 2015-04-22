@@ -19,9 +19,9 @@ describe("chorus.dialogs.DataSourcesNew", function() {
         expect(this.selectMenuStub.find(".register_existing_hdfs")).toExist();
     });
 
-    it("shows data source description", function() {
-        expect(this.dialog.$(".register_existing_greenplum .description").text()).toMatchTranslation("data_sources.new_dialog.register_existing_greenplum_help_text");
-        expect(this.dialog.$(".register_existing_hdfs .description").text()).toMatchTranslation("data_sources.new_dialog.register_existing_hdfs_help_text");
+    it("shows data source 'helpful' information", function() {
+        expect(this.dialog.$(".register_existing_greenplum .form_info_block .message").text()).toMatchTranslation("data_sources.new_dialog.register_existing_greenplum_help_text");
+        expect(this.dialog.$(".register_existing_hdfs .form_info_block .message").text()).toMatchTranslation("data_sources.new_dialog.register_existing_hdfs_help_text");
     });
 
     it("does not autocomplete password inputs", function(){
@@ -41,12 +41,14 @@ describe("chorus.dialogs.DataSourcesNew", function() {
         });
 
         it("has select box for 'Greenplum Database', 'HDFS Cluster', 'Hawq', and 'JDBC'", function() {
-            expect(this.dialog.$("select.data_sources option").length).toBe(6);
+            expect(this.dialog.$("select.data_sources option").length).toBe(7);
             expect(this.dialog.$("select.data_sources option").eq(1).text()).toMatchTranslation("datasource.greenplum");
             expect(this.dialog.$("select.data_sources option").eq(2).text()).toMatchTranslation("datasource.postgres");
             expect(this.dialog.$("select.data_sources option").eq(3).text()).toMatchTranslation("datasource.hdfs");
             expect(this.dialog.$("select.data_sources option").eq(4).text()).toMatchTranslation("datasource.hawq");
             expect(this.dialog.$("select.data_sources option").eq(5).text()).toMatchTranslation("datasource.jdbc");
+            expect(this.dialog.$("select.data_sources option").eq(6).text()).toMatchTranslation("datasource.jdbc_hive");
+
         });
 
         it("starts with no select box selected", function() {
@@ -452,8 +454,8 @@ describe("chorus.dialogs.DataSourcesNew", function() {
             expect(this.dialog.$("select.data_sources option[name='register_existing_gnip']")).toExist();
         });
 
-        it("shows gnip data source description", function() {
-            expect(this.dialog.$(".register_existing_gnip .description").text()).toMatchTranslation("data_sources.new_dialog.register_existing_gnip_help_text");
+        it("shows gnip data source 'helpful' information", function() {
+            expect(this.dialog.$(".register_existing_gnip .form_info_block .message").text()).toMatchTranslation("data_sources.new_dialog.register_existing_gnip_help_text");
         });
 
         it("shows the icon", function() {
@@ -534,7 +536,9 @@ describe("chorus.dialogs.DataSourcesNew", function() {
                         spyOn(chorus, 'toast');
                         this.server.lastCreate().succeed();
                         expect(chorus.toast).toHaveBeenCalledWith('data_sources.add.toast',
-                            {dataSourceName: this.dialog.model.name()});
+                            {dataSourceName: this.dialog.model.name(),
+                            toastOpts: {type: "success"}
+                            });
                     });
 
                     it("publishes the 'data_source:added' page event with the new data_source's id", function() {

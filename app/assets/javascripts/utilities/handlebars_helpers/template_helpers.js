@@ -3,6 +3,18 @@ chorus.handlebarsHelpers.template = {
         return new Handlebars.SafeString(window.HandlebarsTemplates[templateName](context));
     },
 
+    // generalized fragment for some interface actions
+    // addWidget = icon (+) for adding an item in a list
+    // removeWidget = icon (x) for removing an item from a list
+
+    addWidget: function(t) {
+        return Handlebars.helpers.renderTemplate("components/widget_add", {text: t});
+    },
+    removeWidget: function(t) {
+        return Handlebars.helpers.renderTemplate("components/widget_remove", {text: t});
+    },
+
+
     formControls:function(submitText, cancelText) {
         if(cancelText && cancelText.hash) {
             cancelText = "actions.cancel";
@@ -17,8 +29,12 @@ chorus.handlebarsHelpers.template = {
         return Handlebars.helpers.renderTemplate("components/form_controls", { submitText: submitText, cancelText: cancelText, disabled: true});
     },
 
-    infoBlock: function(infoTranslation) {
-        return Handlebars.helpers.renderTemplate("components/info_block", {info: infoTranslation});
+//     infoBlock: function(infoTranslation) {
+//         return Handlebars.helpers.renderTemplate("components/info_block", {info: infoTranslation});
+//     },
+
+    formInfoBlock: function(t) {
+        return Handlebars.helpers.renderTemplate("components/form_info_block", {text: t});
     },
 
     renderTemplateIf: function(conditional, templateName, context) {
@@ -53,10 +69,11 @@ chorus.handlebarsHelpers.template = {
         return Handlebars.helpers.renderTemplate("data_sources/hdfs_data_source_fields", context || {});
     },
 
-    hdfsVersionsSelect: function(selectOne) {
+    hdfsVersionsSelect: function(selectOne, hive) {
         selectOne = selectOne === undefined ? true : selectOne;
+        hive = hive === undefined ? false : hive;
         return Handlebars.helpers.renderTemplate("data_sources/hdfs_versions_select", {
-            hdfsVersions: chorus.models.Config.instance().get("hdfsVersions"),
+            hdfsVersions: hive ? chorus.models.Config.instance().get("hiveHdfsVersions") : chorus.models.Config.instance().get("hdfsVersions"),
             selectOne: selectOne
         });
     },
@@ -66,13 +83,21 @@ chorus.handlebarsHelpers.template = {
             zones: chorus.models.Config.instance().get("timeZones")
         });
     },
-
+    
+    generalDataSourceFields: function (values) {
+        return Handlebars.helpers.renderTemplate("data_sources/general_data_source_fields", values || {});
+    },
+    
     dbDataSourceFields: function(context) {
         return Handlebars.helpers.renderTemplate("data_sources/db_data_source_fields", context || {});
     },
 
     jdbcDataSourceFields: function(context) {
         return Handlebars.helpers.renderTemplate("data_sources/jdbc_data_source_fields", context || {});
+    },
+
+    jdbcHiveDataSourceFields: function(context) {
+        return Handlebars.helpers.renderTemplate("data_sources/jdbc_hive_data_source_fields", context || {});
     },
 
     workflowResultLink: function (jobTaskResult) {

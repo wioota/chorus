@@ -1,10 +1,13 @@
 #main_content {
-    border: $border-canon;
-    @include border-radius(3px);
+/*     border: $border-canon; */
+    border-right: $border-canon;
+/*     @include border-radius(3px); */
 }
 
 .content_header {
-/*     background: white; */
+
+    background: #FFFFFF;
+
     min-height: 36px;
     padding: 10px $padding-x 5px;
 /*     border-bottom: $border-canon; */
@@ -19,7 +22,9 @@
             }
         }
 
-        .text-remove, .transition-border, #tag_editor {
+        .text-remove,
+/*         .tag-remove, */
+        .transition-border, #tag_editor {
             display: none;
         }
     }
@@ -28,6 +33,8 @@
         @include ellipsis;
         padding-top: 16px;
         padding-bottom: 7px;
+        margin-right: 25%;
+        
         @include heading-normal;
     }
 
@@ -97,5 +104,5 @@
 
   height: 16px;
   width:16px;
-  background-image: url("/images/tableau_icon.png");
+  background-image: url("/images/general/tableau_icon.png");
 }

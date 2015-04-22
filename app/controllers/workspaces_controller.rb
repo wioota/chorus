@@ -13,7 +13,10 @@ class WorkspacesController < ApplicationController
 
     workspaces = workspaces.active if params[:active]
     succinct = params[:succinct] == 'true'
+    # Prakash 1/22. Needed to separate namespaces for home page and workspaces page. The JSON data
+    # generated for two pages is different. This needs to be fixed in future.
 
+    @namespace = succinct ? 'home:workspaces' : 'workspaces:workspaces'
     if params[:get_options] == 'most_active'
       available_workspaces = workspaces.map(&:id)
       results = []
@@ -29,25 +32,30 @@ class WorkspacesController < ApplicationController
                                         .limit(10)
                             .map(&:workspace_id)
 
-        results = workspaces.where('id IN (' + top_workspace_ids.join(',') + ')')
+        @workspaces = workspaces.where('id IN (' + top_workspace_ids.join(',') + ')')
                             .includes(succinct ? [:owner] : Workspace.eager_load_associations)
                             .order("lower(name) ASC, id")
 
-        present paginate(results),
-            :presenter_options => {
-                :show_latest_comments => (params[:show_latest_comments] == 'true'),
-                :succinct => succinct
-            }
+        present paginate(@workspaces),
+           :presenter_options => {
+               :show_latest_comments => (params[:show_latest_comments] == 'true'),
+              :succinct => succinct, :cached => true, :namespace => @namespace
+        }
+
       end
     else
-      results = workspaces.includes(succinct ? [:owner] : Workspace.eager_load_associations)
+
+      @workspaces = workspaces.includes(succinct ? [:owner] : Workspace.eager_load_associations)
                           .order("lower(name) ASC, id")
-      present paginate(results),
-              :presenter_options => {
-                  :show_latest_comments => (params[:show_latest_comments] == 'true'),
-                  :succinct => succinct
-              }
+
+      present paginate(@workspaces),
+             :presenter_options => {
+                 :show_latest_comments => (params[:show_latest_comments] == 'true'),
+                 :succinct => succinct, :cached => true, :namespace => @namespace
+             }
+
     end
+
   end
 
   def create
@@ -59,7 +67,8 @@ class WorkspacesController < ApplicationController
   def show
     workspace = Workspace.find(params[:id])
     authorize! :show, workspace
-    present workspace, :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true'}
+    # use the cached version of "workspaces:workspaces" namespace.
+    present workspace, :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true',:cached => true, :namespace => 'workspaces:workspaces' }
   end
 
   def update

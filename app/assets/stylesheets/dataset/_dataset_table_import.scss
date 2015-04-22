@@ -1,4 +1,12 @@
 $cell-width: 150px;
+
+// colors for different data types displayed in the headers and elsewhere in app
+// TODO: should be expanded across app and made common
+$datatype-text-backgroundcolor: #8989BA;
+$datatype-integer-backgroundcolor: #55A3EE;
+$datatype-date_time-backgroundcolor: #61D0F4;
+
+
 .table_import_csv.dialog {
     .grid {
       height: 300px;
@@ -48,7 +56,7 @@ $cell-width: 150px;
         }
 
         label.delimiter {
-            font-size: 12px;
+            font-size: $small-font;
             font-weight: normal;
             color: $color-text2;
             padding-right: 5px;
@@ -90,7 +98,7 @@ $cell-width: 150px;
     .import_data_grid {
       .type {
         line-height: 16px;
-        font-size: 12px;
+        font-size: $small-font;
         padding: 0px;
         overflow: visible;
         z-index: $data-grid-column-header-z-index;
@@ -112,8 +120,8 @@ $cell-width: 150px;
             height: 16px;
             display: inline-block;
             border: none;
-            color: white;
-            margin-left: 12px;
+            color: $core-white;
+            margin-left: 5px;
             left: 0;
             right: 0;
           }
@@ -135,32 +143,36 @@ $cell-width: 150px;
             position: absolute;
             right: 10px;
             top: 5px;
-            @include triangle(down, white, 8px, 8px);
+            @include triangle-glyph(down);
+            color: $core-white;
         }
 
         &.integer, &.double_precision {
-          background: url(/images/datatypes/label_sm_datatype_dkblue2.png) repeat;
+//           background: url(/images/datatypes/label_sm_datatype_dkblue2.png) repeat;
+            background-color: $datatype-integer-backgroundcolor;
         }
 
         &.text {
-          background: url(/images/datatypes/label_sm_datatype_purple2.png) repeat;
+//           background: url(/images/datatypes/label_sm_datatype_purple2.png) repeat;
+          background-color: $datatype-text-backgroundcolor;
         }
 
         &.date, &.time, &.date_time, &.timestamp {
-          background: url(/images/datatypes/label_sm_datatype_ltblue2.png) repeat;
+//           background: url(/images/datatypes/label_sm_datatype_ltblue2.png) repeat;
+            background-color: $datatype-date_time-backgroundcolor;
         }
 
         .popup_filter {
-          z-index: 9999999;
+          z-index: $popup_filter-z-index;
         }
       }
 
       .column_mapping {
-        font-size: 12px;
+        font-size: $small-font;
 
         a {
           @include ellipsis;
-          font-size: 12px;
+          font-size: $small-font;
           font-weight: $semibold;
           max-width: $cell-width - 68px;
           margin-left: 3px;
@@ -168,7 +180,8 @@ $cell-width: 150px;
             color: #cc0000;
 
             .arrow {
-              @include triangle(down, #cc0000, 6px, 6px);
+              @include triangle-glyph(down);
+              color: #CC0000;
             }
           }
 
@@ -178,15 +191,17 @@ $cell-width: 150px;
 
           .arrow {
             display: inline-block;
-            @include triangle(down, $link-color, 6px, 6px);
+		    @include triangle-glyph(down);
+		    color: $link-color;
           }
         }
       }
     }
 
-    .form_controls {
-        margin-top: 0px;
-    }
+/* to be deleted when final */
+/*     .form_controls { */
+/*         margin-top: 0px; */
+/*     } */
 }
 
 .existing_table_import_csv.table_import_csv {
@@ -212,7 +227,7 @@ $cell-width: 150px;
         }
 
         .automap {
-            font-size: 12px;
+            font-size: $small-font;
             font-weight: $semibold;
             padding-left: 10px;
         }
@@ -233,11 +248,25 @@ $cell-width: 150px;
         height: 10px;
         margin: 0 3px;
 
+/* to be deleted when final */
+/*         .check { */
+/*             background-image: url("/images/check.png"); */
+/*             display: inline-block; */
+/*             width: 10px; */
+/*             height: 10px; */
+/*         } */
         .check {
-            background-image: url("/images/check.png");
             display: inline-block;
-            width: 10px;
-            height: 10px;
+    
+            position: absolute;
+            top: 10px;
+            left: -12px;
+
+            &::after {
+                font-family: FontAwesome;
+                 /* glyph: check */
+                content: "\f00c";
+            }
         }
     }
 
@@ -294,7 +323,7 @@ $cell-width: 150px;
   }
   .column_name {
     display: block;
-    padding: 10px;
+    padding: 5px;
     font-size: $default-font-size;
   }
 }

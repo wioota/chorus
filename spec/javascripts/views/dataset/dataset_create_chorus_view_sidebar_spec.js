@@ -35,7 +35,7 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             });
 
             it("has the right text", function() {
-                expect(addJoinLink.text()).toMatchTranslation("dataset.chorusview.sidebar.add_join");
+                expect(addJoinLink.text()).toMatchTranslation("dataset.chorusview.sidebar.add_join.action");
             });
 
             it("has a reference to a chorus view derived from the current dataset", function() {
@@ -79,7 +79,8 @@ describe("chorus.views.CreateChorusViewSidebar", function() {
             context("removing the join", function() {
                 beforeEach(function() {
                     spyOn(this.chorusView, "removeJoin");
-                    this.view.$(".join .delete").click();
+
+                    this.view.$(".delete").click();
                 });
 
                 it("pops up an alert", function() {

@@ -106,7 +106,7 @@ describe("chorus.views.DatasetSidebar", function() {
 
                 it("renders an activity list inside the tabbed area", function() {
                     expect(this.view.tabs.activity).toBeA(chorus.views.ActivityList);
-                    expect(this.view.tabs.activity.el).toBe(this.view.$(".tabbed_area .activity_list")[0]);
+                    expect(this.view.tabs.activity.el).toBe(this.view.$(".tabbed_content_area .activity_list")[0]);
                 });
             });
         });
@@ -529,14 +529,14 @@ describe("chorus.views.DatasetSidebar", function() {
                     it("has an 'imported xx ago' description", function() {
                         expect(this.view.$(".last_import")).toContainTranslation("import.last_imported_into", {
                             timeAgo: Handlebars.helpers.relativeTimestamp("2012-02-29T14:35:38Z"),
-                            tableLink: "some_source_..."
+                            tableLink: "some_source_…"
                         });
                     });
 
                     it("renders the filename as a span with a title", function() {
                         expect(this.view.$(".last_import a")).not.toExist();
                         expect(this.view.$(".last_import .source_file")).toBe("span");
-                        expect(this.view.$(".last_import .source_file")).toHaveText("some_source_...");
+                        expect(this.view.$(".last_import .source_file")).toHaveText("some_source_…");
                         expect(this.view.$(".last_import .source_file")).toHaveAttr("title", "some_source_file.csv");
                     });
 
@@ -643,7 +643,7 @@ describe("chorus.views.DatasetSidebar", function() {
                         });
 
                         it("does not have an 'import now' link", function() {
-                            expect(this.view.$("a.import_now.dialog")).not.toExist();
+                            expect(this.view.$("a.import_now")).not.toExist();
                         });
                     });
                 });
@@ -668,7 +668,7 @@ describe("chorus.views.DatasetSidebar", function() {
                     it("has an 'imported xx ago' description", function() {
                         var lastImport = this.view.imports.last();
                         var destTable = lastImport.destination();
-                        expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: Handlebars.helpers.relativeTimestamp(lastImport.get('completedStamp')), tableLink: "our_destinat..."});
+                        expect(this.view.$(".last_import")).toContainTranslation("import.last_imported", {timeAgo: Handlebars.helpers.relativeTimestamp(lastImport.get('completedStamp')), tableLink: "our_destinat…"});
                         expect(this.view.$(".last_import a")).toHaveHref(destTable.showUrl());
                     });
                 });

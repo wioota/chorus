@@ -38,7 +38,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                 });
 
                 it("shows a toast message", function() {
-                    expect(chorus.toast).toHaveBeenCalledWith("data_sources.confirm_change_owner.toast");
+                    expect(chorus.toast).toHaveBeenCalledWith("data_sources.confirm_change_owner.toast", {displayName: this.newOwner.displayName(), toastOpts: {type: "success"}});
                 });
 
                 describe("after re-fetching the accounts", function() {
@@ -123,7 +123,9 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
             });
 
             it("displays the shared account subheader", function() {
-                expect(this.dialog.$(".sub_header .details_text").text()).toMatchTranslation("data_sources.shared_account");
+
+                var subhead = this.dialog.$(".shared_accounts").text();
+                expect(subhead).toMatchTranslation("data_sources.shared_account");
             });
 
             it("displays the account owner information", function() {
@@ -138,7 +140,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                 expect(this.dialog.$("a.edit")).toExist();
             });
 
-            it("displays the Change owner link", function() {
+            it("displays the change owner link", function() {
                 expect(this.dialog.$("a.change_owner")).toExist();
             });
 
@@ -156,7 +158,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                     expect(this.dialog.$("div.name")).toHaveClass("hidden");
                 });
 
-                describe("when the user fetch completes", function() {
+                describe("> when the user fetch completes", function() {
                     beforeEach(function() {
                         this.dialog.users.reset([
                             backboneFixtures.user({ firstName: "jim", lastName: "aardvark", id: '222' }),
@@ -260,7 +262,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                         });
 
                         it("displays a toast message", function() {
-                            expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_removed");
+                            expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_removed.toast", {toastOpts: {type: "deletion"}});
                         });
 
                         it("clears shared account information from the data source model in the dialog", function() {
@@ -290,7 +292,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                         });
 
                         it("displays a save failed toast message", function() {
-                            expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_remove_failed");
+                            expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_remove_failed.toast", {toastOpts: {type: "error"}});
                         });
                     });
                 });
@@ -311,9 +313,9 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
             });
             this.accounts = this.dataSource.accounts();
             this.accounts.add([
-                backboneFixtures.dataSourceAccount({ id: '1', dataSourceId: this.dataSource.id, owner: { firstName: "bob", lastName: "zzap", id: '111' } }),
-                backboneFixtures.dataSourceAccount({ id: '2', dataSourceId: this.dataSource.id, owner: { firstName: "jim", lastName: "aardvark", id: '222' } }),
-                backboneFixtures.dataSourceAccount({ id: '3', dataSourceId: this.dataSource.id, owner: this.owner.attributes })
+                backboneFixtures.dataSourceAccount({id: '1', dataSourceId: this.dataSource.id, owner: { firstName: "bob", lastName: "zzap", id: '111' } }),
+                backboneFixtures.dataSourceAccount({id: '2', dataSourceId: this.dataSource.id, owner: { firstName: "jim", lastName: "aardvark", id: '222' } }),
+                backboneFixtures.dataSourceAccount({id: '3', dataSourceId: this.dataSource.id, owner: this.owner.attributes })
             ]);
             this.dialog = new chorus.dialogs.DataSourcePermissions({ dataSource: this.dataSource });
             this.dialog.launchModal();
@@ -426,7 +428,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                     });
                 });
 
-                describe("when the save fails", function() {
+                describe("> when the save fails", function() {
                     beforeEach(function() {
                         this.accountBeingEdited.serverErrors = { fields: { a: { BLANK: {} } } };
                         this.accountBeingEdited.trigger('saveFailed');
@@ -436,7 +438,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                         expect(this.liBeingEdited).toHaveClass("editing");
                     });
 
-                    it("displays error messages", function() {
+                    it("> displays error messages", function() {
                         expect(this.dialog.$(".errors li:first-child").text().trim()).toBe("A can't be blank");
                     });
 
@@ -803,7 +805,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                     });
 
                     it("displays a toast message", function() {
-                        expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_added");
+                        expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_added.toast", {toastOpts: {type: "success"}});
                         expect(this.otherSavedSpy).toHaveBeenCalled();
                     });
 
@@ -852,7 +854,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                     });
 
                     it("displays a save failed toast message", function() {
-                        expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_add_failed");
+                        expect(chorus.toast).toHaveBeenCalledWith("data_sources.shared_account_add_failed.toast", {toastOpts: {type: "error"}});
                     });
 
                     context("and then a save succeeds", function() {
@@ -862,7 +864,7 @@ describe("chorus.dialogs.DataSourcePermissions", function() {
                         });
 
                         it("doesn't display the saved toast message", function() {
-                            expect(chorus.toast).not.toHaveBeenCalledWith("data_sources.shared_account_added");
+                            expect(chorus.toast).not.toHaveBeenCalledWith("data_sources.shared_account_added.toast", {toastOpts: {type: "success"}});
                         });
                     });
                 });

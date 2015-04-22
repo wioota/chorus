@@ -24,7 +24,7 @@ describe TaggingsController do
       end
 
       context 'with a dataset' do
-        let(:entity) { datasets(:table) }
+        let(:entity) { datasets(:default_table) }
 
         it 'adds the tags' do
           post :create, params
@@ -109,7 +109,7 @@ describe TaggingsController do
 
     context 'when multiple entities are being tagged' do
       let(:first_entity) { workfiles(:public) }
-      let(:second_entity) { datasets(:table) }
+      let(:second_entity) { datasets(:default_table) }
       let(:tag_name) { 'alpha' }
       let(:taggables) { [
           {:entity_id => first_entity.id, :entity_type => first_entity.class.name.underscore},

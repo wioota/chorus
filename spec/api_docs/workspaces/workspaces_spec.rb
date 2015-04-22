@@ -12,7 +12,7 @@ resource "Workspaces" do
   let(:database_id) { database.id }
   let(:sandbox) { dataset.schema }
   let(:sandbox_id) { sandbox.id }
-  let(:dataset) { datasets(:table) }
+  let(:dataset) { datasets(:default_table) }
   let(:dataset_id) { dataset.to_param }
 
   before do
@@ -124,7 +124,7 @@ resource "Workspaces" do
     let(:public) { false }
     let(:summary) { "Lots of good data in here" }
 
-    example_request "Create a workspace" do
+    example_request "Create New Workspace" do
       status.should == 201
     end
   end
