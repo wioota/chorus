@@ -96,15 +96,14 @@ $margin-right-for-error-marker: 20px;
             border: 1px solid;
             border-radius: $alert-border-radius;
 
-            &:first-child {}
             &:last-child {
                 margin-bottom: 0px;
             }
 
             &::before {
                 display: inline-block;
-                width: 0;
-                height: 0;
+                width: 0px;
+                height: 1em;
                 position: relative;
                 left: -25px;
                 top: 1px;
@@ -117,22 +116,20 @@ $margin-right-for-error-marker: 20px;
     }
 }
 
-/*     .action { */
-/*         font-weight: normal; */
-/*         display: inline-block; */
-/*         float: right; */
-/*         margin: 0 10px; */
-/*         font-size: $medium-font; */
-/*         color: white; */
-/*         padding-top: 10px; */
-/*     } */
+//     .action { */
+//         font-weight: normal; */
+//         display: inline-block; */
+//         float: right; */
+//         margin: 0 10px; */
+//         font-size: $medium-font; */
+//         color: white; */
+//         padding-top: 10px; */
+//     } */
 
 
 .error_block {}
 
-.warning {
-//     background-color: $needs-attention;
-}
+.warning {}
 
 /* user input: named error BUT in meaning is as alert */
 
