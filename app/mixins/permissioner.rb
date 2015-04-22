@@ -30,22 +30,36 @@ module Permissioner
 
   def object_roles(name=nil)
     self.save! if new_record?
-    chorus_class = ChorusClass.find_or_create_by_name(self.class.name)
-    chorus_object = ChorusObject.find_or_create_by_chorus_class_id_and_instance_id(chorus_class.id, self.id)
 
-    if name.nil? then chorus_object.roles else chorus_object.roles.find_by_name(name) end
+    if name.nil? then self.chorus_object.roles else self.chorus_object.roles.find_by_name(name) end
   end
 
 
   private
 
   def chorus_object
-
+    chorus_class = ChorusClass.find_or_create_by_name(self.class.name)
+    chorus_object = ChorusObject.find_or_create_by_chorus_class_id_and_instance_id(chorus_class.id, self.id)
   end
-
 
   # Class-level methods invlove setting class-level permissions/roles (vs object-level)
   module ClassMethods
+
+    def permission_symbols_for(user)
+      chorus_class = ChorusClass.find_by_name(self.name)
+      permissions = user.roles.map(&:permissions).flatten.select{|permission| permission.chorus_class == chorus_class}
+
+      activity_symbols = Set.new
+      permissions.each do |permission|
+        bits = permission.permissions_mask
+        bit_length = bits.size * 8
+        bit_length.times do |i|
+          activity_symbols.add(self::PERMISSIONS[i]) if bits[i] == 1
+        end
+      end
+
+      activity_symbols.to_a
+    end
 
     # Given an activity, this method returns an integer with that
     # bit set
@@ -67,6 +81,7 @@ module Permissioner
 
         activity_symbol_array.each do |activity_symbol|
           index = self::PERMISSIONS.index(activity_symbol)
+          puts "activity symbol not found" if index.nil?
           bits |= ( 1 << index )
         end
 

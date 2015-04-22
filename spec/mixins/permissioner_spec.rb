@@ -1,32 +1,11 @@
 require 'spec_helper'
 
+
+# This is for testing basic Permissioner methods. To test behavior
+# about classes that 'include' Permissioner, see
+# spec/support/shared_behaviors/permissioner_behaviors.rb. When you add Permissioner to a model,
+# add the corresponding it_behaves_like 'a model with permissions',
+# it_behaves_like 'a model with object level roles', etc. to the model_spec.rb.
+# Those specs will make sure that the model code matches the expectations of Permissioner
 describe Permissioner do
-
-
-  describe "create_permissions_for" do
-    before :all do
-      class TestModel
-        include Permissioner
-        PERMISSIONS = [:up, :down, :left, :right]
-      end
-
-    end
-
-    let (:role) { roles(:a_role) }
-    let (:arbitrary_user) { users(:admin) }
-    let (:the_permissions) { [:up, :down] }
-
-    before :each do
-      TestModel.create_permissions_for(role, the_permissions)
-    end
-
-    it "should create a chorus_class if there isn't one for the given model" do
-      ChorusClass.find_by_name("TestModel").should_not be_nil
-    end
-
-    it "should create .permissions on the chorus_class" do
-       ChorusClass.find_by_name("TestModel").permissions.should have_exactly(1).items
-    end
-
-  end
 end
