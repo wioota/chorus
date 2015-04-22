@@ -40,7 +40,7 @@ $margin-right-for-error-marker: 20px;
 .errors,
 .sql_errors,
 .dataset_errors,
-.warning {
+{
     @include after-clearfix;
 
     // background-color: $body-background-color;

@@ -1,10 +1,13 @@
-<div class="warning{{#unless warning}} hidden{{/unless}}">
-    {{#if warning}}{{renderErrors warning}}{{/if}}
+<div class="login_errors">
+    <div class="errors{{#unless warning}} hidden{{/unless}}">
+        {{#if warning}}{{renderErrors warning}}{{/if}}
+    </div>
+
+    {{> errorDiv}}
 </div>
-{{> errorDiv}}
 
 <div class="login_content">
-    <div class="card">
+    <div class="login_card">
         <form class="login" action="/auth/login/" method="post">
             <img class="logo {{branding}}" src="images/branding/{{logo}}"/>
             <div class="content">
@@ -20,7 +23,7 @@
         </form>
     </div>
 
-    <div class="login_footer">
+    <div id="login_footer">
         <div class="legal {{branding}}">
             <p>
                 <span class="copyright">{{{copyright}}}</span>
