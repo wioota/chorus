@@ -21,13 +21,12 @@ I18n.isValidNode = function(obj, node, undefined) {
 }
 
 I18n.lookup = function(scope, options) {
-  var options = options || {}
-    , lookupInitialScope = scope
-    , translations = this.prepareOptions(I18n.translations)
-    , messages = translations[options.locale || I18n.currentLocale()]
-    , options = this.prepareOptions(options)
-    , currentScope
-  ;
+  var options = options || {},
+    lookupInitialScope = scope,
+    translations = this.prepareOptions(I18n.translations),
+    messages = translations[options.locale || I18n.currentLocale()],
+    options = this.prepareOptions(options),
+    currentScope;
 
   if (!messages){
     return;
@@ -69,10 +68,9 @@ I18n.lookup = function(scope, options) {
 //   #=> {name: "John Doe", role: "user"}
 //
 I18n.prepareOptions = function() {
-  var options = {}
-    , opts
-    , count = arguments.length
-  ;
+  var options = {},
+    opts,
+    count = arguments.length;
 
   for (var i = 0; i < count; i++) {
     opts = arguments[i];
@@ -93,11 +91,10 @@ I18n.prepareOptions = function() {
 
 I18n.interpolate = function(message, options) {
   options = this.prepareOptions(options);
-  var matches = message.match(this.PLACEHOLDER)
-    , placeholder
-    , value
-    , name
-  ;
+  var matches = message.match(this.PLACEHOLDER), 
+  placeholder, 
+  value, 
+  name;
 
   if (!matches) {
     return message;
@@ -205,9 +202,8 @@ I18n.parseDate = function(date) {
 };
 
 I18n.toTime = function(scope, d) {
-  var date = this.parseDate(d)
-    , format = this.lookup(scope)
-  ;
+  var date = this.parseDate(d),
+  format = this.lookup(scope);
 
   if (date.toString().match(/invalid/i)) {
     return date.toString();
@@ -290,13 +286,12 @@ I18n.toNumber = function(number, options) {
     {precision: 3, separator: ".", delimiter: ",", strip_insignificant_zeros: false}
   );
 
-  var negative = number < 0
-    , string = Math.abs(number).toFixed(options.precision).toString()
-    , parts = string.split(".")
-    , precision
-    , buffer = []
-    , formattedNumber
-  ;
+  var negative = number < 0,
+  string = Math.abs(number).toFixed(options.precision).toString(),
+  parts = string.split("."),
+  precision,
+  buffer = [],
+  formattedNumber;
 
   number = parts[0];
   precision = parts[1];
@@ -349,12 +344,11 @@ I18n.toCurrency = function(number, options) {
 };
 
 I18n.toHumanSize = function(number, options) {
-  var kb = 1024
-    , size = number
-    , iterations = 0
-    , unit
-    , precision
-  ;
+  var kb = 1024,
+  size = number,
+  iterations = 0,
+  unit,
+  precision;
 
   while (size >= kb && iterations < 4) {
     size = size / kb;
@@ -375,10 +369,7 @@ I18n.toHumanSize = function(number, options) {
   );
 
   number = this.toNumber(size, options);
-  number = options.format
-    .replace("%u", unit)
-    .replace("%n", number)
-  ;
+  number = options.format.replace("%u", unit).replace("%n", number);
 
   return number;
 };
@@ -428,9 +419,8 @@ I18n.pluralize = function(count, scope, options) {
 };
 
 I18n.missingTranslation = function() {
-  var message = '[missing "' + this.currentLocale()
-    , count = arguments.length
-  ;
+  var message = '[missing "' + this.currentLocale(),
+  count = arguments.length;
 
   for (var i = 0; i < count; i++) {
     message += "." + arguments[i];
