@@ -1,7 +1,7 @@
 @import "_browser_support";
 @import "_common";
 
-/* grey color for the (?) glyph on forms that provide more info */
+// grey color for the (?) glyph on forms that provide more info */
 $more-info-color: #888888;
 
 
@@ -116,10 +116,10 @@ $more-info-color: #888888;
 }
 
 .more-info {
-    /* 	background-image: url('/images/more-info.png'); */
-    /* 	display: inline-block; */
-    /* 	height: 12px; */
-    /* 	width: 12px; */
+//     	background-image: url('/images/more-info.png'); */
+//     	display: inline-block; */
+//     	height: 12px; */
+//     	width: 12px; */
     color: $more-info-color;
     
 	&:hover::after {
@@ -131,7 +131,7 @@ $more-info-color: #888888;
 		position: relative;
 		left: $caret-margin;
 		font-family: FontAwesome;
-		content: "\f059";  /* question-circle */
+		content: "\f059";  // question-circle
 	}
 }
 
@@ -160,13 +160,12 @@ $more-info-color: #888888;
   }
 }
 
-/* specific color for the (?) glyph */
+// specific color for the (?) glyph */
 .fa-question-circle {
 	color: $more-info-color;
 }
 
 a.more {
-    /* when the 'show more' link is used, adjust to reflect font size of context */
+//     when the 'show more' link is used, adjust to reflect font size of context */
     font-size: inherit;
-    
 }
