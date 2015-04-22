@@ -5,9 +5,11 @@ $sub_nav-lozenge-min-width: 90px;
 $sub_nav-lozenge-height: 23px;
 
 .sub_nav {
+    // left and right margins to match overall page
+     @include page_side_padding;
+    
     margin-top: $header-height + $subheader-height;
     height: $subnav-height;
-    padding-left: $page-margin-left;
     line-height: $subnav-height;
     background: $sub_nav-background;
     border-bottom: $border-canon;
@@ -20,7 +22,6 @@ $sub_nav-lozenge-height: 23px;
         }
 
         @include pill-tab($sub_nav-lozenge-min-width, $sub_nav-lozenge-height);
-
         @include pill-tab-colors($lozenge-color-normal, $lozenge-color-hover, $lozenge-color-selected);
     }
 //   specials for subnav */

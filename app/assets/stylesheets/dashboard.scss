@@ -27,7 +27,12 @@ $title-height: $dashboard-module-title-height - $dashboard-module-padding;
 /* page layout        */
 div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
     #guts {
-        padding: ($header-height + $subheader-height) $page-margin-right 10px $page-margin-left;
+        // padding: ($header-height + $subheader-height) $page-margin-right 10px $page-margin-left;
+        
+        // .page_side_padding provides left and right 
+        @include page_side_padding;
+        padding-top: ($header-height + $subheader-height);
+        padding-bottom: 10px;
     }
 
     #sidebar_wrapper {
@@ -56,13 +61,6 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         background-color: $shaded-background-color;
         display: inline-block;
         cursor: pointer;
-
-        /* covers the glyphs used, such as the cog */
-        // i {
-        //     color: $color-text3;
-        //     font-size: 13px;
-        //     line-height: $height-button-widgetshell;
-        // }
     }
     
     .configure {
@@ -322,13 +320,6 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         display: inline-block;
         margin-right: 3px;
         cursor: pointer;
-        
-        /* covers the glyphs used; i.e the cog */
-        // i {
-        //      color: $color-text3;
-        //      font-size: $small-font;
-        //      line-height: $height-button-widgetshell;
-        // }
 
         /* remove rightside margin on the rightmost button so that it is flush right */
         &:last-child {

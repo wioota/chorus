@@ -2,7 +2,7 @@
 @import "_browser_support";
 
 // Grand Old Colors
-/* basic color rules - DO NOT use these in component files, they should only be used in config sections! */
+// basic color rules - DO NOT use these in component files, they should only be used in config sections! */
 $light-green:       #B3D988;
 $light-blue:        #C4DCEB;
 $blue:              #2C95DD;
@@ -39,7 +39,7 @@ $charcoal:          #464646;
 $black:             #000000;
 $core-white:		#FFFFFF;
 
-//transparent variants
+// transparent variants
 $shadow-color:		rgba($shadow-gray, .7);  //rgba(178, 181, 185, 0.7);
 
 
@@ -338,12 +338,12 @@ $mid-light-type: #5f5f5f;
 
 $action-bar-highlighted-font-color: $fiji-green;
 
-/* Link */
+// Link */
 
 $default-link-color: $blue;
 $low-light-link-color: $gray;
 
-/* Lists */
+// Lists */
 
 $list-horizontal-divider: 1px solid $border-color;
 $list-vertical-divider: 1px solid $border-color;
@@ -351,23 +351,23 @@ $list-selectable-hover-color: rgba(0,0,0,0.1);
 $list-selectable-selected-color: #FFFFFF;
 $list-border-color-highlighted: $green;
 
-/* breadcrumb specs */
+// breadcrumb specs */
 $list-breadcrumb-fontfamily: "FontAwesome";
 $list-breadcrumb-divider: "\f0da";
 $list-breadcrumb-spacingleft: 1px;
 $list-breadcrumb-spacingright: 5px;
 $list-breadcrumb-size: 13px;
 
-/* whitespace */
+// whitespace */
 
 $baseLineHeight: 1.5em !default; //must be in em
 $baseFontSize: 15px !default; // must be px
 
-/*
- * em-ratio converts between em and px
- * to em    divide by this ratio
- * to px    mulitply by this ratio
- */
+// 
+//  * em-ratio converts between em and px
+//  * to em    divide by this ratio
+//  * to px    mulitply by this ratio
+//  */
 $emRatio: $baseFontSize/$baseLineHeight;
 
 
@@ -388,7 +388,7 @@ $button-border-color-secondary: $gray-blue;
 
 $button-border-color-limited: #A0A0A0;
 
-/* action bars */
+// action bars */
 $action-bar-highlighted-background-color: $light-green;
 $action-bar-hovered-item-background-color: #C3ECA0;
 $action-bar-secondary-background-color: $light-blue;
@@ -407,8 +407,7 @@ $lozenge-color-selected-dark: $brand-dark;
 
 
 ///////////////////////////////////////////////////////
-// Mixins
-
+// MIXINS
 
 
 // Un-comment these lines to find text that isn't styled with a mixin
@@ -416,6 +415,30 @@ $lozenge-color-selected-dark: $brand-dark;
 @mixin debugging-mixin {
     // text-shadow: none !important;
 }
+
+// UTILITY MIXINS
+@mixin after-clearfix($which: both) {
+    &:after {
+        content: ".";
+        display: block;
+        height: 0;
+        font-size: 0;
+        clear: $which;
+        visibility: hidden;
+    }
+}
+
+
+// LAYOUT MIXINS
+// page_side_padding gives common left and right margins for the page window in the overall page layout
+// use this for consistent pagemargins in the layout display
+// @include page_side_padding
+@mixin page_side_padding {
+    padding-left: $page-margin-left;
+    padding-right: $page-margin-right;
+}
+
+
 
 @mixin placeholder {
   @include debugging-mixin;
@@ -425,11 +448,12 @@ $lozenge-color-selected-dark: $brand-dark;
   &:-ms-input-placeholder      {@content}
 }
 
+// TYPOGRAPHY MIXINS
 @mixin heading-normal {
     @include debugging-mixin;
     font-size: 24px;
     font-weight: $semibold;
-    /* color: $color-text1; */
+//     color: $color-text1; */
 }
 
 @mixin subheading-normal {
@@ -496,9 +520,9 @@ $lozenge-color-selected-dark: $brand-dark;
     color: $color-text2;
 }
 
-/* primary link */
-/* used for the name of items in list */
-/* workspaces, files, etc. */
+// primary link */
+// used for the name of items in list */
+// workspaces, files, etc. */
 
 @mixin font-primary {
     font-size: 18px;
@@ -639,17 +663,6 @@ $lozenge-color-selected-dark: $brand-dark;
     @include uppercase;
 }
 
-@mixin after-clearfix($which: both) {
-    &:after {
-        content: ".";
-        display: block;
-        height: 0;
-        font-size: 0;
-        clear: $which;
-        visibility: hidden;
-    }
-}
-
 @mixin borderbox {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -669,14 +682,14 @@ $lozenge-color-selected-dark: $brand-dark;
 }
 
 @mixin menu-triangle {
-/*     padding-right: 10px; */
-/*     background-image: url("/images/blue-menu-triangle.png"); */
-/*     background-position: right; */
-/*     background-repeat: no-repeat; */
+//     padding-right: 10px; */
+//     background-image: url("/images/blue-menu-triangle.png"); */
+//     background-position: right; */
+//     background-repeat: no-repeat; */
 }
 
-/* caret for menus */
-/* pointing: DOWN  */
+// caret for menus */
+// pointing: DOWN  */
 @mixin menu-triangle-glyph {
 	&:hover::after {
     	text-decoration: none !important;	
@@ -690,7 +703,7 @@ $lozenge-color-selected-dark: $brand-dark;
 	}
 }
 
-/* generates caret with FA */
+// generates caret with FA */
 @mixin triangle-glyph($pointing_direction) {
 	
 	&::after {
@@ -703,7 +716,7 @@ $lozenge-color-selected-dark: $brand-dark;
 	}
 }
 
-/* outputs the FA glyph content for the 'caret' */
+// outputs the FA glyph content for the 'caret' */
 @mixin caret-glyph($pointing_direction) {
 
 	@if $pointing_direction == up {
@@ -718,7 +731,7 @@ $lozenge-color-selected-dark: $brand-dark;
 }
 
 
-/* generates a caret with css */
+// generates a caret with css */
 @mixin triangle($pointing_direction, $color, $width, $height) {
     width: 0;
    	height: 0;
@@ -741,11 +754,11 @@ $lozenge-color-selected-dark: $brand-dark;
 	}
 }
 
-/* ********* */
-/* used to generate the pill shapes used in sub nav and right-side nav tabs */
-/* call with: */
-/* min-width: min width of the pill */
-/* height: height of the pill. if none provided, defaults to 21px */
+// ********* */
+// used to generate the pill shapes used in sub nav and right-side nav tabs */
+// call with: */
+// min-width: min width of the pill */
+// height: height of the pill. if none provided, defaults to 21px */
 
 @mixin pill-tab($min-width, $height: $default-lozenge-height) {
     &:hover .lozenge {
