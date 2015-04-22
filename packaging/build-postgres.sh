@@ -29,4 +29,4 @@ echo "Removing temp files.."
 rm postgresql-$POSTGRES_VERSION.tar.gz
 rm -rf postgresql-$POSTGRES_VERSION
 
-echo "Postgres installation complete."
+echo "Postgres build and package complete."

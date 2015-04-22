@@ -82,7 +82,7 @@ describe("chorus.dialogs.ConfigureWorkfileTask", function () {
                             });
 
                             it("should create a toast", function () {
-                                expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message);
+                                expect(chorus.toast).toHaveBeenCalledWith('create_job_task_dialog.toast', {toastOpts: {type: 'success'}});
                             });
 
                             it("invalidates the job", function () {
@@ -168,7 +168,8 @@ describe("chorus.dialogs.ConfigureWorkfileTask", function () {
                     });
 
                     it("should create a toast", function () {
-                        expect(chorus.toast).toHaveBeenCalledWith(this.dialog.message);
+                        expect(chorus.toast).toHaveBeenCalledWith('create_job_task_dialog.toast', {toastOpts: {type: 'success'}});
+
                     });
 
                     it("invalidates the job", function () {

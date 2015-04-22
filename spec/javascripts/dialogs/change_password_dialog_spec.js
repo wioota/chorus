@@ -47,10 +47,15 @@ describe("chorus.dialogs.ChangePassword", function() {
 
         describe("when the save request completes", function() {
             beforeEach(function() {
+                spyOn(chorus, "toast");
                 spyOnEvent($(document), "close.facebox");
                 this.user.trigger("saved");
             });
-
+            
+            it("displays a success message", function() {
+                expect(chorus.toast).toHaveBeenCalled();
+            });
+            
             it("closes the dialog box", function() {
                 expect("close.facebox").toHaveBeenTriggeredOn($(document));
             });

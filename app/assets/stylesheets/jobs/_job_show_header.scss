@@ -13,9 +13,7 @@
     .next_run {
         width: 250px;
     }
-    .last_run {
-        // width: 400px;
-    }
+    .last_run {}
     .owner {
         @include ellipsis;
     }

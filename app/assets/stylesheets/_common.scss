@@ -10,6 +10,7 @@ $green:             #98B675;
 $gray-blue:         #B2C7D6;
 $gray:              #7D7D7D;
 $fiji-green:        #4E7225;
+
 $fire-engine-red:   #B5121B;
 $pumpkin:           #F7771B;
 
@@ -39,7 +40,7 @@ $black:             #000000;
 $core-white:		#FFFFFF;
 
 //transparent variants
-$shadow-color:		rgba($shadow-gray, .7);
+$shadow-color:		rgba($shadow-gray, .7);  //rgba(178, 181, 185, 0.7);
 
 
 // Tints & Shades of Brand Colors
@@ -85,7 +86,8 @@ $color-text2:   $charcoal;
 $color-text3:   lighten($charcoal, 10%);
 $color-text4:   lighten($bright-grey, 20%);
 $link-color:    $brand;
-$disabled-text: rgb(147, 154, 159);  //#939799
+$disabled-text: #939799;
+
 $caret-color:   $light-sky-blue;
 
 
@@ -163,6 +165,7 @@ $error-border-color:        #BF7C7C;
 $error-text-color:          #661616;
 $error-icon-color:          #881111;
 $error-tooltip-text-color:  $core-white;
+$error-input-border-color:  #AA3333;
 
 $notification: $bright-turquoise;
 $notification-error-dark:   #D43A0B;
@@ -189,8 +192,8 @@ $informational-text-color:          #002244;
 $success-color:             $ok;
 $success-background-color:  #DFF0D8;
 $success-border-color:      #B3C0A0;
-$success-icon-color:        $ok;
-$success-text-color:        #468844;
+$success-icon-color:        #448025;
+$success-text-color:        #448044;
 
 $normal-tooltip-text-color: $core-white;
 
@@ -205,7 +208,7 @@ $hardError-icon-color:          #EEEEEE;
 // SIZING & DIMENSIONS
 
 $alert-border-radius:   3px;
-$alert-icon-large:      22px;
+$alert-icon-large:      36px;
 $alert-icon-medium:     16px;
 $alert-icon-small:      12px;
 
@@ -246,6 +249,9 @@ $default-dialog-width-medium: 600px;
 $default-dialog-width-wide: 940px;
 /* $dialog-padding= interior padding from edge for dialog content */
 $dialog-padding: 15px;
+$dialog-padding-leftRight: 15px;
+$dialog-padding-top: 15px;
+$dialog-padding-bottom: 15px;
 
 $separator-space: 4px;
 
@@ -303,25 +309,27 @@ $ridiculously-large-z-index: 9999999999999;
 
 $font-family: "Source Sans Pro",Helvetica,Arial,Verdana,sans-serif;
 
-// Font weights
-$light: 300;
+// FONT WEIGHTS
+$light:     300;
 // "normal" defaults to 400
-$semibold: 600;
-$bold: 700;
+$semibold:  600;
+$bold:      700;
 
 
-// Font size
+// FONT SIZES
 // normal size should be medium
-$medium-font: 14px;
-$small-font: 12px;
-$smallest-font: 10px;
-$default-font-size: $medium-font;
+$medium-font:               14px;
+$small-font:                12px;
+$smallest-font:             10px;
+$default-font-size:         $medium-font;
 
 // fontsize for the page (sub) header element. eg. name of item
-$page_header-fontsize: 20.5px;
+$page_header-fontsize:      20.5px;
 
 // fontsize for the primary item name in lists. e.g. workspace, workfile, datasource, etc.
-$listitem_name-fontsize: 16px;
+$listitem_name-fontsize:    16px;
+
+
 
 $default-font-color: $color-text3;
 
@@ -504,27 +512,27 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin font-action-link {
     color: $brand;
-    font-size: 14px;
+    font-size: $medium-font;
 }
 
 @mixin font-secondary-link {
     color: $brand-dark;
-    font-size: 12px;
+    font-size: $small-font;
     font-weight: $semibold;
 }
 
 @mixin font-menu {
     @include debugging-mixin;
-    font-size: 14px;
-    font-weight: normal;
+    font-size: $medium-font;
     line-height: 14px;
+    font-weight: normal;
     vertical-align: middle;
     color: $color-text1;
 }
 
 @mixin results-console {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     font-weight: $semibold;
     color: $color-text1;
 }
@@ -545,43 +553,41 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin list-item-details-area {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     color: $color-text3;
 }
 
 @mixin insight-ribbon {
     @include debugging-mixin;
-
-    font-size: 12px;
-    font-weight: $bold;
+    font-size: $small-font;
+    font-weight: $semibold;
 	color: $core-white;
 }
 
-
 @mixin database-column-type {
     @include debugging-mixin;
-    font-size: 12px;
+    font-size: $medium-font;
     font-weight: normal;
-	color: $core-white;
+	color: $color-text3;
 }
 
 @mixin secondary-text-normal {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     font-weight: normal;
     color: $color-text3;
 }
 
 @mixin tertiary-text-normal {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     font-weight: normal;
     color: $color-text4;
 }
 
 @mixin secondary-text-semibold {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     font-weight: $semibold;
     color: $color-text3;
 }
@@ -615,12 +621,12 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin dashboard-snapshot-model {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
 }
 
 @mixin dashboard-module-title {
     @include debugging-mixin;
-    font-size: 14px;
+    font-size: $medium-font;
     color: $color-text2;
     @include uppercase;
 }
@@ -797,7 +803,6 @@ $lozenge-color-selected-dark: $brand-dark;
 
 @mixin grab_cursor {
     cursor: -moz-grab;
-    // cursor: -o-grab;
     cursor: -ms-grab;
     cursor: -webkit-grab;
     cursor: grab;

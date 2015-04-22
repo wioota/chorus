@@ -169,7 +169,8 @@
                 this.fetch();
             }, this);
 
-            insight.save({ validateBody: false }, {method: 'create'});
+            insight.save({validateBody: false}, {method: 'create'});
+            chorus.toast("insight.publish.success.toast", {toastOpts: {type: "success"}});
         },
 
         unpublish: function() {
@@ -182,7 +183,8 @@
                 this.fetch();
             }, this);
 
-            insight.save({ validateBody: false }, {method: 'create'});
+            insight.save({validateBody: false}, {method: 'create'});
+            chorus.toast("insight.unpublish.success.toast", {toastOpts: {type: "deletion"}});
         },
 
         toNote: function() {

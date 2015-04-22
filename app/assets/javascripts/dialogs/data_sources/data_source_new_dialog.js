@@ -1,4 +1,4 @@
-chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
+chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend ({
     constructorName: "DataSourcesNew",
     templateName: "data_source_new",
     title: t("data_sources.new_dialog.title"),
@@ -161,7 +161,7 @@ chorus.dialogs.DataSourcesNew = chorus.dialogs.Base.extend({
 
     saveSuccess: function () {
         chorus.PageEvents.trigger("data_source:added", this.model);
-        chorus.toast('data_sources.add.toast', {dataSourceName: this.model.name()});
+        chorus.toast('data_sources.add.toast', {dataSourceName: this.model.name(), toastOpts: {type: "success"}});
         this.closeModal();
     }
 });

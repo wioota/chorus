@@ -206,7 +206,7 @@ describe("chorus.dialogs.ComposeKaggleMessage", function () {
 
             it("shows a toast message if saved successfully", function () {
                 this.dialog.model.trigger("saved");
-                expect(chorus.toast).toHaveBeenCalledWith("kaggle.compose.success.toast", {toastOpts: {type: "success"}} );
+                expect(chorus.toast).toHaveBeenCalledWith("kaggle.compose.success.toast", {toastOpts: {type: "success"}});
             });
 
             context("when the dialog has errors", function () {

@@ -37,14 +37,14 @@
         <ul>
             {{#if realWorkspace}}
                 {{#unless workspaceArchived}}
-                    <li><a class="new_note dialog" href="#">{{t "actions.add_note"}}</a></li>
+                    <li><a class="new_note dialog-launch" href="#">{{t "actions.add_note"}}</a></li>
                     {{#if isHdfsDataset}}
                         <li><a class="create_external_table">{{t "hdfs.create_external_table"}}</a></li>
                     {{/if}}
 
                     {{#if isChorusView}}
                         {{#unless noValidCredentials}}
-                            <li><a class="create_database_view dialog" href="#">{{t "actions.create_database_view"}}</a></li>
+                            <li><a class="create_database_view dialog-launch" href="#">{{t "actions.create_database_view"}}</a></li>
                             {{#if currentUserCanDuplicateChorusViews}}
                                 <li><a class="duplicate" href="#">{{t "dataset.chorusview.duplicate"}}</a></li>
                             {{/if}}
@@ -52,7 +52,7 @@
                     {{/if}}
                 {{/unless}}
             {{else}}
-                <li><a class="new_note dialog" href="#">{{t "actions.add_note"}}</a></li>
+                <li><a class="new_note dialog-launch" href="#">{{t "actions.add_note"}}</a></li>
             {{/if}}
 
             {{#if canAssociate}}
@@ -66,7 +66,7 @@
                 {{/if}}
                 {{#if canExport}}
                     {{#if importsEnabled}}
-                        <li><a class="import_now dialog" href="#">{{t "actions.import_now"}}</a></li>
+                        <li><a class="import_now dialog-launch" href="#">{{t "actions.import_now"}}</a></li>
                     {{else}}
                         <li><span class="import_now disabled">{{t "actions.import_now"}}</span></li>
                     {{/if}}
@@ -99,7 +99,7 @@
                         {{#if stale}}
                             <span class="download disabled" href="#">{{t "actions.download"}}</span>
                         {{else}}
-                            <a class="download dialog" href="#">{{t "actions.download"}}</a>
+                            <a class="download dialog-launch" href="#">{{t "actions.download"}}</a>
                         {{/if}}
                     </li>
                     {{#if canAnalyze}}
@@ -115,7 +115,7 @@
             {{/unless}}
 
             {{#unless workspaceArchived}}
-                {{#if isDeleteable}}<li><a href="#" class="delete_dataset alert" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey functionCallContext=this}}</a></li>{{/if}}
+                {{#if isDeleteable}}<li><a href="#" class="delete_dataset alert-launch" data-key-prefix="{{deleteMsgKey}}">{{t deleteTextKey functionCallContext=this}}</a></li>{{/if}}
             {{/unless}}
         </ul>
     </div>
