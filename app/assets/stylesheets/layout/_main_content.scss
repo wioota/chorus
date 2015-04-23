@@ -1,5 +1,4 @@
 #main_content {
-
     border-right: $border-canon;
 }
 
@@ -7,10 +6,10 @@
 
     background: #FFFFFF;
 
-    min-height: 36px;
+    min-height: 30px;
     padding: 10px $padding-x 5px;
 /*     border-bottom: $border-canon; */
-/*     @include border-top-radius(3px); */
+
 
     .tags_input {
         border: none;

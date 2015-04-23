@@ -32,6 +32,8 @@
 #guts {
     @include after-clearfix;
     z-index: $guts-z-index;
+    
+    @include page_side_padding;
 }
 
 .workspace > #guts {

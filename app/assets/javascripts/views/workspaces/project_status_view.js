@@ -65,7 +65,7 @@ chorus.views.ProjectStatus = chorus.views.Base.extend({
         if (this.statusChangeActivityView) {
             _.extend(tooltipOptions, {content: $(this.statusChangeActivityView.render().el)});
         }
-
+        
         this.$('.status_reason').qtip(tooltipOptions);
     }
 });
