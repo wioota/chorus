@@ -20,11 +20,11 @@ $select_width: 375px;
     }
 
     .half-width {
-        width: $select_width;
+        width: $selectlist-width-large;
         display: inline-block;
 
         select {
-            width: $select_width;
+            width: $selectlist-width-large;
         }
     }
 

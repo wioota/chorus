@@ -27,7 +27,7 @@ $datatype-date_time-backgroundcolor: #61D0F4;
         }
 
         select {
-            width: 160px;
+            width:$selectlist-width-medium;
         }
 
         .name_label {
