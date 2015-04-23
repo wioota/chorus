@@ -7,7 +7,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
     persistent: true,
     events: {
         "submit form": "save",
-        "click .show_options": "showOptions",
+        // "click .show_options": "showOptions",
         "click .remove": "removeAttachment",
         "click .add_workfile": "launchWorkfileDialog",
         "click .add_dataset": "launchDatasetDialog",
@@ -183,11 +183,11 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
         };
     },
 
-    showOptions: function(e) {
-        e && e.preventDefault();
-        this.$(".options_text").addClass("hidden");
-        this.$(".options_area").removeClass("hidden");
-    },
+//     showOptions: function(e) {
+//         e && e.preventDefault();
+//         this.$(".options_text").addClass("hidden");
+//         this.$(".options_area").removeClass("hidden");
+//     },
 
     launchDesktopFileDialog: function(e) {
         this.clearErrors();
