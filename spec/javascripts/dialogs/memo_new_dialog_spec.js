@@ -39,10 +39,10 @@ describe("chorus.dialogs.MemoNewDialog", function() {
             expect(this.dialog.$("textarea[name=body]").val()).toBe("cats");
         });
 
-        it("has the 'Show options' link", function() {
-            expect(this.dialog.$('a.show_options').length).toBe(1);
-            expect(this.dialog.$('a.show_options').text()).toMatchTranslation('notes.new_dialog.show_options');
-        });
+//         it("has the 'Show options' link", function() {
+//             expect(this.dialog.$('a.show_options').length).toBe(1);
+//             expect(this.dialog.$('a.show_options').text()).toMatchTranslation('notes.new_dialog.show_options');
+//         });
 
         it("should have a notification recipients subview", function() {
             expect(this.dialog.$(this.dialog.notifications.el)).toExist();
@@ -122,32 +122,32 @@ describe("chorus.dialogs.MemoNewDialog", function() {
         });
     });
 
-    describe("show_options", function() {
-        it("shows the options area and hides the options_text when clicked", function() {
-            expect(this.dialog.$('.options_area')).toBeHidden();
-            expect(this.dialog.$('.options_text')).not.toHaveClass('hidden');
-            this.dialog.$("a.show_options").click();
-            expect(this.dialog.$('.options_text')).toBeHidden();
-            expect(this.dialog.$('.options_area')).not.toHaveClass('hidden');
-        });
+//      describe("show_options", function() {
+//         it("shows the options area and hides the options_text when clicked", function() {
+//             expect(this.dialog.$('.options_area')).toBeHidden();
+//             expect(this.dialog.$('.options_text')).not.toHaveClass('hidden');
+//             this.dialog.$("a.show_options").click();
+//             expect(this.dialog.$('.options_text')).toBeHidden();
+//             expect(this.dialog.$('.options_area')).not.toHaveClass('hidden');
+//         });
 
-        it("renders the attachment links when the allowWorkspaceAttachments option is truthy", function() {
-            expect(this.dialog.$("a.add_workfile")).toExist();
-            expect(this.dialog.$("a.add_dataset")).toExist();
-        });
+//         it("renders the attachment links when the allowWorkspaceAttachments option is truthy", function() {
+//             expect(this.dialog.$("a.add_workfile")).toExist();
+//             expect(this.dialog.$("a.add_dataset")).toExist();
+//         });
 
-        it("doesn't render the attachment links when the allowWorkspaceAttachments option is falsy", function() {
-            this.dialog.options.allowWorkspaceAttachments = false;
-            this.dialog.render();
-            expect(this.dialog.$("a.add_workfile")).not.toExist();
-            expect(this.dialog.$("a.add_dataset")).not.toExist();
-        });
+//         it("doesn't render the attachment links when the allowWorkspaceAttachments option is falsy", function() {
+//             this.dialog.options.allowWorkspaceAttachments = false;
+//             this.dialog.render();
+//             expect(this.dialog.$("a.add_workfile")).not.toExist();
+//             expect(this.dialog.$("a.add_dataset")).not.toExist();
+//         });
 
-        it("prevents default on click", function() {
-            var eventSpy = jasmine.createSpyObj("event", ['preventDefault']);
-            this.dialog.showOptions(eventSpy);
-            expect(eventSpy.preventDefault).toHaveBeenCalled();
-        });
+//         it("prevents default on click", function() {
+//             var eventSpy = jasmine.createSpyObj("event", ['preventDefault']);
+//             this.dialog.showOptions(eventSpy);
+//             expect(eventSpy.preventDefault).toHaveBeenCalled();
+//         });
 
         describe("> when the 'attach workfile' link is clicked", function() {
             beforeEach(function() {
@@ -695,7 +695,7 @@ describe("chorus.dialogs.MemoNewDialog", function() {
                 });
             });
         });
-    });
+//     });
 
     describe("submit", function() {
         beforeEach(function() {
