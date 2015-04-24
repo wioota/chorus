@@ -10,7 +10,7 @@ class InstallerIO:
 
     def prompt(self, msg, default=None):
         while True:
-            sys.stdout.write(msg + ":")
+            sys.stdout.write(msg + " [default=\'%s\']:" % str(default))
             if not self.silent:
                 inputs = raw_input()
             else:
@@ -25,7 +25,7 @@ class InstallerIO:
 
     def prompt_int(self, msg, default=None):
         while True:
-            sys.stdout.write(msg + "[default=%s]:" % str(default))
+            sys.stdout.write(msg + " [default=\'%s\']:" % str(default))
             if not self.silent:
                 inputs = raw_input()
             else:
@@ -64,7 +64,7 @@ class InstallerIO:
                 print "Please respond with 'yes' or 'no' (or 'y' or 'n')"
     def require_selection(self, msg, legal_choices, default=None):
         while True:
-            sys.stdout.write(msg + ":")
+            sys.stdout.write(msg + " [default=\'%s\']:" % str(default))
             if not self.silent:
                 choice = raw_input()
             else:
@@ -79,7 +79,7 @@ class InstallerIO:
 
     def require_menu(self, msg, legal_choices, default=6):
         while True:
-            sys.stdout.write(msg + ":")
+            sys.stdout.write(msg + " [default=\'%s\']:" % str(default))
             if not self.silent:
                 choice = raw_input()
             else:

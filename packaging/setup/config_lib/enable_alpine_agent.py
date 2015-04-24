@@ -6,6 +6,7 @@ sys.path.append("..")
 def enable_alpine_agent(options):
     from log import logger
     from installer_io import InstallerIO
+    from text import text
     io = InstallerIO(options.silent)
     contents = ""
     alpine_conf = os.path.join(options.chorus_path, "shared/ALPINE_DATA_REPOSITORY/configuration/alpine.conf")
@@ -14,18 +15,21 @@ def enable_alpine_agent(options):
 
     content = re.findall(r"(#?\s*agent.*{.*?})", contents, re.DOTALL)[0]
     dic = {}
+    agent_dic={}
     idx = 1
     for line in content.split("\n"):
         if "enabled" in line:
             dic[idx] = line.split("#")[-1].strip()
+            print line.split("#")[0].split("=")[1].strip()
+            if line.split("#")[0].split("=")[1].strip() == "true":
+                agent_dic[idx] = "(enabled)"
+            else:
+                agent_dic[idx] = ""
             idx += 1
 
-    agents_str = "\n".join( str(e) + ". " + dic[e] for e in dic.keys()) + "\n"\
-            + "input the number(multiple agents using ',' to seperate)"
+    agents_str = "\n".join(str(e) + ". " + dic[e] + " " + agent_dic[e] for e in dic.keys())
 
-    agents = io.require_selection("which alpine agent you want to enable(The choice you don't choose will be disabled)?\n"\
-                                  + "By default, will enable CDH5:\n"
-                                  + agents_str, range(1, idx), default=[4])
+    agents = io.require_selection(text.get("interview_question", "alpine_agent_menu") % agents_str, range(1, idx), default=[4])
 
     replace = ""
     idx = 1
@@ -39,5 +43,5 @@ def enable_alpine_agent(options):
     with open(alpine_conf, "w") as f:
         f.write(contents)
     logger.info(str([dic[agent] for agent in agents]) + " is enabled.")
-    logger.info("For more advanced configuration, change %s manually" % alpine_conf)
+    logger.info(text.get("status_msg", "enable_agent_post_step") % alpine_conf)
 

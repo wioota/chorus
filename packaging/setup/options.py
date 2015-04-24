@@ -16,7 +16,7 @@ def get_options(args):
     parser.add_option('--data_path', action="store", dest="data_path",
                       help="provide the chorus data path [default: %default]", default=os.getenv("CHORUS_DATA", "/data/chorus"))
     parser.add_option('--passphrase', action="store", dest="passphrase",
-                      help="provide the passphrase [default: %default]", default="")
+                      help="provide the passphrase [default: \'%default\']", default="")
     parser.add_option('--disable_spec', action="store_true", dest="disable_spec",
                       help="disable the spec check [default: %default]", default=False)
     parser.add_option('--chorus_only', action="store_true", dest="chorus_only",

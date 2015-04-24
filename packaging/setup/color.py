@@ -10,7 +10,7 @@ UNDERLINE = '\033[4m'
 END = '\033[0m'
 
 def bold(msg):
-    return BOLD + GREEN + msg + END
+    return BOLD + BLUE + msg + END
 
 def warning(msg):
     return YELLOW + msg + END

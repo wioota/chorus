@@ -7,6 +7,7 @@ def configure_default_port(options):
     from log import logger
     from installer_io import InstallerIO
     from configParser import ConfigParser
+    from text import text
     io = InstallerIO(options.silent)
 
     config_file = os.path.join(options.chorus_path, "shared/chorus.properties")
@@ -23,15 +24,15 @@ def configure_default_port(options):
     menu += "\n".join(str(len(ports)+i+1) + ". %s: [default: %s]" % (alpine_ports[i], alpine_config[alpine_ports[i].replace("_", ".")]) \
                       for i in xrange(0, len(alpine_ports)))
     menu += "\n%d. exit" % (len(ports) + len(alpine_ports) + 1)
-    num = io.require_menu("which port do you want to change, please enter the number? (default is exit):\n" + \
-                            menu + "\n", range(1, len(ports)+len(alpine_ports)+2), default=len(ports)+len(alpine_ports)+1)
+    num = io.require_menu(text.get("interview_question", "port_menu")  % menu,
+                          range(1, len(ports)+len(alpine_ports)+2), default=len(ports)+len(alpine_ports)+1)
     if num in range(1, len(ports)+1):
-        new_port = io.prompt_int("please enter the %s number you want to use " % ports[num-1], default=int(chorus_config[ports[num-1]]))
+        new_port = io.prompt_int(text.get("interview_question", "change_port") % ports[num-1], default=int(chorus_config[ports[num-1]]))
         chorus_config[ports[num-1]] = new_port
         chorus_config.write(config_file)
         logger.info("%s has successfully changed to %d" % (ports[num-1], new_port))
     elif num in range(len(ports)+1, len(ports)+1+len(alpine_ports)):
-        new_port = io.prompt_int("please enter the %s number you want to use " % alpine_ports[num-len(ports)-1], default=int(alpine_config[alpine_ports[num-len(ports)-1].replace("_", ".")]))
+        new_port = io.prompt_int(text.get("interview_question", "change_port") % alpine_ports[num-len(ports)-1], default=int(alpine_config[alpine_ports[num-len(ports)-1].replace("_", ".")]))
         alpine_config[alpine_ports[num-len(ports)-1].replace("_", ".")] = new_port
         alpine_config.write(alpine_config_file)
         chorus_config["workflow.url"] = "http://%s:%d" % (alpine_config["alpine.host"], new_port)

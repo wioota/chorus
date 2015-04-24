@@ -15,6 +15,7 @@ from configure import configure
 from health_check import health_check
 from func_executor import processify
 from helper import get_version
+from text import text
 
 
 CHORUS_PSQL = "\
@@ -302,7 +303,7 @@ class ChorusSetup:
         with open(database_config_file, 'w') as f:
             f.write(content)
 
-    @processify(msg="->Initializing database...", interval=1.5)
+    @processify(msg=text.get("step_msg", "initialize_db"), interval=1.5)
     def setup_database(self):
         logger.debug("->Initializing database...")
         pwfile = os.path.join(self.release_path, "postgres/pwfile")
@@ -319,7 +320,7 @@ class ChorusSetup:
         self.executor.rake(db_commands)
         self.executor.stop_postgres()
 
-    @processify(msg="->Running database migrations...", interval=1.5)
+    @processify(msg=text.get("step_msg", "db_migrate"), interval=1.5)
     def upgrade_database(self):
         self.executor.start_postgres()
         logger.debug("->Running database migrations...")
@@ -329,13 +330,13 @@ class ChorusSetup:
         self.executor.rake(db_commands)
         self.executor.stop_postgres()
 
-    @processify(msg="->Running data validation...", interval=1.5)
+    @processify(msg=text.get("step_msg", "db_validation"), interval=1.5)
     def validate_data_sources(self, msg="", interval=1.5):
         logger.debug("->Running data validation...")
         self.executor.start_postgres()
         self.executor.rake("validations:data_source")
 
-    @processify(msg="->Shutting down previous Chorus install...", interval=1.5)
+    @processify(msg=text.get("step_msg", "stop_pre_chorus"), interval=1.5)
     def stop_previous_release(self):
         logger.debug("->Shutting down previous Chorus install...")
         self.executor.stop_previous_release()
@@ -353,7 +354,7 @@ class ChorusSetup:
             return True
 
     def configure_alpine(self):
-        @processify(msg="->Installing %s..." % self.alpine_version)
+        @processify(msg=text.get("step_msg", "setting_up_alpine") % self.alpine_version)
         def configure():
             logger.debug("Extracting %s to %s" % (self.alpine_installer, self.alpine_release_path))
             self.executor.run("sh %s --target %s --noexec" % (self.alpine_installer, self.alpine_release_path))
@@ -405,10 +406,10 @@ class ChorusSetup:
         self.configure_secret_key(passphrase)
         self.configure_secret_token()
 
-        msg = "Creating"
         if is_upgrade:
-            msg = "Updating"
-        logger.info(bold("%s metadata database (may take 2~3 minuts):" % msg))
+            logger.info(bold(text.get("step_msg", "update_database")))
+        else:
+            logger.info(bold(text.get("step_msg", "create_database")))
         self.extract_postgres()
         if is_upgrade:
             self.validate_data_sources()
@@ -423,33 +424,25 @@ class ChorusSetup:
         self.link_current_to_release("current", self.release_path)
 
         if self.is_alpine_exits() and self.options.chorus_only is False:
-            logger.info(bold("Setting up alpine:"))
+            logger.info(bold(text.get("step_msg", "install_alpine")))
             self.configure_alpine()
             self.link_current_to_release("alpine-current", self.alpine_release_path)
         self.source_chorus_path()
         print "*" * 60
-        print "Alpine Chorus successfully installed:"
-        print "Install Directory: %s" % self.options.chorus_path
-        print "Data Directory: %s" % self.options.data_path
-        print "Chorus Version: %s" % self.chorus_version
-        print "Alpine Version: %s" % self.alpine_version
+        print text.get("status_msg", "success_install") % \
+                (self.options.chorus_path, self.options.data_path, self.chorus_version, self.alpine_version)
         print "*" * 60
 
-        if self.io.require_confirmation("Would you like to run a full health check now?\n" + \
-                                        "A full health check can be run later by executing: chorus_control.sh health_check", default="no"):
+        if self.io.require_confirmation(text.get("interview_question", "do_health_check"), default="no"):
             health_check()
-        if self.io.require_confirmation("Would you like to modify the system settings for Alpine Chorus?\n" + \
-                                        "System settings can be modified later by executing chorus_control.sh configure", default="no"):
+        if self.io.require_confirmation(text.get("interview_question", "do_configure") , default="no"):
             configure.config(self.options, is_upgrade)
 
-        print bold("Setup Complete")
+        print bold(text.get("status_msg", "setup_complete"))
         if is_upgrade:
-            print "Confirm custom configuration settings as directed in the upgrade guide before restarting Chorus."
+            print text.get("status_msg", "upgrade")
         print "*" * 60
-        print "To start Chorus, run the following commands:"
-        print "\"su - %s\"" % pwd.getpwuid(os.getuid()).pw_name
-        #print "\"source %s/chorus_path.sh\"" % self.options.chorus_path
-        print "\"chorus_control.sh start\""
+        print text.get("status_msg", "setup_post_step") % pwd.getpwuid(os.getuid()).pw_name
         print "*" * 60
 
 chorus_set = ChorusSetup()

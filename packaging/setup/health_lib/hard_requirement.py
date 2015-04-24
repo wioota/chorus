@@ -8,9 +8,10 @@ sys.path.append("..")
 from log import logger
 from chorus_executor import ChorusExecutor
 from func_executor import processify
+from text import text
 
 def a_check_os_system():
-    @processify(msg="->Checking OS Version...")
+    @processify(msg=text.get("step_msg", "check_os"))
     def check():
         os_name, version, release = platform.linux_distribution()
         if os_name.lower() in ["redhat", "centos"] and re.match(r"^[5|6]", version):
@@ -22,7 +23,7 @@ def a_check_os_system():
     check()
 
 def b_check_runing_user(install_mode=False):
-    @processify(msg="->Checking Running User...")
+    @processify(msg=text.get("step_msg", "check_user"))
     def check():
         if os.getuid() == 0 and install_mode:
             raise Exception("Please don't run this program as root")
@@ -30,7 +31,7 @@ def b_check_runing_user(install_mode=False):
 
 def c_check_java_version():
     executor = ChorusExecutor()
-    @processify(msg="->Checking Java Version...")
+    @processify(msg=text.get("step_msg", "check_java"))
     def check():
         ret, stdout, stderr = executor.run("java -version 2>&1")
         if "command not found" in stdout:
@@ -45,7 +46,7 @@ def c_check_java_version():
     check()
 
 def d_check_disk_space(dir):
-    @processify(msg="->Checking disk space...")
+    @processify(msg=text.get("step_msg", "check_disk"))
     def check():
         stat= os.statvfs(dir)
         free_space = stat.f_frsize*stat.f_bavail / (1024 * 1024 * 1024)

@@ -5,6 +5,7 @@ import inspect
 import config_lib
 from installer_io import InstallerIO
 from log import logger
+from text import text
 
 class Configure:
     def __init__(self):
@@ -70,15 +71,13 @@ class Configure:
         print "*" * 60
         header = ""
         if self.chorus_version is None:
-            print "Chorus Not Detected"
+            print text.get("status_msg", "no_chorus")
         else:
-            print "Chorus Version:\t" + self.chorus_version
-            print "Chorus Service State:\t" + self.get_chorus_state()
+            print text.get("status_msg", "chorus_status") % (self.chorus_version, self.get_chorus_state())
         if self.alpine_version is None:
-            print "Alpine Not Detected"
+            print text.get("status_msg", "no_alpine")
         else:
-            print "Alpine Version:\t" + self.alpine_version
-            print "Alpine Service State:\t" + self.get_alpine_state()
+            print text.get("status_msg", "alpine_status") % (self.alpine_version, self.get_alpine_state())
         print "CHORUS_HOME:\t%s" % os.getenv("CHORUS_HOME", "not set in ~/.bashrc")
         print "*" * 60
         if self.chorus_version is None:
@@ -87,18 +86,17 @@ class Configure:
         self.method = self._load_configure_func()
         while True:
             lens = len(self.method) + 1
-            menu = "\n".join(str(e) + ". " + self.method[e][0] for e in self.method.keys()) + "\n%d. exit\n" % lens
-            selection = self.io.require_menu("choose the configuration you want to change: (default is exit)\n" \
-                                        + menu, range(1, lens + 1), default=lens)
+            menu = "\n".join(str(e) + ". " + self.method[e][0] for e in self.method.keys()) + "\n%d. exit" % lens
+            selection = self.io.require_menu(text.get("interview_question", "configuration_menu") % menu, range(1, lens + 1), default=lens)
             if selection == lens:
                 break
             self.method[selection][1](options)
-            if self.io.require_confirmation("continue changing other configuration?", default="no"):
+            if self.io.require_confirmation(text.get("interview_question", "back_to_menu"), default="no"):
                 continue
             else:
                 break
         print "*" * 60
-        print "Run \"chorus_control.sh restart\" to affect the change of configuration."
+        print text.get("status_msg", "configure_post_step")
         print "*" * 60
 
 configure = Configure()

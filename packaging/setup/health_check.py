@@ -7,6 +7,7 @@ import health_lib
 from log import logger
 from color import bold, warning
 from chorus_executor import ChorusExecutor
+from text import text
 
 def _load_configure_func():
     dic = {}
@@ -22,7 +23,7 @@ def _load_configure_func():
     return dic
 
 def system_checking(install_mode=False, chorus_path=None):
-    logger.info(bold("Verifying Minimum System Requirements:"))
+    logger.info(bold(text.get("step_msg", "health_check")))
     for func in _load_configure_func().values():
         if func[0] == "b_check_running_user":
             func[1](install_mode=install_mode)

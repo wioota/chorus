@@ -7,12 +7,13 @@ def enable_https(options):
     from chorus_executor import ChorusExecutor
     from log import logger
     from configParser import ConfigParser
+    from text import text
     io = InstallerIO(options.silent)
 
     config_file = os.path.join(options.chorus_path, "shared/chorus.properties")
     chorus_config = ConfigParser(config_file)
     if chorus_config.has_key("ssl.enabled") and chorus_config["ssl.enabled"].lower() == "true":
-        if not io.require_confirmation("ssl already enabled, want to re-configure again?", default="no"):
+        if not io.require_confirmation(text.get("interview_question", "https_question"), default="no"):
             return
 
     executor = ChorusExecutor(options.chorus_path)
@@ -30,7 +31,7 @@ def enable_https(options):
     executor.run("openssl x509 -req -days 365 -in %s -signkey %s -out %s" % \
                  (server_csr, server_key, server_crt))
 
-    port = io.prompt_int("Which port you want to use for https?", default=8443)
+    port = io.prompt_int(text.get("interview_question", "https_port"), default=8443)
 
     chorus_config["ssl.enabled"] = "true"
     chorus_config["ssl_server_port"] = port

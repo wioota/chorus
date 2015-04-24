@@ -15,6 +15,7 @@ from setup import chorus_executor
 from setup import options
 from setup import log
 from setup.health_check import system_checking
+from setup.text import text
 sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), "setup"))
 options, arg, health_args = options.get_options(sys.argv)
 logger = log.logger
@@ -29,7 +30,8 @@ fresh_install = False
 
 dot_chorus = os.path.join("/root", ".chorus")
 def exit_gracefully(signum, frame):
-    print "\nInstall aborted, Cancelled by user"
+    print
+    print text.get("error_msg", "program_abort") % "Install"
     sys.exit(1)
 
 def _eula_by_brand():
@@ -87,7 +89,7 @@ def grant_permission(user, chorus_path, data_path):
         raise Exception("[ERROR] " + stderr)
 
 def copy_to_dest(installation_path, chorus_path, data_path, release_path, user):
-    @processify(msg="->Installing Chorus to %s..." % chorus_path)
+    @processify(msg=text.get("step_msg", "install_chorus_process") % chorus_path)
     def copy():
 
         ret, stdout, stderr = run("cp -rf %s %s" % (os.path.join(installation_path, "version_build"), chorus_path))
@@ -117,53 +119,51 @@ def install():
     else:
         fresh_install = True
         if not prompt_for_eula():
-            print "Install aborted, Cancelled by user"
+            print text.get("error_msg", "program_abort") % "Install"
             return
-        user = io.prompt("Specify the system user that will run Alpine Chorus processes [default: %s]" % options.chorus_user, default=options.chorus_user)
+        user = io.prompt(text.get("interview_question", "specify_user"), default=options.chorus_user)
         ret, stdout, stderr = run("useradd chorus")
         if ret not in [0,9]:
             if ret == 126:
                 stderr += "Please run as the user with root permission\n"
             raise Exception(stderr)
-        chorus_path = io.prompt("Please enter the full path to the Chorus installation directory [default: %s]" % options.chorus_path, default=options.chorus_path)
+        chorus_path = io.prompt(text.get("interview_question", "specify_chorus_path"), default=options.chorus_path)
 
-        data_path = io.prompt("Please enter the full path to the Chorus data directory [default: %s]" % options.data_path, default=options.data_path)
+        data_path = io.prompt(text.get("interview_question", "specify_data_path"), default=options.data_path)
 
-        passphrase = io.prompt("Enter optional passphrase to generate "
-                               + "a recoverable secret key for encrypting passwords."
-                               + "By default, a random key will be generated", default='')
+        passphrase = io.prompt(text.get("interview_question", "specify_passprase"), default='')
 
         install_alpine = "False"
         if is_alpine_exits(installation_path):
-            install_alpine = str(io.require_confirmation("Do you want to install Alpine?", "yes"))
+            install_alpine = str(io.require_confirmation(text.get("interview_question", "install_alpine"), "yes"))
     ret, stdout, stderr = run("mkdir -p %s && mkdir -p %s" % (chorus_path, data_path))
     if ret != 0:
         raise Exception("[ERROR] " + stderr)
     release_path = os.path.join(chorus_path, "releases/%s" % version)
     pre_version = detect_pre_version(chorus_path)
     cur_version = version.split("-")[0]
-    msg = "Installing"
+    msg = text.get("common", "install")
     if pre_version is not None:
         default = "yes"
         if compare_version(cur_version, pre_version) == 1:
-            msg = "Upgrade"
+            msg = text.get("common", "upgrade")
         elif compare_version(cur_version, pre_version) == -1:
             default = "no"
-            msg = "Downgrade"
+            msg = text.get("common", "downgrade")
         else:
             default = "no"
-            msg = "Re-install"
-        if not io.require_confirmation("You already have chorus version: %s installed. \n" % pre_version\
-			+"Do you want to %s the chorus to version: %s" % (msg, cur_version), default):
-            print "\n%s aborted, Cancelled by user" % msg
+            msg = text.get("common", "reinstall")
+        if not io.require_confirmation(text.get("interview_question", "pre_version_detect") % (pre_version, msg, cur_version), default):
+            print
+            print text.get("error_msg", "program_abort") % msg
             return
     if not options.disable_spec:
         system_checking(True, chorus_path)
 
     if msg in ["Installing", "Re-install"]:
-        output(bold("%s Chorus %s:" % (msg, version)))
+        output(bold(text.get("step_msg", "install_chorus") % (msg, version)))
     else:
-        output(bold("%s Chorus to %s:" % (msg, version)))
+        output(bold(text.get("step_msg", "upgrade_or_downgrade_chorus") % (msg, version)))
     copy_to_dest(installation_path, chorus_path, data_path, release_path, user)
 
     with open(dot_chorus, "w") as f:
@@ -192,5 +192,5 @@ try:
 except Exception as e:
     if fresh_install and os.path.exists(dot_chorus):
         os.path.remove(dot_chorus)
-    print "[ERROR]:" + error(str(e) + "\nException Occured, see /tmp/install.log for details")
+        print "[ERROR]:" + error(str(e) + "\n" + text.get("error_msg", "exception"))
     logger.debug(traceback.format_exc())
