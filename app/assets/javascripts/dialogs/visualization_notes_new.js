@@ -19,7 +19,7 @@ chorus.dialogs.VisualizationNotesNew = chorus.dialogs.MemoNew.extend({
     postRender: function() {
         this._super("postRender", arguments);
 
-        this.showOptions();
+        // this.showOptions();
         this.showVisualizationData();
     },
 
