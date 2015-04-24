@@ -41,7 +41,7 @@ chorus.dialogs.Comment = chorus.dialogs.Base.include (
             var $input = this.$(".cleditorMain");
             this.markInputAsInvalid($input, model.errors.text, true);
 
-            this.$("iframe").contents().find("text").css("margin-right", "20px");
+            // this.$("iframe").contents().find("text").css("margin-right", "20px");
         }
     },
 

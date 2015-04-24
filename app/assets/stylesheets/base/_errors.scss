@@ -3,7 +3,7 @@
 /*                                          */
 /* ********** */
 
-$margin-right-for-error-marker: 20px;
+$space-right-for-error-marker: 20px;
 
 // exclamation icon to preceed error messages
 // @mixin alert-marker {
@@ -33,7 +33,6 @@ $margin-right-for-error-marker: 20px;
     background-image: url("/images/messaging/error-exclamation.svg");
     background-size: $alert-icon-medium $alert-icon-medium;
     background-repeat: no-repeat;
-    padding-right: $margin-right-for-error-marker;
 }
 
 
@@ -131,35 +130,51 @@ $margin-right-for-error-marker: 20px;
 
 .warning {}
 
-/* user input: named error BUT in meaning is as alert */
 
 /* input elements wont take ::after  */
 /* so background image is necessary */
 
-input.has_error,
-textarea.has_error,
-.text-core .text-wrap textarea.has_error,
-.text-core .text-wrap input.has_error {
-    @include error-input-border;
-    @include border-radius(1px);
+input,
+textarea,
+.text-core .text-wrap textarea,
+.text-core .text-wrap input {
+
+    &.has_error {
+        @include error-input-border;
+        @include border-radius(1px);
     
-    @include error-background-icon;
-    background-position: right 2px bottom 50%;
+        @include error-background-icon;
+        padding-right: $space-right-for-error-marker;
+        background-position: right 2px bottom 50%;
+    }
 }
 
-// .inputError {
-//     @include alert-marker;
-// }
 
-.cleditorMain.has_error {
-    @include error-input-border;
-    @include border-radius(1px);
+.cleditorMain {
+    position: relative; 
+    box-sizing: border-box;
 
-    @include error-background-icon;
-    background-position: 99% 2%;
+    &.has_error {
+        @include error-input-border;
+        @include border-radius(1px);
 
-    iframe body {
-        margin-right: $margin-right-for-error-marker;
+        // background-position: 99% 2%;
+
+        iframe body {
+            margin-right: $space-right-for-error-marker;
+        }
+            &::after {
+                display: inline-block;
+                width: $alert-icon-medium;
+                height: $alert-icon-medium;
+                position: absolute;
+
+                right: 5px;
+                top: 4px;
+
+                content: " ";
+                @include error-background-icon;
+            }
     }
 }
 

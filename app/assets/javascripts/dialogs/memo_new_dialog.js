@@ -170,7 +170,7 @@ chorus.dialogs.MemoNew = chorus.dialogs.Base.include(
             var $input = this.$(".cleditorMain");
             this.markInputAsInvalid($input, model.errors.body, true);
             // TODO: fix this so that it applies a css class for the margin, not a fixed value
-            this.$("iframe").contents().find("body").css("margin-right", "20px");
+           //  this.$("iframe").contents().find("body").css("margin-right", "20px");
         }
     },
 

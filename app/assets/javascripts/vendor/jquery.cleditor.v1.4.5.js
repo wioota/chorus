@@ -1,5 +1,7 @@
 ﻿// ******
-// MODIFIED FOR CHORUS
+// MODIFIED FOR CHORUS !!!!!!
+//
+
 
 /*!
  CLEditor WYSIWYG HTML Editor v1.4.5
@@ -38,20 +40,20 @@
 //             fonts:        // font names in the font popup
 //                           "Arial,Arial Black,Courier New,Narrow,Garamond," +
 //                           "Georgia,Impact,Sans Serif,Serif,Tahoma,Trebuchet MS,Verdana",
-            sizes:        // sizes in the font size popup
-                          "1,2,3,4,5,6,7",
-            styles:       // styles in the style popup
-                          [["Paragraph", "<p>"], ["Header 1", "<h1>"], ["Header 2", "<h2>"],
-                          ["Header 3", "<h3>"], ["Header 4", "<h4>"], ["Header 5", "<h5>"],
-                          ["Header 6", "<h6>"]],
+//             sizes:        // sizes in the font size popup
+//                           "1,2,3,4,5,6,7",
+//             styles:       // styles in the style popup
+//                           [["Paragraph", "<p>"], ["Header 1", "<h1>"], ["Header 2", "<h2>"],
+//                           ["Header 3", "<h3>"], ["Header 4", "<h4>"], ["Header 5", "<h5>"],
+//                           ["Header 6", "<h6>"]],
             useCSS:       false, // use CSS to style HTML when possible (not supported in ie)
             docType:      // Document type contained within the editor
                           //'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
                           '<!DOCTYPE html>',
             docCSSFile:   // CSS file used to style the document contained within the editor
                           "",
-            bodyStyle:    // style to assign to document body contained within the editor
-                          "margin:4px; font:10pt Arial,Verdana; cursor:text"
+                          // style to assign to document body contained within the editor
+            bodyStyle:    "font-size:10pt; font-family:Arial,Verdana !important; margin:4px; cursor:text"
         },
 
         // Define all usable toolbar buttons - the init string property is 
@@ -483,7 +485,7 @@
                     return false; // stop propagination to document click
                 }
 
-                // propaginate to document click
+                // propagate to document click
                 return;
 
             }
