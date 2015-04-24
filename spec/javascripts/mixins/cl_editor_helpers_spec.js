@@ -26,7 +26,7 @@ describe("chorus.Mixins.clEditor", function() {
             });
 
             it("should have the given controls", function() {
-                expect(this.editor.options.controls).toBe("bold italic | bullets numbering | link unlink");
+                expect(this.editor.options.controls).toBe("bold italic | bullets numbering | link unlink | removeformat");
             });
 
 //             _.each(controls, function(control) {
