@@ -100,6 +100,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.include(
 
     startVisualizationWizard: function() {
         this.resultsConsole.clickClose();
+
+        // Show the Chiasm visualization container.
+        $('#chiasm').removeClass("hidden");
+
         this.$('.chart_icon:eq(0)').click();
         this.$('.column_count').addClass('hidden');
         this.$('.info_bar').removeClass('hidden');
@@ -112,7 +116,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.include(
     },
 
     selectVisualization: function(e) {
+
+        // Extract the selected chart type.
         var type = $(e.target).data('chart_type');
+
         this.$(".create_chart .cancel").data("type", type);
         this.$('.chart_icon').removeClass('selected');
         $(e.target).addClass('selected');
@@ -122,6 +129,10 @@ chorus.views.DatasetContentDetails = chorus.views.Base.include(
 
     cancelVisualization: function(e) {
         e.preventDefault();
+
+        // Hide the Chiasm visualization container.
+        $('#chiasm').addClass("hidden");
+
         this.$('.definition').removeClass("hidden");
         this.$('.create_chart').addClass("hidden");
         this.$(".filters").addClass("hidden");
@@ -216,14 +227,29 @@ chorus.views.DatasetContentDetails = chorus.views.Base.include(
     },
 
     showVisualizationConfig: function(chartType) {
+
         if(this.chartConfig) { this.chartConfig.teardown(true);}
 
         var options = { model: this.dataset, collection: this.collection, errorContainer: this };
         this.chartConfig = chorus.views.ChartConfiguration.buildForType(chartType, options);
         this.chartConfig.filters = this.filterWizardView.collection;
+        this.chartConfig.chartType = chartType;
 
         this.$(".chart_config").removeClass("hidden");
         this.renderSubview("chartConfig");
+
+        // Update the Chiasm visualization to initialize.
+        this.updateChiasmVisualization();
+
+        // Update the Chiasm visualization when configuration changes.
+        // The "configChanged" event is triggered whenever any part of the
+        // visualization configuration changes.
+        this.chartConfig.on("configChanged", _.bind(this.updateChiasmVisualization, this));
+    },
+
+    updateChiasmVisualization: function(){
+        var options = this.chartConfig.chartOptions();
+        $("#chiasm").html(this.chartConfig.chartType + ": " + JSON.stringify(options));
     },
 
     showSelectedTitle: function(e) {
