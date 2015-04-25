@@ -1,5 +1,11 @@
 {{#if members}}
+<div class="module_header">
+    <div class="title">{{t "workspace.members.title" count=members.length}}</div>
+</div>
+<div class="module_content">
+
     <div class="members">
+        
         <ul>
             {{#each members}}
             <li>
@@ -11,4 +17,8 @@
         <a class="more_members dialog-launch" href="#">{{t "workspace.members_more" count=extra_members}}</a>
         {{/if}}
     </div>
+
+</div>
+<div class="module_bottom"></div>
+
 {{/if}}

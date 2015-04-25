@@ -819,6 +819,11 @@ $lozenge-color-selected-dark: $brand-dark;
     cursor: grab;
 }
 
+@mixin sidebar-panel-heading-font {
+        @include secondary-text-small-semibold;
+        @include uppercase;
+}
+
 @mixin sidebar-panel {
     $border-radius: $default-border-radius;
     margin-top: $sidebar-padding-top;
@@ -840,9 +845,9 @@ $lozenge-color-selected-dark: $brand-dark;
         @include border-top-radius($border-radius);
         border-bottom: $border-canon;
         display: block;
-        @include secondary-text-small-semibold;
-        @include uppercase;
         padding: 10px;
+        
+        @include sidebar-panel-heading-font;
     }
 
     ul {

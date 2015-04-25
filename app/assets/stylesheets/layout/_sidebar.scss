@@ -85,21 +85,6 @@ body .ui-draggable-dragging {
         }
     }
 
-    .members {
-
-        li {
-            display: inline-block;
-            vertical-align: middle;
-            height: $icon-image-height + 3px;
-            width: $icon-image-width + 3px;
-        }
-
-        .dialog {
-            font-size: $small-font;
-            font-weight: $semibold;
-            margin-left: 10px;
-        }
-    }
 
     .notice {
         a {

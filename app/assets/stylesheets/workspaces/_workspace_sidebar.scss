@@ -1,4 +1,5 @@
-.workspace_list_sidebar, .workspace_show_sidebar {
+.workspace_list_sidebar,
+.workspace_show_sidebar {
     .info {
         .name {
             @include ellipsis;
@@ -7,13 +8,43 @@
         }
     }
 
-    .workspace_member_list .members {
+    .workspace_member_list {
         @include sidebar-panel;
+
+
+        .members {
+            $sidebar-member-image-size: 35px;
+
+            
+            li {
+                display: inline-block;
+                vertical-align: middle;
+                height: $icon-image-height + 5px;
+                width: $icon-image-width + 5px;
+            }
+
+            .more_members {
+                // font-size: $small-font;
+                // font-weight: $semibold;
+                margin-left: 10px;
+            }
+        }
+    
     }
 
-    img.workspace_image {
-        max-width: $sidebar-width - 16px;
-        width: 100%;
-        height: auto;
+.module_header {
+    .title {
+        @include sidebar-panel-heading-font;
+        padding: 0 10px 0 10px;
+    }
+}
+
+
+    img {
+        &.workspace_image {
+            max-width: $sidebar-width - 16px;
+            width: 100%;
+            height: auto;
+        }
     }
 }

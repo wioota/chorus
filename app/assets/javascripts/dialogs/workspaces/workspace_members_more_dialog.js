@@ -1,7 +1,7 @@
 chorus.dialogs.WorkspaceMembersMore = chorus.dialogs.Base.extend({
     constructorName: "WorkspaceMembersMore",
-    templateName:"workspace_members_more",
-    title:t("workspace.members"),
+    templateName: "workspace_members_more",
+    title: t("workspace.members_more.dialog.title"),
     persistent:true,
 
     subviews:{
@@ -52,7 +52,7 @@ chorus.dialogs.WorkspaceMembersMore = chorus.dialogs.Base.extend({
             members:_.map(sortedMembers, function (member) {
                 return {
                     displayName:member.displayName(),
-                    imageUrl:member.fetchImageUrl({size:'icon'}),
+                    imageUrl:member.fetchImageUrl({size: 'icon'}),
                     showUrl:member.showUrl()
                 };
             })

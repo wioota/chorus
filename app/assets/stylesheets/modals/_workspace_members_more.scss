@@ -1,23 +1,24 @@
-.workspace_members_more {
-    .sub_header {
-        padding: 0 15px;
-        @include borderbox;
+.dialog {
+    &.workspace_members_more {
+        .dialog_content:not(.is_loading) {
+            padding: 0;
+        }
     }
+}
+
+.workspace_members_more {
+//     .sub_header {
+//         padding: 0;
+//         @include borderbox;
+//     }
 
     .collection_list {
         border-top: 1px solid $border-color-dark;
         border-bottom: 1px solid $border-color-dark;
-
     }
 
     button {
         float: right;
         margin: 0 10px 15px;
-    }
-}
-
-.dialog.workspace_members_more {
-    .dialog_content:not(.is_loading) {
-        padding: 0;
     }
 }
