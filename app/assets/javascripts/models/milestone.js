@@ -29,7 +29,7 @@ chorus.models.Milestone = chorus.models.Base.extend({
             toggleMessage = "milestone.status.completed.toast";
             type = "success";
         } 
-        chorus.toast(toggleMessage, {name: this.name(), toastOpts: {type: type} });
+        chorus.toast(toggleMessage, {milestoneName: this.name(), toastOpts: {type: type} });
         this.onClose();
     },
     
