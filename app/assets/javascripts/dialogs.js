@@ -10,7 +10,7 @@ chorus.dialogs.Base = chorus.Modal.extend ({
 
         var header = $("<div id='dialog_header' class='dialog_header'/>");
         var content = $("<div id='dialog_content' class='dialog_content'/>");
-        var errors = $("<div id='dialog_errors' class='errors hidden'/>");
+        var errors = $('<div id="dialog_errors" class="errors hidden"/>');
 
         this.events = this.events || {};
 
