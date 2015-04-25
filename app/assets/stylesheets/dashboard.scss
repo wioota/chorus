@@ -7,8 +7,8 @@ $debug-browser-support: true;
 
 
 
-/* height of buttons used for dashboard widget shell */
-/* e.g. configure button */
+// height of buttons used for dashboard widget shell */
+// e.g. configure button */
 $height-button-widgetshell: 23px;
 
 $dashboard-module-minheight: 150px;
@@ -17,10 +17,10 @@ $dashboard-module-padding: 10px;
 $title-content-height: $dashboard-module-title-height - $dashboard-module-padding;
 
 
-/* PAGE styles */
-/* PAGETYPE: dashboard  */
+// PAGE styles */
+// PAGETYPE: dashboard  */
 
-/* page layout        */
+// page layout        */
 div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
     #guts {
         padding: ($header-height + $subheader-height) $page-margin-right 10px $page-margin-left;
@@ -43,10 +43,10 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         float: right;
     }   
 }
-/* END page layout */
+// END page layout */
 
-/* page heading    */
-/* its mostly a regular page heading, but w/edit button on right */
+// page heading    */
+// its mostly a regular page heading, but w/edit button on right */
 .dashboard_sub_header {
     .button {
         background-color: $shaded-background-color;
@@ -60,19 +60,19 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         @include panel-button($height-button-widgetshell);
     }
 }
-/* END: page heading */
-/* END: PAGETYPE dashboard */
+// END: page heading */
+// END: PAGETYPE dashboard */
 
 
-/* ************ */
-/* WIDGETS      */
-/* specific dashboard widgets */
+// ************ */
+// WIDGETS      */
+// specific dashboard widgets */
 
 .dashboard_module {
 
-/* ************ */
-/* A dashboard_module             */
-/* widget: recent activity stream */
+// ************ */
+// A dashboard_module             */
+// widget: recent activity stream */
 
     // note: there is additional css for activity list dashboard widget in _activity_list.scss
     
@@ -98,12 +98,12 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         }
     }
 
-/* END: recent activity stream */
+// END: recent activity stream */
 
 
-/* ************ */
-/* A dashboard_module    */
-/* widget: site snapshot */
+// ************ */
+// A dashboard_module    */
+// widget: site snapshot */
 
     &.dashboard_site_snapshot {
         ul {
@@ -145,12 +145,12 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         .workfile .total { color: $blue; }
         .user .total { color: $purple; }
     }
-/* END: site snapshot */
+// END: site snapshot */
 
 
-/* ************ */
-/* dashboard_module >  */
-/* widget: workspace activity/most active chart */
+// ************ */
+// dashboard_module >  */
+// widget: workspace activity/most active chart */
 
     &.dashboard_workspace_activity {
         .chart {
@@ -163,12 +163,12 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
             }
         }
     }
-/* END: workspace activity chart */
+// END: workspace activity chart */
 
 
-/* ************ */
-/* A dashboard_module       */
-/* widget: recent workfiles */
+// ************ */
+// A dashboard_module       */
+// widget: recent workfiles */
 
     &.dashboard_recent_workfiles {
         #recent_workfiles_main_content {
@@ -232,18 +232,17 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
             border-bottom: $border-canon;
         }
     }
-/* END: recent workfiles */
-
+// END: recent workfiles */
 }
 
 
-/* ************ */
-/* general dashboard widget */
-/* panel used in configuring the widgets */
+// ************ */
+// general dashboard widget */
+// panel used in configuring the widgets */
 
 .dashboard_module {
 
-    /* BEGIN: widget configuration */
+    //     BEGIN: widget configuration */
     .widget_configuration {
         display: none;
 
@@ -252,11 +251,11 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
             width: 100%;
             height: 100%;
 
-            /* position to defeat the padding of the widget shell... */
+            // position to defeat the padding of the widget shell... */
             top: -$dashboard-module-padding;
             left: -$dashboard-module-padding;
 
-            /* ...and add to cover the shell's padding */
+            // ...and add to cover the shell's padding */
             padding-bottom: ($dashboard-module-padding * 2) + 5;
             padding-right: $dashboard-module-padding * 2;
         
@@ -268,12 +267,12 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
             position: absolute;           
             width: 100%;
             
-            /* position to defeat the padding of the widget shell... */
+            // position to defeat the padding of the widget shell... */
             top: -$dashboard-module-padding;
             left: -$dashboard-module-padding;
 
-            /* ...match padding of normal widget shell content */
-            /* but account for the padding of the border */
+            // ...match padding of normal widget shell content */
+            // but account for the padding of the border */
             padding: $dashboard-module-padding - 1;
        
             background-color: $core-white;
@@ -288,14 +287,14 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
             padding-bottom: $dashboard-module-padding / 2;
         }
     }
-    /* END: widget configuration */
+    // END: widget configuration */
 }
 
 
 
-/* ************ */
-/* general dashboard widget */
-/* provides a general style for a widget shell with common elements */
+// ************ */
+// general dashboard widget */
+// provides a general style for a widget shell with common elements */
 
 .dashboard_module {
 
@@ -312,34 +311,16 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
         margin-right: 3px;
         cursor: pointer;
 
-        /* remove rightside margin on the rightmost button so that it is flush right */
+        // remove rightside margin on the rightmost button so that it is flush right
         &:last-child {
             margin-right: 0px;
         }
     }
 
-    /* the configure button */
+    // the configure button */
     .configure {
         width: 28px;
         @include panel-button($height-button-widgetshell);
-    }
-    
-    .module_header {
-        min-height: $title-content-height + $dashboard-module-padding;
-        line-height: $title-content-height;
-
-        .title {
-            display: inline-block;
-            @include dashboard-module-title;
-            height: $title-content-height;
-            line-height: $title-content-height;
-        }
-        
-        .menus {
-            float: none !important;
-            padding-top: 5px;
-            padding-bottom: 5px;
-        }
     }
 
     .loading_text {
@@ -347,8 +328,25 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
     }
 }
     
+.module_header {
+    min-height: $title-content-height + $dashboard-module-padding;
+    line-height: $title-content-height;
 
-/* rules for the recent activity hovering list that is part of the workspace cards */
+    .title {
+        display: inline-block;
+        @include dashboard-module-title;
+        height: $title-content-height;
+        line-height: $title-content-height;
+    }
+    
+    .menus {
+        float: none !important;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+}
+
+// rules for the recent activity hovering list that is part of the workspace cards */
 
     .tooltip {
         li.comment {
@@ -362,10 +360,10 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
     }
 
 
-/* TODO move this to the right location */
-/* in the css file */
+// TODO move this to the right location */
+// in the css file */
 
-/* workspace most active chart: card of workspace details that displays on hover */
+// workspace most active chart: card of workspace details that displays on hover */
   
 .hovercard {
     width: 300px;
@@ -376,7 +374,7 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
 	}
 
 	.ui-tooltip-content {
-		/* override defaults */
+		// override defaults
 		padding: 0;
     	background-color: $core-white;
     	border-radius: $default-border-radius;
@@ -418,12 +416,12 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
 }
 
 
-/* ********** */
-/* ********** */
+// ********** */
+// ********** */
 
-/* empty and app-tip needs a better home location. */
-/* they are not specific to dashboard */
-/* empty state: general case for when a 'set' has no contents. */
+// empty and app-tip needs a better home location. */
+// they are not specific to dashboard */
+// empty state: general case for when a 'set' has no contents. */
 
 .empty_state {
     color: $disabled-text;
@@ -433,7 +431,7 @@ div[data-page="Dashboard"], div[data-page="UserDashboardEdit"] {
 }
 
 
-/* in-app "intrinsic assistance" text */
+// in-app "intrinsic assistance" text */
 $tip-text-color: $disabled-text;
 
 .text_tip {
