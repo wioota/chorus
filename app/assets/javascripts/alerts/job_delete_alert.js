@@ -6,11 +6,11 @@ chorus.alerts.JobDelete = chorus.alerts.ModelDelete.extend({
     ok: t("job_delete.ok"),
     deleteMessage: "job_delete.toast",
 
-    deleteMessageParams:function () {
+    deleteMessageParams: function () {
         return { jobName: this.modelName };
     },
 
-    makeModel:function () {
+    makeModel: function () {
         this._super("makeModel", arguments);
         this.model = this.model || this.pageModel;
         this.modelName = this.model.name();

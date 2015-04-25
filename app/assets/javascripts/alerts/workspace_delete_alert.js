@@ -7,13 +7,13 @@ chorus.alerts.WorkspaceDelete = chorus.alerts.ModelDelete.extend ({
     redirectUrl: "/",
     deleteMessage: "workspace.delete.toast",
 
-    deleteMessageParams:function () {
+    deleteMessageParams: function () {
         return {
             workspaceName: this.workspaceName
         };
     },
 
-    makeModel:function () {
+    makeModel: function () {
         this._super("makeModel", arguments);
         this.model = this.model || this.pageModel;
         this.workspaceName = this.model.get("name");

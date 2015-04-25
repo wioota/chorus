@@ -10,7 +10,7 @@ chorus.alerts.WorkfileDelete = chorus.alerts.ModelDelete.extend({
         };
     },
 
-    makeModel:function () {
+    makeModel: function () {
         this.model = this.model || new chorus.models.Workfile({
             id: this.options.workfileId,
             fileName: this.options.workfileName,
@@ -18,7 +18,7 @@ chorus.alerts.WorkfileDelete = chorus.alerts.ModelDelete.extend({
         });
     },
 
-    setup:function () {
+    setup: function () {
         this.title = t("workfile.delete.title", {workfileTitle:this.model.get("fileName")});
         this.redirectUrl = this.model.workspace().workfilesUrl();
     }

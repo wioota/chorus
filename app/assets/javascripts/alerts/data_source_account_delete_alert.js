@@ -6,7 +6,7 @@ chorus.alerts.DataSourceAccountDelete = chorus.alerts.ModelDelete.extend({
     ok: t("data_sources.account.delete.button"),
     deleteMessage: "data_sources.account.delete.toast",
 
-    makeModel:function () {
+    makeModel: function () {
         this._super("makeModel", arguments);
         this.model = this.options.dataSource.accountForCurrentUser();
     }

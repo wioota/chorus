@@ -1,7 +1,7 @@
 chorus.alerts.ExecutionMessage = chorus.alerts.Base.extend({
     constructorName: "ExecutionMessage",
 
-    cancel:t("actions.close_window"),
+    cancel: t("actions.close_window"),
     additionalClass: "info",
 
     preRender: function() {

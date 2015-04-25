@@ -8,11 +8,11 @@ chorus.alerts.MultipleJobDelete = chorus.alerts.CollectionDelete.extend({
         this.deleteMessage = "job_delete.multiple.toast";
     },
 
-    deleteMessageParams:function () {
+    deleteMessageParams: function () {
         return {count: this.count, plurality: this.count > 1 ? 's' : ''};
     },
 
-    makeModel:function () {
+    makeModel: function () {
         this.collection = this.options.collection;
         this.count = this.collection.length;
         this.redirectUrl = this.collection.at(0).workspace().jobsUrl();

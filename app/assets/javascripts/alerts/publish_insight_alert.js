@@ -9,7 +9,7 @@ chorus.alerts.PublishInsight = chorus.alerts.Confirm.extend({
         this.body = "";
     },
 
-    confirmAlert:function () {
+    confirmAlert: function () {
         this.publish ? this.model.publish() : this.model.unpublish();
         this.closeModal();
     }

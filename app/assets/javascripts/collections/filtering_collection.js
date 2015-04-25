@@ -1,7 +1,7 @@
 chorus.collections.FilteringCollection = chorus.collections.Base.extend({
-    constructorName:"FilteringCollection",
+    constructorName: "FilteringCollection",
 
-    setup:function (args) {
+    setup: function (args) {
 
         if(!this.attributes.collection) {
             throw "Must initialize FilteringCollection with a child collection";

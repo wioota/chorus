@@ -1,7 +1,7 @@
 chorus.dialogs.WorkspaceEditMembers = chorus.dialogs.Base.extend({
     constructorName: "WorkspaceEditMembers",
-    templateName:"workspace_edit_members",
-    title:t("workspace.edit_members_dialog.title"),
+    templateName: "workspace_edit_members",
+    title: t("workspace.edit_members_dialog.title"),
     additionalClass: "dialog_wide",
     persistent:true,
 
@@ -27,11 +27,11 @@ chorus.dialogs.WorkspaceEditMembers = chorus.dialogs.Base.extend({
 
     setup:function () {
         this.shuttle = new chorus.views.ShuttleWidget({
-            collection:this.collection,
-            selectionSource:this.members,
-            nonRemovable:[this.options.pageModel.owner()],
-            nonRemovableText:t("workspace.owner"),
-            objectName:t("workspace.members")
+            collection: this.collection,
+            selectionSource: this.members,
+            nonRemovable: [this.options.pageModel.owner()],
+            nonRemovableText: t("workspace.owner"),
+            objectName: t("workspace.members")
         });
     },
 

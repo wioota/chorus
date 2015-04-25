@@ -20,7 +20,7 @@ chorus.alerts.UserDelete = chorus.alerts.ModelDelete.extend({
         this.$("button.submit").startLoading("actions.deleting");
     },
 
-    makeModel:function () {
+    makeModel: function () {
         this.model = this.model || new chorus.models.User({ id: this.options.id });
     }
 });
