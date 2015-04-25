@@ -23,7 +23,8 @@ $alert-marker-width: 60px;
 
         background-color: $body-background-color;
         // @include border-radius ($default-border-radius);
-
+    }
+    
     .alert_content {
         margin-left: $alert-marker-width;
         
@@ -88,7 +89,7 @@ $alert-marker-width: 60px;
             font-weight: normal;
             // color: black;
         }
-    }
+//     }
 
 
     .alert-message,
