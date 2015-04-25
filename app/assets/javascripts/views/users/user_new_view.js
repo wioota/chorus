@@ -1,8 +1,8 @@
 chorus.views.UserNew = chorus.views.Base.extend({
-    templateName:"user/new",
+    templateName: "user/new",
 
     events:{
-        "submit form":'submitNewUser',
+        "submit form": 'submitNewUser',
         "click button.cancel": "goBack"
     },
 
@@ -20,7 +20,7 @@ chorus.views.UserNew = chorus.views.Base.extend({
         this.$("textarea").limitMaxlength();
     },
 
-    submitNewUser:function submitNewUser(e) {
+    submitNewUser: function submitNewUser(e) {
         e.preventDefault();
         if(this.saving) {return;}
         this.saving = true;
@@ -57,6 +57,14 @@ chorus.views.UserNew = chorus.views.Base.extend({
     },
 
     userSaved: function() {
+        this.teardown();
+        
         chorus.router.navigate("/users");
+        chorus.toast('user.new_user.success.toast', {username: this.model.name(), toastOpts: {type: "success"}});
+    },
+    
+    teardown: function() {
+        this.remove(); // automatically remove bound events which uses listenTo() method.
     }
+    
 });

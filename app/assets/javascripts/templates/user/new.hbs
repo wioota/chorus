@@ -40,19 +40,18 @@
         <legend>{{t "user.profile.group_app_roles.title"}}</legend>
 
             <span class="left admin">
-               <!-- <label class="placeholder"></label> -->
                 <label>
-                       <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}}checked{{/if}}/>
-                       <label class="checkbox-label" for="admin-checkbox">{{t "users.make_admin"}}</label>
+                    <input type="checkbox" name="admin" id="admin-checkbox" {{#if admin}}checked{{/if}}/>
+                    <label class="checkbox-label" for="admin-checkbox" {{#unless admin}}title="{{t 'users.make_admin.tip'}}"{{/unless}}>
+                        {{t "users.make_admin.label"}}</label>
                 </label>
             </span>
-           
-            
+
              <span class="left admin">
-                <!-- <label class="placeholder"></label> -->
                  <label>
                     <input type="checkbox" name="developer" id="developer-checkbox" {{#if developer}}checked{{/if}}/>
-                    <label class="checkbox-label" for="developer-checkbox">{{t "users.make_developer"}}</label>
+                    <label class="checkbox-label" for="developer-checkbox" {{#unless developer}}title="{{t 'users.make_developer.tip'}}"{{/unless}}>
+                        {{t "users.make_developer.label"}}</label>
                 </label>
             </span>
 

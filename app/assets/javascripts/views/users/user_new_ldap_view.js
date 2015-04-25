@@ -1,6 +1,8 @@
 (function() {
     function userSuccessfullySaved() {
         chorus.router.navigate("/users");
+        chorus.toast('user.new_user.success.toast', {username: this.model.name(), toastOpts: {type: "success"}});
+        this.teardown();
     }
 
     chorus.views.UserNewLdap = chorus.views.Base.extend({
@@ -110,6 +112,10 @@
         showErrors: function() {
             this._super("showErrors", arguments);
             this.saving = false;
+        },
+            
+        teardown: function() {
+            this.remove(); // automatically remove bound events which uses listenTo() method.
         }
     });
 })();

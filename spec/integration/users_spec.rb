@@ -70,7 +70,7 @@ describe "Users" do
         click_link "#{user.first_name} #{user.last_name}"
       end
       click_link "Edit Profile"
-      check "Make this person an administrator"
+      check "Administrator"
       click_button "Save Changes"
       find('a', :text => "Edit Profile")
 

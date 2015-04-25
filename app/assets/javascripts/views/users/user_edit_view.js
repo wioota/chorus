@@ -1,5 +1,6 @@
 (function () {
     function userSuccessfullySaved() {
+        chorus.toast('user.edit_user.success.toast', {username: this.model.name(), toastOpts: {type: "success"}});
         chorus.router.navigate(this.model.showUrl());
     }
 
@@ -7,12 +8,12 @@
         templateName:"user/edit",
 
         events:{
-            "submit form":'saveEditUser',
-            "click button.cancel":"goBack"
+            "submit form": 'saveEditUser',
+            "click button.cancel": "goBack"
         },
 
         subviews:{
-            '.profile_image':"imageUpload"
+            '.profile_image': "imageUpload"
         },
 
         setup:function () {
@@ -31,7 +32,7 @@
             this.$("textarea").limitMaxlength();
         },
 
-        saveEditUser:function saveEditUser(e) {
+        saveEditUser: function saveEditUser(e) {
             e.preventDefault();
             chorus.page.stopListening(this.model, "unprocessableEntity");
             var updates = {};
@@ -46,6 +47,7 @@
             updates.notes = this.$("textarea").val().trim();
 
             this.model.save(updates, {wait: true});
+             
         },
 
         goBack:function () {
