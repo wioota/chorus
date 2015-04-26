@@ -5,8 +5,7 @@ chorus.alerts.ModelDelete = chorus.alerts.Confirm.extend({
     constructorName: "ModelDelete",
     focusSelector: "button.cancel",
     
-    // class for the alert dialog style
-    // additionalClass: "error",
+    // class for the alert_dialog style: warning
     additionalClass: "warning",
     persistent: true, //here for documentation, doesn't actually do anything as we've overwritten bindCallbacks
 
