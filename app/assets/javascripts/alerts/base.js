@@ -21,7 +21,8 @@ chorus.alerts.Base = chorus.Modal.extend({
             text: _.result(this, 'text'),
             body: this.body,
             ok: this.ok,
-            cancel: this.cancel || t("actions.cancel")
+            secondaryButton: this.secondaryButton,
+            cancel: this.cancel || t("form.button.cancel")
         };
     },
 
