@@ -3,7 +3,7 @@ chorus.alerts.Confirm = chorus.alerts.Base.extend({
 
     focusSelector: "button.submit",
 
-    // class for the alert dialog style
+    // default class for the alert:confirm dialog style
     additionalClass: "confirm",
     
     postRender: function() {
