@@ -11,11 +11,9 @@
     .workspace_member_list {
         @include sidebar-panel;
 
-
         .members {
             $sidebar-member-image-size: 35px;
 
-            
             li {
                 display: inline-block;
                 vertical-align: middle;
@@ -24,21 +22,28 @@
             }
 
             .more_members {
-                // font-size: $small-font;
-                // font-weight: $semibold;
                 margin-left: 10px;
+                
+                &::after {
+                    content: "\2026";  //ellipsis
+                }
             }
         }
     
     }
 
-.module_header {
-    .title {
-        @include sidebar-panel-heading-font;
-        padding: 0 10px 0 10px;
+    .module_header {
+        padding: 10px 10px 0 10px;
+        .title {
+            // @include sidebar-panel-heading-font;
+            line-height: normal;
+        }
+        .subtitle {
+            font-size: $small-font;
+            line-height: $small-font;
+        }
+        
     }
-}
-
 
     img {
         &.workspace_image {
