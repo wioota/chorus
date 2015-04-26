@@ -3,7 +3,6 @@ chorus.pages.StyleGuidePage = chorus.pages.Base.extend({
         this.mainContent = new chorus.views.MainContentView({
             content: new chorus.pages.StyleGuidePage.SiteElementsView(),
             contentHeader: new chorus.views.StaticTemplate("default_content_header", {title: 'Style Guide Page'}),
-            contentDetails: new chorus.views.StaticTemplate("plain_text", {text: 'Design rules for a happy family.'})
         });
     }
 });
