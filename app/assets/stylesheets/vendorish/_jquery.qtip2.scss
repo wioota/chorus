@@ -1,18 +1,18 @@
-/*
-* qTip2 - Pretty powerful tooltips
-* http://craigsworks.com/projects/qtip2/
-*
-* Version: 2.0.0pre
-* Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com
-*
-* Dual licensed under MIT or GPLv2 licenses
-*   http://en.wikipedia.org/wiki/MIT_License
-*   http://en.wikipedia.org/wiki/GNU_General_Public_License
-*
-* Date: Fri Jan 6 22:07:57 2012 +0000
-*/
+// 
+// * qTip2 - Pretty powerful tooltips
+// * http://craigsworks.com/projects/qtip2/
+// *
+// * Version: 2.0.0pre
+// * Copyright 2009-2010 Craig Michael Thompson - http://craigsworks.com
+// *
+// * Dual licensed under MIT or GPLv2 licenses
+// *   http://en.wikipedia.org/wiki/MIT_License
+// *   http://en.wikipedia.org/wiki/GNU_General_Public_License
+// *
+// * Date: Fri Jan 6 22:07:57 2012 +0000
+// */
 
-/* Core qTip styles */
+// Core qTip styles */
 .ui-tooltip, .qtip{
 	position: absolute;
 	left: -28000px;
@@ -25,7 +25,7 @@
 	line-height: 12px;
 }
 
-	/* Fluid class for determining actual width in IE */
+	// Fluid class for determining actual width in IE */
 	.ui-tooltip-fluid{
 		display: block;
 		visibility: hidden;
@@ -59,7 +59,7 @@
 
 	.ui-tooltip-titlebar + .ui-tooltip-content{ border-top-width: 0px !important; }
 
-		/*! Default close button class */
+		// ! Default close button class */
 		.ui-tooltip-titlebar .ui-state-default{
 			position: absolute;
 			right: 4px;
@@ -73,7 +73,7 @@
 			border-style: solid;
 		}
 		
-		* html .ui-tooltip-titlebar .ui-state-default{ top: 16px; } /* IE fix */
+		* html .ui-tooltip-titlebar .ui-state-default{ top: 16px; } // IE fix */
 
 		.ui-tooltip-titlebar .ui-icon,
 		.ui-tooltip-icon .ui-icon{
@@ -100,14 +100,12 @@
 			}
 
 
-/* Applied to 'focused' tooltips e.g. most recently displayed/interacted with */
-.ui-tooltip-focus{
-
+// Applied to 'focused' tooltips e.g. most recently displayed/interacted with */
+.ui-tooltip-focus {
 }
 
-/* Applied on hover of tooltips i.e. added/removed on mouseenter/mouseleave respectively */
-.ui-tooltip-hover{
-	
+// Applied on hover of tooltips i.e. added/removed on mouseenter/mouseleave respectively */
+.ui-tooltip-hover {
 }
 
 
@@ -134,17 +132,17 @@
 		color: #111;
 	}
 
-/* Modal plugin */
+// Modal plugin */
 #qtip-overlay{
 	position: fixed;
 	left: -10000em;
 	top: -10000em;
 }
 
-	/* Applied to modals with show.modal.blur set to true */
+	// Applied to modals with show.modal.blur set to true */
 	#qtip-overlay.blurs{ cursor: pointer; }
 
-	/* Change opacity of overlay here */
+	// Change opacity of overlay here */
 	#qtip-overlay div{
 		position: absolute;
 		left: 0; top: 0;
@@ -157,7 +155,7 @@
 		-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
 	}
 
-/* Tips plugin */
+// Tips plugin */
 .ui-tooltip .ui-tooltip-tip{
 	margin: 0 auto;
 	overflow: hidden;
@@ -179,7 +177,7 @@
 	.ui-tooltip .ui-tooltip-tip canvas{ top: 0; left: 0; }
 
 
-/*! Light tooltip style */
+// ! Light tooltip style */
 .ui-tooltip-light .ui-tooltip-titlebar,
 .ui-tooltip-light .ui-tooltip-content{
 	border-color: #E2E2E2;
@@ -195,7 +193,7 @@
 	}
 
 
-/*! Dark tooltip style */
+// ! Dark tooltip style */
 .ui-tooltip-dark .ui-tooltip-titlebar,
 .ui-tooltip-dark .ui-tooltip-content{
 	border-color: #303030;
@@ -219,7 +217,7 @@
 	}
 
 
-/*! Cream tooltip style */
+// ! Cream tooltip style */
 .ui-tooltip-cream .ui-tooltip-titlebar,
 .ui-tooltip-cream .ui-tooltip-content{
 	border-color: #F9E98E;
@@ -239,7 +237,7 @@
 	}
 
 
-/*! Red tooltip style */
+// ! Red tooltip style */
 .ui-tooltip-red .ui-tooltip-titlebar,
 .ui-tooltip-red .ui-tooltip-content{
 	border-color: #D95252;
@@ -267,7 +265,7 @@
 	}
 
 
-/*! Green tooltip style */
+// ! Green tooltip style */
 .ui-tooltip-green .ui-tooltip-titlebar,
 .ui-tooltip-green .ui-tooltip-content{
 	border-color: #90D93F;
@@ -287,7 +285,7 @@
 	}
 
 
-/*! Blue tooltip style */
+// ! Blue tooltip style */
 .ui-tooltip-blue .ui-tooltip-titlebar,
 .ui-tooltip-blue .ui-tooltip-content{
 	border-color: #ADD9ED;
@@ -306,7 +304,7 @@
 		background-position: -2px 0;
 	}
 
-/*! Add shadows to your tooltips in: FF3+, Chrome 2+, Opera 10.6+, IE6+, Safari 2+ */
+// ! Add shadows to your tooltips in: FF3+, Chrome 2+, Opera 10.6+, IE6+, Safari 2+ */
 .ui-tooltip-shadow{
 	-webkit-box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
 	-moz-box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
@@ -318,12 +316,12 @@
 		filter: progid:DXImageTransform.Microsoft.Shadow(Color='gray', Direction=135, Strength=3);
 		-ms-filter:"progid:DXImageTransform.Microsoft.Shadow(Color='gray', Direction=135, Strength=3)";
 
-		_margin-bottom: -3px; /* IE6 */
-		.margin-bottom: -3px; /* IE7 */
+		_margin-bottom: -3px; // IE6 */
+		.margin-bottom: -3px; // IE7 */
 	}
 
 
-/*! Add rounded corners to your tooltips in: FF3+, Chrome 2+, Opera 10.6+, IE9+, Safari 2+ */
+// ! Add rounded corners to your tooltips in: FF3+, Chrome 2+, Opera 10.6+, IE9+, Safari 2+ */
 .ui-tooltip-rounded,
 .ui-tooltip-rounded .ui-tooltip-content,
 .ui-tooltip-tipsy,
@@ -352,7 +350,7 @@
 }
 
 
-/*! Youtube tooltip style */
+// ! Youtube tooltip style */
 .ui-tooltip-youtube{
 	-webkit-box-shadow: 0 0 3px #333;
 	-moz-box-shadow: 0 0 3px #333;
@@ -361,8 +359,8 @@
 
 	.ui-tooltip-youtube .ui-tooltip-titlebar,
 	.ui-tooltip-youtube .ui-tooltip-content{
-		_margin-bottom: 0; /* IE6 */
-		.margin-bottom: 0; /* IE7 */
+		_margin-bottom: 0; // IE6 */
+		.margin-bottom: 0; // IE7 */
 
 		background: transparent;
 		background: rgba(0, 0, 0, 0.85);
@@ -382,7 +380,7 @@
 	}
 
 
-/* jQuery TOOLS Tooltip style */
+// jQuery TOOLS Tooltip style */
 .ui-tooltip-jtools{
 	background: #232323;
 	background: rgba(0, 0, 0, 0.7);
@@ -401,13 +399,13 @@
 	box-shadow: 0 0 12px #333;
 }
 
-	/* IE Specific */
+	// IE Specific */
 	.ui-tooltip-jtools .ui-tooltip-titlebar{
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#717171,endColorstr=#4A4A4A);
+		// filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#717171,endColorstr=#4A4A4A);
 		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#717171,endColorstr=#4A4A4A)";
 	}
 	.ui-tooltip-jtools .ui-tooltip-content{
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#4A4A4A,endColorstr=#232323);
+		// filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#4A4A4A,endColorstr=#232323);
 		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#4A4A4A,endColorstr=#232323)";
 	}
 
@@ -427,7 +425,7 @@
 	}
 
 
-/* Cluetip style */
+// Cluetip style */
 .ui-tooltip-cluetip{
 	-webkit-box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.4);
 	-moz-box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.4);
@@ -456,19 +454,19 @@
 	}
 
 
-/* Tipsy style */
+// Tipsy style */
 .ui-tooltip-tipsy{
 	border: 0;
 }
 
 	.ui-tooltip-tipsy .ui-tooltip-titlebar,
 	.ui-tooltip-tipsy .ui-tooltip-content{
-		_margin-bottom: 0; /* IE6 */
-		.margin-bottom: 0; /* IE7 */
+		_margin-bottom: 0; // IE6 */
+		.margin-bottom: 0; // IE7 */
 
 		background: transparent;
 		background: rgba(0, 0, 0, .87);
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#D9000000,endColorstr=#D9000000);
+		// filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#D9000000,endColorstr=#D9000000);
 		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#D9000000,endColorstr=#D9000000)";
 		
 		color: white;
@@ -499,7 +497,7 @@
 	}
 
 
-/* Tipped style */
+// Tipped style */
 .ui-tooltip-tipped{
 
 }
@@ -515,7 +513,7 @@
 		background: #3A79B8;
 		background-image: -moz-linear-gradient(top, #3A79B8, #2E629D);
 		background-image: -webkit-gradient(linear, left top, left bottom, from(#3A79B8), to(#2E629D));
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#3A79B8,endColorstr=#2E629D);
+		// filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#3A79B8,endColorstr=#2E629D);
 		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#3A79B8,endColorstr=#2E629D)";
 
 		color: white;
@@ -547,7 +545,7 @@
 			color: #555;
 		}
 
-/* IE9 fix - removes all filters */
+// IE9 fix - removes all filters */
 .ui-tooltip:not(.ie9haxors) div.ui-tooltip-content,
 .ui-tooltip:not(.ie9haxors) div.ui-tooltip-titlebar{
 	filter: none;

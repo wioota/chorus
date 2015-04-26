@@ -2,10 +2,10 @@
 
 $dialog-girdle-padding-top: 10px;
 
-/* GENERAL DIALOG STYLES */
+// GENERAL DIALOG STYLES */
 
-/* .girdle wraps the content of the dialog popup */
-/* and sets the overall margins for the content area */
+// .girdle wraps the content of the dialog popup */
+// and sets the overall margins for the content area */
 .dialog_popup .girdle {
     padding: $dialog-girdle-padding-top $dialog-padding-leftRight $dialog-padding-bottom $dialog-padding-leftRight;
     border: none;
@@ -13,9 +13,9 @@ $dialog-girdle-padding-top: 10px;
     @include box-sizing(border-box);
     overflow-y: auto;
 
-    /* development: to delete */
+    //     development: to delete */
     border: 1px dotted #DCC;
-    /* END development: to delete */
+    //     END development: to delete */
     
     background-color: $body-background-color;
 
@@ -139,17 +139,17 @@ $dialog-girdle-padding-top: 10px;
             border-bottom: $border-canon;
         }
 
-/* retiring this class */ /* to be removed when final */
-/*         .sub_content { */
-/*             padding: 10px $dialog-padding; */
-/*         } */
+// retiring this class */ /* to be removed when final */
+//         .sub_content { */
+//             padding: 10px $dialog-padding; */
+//         } */
 
 
         .loading_section {
             padding: 20px;
         }
 
-        /* .form_controls { margin: 0; } */
+        // .form_controls { margin: 0; } */
     }
 
     .sub_header {
@@ -188,7 +188,7 @@ $dialog-girdle-padding-top: 10px;
     }
 }
 
-/* replace and delete this one with the one following it for more simplicity*/
+// replace and delete this one with the one following it for more simplicity*/
 .icon-add,
 .icon-remove {
     &.fa {
@@ -203,8 +203,8 @@ $dialog-girdle-padding-top: 10px;
     }
 }
 
-/* ************* */
-/* dialog widths */
+// ************* */
+// DIALOG WIDTHS */
 div.dialog {
     width: $default-dialog-width;
 
@@ -216,22 +216,22 @@ div.dialog {
     margin-right: auto;
 }
 
-/* custom widths */
+// custom widths */
 
 .dialog {
     &.data_source_permissions {
-    /*   width: 570px; */
+    //   width: 570px; */
         width: $default-dialog-width-medium;
     }
 
     &.workspace_edit_dialog {
-    /*      width: 580px; */
+        // width: 580px; */
         width: $default-dialog-width-medium;
     }
 }
 
 
-/* to do: work out what should be in show_image.scss and what should be here */
+// to do: work out what should be in show_image.scss and what should be here */
 .XXXdialog.show_image {
     width: 100%;
     min-width: 600px;

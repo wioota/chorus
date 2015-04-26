@@ -6,7 +6,7 @@
 
 @mixin user_avatar_image {
     background: #FFF;
-    /* padding: 2px; */
+    // padding: 2px; */
     border: $border-canon;
     border-radius: 5px;
 }
@@ -20,20 +20,20 @@
     background-repeat:   no-repeat;
     background-size:     cover;
 }
-/* alternate */
-/*     <li class="avatar"> */
-/*         <img src="ipod.jpg" alt="iPod" /> */
-/*     </li> */
-/* avatar { */
-/*  height: $icon-image-width; */
-/*  width: $icon-image-width; */
-/*  overflow: hidden; */
-/* } */
-
-/* .avatar img { */
-/*  height: auto; */
-/*  width: 400px; */
-/* } */
+// alternate */
+//     <li class="avatar"> */
+//         <img src="ipod.jpg" alt="iPod" /> */
+//     </li> */
+// avatar { */
+//  height: $icon-image-width; */
+//  width: $icon-image-width; */
+//  overflow: hidden; */
+// } */
+// 
+// .avatar img { */
+//  height: auto; */
+//  width: 400px; */
+// } */
 
 img.profile {
     @include profile_image;

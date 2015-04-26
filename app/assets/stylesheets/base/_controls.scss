@@ -6,9 +6,9 @@
   transform: translateY(-50%);
 }
 
-/* * */
-/* .form_controls= the 'footer' section at bottom of dialogs with the buttons */
-/* * */
+// * */
+// .form_controls= the 'footer' section at bottom of dialogs with the buttons */
+// * */
 
 .dialog_popup .form_controls {
 
@@ -28,7 +28,7 @@
     button {
         display: inline-block;
         
-        /* general rule to float left a form button at bottom */
+        // general rule to float left a form button at bottom */
         &.left {
             float: left;
         }
@@ -42,7 +42,7 @@
             left: 17px;
             display: inline-block;
             > group {
-                /* Position fixes for IE8 VML fallback */
+                // Position fixes for IE8 VML fallback */
                 position: absolute;
                 bottom: 7px;
                 left: 0px;

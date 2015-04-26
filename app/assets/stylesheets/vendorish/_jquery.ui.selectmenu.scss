@@ -4,8 +4,8 @@
 $button-color-shade: #EEEEEE;
 
 
-/* Selectmenu
-----------------------------------*/
+// Selectmenu
+// ----------------------------------*/
 .ui-button {
   display: inline-block;
   position: relative;
@@ -17,7 +17,7 @@ $button-color-shade: #EEEEEE;
   overflow: visible;
 }
 
-/* the overflow property removes extra width in IE */
+// the overflow property removes extra width in IE */
 .ui-button,
 .ui-button:link,
 .ui-button:visited,
@@ -26,7 +26,7 @@ $button-color-shade: #EEEEEE;
     text-decoration: none;
 }
 
-/* reset extra padding in Firefox */
+// reset extra padding in Firefox */
 
 .ui-selectmenu-menu {
   padding: 0;
@@ -52,11 +52,11 @@ $button-color-shade: #EEEEEE;
   border: 0;
 }
 
-/* .ui-selectmenu-button span.ui-icon { */
-/*   right: 4px; */
-/*   position: absolute; */
-/*   top: 1px; */
-/* } */
+// .ui-selectmenu-button span.ui-icon { */
+//   right: 4px; */
+//   position: absolute; */
+//   top: 1px; */
+// } */
 
 .ui-selectmenu-button span.ui-selectmenu-text {
   text-align: left;
@@ -101,8 +101,8 @@ $button-color-shade: #EEEEEE;
   border-bottom-right-radius: 4px;
 }
 
-/* Interaction states
-----------------------------------*/
+// Interaction states
+// ----------------------------------*/
 .ui-state-default {
     border: 1px solid #aaa;
 }
@@ -271,7 +271,7 @@ a.ui-selectmenu-disabled {
   @include opacity(.8);
 }
 
-/* for optgroups */
+// for optgroups */
 .ui-selectmenu-menu .ui-selectmenu-group {
   font-size: 1em;
 }
@@ -288,18 +288,18 @@ a.ui-selectmenu-disabled {
   padding: 0;
 }
 
-/* IE6 workaround (dotted transparent borders) */
-/* * html .ui-selectmenu-menu li { */
-/*   border-color: pink; */
-/*   filter: chroma(color = pink); */
-/*   width: 100%; */
-/* } */
+// IE6 workaround (dotted transparent borders) */
+// * html .ui-selectmenu-menu li { */
+//   border-color: pink; */
+//   filter: chroma(color = pink); */
+//   width: 100%; */
+// } */
 
 * html .ui-selectmenu-menu li a {
   position: relative
 }
 
-/* IE7 workaround (opacity disabled) */
+// IE7 workaround (opacity disabled) */
 // *+html .ui-state-disabled, *+html .ui-state-disabled a {
 //   color: silver;
 // }

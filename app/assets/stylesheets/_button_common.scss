@@ -60,7 +60,7 @@ $default-button-height: $button-height;
     background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
     color: $wet-concrete;
     border: 1px solid $another-shade-of-gray;
-    /* box-shadow: inset 0px 1px 1px 0px rgba(255,255,255,0.192); */
+    // box-shadow: inset 0px 1px 1px 0px rgba(255,255,255,0.192); */
 
     &:disabled, &:disabled:hover {
         background-image: linear-gradient(0deg, $bone-white 0%, $nearly-white 100%);
@@ -77,7 +77,7 @@ $default-button-height: $button-height;
 }
 
 @mixin button-actionary-coloring {
-    //background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
+    // background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
     background: linear-gradient(0deg, rgba($bone-offwhite, 0.7) 0%, rgba($bone-white, 0.8) 100%);
     
     color: $wet-concrete;

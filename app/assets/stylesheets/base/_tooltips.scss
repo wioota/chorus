@@ -29,21 +29,21 @@ $more-info-color: #888888;
 }
 
 .tooltip-normal {
-/*     qTip's author explicitly recommends !important for overriding z-index */
-/*     https://github.com/Craga89/qTip2/issues/274 */
-/*     z-index: $body-tooltip-z-index !important; */
+//     qTip's author explicitly recommends !important for overriding z-index */
+//     https://github.com/Craga89/qTip2/issues/274 */
+//     z-index: $body-tooltip-z-index !important; */
 
     box-shadow: $shadow-canon;
 }
 
 .ui-tooltip {
-/*     qTip's author explicitly recommends !important for overriding z-index */
-/*     https://github.com/Craga89/qTip2/issues/274 */
+//     qTip's author explicitly recommends !important for overriding z-index */
+//     https://github.com/Craga89/qTip2/issues/274 */
     z-index: $tooltip-z-index !important;
 }
 
 .tooltip-white {
-    /* @include tooltip($color-text1, #FFFFFF, #CCCCCC); */
+    // @include tooltip($color-text1, #FFFFFF, #CCCCCC); */
     @include tooltip($color-text1, #FFFFFF, $border-color);
 
     box-shadow: $shadow-canon;
@@ -51,7 +51,7 @@ $more-info-color: #888888;
 
 .tooltip-error {
     @include tooltip($error-tooltip-text-color, #B61B1D, #B61B1D);
-    /* box-shadow: $shadow-canon; */
+    // box-shadow: $shadow-canon; */
 
     .ui-tooltip-content {
         font-size: $medium-font;

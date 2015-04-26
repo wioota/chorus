@@ -85,11 +85,11 @@
     position:absolute;
     z-index:9999;
     text-align:center;
-    /* 
-    Change the font-size to suit your needs. The following line is for the demo
-    that has a 14px font-size defined on the body tag.
-    All other rules are "em" based and inherit from the font-size set here.
-    */
+//     
+//     Change the font-size to suit your needs. The following line is for the demo
+//     that has a 14px font-size defined on the body tag.
+//     All other rules are "em" based and inherit from the font-size set here.
+//     */
 
     font-weight: normal;
     font-size: $default-font-size;
@@ -356,13 +356,13 @@
     }
 .date-picker .prev-but.fd-disabled:hover,
 .date-picker .next-but.fd-disabled:hover {
-    /* Uncomment this if you have uncommented the "scale" rules above
-
-    -webkit-transform:scale(1);
-       -moz-transform:scale(1);
-        -ms-transform:scale(1);
-            transform:scale(1);
-    */
+    // Uncomment this if you have uncommented the "scale" rules above
+    // 
+    //     -webkit-transform:scale(1);
+    //        -moz-transform:scale(1);
+    //         -ms-transform:scale(1);
+    //             transform:scale(1);
+    //     */
     text-shadow:0 -1px 1px rgba(255,255,255,.8);
     }
 
@@ -539,14 +539,14 @@
 
 // The "active cursor" style */
 .date-picker td {
-    /* 
-    Uncomment this if you want a transition on the cursor cells scale effect
-
-    -webkit-transition: all .2s ease;
-       -moz-transition: all .2s ease;
-        -ms-transition: all .2s ease;
-            transition: all .2s ease;
-    */
+    
+    // Uncomment this if you want a transition on the cursor cells scale effect
+    //     
+    // -webkit-transition: all .2s ease;
+    //    -moz-transition: all .2s ease;
+    //     -ms-transition: all .2s ease;
+    //         transition: all .2s ease;
+    // */
     }
 
 // Keyboard users get a scaled cursor. webKit exhibits buggy behaviour when 

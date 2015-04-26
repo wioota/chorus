@@ -3,10 +3,10 @@
 @import "_button_common";
 
 
-/* GENERAL RULES FOR FORMS IN THE APPLICATION */
+// GENERAL RULES FOR FORMS IN THE APPLICATION */
 
 
-/* widget "* = required" */
+// widget "* = required" */
 .legend_for_required {
     position: relative;
     top: 10px;
@@ -15,7 +15,7 @@
     color: #707070;
 }
 
-/* red asterisk for required fields */
+// red asterisk for required fields */
 .required::after {
     margin-left: 2.2px;
     content: "*";
@@ -23,7 +23,7 @@
     color: $required-marker-color;
 }
 
-/* grouping of options in form */
+// grouping of options in form */
 fieldset {
     margin: 0 0 0 0;
     padding: 5px 10px 5px 10px;
@@ -56,7 +56,7 @@ fieldset {
 
 .form_pair {
 
-    /* default for all form labels = label on line above form element */
+    // default for all form labels = label on line above form element */
     label {
         display: block;
     }
@@ -82,7 +82,6 @@ fieldset {
 
     @include after-clearfix;
 }
-
 
 // DIFFERENCES when form is in main page
 .logged_in_layout {
