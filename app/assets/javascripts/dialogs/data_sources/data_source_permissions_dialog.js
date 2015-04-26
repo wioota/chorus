@@ -210,7 +210,7 @@ chorus.dialogs.DataSourcePermissions = chorus.dialogs.Base.extend({
         }
     },
 
-    //TODO: currently, when adding a new individual account, there is no confirmation that the add is successful
+    // TODO: currently, when adding a new individual account, there is no confirmation that the add is successful
     // other than that the list of accounts updates. there should be some 'success' activity
     save: function(event) {
         event.stopPropagation();
