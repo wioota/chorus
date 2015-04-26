@@ -780,7 +780,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 csvOptions: {tableName: 'foobar', contents: this.models.csvImport.get("contents")}
             }),
 
-            "Workspace Data source Account": new chorus.dialogs.WorkspaceDataSourceAccount({model: this.models.dataSourceAccount, pageModel: this.models.workspace}),
+            "Workspace Data source Account": new chorus.dialogs.WorkspaceDataSourceAccount({
+                model: this.models.dataSourceAccount, pageModel: this.models.workspace}),
 
             "Data Source Account": new chorus.dialogs.DataSourceAccount({
                 title: t("data_sources.account.add.title"),

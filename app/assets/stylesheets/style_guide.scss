@@ -1,6 +1,40 @@
+@import "compass/css3/box-sizing";
 @import "_common";
 
+$dialog-girdle-padding-top: 10px;
+
 #page[data-page=StyleGuide]  {
+
+
+// BEGIN: DUPLICATE CLASSES FROM _dialog
+// in order to render style guide correctly
+
+// .girdle wraps the content of the dialog popup */
+// and sets the overall margins for the content area */
+    .girdle {
+    padding: $dialog-girdle-padding-top $dialog-padding-leftRight $dialog-padding-bottom $dialog-padding-leftRight;
+    border: none;
+
+    @include box-sizing(border-box);
+    overflow-y: auto;
+
+//     development: to delete */
+    border: 1px dotted #DCC;
+//     END development: to delete */
+    
+    background-color: $body-background-color;
+
+    .action_bar {
+        // counteract the dialog padding when it is inside .girdle
+        margin-top: -$dialog-girdle-padding-top;
+        margin-left: -$dialog-padding-leftRight;
+        margin-right: -$dialog-padding-leftRight;
+    }
+}
+
+// END: DUPLICATE CLASSES FROM _dialog
+
+    
     .sub_nav {
         padding-top: 0px;
         position: initial
