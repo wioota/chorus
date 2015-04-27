@@ -65,7 +65,7 @@ describe("chorus.alerts.Error", function() {
     
     afterEach(function() {
         this.modelWithError.destroy();
-        this.alert.destroy();
+        this.alert.teardown();
     });
 
 });
