@@ -131,7 +131,7 @@ def install():
 
         data_path = io.prompt(text.get("interview_question", "specify_data_path"), default=options.data_path)
 
-        passphrase = io.prompt(text.get("interview_question", "specify_passprase"), default='')
+        passphrase = io.prompt(text.get("interview_question", "specify_passphrase"), default='')
 
         install_alpine = "False"
         if is_alpine_exits(installation_path):
