@@ -1,5 +1,5 @@
 chorus.dialogs.ChangePassword = chorus.dialogs.Base.extend({
-    templateName: "change_password",
+    templateName: "dialogs/change_password",
     title: function() {
         return this.changeSelfPassword() ? t("user.change_password_self.title") : t("user.change_password.title");
     },
