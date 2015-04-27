@@ -169,11 +169,23 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
         });
 
         this.models.workfileWithErrors = this.models.workfile.clone();
-
+        
         this.models.workfileWithErrors.serverErrors = {
             fields: { general: { GENERIC: { field: "general", message: "JDBC::Postgres::Oracle::Connection Really long message that should not wrap in a weird way" }}}
         };
 
+        // *****
+        // to set up the workfileConflictAlert
+        this.models.workfileWithConflict = this.models.workfile.clone();
+        
+        var conflictMessage = "This work file has been modified by Brobee";
+        this.models.workfileWithConflict.serverErrors = {fields: {version: {GENERIC: {message: conflictMessage}}}};
+        
+        this.models.workfileWithConflict.versionInfo = {
+            content : "version content",
+        };
+        // *****
+               
         this.models.tableauWorkfile = new chorus.models.Workfile({
             fileName: "Bestest Tableaust Workfile",
             fileType: "tableau_workbook",
@@ -911,7 +923,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 model: this.models.dataset,
             }),
 
-
+// **************
+// ALERT-types
 
 
             "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
@@ -932,12 +945,15 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 //tableName: {objectName: "brobie"}????
 //             }),
 
+            "Workfile draft exists alert": new chorus.alerts.WorkfileDraft({
+                model: this.models.workfile
+                }),
 
-//             "workfile conflict alert": new chorus.alerts.WorkfileConflict({
-//                 workfile: backboneFixtures.workfile.sql({ versionInfo: { content: "version content" } }),
-//                 message: "This work file has been modified by Bert",// 
-//                 serverErrors: {fields: {version: {GENERIC: {message: this.message}}}}
-//             })
+            "workfile conflict alert": new chorus.alerts.WorkfileConflict({
+                model: this.models.workfileWithConflict,
+                
+                //versionInfo: { content : "version content" }
+            })
         };
     },
 
