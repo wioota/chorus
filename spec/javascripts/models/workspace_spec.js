@@ -569,4 +569,10 @@ describe("chorus.models.Workspace", function() {
             expect(this.model.milestonesUrl()).toBe("#/workspaces/5/milestones");
         });
     });
+
+
+    afterEach(function() {
+        this.model.destroy();
+    });
+    
 });
