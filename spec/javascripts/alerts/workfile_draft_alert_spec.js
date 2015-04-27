@@ -46,7 +46,7 @@ describe("chorus.alerts.WorkfileDraft", function() {
     describe("choosing the saved version", function() {
         beforeEach(function() {
             spyOn(this.alert, "closeModal");
-            this.alert.$("button.cancel").click();
+            this.alert.$("button.secondaryButton").click();
         });
 
         it("fetches the draft", function() {
