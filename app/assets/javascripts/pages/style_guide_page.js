@@ -11,11 +11,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
     className: "views",
     templateName: 'style_guide',
 
+    // build a set of sham models to use in the various style guide examples
     buildModels: function() {
         this.models = {};
 
         var tagList = _.range(25).map(function(i) {
-            return {name: "Tag Numba " + i};
+            return {name: "Tag Numb" + i};
         });
 
         this.models.workspace = new chorus.models.Workspace({
@@ -828,8 +829,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 model: this.models.gpdbDataSource
             }),
 
-            "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
-
             "Dataset Download": new chorus.dialogs.DatasetDownload({ pageModel: this.models.dataset}),
 
 // !DATASET filter set
@@ -906,7 +905,39 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                     fileName: "hello-frequency.png",
                     svgData: "<svg/>"
                 }
-            })
+            }),
+
+            "Analyze Dataset?": new chorus.alerts.Analyze({
+                model: this.models.dataset,
+            }),
+
+
+
+
+            "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
+
+            "Change Data Source Owner?": new chorus.alerts.DataSourceChangedOwner({
+                 model: this.models.user
+            }),
+
+
+
+            "Add Shared Account Alert": new chorus.alerts.AddSharedAccount(),
+
+            "Remove Shared Account Alert": new chorus.alerts.RemoveSharedAccount(),
+            
+            "Remove Individual Account Alert": new chorus.alerts.RemoveIndividualAccount(),
+
+//             "Remove Join Alert": new chorus.alerts.RemoveJoinConfirmAlert({
+                //tableName: {objectName: "brobie"}????
+//             }),
+
+
+//             "workfile conflict alert": new chorus.alerts.WorkfileConflict({
+//                 workfile: backboneFixtures.workfile.sql({ versionInfo: { content: "version content" } }),
+//                 message: "This work file has been modified by Bert",// 
+//                 serverErrors: {fields: {version: {GENERIC: {message: this.message}}}}
+//             })
         };
     },
 
