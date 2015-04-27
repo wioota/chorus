@@ -1,5 +1,6 @@
 chorus.alerts.RemoveIndividualAccount = chorus.alerts.Confirm.extend({
     constructorName: "RemoveIndividualAccount",
+    additionalClass: "warning",
 
     ok: t("data_sources.remove_individual_account.remove"),
 

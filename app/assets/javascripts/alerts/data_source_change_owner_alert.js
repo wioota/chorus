@@ -1,5 +1,6 @@
 chorus.alerts.DataSourceChangedOwner = chorus.alerts.Confirm.extend({
     constructorName: "DataSourceChangedOwner",
+    additionalClass: "warning",
 
     text: t("data_sources.confirm_change_owner.text"),
     ok: t("data_sources.confirm_change_owner.change_owner"),

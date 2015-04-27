@@ -1,8 +1,8 @@
 chorus.alerts.FunctionInfo = chorus.alerts.Base.extend({
     constructorName: "FunctionInfo",
+    additionalClass: "info function_info",
 
     cancel: t("actions.close_window"),
-    additionalClass: "info function_info",
 
     makeModel: function(options) {
         this.model = options.model;

@@ -1,5 +1,6 @@
 chorus.alerts.RemoveSharedAccount = chorus.alerts.Confirm.extend({
     constructorName: "RemoveSharedAccount",
+    additionalClass: "warning",
 
     text: t("data_sources.remove_shared_account.text"),
     title: t("data_sources.remove_shared_account.title"),

@@ -1,5 +1,6 @@
 chorus.alerts.RemoveJoinConfirmAlert = chorus.alerts.Confirm.extend({
     constructorName: "RemoveJoinConfirmAlert",
+    additionalClass: "warning",
 
     title: t("dataset.join.remove.title"),
     ok: t("dataset.join.remove.ok"),
