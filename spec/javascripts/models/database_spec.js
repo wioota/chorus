@@ -56,4 +56,9 @@ describe("chorus.models.Database", function() {
             });
         });
     });
+    
+    afterEach(function() {
+        this.model.destroy();
+    });
+    
 });

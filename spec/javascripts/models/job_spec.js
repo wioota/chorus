@@ -223,4 +223,9 @@ describe("chorus.models.Job", function () {
             });
         });
     });
+
+    afterEach(function () {
+        this.model.destroy();
+    });
+    
 });

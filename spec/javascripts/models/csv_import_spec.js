@@ -20,4 +20,9 @@ describe("chorus.models.CSVImport", function() {
             expect(this.model.toJSON().csv_import.contents).toBeUndefined();
         });
     });
+    
+    afterEach(function() {
+        this.model.destroy();
+    });
+    
 });

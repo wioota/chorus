@@ -47,4 +47,9 @@ describe("chorus.models.Filter", function() {
             expect(this.model.get("input").value).toBe("hello_input");
         });
     });
+
+    afterEach(function() {
+        this.model.destroy();
+    });
+    
 });
