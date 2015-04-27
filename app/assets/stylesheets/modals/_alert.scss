@@ -92,7 +92,7 @@ $alert-marker-width: 60px;
 //     }
 
 
-    .alert-message,
+//     .alert-message,
     .alert-info,
     .alert-confirm,
     .alert-warning,
@@ -100,11 +100,11 @@ $alert-marker-width: 60px;
         display: none;
     }
 
-    &.message {
-        .alert-message{
-            display: inline-block;
-        }
-    }
+//     &.message {
+//         .alert-message{
+//             display: inline-block;
+//         }
+//     }
     &.info {
         .alert-info {
             display: inline-block;
@@ -126,14 +126,13 @@ $alert-marker-width: 60px;
         }
     }
 }
+
 .alert_header {
-    height: 3px;
-    
+    height: $default-border-radius;
     @include border-top-radius($default-border-radius);
 
     background-color: $body-background-color;
 }
-
 
 .alert_bottom {
     height: 50px;

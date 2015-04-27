@@ -8,7 +8,7 @@
 
     <div class="girdle">
         <div class="alert-icon">
-            <span class="alert-message"></span>
+            <!-- <span class="alert-message"></span> -->
             <span class="alert-info"></span>
             <span class="alert-confirm"></span>
             <span class="alert-warning"></span>
@@ -56,7 +56,12 @@
 
     <div class="alert_bottom form_controls">
         <button type="submit" class="submit modalish hidden" tabindex="1">{{ok}}</button>
-        <button type="button" class="cancel modalish" tabindex="2">{{cancel}}</button>
+        {{#if secondaryButton}}
+            <button type="button" class="modalish secondaryButton" tabindex="2">{{secondaryButton}}</button>
+        {{/if}}
+        {{#if cancel}}
+        <button type="button" class="cancel modalish" tabindex="9">{{cancel}}</button>
+        {{/if}}
     </div>
 
 <!-- </div> -->
