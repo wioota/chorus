@@ -112,5 +112,10 @@ describe("chorus.alerts.Base", function() {
             expect($.fn.focus.lastCall().object).toBe("button.cancel");
         });
     });
+    
+    afterEach(function() {
+        this.alert.teardown();
+    });
+    
 });
 
