@@ -1,7 +1,7 @@
 chorus.views.ActivityList = chorus.views.Base.extend({
     constructorName: "ActivityListView",
-    templateName:"activity_list",
-    useLoadingSection:true,
+    templateName: "activity_list",
+    useLoadingSection: true,
 
     events:{
         "click .morelinks a.more, .morelinks a.less": "toggleCommentList",
