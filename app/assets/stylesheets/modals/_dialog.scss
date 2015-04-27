@@ -38,14 +38,14 @@ $dialog-girdle-padding-top: 10px;
 }
 
 #dialog_content {
+    
     .girdle {}
 }
 
 
 .dialog {
-//     background-color: $body-background-color;
-//     border-radius: $default-border-radius;    
-
+    // interim fix for background of dialogs
+    background-color: $body-background-color;
 
     h1 {
         font-size: $medium-font;
@@ -193,7 +193,9 @@ $dialog-girdle-padding-top: 10px;
 /* dialog widths */
 div.dialog {
     width: $default-dialog-width;
-
+    // interim fix for background of dialogs
+    background-color: $body-background-color;
+    
     &.dialog_wide {
         width: $default-dialog-width-wide;
     }
@@ -204,18 +206,16 @@ div.dialog {
 
 .dialog {
     &.data_source_permissions {
-    /*   width: 570px; */
         width: $default-dialog-width-medium;
     }
 
     &.workspace_edit_dialog {
-    /*      width: 580px; */
         width: $default-dialog-width-medium;
     }
 }
 
 
-/* to do: work out what should be in show_image.scss and what should be here */
+// to do: work out what should be in show_image.scss and what should be here */
 .dialog.show_image {
     width: 100%;
     min-width: 600px;
