@@ -66,6 +66,13 @@ describe("chorus.models.Dataset", function() {
             expect(this.jdbcDataset.isOracle()).toBeFalsy();
             expect(this.pgDataset.isOracle()).toBeFalsy();
         });
+        
+         afterEach(function() {
+            this.oracleDataset.destroy();
+            this.jdbcDataset.destroy();
+            this.gpdbDataset.destroy();
+            this.pgDataset.destroy();
+        });       
     });
 
     describe('#isJdbc', function(){
@@ -82,6 +89,14 @@ describe("chorus.models.Dataset", function() {
             expect(this.jdbcDataset.isJdbc()).toBeTruthy();
             expect(this.pgDataset.isJdbc()).toBeFalsy();
         });
+
+        afterEach(function() {
+            this.oracleDataset.destroy();
+            this.jdbcDataset.destroy();
+            this.gpdbDataset.destroy();
+            this.pgDataset.destroy();
+        });   
+
     });
 
     describe('#isGreenplum', function(){
@@ -98,6 +113,13 @@ describe("chorus.models.Dataset", function() {
             expect(this.jdbcDataset.isGreenplum()).toBeFalsy();
             expect(this.pgDataset.isGreenplum()).toBeFalsy();
         });
+        afterEach(function() {
+            this.oracleDataset.destroy();
+            this.jdbcDataset.destroy();
+            this.gpdbDataset.destroy();
+            this.pgDataset.destroy();
+        });   
+        
     });
 
     describe('#isPostgres', function(){
@@ -114,6 +136,14 @@ describe("chorus.models.Dataset", function() {
             expect(this.jdbcDataset.isPostgres()).toBeFalsy();
             expect(this.pgDataset.isPostgres()).toBeTruthy();
         });
+        
+        afterEach(function() {
+            this.oracleDataset.destroy();
+            this.jdbcDataset.destroy();
+            this.gpdbDataset.destroy();
+            this.pgDataset.destroy();
+        });   
+        
     });
 
     it("includes the DataSourceCredentials mixin", function() {
@@ -1149,4 +1179,9 @@ describe("chorus.models.Dataset", function() {
             expect(this.dataset.analyze().url()).toBe("/tables/543/analyze");
         });
     });
+
+    afterEach(function() {
+        this.dataset.destory();
+    });
+    
 });
