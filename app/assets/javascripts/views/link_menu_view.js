@@ -1,10 +1,10 @@
 chorus.views.LinkMenu = chorus.views.Base.extend({
     constructorName: "LinkMenuView",
-    templateName:"link_menu",
+    templateName: "link_menu",
 
     events:{
-        "click a.popup":"popupLinkClicked",
-        "click .menu a":"choose"
+        "click a.popup": "popupLinkClicked",
+        "click .menu a": "choose"
     },
 
     context:function () {

@@ -148,6 +148,9 @@ $menu-item-height-default: 40px;
             	height: 16px;
             	opacity: $header-item-opacity;
             	
+            	position: absolute;
+            	left: 16px;
+            	
             	svg {
             	    fill: #FFF;
             	}
