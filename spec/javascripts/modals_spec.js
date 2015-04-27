@@ -297,8 +297,11 @@ describe("chorus.Modal", function() {
             this.modal.keydownHandler({keyCode: 27});
         });
 
-        it("should call #closeModal", function(){
-            expect(this.modal.closeModal).toHaveBeenCalled();
+//         it("should call #closeModal", function(){
+//             expect(this.modal.closeModal).toHaveBeenCalled();
+//         });
+        it("should not call #closeModal", function(){
+            expect(this.modal.closeModal).not.toHaveBeenCalled();
         });
     });
 });

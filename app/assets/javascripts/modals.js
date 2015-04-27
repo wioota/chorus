@@ -92,6 +92,9 @@ chorus.Modal = chorus.views.Base.extend ({
 
     keydownHandler:function (e) {
         if (e.keyCode === 27) {
+            /* jshint ignore:start */
+            console.log ("modals.js = escape key");
+            /* jshint ignore:end */
             this.escapePressed();
         }
     },
@@ -100,7 +103,7 @@ chorus.Modal = chorus.views.Base.extend ({
         this.closeModal();
     },
 
-    modalClosed:function () {
+    modalClosed: function () {
         if (this === chorus.modal) {
             this.close();
             $("#facebox").remove();

@@ -1,10 +1,11 @@
 chorus.alerts.WorkfileConflict = chorus.alerts.Confirm.extend({
     constructorName: "WorkfileConflict",
-
+    additionalClass: "warning",
+    
     text: t("workfile.conflict.alert.text"),
     ok: t("workfile.conflict.alert.submit"),
-    cancel: t("workfile.conflict.alert.cancel"),
-    additionalClass:"error",
+    secondaryButton: t("workfile.conflict.alert.cancel"),
+    // cancel: t("form.button.cancel"),
 
     setup: function () {
         this.title = this.model.serverErrorMessage();

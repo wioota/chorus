@@ -136,10 +136,11 @@
 //         left:	$(window).width() / 2 - ($("#facebox .dialog_popup").outerWidth() / 2)
       })
 
-      $(document).bind('keydown.facebox', function(e) {
-        if (e.keyCode == 27) $.facebox.close()
-        return true
-      })
+//       $(document).bind('keydown.facebox', function(e) {
+//         if (e.keyCode == 27) $.facebox.close()
+//         return true
+//       })
+
       $(document).trigger('loading.facebox')
     },
 
