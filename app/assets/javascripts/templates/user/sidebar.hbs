@@ -5,7 +5,11 @@
         <li><a class="edit_tags">{{t "sidebar.edit_tags"}}</a></li>
         {{#if permission}}
             {{#unless isInEditMode}}
-            <li><a href="#/users/{{id}}/edit" class="edit_user">{{t "actions.edit_profile"}}</a></li>
+                {{#if isViewingSelf}}
+                    <li><a href="#/users/{{id}}/edit" class="edit_user">{{t "actions.edit_your_profile"}}</a></li>
+                {{else}}
+                    <li><a href="#/users/{{id}}/edit" class="edit_user">{{t "actions.edit_profile"}}</a></li>
+                {{/if}}
             {{/unless}}
 
             {{#if deleteAvailable}}
