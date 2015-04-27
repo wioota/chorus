@@ -1,7 +1,16 @@
 chorus.alerts.Error = chorus.alerts.Base.extend({
     constructorName: "Error",
-    cancel: t("actions.close_window"),
+    
+    // default class for the alert:confirm dialog style
     additionalClass: "error",
+
+    cancel: t("actions.close_window"),
+
+    additionalContext: function() {
+        return {
+            closeOnEscape: false
+        };
+    },
 
     makeModel:function () {
         this._super("makeModel", arguments);
