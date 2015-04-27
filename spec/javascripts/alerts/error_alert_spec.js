@@ -49,12 +49,23 @@ describe("chorus.alerts.Error", function() {
             expect(this.alert.$("button.submit")).toHaveClass("hidden");
         });
 
-        it("should display a 'Close Window' button", function() {
+        it("should display a 'Close' button", function() {
             expect(this.alert.$("button.cancel").text()).toMatchTranslation("actions.close_window");
         });
 
         it("should hide the error div when model has errors", function() {
             expect(this.alert.$(".errors")).toHaveClass('hidden');
         });
+        
+        afterEach(function() {
+            this.alert.teardown();
+        });
+
     });
+    
+    afterEach(function() {
+        this.modelWithError.destroy();
+        this.alert.destory();
+    });
+
 });
