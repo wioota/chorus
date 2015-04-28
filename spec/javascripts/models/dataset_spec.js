@@ -1181,7 +1181,7 @@ describe("chorus.models.Dataset", function() {
     });
 
     afterEach(function() {
-        this.dataset.destory();
+        this.dataset.destroy();
     });
     
 });
