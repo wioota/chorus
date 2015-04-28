@@ -34,9 +34,6 @@ module Permissioner
     if name.nil? then self.chorus_object.roles else self.chorus_object.roles.find_by_name(name) end
   end
 
-
-  private
-
   def chorus_object
     chorus_class = ChorusClass.find_or_create_by_name(self.class.name)
     chorus_object = ChorusObject.find_or_create_by_chorus_class_id_and_instance_id(chorus_class.id, self.id)
