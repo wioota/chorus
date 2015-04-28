@@ -33,6 +33,10 @@ FixtureBuilder.configure do |fbuilder|
 
   # now declare objects
   fbuilder.factory do
+    admin_role = Role.create(:name => "Admin")
+    developer_role = Role.create(:name => "Developer")
+    User.set_permissions_for [admin_role], [:create]
+
     extend CurrentUserHelpers
     extend RR::Adapters::RRMethods
     Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
@@ -54,9 +58,15 @@ FixtureBuilder.configure do |fbuilder|
       ActiveRecord::Base.connection.execute("ALTER SEQUENCE #{klass.table_name}_id_seq RESTART WITH 1000000;")
     end
 
+    #Roles, Groups, and Permissions
+    @a_role = FactoryGirl.create(:role)
+    @a_permission = FactoryGirl.create(:permission)
+    @a_group = FactoryGirl.create(:group)
+
     #Users
     admin = FactoryGirl.create(:admin, {:last_name => 'AlphaSearch', :username => 'admin'})
     evil_admin = FactoryGirl.create(:admin, {:last_name => 'AlphaSearch', :username => 'evil_admin'})
+    Role.find_by_name("Admin").users << [admin, evil_admin]
     Events::UserAdded.by(admin).add(:new_user => evil_admin)
 
     FactoryGirl.create(:user, :username => 'default')
@@ -85,10 +95,6 @@ FixtureBuilder.configure do |fbuilder|
     Events::UserAdded.by(user_with_restricted_access).add(:new_user => user_with_restricted_access)
 
 
-    #Roles, Groups, and Permissions
-    @a_role = FactoryGirl.create(:role)
-    @a_permission = FactoryGirl.create(:permission)
-    @a_group = FactoryGirl.create(:group)
 
 
     #Data Sources

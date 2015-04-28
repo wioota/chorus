@@ -21,6 +21,19 @@ describe User do
     end
   end
 
+  describe "permissions" do
+    # Since the permissions use a bitmask, it's important that the order of permissions
+    # never change after the customer has permissions in the database.
+    # If you need a new permission, append it to the end of the list.
+    # Updating the order of permissions after-the-fact will require
+    # lots of testing.
+
+    it "should have the exact permissions specified" do
+      permissions_list = [:create]
+      User::PERMISSIONS.should eq(permissions_list)
+    end
+  end
+
   describe ".authenticate" do
     let(:user) { users(:default) }
 
