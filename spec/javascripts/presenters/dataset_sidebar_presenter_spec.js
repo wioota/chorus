@@ -267,7 +267,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
                 });
                 
                 afterEach(function() {
-                    this.datasetImport.destroy();
+                    this.datasetImport.teardown();
                 });
 
 
@@ -342,7 +342,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
             });
             
             afterEach(function() {
-                this.presenter.destroy();
+                this.presenter.teardown();
             });
 
 
@@ -364,7 +364,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
         });
 
             afterEach(function() {
-                this.presenter.destroy();
+                this.presenter.teardown();
             });
             
     });
@@ -427,7 +427,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
         });
 
             afterEach(function() {
-                this.presenter.destroy();
+                this.presenter.teardown();
             });
             
     });
@@ -459,7 +459,7 @@ describe("chorus.presenters.DatasetSidebar", function() {
         });
 
             afterEach(function() {
-                this.presenter.destroy();
+                this.presenter.teardown();
             });
             
     });
