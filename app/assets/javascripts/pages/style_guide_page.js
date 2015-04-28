@@ -926,6 +926,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 // **************
 // ALERT-types
 
+			"Import Failed": new chorus.alerts.ImportFailed({ activityId: 26 }),
+
 
             "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
 

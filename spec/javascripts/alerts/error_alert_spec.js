@@ -37,6 +37,10 @@ describe("chorus.alerts.Error", function() {
             it("should have the correct body", function() {
                 expect(this.alert.body).toBe("Something failed");
             });
+            
+            	afterEach(function() {
+            		this.alert.teardown();
+        		});
         });
     });
 

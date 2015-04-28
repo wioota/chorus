@@ -46,4 +46,9 @@ describe("chorus.alerts.ImportFailed", function() {
             });
         });
     });
+    
+    afterEach(function() {
+        this.alert.teardown();
+    });
+    
 });

@@ -26,7 +26,8 @@ describe("chorus.alerts.WorkfileConflict", function() {
         });
 
         it("should display 'Discard Changes' for the cancel button", function() {
-            expect(this.alert.$("button.cancel").text().trim()).toMatchTranslation("workfile.conflict.alert.cancel");
+            //expect(this.alert.$("button.cancel").text().trim()).toMatchTranslation("workfile.conflict.alert.cancel");
+            expect(this.alert.$("secondaryButton").text().trim()).toMatchTranslation("workfile.conflict.alert.cancel");
         });
     });
 
