@@ -28,19 +28,21 @@ module Authority
 
     # Is user owner of object?
     #return if is_owner?(user, object) || handle_legacy_action(options[:or], object, user)
-    return if chorus_object.owner == user
+    #return if chorus_object.owner == user
 
     # retreive and merge permissions
-    common_permissions = common_permissions_between(roles, chorus_class)
-    common_permissions += common_permissions_between(roles, chorus_object)
-    raise Allowy::AccessDenied.new("Unauthorized", activity_symbol, object) unless common_permissions
+    class_permissions = common_permissions_between(roles, chorus_class)
+    object_permissions = common_permissions_between(roles, chorus_object)
+    permissions = [class_permissions, object_permissions].flatten.compact
+
+    raise Allowy::AccessDenied.new("Unauthorized", activity_symbol, object) unless permissions
 
     Chorus.log_debug("Could not find activity_symbol in #{actual_class.name} permissions") if actual_class::PERMISSIONS.index(activity_symbol).nil?
 
     activity_mask = actual_class.bitmask_for(activity_symbol)
 
     # check to see if this user is allowed to do this action at the object or class level
-    allowed = common_permissions.any? do |permission|
+    allowed = permissions.any? do |permission|
       bit_enabled? permission.permissions_mask, activity_mask
     end
 
@@ -91,13 +93,10 @@ module Authority
   # returns the intersection of all permissions from roles and all permissions for the class
   def self.common_permissions_between(roles, chorus_class_or_object)
     all_roles_permissions = roles.inject([]){ |permissions, role| permissions.concat(role.permissions) }
-    if chorus_class_or_object.permissions.empty? || all_roles_permissions.empty?
-      Chorus.log_debug("ChorusClass #{chorus_class} does not haver permissions assigned") if chorus_class_or_object.permissions.empty?
-      Chorus.log_debug("User.roles and group.roles have no permissions assigned") if all_roles_permissions.empty?
+    if chorus_class_or_object.nil? || chorus_class_or_object.permissions.empty? || all_roles_permissions.empty?
       return nil
-      #raise Allowy::AccessDenied.new("Role not found", nil, nil)
     end
-    common_permissions = all_roles_permissions & chorus_class.permissions
+    common_permissions = all_roles_permissions & chorus_class_or_object.permissions
   end
 
   def self.bit_enabled?(bits, mask)

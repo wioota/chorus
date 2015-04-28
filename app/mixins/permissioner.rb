@@ -105,7 +105,7 @@ module Permissioner
       permissions
     end
 
-    def add_permissions_for(roles, activity_symbol_array)
+    def set_permissions_for(roles, activity_symbol_array)
       chorus_class = ChorusClass.find_or_create_by_name(self.name)
       chorus_class.permissions << generate_permissions_for(roles, activity_symbol_array)
     end
