@@ -12,9 +12,19 @@ module DataSources
       authorize! :edit, data_source
 
       account = data_source.accounts.find_or_initialize_by_owner_id(params[:account][:owner_id])
+
       account.attributes = params[:account]
 
       account.save!
+
+      # Need to clean workspace cache for user so that dashboard displays correct no of data sources. DEV-9092
+      user = account.owner
+      workspaces = data_source.workspaces
+      workspaces.each do |workspace|
+        if workspace.members.include? user
+          workspace.delete_cache(user)
+        end
+      end
 
       present account, :status => :created
     end
@@ -27,6 +37,15 @@ module DataSources
       account.attributes = params[:account]
       account.save!
 
+      # Need to clean workspace cache for user so that dashboard displays correct no of data sources. DEV-9092
+      user = account.owner
+      workspaces = gpdb_data_source.workspaces
+      workspaces.each do |workspace|
+        if workspace.members.include? user
+          workspace.delete_cache(user)
+        end
+      end
+
       present account, :status => :ok
     end
 
@@ -35,7 +54,17 @@ module DataSources
       authorize! :edit, gpdb_data_source
       account = gpdb_data_source.accounts.find(params[:id])
 
+      # Need to clean workspace cache for user so that dashboard displays correct no of data sources. DEV-9092
+      user = account.owner
+      workspaces = gpdb_data_source.workspaces
+      workspaces.each do |workspace|
+        if workspace.members.include? user
+          workspace.delete_cache(user)
+        end
+      end
+
       account.destroy
+
       render :json => {}
     end
   end

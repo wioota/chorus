@@ -83,15 +83,22 @@ class Workspace < ActiveRecord::Base
     ]
   end
 
-  def delete_cache
-    #Fix for 87339340. Avoid searching for cache if the record is newly created and does have an ID before saving to database.
-    if self.id != nil && current_user != nil
+  def delete_cache(user = nil)
+
+    if self.id != nil && user != nil
+      cache_key = "home:workspaces/Users/#{user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
+      Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with cache key = #{cache_key} --"
+      Rails.cache.delete(cache_key)
+      cache_key = "workspaces:workspaces/Users/#{user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
+      Rails.cache.delete(cache_key)
+      return true
+    elsif self.id != nil && current_user != nil
+      #Fix for 87339340. Avoid searching for cache if the record is newly created and does have an ID before saving to database.
       cache_key = "home:workspaces/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
       Chorus.log_debug "-- BEFORE SAVE: Clearing cache for #{self.class.name} with cache key = #{cache_key} --"
       Rails.cache.delete(cache_key)
       cache_key = "workspaces:workspaces/Users/#{current_user.id}/#{self.class.name}/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}"
       Rails.cache.delete(cache_key)
-      #Rails.cache.delete_matched(/.*\/#{self.class.name}\/#{self.id}-#{(self.updated_at.to_f * 1000).round(0)}/)
       return true
     end
   end
