@@ -1,17 +1,15 @@
 class UserDashboardsController < ApplicationController
   wrap_parameters :dashboard_config
+  before_filter :load_user
+  before_filter :require_referenced_user
 
   def show
-    authorize! :update, user
-
-    present DashboardConfig.new(user)
+    present DashboardConfig.new(@user)
   end
 
   def create
-    authorize! :update, user
-
     modules = params[:dashboard_config][:modules]
-    config = DashboardConfig.new(user)
+    config = DashboardConfig.new(@user)
     config.update(modules)
 
     present config
@@ -19,7 +17,7 @@ class UserDashboardsController < ApplicationController
 
   private
 
-  def user
+  def load_user
     @user ||= User.find params[:user_id]
   end
 end
