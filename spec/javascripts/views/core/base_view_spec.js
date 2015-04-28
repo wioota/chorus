@@ -43,6 +43,11 @@ describe("chorus.views.Base", function() {
                     });
                 });
             });
+
+            afterEach(function() {
+                this.model.destroy();
+            });
+            
         });
     });
 
@@ -86,6 +91,11 @@ describe("chorus.views.Base", function() {
                 });
             });
         });
+
+            afterEach(function() {
+                this.model.destroy();
+            });
+            
     });
 
     describe("unbindCallbacks", function() {
@@ -378,6 +388,11 @@ describe("chorus.views.Base", function() {
                     });
                 });
             });
+
+            afterEach(function() {
+                this.model.destroy();
+            });
+            
         });
 
         describe("when an additionalContext is defined", function() {
@@ -807,5 +822,10 @@ describe("chorus.views.Base", function() {
         it("sets up input placeholders for older browsers", function() {
             expect(chorus.placeholder).toHaveBeenCalledWith(this.view.$("input[placeholder], textarea[placeholder]"));
         });
+
+        afterEach(function() {
+            this.view.teardown();
+        });
+        
     });
 });
