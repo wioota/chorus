@@ -12,7 +12,7 @@ class Workspace < ActiveRecord::Base
   # DO NOT CHANGE the order of these permissions, you'll accidently change everyone's permissons across the site.
   # Order: show, update, destroy
   PERMISSIONS = [:show, :update, :destroy]
-  OBJECT_LEVEL_ROLES = [:workspace_owner, :project_manager, :project_developer, :contributor, :workspace_visitor]
+  #OBJECT_LEVEL_ROLES = [:workspace_owner, :project_manager, :project_developer, :contributor, :workspace_visitor]
 
   attr_accessible :name, :public, :summary, :member_ids, :has_added_member, :owner_id, :archiver, :archived,
                   :has_changed_settings, :show_sandbox_datasets, :is_project, :project_status, :project_status_reason,

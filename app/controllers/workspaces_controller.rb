@@ -66,8 +66,8 @@ class WorkspacesController < ApplicationController
 
   def show
     workspace = Workspace.find(params[:id])
-    Authority.authorize! :show, workspace, current_user
-    # authorize! :show, workspace
+    #Authority.authorize! :show, workspace, current_user
+    authorize! :show, workspace
     # use the cached version of "workspaces:workspaces" namespace.
     present workspace, :presenter_options => {:show_latest_comments => params[:show_latest_comments] == 'true',:cached => false, :namespace => 'workspaces:workspaces' }
   end

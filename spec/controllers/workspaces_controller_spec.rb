@@ -145,7 +145,7 @@ describe WorkspacesController do
 
     context "with a valid workspace id" do
       it "uses authentication" do
-        mock(Authority).authorize!(:show, workspace, owner)
+        mock(subject).authorize!(:show, workspace)
         get :show, :id => workspace.to_param
       end
 
