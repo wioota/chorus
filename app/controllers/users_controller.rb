@@ -65,12 +65,7 @@ class UsersController < ApplicationController
 
   def authorize
     user_object = @user || User.new
-
-    begin
-      Authority.authorize! action_name.to_sym, user_object, current_user
-    rescue Allowy::AccessDenied # Authority uses Allowy's errors for backwards compatibility
-      render_forbidden
-    end
+    Authority.authorize! action_name.to_sym, user_object, current_user
   end
 
 end
