@@ -102,10 +102,12 @@ describe UsersController do
       end
 
       it "should make a user an admin" do
+        Role.find_by_name("Admin").users.should include(User.find_by_username(params[:username]))
         User.find_by_username(params[:username]).admin.should be_true
       end
 
       it 'should make a user a developer' do
+        Role.find_by_name("Developer").users.should include(User.find_by_username(params[:username]))
         User.find_by_username(params[:username]).should be_developer
       end
 

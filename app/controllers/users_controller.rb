@@ -1,8 +1,9 @@
 class UsersController < ApplicationController
   before_filter :load_user, :only => [:show, :update, :destroy]
-  before_filter :require_admin, :only => [:create, :destroy, :ldap]
+  before_filter :require_admin, :only => [:destroy, :ldap]
   before_filter :require_not_current_user, :only => [:destroy]
   before_filter :require_admin_or_referenced_user, :only => :update
+  before_filter :authorize, :only => [:create]
 
   wrap_parameters :exclude => []
 
@@ -17,11 +18,14 @@ class UsersController < ApplicationController
   def create
     user = User.new
     user.attributes = user_params
+    # remove these lines when Roles are fully implemented
     user.admin = user_params[:admin] if user_params.key?(:admin)
     user.developer = user_params[:developer] if user_params.key?(:developer)
     User.transaction do
       user.save!
 
+      Role.find_by_name("Admin").users << user if user_params.key?(:admin)
+      Role.find_by_name("Developer").users << user if user_params.key?(:developer)
       Events::UserAdded.by(current_user).add(:new_user => user)
     end
 
@@ -57,6 +61,16 @@ class UsersController < ApplicationController
 
   def user_params
     @user_params ||= params[:user]
+  end
+
+  def authorize
+    user_object = @user || User.new
+
+    begin
+      Authority.authorize! action_name.to_sym, user_object, current_user
+    rescue Allowy::AccessDenied # Authority uses Allowy's errors for backwards compatibility
+      render_forbidden
+    end
   end
 
 end
