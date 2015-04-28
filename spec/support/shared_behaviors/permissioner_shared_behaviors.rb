@@ -24,7 +24,7 @@ shared_examples "a permissioned model" do
 
     it "should create .permissions on the chorus class" do
       old_count = ChorusClass.find_by_name(model.class.name).permissions.count
-      model.class.add_permissions_for(role, permission)
+      model.class.set_permissions_for(role, permission)
       new_count = ChorusClass.find_by_name(model.class.name).permissions.count
 
       expect(new_count).to eq(old_count + 1)
@@ -39,7 +39,7 @@ shared_examples "a permissioned model" do
     let (:permission) { model.class::PERMISSIONS.first }
     it "should_return the correct permission_symbol" do
       user.roles << role
-      model.class.add_permissions_for(role, permission)
+      model.class.set_permissions_for(role, permission)
       expect(model.class.permission_symbols_for(user)).to eq(Array.wrap(permission))
     end
   end
