@@ -259,6 +259,15 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             timestamp: "2013-01-31T20:14:27Z"
         });
 
+        this.models.importFailedActivity = new chorus.models.Activity({
+            action: "ImportFailed",
+            id: 68,
+            actor: this.models.user.attributes,
+            workfile: this.models.workfile.attributes,
+            workspace: this.models.workspace.attributes,
+            timestamp: "2015-01-31T20:14:27Z"
+        });
+        
         this.models.searchResult = new chorus.models.SearchResult({
             users: {
                 results: [this.models.user.set({ highlightedAttributes: {
@@ -810,14 +819,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                     model: this.models.otherUser
                 }),               
 
-            "New Note": new chorus.dialogs.NotesNew({pageModel: new chorus.models.Job()}),
+            "Create Comment": new chorus.dialogs.Comment(),
+            
+            "Create Note": new chorus.dialogs.NotesNew({pageModel: new chorus.models.Job()}),
 
-            "Comment": new chorus.dialogs.Comment(),
-
-            "Create Directory External Table from HDFS": new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
-                collection: this.collections.CsvHdfsFileSet,
-                directoryName: "some directory"
-            }),
 
             "Edit Note": new chorus.dialogs.EditNote({
                 activity: this.models.activity
@@ -827,7 +832,14 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 collection: this.collections.workfileSet
             }),
 
-            "Insights New": new chorus.dialogs.InsightsNew({pageModel: new chorus.models.Job()}),
+            "Create Insight": new chorus.dialogs.InsightsNew({pageModel: new chorus.models.Job()}),
+
+
+            "Create Directory External Table from HDFS": new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
+                collection: this.collections.CsvHdfsFileSet,
+                directoryName: "some directory"
+            }),
+
 
             "Pick Workspace": new chorus.dialogs.PickWorkspace(),
 
@@ -837,6 +849,13 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Create Database View": new chorus.dialogs.CreateDatabaseView({ pageModel: this.models.dataset }),
 
+
+            "New Data Source": new chorus.dialogs.DataSourcesNew(),
+
+            "Data Source Permissions": new chorus.dialogs.DataSourcePermissions({
+                dataSource: this.models.gpdbDataSource
+            }),
+            
             "Edit Data Source": new chorus.dialogs.DataSourceEdit({
                 model: this.models.gpdbDataSource
             }),
@@ -877,11 +896,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 pageModel: this.models.gnipDataSource
             }),
 
-            "New Data Source": new chorus.dialogs.DataSourcesNew(),
-
-            "Data Source Permissions": new chorus.dialogs.DataSourcePermissions({
-                dataSource: this.models.gpdbDataSource
-            }),
 
             "Compose Kaggle Message": new chorus.dialogs.ComposeKaggleMessage({
                 collection: this.collections.kaggleUserSet
@@ -926,10 +940,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 // **************
 // ALERT-types
 
-			"Import Failed": new chorus.alerts.ImportFailed({ activityId: 26 }),
+			"Error: Import Failed (Alert)": new chorus.alerts.ImportFailed({ activityId: 68 }),
 
 
-            "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
+            "Error: Dataset Not Importable (Alert)": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
 
             "Change Data Source Owner?": new chorus.alerts.DataSourceChangedOwner({
                  model: this.models.user
