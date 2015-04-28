@@ -265,10 +265,6 @@ describe("chorus.presenters.DatasetSidebar", function() {
                         expect(presenter.lastImport()).toMatch("Import failed 1 month ago from");
                     });
                 });
-                
-                afterEach(function() {
-                    this.datasetImport.teardown();
-                });
 
 
             });
@@ -340,10 +336,6 @@ describe("chorus.presenters.DatasetSidebar", function() {
             it("does not allow importing at all", function () {
                 expect(this.presenter.importsEnabled()).toBeFalsy();
             });
-            
-            afterEach(function() {
-                this.presenter.teardown();
-            });
 
 
         });
@@ -363,10 +355,6 @@ describe("chorus.presenters.DatasetSidebar", function() {
             expect(this.presenter.canAssociate()).toBeTruthy();
         });
 
-            afterEach(function() {
-                this.presenter.teardown();
-            });
-            
     });
 
     context("with a Postgres dataset", function() {
@@ -426,10 +414,6 @@ describe("chorus.presenters.DatasetSidebar", function() {
             expect(this.presenter.canAssociate()).toBeFalsy();
         });
 
-            afterEach(function() {
-                this.presenter.teardown();
-            });
-            
     });
 
     context("with an hdfs dataset", function() {
@@ -458,9 +442,6 @@ describe("chorus.presenters.DatasetSidebar", function() {
             expect(this.presenter.canAssociate()).toBeFalsy();
         });
 
-            afterEach(function() {
-                this.presenter.teardown();
-            });
             
     });
 });
