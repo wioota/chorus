@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
   before_filter :load_user, :only => [:show, :update, :destroy]
-  before_filter :require_admin, :only => [:destroy, :ldap]
+  before_filter :require_admin, :only => [:ldap]
   before_filter :require_not_current_user, :only => [:destroy]
   before_filter :require_admin_or_referenced_user, :only => :update
-  before_filter :authorize, :only => [:create]
+  before_filter :authorize, :only => [:create, :destroy]
 
   wrap_parameters :exclude => []
 

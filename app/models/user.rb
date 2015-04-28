@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
   has_many :comments
 
   # roles, groups, and permissions
-  PERMISSIONS = [:create]
+  PERMISSIONS = [:create, :destroy]
   has_and_belongs_to_many :groups
   has_and_belongs_to_many :roles
   # object_roles allow a User to have different roles for different objects (currently just Workspace)

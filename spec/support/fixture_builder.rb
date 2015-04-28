@@ -33,9 +33,13 @@ FixtureBuilder.configure do |fbuilder|
 
   # now declare objects
   fbuilder.factory do
+
+    # These permissions need to be duplicated in developement and production seeding.
+    # If you can keep these DRY somehow let me know! I tried for an hour
+    # to find the right place. Hopefully this comment is gone later
     admin_role = Role.create(:name => "Admin")
     developer_role = Role.create(:name => "Developer")
-    User.set_permissions_for [admin_role], [:create]
+    User.set_permissions_for [admin_role], [:create, :destroy]
 
     extend CurrentUserHelpers
     extend RR::Adapters::RRMethods

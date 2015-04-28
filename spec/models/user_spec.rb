@@ -29,7 +29,7 @@ describe User do
     # lots of testing.
 
     it "should have the exact permissions specified" do
-      permissions_list = [:create]
+      permissions_list = [:create, :destroy]
       User::PERMISSIONS.should eq(permissions_list)
     end
   end
