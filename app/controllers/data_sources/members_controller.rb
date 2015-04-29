@@ -9,7 +9,7 @@ module DataSources
 
     def create
       gpdb_data_source = DataSource.unshared.find(params[:data_source_id])
-      authorize! :edit, data_source
+      authorize! :edit, gpdb_data_source
 
       account = gpdb_data_source.accounts.find_or_initialize_by_owner_id(params[:account][:owner_id])
 
@@ -20,7 +20,7 @@ module DataSources
       # Need to clean workspace cache for user so that dashboard displays correct no of data sources. DEV-9092
       if gpdb_data_source.instance_of?(GpdbDataSource)
         user = account.owner
-        workspaces = data_source.workspaces
+        workspaces = gpdb_data_source.workspaces
         workspaces.each do |workspace|
           if workspace.members.include? user
             workspace.delete_cache(user)
