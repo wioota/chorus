@@ -39,7 +39,7 @@ FixtureBuilder.configure do |fbuilder|
     # to find the right place. Hopefully this comment is gone later
     admin_role = Role.create(:name => "Admin")
     developer_role = Role.create(:name => "Developer")
-    User.set_permissions_for [admin_role], [:create, :destroy]
+    User.set_permissions_for [admin_role], [:create, :destroy, :ldap]
 
     extend CurrentUserHelpers
     extend RR::Adapters::RRMethods
