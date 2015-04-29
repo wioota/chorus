@@ -150,7 +150,6 @@ describe QC do
   end
 
   it "adds timestamps to clockwork logs" do
-    mock(Clockwork.config[:logger]).info("#{timestamp.to_s}: hello")
-    Clockwork.log("hello")
+    Clockwork.config[:logger].instance_variable_get(:@formatter).instance_variable_get(:@datetime_format).should eq("%Y-%m-%d %H:%M:%S")
   end
 end
