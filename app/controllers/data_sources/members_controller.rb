@@ -8,21 +8,23 @@ module DataSources
     end
 
     def create
-      data_source = DataSource.unshared.find(params[:data_source_id])
+      gpdb_data_source = DataSource.unshared.find(params[:data_source_id])
       authorize! :edit, data_source
 
-      account = data_source.accounts.find_or_initialize_by_owner_id(params[:account][:owner_id])
+      account = gpdb_data_source.accounts.find_or_initialize_by_owner_id(params[:account][:owner_id])
 
       account.attributes = params[:account]
 
       account.save!
 
       # Need to clean workspace cache for user so that dashboard displays correct no of data sources. DEV-9092
-      user = account.owner
-      workspaces = data_source.workspaces
-      workspaces.each do |workspace|
-        if workspace.members.include? user
-          workspace.delete_cache(user)
+      if gpdb_data_source.instance_of?(GpdbDataSource)
+        user = account.owner
+        workspaces = data_source.workspaces
+        workspaces.each do |workspace|
+          if workspace.members.include? user
+            workspace.delete_cache(user)
+          end
         end
       end
 
@@ -38,11 +40,13 @@ module DataSources
       account.save!
 
       # Need to clean workspace cache for user so that dashboard displays correct no of data sources. DEV-9092
-      user = account.owner
-      workspaces = gpdb_data_source.workspaces
-      workspaces.each do |workspace|
-        if workspace.members.include? user
-          workspace.delete_cache(user)
+      if gpdb_data_source.instance_of?(GpdbDataSource)
+        user = account.owner
+        workspaces = gpdb_data_source.workspaces
+        workspaces.each do |workspace|
+          if workspace.members.include? user
+            workspace.delete_cache(user)
+          end
         end
       end
 
@@ -55,11 +59,13 @@ module DataSources
       account = gpdb_data_source.accounts.find(params[:id])
 
       # Need to clean workspace cache for user so that dashboard displays correct no of data sources. DEV-9092
-      user = account.owner
-      workspaces = gpdb_data_source.workspaces
-      workspaces.each do |workspace|
-        if workspace.members.include? user
-          workspace.delete_cache(user)
+      if gpdb_data_source.instance_of?(GpdbDataSource)
+        user = account.owner
+        workspaces = gpdb_data_source.workspaces
+        workspaces.each do |workspace|
+          if workspace.members.include? user
+            workspace.delete_cache(user)
+          end
         end
       end
 
