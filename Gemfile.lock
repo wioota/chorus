@@ -460,4 +460,4 @@ DEPENDENCIES
   uglifier
   vcr (~> 2.3.0)
   will_paginate
-  yui-compressor
+  yui-compressor (= 0.12.0)

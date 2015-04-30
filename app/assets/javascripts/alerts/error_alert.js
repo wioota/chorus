@@ -1,7 +1,7 @@
 chorus.alerts.Error = chorus.alerts.Base.extend({
     constructorName: "Error",
-    cancel:t("actions.close_window"),
-    additionalClass:"error",
+    cancel: t("actions.close_window"),
+    additionalClass: "error",
 
     makeModel:function () {
         this._super("makeModel", arguments);

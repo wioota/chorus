@@ -3,7 +3,6 @@ chorus.pages.StyleGuidePage = chorus.pages.Base.extend({
         this.mainContent = new chorus.views.MainContentView({
             content: new chorus.pages.StyleGuidePage.SiteElementsView(),
             contentHeader: new chorus.views.StaticTemplate("default_content_header", {title: 'Style Guide Page'}),
-            contentDetails: new chorus.views.StaticTemplate("plain_text", {text: 'Design rules for a happy family.'})
         });
     }
 });
@@ -12,11 +11,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
     className: "views",
     templateName: 'style_guide',
 
+    // build a set of sham models to use in the various style guide examples
     buildModels: function() {
         this.models = {};
 
         var tagList = _.range(25).map(function(i) {
-            return {name: "Tag Numba " + i};
+            return {name: "Tag Numb" + i};
         });
 
         this.models.workspace = new chorus.models.Workspace({
@@ -126,6 +126,12 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             completeJson: true
         });
 
+
+        this.models.newModelwithError = this.models.dataset.clone();
+        this.models.newModelwithError.serverErrors = {fields: {connection: {INVALID: {message: "Couldn't find host/port to connect to" } } } };
+
+
+
         this.models.datasetImportability = new chorus.models.DatasetImportability({
             "importable": "false",
             "invalidColumns": []
@@ -169,11 +175,23 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
         });
 
         this.models.workfileWithErrors = this.models.workfile.clone();
-
+        
         this.models.workfileWithErrors.serverErrors = {
             fields: { general: { GENERIC: { field: "general", message: "JDBC::Postgres::Oracle::Connection Really long message that should not wrap in a weird way" }}}
         };
 
+        // *****
+        // to set up the workfileConflictAlert
+        this.models.workfileWithConflict = this.models.workfile.clone();
+        
+        var conflictMessage = "This work file has been modified by Brobee";
+        this.models.workfileWithConflict.serverErrors = {fields: {version: {GENERIC: {message: conflictMessage}}}};
+        
+        this.models.workfileWithConflict.versionInfo = {
+            content : "version content",
+        };
+        // *****
+               
         this.models.tableauWorkfile = new chorus.models.Workfile({
             fileName: "Bestest Tableaust Workfile",
             fileType: "tableau_workbook",
@@ -247,6 +265,15 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
             timestamp: "2013-01-31T20:14:27Z"
         });
 
+        this.models.importFailedActivity = new chorus.models.Activity({
+            action: "ImportFailed",
+            id: 68,
+            actor: this.models.user.attributes,
+            workfile: this.models.workfile.attributes,
+            workspace: this.models.workspace.attributes,
+            timestamp: "2015-01-31T20:14:27Z"
+        });
+        
         this.models.searchResult = new chorus.models.SearchResult({
             users: {
                 results: [this.models.user.set({ highlightedAttributes: {
@@ -780,7 +807,8 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 csvOptions: {tableName: 'foobar', contents: this.models.csvImport.get("contents")}
             }),
 
-            "Workspace Data source Account": new chorus.dialogs.WorkspaceDataSourceAccount({model: this.models.dataSourceAccount, pageModel: this.models.workspace}),
+            "Workspace Data source Account": new chorus.dialogs.WorkspaceDataSourceAccount({
+                model: this.models.dataSourceAccount, pageModel: this.models.workspace}),
 
             "Data Source Account": new chorus.dialogs.DataSourceAccount({
                 title: t("data_sources.account.add.title"),
@@ -797,14 +825,10 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                     model: this.models.otherUser
                 }),               
 
-            "New Note": new chorus.dialogs.NotesNew({pageModel: new chorus.models.Job()}),
+            "Create Comment": new chorus.dialogs.Comment(),
+            
+            "Create Note": new chorus.dialogs.NotesNew({pageModel: new chorus.models.Job()}),
 
-            "Comment": new chorus.dialogs.Comment(),
-
-            "Create Directory External Table from HDFS": new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
-                collection: this.collections.CsvHdfsFileSet,
-                directoryName: "some directory"
-            }),
 
             "Edit Note": new chorus.dialogs.EditNote({
                 activity: this.models.activity
@@ -814,7 +838,14 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 collection: this.collections.workfileSet
             }),
 
-            "Insights New": new chorus.dialogs.InsightsNew({pageModel: new chorus.models.Job()}),
+            "Create Insight": new chorus.dialogs.InsightsNew({pageModel: new chorus.models.Job()}),
+
+
+            "Create Directory External Table from HDFS": new chorus.dialogs.CreateDirectoryExternalTableFromHdfs({
+                collection: this.collections.CsvHdfsFileSet,
+                directoryName: "some directory"
+            }),
+
 
             "Pick Workspace": new chorus.dialogs.PickWorkspace(),
 
@@ -824,11 +855,16 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
 
             "Create Database View": new chorus.dialogs.CreateDatabaseView({ pageModel: this.models.dataset }),
 
+
+            "New Data Source": new chorus.dialogs.DataSourcesNew(),
+
+            "Data Source Permissions": new chorus.dialogs.DataSourcePermissions({
+                dataSource: this.models.gpdbDataSource
+            }),
+            
             "Edit Data Source": new chorus.dialogs.DataSourceEdit({
                 model: this.models.gpdbDataSource
             }),
-
-            "Dataset Not Importable Alert": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
 
             "Dataset Download": new chorus.dialogs.DatasetDownload({ pageModel: this.models.dataset}),
 
@@ -866,11 +902,6 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                 pageModel: this.models.gnipDataSource
             }),
 
-            "New Data Source": new chorus.dialogs.DataSourcesNew(),
-
-            "Data Source Permissions": new chorus.dialogs.DataSourcePermissions({
-                dataSource: this.models.gpdbDataSource
-            }),
 
             "Compose Kaggle Message": new chorus.dialogs.ComposeKaggleMessage({
                 collection: this.collections.kaggleUserSet
@@ -906,6 +937,49 @@ chorus.pages.StyleGuidePage.SiteElementsView = chorus.views.Bare.extend({
                     fileName: "hello-frequency.png",
                     svgData: "<svg/>"
                 }
+            }),
+            
+            "Analyze this?" :  new chorus.alerts.Analyze({
+                model: this.models.dataset
+            }),
+
+            
+            "Analyze this + error" :  new chorus.alerts.Analyze({
+                model: this.models.newModelwithError
+            }),
+
+// **************
+// ALERT-types
+
+			"Error: Import Failed (Alert)": new chorus.alerts.ImportFailed({ activityId: 68 }),
+
+
+            "Error: Dataset Not Importable (Alert)": new chorus.alerts.DatasetNotImportable({ datasetImportability: this.models.datasetImportability }),
+
+            "Change Data Source Owner?": new chorus.alerts.DataSourceChangedOwner({
+                 model: this.models.user
+            }),
+
+
+
+            "Add Shared Account Alert": new chorus.alerts.AddSharedAccount(),
+
+            "Remove Shared Account Alert": new chorus.alerts.RemoveSharedAccount(),
+            
+            "Remove Individual Account Alert": new chorus.alerts.RemoveIndividualAccount(),
+
+//             "Remove Join Alert": new chorus.alerts.RemoveJoinConfirmAlert({
+                //tableName: {objectName: "brobie"}????
+//             }),
+
+            "Workfile draft exists alert": new chorus.alerts.WorkfileDraft({
+                model: this.models.workfile
+                }),
+
+            "workfile conflict alert": new chorus.alerts.WorkfileConflict({
+                model: this.models.workfileWithConflict,
+                
+                //versionInfo: { content : "version content" }
             })
         };
     },

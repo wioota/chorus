@@ -45,7 +45,6 @@ Chorus::Application.routes.draw do
   end
 
   resources :jdbc_hive_data_sources, :except => [:new, :edit] do
-    resources :imports, :only => [:create], :controller => 'jdbc_hive_data_source_imports'
   end
 
   resources :databases, :only => [:show] do

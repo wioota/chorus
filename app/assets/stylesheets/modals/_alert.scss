@@ -6,8 +6,8 @@ $alert-marker-width: 60px;
 
 .alert {
     .errors {
-        width: 483px;
-        max-width: 483px;
+//         width: 483px;
+//         max-width: 483px;
     }
 
     .guts {
@@ -25,7 +25,7 @@ $alert-marker-width: 60px;
 
                 h1 {
                     color: black;
-                    font-size: $medium-font;
+                    // font-size: $medium-font;
                     font-weight: $semibold;
                     margin-bottom: 10px;
                 }
@@ -53,7 +53,7 @@ $alert-marker-width: 60px;
         }
 
         .body {
-            margin-top: 10px;
+            margin-top: 60px;
             padding: 10px;
             overflow-y: auto;
             overflow-x: hidden;

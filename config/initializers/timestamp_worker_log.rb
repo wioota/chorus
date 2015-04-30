@@ -8,7 +8,10 @@ module QC
 end
 
 module Clockwork
-  def log(msg)
-    config[:logger].info(Time.current.to_s + ": " + msg)
+  configure do |config|
+    logger = Logger.new(STDOUT)
+    logger.formatter = Logger::Formatter.new
+    logger.datetime_format = "%Y-%m-%d %H:%M:%S"
+    config[:logger] = logger
   end
 end

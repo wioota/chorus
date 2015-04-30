@@ -23,7 +23,7 @@ chorus.views.TagListSidebar = chorus.views.Sidebar.extend({
 
     additionalContext: function() {
         return {
-            hasTag: this.tag !== null,
+            hasTag: this.tag !== null && this.tag !== undefined,
             name: this.tag && this.tag.get('name')
         };
     },

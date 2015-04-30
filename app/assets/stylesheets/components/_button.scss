@@ -8,7 +8,7 @@ input[type=submit] {
     -webkit-appearance: initial;
     display: inline-block;
     color: $default-font-color;
-    line-height: $button-height -2;
+    line-height: ($button-height - 2px);
     vertical-align: middle;
     margin: 0;
     padding: 0 $button-padding-sides;
@@ -39,7 +39,7 @@ button.modalish,
         }
     }
     
-    /* overrides for the cancel button "link" so that it is closer to the other buttons */
+    // overrides for the cancel button "link" so that it is closer to the other buttons */
     &.cancel {
         min-width: 75px;
         margin-right: 0px;

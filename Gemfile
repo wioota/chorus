@@ -38,7 +38,7 @@ group :assets do
   gem 'handlebars_assets'
   gem 'therubyrhino'
   gem 'uglifier'
-  gem 'yui-compressor'
+  gem 'yui-compressor', '0.12.0'
   gem 'turbo-sprockets-rails3'
   gem 'jquery-rails', '2.1.4'
 end

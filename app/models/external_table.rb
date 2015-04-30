@@ -36,7 +36,7 @@ class ExternalTable
     )
     true
   rescue PostgresLikeConnection::DatabaseError => e
-    errors.add(:name, :TAKEN)
+    errors.add(@name, :TAKEN)
     false
   end
 

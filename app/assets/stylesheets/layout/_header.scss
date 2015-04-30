@@ -109,6 +109,9 @@ $menu-item-height-default: 40px;
             	height: 16px;
             	opacity: 0.94;
             	
+            	position: absolute;
+            	left: 16px;
+            	
             	svg {
             	    fill: #FFF;
             	}
@@ -385,7 +388,7 @@ $menu-item-height-default: 40px;
 
                 $difference: 150px;
                 $window-height: 1000px;
-                @while $window-height > 300px {
+                @while $window-height > 400px {
                     @media (max-height: #{$window-height}) {
                         max-height: $window-height - $difference;
                     }

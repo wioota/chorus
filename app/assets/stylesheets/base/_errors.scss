@@ -42,7 +42,7 @@ $margin-right-for-error-marker: 20px;
     @include after-clearfix;
 
     background-color: $body-background-color;
-    padding-top: 5px;
+    // padding-top: 5px;
 
     font-weight: normal;
 
@@ -96,7 +96,7 @@ $margin-right-for-error-marker: 20px;
 
 
             &:first-child {
-                // margin-top: 5px;
+                margin-top: 5px;
                 // border-top-left-radius: $alert-border-radius;
                 // border-top-right-radius: $alert-border-radius;
             }
