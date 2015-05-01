@@ -200,6 +200,8 @@ chorus.views.DatasetContentDetails = chorus.views.Base.include(
     closeErrorWithDetailsLink: function(e) {
         e && e.preventDefault();
         this.$(".dataset_errors").addClass("hidden");
+        this.$('.standard_error').addClass('hidden');
+        this.$('.non_implementation_error').addClass('hidden');
     },
 
     viewErrorDetails: function(e) {
@@ -244,7 +246,13 @@ chorus.views.DatasetContentDetails = chorus.views.Base.include(
     },
 
     showErrorWithDetailsLink: function(taskOrColumnSet, alertClass) {
-        this.$('.dataset_errors').removeClass('hidden');
+        this.$(".dataset_errors").removeClass("hidden");
+        if(taskOrColumnSet.serverErrorMessage() === t("field_error.visualization.NOT_IMPLEMENTED")) {
+            this.$('.non_implementation_error').removeClass('hidden');
+        }
+        else {
+            this.$('.standard_error').removeClass('hidden');
+        }
         this.alertClass = alertClass;
         this.errorSource = taskOrColumnSet;
     },
