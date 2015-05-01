@@ -8,14 +8,32 @@ div.login {
     $card-border-radius: 5px;
     $image-fudge: 10px;
 
-    background: $login-background;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
 
-    .errors {
-        margin-left: auto;
-        margin-right: auto;   
+    background: $login-background;
+
+
+.errors,
+.warning {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: $card-width;
+    background-color: transparent;
+    top: 30px;
+        
+//     ul {
+//         li {
+//             margin-top: 10px;        
+//         }
+//     }
     }
-    
+
     .login_content {
         position: relative;
         margin-left: auto;
