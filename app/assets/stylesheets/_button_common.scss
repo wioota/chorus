@@ -1,9 +1,11 @@
 // shared button definitions and mixins
 // DO NOT PUT ANY CSS RULES INTO THIS FILE
 
-@import "_browser_support";
+
 @import "compass/css3/opacity";
+@import "compass/css3/images";
 @import "compass/css3/border-radius";
+$debug-browser-support: true;
 
 // These are the button colors from the Workflow IDE.
 $border-blue:           rgb(0,140,200);
@@ -36,50 +38,101 @@ $default-button-height: $button-height;
 }
 
 @mixin button-primary-coloring {
-    background-image: linear-gradient(0deg, $bone-offwhite 0%, $brand 0%, $another-blue 100%);
+    // background-image: linear-gradient(0deg, $bone-offwhite 0%, $brand 0%, $another-blue 100%);
+    // @include background(linear-gradient($bone-offwhite 0%, $brand 0%, $another-blue 100%));
+
+    background-color: $brand;
+    @include filter-gradient($brand, $another-blue, vertical);
+    @include background(linear-gradient($bone-offwhite 0%, $brand 0%, $another-blue 100%));
+    @include background-image(linear-gradient(top, $bone-offwhite 0%, $brand 0%, $another-blue 100%));
+
     color: $nearly-white;
     border: 1px solid $border-blue;
     box-shadow: inset 0px 1px 1px 0px rgba(255,255,255,0.192);
 
     &:disabled, &:disabled:hover {
-        background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
+        // background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
+        // @include background(linear-gradient($bone-offwhite 0%, $bone-white 100%));
+        background-color: $bone-offwhite;
+        @include filter-gradient($bone-offwhite, $bone-white, vertical);
+        @include background(linear-gradient($bone-offwhite 0%, $bone-white 100%));
+        @include background-image(linear-gradient(top, $bone-offwhite 0%, $bone-white 100%));
+    
         border: 1px solid $dry-concrete;
     }
 
     &:hover {
-        background-image: linear-gradient(0deg, $another-blue  0%, $third-blue 99%);
+        // background-image: linear-gradient(0deg, $another-blue 0%, $third-blue 99%);
+        //  @include background(linear-gradient($another-blue 0%, $third-blue 99%));
+        background-color: $another-blue;
+        @include filter-gradient($another-blue, $third-blue, vertical);
+        @include background(linear-gradient($another-blue 0%, $third-blue 100%));
+        @include background-image(linear-gradient(top, $another-blue 0%, $third-blue 100%));
     }
 
     &:active {
-        background-image: linear-gradient(0deg, $another-blue 0%, $brand 100%, $bone-offwhite 100%);
+        // background-image: linear-gradient(0deg, $another-blue 0%, $brand 100%, $bone-offwhite 100%);
+        // @include background(linear-gradient($another-blue 0%, $brand 100%, $bone-offwhite 100%));
+        background-color: $another-blue;
+        @include filter-gradient($another-blue, $brand, vertical);
+        @include background(linear-gradient($another-blue 0%, $brand 100%, $bone-offwhite 100%));
+        @include background-image(linear-gradient(top, $another-blue 0%, $brand 100%, $bone-offwhite 100%));
+
         box-shadow: inset 0px 1px 1px 0px $button-shade;
     }
 }
 
 @mixin button-secondary-coloring {
-    background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
+    // background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
+    // @include background(linear-gradient($bone-offwhite 0%, $bone-white 100%));
+    background-color: $bone-offwhite;
+    @include filter-gradient($bone-offwhite, $bone-white, vertical);
+    @include background(linear-gradient($bone-offwhite 0%, $bone-white 100%));
+    @include background-image(linear-gradient(top, $bone-offwhite 0%, $bone-white 100%));
+        
     color: $wet-concrete;
     border: 1px solid $another-shade-of-gray;
     /* box-shadow: inset 0px 1px 1px 0px rgba(255,255,255,0.192); */
 
     &:disabled, &:disabled:hover {
-        background-image: linear-gradient(0deg, $bone-white 0%, $nearly-white 100%);
+        // background-image: linear-gradient(0deg, $bone-white 0%, $nearly-white 100%);
+        // @include background(linear-gradient($bone-white 0%, $nearly-white 100%));
+        background-color: $bone-white;
+        @include filter-gradient($bone-offwhite, $nearly-white, vertical);
+        @include background(linear-gradient($bone-offwhite 0%, $nearly-white 100%));
+        @include background-image(linear-gradient(top, $bone-white 0%, $nearly-white 100%));
     }
 
     &:hover {
-        background-image: linear-gradient(0deg, $warm-bones 0%, $nearly-white 100%);
+        // background-image: linear-gradient(0deg, $warm-bones 0%, $nearly-white 100%);
+        // @include background(linear-gradient($warm-bones 0%, $nearly-white 100%));
+        background-color: $warm-bones;
+        @include filter-gradient($warm-bones, $nearly-white, vertical);
+        @include background(linear-gradient($warm-bones 0%, $nearly-white 100%));
+        @include background-image(linear-gradient(top, $warm-bones 0%, $nearly-white 100%));
     }
 
     &:active {
-        background-image: linear-gradient(0deg, $bone-white 0%, $bone-offwhite 100%);
+        // background-image: linear-gradient(0deg, $bone-white 0%, $bone-offwhite 100%);
+        // @include background(linear-gradient($bone-white 0%, $bone-offwhite 100%));
+        background-color: $bone-white;
+        @include filter-gradient($bone-white, $bone-offwhite, vertical);
+        @include background(linear-gradient($bone-offwhite 0%, $bone-offwhite 100%));
+        @include background-image(linear-gradient(top, $bone-white 0%, $bone-offwhite 100%));
+
         box-shadow: inset 0px 1px 1px 0px $button-shade;
     }
 }
 
 @mixin button-actionary-coloring {
     //background-image: linear-gradient(0deg, $bone-offwhite 0%, $bone-white 100%);
-    background: linear-gradient(0deg, rgba($bone-offwhite, 0.7) 0%, rgba($bone-white, 0.8) 100%);
-    
+    //     background: linear-gradient(0deg, rgba($bone-offwhite, 0.7) 0%, rgba($bone-white, 0.8) 100%);
+    // @include background(linear-gradient(rgba($bone-offwhite, 0.7) 0%, rgba($bone-white, 0.8) 100%));
+        background-color: rgba($bone-offwhite, 0.7);
+        @include filter-gradient(rgba($bone-offwhite, 0.7), rgba($bone-white, 0.8), vertical);
+        @include background-image(linear-gradient(top, rgba($bone-offwhite, 0.7) 0%, rgba($bone-white, 0.8) 100%));
+
+
     color: $wet-concrete;
     border: 1px solid $another-shade-of-gray;
 
@@ -88,11 +141,16 @@ $default-button-height: $button-height;
     }
 
     &:hover {
-       background: linear-gradient(0deg, rgba($bone-offwhite, 0.9) 0%, rgba($bone-white, 0.9) 100%);
+       // background: linear-gradient(0deg, rgba($bone-offwhite, 0.9) 0%, rgba($bone-white, 0.9) 100%);
+       // @include background(linear-gradient( rgba($bone-offwhite, 0.9) 0%, rgba($bone-white, 0.9) 100% ));
+        background-color: rgba($bone-offwhite, 0.9);
+        @include filter-gradient(rgba($bone-offwhite, 0.9), rgba($bone-white, 0.9) , vertical);
+        @include background-image(linear-gradient(top, rgba($bone-offwhite, 0.9) 0%, rgba($bone-white, 0.9) 100%));
+        
     }
 
     &:active {
-       // background-image: linear-gradient(0deg, $bone-white 0%, $bone-offwhite 100%);
+        // background-image: linear-gradient(0deg, $bone-white 0%, $bone-offwhite 100%);
         box-shadow: inset 0px 1px 1px 0px $button-shade;
     }
 }
@@ -104,15 +162,18 @@ $default-button-height: $button-height;
     border: 1px solid $another-shade-of-gray;
 
     &:disabled, &:disabled:hover {
-        background-image: linear-gradient(0deg, $bone-white 0%, $nearly-white 100%);
+        // background-image: linear-gradient(0deg, $bone-white 0%, $nearly-white 100%);
+        @include background(linear-gradient($bone-white 0%, $nearly-white 100%));
     }
 
     &:hover {
-        background-image: linear-gradient(0deg, $warm-bones 0%, $nearly-white 100%);
+        // background-image: linear-gradient(0deg, $warm-bones 0%, $nearly-white 100%);
+        @include background(linear-gradient( $warm-bones 0%, $nearly-white 100%));
     }
 
     &:active {
-        background-image: linear-gradient(0deg, $bone-white 0%, $bone-offwhite 100%);
+        // background-image: linear-gradient(0deg, $bone-white 0%, $bone-offwhite 100%);
+        @include background(linear-gradient($bone-white 0%, $bone-offwhite 100%));
         box-shadow: inset 0px 1px 1px 0px $button-shade;
     }
 }

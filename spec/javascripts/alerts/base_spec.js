@@ -62,6 +62,10 @@ describe("chorus.alerts.Base", function() {
 
             expect(this.alert.$(".errors").text()).toContain("Couldn't find host/port to connect to");
         });
+        afterEach(function() {
+            this.alert.teardown();
+        });
+
     });
 
     describe("#launchModal", function() {
@@ -79,6 +83,11 @@ describe("chorus.alerts.Base", function() {
         it("renders in the facebox", function() {
             expect(this.alert.render).toHaveBeenCalled();
         });
+
+        afterEach(function() {
+            this.alert.teardown();
+        });
+        
     });
 
     describe("Clicking the cancel button", function() {
@@ -96,6 +105,9 @@ describe("chorus.alerts.Base", function() {
             it("dismisses the alert", function() {
                 expect("close.facebox").toHaveBeenTriggeredOn($(document));
             });
+        });
+        afterEach(function() {
+            this.alert.teardown();
         });
     });
 
