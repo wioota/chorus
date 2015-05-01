@@ -31,7 +31,7 @@ describe ServiceScheduler do
     end
 
     it "enqueues the 'DataSource.check_status' job in QC" do
-      mock(QC.default_queue).enqueue_if_not_queued("DataSource.check_status")
+      mock(QC.default_queue).enqueue_if_not_queued("DataSource.check")
       job_scheduler.job_named('DataSource.check').run(Time.current)
     end
   end
@@ -42,7 +42,7 @@ describe ServiceScheduler do
     end
 
     it "enqueues the 'HdfsDataSource.check_status' job in QC" do
-      mock(QC.default_queue).enqueue_if_not_queued("HdfsDataSource.check_status")
+      mock(QC.default_queue).enqueue_if_not_queued("HdfsDataSource.check")
       job_scheduler.job_named('HdfsDataSource.check').run(Time.current)
     end
   end
