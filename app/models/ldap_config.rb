@@ -7,13 +7,20 @@ class LdapConfig
   def initialize(root_dir=nil)
     set_root_dir(root_dir)
     ldap_config = {}
-    @config = Properties.load_file(config_file_path) if File.exists?(config_file_path)
+
+    @config = Properties.load_file(config_file_path) if config_file_exists?
     check_configuration_validity
   end
 
+
+
   def self.exists?
-    config = self.instance
-    File.exists?(config_file_path) && config && config['ldap'] && config['ldap']['enable'].present?
+    config = self.instance.config
+    config && config['ldap'] && config['ldap']['enable'].present?
+  end
+
+  def config
+    @config
   end
 
   def [](key_string)
@@ -59,6 +66,14 @@ class LdapConfig
   end
 
   private
+
+  def config_file_exists?
+     if File.symlink?(config_file_path)
+      File.exists?(File.readlink(config_file_path))
+    else
+      File.exists?(config_file_path)
+    end
+  end
 
   def set_root_dir(root_dir)
     @root_dir = root_dir || Rails.root
