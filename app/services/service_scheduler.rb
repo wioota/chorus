@@ -7,7 +7,7 @@ class ServiceScheduler
     data_sources = DataSource.where(:deleted_at => nil)
     data_sources.each do |data_source|
       Rails.logger.debug "Scheduling database status check for #{data_source.name}"
-      every(ChorusConfig.instance['instance_poll_interval_minutes'].minutes, 'DataSource.check') do
+      every(ChorusConfig.instance['instance_poll_interval_minutes'].minutes, 'DataSource.check_status') do
         QC.enqueue_if_not_queued('DataSource.check_status', data_source.id)
       end
     end
@@ -15,7 +15,7 @@ class ServiceScheduler
     data_sources = HdfsDataSource.where(:deleted_at => nil)
     data_sources.each do |data_source|
       Rails.logger.debug "Scheduling database status check for #{data_source.name}"
-      every(ChorusConfig.instance['instance_poll_interval_minutes'].minutes, 'HdfsDataSource.check') do
+      every(ChorusConfig.instance['instance_poll_interval_minutes'].minutes, 'HdfsDataSource.check_status') do
         QC.enqueue_if_not_queued('HdfsDataSource.check_status', data_source.id)
       end
     end

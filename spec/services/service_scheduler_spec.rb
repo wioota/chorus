@@ -27,23 +27,23 @@ describe ServiceScheduler do
   let(:job_scheduler) { ServiceScheduler.new }
   describe "DataSource.check_status" do
     it "runs every ChorusConfig.instance['instance_poll_interval_minutes'] minutes" do
-      job_scheduler.job_named('DataSource.check').period.should == ChorusConfig.instance['instance_poll_interval_minutes'].minutes
+      job_scheduler.job_named('DataSource.check_status').period.should == ChorusConfig.instance['instance_poll_interval_minutes'].minutes
     end
 
     it "enqueues the 'DataSource.check_status' job in QC" do
-      mock(QC.default_queue).enqueue_if_not_queued("DataSource.check")
-      job_scheduler.job_named('DataSource.check').run(Time.current)
+      mock(QC.default_queue).enqueue_if_not_queued.with_any_args
+      job_scheduler.job_named('DataSource.check_status').run(Time.current)
     end
   end
 
   describe "HdfsDataSource.check_status" do
     it "runs every ChorusConfig.instance['instance_poll_interval_minutes'] minutes" do
-      job_scheduler.job_named('HdfsDataSource.check').period.should == ChorusConfig.instance['instance_poll_interval_minutes'].minutes
+      job_scheduler.job_named('HdfsDataSource.check_status').period.should == ChorusConfig.instance['instance_poll_interval_minutes'].minutes
     end
 
     it "enqueues the 'HdfsDataSource.check_status' job in QC" do
-      mock(QC.default_queue).enqueue_if_not_queued("HdfsDataSource.check")
-      job_scheduler.job_named('HdfsDataSource.check').run(Time.current)
+      mock(QC.default_queue).enqueue_if_not_queued.with_any_args
+      job_scheduler.job_named('HdfsDataSource.check_status').run(Time.current)
     end
   end
 
