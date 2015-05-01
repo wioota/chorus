@@ -25,30 +25,27 @@ end
 
 describe ServiceScheduler do
   let(:job_scheduler) { ServiceScheduler.new }
+  describe "DataSource.check_status" do
+    it "runs every ChorusConfig.instance['instance_poll_interval_minutes'] minutes" do
+      job_scheduler.job_named('DataSource.check').period.should == ChorusConfig.instance['instance_poll_interval_minutes'].minutes
+    end
 
-  # Prakash. Commenting out tests for DataSource check_all status to unblock build. Need to investigate writing tests for new loop construct tests.
-  # describe "DataSource.check_status" do
-  #   it "runs every ChorusConfig.instance['instance_poll_interval_minutes'] minutes" do
-  #     job_scheduler.job_named('DataSource.check_status').period.should == ChorusConfig.instance['instance_poll_interval_minutes'].minutes
-  #   end
-  #
-  #   it "enqueues the 'DataSource.check_status' job in QC" do
-  #     #QC.enqueue_if_not_queued('DataSource.check_status')
-  #     mock(QC.default_queue).enqueue_if_not_queued('DataSource.check_status')
-  #     job_scheduler.job_named('DataSource.check_status').run(Time.current)
-  #   end
-  # end
-  #
-  # describe "HdfsDataSource.check_status" do
-  #   it "runs every ChorusConfig.instance['instance_poll_interval_minutes'] minutes" do
-  #     job_scheduler.job_named('HdfsDataSource.check_status').period.should == ChorusConfig.instance['instance_poll_interval_minutes'].minutes
-  #   end
-  #
-  #   it "enqueues the 'HdfsDataSource.check_status' job in QC" do
-  #     mock(QC.default_queue).enqueue_if_not_queued("HdfsDataSource.check_status")
-  #     job_scheduler.job_named('HdfsDataSource.check_status').run(Time.current)
-  #   end
-  # end
+    it "enqueues the 'DataSource.check_status' job in QC" do
+      mock(QC.default_queue).enqueue_if_not_queued("DataSource.check")
+      job_scheduler.job_named('DataSource.check').run(Time.current)
+    end
+  end
+
+  describe "HdfsDataSource.check_status" do
+    it "runs every ChorusConfig.instance['instance_poll_interval_minutes'] minutes" do
+      job_scheduler.job_named('HdfsDataSource.check').period.should == ChorusConfig.instance['instance_poll_interval_minutes'].minutes
+    end
+
+    it "enqueues the 'HdfsDataSource.check_status' job in QC" do
+      mock(QC.default_queue).enqueue_if_not_queued("HdfsDataSource.check")
+      job_scheduler.job_named('HdfsDataSource.check').run(Time.current)
+    end
+  end
 
   describe 'delete_old_files!' do
     it "runs every ChorusConfig.instance['delete_unimported_csv_files_interval_hours'] hours" do
