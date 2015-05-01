@@ -91,7 +91,7 @@ describe ExternalTable do
       end
 
       e.save.should be_false
-      e.should have_error_on(:name).with_message(:TAKEN)
+      e.should have_error_on(e.name).with_message(:TAKEN)
     end
   end
 
