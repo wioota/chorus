@@ -24,21 +24,21 @@
 
             <fieldset class="interval_options {{#if runsOnDemand}}hidden{{/if}}">
                 <label>{{t "job.dialog.run_every"}}</label>
-                <input class='interval_value' type='text' maxlength="3" value="{{intervalValue}}"/>
+                <input class="interval_value" type="text" maxlength="3" value="{{intervalValue}}"/>
 
-                <select class='interval_unit'>
+                <select class="interval_unit">
                     <option value="hours">{{t "job.interval_unit.hours"}}</option>
                     <option value="days">{{t "job.interval_unit.days"}}</option>
                     <option value="weeks">{{t "job.interval_unit.weeks"}}</option>
                     <option value="months">{{t "job.interval_unit.months"}}</option>
                 </select>
 
-                <div class='next_run'>
+                <div class="next_run">
                     <label class="">{{t "job.dialog.next_run_date"}}</label>
 
                     <div>
                         <div class="start_date_widget">
-                            <div class='start_date'></div>
+                            <div class="start_date"></div>
                         </div>
                         <div class="time">
                             <select class="hour">
@@ -77,7 +77,7 @@
         </legend>
 
         {{#each notifyOptions}}
-            <div class='notify options'>
+            <div class="notify options">
                 <div class='title'>{{t labelKey}}</div>
                 <label>
                     <input type="radio" name="{{condition}}_notify" value="nobody" class="row"
@@ -91,8 +91,8 @@
                     <input type="radio" id="{{condition}}_notify_selected" name="{{condition}}_notify" value="selected" class="row"
                            {{#if notifySelected}}checked='checked'{{/if}}/>
 
-                    <a class='select_{{condition}}_recipients {{#unless notifySelected}}hidden{{/unless}}' href='#'>{{t 'job.dialog.edit.notify.recipients_selected' count=recipientCount}}</a>
-                    <span class='select_{{condition}}_recipients {{#if notifySelected}}hidden{{/if}}'>{{t 'job.dialog.edit.notify.recipients_not_selected'}}</span>
+                    <a class="select_{{condition}}_recipients {{#unless notifySelected}}hidden{{/unless}}" href="#">{{t 'job.dialog.edit.notify.recipients_selected' count=recipientCount}}</a>
+                    <span class="select_{{condition}}_recipients {{#if notifySelected}}hidden{{/if}}">{{t 'job.dialog.edit.notify.recipients_not_selected'}}</span>
                 </label>
             </div>
         {{/each}}

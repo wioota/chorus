@@ -36,14 +36,26 @@
 
       .start_date_widget, .end_date_widget {
         display: inline-block;
+
+        .month, .day {
+          width: 30px;
+        }
+
+        .year {
+          width: 50px;
+        }
       }
 
       .time {
         display: inline-block;
         padding-left: 10px;
 
-        select, .ui-selectmenu-button .ui-button {
+        .hour {
           width: 50px;
+        }
+
+        .minute, .meridiem  {
+          width: 70px;
         }
       }
 
