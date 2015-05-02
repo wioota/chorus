@@ -380,6 +380,7 @@ describe ChorusConfig do
         config.hdfs_versions.should =~ [
             'Cloudera CDH4',
             'Cloudera CDH5',
+            'Cloudera CDH5.3',
             'Hortonworks HDP 2',
             'MapR',
             'MapR4',
